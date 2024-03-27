@@ -65,6 +65,7 @@ import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.xtext.EcoreUtil2;
+import org.eclipse.xtext.formatting.IWhitespaceInformationProvider;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
@@ -86,10 +87,15 @@ public class ExtractCallableRefactoring extends Refactoring {
 	@Inject
 	private ILocationInFileProvider locationInFileProvider;
 
+	@Inject
+	private IWhitespaceInformationProvider whitespaceInformationProvider;
+
 	private String name = Messages.ExtractCallableRefactoring_Name;
 
 	private XtextEditor editor;
 	private ITextSelection selection;
+
+	private String lineSeparator;
 
 	private XtextResource resourceCopy;
 	private List<EObject> selectedSemanticElements;
@@ -110,6 +116,9 @@ public class ExtractCallableRefactoring extends Refactoring {
 	public void initialize(final XtextEditor editor, final ITextSelection selection) {
 		this.editor = editor;
 		this.selection = selection;
+
+		lineSeparator = whitespaceInformationProvider.getLineSeparatorInformation(editor.getDocument().getResourceURI())
+				.getLineSeparator();
 
 		resourceCopy = editor.getDocument().priorityReadOnly(this::copyResource);
 		selectedSemanticElements = findSelectedSemanticObjects();
@@ -315,7 +324,7 @@ public class ExtractCallableRefactoring extends Refactoring {
 
 	protected TextEdit createCallableTextEdit() {
 		final StringBuilder callableText = new StringBuilder();
-		callableText.append(System.lineSeparator());
+		callableText.append(lineSeparator);
 		generateCallableHeader(callableText);
 		generateCallableBody(callableText);
 		generateCallableFooter(callableText);
@@ -329,7 +338,7 @@ public class ExtractCallableRefactoring extends Refactoring {
 	}
 
 	protected void generateCallableHeader(final StringBuilder builder) {
-		builder.append(System.lineSeparator());
+		builder.append(lineSeparator);
 		builder.append(getCallableType());
 		builder.append(" "); //$NON-NLS-1$
 		builder.append(getCallableName());
@@ -337,28 +346,28 @@ public class ExtractCallableRefactoring extends Refactoring {
 			builder.append(": "); //$NON-NLS-1$
 			builder.append(returnType.get().getName());
 		}
-		builder.append(System.lineSeparator());
+		builder.append(lineSeparator);
 		generateCallableParameters("INPUT", inputParameters, builder); //$NON-NLS-1$
 		generateCallableParameters("IN_OUT", inoutParameters, builder); //$NON-NLS-1$
 		generateCallableParameters("OUTPUT", outputParameters, builder); //$NON-NLS-1$
 	}
 
-	protected static void generateCallableParameters(final String type, final List<STVarDeclaration> parameters,
+	protected void generateCallableParameters(final String type, final List<STVarDeclaration> parameters,
 			final StringBuilder builder) {
 		if (!parameters.isEmpty()) {
 			builder.append("VAR_"); //$NON-NLS-1$
 			builder.append(type);
-			builder.append(System.lineSeparator());
+			builder.append(lineSeparator);
 			for (final var param : parameters) {
 				builder.append("    "); //$NON-NLS-1$
 				builder.append(param.getName());
 				builder.append(": "); //$NON-NLS-1$
 				builder.append(STCoreUtil.getFeatureType(param).getName());
 				builder.append(";"); //$NON-NLS-1$
-				builder.append(System.lineSeparator());
+				builder.append(lineSeparator);
 			}
 			builder.append("END_VAR"); //$NON-NLS-1$
-			builder.append(System.lineSeparator());
+			builder.append(lineSeparator);
 		}
 	}
 
@@ -369,10 +378,10 @@ public class ExtractCallableRefactoring extends Refactoring {
 			builder.append(" := "); //$NON-NLS-1$
 			builder.append(getRefactoredSelectedSemanticElementsText().orElse("")); //$NON-NLS-1$
 			builder.append(";"); //$NON-NLS-1$
-			builder.append(System.lineSeparator());
+			builder.append(lineSeparator);
 		} else {
 			builder.append(getRefactoredSelectedSemanticElementsText().orElse("")); //$NON-NLS-1$
-			builder.append(System.lineSeparator());
+			builder.append(lineSeparator);
 		}
 	}
 
@@ -403,7 +412,7 @@ public class ExtractCallableRefactoring extends Refactoring {
 	protected void generateCallableFooter(final StringBuilder builder) {
 		builder.append("END_"); //$NON-NLS-1$
 		builder.append(getCallableType());
-		builder.append(System.lineSeparator());
+		builder.append(lineSeparator);
 	}
 
 	protected Optional<ICallable> calculateCallable() {
