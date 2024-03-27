@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Debug ST
 Bundle-SymbolicName: org.eclipse.fordiac.ide.debug.st;singleton:=true
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.debug.st
 Bundle-RequiredExecutionEnvironment: JavaSE-17

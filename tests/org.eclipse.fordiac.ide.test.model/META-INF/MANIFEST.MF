@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Model Tests
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.model
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.model
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Eclipse 4diac

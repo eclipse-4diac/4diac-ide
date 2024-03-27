@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.edit;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.model.edit
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin$Implementation
 Bundle-Vendor: %providerName

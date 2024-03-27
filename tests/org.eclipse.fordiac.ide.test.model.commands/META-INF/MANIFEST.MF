@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Model Command Tests
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.model.commands
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Fragment-Host: org.eclipse.fordiac.ide.model.commands
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.model.commands
 Bundle-RequiredExecutionEnvironment: JavaSE-17

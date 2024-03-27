@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.fordiac</groupId>
 	<artifactId>parent</artifactId>
-	<version>2.0.1-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Eclipse 4diac IDE Parent Project</name>
 	<modules>
@@ -118,7 +118,7 @@
 						<artifact>
 							<groupId>org.eclipse.fordiac</groupId>
 							<artifactId>org.eclipse.fordiac.ide.product</artifactId>
-							<version>2.0.1-SNAPSHOT</version>
+							<version>3.0.0-SNAPSHOT</version>
 						</artifact>
 					</target>
 					
