@@ -4,7 +4,7 @@
     modelDirectory="/org.eclipse.fordiac.ide.deployment/src-gen" editDirectory="/org.eclipse.fordiac.ide.deployment.edit/src-gen"
     editorDirectory="/org.eclipse.fordiac.ide.deployment.editor/src-gen" modelPluginID="org.eclipse.fordiac.ide.deployment"
     modelName="DevResponse" modelPluginClass="" editPluginClass="org.eclipse.fordiac.ide.deployment.devResponse.provider.devResponseEditPlugin"
-    nonNLSMarkers="true" importerID="org.eclipse.emf.importer.ecore" complianceLevel="17.0"
+    nonNLSMarkers="true" importerID="org.eclipse.emf.importer.ecore" complianceLevel="21.0"
     copyrightFields="false" editPluginID="org.eclipse.fordiac.deployment.edit" importOrganizing="true"
     cleanup="true">
   <foreignModel>devResponse.ecore</foreignModel>

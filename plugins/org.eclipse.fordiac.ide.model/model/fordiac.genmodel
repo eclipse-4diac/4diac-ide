@@ -5,7 +5,7 @@
     editDirectory="/org.eclipse.fordiac.ide.model.edit/src-gen" modelPluginID="org.eclipse.fordiac.ide.model"
     templateDirectory="" modelName="fordiac" editPluginClass="org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin"
     nonNLSMarkers="true" commentFormatting="true" importerID="org.eclipse.emf.importer.ecore"
-    containmentProxies="true" complianceLevel="17.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.model.edit"
+    containmentProxies="true" complianceLevel="21.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.model.edit"
     language="" importOrganizing="true">
   <genAnnotations source="http://www.eclipse.org/emf/2002/GenModel/importer/org.eclipse.xsd.ecore.importer">
     <details key="sortAttributes" value="false"/>

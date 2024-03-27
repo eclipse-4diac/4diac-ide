@@ -5,7 +5,7 @@
     modelPluginID="org.eclipse.fordiac.ide.hierarchymanager.model" modelName="hierarchy"
     editPluginClass="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider.HierarchyEditPlugin"
     nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
-    importerID="org.eclipse.xsd.ecore.importer" complianceLevel="17.0" copyrightFields="false"
+    importerID="org.eclipse.xsd.ecore.importer" complianceLevel="21.0" copyrightFields="false"
     operationReflection="true" importOrganizing="true">
   <foreignModel>hierarchy.xsd</foreignModel>
   <genPackages prefix="Hierarchy" basePackage="org.eclipse.fordiac.ide.hierarchymanager.model"

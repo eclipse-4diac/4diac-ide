@@ -8,7 +8,7 @@
     modelName="STAlgorithm" editPluginClass="org.eclipse.fordiac.ide.structuredtextalgorithm.model.stalgorithm.provider.STAlgorithmEditPlugin"
     updateClasspath="false" nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     commentFormatting="true" testSuiteClass="org.eclipse.fordiac.ide.structuredtextalgorithm.model.stalgorithm.tests.STAlgorithmAllTests"
-    complianceLevel="17.0" copyrightFields="false" runtimeVersion="2.33" usedGenPackages="../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel#//stcore ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data">
+    complianceLevel="21.0" copyrightFields="false" runtimeVersion="2.33" usedGenPackages="../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel#//stcore ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data">
   <genPackages prefix="STAlgorithm" basePackage="org.eclipse.fordiac.ide.structuredtextalgorithm"
       disposableProviderFactory="true" fileExtensions="stalg" ecorePackage="STAlgorithm.ecore#/">
     <genClasses ecoreClass="STAlgorithm.ecore#//STAlgorithm">

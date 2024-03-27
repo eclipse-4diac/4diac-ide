@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.fordiac.ide.globalconstantseditor,
  org.eclipse.xtext.xbase.ide,
  org.antlr.runtime;bundle-version="[3.2.0,3.2.1)",
  org.eclipse.fordiac.ide.structuredtextcore
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.globalconstantseditor.ide.contentassist.antlr.internal,
  org.eclipse.fordiac.ide.globalconstantseditor.ide.contentassist.antlr,
  org.eclipse.fordiac.ide.globalconstantseditor.ide.contentassist.antlr.lexer

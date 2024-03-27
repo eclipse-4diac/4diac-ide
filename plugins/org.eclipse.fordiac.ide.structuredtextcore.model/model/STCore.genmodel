@@ -8,7 +8,7 @@
     editorPluginClass="org.eclipse.fordiac.ide.structuredtextcore.model.stcore.presentation.STCoreEditorPlugin"
     updateClasspath="false" nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     commentFormatting="true" testSuiteClass="org.eclipse.fordiac.ide.structuredtextcore.model.stcore.tests.STCoreAllTests"
-    complianceLevel="17.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.structuredtextcore.model.edit"
+    complianceLevel="21.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.structuredtextcore.model.edit"
     editorPluginID="org.eclipse.fordiac.ide.structuredtextcore.model.editor" runtimeVersion="2.33"
     usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement">
   <genPackages prefix="STCore" basePackage="org.eclipse.fordiac.ide.structuredtextcore"

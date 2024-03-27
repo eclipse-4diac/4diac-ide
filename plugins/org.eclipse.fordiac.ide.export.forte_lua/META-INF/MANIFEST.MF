@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.ui.workbench,
  org.eclipse.xtext
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.fordiac.ide.export.forte_lua
 Bundle-Vendor: Eclipse 4diac
