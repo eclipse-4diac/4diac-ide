@@ -40,8 +40,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
@@ -112,6 +114,7 @@ public final class TypeLibrary {
 	private final Map<String, TypeEntry> errorTypes = new ConcurrentHashMap<>();
 	private final Map<IFile, TypeEntry> fileMap = new ConcurrentHashMap<>();
 	private final Map<String, AtomicInteger> packages = new ConcurrentHashMap<>();
+	private final Queue<TypeEntry> duplicates = new ConcurrentLinkedQueue<>();
 
 	public Map<String, AdapterTypeEntry> getAdapterTypes() {
 		return adapterTypes;
@@ -503,8 +506,9 @@ public final class TypeLibrary {
 		addPackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
 	}
 
-	private static void handleDuplicateTypeName(final TypeEntry entry) {
-		if (entry.getFile() != null) {
+	private void handleDuplicateTypeName(final TypeEntry entry) {
+		if (entry.getFile() != null && entry.getFile().exists()) {
+			duplicates.add(entry);
 			createTypeLibraryMarker(entry.getFile(),
 					MessageFormat.format(Messages.TypeLibrary_TypeExists, entry.getFullTypeName()));
 		} else {
@@ -531,6 +535,27 @@ public final class TypeLibrary {
 		}
 		removePackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
 		deleteTypeLibraryMarkers(entry.getFile());
+		retryDuplicates();
+	}
+
+	private void retryDuplicates() {
+		duplicates.removeIf(this::retryDuplicate);
+	}
+
+	private boolean retryDuplicate(final TypeEntry entry) {
+		if (!exists(entry)) {
+			return true;
+		}
+		if (entry instanceof final DataTypeEntry dtEntry) {
+			if (dataTypeLib.addTypeEntry(dtEntry)) {
+				deleteTypeLibraryMarkers(entry.getFile());
+				return true;
+			}
+		} else if (addBlockTypeEntry(entry)) {
+			deleteTypeLibraryMarkers(entry.getFile());
+			return true;
+		}
+		return false;
 	}
 
 	protected void addPackageNameReference(final String packageName) {
@@ -576,7 +601,8 @@ public final class TypeLibrary {
 	}
 
 	private boolean exists(final TypeEntry entry) {
-		return entry.getFile().exists() && BuildpathUtil.findSourceFolder(buildpath, entry.getFile()).isPresent();
+		return entry.getFile() != null && entry.getFile().exists()
+				&& BuildpathUtil.findSourceFolder(buildpath, entry.getFile()).isPresent();
 	}
 
 	private void checkAdditions(final IContainer container) {
@@ -678,7 +704,8 @@ public final class TypeLibrary {
 	}
 
 	private static void deleteTypeLibraryMarkers(final IResource resource) {
-		FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.TYPE_LIBRARY_MARKER, Collections.emptyList());
+		FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.TYPE_LIBRARY_MARKER, Collections.emptyList(),
+				true);
 	}
 
 	void setProject(final IProject newProject) {

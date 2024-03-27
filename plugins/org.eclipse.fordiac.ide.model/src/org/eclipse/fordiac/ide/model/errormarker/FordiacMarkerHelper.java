@@ -212,7 +212,13 @@ public final class FordiacMarkerHelper {
 
 	public static void updateMarkers(final IResource resource, final String type,
 			final List<ErrorMarkerBuilder> builders) {
-		if (resource != null && resource.isAccessible() && (errorMarkersNeedsUpdate(resource, type, builders))) {
+		updateMarkers(resource, type, builders, false);
+	}
+
+	public static void updateMarkers(final IResource resource, final String type,
+			final List<ErrorMarkerBuilder> builders, final boolean force) {
+		if (resource != null && resource.isAccessible()
+				&& (force || errorMarkersNeedsUpdate(resource, type, builders))) {
 			final WorkspaceJob job = new WorkspaceJob("Update error markers on resource: " + resource.getName()) { //$NON-NLS-1$
 				@Override
 				public IStatus runInWorkspace(final IProgressMonitor monitor) {

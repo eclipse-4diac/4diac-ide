@@ -43,6 +43,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.CrossReference;
 import org.eclipse.xtext.Keyword;
+import org.eclipse.xtext.formatting.IWhitespaceInformationProvider;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
@@ -302,6 +303,9 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 		@Inject
 		private IQualifiedNameConverter qualifiedNameConverter;
 
+		@Inject
+		private IWhitespaceInformationProvider whitespaceInformationProvider;
+
 		@Override
 		public void lookupCrossReference(final IScope scope, final EObject model, final EReference reference,
 				final ICompletionProposalAcceptor acceptor, final Predicate<IEObjectDescription> filter,
@@ -365,10 +369,9 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 					qualifiedNameConverter.toString(candidate.getQualifiedName()));
 		}
 
-		@SuppressWarnings("static-method") // subclasses may override
 		protected IReplacementTextApplier getImportReplacementTextApplier(final XtextResource resource,
 				final String importedNamespace) {
-			return new STCoreImportReplacementTextApplier(resource, importedNamespace);
+			return new STCoreImportReplacementTextApplier(resource, importedNamespace, whitespaceInformationProvider);
 		}
 
 		protected static AliasedEObjectDescription createImportedDescription(final IEObjectDescription description) {
@@ -377,6 +380,10 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 
 		protected static QualifiedName getSimpleName(final IEObjectDescription description) {
 			return QualifiedName.create(description.getQualifiedName().getLastSegment());
+		}
+
+		public IWhitespaceInformationProvider getWhitespaceInformationProvider() {
+			return whitespaceInformationProvider;
 		}
 	}
 
