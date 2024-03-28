@@ -129,6 +129,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextFunction;
 import org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
@@ -632,6 +634,10 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateTextMethod((TextMethod)value, diagnostics, context);
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT:
 				return validateTypedConfigureableObject((TypedConfigureableObject)value, diagnostics, context);
+			case LibraryElementPackage.TYPED_SUB_APP:
+				return validateTypedSubApp((TypedSubApp)value, diagnostics, context);
+			case LibraryElementPackage.UNTYPED_SUB_APP:
+				return validateUntypedSubApp((UntypedSubApp)value, diagnostics, context);
 			case LibraryElementPackage.VALUE:
 				return validateValue((Value)value, diagnostics, context);
 			case LibraryElementPackage.VAR_DECLARATION:
@@ -2519,6 +2525,46 @@ public class LibraryElementValidator extends EObjectValidator {
 	 */
 	public boolean validateTypedConfigureableObject_validateType(TypedConfigureableObject typedConfigureableObject, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return typedConfigureableObject.validateType(diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateTypedSubApp(TypedSubApp typedSubApp, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(typedSubApp, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(typedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(typedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(typedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(typedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(typedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(typedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(typedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(typedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(typedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(typedSubApp, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateUntypedSubApp(UntypedSubApp untypedSubApp, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(untypedSubApp, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(untypedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(untypedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(untypedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(untypedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(untypedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(untypedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(untypedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(untypedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(untypedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(untypedSubApp, diagnostics, context);
+		return result;
 	}
 
 	/**

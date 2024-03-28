@@ -20,11 +20,11 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.systemmanagement.ui.providers.SubAppItemProviderForSystem;
+import org.eclipse.fordiac.ide.systemmanagement.ui.providers.UntypedSubAppItemProviderForSystem;
 
-public class SubAppItemProviderEmfCompare extends SubAppItemProviderForSystem {
+public class UntypedSubAppItemProviderEmfCompare extends UntypedSubAppItemProviderForSystem {
 
-	public SubAppItemProviderEmfCompare(final AdapterFactory adapterFactory) {
+	public UntypedSubAppItemProviderEmfCompare(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 

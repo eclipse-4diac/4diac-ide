@@ -26,11 +26,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvid
 import org.eclipse.fordiac.ide.model.libraryElement.provider.SubAppTypeItemProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
-public class TypedSubAppItemProvider extends SubAppTypeItemProvider {
+public class EditorSubAppTypeItemProvider extends SubAppTypeItemProvider {
 
 	protected FBNetworkItemProvider subAppNetworkItemProvider = null;
 
-	public TypedSubAppItemProvider(final AdapterFactory adapterFactory) {
+	public EditorSubAppTypeItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 		subAppNetworkItemProvider = new FBNetworkItemProvider(adapterFactory) {
 

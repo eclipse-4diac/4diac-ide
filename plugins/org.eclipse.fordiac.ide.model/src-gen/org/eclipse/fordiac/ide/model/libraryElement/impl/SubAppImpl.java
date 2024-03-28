@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,10 +17,8 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -37,7 +35,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl#getSubAppNetwork <em>Sub App Network</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl#getWidth <em>Width</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl#getHeight <em>Height</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl#isLocked <em>Locked</em>}</li>
@@ -45,17 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
  *
  * @generated
  */
-public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
-	/**
-	 * The cached value of the '{@link #getSubAppNetwork() <em>Sub App Network</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSubAppNetwork()
-	 * @generated
-	 * @ordered
-	 */
-	protected FBNetwork subAppNetwork;
-
+public abstract class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	/**
 	 * The default value of the '{@link #getWidth() <em>Width</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -133,74 +120,6 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.SUB_APP;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public FBNetwork getSubAppNetwork() {
-		if (subAppNetwork != null && subAppNetwork.eIsProxy()) {
-			InternalEObject oldSubAppNetwork = (InternalEObject)subAppNetwork;
-			subAppNetwork = (FBNetwork)eResolveProxy(oldSubAppNetwork);
-			if (subAppNetwork != oldSubAppNetwork) {
-				InternalEObject newSubAppNetwork = (InternalEObject)subAppNetwork;
-				NotificationChain msgs = oldSubAppNetwork.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, null, null);
-				if (newSubAppNetwork.eInternalContainer() == null) {
-					msgs = newSubAppNetwork.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, oldSubAppNetwork, subAppNetwork));
-			}
-		}
-		return subAppNetwork;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FBNetwork basicGetSubAppNetwork() {
-		return subAppNetwork;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetSubAppNetwork(FBNetwork newSubAppNetwork, NotificationChain msgs) {
-		FBNetwork oldSubAppNetwork = subAppNetwork;
-		subAppNetwork = newSubAppNetwork;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, oldSubAppNetwork, newSubAppNetwork);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setSubAppNetwork(FBNetwork newSubAppNetwork) {
-		if (newSubAppNetwork != subAppNetwork) {
-			NotificationChain msgs = null;
-			if (subAppNetwork != null)
-				msgs = ((InternalEObject)subAppNetwork).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, null, msgs);
-			if (newSubAppNetwork != null)
-				msgs = ((InternalEObject)newSubAppNetwork).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, null, msgs);
-			msgs = basicSetSubAppNetwork(newSubAppNetwork, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SUB_APP__SUB_APP_NETWORK, newSubAppNetwork, newSubAppNetwork));
 	}
 
 	/**
@@ -306,7 +225,21 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	 */
 	@Override
 	public boolean isTyped() {
-		return (getType() != null);
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public FBNetwork getSubAppNetwork() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -316,7 +249,9 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	 */
 	@Override
 	public FBNetwork loadSubAppNetwork() {
-		return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.loadSubAppNetwork(this);
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -345,26 +280,8 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
-				return basicSetSubAppNetwork(null, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
-				if (resolve) return getSubAppNetwork();
-				return basicGetSubAppNetwork();
 			case LibraryElementPackage.SUB_APP__WIDTH:
 				return getWidth();
 			case LibraryElementPackage.SUB_APP__HEIGHT:
@@ -384,9 +301,6 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
-				setSubAppNetwork((FBNetwork)newValue);
-				return;
 			case LibraryElementPackage.SUB_APP__WIDTH:
 				setWidth((Integer)newValue);
 				return;
@@ -410,9 +324,6 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
-				setSubAppNetwork((FBNetwork)null);
-				return;
 			case LibraryElementPackage.SUB_APP__WIDTH:
 				setWidth(WIDTH_EDEFAULT);
 				return;
@@ -436,8 +347,6 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.SUB_APP__SUB_APP_NETWORK:
-				return subAppNetwork != null;
 			case LibraryElementPackage.SUB_APP__WIDTH:
 				return width != WIDTH_EDEFAULT;
 			case LibraryElementPackage.SUB_APP__HEIGHT:
@@ -463,7 +372,7 @@ public class SubAppImpl extends FBNetworkElementImpl implements SubApp {
 		result.append(width);
 		result.append(", height: "); //$NON-NLS-1$
 		result.append(height);
-		result.append(", Locked: "); //$NON-NLS-1$
+		result.append(", locked: "); //$NON-NLS-1$
 		result.append(locked);
 		result.append(')');
 		return result.toString();

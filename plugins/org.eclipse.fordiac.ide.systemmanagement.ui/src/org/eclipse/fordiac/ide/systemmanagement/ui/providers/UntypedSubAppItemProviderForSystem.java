@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvider;
-import org.eclipse.fordiac.ide.model.libraryElement.provider.SubAppItemProvider;
+import org.eclipse.fordiac.ide.model.libraryElement.provider.UntypedSubAppItemProvider;
 
 /**
  * a dedicated item provider that will ensure that in the system tree the
@@ -37,11 +37,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.provider.SubAppItemProvider;
  * @author alil
  *
  */
-public class SubAppItemProviderForSystem extends SubAppItemProvider {
+public class UntypedSubAppItemProviderForSystem extends UntypedSubAppItemProvider {
 
 	private FBNetworkItemProvider subAppNetworkItemProvider = null;
 
-	public SubAppItemProviderForSystem(final AdapterFactory adapterFactory) {
+	public UntypedSubAppItemProviderForSystem(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 		subAppNetworkItemProvider = new FBNetworkItemProviderForSystem(adapterFactory);
 	}
@@ -61,7 +61,8 @@ public class SubAppItemProviderForSystem extends SubAppItemProvider {
 	@Override
 	public boolean hasChildren(final Object object) {
 		if (((SubApp) object).isTyped()) {
-			// if we are typed subapp we always say we have children, avoids early copying of type network
+			// if we are typed subapp we always say we have children, avoids early copying
+			// of type network
 			return true;
 		}
 		final FBNetwork fbNetwork = getFBNetwork(object);
@@ -81,7 +82,8 @@ public class SubAppItemProviderForSystem extends SubAppItemProvider {
 		final SubApp subapp = ((SubApp) object);
 		FBNetwork subAppNetwork = subapp.getSubAppNetwork();
 		if ((null == subAppNetwork) && subapp.isTyped()) {
-			// the subapp currently does not have a subappnetwork and it is typed, copy the subapp network from the type
+			// the subapp currently does not have a subappnetwork and it is typed, copy the
+			// subapp network from the type
 			// to the instance
 			subAppNetwork = subapp.loadSubAppNetwork();
 		}
@@ -100,7 +102,8 @@ public class SubAppItemProviderForSystem extends SubAppItemProvider {
 	public void notifyChanged(final Notification notification) {
 		if (LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY == notification
 				.getFeatureID(TypedConfigureableObject.class)) {
-			// if the type entry get change inform viewer to update the parent's children, this ensures that any
+			// if the type entry get change inform viewer to update the parent's children,
+			// this ensures that any
 			// filters that may be enabled are applied
 			final SubApp subapp = (SubApp) notification.getNotifier();
 			final Notification wrappedNotification = ViewerNotification.wrapNotification(notification,

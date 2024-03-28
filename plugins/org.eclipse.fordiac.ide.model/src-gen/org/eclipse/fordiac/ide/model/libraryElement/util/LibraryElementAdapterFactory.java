@@ -475,6 +475,14 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createTypedConfigureableObjectAdapter();
 			}
 			@Override
+			public Adapter caseTypedSubApp(TypedSubApp object) {
+				return createTypedSubAppAdapter();
+			}
+			@Override
+			public Adapter caseUntypedSubApp(UntypedSubApp object) {
+				return createUntypedSubAppAdapter();
+			}
+			@Override
 			public Adapter caseValue(Value object) {
 				return createValueAdapter();
 			}
@@ -1883,6 +1891,34 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTypedConfigureableObjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp <em>Typed Sub App</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp
+	 * @generated
+	 */
+	public Adapter createTypedSubAppAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp <em>Untyped Sub App</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp
+	 * @generated
+	 */
+	public Adapter createUntypedSubAppAdapter() {
 		return null;
 	}
 

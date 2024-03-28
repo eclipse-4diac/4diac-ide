@@ -2219,7 +2219,7 @@ public interface LibraryElementPackage extends EPackage {
 	int CFB_INSTANCE__GROUP = FB__GROUP;
 
 	/**
-	 * The feature id for the '<em><b>Cfb Network</b></em>' containment reference.
+	 * The feature id for the '<em><b>Cfb Network</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4980,7 +4980,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclaration()
 	 * @generated
 	 */
-	int VAR_DECLARATION = 99;
+	int VAR_DECLARATION = 101;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7191,22 +7191,13 @@ public interface LibraryElementPackage extends EPackage {
 	int SUB_APP__GROUP = FB_NETWORK_ELEMENT__GROUP;
 
 	/**
-	 * The feature id for the '<em><b>Sub App Network</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUB_APP__SUB_APP_NETWORK = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Width</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SUB_APP__WIDTH = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
+	int SUB_APP__WIDTH = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Height</b></em>' attribute.
@@ -7215,7 +7206,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUB_APP__HEIGHT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 2;
+	int SUB_APP__HEIGHT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
@@ -7224,7 +7215,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUB_APP__LOCKED = FB_NETWORK_ELEMENT_FEATURE_COUNT + 3;
+	int SUB_APP__LOCKED = FB_NETWORK_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Sub App</em>' class.
@@ -7233,7 +7224,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUB_APP_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 4;
+	int SUB_APP_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppTypeImpl <em>Sub App Type</em>}' class.
@@ -7391,6 +7382,260 @@ public interface LibraryElementPackage extends EPackage {
 	int SYSTEM_CONFIGURATION_FEATURE_COUNT = 3;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedSubAppImpl <em>Typed Sub App</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.TypedSubAppImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedSubApp()
+	 * @generated
+	 */
+	int TYPED_SUB_APP = 98;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__NAME = SUB_APP__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__COMMENT = SUB_APP__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__ATTRIBUTES = SUB_APP__ATTRIBUTES;
+
+	/**
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__TYPE_ENTRY = SUB_APP__TYPE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Position</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__POSITION = SUB_APP__POSITION;
+
+	/**
+	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__INTERFACE = SUB_APP__INTERFACE;
+
+	/**
+	 * The feature id for the '<em><b>Mapping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__MAPPING = SUB_APP__MAPPING;
+
+	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__GROUP = SUB_APP__GROUP;
+
+	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__WIDTH = SUB_APP__WIDTH;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__HEIGHT = SUB_APP__HEIGHT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__LOCKED = SUB_APP__LOCKED;
+
+	/**
+	 * The feature id for the '<em><b>Sub App Network</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__SUB_APP_NETWORK = SUB_APP_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Typed Sub App</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP_FEATURE_COUNT = SUB_APP_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.UntypedSubAppImpl <em>Untyped Sub App</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.UntypedSubAppImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getUntypedSubApp()
+	 * @generated
+	 */
+	int UNTYPED_SUB_APP = 99;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNTYPED_SUB_APP__NAME = SUB_APP__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNTYPED_SUB_APP__COMMENT = SUB_APP__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNTYPED_SUB_APP__ATTRIBUTES = SUB_APP__ATTRIBUTES;
+
+	/**
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNTYPED_SUB_APP__TYPE_ENTRY = SUB_APP__TYPE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Position</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNTYPED_SUB_APP__POSITION = SUB_APP__POSITION;
+
+	/**
+	 * The feature id for the '<em><b>Interface</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNTYPED_SUB_APP__INTERFACE = SUB_APP__INTERFACE;
+
+	/**
+	 * The feature id for the '<em><b>Mapping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNTYPED_SUB_APP__MAPPING = SUB_APP__MAPPING;
+
+	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNTYPED_SUB_APP__GROUP = SUB_APP__GROUP;
+
+	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNTYPED_SUB_APP__WIDTH = SUB_APP__WIDTH;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNTYPED_SUB_APP__HEIGHT = SUB_APP__HEIGHT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNTYPED_SUB_APP__LOCKED = SUB_APP__LOCKED;
+
+	/**
+	 * The feature id for the '<em><b>Sub App Network</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNTYPED_SUB_APP__SUB_APP_NETWORK = SUB_APP_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Untyped Sub App</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNTYPED_SUB_APP_FEATURE_COUNT = SUB_APP_FEATURE_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl <em>Value</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7398,7 +7643,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getValue()
 	 * @generated
 	 */
-	int VALUE = 98;
+	int VALUE = 100;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -7426,7 +7671,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVersionInfo()
 	 * @generated
 	 */
-	int VERSION_INFO = 100;
+	int VERSION_INFO = 102;
 
 	/**
 	 * The feature id for the '<em><b>Author</b></em>' attribute.
@@ -7490,7 +7735,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getWith()
 	 * @generated
 	 */
-	int WITH = 101;
+	int WITH = 103;
 
 	/**
 	 * The feature id for the '<em><b>Variables</b></em>' reference.
@@ -7518,7 +7763,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 102;
+	int LANGUAGE = 104;
 
 	/**
 	 * The meta object id for the '<em>Command Stack</em>' data type.
@@ -7528,7 +7773,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommandStack()
 	 * @generated
 	 */
-	int COMMAND_STACK = 103;
+	int COMMAND_STACK = 105;
 
 	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
@@ -7538,7 +7783,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 104;
+	int IFILE = 106;
 
 	/**
 	 * The meta object id for the '<em>Interface Element Stream</em>' data type.
@@ -7548,7 +7793,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceElementStream()
 	 * @generated
 	 */
-	int INTERFACE_ELEMENT_STREAM = 105;
+	int INTERFACE_ELEMENT_STREAM = 107;
 
 	/**
 	 * The meta object id for the '<em>IProject</em>' data type.
@@ -7558,7 +7803,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 106;
+	int IPROJECT = 108;
 
 	/**
 	 * The meta object id for the '<em>Point</em>' data type.
@@ -7568,7 +7813,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPoint()
 	 * @generated
 	 */
-	int POINT = 107;
+	int POINT = 109;
 
 	/**
 	 * The meta object id for the '<em>Type Entry</em>' data type.
@@ -7578,7 +7823,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeEntry()
 	 * @generated
 	 */
-	int TYPE_ENTRY = 108;
+	int TYPE_ENTRY = 110;
 
 	/**
 	 * The meta object id for the '<em>Type Library</em>' data type.
@@ -7588,7 +7833,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeLibrary()
 	 * @generated
 	 */
-	int TYPE_LIBRARY = 109;
+	int TYPE_LIBRARY = 111;
 
 	/**
 	 * The meta object id for the '<em>Var Decl List</em>' data type.
@@ -7598,7 +7843,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclList()
 	 * @generated
 	 */
-	int VAR_DECL_LIST = 110;
+	int VAR_DECL_LIST = 112;
 
 
 	/**
@@ -7985,10 +8230,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getCFBInstance();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.CFBInstance#getCfbNetwork <em>Cfb Network</em>}'.
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.CFBInstance#getCfbNetwork <em>Cfb Network</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Cfb Network</em>'.
+	 * @return the meta object for the reference '<em>Cfb Network</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CFBInstance#getCfbNetwork()
 	 * @see #getCFBInstance()
 	 * @generated
@@ -10295,17 +10540,6 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getSubApp();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork <em>Sub App Network</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Sub App Network</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork()
-	 * @see #getSubApp()
-	 * @generated
-	 */
-	EReference getSubApp_SubAppNetwork();
-
-	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getWidth <em>Width</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10604,6 +10838,48 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getTypedConfigureableObject_TypeEntry();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp <em>Typed Sub App</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Typed Sub App</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp
+	 * @generated
+	 */
+	EClass getTypedSubApp();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getSubAppNetwork <em>Sub App Network</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Sub App Network</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getSubAppNetwork()
+	 * @see #getTypedSubApp()
+	 * @generated
+	 */
+	EReference getTypedSubApp_SubAppNetwork();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp <em>Untyped Sub App</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Untyped Sub App</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp
+	 * @generated
+	 */
+	EClass getUntypedSubApp();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp#getSubAppNetwork <em>Sub App Network</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Sub App Network</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp#getSubAppNetwork()
+	 * @see #getUntypedSubApp()
+	 * @generated
+	 */
+	EReference getUntypedSubApp_SubAppNetwork();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Value <em>Value</em>}'.
@@ -11190,7 +11466,7 @@ public interface LibraryElementPackage extends EPackage {
 		EClass CFB_INSTANCE = eINSTANCE.getCFBInstance();
 
 		/**
-		 * The meta object literal for the '<em><b>Cfb Network</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Cfb Network</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -13080,14 +13356,6 @@ public interface LibraryElementPackage extends EPackage {
 		EClass SUB_APP = eINSTANCE.getSubApp();
 
 		/**
-		 * The meta object literal for the '<em><b>Sub App Network</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SUB_APP__SUB_APP_NETWORK = eINSTANCE.getSubApp_SubAppNetwork();
-
-		/**
 		 * The meta object literal for the '<em><b>Width</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13326,6 +13594,42 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY = eINSTANCE.getTypedConfigureableObject_TypeEntry();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedSubAppImpl <em>Typed Sub App</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.TypedSubAppImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedSubApp()
+		 * @generated
+		 */
+		EClass TYPED_SUB_APP = eINSTANCE.getTypedSubApp();
+
+		/**
+		 * The meta object literal for the '<em><b>Sub App Network</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TYPED_SUB_APP__SUB_APP_NETWORK = eINSTANCE.getTypedSubApp_SubAppNetwork();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.UntypedSubAppImpl <em>Untyped Sub App</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.UntypedSubAppImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getUntypedSubApp()
+		 * @generated
+		 */
+		EClass UNTYPED_SUB_APP = eINSTANCE.getUntypedSubApp();
+
+		/**
+		 * The meta object literal for the '<em><b>Sub App Network</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference UNTYPED_SUB_APP__SUB_APP_NETWORK = eINSTANCE.getUntypedSubApp_SubAppNetwork();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl <em>Value</em>}' class.

@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,46 +17,46 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>CFB Instance</b></em>'.
+ * An implementation of the model object '<em><b>Typed Sub App</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl#getCfbNetwork <em>Cfb Network</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedSubAppImpl#getSubAppNetwork <em>Sub App Network</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class CFBInstanceImpl extends FBImpl implements CFBInstance {
+public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 	/**
-	 * The cached value of the '{@link #getCfbNetwork() <em>Cfb Network</em>}' reference.
+	 * The cached value of the '{@link #getSubAppNetwork() <em>Sub App Network</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCfbNetwork()
+	 * @see #getSubAppNetwork()
 	 * @generated
 	 * @ordered
 	 */
-	protected FBNetwork cfbNetwork;
+	protected FBNetwork subAppNetwork;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected CFBInstanceImpl() {
+	protected TypedSubAppImpl() {
 		super();
 	}
 
@@ -67,7 +67,7 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return LibraryElementPackage.Literals.CFB_INSTANCE;
+		return LibraryElementPackage.Literals.TYPED_SUB_APP;
 	}
 
 	/**
@@ -76,16 +76,16 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 	 * @generated
 	 */
 	@Override
-	public FBNetwork getCfbNetwork() {
-		if (cfbNetwork != null && cfbNetwork.eIsProxy()) {
-			InternalEObject oldCfbNetwork = (InternalEObject)cfbNetwork;
-			cfbNetwork = (FBNetwork)eResolveProxy(oldCfbNetwork);
-			if (cfbNetwork != oldCfbNetwork) {
+	public FBNetwork getSubAppNetwork() {
+		if (subAppNetwork != null && subAppNetwork.eIsProxy()) {
+			InternalEObject oldSubAppNetwork = (InternalEObject)subAppNetwork;
+			subAppNetwork = (FBNetwork)eResolveProxy(oldSubAppNetwork);
+			if (subAppNetwork != oldSubAppNetwork) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK, oldCfbNetwork, cfbNetwork));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK, oldSubAppNetwork, subAppNetwork));
 			}
 		}
-		return cfbNetwork;
+		return subAppNetwork;
 	}
 
 	/**
@@ -93,8 +93,8 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FBNetwork basicGetCfbNetwork() {
-		return cfbNetwork;
+	public FBNetwork basicGetSubAppNetwork() {
+		return subAppNetwork;
 	}
 
 	/**
@@ -103,11 +103,11 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 	 * @generated
 	 */
 	@Override
-	public void setCfbNetwork(FBNetwork newCfbNetwork) {
-		FBNetwork oldCfbNetwork = cfbNetwork;
-		cfbNetwork = newCfbNetwork;
+	public void setSubAppNetwork(FBNetwork newSubAppNetwork) {
+		FBNetwork oldSubAppNetwork = subAppNetwork;
+		subAppNetwork = newSubAppNetwork;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK, oldCfbNetwork, cfbNetwork));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK, oldSubAppNetwork, subAppNetwork));
 	}
 
 	/**
@@ -116,8 +116,8 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 	 * @generated
 	 */
 	@Override
-	public FBNetwork loadCFBNetwork() {
-		return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.loadCFBNetwork(this);
+	public boolean isTyped() {
+		return true;
 	}
 
 	/**
@@ -126,13 +126,8 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 	 * @generated
 	 */
 	@Override
-	public CompositeFBType getType() {
-		//this cannot be moved to the annotation class because there we don't have the super access!!!
-		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
-		if(type instanceof CompositeFBType){
-		   return (CompositeFBType) type; 
-		}
-		return null;
+	public FBNetwork loadSubAppNetwork() {
+		return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.loadSubAppNetwork(this);
 	}
 
 	/**
@@ -143,9 +138,9 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK:
-				if (resolve) return getCfbNetwork();
-				return basicGetCfbNetwork();
+			case LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK:
+				if (resolve) return getSubAppNetwork();
+				return basicGetSubAppNetwork();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -159,8 +154,8 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK:
-				setCfbNetwork((FBNetwork)newValue);
+			case LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK:
+				setSubAppNetwork((FBNetwork)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -176,8 +171,8 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK:
-				setCfbNetwork((FBNetwork)null);
+			case LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK:
+				setSubAppNetwork((FBNetwork)null);
 				return;
 			default:
 				super.eUnset(featureID);
@@ -193,11 +188,11 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK:
-				return cfbNetwork != null;
+			case LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK:
+				return subAppNetwork != null;
 			default:
 				return super.eIsSet(featureID);
 		}
 	}
 
-} //CFBInstanceImpl
+} //TypedSubAppImpl

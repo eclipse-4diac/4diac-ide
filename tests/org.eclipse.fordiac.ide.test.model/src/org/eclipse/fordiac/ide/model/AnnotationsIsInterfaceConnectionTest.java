@@ -49,35 +49,34 @@ class AnnotationsIsInterfaceConnectionTest {
 		final var subapp = createSubappBusOutside(struct, muxblock, demuxblock);
 
 		addVerifyConnection(subapp, //
-				subapp.getInterfaceElement(SUBAPP_INPUT_NAME),//
+				subapp.getInterfaceElement(SUBAPP_INPUT_NAME), //
 				demuxblock.getInterfaceElement(DEMUX_IN), //
 				true //
-				);
+		);
 
 		addVerifyConnection(subapp, //
-				muxblock.getInterfaceElement(MUX_OUT),//
+				muxblock.getInterfaceElement(MUX_OUT), //
 				subapp.getInterfaceElement(SUBAPP_OUTPUT_NAME), //
 				true //
-				);
+		);
 
 		addVerifyConnection(subapp, //
-				demuxblock.getInterfaceElement(STRUCT_ELEMENT_1),//
+				demuxblock.getInterfaceElement(STRUCT_ELEMENT_1), //
 				muxblock.getInterfaceElement(STRUCT_ELEMENT_1), //
 				true //
-				);
+		);
 
 		addVerifyConnection(subapp, //
-				demuxblock.getInterfaceElement(STRUCT_ELEMENT_2),//
+				demuxblock.getInterfaceElement(STRUCT_ELEMENT_2), //
 				muxblock.getInterfaceElement(STRUCT_ELEMENT_2), //
 				true //
-				);
+		);
 
 	}
 
 	@SuppressWarnings("squid:S5960")
 	private static DataConnection addVerifyConnection(final SubApp subapp, final IInterfaceElement source,
-			final IInterfaceElement destination,
-			final boolean expected) {
+			final IInterfaceElement destination, final boolean expected) {
 		final var conn = LibraryElementFactory.eINSTANCE.createDataConnection();
 		conn.setSource(source);
 		conn.setDestination(destination);
@@ -89,7 +88,7 @@ class AnnotationsIsInterfaceConnectionTest {
 
 	private static SubApp createSubappBusOutside(final StructuredType struct, final Multiplexer muxblock,
 			final Demultiplexer demuxblock) {
-		final var subapp = LibraryElementFactory.eINSTANCE.createSubApp();
+		final var subapp = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
 
 		final var input = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		input.setType(struct);
@@ -121,39 +120,39 @@ class AnnotationsIsInterfaceConnectionTest {
 		final var subapp = createSubappBusInside(muxblock, demuxblock);
 
 		addVerifyConnection(subapp, //
-				subapp.getInterfaceElement(SUBAPP_INPUT_NAME),//
+				subapp.getInterfaceElement(SUBAPP_INPUT_NAME), //
 				muxblock.getInterfaceElement(STRUCT_ELEMENT_1), //
 				true //
-				);
+		);
 
 		addVerifyConnection(subapp, //
-				subapp.getInterfaceElement(SUBAPP_INPUT_NAME),//
+				subapp.getInterfaceElement(SUBAPP_INPUT_NAME), //
 				muxblock.getInterfaceElement(STRUCT_ELEMENT_2), //
 				true //
-				);
+		);
 
 		addVerifyConnection(subapp, //
 				demuxblock.getInterfaceElement(STRUCT_ELEMENT_1), //
-				subapp.getInterfaceElement(SUBAPP_OUTPUT_NAME),//
+				subapp.getInterfaceElement(SUBAPP_OUTPUT_NAME), //
 				true //
-				);
+		);
 
 		addVerifyConnection(subapp, //
 				demuxblock.getInterfaceElement(STRUCT_ELEMENT_2), //
-				subapp.getInterfaceElement(SUBAPP_OUTPUT_NAME),//
+				subapp.getInterfaceElement(SUBAPP_OUTPUT_NAME), //
 				true //
-				);
+		);
 
 		addVerifyConnection(subapp, //
 				muxblock.getInterfaceElement(MUX_OUT), //
 				demuxblock.getInterfaceElement(DEMUX_IN), //
 				true //
-				);
+		);
 
 	}
 
 	private static SubApp createSubappBusInside(final Multiplexer muxblock, final Demultiplexer demuxblock) {
-		final var subapp = LibraryElementFactory.eINSTANCE.createSubApp();
+		final var subapp = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
 
 		final var input = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		input.setType(IecTypes.ElementaryTypes.DINT);

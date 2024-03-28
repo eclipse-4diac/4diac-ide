@@ -12,63 +12,33 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import java.util.Objects;
-import java.util.Set;
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.commands.Messages;
-import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 
-public class UntypeSubAppCommand extends Command implements ScopedCommand {
-	private final SubApp subapp;
-	private final SubAppTypeEntry typeEntry;
+public class UntypeSubAppCommand extends AbstractUpdateFBNElementCommand {
 
 	public UntypeSubAppCommand(final SubApp subapp) {
-		super(Messages.UntypeSubappCommand_Label);
-		this.subapp = Objects.requireNonNull(subapp);
-		typeEntry = (SubAppTypeEntry) subapp.getTypeEntry();
-	}
-
-	public SubApp getSubapp() {
-		return subapp;
+		super(subapp);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return null != typeEntry;
+		return super.canExecute() && oldElement instanceof final TypedSubApp subapp && subapp.getType() != null;
 	}
 
 	@Override
-	public void execute() {
-		if (subapp.getSubAppNetwork() == null) {
-			// the subapp network was not yet copied from the type, i.e., subapp was never
-			// shown in viewer
-			subapp.setSubAppNetwork(
-					FBNetworkHelper.copyFBNetWork(subapp.getType().getFBNetwork(), subapp.getInterface()));
-		}
-		removeType();
-	}
-
-	@Override
-	public void redo() {
-		removeType();
-	}
-
-	@Override
-	public void undo() {
-		subapp.setTypeEntry(typeEntry);
-	}
-
-	private void removeType() {
-		subapp.setTypeEntry(null);
-	}
-
-	@Override
-	public Set<EObject> getAffectedObjects() {
-		return Set.of(subapp);
+	protected void createNewFB() {
+		newElement = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
+		newElement.setName(oldElement.getName());
+		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
+		newElement.setInterface(oldElement.getType().getInterfaceList().copy());
+		createValues();
+		transferInstanceComments();
+		((UntypedSubApp) newElement).setSubAppNetwork(FBNetworkHelper
+				.copyFBNetWork(((TypedSubApp) oldElement).getType().getFBNetwork(), newElement.getInterface()));
 	}
 }

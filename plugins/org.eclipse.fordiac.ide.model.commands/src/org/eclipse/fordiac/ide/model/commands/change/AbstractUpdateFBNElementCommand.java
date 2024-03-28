@@ -125,8 +125,10 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		// set Visible attribute after reconnect, to not hide connected In/Outputs
 		// transfer attributes from type first (for new vars), then override them from
 		// old instance
-		transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getInputVars());
-		transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getOutputVars());
+		if (newElement.getType() != null) {
+			transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getInputVars());
+			transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getOutputVars());
+		}
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getInputVars());
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getOutputVars());
 

@@ -203,7 +203,7 @@ public class MapToCommand extends Command implements ScopedCommand {
 	}
 
 	private FBNetworkElement createTargetUntypedSubApp() {
-		final SubApp element = LibraryElementFactory.eINSTANCE.createSubApp();
+		final SubApp element = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
 		element.setPosition(EcoreUtil.copy(srcElement.getPosition()));
 		element.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		element.setInterface(EcoreUtil.copy(srcElement.getInterface()));
