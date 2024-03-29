@@ -80,21 +80,18 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 
 	private void setAssociatedConnectionsWidth(final int width) {
 		final EditPart source = getHost().getSource();
-		if (source instanceof AbstractGraphicalEditPart) {
-			setConnectionsWidth(((AbstractGraphicalEditPart) source).getSourceConnections(), width);
+		if (source instanceof final AbstractGraphicalEditPart sourceEP) {
+			setConnectionsWidth(sourceEP.getSourceConnections(), width);
 		}
 		final EditPart destination = getHost().getTarget();
-		if (destination instanceof AbstractGraphicalEditPart) {
-			setConnectionsWidth(((AbstractGraphicalEditPart) destination).getTargetConnections(), width);
+		if (destination instanceof final AbstractGraphicalEditPart destEP) {
+			setConnectionsWidth(destEP.getTargetConnections(), width);
 		}
 	}
 
-	private void setConnectionsWidth(final List<Object> list, final int width) {
-		list.forEach(ep -> {
-			if (ep instanceof ConnectionEditPart) {
-				setConnectionWidth((ConnectionEditPart) ep, width);
-			}
-		});
+	private void setConnectionsWidth(final List<? extends org.eclipse.gef.ConnectionEditPart> list, final int width) {
+		list.stream().filter(ConnectionEditPart.class::isInstance).map(ConnectionEditPart.class::cast)
+				.forEach(ep -> setConnectionWidth(ep, width));
 	}
 
 	private void setConnectionWidth(final ConnectionEditPart ep, final int width) {
