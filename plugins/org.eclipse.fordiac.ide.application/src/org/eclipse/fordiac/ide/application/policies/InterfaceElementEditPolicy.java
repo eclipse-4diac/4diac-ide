@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 fortiss GmbH, Johannes Kepler Universtiy
- * 				 2020 Primetals Technologies Germany GmbH
- * 				 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2016, 2024 fortiss GmbH, Johannes Kepler University Linz,
+ *                          Primetals Technologies Germany GmbH,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,10 +10,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Daniel Lindhuber, Bianca Wiesmayr
- *     - connections across subapp borders
+ *               - connections across subapp borders
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
@@ -94,15 +93,15 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 
 		if ((srcParent != null) && (dstParent != null)) {
 			if (srcParent == dstParent) {
-				return checkParentInSameNetwork(source, parent, srcParent);
+				return checkParentInSameNetwork(source, destination, parent, srcParent);
 			}
-			if ((source.getFBNetworkElement() instanceof SubApp)
-					&& (((SubApp) source.getFBNetworkElement()).getSubAppNetwork() == dstParent)) {
+			if ((source.getFBNetworkElement() instanceof final SubApp subapp)
+					&& (subapp.getSubAppNetwork() == dstParent)) {
 				// we have a connection from a subapp pin to an internal FB
 				return dstParent;
 			}
-			if ((destination.getFBNetworkElement() instanceof SubApp)
-					&& (((SubApp) destination.getFBNetworkElement()).getSubAppNetwork() == srcParent)) {
+			if ((destination.getFBNetworkElement() instanceof final SubApp subapp)
+					&& (subapp.getSubAppNetwork() == srcParent)) {
 				// we have a connection from a subapp pin to an internal FB
 				return srcParent;
 			}
@@ -110,13 +109,25 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		return null;
 	}
 
-	private static FBNetwork checkParentInSameNetwork(final IInterfaceElement source, final FBNetwork parent,
-			final FBNetwork srcParent) {
+	private static FBNetwork checkParentInSameNetwork(final IInterfaceElement src, final IInterfaceElement dest,
+			final FBNetwork parent, final FBNetwork srcParent) {
+		if (src.getFBNetworkElement() instanceof final SubApp srcSubApp
+				&& dest.getFBNetworkElement() instanceof final SubApp destSubApp && srcSubApp == destSubApp
+				&& !srcSubApp.isTyped() && srcSubApp.getSubAppNetwork() != parent) {
+			// we have a connection request for a pin to pin untyped expanded subapp
+			// connection
+			if (src.isIsInput()) {
+				// for input to input connections use the inner network
+				return srcSubApp.getSubAppNetwork();
+			}
+			// for output to input connections use the outer network
+			return srcParent;
+		}
+
 		if (srcParent == parent) {
 			return parent;
 		}
-		if ((source.getFBNetworkElement() instanceof SubApp)
-				&& (((SubApp) source.getFBNetworkElement()).getSubAppNetwork() == parent)) {
+		if ((src.getFBNetworkElement() instanceof final SubApp subApp) && (subApp.getSubAppNetwork() == parent)) {
 			// we have a subapp pin to pin connection inside of a subapp
 			return parent;
 		}
@@ -129,8 +140,8 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 			if (pin.getFBNetworkElement() != null) {
 				return pin.getFBNetworkElement().getFbNetwork();
 			}
-			if (pin.eContainer().eContainer() instanceof CompositeFBType) {
-				return ((CompositeFBType) pin.eContainer().eContainer()).getFBNetwork();
+			if (pin.eContainer().eContainer() instanceof final CompositeFBType cfbType) {
+				return cfbType.getFBNetwork();
 			}
 		}
 		return null;
@@ -138,8 +149,8 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 
 	private static IInterfaceElement getRequestTarget(final ReconnectRequest request) {
 		final EditPart target = request.getTarget();
-		if (target.getModel() instanceof IInterfaceElement) {
-			return (IInterfaceElement) target.getModel();
+		if (target.getModel() instanceof final IInterfaceElement ie) {
+			return ie;
 		}
 		return null;
 	}
