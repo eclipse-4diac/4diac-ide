@@ -203,13 +203,17 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		final IEditorPart editor = (IEditorPart) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_EDITOR_NAME);
 
-		if (selection != null && ((IStructuredSelection) selection).size() == 1) {
-			setBaseEnabled(editor != null
-					&& ((IStructuredSelection) selection).getFirstElement() instanceof InterfaceEditPart);
+		if (selection instanceof final IStructuredSelection structSel && structSel.size() == 1) {
+			setBaseEnabled(editor != null && isValidSelectedElement(structSel));
 		} else {
 			setBaseEnabled(false);
 		}
 
+	}
+
+	@SuppressWarnings("static-method") // allow subclasses to override this method
+	protected boolean isValidSelectedElement(final IStructuredSelection structSel) {
+		return structSel.getFirstElement() instanceof InterfaceEditPart;
 	}
 
 	protected List<IInterfaceElement> getConnectionOposites(final InterfaceEditPart iep) {
@@ -291,6 +295,17 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	@SuppressWarnings("static-method")
 	protected boolean hasOpposites(final InterfaceEditPart pin) {
 		return false;
+	}
+
+	protected static void selectOpposites(final ExecutionEvent event, final GraphicalViewer viewer,
+			final IInterfaceElement originPin, final List<IInterfaceElement> opposites) throws ExecutionException {
+		if (!opposites.isEmpty()) {
+			if (opposites.size() == 1) {
+				HandlerHelper.selectElement(opposites.get(0), viewer);
+			} else {
+				showOppositeSelectionDialog(opposites, event, viewer, originPin);
+			}
+		}
 	}
 
 	protected static IInterfaceElement calcInternalOppositePin(final EList<? extends IInterfaceElement> source,

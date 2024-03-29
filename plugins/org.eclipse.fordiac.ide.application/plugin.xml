@@ -546,14 +546,56 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftConnectionHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
+        <with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+            	</or>
+          	</iterate>
+        </with>
       </activeWhen>
     </handler>
     
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftConnectionHandler"
              commandId="org.eclipse.ui.edit.text.goto.wordPrevious">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
+		<with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+            	</or>
+          	</iterate>
+        </with>        	
+      </activeWhen>
+    </handler>
+    
+    <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftTargetPinConnectionHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection">
+	  <activeWhen>
+        <with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart" />
+            	</or>
+          	</iterate>
+        </with>
+      </activeWhen>
+    </handler>
+    
+    <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftTargetPinConnectionHandler"
+             commandId="org.eclipse.ui.edit.text.goto.wordPrevious">
+	  <activeWhen>
+		<with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart" />
+            	</or>
+          	</iterate>
+        </with>        	
       </activeWhen>
     </handler>
     
@@ -562,14 +604,56 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowRightConnectionHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
+        <with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+            	</or>
+          	</iterate>
+        </with>
       </activeWhen>
     </handler>
     
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowRightConnectionHandler"
              commandId="org.eclipse.ui.edit.text.goto.wordNext">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
+        <with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+            	</or>
+          	</iterate>
+        </with>
+      </activeWhen>
+    </handler>
+    
+     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowRightTargetPinConnectionHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection">
+	  <activeWhen>
+        <with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart" />
+            	</or>
+          	</iterate>
+        </with>
+      </activeWhen>
+    </handler>
+    
+    <handler class="org.eclipse.fordiac.ide.application.handlers.FollowRightTargetPinConnectionHandler"
+             commandId="org.eclipse.ui.edit.text.goto.wordNext">
+	  <activeWhen>
+		<with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart" />
+            	</or>
+          	</iterate>
+        </with>        	
       </activeWhen>
     </handler>
     
@@ -1631,6 +1715,7 @@
               <iterate>
                 <or>
                   <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart" />
                 </or>
               </iterate>
             </with>
