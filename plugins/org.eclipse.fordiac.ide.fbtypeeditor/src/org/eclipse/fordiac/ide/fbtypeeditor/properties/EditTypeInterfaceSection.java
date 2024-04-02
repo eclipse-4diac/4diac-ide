@@ -20,8 +20,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
-import java.util.Arrays;
-
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -33,6 +31,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -45,7 +44,6 @@ import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.widgets.Group;
 
 public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
-	final static String[] options = { "RETAIN", "NON_RETAIN", "" }; //$NON-NLS-1$
 
 	@Override
 	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement,
@@ -72,8 +70,7 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
-		outputTable.addConfiguration(new DropdownSelectionWidget(Arrays.asList(options)));
-		outputTable.configure();
+		outputTable.addConfiguration(new DropdownSelectionWidget(RetainTag.getTagList()));
 		outputTable.configure();
 	}
 
@@ -93,7 +90,7 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
-		inputTable.addConfiguration(new DropdownSelectionWidget(Arrays.asList(options)));
+		inputTable.addConfiguration(new DropdownSelectionWidget(RetainTag.getTagList()));
 		inputTable.configure();
 	}
 

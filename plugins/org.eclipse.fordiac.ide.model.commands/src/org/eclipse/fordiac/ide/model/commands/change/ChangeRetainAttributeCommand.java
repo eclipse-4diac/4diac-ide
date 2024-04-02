@@ -19,16 +19,18 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
+import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeRetainAttributeCommand extends Command implements ScopedCommand {
 
 	private final IInterfaceElement pin;
-	private final String oldValue;
-	private final String newValue;
+	private final RetainTag oldValue;
+	private final RetainTag newValue;
 
-	public ChangeRetainAttributeCommand(final IInterfaceElement pin, final String oldValue, final String newValue) {
+	public ChangeRetainAttributeCommand(final IInterfaceElement pin, final RetainTag oldValue,
+			final RetainTag newValue) {
 		this.pin = pin;
 		this.oldValue = oldValue;
 		this.newValue = newValue;
@@ -41,10 +43,14 @@ public class ChangeRetainAttributeCommand extends Command implements ScopedComma
 
 	@Override
 	public void execute() {
-		if (isTagged(newValue)) {
-			pin.setAttribute(InternalAttributeDeclarations.RETAIN, newValue, "");
-		} else {
+		if ((isTagged(oldValue) && !isTagged(newValue))
+				&& (null != pin.getAttribute(LibraryElementTags.RETAIN_ATTRIBUTE))) {
 			pin.deleteAttribute(LibraryElementTags.RETAIN_ATTRIBUTE);
+			return;
+		}
+
+		if (isTagged(newValue)) {
+			pin.setAttribute(InternalAttributeDeclarations.RETAIN, newValue.getString(), "");
 		}
 	}
 
@@ -56,14 +62,14 @@ public class ChangeRetainAttributeCommand extends Command implements ScopedComma
 	@Override
 	public void undo() {
 		if (!isTagged(oldValue)) {
-			pin.setAttribute(InternalAttributeDeclarations.RETAIN, oldValue, "");
-		} else {
+			pin.setAttribute(InternalAttributeDeclarations.RETAIN, oldValue.getString(), "");
+		} else if (null != pin.getAttribute(LibraryElementTags.RETAIN_ATTRIBUTE)) {
 			pin.deleteAttribute(LibraryElementTags.RETAIN_ATTRIBUTE);
 		}
 	}
 
-	private static boolean isTagged(final String tag) {
-		return tag.equalsIgnoreCase("RETAIN") || tag.equalsIgnoreCase("NON_RETAIN");
+	private static boolean isTagged(final RetainTag tag) {
+		return tag != RetainTag.NOTHING;
 	}
 
 }
