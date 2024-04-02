@@ -63,11 +63,10 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 				destinationFB.getInterfaceList().getEventInputs().size()
 						- sourceType.getInterfaceList().getEventOutputs().size());
 		for (final Event event : evExpected) {
-			if (event.getName().equals("expected")) { //$NON-NLS-1$
-				createPathTimeOut(eccGen, plug);
-			}
+
 			// each splitName segment is an event name that is expected
-			final String[] splitName = event.getName().split("_"); //$NON-NLS-1$
+			final String comment = event.getComment();
+			final String[] splitName = comment.split("\\."); //$NON-NLS-1$
 
 			// flip flop at end
 			// error
@@ -79,7 +78,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 			erAct.setOutput(destinationFB.getInterfaceList().getEventOutputs().get(0));
 			errState.getECAction().add(erAct);
 			eccGen.increaseCaseCount();
-			// Success
+			// success
 			eccGen.createState("previous_success", splitName.length + 1); //$NON-NLS-1$
 			eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "previous_success")); //$NON-NLS-1$
 			final ECState sucState = eccGen.getLastState();
@@ -88,7 +87,11 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 			suAct.setOutput(destinationFB.getInterfaceList().getEventOutputs().get(1));
 			eccGen.getLastState().getECAction().add(suAct);
 
-			for (int i = 0; i < splitName.length - 1; i++) {
+			if (event.getName().equals("expected")) { //$NON-NLS-1$
+				createPathTimeOut(eccGen, plug, sucState, errState);
+			}
+
+			for (int i = 0; i < splitName.length; i++) {
 				eccGen.createState(splitName[i] + "_wait", i); //$NON-NLS-1$
 				eccGen.getLastState()
 						.setName(NameRepository.createUniqueName(eccGen.getLastState(), splitName[i] + "_WAIT_1")); //$NON-NLS-1$
@@ -115,13 +118,15 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 				eccGen.createState("ERROR", i); //$NON-NLS-1$
 				eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "ERROR_1")); //$NON-NLS-1$
 				createErrorTransitions(eccGen, splitName[i]);
+
 				eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
-						ECCContentAndLabelProvider.getInputEvents(destinationFB)
-								.get(ECCContentAndLabelProvider.getInputEvents(destinationFB).size() - 1));
+						ECCContentAndLabelProvider.getInputEvents(destinationFB).stream()
+								.filter(s -> ECCContentAndLabelProvider.getEventName(s).equals("_ETimeOut.TimeOut")) //$NON-NLS-1$
+								.findFirst().orElse(null));
 				eccGen.createTransitionFromTo(eccGen.getLastState(), errState, null);
 				eccGen.decreaseCaseCount();
 
-				if (i == splitName.length - 2) {
+				if (i == splitName.length - 1) {
 					// before the success/match state a state with timeout is inserted to check for
 					// any additional incoming events
 					createTimeOutState(eccGen, splitName[i], errState, i);
@@ -178,9 +183,9 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 		}
 
 		eccGen.createTransitionFromTo(eccGen.getNTimesLast(2), eccGen.getLastState(),
-				ECCContentAndLabelProvider.getInputEvents(destinationFB)
-						.get(ECCContentAndLabelProvider.getInputEvents(destinationFB).size() - 1));
-
+				ECCContentAndLabelProvider.getInputEvents(destinationFB).stream()
+						.filter(s -> ECCContentAndLabelProvider.getEventName(s).equals("_ETimeOut.TimeOut")).findFirst() //$NON-NLS-1$
+						.orElse(null));
 		eccGen.createTransitionFromTo(eccGen.getLastState(), sucState, null);
 		eccGen.createTransitionFromTo(eccGen.getLastState(), errState, null);
 		if (!destinationFB.getInterfaceList().getInputVars().isEmpty()) {
@@ -192,7 +197,8 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 
 	}
 
-	private void createPathTimeOut(final TestEccGenerator eccGen, final AdapterDeclaration plug) {
+	private void createPathTimeOut(final TestEccGenerator eccGen, final AdapterDeclaration plug, final ECState suc,
+			final ECState err) {
 		eccGen.createState("S1", 0); //$NON-NLS-1$
 		eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
 		eccGen.createTransitionFromTo(eccGen.getEcc().getStart(), eccGen.getLastState(), getEventInput("expected")); //$NON-NLS-1$
@@ -203,32 +209,18 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 				.filter(s -> s.getName().equals("START")).findFirst().orElse(null)); //$NON-NLS-1$
 		eccGen.getLastState().getECAction().add(act);
 
-		eccGen.createState("S1", 1); //$NON-NLS-1$
-		eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
-
-		eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
-				plug.getType().getInterfaceList().getEventOutputs().get(0));
-		eccGen.createTransitionFromTo(eccGen.getLastState(), eccGen.getEcc().getStart(), null);
-		final ECAction actSuc = TestEccGenerator.createAction();
-		actSuc.setOutput(destinationFB.getInterfaceList().getEventOutputs().get(1));
-		eccGen.getLastState().getECAction().add(actSuc);
-
-		eccGen.increaseCaseCount();
-		eccGen.createState("S1", 1); //$NON-NLS-1$
-		eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
+		eccGen.createTransitionFromTo(eccGen.getLastState(), suc,
+				ECCContentAndLabelProvider.getInputEvents(destinationFB)
+						.get(ECCContentAndLabelProvider.getInputEvents(destinationFB).size() - 1));
 		for (final Event ev : destinationFB.getInterfaceList().getEventInputs()) {
-			eccGen.createTransitionFromTo(eccGen.getNTimesLast(2), eccGen.getLastState(), ev);
+			eccGen.createTransitionFromTo(eccGen.getLastState(), err, ev);
 		}
-		final ECAction actErr = TestEccGenerator.createAction();
-		actErr.setOutput(destinationFB.getInterfaceList().getEventOutputs().get(0));
-		eccGen.createTransitionFromTo(eccGen.getLastState(), eccGen.getEcc().getStart(), null);
-		eccGen.getLastState().getECAction().add(actErr);
 	}
 
 	private AdapterDeclaration createTimeOutPlug() {
 		final TypeLibrary typelib = entry.getTypeLibrary();
 		final AdapterTypeEntry timeOutEntry = typelib.getAdapterTypeEntry("ATimeOut"); //$NON-NLS-1$
-		final CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(timeOutEntry.getType(), "timeOut", //$NON-NLS-1$
+		final CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(timeOutEntry.getType(), "_ETimeOut", //$NON-NLS-1$
 				sourceType.getInterfaceList(), false, -1);
 
 		try {
@@ -243,16 +235,18 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 	}
 
 	public static Algorithm createTimeOutAlg(final BasicFBType fb) {
-		final String algText = "timeOut.DT := TIME#1000ms; \n";//$NON-NLS-1$
+		final String algText = "_ETimeOut.DT := TIME#1000ms; \n";//$NON-NLS-1$
 		return TestEccGenerator.createAlgorithm(fb, "TimeOutAlg", algText); //$NON-NLS-1$
 	}
 
 	private void createErrorTransitions(final TestEccGenerator eccGen, final String ev) {
+
 		for (final Event errEv : destinationFB.getInterfaceList().getEventInputs()) {
 			if (!errEv.getName().equals(ev)) {
 				eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(), errEv);
 			}
 		}
+
 	}
 
 	private Event getEventInput(final String name) {
@@ -293,10 +287,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 
 	@Override
 	protected List<Event> createOutputEventList() {
-		final List<Event> list = new ArrayList<>();
-		list.add(createEvent("ERR", false));//$NON-NLS-1$
-		list.add(createEvent("SUC", false)); //$NON-NLS-1$
-		return list;
+		return List.of(createEvent("ERR", false), createEvent("SUC", false)); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	// match fb needs for each data output on the block to test an expected and
