@@ -45,6 +45,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
@@ -61,7 +62,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -69,7 +69,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
@@ -449,10 +448,9 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		if (this.equals(getSite().getPage().getActiveEditor()) && !(part instanceof PropertySheet)) {
 			if (selection instanceof final StructuredSelection structSel
 					&& structSel.getFirstElement() instanceof final URI uri) {
-				if (fbType.eResource().getEObject(uri.fragment()) instanceof final FB fb) {
-					handleContentOutlineSelection(new StructuredSelection(fb));
-				} else if (fbType.eResource().getEObject(uri.fragment()) instanceof final SubApp subApp) {
-					handleContentOutlineSelection(new StructuredSelection(subApp));
+				final EObject selectedElement = fbType.eResource().getEObject(uri.fragment());
+				if (selectedElement instanceof final FBNetworkElement fbEl) {
+					handleContentOutlineSelection(new StructuredSelection(fbEl));
 				}
 			} else {
 				handleContentOutlineSelection(selection);

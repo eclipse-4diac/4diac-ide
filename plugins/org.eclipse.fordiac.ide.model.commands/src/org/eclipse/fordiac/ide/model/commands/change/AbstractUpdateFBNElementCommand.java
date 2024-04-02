@@ -79,6 +79,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	/** The FBNetworkElement which should be updated */
 	protected FBNetworkElement oldElement;
+	/** The index where the fbNetwork element should be added */
+	protected int oldIndex;
+
 	protected FBNetwork network;
 
 	protected TypeEntry entry;
@@ -108,7 +111,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		checkGroup(oldElement, newElement); // needs to be done before anything is changed on the old element Bug
 		// 579570
 		if (network != null) {
-			network.getNetworkElements().add(newElement);
+			oldIndex = network.getNetworkElements().indexOf(oldElement);
+			network.getNetworkElements().add(oldIndex, newElement);
 		}
 
 		handleErrorMarker();
@@ -164,7 +168,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		}
 		checkGroup(oldElement, newElement);
 
-		network.getNetworkElements().add(newElement);
+		network.getNetworkElements().add(oldIndex, newElement);
 		reconnCmds.redo();
 		network.getNetworkElements().remove(oldElement);
 
@@ -181,7 +185,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 			mapCmd.undo();
 		}
 
-		network.getNetworkElements().add(oldElement);
+		network.getNetworkElements().add(oldIndex, oldElement);
 		reconnCmds.undo();
 		network.getNetworkElements().remove(newElement);
 
