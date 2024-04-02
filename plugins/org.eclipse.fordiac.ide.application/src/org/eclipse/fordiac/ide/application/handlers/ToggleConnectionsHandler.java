@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
+import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.HideConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -107,6 +108,8 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 			} else if (obj instanceof final AbstractFBNElementEditPart fbEP) {
 				fbEP.getModel().getInterface().getAllInterfaceElements()
 						.forEach(pin -> togglePinConnections(commands, pin, isVisible));
+			} else if (obj instanceof final TargetInterfaceElementEditPart iep) {
+				togglePinConnections(commands, iep.getModel().getHost(), isVisible);
 			} else if (obj instanceof final InterfaceEditPart iep) {
 				togglePinConnections(commands, iep.getModel(), isVisible);
 			}
@@ -174,7 +177,9 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 				}
 			}
 		}
-		return ((ep instanceof final InterfaceEditPart iep) && (hasConnection(iep.getModel())));
+
+		return ((ep instanceof final TargetInterfaceElementEditPart tiep) && (hasConnection(tiep.getModel().getHost()))
+				|| (ep instanceof final InterfaceEditPart iep) && (hasConnection(iep.getModel())));
 	}
 
 	private static boolean hasConnection(final IInterfaceElement ie) {
@@ -193,15 +198,20 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 			final GraphicalViewer viewer = currentActiveEditor.getAdapter(GraphicalViewer.class);
 			if (viewer != null) {
 				final boolean isVisible = checkVisibilityOfSelection(viewer.getSelectedEditParts());
-				setElementText(element, isVisible, viewer.getSelectedEditParts().size() == 1
-						&& viewer.getSelectedEditParts().get(0) instanceof ConnectionEditPart);
+				setElementText(element, isVisible,
+						viewer.getSelectedEditParts().size() == 1
+								&& (viewer.getSelectedEditParts().get(0) instanceof ConnectionEditPart),
+						viewer.getSelectedEditParts().get(0) instanceof TargetInterfaceElementEditPart);
 			}
 		}
 	}
 
-	private static void setElementText(final UIElement element, final boolean isVisible, final boolean isSingular) {
+	private static void setElementText(final UIElement element, final boolean isVisible, final boolean isSingular,
+			final boolean isTargetInterface) {
 		if (isVisible) {
 			element.setText(isSingular ? Messages.ToggleConnections_Singular_Hide : Messages.ToggleConnections_Hide);
+		} else if (isTargetInterface) {
+			element.setText(Messages.ToggleConnections_Target_Show);
 		} else {
 			element.setText(isSingular ? Messages.ToggleConnections_Singular_Show : Messages.ToggleConnections_Show);
 		}
