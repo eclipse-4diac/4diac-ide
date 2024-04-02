@@ -117,6 +117,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	 * connections.
 	 */
 	public void layoutExpandedInterface() {
+		interfacePositions.calculate();
 		expandedInputFigure.getChildren().get(0).getLayoutManager().layout(expandedInputFigure.getChildren().get(0));
 		expandedOutputFigure.getChildren().get(0).getLayoutManager().layout(expandedOutputFigure.getChildren().get(0));
 	}

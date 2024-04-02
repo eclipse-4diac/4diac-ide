@@ -28,7 +28,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -121,15 +120,9 @@ public class ModelSearchQuery implements ISearchQuery {
 					}
 				}
 			}
-			if (fbnetworkElement instanceof final CFBInstance cfb) {
-				searchFBNetwork(cfb.getType().getFBNetwork(), allocatePathList(path, cfb));
-			}
-			if (fbnetworkElement instanceof final SubApp subApp) {
-				if (subApp.isTyped()) {
-					searchFBNetwork(subApp.getType().getFBNetwork(), allocatePathList(path, subApp));
-				} else if (subApp.getSubAppNetwork() != null) {
-					searchFBNetwork(subApp.getSubAppNetwork(), path);
-				}
+			if (fbnetworkElement instanceof final SubApp subApp && !subApp.isTyped()
+					&& subApp.getSubAppNetwork() != null) {
+				searchFBNetwork(subApp.getSubAppNetwork(), path);
 			}
 			if (modelQuerySpec.isCheckedPinName() && fbnetworkElement.getInterface() != null) {
 				final List<IInterfaceElement> matchingPins = fbnetworkElement.getInterface().getAllInterfaceElements()

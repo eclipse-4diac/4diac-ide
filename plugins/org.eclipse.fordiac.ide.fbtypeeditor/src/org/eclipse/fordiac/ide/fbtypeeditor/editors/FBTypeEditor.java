@@ -45,6 +45,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
@@ -61,7 +62,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -447,15 +447,10 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (this.equals(getSite().getPage().getActiveEditor()) && !(part instanceof PropertySheet)) {
 			if (selection instanceof final StructuredSelection structSel
-					&& structSel.getFirstElement() instanceof final URI uri
-					&& fbType.eResource().getEObject(uri.fragment()) instanceof final FB fb) {
-				if (fb.eContainer() instanceof FBType && !fb.isContainedInTypedInstance()) {
-					// internal fb
-					// TODO currently has the old behaviour
-					handleContentOutlineSelection(new StructuredSelection(fb));
-				} else {
-					// fb in network
-					handleContentOutlineSelection(new StructuredSelection(fb));
+					&& structSel.getFirstElement() instanceof final URI uri) {
+				final EObject selectedElement = fbType.eResource().getEObject(uri.fragment());
+				if (selectedElement instanceof final FBNetworkElement fbEl) {
+					handleContentOutlineSelection(new StructuredSelection(fbEl));
 				}
 			} else {
 				handleContentOutlineSelection(selection);
