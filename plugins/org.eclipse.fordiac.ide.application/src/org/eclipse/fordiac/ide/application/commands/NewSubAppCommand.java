@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.gef.EditPart;
@@ -35,6 +36,14 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	private final AddElementsToSubAppCommand addElements;
 	private Command mapSubappCmd; // can not be in the compound command as it needs to be performed when
 	// subapp interface is finished
+
+	public NewSubAppCommand(final FBNetwork fbNetwork, final List<?> selection, final Position pos) {
+		super(fbNetwork, LibraryElementFactory.eINSTANCE.createUntypedSubApp(), pos);
+		getElement().setSubAppNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
+		addElements = new AddElementsToSubAppCommand(getElement(), selection);
+		checkMapping(selection);
+		parts = selection;
+	}
 
 	public NewSubAppCommand(final FBNetwork fbNetwork, final List<?> selection, final int x, final int y) {
 		super(fbNetwork, LibraryElementFactory.eINSTANCE.createUntypedSubApp(), x, y);

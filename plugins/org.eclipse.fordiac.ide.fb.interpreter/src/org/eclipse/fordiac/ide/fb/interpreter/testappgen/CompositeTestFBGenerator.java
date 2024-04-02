@@ -73,7 +73,8 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 				if (i == testSuite.getTestCases().size() - 1
 						&& (j == blocksToAdd.size() - 2 || j == blocksToAdd.size() - 1)) {
 					x = 50 + 400 * j;
-					y = net.getNetworkElements().get((testSuite.getTestCases().size() * 3) / 2).getPosition().getY();
+					y = net.getNetworkElements().get((testSuite.getTestCases().size() * 3) / 2).getPosition()
+							.toScreenPoint().y;
 				} else {
 					x = 50 + 400 * j;
 					y = 50 + 250 * i;
@@ -125,7 +126,7 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 				matchFBs.get(matchFBs.size() - 1).getInterface().getPlugs().get(0),
 				compositeFB.getFBNetwork().getFBNamed(name).getInterface().getSockets().get(0));
 		compositeFB.getFBNetwork().getAdapterConnections().add(a);
-}
+	}
 
 	private static AdapterConnection createAdapterConnection(final AdapterDeclaration source,
 			final AdapterDeclaration dest) {

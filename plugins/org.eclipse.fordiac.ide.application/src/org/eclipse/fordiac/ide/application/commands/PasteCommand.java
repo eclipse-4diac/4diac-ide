@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.actions.CopyPasteData;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
@@ -60,7 +61,7 @@ import org.eclipse.swt.graphics.Point;
 /** The Class PasteCommand. */
 public class PasteCommand extends Command implements ScopedCommand {
 
-	private static final int DEFAULT_DELTA = 20;
+	private static final double DEFAULT_DELTA = 20 * 100 / 18;
 	private final CopyPasteData copyPasteData;
 	private final FBNetwork dstFBNetwork;
 
@@ -69,10 +70,10 @@ public class PasteCommand extends Command implements ScopedCommand {
 	private final CompoundCommand connCreateCmds = new CompoundCommand();
 	private final CompoundCommand updateTypeCmds = new CompoundCommand();
 
-	private int xDelta;
-	private int yDelta;
+	private double xDelta;
+	private double yDelta;
 	private boolean calculateDelta = false;
-	private Point pasteRefPos;
+	private Position pasteRefPos;
 	private final TypeLibrary dstTypeLib;
 
 	/**
@@ -86,7 +87,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 	public PasteCommand(final CopyPasteData copyPasteData, final FBNetwork destination, final Point pasteRefPos) {
 		this.copyPasteData = copyPasteData;
 		this.dstFBNetwork = destination;
-		this.pasteRefPos = pasteRefPos;
+		this.pasteRefPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(pasteRefPos.x, pasteRefPos.y);
 		calculateDelta = true;
 		dstTypeLib = checkTypeLib(copyPasteData.srcNetwork(), destination);
 	}
@@ -95,8 +96,8 @@ public class PasteCommand extends Command implements ScopedCommand {
 			final int copyDeltaY) {
 		this.copyPasteData = copyPasteData;
 		this.dstFBNetwork = destination;
-		xDelta = copyDeltaX;
-		yDelta = copyDeltaY;
+		xDelta = CoordinateConverter.INSTANCE.screenToIEC61499(copyDeltaX);
+		yDelta = CoordinateConverter.INSTANCE.screenToIEC61499(copyDeltaY);
 		dstTypeLib = checkTypeLib(copyPasteData.srcNetwork(), destination);
 	}
 
@@ -152,19 +153,18 @@ public class PasteCommand extends Command implements ScopedCommand {
 	}
 
 	private void updateDelta() {
-		int x = Integer.MAX_VALUE;
-		int y = Integer.MAX_VALUE;
-
-		for (final FBNetworkElement element : copyPasteData.elements()) {
-			final Position outermostPos = getPositionOfOutermostNetwork(element);
-			x = Math.min(x, outermostPos.getX());
-			y = Math.min(y, outermostPos.getY());
-		}
-
 		if (calculateDelta) {
 			if (null != pasteRefPos) {
-				xDelta = pasteRefPos.x - x;
-				yDelta = pasteRefPos.y - y;
+				double x = Double.MAX_VALUE;
+				double y = Integer.MAX_VALUE;
+
+				for (final FBNetworkElement element : copyPasteData.elements()) {
+					final Position outermostPos = getPositionOfOutermostNetwork(element);
+					x = Math.min(x, outermostPos.getX());
+					y = Math.min(y, outermostPos.getY());
+				}
+				xDelta = pasteRefPos.getX() - x;
+				yDelta = pasteRefPos.getY() - y;
 			} else {
 				xDelta = DEFAULT_DELTA;
 				yDelta = DEFAULT_DELTA;

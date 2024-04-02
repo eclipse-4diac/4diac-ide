@@ -17,12 +17,20 @@ import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 
 public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementCommand {
 
 	private final SubAppTypeEntry typeEntry;
+
+	public CreateSubAppInstanceCommand(final SubAppTypeEntry typeEntry, final FBNetwork fbNetwork, final Position pos) {
+		super(fbNetwork, LibraryElementFactory.eINSTANCE.createTypedSubApp(), pos);
+		this.typeEntry = typeEntry;
+		setLabel(Messages.CreateSubAppInstanceCommand_CreateSubapplicationInstance);
+		getSubApp().setTypeEntry(typeEntry);
+	}
 
 	public CreateSubAppInstanceCommand(final SubAppTypeEntry typeEntry, final FBNetwork fbNetwork, final int x,
 			final int y) {

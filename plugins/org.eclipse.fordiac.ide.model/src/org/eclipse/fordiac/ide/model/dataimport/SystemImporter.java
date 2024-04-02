@@ -30,6 +30,7 @@ import java.util.Optional;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
@@ -319,8 +320,7 @@ public class SystemImporter extends CommonElementImporter {
 					if (channel != null) {
 						final CommunicationChannel comm = LibraryElementFactory.eINSTANCE.createCommunicationChannel();
 						comm.setName(copyCommunication.getName());
-						comm.updatePosition(copyCommunication.getPosition().getX(),
-								copyCommunication.getPosition().getY());
+						comm.setPosition(EcoreUtil.copy(copyCommunication.getPosition()));
 						comm.setTypeEntry(copyCommunication.getTypeEntry());
 						comm.setInterface(copyCommunication.getType().getInterfaceList().copy());
 						channel.getMappedElements().add(comm);

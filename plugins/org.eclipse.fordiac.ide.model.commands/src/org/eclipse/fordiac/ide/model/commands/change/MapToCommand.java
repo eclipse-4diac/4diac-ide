@@ -178,7 +178,7 @@ public class MapToCommand extends Command implements ScopedCommand {
 
 	private FBNetworkElement createTargetFB() {
 		final FBCreateCommand targetCreateFB = new FBCreateCommand((FBTypeEntry) srcElement.getTypeEntry(),
-				getTargetFBNetwork(), srcElement.getPosition().getX(), srcElement.getPosition().getY());
+				getTargetFBNetwork(), srcElement.getPosition());
 		targetCreateFB.execute();
 		return targetCreateFB.getFB();
 	}
@@ -195,10 +195,8 @@ public class MapToCommand extends Command implements ScopedCommand {
 		}
 
 		final CreateSubAppInstanceCommand cmd = new CreateSubAppInstanceCommand(
-				(SubAppTypeEntry) srcElement.getTypeEntry(), getTargetFBNetwork(), srcElement.getPosition().getX(),
-				srcElement.getPosition().getY());
+				(SubAppTypeEntry) srcElement.getTypeEntry(), getTargetFBNetwork(), srcElement.getPosition());
 		cmd.execute();
-
 		return cmd.getSubApp();
 	}
 

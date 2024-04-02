@@ -120,9 +120,8 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if (notification.getEventType() == Notification.REMOVE) {
-				if ((notification.getOldValue() == getModel().getConditionEvent())
-						|| ECActionOutputEventEditPart.isAdapterNotification(notification.getOldValue(),
-								getModel().getConditionEvent())) {
+				if ((notification.getOldValue() == getModel().getConditionEvent()) || ECActionOutputEventEditPart
+						.isAdapterNotification(notification.getOldValue(), getModel().getConditionEvent())) {
 					AbstractDirectEditableEditPart.executeCommand(new ChangeConditionEventCommand(getModel(), "")); //$NON-NLS-1$
 				}
 			} else if (notification.getEventType() == Notification.SET) {
@@ -238,7 +237,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 
 			private Command getTransitionMoveCommand(final ChangeBoundsRequest request) {
-				final Point p = getModel().getPosition().asPoint();
+				final Point p = getModel().getPosition().toScreenPoint();
 				final double scaleFactor = ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager().getZoom();
 				p.scale(scaleFactor);
 				p.x += request.getMoveDelta().x;
@@ -294,7 +293,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	}
 
 	protected void refreshLocator() {
-		getManager().updateRefPosition(getModel().getPosition().asPoint());
+		getManager().updateRefPosition(getModel().getPosition().toScreenPoint());
 	}
 
 	@Override
