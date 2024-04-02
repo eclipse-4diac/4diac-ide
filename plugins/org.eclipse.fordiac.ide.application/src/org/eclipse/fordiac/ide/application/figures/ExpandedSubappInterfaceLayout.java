@@ -101,7 +101,7 @@ public class ExpandedSubappInterfaceLayout extends ToolbarLayout {
 
 			if (entry == null) {
 				// direct connections
-				newBounds = new Rectangle(x, positions.directPositions.get(child).intValue(), prefWidth, prefHeight);
+				newBounds = new Rectangle(x, getDirectPosition(child), prefWidth, prefHeight);
 			} else if (entry.intValue() == Integer.MAX_VALUE) {
 				// unconnected pins
 				newBounds = new Rectangle(x, y, prefWidth, prefHeight);
@@ -133,6 +133,10 @@ public class ExpandedSubappInterfaceLayout extends ToolbarLayout {
 		}
 
 		parent.getBounds().height = parent.getParent().getBounds().height;
+	}
+
+	private int getDirectPosition(final IFigure child) {
+		return positions.directPositions.getOrDefault(child, Integer.valueOf(0)).intValue();
 	}
 
 }
