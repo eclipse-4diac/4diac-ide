@@ -27,8 +27,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.Arrays;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
@@ -38,6 +36,7 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
+import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
@@ -51,8 +50,6 @@ import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.widgets.Composite;
 
 public class InternalVarsSection extends AbstractInternalVarsSection {
-
-	final static String[] options = { "RETAIN", "NON_RETAIN", "" }; //$NON-NLS-1$
 
 	@Override
 	protected CreationCommand newCreateCommand(final Object refElement) {
@@ -98,7 +95,7 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
 		table.addConfiguration(new TypeDeclarationEditorConfiguration(provider));
-		table.addConfiguration(new DropdownSelectionWidget(Arrays.asList(options)));
+		table.addConfiguration(new DropdownSelectionWidget(RetainTag.getTagList()));
 		table.configure();
 	}
 

@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeRetainAttributeComman
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
 import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
+import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -60,13 +61,12 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		};
 	}
 
-	private String getAttributeValueAsString(final VarDeclaration rowObject) {
+	private static String getAttributeValueAsString(final VarDeclaration rowObject) {
 		final Attribute attribute = rowObject.getAttribute(LibraryElementTags.RETAIN_ATTRIBUTE);
-		if (null == attribute) {
-			return String.valueOf(""); //$NON-NLS-1$
+		if (attribute == null) {
+			return NULL_DEFAULT;
 		}
-		return attribute.getValue();
-
+		return Objects.toString(RetainHelper.deriveTag(attribute.getValue()).getString(), NULL_DEFAULT);
 	}
 
 	@Override
@@ -81,8 +81,8 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 				Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 		case VISIBLE -> new HidePinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 		case RETAIN -> new ChangeRetainAttributeCommand(rowObject,
-				Objects.toString(rowObject.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE), NULL_DEFAULT),
-				Objects.toString(newValue, NULL_DEFAULT));
+				RetainHelper.deriveTag(rowObject.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE)),
+				RetainHelper.deriveTag(Objects.toString(newValue, NULL_DEFAULT)));
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
 	}
