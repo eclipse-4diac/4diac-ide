@@ -41,7 +41,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -381,12 +380,12 @@ public abstract class CommonElementImporter {
 		try {
 			final String x = getAttributeValue(LibraryElementTags.X_ATTRIBUTE);
 			final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
-			if (null != x) {
-				pos.setX(CoordinateConverter.INSTANCE.convertFrom1499XML(x));
+			if (x != null && !x.isBlank()) {
+				pos.setX(Double.parseDouble(x));
 			}
 			final String y = getAttributeValue(LibraryElementTags.Y_ATTRIBUTE);
-			if (null != y) {
-				pos.setY(CoordinateConverter.INSTANCE.convertFrom1499XML(y));
+			if (null != y && !y.isBlank()) {
+				pos.setY(Double.parseDouble(y));
 			}
 			positionableElement.setPosition(pos);
 		} catch (final NumberFormatException nfe) {

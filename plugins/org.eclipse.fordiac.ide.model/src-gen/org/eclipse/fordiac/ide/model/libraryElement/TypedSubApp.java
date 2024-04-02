@@ -68,7 +68,7 @@ public interface TypedSubApp extends SubApp {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * if it is an untyped subapp and the fbnetwork is not yet loaded load it from the type
+	 * 
 	 * <!-- end-model-doc -->
 	 * @model
 	 * @generated

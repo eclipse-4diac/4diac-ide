@@ -49,7 +49,6 @@ public class ECTransitionFigure extends SplineConnection {
 		private final Label orderLabel;
 
 		public TransitionOrderDecorator() {
-			super();
 			setLayoutManager(new StackLayout());
 			setFill(true);
 			setAntialias(1);
@@ -125,7 +124,7 @@ public class ECTransitionFigure extends SplineConnection {
 
 	public void updateBendPoints(final ECTransition ecTransition) {
 		final List<Bendpoint> bendPoints = new ArrayList<>();
-		bendPoints.add(new AbsoluteBendpoint(ecTransition.getPosition().asPoint()));
+		bendPoints.add(new AbsoluteBendpoint(ecTransition.getPosition().toScreenPoint()));
 		getConnectionRouter().setConstraint(this, bendPoints);
 	}
 
@@ -152,7 +151,7 @@ public class ECTransitionFigure extends SplineConnection {
 		conditionBackground = new SetableAlphaLabel();
 		conditionBackground.setText(conditionText); // needed for correct size
 		conditionBackground
-		.setBorder(new MarginBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
+				.setBorder(new MarginBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
 		conditionBackground.setAlpha(190);
 		conditionBackground.setOpaque(true);
 

@@ -59,7 +59,6 @@ import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
@@ -169,23 +168,26 @@ public final class FBNetworkHelper {
 	 * subapp/...
 	 */
 
-	public static Point getTopLeftCornerOfFBNetwork(final List<?> selection) {
+	public static Position getTopLeftCornerOfFBNetwork(final List<?> selection) {
 		Assert.isNotNull(selection);
-		final Point pt = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
-		Object fb = null;
+		double x = Double.MAX_VALUE;
+		double y = Double.MAX_VALUE;
 		for (final Object sel : selection) {
-			fb = (sel instanceof final EditPart ep) ? ep.getModel() : sel;
+			final Object fb = (sel instanceof final EditPart ep) ? ep.getModel() : sel;
 			if (fb instanceof final FBNetworkElement fbnEL) {
 				final Position pos = fbnEL.getPosition();
-				pt.x = Math.min(pt.x, pos.getX());
-				pt.y = Math.min(pt.y, pos.getY());
+				x = Math.min(x, pos.getX());
+				y = Math.min(y, pos.getY());
 			}
 		}
-		return pt;
+		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+		pos.setX(x);
+		pos.setY(y);
+		return pos;
 	}
 
-	public static void moveFBNetworkByOffset(final Iterable<FBNetworkElement> fbNetwork, final int xOffset,
-			final int yOffset) {
+	public static void moveFBNetworkByOffset(final Iterable<FBNetworkElement> fbNetwork, final double xOffset,
+			final double yOffset) {
 		for (final FBNetworkElement el : fbNetwork) {
 			final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
 			pos.setX(el.getPosition().getX() + xOffset);
@@ -194,20 +196,19 @@ public final class FBNetworkHelper {
 		}
 	}
 
-	public static Point removeXYOffsetForFBNetwork(final List<FBNetworkElement> fbNetwork) {
-		final Point offset = getTopLeftCornerOfFBNetwork(fbNetwork);
-		moveFBNetworkByOffset(fbNetwork, -offset.x, -offset.y);
+	public static Position removeXYOffsetForFBNetwork(final List<FBNetworkElement> fbNetwork) {
+		final Position offset = getTopLeftCornerOfFBNetwork(fbNetwork);
+		moveFBNetworkByOffset(fbNetwork, -offset.getX(), -offset.getY());
 		return offset;
 	}
 
-	public static void moveFBNetworkToDestination(final List<FBNetworkElement> fbnetwork, final Point destination) {
-		final Point current = getTopLeftCornerOfFBNetwork(fbnetwork);
-		final Point offset = new Point(destination.x - current.x, destination.y - current.y);
-		moveFBNetworkByOffset(fbnetwork, offset);
+	public static void moveFBNetworkToDestination(final List<FBNetworkElement> fbnetwork, final Position destination) {
+		final Position current = getTopLeftCornerOfFBNetwork(fbnetwork);
+		moveFBNetworkByOffset(fbnetwork, destination.getX() - current.getX(), destination.getY() - current.getY());
 	}
 
-	public static void moveFBNetworkByOffset(final List<FBNetworkElement> fbNetwork, final Point offset) {
-		moveFBNetworkByOffset(fbNetwork, offset.x, offset.y);
+	public static void moveFBNetworkByOffset(final List<FBNetworkElement> fbNetwork, final Position offset) {
+		moveFBNetworkByOffset(fbNetwork, offset.getX(), offset.getY());
 	}
 
 	public static boolean targetSubappIsInSameFbNetwork(final List<FBNetworkElement> elements,

@@ -22,10 +22,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	private FBTypeEntry typeEntry;
+
+	public FBCreateCommand(final FBTypeEntry typeEntry, final FBNetwork fbNetwork, final Position pos) {
+		super(fbNetwork, createNewFb(typeEntry), pos);
+		this.typeEntry = typeEntry;
+		setLabel(Messages.FBCreateCommand_LABEL_CreateFunctionBlock);
+		getFB().setTypeEntry(typeEntry);
+	}
 
 	public FBCreateCommand(final FBTypeEntry typeEntry, final FBNetwork fbNetwork, final int x, final int y) {
 		super(fbNetwork, createNewFb(typeEntry), x, y);

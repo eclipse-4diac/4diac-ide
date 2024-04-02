@@ -19,23 +19,25 @@ import java.util.Set;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.commands.Command;
 
 public class RemoveElementsFromGroup extends Command implements ScopedCommand {
 
 	private final Group sourceGroup;
-	private final Point offset;
+	private final Position offset;
 	private final List<FBNetworkElement> elements;
 
 	public RemoveElementsFromGroup(final Collection<FBNetworkElement> elements, final Point offset) {
 		this.elements = new ArrayList<>(elements);
 		this.sourceGroup = getGroup(this.elements);
-		this.offset = offset;
+		this.offset = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(offset.x, offset.y);
 	}
 
 	public RemoveElementsFromGroup(final Collection<FBNetworkElement> elements) {
@@ -57,7 +59,7 @@ public class RemoveElementsFromGroup extends Command implements ScopedCommand {
 	@Override
 	public void undo() {
 		elements.forEach(el -> el.setGroup(sourceGroup));
-		FBNetworkHelper.moveFBNetworkByOffset(elements, -offset.x, -offset.y);
+		FBNetworkHelper.moveFBNetworkByOffset(elements, -offset.getX(), -offset.getY());
 	}
 
 	@Override
@@ -67,7 +69,7 @@ public class RemoveElementsFromGroup extends Command implements ScopedCommand {
 
 	private void performRemove() {
 		elements.forEach(el -> el.setGroup(null));
-		FBNetworkHelper.moveFBNetworkByOffset(elements, offset.x, offset.y);
+		FBNetworkHelper.moveFBNetworkByOffset(elements, offset);
 		FBNetworkHelper.selectElements(elements);
 	}
 
@@ -82,12 +84,11 @@ public class RemoveElementsFromGroup extends Command implements ScopedCommand {
 		return elements.stream().allMatch(el -> sourceGroup.equals(el.getGroup()));
 	}
 
-	private static Point getOffsetFromGroup(final Group sourceGroup) {
+	private static Position getOffsetFromGroup(final Group sourceGroup) {
 		if (sourceGroup != null) {
-			final Position position = sourceGroup.getPosition();
-			return new Point(position.getX(), position.getY());
+			return sourceGroup.getPosition();
 		}
-		return new Point();
+		return LibraryElementFactory.eINSTANCE.createPosition();
 	}
 
 	@Override

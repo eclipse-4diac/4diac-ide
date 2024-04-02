@@ -27,6 +27,7 @@ import java.util.Set;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
@@ -47,6 +48,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
@@ -123,9 +125,10 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 	private void processElementsToAdd() {
 		final EList<FBNetworkElement> fbNetwork = targetSubApp.getSubAppNetwork().getNetworkElements();
 
-		final Point posOffset = getFBOffset();
+		final Position posOffset = getFBOffset();
 		for (final FBNetworkElement fbNetworkElement : elementsToAdd) {
-			final SetPositionCommand command = new SetPositionCommand(fbNetworkElement, posOffset.x, posOffset.y);
+			final SetPositionCommand command = new SetPositionCommand(fbNetworkElement, posOffset.getX(),
+					posOffset.getY());
 			// the set position command needs to be executed before the connections are
 			// checked as there interface
 			// elements are added which can result in container size changes
@@ -144,12 +147,14 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 		}
 	}
 
-	private Point getFBOffset() {
+	private Position getFBOffset() {
 		if (moveDelta != null) {
-			return new Point(-moveDelta.x, -moveDelta.y);
+			return CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(-moveDelta.x, -moveDelta.y);
 		}
-		final org.eclipse.swt.graphics.Point offset = FBNetworkHelper.getTopLeftCornerOfFBNetwork(elementsToAdd);
-		return new Point(-offset.x, -offset.y);
+		final Position offset = FBNetworkHelper.getTopLeftCornerOfFBNetwork(elementsToAdd);
+		offset.setX(-offset.getX());
+		offset.setY(-offset.getY());
+		return offset;
 	}
 
 	private void ensureUniqueName(final FBNetworkElement element) {
