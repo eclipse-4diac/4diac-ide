@@ -16,7 +16,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
+import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
+import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
@@ -153,5 +155,15 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 			return ie;
 		}
 		return null;
+	}
+
+	@Override
+	protected ConnectionAnchor getSourceConnectionAnchor(final CreateConnectionRequest request) {
+		if (getHost().getModel() instanceof final IInterfaceElement ie && ie.isIsInput()
+				&& ie.getFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded()) {
+			// we are unfolded and this is an internal connection
+			return new FixedAnchor(getHostFigure(), false);
+		}
+		return super.getSourceConnectionAnchor(request);
 	}
 }
