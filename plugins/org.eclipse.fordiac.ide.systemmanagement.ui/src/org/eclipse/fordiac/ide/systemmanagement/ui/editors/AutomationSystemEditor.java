@@ -20,6 +20,7 @@
 package org.eclipse.fordiac.ide.systemmanagement.ui.editors;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -64,6 +65,7 @@ import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -71,10 +73,14 @@ import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.SelectionTabbedPropertySheetPage;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -106,8 +112,33 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		loadSystem();
 		if (system != null) {
 			hookSystemEntry(system.getTypeEntry());
-
 		}
+	}
+
+	@Override
+	public void createPartControl(final Composite parent) {
+		if (system != null) {
+			super.createPartControl(parent);
+		} else {
+			showLoadErrorMessage(parent);
+		}
+	}
+
+	public void showLoadErrorMessage(final Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NONE);
+		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).applyTo(composite);
+
+		final Image image = Display.getDefault().getSystemImage(SWT.ICON_ERROR);
+		final Label imageLabel = new Label(composite, SWT.NULL);
+		image.setBackground(imageLabel.getBackground());
+		imageLabel.setImage(image);
+		GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.BEGINNING).applyTo(imageLabel);
+
+		final Label messageLabel = new Label(composite, SWT.NONE);
+		messageLabel.setText(
+				MessageFormat.format(Messages.AutomationSystemEditor_CouldNotLoadSystem, getEditorInput().getName()));
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(messageLabel);
 	}
 
 	private void hookSystemEntry(final TypeEntry typeEntry) {
@@ -332,7 +363,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return adapter.cast(new SelectionTabbedPropertySheetPage(this));
 		}
 		if (adapter == IContentOutlinePage.class) {
-			if (null == outlinePage) {
+			if (outlinePage == null && system != null) {
 				outlinePage = new DiagramOutlinePage(getActiveEditor().getAdapter(GraphicalViewer.class));
 			}
 			return adapter.cast(outlinePage);
@@ -409,10 +440,10 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		if (!getBreadcrumb().openPath(path, system)) {
 			if (!system.getApplication().isEmpty()) {
 				OpenListenerManager.openEditor(system.getApplication().get(0));
-				showReloadErrorMessage(path, "Showing first application.");
+				showReloadErrorMessage(path, Messages.AutomationSystemEditor_ShowingFirstApplication);
 			} else {
 				OpenListenerManager.openEditor(system);
-				showReloadErrorMessage(path, "Showing system.");
+				showReloadErrorMessage(path, Messages.AutomationSystemEditor_ShowingSystem);
 			}
 		}
 		selectRootModelOfEditor();
