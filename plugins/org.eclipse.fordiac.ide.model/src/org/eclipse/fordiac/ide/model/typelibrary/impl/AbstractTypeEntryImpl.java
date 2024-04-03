@@ -302,9 +302,26 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 				|| notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE)
 				&& dependencies.get().contains(notification.getNotifier())) {
 			synchronized (this) {
+
 				setType(null);
 				setTypeEditable(null);
+
+				if (notification.getNewValue() != null && notification.getOldValue() != null) {
+					// if there is an editor opened then this notification will be delagted to the
+					// corresponding editor,
+					// If not, then nothing will happen
+					delagateNotifiactionToEditor(notification);
+				}
+
 			}
+		}
+	}
+
+	private void delagateNotifiactionToEditor(final Notification notification) {
+		if (eNotificationRequired() && notification.getNewValue() instanceof final LibraryElement element) {
+			eNotify(new TypeEntryNotificationImpl(this, Notification.SET,
+					TypeEntry.TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE, notification.getOldValue(),
+					element.getTypeEntry()));
 		}
 	}
 
@@ -397,7 +414,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			checkAndCreateFolderHierarchy(getFile(), monitor);
 			getFile().create(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
 		}
-		// "reset" the modification timestamp in the TypeEntry to avoid reload - as for
+		// "reset" the modification timestamp in the TypeEntry to avoid reload - as
+		// for
 		// this timestamp it is not necessary as the data is in memory
 		setLastModificationTimestamp(getFile().getModificationStamp());
 		updateDependencies(exporter.getDependencies());

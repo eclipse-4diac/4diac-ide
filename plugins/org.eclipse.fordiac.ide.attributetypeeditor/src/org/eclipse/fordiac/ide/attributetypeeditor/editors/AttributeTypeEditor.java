@@ -497,4 +497,10 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 		setInputWithNotify(input);
 	}
 
+	@Override
+	public void updateInstances(final TypeEntry entry) {
+		// TODO Auto-generated method stub
+
+	}
+
 }
