@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
@@ -43,17 +42,14 @@ import org.eclipse.gef.requests.SelectionRequest;
  *
  */
 public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEditPolicy
-implements PropertyChangeListener {
+		implements PropertyChangeListener {
 
-	// the number of pixels the selection feedback should be wider then the connection, needs to be an even number so
+	// the number of pixels the selection feedback should be wider then the
+	// connection, needs to be an even number so
 	// that the selection feedback is symmetric around the connection line
 	private static final int SELECTION_FEEDBACK_SIZE_DELTA = 6;
 	private IFigure selectionFeedback;
 	private IFigure hoverFeedback;
-
-	public FeedbackConnectionEndpointEditPolicy() {
-		super();
-	}
 
 	@Override
 	public void activate() {
@@ -92,7 +88,7 @@ implements PropertyChangeListener {
 	 * @return the connection figure
 	 */
 	protected PolylineConnection getConnectionFigure() {
-		return (PolylineConnection) ((GraphicalEditPart) getHost()).getFigure();
+		return (PolylineConnection) getHost().getFigure();
 	}
 
 	@Override
@@ -113,8 +109,8 @@ implements PropertyChangeListener {
 	public void showTargetFeedback(final Request request) {
 		if ((request instanceof SelectionRequest) && (null == hoverFeedback) && (null == handles)) {
 			final IFigure connFigure = getHostFigure();
-			if ((connFigure instanceof PolylineConnection) && (null == hoverFeedback)) {
-				hoverFeedback = createSelectionFeedbackFigure((PolylineConnection) connFigure);
+			if ((connFigure instanceof final PolylineConnection plc) && (null == hoverFeedback)) {
+				hoverFeedback = createSelectionFeedbackFigure(plc);
 				addFeedback(hoverFeedback);
 			}
 		}
@@ -148,6 +144,7 @@ implements PropertyChangeListener {
 		}
 	}
 
+	@SuppressWarnings("static-method") // allow sub-classe to provide their own selection feedback figure
 	protected IFigure createSelectionFeedbackFigure(final PolylineConnection connFigure) {
 		final Polyline figure = new Polyline();
 		figure.setLineWidth(connFigure.getLineWidth() + SELECTION_FEEDBACK_SIZE_DELTA);

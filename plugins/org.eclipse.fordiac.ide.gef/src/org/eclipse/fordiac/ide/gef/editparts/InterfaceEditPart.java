@@ -319,8 +319,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	protected abstract GraphicalNodeEditPolicy getNodeEditPolicy();
 
 	public void setInOutConnectionsWidth(final int width) {
-		getSourceConnections().forEach(cep -> checkConnection(width, (ConnectionEditPart) cep));
-		getTargetConnections().forEach(cep -> checkConnection(width, (ConnectionEditPart) cep));
+		getSourceConnections().forEach(cep -> checkConnection(width, cep));
+		getTargetConnections().forEach(cep -> checkConnection(width, cep));
 	}
 
 	private static void checkConnection(final int width, final ConnectionEditPart cep) {

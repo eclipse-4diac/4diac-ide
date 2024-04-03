@@ -35,7 +35,6 @@ import org.eclipse.fordiac.ide.systemconfiguration.commands.SegmentCreateCommand
 import org.eclipse.fordiac.ide.systemconfiguration.commands.SegmentSetConstraintCommand;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
@@ -55,9 +54,9 @@ public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 				@Override
 				protected List createSelectionHandles() {
 					final List list = new ArrayList();
-					list.add(new ResizeHandle((GraphicalEditPart) getHost(), PositionConstants.EAST));
-					list.add(new ResizeHandle((GraphicalEditPart) getHost(), PositionConstants.WEST));
-					list.add(new ModifiedMoveHandle((GraphicalEditPart) getHost(), new Insets(0, 2, 0, 2), 20));
+					list.add(new ResizeHandle(getHost(), PositionConstants.EAST));
+					list.add(new ResizeHandle(getHost(), PositionConstants.WEST));
+					list.add(new ModifiedMoveHandle(getHost(), new Insets(0, 2, 0, 2), 20));
 					return list;
 				}
 			};
@@ -73,16 +72,15 @@ public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
 			final Object constraint) {
-		if (constraint instanceof Rectangle) {
-			final Rectangle rec = new Rectangle((Rectangle) constraint);
-			if (child.getModel() instanceof Segment) {
-				return new SegmentSetConstraintCommand((Segment) child.getModel(), rec, request);
+		if (constraint instanceof final Rectangle rectangle) {
+			final Rectangle rec = new Rectangle(rectangle);
+			if (child.getModel() instanceof final Segment segment) {
+				return new SegmentSetConstraintCommand(segment, rec, request);
 			}
 			// return a command that can move a "PositionableElement"
-			if (child.getModel() instanceof PositionableElement && RequestUtil.isMoveRequest(request)) {
+			if (child.getModel() instanceof final PositionableElement posel && RequestUtil.isMoveRequest(request)) {
 				final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
-				final PositionableElement temp = (PositionableElement) child.getModel();
-				return new SetPositionCommand(temp, moveDelta.x, moveDelta.y);
+				return new SetPositionCommand(posel, moveDelta.x, moveDelta.y);
 			}
 		}
 		return null;
@@ -97,15 +95,15 @@ public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		final Rectangle constraint = (Rectangle) getConstraintFor(request);
 		if (childClass instanceof DeviceTypeEntry) {
 			final DeviceTypeEntry type = (DeviceTypeEntry) request.getNewObjectType();
-			if (getHost().getModel() instanceof SystemConfiguration) {
-				return new DeviceCreateCommand(type, (SystemConfiguration) getHost().getModel(),
+			if (getHost().getModel() instanceof final SystemConfiguration sysConf) {
+				return new DeviceCreateCommand(type, sysConf,
 						new Rectangle(constraint.getLocation().x, constraint.getLocation().y, -1, -1));
 			}
 		}
 		if (childClass instanceof SegmentTypeEntry) {
 			final SegmentTypeEntry type = (SegmentTypeEntry) request.getNewObjectType();
-			if (getHost().getModel() instanceof SystemConfiguration) {
-				return new SegmentCreateCommand(type, (SystemConfiguration) getHost().getModel(), constraint);
+			if (getHost().getModel() instanceof final SystemConfiguration sysConf) {
+				return new SegmentCreateCommand(type, sysConf, constraint);
 			}
 		}
 		return null;

@@ -50,9 +50,10 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 		final SubApp subapp = (SubApp) ((EditPart) selection.getFirstElement()).getModel();
 		Command cmd = new ToggleSubAppRepresentationCommand(subapp);
 
-		if (!subapp.isUnfolded() && (selection.getFirstElement() instanceof SubAppForFBNetworkEditPart)) {
-			//we are going to get unfolded wrap resize command
-			cmd = new ResizeGroupOrSubappCommand((SubAppForFBNetworkEditPart) selection.getFirstElement(), cmd);
+		if (!subapp.isUnfolded()
+				&& (selection.getFirstElement() instanceof final SubAppForFBNetworkEditPart subAppEP)) {
+			// we are going to get unfolded wrap resize command
+			cmd = new ResizeGroupOrSubappCommand(subAppEP, cmd);
 		}
 
 		final CommandStack commandStack = HandlerUtil.getActiveEditor(event).getAdapter(CommandStack.class);
@@ -81,7 +82,7 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
 		if (currentActiveEditor != null) {
 			final GraphicalViewer viewer = currentActiveEditor.getAdapter(GraphicalViewer.class);
-			final EditPart editPart = (EditPart) viewer.getSelectedEditParts().get(0);
+			final EditPart editPart = viewer.getSelectedEditParts().get(0);
 
 			if ((editPart.getModel() instanceof final SubApp subApp)) {
 				if (subApp.isUnfolded()) {
@@ -102,10 +103,9 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 	}
 
 	private static SubApp getSelectedSubApp(final Object selection) {
-		if (selection instanceof final IStructuredSelection structSel) {
-			if (!structSel.isEmpty() && (structSel.size() == 1)) {
-				return getSubApp(structSel.getFirstElement());
-			}
+		if ((selection instanceof final IStructuredSelection structSel)
+				&& (!structSel.isEmpty() && (structSel.size() == 1))) {
+			return getSubApp(structSel.getFirstElement());
 		}
 		return null;
 	}
@@ -116,7 +116,8 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 		}
 		if (currentElement instanceof final SubAppForFBNetworkEditPart subAppNetworkEP) {
 			return subAppNetworkEP.getModel();
-		} else if (currentElement instanceof UISubAppNetworkEditPart) {
+		}
+		if (currentElement instanceof UISubAppNetworkEditPart) {
 			return (SubApp) ((UISubAppNetworkEditPart) currentElement).getModel().eContainer();
 		}
 		return null;

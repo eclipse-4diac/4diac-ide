@@ -58,16 +58,15 @@ public class GetCoverageHandler extends AbstractHandler {
 			for (final Object sel : selection) {
 				if (((EditPart) sel) instanceof final SequenceRootEditPart serviceSeqEP) {
 					for (final Object service : serviceSeqEP.getChildren()) {
-						if (service instanceof final ServiceSequenceEditPart serviceEP
-								&& serviceEP.getModel() instanceof final ServiceSequence seq) {
-
+						if (service instanceof final ServiceSequenceEditPart serviceEP) {
+							final ServiceSequence seq = serviceEP.getModel();
 							eventManagerValidity = checkForExistingEventManager(seq, serviceSeqEP.getFBType());
-							setCoverageData((EventManager) seq.getEventManager(), serviceEP.getModel());
+							setCoverageData((EventManager) seq.getEventManager(), seq);
 						}
 					}
 				} else if (((EditPart) sel) instanceof final ServiceSequenceEditPart serviceEP
-						&& serviceEP.getModel() instanceof final ServiceSequence seq
 						&& serviceEP.getParent() instanceof final SequenceRootEditPart serviceSeqEP) {
+					final ServiceSequence seq = serviceEP.getModel();
 					eventManagerValidity = checkForExistingEventManager(seq, serviceSeqEP.getFBType());
 					setCoverageData((EventManager) seq.getEventManager(), serviceEP.getModel());
 				}
