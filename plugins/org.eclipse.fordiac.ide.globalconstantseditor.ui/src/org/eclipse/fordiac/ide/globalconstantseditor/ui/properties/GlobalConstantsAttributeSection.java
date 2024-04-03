@@ -24,9 +24,8 @@ public class GlobalConstantsAttributeSection extends AttributeSection {
 	@Override
 	protected ConfigurableObject getInputType(final Object input) {
 		if (input instanceof final GlobalConstantsEditor editor
-				&& editor.getDocument() instanceof final GlobalConstantsDocument document
-				&& document.getResourceLibraryElement() instanceof final ConfigurableObject configurableObject) {
-			return configurableObject;
+				&& editor.getDocument() instanceof final GlobalConstantsDocument document) {
+			return document.getResourceLibraryElement();
 		}
 		return null;
 	}

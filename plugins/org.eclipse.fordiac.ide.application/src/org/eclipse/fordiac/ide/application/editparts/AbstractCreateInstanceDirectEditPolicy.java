@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
@@ -53,11 +52,6 @@ abstract class AbstractCreateInstanceDirectEditPolicy extends DirectEditPolicy {
 	@Override
 	protected void showCurrentEditValue(final DirectEditRequest request) {
 		// we don't need to do anything here for creating new fb instances
-	}
-
-	@Override
-	public GraphicalEditPart getHost() {
-		return (GraphicalEditPart) super.getHost();
 	}
 
 }
