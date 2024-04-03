@@ -40,10 +40,8 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
@@ -89,12 +87,17 @@ import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -114,7 +117,6 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.xtext.ui.editor.XtextEditor;
-import org.osgi.framework.FrameworkUtil;
 
 public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelectionListener, CommandStackEventListener,
 		ITabbedPropertySheetPageContributor, IGotoMarker, ITypeEntryEditor, INavigationLocationProvider {
@@ -282,20 +284,41 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		}
 		fbType = getFBType(typeEntry);
 
-		if (fbType == null) {
-			throw new PartInitException(new Status(IStatus.ERROR, FrameworkUtil.getBundle(getClass()).getSymbolicName(),
-					Messages.FBTypeEditor_TypeFileDoesnotExist));
+		if (fbType != null && typeEntry != null) {
+			typeEntry.eAdapters().add(adapter);
+			annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEntry.getFile());
+			validationJob = new ValidationJob(getPartName(), commandStack, annotationModel);
 		}
-
-		typeEntry.eAdapters().add(adapter);
 
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		getCommandStack().addCommandStackEventListener(this);
 
-		annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEntry.getFile());
-		validationJob = new ValidationJob(getPartName(), commandStack, annotationModel);
-
 		super.init(site, editorInput);
+	}
+
+	@Override
+	public void createPartControl(final Composite parent) {
+		if (fbType != null) {
+			super.createPartControl(parent);
+		} else {
+			showLoadErrorMessage(parent);
+		}
+	}
+
+	public void showLoadErrorMessage(final Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NONE);
+		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).applyTo(composite);
+
+		final Image image = Display.getDefault().getSystemImage(SWT.ICON_ERROR);
+		final Label imageLabel = new Label(composite, SWT.NULL);
+		image.setBackground(imageLabel.getBackground());
+		imageLabel.setImage(image);
+		GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.BEGINNING).applyTo(imageLabel);
+
+		final Label messageLabel = new Label(composite, SWT.NONE);
+		messageLabel.setText(MessageFormat.format(Messages.FBTypeEditor_CouldNotLoadType, getEditorInput().getName()));
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(messageLabel);
 	}
 
 	@Override
@@ -547,6 +570,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 				break;
 			case CommandStack.POST_UNDO:
 				interfaceChanges--;
+				break;
 			default:
 				break;
 			}
@@ -612,7 +636,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 
 	@Override
 	public INavigationLocation createNavigationLocation() {
-		return new FBTypeNavigationLocation(this);
+		return (fbType != null) ? new FBTypeNavigationLocation(this) : null;
 	}
 
 	@Override
