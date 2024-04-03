@@ -218,7 +218,10 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 		}
 		addListenerToDataTypeObj();
 		firePropertyChange(IEditorPart.PROP_DIRTY);
-		updateFB(set);
+
+		if (false) { // deactivate temporary
+			updateFB(set);
+		}
 	}
 
 	@Override
@@ -518,5 +521,11 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 			setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
 		}
 		setInputWithNotify(input);
+	}
+
+	@Override
+	public void updateInstances(final TypeEntry entry) {
+		// TODO Auto-generated method stub
+
 	}
 }
