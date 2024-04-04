@@ -43,7 +43,6 @@ import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
@@ -57,7 +56,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -454,32 +455,7 @@ public abstract class CommonElementImporter {
 		}
 		attribute.setValue(value);
 
-		if (confObject instanceof final ConfigurableFB fb) {
-			handleConfigurableFB(fb, attribute);
-		} else {
-			confObject.getAttributes().add(attribute);
-		}
-	}
-
-	private void handleConfigurableFB(final ConfigurableFB fb, final Attribute attribute) {
-		if (fb instanceof final StructManipulator structManipulator) {
-			fb.getAttributes().add(attribute);
-			checkStructAttribute(structManipulator, attribute);
-		} else if (LibraryElementTags.F_MOVE_CONFIG.equals(attribute.getName())) {
-			fb.loadConfiguration(attribute.getName(), attribute.getValue());
-		}
-	}
-
-	private void checkStructAttribute(final StructManipulator fb, final Attribute attribute) {
-		if (LibraryElementTags.STRUCT_MANIPULATOR_CONFIG.equals(attribute.getName())) {
-			final StructuredType structType = addDependency(
-					getTypeLibrary().getDataTypeLibrary().getStructuredType(attribute.getValue()));
-			fb.setStructTypeElementsAtInterface(structType);
-			fb.getAttributes().remove(attribute);
-		} else if (LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(attribute.getName())) {
-			// reset type to get visible children configured
-			fb.setStructTypeElementsAtInterface(fb.getStructType());
-		}
+		confObject.getAttributes().add(attribute);
 	}
 
 	protected VarDeclaration parseParameter() throws TypeImportException, XMLStreamException {
@@ -660,6 +636,8 @@ public abstract class CommonElementImporter {
 			parsePinVisibilityAttribute(block);
 		} else if (isPinVarConfigAttribute()) {
 			parsePinVarConfigAttribute(block);
+		} else if (isConfigurableFbAttribute(block)) {
+			parseConfigurableFbAttribute((ConfigurableFB) block);
 		} else {
 			parseGenericAttributeNode(block);
 		}
@@ -684,6 +662,19 @@ public abstract class CommonElementImporter {
 				}
 			}
 		}
+	}
+
+	private boolean isConfigurableFbAttribute(final FBNetworkElement block) {
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		return (block instanceof ConfigurableMoveFB && LibraryElementTags.F_MOVE_CONFIG.equals(name)
+				|| (block instanceof StructManipulator && LibraryElementTags.STRUCT_MANIPULATOR_CONFIG.equals(name))
+				|| (block instanceof Demultiplexer && LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(name)));
+	}
+
+	protected void parseConfigurableFbAttribute(final ConfigurableFB block) {
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		final String datatypeName = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		block.loadConfiguration(name, datatypeName);
 	}
 
 	protected void parseParameter(final FBNetworkElement block) throws TypeImportException, XMLStreamException {

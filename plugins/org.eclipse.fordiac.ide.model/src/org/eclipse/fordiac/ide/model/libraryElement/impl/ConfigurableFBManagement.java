@@ -39,12 +39,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
 /**
- * Helper class for methods that will be - accessed from the model or - used
- * directly as static helper methods
+ * Helper class for methods that will be - accessed from the model
  */
 public final class ConfigurableFBManagement {
 
-	public static final String CHILDREN_ATTRIBUTE = "VisibleChildren"; //$NON-NLS-1$
 	public static final String DEMUX_NAME = "STRUCT_DEMUX"; //$NON-NLS-1$
 	public static final String MUX_NAME = "STRUCT_MUX"; //$NON-NLS-1$
 
@@ -63,6 +61,10 @@ public final class ConfigurableFBManagement {
 	static void loadFbConfiguration(final ConfigurableFB fb, final String attributeName, final String typeName) {
 		if (fb instanceof final ConfigurableMoveFB moveFB) {
 			loadFbMoveConfiguration(moveFB, attributeName, typeName);
+		} else if (fb instanceof final StructManipulator structFB) {
+			loadStructManipulatorConfiguration(structFB, attributeName, typeName);
+		} else if (fb instanceof final Demultiplexer demux) {
+			loadVisibleChildrenDemuxConfiguration(demux, attributeName, typeName);
 		}
 	}
 
@@ -75,6 +77,29 @@ public final class ConfigurableFBManagement {
 			fb.setDataType(dataType);
 		}
 		updateFbConfiguration(fb);
+	}
+
+	private static void loadStructManipulatorConfiguration(final StructManipulator fb, final String attributeName,
+			final String typeName) {
+		if (LibraryElementTags.STRUCT_MANIPULATOR_CONFIG.equals(attributeName) && typeName != null) {
+			final DataType dataType = fb.getTypeLibrary().getDataTypeLibrary().getType(typeName);
+			fb.setDataType(dataType);
+			if (dataType instanceof final StructuredType structType) {
+				setStructTypeElementsAtInterface(fb, structType);
+			}
+		}
+	}
+
+	private static void loadVisibleChildrenDemuxConfiguration(final Demultiplexer fb, final String attributeName,
+			final String attributeValue) {
+		if (LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(attributeName) && attributeValue != null) {
+			// reset type to get visible children configured
+			final Attribute attr = LibraryElementFactory.eINSTANCE.createAttribute();
+			attr.setName(attributeName);
+			attr.setValue(attributeValue);
+			fb.getAttributes().add(attr);
+			fb.setStructTypeElementsAtInterface(fb.getStructType());
+		}
 	}
 
 	static EList<Attribute> getConfigurableFbAttributes(final ConfigurableFB fb) {
@@ -104,7 +129,7 @@ public final class ConfigurableFBManagement {
 		if (muxer instanceof Demultiplexer) {
 			if (null == newStructType) {
 				setVariablesAsOutputs(muxer, Collections.emptyList(), null);
-			} else if (muxer.getAttribute(CHILDREN_ATTRIBUTE) != null) {
+			} else if (muxer.getAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN) != null) {
 				setVariablesAsOutputs(muxer, collectVisibleChildren(muxer, newStructType).getMemberVariables(),
 						newStructType);
 			} else {
@@ -119,7 +144,7 @@ public final class ConfigurableFBManagement {
 
 	private static StructuredType collectVisibleChildren(final StructManipulator muxer,
 			final StructuredType newStructType) {
-		final Attribute attr = muxer.getAttribute(CHILDREN_ATTRIBUTE);
+		final Attribute attr = muxer.getAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
 		final StructuredType configuredStruct = DataFactory.eINSTANCE.createStructuredType();
 		configuredStruct.setName(newStructType.getName());
 		configuredStruct.setComment(newStructType.getComment());
