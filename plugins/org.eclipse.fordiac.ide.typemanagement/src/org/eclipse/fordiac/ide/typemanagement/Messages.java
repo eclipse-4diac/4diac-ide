@@ -131,6 +131,7 @@ public final class Messages extends NLS {
 	public static String WillBeImported;
 
 	public static String Refactoring_RenameFromTo;
+	public static String Refactoring_AffectedFuctionBlock;
 	public static String Refactoring_AffectedStruct;
 	public static String Refactoring_AffectedInstancesOfFB;
 	public static String Refactoring_UpdateTypeEntryChange;

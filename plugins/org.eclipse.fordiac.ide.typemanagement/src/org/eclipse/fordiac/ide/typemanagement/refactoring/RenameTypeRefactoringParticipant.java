@@ -14,7 +14,12 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -104,38 +109,92 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 	}
 
 	private CompositeChange createStructDataChange(final StructuredType type) {
-		InstanceSearch search = StructDataTypeSearch
-				.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable());
-		final IProject project = typeEntry.getFile().getProject();
-
-		final Set<INamedElement> allFBWithStruct = InstanceSearch.performProjectSearch(project,
-				StructDataTypeSearch.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable()),
-				StructDataTypeSearch.createStructInterfaceSearch((StructuredType) typeEntry.getTypeEditable()),
-				new FBInstanceSearch((DataTypeEntry) typeEntry));
-		allFBWithStruct.addAll(search.searchStructuredTypes(typeEntry.getTypeLibrary()));
 		final CompositeChange parentChange = new CompositeChange(
 				MessageFormat.format(Messages.Refactoring_RenameFromTo, typeEntry.getTypeName(), newName));
-		parentChange.add(new UpdateTypeEntryChange(file, typeEntry, newName, oldName));
 
-		final CompositeChange change = new CompositeChange(Messages.Refactoring_AffectedStruct);
-		final CompositeChange fbTypeChanges = new CompositeChange("Fb Types:"); //$NON-NLS-1$
-		search = StructDataTypeSearch.createStructInterfaceSearch((StructuredType) typeEntry.getTypeEditable());
-		final Set<INamedElement> fbTypes = search.performTypeLibBlockSearch(typeEntry.getTypeLibrary());
-		fbTypes.forEach(fb -> fbTypeChanges.add(new InterfaceDataTypeChange((FBType) fb, typeEntry, oldName)));
-		parentChange.add(fbTypeChanges);
-		allFBWithStruct.stream().map(this::createSubChange).forEach(change::add);
+		final Change typeLibraryChange = new UpdateTypeLibraryEntryChange(file, typeEntry, newName, oldName);
+		parentChange.add(typeLibraryChange);
 
-		if (!allFBWithStruct.isEmpty()) {
-			parentChange.add(change);
+		final CompositeChange fbTypeChange = getRequiredFbTypeChange();
+		if (Objects.nonNull(fbTypeChange)) {
+			parentChange.add(fbTypeChange);
+		}
+
+		final CompositeChange structChange = getRequiredStructChange();
+		if (Objects.nonNull(structChange)) {
+			parentChange.add(structChange);
 		}
 
 		return parentChange;
 	}
 
+	private CompositeChange getRequiredFbTypeChange() {
+		final InstanceSearch search = StructDataTypeSearch
+				.createStructInterfaceSearch((StructuredType) typeEntry.getTypeEditable());
+		final Set<INamedElement> fbTypes = search.performTypeLibBlockSearch(typeEntry.getTypeLibrary());
+
+		if (fbTypes.isEmpty()) {
+			return null;
+		}
+
+		final CompositeChange fbTypeChanges = new CompositeChange(Messages.Refactoring_AffectedFuctionBlock);
+
+		final Map<String, Set<InterfaceDataTypeChange>> affectedFunctionBlockChangeInterfaces = new HashMap<>();
+
+		fbTypes.stream().filter(FBType.class::isInstance).map(fb -> (FBType) fb).forEach(fb -> {
+
+			final String label = fb.getTypeEntry().getFile().getName() + " ["
+					+ fb.getTypeEntry().getFile().getProject().getName() + "]";
+
+			if (!affectedFunctionBlockChangeInterfaces.containsKey(label)) {
+				affectedFunctionBlockChangeInterfaces.put(label, new HashSet<>());
+			}
+
+			affectedFunctionBlockChangeInterfaces.get(label).add(new InterfaceDataTypeChange(fb, typeEntry, oldName));
+
+		});
+
+		final Stream<CompositeChange> changesStream = affectedFunctionBlockChangeInterfaces.entrySet().stream()
+				.map(entry -> {
+					final CompositeChange fbChange = new CompositeChange(entry.getKey());
+
+					entry.getValue().stream().forEach(fbChange::add);
+
+					return fbChange;
+				});
+
+		changesStream.forEach(fbTypeChanges::add);
+
+		return fbTypeChanges;
+	}
+
+	private CompositeChange getRequiredStructChange() {
+		final IProject project = typeEntry.getFile().getProject();
+
+		final CompositeChange structChange = new CompositeChange(Messages.Refactoring_AffectedStruct);
+
+		final InstanceSearch structMemberSearch = StructDataTypeSearch
+				.createStructMemberSearch((StructuredType) typeEntry.getTypeEditable());
+
+		final Set<INamedElement> allFBWithStruct = InstanceSearch.performProjectSearch(project, structMemberSearch,
+				StructDataTypeSearch.createStructInterfaceSearch((StructuredType) typeEntry.getTypeEditable()),
+				new FBInstanceSearch((DataTypeEntry) typeEntry));
+
+		allFBWithStruct.addAll(structMemberSearch.searchStructuredTypes(typeEntry.getTypeLibrary()));
+
+		if (allFBWithStruct.isEmpty()) {
+			return null;
+		}
+
+		allFBWithStruct.stream().map(this::createSubChange).forEach(structChange::add);
+
+		return structChange;
+	}
+
 	private CompositeChange createFBDataChange(final FBType type) {
 		final CompositeChange parentChange = new CompositeChange(
 				MessageFormat.format(Messages.Refactoring_RenameFromTo, typeEntry.getTypeName(), newName));
-		parentChange.add(new UpdateTypeEntryChange(file, typeEntry, newName, oldName));
+		parentChange.add(new UpdateTypeLibraryEntryChange(file, typeEntry, newName, oldName));
 		Set<INamedElement> allFBs;
 		final CompositeChange change = new CompositeChange(Messages.Refactoring_AffectedInstancesOfFB);
 		final IProject project = type.getTypeEntry().getFile().getProject();

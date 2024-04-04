@@ -35,14 +35,14 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 
-public class UpdateTypeEntryChange extends Change {
+public class UpdateTypeLibraryEntryChange extends Change {
 
 	IFile file;
 	TypeEntry typeEntry;
 	String newName;
 	String oldName;
 
-	UpdateTypeEntryChange(final IFile file, final TypeEntry typeEntry, final String newName, final String oldName) {
+	UpdateTypeLibraryEntryChange(final IFile file, final TypeEntry typeEntry, final String newName, final String oldName) {
 		this.file = file;
 		this.typeEntry = typeEntry;
 		this.newName = newName;
@@ -98,7 +98,7 @@ public class UpdateTypeEntryChange extends Change {
 		if (newFile != null) {
 			FordiacResourceChangeListener.updateTypeEntryByRename(newFile, typeEntry);
 
-			return new UpdateTypeEntryChange(newFile, typeEntry, oldName, newName);
+			return new UpdateTypeLibraryEntryChange(newFile, typeEntry, oldName, newName);
 		}
 		return null;
 	}
