@@ -292,7 +292,10 @@
       <genOperations ecoreOperation="lib.ecore#//DataConnection/getDataDestination"
           body="return org.eclipse.fordiac.ide.model.Annotations.getDataDestination(this);"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//Demultiplexer"/>
+    <genClasses ecoreClass="lib.ecore#//Demultiplexer">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Demultiplexer/isConfigured"/>
+      <genOperations ecoreOperation="lib.ecore#//Demultiplexer/getMemberVars" body="return getInterface().getOutputVars();"/>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//Device">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Device/resource"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Device/profile"/>
@@ -614,8 +617,13 @@
       <genOperations ecoreOperation="lib.ecore#//Mapping/getAutomationSystem" body="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//MappingTarget"/>
+    <genClasses ecoreClass="lib.ecore#//MemberVarDeclaration">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//MemberVarDeclaration/parentNames"/>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//Method"/>
-    <genClasses ecoreClass="lib.ecore#//Multiplexer"/>
+    <genClasses ecoreClass="lib.ecore#//Multiplexer">
+      <genOperations ecoreOperation="lib.ecore#//Multiplexer/getMemberVars" body="return getInterface().getInputVars();"/>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//OriginalSource">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//OriginalSource/text"/>
     </genClasses>
@@ -732,6 +740,7 @@
         <genParameters ecoreParameter="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface/newStruct"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//StructManipulator/updateConfiguration"/>
+      <genOperations ecoreOperation="lib.ecore#//StructManipulator/getMemberVars"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//SubAppType"/>
     <genClasses ecoreClass="lib.ecore#//SystemConfiguration">

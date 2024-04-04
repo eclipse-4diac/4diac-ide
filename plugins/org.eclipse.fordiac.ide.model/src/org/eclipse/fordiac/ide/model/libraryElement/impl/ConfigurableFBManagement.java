@@ -47,6 +47,15 @@ public final class ConfigurableFBManagement {
 	public static final String MUX_NAME = "STRUCT_MUX"; //$NON-NLS-1$
 
 	static void updateFbConfiguration(final ConfigurableFB fb) {
+		if (fb instanceof ConfigurableMoveFB) {
+			updateMoveFbConfiguration(fb);
+		} else if ((fb instanceof final StructManipulator sm)
+				&& (fb.getDataType() instanceof final StructuredType structType)) {
+			setStructTypeElementsAtInterface(sm, structType);
+		}
+	}
+
+	private static void updateMoveFbConfiguration(final ConfigurableFB fb) {
 		// if data type exists, set it as the data type of the input/output data pin
 		if (fb.getDataType() != null && fb.getInterface() != null) {
 			for (final VarDeclaration input : fb.getInterface().getInputVars()) {
@@ -75,8 +84,8 @@ public final class ConfigurableFBManagement {
 			// get data type from library
 			final DataType dataType = fb.getTypeLibrary().getDataTypeLibrary().getType(typeName);
 			fb.setDataType(dataType);
+			updateFbConfiguration(fb);
 		}
-		updateFbConfiguration(fb);
 	}
 
 	private static void loadStructManipulatorConfiguration(final StructManipulator fb, final String attributeName,
@@ -84,9 +93,7 @@ public final class ConfigurableFBManagement {
 		if (LibraryElementTags.STRUCT_MANIPULATOR_CONFIG.equals(attributeName) && typeName != null) {
 			final DataType dataType = fb.getTypeLibrary().getDataTypeLibrary().getType(typeName);
 			fb.setDataType(dataType);
-			if (dataType instanceof final StructuredType structType) {
-				setStructTypeElementsAtInterface(fb, structType);
-			}
+			updateFbConfiguration(fb);
 		}
 	}
 

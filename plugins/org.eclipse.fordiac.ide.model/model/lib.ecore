@@ -705,7 +705,14 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="fBNetwork" eType="#//FBNetwork"
         eOpposite="#//FBNetwork/dataConnections"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Demultiplexer" eSuperTypes="#//StructManipulator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Demultiplexer" eSuperTypes="#//StructManipulator">
+    <eOperations name="getMemberVars" upperBound="-1" eType="#//VarDeclaration">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getInterface().getOutputVars();"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isConfigured" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Device" eSuperTypes="#//TypedConfigureableObject #//PositionableElement #//ColorizableElement #//IVarElement">
     <eOperations name="getAutomationSystem" lowerBound="1" eType="#//AutomationSystem">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -1659,8 +1666,18 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="to" eType="#//FBNetworkElement"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MappingTarget" eSuperTypes="#//INamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MemberVarDeclaration" eSuperTypes="#//VarDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parentNames" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Method" abstract="true" eSuperTypes="#//ICallable"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Multiplexer" eSuperTypes="#//StructManipulator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Multiplexer" eSuperTypes="#//StructManipulator">
+    <eOperations name="getMemberVars" upperBound="-1" eType="#//VarDeclaration">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getInterface().getInputVars();"/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OriginalSource">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral="&quot;&quot;"/>
@@ -1951,6 +1968,7 @@
       <eParameters name="newStruct" eType="ecore:EClass data.ecore#//StructuredType"/>
     </eOperations>
     <eOperations name="updateConfiguration"/>
+    <eOperations name="getMemberVars" upperBound="-1" eType="#//VarDeclaration"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="structType" lowerBound="1"
         eType="ecore:EClass data.ecore#//StructuredType" transient="true"/>
   </eClassifiers>

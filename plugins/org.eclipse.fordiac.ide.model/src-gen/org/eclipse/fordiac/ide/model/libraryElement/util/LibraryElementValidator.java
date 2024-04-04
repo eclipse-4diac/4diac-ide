@@ -95,6 +95,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
@@ -566,6 +567,8 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateMapping((Mapping)value, diagnostics, context);
 			case LibraryElementPackage.MAPPING_TARGET:
 				return validateMappingTarget((MappingTarget)value, diagnostics, context);
+			case LibraryElementPackage.MEMBER_VAR_DECLARATION:
+				return validateMemberVarDeclaration((MemberVarDeclaration)value, diagnostics, context);
 			case LibraryElementPackage.METHOD:
 				return validateMethod((Method)value, diagnostics, context);
 			case LibraryElementPackage.MULTIPLEXER:
@@ -2689,6 +2692,33 @@ public class LibraryElementValidator extends EObjectValidator {
 	 */
 	public boolean validateWith(With with, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(with, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateMemberVarDeclaration(MemberVarDeclaration memberVarDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(memberVarDeclaration, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateIInterfaceElement_validateName(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateITypedElement_validateType(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateMultipleInputConnections(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForGenericTypeVariable(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueForGenericInstanceVariable(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappNetwork(memberVarDeclaration, diagnostics, context);
+		return result;
 	}
 
 	/**

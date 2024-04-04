@@ -18,24 +18,33 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.common.util.EList;
 
-
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Multiplexer</b></em>'.
+ * A representation of the model object '<em><b>Member Var Declaration</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <p>
+ * The following features are supported:
+ * </p>
+ * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration#getParentNames <em>Parent Names</em>}</li>
+ * </ul>
  *
- * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getMultiplexer()
+ * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getMemberVarDeclaration()
  * @model
  * @generated
  */
-public interface Multiplexer extends StructManipulator {
-
+public interface MemberVarDeclaration extends VarDeclaration {
 	/**
+	 * Returns the value of the '<em><b>Parent Names</b></em>' attribute list.
+	 * The list contents are of type {@link java.lang.String}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
+	 * @return the value of the '<em>Parent Names</em>' attribute list.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getMemberVarDeclaration_ParentNames()
+	 * @model
 	 * @generated
 	 */
-	EList<VarDeclaration> getMemberVars();
-} // Multiplexer
+	EList<String> getParentNames();
+
+} // MemberVarDeclaration
