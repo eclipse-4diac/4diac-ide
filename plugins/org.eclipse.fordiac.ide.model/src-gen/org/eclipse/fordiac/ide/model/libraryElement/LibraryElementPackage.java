@@ -2219,7 +2219,7 @@ public interface LibraryElementPackage extends EPackage {
 	int CFB_INSTANCE__GROUP = FB__GROUP;
 
 	/**
-	 * The feature id for the '<em><b>Cfb Network</b></em>' reference.
+	 * The feature id for the '<em><b>Cfb Network</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -7491,7 +7491,7 @@ public interface LibraryElementPackage extends EPackage {
 	int TYPED_SUB_APP__LOCKED = SUB_APP__LOCKED;
 
 	/**
-	 * The feature id for the '<em><b>Sub App Network</b></em>' reference.
+	 * The feature id for the '<em><b>Sub App Network</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -8230,10 +8230,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getCFBInstance();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.CFBInstance#getCfbNetwork <em>Cfb Network</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.CFBInstance#getCfbNetwork <em>Cfb Network</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Cfb Network</em>'.
+	 * @return the meta object for the containment reference '<em>Cfb Network</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CFBInstance#getCfbNetwork()
 	 * @see #getCFBInstance()
 	 * @generated
@@ -10850,10 +10850,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getTypedSubApp();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getSubAppNetwork <em>Sub App Network</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getSubAppNetwork <em>Sub App Network</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Sub App Network</em>'.
+	 * @return the meta object for the containment reference '<em>Sub App Network</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getSubAppNetwork()
 	 * @see #getTypedSubApp()
 	 * @generated
@@ -11466,7 +11466,7 @@ public interface LibraryElementPackage extends EPackage {
 		EClass CFB_INSTANCE = eINSTANCE.getCFBInstance();
 
 		/**
-		 * The meta object literal for the '<em><b>Cfb Network</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Cfb Network</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -13606,7 +13606,7 @@ public interface LibraryElementPackage extends EPackage {
 		EClass TYPED_SUB_APP = eINSTANCE.getTypedSubApp();
 
 		/**
-		 * The meta object literal for the '<em><b>Sub App Network</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Sub App Network</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

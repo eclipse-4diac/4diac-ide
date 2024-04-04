@@ -35,22 +35,22 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  */
 public interface TypedSubApp extends SubApp {
 	/**
-	 * Returns the value of the '<em><b>Sub App Network</b></em>' reference.
+	 * Returns the value of the '<em><b>Sub App Network</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Sub App Network</em>' reference.
+	 * @return the value of the '<em>Sub App Network</em>' containment reference.
 	 * @see #setSubAppNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTypedSubApp_SubAppNetwork()
-	 * @model transient="true"
+	 * @model containment="true" resolveProxies="true" transient="true" derived="true"
 	 * @generated
 	 */
 	FBNetwork getSubAppNetwork();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getSubAppNetwork <em>Sub App Network</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getSubAppNetwork <em>Sub App Network</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Sub App Network</em>' reference.
+	 * @param value the new value of the '<em>Sub App Network</em>' containment reference.
 	 * @see #getSubAppNetwork()
 	 * @generated
 	 */

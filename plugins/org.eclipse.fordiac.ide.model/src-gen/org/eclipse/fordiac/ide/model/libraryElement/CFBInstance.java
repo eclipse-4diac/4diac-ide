@@ -35,22 +35,22 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  */
 public interface CFBInstance extends FB {
 	/**
-	 * Returns the value of the '<em><b>Cfb Network</b></em>' reference.
+	 * Returns the value of the '<em><b>Cfb Network</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cfb Network</em>' reference.
+	 * @return the value of the '<em>Cfb Network</em>' containment reference.
 	 * @see #setCfbNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCFBInstance_CfbNetwork()
-	 * @model transient="true"
+	 * @model containment="true" resolveProxies="true" transient="true" derived="true"
 	 * @generated
 	 */
 	FBNetwork getCfbNetwork();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.CFBInstance#getCfbNetwork <em>Cfb Network</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.CFBInstance#getCfbNetwork <em>Cfb Network</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Cfb Network</em>' reference.
+	 * @param value the new value of the '<em>Cfb Network</em>' containment reference.
 	 * @see #getCfbNetwork()
 	 * @generated
 	 */
