@@ -16,58 +16,47 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
-import org.eclipse.emf.common.notify.Notification;
+import java.util.Collection;
 
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Demultiplexer</b></em>'.
+ * An implementation of the model object '<em><b>Member Var Declaration</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DemultiplexerImpl#isIsConfigured <em>Is Configured</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MemberVarDeclarationImpl#getParentNames <em>Parent Names</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class DemultiplexerImpl extends StructManipulatorImpl implements Demultiplexer {
+public class MemberVarDeclarationImpl extends VarDeclarationImpl implements MemberVarDeclaration {
 	/**
-	 * The default value of the '{@link #isIsConfigured() <em>Is Configured</em>}' attribute.
+	 * The cached value of the '{@link #getParentNames() <em>Parent Names</em>}' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isIsConfigured()
+	 * @see #getParentNames()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean IS_CONFIGURED_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isIsConfigured() <em>Is Configured</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isIsConfigured()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean isConfigured = IS_CONFIGURED_EDEFAULT;
+	protected EList<String> parentNames;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected DemultiplexerImpl() {
+	protected MemberVarDeclarationImpl() {
 		super();
 	}
 
@@ -78,7 +67,7 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return LibraryElementPackage.Literals.DEMULTIPLEXER;
+		return LibraryElementPackage.Literals.MEMBER_VAR_DECLARATION;
 	}
 
 	/**
@@ -87,31 +76,11 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 	 * @generated
 	 */
 	@Override
-	public boolean isIsConfigured() {
-		return isConfigured;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setIsConfigured(boolean newIsConfigured) {
-		boolean oldIsConfigured = isConfigured;
-		isConfigured = newIsConfigured;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEMULTIPLEXER__IS_CONFIGURED, oldIsConfigured, isConfigured));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<VarDeclaration> getMemberVars() {
-		return getInterface().getOutputVars();
+	public EList<String> getParentNames() {
+		if (parentNames == null) {
+			parentNames = new EDataTypeUniqueEList<String>(String.class, this, LibraryElementPackage.MEMBER_VAR_DECLARATION__PARENT_NAMES);
+		}
+		return parentNames;
 	}
 
 	/**
@@ -122,8 +91,8 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.DEMULTIPLEXER__IS_CONFIGURED:
-				return isIsConfigured();
+			case LibraryElementPackage.MEMBER_VAR_DECLARATION__PARENT_NAMES:
+				return getParentNames();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -134,11 +103,13 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.DEMULTIPLEXER__IS_CONFIGURED:
-				setIsConfigured((Boolean)newValue);
+			case LibraryElementPackage.MEMBER_VAR_DECLARATION__PARENT_NAMES:
+				getParentNames().clear();
+				getParentNames().addAll((Collection<? extends String>)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -154,8 +125,8 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.DEMULTIPLEXER__IS_CONFIGURED:
-				setIsConfigured(IS_CONFIGURED_EDEFAULT);
+			case LibraryElementPackage.MEMBER_VAR_DECLARATION__PARENT_NAMES:
+				getParentNames().clear();
 				return;
 			default:
 				super.eUnset(featureID);
@@ -171,8 +142,8 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.DEMULTIPLEXER__IS_CONFIGURED:
-				return isConfigured != IS_CONFIGURED_EDEFAULT;
+			case LibraryElementPackage.MEMBER_VAR_DECLARATION__PARENT_NAMES:
+				return parentNames != null && !parentNames.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -188,10 +159,10 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (isConfigured: "); //$NON-NLS-1$
-		result.append(isConfigured);
+		result.append(" (parentNames: "); //$NON-NLS-1$
+		result.append(parentNames);
 		result.append(')');
 		return result.toString();
 	}
 
-} //DemultiplexerImpl
+} //MemberVarDeclarationImpl

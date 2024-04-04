@@ -339,6 +339,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createMappingTargetAdapter();
 			}
 			@Override
+			public Adapter caseMemberVarDeclaration(MemberVarDeclaration object) {
+				return createMemberVarDeclarationAdapter();
+			}
+			@Override
 			public Adapter caseMethod(Method object) {
 				return createMethodAdapter();
 			}
@@ -1975,6 +1979,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createWithAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration <em>Member Var Declaration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration
+	 * @generated
+	 */
+	public Adapter createMemberVarDeclarationAdapter() {
 		return null;
 	}
 

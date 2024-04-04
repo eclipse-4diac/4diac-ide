@@ -810,6 +810,15 @@ public interface LibraryElementFactory extends EFactory {
 	With createWith();
 
 	/**
+	 * Returns a new object of class '<em>Member Var Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Member Var Declaration</em>'.
+	 * @generated
+	 */
+	MemberVarDeclaration createMemberVarDeclaration();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

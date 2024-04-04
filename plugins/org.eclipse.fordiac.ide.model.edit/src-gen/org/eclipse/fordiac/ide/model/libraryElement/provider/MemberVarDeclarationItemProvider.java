@@ -22,30 +22,28 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.ecore.EStructuralFeature;
-
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-
-import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants} object.
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class GlobalConstantsItemProvider extends LibraryElementItemProvider {
+public class MemberVarDeclarationItemProvider 
+	extends VarDeclarationItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public GlobalConstantsItemProvider(AdapterFactory adapterFactory) {
+	public MemberVarDeclarationItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -60,50 +58,42 @@ public class GlobalConstantsItemProvider extends LibraryElementItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addParentNamesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * This adds a property descriptor for the Parent Names feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__CONSTANTS);
-			childrenFeatures.add(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__SOURCE);
-		}
-		return childrenFeatures;
+	protected void addParentNamesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MemberVarDeclaration_parentNames_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_MemberVarDeclaration_parentNames_feature", "_UI_MemberVarDeclaration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.MEMBER_VAR_DECLARATION__PARENT_NAMES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
-	}
-
-	/**
-	 * This returns GlobalConstants.gif.
+	 * This returns MemberVarDeclaration.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/GlobalConstants")); //$NON-NLS-1$
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/MemberVarDeclaration")); //$NON-NLS-1$
 	}
 
 	/**
@@ -114,10 +104,10 @@ public class GlobalConstantsItemProvider extends LibraryElementItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((GlobalConstants)object).getName();
+		String label = ((MemberVarDeclaration)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_GlobalConstants_type") : //$NON-NLS-1$
-			getString("_UI_GlobalConstants_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			getString("_UI_MemberVarDeclaration_type") : //$NON-NLS-1$
+			getString("_UI_MemberVarDeclaration_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 
@@ -132,10 +122,9 @@ public class GlobalConstantsItemProvider extends LibraryElementItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(GlobalConstants.class)) {
-			case LibraryElementPackage.GLOBAL_CONSTANTS__CONSTANTS:
-			case LibraryElementPackage.GLOBAL_CONSTANTS__SOURCE:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+		switch (notification.getFeatureID(MemberVarDeclaration.class)) {
+			case LibraryElementPackage.MEMBER_VAR_DECLARATION__PARENT_NAMES:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			default:
 				super.notifyChanged(notification);
@@ -153,26 +142,6 @@ public class GlobalConstantsItemProvider extends LibraryElementItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__CONSTANTS,
-				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__CONSTANTS,
-				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__CONSTANTS,
-				 LibraryElementFactory.eINSTANCE.createMemberVarDeclaration()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__SOURCE,
-				 LibraryElementFactory.eINSTANCE.createOriginalSource()));
 	}
 
 }
