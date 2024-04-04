@@ -27,12 +27,15 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -116,15 +119,49 @@ public final class ConfigurableFBManagement {
 		if (fb instanceof final ConfigurableMoveFB movefb) {
 			return getFbMoveAttributes(movefb);
 		}
+		if (fb instanceof final Multiplexer mux) {
+			return getStructManipulatorAttributes(mux);
+		}
+		if (fb instanceof final Demultiplexer demux) {
+			return getConfigurableDemuxAttributes(demux);
+		}
 		return ECollections.emptyEList();
 	}
 
 	private static EList<Attribute> getFbMoveAttributes(final ConfigurableMoveFB fb) {
-
 		final Attribute attr = LibraryElementFactory.eINSTANCE.createAttribute();
 		attr.setName(LibraryElementTags.F_MOVE_CONFIG);
-		attr.setValue(fb.getDataType().getName());
+		attr.setValue(PackageNameHelper.getFullTypeName(fb.getDataType()));
 		return ECollections.asEList(attr);
+	}
+
+	private static EList<Attribute> getStructManipulatorAttributes(final StructManipulator fb) {
+		final Attribute attr = LibraryElementFactory.eINSTANCE.createAttribute();
+		attr.setName(LibraryElementTags.STRUCT_MANIPULATOR_CONFIG);
+		attr.setType(ElementaryTypes.STRING);
+		attr.setValue(PackageNameHelper.getFullTypeName(fb.getDataType()));
+		return ECollections.asEList(attr);
+	}
+
+	private static EList<Attribute> getConfigurableDemuxAttributes(final Demultiplexer fb) {
+		final Attribute attr = LibraryElementFactory.eINSTANCE.createAttribute();
+		attr.setName(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
+		attr.setType(ElementaryTypes.STRING);
+		attr.setValue(buildVisibleChildrenString(fb));
+		return ECollections.asEList(getStructManipulatorAttributes(fb).get(0), attr);
+	}
+
+	private static String buildVisibleChildrenString(final StructManipulator fb) {
+		final StringBuilder sb = new StringBuilder();
+		fb.getMemberVars().forEach(var -> sb.append(getMemberVarName((MemberVarDeclaration) var) + ",")); //$NON-NLS-1$
+		return sb.substring(0, sb.length() - 2); // avoid adding "," in the end
+	}
+
+	private static String getMemberVarName(final MemberVarDeclaration var) {
+		final StringBuilder sb = new StringBuilder();
+		var.getParentNames().forEach(name -> sb.append(name + ".")); //$NON-NLS-1$
+		sb.append(var.getName());
+		return sb.toString();
 	}
 
 	static void setStructTypeElementsAtInterface(final StructManipulator muxer, final StructuredType newStructType) {
