@@ -186,24 +186,18 @@
       </genOperations>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//ConfigurableFB">
-      <genOperations ecoreOperation="lib.ecore#//ConfigurableFB/updateConfiguration"/>
-      <genOperations ecoreOperation="lib.ecore#//ConfigurableFB/loadConfiguration">
-        <genParameters ecoreParameter="lib.ecore#//ConfigurableFB/loadConfiguration/config"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ConfigurableFB/dataType"/>
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableFB/updateConfiguration"
+          body="ConfigurableFBManagement.updateFbConfiguration(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableFB/loadConfiguration"
+          body="ConfigurableFBManagement.loadFbConfiguration(this, attributeName, typeName);">
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableFB/loadConfiguration/attributeName"/>
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableFB/loadConfiguration/typeName"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//ConfigurableFB/getConfigurationAsAttributes"
-          body="return ECollections.emptyEList();"/>
+          body="return ConfigurableFBManagement.getConfigurableFbAttributes(this);"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//ConfigurableMoveFB">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ConfigurableMoveFB/dataType"/>
-      <genOperations ecoreOperation="lib.ecore#//ConfigurableMoveFB/updateConfiguration"
-          body="// if data type exists, set it as the data type of the input/output data pin&#xA;if (dataType != null &amp;&amp; getInterface() != null) {&#xA;&#x9;for (final VarDeclaration input : getInterface().getInputVars()) {&#xA;&#x9;&#x9;input.setType(dataType);&#xA;&#x9;}&#xA;&#x9;for (final VarDeclaration output : getInterface().getOutputVars()) {&#xA;&#x9;&#x9;output.setType(dataType);&#xA;&#x9;} // FB_MOVE has no varinouts&#xA;}"/>
-      <genOperations ecoreOperation="lib.ecore#//ConfigurableMoveFB/loadConfiguration"
-          body="&#x9;&#x9;// attribute holds the name of the desired data type of input and output data&#xA;&#x9;&#x9;if ((config != null &amp;&amp; LibraryElementTags.F_MOVE_CONFIG.equals(config.getName()))&#xA;&#x9;&#x9;&#x9;&#x9;&amp;&amp; (config.getValue() != null)) {&#xA;&#x9;&#x9;&#x9;// get data type from library&#xA;&#x9;&#x9;&#x9;dataType = getTypeLibrary().getDataTypeLibrary().getTypeIfExists(config.getValue());&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;updateConfiguration();">
-        <genParameters ecoreParameter="lib.ecore#//ConfigurableMoveFB/loadConfiguration/config"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//ConfigurableMoveFB/getConfigurationAsAttributes"
-          body="return ECollections.emptyEList();"/>
-    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ConfigurableMoveFB"/>
     <genClasses image="false" ecoreClass="lib.ecore#//Connection">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Connection/brokenConnection"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Connection/source"/>
@@ -734,7 +728,7 @@
     <genClasses ecoreClass="lib.ecore#//StructManipulator">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//StructManipulator/structType"/>
       <genOperations ecoreOperation="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface"
-          body="org.eclipse.fordiac.ide.model.StructManipulation.setStructTypeElementsAtInterface(this, newStruct);">
+          body="ConfigurableFBManagement.setStructTypeElementsAtInterface(this, newStruct);">
         <genParameters ecoreParameter="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface/newStruct"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//StructManipulator/updateConfiguration"/>

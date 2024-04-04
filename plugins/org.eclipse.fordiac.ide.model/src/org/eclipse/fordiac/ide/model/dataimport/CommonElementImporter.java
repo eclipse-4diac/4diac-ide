@@ -466,7 +466,7 @@ public abstract class CommonElementImporter {
 			fb.getAttributes().add(attribute);
 			checkStructAttribute(structManipulator, attribute);
 		} else if (LibraryElementTags.F_MOVE_CONFIG.equals(attribute.getName())) {
-			fb.loadConfiguration(attribute);
+			fb.loadConfiguration(attribute.getName(), attribute.getValue());
 		}
 	}
 
