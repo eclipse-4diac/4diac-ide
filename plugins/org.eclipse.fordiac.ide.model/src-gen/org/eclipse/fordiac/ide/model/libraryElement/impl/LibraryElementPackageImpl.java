@@ -4266,7 +4266,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEParameter(op, ecorePackage.getEString(), "name", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(cfbInstanceEClass, CFBInstance.class, "CFBInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getCFBInstance_CfbNetwork(), this.getFBNetwork(), null, "cfbNetwork", null, 0, 1, CFBInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getCFBInstance_CfbNetwork(), this.getFBNetwork(), null, "cfbNetwork", null, 0, 1, CFBInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(cfbInstanceEClass, this.getFBNetwork(), "loadCFBNetwork", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -5125,7 +5125,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(typedSubAppEClass, TypedSubApp.class, "TypedSubApp", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getTypedSubApp_SubAppNetwork(), this.getFBNetwork(), null, "subAppNetwork", null, 0, 1, TypedSubApp.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getTypedSubApp_SubAppNetwork(), this.getFBNetwork(), null, "subAppNetwork", null, 0, 1, TypedSubApp.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(typedSubAppEClass, theXMLTypePackage.getBoolean(), "isTyped", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 

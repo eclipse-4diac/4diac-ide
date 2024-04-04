@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -42,7 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  */
 public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 	/**
-	 * The cached value of the '{@link #getCfbNetwork() <em>Cfb Network</em>}' reference.
+	 * The cached value of the '{@link #getCfbNetwork() <em>Cfb Network</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getCfbNetwork()
@@ -81,6 +82,12 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 			InternalEObject oldCfbNetwork = (InternalEObject)cfbNetwork;
 			cfbNetwork = (FBNetwork)eResolveProxy(oldCfbNetwork);
 			if (cfbNetwork != oldCfbNetwork) {
+				InternalEObject newCfbNetwork = (InternalEObject)cfbNetwork;
+				NotificationChain msgs = oldCfbNetwork.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK, null, null);
+				if (newCfbNetwork.eInternalContainer() == null) {
+					msgs = newCfbNetwork.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK, oldCfbNetwork, cfbNetwork));
 			}
@@ -102,12 +109,34 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setCfbNetwork(FBNetwork newCfbNetwork) {
+	public NotificationChain basicSetCfbNetwork(FBNetwork newCfbNetwork, NotificationChain msgs) {
 		FBNetwork oldCfbNetwork = cfbNetwork;
 		cfbNetwork = newCfbNetwork;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK, oldCfbNetwork, cfbNetwork));
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK, oldCfbNetwork, newCfbNetwork);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCfbNetwork(FBNetwork newCfbNetwork) {
+		if (newCfbNetwork != cfbNetwork) {
+			NotificationChain msgs = null;
+			if (cfbNetwork != null)
+				msgs = ((InternalEObject)cfbNetwork).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK, null, msgs);
+			if (newCfbNetwork != null)
+				msgs = ((InternalEObject)newCfbNetwork).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK, null, msgs);
+			msgs = basicSetCfbNetwork(newCfbNetwork, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK, newCfbNetwork, newCfbNetwork));
 	}
 
 	/**
@@ -133,6 +162,21 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 		   return (CompositeFBType) type; 
 		}
 		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK:
+				return basicSetCfbNetwork(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
 	}
 
 	/**
