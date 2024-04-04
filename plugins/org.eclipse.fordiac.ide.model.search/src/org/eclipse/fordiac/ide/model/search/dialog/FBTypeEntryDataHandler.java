@@ -12,11 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search.dialog;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.search.types.FBInstanceSearch;
+import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public class FBTypeEntryDataHandler extends AbstractTypeEntryDataHandler<TypeEntry> {
@@ -25,19 +25,10 @@ public class FBTypeEntryDataHandler extends AbstractTypeEntryDataHandler<TypeEnt
 	}
 
 	@Override
-	public HashMap<INamedElement, TypeEntry> createInputSet(final TypeEntry inputTypeEntry) {
-		final HashMap<INamedElement, TypeEntry> inputElementsSet = new HashMap<>();
-		final IProject project = typeEntry.getFile().getProject();
-		final FBInstanceSearch search = new FBInstanceSearch(typeEntry.getFullTypeName());
-		search.performProjectSearch(project).stream().forEach(sp -> {
-			inputElementsSet.put(sp, inputTypeEntry);
-		});
-
-		search.performInternalFBSearch(inputTypeEntry.getTypeLibrary()).stream().forEach(sp -> {
-			inputElementsSet.put(sp, inputTypeEntry);
-		});
-
-		return inputElementsSet;
+	public Map<INamedElement, TypeEntry> createInputSet(final TypeEntry inputTypeEntry) {
+		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(typeEntry);
+		return search.performSearch().stream().filter(INamedElement.class::isInstance).map(INamedElement.class::cast)
+				.collect(Collectors.toMap(el -> el, el -> inputTypeEntry));
 	}
 
 }
