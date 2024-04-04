@@ -2823,13 +2823,22 @@ public interface LibraryElementPackage extends EPackage {
 	int CONFIGURABLE_FB__GROUP = FB__GROUP;
 
 	/**
+	 * The feature id for the '<em><b>Data Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURABLE_FB__DATA_TYPE = FB_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Configurable FB</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONFIGURABLE_FB_FEATURE_COUNT = FB_FEATURE_COUNT + 0;
+	int CONFIGURABLE_FB_FEATURE_COUNT = FB_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableMoveFBImpl <em>Configurable Move FB</em>}' class.
@@ -2920,7 +2929,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONFIGURABLE_MOVE_FB__DATA_TYPE = CONFIGURABLE_FB_FEATURE_COUNT + 0;
+	int CONFIGURABLE_MOVE_FB__DATA_TYPE = CONFIGURABLE_FB__DATA_TYPE;
 
 	/**
 	 * The number of structural features of the '<em>Configurable Move FB</em>' class.
@@ -2929,7 +2938,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONFIGURABLE_MOVE_FB_FEATURE_COUNT = CONFIGURABLE_FB_FEATURE_COUNT + 1;
+	int CONFIGURABLE_MOVE_FB_FEATURE_COUNT = CONFIGURABLE_FB_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Dx1</b></em>' attribute.
@@ -3121,6 +3130,15 @@ public interface LibraryElementPackage extends EPackage {
 	int STRUCT_MANIPULATOR__GROUP = CONFIGURABLE_FB__GROUP;
 
 	/**
+	 * The feature id for the '<em><b>Data Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRUCT_MANIPULATOR__DATA_TYPE = CONFIGURABLE_FB__DATA_TYPE;
+
+	/**
 	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3209,6 +3227,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int DEMULTIPLEXER__GROUP = STRUCT_MANIPULATOR__GROUP;
+
+	/**
+	 * The feature id for the '<em><b>Data Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEMULTIPLEXER__DATA_TYPE = STRUCT_MANIPULATOR__DATA_TYPE;
 
 	/**
 	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
@@ -5363,6 +5390,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int MULTIPLEXER__GROUP = STRUCT_MANIPULATOR__GROUP;
+
+	/**
+	 * The feature id for the '<em><b>Data Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLEXER__DATA_TYPE = STRUCT_MANIPULATOR__DATA_TYPE;
 
 	/**
 	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
@@ -8549,6 +8585,17 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getConfigurableFB();
 
 	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB#getDataType <em>Data Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Data Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB#getDataType()
+	 * @see #getConfigurableFB()
+	 * @generated
+	 */
+	EReference getConfigurableFB_DataType();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB <em>Configurable Move FB</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8557,17 +8604,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getConfigurableMoveFB();
-
-	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB#getDataType <em>Data Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Data Type</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB#getDataType()
-	 * @see #getConfigurableMoveFB()
-	 * @generated
-	 */
-	EReference getConfigurableMoveFB_DataType();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection <em>Connection</em>}'.
@@ -11728,6 +11764,14 @@ public interface LibraryElementPackage extends EPackage {
 		EClass CONFIGURABLE_FB = eINSTANCE.getConfigurableFB();
 
 		/**
+		 * The meta object literal for the '<em><b>Data Type</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONFIGURABLE_FB__DATA_TYPE = eINSTANCE.getConfigurableFB_DataType();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableMoveFBImpl <em>Configurable Move FB</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11736,14 +11780,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CONFIGURABLE_MOVE_FB = eINSTANCE.getConfigurableMoveFB();
-
-		/**
-		 * The meta object literal for the '<em><b>Data Type</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CONFIGURABLE_MOVE_FB__DATA_TYPE = eINSTANCE.getConfigurableMoveFB_DataType();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl <em>Connection</em>}' class.

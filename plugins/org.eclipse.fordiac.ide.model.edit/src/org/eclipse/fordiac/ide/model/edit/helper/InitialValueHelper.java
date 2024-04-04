@@ -17,7 +17,6 @@
 
 package org.eclipse.fordiac.ide.model.edit.helper;
 
-import org.eclipse.fordiac.ide.model.StructManipulation;
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
@@ -41,7 +40,7 @@ public final class InitialValueHelper {
 				return varDec.getValue().getValue();
 			}
 			if (hasDataTypeInitialValue(varDec)) {
-				return StructManipulation.getMemberVarValue(varDec);
+				return getMemberVarValue(varDec);
 			}
 			return getDefaultValue(element);
 		}
@@ -60,9 +59,22 @@ public final class InitialValueHelper {
 
 	private static boolean hasDataTypeInitialValue(final VarDeclaration varDec) {
 		if (varDec.getFBNetworkElement() instanceof StructManipulator) {
-			return !StructManipulation.getMemberVarValue(varDec).isBlank();
+			return !getMemberVarValue(varDec).isBlank();
 		}
 		return false;
+	}
+
+	private static String getMemberVarValue(final VarDeclaration v) {
+		if ((v != null) && (v.getName() != null) && (v.getFBNetworkElement() instanceof final StructManipulator muxer)
+				&& (muxer.getStructType() != null)) {
+			final VarDeclaration matchingMember = muxer.getStructType().getMemberVariables().stream()
+					.filter(member -> v.getName().equals(member.getName())).findFirst().orElse(null);
+			if ((matchingMember != null) && (matchingMember.getValue() != null)) {
+				return matchingMember.getValue().getValue();
+			}
+		}
+
+		return ""; //$NON-NLS-1$
 	}
 
 	public static String getDefaultValue(final Object element) {
