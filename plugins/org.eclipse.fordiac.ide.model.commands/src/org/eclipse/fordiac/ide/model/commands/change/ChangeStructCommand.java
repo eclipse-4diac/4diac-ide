@@ -20,6 +20,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -28,8 +29,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 
 public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 
-	private final StructuredType newStruct;
+	private final DataType newStruct;
 	private final String newVisibleChildren;
+
+	public ChangeStructCommand(final StructManipulator mux) {
+		super(mux);
+		this.newStruct = mux.getDataType();
+		entry = mux.getTypeEntry();
+		newVisibleChildren = null;
+	}
 
 	public ChangeStructCommand(final StructManipulator mux, final StructuredType newStruct) {
 		super(mux);
@@ -54,6 +62,7 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 		}
 		newElement.setTypeEntry(entry);
 		setInterface();
+		handleConfigurableFB();
 		newElement.setName(oldElement.getName());
 
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));

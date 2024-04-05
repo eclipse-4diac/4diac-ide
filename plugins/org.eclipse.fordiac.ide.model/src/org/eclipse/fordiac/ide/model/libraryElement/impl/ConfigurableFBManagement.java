@@ -152,7 +152,7 @@ public final class ConfigurableFBManagement {
 	static String getMemberVarName(final MemberVarDeclaration varDecl) {
 		final StringBuilder sb = new StringBuilder();
 		varDecl.getParentNames().forEach(name -> sb.append(name + ".")); //$NON-NLS-1$
-		sb.append(varDecl.getName());
+		sb.append(varDecl.getVarName());
 		return sb.toString();
 	}
 

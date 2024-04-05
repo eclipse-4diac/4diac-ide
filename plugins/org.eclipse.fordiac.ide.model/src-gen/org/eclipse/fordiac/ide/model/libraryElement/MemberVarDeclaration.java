@@ -53,6 +53,14 @@ public interface MemberVarDeclaration extends VarDeclaration {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	String getFullName();
+	String getName();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getVarName();
 
 } // MemberVarDeclaration

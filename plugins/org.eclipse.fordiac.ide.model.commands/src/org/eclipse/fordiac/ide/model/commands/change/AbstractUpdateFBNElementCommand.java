@@ -104,6 +104,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		}
 
 		createNewFB();
+
 		checkGroup(oldElement, newElement); // needs to be done before anything is changed on the old element Bug
 		// 579570
 		if (network != null) {
@@ -112,11 +113,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		}
 
 		handleErrorMarker();
-
 		// Find connectionless pins which should be saved
 		handleParameters();
-
-		handleConfigurableFB();
 
 		// Find connections which should be reconnected
 		handleConnections();
@@ -150,8 +148,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	protected void handleConfigurableFB() {
 		// for the configurable fb we have to transfer the data type
-		if (newElement instanceof final ConfigurableFB configFb && oldElement instanceof final ConfigurableFB oldMove) {
-			configFb.setDataType(oldMove.getDataType());
+		if (newElement instanceof final ConfigurableFB configFb
+				&& oldElement instanceof final ConfigurableFB oldConfigFb) {
+			configFb.setDataType(oldConfigFb.getDataType());
 			configFb.updateConfiguration();
 		}
 	}
@@ -200,11 +199,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	public void setInterface() {
 		newElement.setInterface(newElement.getType().getInterfaceList().copy());
-
-		// handle configurable fb kinds
-		if (newElement instanceof final ConfigurableFB fbConfig) {
-			fbConfig.updateConfiguration();
-		}
 	}
 
 	private void transferVisibleAndVarConfigAttributes(final EList<VarDeclaration> varDeclList) {

@@ -37,7 +37,7 @@ public class DeleteDemuxPortCommand extends Command implements ScopedCommand {
 		this.type = Objects.requireNonNull(type);
 		this.node = Objects.requireNonNull(node);
 		this.variable = type.getMemberVars().stream().map(MemberVarDeclaration.class::cast)
-				.filter(member -> node.getPinName().equals(member.getFullName())).findAny().orElse(null);
+				.filter(member -> node.getPinName().equals(member.getName())).findAny().orElse(null);
 	}
 
 	@Override
