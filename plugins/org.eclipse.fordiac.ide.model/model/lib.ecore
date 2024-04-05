@@ -1667,6 +1667,11 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MappingTarget" eSuperTypes="#//INamedElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="MemberVarDeclaration" eSuperTypes="#//VarDeclaration">
+    <eOperations name="getFullName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return ConfigurableFBManagement.getMemberVarName(this);"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="parentNames" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
