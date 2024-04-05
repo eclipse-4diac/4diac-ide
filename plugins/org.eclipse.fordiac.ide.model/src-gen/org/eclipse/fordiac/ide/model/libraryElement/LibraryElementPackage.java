@@ -3139,22 +3139,13 @@ public interface LibraryElementPackage extends EPackage {
 	int STRUCT_MANIPULATOR__DATA_TYPE = CONFIGURABLE_FB__DATA_TYPE;
 
 	/**
-	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int STRUCT_MANIPULATOR__STRUCT_TYPE = CONFIGURABLE_FB_FEATURE_COUNT + 0;
-
-	/**
 	 * The number of structural features of the '<em>Struct Manipulator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STRUCT_MANIPULATOR_FEATURE_COUNT = CONFIGURABLE_FB_FEATURE_COUNT + 1;
+	int STRUCT_MANIPULATOR_FEATURE_COUNT = CONFIGURABLE_FB_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3236,15 +3227,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int DEMULTIPLEXER__DATA_TYPE = STRUCT_MANIPULATOR__DATA_TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEMULTIPLEXER__STRUCT_TYPE = STRUCT_MANIPULATOR__STRUCT_TYPE;
 
 	/**
 	 * The feature id for the '<em><b>Is Configured</b></em>' attribute.
@@ -5856,15 +5838,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int MULTIPLEXER__DATA_TYPE = STRUCT_MANIPULATOR__DATA_TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Struct Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MULTIPLEXER__STRUCT_TYPE = STRUCT_MANIPULATOR__STRUCT_TYPE;
 
 	/**
 	 * The number of structural features of the '<em>Multiplexer</em>' class.
@@ -10757,17 +10730,6 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getStructManipulator();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator#getStructType <em>Struct Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Struct Type</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.StructManipulator#getStructType()
-	 * @see #getStructManipulator()
-	 * @generated
-	 */
-	EReference getStructManipulator_StructType();
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.SubAppType <em>Sub App Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -13591,14 +13553,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass STRUCT_MANIPULATOR = eINSTANCE.getStructManipulator();
-
-		/**
-		 * The meta object literal for the '<em><b>Struct Type</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference STRUCT_MANIPULATOR__STRUCT_TYPE = eINSTANCE.getStructManipulator_StructType();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppTypeImpl <em>Sub App Type</em>}' class.

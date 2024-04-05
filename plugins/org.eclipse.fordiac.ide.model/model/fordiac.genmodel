@@ -734,11 +734,6 @@
       <genOperations ecoreOperation="lib.ecore#//SubApp/getVisibleHeight" body="return isUnfolded() ? getHeight() : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//StructManipulator">
-      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//StructManipulator/structType"/>
-      <genOperations ecoreOperation="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface"
-          body="ConfigurableFBManagement.setStructTypeElementsAtInterface(this, newStruct);">
-        <genParameters ecoreParameter="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface/newStruct"/>
-      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//StructManipulator/updateConfiguration"/>
       <genOperations ecoreOperation="lib.ecore#//StructManipulator/getMemberVars"/>
     </genClasses>

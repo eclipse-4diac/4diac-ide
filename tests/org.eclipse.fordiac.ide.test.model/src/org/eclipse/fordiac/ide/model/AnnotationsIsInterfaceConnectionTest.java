@@ -206,7 +206,8 @@ class AnnotationsIsInterfaceConnectionTest {
 		muxOut.setName(MUX_OUT);
 		muxblock.getInterface().getOutputVars().add(muxOut);
 
-		muxblock.setStructTypeElementsAtInterface(struct);
+		muxblock.setDataType(struct);
+		muxblock.updateConfiguration();
 		return muxblock;
 	}
 
@@ -226,7 +227,8 @@ class AnnotationsIsInterfaceConnectionTest {
 		demuxIn.setName(DEMUX_IN);
 		demuxblock.getInterface().getInputVars().add(demuxIn);
 
-		demuxblock.setStructTypeElementsAtInterface(struct);
+		demuxblock.setDataType(struct);
+		demuxblock.updateConfiguration();
 		return demuxblock;
 	}
 

@@ -55,7 +55,7 @@ public class StructuredDataTypeDataHandler extends AbstractTypeEntryDataHandler<
 		new FBInstanceSearch(typeEntry).performProjectSearch(project).stream()
 				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
 				.filter(fb -> fb instanceof final StructManipulator structmanipulator
-						&& structmanipulator.getStructType().equals(typeEntry.getTypeEditable()))
+						&& structmanipulator.getDataType().equals(typeEntry.getTypeEditable()))
 				.forEach(s -> {
 					if (s instanceof StructManipulator || (s instanceof final SubApp subApp && !subApp.isTyped())) {
 						inputElementsSet.put(s, inputDataTypeEntry);
@@ -63,9 +63,9 @@ public class StructuredDataTypeDataHandler extends AbstractTypeEntryDataHandler<
 						try {
 							children.get(s.getTypeName()).add(s);
 						} catch (final Exception e) {
-							FordiacLogHelper.logError("FBUPDATE Dialog cant find TypeName: " + s.getTypeName()
-									+ " of FBNE: " + s.getName() + " of class: " + s.getClass().getName()
-									+ " in children List: " + children.toString());
+							FordiacLogHelper.logError("FBUPDATE Dialog cant find TypeName: " + s.getTypeName() //$NON-NLS-1$
+									+ " of FBNE: " + s.getName() + " of class: " + s.getClass().getName() //$NON-NLS-1$ //$NON-NLS-2$
+									+ " in children List: " + children.toString()); //$NON-NLS-1$
 							children.get(s.getTypeName()).add(s);
 						}
 					}

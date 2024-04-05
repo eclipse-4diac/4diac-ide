@@ -19,22 +19,29 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 
 public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 
 	private final StructuredType newStruct;
+	private final String newVisibleChildren;
 
 	public ChangeStructCommand(final StructManipulator mux, final StructuredType newStruct) {
 		super(mux);
 		this.newStruct = newStruct;
 		entry = mux.getTypeEntry();
+		newVisibleChildren = null;
+	}
+
+	public ChangeStructCommand(final Demultiplexer demux, final String newVisibleChildren) {
+		super(demux);
+		newStruct = null;
+		this.newVisibleChildren = newVisibleChildren;
 	}
 
 	@Override
@@ -49,9 +56,13 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 		newElement.setName(oldElement.getName());
 
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
-		updateStruct(newStruct);
 		copyAttributes();
-		((StructManipulator) newElement).setStructTypeElementsAtInterface(newStruct);
+		if (newStruct != null) {
+			((StructManipulator) newElement).setDataType(newStruct);
+			((StructManipulator) newElement).updateConfiguration();
+		} else if (newElement instanceof final Demultiplexer demux) {
+			demux.loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, newVisibleChildren);
+		}
 		createValues();
 		transferInstanceComments();
 	}
@@ -66,22 +77,5 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 
 	public StructManipulator getOldMux() {
 		return (StructManipulator) oldElement;
-	}
-
-	// recursively update the struct's members because the lib only reloads them on
-	// startup
-	private static void updateStruct(final StructuredType struct) {
-		if (struct.getTypeLibrary() != null) {
-			final DataTypeLibrary lib = struct.getTypeLibrary().getDataTypeLibrary();
-			struct.getMemberVariables().stream().filter(varDecl -> varDecl.getType() instanceof StructuredType)
-					.forEach(varDecl -> {
-						final StructuredType updatedStruct = lib
-								.getStructuredType(PackageNameHelper.getFullTypeName(varDecl.getType()));
-						if (updatedStruct != null) {
-							varDecl.setType(updatedStruct);
-						}
-						updateStruct(updatedStruct);
-					});
-		}
 	}
 }

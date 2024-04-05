@@ -18,6 +18,7 @@
 package org.eclipse.fordiac.ide.model.edit.helper;
 
 import org.eclipse.fordiac.ide.model.data.AnyType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -66,8 +67,8 @@ public final class InitialValueHelper {
 
 	private static String getMemberVarValue(final VarDeclaration v) {
 		if ((v != null) && (v.getName() != null) && (v.getFBNetworkElement() instanceof final StructManipulator muxer)
-				&& (muxer.getStructType() != null)) {
-			final VarDeclaration matchingMember = muxer.getStructType().getMemberVariables().stream()
+				&& (muxer.getDataType() instanceof final StructuredType structType)) {
+			final VarDeclaration matchingMember = structType.getMemberVariables().stream()
 					.filter(member -> v.getName().equals(member.getName())).findFirst().orElse(null);
 			if ((matchingMember != null) && (matchingMember.getValue() != null)) {
 				return matchingMember.getValue().getValue();
