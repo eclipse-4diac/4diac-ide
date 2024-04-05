@@ -175,7 +175,8 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		t.test(state.getDemultiplexer());
 		t.test(!state.getDemultiplexer().getMemberVars().stream().filter(MemberVarDeclaration.class::isInstance)
 				.filter(out -> ((MemberVarDeclaration) out).getFullName().equals(name)).findAny().isEmpty());
-		t.test(Arrays.asList(getVisibleChildrenAttribute(state.getDemultiplexer()).getValue().split(",")) //$NON-NLS-1$
+		String attributeValue = getVisibleChildrenAttribute(state.getDemultiplexer()).getValue();
+		t.test(Arrays.asList(attributeValue.split(",")) //$NON-NLS-1$
 				.contains(name));
 	}
 

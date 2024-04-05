@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.gef.commands.Command;
 
 public class DeleteDemuxPortCommand extends Command implements ScopedCommand {
@@ -35,9 +36,8 @@ public class DeleteDemuxPortCommand extends Command implements ScopedCommand {
 	public DeleteDemuxPortCommand(final Demultiplexer type, final CheckableStructTreeNode node) {
 		this.type = Objects.requireNonNull(type);
 		this.node = Objects.requireNonNull(node);
-		// TODO: add specific method for demultiplexer to also find member vars in dot
-		// notation
-		this.variable = type.getInterfaceElement(node.getPinName());
+		this.variable = type.getMemberVars().stream().map(MemberVarDeclaration.class::cast)
+				.filter(member -> node.getPinName().equals(member.getFullName())).findAny().orElse(null);
 	}
 
 	@Override

@@ -145,8 +145,8 @@ public final class ConfigurableFBManagement {
 			return ""; //$NON-NLS-1$
 		}
 		final StringBuilder sb = new StringBuilder();
-		fb.getMemberVars().forEach(var -> sb.append(getMemberVarName((MemberVarDeclaration) var) + ",")); //$NON-NLS-1$
-		return sb.substring(0, sb.length() - 2); // avoid adding "," in the end
+		fb.getMemberVars().forEach(varDecl -> sb.append(getMemberVarName((MemberVarDeclaration) varDecl) + ",")); //$NON-NLS-1$
+		return sb.substring(0, sb.length() - 1); // avoid adding "," in the end
 	}
 
 	static String getMemberVarName(final MemberVarDeclaration varDecl) {
