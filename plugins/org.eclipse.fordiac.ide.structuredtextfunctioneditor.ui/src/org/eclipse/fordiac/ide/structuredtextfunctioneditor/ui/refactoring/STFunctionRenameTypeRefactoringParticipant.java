@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.RenameTypeRefactoringParticipant;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -40,7 +39,7 @@ public class STFunctionRenameTypeRefactoringParticipant extends RenameTypeRefact
 	}
 
 	@Override
-	public void checkFileEnding(final RefactoringStatus result, final TypeEntry typeEntry) {
+	protected void checkFileEnding(final RefactoringStatus result) {
 		// not necessary
 	}
 }
