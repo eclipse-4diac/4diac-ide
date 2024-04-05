@@ -140,7 +140,7 @@ public final class ConfigurableFBManagement {
 		return ECollections.asEList(getStructManipulatorAttributes(fb).get(0), attr);
 	}
 
-	private static String buildVisibleChildrenString(final StructManipulator fb) {
+	public static String buildVisibleChildrenString(final StructManipulator fb) {
 		if (fb.getMemberVars().isEmpty()) {
 			return ""; //$NON-NLS-1$
 		}
@@ -255,6 +255,8 @@ public final class ConfigurableFBManagement {
 					withedEvent.getWith().add(with);
 				});
 			}
+			// configure pin
+			demux.getInterface().getInputVars().get(0).setType(demux.getDataType());
 		}
 	}
 
