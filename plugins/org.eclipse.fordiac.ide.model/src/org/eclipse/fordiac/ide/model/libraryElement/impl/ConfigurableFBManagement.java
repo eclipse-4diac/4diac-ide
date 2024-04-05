@@ -14,6 +14,7 @@
 
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.emf.common.util.ECollections;
@@ -21,7 +22,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -64,12 +64,13 @@ public final class ConfigurableFBManagement {
 	static void loadFbConfiguration(final ConfigurableFB fb, final String attributeName, final String typeName) {
 		if (fb instanceof final ConfigurableMoveFB moveFB) {
 			loadFbMoveConfiguration(moveFB, attributeName, typeName);
-		} else if (fb instanceof final StructManipulator structFB) {
-			loadStructManipulatorConfiguration(structFB, attributeName, typeName);
-		}
-		if (fb instanceof final Demultiplexer demux) {
+		} else if (fb instanceof final Demultiplexer demux) {
 			loadVisibleChildrenDemuxConfiguration(demux, attributeName, typeName);
 		}
+		if (fb instanceof final StructManipulator structFB) {
+			loadStructManipulatorConfiguration(structFB, attributeName, typeName);
+		}
+
 	}
 
 	private static void loadFbMoveConfiguration(final ConfigurableMoveFB fb, final String attributeName,
@@ -148,10 +149,10 @@ public final class ConfigurableFBManagement {
 		return sb.substring(0, sb.length() - 2); // avoid adding "," in the end
 	}
 
-	static String getMemberVarName(final MemberVarDeclaration var) {
+	static String getMemberVarName(final MemberVarDeclaration varDecl) {
 		final StringBuilder sb = new StringBuilder();
-		var.getParentNames().forEach(name -> sb.append(name + ".")); //$NON-NLS-1$
-		sb.append(var.getName());
+		varDecl.getParentNames().forEach(name -> sb.append(name + ".")); //$NON-NLS-1$
+		sb.append(varDecl.getName());
 		return sb.toString();
 	}
 
@@ -178,7 +179,7 @@ public final class ConfigurableFBManagement {
 
 	private static void updateDemuxConfiguration(final StructManipulator muxer) {
 		// create member variables of struct as data output ports
-		if (muxer.getDataType() instanceof final StructuredType structType) {
+		if (muxer.getDataType() instanceof StructuredType) {
 			final Event outputEvent = muxer.getInterface().getEventOutputs().get(0);
 			createMemberVars(muxer, outputEvent, false);
 		} else {
@@ -218,34 +219,42 @@ public final class ConfigurableFBManagement {
 	}
 
 	private static void updateConfiguredDemuxConfiguration(final Demultiplexer demux, final String visibleChildren) {
-		if (visibleChildren != null && (demux.getDataType() instanceof final StructuredType structType)) {
-			final String[] memberVarNames = visibleChildren.trim().split(","); //$NON-NLS-1$
-			for (final String memberVarName : memberVarNames) {
-				final String[] subnames = memberVarName.split("\\."); //$NON-NLS-1$
-				final MemberVarDeclaration pin = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
-				pin.setName(subnames[subnames.length - 1]);
-				final VarDeclaration varInStruct = findVarDeclarationInStruct(structType, memberVarName);
-				if (varInStruct != null) {
-					pin.setType(varInStruct.getType());
-					System.out.println("cuold not find variable in struct:" + memberVarName);
-				} else {
-					pin.setType(IecTypes.GenericTypes.ANY);
-				}
-				pin.setValue(LibraryElementFactory.eINSTANCE.createValue());
-				pin.setIsInput(false);
-				demux.getMemberVars().add(pin);
-			}
-			// clear any previous withs
-			final Event withedEvent = demux.getInterface().getEventOutputs().get(0);
-			withedEvent.getWith().clear();
-			// create with constructs
-			demux.getMemberVars().forEach(varDecl -> {
-				final With with = LibraryElementFactory.eINSTANCE.createWith();
-				with.setVariables(varDecl);
-				withedEvent.getWith().add(with);
-			});
-		} else {
+		if (visibleChildren == null || !(demux.getDataType() instanceof StructuredType) || !demux.isIsConfigured()) {
 			updateDemuxConfiguration(demux);
+		} else {
+			// no children visible, hide all
+			demux.getMemberVars().clear();
+			demux.getInterface().getEventOutputs().get(0).getWith().clear();
+
+			if (!visibleChildren.isBlank()) {
+				final StructuredType structType = (StructuredType) demux.getDataType();
+				final String[] memberVarNames = visibleChildren.trim().split(","); //$NON-NLS-1$
+				for (final String memberVarName : memberVarNames) {
+					final String[] subnames = memberVarName.trim().split("\\."); //$NON-NLS-1$
+					final MemberVarDeclaration pin = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
+					pin.setName(subnames[subnames.length - 1]);
+					final VarDeclaration varInStruct = findVarDeclarationInStruct(structType, memberVarName);
+					if (varInStruct != null) {
+						pin.setType(varInStruct.getType());
+					} else {
+						// error marker data type, no known type name
+						pin.setType(demux.getTypeLibrary().getDataTypeLibrary().getType("")); //$NON-NLS-1$
+					}
+					pin.setValue(LibraryElementFactory.eINSTANCE.createValue());
+					pin.setIsInput(false);
+					pin.getParentNames().addAll(Arrays.asList(subnames).subList(0, subnames.length - 1));
+					demux.getMemberVars().add(pin);
+				}
+				// clear any previous withs
+				final Event withedEvent = demux.getInterface().getEventOutputs().get(0);
+				withedEvent.getWith().clear();
+				// create with constructs
+				demux.getMemberVars().forEach(varDecl -> {
+					final With with = LibraryElementFactory.eINSTANCE.createWith();
+					with.setVariables(varDecl);
+					withedEvent.getWith().add(with);
+				});
+			}
 		}
 	}
 
@@ -258,10 +267,11 @@ public final class ConfigurableFBManagement {
 			final Object[] findings = members.stream().filter(memVar -> memVar.getName().equals(subname)).toArray();
 			if (findings.length > 0) {
 				found = (VarDeclaration) findings[0];
+				if (found.getType() instanceof final StructuredType structType) {
+					members = structType.getMemberVariables();
+				}
 			}
-			if ((null != found) && (found.getType() instanceof final StructuredType structType)) {
-				members = structType.getMemberVariables();
-			}
+
 		}
 		return found;
 	}

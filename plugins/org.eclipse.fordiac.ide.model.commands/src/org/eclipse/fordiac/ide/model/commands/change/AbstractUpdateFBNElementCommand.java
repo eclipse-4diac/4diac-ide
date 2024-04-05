@@ -38,7 +38,6 @@ import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -150,11 +149,10 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	}
 
 	protected void handleConfigurableFB() {
-		// for the configurable move fb we have to transfer the data type
-		if (newElement instanceof final ConfigurableMoveFB fMove
-				&& oldElement instanceof final ConfigurableMoveFB oldMove) {
-			fMove.setDataType(oldMove.getDataType());
-			fMove.updateConfiguration();
+		// for the configurable fb we have to transfer the data type
+		if (newElement instanceof final ConfigurableFB configFb && oldElement instanceof final ConfigurableFB oldMove) {
+			configFb.setDataType(oldMove.getDataType());
+			configFb.updateConfiguration();
 		}
 	}
 
