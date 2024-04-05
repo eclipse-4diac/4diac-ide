@@ -41,6 +41,7 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 	public ChangeStructCommand(final Demultiplexer demux, final String newVisibleChildren) {
 		super(demux);
 		newStruct = null;
+		entry = demux.getTypeEntry();
 		this.newVisibleChildren = newVisibleChildren;
 	}
 
@@ -57,14 +58,27 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
 		copyAttributes();
-		if (newStruct != null) {
-			((StructManipulator) newElement).setDataType(newStruct);
-			((StructManipulator) newElement).updateConfiguration();
-		} else if (newElement instanceof final Demultiplexer demux) {
-			demux.loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, newVisibleChildren);
-		}
+
 		createValues();
 		transferInstanceComments();
+	}
+
+	@Override
+	protected void handleConfigurableFB() {
+		if (newStruct != null) {
+			getNewMux().setDataType(newStruct);
+			getNewMux().updateConfiguration();
+		} else if (isDemuxConfiguration()) {
+			getNewMux().setDataType(getOldMux().getDataType());
+			getNewMux().loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, newVisibleChildren);
+		}
+	}
+
+	private boolean isDemuxConfiguration() {
+		if (newElement instanceof final Demultiplexer demux) {
+			return demux.isIsConfigured() || newVisibleChildren != null;
+		}
+		return false;
 	}
 
 	protected void copyAttributes() {

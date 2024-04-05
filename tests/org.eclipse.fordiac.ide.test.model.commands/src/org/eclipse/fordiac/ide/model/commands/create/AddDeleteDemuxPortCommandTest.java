@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CheckableStructTree;
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
@@ -27,11 +28,13 @@ import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateMemberVariableCommandTestBase.State;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -170,21 +173,23 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 
 	protected static void verifyAdded(final State state, final TestFunction t, final String name) {
 		t.test(state.getDemultiplexer());
-		t.test(!state.getDemultiplexer().getInterface().getOutputVars().stream()
-				.filter(out -> out.getName().equals(name)).findAny().isEmpty());
-		t.test(Arrays
-				.asList(state.getDemultiplexer().getAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN).getValue()
-						.split(",")) //$NON-NLS-1$
+		t.test(!state.getDemultiplexer().getMemberVars().stream().filter(MemberVarDeclaration.class::isInstance)
+				.filter(out -> ((MemberVarDeclaration) out).getFullName().equals(name)).findAny().isEmpty());
+		t.test(Arrays.asList(getVisibleChildrenAttribute(state.getDemultiplexer()).getValue().split(",")) //$NON-NLS-1$
 				.contains(name));
+	}
+
+	private static Attribute getVisibleChildrenAttribute(final Demultiplexer demux) {
+		final EList<Attribute> attributes = demux.getConfigurationAsAttributes();
+		return attributes.stream().filter(attr -> attr.getName().equals(LibraryElementTags.DEMUX_VISIBLE_CHILDREN))
+				.findFirst().orElse(null);
 	}
 
 	protected static void verifyDeleted(final State state, final TestFunction t, final String name) {
 		t.test(state.getDemultiplexer());
 		t.test(state.getDemultiplexer().getInterface().getOutputVars().stream()
 				.filter(out -> out.getName().equals(name)).findAny().isEmpty());
-		t.test(!Arrays
-				.asList(state.getDemultiplexer().getAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN).getValue()
-						.split(",")) //$NON-NLS-1$
+		t.test(!Arrays.asList(getVisibleChildrenAttribute(state.getDemultiplexer()).getValue().split(",")) //$NON-NLS-1$
 				.contains(name));
 	}
 

@@ -41,22 +41,19 @@ public class AddDemuxPortCommand extends Command implements ScopedCommand {
 	@Override
 	public void execute() {
 		node.updateNode(true);
-		if (null == newVisibleChildren) {
-			newVisibleChildren = node.getTree().getRoot().visibleToString();
-		}
+		newVisibleChildren = node.getTree().getRoot().visibleToString();
 		cmd = new ChangeStructCommand(type, newVisibleChildren);
 		if (cmd.canExecute()) {
 			cmd.execute();
 		}
 		oldMux = type;
 		type = (Demultiplexer) cmd.getNewMux();
-		type.setIsConfigured(true);
 	}
 
 	@Override
 	public boolean canExecute() {
 		// can execute if port doesn't exist in demux yet
-		return (varName != null && oldMux.getInterfaceElement(node.getPinName()) == null);
+		return (varName != null && type.getInterfaceElement(node.getPinName()) == null);
 	}
 
 	@Override
