@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.gef.commands.Command;
 
 public class AddDemuxPortCommand extends Command implements ScopedCommand {
@@ -52,8 +53,12 @@ public class AddDemuxPortCommand extends Command implements ScopedCommand {
 
 	@Override
 	public boolean canExecute() {
+		if (varName == null) {
+			return false;
+		}
 		// can execute if port doesn't exist in demux yet
-		return (varName != null && type.getInterfaceElement(node.getPinName()) == null);
+		return type.getMemberVars().stream().map(MemberVarDeclaration.class::cast)
+				.noneMatch(member -> node.getPinName().equals(member.getFullName()));
 	}
 
 	@Override
