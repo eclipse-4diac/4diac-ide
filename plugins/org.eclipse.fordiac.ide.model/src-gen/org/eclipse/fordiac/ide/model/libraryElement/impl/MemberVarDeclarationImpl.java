@@ -89,6 +89,16 @@ public class MemberVarDeclarationImpl extends VarDeclarationImpl implements Memb
 	 * @generated
 	 */
 	@Override
+	public String getFullName() {
+		return ConfigurableFBManagement.getMemberVarName(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.MEMBER_VAR_DECLARATION__PARENT_NAMES:

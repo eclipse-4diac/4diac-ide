@@ -47,4 +47,12 @@ public interface MemberVarDeclaration extends VarDeclaration {
 	 */
 	EList<String> getParentNames();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getFullName();
+
 } // MemberVarDeclaration

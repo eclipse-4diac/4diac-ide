@@ -147,7 +147,7 @@ public final class ConfigurableFBManagement {
 		return sb.substring(0, sb.length() - 2); // avoid adding "," in the end
 	}
 
-	private static String getMemberVarName(final MemberVarDeclaration var) {
+	static String getMemberVarName(final MemberVarDeclaration var) {
 		final StringBuilder sb = new StringBuilder();
 		var.getParentNames().forEach(name -> sb.append(name + ".")); //$NON-NLS-1$
 		sb.append(var.getName());
