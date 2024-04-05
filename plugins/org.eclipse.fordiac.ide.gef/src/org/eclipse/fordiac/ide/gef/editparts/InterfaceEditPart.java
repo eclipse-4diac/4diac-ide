@@ -195,7 +195,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	private static String getPinName(final IInterfaceElement pin) {
 		if (pin instanceof final MemberVarDeclaration memberVarDecl) {
-			return memberVarDecl.getFullName();
+			return memberVarDecl.getName();
 		}
 		return pin.getName();
 	}

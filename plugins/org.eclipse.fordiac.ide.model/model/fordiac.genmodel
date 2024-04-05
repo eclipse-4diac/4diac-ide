@@ -619,8 +619,9 @@
     <genClasses ecoreClass="lib.ecore#//MappingTarget"/>
     <genClasses ecoreClass="lib.ecore#//MemberVarDeclaration">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//MemberVarDeclaration/parentNames"/>
-      <genOperations ecoreOperation="lib.ecore#//MemberVarDeclaration/getFullName"
-          body="return ConfigurableFBManagement.getMemberVarName(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//MemberVarDeclaration/getName" body="return ConfigurableFBManagement.getMemberVarName(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//MemberVarDeclaration/getVarName"
+          body="return super.getName();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Method"/>
     <genClasses ecoreClass="lib.ecore#//Multiplexer">

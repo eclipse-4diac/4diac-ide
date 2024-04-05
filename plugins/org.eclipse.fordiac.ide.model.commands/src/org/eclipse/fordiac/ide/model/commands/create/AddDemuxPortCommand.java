@@ -58,7 +58,7 @@ public class AddDemuxPortCommand extends Command implements ScopedCommand {
 		}
 		// can execute if port doesn't exist in demux yet
 		return type.getMemberVars().stream().map(MemberVarDeclaration.class::cast)
-				.noneMatch(member -> node.getPinName().equals(member.getFullName()));
+				.noneMatch(member -> node.getPinName().equals(member.getName()));
 	}
 
 	@Override

@@ -62,6 +62,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 	protected void createNewFB() {
 		newElement = createCopiedFBEntry(oldElement);
 		setInterface();
+		handleConfigurableFB();
 		newElement.setName(oldElement.getName());
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
 		createValues();
