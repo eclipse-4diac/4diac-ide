@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
 
 public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 
@@ -36,14 +37,21 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 		super(mux);
 		this.newStruct = mux.getDataType();
 		entry = mux.getTypeEntry();
-		newVisibleChildren = null;
+		newVisibleChildren = getOldVisibleChildren(mux);
 	}
 
 	public ChangeStructCommand(final StructManipulator mux, final StructuredType newStruct) {
 		super(mux);
 		this.newStruct = newStruct;
 		entry = mux.getTypeEntry();
-		newVisibleChildren = null;
+		newVisibleChildren = getOldVisibleChildren(mux);
+	}
+
+	private static String getOldVisibleChildren(final StructManipulator mux) {
+		if (mux instanceof final Demultiplexer demux && demux.isIsConfigured()) {
+			return ConfigurableFBManagement.buildVisibleChildrenString(demux);
+		}
+		return null;
 	}
 
 	public ChangeStructCommand(final Demultiplexer demux, final String newVisibleChildren) {
@@ -76,10 +84,11 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 	protected void handleConfigurableFB() {
 		if (newStruct != null) {
 			getNewMux().setDataType(newStruct);
-			getNewMux().updateConfiguration();
-		} else if (isDemuxConfiguration()) {
-			getNewMux().setDataType(getOldMux().getDataType());
+		}
+		if (isDemuxConfiguration()) {
 			getNewMux().loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, newVisibleChildren);
+		} else {
+			getNewMux().updateConfiguration();
 		}
 	}
 
