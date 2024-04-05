@@ -24,7 +24,6 @@ public abstract class Abstract4diacEditPartFactory implements EditPartFactory {
 	private final GraphicalEditor editor;
 
 	protected Abstract4diacEditPartFactory(final GraphicalEditor editor) {
-		super();
 		this.editor = editor;
 	}
 
@@ -37,13 +36,13 @@ public abstract class Abstract4diacEditPartFactory implements EditPartFactory {
 		// get EditPart for model element
 		EditPart part = null;
 		try {
-			if (modelElement instanceof IEditPartCreator) {
+			if (modelElement instanceof final IEditPartCreator epCreator) {
 				// this if needs be the first check so that plugins can more easily provide
 				// special behavior for derived classes
 				// (e.g., interface elements for monitored adapters)
-				part = ((IEditPartCreator) modelElement).createEditPart();
-			} else if (modelElement instanceof IConnectionEditPartCreator) {
-				part = ((IConnectionEditPartCreator) modelElement).createEditPart();
+				part = epCreator.createEditPart();
+			} else if (modelElement instanceof final IConnectionEditPartCreator connCreator) {
+				part = connCreator.createEditPart();
 			} else {
 				part = getPartForElement(context, modelElement);
 			}

@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -223,7 +224,13 @@ public final class ConfigurableFBManagement {
 				final String[] subnames = memberVarName.split("\\."); //$NON-NLS-1$
 				final MemberVarDeclaration pin = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
 				pin.setName(subnames[subnames.length - 1]);
-				pin.setType(findVarDeclarationInStruct(structType, memberVarName).getType());
+				final VarDeclaration varInStruct = findVarDeclarationInStruct(structType, memberVarName);
+				if (varInStruct != null) {
+					pin.setType(varInStruct.getType());
+					System.out.println("cuold not find variable in struct:" + memberVarName);
+				} else {
+					pin.setType(IecTypes.GenericTypes.ANY);
+				}
 				pin.setValue(LibraryElementFactory.eINSTANCE.createValue());
 				pin.setIsInput(false);
 				demux.getMemberVars().add(pin);
