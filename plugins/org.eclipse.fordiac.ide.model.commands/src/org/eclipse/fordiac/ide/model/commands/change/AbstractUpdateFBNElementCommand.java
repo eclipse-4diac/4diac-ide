@@ -35,23 +35,20 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteErrorMarkerCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -207,13 +204,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		newElement.setInterface(newElement.getType().getInterfaceList().copy());
 
 		// handle configurable fb kinds
-		if (newElement instanceof final Multiplexer multiplexer) {
-			multiplexer.setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry).getType()
-					.getInterfaceList().getOutputVars().get(0).getType());
-		}
-		if (newElement instanceof final Demultiplexer demultiplexer) {
-			demultiplexer.setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry).getType()
-					.getInterfaceList().getInputVars().get(0).getType());
+		if (newElement instanceof final ConfigurableFB fbConfig) {
+			fbConfig.updateConfiguration();
 		}
 	}
 

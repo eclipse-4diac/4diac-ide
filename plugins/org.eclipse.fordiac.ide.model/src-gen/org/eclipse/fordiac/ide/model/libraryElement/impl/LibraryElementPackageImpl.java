@@ -3159,15 +3159,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EReference getStructManipulator_StructType() {
-		return (EReference)structManipulatorEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getSubAppType() {
 		return subAppTypeEClass;
 	}
@@ -4016,7 +4007,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEAttribute(subAppEClass, SUB_APP__LOCKED);
 
 		structManipulatorEClass = createEClass(STRUCT_MANIPULATOR);
-		createEReference(structManipulatorEClass, STRUCT_MANIPULATOR__STRUCT_TYPE);
 
 		subAppTypeEClass = createEClass(SUB_APP_TYPE);
 
@@ -5106,10 +5096,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(subAppEClass, theXMLTypePackage.getInt(), "getVisibleHeight", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(structManipulatorEClass, StructManipulator.class, "StructManipulator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getStructManipulator_StructType(), theDataPackage.getStructuredType(), null, "structType", null, 1, 1, StructManipulator.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-
-		op = addEOperation(structManipulatorEClass, null, "setStructTypeElementsAtInterface", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, theDataPackage.getStructuredType(), "newStruct", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(structManipulatorEClass, null, "updateConfiguration", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 

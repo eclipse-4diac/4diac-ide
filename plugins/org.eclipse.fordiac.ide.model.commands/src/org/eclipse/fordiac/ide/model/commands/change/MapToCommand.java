@@ -185,7 +185,8 @@ public class MapToCommand extends Command implements ScopedCommand {
 
 	private FBNetworkElement createTargetStructManipulator() {
 		final StructManipulator manipulator = (StructManipulator) createTargetFB();
-		manipulator.setStructTypeElementsAtInterface(((StructManipulator) srcElement).getStructType());
+		manipulator.setDataType(((StructManipulator) srcElement).getDataType());
+		manipulator.updateConfiguration();
 		return manipulator;
 	}
 

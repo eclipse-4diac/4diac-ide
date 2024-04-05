@@ -48,8 +48,8 @@ public abstract class AbstractStructManipulatorEditPart extends AbstractFBNEleme
 	protected List<Object> getModelChildren() {
 		final List<Object> elements = super.getModelChildren();
 		final StructManipulator model = getModel();
-		if (model.getStructType() != null) {
-			elements.add(model.getStructType());
+		if (model.getDataType() != null) {
+			elements.add(model.getDataType());
 		} else {
 			elements.add(GenericTypes.ANY_STRUCT);
 		}

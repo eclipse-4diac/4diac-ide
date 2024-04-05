@@ -94,8 +94,8 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			typeLib.addTypeEntry(te);
 			d.setTypeEntry(te);
 
-			d.setStructType(struct);
-			d.setStructTypeElementsAtInterface(struct);
+			d.setDataType(struct);
+			d.updateConfiguration();
 			final FBNetwork dummyFbN = LibraryElementFactory.eINSTANCE.createFBNetwork();
 			dummyFbN.getNetworkElements().add(d);
 

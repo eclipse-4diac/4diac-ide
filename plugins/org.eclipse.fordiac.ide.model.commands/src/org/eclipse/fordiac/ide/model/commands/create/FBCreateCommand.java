@@ -14,14 +14,12 @@
 package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.fordiac.ide.model.commands.Messages;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
@@ -70,12 +68,8 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	@Override
 	public void execute() {
 		super.execute();
-		if (getFB() instanceof final Multiplexer multiplexer) {
-			multiplexer.setStructTypeElementsAtInterface(
-					(StructuredType) typeEntry.getType().getInterfaceList().getOutputVars().get(0).getType());
-		} else if (getFB() instanceof final Demultiplexer demux) {
-			demux.setStructTypeElementsAtInterface(
-					(StructuredType) typeEntry.getType().getInterfaceList().getInputVars().get(0).getType());
+		if (getFB() instanceof final ConfigurableFB fb) {
+			fb.updateConfiguration();
 		}
 	}
 

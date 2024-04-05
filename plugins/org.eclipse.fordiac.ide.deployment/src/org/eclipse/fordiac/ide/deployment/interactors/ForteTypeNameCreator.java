@@ -17,9 +17,7 @@ package org.eclipse.fordiac.ide.deployment.interactors;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 
 public class ForteTypeNameCreator {
 
@@ -38,13 +36,7 @@ public class ForteTypeNameCreator {
 	}
 
 	private static String getConfigureFBType(final ConfigurableFB confFB) {
-		DataType dt = null;
-		if (confFB instanceof final ConfigurableMoveFB move) {
-			dt = move.getDataType();
-		}
-		if (confFB instanceof final StructManipulator structMan) {
-			dt = structMan.getStructType();
-		}
+		final DataType dt = confFB.getDataType();
 		String typeName = getTypeName(confFB);
 		if (dt != null) {
 			// the _1 is needed for 4diac FORTE to separate type name from configuration

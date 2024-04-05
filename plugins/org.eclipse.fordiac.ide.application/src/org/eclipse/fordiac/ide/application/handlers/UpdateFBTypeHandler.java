@@ -62,7 +62,7 @@ public class UpdateFBTypeHandler extends AbstractHandler {
 		if (element instanceof final StructManipulator mux) {
 			final DataTypeLibrary lib = mux.getType().getTypeLibrary().getDataTypeLibrary();
 			// check type entry for reference to original struct even for configured mux:
-			final String fullTypeName = mux.getStructType().getTypeEntry().getFullTypeName();
+			final String fullTypeName = mux.getDataType().getTypeEntry().getFullTypeName();
 			final DataType datatype = lib.getType(fullTypeName);
 			if (datatype instanceof final StructuredType updated) {
 				return new ChangeStructCommand(mux, updated);

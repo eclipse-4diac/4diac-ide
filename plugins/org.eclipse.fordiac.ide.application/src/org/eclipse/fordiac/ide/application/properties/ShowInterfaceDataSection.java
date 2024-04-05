@@ -66,11 +66,11 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 		final FBNetworkElement selection = getType();
 		if (selection instanceof final StructManipulator structManipulator) {
 			if (selection instanceof Multiplexer) {
-				inputProvider.setInput(structManipulator.getStructType().getMemberVariables());
+				inputProvider.setInput(structManipulator.getInterface().getInputVars());
 				outputProvider.setInput(structManipulator.getInterface().getOutputVars());
 			} else if (selection instanceof Demultiplexer) {
 				inputProvider.setInput(structManipulator.getInterface().getInputVars());
-				outputProvider.setInput(structManipulator.getStructType().getMemberVariables());
+				outputProvider.setInput(structManipulator.getInterface().getOutputVars());
 			}
 		} else if ((selection instanceof SubApp) && (selection.getType() != null)) { // typed subapp
 			setTableInput(selection.getType().getInterfaceList());

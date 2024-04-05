@@ -14,17 +14,11 @@
 
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
@@ -46,15 +40,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  */
 public final class ConfigurableFBManagement {
 
-	public static final String DEMUX_NAME = "STRUCT_DEMUX"; //$NON-NLS-1$
-	public static final String MUX_NAME = "STRUCT_MUX"; //$NON-NLS-1$
-
 	static void updateFbConfiguration(final ConfigurableFB fb) {
 		if (fb instanceof ConfigurableMoveFB) {
 			updateMoveFbConfiguration(fb);
-		} else if ((fb instanceof final StructManipulator sm)
-				&& (fb.getDataType() instanceof final StructuredType structType)) {
-			setStructTypeElementsAtInterface(sm, structType);
+		} else if ((fb instanceof final StructManipulator sm) && (fb.getDataType() instanceof StructuredType)) {
+			updateStructManipulatorConfiguration(sm);
 		}
 	}
 
@@ -75,7 +65,8 @@ public final class ConfigurableFBManagement {
 			loadFbMoveConfiguration(moveFB, attributeName, typeName);
 		} else if (fb instanceof final StructManipulator structFB) {
 			loadStructManipulatorConfiguration(structFB, attributeName, typeName);
-		} else if (fb instanceof final Demultiplexer demux) {
+		}
+		if (fb instanceof final Demultiplexer demux) {
 			loadVisibleChildrenDemuxConfiguration(demux, attributeName, typeName);
 		}
 	}
@@ -101,14 +92,10 @@ public final class ConfigurableFBManagement {
 	}
 
 	private static void loadVisibleChildrenDemuxConfiguration(final Demultiplexer fb, final String attributeName,
-			final String attributeValue) {
-		if (LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(attributeName) && attributeValue != null) {
-			// reset type to get visible children configured
-			final Attribute attr = LibraryElementFactory.eINSTANCE.createAttribute();
-			attr.setName(attributeName);
-			attr.setValue(attributeValue);
-			fb.getAttributes().add(attr);
-			fb.setStructTypeElementsAtInterface(fb.getStructType());
+			final String visibleChildren) {
+		if (LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(attributeName) && visibleChildren != null) {
+			fb.setIsConfigured(true);
+			updateConfiguredDemuxConfiguration(fb, visibleChildren);
 		}
 	}
 
@@ -152,6 +139,9 @@ public final class ConfigurableFBManagement {
 	}
 
 	private static String buildVisibleChildrenString(final StructManipulator fb) {
+		if (fb.getMemberVars().isEmpty()) {
+			return ""; //$NON-NLS-1$
+		}
 		final StringBuilder sb = new StringBuilder();
 		fb.getMemberVars().forEach(var -> sb.append(getMemberVarName((MemberVarDeclaration) var) + ",")); //$NON-NLS-1$
 		return sb.substring(0, sb.length() - 2); // avoid adding "," in the end
@@ -164,116 +154,97 @@ public final class ConfigurableFBManagement {
 		return sb.toString();
 	}
 
-	static void setStructTypeElementsAtInterface(final StructManipulator muxer, final StructuredType newStructType) {
-		muxer.setStructType(newStructType);
-		setMemberVariablesAsPorts(muxer, newStructType);
-	}
-
-	static void setMemberVariablesAsPorts(final StructManipulator muxer, final StructuredType newStructType) {
-		if (muxer instanceof Demultiplexer) {
-			if (null == newStructType) {
-				setVariablesAsOutputs(muxer, Collections.emptyList(), null);
-			} else if (muxer.getAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN) != null) {
-				setVariablesAsOutputs(muxer, collectVisibleChildren(muxer, newStructType).getMemberVariables(),
-						newStructType);
+	static void updateStructManipulatorConfiguration(final StructManipulator muxer) {
+		if (muxer instanceof final Demultiplexer demux) {
+			if (demux.isIsConfigured()) {
+				// updating requires finding all elements again - struct may have changed!
+				updateConfiguredDemuxConfiguration(demux, buildVisibleChildrenString(muxer));
 			} else {
-				setVariablesAsOutputs(muxer, newStructType.getMemberVariables(), newStructType);
+				updateDemuxConfiguration(muxer);
 			}
-		}
-
-		if (muxer instanceof Multiplexer) {
-			setVariablesAsInputs(muxer, newStructType);
+		} else if (muxer instanceof Multiplexer) {
+			updateMultiplexerConfiguration(muxer);
 		}
 	}
 
-	private static StructuredType collectVisibleChildren(final StructManipulator muxer,
-			final StructuredType newStructType) {
-		final Attribute attr = muxer.getAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
-		final StructuredType configuredStruct = DataFactory.eINSTANCE.createStructuredType();
-		configuredStruct.setName(newStructType.getName());
-		configuredStruct.setComment(newStructType.getComment());
-		final List<String> visibleChildrenNames = Arrays
-				.asList(attr.getValue().trim().split(LibraryElementTags.VARIABLE_SEPARATOR));
-		final Collection<VarDeclaration> visibleVars = getVarDeclarations(muxer.getStructType(), visibleChildrenNames);
-		configuredStruct.getMemberVariables().addAll(visibleVars);
-		return configuredStruct;
-	}
-
-	private static void setVariablesAsInputs(final StructManipulator muxer, final StructuredType newStructType) {
+	private static void updateMultiplexerConfiguration(final StructManipulator muxer) {
 		// create member variables of struct as data input ports
-		if (null == newStructType) {
-			muxer.getInterface().getInputVars().clear();
-		} else {
-			final Collection<VarDeclaration> list = EcoreUtil.copyAll(newStructType.getMemberVariables());
-			list.forEach(varDecl -> {
-				if (null == muxer.getInterfaceElement(varDecl.getName())) {
-					varDecl.setIsInput(true);
-					varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
-				}
-			});
-			final Event ev = muxer.getInterface().getEventInputs().get(0);
-			// clear any previous withs
-			ev.getWith().clear();
+		final Event ev = muxer.getInterface().getEventInputs().get(0);
+		createMemberVars(muxer, ev, true);
+		// configure pin
+		muxer.getInterface().getOutputVars().get(0).setType(muxer.getDataType());
+	}
 
+	private static void updateDemuxConfiguration(final StructManipulator muxer) {
+		// create member variables of struct as data output ports
+		if (muxer.getDataType() instanceof final StructuredType structType) {
+			final Event outputEvent = muxer.getInterface().getEventOutputs().get(0);
+			createMemberVars(muxer, outputEvent, false);
+		} else {
+			muxer.getMemberVars().clear();
+		}
+		// configure pin
+		muxer.getInterface().getInputVars().get(0).setType(muxer.getDataType());
+	}
+
+	private static void createMemberVars(final StructManipulator muxer, final Event withedEvent,
+			final boolean isInput) {
+		if (muxer.getDataType() instanceof final StructuredType structType) {
+			structType.getMemberVariables().forEach(memberVar -> {
+				final VarDeclaration varDecl = copyVarAsMember(memberVar, isInput);
+				muxer.getMemberVars().add(varDecl);
+			});
+			// clear any previous withs
+			withedEvent.getWith().clear();
 			// create with constructs
-			list.forEach(varDecl -> {
+			muxer.getMemberVars().forEach(varDecl -> {
 				final With with = LibraryElementFactory.eINSTANCE.createWith();
 				with.setVariables(varDecl);
-				ev.getWith().add(with);
+				withedEvent.getWith().add(with);
 			});
-
-			// add data input ports to the interface
-			muxer.getInterface().getInputVars().addAll(list);
-			muxer.getInterface().getOutputVars().get(0).setType(newStructType); // there should be only one output
+		} else {
+			muxer.getMemberVars().clear();
 		}
 	}
 
-	private static void setVariablesAsOutputs(final StructManipulator muxer, final Collection<VarDeclaration> vars,
-			final StructuredType newStructType) {
-		final Collection<VarDeclaration> list = EcoreUtil.copyAll(vars);
-		list.forEach(varDecl -> {
-			varDecl.setIsInput(false);
-			varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
-		});
-		final List<Event> outputEvents = muxer.getInterface().getEventOutputs();
-		// clear any previous withs
-		outputEvents.forEach(ev -> ev.getWith().clear());
-
-		// create with constructs
-		list.forEach(varDecl -> {
-			final With with = LibraryElementFactory.eINSTANCE.createWith();
-			with.setVariables(varDecl);
-			outputEvents.forEach(ev -> ev.getWith().add(with));
-		});
-
-		// add data output ports to the interface
-		muxer.getInterface().getOutputVars().clear();
-		muxer.getInterface().getOutputVars().addAll(list);
-		muxer.getInterface().getInputVars().get(0).setType(newStructType); // there should be only one output
-
+	private static MemberVarDeclaration copyVarAsMember(final VarDeclaration memberVar, final boolean isInput) {
+		final MemberVarDeclaration copy = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
+		copy.setName(memberVar.getName());
+		copy.setType(memberVar.getType());
+		copy.setValue(LibraryElementFactory.eINSTANCE.createValue());
+		copy.setIsInput(isInput);
+		return copy;
 	}
 
-	private static Collection<VarDeclaration> getVarDeclarations(final StructuredType structType,
-			final List<String> varDeclNames) {
-		final List<VarDeclaration> vars = new ArrayList<>();
-		varDeclNames.forEach(name -> {
-			final VarDeclaration varDecl = EcoreUtil.copy(findVarDeclarationInStruct(structType, name));
-			if (null != varDecl) {
-				varDecl.setName(name);
-				vars.add(varDecl);
+	private static void updateConfiguredDemuxConfiguration(final Demultiplexer demux, final String visibleChildren) {
+		if (visibleChildren != null && (demux.getDataType() instanceof final StructuredType structType)) {
+			final String[] memberVarNames = visibleChildren.trim().split(","); //$NON-NLS-1$
+			for (final String memberVarName : memberVarNames) {
+				final String[] subnames = memberVarName.split("\\."); //$NON-NLS-1$
+				final MemberVarDeclaration pin = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
+				pin.setName(subnames[subnames.length - 1]);
+				pin.setType(findVarDeclarationInStruct(structType, memberVarName).getType());
+				pin.setValue(LibraryElementFactory.eINSTANCE.createValue());
+				pin.setIsInput(false);
+				demux.getMemberVars().add(pin);
 			}
-		});
-		return vars;
+			// clear any previous withs
+			final Event withedEvent = demux.getInterface().getEventOutputs().get(0);
+			withedEvent.getWith().clear();
+			// create with constructs
+			demux.getMemberVars().forEach(varDecl -> {
+				final With with = LibraryElementFactory.eINSTANCE.createWith();
+				with.setVariables(varDecl);
+				withedEvent.getWith().add(with);
+			});
+		} else {
+			updateDemuxConfiguration(demux);
+		}
 	}
 
 	private static VarDeclaration findVarDeclarationInStruct(final StructuredType struct, final String name) {
-		// if struct is already configured, we find the variable there
-		VarDeclaration found = struct.getMemberVariables().stream().filter(memVar -> memVar.getName().equals(name))
-				.findFirst().orElse(null);
-		if (found != null) {
-			return found;
-		}
-		// else we have to check each element separately
+		// we have to check each element separately
+		VarDeclaration found = null;
 		final String[] subnames = name.split("\\."); //$NON-NLS-1$
 		List<VarDeclaration> members = struct.getMemberVariables();
 		for (final String subname : subnames) { //
