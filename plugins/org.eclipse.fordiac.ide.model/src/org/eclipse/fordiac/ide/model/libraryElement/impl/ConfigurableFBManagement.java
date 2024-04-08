@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.util.ECollections;
@@ -261,6 +262,10 @@ public final class ConfigurableFBManagement {
 			found = findings.get(0);
 			if (found.getType() instanceof final StructuredType structType) {
 				members = structType.getMemberVariables();
+			} else {
+				// in case of previously deleted vars, we would otherwise look at the wrong
+				// hierarchy level
+				members = Collections.emptyList();
 			}
 		}
 		return found;
