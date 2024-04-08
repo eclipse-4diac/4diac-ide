@@ -231,19 +231,16 @@ public final class ConfigurableFBManagement {
 				final String[] memberVarNames = visibleChildren.trim().split(","); //$NON-NLS-1$
 				for (final String memberVarName : memberVarNames) {
 					final String[] subnames = memberVarName.trim().split("\\."); //$NON-NLS-1$
-					final MemberVarDeclaration pin = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
-					pin.setName(subnames[subnames.length - 1]);
-					final VarDeclaration varInStruct = findVarDeclarationInStruct(structType, memberVarName);
+					final VarDeclaration varInStruct = findVarDeclarationInStruct(structType, subnames);
 					if (varInStruct != null) {
+						final MemberVarDeclaration pin = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
+						pin.setName(subnames[subnames.length - 1]);
 						pin.setType(varInStruct.getType());
-					} else {
-						// error marker data type, no known type name
-						pin.setType(demux.getTypeLibrary().getDataTypeLibrary().getType("")); //$NON-NLS-1$
+						pin.setValue(LibraryElementFactory.eINSTANCE.createValue());
+						pin.setIsInput(false);
+						pin.getParentNames().addAll(Arrays.asList(subnames).subList(0, subnames.length - 1));
+						demux.getMemberVars().add(pin);
 					}
-					pin.setValue(LibraryElementFactory.eINSTANCE.createValue());
-					pin.setIsInput(false);
-					pin.getParentNames().addAll(Arrays.asList(subnames).subList(0, subnames.length - 1));
-					demux.getMemberVars().add(pin);
 				}
 				// clear any previous withs
 				final Event withedEvent = demux.getInterface().getEventOutputs().get(0);
@@ -260,20 +257,20 @@ public final class ConfigurableFBManagement {
 		}
 	}
 
-	private static VarDeclaration findVarDeclarationInStruct(final StructuredType struct, final String name) {
+	private static VarDeclaration findVarDeclarationInStruct(final StructuredType struct, final String[] subnames) {
 		// we have to check each element separately
 		VarDeclaration found = null;
-		final String[] subnames = name.split("\\."); //$NON-NLS-1$
 		List<VarDeclaration> members = struct.getMemberVariables();
 		for (final String subname : subnames) { //
-			final Object[] findings = members.stream().filter(memVar -> memVar.getName().equals(subname)).toArray();
-			if (findings.length > 0) {
-				found = (VarDeclaration) findings[0];
-				if (found.getType() instanceof final StructuredType structType) {
-					members = structType.getMemberVariables();
-				}
+			final List<VarDeclaration> findings = members.stream().filter(memVar -> memVar.getName().equals(subname))
+					.toList();
+			if (findings.isEmpty()) {
+				break;
 			}
-
+			found = findings.get(0);
+			if (found.getType() instanceof final StructuredType structType) {
+				members = structType.getMemberVariables();
+			}
 		}
 		return found;
 	}
