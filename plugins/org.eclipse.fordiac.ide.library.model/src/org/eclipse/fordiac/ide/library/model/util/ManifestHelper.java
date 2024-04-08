@@ -133,6 +133,24 @@ public final class ManifestHelper {
 		reqList.remove(dependency);
 	}
 
+	public static void updateDependency(final Manifest manifest, final Required dependency) {
+		if (manifest.getDependencies() == null) {
+			manifest.setDependencies(factory.createDependencies());
+		}
+		final EList<Required> reqList = manifest.getDependencies().getRequired();
+		final Optional<Required> result = reqList.stream()
+				.filter(r -> r.getSymbolicName().equals(dependency.getSymbolicName())).findAny();
+		if (result.isPresent()) {
+			final VersionComparator comp = new VersionComparator();
+			if (!comp.contains(result.get().getVersion(), dependency.getVersion())) { // replace dependency
+				reqList.remove(result.get());
+				reqList.add(dependency);
+			}
+		} else {
+			reqList.add(dependency);
+		}
+	}
+
 	public static Resource createResource(final URI uri) {
 		final XMLResource resource = (XMLResource) resourceFactory.createResource(uri);
 		resource.getDefaultSaveOptions().put(XMLResource.OPTION_ENCODING, "UTF-8");

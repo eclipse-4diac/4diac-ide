@@ -19,7 +19,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ltk.ui.refactoring,
  org.eclipse.fordiac.ide.model.search,
  org.eclipse.fordiac.ide.model.commands,
- org.eclipse.fordiac.ide.model.ui
+ org.eclipse.fordiac.ide.model.ui,
+ org.eclipse.fordiac.ide.library.model,
+ org.eclipse.fordiac.ide.gitlab
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.0.0.qualifier

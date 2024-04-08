@@ -13,34 +13,48 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.model.util;
 
+import java.lang.module.ModuleDescriptor.Version;
 import java.util.Comparator;
 
 public class VersionComparator implements Comparator<String> {
 
 	@Override
-	public int compare(String o1, String o2) {
-		if (o1 == null) return (o2 == null) ? 0 : -1;
-		if (o1.equals(o2)) return 0;
-		if (o2 == null) return 1;
-		
-		String[] v1 = o1.split("\\.");
-		String[] v2 = o2.split("\\.");
-		
-		int shared = Math.min(v1.length, v2.length);
-		for (int i = 0; i < shared; i++) {
-			int comp = Integer.parseInt(v1[i]) - Integer.parseInt(v2[i]);
-			if (comp != 0) return Integer.signum(comp);
+	public int compare(final String o1, final String o2) {
+
+		if (o1 == null || o1.isBlank()) {
+			return (o2 == null || o2.isBlank()) ? 0 : -1;
 		}
-		for (int i = shared; i < v1.length; i++) {
-			int comp = Integer.parseInt(v1[i]);
-			if (comp > 0) return 1;
+		if (o1.equals(o2)) {
+			return 0;
 		}
-		for (int i = shared; i < v2.length; i++) {
-			int comp = Integer.parseInt(v2[i]);
-			if (comp > 0) return -1;
+		if (o2 == null || o2.isBlank()) {
+			return 1;
 		}
-		
-		return 0;
+
+		final Version v1 = Version.parse(o1);
+		final Version v2 = Version.parse(o2);
+
+		return v1.compareTo(v2);
 	}
 
+	@SuppressWarnings("nls")
+	public boolean contains(final String version, final String localVersion) {
+		final Version locVersion = Version.parse(localVersion);
+		if ((version.startsWith("(") || version.startsWith("[")) && (version.endsWith(")") || version.endsWith("]"))
+				&& version.contains("-")) {
+			final Version lowerBound = Version.parse(version.substring(1, version.indexOf("-")));
+			final Version upperBound = Version.parse(version.substring(version.indexOf("-") + 1, version.length() - 1));
+			return (((version.startsWith("(") && lowerBound.compareTo(locVersion) < 0)
+					|| (version.startsWith("[") && lowerBound.compareTo(locVersion) <= 0))
+					&& ((version.endsWith(")") && upperBound.compareTo(locVersion) > 0)
+							|| (version.endsWith("]") && upperBound.compareTo(locVersion) >= 0)));
+
+		}
+		if (!(version.contains("(") || version.contains("[") || version.contains("]") || version.contains(")")
+				|| version.contains("-"))) {
+			final Version singleVersion = Version.parse(version);
+			return (singleVersion.compareTo(locVersion) == 0);
+		}
+		return false;
+	}
 }

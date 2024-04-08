@@ -11,9 +11,10 @@
  *   Patrick Aigner
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
+package org.eclipse.fordiac.ide.typemanagement.wizards;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +24,8 @@ import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
-import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
+import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.librarylinker.LibraryUtil;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -45,17 +46,24 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
-public class New4diacProjectLibraryPage extends WizardPage {
+public class LibrarySelectionPage extends WizardPage {
 	private List<LibDisplay> libraries;
 	private Map<String, List<LibDisplay>> libGroupings;
 	private CheckboxTableViewer tableViewer;
 	private Button selectAllButton;
 	private Button deselectButton;
+	private boolean showStandard;
+	private boolean showWorkspace;
+	private final boolean selectAll;
 	private final VersionComparator versionComparator;
 
-	public New4diacProjectLibraryPage(final String pageName) {
+	public LibrarySelectionPage(final String pageName, final boolean alwaysComplete, final boolean selectAll,
+			final boolean showStandard, final boolean showWorkspace) {
 		super(pageName);
-		setPageComplete(true);
+		setPageComplete(alwaysComplete);
+		this.showStandard = showStandard;
+		this.showWorkspace = showWorkspace;
+		this.selectAll = selectAll;
 		versionComparator = new VersionComparator();
 	}
 
@@ -67,7 +75,9 @@ public class New4diacProjectLibraryPage extends WizardPage {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		findLibs();
-		selectAll();
+		if (selectAll) {
+			selectAll();
+		}
 
 		final Composite tableComposite = new Composite(composite, SWT.NONE);
 		tableComposite.setLayout(new GridLayout(1, true));
@@ -76,6 +86,8 @@ public class New4diacProjectLibraryPage extends WizardPage {
 		tableViewer = CheckboxTableViewer.newCheckList(tableComposite, SWT.NONE);
 		configureTableViewer(tableViewer);
 		tableViewer.setInput(libraries);
+
+		configureSelectionListener();
 
 		final Composite buttonComposite = new Composite(composite, SWT.NONE);
 		buttonComposite.setFont(parent.getFont());
@@ -94,14 +106,40 @@ public class New4diacProjectLibraryPage extends WizardPage {
 		Dialog.applyDialogFont(composite);
 	}
 
+	@Override
+	public boolean isPageComplete() {
+		return super.isPageComplete() || libraries.stream().anyMatch(LibDisplay::isSelected);
+	}
+
+	private void configureSelectionListener() {
+		tableViewer.getTable().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				setPageComplete(isPageComplete());
+			}
+		});
+	}
+
 	private void findLibs() {
-		libraries = SystemPaletteManagement.getStandardLibraries(TypeLibraryManager.getToolLibProject()).entrySet()
-				.stream()
-				.map(entry -> new LibDisplay(false, entry.getKey().getProduct().getName(),
-						entry.getKey().getProduct().getSymbolicName(),
-						entry.getKey().getProduct().getVersionInfo().getVersion(),
-						entry.getKey().getProduct().getComment(), entry.getValue()))
-				.toList();
+		libraries = new ArrayList<>();
+		if (showStandard) {
+			libraries
+					.addAll(LibraryUtil.getStandardLibraries(TypeLibraryManager.getToolLibProject()).entrySet().stream()
+							.map(entry -> new LibDisplay(false, entry.getKey().getProduct().getName(),
+									entry.getKey().getProduct().getSymbolicName(),
+									entry.getKey().getProduct().getVersionInfo().getVersion(),
+									entry.getKey().getProduct().getComment(), entry.getValue()))
+							.toList());
+		}
+		if (showWorkspace) {
+			libraries.addAll(
+					LibraryUtil.getWorkspaceLibraries(TypeLibraryManager.getToolLibProject()).entrySet().stream()
+							.map(entry -> new LibDisplay(false, entry.getKey().getProduct().getName(),
+									entry.getKey().getProduct().getSymbolicName(),
+									entry.getKey().getProduct().getVersionInfo().getVersion(),
+									entry.getKey().getProduct().getComment(), entry.getValue()))
+							.toList());
+		}
 		libGroupings = libraries.stream().collect(Collectors.groupingBy(lib -> lib.symbolicName));
 	}
 
@@ -142,7 +180,7 @@ public class New4diacProjectLibraryPage extends WizardPage {
 		table.setSortDirection(SWT.DOWN);
 
 		final TableViewerColumn nameColumn = new TableViewerColumn(viewer, SWT.LEAD);
-		nameColumn.getColumn().setText(Messages.New4diacProjectWizard_Library_Name);
+		nameColumn.getColumn().setText(Messages.LibraryPage_Name);
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
@@ -151,7 +189,7 @@ public class New4diacProjectLibraryPage extends WizardPage {
 		});
 
 		final TableViewerColumn versionColumn = new TableViewerColumn(viewer, SWT.LEAD);
-		versionColumn.getColumn().setText(Messages.New4diacProjectWizard_Library_Version);
+		versionColumn.getColumn().setText(Messages.LibraryPage_Version);
 		versionColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
@@ -160,7 +198,7 @@ public class New4diacProjectLibraryPage extends WizardPage {
 		});
 
 		final TableViewerColumn commentColumn = new TableViewerColumn(viewer, SWT.LEAD);
-		commentColumn.getColumn().setText(Messages.New4diacProjectWizard_Library_Comment);
+		commentColumn.getColumn().setText(Messages.LibraryPage_Comment);
 		commentColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
@@ -169,7 +207,7 @@ public class New4diacProjectLibraryPage extends WizardPage {
 		});
 
 		final TableViewerColumn symNameColumn = new TableViewerColumn(viewer, SWT.LEAD);
-		symNameColumn.getColumn().setText(Messages.New4diacProjectWizard_Library_SymbolicName);
+		symNameColumn.getColumn().setText(Messages.LibraryPage_SymbolicName);
 		symNameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
@@ -223,12 +261,12 @@ public class New4diacProjectLibraryPage extends WizardPage {
 
 		selectAllButton = new Button(buttonComposite, SWT.PUSH);
 		selectAllButton.setFont(buttonComposite.getFont());
-		selectAllButton.setText(Messages.New4diacProjectWizard_Library_SelectAll);
+		selectAllButton.setText(Messages.LibraryPage_SelectAll);
 		setButtonLayoutData(selectAllButton);
 
 		deselectButton = new Button(buttonComposite, SWT.PUSH);
 		deselectButton.setFont(buttonComposite.getFont());
-		deselectButton.setText(Messages.New4diacProjectWizard_Library_DeselectAll);
+		deselectButton.setText(Messages.LibraryPage_DeselectAll);
 		setButtonLayoutData(deselectButton);
 
 		selectAllButton.addSelectionListener(new SelectionAdapter() {
@@ -293,6 +331,26 @@ public class New4diacProjectLibraryPage extends WizardPage {
 		public URI getUri() {
 			return uri;
 		}
-
 	}
+
+	public boolean isShowStandard() {
+		return showStandard;
+	}
+
+	public void setShowStandard(final boolean showStandard) {
+		this.showStandard = showStandard;
+		findLibs();
+		tableViewer.setInput(libraries);
+	}
+
+	public boolean isShowWorkspace() {
+		return showWorkspace;
+	}
+
+	public void setShowWorkspace(final boolean showWorkspace) {
+		this.showWorkspace = showWorkspace;
+		findLibs();
+		tableViewer.setInput(libraries);
+	}
+
 }

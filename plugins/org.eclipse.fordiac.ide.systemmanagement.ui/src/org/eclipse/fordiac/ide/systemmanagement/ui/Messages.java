@@ -54,13 +54,6 @@ public final class Messages extends NLS {
 	public static String New4diacProjectWizard_SystemNameNotValid;
 	public static String New4diacProjectWizard_DirectoryWithProjectNameAlreadyExistsInWorkspace;
 
-	public static String New4diacProjectWizard_Library_SelectAll;
-	public static String New4diacProjectWizard_Library_DeselectAll;
-	public static String New4diacProjectWizard_Library_Name;
-	public static String New4diacProjectWizard_Library_Version;
-	public static String New4diacProjectWizard_Library_Comment;
-	public static String New4diacProjectWizard_Library_SymbolicName;
-
 	public static String NewSystemWizardPage_CreateNewSystem;
 
 	static {
