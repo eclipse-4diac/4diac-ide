@@ -27,7 +27,6 @@ import org.eclipse.gef.commands.Command;
 public class AddDemuxPortCommand extends Command implements ScopedCommand {
 
 	private Demultiplexer type;
-	private String newVisibleChildren;
 	private final String varName;
 	private Demultiplexer oldMux;
 	private ChangeStructCommand cmd;
@@ -42,7 +41,7 @@ public class AddDemuxPortCommand extends Command implements ScopedCommand {
 	@Override
 	public void execute() {
 		node.updateNode(true);
-		newVisibleChildren = node.getTree().getRoot().visibleToString();
+		final String newVisibleChildren = node.getTree().getRoot().visibleToString();
 		cmd = new ChangeStructCommand(type, newVisibleChildren);
 		if (cmd.canExecute()) {
 			cmd.execute();
@@ -66,7 +65,6 @@ public class AddDemuxPortCommand extends Command implements ScopedCommand {
 		node.updateNode(true);
 		cmd.redo();
 		type = (Demultiplexer) cmd.getNewMux();
-		type.setIsConfigured(true);
 	}
 
 	@Override

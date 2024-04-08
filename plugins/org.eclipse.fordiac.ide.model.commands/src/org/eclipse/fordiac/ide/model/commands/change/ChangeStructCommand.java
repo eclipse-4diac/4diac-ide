@@ -56,7 +56,7 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 
 	public ChangeStructCommand(final Demultiplexer demux, final String newVisibleChildren) {
 		super(demux);
-		newStruct = null;
+		newStruct = demux.getDataType();
 		entry = demux.getTypeEntry();
 		this.newVisibleChildren = newVisibleChildren;
 	}
