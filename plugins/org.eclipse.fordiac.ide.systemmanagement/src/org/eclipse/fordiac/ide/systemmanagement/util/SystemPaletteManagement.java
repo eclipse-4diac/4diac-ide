@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
  * The Class SystemPaletteManagement.
  */
 public final class SystemPaletteManagement {
+	private static final String MANIFEST_FILE = "MANIFEST.MF"; //$NON-NLS-1$
 
 	public static void linkToolTypeLibsToDestination(final Map<String, java.net.URI> libs, final IFolder destination) {
 		try {
@@ -55,9 +56,13 @@ public final class SystemPaletteManagement {
 
 			libs.forEach((name, loc) -> {
 				final IFolder link = destination.getFolder(new Path(name));
+				final IFile man = link.getFile(MANIFEST_FILE);
+				final java.net.URI typelib = URIUtil.append(loc, "typelib"); //$NON-NLS-1$
+				final java.net.URI manifest = URIUtil.append(loc, MANIFEST_FILE);
 
 				try {
-					link.createLink(loc, IResource.NONE, monitor);
+					link.createLink(typelib, IResource.NONE, monitor);
+					man.createLink(manifest, IResource.HIDDEN, monitor);
 				} catch (final CoreException e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
 				}
@@ -70,7 +75,7 @@ public final class SystemPaletteManagement {
 
 	public static Map<Manifest, java.net.URI> getStandardLibraries(final IProject project) {
 		final Map<Manifest, java.net.URI> libraries = new HashMap<>();
-		final FilenameFilter filter = (file, name) -> name.equals("MANIFEST.MF"); //$NON-NLS-1$
+		final FilenameFilter filter = (file, name) -> name.equals(MANIFEST_FILE);
 
 		final java.net.URI typeLibURI = java.net.URI.create("ECLIPSE_HOME/" + TypeLibraryTags.TYPE_LIBRARY); //$NON-NLS-1$
 		final IPathVariableManager varMan = project.getPathVariableManager();

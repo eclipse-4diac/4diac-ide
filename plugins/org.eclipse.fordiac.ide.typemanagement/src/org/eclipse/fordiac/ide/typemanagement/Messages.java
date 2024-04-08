@@ -141,6 +141,16 @@ public final class Messages extends NLS {
 	public static String PreviewChange_ChangeToAnyStruct;
 	public static String PreviewChange_ReplaceWithMarker;
 
+	public static String TypeLibrary_ProjectLoadingProblem;
+	public static String TypeLibrary_LibraryLoadingProblem;
+
+	public static String LibraryPage_SelectAll;
+	public static String LibraryPage_DeselectAll;
+	public static String LibraryPage_Name;
+	public static String LibraryPage_Version;
+	public static String LibraryPage_Comment;
+	public static String LibraryPage_SymbolicName;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
