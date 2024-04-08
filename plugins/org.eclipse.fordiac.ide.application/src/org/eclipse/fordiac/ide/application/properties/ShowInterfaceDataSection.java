@@ -20,11 +20,9 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
@@ -64,14 +62,8 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
 	protected void setTableInput() {
 		final FBNetworkElement selection = getType();
-		if (selection instanceof final StructManipulator structManipulator) {
-			if (selection instanceof Multiplexer) {
-				inputProvider.setInput(structManipulator.getInterface().getInputVars());
-				outputProvider.setInput(structManipulator.getInterface().getOutputVars());
-			} else if (selection instanceof Demultiplexer) {
-				inputProvider.setInput(structManipulator.getInterface().getInputVars());
-				outputProvider.setInput(structManipulator.getInterface().getOutputVars());
-			}
+		if (selection instanceof StructManipulator) {
+			setTableInput(selection.getInterface());
 		} else if ((selection instanceof SubApp) && (selection.getType() != null)) { // typed subapp
 			setTableInput(selection.getType().getInterfaceList());
 		} else {

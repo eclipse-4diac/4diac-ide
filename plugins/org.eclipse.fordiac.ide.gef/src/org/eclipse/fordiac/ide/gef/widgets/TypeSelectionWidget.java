@@ -170,8 +170,8 @@ public class TypeSelectionWidget {
 	}
 
 	public void refresh() {
-		if (configurableObject instanceof IInterfaceElement) {
-			tableViewer.setInput(new String[] { ((IInterfaceElement) configurableObject).getType().getName() });
+		if (configurableObject instanceof final IInterfaceElement iel) {
+			tableViewer.setInput(new String[] { iel.getType().getName() });
 		}
 		disableOpenEditorForAnyType();
 	}
@@ -219,8 +219,8 @@ public class TypeSelectionWidget {
 			typeComp.setLayout(gridLayout);
 			typeComp.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 			openEditorButton.dispose();
-		} else if (configurableObject instanceof VarDeclaration) {
-			final DataType dtp = ((VarDeclaration) configurableObject).getType();
+		} else if (configurableObject instanceof final VarDeclaration varDecl) {
+			final DataType dtp = varDecl.getType();
 			openEditorButton.setEnabled((dtp instanceof StructuredType) && !IecTypes.GenericTypes.isAnyType(dtp)); // $NON-NLS-1$
 		}
 	}

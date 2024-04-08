@@ -34,17 +34,24 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 	private final String newVisibleChildren;
 
 	public ChangeStructCommand(final StructManipulator mux) {
-		super(mux);
-		this.newStruct = mux.getDataType();
-		entry = mux.getTypeEntry();
-		newVisibleChildren = getOldVisibleChildren(mux);
+		this(mux, mux.getDataType(), getOldVisibleChildren(mux));
 	}
 
 	public ChangeStructCommand(final StructManipulator mux, final StructuredType newStruct) {
-		super(mux);
-		this.newStruct = newStruct;
-		entry = mux.getTypeEntry();
-		newVisibleChildren = getOldVisibleChildren(mux);
+		this(mux, newStruct, getOldVisibleChildren(mux));
+	}
+
+	public ChangeStructCommand(final Demultiplexer demux, final String newVisibleChildren) {
+		this(demux, demux.getDataType(), newVisibleChildren);
+	}
+
+	// only to avoid code duplication, public constructors ensure correct set-up
+	private ChangeStructCommand(final StructManipulator demux, final DataType datatype,
+			final String newVisibleChildren) {
+		super(demux);
+		newStruct = datatype;
+		entry = demux.getTypeEntry();
+		this.newVisibleChildren = newVisibleChildren;
 	}
 
 	private static String getOldVisibleChildren(final StructManipulator mux) {
@@ -52,13 +59,6 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 			return ConfigurableFBManagement.buildVisibleChildrenString(demux);
 		}
 		return null;
-	}
-
-	public ChangeStructCommand(final Demultiplexer demux, final String newVisibleChildren) {
-		super(demux);
-		newStruct = demux.getDataType();
-		entry = demux.getTypeEntry();
-		this.newVisibleChildren = newVisibleChildren;
 	}
 
 	@Override
