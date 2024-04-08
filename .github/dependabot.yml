@@ -1,5 +1,12 @@
 version: 2
 updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "develop"
+    labels:
+      - "Github Action Dependencies"
   - package-ecosystem: maven
     directory: /
     schedule:
@@ -8,5 +15,6 @@ updates:
       prefix: fix
       prefix-development: chore
       include: scope
+    target-branch: "develop"
     labels:
       - dependencies
