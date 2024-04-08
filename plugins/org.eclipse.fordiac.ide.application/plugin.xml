@@ -530,6 +530,11 @@
           id="org.eclipse.fordiac.ide.application.commands.aggressiveConDelete"
           name="Aggressive Connection Delete">
     </command>
+	<command
+          categoryId="org.eclipse.fordiac.ide.commands.category"
+          id="org.eclipse.fordiac.ide.application.commands.moveThroughHierarchy"
+          name="Move elements through hierarchy">
+    </command>
 
   </extension>
   
@@ -877,6 +882,8 @@
         </with>
       </activeWhen>
     </handler>
+    <handler class="org.eclipse.fordiac.ide.application.handlers.MoveThroughHierarchyHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.moveThroughHierarchy" />
   </extension>
   
   <extension point="org.eclipse.ui.bindings">
@@ -1170,6 +1177,22 @@
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.moveToParent">
+        <visibleWhen checkEnabled="true">
+          <and>
+            <or>
+              <and>
+                <with variable="activeEditor">
+                  <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+                </with>
+                <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartMultiSelection" />
+              </and>
+              <test property="org.eclipse.fordiac.ide.application.properties.parentIsSubApp" />
+            </or>
+            <test property="org.eclipse.fordiac.ide.application.utilities.isSubapplication" />
+          </and>
+        </visibleWhen>
+      </command>
+       <command commandId="org.eclipse.fordiac.ide.application.commands.moveThroughHierarchy">
         <visibleWhen checkEnabled="true">
           <and>
             <or>
