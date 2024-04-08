@@ -28,7 +28,6 @@ public class DeleteDemuxPortCommand extends Command implements ScopedCommand {
 
 	private Demultiplexer type;
 	private final IInterfaceElement variable;
-	private String newVisibleChildren;
 	private ChangeStructCommand cmd;
 	private Demultiplexer oldMux;
 	private final CheckableStructTreeNode node;
@@ -43,14 +42,13 @@ public class DeleteDemuxPortCommand extends Command implements ScopedCommand {
 	@Override
 	public void execute() {
 		node.updateNode(false);
-		newVisibleChildren = node.getTree().getRoot().visibleToString();
+		final String newVisibleChildren = node.getTree().getRoot().visibleToString();
 		cmd = new ChangeStructCommand(type, newVisibleChildren);
 		if (cmd.canExecute()) {
 			cmd.execute();
 		}
 		oldMux = type;
 		type = (Demultiplexer) cmd.getNewMux();
-		type.setIsConfigured(true);
 	}
 
 	@Override
@@ -64,7 +62,6 @@ public class DeleteDemuxPortCommand extends Command implements ScopedCommand {
 		node.updateNode(false);
 		cmd.redo();
 		type = (Demultiplexer) cmd.getNewMux();
-		type.setIsConfigured(true);
 	}
 
 	@Override
