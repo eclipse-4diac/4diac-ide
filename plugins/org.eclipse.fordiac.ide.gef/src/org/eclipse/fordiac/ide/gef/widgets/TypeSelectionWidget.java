@@ -226,7 +226,7 @@ public class TypeSelectionWidget {
 	}
 
 	private static boolean isNonGenericStructType(final DataType dataType) {
-		return dataType instanceof StructuredType && !!"ANY_STRUCT".contentEquals(dataType.getName()); //$NON-NLS-1$
+		return dataType instanceof StructuredType && !"ANY_STRUCT".contentEquals(dataType.getName()); //$NON-NLS-1$
 	}
 
 	protected TypeLibrary getTypeLibrary() {
