@@ -18,7 +18,6 @@ import java.util.List;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.ToolbarLayout;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.utilities.ExpandedInterfacePositionMap;
 
@@ -46,90 +45,40 @@ public class ExpandedSubappInterfaceLayout extends ToolbarLayout {
 		final List<? extends IFigure> children = parent.getChildren();
 		final int numChildren = children.size();
 		final Rectangle clientArea = transposer.t(parent.getClientArea());
-		final int availableHeight = clientArea.height;
-		final int x = clientArea.x;
-		int y;
-		if (isInput) {
-			y = positions.getInputUnconnectedStart() == Integer.MAX_VALUE ? clientArea.y
-					: positions.getInputUnconnectedStart();
-		} else {
-			y = positions.getOutputUnconnectedStart() == Integer.MAX_VALUE ? clientArea.y
-					: positions.getOutputUnconnectedStart();
-		}
-
-		final Dimension[] prefSizes = new Dimension[numChildren];
-		final Dimension[] minSizes = new Dimension[numChildren];
 
 		// always horizontal
 		final int wHint = parent.getClientArea(Rectangle.SINGLETON).width;
 		final int hHint = -1;
 
-		IFigure child;
-		int totalHeight = 0;
-		int totalMinHeight = 0;
-		int prefMinSumHeight = 0;
+		final int x = clientArea.x;
+		int y = isInput ? positions.getInputUnconnectedStart() : positions.getOutputUnconnectedStart();
+		y = (y == Integer.MAX_VALUE) ? clientArea.y : y;
 
 		for (int i = 0; i < numChildren; i++) {
-			child = children.get(i);
-
-			prefSizes[i] = transposer.t(getChildPreferredSize(child, wHint, hHint));
-			minSizes[i] = transposer.t(getChildMinimumSize(child, wHint, hHint));
-
-			totalHeight += prefSizes[i].height;
-			totalMinHeight += minSizes[i].height;
-		}
-		totalHeight += (numChildren - 1) * getSpacing();
-		totalMinHeight += (numChildren - 1) * getSpacing();
-		prefMinSumHeight = totalHeight - totalMinHeight;
-
-		int amntShrinkHeight = totalHeight - Math.max(availableHeight, totalMinHeight);
-
-		if (amntShrinkHeight < 0) {
-			amntShrinkHeight = 0;
-		}
-
-		for (int i = 0; i < numChildren; i++) {
-			int amntShrinkCurrentHeight = 0;
-			final int prefHeight = prefSizes[i].height;
-			final int minHeight = minSizes[i].height;
-			final int prefWidth = prefSizes[i].width;
-			final int minWidth = minSizes[i].width;
-			child = children.get(i);
+			final IFigure child = children.get(i);
+			final int prefHeight = transposer.t(getChildPreferredSize(child, wHint, hHint)).height;
 
 			final var entry = isInput ? positions.inputPositions.get(child) : positions.outputPositions.get(child);
 			final Rectangle newBounds;
 
 			if (entry == null) {
 				// direct connections
-				newBounds = new Rectangle(x, getDirectPosition(child), prefWidth, prefHeight);
+				newBounds = new Rectangle(x, getDirectPosition(child), 0, prefHeight);
 			} else if (entry.intValue() == Integer.MAX_VALUE) {
 				// unconnected pins
-				newBounds = new Rectangle(x, y, prefWidth, prefHeight);
+				newBounds = new Rectangle(x, y, 0, prefHeight);
 				y += newBounds.height;
 			} else {
 				// normal connections
-				newBounds = new Rectangle(x, entry.intValue(), prefWidth, prefHeight);
+				newBounds = new Rectangle(x, entry.intValue(), 0, prefHeight);
 			}
 
-			if (prefMinSumHeight != 0) {
-				amntShrinkCurrentHeight = (prefHeight - minHeight) * amntShrinkHeight / (prefMinSumHeight);
-			}
-
-			int width = Math.min(prefWidth, transposer.t(child.getMaximumSize()).width);
-			if (isStretchMinorAxis()) {
-				width = transposer.t(child.getMaximumSize()).width;
-			}
-			width = Math.max(minWidth, Math.min(clientArea.width, width));
-			newBounds.width = width;
-
-			newBounds.x += clientArea.width - width; // bottom right alignment
-
-			newBounds.height -= amntShrinkCurrentHeight;
+			// stretch to fit
+			newBounds.width = clientArea.width;
+			// bottom right alignment
+			newBounds.x += clientArea.width - newBounds.width;
 
 			child.setBounds(transposer.t(newBounds));
-
-			amntShrinkHeight -= amntShrinkCurrentHeight;
-			prefMinSumHeight -= (prefHeight - minHeight);
 		}
 
 		parent.getBounds().height = parent.getParent().getBounds().height;
