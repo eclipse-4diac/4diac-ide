@@ -31,15 +31,13 @@ import org.eclipse.swt.widgets.Display;
 public class InterfaceDataTypeChange extends Change {
 
 	private final FBType fbType;
-	private final TypeEntry typeEntry;
-	private final String oldName;
+	private final TypeEntry oldTypeEntry;
 	private final List<String> inputPinNames;
 	private final List<String> outputPinNames;
 
-	public InterfaceDataTypeChange(final FBType fbType, final TypeEntry oldTypeEntry, final String oldName) {
+	public InterfaceDataTypeChange(final FBType fbType, final TypeEntry oldTypeEntry) {
 		this.fbType = fbType;
-		this.typeEntry = oldTypeEntry;
-		this.oldName = oldName;
+		this.oldTypeEntry = oldTypeEntry;
 		this.inputPinNames = fbType.getInterfaceList().getInputs()
 				.filter(input -> input.getTypeName().equals(oldTypeEntry.getTypeName())).map(IInterfaceElement::getName)
 				.toList();
@@ -61,7 +59,8 @@ public class InterfaceDataTypeChange extends Change {
 	}
 
 	private Command getUpdatePinInTypeDelcarationCommand() {
-		return FBUpdater.createUpdatePinInTypeDeclarationCommand(fbType, (DataTypeEntry) typeEntry, oldName);
+		return FBUpdater.createUpdatePinInTypeDeclarationCommand(fbType, (DataTypeEntry) this.oldTypeEntry,
+				this.oldTypeEntry.getTypeName());
 	}
 
 	@Override

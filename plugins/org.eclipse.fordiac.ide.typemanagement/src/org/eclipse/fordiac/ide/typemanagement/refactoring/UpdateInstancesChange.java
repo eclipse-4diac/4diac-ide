@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -52,7 +51,7 @@ public class UpdateInstancesChange extends Change {
 
 	@Override
 	public String getName() {
-		return "Update FB instances - " + FBNetworkHelper.getFullHierarchicalName(instance); //$NON-NLS-1$
+		return "Update FB instance: " + instance.getName(); //$NON-NLS-1$
 	}
 
 	@Override

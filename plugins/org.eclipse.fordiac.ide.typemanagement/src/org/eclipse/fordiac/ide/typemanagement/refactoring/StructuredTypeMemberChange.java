@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -27,23 +29,21 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 public class StructuredTypeMemberChange extends Change {
 
 	private final StructuredType affectedStruct;
-	private final TypeEntry typeEntry;
-	private final String oldName;
+	private final TypeEntry oldTypeEntry;
+	private final List<String> affectedMembers;
 
 	private final CompoundCommand cmd = new CompoundCommand();
 
-	public StructuredTypeMemberChange(final StructuredType affectedStruct, final TypeEntry oldTypeEntry,
-			final String oldName, final String newName) {
+	public StructuredTypeMemberChange(final StructuredType affectedStruct, final TypeEntry oldTypeEntry) {
 		this.affectedStruct = affectedStruct;
-		this.typeEntry = oldTypeEntry;
-		this.oldName = oldName;
+		this.oldTypeEntry = oldTypeEntry;
+		this.affectedMembers = affectedStruct.getMemberVariables().stream()
+				.filter(var -> var.getType().equals(oldTypeEntry.getType())).map(VarDeclaration::getName).toList();
 	}
 
 	@Override
 	public String getName() {
-		return "Update Struct Members - " + affectedStruct.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
-				+ affectedStruct.getTypeEntry().getFile().getFileExtension() + " - " //$NON-NLS-1$
-				+ affectedStruct.getTypeEntry().getFile().getProject().getName();
+		return "Update Struct Members: " + this.affectedMembers.toString(); //$NON-NLS-1$
 	}
 
 	@Override
@@ -63,8 +63,9 @@ public class StructuredTypeMemberChange extends Change {
 		final StructuredType structuredTypeEditable = (StructuredType) affectedStruct.getTypeEntry().getTypeEditable();
 		for (final VarDeclaration varDeclaration : structuredTypeEditable.getMemberVariables()) {
 			final String typeName = varDeclaration.getTypeName();
-			if (typeName.equals(oldName)) {
-				cmd.add(ChangeDataTypeCommand.forDataType(varDeclaration, (DataType) typeEntry.getTypeEditable()));
+			if (typeName.equals(this.oldTypeEntry.getTypeName())) {
+				cmd.add(ChangeDataTypeCommand.forDataType(varDeclaration,
+						(DataType) this.oldTypeEntry.getTypeEditable()));
 			}
 		}
 
