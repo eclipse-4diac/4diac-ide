@@ -110,8 +110,7 @@ public class TestFbGenerator extends AbstractBasicFBGenerator {
 		boolean containsParameters = false;
 		int nameCnt = 0;
 		if (!fb.getAlgorithm().isEmpty()) {
-			nameCnt = Integer.parseInt(
-					Character.toString(fb.getAlgorithm().get(fb.getAlgorithm().size() - 1).getName().charAt(1)));
+			nameCnt = Integer.parseInt(fb.getAlgorithm().get(fb.getAlgorithm().size() - 1).getName().substring(1));
 			nameCnt++;
 		}
 

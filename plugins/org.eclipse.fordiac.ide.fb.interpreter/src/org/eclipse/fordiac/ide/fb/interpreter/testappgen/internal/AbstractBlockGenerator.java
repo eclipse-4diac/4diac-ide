@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -61,9 +62,7 @@ public abstract class AbstractBlockGenerator {
 	}
 
 	public static void addPosition(final PositionableElement el, final double x, final double y) {
-		final Position p0 = LibraryElementFactory.eINSTANCE.createPosition();
-		p0.setX(x);
-		p0.setY(y);
+		final Position p0 = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates((int) x, (int) y);
 		el.setPosition(p0);
 	}
 
