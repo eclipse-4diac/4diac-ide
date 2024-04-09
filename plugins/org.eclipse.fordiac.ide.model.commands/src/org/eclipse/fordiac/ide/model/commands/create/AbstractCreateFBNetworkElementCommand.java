@@ -21,6 +21,7 @@ import java.util.Set;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
@@ -47,7 +48,8 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command
 			final Position position) {
 		this.fbNetwork = fbNetwork;
 		this.element = element;
-		this.position = position;
+		this.position = (position.eContainer() != null) ? // if we get a position that is currently used create a copy
+				EcoreUtil.copy(position) : position;
 	}
 
 	protected AbstractCreateFBNetworkElementCommand(final FBNetwork fbNetwork, final FBNetworkElement element,
