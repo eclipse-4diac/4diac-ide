@@ -5,6 +5,7 @@ on:
     workflows: ["4diac IDE verification build"]
     types:
       - completed
+      
 permissions:
   checks: write
   pull-requests: write
