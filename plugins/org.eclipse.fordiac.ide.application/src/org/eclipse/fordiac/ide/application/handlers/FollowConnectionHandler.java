@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -226,6 +228,33 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				.toList();
 	}
 
+	protected boolean containsBorderElement(final InterfaceEditPart iep) {
+		final IInterfaceElement ie = iep.getModel();
+		final EList<Connection> connList = getConnectionList(ie);
+		return connList.stream()
+				.anyMatch(conn -> conn.getFBNetwork().isSubApplicationNetwork() && !conn.getDestination().isIsInput());
+	}
+
+	protected static List<IInterfaceElement> resolveBorderElements(final List<IInterfaceElement> opposites,
+			final GraphicalViewer viewer) {
+		final List<IInterfaceElement> resolvedOpposites = new ArrayList();
+		boolean changeFlag = false;
+		for (final IInterfaceElement element : opposites) {
+			final EditPart ep = (EditPart) (viewer.getEditPartRegistry().get(element));
+			if ((ep instanceof final InterfaceEditPart iep) && isBorderElement(iep)) {
+				isBorderElement(iep);
+				resolvedOpposites.addAll(getTargetPins(iep));
+				changeFlag = true;
+			} else {
+				resolvedOpposites.add(element);
+			}
+		}
+		if (changeFlag) {
+			return resolvedOpposites;
+		}
+		return opposites;
+	}
+
 	private boolean useTargetPins(final InterfaceEditPart iep) {
 		return !iep.getChildren().isEmpty()
 				&& ((iep.getModel().isIsInput() && isLeft()) || (!iep.getModel().isIsInput() && !isLeft()));
@@ -238,6 +267,10 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	private static List<IInterfaceElement> getTargetPins(final InterfaceEditPart iep) {
 		return iep.getChildren().stream().filter(TargetInterfaceElementEditPart.class::isInstance)
 				.map(ep -> (TargetInterfaceElementEditPart) ep).map(ep -> ep.getModel().getRefElement()).toList();
+	}
+
+	private static boolean isBorderElement(final InterfaceEditPart iep) {
+		return iep.getChildren().stream().anyMatch(TargetInterfaceElementEditPart.class::isInstance);
 	}
 
 	protected static boolean isInsideSubappOrViewer(final IInterfaceElement ie, final FBNetwork fbNetwork) {
@@ -299,11 +332,12 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	protected static void selectOpposites(final ExecutionEvent event, final GraphicalViewer viewer,
 			final IInterfaceElement originPin, final List<IInterfaceElement> opposites) throws ExecutionException {
-		if (!opposites.isEmpty()) {
+		final List<IInterfaceElement> resolved = resolveBorderElements(opposites, viewer);
+		if (!resolved.isEmpty()) {
 			if (opposites.size() == 1) {
-				HandlerHelper.selectElement(opposites.get(0), viewer);
+				HandlerHelper.selectElement(resolved.get(0), viewer);
 			} else {
-				showOppositeSelectionDialog(opposites, event, viewer, originPin);
+				showOppositeSelectionDialog(resolved, event, viewer, originPin);
 			}
 		}
 	}
