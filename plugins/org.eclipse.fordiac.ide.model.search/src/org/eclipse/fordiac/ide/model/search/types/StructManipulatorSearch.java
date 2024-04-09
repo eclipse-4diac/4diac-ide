@@ -24,7 +24,6 @@ public class StructManipulatorSearch extends InstanceSearch {
 		super(new StructSearchFilter(dataTypeEntry));
 	}
 
-
 	private static class StructSearchFilter implements SearchFilter {
 
 		private final DataTypeEntry entry;
@@ -34,10 +33,9 @@ public class StructManipulatorSearch extends InstanceSearch {
 		}
 
 		@Override
-		public boolean apply(final INamedElement searchCandiate) {
-			if (searchCandiate instanceof final StructManipulator sm) {
-				return sm.getStructType().getName()
-						.equalsIgnoreCase(entry.getTypeName());
+		public boolean apply(final INamedElement searchCandidate) {
+			if (searchCandidate instanceof final StructManipulator sm) {
+				return sm.getDataType().getName().equalsIgnoreCase(entry.getTypeName());
 			}
 			return false;
 

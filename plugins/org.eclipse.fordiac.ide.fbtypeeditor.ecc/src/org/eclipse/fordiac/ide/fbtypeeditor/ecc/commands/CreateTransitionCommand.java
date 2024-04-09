@@ -61,7 +61,6 @@ public class CreateTransitionCommand extends CreationCommand {
 	private EditPartViewer viewer;
 
 	public CreateTransitionCommand() {
-		super();
 	}
 
 	/**
@@ -77,9 +76,9 @@ public class CreateTransitionCommand extends CreationCommand {
 	 */
 	public CreateTransitionCommand(final ECState source, final ECState destination, final Event conditionEvent) {
 		this.source = source;
-		this.sourceLocation = source.getPosition().asPoint();
+		this.sourceLocation = source.getPosition().toScreenPoint();
 		this.destination = destination;
-		this.destLocation = destination.getPosition().asPoint();
+		this.destLocation = destination.getPosition().toScreenPoint();
 		this.conditionEvent = conditionEvent;
 	}
 
@@ -156,17 +155,15 @@ public class CreateTransitionCommand extends CreationCommand {
 		// it is necessary to invoke the following code after adding the
 		// transition to the parent, otherwise ECTransitionEditPart will
 		// throw a NPE in the activate method!
-		transition.updatePosition(calcTransitionBendPoint());
+		transition.updatePositionFromScreenCoordinates(calcTransitionBendPoint());
 		transition.setSource(source);
 		transition.setDestination(destination);
 		transition.setConditionEvent(conditionEvent);
 
 		if (conditionExpression != null) {
 			transition.setConditionExpression(conditionExpression);
-		} else {
-			if (conditionEvent == null) {
-				transition.setConditionExpression("1"); //$NON-NLS-1$
-			}
+		} else if (conditionEvent == null) {
+			transition.setConditionExpression("1"); //$NON-NLS-1$
 		}
 		if (null != viewer) {
 			final Object obj = viewer.getEditPartRegistry().get(transition);

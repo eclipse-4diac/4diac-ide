@@ -19,22 +19,46 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
 
 public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 
-	private final StructuredType newStruct;
+	private final DataType newStruct;
+	private final String newVisibleChildren;
+
+	public ChangeStructCommand(final StructManipulator mux) {
+		this(mux, mux.getDataType(), getOldVisibleChildren(mux));
+	}
 
 	public ChangeStructCommand(final StructManipulator mux, final StructuredType newStruct) {
-		super(mux);
-		this.newStruct = newStruct;
-		entry = mux.getTypeEntry();
+		this(mux, newStruct, getOldVisibleChildren(mux));
+	}
+
+	public ChangeStructCommand(final Demultiplexer demux, final String newVisibleChildren) {
+		this(demux, demux.getDataType(), newVisibleChildren);
+	}
+
+	// only to avoid code duplication, public constructors ensure correct set-up
+	private ChangeStructCommand(final StructManipulator demux, final DataType datatype,
+			final String newVisibleChildren) {
+		super(demux);
+		newStruct = datatype;
+		entry = demux.getTypeEntry();
+		this.newVisibleChildren = newVisibleChildren;
+	}
+
+	private static String getOldVisibleChildren(final StructManipulator mux) {
+		if (mux instanceof final Demultiplexer demux && demux.isIsConfigured()) {
+			return ConfigurableFBManagement.buildVisibleChildrenString(demux);
+		}
+		return null;
 	}
 
 	@Override
@@ -46,14 +70,33 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 		}
 		newElement.setTypeEntry(entry);
 		setInterface();
+		handleConfigurableFB();
 		newElement.setName(oldElement.getName());
 
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
-		updateStruct(newStruct);
 		copyAttributes();
-		((StructManipulator) newElement).setStructTypeElementsAtInterface(newStruct);
+
 		createValues();
 		transferInstanceComments();
+	}
+
+	@Override
+	protected void handleConfigurableFB() {
+		if (newStruct != null) {
+			getNewMux().setDataType(newStruct);
+		}
+		if (isDemuxConfiguration()) {
+			getNewMux().loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, newVisibleChildren);
+		} else {
+			getNewMux().updateConfiguration();
+		}
+	}
+
+	private boolean isDemuxConfiguration() {
+		if (newElement instanceof final Demultiplexer demux) {
+			return demux.isIsConfigured() || newVisibleChildren != null;
+		}
+		return false;
 	}
 
 	protected void copyAttributes() {
@@ -66,22 +109,5 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 
 	public StructManipulator getOldMux() {
 		return (StructManipulator) oldElement;
-	}
-
-	// recursively update the struct's members because the lib only reloads them on
-	// startup
-	private static void updateStruct(final StructuredType struct) {
-		if (struct.getTypeLibrary() != null) {
-			final DataTypeLibrary lib = struct.getTypeLibrary().getDataTypeLibrary();
-			struct.getMemberVariables().stream().filter(varDecl -> varDecl.getType() instanceof StructuredType)
-					.forEach(varDecl -> {
-						final StructuredType updatedStruct = lib
-								.getStructuredType(PackageNameHelper.getFullTypeName(varDecl.getType()));
-						if (updatedStruct != null) {
-							varDecl.setType(updatedStruct);
-						}
-						updateStruct(updatedStruct);
-					});
-		}
 	}
 }

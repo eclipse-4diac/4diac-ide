@@ -406,12 +406,8 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * @generated
 	 */
 	@Override
-	public void updatePosition(final int x, final int y) {
-		final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createPosition();
-		pos.setX(x);
-		pos.setY(y);
-		
-		setPosition(pos);
+	public void updatePositionFromScreenCoordinates(final int x, final int y) {
+		PositionAnnotation.updatePositionFromScreenCoordinates(this, x,y);
 	}
 
 	/**
@@ -420,8 +416,8 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 * @generated
 	 */
 	@Override
-	public void updatePosition(final Point newPos) {
-		updatePosition(newPos.x, newPos.y);
+	public void updatePositionFromScreenCoordinates(final Point newPos) {
+		updatePositionFromScreenCoordinates(newPos.x, newPos.y);
 	}
 
 	/**

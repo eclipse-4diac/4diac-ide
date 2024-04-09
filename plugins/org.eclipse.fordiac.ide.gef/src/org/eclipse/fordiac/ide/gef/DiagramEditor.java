@@ -142,7 +142,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 				canvas.scrollTo(scrollPos.x, scrollPos.y);
 			} else {
 				// if we have a selected edit part we want to show it in the middle
-				viewer.revealEditPart((EditPart) viewer.getSelectedEditParts().get(0));
+				viewer.revealEditPart(viewer.getSelectedEditParts().get(0));
 			}
 		}
 	}

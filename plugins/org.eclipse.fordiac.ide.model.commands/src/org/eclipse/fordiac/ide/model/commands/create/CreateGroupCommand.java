@@ -44,7 +44,7 @@ public class CreateGroupCommand extends AbstractCreateFBNetworkElementCommand {
 
 	@Override
 	public void execute() {
-		updateCreatePosition(posSizeRef.x, posSizeRef.y);
+		updateCreatePosition(posSizeRef.getTopLeft());
 		getElement().setWidth(posSizeRef.width);
 		getElement().setHeight(posSizeRef.height);
 		super.execute();
@@ -81,7 +81,8 @@ public class CreateGroupCommand extends AbstractCreateFBNetworkElementCommand {
 
 	private final Rectangle checkPosSizeRef(final Rectangle posSizeRef) {
 		if (!addElements.getElementsToAdd().isEmpty()) {
-			// if we do not have an empty group move it a bit to the left and up so that the FBs stay at their positions
+			// if we do not have an empty group move it a bit to the left and up so that the
+			// FBs stay at their positions
 			posSizeRef.x -= GROUP_BORDER;
 			posSizeRef.y -= GROUP_TOP_BORDER;
 			posSizeRef.width += 2 * GROUP_BORDER;

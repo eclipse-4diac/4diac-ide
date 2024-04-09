@@ -66,7 +66,7 @@ public interface PositionableElement extends EObject {
 	 * @model xDataType="org.eclipse.emf.ecore.xml.type.Int" xRequired="true" yDataType="org.eclipse.emf.ecore.xml.type.Int" yRequired="true"
 	 * @generated
 	 */
-	void updatePosition(int x, int y);
+	void updatePositionFromScreenCoordinates(int x, int y);
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -74,6 +74,6 @@ public interface PositionableElement extends EObject {
 	 * @model newPosDataType="org.eclipse.fordiac.ide.model.libraryElement.Point" newPosRequired="true"
 	 * @generated
 	 */
-	void updatePosition(Point newPos);
+	void updatePositionFromScreenCoordinates(Point newPos);
 
 } // PositionableElement

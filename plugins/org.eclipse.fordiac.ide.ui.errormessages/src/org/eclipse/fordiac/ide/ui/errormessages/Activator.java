@@ -27,10 +27,10 @@ public class Activator extends Plugin {
 	// The shared instance
 	private static Activator plugin;
 
-	private static synchronized void setPlugin(Activator instance) {
+	private static synchronized void setPlugin(final Activator instance) {
 		plugin = instance;
 	}
-	
+
 	/**
 	 * The constructor.
 	 */

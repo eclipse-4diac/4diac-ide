@@ -134,7 +134,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 					&& EcoreUtil.getRootContainer(getType()) instanceof final LibraryElement libraryElement) {
 				importCommand = new AddNewImportCommand(libraryElement, newStructName);
 			}
-			
+
 			final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
 			commandStack.execute(cmd.chain(importCommand));
 			updateStructManipulatorFB(cmd.getNewMux());
@@ -142,7 +142,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 	}
 
 	public boolean newStructSelected(final String newStructName) {
-		return !newStructName.equalsIgnoreCase(PackageNameHelper.getFullTypeName(getType().getStructType()))
+		return !newStructName.equalsIgnoreCase(PackageNameHelper.getFullTypeName(getType().getDataType()))
 				&& getDataTypeLib().getStructuredType(newStructName) != null;
 	}
 
@@ -281,7 +281,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 
 	public void initTree(final StructManipulator manipulator, final TreeViewer viewer) {
 		final StructuredType struct = manipulator.getTypeEntry().getTypeLibrary().getDataTypeLibrary()
-				.getStructuredType(PackageNameHelper.getFullTypeName(manipulator.getStructType()));
+				.getStructuredType(PackageNameHelper.getFullTypeName(manipulator.getDataType()));
 
 		final CheckableStructTree tree;
 		if (viewer != null) {

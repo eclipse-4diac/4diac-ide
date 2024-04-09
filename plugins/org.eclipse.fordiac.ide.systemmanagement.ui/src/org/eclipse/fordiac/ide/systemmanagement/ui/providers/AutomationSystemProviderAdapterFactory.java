@@ -45,11 +45,19 @@ public class AutomationSystemProviderAdapterFactory extends LibraryElementItemPr
 	}
 
 	@Override
-	public Adapter createSubAppAdapter() {
-		if (subAppItemProvider == null) {
-			subAppItemProvider = new SubAppItemProviderForSystem(this);
+	public Adapter createTypedSubAppAdapter() {
+		if (typedSubAppItemProvider == null) {
+			typedSubAppItemProvider = new TypedSubAppItemProviderForSystem(this);
 		}
-		return subAppItemProvider;
+		return typedSubAppItemProvider;
+	}
+
+	@Override
+	public Adapter createUntypedSubAppAdapter() {
+		if (untypedSubAppItemProvider == null) {
+			untypedSubAppItemProvider = new UntypedSubAppItemProviderForSystem(this);
+		}
+		return untypedSubAppItemProvider;
 	}
 
 	@Override

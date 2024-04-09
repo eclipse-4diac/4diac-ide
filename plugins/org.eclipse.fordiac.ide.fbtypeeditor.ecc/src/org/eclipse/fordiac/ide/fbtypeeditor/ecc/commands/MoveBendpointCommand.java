@@ -14,7 +14,9 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.commands.Command;
 
 /**
@@ -25,9 +27,8 @@ public class MoveBendpointCommand extends Command {
 	/** The e c transition. */
 	private final ECTransition eCTransition;
 
-	private final Point point;
-	private Point oldPoint;
-
+	private final Position newPos;
+	private Position oldPos;
 
 	/**
 	 * Instantiates a new move bendpoint command.
@@ -36,9 +37,8 @@ public class MoveBendpointCommand extends Command {
 	 * @param point      the point
 	 */
 	public MoveBendpointCommand(final ECTransition transition, final Point point) {
-		super();
 		this.eCTransition = transition;
-		this.point = point;
+		this.newPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(point.x, point.y);
 	}
 
 	/*
@@ -48,8 +48,8 @@ public class MoveBendpointCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		oldPoint = eCTransition.getPosition().asPoint();
-		redo();
+		oldPos = eCTransition.getPosition();
+		eCTransition.setPosition(newPos);
 	}
 
 	/*
@@ -59,7 +59,7 @@ public class MoveBendpointCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		eCTransition.updatePosition(oldPoint);
+		eCTransition.setPosition(oldPos);
 	}
 
 	/*
@@ -69,7 +69,7 @@ public class MoveBendpointCommand extends Command {
 	 */
 	@Override
 	public void redo() {
-		eCTransition.updatePosition(point);
+		eCTransition.setPosition(newPos);
 	}
 
 }

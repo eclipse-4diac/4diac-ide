@@ -486,4 +486,9 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		return selection;
 	}
 
+	@Override
+	public void updateInstances(final TypeEntry entry) {
+		// TODO Auto-generated method stub
+	}
+
 }

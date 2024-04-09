@@ -139,7 +139,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	public void doSave(final IProgressMonitor monitor) {
 		if ((null != typeEntry) && (checkTypeSaveAble())) {
 			performPresaveHooks();
-			if (interfaceChanges != 0) {
+			if (false /* deactivate temporarly */ && interfaceChanges != 0) {
 				createSaveDialog(monitor);
 			} else {
 				doSaveInternal(monitor);
@@ -680,6 +680,12 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 						&& fbType.getInterfaceList().equals(changeIFCmd.getInterfaceElement().eContainer()))
 				|| (cmd instanceof final ChangeNameCommand chgNameCmd
 						&& fbType.getInterfaceList().equals(chgNameCmd.getElement().eContainer())));
+	}
+
+	@Override
+	public void updateInstances(final TypeEntry entry) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

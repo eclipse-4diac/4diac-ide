@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
@@ -48,6 +49,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -56,7 +58,7 @@ import org.eclipse.swt.graphics.Point;
 public class MoveElementsFromSubAppCommand extends Command implements ScopedCommand {
 
 	protected final SubApp sourceSubApp;
-	private Point destination;
+	private Position destination;
 	private final FBNetwork destinationNetwork;
 	protected final List<FBNetworkElement> elements;
 	private final Map<FBNetworkElement, org.eclipse.fordiac.ide.model.libraryElement.Position> oldPos = new HashMap<>(); // for
@@ -73,7 +75,7 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 
 	public MoveElementsFromSubAppCommand(final Collection<FBNetworkElement> elements, final Point destination) {
 		this.elements = new ArrayList<>(elements);
-		this.destination = destination;
+		setDestination(destination);
 		this.sourceSubApp = getSourceSubapp();
 		this.destinationNetwork = sourceSubApp != null ? sourceSubApp.getFbNetwork() : null;
 	}
@@ -230,7 +232,7 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 
 	private void positionElements() {
 		if (null == destination) {
-			sourceSubApp.getPosition();
+			destination = sourceSubApp.getPosition();
 		}
 		FBNetworkHelper.moveFBNetworkToDestination(elements, destination);
 	}
@@ -354,8 +356,8 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 		return cmd;
 	}
 
-	protected void setDestination(final Point destination) {
-		this.destination = destination;
+	protected final void setDestination(final Point destination) {
+		this.destination = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(destination.x, destination.y);
 	}
 
 	@Override

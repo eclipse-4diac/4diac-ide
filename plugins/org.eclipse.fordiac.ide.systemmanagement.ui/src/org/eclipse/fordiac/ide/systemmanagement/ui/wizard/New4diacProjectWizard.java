@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.commands.NewAppCommand;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
+import org.eclipse.fordiac.ide.typemanagement.wizards.LibrarySelectionPage;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -43,7 +44,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 
 	/** The pages. */
 	private New4diacProjectPage page;
-	private New4diacProjectLibraryPage libPage;
+	private LibrarySelectionPage libPage;
 
 	/**
 	 * Instantiates a new new system wizard.
@@ -63,7 +64,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 		page.setTitle(Messages.New4diacProjectWizard_WizardName);
 		page.setDescription(Messages.New4diacProjectWizard_WizardDesc);
 
-		libPage = new New4diacProjectLibraryPage(Messages.New4diacProjectWizard_WizardName);
+		libPage = new LibrarySelectionPage(Messages.New4diacProjectWizard_WizardName, true, true, true, false);
 		libPage.setTitle(Messages.New4diacProjectWizard_WizardName);
 		libPage.setDescription(Messages.New4diacProjectWizard_WizardDesc);
 

@@ -76,8 +76,8 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	public final TypeLibrary getTypeLibrary() {
 		final EObject root = EcoreUtil.getRootContainer(getType());
 
-		if (root instanceof LibraryElement) {
-			return ((LibraryElement) root).getTypeLibrary();
+		if (root instanceof final LibraryElement libEl) {
+			return libEl.getTypeLibrary();
 		}
 		throw new IllegalStateException(
 				"Could not determine root element for finding the typ lib for given element: " + getType()); //$NON-NLS-1$
@@ -95,8 +95,8 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		Object input = selection;
-		if (selection instanceof IStructuredSelection) {
-			input = ((IStructuredSelection) selection).getFirstElement();
+		if (selection instanceof final IStructuredSelection structSel) {
+			input = structSel.getFirstElement();
 		}
 		commandStack = getCommandStack(part, input);
 		if (null == commandStack) { // disable all fields

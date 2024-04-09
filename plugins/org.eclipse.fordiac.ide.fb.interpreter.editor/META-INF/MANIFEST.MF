@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fb.interpreter.editor;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.fb.interpreter.editor
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.fordiac.ide.fb.intepreter.presentation.OperationalSemanticsEditorPlugin$Implementation
 Bundle-Vendor: %providerName

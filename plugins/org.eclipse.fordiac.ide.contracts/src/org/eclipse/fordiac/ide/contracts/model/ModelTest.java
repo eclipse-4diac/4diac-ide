@@ -26,7 +26,7 @@ public class ModelTest {
 	}
 
 	public static void test() {
-		final SubApp subApp = LibraryElementFactory.eINSTANCE.createSubApp();
+		final SubApp subApp = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
 		subApp.setComment("ASSUMPTION VV occurs within [1,2]ms   \nGUARANTEE Reaction(VV,BB) within [6,39]ms \n"); //$NON-NLS-1$
 		subApp.setComment(
 				"ASSUMPTION CD occurs every 7ms with [8,9]ms offset\n GUARANTEE Reaction(EI1,EO1) within [1,1]ms  ConstractState TRUE \n"); //$NON-NLS-1$

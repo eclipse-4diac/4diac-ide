@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
@@ -71,8 +72,8 @@ public class ConvertSubappToGroupCommand extends Command implements ScopedComman
 		// delete subapp
 		convertToGroupCmd.add(new FlattenSubAppCommand(sourceSubapp, false));
 		// create new group from subapp network
-		final Rectangle bounds = new Rectangle(sourceSubapp.getPosition().getX(), sourceSubapp.getPosition().getY(),
-				sourceSubapp.getWidth(), sourceSubapp.getHeight());
+		final Rectangle bounds = new Rectangle(sourceSubapp.getPosition().toScreenPoint(),
+				new Dimension(sourceSubapp.getWidth(), sourceSubapp.getHeight()));
 		createGroupCmd = new CreateGroupCommand(fbNetwork, subappContents, bounds);
 		convertToGroupCmd.add(createGroupCmd);
 	}

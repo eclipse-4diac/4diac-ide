@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.edit.helper;
 
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -37,8 +38,9 @@ public final class CommentHelper {
 	public static String getTypeComment(final IInterfaceElement interfaceElement) {
 		if (interfaceElement != null) {
 			final FBNetworkElement fbn = interfaceElement.getFBNetworkElement();
-			if (fbn instanceof final StructManipulator structManipulator && structManipulator.getStructType() != null) {
-				final VarDeclaration structMember = structManipulator.getStructType().getMemberVariables().stream()
+			if (fbn instanceof final StructManipulator structManipulator
+					&& structManipulator.getDataType() instanceof final StructuredType struct) {
+				final VarDeclaration structMember = struct.getMemberVariables().stream()
 						.filter(member -> interfaceElement.getName().equals(member.getName())).findFirst().orElse(null);
 				if (structMember != null && structMember.getComment() != null) {
 					return structMember.getComment();

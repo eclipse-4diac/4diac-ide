@@ -37,7 +37,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.fbtypeeditor.network,
  org.eclipse.fordiac.ide.library.model
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.systemmanagement.ui;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.systemmanagement.ui

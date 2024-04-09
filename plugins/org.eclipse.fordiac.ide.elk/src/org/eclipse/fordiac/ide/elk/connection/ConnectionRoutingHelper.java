@@ -77,8 +77,8 @@ public final class ConnectionRoutingHelper {
 	}
 
 	private static void addSubAppPins(final ConnectionLayoutMapping mapping) {
-		final SubAppForFBNetworkEditPart subapp = (SubAppForFBNetworkEditPart) ((UnfoldedSubappContentEditPart) mapping
-				.getParentElement()).getParent();
+		final SubAppForFBNetworkEditPart subapp = ((UnfoldedSubappContentEditPart) mapping.getParentElement())
+				.getParent();
 		final List<UntypedSubAppInterfaceElementEditPart> pins = subapp.getChildren().stream()
 				.filter(UntypedSubAppInterfaceElementEditPart.class::isInstance)
 				.map(UntypedSubAppInterfaceElementEditPart.class::cast).toList();

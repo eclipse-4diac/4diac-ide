@@ -27,11 +27,19 @@ public class AutomationSystemItemProviderEmfCompare extends AutomationSystemProv
 	}
 
 	@Override
-	public Adapter createSubAppAdapter() {
-		if (subAppItemProvider == null) {
-			subAppItemProvider = new SubAppItemProviderEmfCompare(this);
+	public Adapter createTypedSubAppAdapter() {
+		if (typedSubAppItemProvider == null) {
+			typedSubAppItemProvider = new TypedSubAppItemProviderEmfCompare(this);
 		}
-		return subAppItemProvider;
+		return typedSubAppItemProvider;
+	}
+
+	@Override
+	public Adapter createUntypedSubAppAdapter() {
+		if (untypedSubAppItemProvider == null) {
+			untypedSubAppItemProvider = new UntypedSubAppItemProviderEmfCompare(this);
+		}
+		return untypedSubAppItemProvider;
 	}
 
 	@Override

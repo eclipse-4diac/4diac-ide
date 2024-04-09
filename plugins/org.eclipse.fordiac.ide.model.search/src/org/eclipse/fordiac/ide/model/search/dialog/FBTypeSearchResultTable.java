@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search.dialog;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -77,7 +77,7 @@ public class FBTypeSearchResultTable extends Composite {
 		this.setLayout(new GridLayout(1, true));
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		final FBTypeEntryDataHandler treeData = new FBTypeEntryDataHandler(entry);
-		final HashMap<INamedElement, TypeEntry> result = treeData.createInputSet(treeData.getTypeEntry());
+		final Map<INamedElement, TypeEntry> result = treeData.createInputSet(treeData.getTypeEntry());
 		if (result.isEmpty()) {
 			// No results - display just the info
 			final Label warningLabel = LabelFactory.newLabel(SWT.NONE).create(this);
@@ -85,7 +85,7 @@ public class FBTypeSearchResultTable extends Composite {
 		} else {
 			treeData.setInputSet(result);
 			final Label label = new Label(getParent(), SWT.NONE);
-			label.setText("Number of instances of " + treeData.typeEntry.getTypeName() + " : " //$NON-NLS-1$
+			label.setText("Number of instances of " + treeData.typeEntry.getTypeName() + " : " //$NON-NLS-1$ //$NON-NLS-2$
 					+ treeData.getInputSet().size());
 			final TreeViewer treeViewer = new TreeViewer(this);
 			configureTableViewer(treeViewer);

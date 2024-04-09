@@ -112,16 +112,21 @@ public abstract class AbstractBasicFBGenerator extends AbstractBlockGenerator {
 	protected List<Event> getExpectedEvents(final boolean isInput) {
 		final List<Event> list = new ArrayList<>();
 		for (final TestCase testC : testSuite.getTestCases()) {
-			final StringBuilder sb = new StringBuilder();
+			final StringBuilder sbName = new StringBuilder();
+			final StringBuilder sbComment = new StringBuilder();
 			for (final TestState testState : testC.getTestStates()) {
 				for (final OutputPrimitive prim : testState.getTestOutputs()) {
-					sb.append(prim.getEvent() + "_"); //$NON-NLS-1$
+					sbName.append(prim.getEvent() + "_"); //$NON-NLS-1$
+					sbComment.append(prim.getEvent() + "."); //$NON-NLS-1$
 				}
 			}
-			sb.append("expected"); //$NON-NLS-1$
-			final String name = sb.toString();
+			sbName.append("expected"); //$NON-NLS-1$
+			final String comment = sbComment.toString();
+			final String name = sbName.toString();
 			if (!containsEvent(list, name)) {
-				list.add(createEvent(name, isInput));
+				final Event newEvent = createEvent(name, isInput);
+				newEvent.setComment(comment.substring(0, comment.lastIndexOf('.')));
+				list.add(newEvent);
 			}
 		}
 		return list;

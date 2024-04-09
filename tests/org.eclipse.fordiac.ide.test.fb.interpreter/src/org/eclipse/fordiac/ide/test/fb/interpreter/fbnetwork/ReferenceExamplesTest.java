@@ -44,7 +44,7 @@ import org.osgi.framework.Bundle;
 public class ReferenceExamplesTest {
 
 	private static final String FILE_EXTENSION = "opsem"; //$NON-NLS-1$
-	private static Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.fb.interpreter");  //$NON-NLS-1$
+	private static Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.fb.interpreter"); //$NON-NLS-1$
 	private static FordiacProjectLoader loader;
 	private static IResource[] resources;
 
@@ -61,8 +61,7 @@ public class ReferenceExamplesTest {
 
 	public static IResource[] getTraceNames() throws CoreException {
 		loadProject();
-		return Stream.of(resources)
-				.filter(res -> FILE_EXTENSION.equals(res.getFileExtension()))
+		return Stream.of(resources).filter(res -> FILE_EXTENSION.equals(res.getFileExtension()))
 				.toArray(IResource[]::new);
 	}
 
@@ -96,10 +95,10 @@ public class ReferenceExamplesTest {
 
 		// prepare for emf compare
 		final Resource resRight = EventManagerUtils.addResourceToManager(eventManager,
-				URI.createURI("platform:/resource/ReferenceExamples/" + res.getName())); //$NON-NLS-1$ //$NON-NLS-2$
+				URI.createURI("platform:/resource/ReferenceExamples/" + res.getName())); //$NON-NLS-1$
 
 		final Resource resLeft = EventManagerUtils
-				.loadResourceNotOnDemand (URI.createPlatformResourceURI(res.getFullPath().toString(), true));
+				.loadResourceNotOnDemand(URI.createPlatformResourceURI(res.getFullPath().toString(), true));
 
 		final Comparison eventComparison = EventManagerComparisonUtils.compareEventManager(resLeft, resRight);
 		EMFComparePrettyPrinter.printComparison(eventComparison, System.out);

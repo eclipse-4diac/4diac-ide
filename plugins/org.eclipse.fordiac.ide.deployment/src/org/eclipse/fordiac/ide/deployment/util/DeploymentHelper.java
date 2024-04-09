@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2018 fortiss GmbH, Johannes Kepler University
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2018, 2024 fortiss GmbH, Johannes Kepler University
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,10 +15,12 @@
 package org.eclipse.fordiac.ide.deployment.util;
 
 import java.text.MessageFormat;
+import java.util.function.Function;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -26,20 +28,35 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public interface DeploymentHelper {
 
-	String MGR_ID = "MGR_ID";  //$NON-NLS-1$
-
+	String MGR_ID = "MGR_ID"; //$NON-NLS-1$
 
 	static String getVariableValue(final VarDeclaration varDecl) throws DeploymentException {
 		if (hasInitalValue(varDecl)) {
 			try {
-				return VariableOperations.newVariable(varDecl).toString();
+				return VariableOperations.newVariable(varDecl).toString(false);
 			} catch (final Exception e) {
 				if (forceDeployement()) {
 					return varDecl.getValue().getValue();
-				} else {
-					throw new DeploymentException(MessageFormat.format(Messages.DeploymentHelper_VariableValueError,
-							varDecl.getValue().getValue(), varDecl.getQualifiedName(), e.getMessage()), e);
 				}
+				throw new DeploymentException(MessageFormat.format(Messages.DeploymentHelper_VariableValueError,
+						varDecl.getValue().getValue(), varDecl.getQualifiedName(), e.getMessage()), e);
+			}
+		}
+		return null;
+	}
+
+	static Function<VarDeclaration, String> getVariableValueRetargetable(final VarDeclaration varDecl)
+			throws DeploymentException {
+		if (hasInitalValue(varDecl)) {
+			try {
+				final Value value = VariableOperations.newVariable(varDecl).getValue();
+				return destination -> VariableOperations.newVariable(destination, value).toString(false);
+			} catch (final Exception e) {
+				if (forceDeployement()) {
+					return unused -> varDecl.getValue().getValue();
+				}
+				throw new DeploymentException(MessageFormat.format(Messages.DeploymentHelper_VariableValueError,
+						varDecl.getValue().getValue(), varDecl.getQualifiedName(), e.getMessage()), e);
 			}
 		}
 		return null;

@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.ui.editors;
 import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -36,14 +37,30 @@ public class TypeEntryAdapter extends AdapterImpl {
 	public void notifyChanged(final Notification notification) {
 		super.notifyChanged(notification);
 
-		if (TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE.equals(notification.getFeature())) {
+		String feature = "";
+		if (notification.getFeature() instanceof final String string) {
+			feature = string;
+		}
+
+		switch (feature) {
+		case TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE:
 			handleFileContentChange();
-		} else if (TypeEntry.TYPE_ENTRY_FILE_FEATURE.equals(notification.getFeature())) {
+			break;
+		case TypeEntry.TYPE_ENTRY_FILE_FEATURE:
 			Display.getDefault().asyncExec(() -> {
 				if (notification.getNewValue() instanceof final IFile newFile) {
 					editor.setInput(new FileEditorInput(newFile));
 				}
 			});
+			break;
+		case TypeEntry.TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE:
+			// if there is no typeEntry inside, then the notification is used wrong, and for
+			// that we want to know that early
+			Assert.isTrue(notification.getNotifier() instanceof TypeEntry);
+			Assert.isTrue(notification.getNewValue() instanceof TypeEntry);
+			final TypeEntry typeEntry = (TypeEntry) notification.getNewValue();
+			editor.updateInstances(typeEntry);
+			break;
 		}
 	}
 

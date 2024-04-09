@@ -25,8 +25,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 
@@ -36,8 +37,16 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	private Command mapSubappCmd; // can not be in the compound command as it needs to be performed when
 	// subapp interface is finished
 
+	public NewSubAppCommand(final FBNetwork fbNetwork, final List<?> selection, final Position pos) {
+		super(fbNetwork, LibraryElementFactory.eINSTANCE.createUntypedSubApp(), pos);
+		getElement().setSubAppNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
+		addElements = new AddElementsToSubAppCommand(getElement(), selection);
+		checkMapping(selection);
+		parts = selection;
+	}
+
 	public NewSubAppCommand(final FBNetwork fbNetwork, final List<?> selection, final int x, final int y) {
-		super(fbNetwork, LibraryElementFactory.eINSTANCE.createSubApp(), x, y);
+		super(fbNetwork, LibraryElementFactory.eINSTANCE.createUntypedSubApp(), x, y);
 		getElement().setSubAppNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
 		addElements = new AddElementsToSubAppCommand(getElement(), selection);
 		checkMapping(selection);
@@ -86,7 +95,8 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 		if (null != mapSubappCmd) {
 			mapSubappCmd.undo();
 		}
-		// this has to be done before super.undo() as otherwise addElements does not have the correct networks.
+		// this has to be done before super.undo() as otherwise addElements does not
+		// have the correct networks.
 		addElements.undo();
 		super.undo();
 	}
@@ -123,7 +133,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	@Override
-	public SubApp getElement() {
-		return (SubApp) super.getElement();
+	public UntypedSubApp getElement() {
+		return (UntypedSubApp) super.getElement();
 	}
 }

@@ -109,8 +109,8 @@ public final class FBShapeHelper {
 	}
 
 	private static int getStructNameCharacters(final FBNetworkElement element) {
-		if (element instanceof final StructManipulator structManipulator && structManipulator.getStructType() != null) {
-			return structManipulator.getStructType().getName().length();
+		if (element instanceof final StructManipulator structManipulator && structManipulator.getDataType() != null) {
+			return structManipulator.getDataType().getName().length();
 		}
 		return 0;
 	}

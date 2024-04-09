@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.fordiac.ide.comgeneration.feature"
       label="Communication FB generation"
-      version="2.0.0.qualifier"
+      version="3.0.0.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>
@@ -172,9 +172,6 @@ United States, other countries, or both.\n
 
    <plugin
          id="org.eclipse.fordiac.ide.comgeneration"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
 </feature>

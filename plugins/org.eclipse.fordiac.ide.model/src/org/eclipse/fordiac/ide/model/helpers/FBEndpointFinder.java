@@ -393,7 +393,7 @@ public class FBEndpointFinder {
 		final FBNetworkElement fb = state.ifElem.getFBNetworkElement();
 
 		// trace find right interface from the interface stack
-		for (final IInterfaceElement structMem : ((StructManipulator) fb).getStructType().getMemberVariables().stream()
+		for (final IInterfaceElement structMem : ((StructManipulator) fb).getMemberVars().stream()
 				.filter(mem -> fb.getInterfaceElement(mem.getName()) != null).toList()) {
 			final IInterfaceElement realInt = fb.getInterfaceElement(structMem.getName());
 

@@ -3,7 +3,7 @@ Export-Package: org.eclipse.fordiac.ide.subapptypeeditor.viewer
 Bundle-ManifestVersion: 2
 Bundle-Name: Subapplication Type Editor
 Bundle-SymbolicName: org.eclipse.fordiac.ide.subapptypeeditor;singleton:=true
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.views.properties.tabbed,

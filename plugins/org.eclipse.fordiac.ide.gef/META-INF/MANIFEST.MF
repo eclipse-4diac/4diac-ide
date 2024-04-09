@@ -48,7 +48,7 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.xtext.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Name: Graphical Utilites
 Bundle-Activator: org.eclipse.fordiac.ide.gef.Activator
 Bundle-ManifestVersion: 2

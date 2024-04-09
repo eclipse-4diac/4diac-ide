@@ -216,6 +216,8 @@ public final class Messages extends NLS {
 
 	public static String ToggleConnections_Singular_Show;
 
+	public static String ToggleConnections_Target_Show;
+
 	public static String VarConfigurationSection_VarConfigs;
 
 	static {

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -26,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
@@ -43,7 +45,7 @@ public class DeviceCreateCommand extends Command {
 	private static final String CREATE_DEVICE_LABEL = Messages.DeviceCreateCommand_LABEL_CreateDevice;
 	private final DeviceTypeEntry entry;
 	private final SystemConfiguration parent;
-	private final Rectangle bounds;
+	private final Position pos;
 	private Device device;
 
 	public Device getDevice() {
@@ -53,13 +55,13 @@ public class DeviceCreateCommand extends Command {
 	public DeviceCreateCommand(final DeviceTypeEntry entry, final SystemConfiguration parent, final Rectangle bounds) {
 		this.entry = entry;
 		this.parent = parent;
-		this.bounds = bounds;
+		this.pos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(bounds.x, bounds.y);
 		setLabel(CREATE_DEVICE_LABEL);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return (entry != null) && (bounds != null) && (parent != null);
+		return (entry != null) && (parent != null);
 	}
 
 	@Override
@@ -68,7 +70,7 @@ public class DeviceCreateCommand extends Command {
 		device.setTypeEntry(entry);
 		CommonElementImporter.createParameters(device);
 		setDeviceProfile();
-		device.updatePosition(bounds.getTopLeft());
+		device.setPosition(pos);
 		parent.getDevices().add(device);
 		// the name needs to be set after the device is added to the network
 		// so that name checking works correctly

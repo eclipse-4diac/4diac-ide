@@ -21,17 +21,21 @@ import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
 public enum VarDeclarationTableColumn implements NatTableColumn {
 	NAME(FordiacMessages.Name), TYPE(FordiacMessages.Type), COMMENT(FordiacMessages.Comment),
 	INITIAL_VALUE(FordiacMessages.InitialValue), VAR_CONFIG(FordiacMessages.VarConfig),
-	VISIBLE(FordiacMessages.Visible);
+	VISIBLE(FordiacMessages.Visible), RETAIN(FordiacMessages.Retain);
 
 	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS = List.of(NAME, TYPE, COMMENT, INITIAL_VALUE);
 	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_VAR_CONFIG = List.of(NAME, TYPE, COMMENT,
 			INITIAL_VALUE, VAR_CONFIG);
 	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG = List.of(NAME,
 			TYPE, COMMENT, INITIAL_VALUE, VISIBLE, VAR_CONFIG);
+	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG_AND_RETAIN = List
+			.of(NAME, TYPE, COMMENT, INITIAL_VALUE, VISIBLE, VAR_CONFIG, RETAIN);
+	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_RETAIN = List.of(NAME, TYPE, COMMENT,
+			INITIAL_VALUE, RETAIN);
 
 	public static final Set<VarDeclarationTableColumn> DEFAULT_EDITABLE = Set.of(VarDeclarationTableColumn.COMMENT,
 			VarDeclarationTableColumn.INITIAL_VALUE, VarDeclarationTableColumn.VISIBLE,
-			VarDeclarationTableColumn.VAR_CONFIG);
+			VarDeclarationTableColumn.VAR_CONFIG, VarDeclarationTableColumn.RETAIN);
 
 	public static final Set<VarDeclarationTableColumn> DEFAULT_EDITABLE_NO_INITIAL_VALUE = Set.of(
 			VarDeclarationTableColumn.COMMENT, VarDeclarationTableColumn.VISIBLE, VarDeclarationTableColumn.VAR_CONFIG);

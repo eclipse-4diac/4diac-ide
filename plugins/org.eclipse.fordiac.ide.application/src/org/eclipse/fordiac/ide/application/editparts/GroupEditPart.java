@@ -70,8 +70,8 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 			if (getHost() instanceof GroupEditPart) {
 				final String str = (String) request.getCellEditor().getValue();
 				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
-					return new ResizeGroupOrSubappCommand((GraphicalEditPart) getHost(),
-							(Command) new ChangeCommentCommand(((GroupEditPart) getHost()).getModel(), str));
+					return new ResizeGroupOrSubappCommand(getHost(),
+							new ChangeCommentCommand(((GroupEditPart) getHost()).getModel(), str));
 				}
 			}
 			return null;
@@ -262,7 +262,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 	protected void refreshPosition() {
 		if (getParent() != null) {
 			final Position position = getModel().getPosition();
-			final Point asPoint = position.asPoint();
+			final Point asPoint = position.toScreenPoint();
 			final Rectangle bounds = new Rectangle(asPoint, getGroupSize());
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}

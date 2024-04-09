@@ -14,9 +14,11 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.commands.Command;
 
 /**
@@ -25,7 +27,7 @@ import org.eclipse.gef.commands.Command;
 public class CreateECStateCommand extends Command {
 
 	/** The location. */
-	private final Point location;
+	private final Position pos;
 
 	/** The ec state. */
 	private final ECState ecState;
@@ -41,8 +43,7 @@ public class CreateECStateCommand extends Command {
 	 * @param parent   the parent
 	 */
 	public CreateECStateCommand(final ECState ecState, final Point location, final ECC parent) {
-		super();
-		this.location = location;
+		this.pos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(location.x, location.y);
 		this.ecState = ecState;
 		this.parent = parent;
 	}
@@ -54,7 +55,7 @@ public class CreateECStateCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		ecState.updatePosition(location);
+		ecState.setPosition(pos);
 		if (parent.getECState().isEmpty()) {
 			parent.setStart(ecState);
 		}

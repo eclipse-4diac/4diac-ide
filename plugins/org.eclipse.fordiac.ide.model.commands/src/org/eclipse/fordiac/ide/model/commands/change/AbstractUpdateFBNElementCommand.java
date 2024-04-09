@@ -35,23 +35,19 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteErrorMarkerCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -108,6 +104,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		}
 
 		createNewFB();
+
 		checkGroup(oldElement, newElement); // needs to be done before anything is changed on the old element Bug
 		// 579570
 		if (network != null) {
@@ -116,11 +113,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		}
 
 		handleErrorMarker();
-
 		// Find connectionless pins which should be saved
 		handleParameters();
-
-		handleConfigurableFB();
 
 		// Find connections which should be reconnected
 		handleConnections();
@@ -129,8 +123,10 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		// set Visible attribute after reconnect, to not hide connected In/Outputs
 		// transfer attributes from type first (for new vars), then override them from
 		// old instance
-		transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getInputVars());
-		transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getOutputVars());
+		if (newElement.getType() != null) {
+			transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getInputVars());
+			transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getOutputVars());
+		}
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getInputVars());
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getOutputVars());
 
@@ -151,11 +147,11 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	}
 
 	protected void handleConfigurableFB() {
-		// for the configurable move fb we have to transfer the data type
-		if (newElement instanceof final ConfigurableMoveFB fMove
-				&& oldElement instanceof final ConfigurableMoveFB oldMove) {
-			fMove.setDataType(oldMove.getDataType());
-			fMove.updateConfiguration();
+		// for the configurable fb we have to transfer the data type
+		if (newElement instanceof final ConfigurableFB configFb
+				&& oldElement instanceof final ConfigurableFB oldConfigFb) {
+			configFb.setDataType(oldConfigFb.getDataType());
+			configFb.updateConfiguration();
 		}
 	}
 
@@ -203,16 +199,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	public void setInterface() {
 		newElement.setInterface(newElement.getType().getInterfaceList().copy());
-
-		// handle configurable fb kinds
-		if (newElement instanceof final Multiplexer multiplexer) {
-			multiplexer.setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry).getType()
-					.getInterfaceList().getOutputVars().get(0).getType());
-		}
-		if (newElement instanceof final Demultiplexer demultiplexer) {
-			demultiplexer.setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry).getType()
-					.getInterfaceList().getInputVars().get(0).getType());
-		}
 	}
 
 	private void transferVisibleAndVarConfigAttributes(final EList<VarDeclaration> varDeclList) {
