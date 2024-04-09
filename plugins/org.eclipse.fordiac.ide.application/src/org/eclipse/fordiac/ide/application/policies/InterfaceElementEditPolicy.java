@@ -16,19 +16,29 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.draw2d.ConnectionAnchor;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.gef.requests.ReconnectRequest;
@@ -71,14 +81,71 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 	}
 
 	private Command createReconnectCommand(final ReconnectRequest request, final boolean isSourceReconnect) {
-		final AbstractReconnectConnectionCommand cmd = createReconnectCommand(
-				(Connection) request.getConnectionEditPart().getModel(), isSourceReconnect, getRequestTarget(request));
+		final var conn = (Connection) request.getConnectionEditPart().getModel();
+		final var sourcePin = conn.getSource();
+		final var targetPin = conn.getDestination();
+		final var newPin = (IInterfaceElement) request.getTarget().getModel();
+
+		// border crossing source reconnect
+		if (isSourceReconnect && isBorderCrossing(sourcePin, newPin)) {
+			final var cmd = new CompoundCommand();
+			final var sinks = new ArrayList<IInterfaceElement>();
+			collectSinksRec(conn, cmd, sinks);
+			for (final var sink : sinks) {
+				cmd.add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(newPin, sink));
+			}
+			return cmd;
+		}
+
+		// border crossing destination reconnect
+		if (!isSourceReconnect && isBorderCrossing(targetPin, newPin)) {
+			final var cmd = new CompoundCommand();
+			cmd.add(new DeleteConnectionCommand(conn));
+			cmd.add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(conn.getSource(),
+					newPin));
+			return cmd;
+		}
+
+		// local reconnect
+		final AbstractReconnectConnectionCommand cmd = createReconnectCommand(conn, isSourceReconnect,
+				getRequestTarget(request));
 		final FBNetwork newParent = checkConnectionParent(cmd.getNewSource(), cmd.getNewDestination(), cmd.getParent());
 		if (newParent != null) {
 			cmd.setParent(newParent);
 			return cmd;
 		}
 		return null;
+	}
+
+	private void collectSinksRec(final Connection conn, final CompoundCommand cmd,
+			final List<IInterfaceElement> sinks) {
+		cmd.add(new DeleteConnectionCommand(conn));
+		if (isEpxandedSubapp(conn.getDestinationElement())) {
+			final var destination = conn.getDestination();
+			if (destination.getInputConnections().size() == 1) {
+				for (final var outConn : destination.getOutputConnections()) {
+					collectSinksRec(outConn, cmd, sinks);
+				}
+				cmd.add(new DeleteInterfaceCommand(destination));
+			}
+		} else {
+			sinks.add(conn.getDestination());
+		}
+	}
+
+	private static boolean isBorderCrossing(final IInterfaceElement ie1, final IInterfaceElement ie2) {
+		return getContainer(ie1.getFBNetworkElement()) != getContainer(ie2.getFBNetworkElement());
+	}
+
+	private static EObject getContainer(final FBNetworkElement elem) {
+		if (elem instanceof final SubApp subapp) {
+			return subapp;
+		}
+		return FBNetworkElementHelper.getContainerSubappOfFB((FB) elem);
+	}
+
+	private static boolean isEpxandedSubapp(final FBNetworkElement elem) {
+		return elem instanceof final SubApp subapp && subapp.isUnfolded();
 	}
 
 	protected FBNetwork getParentNetwork() {
