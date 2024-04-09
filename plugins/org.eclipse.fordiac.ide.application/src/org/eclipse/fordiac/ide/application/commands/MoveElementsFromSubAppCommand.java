@@ -74,10 +74,19 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 	private final Set<Connection> connsMovedToParent = new HashSet<>();
 
 	public MoveElementsFromSubAppCommand(final Collection<FBNetworkElement> elements, final Point destination) {
+		this(elements, destination, null);
+	}
+
+	public MoveElementsFromSubAppCommand(final Collection<FBNetworkElement> elements, final Point destination,
+			final FBNetwork destinationNetwork) {
 		this.elements = new ArrayList<>(elements);
 		setDestination(destination);
 		this.sourceSubApp = getSourceSubapp();
-		this.destinationNetwork = sourceSubApp != null ? sourceSubApp.getFbNetwork() : null;
+		if (destinationNetwork == null) {
+			this.destinationNetwork = sourceSubApp != null ? sourceSubApp.getFbNetwork() : null;
+		} else {
+			this.destinationNetwork = destinationNetwork;
+		}
 	}
 
 	private SubApp getSourceSubapp() {
