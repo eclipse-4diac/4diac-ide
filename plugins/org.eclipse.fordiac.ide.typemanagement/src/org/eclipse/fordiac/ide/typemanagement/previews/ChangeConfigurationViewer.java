@@ -13,7 +13,7 @@
  *   Dario Romano
  *     - add correct preservation of selection and ui initialization from change state
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.wizards;
+package org.eclipse.fordiac.ide.typemanagement.previews;
 
 import java.util.HashMap;
 import java.util.Map;

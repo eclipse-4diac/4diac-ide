@@ -35,10 +35,26 @@ public class StructuredTypeMemberChange extends Change {
 	private final CompoundCommand cmd = new CompoundCommand();
 
 	public StructuredTypeMemberChange(final StructuredType affectedStruct, final TypeEntry oldTypeEntry) {
+
 		this.affectedStruct = affectedStruct;
 		this.oldTypeEntry = oldTypeEntry;
 		this.affectedMembers = affectedStruct.getMemberVariables().stream()
 				.filter(var -> var.getType().equals(oldTypeEntry.getType())).map(VarDeclaration::getName).toList();
+
+		this.buildRefactoringChange();
+
+	}
+
+	public void buildRefactoringChange() {
+		final StructuredType structuredTypeEditable = (StructuredType) affectedStruct.getTypeEntry().getTypeEditable();
+		for (final VarDeclaration varDeclaration : structuredTypeEditable.getMemberVariables()) {
+			final String typeName = varDeclaration.getTypeName();
+			if (typeName.equals(this.oldTypeEntry.getTypeName())) {
+				cmd.add(ChangeDataTypeCommand.forDataType(varDeclaration,
+						(DataType) this.oldTypeEntry.getTypeEditable()));
+			}
+		}
+
 	}
 
 	@Override
@@ -56,18 +72,10 @@ public class StructuredTypeMemberChange extends Change {
 		return new RefactoringStatus();
 	}
 
-	/** TODO here we need to return the Undo change */
 	@Override
 	public Change perform(final IProgressMonitor pm) throws CoreException {
 
 		final StructuredType structuredTypeEditable = (StructuredType) affectedStruct.getTypeEntry().getTypeEditable();
-		for (final VarDeclaration varDeclaration : structuredTypeEditable.getMemberVariables()) {
-			final String typeName = varDeclaration.getTypeName();
-			if (typeName.equals(this.oldTypeEntry.getTypeName())) {
-				cmd.add(ChangeDataTypeCommand.forDataType(varDeclaration,
-						(DataType) this.oldTypeEntry.getTypeEditable()));
-			}
-		}
 
 		cmd.execute();
 		structuredTypeEditable.getTypeEntry().save(structuredTypeEditable, pm);
@@ -76,8 +84,12 @@ public class StructuredTypeMemberChange extends Change {
 	}
 
 	@Override
-	public Object getModifiedElement() {
-		return null;
+	public StructuredType getModifiedElement() {
+		return this.affectedStruct;
+	}
+
+	public CompoundCommand getRefactoringCommand() {
+		return cmd;
 	}
 
 }

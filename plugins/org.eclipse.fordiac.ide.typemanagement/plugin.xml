@@ -721,7 +721,7 @@
    <extension
          point="org.eclipse.ltk.ui.refactoring.changePreviewViewers">
       <changePreviewViewer
-            class="org.eclipse.fordiac.ide.typemanagement.wizards.ChangeConfigurationViewer"
+            class="org.eclipse.fordiac.ide.typemanagement.previews.ChangeConfigurationViewer"
             id="org.eclipse.fordiac.ide.typemanagement.wizards.DeleteStructChangeViewer">
          <enablement>
          <or>
@@ -730,6 +730,16 @@
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeFBTypeDeletionChange$DeleteInternalFBChange"/>   
          </or>
          </enablement>
+      </changePreviewViewer>
+      <changePreviewViewer
+            class="org.eclipse.fordiac.ide.typemanagement.previews.StructChangePreviewViewer"
+            id="org.eclipse.fordiac.ide.typemanagement.changePreviewViewer2">
+         <enablement>
+            <or>
+               <instanceof
+                     value="org.eclipse.fordiac.ide.typemanagement.refactoring.StructuredTypeMemberChange">
+               </instanceof>
+            </or></enablement>
       </changePreviewViewer>
    </extension>
    <extension
