@@ -32,11 +32,6 @@ public final class Messages extends NLS {
 	public static String DeviceTypeSelectionTreeContentProvider_DeviceTypes;
 	public static String ResourceTypeSelectionTreeContentProvider_ResourceTypes;
 
-	public static String TypeEntryEditor_FileChangedTitle;
-	public static String TypeEntryEditor_filedchanged_message;
-	public static String TypeEntryEditor_replace_button_label;
-	public static String TypeEntryEditor_dontreplace_button_label;
-
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
