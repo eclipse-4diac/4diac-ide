@@ -136,7 +136,7 @@ public final class ManifestHelper {
 		return SCOPE_LIBRARY.equals(manifest.getScope());
 	}
 
-	public static void addDependency(final Manifest manifest, final Required dependency) {
+	public static boolean addDependency(final Manifest manifest, final Required dependency) {
 		if (manifest.getDependencies() == null) {
 			manifest.setDependencies(factory.createDependencies());
 		}
@@ -146,15 +146,14 @@ public final class ManifestHelper {
 		if (result.isPresent()) {
 			reqList.remove(result.get());
 		}
-		reqList.add(dependency);
+		return reqList.add(dependency);
 	}
 
-	public static void removeDependency(final Manifest manifest, final Required dependency) {
+	public static boolean removeDependency(final Manifest manifest, final Required dependency) {
 		if (manifest.getDependencies() == null) {
-			return;
+			return false;
 		}
-		final EList<Required> reqList = manifest.getDependencies().getRequired();
-		reqList.remove(dependency);
+		return manifest.getDependencies().getRequired().remove(dependency);
 	}
 
 	public static void updateDependency(final Manifest manifest, final Required dependency) {
@@ -270,6 +269,15 @@ public final class ManifestHelper {
 			return null;
 		}
 		return getManifest(uri); // properly load the converted manifest
+	}
+
+	public static boolean saveManifest(final Manifest manifest) {
+		try {
+			manifest.eResource().save(null);
+		} catch (final IOException e) {
+			return false;
+		}
+		return true;
 	}
 
 	public static Required createRequired(final String symbolicName, final String version) {
