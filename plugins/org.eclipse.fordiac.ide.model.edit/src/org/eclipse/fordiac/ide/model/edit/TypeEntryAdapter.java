@@ -10,7 +10,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model.ui.editors;
+package org.eclipse.fordiac.ide.model.edit;
 
 import java.text.MessageFormat;
 
@@ -18,8 +18,16 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.ui.Messages;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.FileEditorInput;
@@ -37,7 +45,7 @@ public class TypeEntryAdapter extends AdapterImpl {
 	public void notifyChanged(final Notification notification) {
 		super.notifyChanged(notification);
 
-		String feature = "";
+		String feature = ""; //$NON-NLS-1$
 		if (notification.getFeature() instanceof final String string) {
 			feature = string;
 		}
@@ -59,7 +67,9 @@ public class TypeEntryAdapter extends AdapterImpl {
 			Assert.isTrue(notification.getNotifier() instanceof TypeEntry);
 			Assert.isTrue(notification.getNewValue() instanceof TypeEntry);
 			final TypeEntry typeEntry = (TypeEntry) notification.getNewValue();
-			editor.updateInstances(typeEntry);
+			handleDependencyUpdate(typeEntry);
+			break;
+		default:
 			break;
 		}
 	}
@@ -99,4 +109,25 @@ public class TypeEntryAdapter extends AdapterImpl {
 
 		return dialog.open();
 	}
+
+	private void handleDependencyUpdate(final TypeEntry typeEntry) {
+		final LibraryElement editedElement = editor.getEditedElement();
+		if ((editedElement != null) && (typeEntry instanceof FBTypeEntry || typeEntry instanceof SubAppTypeEntry)) {
+			handleBlockTypeDependencyUpdate(editedElement, typeEntry);
+		}
+	}
+
+	private static void handleBlockTypeDependencyUpdate(final LibraryElement editedElement, final TypeEntry typeEntry) {
+		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(editedElement, typeEntry);
+
+		search.performSearch().stream().filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
+				.map(fbnEl -> {
+					if (fbnEl instanceof final FB fb && fbnEl.eContainer() == editedElement) {
+						return new UpdateInternalFBCommand(fb, typeEntry);
+					}
+					return new UpdateFBTypeCommand(fbnEl, typeEntry);
+				}).forEach(Command::execute);
+
+	}
+
 }

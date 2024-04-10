@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
@@ -37,6 +38,17 @@ public class BlockTypeInstanceSearch extends IEC61499ElementSearch {
 
 	public BlockTypeInstanceSearch(final TypeEntry entry) {
 		super(createSearchContext(entry),
+				searchCanditate -> searchCanditate instanceof final TypedConfigureableObject tco
+						&& entry == tco.getTypeEntry(),
+				createChildrenProvider());
+	}
+
+	/*
+	 * Search inside of a LibaryElement
+	 *
+	 */
+	public BlockTypeInstanceSearch(final LibraryElement typeEditable, final TypeEntry entry) {
+		super(createSearchContext(typeEditable),
 				searchCanditate -> searchCanditate instanceof final TypedConfigureableObject tco
 						&& entry == tco.getTypeEntry(),
 				createChildrenProvider());
@@ -58,6 +70,39 @@ public class BlockTypeInstanceSearch extends IEC61499ElementSearch {
 			@Override
 			public Collection<URI> getSubappTypes() {
 				return Collections.emptyList();
+			}
+
+			@Override
+			public Collection<URI> getFBTypes() {
+				return Collections.emptyList();
+			}
+
+			@Override
+			public Collection<URI> getAllTypes() {
+				return Collections.emptyList();
+			}
+		};
+	}
+
+	private static ISearchContext createSearchContext(final LibraryElement typeEditable) {
+		return new ISearchContext() {
+
+			@Override
+			public Stream<URI> getTypes() {
+				return Stream.of(typeEditable.getTypeEntry().getURI());
+			}
+
+			@Override
+			public Collection<URI> getSubappTypes() {
+				return Collections.emptyList();
+			}
+
+			@Override
+			public LibraryElement getLibraryElement(final URI uri) {
+				if (uri.equals(typeEditable.getTypeEntry().getURI())) {
+					return typeEditable;
+				}
+				return null;
 			}
 
 			@Override

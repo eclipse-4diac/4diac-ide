@@ -10,9 +10,9 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model.ui.editors;
+package org.eclipse.fordiac.ide.model.edit;
 
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 
@@ -36,10 +36,9 @@ public interface ITypeEntryEditor extends IEditorPart {
 	void setInput(IEditorInput input);
 
 	/**
-	 * After a typeEntry from an instance inside this editor has changed , the
-	 * editor needs to search and update all instances that are using this type.
+	 * Get the LibraryElement that is edited with this editor.
 	 *
-	 * @param typeEntry
+	 * @return libraryElement
 	 */
-	void updateInstances(TypeEntry typeEntry);
+	LibraryElement getEditedElement();
 }
