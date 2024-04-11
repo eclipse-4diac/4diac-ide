@@ -13,17 +13,28 @@
 package org.eclipse.fordiac.ide.model.edit;
 
 import java.text.MessageFormat;
+import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -112,8 +123,14 @@ public class TypeEntryAdapter extends AdapterImpl {
 
 	private void handleDependencyUpdate(final TypeEntry typeEntry) {
 		final LibraryElement editedElement = editor.getEditedElement();
-		if ((editedElement != null) && (typeEntry instanceof FBTypeEntry || typeEntry instanceof SubAppTypeEntry)) {
-			handleBlockTypeDependencyUpdate(editedElement, typeEntry);
+		if (editedElement != null) {
+
+			if ((typeEntry instanceof FBTypeEntry || typeEntry instanceof SubAppTypeEntry)) {
+				handleBlockTypeDependencyUpdate(editedElement, typeEntry);
+			}
+			if (typeEntry instanceof final DataTypeEntry dtEntry) {
+				handleDataTypeEntryUpdate(editedElement, dtEntry);
+			}
 		}
 	}
 
@@ -127,6 +144,25 @@ public class TypeEntryAdapter extends AdapterImpl {
 					}
 					return new UpdateFBTypeCommand(fbnEl, typeEntry);
 				}).forEach(Command::execute);
+
+	}
+
+	private static void handleDataTypeEntryUpdate(final LibraryElement editedElement, final DataTypeEntry dtEntry) {
+		final DataTypeInstanceSearch search = new DataTypeInstanceSearch(editedElement, dtEntry);
+		final AnyDerivedType dataType = dtEntry.getType();
+		search.performSearch().stream().map(item -> {
+			if (item instanceof final VarDeclaration varDecl) {
+				return ChangeDataTypeCommand.forDataType(varDecl, dataType);
+			}
+			if (item instanceof final ConfigurableFB configFB) {
+				if (item instanceof final StructManipulator structMan
+						&& dataType instanceof final StructuredType struct) {
+					return new ChangeStructCommand(structMan, struct);
+				}
+				return new ConfigureFBCommand(configFB, dataType);
+			}
+			return null;
+		}).filter(Objects::nonNull).forEach(Command::execute);
 
 	}
 
