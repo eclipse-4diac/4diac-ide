@@ -37,7 +37,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 
 public class FordiacLogListener implements ILogListener {
-	private static final String FORDIAC_IDE_BUGZILLA_URL = "https://bugs.eclipse.org/bugs/enter_bug.cgi?product=4DIAC&component=4DIAC-IDE"; //$NON-NLS-1$
+	private static final String FORDIAC_IDE_ISSUE_URL = "https://github.com/eclipse-4diac/4diac-ide/issues/new"; //$NON-NLS-1$
 
 	private static final class LogErrorDialog extends ErrorDialog {
 		private LogErrorDialog(final Shell parentShell, final IStatus status) {
@@ -105,7 +105,7 @@ public class FordiacLogListener implements ILogListener {
 		try {
 			final IWorkbench wb = PlatformUI.getWorkbench();
 			final IWebBrowser browser = wb.getBrowserSupport().createBrowser(Activator.PLUGIN_ID);
-			browser.openURL(new URL(FORDIAC_IDE_BUGZILLA_URL));
+			browser.openURL(new URL(FORDIAC_IDE_ISSUE_URL));
 		} catch (PartInitException | MalformedURLException e) {
 			FordiacLogHelper.logError("Error in opening the 4diac bugzilla web-page!", e); //$NON-NLS-1$
 		}
