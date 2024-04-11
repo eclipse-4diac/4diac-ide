@@ -48,7 +48,7 @@ public class BlockTypeInstanceSearch extends IEC61499ElementSearch {
 	 *
 	 */
 	public BlockTypeInstanceSearch(final LibraryElement typeEditable, final TypeEntry entry) {
-		super(createSearchContext(typeEditable),
+		super(new LibraryElementSearchContext(typeEditable),
 				searchCanditate -> searchCanditate instanceof final TypedConfigureableObject tco
 						&& entry == tco.getTypeEntry(),
 				createChildrenProvider());
@@ -70,39 +70,6 @@ public class BlockTypeInstanceSearch extends IEC61499ElementSearch {
 			@Override
 			public Collection<URI> getSubappTypes() {
 				return Collections.emptyList();
-			}
-
-			@Override
-			public Collection<URI> getFBTypes() {
-				return Collections.emptyList();
-			}
-
-			@Override
-			public Collection<URI> getAllTypes() {
-				return Collections.emptyList();
-			}
-		};
-	}
-
-	private static ISearchContext createSearchContext(final LibraryElement typeEditable) {
-		return new ISearchContext() {
-
-			@Override
-			public Stream<URI> getTypes() {
-				return Stream.of(typeEditable.getTypeEntry().getURI());
-			}
-
-			@Override
-			public Collection<URI> getSubappTypes() {
-				return Collections.emptyList();
-			}
-
-			@Override
-			public LibraryElement getLibraryElement(final URI uri) {
-				if (uri.equals(typeEditable.getTypeEntry().getURI())) {
-					return typeEditable;
-				}
-				return null;
 			}
 
 			@Override
