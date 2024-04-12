@@ -45,7 +45,7 @@ public final class ConfigurableFBManagement {
 	static void updateFbConfiguration(final ConfigurableFB fb) {
 		if (fb instanceof ConfigurableMoveFB) {
 			updateMoveFbConfiguration(fb);
-		} else if ((fb instanceof final StructManipulator sm) && (fb.getDataType() instanceof StructuredType)) {
+		} else if (fb instanceof final StructManipulator sm) {
 			updateStructManipulatorConfiguration(sm);
 		}
 	}
