@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.contracts;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.application.utilities.IntervalVerifyListener;
 import org.eclipse.fordiac.ide.contracts.model.ContractKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -53,7 +52,7 @@ public class DefineFBReactionThreePinDialog extends ContractElementDialog {
 		Label label = new Label(group, SWT.None);
 
 		label.setText("After " + pinFrom.getName() + " the events " + ContractKeywords.EVENTS_OPEN //$NON-NLS-1$//$NON-NLS-2$
-				+ outputEvents.get(0).getName() + " "  //$NON-NLS-1$
+				+ outputEvents.get(0).getName() + " " //$NON-NLS-1$
 				+ outputEvents.get(0).getName() + ContractKeywords.EVENTS_CLOSE);
 		label.setLayoutData(GridDataFactory.fillDefaults().span(NUM_COLUMNS, 1).grab(true, true).create());
 
@@ -61,7 +60,6 @@ public class DefineFBReactionThreePinDialog extends ContractElementDialog {
 		label.setText(ContractKeywords.OCCURS + " " + ContractKeywords.WITHIN); //$NON-NLS-1$
 
 		inputTimeText = new Text(group, SWT.RIGHT);
-		inputTimeText.addListener(SWT.KeyDown, new IntervalVerifyListener(inputTimeText));
 		inputTimeText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		label = new Label(group, SWT.None);

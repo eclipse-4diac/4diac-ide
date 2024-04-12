@@ -41,8 +41,7 @@ public class ConvertGroupToSubappCommand extends Command implements ScopedComman
 	public ConvertGroupToSubappCommand(final Group source) {
 		sourceGroup = Objects.requireNonNull(source);
 		fbNetwork = sourceGroup.getFbNetwork();
-		createSubappCmd = new NewSubAppCommand(fbNetwork, sourceGroup.getGroupElements(),
-				sourceGroup.getPosition().getX(), sourceGroup.getPosition().getY());
+		createSubappCmd = new NewSubAppCommand(fbNetwork, sourceGroup.getGroupElements(), sourceGroup.getPosition());
 	}
 
 	@Override

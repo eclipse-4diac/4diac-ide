@@ -15,6 +15,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
@@ -137,15 +138,17 @@ public class ResourceDeploymentData {
 	private void addSubAppParams(final SubApp subApp, final Deque<SubApp> subAppHierarchy, final String prefix)
 			throws DeploymentException {
 		for (final VarDeclaration dataInput : subApp.getInterface().getInputVars()) {
-			final String val = DeploymentHelper.getVariableValue(dataInput);
-			if (null != val) {
+			final Function<VarDeclaration, String> dataInputValue = DeploymentHelper
+					.getVariableValueRetargetable(dataInput);
+			if (dataInputValue != null) {
 				for (final ConDeploymentDest destData : getSubappInterfaceconnections(subAppHierarchy, prefix,
 						dataInput)) {
-					params.add(new ParameterData(val, destData.prefix, (VarDeclaration) destData.destination));
+					final VarDeclaration destVar = (VarDeclaration) destData.destination;
+					final String destDataValue = dataInputValue.apply(destVar);
+					params.add(new ParameterData(destDataValue, destData.prefix, destVar));
 				}
 			}
 		}
-
 	}
 
 	private static FBNetwork getFBNetworkForSubApp(final SubApp subApp) {

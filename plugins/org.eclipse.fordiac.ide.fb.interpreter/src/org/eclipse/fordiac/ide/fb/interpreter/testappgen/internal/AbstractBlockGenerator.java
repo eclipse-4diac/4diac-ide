@@ -60,7 +60,7 @@ public abstract class AbstractBlockGenerator {
 		return entry;
 	}
 
-	public static void addPosition(final PositionableElement el, final int x, final int y) {
+	public static void addPosition(final PositionableElement el, final double x, final double y) {
 		final Position p0 = LibraryElementFactory.eINSTANCE.createPosition();
 		p0.setX(x);
 		p0.setY(y);

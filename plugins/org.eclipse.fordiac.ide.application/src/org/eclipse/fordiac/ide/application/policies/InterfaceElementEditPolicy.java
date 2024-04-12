@@ -17,14 +17,19 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import org.eclipse.draw2d.ConnectionAnchor;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.commands.BorderCrossingReconnectCommand;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
@@ -71,14 +76,41 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 	}
 
 	private Command createReconnectCommand(final ReconnectRequest request, final boolean isSourceReconnect) {
-		final AbstractReconnectConnectionCommand cmd = createReconnectCommand(
-				(Connection) request.getConnectionEditPart().getModel(), isSourceReconnect, getRequestTarget(request));
+		final var conn = (Connection) request.getConnectionEditPart().getModel();
+		final var sourcePin = conn.getSource();
+		final var targetPin = conn.getDestination();
+		final var newPin = (IInterfaceElement) request.getTarget().getModel();
+
+		// border crossing source reconnect
+		if (isSourceReconnect && isBorderCrossing(sourcePin, newPin)) {
+			return new BorderCrossingReconnectCommand(newPin, targetPin, conn, true);
+		}
+
+		// border crossing destination reconnect
+		if (!isSourceReconnect && isBorderCrossing(targetPin, newPin)) {
+			return new BorderCrossingReconnectCommand(sourcePin, newPin, conn, false);
+		}
+
+		// local reconnect
+		final AbstractReconnectConnectionCommand cmd = createReconnectCommand(conn, isSourceReconnect,
+				getRequestTarget(request));
 		final FBNetwork newParent = checkConnectionParent(cmd.getNewSource(), cmd.getNewDestination(), cmd.getParent());
 		if (newParent != null) {
 			cmd.setParent(newParent);
 			return cmd;
 		}
 		return null;
+	}
+
+	private static boolean isBorderCrossing(final IInterfaceElement ie1, final IInterfaceElement ie2) {
+		return getContainer(ie1.getFBNetworkElement()) != getContainer(ie2.getFBNetworkElement());
+	}
+
+	private static EObject getContainer(final FBNetworkElement elem) {
+		if (elem instanceof final SubApp subapp) {
+			return subapp;
+		}
+		return FBNetworkElementHelper.getContainerSubappOfFB((FB) elem);
 	}
 
 	protected FBNetwork getParentNetwork() {

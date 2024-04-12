@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts;
 
-import org.eclipse.fordiac.ide.application.utilities.IntervalVerifyListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -55,7 +54,6 @@ public class DefineFBGuaranteeTwoPinDialog extends ContractElementDialog {
 		label.setText("occurs within"); //$NON-NLS-1$
 
 		inputTimeText = new Text(group, SWT.RIGHT);
-		inputTimeText.addListener(SWT.KeyDown, new IntervalVerifyListener(inputTimeText));
 		inputTimeText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		label = new Label(group, SWT.None);

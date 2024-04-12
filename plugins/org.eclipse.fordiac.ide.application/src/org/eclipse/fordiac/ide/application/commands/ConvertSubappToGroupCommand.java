@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
@@ -68,18 +69,18 @@ public class ConvertSubappToGroupCommand extends Command implements ScopedComman
 
 	private void createConvertToGroupCommand() {
 		final List<?> subappContents = new ArrayList<>(sourceSubapp.getSubAppNetwork().getNetworkElements());
-		// delete subapp
+		// delete subapp, this absolutely has to be done first
 		convertToGroupCmd.add(new FlattenSubAppCommand(sourceSubapp, false));
 		// create new group from subapp network
-		final Rectangle bounds = new Rectangle(sourceSubapp.getPosition().getX(), sourceSubapp.getPosition().getY(),
-				sourceSubapp.getWidth(), sourceSubapp.getHeight());
+		final Rectangle bounds = new Rectangle(sourceSubapp.getPosition().toScreenPoint(),
+				new Dimension(sourceSubapp.getWidth(), sourceSubapp.getHeight()));
 		createGroupCmd = new CreateGroupCommand(fbNetwork, subappContents, bounds);
 		convertToGroupCmd.add(createGroupCmd);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return isUntypedSubapp(sourceSubapp) && convertToGroupCmd.canExecute();
+		return isUntypedSubapp(sourceSubapp) && !sourceSubapp.isInGroup();
 	}
 
 	private static boolean isUntypedSubapp(final SubApp subapp) {

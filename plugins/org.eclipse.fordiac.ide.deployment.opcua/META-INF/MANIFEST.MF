@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OPCUA Deployment
+Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.opcua;singleton:=true
+Bundle-Version: 3.0.0.qualifier
+Bundle-Vendor: Eclipse 4diac
+Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.opcua
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Require-Bundle: org.apache.log4j,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.e4.core.services,
+ org.eclipse.ui,
+ org.eclipse.emf.ecore.xmi;visibility:=reexport,
+ org.eclipse.gef,
+ org.eclipse.milo.sdk-core,
+ org.eclipse.milo.sdk-client,
+ org.eclipse.milo.stack-core,
+ org.eclipse.milo.stack-client,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.commands,
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.fordiac.ide.export,
+ org.eclipse.fordiac.ide.export.forte_lua,
+ org.eclipse.fordiac.ide.systemconfiguration,
+ org.eclipse.fordiac.ide.deployment,
+ org.eclipse.fordiac.ide.deployment.iec61499
+Export-Package: org.eclipse.fordiac.ide.deployment.opcua

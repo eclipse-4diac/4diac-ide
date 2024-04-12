@@ -58,6 +58,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -142,7 +143,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	protected String getLabelText() {
 		final String altText = getAlternativePinLabelText();
-		return (!altText.isBlank()) ? altText : getModel().getName();
+		return (!altText.isBlank()) ? altText : getPinName(getModel());
 	}
 
 	private String getAlternativePinLabelText() {
@@ -182,7 +183,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		final IInterfaceElement refPin = getSourcePin();
 		if (refPin != null) {
 			final FBNetworkElement source = refPin.getFBNetworkElement();
-			final String pinName = refPin.getName();
+			final String pinName = getPinName(refPin);
 			if (source != null && !isSubAppPin(source)) {
 				final String elementName = source.getName();
 				return elementName + "." + pinName; //$NON-NLS-1$
@@ -190,6 +191,13 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 			return pinName;
 		}
 		return ""; //$NON-NLS-1$
+	}
+
+	private static String getPinName(final IInterfaceElement pin) {
+		if (pin instanceof final MemberVarDeclaration memberVarDecl) {
+			return memberVarDecl.getName();
+		}
+		return pin.getName();
 	}
 
 	private IInterfaceElement getSourcePin() {
@@ -319,8 +327,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	protected abstract GraphicalNodeEditPolicy getNodeEditPolicy();
 
 	public void setInOutConnectionsWidth(final int width) {
-		getSourceConnections().forEach(cep -> checkConnection(width, (ConnectionEditPart) cep));
-		getTargetConnections().forEach(cep -> checkConnection(width, (ConnectionEditPart) cep));
+		getSourceConnections().forEach(cep -> checkConnection(width, cep));
+		getTargetConnections().forEach(cep -> checkConnection(width, cep));
 	}
 
 	private static void checkConnection(final int width, final ConnectionEditPart cep) {

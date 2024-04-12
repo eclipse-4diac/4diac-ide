@@ -34,14 +34,14 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.junit.jupiter.params.provider.Arguments;
 
 public class CreateStructFromInterfaceElementsCommandTest
-extends CommandTestBase<CreateStructFromInterfaceElementsCommandTest.State> {
+		extends CommandTestBase<CreateStructFromInterfaceElementsCommandTest.State> {
 	private static final String SET_STRUCT_NAME = "setStruct"; //$NON-NLS-1$
 
 	public static class State extends CommandTestBase.StateBase {
 		private final SubApp subApp;
 
 		public State() {
-			subApp = LibraryElementFactory.eINSTANCE.createSubApp();
+			subApp = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
 			subApp.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		}
 
@@ -65,12 +65,12 @@ extends CommandTestBase<CreateStructFromInterfaceElementsCommandTest.State> {
 				new ExecutionDescription<>("Prepare Functionblocks", //$NON-NLS-1$
 						CreateStructFromInterfaceElementsCommandTest::createInterfaceElements, //
 						CreateStructFromInterfaceElementsCommandTest::verifyFBCreation //
-						), //
+				), //
 				new ExecutionDescription<>("Replace first element", //$NON-NLS-1$
 						CreateStructFromInterfaceElementsCommandTest::testWithOneElement, //
 						CreateStructFromInterfaceElementsCommandTest::verifyTestWithOneElement //
-						) //
-				);
+				) //
+		);
 		final Collection<Arguments> a = new ArrayList<>();
 		a.addAll(describeCommand("FB with two inputs and outputs", State::new, //$NON-NLS-1$
 				(StateVerifier<State>) CreateStructFromInterfaceElementsCommandTest::verifyInitalValues,

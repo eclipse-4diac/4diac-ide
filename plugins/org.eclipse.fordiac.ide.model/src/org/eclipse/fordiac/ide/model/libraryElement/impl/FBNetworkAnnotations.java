@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
@@ -31,7 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
-import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.util.SpatialHash;
@@ -86,9 +86,9 @@ final class FBNetworkAnnotations {
 			if (element instanceof ErrorMarkerFBNElement || !filter.test(element)) {
 				continue;
 			}
-			final Position position = element.getPosition();
-			final int x1 = position.getX() - marginLeftRight;
-			final int y1 = position.getY() - marginTopBottom;
+			final Point position = element.getPosition().toScreenPoint();
+			final int x1 = position.x - marginLeftRight;
+			final int y1 = position.y - marginTopBottom;
 			final int x2 = x1 + element.getVisibleWidth() + marginLeftRight;
 			final int y2 = y1 + element.getVisibleHeight() + marginTopBottom;
 			// check parent collision

@@ -35,6 +35,10 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -216,4 +220,24 @@ public enum TypeLibraryManager {
 		}
 	}
 
+	// TODO: move to more appropriate utility class
+	public static <T> T loadExtension(final String extensionPoint, final Class<T> type) {
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IExtensionPoint point = registry.getExtensionPoint(extensionPoint);
+		final IExtension[] extensions = point.getExtensions();
+		for (final IExtension extension : extensions) {
+			final IConfigurationElement[] elements = extension.getConfigurationElements();
+			for (final IConfigurationElement element : elements) {
+				try {
+					final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
+					if (type.isInstance(obj)) {
+						return type.cast(obj);
+					}
+				} catch (final Exception e) {
+					FordiacLogHelper.logError(e.getMessage(), e);
+				}
+			}
+		}
+		return null;
+	}
 }

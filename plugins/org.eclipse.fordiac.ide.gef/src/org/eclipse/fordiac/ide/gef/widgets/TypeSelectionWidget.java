@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -128,12 +129,10 @@ public class TypeSelectionWidget {
 	}
 
 	protected DataType getDataTypeForOpenButton(DataType dataType) {
-		if (configurableObject instanceof StructManipulator) {
-			dataType = ((StructManipulator) configurableObject).getStructType();
-		} else if (configurableObject instanceof IInterfaceElement) {
-			dataType = ((IInterfaceElement) configurableObject).getType();
-		} else if (configurableObject instanceof ConfigurableMoveFB) {
-			dataType = ((ConfigurableMoveFB) configurableObject).getDataType();
+		if (configurableObject instanceof final ConfigurableFB configFb) {
+			dataType = configFb.getDataType();
+		} else if (configurableObject instanceof final IInterfaceElement iel) {
+			dataType = iel.getType();
 		}
 		return dataType;
 	}
@@ -150,7 +149,7 @@ public class TypeSelectionWidget {
 
 		if (type instanceof final StructManipulator structManipulator) {
 			final String newName = ImportHelper.deresolveImport(
-					PackageNameHelper.getFullTypeName(structManipulator.getStructType()),
+					PackageNameHelper.getFullTypeName(structManipulator.getDataType()),
 					PackageNameHelper.getContainerPackageName(type), ImportHelper.getContainerImports(type));
 			tableViewer.setInput(new String[] { newName });
 			resizeTextField();
@@ -171,8 +170,8 @@ public class TypeSelectionWidget {
 	}
 
 	public void refresh() {
-		if (configurableObject instanceof IInterfaceElement) {
-			tableViewer.setInput(new String[] { ((IInterfaceElement) configurableObject).getType().getName() });
+		if (configurableObject instanceof final IInterfaceElement iel) {
+			tableViewer.setInput(new String[] { iel.getType().getName() });
 		}
 		disableOpenEditorForAnyType();
 	}
@@ -209,9 +208,8 @@ public class TypeSelectionWidget {
 	}
 
 	private void disableOpenEditorForAnyType() {
-		if (configurableObject instanceof StructManipulator) {
-			openEditorButton.setEnabled(
-					!"ANY_STRUCT".contentEquals(((StructManipulator) configurableObject).getStructType().getName())); //$NON-NLS-1$
+		if (configurableObject instanceof final ConfigurableFB configurableFb) {
+			openEditorButton.setEnabled(isNonGenericStructType(configurableFb.getDataType()));
 		} else if ((configurableObject instanceof Event) || (configurableObject instanceof AdapterDeclaration)) {
 			// reset parent composite and dispose button
 			final Composite typeComp = tableViewer.getTable().getParent();
@@ -221,10 +219,14 @@ public class TypeSelectionWidget {
 			typeComp.setLayout(gridLayout);
 			typeComp.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 			openEditorButton.dispose();
-		} else if (configurableObject instanceof VarDeclaration) {
-			final DataType dtp = ((VarDeclaration) configurableObject).getType();
+		} else if (configurableObject instanceof final VarDeclaration varDecl) {
+			final DataType dtp = varDecl.getType();
 			openEditorButton.setEnabled((dtp instanceof StructuredType) && !IecTypes.GenericTypes.isAnyType(dtp)); // $NON-NLS-1$
 		}
+	}
+
+	private static boolean isNonGenericStructType(final DataType dataType) {
+		return dataType instanceof StructuredType && !"ANY_STRUCT".contentEquals(dataType.getName()); //$NON-NLS-1$
 	}
 
 	protected TypeLibrary getTypeLibrary() {

@@ -14,13 +14,13 @@ package org.eclipse.fordiac.ide.model.annotations;
 
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 
 public final class SubAppAnnotations {
 
-	public static FBNetwork loadSubAppNetwork(final SubApp subApp) {
+	public static FBNetwork loadSubAppNetwork(final TypedSubApp subApp) {
 		FBNetwork subAppNetwork = subApp.getSubAppNetwork();
-		if ((null == subAppNetwork) && (subApp.isTyped())) {
+		if (null == subAppNetwork) {
 			subAppNetwork = FBNetworkHelper.copyFBNetWork(subApp.getType().getFBNetwork(), subApp.getInterface());
 			subApp.setSubAppNetwork(subAppNetwork);
 		}

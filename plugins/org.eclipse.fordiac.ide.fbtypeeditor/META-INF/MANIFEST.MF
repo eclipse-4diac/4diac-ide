@@ -32,7 +32,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model.search
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Name: Function Block Type Editor
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor;singleton:=true

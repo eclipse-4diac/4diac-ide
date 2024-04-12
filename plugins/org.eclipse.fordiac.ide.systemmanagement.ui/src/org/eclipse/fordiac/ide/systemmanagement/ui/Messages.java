@@ -22,6 +22,12 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.systemmanagement.ui.messages"; //$NON-NLS-1$
 
+	public static String AutomationSystemEditor_CouldNotLoadSystem;
+
+	public static String AutomationSystemEditor_ShowingFirstApplication;
+
+	public static String AutomationSystemEditor_ShowingSystem;
+
 	public static String NewApplicationWizardTitle;
 
 	public static String NewApplicationPage_NewApplicationDescription;
@@ -53,13 +59,6 @@ public final class Messages extends NLS {
 	public static String New4diacProjectWizard_InitialApplicationName;
 	public static String New4diacProjectWizard_SystemNameNotValid;
 	public static String New4diacProjectWizard_DirectoryWithProjectNameAlreadyExistsInWorkspace;
-
-	public static String New4diacProjectWizard_Library_SelectAll;
-	public static String New4diacProjectWizard_Library_DeselectAll;
-	public static String New4diacProjectWizard_Library_Name;
-	public static String New4diacProjectWizard_Library_Version;
-	public static String New4diacProjectWizard_Library_Comment;
-	public static String New4diacProjectWizard_Library_SymbolicName;
 
 	public static String NewSystemWizardPage_CreateNewSystem;
 

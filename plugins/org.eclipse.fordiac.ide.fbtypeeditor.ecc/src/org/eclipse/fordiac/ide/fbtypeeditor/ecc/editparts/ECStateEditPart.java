@@ -163,7 +163,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	@Override
 	protected void refreshVisuals() {
-		final Rectangle rect = new Rectangle(getModel().getPosition().asPoint(), new Dimension(-1, -1));
+		final Rectangle rect = new Rectangle(getModel().getPosition().toScreenPoint(), new Dimension(-1, -1));
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rect);
 		getFigure().setHasAction(!getModel().getECAction().isEmpty());
 		refreshStateTooltip();

@@ -297,7 +297,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 		public Change perform(final IProgressMonitor pm) throws CoreException {
 			final DataTypeLibrary lib = manipulator.getType().getTypeLibrary().getDataTypeLibrary();
 			StructuredType updated = (StructuredType) lib
-					.getTypeIfExists(PackageNameHelper.getFullTypeName(manipulator.getStructType()));
+					.getTypeIfExists(PackageNameHelper.getFullTypeName(manipulator.getDataType()));
 			if (updated == null) {
 				updated = GenericTypes.ANY_STRUCT;
 			}

@@ -23,9 +23,7 @@ public abstract class AbstractFreeformFigure extends Figure implements FreeformF
 	private Rectangle extent;
 
 	protected AbstractFreeformFigure() {
-		super();
 	}
-
 
 	@Override
 	public Rectangle getFreeformExtent() {
@@ -62,8 +60,7 @@ public abstract class AbstractFreeformFigure extends Figure implements FreeformF
 
 	@Override
 	public void fireExtentChanged() {
-		getListeners(FreeformListener.class)
-		.forEachRemaining(listener -> ((FreeformListener) listener).notifyFreeformExtentChanged());
+		getListeners(FreeformListener.class).forEachRemaining(FreeformListener::notifyFreeformExtentChanged);
 	}
 
 	@Override

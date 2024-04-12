@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
@@ -23,8 +24,8 @@ import org.eclipse.gef.commands.Command;
 
 public class SetPositionCommand extends Command {
 	private final PositionableElement positionableElement;
-	private final int dx;
-	private final int dy;
+	private final double dx;
+	private final double dy;
 	private Position oldPos;
 	private Position newPos;
 
@@ -32,11 +33,16 @@ public class SetPositionCommand extends Command {
 		return positionableElement;
 	}
 
-	public SetPositionCommand(final PositionableElement positionableElement, final int dx, final int dy) {
+	public SetPositionCommand(final PositionableElement positionableElement, final double dx, final double dy) {
 		this.positionableElement = positionableElement;
 		this.dx = dx;
 		this.dy = dy;
 		setLabel(Messages.ViewSetPositionCommand_LABEL_Move);
+	}
+
+	public SetPositionCommand(final PositionableElement positionableElement, final int dx, final int dy) {
+		this(positionableElement, CoordinateConverter.INSTANCE.screenToIEC61499(dx),
+				CoordinateConverter.INSTANCE.screenToIEC61499(dy));
 	}
 
 	@Override
@@ -72,4 +78,3 @@ public class SetPositionCommand extends Command {
 		positionableElement.setPosition(pos);
 	}
 }
-

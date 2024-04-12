@@ -17,16 +17,24 @@ import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 
 public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementCommand {
 
 	private final SubAppTypeEntry typeEntry;
 
-	public CreateSubAppInstanceCommand(final SubAppTypeEntry typeEntry, final FBNetwork fbNetwork,
-			final int x, final int y) {
-		super(fbNetwork, LibraryElementFactory.eINSTANCE.createSubApp(), x, y);
+	public CreateSubAppInstanceCommand(final SubAppTypeEntry typeEntry, final FBNetwork fbNetwork, final Position pos) {
+		super(fbNetwork, LibraryElementFactory.eINSTANCE.createTypedSubApp(), pos);
+		this.typeEntry = typeEntry;
+		setLabel(Messages.CreateSubAppInstanceCommand_CreateSubapplicationInstance);
+		getSubApp().setTypeEntry(typeEntry);
+	}
+
+	public CreateSubAppInstanceCommand(final SubAppTypeEntry typeEntry, final FBNetwork fbNetwork, final int x,
+			final int y) {
+		super(fbNetwork, LibraryElementFactory.eINSTANCE.createTypedSubApp(), x, y);
 		this.typeEntry = typeEntry;
 		setLabel(Messages.CreateSubAppInstanceCommand_CreateSubapplicationInstance);
 		getSubApp().setTypeEntry(typeEntry);
@@ -42,8 +50,8 @@ public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementC
 		return typeEntry.getType().getInterfaceList().copy();
 	}
 
-	public SubApp getSubApp() {
-		return (SubApp) getElement();
+	public TypedSubApp getSubApp() {
+		return (TypedSubApp) getElement();
 	}
 
 	public SubAppTypeEntry getTypeEntry() {

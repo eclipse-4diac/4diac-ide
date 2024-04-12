@@ -1,12 +1,14 @@
 Manifest-Version: 1.0
 Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.externaltools,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.runtime,
  org.eclipse.debug.core,
- org.eclipse.fordiac.ide.ui
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.debug.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Name: Forte Launcher
 Bundle-Activator: org.eclipse.fordiac.ide.fortelauncher.Activator
 Bundle-ManifestVersion: 2

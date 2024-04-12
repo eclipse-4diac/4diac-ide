@@ -12,7 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.librarylinker.LibraryLinker;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -21,25 +24,36 @@ import org.eclipse.ui.IWorkbench;
 
 public class ExtractedLibraryImportWizard extends Wizard implements IImportWizard {
 
-	private ExtractedLibraryImportWizardPage firstPage;
-	private StructuredSelection selection;
+	private LibrarySelectionPage firstPage;
+	private IProject selectedProject;
 
 	@Override
 	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
-		this.selection = new StructuredSelection(selection.toList());
 		setWindowTitle(Messages.ExtractedLibraryImportWizard);
 		setNeedsProgressMonitor(true);
+		final StructuredSelection sel = new StructuredSelection(selection.toList());
+		if (!sel.isEmpty()) {
+			if (sel.getFirstElement() instanceof final IProject project) {
+				selectedProject = project;
+			}
+			if ((sel.getFirstElement() instanceof final IFolder folder)
+					&& (folder.getParent() instanceof final IProject project)) {
+				selectedProject = project;
+			}
+		}
 	}
 
 	@Override
 	public boolean performFinish() {
-		firstPage.importLib();
+		final LibraryLinker libraryLinker = new LibraryLinker();
+		libraryLinker.setSelectedProject(selectedProject);
+		libraryLinker.importLibraries(firstPage.getChosenLibraries().values());
 		return true;
 	}
 
 	@Override
 	public void addPages() {
-		firstPage = new ExtractedLibraryImportWizardPage(Messages.ImportExtractedFiles, selection);
+		firstPage = new LibrarySelectionPage(Messages.ImportExtractedFiles, false, false, true, true);
 		addPage(firstPage);
 	}
 }

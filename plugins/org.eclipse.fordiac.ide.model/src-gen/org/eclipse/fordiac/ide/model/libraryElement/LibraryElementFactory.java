@@ -720,15 +720,6 @@ public interface LibraryElementFactory extends EFactory {
 	STMethod createSTMethod();
 
 	/**
-	 * Returns a new object of class '<em>Sub App</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Sub App</em>'.
-	 * @generated
-	 */
-	SubApp createSubApp();
-
-	/**
 	 * Returns a new object of class '<em>Struct Manipulator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -765,6 +756,24 @@ public interface LibraryElementFactory extends EFactory {
 	TypedConfigureableObject createTypedConfigureableObject();
 
 	/**
+	 * Returns a new object of class '<em>Typed Sub App</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Typed Sub App</em>'.
+	 * @generated
+	 */
+	TypedSubApp createTypedSubApp();
+
+	/**
+	 * Returns a new object of class '<em>Untyped Sub App</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Untyped Sub App</em>'.
+	 * @generated
+	 */
+	UntypedSubApp createUntypedSubApp();
+
+	/**
 	 * Returns a new object of class '<em>Value</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -799,6 +808,15 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	With createWith();
+
+	/**
+	 * Returns a new object of class '<em>Member Var Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Member Var Declaration</em>'.
+	 * @generated
+	 */
+	MemberVarDeclaration createMemberVarDeclaration();
 
 	/**
 	 * Returns the package supported by this factory.

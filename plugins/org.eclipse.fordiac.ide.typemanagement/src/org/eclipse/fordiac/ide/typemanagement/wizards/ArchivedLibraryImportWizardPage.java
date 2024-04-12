@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.typemanagement.wizards;
 import java.io.File;
 import java.io.IOException;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.librarylinker.ArchivedLibraryImportContentProvider;
 import org.eclipse.fordiac.ide.typemanagement.librarylinker.LibraryLinker;
@@ -27,16 +29,25 @@ public class ArchivedLibraryImportWizardPage extends LibraryImportWizardPage {
 
 	private LibraryLinker libraryLinker;
 	private File selectedFile;
-	private final StructuredSelection selection;
+	private IProject selectedProject;
 
 	protected ArchivedLibraryImportWizardPage(final String pageName, final StructuredSelection selection) {
 		super(pageName);
-		this.selection = selection;
 		setColumnTitle(Messages.DirsWithArchives);
+		final StructuredSelection sel = new StructuredSelection(selection.toList());
+		if (!sel.isEmpty()) {
+			if (sel.getFirstElement() instanceof final IProject project) {
+				selectedProject = project;
+			}
+			if ((sel.getFirstElement() instanceof final IFolder folder)
+					&& (folder.getParent() instanceof final IProject project)) {
+				selectedProject = project;
+			}
+		}
 	}
 
 	public void unzipAndImportArchive() throws IOException {
-		libraryLinker.extractLibrary(selectedFile, selection);
+		libraryLinker.extractLibrary(selectedFile, selectedProject);
 	}
 
 	@Override

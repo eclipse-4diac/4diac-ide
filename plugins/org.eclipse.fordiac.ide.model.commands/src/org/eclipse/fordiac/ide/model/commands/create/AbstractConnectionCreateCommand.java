@@ -18,7 +18,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
@@ -304,9 +307,7 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 
 	@Override
 	public Set<EObject> getAffectedObjects() {
-		if (parent != null) {
-			return Set.of(parent);
-		}
-		return Set.of();
+		return Stream.of(parent, connection, source, destination).filter(Objects::nonNull)
+				.collect(Collectors.toUnmodifiableSet());
 	}
 }

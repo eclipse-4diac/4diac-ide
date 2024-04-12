@@ -187,4 +187,20 @@ public interface VarDeclaration extends IInterfaceElement {
 	 */
 	boolean validateVarInOutIsWithed(DiagnosticChain diagnostics, Map<Object, Object> context);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateVarInOutSubappInterface(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateVarInOutSubappNetwork(DiagnosticChain diagnostics, Map<Object, Object> context);
+
 } // VarDeclaration

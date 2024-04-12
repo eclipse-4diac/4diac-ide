@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.contracts.model.Contract;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.junit.jupiter.api.Test;
 
 class ContractTest {
@@ -32,7 +32,7 @@ class ContractTest {
 		final Contract contract = Contract
 				.getContractFromComment("ASSUMPTION CU occurs every [11,22]ms" + System.lineSeparator() //$NON-NLS-1$
 						+ "GUARANTEE Whenever event CU occurs, then event CUO occurs within [7,10]ms"); //$NON-NLS-1$
-		final SubApp subApp = LibraryElementFactory.eINSTANCE.createSubApp();
+		final UntypedSubApp subApp = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
 		subApp.setName("_CONTRACT_Test"); //$NON-NLS-1$
 		contract.setOwner(subApp);
 		final InterfaceList iList = LibraryElementFactory.eINSTANCE.createInterfaceList();
@@ -55,7 +55,7 @@ class ContractTest {
 		final Contract contract = Contract
 				.getContractFromComment("ASSUMPTION CU occurs every [11,22]ms" + System.lineSeparator() //$NON-NLS-1$
 						+ "GUARANTEE Whenever event CU occurs, then event CUO occurs within [7,10]ms"); //$NON-NLS-1$
-		final SubApp subApp = LibraryElementFactory.eINSTANCE.createSubApp();
+		final UntypedSubApp subApp = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
 		subApp.setName("_CONTRACT_Test"); //$NON-NLS-1$
 		contract.setOwner(subApp);
 		final InterfaceList iList = LibraryElementFactory.eINSTANCE.createInterfaceList();

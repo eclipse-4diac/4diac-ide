@@ -17,8 +17,10 @@ package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
@@ -27,17 +29,18 @@ import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.commands.Command;
 
 public class SegmentCreateCommand extends Command {
+	private static final int DEFAULT_SEGMENT_WIDTH = 300;
 	private final SegmentTypeEntry type;
 	private final SystemConfiguration parent;
-	private final Rectangle bounds;
+	private final Position pos;
+	private final int width;
 	private Segment segment;
 
-	public SegmentCreateCommand(final SegmentTypeEntry type, final SystemConfiguration parent,
-			final Rectangle bounds) {
-		super();
+	public SegmentCreateCommand(final SegmentTypeEntry type, final SystemConfiguration parent, final Rectangle bounds) {
 		this.type = type;
 		this.parent = parent;
-		this.bounds = bounds;
+		pos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(bounds.x, bounds.y);
+		width = (-1 != bounds.width) ? bounds.width : DEFAULT_SEGMENT_WIDTH;
 	}
 
 	@Override
@@ -50,15 +53,15 @@ public class SegmentCreateCommand extends Command {
 		segment = LibraryElementFactory.eINSTANCE.createSegment();
 		segment.setColor(ColorHelper.createRandomColor());
 		segment.setTypeEntry(type);
-		final CommunicationConfigurationDetails commConfig=CommunicationConfigurationDetails
+		final CommunicationConfigurationDetails commConfig = CommunicationConfigurationDetails
 				.getCommConfigUiFromExtensionPoint(type.getTypeName(),
 						CommunicationConfigurationDetails.COMM_EXT_ATT_ID);
 		if (commConfig != null) {
 			segment.setCommunication(commConfig.createModel(segment.getVarDeclarations()));
 		}
 		segment.getVarDeclarations().addAll(EcoreUtil.copyAll(type.getType().getVarDeclaration()));
-		segment.updatePosition(bounds.getTopLeft());
-		segment.setWidth((-1 != bounds.width) ? bounds.width : 300);
+		segment.setPosition(pos);
+		segment.setWidth(width);
 		redo();
 		segment.setName(NameRepository.createUniqueName(segment, type.getType().getName()));
 	}

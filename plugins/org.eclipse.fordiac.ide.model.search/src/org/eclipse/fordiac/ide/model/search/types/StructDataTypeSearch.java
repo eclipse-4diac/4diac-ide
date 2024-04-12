@@ -90,9 +90,9 @@ public class StructDataTypeSearch extends InstanceSearch {
 		}
 
 		@Override
-		public boolean apply(final INamedElement searchCanditate) {
-			if (searchCanditate instanceof final StructManipulator mux) {
-				return mux.getStructType().getName().equals(entry.getName());
+		public boolean apply(final INamedElement searchCandidate) {
+			if (searchCandidate instanceof final StructManipulator mux) {
+				return mux.getDataType().getName().equals(entry.getName());
 			}
 			return false;
 		}

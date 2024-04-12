@@ -80,17 +80,7 @@ public abstract class AbstractInternalVarsSection extends AbstractSection
 		buttons = new AddDeleteReorderToolbarWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
-		provider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
-		final DataLayer dataLayer = new VarDeclarationDataLayer(provider, VarDeclarationTableColumn.DEFAULT_COLUMNS);
-		dataLayer.setConfigLabelAccumulator(
-				new VarDeclarationConfigLabelAccumulator(provider, this::getAnnotationModel));
-
-		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer,
-				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), IEditableRule.ALWAYS_EDITABLE,
-				null, this, false);
-		table.addConfiguration(new InitialValueEditorConfiguration(provider));
-		table.addConfiguration(new TypeDeclarationEditorConfiguration(provider));
-		table.configure();
+		createNatTable(composite);
 
 		buttons.bindToTableViewer(table, this, this::newCreateCommand, this::newDeleteCommand,
 				ref -> new ChangeVariableOrderCommand(getVarList(), (VarDeclaration) ref, true),
@@ -98,6 +88,24 @@ public abstract class AbstractInternalVarsSection extends AbstractSection
 
 		selectionProvider = new RowPostSelectionProvider<>(table, NatTableWidgetFactory.getSelectionLayer(table),
 				provider, false);
+	}
+
+	protected void createNatTable(final Composite composite) {
+		provider = new ChangeableListDataProvider<>(
+				new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS));
+		final DataLayer dataLayer = new VarDeclarationDataLayer(provider, VarDeclarationTableColumn.DEFAULT_COLUMNS);
+		final VarDeclarationConfigLabelAccumulator acc = new VarDeclarationConfigLabelAccumulator(provider,
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS);
+
+		dataLayer.setConfigLabelAccumulator(acc);
+
+		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer,
+				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), IEditableRule.ALWAYS_EDITABLE,
+				null, this, false);
+
+		table.addConfiguration(new InitialValueEditorConfiguration(provider));
+		table.addConfiguration(new TypeDeclarationEditorConfiguration(provider));
+		table.configure();
 	}
 
 	protected abstract CreationCommand newCreateCommand(Object refElement);

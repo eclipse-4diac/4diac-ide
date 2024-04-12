@@ -14,6 +14,7 @@
 
 import org.eclipse.fordiac.ide.export.forte_lua.st.StructuredTextSupportFactory
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
+import org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsStandaloneSetup
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
@@ -33,6 +34,7 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 	@BeforeAll
 	def static void setup() {
 		new DataTypeLibrary()
+		GlobalConstantsStandaloneSetup.doSetup()
 		STFunctionStandaloneSetup.doSetup()
 		STAlgorithmStandaloneSetup.doSetup()
 		StructuredTextSupportFactory.register()

@@ -17,21 +17,20 @@ import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemP
 
 public class TypedSubappProviderAdapterFactory extends LibraryElementItemProviderAdapterFactory {
 
-
 	@Override
 	public Adapter createSubAppTypeAdapter() {
 		if (subAppTypeItemProvider == null) {
-			subAppTypeItemProvider = new TypedSubAppItemProvider(this);
+			subAppTypeItemProvider = new EditorSubAppTypeItemProvider(this);
 		}
 		return subAppTypeItemProvider;
 	}
 
 	@Override
-	public Adapter createSubAppAdapter() {
-		if (subAppItemProvider == null) {
-			subAppItemProvider = new SubAppItemProviderForTypedSubapps(this);
+	public Adapter createTypedSubAppAdapter() {
+		if (typedSubAppItemProvider == null) {
+			typedSubAppItemProvider = new SubAppItemProviderForTypedSubapps(this);
 		}
-		return subAppItemProvider;
+		return typedSubAppItemProvider;
 	}
 
 }

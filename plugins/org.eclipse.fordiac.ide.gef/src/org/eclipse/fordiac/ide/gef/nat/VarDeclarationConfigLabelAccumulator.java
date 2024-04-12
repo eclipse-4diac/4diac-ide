@@ -82,6 +82,8 @@ public class VarDeclarationConfigLabelAccumulator extends AbstractAnnotatedConfi
 		case VISIBLE:
 			configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
 			break;
+		case RETAIN:
+			configLabels.addLabelOnTop(NatTableWidgetFactory.RETAIN_CONFIG_CELL);
 		default:
 			break;
 		}

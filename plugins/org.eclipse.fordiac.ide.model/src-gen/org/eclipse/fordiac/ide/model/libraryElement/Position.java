@@ -44,12 +44,12 @@ public interface Position extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>X</em>' attribute.
-	 * @see #setX(int)
+	 * @see #setX(double)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPosition_X()
-	 * @model default="0" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model default="0" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 * @generated
 	 */
-	int getX();
+	double getX();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Position#getX <em>X</em>}' attribute.
@@ -59,7 +59,7 @@ public interface Position extends EObject {
 	 * @see #getX()
 	 * @generated
 	 */
-	void setX(int value);
+	void setX(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Y</b></em>' attribute.
@@ -67,12 +67,12 @@ public interface Position extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Y</em>' attribute.
-	 * @see #setY(int)
+	 * @see #setY(double)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPosition_Y()
-	 * @model default="0" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model default="0" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 * @generated
 	 */
-	int getY();
+	double getY();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Position#getY <em>Y</em>}' attribute.
@@ -82,7 +82,7 @@ public interface Position extends EObject {
 	 * @see #getY()
 	 * @generated
 	 */
-	void setY(int value);
+	void setY(double value);
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -90,6 +90,6 @@ public interface Position extends EObject {
 	 * @model dataType="org.eclipse.fordiac.ide.model.libraryElement.Point" required="true"
 	 * @generated
 	 */
-	Point asPoint();
+	Point toScreenPoint();
 
 } // Position

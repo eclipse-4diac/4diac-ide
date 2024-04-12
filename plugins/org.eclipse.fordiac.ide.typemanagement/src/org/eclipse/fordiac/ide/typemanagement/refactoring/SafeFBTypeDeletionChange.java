@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
-import java.util.Collection;
 import java.util.EnumSet;
 
 import org.eclipse.core.runtime.CoreException;
@@ -27,12 +26,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
+import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
+import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -47,33 +45,20 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 
 	public static void addUpdateChanges(final CompositeChange change, final FBType type,
 			final boolean deleteInternalFBs) {
-		// @formatter:off
-		final InstanceSearch search = new InstanceSearch((final INamedElement searchCandiate) ->
-			searchCandiate instanceof final FBNetworkElement fb
-					&& fb.getFullTypeName() != null
-					&& fb.getFullTypeName().equalsIgnoreCase(type.getTypeEntry().getFullTypeName()));
 
-		// application instances
-		SystemManager.INSTANCE.getProjectSystems(type.getTypeLibrary().getProject()).stream()
-			.map(search::performApplicationSearch)
-			.flatMap(Collection::stream)
-			.map(FBNetworkElement.class::cast)
-			.map(UpdateFBTypeInstanceChange::new)
-			.forEach(change::add);
+		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(type.getTypeEntry());
 
-		// type lib network instances
-		search.performTypeLibraryNetworkSearch(type.getTypeLibrary()).stream()
-			.map(FBNetworkElement.class::cast)
-			.map(UpdateFBTypeInstanceChange::new)
-			.forEach(change::add);
-
-		if (deleteInternalFBs) {
-			search.performInternalFBSearch(type.getTypeLibrary()).stream()
-				.map(FB.class::cast)
-				.map(fb -> new DeleteInternalFBChange((BaseFBType) fb.eContainer(), fb))
-				.forEach(change::add);
-		}
-		// @formatter:on
+		search.performSearch().stream().filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
+				.forEach(fbnEl -> {
+					if (fbnEl instanceof final FB fb && fbnEl.eContainer() instanceof final BaseFBType baseFBType) {
+						if (deleteInternalFBs) {
+							// we have an internal FB and we should delete it
+							change.add(new DeleteInternalFBChange(baseFBType, fb));
+						}
+					} else {
+						change.add(new UpdateFBTypeInstanceChange(fbnEl));
+					}
+				});
 	}
 
 	private static class UpdateFBTypeInstanceChange extends CompositeChange {
@@ -94,7 +79,7 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
 			final Command cmd = new UpdateFBTypeCommand(fb, getErrorMarkerEntry(fb));
-			ChangeExecutionHelper.executeChange(cmd, fb, pm);
+			AbstractLiveSearchContext.executeAndSave(cmd, fb, pm);
 			return super.perform(pm);
 		}
 	}
@@ -123,7 +108,7 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 				// use empty string to force errormarker
 				cmd = new ChangeFbTypeCommand(internalFb, getErrorMarkerEntry(internalFb));
 			}
-			ChangeExecutionHelper.executeChange(cmd, baseFb, pm);
+			AbstractLiveSearchContext.executeAndSave(cmd, baseFb, pm);
 			return super.perform(pm);
 		}
 

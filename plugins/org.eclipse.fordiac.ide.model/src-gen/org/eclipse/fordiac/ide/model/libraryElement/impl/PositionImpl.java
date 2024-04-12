@@ -51,7 +51,7 @@ public class PositionImpl extends EObjectImpl implements Position {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int X_EDEFAULT = 0;
+	protected static final double X_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getX() <em>X</em>}' attribute.
@@ -61,7 +61,7 @@ public class PositionImpl extends EObjectImpl implements Position {
 	 * @generated
 	 * @ordered
 	 */
-	protected int x = X_EDEFAULT;
+	protected double x = X_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getY() <em>Y</em>}' attribute.
@@ -71,7 +71,7 @@ public class PositionImpl extends EObjectImpl implements Position {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int Y_EDEFAULT = 0;
+	protected static final double Y_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getY() <em>Y</em>}' attribute.
@@ -81,7 +81,7 @@ public class PositionImpl extends EObjectImpl implements Position {
 	 * @generated
 	 * @ordered
 	 */
-	protected int y = Y_EDEFAULT;
+	protected double y = Y_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -108,7 +108,7 @@ public class PositionImpl extends EObjectImpl implements Position {
 	 * @generated
 	 */
 	@Override
-	public int getX() {
+	public double getX() {
 		return x;
 	}
 
@@ -118,8 +118,8 @@ public class PositionImpl extends EObjectImpl implements Position {
 	 * @generated
 	 */
 	@Override
-	public void setX(int newX) {
-		int oldX = x;
+	public void setX(double newX) {
+		double oldX = x;
 		x = newX;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.POSITION__X, oldX, x));
@@ -131,7 +131,7 @@ public class PositionImpl extends EObjectImpl implements Position {
 	 * @generated
 	 */
 	@Override
-	public int getY() {
+	public double getY() {
 		return y;
 	}
 
@@ -141,8 +141,8 @@ public class PositionImpl extends EObjectImpl implements Position {
 	 * @generated
 	 */
 	@Override
-	public void setY(int newY) {
-		int oldY = y;
+	public void setY(double newY) {
+		double oldY = y;
 		y = newY;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.POSITION__Y, oldY, y));
@@ -154,8 +154,8 @@ public class PositionImpl extends EObjectImpl implements Position {
 	 * @generated
 	 */
 	@Override
-	public Point asPoint() {
-		return new org.eclipse.draw2d.geometry.Point(getX(), getY());
+	public Point toScreenPoint() {
+		return PositionAnnotation.toScreenPoint(this);
 	}
 
 	/**
@@ -184,10 +184,10 @@ public class PositionImpl extends EObjectImpl implements Position {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case LibraryElementPackage.POSITION__X:
-				setX((Integer)newValue);
+				setX((Double)newValue);
 				return;
 			case LibraryElementPackage.POSITION__Y:
-				setY((Integer)newValue);
+				setY((Double)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);

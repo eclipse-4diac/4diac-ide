@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Model Command Tests
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.model.commands
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Fragment-Host: org.eclipse.fordiac.ide.model.commands
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.model.commands
 Bundle-RequiredExecutionEnvironment: JavaSE-17
@@ -10,7 +10,6 @@ Bundle-Vendor: Eclipse 4diac
 Require-Bundle: org.eclipse.core.resources,
  org.junit,
  org.eclipse.e4.core.services,
- org.eclipse.osgi.services,
  org.eclipse.e4.core.contexts,
  org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.elk,
@@ -21,4 +20,5 @@ Import-Package:
  org.junit.jupiter.api,
  org.junit.jupiter.params,
  org.junit.jupiter.params.provider,
- org.opentest4j
+ org.opentest4j,
+ org.osgi.service.event

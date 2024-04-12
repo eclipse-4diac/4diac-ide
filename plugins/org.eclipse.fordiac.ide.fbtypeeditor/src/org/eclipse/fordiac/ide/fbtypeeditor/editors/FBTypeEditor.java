@@ -26,9 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -40,10 +38,8 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
@@ -54,10 +50,10 @@ import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
+import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -65,7 +61,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
@@ -75,8 +70,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.model.ui.editors.ITypeEntryEditor;
-import org.eclipse.fordiac.ide.model.ui.editors.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
@@ -89,12 +82,17 @@ import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -114,7 +112,6 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.xtext.ui.editor.XtextEditor;
-import org.osgi.framework.FrameworkUtil;
 
 public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelectionListener, CommandStackEventListener,
 		ITabbedPropertySheetPageContributor, IGotoMarker, ITypeEntryEditor, INavigationLocationProvider {
@@ -155,7 +152,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		// Depending on the button clicked:
 		switch (fbSaveDialog.open()) {
 		case DEFAULT_BUTTON_INDEX:
-			doSaveWithUpdate(monitor, fbSaveDialog.getDataHandler().getCollectedElements());
+			doSaveInternal(monitor);
 			break;
 		case CANCEL_BUTTON_INDEX:
 			MessageDialog.openInformation(null, Messages.FBTypeEditor_ViewingComposite_Headline,
@@ -224,44 +221,9 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		interfaceChanges = 0;
 	}
 
-	private void doSaveWithUpdate(final IProgressMonitor monitor, final Set<INamedElement> set) {
-		doSaveInternal(monitor);
-		updateFB(set);
-	}
-
 	@Override
 	public void doSaveAs() {
 		// TODO implement a save as new type method
-	}
-
-	private void updateFB(final Set<INamedElement> set) {
-		final Command cmd = getUpdateInstancesCommand(set);
-		Display.getDefault().asyncExec(cmd::execute);
-	}
-
-	private Command getUpdateInstancesCommand(final Set<INamedElement> set) {
-		final List<Command> commands = new ArrayList<>();
-		set.stream().forEach(instance -> {
-			if (instance instanceof final FBNetworkElement s) {
-				if (s.eContainer() instanceof final BaseFBType bte) {
-					if (bte.getTypeEntry().getTypeEditable() instanceof final BaseFBType bteedit) {
-						bteedit.getInternalFbs().stream()
-								.filter(fbe -> fbe.getName().equals(s.getName())
-										&& fbe.getFullTypeName().equals(s.getFullTypeName()))
-								.findAny().map(se -> new UpdateInternalFBCommand(se,
-										fbSaveDialog.getDataHandler().getTypeOfElement(s)))
-								.ifPresent(commands::add);
-					}
-				} else {
-					commands.add(new UpdateFBTypeCommand(s, fbSaveDialog.getDataHandler().getTypeOfElement(s)));
-				}
-			}
-		});
-		Command cmd = new CompoundCommand();
-		for (final Command subCmd : commands) {
-			cmd = cmd.chain(subCmd);
-		}
-		return cmd;
 	}
 
 	/**
@@ -282,20 +244,41 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		}
 		fbType = getFBType(typeEntry);
 
-		if (fbType == null) {
-			throw new PartInitException(new Status(IStatus.ERROR, FrameworkUtil.getBundle(getClass()).getSymbolicName(),
-					Messages.FBTypeEditor_TypeFileDoesnotExist));
+		if (fbType != null && typeEntry != null) {
+			typeEntry.eAdapters().add(adapter);
+			annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEntry.getFile());
+			validationJob = new ValidationJob(getPartName(), commandStack, annotationModel);
 		}
-
-		typeEntry.eAdapters().add(adapter);
 
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		getCommandStack().addCommandStackEventListener(this);
 
-		annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEntry.getFile());
-		validationJob = new ValidationJob(getPartName(), commandStack, annotationModel);
-
 		super.init(site, editorInput);
+	}
+
+	@Override
+	public void createPartControl(final Composite parent) {
+		if (fbType != null) {
+			super.createPartControl(parent);
+		} else {
+			showLoadErrorMessage(parent);
+		}
+	}
+
+	public void showLoadErrorMessage(final Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NONE);
+		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).applyTo(composite);
+
+		final Image image = Display.getDefault().getSystemImage(SWT.ICON_ERROR);
+		final Label imageLabel = new Label(composite, SWT.NULL);
+		image.setBackground(imageLabel.getBackground());
+		imageLabel.setImage(image);
+		GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.BEGINNING).applyTo(imageLabel);
+
+		final Label messageLabel = new Label(composite, SWT.NONE);
+		messageLabel.setText(MessageFormat.format(Messages.FBTypeEditor_CouldNotLoadType, getEditorInput().getName()));
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(messageLabel);
 	}
 
 	@Override
@@ -547,6 +530,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 				break;
 			case CommandStack.POST_UNDO:
 				interfaceChanges--;
+				break;
 			default:
 				break;
 			}
@@ -612,7 +596,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 
 	@Override
 	public INavigationLocation createNavigationLocation() {
-		return new FBTypeNavigationLocation(this);
+		return (fbType != null) ? new FBTypeNavigationLocation(this) : null;
 	}
 
 	@Override
@@ -656,6 +640,11 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 						&& fbType.getInterfaceList().equals(changeIFCmd.getInterfaceElement().eContainer()))
 				|| (cmd instanceof final ChangeNameCommand chgNameCmd
 						&& fbType.getInterfaceList().equals(chgNameCmd.getElement().eContainer())));
+	}
+
+	@Override
+	public LibraryElement getEditedElement() {
+		return getFBType();
 	}
 
 }

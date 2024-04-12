@@ -19,7 +19,6 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 
@@ -37,7 +36,7 @@ public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 
 	@Override
 	protected void createMoveHandle(final List handles) {
-		handles.add(new ModifiedMoveHandle((GraphicalEditPart) getHost(), insets, DiagramPreferences.CORNER_DIM));
+		handles.add(new ModifiedMoveHandle(getHost(), insets, DiagramPreferences.CORNER_DIM));
 		removeSelectionFeedbackFigure();
 	}
 
@@ -89,8 +88,7 @@ public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 	}
 
 	private boolean isValidConnectionRequest(final Request request) {
-		return (getHost() instanceof AbstractConnectableEditPart)
-				&& ((AbstractConnectableEditPart) getHost()).isConnectable()
+		return (getHost() instanceof final AbstractConnectableEditPart acEP) && acEP.isConnectable()
 				&& (REQ_RECONNECT_SOURCE.equals(request.getType()) || REQ_RECONNECT_TARGET.equals(request.getType())
 						|| REQ_CONNECTION_END.equals(request.getType()));
 	}

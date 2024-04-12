@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011, 2015 Profactor GbmH, TU Wien, 
- * 				 2018 Johannes Kepler University 
- * 
+ * Copyright (c) 2008, 2009, 2011, 2015 Profactor GbmH, TU Wien,
+ * 				 2018 Johannes Kepler University
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.gef.policies;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.swt.graphics.Color;
@@ -31,12 +30,12 @@ public class HighlightEditPolicy extends org.eclipse.gef.editpolicies.GraphicalE
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editpolicies.AbstractEditPolicy#eraseTargetFeedback(org
 	 * .eclipse.gef.Request)
 	 */
 	@Override
-	public void eraseTargetFeedback(Request request) {
+	public void eraseTargetFeedback(final Request request) {
 		if (revertColor != null) {
 			setContainerBackground(revertColor);
 			revertColor = null;
@@ -48,21 +47,21 @@ public class HighlightEditPolicy extends org.eclipse.gef.editpolicies.GraphicalE
 	}
 
 	private IFigure getContainerFigure() {
-		return ((GraphicalEditPart) getHost()).getFigure();
+		return getHost().getFigure();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editpolicies.AbstractEditPolicy#getTargetEditPart(org
 	 * .eclipse.gef.Request)
 	 */
 	@Override
-	public EditPart getTargetEditPart(Request request) {
+	public EditPart getTargetEditPart(final Request request) {
 		return request.getType().equals(RequestConstants.REQ_SELECTION_HOVER) ? getHost() : null;
 	}
 
-	private void setContainerBackground(Color c) {
+	private void setContainerBackground(final Color c) {
 		getContainerFigure().setBackgroundColor(c);
 	}
 
@@ -75,12 +74,12 @@ public class HighlightEditPolicy extends org.eclipse.gef.editpolicies.GraphicalE
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editpolicies.AbstractEditPolicy#showTargetFeedback(org
 	 * .eclipse.gef.Request)
 	 */
 	@Override
-	public void showTargetFeedback(Request request) {
+	public void showTargetFeedback(final Request request) {
 		showHighlight();
 	}
 }

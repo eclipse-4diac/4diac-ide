@@ -14,28 +14,31 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.viewers.StructuredSelection;
 
 public interface ILibraryLinker {
-	void extractLibrary(final File file, final StructuredSelection selection) throws IOException;
+	void extractLibrary(final File file, final IProject project) throws IOException;
 
 	File newFile(final File destinationDir, final ZipEntry zipEntry) throws IOException;
 
-	void setSelectedProject(final StructuredSelection selection);
+	void setSelectedProject(final IProject project);
 
 	void setSelectedProjectWithTypeLib(final IProject project, TypeLibrary typeLib);
 
 	File[] listLibDirectories(final String directory);
 
-	void importLibrary(final String directory);
+	void importLibrary(final java.net.URI uri);
 
-	void removeOldLibVersion(final List<String> importedLibs, final String newDirectoryName);
+	void importLibraries(final Collection<java.net.URI> uris);
+
+	boolean removeOldLibVersion(final IFolder libDirectory);
 
 	void createTypeEntriesManually(final IContainer container);
 
@@ -48,5 +51,9 @@ public interface ILibraryLinker {
 	File[] listDirectoriesContainingArchives();
 
 	File[] listExtractedFiles();
+
+	File[] listStandardLibraries();
+
+	void checkManifestFile(final IProject project, final TypeLibrary typeLibrary);
 
 }

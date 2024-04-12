@@ -129,7 +129,7 @@ public class UpdateContractCommand extends Command {
 		final Position pos = fbNetworkElement.getPosition();
 		final List<FBNetworkElement> list = new ArrayList<>();
 		list.add(fbNetworkElement);
-		subappcmd = new NewSubAppCommand(network, list, pos.getX(), pos.getY());
+		subappcmd = new NewSubAppCommand(network, list, pos);
 		if (subappcmd.canExecute()) {
 			subappcmd.execute();
 		}

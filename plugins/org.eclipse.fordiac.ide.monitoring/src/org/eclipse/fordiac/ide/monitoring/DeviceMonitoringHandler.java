@@ -86,7 +86,7 @@ class DeviceMonitoringHandler implements Runnable {
 				try {
 					Thread.sleep(pollingIntervall);
 				} catch (final InterruptedException e) {
-					Thread.currentThread().interrupt();  // mark interruption
+					Thread.currentThread().interrupt(); // mark interruption
 					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 				if (devInteractor.isConnected()) {
@@ -100,8 +100,8 @@ class DeviceMonitoringHandler implements Runnable {
 					}
 				} else {
 					setRunning(false);
+					clearMonitoredElements();
 				}
-
 			}
 		}
 	}
@@ -290,6 +290,10 @@ class DeviceMonitoringHandler implements Runnable {
 		} catch (final DeploymentException e) {
 			// we don't need to do anything here
 		}
+		clearMonitoredElements();
+	}
+
+	private void clearMonitoredElements() {
 		systemMonData.getMonitoredElements().stream()
 				.filter(el -> (el.getPort().getDevice().equals(device) && (el instanceof MonitoringElement)))
 				.forEach(el -> ((MonitoringElement) el).setCurrentValue("")); //$NON-NLS-1$

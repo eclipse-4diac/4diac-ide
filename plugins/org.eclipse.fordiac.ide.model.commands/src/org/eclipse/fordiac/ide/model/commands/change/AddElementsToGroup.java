@@ -21,11 +21,13 @@ import java.util.Set;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -35,11 +37,11 @@ public class AddElementsToGroup extends Command implements ScopedCommand {
 	private final Group targetGroup;
 	private final List<FBNetworkElement> elementsToAdd;
 	private final CompoundCommand removeFromOtherGroups = new CompoundCommand();
-	private Point offset;
+	private final Position offset;
 
 	public AddElementsToGroup(final Group targetGroup, final List<?> selection, final Point offset) {
 		this.targetGroup = Objects.requireNonNull(targetGroup);
-		this.offset = offset.getCopy();
+		this.offset = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(offset.x, offset.y);
 		elementsToAdd = createElementList(selection);
 		identifyRemoveElements();
 	}
@@ -71,20 +73,20 @@ public class AddElementsToGroup extends Command implements ScopedCommand {
 	@Override
 	public void execute() {
 		removeFromOtherGroups.execute();
-		FBNetworkHelper.moveFBNetworkByOffset(elementsToAdd, -getOriginalPositionX(), -getOriginalPositionY());
+		FBNetworkHelper.moveFBNetworkByOffset(elementsToAdd, -offset.getX(), -offset.getY());
 		addElementsToGroup();
 		FBNetworkHelper.selectElements(elementsToAdd);
 	}
 
 	@Override
 	public void redo() {
-		FBNetworkHelper.moveFBNetworkByOffset(elementsToAdd, -getOriginalPositionX(), -getOriginalPositionY());
+		FBNetworkHelper.moveFBNetworkByOffset(elementsToAdd, -offset.getX(), -offset.getY());
 		addElementsToGroup();
 	}
 
 	@Override
 	public void undo() {
-		FBNetworkHelper.moveFBNetworkByOffset(elementsToAdd, getOriginalPositionX(), getOriginalPositionY());
+		FBNetworkHelper.moveFBNetworkByOffset(elementsToAdd, offset.getX(), offset.getY());
 		removeElementsFromGroup();
 		removeFromOtherGroups.undo();
 	}
@@ -106,31 +108,15 @@ public class AddElementsToGroup extends Command implements ScopedCommand {
 
 	private static List<FBNetworkElement> createElementList(final List<?> selection) {
 		final List<FBNetworkElement> elements = new ArrayList<>();
-		for (final Object fbNetworkElement : selection) {
-			if ((fbNetworkElement instanceof EditPart)
-					&& (((EditPart) fbNetworkElement).getModel() instanceof FBNetworkElement)) {
-				elements.add((FBNetworkElement) ((EditPart) fbNetworkElement).getModel());
-			} else if (fbNetworkElement instanceof FBNetworkElement) {
-				elements.add((FBNetworkElement) fbNetworkElement);
+		for (Object fbNetworkElement : selection) {
+			if (fbNetworkElement instanceof final EditPart ep) {
+				fbNetworkElement = ep.getModel();
+			}
+			if (fbNetworkElement instanceof final FBNetworkElement fbnEl) {
+				elements.add(fbnEl);
 			}
 		}
 		return elements;
-	}
-
-	public void setOffset(final Point offset) {
-		this.offset = offset.getCopy();
-	}
-
-	public Point getOffset() {
-		return offset;
-	}
-
-	private int getOriginalPositionX() {
-		return offset.x;
-	}
-
-	private int getOriginalPositionY() {
-		return offset.y;
 	}
 
 	@Override

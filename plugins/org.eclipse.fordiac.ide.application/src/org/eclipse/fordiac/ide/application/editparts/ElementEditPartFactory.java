@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -69,6 +70,9 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		}
 		if (modelElement instanceof StructuredType) {
 			return new StructuredTypeEditPart();
+		}
+		if (modelElement instanceof ErrorMarkerDataType) {
+			return new ErrorMarkerDataTypeEditPart();
 		}
 		if (modelElement instanceof InstanceName) {
 			return new InstanceNameEditPart();

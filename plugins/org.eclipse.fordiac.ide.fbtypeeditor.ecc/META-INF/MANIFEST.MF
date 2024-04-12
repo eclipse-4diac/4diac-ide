@@ -20,7 +20,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.structuredtextalgorithm.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Name: ECC Editor
 Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator
 Bundle-ManifestVersion: 2

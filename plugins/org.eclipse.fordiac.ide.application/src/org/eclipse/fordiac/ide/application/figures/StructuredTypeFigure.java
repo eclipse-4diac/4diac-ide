@@ -12,34 +12,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
-import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.fordiac.ide.gef.figures.AbstractShadowBorder;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 
-public class StructuredTypeFigure extends Label implements IFontUpdateListener {
+public final class StructuredTypeFigure extends Label implements IFontUpdateListener {
 
 	public static final int INSTANCE_LABEL_MARGIN = AbstractShadowBorder.SHADOW_INSETS.top + 2;
 
 	public StructuredTypeFigure() {
-		super();
-	}
-
-	@Override
-	public void setTextAlignment(final int align) {
-		super.setTextAlignment(PositionConstants.CENTER);
-	}
-
-	@Override
-	public void setLabelAlignment(final int align) {
-		super.setLabelAlignment(PositionConstants.CENTER);
-	}
-
-	@Override
-	public void setBorder(final Border border) {
-		super.setBorder(new MarginBorder(0, 0, INSTANCE_LABEL_MARGIN, 0));
+		setBorder(new MarginBorder(0, 0, INSTANCE_LABEL_MARGIN, 0));
+		setLabelAlignment(PositionConstants.CENTER);
+		setTextAlignment(PositionConstants.CENTER);
 	}
 
 	@Override

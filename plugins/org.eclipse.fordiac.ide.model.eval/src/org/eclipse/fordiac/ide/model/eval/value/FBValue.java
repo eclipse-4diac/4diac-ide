@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -58,8 +58,14 @@ public final class FBValue implements Value, Iterable<Value> {
 
 	@Override
 	public String toString() {
-		return members.values().stream().map(member -> member.getName() + " := " + member.getValue()) //$NON-NLS-1$
-				.collect(Collectors.joining(", ", "(", ")")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return toString(true);
+	}
+
+	@Override
+	public String toString(final boolean pretty) {
+		return members.values().stream()
+				.map(member -> member.getName() + (pretty ? " := " : ":=") + member.toString(pretty)) //$NON-NLS-1$ //$NON-NLS-2$
+				.collect(Collectors.joining(pretty ? ", " : ",", "(", ")")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	@Override

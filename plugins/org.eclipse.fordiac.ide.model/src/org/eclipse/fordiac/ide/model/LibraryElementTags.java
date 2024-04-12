@@ -62,6 +62,7 @@ public final class LibraryElementTags {
 	public static final String ADAPTERCONNECTIONS_ELEMENT = "AdapterConnections"; //$NON-NLS-1$
 	public static final String DATA_CONNECTIONS_ELEMENT = "DataConnections"; //$NON-NLS-1$
 	public static final String EVENT_CONNECTIONS_ELEMENT = "EventConnections"; //$NON-NLS-1$
+	public static final String RETAIN_ATTRIBUTE = "Retain";
 
 	public static final String INTERNAL_VARS_ELEMENT = "InternalVars"; //$NON-NLS-1$
 	public static final String INTERNAL_CONST_VARS_ELEMENT = "InternalConstVars"; //$NON-NLS-1$
