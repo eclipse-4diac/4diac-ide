@@ -79,8 +79,12 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 		}
 
 		private boolean valueHasAnnotation() {
-			final Border border = getValueFigure().getBorder();
-			return border instanceof AnnotationFeedbackBorder || border instanceof AnnotationCompoundBorder;
+			final IFigure fig = getValueFigure();
+			if (fig != null) {
+				final Border border = fig.getBorder();
+				return border instanceof AnnotationFeedbackBorder || border instanceof AnnotationCompoundBorder;
+			}
+			return false;
 		}
 
 		private Value getValue() {
