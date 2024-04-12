@@ -22,15 +22,19 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorDataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 
-	private final DataType newStruct;
+	private final TypeEntry newStructTypeEntry;
 	private final String newVisibleChildren;
 
 	public ChangeStructCommand(final StructManipulator mux) {
@@ -49,7 +53,8 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 	private ChangeStructCommand(final StructManipulator demux, final DataType datatype,
 			final String newVisibleChildren) {
 		super(demux);
-		newStruct = datatype;
+		// use type entry to ensure that the latest version is loaded
+		newStructTypeEntry = datatype.getTypeEntry();
 		entry = demux.getTypeEntry();
 		this.newVisibleChildren = newVisibleChildren;
 	}
@@ -82,8 +87,8 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 
 	@Override
 	protected void handleConfigurableFB() {
-		if (newStruct != null) {
-			getNewMux().setDataType(newStruct);
+		if (newStructTypeEntry != null) {
+			getNewMux().setDataType(getDataTypeFromTypeEntry());
 		}
 		if (isDemuxConfiguration()) {
 			getNewMux().loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, newVisibleChildren);
@@ -110,4 +115,20 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 	public StructManipulator getOldMux() {
 		return (StructManipulator) oldElement;
 	}
+
+	private StructuredType getDataTypeFromTypeEntry() {
+		if (newStructTypeEntry == null) {
+			return IecTypes.GenericTypes.ANY_STRUCT;
+		}
+
+		LibraryElement type = newStructTypeEntry.getType();
+
+		if (newStructTypeEntry instanceof ErrorDataTypeEntry) {
+			final TypeEntry reloadedTypeEntry = newStructTypeEntry.getTypeLibrary().find(entry.getFullTypeName());
+			type = reloadedTypeEntry.getType();
+		}
+
+		return (type instanceof final StructuredType dt) ? dt : IecTypes.GenericTypes.ANY_STRUCT;
+	}
+
 }
