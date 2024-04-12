@@ -16,18 +16,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.commands.BorderCrossingReconnectCommand;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -38,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.gef.requests.ReconnectRequest;
@@ -88,22 +83,12 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 
 		// border crossing source reconnect
 		if (isSourceReconnect && isBorderCrossing(sourcePin, newPin)) {
-			final var cmd = new CompoundCommand();
-			final var sinks = new ArrayList<IInterfaceElement>();
-			collectSinksRec(conn, cmd, sinks);
-			for (final var sink : sinks) {
-				cmd.add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(newPin, sink));
-			}
-			return cmd;
+			return new BorderCrossingReconnectCommand(newPin, targetPin, conn, true);
 		}
 
 		// border crossing destination reconnect
 		if (!isSourceReconnect && isBorderCrossing(targetPin, newPin)) {
-			final var cmd = new CompoundCommand();
-			cmd.add(new DeleteConnectionCommand(conn));
-			cmd.add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(conn.getSource(),
-					newPin));
-			return cmd;
+			return new BorderCrossingReconnectCommand(sourcePin, newPin, conn, false);
 		}
 
 		// local reconnect
@@ -117,22 +102,6 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		return null;
 	}
 
-	private void collectSinksRec(final Connection conn, final CompoundCommand cmd,
-			final List<IInterfaceElement> sinks) {
-		cmd.add(new DeleteConnectionCommand(conn));
-		if (isEpxandedSubapp(conn.getDestinationElement())) {
-			final var destination = conn.getDestination();
-			if (destination.getInputConnections().size() == 1) {
-				for (final var outConn : destination.getOutputConnections()) {
-					collectSinksRec(outConn, cmd, sinks);
-				}
-				cmd.add(new DeleteInterfaceCommand(destination));
-			}
-		} else {
-			sinks.add(conn.getDestination());
-		}
-	}
-
 	private static boolean isBorderCrossing(final IInterfaceElement ie1, final IInterfaceElement ie2) {
 		return getContainer(ie1.getFBNetworkElement()) != getContainer(ie2.getFBNetworkElement());
 	}
@@ -142,10 +111,6 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 			return subapp;
 		}
 		return FBNetworkElementHelper.getContainerSubappOfFB((FB) elem);
-	}
-
-	private static boolean isEpxandedSubapp(final FBNetworkElement elem) {
-		return elem instanceof final SubApp subapp && subapp.isUnfolded();
 	}
 
 	protected FBNetwork getParentNetwork() {
