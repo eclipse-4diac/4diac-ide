@@ -37,6 +37,7 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 		this.dataType = dataType;
 		this.typelib = typelib;
 		this.file = file;
+		dataType.setTypeEntry(this);
 	}
 
 	public DataTypeEntryMock(final DataTypeEntryMock typeEntry) {
