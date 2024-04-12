@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
@@ -37,6 +38,17 @@ public class BlockTypeInstanceSearch extends IEC61499ElementSearch {
 
 	public BlockTypeInstanceSearch(final TypeEntry entry) {
 		super(createSearchContext(entry),
+				searchCanditate -> searchCanditate instanceof final TypedConfigureableObject tco
+						&& entry == tco.getTypeEntry(),
+				createChildrenProvider());
+	}
+
+	/*
+	 * Search inside of a LibaryElement
+	 *
+	 */
+	public BlockTypeInstanceSearch(final LibraryElement typeEditable, final TypeEntry entry) {
+		super(new LibraryElementSearchContext(typeEditable),
 				searchCanditate -> searchCanditate instanceof final TypedConfigureableObject tco
 						&& entry == tco.getTypeEntry(),
 				createChildrenProvider());

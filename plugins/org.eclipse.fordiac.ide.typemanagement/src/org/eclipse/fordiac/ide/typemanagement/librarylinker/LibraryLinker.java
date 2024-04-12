@@ -188,8 +188,8 @@ public class LibraryLinker implements ILibraryLinker {
 					updateFBInstancesWithNewTypeVersion();
 				}
 			} catch (final CoreException | IOException e) {
-				MessageDialog.openWarning(null, Messages.Warning,
-						MessageFormat.format(Messages.ImportFailedOnLinkCreation, e.getMessage()));
+				Display.getDefault().syncExec(() -> MessageDialog.openWarning(null, Messages.Warning,
+						MessageFormat.format(Messages.ImportFailedOnLinkCreation, e.getMessage())));
 			}
 		}
 		SystemManager.INSTANCE.addFordiacChangeListener();
@@ -207,8 +207,6 @@ public class LibraryLinker implements ILibraryLinker {
 		boolean isNewVersion = false;
 		if (libDirectory.exists()) {
 			isNewVersion = true;
-			MessageDialog.openWarning(null, Messages.Warning,
-					Messages.NewVersionOf + libDirectory.getName() + " " + Messages.WillBeImported); //$NON-NLS-1$
 			try {
 				cachedTypes = cacheOldTypes(libDirectory.getName());
 				// Remove the link but keep the resource on disk
@@ -217,7 +215,8 @@ public class LibraryLinker implements ILibraryLinker {
 				cachedTypes.forEach(typeEntry -> TypeLibraryManager.INSTANCE.getTypeLibrary(selectedProject)
 						.removeTypeEntry(typeEntry));
 			} catch (final CoreException e) {
-				MessageDialog.openWarning(null, Messages.Warning, Messages.OldTypeLibVersionCouldNotBeDeleted);
+				Display.getDefault().syncExec(() -> MessageDialog.openWarning(null, Messages.Warning,
+						Messages.OldTypeLibVersionCouldNotBeDeleted));
 			}
 		}
 		return isNewVersion;
@@ -423,9 +422,10 @@ public class LibraryLinker implements ILibraryLinker {
 	}
 
 	private void gitlabLibraryImport(final String libSymbolicName, final String libVersion) {
-		if (PreferenceConstants.getURL() != null && PreferenceConstants.getToken() != null) {
-			final GitLabDownloadManager downloadManager = new GitLabDownloadManager(PreferenceConstants.getURL(),
-					PreferenceConstants.getToken());
+		final String url = PreferenceConstants.getURL();
+		final String token = PreferenceConstants.getToken();
+		if (url != null && !url.isBlank() && token != null && !token.isBlank()) {
+			final GitLabDownloadManager downloadManager = new GitLabDownloadManager(url, token);
 			downloadManager.fetchProjectsAndPackages();
 			if (downloadManager.getPackagesAndLeaves().containsKey(libSymbolicName)) {
 				downloadManager.getPackagesAndLeaves().get(libSymbolicName).forEach(l -> {

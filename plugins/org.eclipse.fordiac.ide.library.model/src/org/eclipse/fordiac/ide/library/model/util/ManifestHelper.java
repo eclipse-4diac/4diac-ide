@@ -26,14 +26,20 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.impl.EPackageRegistryImpl;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
+import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.fordiac.ide.library.model.library.LibraryFactory;
+import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Product;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.library.VersionInfo;
 import org.eclipse.fordiac.ide.library.model.library.util.LibraryResourceFactoryImpl;
+import org.eclipse.fordiac.ide.library.model.library.util.LibraryResourceImpl;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class ManifestHelper {
@@ -163,10 +169,44 @@ public final class ManifestHelper {
 		try {
 			resource.load(null);
 		} catch (final IOException e) {
+			/*
+			 * FordiacLogHelper.logWarning("Could not load manifest", e); //$NON-NLS-1$
+			 * return null;
+			 */
+			return getAndConvertOldManifest(uri);
+		}
+		return (Manifest) resource.getContents().get(0);
+	}
+
+	/*
+	 * this method loads Manifests the old way (non-capitalised Tags/Attributes) -
+	 * it then converts it into the new Format and saves
+	 *
+	 * TODO: remove when no longer needed
+	 */
+	private static Manifest getAndConvertOldManifest(final URI uri) {
+		final LibraryResourceImpl res = new LibraryResourceImpl(uri);
+		try {
+			res.load(null);
+		} catch (final IOException e) {
 			FordiacLogHelper.logWarning("Could not load manifest", e); //$NON-NLS-1$
 			return null;
 		}
-		return (Manifest) resource.getContents().get(0);
+		final Manifest manifest = (Manifest) res.getContents().get(0);
+		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(
+				new EPackageRegistryImpl(EPackage.Registry.INSTANCE));
+		extendedMetaData.putPackage(null, LibraryPackage.eINSTANCE);
+		res.getDefaultSaveOptions().put(XMLResource.OPTION_ENCODING, "UTF-8");
+		res.getDefaultSaveOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
+		res.getDefaultSaveOptions().put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
+		res.getDefaultSaveOptions().put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
+		try {
+			manifest.eResource().save(null);
+		} catch (final IOException e) {
+			FordiacLogHelper.logWarning("Could not convert manifest", e); //$NON-NLS-1$
+			return null;
+		}
+		return getManifest(uri); // properly load the converted manifest
 	}
 
 	public static Required createRequired(final String symbolicName, final String version) {

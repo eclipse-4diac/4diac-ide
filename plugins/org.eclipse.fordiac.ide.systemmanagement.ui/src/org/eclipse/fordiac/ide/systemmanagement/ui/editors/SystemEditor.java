@@ -368,8 +368,8 @@ public class SystemEditor extends EditorPart
 		final ActionRegistry registry = getActionRegistry();
 		actionIds.forEach(id -> {
 			final IAction action = registry.getAction(id);
-			if (action instanceof UpdateAction) {
-				((UpdateAction) action).update();
+			if (action instanceof final UpdateAction ua) {
+				ua.update();
 			}
 		});
 	}
@@ -390,7 +390,7 @@ public class SystemEditor extends EditorPart
 
 	@Override
 	public ISelection getSelection() {
-		return new StructuredSelection(system);
+		return (system != null) ? new StructuredSelection(system) : StructuredSelection.EMPTY;
 	}
 
 	@Override

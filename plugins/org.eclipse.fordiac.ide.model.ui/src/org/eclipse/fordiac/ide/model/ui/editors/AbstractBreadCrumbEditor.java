@@ -107,7 +107,10 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		if (null != memento) {
 			itemPath = memento.getString(TAG_BREADCRUMB_HIERACHY);
 		}
-		setInitialModel(getInitialModel(itemPath));
+		final Object initialModel = getInitialModel(itemPath);
+		if (initialModel != null) {
+			setInitialModel(initialModel);
+		}
 		memento = null;
 		// only add the selection change listener when our editor is full up
 		breadcrumb.addSelectionChangedListener(
@@ -304,21 +307,27 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 
 	@Override
 	public INavigationLocation createNavigationLocation() {
-		final Object modelItem = breadcrumb.getActiveItem().getModel();
-		return (modelItem != null) ? new BreadcrumbNavigationLocation(this, modelItem) : null;
+		if (breadcrumb != null) {
+			final Object modelItem = breadcrumb.getActiveItem().getModel();
+			return (modelItem != null) ? new BreadcrumbNavigationLocation(this, modelItem) : null;
+		}
+		return null;
 	}
 
 	@Override
 	public void saveState(final IMemento memento) {
 		final StringBuilder itemPath = new StringBuilder();
-		BreadcrumbNavigationLocation.generateItemPath(itemPath, getBreadcrumb().getActiveItem().getModel(),
-				getBreadcrumb().getContentProvider(), getBreadcrumb().getLabelProvider());
-		memento.putString(TAG_BREADCRUMB_HIERACHY, itemPath.substring(1));
+		// if the editor content could not be loaded the bread crumb can be null
+		if (getBreadcrumb() != null) {
+			BreadcrumbNavigationLocation.generateItemPath(itemPath, getBreadcrumb().getActiveItem().getModel(),
+					getBreadcrumb().getContentProvider(), getBreadcrumb().getLabelProvider());
+			memento.putString(TAG_BREADCRUMB_HIERACHY, itemPath.substring(1));
 
-		final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
-		if (null != viewer) {
-			// we have a graphical viewer store its state
-			saveGraphicalViewerState(viewer, memento);
+			final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
+			if (null != viewer) {
+				// we have a graphical viewer store its state
+				saveGraphicalViewerState(viewer, memento);
+			}
 		}
 	}
 

@@ -69,7 +69,7 @@ public class ConvertSubappToGroupCommand extends Command implements ScopedComman
 
 	private void createConvertToGroupCommand() {
 		final List<?> subappContents = new ArrayList<>(sourceSubapp.getSubAppNetwork().getNetworkElements());
-		// delete subapp
+		// delete subapp, this absolutely has to be done first
 		convertToGroupCmd.add(new FlattenSubAppCommand(sourceSubapp, false));
 		// create new group from subapp network
 		final Rectangle bounds = new Rectangle(sourceSubapp.getPosition().toScreenPoint(),
@@ -80,7 +80,7 @@ public class ConvertSubappToGroupCommand extends Command implements ScopedComman
 
 	@Override
 	public boolean canExecute() {
-		return isUntypedSubapp(sourceSubapp) && convertToGroupCmd.canExecute();
+		return isUntypedSubapp(sourceSubapp) && !sourceSubapp.isInGroup();
 	}
 
 	private static boolean isUntypedSubapp(final SubApp subapp) {

@@ -16,8 +16,11 @@ import java.util.Objects;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -54,23 +57,25 @@ public abstract class AbstractLiveSearchContext implements ISearchContext {
 		return getLiveType(typeEntry);
 	}
 
+	public static void executeAndSave(final Command cmd, final EObject modelObj, final IProgressMonitor pm) {
+		final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(modelObj));
+		if (rootContainer instanceof final LibraryElement elem) {
+			final TypeEntry entry = elem.getTypeEntry();
+			final IEditorPart editor = getEditor(entry);
+			execute(cmd, editor);
+			save(entry, editor, pm);
+		}
+	}
+
 	public static void execute(final Command cmd, final TypeEntry typeEntry) {
 		final IEditorPart editor = getEditor(typeEntry);
-		if (editor != null) {
-			editor.getAdapter(CommandStack.class).execute(cmd);
-		} else if (cmd.canExecute()) {
-			cmd.execute();
-		}
+		execute(cmd, editor);
 
 	}
 
 	public static void save(final TypeEntry typeEntry) {
 		final IEditorPart editor = getEditor(typeEntry);
-		if (editor != null) {
-			editor.doSave(new NullProgressMonitor());
-		} else {
-			saveTypeEntry(typeEntry);
-		}
+		save(typeEntry, editor, new NullProgressMonitor());
 
 	}
 
@@ -142,6 +147,23 @@ public abstract class AbstractLiveSearchContext implements ISearchContext {
 
 			return activeWorkbenchWindow.getActivePage().findEditor(new FileEditorInput(typeEntry.getFile()));
 		});
+	}
+
+	private static void execute(final Command cmd, final IEditorPart editor) {
+		if (editor != null) {
+			// when an editor is open execute in display thread to protect any ui updates
+			Display.getDefault().syncExec(() -> editor.getAdapter(CommandStack.class).execute(cmd));
+		} else if (cmd.canExecute()) {
+			cmd.execute();
+		}
+	}
+
+	private static void save(final TypeEntry typeEntry, final IEditorPart editor, final IProgressMonitor pm) {
+		if (editor != null) {
+			editor.doSave(pm);
+		} else {
+			saveTypeEntry(typeEntry);
+		}
 	}
 
 }
