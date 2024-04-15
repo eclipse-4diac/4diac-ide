@@ -124,6 +124,10 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				@Override
 				public String getText(final Object element) {
 					if (element instanceof final IInterfaceElement iElem) {
+						if (originPin != null && originPin.getFBNetworkElement().getFbNetwork()
+								.equals(iElem.getFBNetworkElement().getFbNetwork())) {
+							return iElem.getFBNetworkElement().getName();
+						}
 						return getFullQualifiedPinName(iElem);
 					}
 					return super.getText(element);
