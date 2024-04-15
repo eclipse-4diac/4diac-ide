@@ -101,6 +101,17 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			return titleAreaComposite;
 		}
 
+		private String getFullQualifiedPinName(final IInterfaceElement iElem) {
+			final StringBuilder sb = new StringBuilder();
+			if (null != iElem.getFBNetworkElement()) {
+				sb.append(iElem.getFBNetworkElement().getQualifiedName());
+				sb.delete(0, sb.indexOf(".") + 1); //$NON-NLS-1$
+			}
+			sb.append('.');
+			sb.append(iElem.getName());
+			return sb.toString();
+		}
+
 		@Override
 		protected Control createDialogArea(final Composite parent) {
 
@@ -113,11 +124,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				@Override
 				public String getText(final Object element) {
 					if (element instanceof final IInterfaceElement iElem) {
-						String retVal = ""; //$NON-NLS-1$
-						if (null != iElem.getFBNetworkElement()) {
-							retVal = iElem.getFBNetworkElement().getName() + "."; //$NON-NLS-1$
-						}
-						return retVal + iElem.getName();
+						return getFullQualifiedPinName(iElem);
 					}
 					return super.getText(element);
 				}
@@ -237,7 +244,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	protected static List<IInterfaceElement> resolveBorderElements(final List<IInterfaceElement> opposites,
 			final GraphicalViewer viewer) {
-		final List<IInterfaceElement> resolvedOpposites = new ArrayList();
+		final List<IInterfaceElement> resolvedOpposites = new ArrayList<>();
 		boolean changeFlag = false;
 		for (final IInterfaceElement element : opposites) {
 			final EditPart ep = (EditPart) (viewer.getEditPartRegistry().get(element));
