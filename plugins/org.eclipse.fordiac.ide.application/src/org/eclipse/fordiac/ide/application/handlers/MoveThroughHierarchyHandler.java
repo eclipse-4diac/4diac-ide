@@ -16,8 +16,6 @@ import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.getCommandS
 import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.getFBNetwork;
 import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.openEditor;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -26,8 +24,9 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
+import org.eclipse.fordiac.ide.application.utilities.SubAppHierarchyDialog;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -39,18 +38,16 @@ import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeNode;
-import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
-import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class MoveThroughHierarchyHandler extends AbstractHandler {
@@ -65,48 +62,41 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 
 			if (!fbelements.isEmpty()) {
 
-				final Object result = openDialog(fbelements.get(0));
-
-				FBNetwork destinationNetwork = null;
-				if (result instanceof final TreeNode node) {
-					if (node.getValue() instanceof final SubApp subapp) {
-						destinationNetwork = subapp.getSubAppNetwork();
-					} else if (node.getValue() instanceof final Application app) {
-						destinationNetwork = app.getFBNetwork();
-					}
+				// get selected FBNetwork
+				final SubAppHierarchyDialog dialog = new SubAppHierarchyDialog(fbelements.get(0));
+				final FBNetwork destinationNetwork = dialog.open();
+				if (destinationNetwork == null) {
+					return Status.CANCEL_STATUS;
 				}
 
-				if (destinationNetwork != null) {
-					final Point destination = getDestination(editor, fbelements, destinationNetwork);
-					final MoveElementsFromSubAppCommand cmd = new MoveElementsFromSubAppCommand(fbelements, destination,
-							destinationNetwork);
-					getCommandStack(editor).execute(cmd);
+				final CompoundCommand delCmd = deleteAllConnections(fbelements);
+				final Point destination = getDestination(editor, fbelements, destinationNetwork);
+				final MoveElementsFromSubAppCommand cmd = new MoveElementsFromSubAppCommand(fbelements, destination,
+						destinationNetwork);
 
-					final GraphicalViewer viewer = HandlerHelper.openEditor(destinationNetwork.eContainer())
-							.getAdapter(GraphicalViewer.class);
-					HandlerHelper.selectElement(fbelements.get(0), viewer);
-				}
+				getCommandStack(editor).execute(delCmd.chain(cmd));
+
+				final GraphicalViewer viewer = HandlerHelper.openEditor(destinationNetwork.eContainer())
+						.getAdapter(GraphicalViewer.class);
+				HandlerHelper.selectElement(fbelements.get(0), viewer);
 			}
 		}
 		return Status.OK_STATUS;
 	}
 
-	private static Object openDialog(final FBNetworkElement fbElement) {
-		final List<TreeNode> nodeList = new ArrayList<>();
-		EObject container = fbElement.eContainer();
-		while (container != null) {
-			if (container instanceof Application || container instanceof SubApp) {
-				nodeList.add(new TreeNode(container));
-			}
-			container = container.eContainer();
+	private static CompoundCommand deleteAllConnections(final List<FBNetworkElement> fbelements) {
+		final CompoundCommand cmd = new CompoundCommand();
+		for (final FBNetworkElement fbElement : fbelements) {
+			fbElement.getInterface().getAllInterfaceElements().forEach(ie -> {
+				if (ie.isIsInput()) {
+					ie.getInputConnections().forEach(conn -> cmd.add(new DeleteConnectionCommand(conn)));
+				} else {
+					ie.getOutputConnections().forEach(conn -> cmd.add(new DeleteConnectionCommand(conn)));
+				}
+			});
 		}
-		Collections.reverse(nodeList);
-		final ElementTreeSelectionDialog dia = new ElementTreeSelectionDialog(Display.getCurrent().getActiveShell(),
-				new TreeNodeLabelProvider(), new TreeNodeContentProvider());
-		dia.setInput(nodeList.toArray(new TreeNode[0]));
-		dia.setTitle(Messages.MoveElementDialogTitle);
-		dia.open();
-		return dia.getResult() != null ? dia.getResult()[0] : null;
+
+		return cmd;
 	}
 
 	@Override
@@ -146,7 +136,12 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 
 		final GraphicalEditPart ep = (GraphicalEditPart) viewer.getEditPartRegistry().get(obj);
 
-		final Rectangle bounds = ep.getFigure().getBounds().getCopy();
+		final Rectangle bounds;
+		if (ep != null) {
+			bounds = ep.getFigure().getBounds().getCopy();
+		} else {
+			bounds = new Rectangle();
+		}
 		final int destX = bounds.x;
 		final int destY = bounds.y + bounds.height + 20;
 
