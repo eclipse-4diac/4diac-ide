@@ -882,6 +882,7 @@ public abstract class CommonElementImporter {
 		escapedValue = escapedValue.replace("&apos;", "\'"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("&#10;", "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("&#9;", "\t"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("\r\n", "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		return escapedValue;
 	}
 
