@@ -419,7 +419,8 @@ public class CommonElementExporter {
 	 * @return the escaped string
 	 */
 	protected static String fullyEscapeValue(final String value) {
-		String escapedValue = value.replace("&", "&amp;"); //$NON-NLS-1$ //$NON-NLS-2$
+		String escapedValue = value.replace("\r\n", "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&", "&amp;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
