@@ -79,6 +79,10 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			this.popupPosition = popupPostion;
 		}
 
+		private boolean isLeftConnectionHandler() {
+			return opposites.getFirst().getInputConnections().isEmpty();
+		}
+
 		@Override
 		protected void adjustBounds() {
 			super.adjustBounds();
@@ -92,7 +96,6 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 		@Override
 		protected Control createTitleMenuArea(final Composite parent) {
-
 			final Composite titleAreaComposite = (Composite) super.createTitleMenuArea(parent);
 
 			final GridData gdLabel = new GridData(GridData.FILL);
@@ -101,7 +104,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			return titleAreaComposite;
 		}
 
-		private String getFullQualifiedPinName(final IInterfaceElement iElem) {
+		private static String getFullQualifiedPinName(final IInterfaceElement iElem) {
 			final StringBuilder sb = new StringBuilder();
 			if (null != iElem.getFBNetworkElement()) {
 				sb.append(iElem.getFBNetworkElement().getQualifiedName());
@@ -151,13 +154,24 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 					if (e.character == SWT.CR) {
 						dialogArea.getShell().close();
 					}
-					if ((e.stateMask == SWT.CTRL) && (e.keyCode == SWT.ARROW_LEFT)) {
-						HandlerHelper.selectElement(originPin, viewer);
-						dialogArea.getShell().close();
-					}
-					if (e.stateMask == SWT.CTRL && e.keyCode == SWT.ARROW_RIGHT) {
-						invokeFollowRightConnectionHandler();
-						dialogArea.getShell().close();
+					if (!isLeftConnectionHandler()) {
+						if ((e.stateMask == SWT.CTRL) && (e.keyCode == SWT.ARROW_LEFT)) {
+							HandlerHelper.selectElement(originPin, viewer);
+							dialogArea.getShell().close();
+						}
+						if (e.stateMask == SWT.CTRL && e.keyCode == SWT.ARROW_RIGHT) {
+							invokeFollowRightConnectionHandler();
+							dialogArea.getShell().close();
+						}
+					} else {
+						if ((e.stateMask == SWT.CTRL) && (e.keyCode == SWT.ARROW_RIGHT)) {
+							HandlerHelper.selectElement(originPin, viewer);
+							dialogArea.getShell().close();
+						}
+						if (e.stateMask == SWT.CTRL && e.keyCode == SWT.ARROW_LEFT) {
+							invokeFollowLeftConnectionHandler();
+							dialogArea.getShell().close();
+						}
 					}
 				}
 			});
@@ -171,19 +185,31 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			return dialogArea;
 		}
 
-		private static void invokeFollowRightConnectionHandler() {
+		private static IHandlerService getHandlerService() {
 			final IWorkbench wb = PlatformUI.getWorkbench();
 			final IWorkbenchWindow window = wb.getActiveWorkbenchWindow();
 			final IWorkbenchPage page = window.getActivePage();
 
 			final IWorkbenchPart active = page.getActivePart();
-			final IHandlerService handlerService = active.getSite().getService(IHandlerService.class);
+			return active.getSite().getService(IHandlerService.class);
 
+		}
+
+		private static void invokeFollowRightConnectionHandler() {
 			try {
-				handlerService.executeCommand("org.eclipse.fordiac.ide.application.commands.followRightConnection", //$NON-NLS-1$
+				getHandlerService().executeCommand("org.eclipse.fordiac.ide.application.commands.followRightConnection", //$NON-NLS-1$
 						null);
 			} catch (final Exception e) {
 				throw new RuntimeException("followRightConnection.command not found");
+			}
+		}
+
+		private static void invokeFollowLeftConnectionHandler() {
+			try {
+				getHandlerService().executeCommand("org.eclipse.fordiac.ide.application.commands.followLeftConnection", //$NON-NLS-1$
+						null);
+			} catch (final Exception e) {
+				throw new RuntimeException("followLeftConnection.command not found");
 			}
 		}
 
@@ -239,21 +265,13 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				.toList();
 	}
 
-	protected boolean containsBorderElement(final InterfaceEditPart iep) {
-		final IInterfaceElement ie = iep.getModel();
-		final EList<Connection> connList = getConnectionList(ie);
-		return connList.stream()
-				.anyMatch(conn -> conn.getFBNetwork().isSubApplicationNetwork() && !conn.getDestination().isIsInput());
-	}
-
-	protected static List<IInterfaceElement> resolveBorderElements(final List<IInterfaceElement> opposites,
+	protected static List<IInterfaceElement> resolveTargetPins(final List<IInterfaceElement> opposites,
 			final GraphicalViewer viewer) {
 		final List<IInterfaceElement> resolvedOpposites = new ArrayList<>();
 		boolean changeFlag = false;
 		for (final IInterfaceElement element : opposites) {
 			final EditPart ep = (EditPart) (viewer.getEditPartRegistry().get(element));
 			if ((ep instanceof final InterfaceEditPart iep) && isBorderElement(iep)) {
-				isBorderElement(iep);
 				resolvedOpposites.addAll(getTargetPins(iep));
 				changeFlag = true;
 			} else {
@@ -343,12 +361,12 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	protected static void selectOpposites(final ExecutionEvent event, final GraphicalViewer viewer,
 			final IInterfaceElement originPin, final List<IInterfaceElement> opposites) throws ExecutionException {
-		final List<IInterfaceElement> resolved = resolveBorderElements(opposites, viewer);
-		if (!resolved.isEmpty()) {
-			if (opposites.size() == 1) {
-				HandlerHelper.selectElement(resolved.get(0), viewer);
+		final List<IInterfaceElement> resolvedOpposites = resolveTargetPins(opposites, viewer);
+		if (!resolvedOpposites.isEmpty()) {
+			if (resolvedOpposites.size() == 1) {
+				HandlerHelper.selectElement(resolvedOpposites.get(0), viewer);
 			} else {
-				showOppositeSelectionDialog(resolved, event, viewer, originPin);
+				showOppositeSelectionDialog(resolvedOpposites, event, viewer, originPin);
 			}
 		}
 	}
