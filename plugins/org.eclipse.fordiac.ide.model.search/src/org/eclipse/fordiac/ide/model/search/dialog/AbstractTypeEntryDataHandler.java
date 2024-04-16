@@ -72,5 +72,10 @@ public abstract class AbstractTypeEntryDataHandler<T extends TypeEntry> {
 		return elements.stream().map(e -> getTypeOfElement(e)).toList();
 	}
 
-	public abstract Map<INamedElement, T> createInputSet(final T inputTypeEntry);
+	public boolean loadInputSet() {
+		inputSet = createInputSet(typeEntry);
+		return inputSet.isEmpty();
+	}
+
+	protected abstract Map<INamedElement, T> createInputSet(final T inputTypeEntry);
 }
