@@ -65,9 +65,9 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		for (final Object selected : selection.toList()) {
 			ServiceSequence seq = getSequence(selected);
+			CreateServiceSequenceCommand cmd = null;
 			if ((seq == null) && (selected instanceof SequenceRootEditPart) && (selection.toList().size() == 1)) {
-				final CreateServiceSequenceCommand cmd = new CreateServiceSequenceCommand(
-						((FBType) ((EditPart) selected).getModel()).getService());
+				cmd = new CreateServiceSequenceCommand(((FBType) ((EditPart) selected).getModel()).getService());
 				if (cmd.canExecute()) {
 					cmd.execute();
 				}
@@ -91,6 +91,8 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 								Messages.RecordServiceSequenceHandler_PROBLEM,
 								Messages.RecordServiceSequenceHandler_CHECK_VARIABLE_NAMES);
 					}
+				} else if (cmd != null && cmd.canUndo()) {
+					cmd.undo();
 				}
 			}
 		}

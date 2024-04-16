@@ -54,6 +54,11 @@ public class CreateMonitorFBHandler extends AbstractHandler {
 					Messages.CreateRuntimeTestFunctionBlockHandler_Select_Service_Model);
 			return Status.CANCEL_STATUS;
 		}
+		if (type.getService().getServiceSequence().isEmpty()) {
+			MessageDialog.openInformation(HandlerUtil.getActiveShell(event), "No Service Sequence found", //$NON-NLS-1$
+					"No Service Sequence found, please create a forbidden sequence."); //$NON-NLS-1$
+			return Status.CANCEL_STATUS;
+		}
 		final TestSuite testSuite = new TestSuite(type);
 
 		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(
