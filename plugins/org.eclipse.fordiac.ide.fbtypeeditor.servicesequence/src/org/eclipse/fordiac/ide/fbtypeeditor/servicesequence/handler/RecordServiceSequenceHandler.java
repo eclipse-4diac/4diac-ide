@@ -93,6 +93,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 					}
 				} else if (cmd != null && cmd.canUndo()) {
 					cmd.undo();
+
 				}
 			}
 		}
