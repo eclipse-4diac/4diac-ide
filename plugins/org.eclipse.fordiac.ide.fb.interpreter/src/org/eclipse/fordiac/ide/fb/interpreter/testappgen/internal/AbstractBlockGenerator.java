@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
@@ -62,6 +63,13 @@ public abstract class AbstractBlockGenerator {
 	}
 
 	public static void addPosition(final PositionableElement el, final double x, final double y) {
+		if (el instanceof ECTransition) {
+			final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+			pos.setX(x);
+			pos.setY(y);
+			el.setPosition(pos);
+			return;
+		}
 		final Position p0 = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates((int) x, (int) y);
 		el.setPosition(p0);
 	}

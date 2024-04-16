@@ -49,6 +49,7 @@ public class TestEccGenerator {
 		final double x2 = to.getPosition().getX();
 		final double y1 = from.getPosition().getY();
 		final double y2 = to.getPosition().getY();
+
 		AbstractBlockGenerator.addPosition(transition, x1 + ((x2 - x1) / 2), y2 + ((y1 - y2) / 2));
 	}
 

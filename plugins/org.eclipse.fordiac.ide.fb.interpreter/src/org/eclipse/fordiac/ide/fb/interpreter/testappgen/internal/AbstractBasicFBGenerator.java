@@ -125,7 +125,9 @@ public abstract class AbstractBasicFBGenerator extends AbstractBlockGenerator {
 			final String name = sbName.toString();
 			if (!containsEvent(list, name)) {
 				final Event newEvent = createEvent(name, isInput);
-				newEvent.setComment(comment.substring(0, comment.lastIndexOf('.')));
+				if (!name.equals("expected")) { //$NON-NLS-1$
+					newEvent.setComment(comment.substring(0, comment.lastIndexOf('.')));
+				}
 				list.add(newEvent);
 			}
 		}
