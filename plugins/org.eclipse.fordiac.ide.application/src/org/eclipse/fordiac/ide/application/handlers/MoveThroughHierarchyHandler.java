@@ -24,9 +24,9 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.commands.BorderCrossingReconnectCommand;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.utilities.SubAppHierarchyDialog;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -51,7 +51,6 @@ import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class MoveThroughHierarchyHandler extends AbstractHandler {
-
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
@@ -69,34 +68,36 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 					return Status.CANCEL_STATUS;
 				}
 
-				final CompoundCommand delCmd = deleteAllConnections(fbelements);
 				final Point destination = getDestination(editor, fbelements, destinationNetwork);
 				final MoveElementsFromSubAppCommand cmd = new MoveElementsFromSubAppCommand(fbelements, destination,
-						destinationNetwork);
+						destinationNetwork); // TODO Merge with this command
+				getCommandStack(editor).execute(cmd);
 
-				getCommandStack(editor).execute(delCmd.chain(cmd));
+				// reconnect the input connections
+				final CompoundCommand reconCmd = new CompoundCommand();
+				fbelements.get(0).getInterface().getAllInterfaceElements().forEach(ie -> {
+					if (ie.isIsInput()) {
+						ie.getInputConnections().forEach(conn -> {
+							reconCmd.add(new BorderCrossingReconnectCommand(conn.getDestination(),
+									conn.getDestination(), conn, false));
+						});
+					}
+				});
+				getCommandStack(editor).execute(reconCmd); // TODO handle reconnect to same Input
 
-				final GraphicalViewer viewer = HandlerHelper.openEditor(destinationNetwork.eContainer())
-						.getAdapter(GraphicalViewer.class);
-				HandlerHelper.selectElement(fbelements.get(0), viewer);
+				// Update editor view
+				if (destinationNetwork.eContainer() instanceof final SubApp subapp && subapp.isUnfolded()) {
+					final GraphicalViewer viewer = HandlerHelper.openEditor(subapp.getFbNetwork().eContainer())
+							.getAdapter(GraphicalViewer.class);
+					HandlerHelper.selectElement(fbelements.get(0), viewer);
+				} else {
+					final GraphicalViewer viewer = HandlerHelper.openEditor(destinationNetwork.eContainer())
+							.getAdapter(GraphicalViewer.class);
+					HandlerHelper.selectElement(fbelements.get(0), viewer);
+				}
 			}
 		}
 		return Status.OK_STATUS;
-	}
-
-	private static CompoundCommand deleteAllConnections(final List<FBNetworkElement> fbelements) {
-		final CompoundCommand cmd = new CompoundCommand();
-		for (final FBNetworkElement fbElement : fbelements) {
-			fbElement.getInterface().getAllInterfaceElements().forEach(ie -> {
-				if (ie.isIsInput()) {
-					ie.getInputConnections().forEach(conn -> cmd.add(new DeleteConnectionCommand(conn)));
-				} else {
-					ie.getOutputConnections().forEach(conn -> cmd.add(new DeleteConnectionCommand(conn)));
-				}
-			});
-		}
-
-		return cmd;
 	}
 
 	@Override
