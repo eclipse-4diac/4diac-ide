@@ -106,7 +106,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				return sb.toString();
 			}
 			if (isInSameNetwork(originPin, iElem)) {
-				sb.append(iElem.getFBNetworkElement());
+				sb.append(iElem.getFBNetworkElement().getName());
 			} else {
 				sb.append(iElem.getFBNetworkElement().getQualifiedName());
 				sb.delete(0, sb.indexOf(".") + 1); //$NON-NLS-1$
@@ -195,7 +195,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				if (e.character == SWT.CR) {
 					dialogArea.getShell().close();
 				}
-				if (opposites.getFirst().getInputConnections().isEmpty()) {
+				if (opposites.get(0).getInputConnections().isEmpty()) {
 					handleRight(e);
 				} else {
 					handleLeft(e);
