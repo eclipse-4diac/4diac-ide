@@ -51,7 +51,10 @@ import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditor;
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorModelAccess;
 import org.eclipse.xtext.ui.editor.embedded.IEditedResourceProvider;
 
-/** Section that appears in the Properties view, when a Transition is selected in the ECC */
+/**
+ * Section that appears in the Properties view, when a Transition is selected in
+ * the ECC
+ */
 @SuppressWarnings("restriction")
 public class TransitionSection extends AbstractSection {
 	private Text commentText;
@@ -154,6 +157,8 @@ public class TransitionSection extends AbstractSection {
 	}
 
 	protected void updateConditionEditor() {
+		final CommandStack commandStackBuffer = commandStack;
+		commandStack = null; // block any updates that may occur.
 		if ((getType().getConditionExpression() != null)
 				&& getType().getConditionExpression().equals(ECCContentAndLabelProvider.ONE_CONDITION)) {
 			conditionEditorModelAccess.updateModel(""); //$NON-NLS-1$
@@ -162,6 +167,7 @@ public class TransitionSection extends AbstractSection {
 			conditionEditorModelAccess.updateModel(getType().getConditionExpression());
 			conditionEditor.getViewer().setEditable(true);
 		}
+		commandStack = commandStackBuffer;
 	}
 
 	@Override
@@ -205,6 +211,6 @@ public class TransitionSection extends AbstractSection {
 	public void fillEventConditionDropdown() {
 		eventCombo.removeAll();
 		ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType()).stream()
-		.forEach(name -> eventCombo.add(name));
+				.forEach(name -> eventCombo.add(name));
 	}
 }
