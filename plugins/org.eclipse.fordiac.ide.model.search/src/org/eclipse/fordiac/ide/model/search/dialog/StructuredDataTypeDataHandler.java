@@ -13,24 +13,19 @@
 package org.eclipse.fordiac.ide.model.search.dialog;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.search.types.FBInstanceSearch;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
-import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
 import org.eclipse.fordiac.ide.model.search.types.StructManipulatorSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class StructuredDataTypeDataHandler extends AbstractTypeEntryDataHandler<DataTypeEntry> {
 	public StructuredDataTypeDataHandler(final DataTypeEntry typeEntry) {
@@ -40,52 +35,43 @@ public class StructuredDataTypeDataHandler extends AbstractTypeEntryDataHandler<
 	@Override
 	public HashMap<INamedElement, DataTypeEntry> createInputSet(final DataTypeEntry inputDataTypeEntry) {
 		final HashMap<INamedElement, DataTypeEntry> inputElementsSet = new HashMap<>();
-
-		// find SubAppTypes
-		InstanceSearch search = StructDataTypeSearch
-				.createStructInterfaceSearch((StructuredType) inputDataTypeEntry.getTypeEditable());
-		// add types to input
-		search.performTypeLibBlockSearch(inputDataTypeEntry.getTypeLibrary()).stream().filter(FBType.class::isInstance)
-				.forEach(fb -> inputElementsSet.put(fb, inputDataTypeEntry));
-		// initiate map with types
-		inputElementsSet.keySet().stream().forEach(st -> children.put(st.getName(), new HashSet<>()));
-
-		// add typed subapp instances as children
-		final IProject project = typeEntry.getFile().getProject();
-		new FBInstanceSearch(typeEntry).performProjectSearch(project).stream()
-				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
-				.filter(fb -> fb instanceof final StructManipulator structmanipulator
-						&& structmanipulator.getDataType().equals(typeEntry.getTypeEditable()))
-				.forEach(s -> {
-					if (s instanceof StructManipulator || (s instanceof final SubApp subApp && !subApp.isTyped())) {
-						inputElementsSet.put(s, inputDataTypeEntry);
-					} else if (!(s instanceof ErrorMarkerFBNElement)) {
-						try {
-							children.get(s.getTypeName()).add(s);
-						} catch (final Exception e) {
-							FordiacLogHelper.logError("FBUPDATE Dialog cant find TypeName: " + s.getTypeName() //$NON-NLS-1$
-									+ " of FBNE: " + s.getName() + " of class: " + s.getClass().getName() //$NON-NLS-1$ //$NON-NLS-2$
-									+ " in children List: " + children.toString()); //$NON-NLS-1$
-							children.get(s.getTypeName()).add(s);
-						}
-					}
-				});
-		// add structmanipulators and untyped subapps to input
-		InstanceSearch
-				.performProjectSearch(project,
-						StructDataTypeSearch
-								.createStructMemberSearch((StructuredType) inputDataTypeEntry.getTypeEditable()),
-						new StructManipulatorSearch(inputDataTypeEntry))
-				.forEach(st -> inputElementsSet.put(st, inputDataTypeEntry));
-
-		// add StructuredTypes
-		search = StructDataTypeSearch.createStructMemberSearch((StructuredType) inputDataTypeEntry.getTypeEditable());
-		final List<StructuredType> stTypes = search.searchStructuredTypes(inputDataTypeEntry.getTypeLibrary()).stream()
-				.map(StructuredType.class::cast).toList();
-		stTypes.forEach(st -> inputElementsSet.put(st, (DataTypeEntry) st.getTypeEntry()));
-		stTypes.forEach(st -> inputElementsSet.putAll(createInputSet((DataTypeEntry) st.getTypeEntry())));
-
+		handleStruct(inputDataTypeEntry, inputElementsSet);
 		return inputElementsSet;
+	}
+
+	private static void handleVarDecl(final VarDeclaration varDecl,
+			final HashMap<INamedElement, DataTypeEntry> inputElementsSet, final DataTypeEntry inputDataTypeEntry) {
+		if (varDecl.eContainer() instanceof final StructuredType st) {
+			final DataTypeEntry stTypeEntry = (DataTypeEntry) st.getTypeEntry();
+			inputElementsSet.put(st, inputDataTypeEntry);
+			handleStruct(stTypeEntry, inputElementsSet);
+		} else if (varDecl.eContainer() instanceof InterfaceList) {
+			// we are either in an untyped subapp or in the interface of a FB or subapp type
+			inputElementsSet.put((INamedElement) varDecl.eContainer().eContainer(), inputDataTypeEntry);
+
+			if (varDecl.eContainer().eContainer() instanceof final FBType type) {
+				final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(type.getTypeEntry());
+				search.performSearch().stream().filter(INamedElement.class::isInstance).map(INamedElement.class::cast)
+						.forEach(el -> inputElementsSet.put(el, inputDataTypeEntry));
+			}
+		} else if (varDecl.eContainer() instanceof final FBType type) {
+			// internal variable
+			inputElementsSet.put(type, inputDataTypeEntry);
+		}
+	}
+
+	private static void handleStruct(final DataTypeEntry stTypeEntry,
+			final HashMap<INamedElement, DataTypeEntry> inputElementsSet) {
+		final DataTypeInstanceSearch dataTypeInstanceSearch = new DataTypeInstanceSearch(stTypeEntry);
+
+		dataTypeInstanceSearch.performSearch().forEach(obj -> {
+			if (obj instanceof final VarDeclaration varDecl) {
+				handleVarDecl(varDecl, inputElementsSet, stTypeEntry);
+			} else if (obj instanceof final StructManipulator structMan) {
+				inputElementsSet.put(structMan, stTypeEntry);
+			}
+
+		});
 	}
 
 	public Set<INamedElement> performStructSearch() {

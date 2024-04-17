@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search.dialog;
 
-import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -50,7 +50,6 @@ import org.eclipse.swt.widgets.TreeColumn;
 public class FBTypeSearchResultTable extends Composite {
 
 	protected static final int TABLE_COL_WIDTH = 150;
-	private final TypeEntry entry;
 	private ColumnLabelProvider labelElement;
 	private ColumnLabelProvider labelPath;
 	private ColumnLabelProvider labelType;
@@ -68,7 +67,6 @@ public class FBTypeSearchResultTable extends Composite {
 	public FBTypeSearchResultTable(final Composite parent, final int style,
 			final AbstractTypeEntryDataHandler<? extends TypeEntry> data) {
 		super(parent, style);
-		this.entry = data.typeEntry;
 		this.dataHandler = data;
 		createTreeViewer();
 	}
@@ -76,20 +74,17 @@ public class FBTypeSearchResultTable extends Composite {
 	private Control createTreeViewer() {
 		this.setLayout(new GridLayout(1, true));
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		final FBTypeEntryDataHandler treeData = new FBTypeEntryDataHandler(entry);
-		final Map<INamedElement, TypeEntry> result = treeData.createInputSet(treeData.getTypeEntry());
-		if (result.isEmpty()) {
+		if (dataHandler.loadInputSet()) {
 			// No results - display just the info
 			final Label warningLabel = LabelFactory.newLabel(SWT.NONE).create(this);
 			warningLabel.setText("No additional function blocks or types have been affected by this change!"); //$NON-NLS-1$
 		} else {
-			treeData.setInputSet(result);
 			final Label label = new Label(getParent(), SWT.NONE);
-			label.setText("Number of instances of " + treeData.typeEntry.getTypeName() + " : " //$NON-NLS-1$ //$NON-NLS-2$
-					+ treeData.getInputSet().size());
+			label.setText("Number of instances of " + dataHandler.typeEntry.getTypeName() + " : " //$NON-NLS-1$ //$NON-NLS-2$
+					+ dataHandler.getInputSet().size());
 			final TreeViewer treeViewer = new TreeViewer(this);
 			configureTableViewer(treeViewer);
-			treeViewer.setInput(result.keySet());
+			treeViewer.setInput(dataHandler.getInputSet().keySet());
 			GridLayoutFactory.fillDefaults().generateLayout(this);
 		}
 		return getParent();
@@ -175,7 +170,8 @@ public class FBTypeSearchResultTable extends Composite {
 			@Override
 			public boolean hasChildren(final Object element) {
 				if (element instanceof final FBType type) {
-					return !dataHandler.getChild(type.getName()).isEmpty();
+					final Set<INamedElement> child = dataHandler.getChild(type.getName());
+					return child != null && !child.isEmpty();
 				}
 				return false;
 			}
