@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: UAO Deployment
+Bundle-SymbolicName: aimirim.fordiac.ide.deployment.uao;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: Aimirim STI
+Automatic-Module-Name: aimirim.fordiac.ide.deployment.uao
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Require-Bundle: org.eclipse.fordiac.ide.deployment,
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.core.runtime
+Export-Package: aimirim.fordiac.ide.deployment.uao
