@@ -3,12 +3,15 @@
 package org.eclipse.fordiac.ide.library.model.library.impl;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
+import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 import org.eclipse.fordiac.ide.library.model.library.*;
 
 /**
@@ -67,6 +70,48 @@ public class LibraryFactoryImpl extends EFactoryImpl implements LibraryFactory {
 			case LibraryPackage.VERSION_INFO: return createVersionInfo();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		switch (eDataType.getClassifierID()) {
+			case LibraryPackage.NAME_SPACE_FILTER:
+				return createNameSpaceFilterFromString(eDataType, initialValue);
+			case LibraryPackage.SYMBOLIC_NAME:
+				return createSymbolicNameFromString(eDataType, initialValue);
+			case LibraryPackage.VERSION_TYPE:
+				return createVersionTypeFromString(eDataType, initialValue);
+			case LibraryPackage.VERSION_TYPE1:
+				return createVersionType1FromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		switch (eDataType.getClassifierID()) {
+			case LibraryPackage.NAME_SPACE_FILTER:
+				return convertNameSpaceFilterToString(eDataType, instanceValue);
+			case LibraryPackage.SYMBOLIC_NAME:
+				return convertSymbolicNameToString(eDataType, instanceValue);
+			case LibraryPackage.VERSION_TYPE:
+				return convertVersionTypeToString(eDataType, instanceValue);
+			case LibraryPackage.VERSION_TYPE1:
+				return convertVersionType1ToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -178,6 +223,78 @@ public class LibraryFactoryImpl extends EFactoryImpl implements LibraryFactory {
 	public VersionInfo createVersionInfo() {
 		VersionInfoImpl versionInfo = new VersionInfoImpl();
 		return versionInfo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String createNameSpaceFilterFromString(EDataType eDataType, String initialValue) {
+		return (String)XMLTypeFactory.eINSTANCE.createFromString(XMLTypePackage.Literals.TOKEN, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertNameSpaceFilterToString(EDataType eDataType, Object instanceValue) {
+		return XMLTypeFactory.eINSTANCE.convertToString(XMLTypePackage.Literals.TOKEN, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String createSymbolicNameFromString(EDataType eDataType, String initialValue) {
+		return (String)XMLTypeFactory.eINSTANCE.createFromString(XMLTypePackage.Literals.TOKEN, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSymbolicNameToString(EDataType eDataType, Object instanceValue) {
+		return XMLTypeFactory.eINSTANCE.convertToString(XMLTypePackage.Literals.TOKEN, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String createVersionTypeFromString(EDataType eDataType, String initialValue) {
+		return (String)XMLTypeFactory.eINSTANCE.createFromString(XMLTypePackage.Literals.TOKEN, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertVersionTypeToString(EDataType eDataType, Object instanceValue) {
+		return XMLTypeFactory.eINSTANCE.convertToString(XMLTypePackage.Literals.TOKEN, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String createVersionType1FromString(EDataType eDataType, String initialValue) {
+		return (String)XMLTypeFactory.eINSTANCE.createFromString(XMLTypePackage.Literals.TOKEN, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertVersionType1ToString(EDataType eDataType, Object instanceValue) {
+		return XMLTypeFactory.eINSTANCE.convertToString(XMLTypePackage.Literals.TOKEN, instanceValue);
 	}
 
 	/**

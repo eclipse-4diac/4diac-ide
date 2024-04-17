@@ -4,6 +4,7 @@ package org.eclipse.fordiac.ide.library.model.library;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -253,13 +254,52 @@ public interface LibraryPackage extends EPackage {
 	int LIBRARY_ELEMENT = 5;
 
 	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIBRARY_ELEMENT__VALUE = 0;
+
+	/**
 	 * The number of structural features of the '<em>Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LIBRARY_ELEMENT_FEATURE_COUNT = 0;
+	int LIBRARY_ELEMENT_FEATURE_COUNT = 1;
+
+	/**
+	 * The meta object id for the '<em>Symbolic Name</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.lang.String
+	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getSymbolicName()
+	 * @generated
+	 */
+	int SYMBOLIC_NAME = 11;
+
+	/**
+	 * The meta object id for the '<em>Version Type</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.lang.String
+	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getVersionType()
+	 * @generated
+	 */
+	int VERSION_TYPE = 12;
+
+	/**
+	 * The meta object id for the '<em>Version Type1</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.lang.String
+	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getVersionType1()
+	 * @generated
+	 */
+	int VERSION_TYPE1 = 13;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.ManifestImpl <em>Manifest</em>}' class.
@@ -464,6 +504,16 @@ public interface LibraryPackage extends EPackage {
 	int VERSION_INFO_FEATURE_COUNT = 3;
 
 	/**
+	 * The meta object id for the '<em>Name Space Filter</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.lang.String
+	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getNameSpaceFilter()
+	 * @generated
+	 */
+	int NAME_SPACE_FILTER = 10;
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.library.model.library.Dependencies <em>Dependencies</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -632,6 +682,53 @@ public interface LibraryPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getLibraryElement();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.library.model.library.LibraryElement#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryElement#getValue()
+	 * @see #getLibraryElement()
+	 * @generated
+	 */
+	EAttribute getLibraryElement_Value();
+
+	/**
+	 * Returns the meta object for data type '{@link java.lang.String <em>Symbolic Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Symbolic Name</em>'.
+	 * @see java.lang.String
+	 * @model instanceClass="java.lang.String"
+	 *        extendedMetaData="name='SymbolicName' baseType='http://www.eclipse.org/emf/2003/XMLType#token' pattern='[a-zA-Z][-_a-zA-Z0-9]*'"
+	 * @generated
+	 */
+	EDataType getSymbolicName();
+
+	/**
+	 * Returns the meta object for data type '{@link java.lang.String <em>Version Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Version Type</em>'.
+	 * @see java.lang.String
+	 * @model instanceClass="java.lang.String"
+	 *        extendedMetaData="name='Version_._1_._type' baseType='http://www.eclipse.org/emf/2003/XMLType#token' pattern='[0-9]+(\\.[0-9]+)*'"
+	 * @generated
+	 */
+	EDataType getVersionType();
+
+	/**
+	 * Returns the meta object for data type '{@link java.lang.String <em>Version Type1</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Version Type1</em>'.
+	 * @see java.lang.String
+	 * @model instanceClass="java.lang.String"
+	 *        extendedMetaData="name='Version_._type' baseType='http://www.eclipse.org/emf/2003/XMLType#token' pattern='[0-9]+(\\.[0-9]+)*|[\\[\\(][0-9]+(\\.[0-9]+)*\\-[0-9]+(\\.[0-9]+)*[\\]\\)]'"
+	 * @generated
+	 */
+	EDataType getVersionType1();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.library.model.library.Manifest <em>Manifest</em>}'.
@@ -828,6 +925,18 @@ public interface LibraryPackage extends EPackage {
 	EAttribute getVersionInfo_Version();
 
 	/**
+	 * Returns the meta object for data type '{@link java.lang.String <em>Name Space Filter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Name Space Filter</em>'.
+	 * @see java.lang.String
+	 * @model instanceClass="java.lang.String"
+	 *        extendedMetaData="name='NameSpaceFilter' baseType='http://www.eclipse.org/emf/2003/XMLType#token' pattern='((_[a-zA-Z0-9]|[a-zA-Z])(_?[a-zA-Z0-9])*|\\*\\*?)(::((_[a-zA-Z0-9]|[a-zA-Z])(_?[a-zA-Z0-9])*|\\*\\*?))*'"
+	 * @generated
+	 */
+	EDataType getNameSpaceFilter();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -991,6 +1100,44 @@ public interface LibraryPackage extends EPackage {
 		EClass LIBRARY_ELEMENT = eINSTANCE.getLibraryElement();
 
 		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LIBRARY_ELEMENT__VALUE = eINSTANCE.getLibraryElement_Value();
+
+		/**
+		 * The meta object literal for the '<em>Symbolic Name</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.lang.String
+		 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getSymbolicName()
+		 * @generated
+		 */
+		EDataType SYMBOLIC_NAME = eINSTANCE.getSymbolicName();
+
+		/**
+		 * The meta object literal for the '<em>Version Type</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.lang.String
+		 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getVersionType()
+		 * @generated
+		 */
+		EDataType VERSION_TYPE = eINSTANCE.getVersionType();
+
+		/**
+		 * The meta object literal for the '<em>Version Type1</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.lang.String
+		 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getVersionType1()
+		 * @generated
+		 */
+		EDataType VERSION_TYPE1 = eINSTANCE.getVersionType1();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.ManifestImpl <em>Manifest</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1141,6 +1288,16 @@ public interface LibraryPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VERSION_INFO__VERSION = eINSTANCE.getVersionInfo_Version();
+
+		/**
+		 * The meta object literal for the '<em>Name Space Filter</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.lang.String
+		 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getNameSpaceFilter()
+		 * @generated
+		 */
+		EDataType NAME_SPACE_FILTER = eINSTANCE.getNameSpaceFilter();
 
 	}
 
