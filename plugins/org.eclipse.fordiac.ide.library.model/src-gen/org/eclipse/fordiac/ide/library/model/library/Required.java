@@ -29,7 +29,7 @@ public interface Required extends EObject {
 	 * @return the value of the '<em>Symbolic Name</em>' attribute.
 	 * @see #setSymbolicName(String)
 	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getRequired_SymbolicName()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
+	 * @model dataType="org.eclipse.fordiac.ide.library.model.library.SymbolicName" required="true"
 	 *        extendedMetaData="kind='attribute' name='SymbolicName' namespace='##targetNamespace'"
 	 * @generated
 	 */
@@ -52,7 +52,7 @@ public interface Required extends EObject {
 	 * @return the value of the '<em>Version</em>' attribute.
 	 * @see #setVersion(String)
 	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getRequired_Version()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
+	 * @model dataType="org.eclipse.fordiac.ide.library.model.library.VersionType1" required="true"
 	 *        extendedMetaData="kind='attribute' name='Version' namespace='##targetNamespace'"
 	 * @generated
 	 */

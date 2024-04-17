@@ -106,7 +106,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="symbolicName" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+        eType="#//SymbolicName">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="SymbolicName"/>
@@ -117,8 +117,14 @@
   <eClassifiers xsi:type="ecore:EClass" name="LibraryElement">
     <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
       <details key="name" value="LibraryElement"/>
-      <details key="kind" value="empty"/>
+      <details key="kind" value="simple"/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//NameSpaceFilter">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value=":0"/>
+        <details key="kind" value="simple"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Manifest">
     <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -157,6 +163,13 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="NameSpaceFilter" instanceClassName="java.lang.String">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="NameSpaceFilter"/>
+      <details key="baseType" value="http://www.eclipse.org/emf/2003/XMLType#token"/>
+      <details key="pattern" value="((_[a-zA-Z0-9]|[a-zA-Z])(_?[a-zA-Z0-9])*|\*\*?)(::((_[a-zA-Z0-9]|[a-zA-Z])(_?[a-zA-Z0-9])*|\*\*?))*"/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Product">
     <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
       <details key="name" value="Product"/>
@@ -192,7 +205,7 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="symbolicName" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="symbolicName" eType="#//SymbolicName">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="SymbolicName"/>
@@ -206,7 +219,7 @@
       <details key="kind" value="empty"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="symbolicName" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+        eType="#//SymbolicName">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="SymbolicName"/>
@@ -214,13 +227,20 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+        eType="#//VersionType1">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="Version"/>
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="SymbolicName" instanceClassName="java.lang.String">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="SymbolicName"/>
+      <details key="baseType" value="http://www.eclipse.org/emf/2003/XMLType#token"/>
+      <details key="pattern" value="[a-zA-Z][-_a-zA-Z0-9]*"/>
+    </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VersionInfo">
     <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -243,12 +263,26 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+        eType="#//VersionType">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="Version"/>
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="VersionType" instanceClassName="java.lang.String">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="Version_._1_._type"/>
+      <details key="baseType" value="http://www.eclipse.org/emf/2003/XMLType#token"/>
+      <details key="pattern" value="[0-9]+(\.[0-9]+)*"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="VersionType1" instanceClassName="java.lang.String">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="Version_._type"/>
+      <details key="baseType" value="http://www.eclipse.org/emf/2003/XMLType#token"/>
+      <details key="pattern" value="[0-9]+(\.[0-9]+)*|[\[\(][0-9]+(\.[0-9]+)*\-[0-9]+(\.[0-9]+)*[\]\)]"/>
+    </eAnnotations>
   </eClassifiers>
 </ecore:EPackage>

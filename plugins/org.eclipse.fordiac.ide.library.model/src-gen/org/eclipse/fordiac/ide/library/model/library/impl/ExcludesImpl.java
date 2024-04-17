@@ -16,9 +16,8 @@ import org.eclipse.fordiac.ide.library.model.library.LibraryElement;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Excludes</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Excludes</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -28,11 +27,12 @@ import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
  *
  * @generated
  */
+
+//test
 public class ExcludesImpl extends EObjectImpl implements Excludes {
 	/**
 	 * The cached value of the '{@link #getLibraryElement() <em>Library Element</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getLibraryElement()
 	 * @generated
 	 * @ordered
@@ -40,8 +40,7 @@ public class ExcludesImpl extends EObjectImpl implements Excludes {
 	protected EList<LibraryElement> libraryElement;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected ExcludesImpl() {
@@ -49,8 +48,7 @@ public class ExcludesImpl extends EObjectImpl implements Excludes {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -59,8 +57,7 @@ public class ExcludesImpl extends EObjectImpl implements Excludes {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -86,8 +83,7 @@ public class ExcludesImpl extends EObjectImpl implements Excludes {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -100,8 +96,7 @@ public class ExcludesImpl extends EObjectImpl implements Excludes {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -117,8 +112,7 @@ public class ExcludesImpl extends EObjectImpl implements Excludes {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -132,8 +126,7 @@ public class ExcludesImpl extends EObjectImpl implements Excludes {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -145,4 +138,4 @@ public class ExcludesImpl extends EObjectImpl implements Excludes {
 		return super.eIsSet(featureID);
 	}
 
-} //ExcludesImpl
+} // ExcludesImpl
