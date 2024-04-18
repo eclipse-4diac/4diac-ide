@@ -13,6 +13,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 public class Constants {
 
 	public static final Response EMPTY_RESPONSE;
+	public static final String FB_NAME_FORMAT = "{0}{1}";
 
 	static {
 		// ensure that all entries in the empty response return appropriate empty values

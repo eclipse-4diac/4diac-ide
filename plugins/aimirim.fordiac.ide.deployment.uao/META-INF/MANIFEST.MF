@@ -6,7 +6,9 @@ Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: Aimirim STI
 Automatic-Module-Name: aimirim.fordiac.ide.deployment.uao
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Require-Bundle: org.eclipse.fordiac.ide.deployment,
+Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.ui,
- org.eclipse.core.runtime
+ org.eclipse.fordiac.ide.deployment,
+ com.google.gson;bundle-version="2.10.1",
+ com.neovisionaries.ws.client;bundle-version="2.14.0"
 Export-Package: aimirim.fordiac.ide.deployment.uao

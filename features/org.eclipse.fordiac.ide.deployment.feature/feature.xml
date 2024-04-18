@@ -171,6 +171,9 @@ United States, other countries, or both.\n
    <includes
          id="org.eclipse.fordiac.ide.milo"
          version="0.0.0"/>
+   <includes
+         id="aimirim.fordiac.ide.websocket"
+         version="0.0.0"/>
 
    <requires>
       <import feature="org.eclipse.fordiac.ide.workbench.feature"/>

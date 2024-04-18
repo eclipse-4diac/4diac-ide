@@ -12,6 +12,13 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "aimirim.fordiac.ide.deployment.uao.messages"; //$NON-NLS-1$
 	public static String UAODeploymentExecutor_CreateClientFailed;
+	public static String UAODeploymentExecutor_ClientConnectionFailed;
+	public static String UAODeploymentExecutor_URIParseFailed;
+	public static String UAODeploymentExecutor_GetMgrIDFailed;
+	public static String UAODeploymentExecutor_RequestInterrupted;
+	public static String UAODeploymentExecutor_CreateFBInstanceFailedNoTypeFound;
+	public static String UAODeploymentExecutor_ClientRequestTimeout;
+	public static String UAODeploymentExecutor_RequestRejected;
 
 	static {
 		// initialize resource bundle
