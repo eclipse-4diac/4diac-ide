@@ -21,12 +21,14 @@ import org.eclipse.ltk.core.refactoring.CompositeChange;
 public class StructTypeChange extends CompositeChange {
 
 	private final IFile file;
+	private final String newName;
 	private final TypeEntry oldTypeEntry;
 
-	public StructTypeChange(final IFile file) {
+	public StructTypeChange(final IFile file, final String newName) {
 		super(Messages.Refactoring_AffectedStruct);
 		this.file = file;
 		this.oldTypeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		this.newName = newName;
 		buildChanges();
 	}
 
@@ -45,7 +47,8 @@ public class StructTypeChange extends CompositeChange {
 				affectedStructChanges.put(label, new HashSet<>());
 			}
 
-			affectedStructChanges.get(label).add(new StructuredTypeMemberChange(impactedStructuredType, oldTypeEntry));
+			affectedStructChanges.get(label)
+					.add(new StructuredTypeMemberChange(impactedStructuredType, oldTypeEntry, newName));
 		});
 
 		return affectedStructChanges.entrySet().stream().map(entry -> {

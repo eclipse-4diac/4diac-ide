@@ -115,7 +115,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 			parentChange.add(fbTypeChange);
 		}
 
-		final CompositeChange structChange = new StructTypeChange(file);
+		final CompositeChange structChange = new StructTypeChange(file, newName);
 		if (structChange.getChildren().length != 0) {
 			parentChange.add(structChange);
 		}

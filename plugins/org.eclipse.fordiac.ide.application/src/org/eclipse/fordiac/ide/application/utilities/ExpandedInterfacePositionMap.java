@@ -95,10 +95,10 @@ public class ExpandedInterfacePositionMap {
 		final Map<IFigure, Integer> map = new HashMap<>();
 		for (final var ie : inputList) {
 			final var connections = ie.getSourceConnections();
-			final Optional<ConnectionEditPart> max = connections.stream()
-					.min((conn1, conn2) -> Integer.compare(
-							((ConnectionEditPart) conn1).getConnectionFigure().getEnd().y,
-							((ConnectionEditPart) conn2).getConnectionFigure().getEnd().y));
+			final Optional<? extends ConnectionEditPart> max = connections.stream()
+					.filter(ConnectionEditPart.class::isInstance).map(obj -> (ConnectionEditPart) obj)
+					.min((conn1, conn2) -> Integer.compare(conn1.getConnectionFigure().getEnd().y,
+							conn2.getConnectionFigure().getEnd().y));
 			if (max.isPresent()) {
 				final Point start = max.get().getConnectionFigure().getStart();
 				final Point end = max.get().getConnectionFigure().getEnd();
@@ -120,9 +120,9 @@ public class ExpandedInterfacePositionMap {
 		for (final var ie : outputList) {
 			final var connections = ie.getTargetConnections();
 			final Optional<ConnectionEditPart> max = connections.stream()
-					.min((conn1, conn2) -> Integer.compare(
-							((ConnectionEditPart) conn1).getConnectionFigure().getStart().y,
-							((ConnectionEditPart) conn2).getConnectionFigure().getStart().y));
+					.filter(ConnectionEditPart.class::isInstance).map(obj -> (ConnectionEditPart) obj)
+					.min((conn1, conn2) -> Integer.compare(conn1.getConnectionFigure().getStart().y,
+							conn2.getConnectionFigure().getStart().y));
 			if (max.isPresent()) {
 				final Point start = max.get().getConnectionFigure().getStart();
 				final Point end = max.get().getConnectionFigure().getEnd();

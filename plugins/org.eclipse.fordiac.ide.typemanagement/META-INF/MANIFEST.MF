@@ -22,7 +22,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model.ui,
  org.eclipse.compare;bundle-version="3.9.300",
  org.eclipse.emf.common,
- org.eclipse.emf.compare.ide.ui;bundle-version="4.4.3"
+ org.eclipse.emf.compare.ide.ui;bundle-version="4.4.3",
+ org.eclipse.emf.compare
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.1.qualifier

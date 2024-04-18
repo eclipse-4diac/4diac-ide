@@ -20,6 +20,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.actions.SelectAllAction;
@@ -66,7 +67,8 @@ public class FBNetworkSelectAllAction extends SelectAllAction {
 		final List<?> elementChildren = child.getChildren();
 		for (final Object elementChild : elementChildren) {
 			if (elementChild instanceof AbstractGraphicalEditPart) {
-				final List<EditPart> connections = ((AbstractGraphicalEditPart) elementChild).getSourceConnections();
+				final List<? extends GraphicalEditPart> connections = ((AbstractGraphicalEditPart) elementChild)
+						.getSourceConnections();
 				connections.stream().filter(EditPart::isSelectable).forEach(selectableChildren::add);
 			}
 		}

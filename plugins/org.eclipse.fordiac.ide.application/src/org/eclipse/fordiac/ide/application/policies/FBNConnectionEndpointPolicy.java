@@ -89,11 +89,9 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 		}
 	}
 
-	private void setConnectionsWidth(final List<Object> list, final int width) {
+	private void setConnectionsWidth(final List<? extends org.eclipse.gef.ConnectionEditPart> list, final int width) {
 		list.forEach(ep -> {
-			if (ep instanceof ConnectionEditPart) {
-				setConnectionWidth((ConnectionEditPart) ep, width);
-			}
+			setConnectionWidth((ConnectionEditPart) ep, width);
 		});
 	}
 

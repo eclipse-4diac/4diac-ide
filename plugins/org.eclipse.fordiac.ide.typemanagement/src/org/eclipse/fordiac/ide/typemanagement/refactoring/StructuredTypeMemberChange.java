@@ -31,13 +31,16 @@ public class StructuredTypeMemberChange extends Change {
 	private final StructuredType affectedStruct;
 	private final TypeEntry oldTypeEntry;
 	private final List<String> affectedMembers;
+	private final String newStructMemberName;
 
 	private final CompoundCommand cmd = new CompoundCommand();
 
-	public StructuredTypeMemberChange(final StructuredType affectedStruct, final TypeEntry oldTypeEntry) {
+	public StructuredTypeMemberChange(final StructuredType affectedStruct, final TypeEntry oldTypeEntry,
+			final String newStructMemberName) {
 
 		this.affectedStruct = affectedStruct;
 		this.oldTypeEntry = oldTypeEntry;
+		this.newStructMemberName = newStructMemberName;
 		this.affectedMembers = affectedStruct.getMemberVariables().stream()
 				.filter(var -> var.getType().equals(oldTypeEntry.getType())).map(VarDeclaration::getName).toList();
 
@@ -90,6 +93,14 @@ public class StructuredTypeMemberChange extends Change {
 
 	public CompoundCommand getRefactoringCommand() {
 		return cmd;
+	}
+
+	public TypeEntry getModifiedTypeEntry() {
+		return this.oldTypeEntry;
+	}
+
+	public String getNewTypeEntryName() {
+		return this.newStructMemberName;
 	}
 
 }
