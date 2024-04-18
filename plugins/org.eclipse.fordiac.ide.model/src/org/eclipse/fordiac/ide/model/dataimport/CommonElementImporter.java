@@ -675,6 +675,7 @@ public abstract class CommonElementImporter {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		final String datatypeName = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		block.loadConfiguration(name, datatypeName);
+		addDependency(block.getDataType());
 	}
 
 	protected void parseParameter(final FBNetworkElement block) throws TypeImportException, XMLStreamException {
