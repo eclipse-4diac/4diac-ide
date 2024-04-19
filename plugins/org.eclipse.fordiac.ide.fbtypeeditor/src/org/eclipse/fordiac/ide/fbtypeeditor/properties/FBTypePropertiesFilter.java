@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.IFilter;
@@ -26,7 +25,7 @@ public class FBTypePropertiesFilter implements IFilter {
 	@Override
 	public boolean select(final Object toTest) {
 		final Object retval = getFBTypeFromSelectedElement(toTest);
-		return ((retval != null)) && !(retval instanceof SubAppType);
+		return ((retval != null));
 	}
 
 	static FBType getFBTypeFromSelectedElement(final Object element) {
@@ -36,12 +35,12 @@ public class FBTypePropertiesFilter implements IFilter {
 
 		}
 
-		if (retval instanceof EditPart) {
-			retval = ((EditPart) retval).getModel();
+		if (retval instanceof final EditPart ep) {
+			retval = ep.getModel();
 		}
 
-		if ((retval instanceof FBNetwork) && (((FBNetwork) retval).eContainer() instanceof FBType)) {
-			retval = ((FBNetwork) retval).eContainer();
+		if ((retval instanceof final FBNetwork fbnetwork) && ((fbnetwork.eContainer() instanceof FBType))) {
+			retval = fbnetwork.eContainer();
 		}
 
 		return (retval instanceof FBType) ? (FBType) retval : null;
