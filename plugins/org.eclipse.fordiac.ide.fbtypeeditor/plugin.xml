@@ -150,13 +150,7 @@
                id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditData"
                tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData">
          </propertySection>
-          
-          <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditTypedSubappInterfaceSection"
-               filter="org.eclipse.fordiac.ide.fbtypeeditor.properties.FBSubappTypePropertiesFilter"
-               id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditDataTypedSubapp"
-               tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData">
-         </propertySection>
+         
          
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceVarInOutSection"

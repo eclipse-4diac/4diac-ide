@@ -28,7 +28,7 @@ public class FBTypePropertiesFilter implements IFilter {
 		return ((retval != null));
 	}
 
-	static FBType getFBTypeFromSelectedElement(final Object element) {
+	protected static FBType getFBTypeFromSelectedElement(final Object element) {
 		Object retval = element;
 		if (element instanceof TextSelection) {
 			retval = getTypeFromActiveEditor();

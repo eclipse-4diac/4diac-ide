@@ -11,16 +11,16 @@
  *    Mario Kastner - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.fbtypeeditor.properties;
+package org.eclipse.fordiac.ide.subapptypeeditor.properties;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.properties.FBTypePropertiesFilter;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 
-public class FBTypeDataPropertiesFilter extends FBTypePropertiesFilter {
+public class FBSubappTypePropertiesFilter extends FBTypePropertiesFilter {
 
 	@Override
 	public boolean select(final Object toTest) {
-		final Object retVal = getFBTypeFromSelectedElement(toTest);
-		return retVal != null && !(retVal instanceof SubAppType);
+		final Object retval = getFBTypeFromSelectedElement(toTest);
+		return retval != null && (retval instanceof SubAppType);
 	}
-
 }
