@@ -72,6 +72,7 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.addConfiguration(new DropdownSelectionWidget(RetainTag.getTagList()));
 		outputTable.configure();
+
 	}
 
 	@Override
