@@ -21,30 +21,16 @@ package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.CommentTypeField;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeField;
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 
 final class InterfaceFilterSelection {
 
 	static IInterfaceElement getSelectableInterfaceElementOfType(final Object object) {
 		Object ie = object;
-		if (ie instanceof final InterfaceEditPart iep) {
-			System.out.println("HAHA");
-		}
-
 		if (ie instanceof EditPart) {
-			if (ie instanceof InterfaceEditPart) {
-				System.out.println("HEUREKA IEP");
-			}
-
 			ie = ((EditPart) ie).getModel();
-
-			if (ie instanceof final SubApp subapp) {
-				System.out.println("HEUREKA");
-			}
 		}
 
 		if (ie instanceof TypeField) {
