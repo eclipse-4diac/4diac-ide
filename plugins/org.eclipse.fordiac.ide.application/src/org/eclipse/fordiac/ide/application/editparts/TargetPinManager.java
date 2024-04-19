@@ -16,11 +16,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElement.GroupTargetInterfaceElement;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -36,7 +40,7 @@ public class TargetPinManager {
 		this.host = host;
 	}
 
-	List<TargetInterfaceElement> getModelChildren() {
+	List<TargetInterfaceElement> getModelChildren(final boolean isOverflow) {
 		final List<IInterfaceElement> pins = host.isInput() ? getSourcePins() : getTargetPins();
 
 		// remove entries from our map if they are not in the list anymore
@@ -46,6 +50,28 @@ public class TargetPinManager {
 		final FBNetwork parentNW = getModel().getFBNetworkElement().getFbNetwork();
 		pins.forEach(pin -> targetPinChildren.computeIfAbsent(pin,
 				newEntry -> TargetInterfaceElement.createFor(getModel(), newEntry, parentNW)));
+
+		if (isOverflow) {
+			// @formatter:off
+			// group pins based on the subapps they are contained in
+			final var grouped = pins.stream()
+					.filter(ie -> TargetPinManager.getContainer(ie) != null)
+					.collect(Collectors.groupingBy(TargetPinManager::getContainer))
+					.entrySet()
+					.stream()
+					.map(e -> (TargetInterfaceElement) new GroupTargetInterfaceElement(getModel(), e.getValue().get(0),
+							e.getKey(), e.getValue().size()))
+					.collect(Collectors.toList());
+
+			final var normal = targetPinChildren.values().stream()
+					.filter(target -> TargetPinManager.getContainer(target.getRefElement()) == null)
+					.toList();
+			// @formatter:on
+
+			grouped.addAll(normal);
+			return grouped;
+		}
+
 		return targetPinChildren.values().stream().sorted().toList();
 	}
 
@@ -88,5 +114,21 @@ public class TargetPinManager {
 
 	private static boolean isContainedInUnfoldedSubapp(final UntypedSubApp subapp) {
 		return subapp.getOuterFBNetworkElement() instanceof final SubApp outerSubApp && outerSubApp.isUnfolded();
+	}
+
+	private static SubApp getContainer(final IInterfaceElement ie) {
+		if (ie.getFBNetworkElement() instanceof final FB fb) {
+			final SubApp container = FBNetworkElementHelper.getContainerSubappOfFB(fb);
+			if (container != null) {
+				return container.isUnfolded() ? container : null;
+			}
+			return null;
+		}
+
+		if (ie.getFBNetworkElement() instanceof final SubApp subapp) {
+			return subapp.isUnfolded() ? subapp : null;
+		}
+
+		return null;
 	}
 }
