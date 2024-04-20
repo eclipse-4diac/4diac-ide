@@ -1,9 +1,15 @@
 /*******************************************************************************
- * Copyright (c) 2017 Aimirim STI
- * 
- *  Contributors:
- *   - Pedro Ricardo
- *   - Felipe Adriano
+ * Copyright (c) 2024 AIMIRIM STI - https://en.aimirimsti.com.br/
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Pedro Ricardo
+ *   Felipe Adriano
  *******************************************************************************/
 package aimirim.fordiac.ide.deployment.uao.helpers;
 
@@ -27,6 +33,10 @@ public class UAOClient {
 	private WebSocket ws;
 	private final LinkedList<JsonObject> msgReceived = new LinkedList<>();
 	
+    /** Initialize UAOClient class
+	 * @param endpoint Server endpoint address.
+     * @param timeoutms Connection timeout.
+     * @param useSsl True to use SSL on connection.*/
 	public UAOClient(String endpoint, int timeoutms, boolean useSsl) throws IOException {
 		this.ws = new WebSocketFactory()
             .setConnectionTimeout(timeoutms)																					
@@ -43,10 +53,16 @@ public class UAOClient {
 		
 	}
 	
+    /** Add callbacks to the connection
+     * @param listener method overwride implemented as descripted in
+     * `WebSocketListener` interface.*/
 	public void addListener(WebSocketListener listener) {
 		ws.addListener(listener);
 	}
 
+    /** Blocking message receive.
+     * @param timeout Timeout (milliseconds) for the wait on server message
+     * @return message received.*/
 	public JsonObject receive(long timeout) throws InterruptedException, TimeoutException {
 		long start = System.currentTimeMillis();
 		long elapsed = 0;
@@ -60,18 +76,22 @@ public class UAOClient {
         return(msgReceived.pop());
 	}
 	
+    /** Client connect action.*/
 	public void connect() throws WebSocketException {
 		ws.connect();
 	}
 	
+    /** Client disconnect action.*/
 	public void disconnect() {
 		ws.disconnect();
 	}
 	
+    /** Send json object to the server.*/.
 	public void send(JsonObject json) {
 		ws.sendText(json.toString());
 	}
 	
+    /** Check if connection is open.*/
 	public boolean isOpen() {
 		return(ws.isOpen());
 	}
