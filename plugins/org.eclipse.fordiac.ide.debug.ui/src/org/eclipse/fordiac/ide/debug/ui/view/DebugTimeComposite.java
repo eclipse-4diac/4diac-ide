@@ -160,7 +160,7 @@ public class DebugTimeComposite {
 		evaluator.getExecutor().setClock(AbstractEvaluator.MonotonicClock.UTC);
 		if (eventQueue != null) {
 			eventQueue.setEvaluatorProcess(evaluator);
-			eventQueue.setClockMode(FBDebugClockMode.SYSTEM);
+			eventQueue.setDebugTimeValue(FBDebugClockMode.SYSTEM, Duration.ZERO);
 		}
 	}
 
@@ -171,8 +171,7 @@ public class DebugTimeComposite {
 			final Duration sleepTime = Duration.of(value, ChronoUnit.MILLIS);
 			if (eventQueue != null) {
 				eventQueue.setEvaluatorProcess(evaluator);
-				eventQueue.setDebugTimeValue(sleepTime);
-				eventQueue.setClockMode(FBDebugClockMode.INCREMENT);
+				eventQueue.setDebugTimeValue(FBDebugClockMode.INCREMENT, sleepTime);
 			}
 		} catch (final NumberFormatException | java.lang.ArithmeticException e) {
 			throw new IllegalStateException("Debug Time Value is not accepted!"); //$NON-NLS-1$
@@ -183,12 +182,11 @@ public class DebugTimeComposite {
 		// time is fixed and set to user input
 		try {
 			final long value = Long.parseLong(text);
-			final Duration sleepTime = Duration.of(value, ChronoUnit.MILLIS);
-			final Instant instant = Instant.ofEpochSecond(sleepTime.getSeconds(), sleepTime.getNano());
+			final Duration manualTime = Duration.of(value, ChronoUnit.MILLIS);
+			final Instant instant = Instant.ofEpochSecond(manualTime.getSeconds(), manualTime.getNano());
 			if (eventQueue != null) {
 				eventQueue.setEvaluatorProcess(evaluator);
-				eventQueue.setDebugTimeValue(sleepTime);
-				eventQueue.setClockMode(FBDebugClockMode.MANUAL);
+				eventQueue.setDebugTimeValue(FBDebugClockMode.MANUAL, manualTime);
 			}
 			evaluator.getExecutor().setClock(Clock.fixed(instant, ZoneId.systemDefault()));
 		} catch (final NumberFormatException | java.lang.ArithmeticException e) {
@@ -225,7 +223,6 @@ public class DebugTimeComposite {
 			manualTimeRadio.setSelection(eventQueue.isDebugTimeManual());
 			debugTimeText.setText(String.valueOf(eventQueue.getDebugTimeValue().toMillis()));
 			eventQueue.setEvaluatorProcess(evaluator);
-			eventQueue.setDebugTime();
 		}
 	}
 

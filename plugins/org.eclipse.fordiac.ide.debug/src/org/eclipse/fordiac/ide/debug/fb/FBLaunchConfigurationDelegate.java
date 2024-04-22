@@ -49,9 +49,8 @@ public abstract class FBLaunchConfigurationDelegate extends CommonLaunchConfigur
 
 			final FBLaunchEventQueue fBLaunchEventQueue = new FBLaunchEventQueue(event, repeatEvent,
 					keepRunningWhenIdle);
-			fBLaunchEventQueue.setDebugTimeValue(FBLaunchConfigurationAttributes.getClockInterval(configuration));
-			fBLaunchEventQueue.setClockMode(FBLaunchConfigurationAttributes.getClockMode(configuration));
-
+			fBLaunchEventQueue.setDebugTimeValue(FBLaunchConfigurationAttributes.getClockMode(configuration),
+					FBLaunchConfigurationAttributes.getClockInterval(configuration));
 			evaluator.setEventQueue(fBLaunchEventQueue);
 			launch(evaluator, configuration, mode, launch, monitor);
 		}
