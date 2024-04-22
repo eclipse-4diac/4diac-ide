@@ -126,12 +126,12 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		GridDataFactory.fillDefaults().applyTo(systemTimeRadio);
 
 		incrementTimeRadio = new Button(radioComp, SWT.RADIO);
-		incrementTimeRadio.setText(Messages.FBLaunchConfigurationTab_UseFixedClockWithSpecifiedTime);
+		incrementTimeRadio.setText(Messages.FBLaunchConfigurationTab_IncrementClockAfterEachEventBySpecifiedAmount);
 		incrementTimeRadio.addListener(SWT.Selection, e -> updateLaunchConfigurationDialog());
 		GridDataFactory.fillDefaults().applyTo(incrementTimeRadio);
 
 		manualTimeRadio = new Button(radioComp, SWT.RADIO);
-		manualTimeRadio.setText(Messages.FBLaunchConfigurationTab_IncrementClockAfterEachEventBySpecifiedAmount);
+		manualTimeRadio.setText(Messages.FBLaunchConfigurationTab_UseFixedClockWithSpecifiedTime);
 		manualTimeRadio.addListener(SWT.Selection, e -> updateLaunchConfigurationDialog());
 		GridDataFactory.fillDefaults().applyTo(manualTimeRadio);
 

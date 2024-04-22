@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator;
-import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorCountingEventQueue;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorExternalEventQueue;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -39,7 +38,9 @@ public class FBLaunchEventQueue implements FBEvaluatorCountingEventQueue, FBEval
 	private final AtomicReference<FBDebugClockMode> clockMode = new AtomicReference<>(FBDebugClockMode.SYSTEM);
 	private final AtomicReference<Duration> incrementDebugTime = new AtomicReference<>(Duration.ZERO);
 	private final AtomicReference<Duration> currentDebugTime = new AtomicReference<>(Duration.ZERO);
+	private final AtomicReference<Clock> currentClock = new AtomicReference<>(AbstractEvaluator.MonotonicClock.UTC);
 	private EvaluatorProcess evaluator;
+	private boolean initialized = false;
 
 	private final BlockingQueue<Event> queue = new LinkedBlockingQueue<>();
 
@@ -84,7 +85,6 @@ public class FBLaunchEventQueue implements FBEvaluatorCountingEventQueue, FBEval
 
 	@Override
 	public boolean triggerInputEvent(final Event event) {
-		setDebugTime();
 		return queue.offer(event);
 	}
 
@@ -134,10 +134,6 @@ public class FBLaunchEventQueue implements FBEvaluatorCountingEventQueue, FBEval
 		this.blocking.set(blocking);
 	}
 
-	public void setClockMode(final FBDebugClockMode clockMode) {
-		this.clockMode.set(clockMode);
-	}
-
 	/**
 	 * Get whether Debug Time is incremented every time an event is triggered.
 	 *
@@ -169,11 +165,16 @@ public class FBLaunchEventQueue implements FBEvaluatorCountingEventQueue, FBEval
 	 * Clock. Depending on the selected mode, this value is either fixed or
 	 * incremented each time an event is triggered.
 	 *
+	 * @param clockMode the clock mode to be enabled
 	 * @param sleepTime the time value
 	 */
-	public void setDebugTimeValue(final Duration sleepTime) {
-		incrementDebugTime.set(sleepTime);
-		currentDebugTime.set(sleepTime);
+	public void setDebugTimeValue(final FBDebugClockMode clockMode, final Duration sleepTime) {
+		this.clockMode.set(clockMode);
+		if (isDebugTimeIncremental()) {
+			incrementDebugTime.set(sleepTime);
+		} else if (isDebugTimeManual()) {
+			currentDebugTime.set(sleepTime);
+		}
 	}
 
 	/**
@@ -192,24 +193,29 @@ public class FBLaunchEventQueue implements FBEvaluatorCountingEventQueue, FBEval
 	 */
 	public void setEvaluatorProcess(final EvaluatorProcess evaluatorProcess) {
 		evaluator = evaluatorProcess;
+		updateEvaluatorClock();
 	}
 
 	/**
 	 * Set Debug Time in Evaluator depending on mode selection.
 	 *
 	 */
-	public void setDebugTime() {
-		final Duration debugTime = currentDebugTime.get();
-		final Instant instant = Instant.ofEpochSecond(debugTime.getSeconds(), debugTime.getNano());
-		if (evaluator != null) {
-			final EvaluatorThreadPoolExecutor executor = evaluator.getExecutor();
-			executor.setClock(Clock.fixed(instant, ZoneId.systemDefault()));
-			if (isDebugTimeSystem()) {
-				executor.setClock(AbstractEvaluator.MonotonicClock.UTC);
-			}
+	void setDebugTime() {
+		Duration debugTime = currentDebugTime.get();
+		if (isDebugTimeIncremental() && initialized) {
+			debugTime = debugTime.plus(incrementDebugTime.get());
 		}
-		if (isDebugTimeIncremental()) {
-			currentDebugTime.set(debugTime.plus(incrementDebugTime.get()));
+		currentDebugTime.set(debugTime);
+		final Instant instant = Instant.ofEpochSecond(debugTime.getSeconds(), debugTime.getNano());
+		currentClock.set(isDebugTimeSystem() ? AbstractEvaluator.MonotonicClock.UTC
+				: Clock.fixed(instant, ZoneId.systemDefault()));
+		updateEvaluatorClock();
+		initialized = true;
+	}
+
+	private void updateEvaluatorClock() {
+		if (evaluator != null) {
+			evaluator.getExecutor().setClock(currentClock.get());
 		}
 	}
 }
