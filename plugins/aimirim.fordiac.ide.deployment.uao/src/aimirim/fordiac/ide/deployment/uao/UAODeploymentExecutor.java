@@ -303,22 +303,9 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	 * @return RESP Response JsonObject received. */
 	private JsonObject _sendReceive(final JsonObject REQ) throws DeploymentException {
 		FordiacLogHelper.logWarning("UAODeploymentExecutor | Sent: "+REQ.toString()); //$NON-NLS-1$
-		client.send(REQ);
-		try {
-			JsonObject RESP = client.receive(2000);
-			FordiacLogHelper.logWarning("UAODeploymentExecutor | Received: "+RESP.toString());
-			int status = RESP.get("result").getAsInt();
-			if(status!=200) {
-				String reason = RESP.get("error").getAsJsonObject().get("desc").getAsString();
-				throw new DeploymentException(MessageFormat.format(Messages.UAODeploymentExecutor_RequestRejected,status,reason));
-			}
-			_incrementCounters();
-			return(RESP);
-		} catch (InterruptedException e) {
-			throw new DeploymentException(MessageFormat.format(Messages.UAODeploymentExecutor_RequestInterrupted, e.getMessage()));
-		} catch (TimeoutException e) {
-			throw new DeploymentException(Messages.UAODeploymentExecutor_ClientRequestTimeout);
-		}
+		JsonObject RESP = client.sendAndWaitResponse(REQ);
+		_incrementCounters();
+		return(RESP);
 	}
 	
 	private boolean _connectionCheck() throws DeploymentException {
