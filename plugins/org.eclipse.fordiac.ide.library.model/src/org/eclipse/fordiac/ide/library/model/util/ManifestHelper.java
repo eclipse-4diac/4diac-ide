@@ -61,6 +61,14 @@ public final class ManifestHelper {
 	private static LibraryFactory factory = LibraryFactory.eINSTANCE;
 	private static LibraryResourceFactoryImpl resourceFactory = new LibraryResourceFactoryImpl();
 
+	public static Manifest getOrCreateProjectManifest(final IProject project) {
+		Manifest manifest = getContainerManifest(project);
+		if (manifest == null) {
+			manifest = createProjectManifest(project, null);
+		}
+		return manifest;
+	}
+
 	public static Manifest getContainerManifest(final IContainer container) {
 		if (container == null) {
 			return null;
