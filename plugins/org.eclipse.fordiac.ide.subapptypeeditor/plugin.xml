@@ -214,6 +214,14 @@
                id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
                tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
          </propertySection>
+         
+         <propertySection
+               class="org.eclipse.fordiac.ide.subapptypeeditor.properties.EditTypedSubappInterfaceSection"
+               filter="org.eclipse.fordiac.ide.subapptypeeditor.properties.FBSubappTypePropertiesFilter"
+               id="org.eclipse.fordiac.ide.subapptypeeditor.properties.section.EditDataTypedSubapp"
+               tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData">
+         </propertySection>
+         
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.ShowInterfaceDataSection"
                id="org.eclipse.fordiac.ide.application.properties.section.ShowData"

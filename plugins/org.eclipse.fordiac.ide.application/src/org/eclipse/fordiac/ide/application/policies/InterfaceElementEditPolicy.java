@@ -82,12 +82,12 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		final var newPin = (IInterfaceElement) request.getTarget().getModel();
 
 		// border crossing source reconnect
-		if (isSourceReconnect && isBorderCrossing(sourcePin, newPin)) {
+		if (isSourceReconnect && isBorderCrossing(targetPin, newPin)) {
 			return new BorderCrossingReconnectCommand(newPin, targetPin, conn, true);
 		}
 
 		// border crossing destination reconnect
-		if (!isSourceReconnect && isBorderCrossing(targetPin, newPin)) {
+		if (!isSourceReconnect && isBorderCrossing(sourcePin, newPin)) {
 			return new BorderCrossingReconnectCommand(sourcePin, newPin, conn, false);
 		}
 

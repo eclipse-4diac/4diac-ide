@@ -10,6 +10,7 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *   Alois Zoitl   - added event repetation toolbar
+ *   Lukas Leimeister - added test recorder interface
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.view;
 
@@ -116,12 +117,14 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 	private static final int NUM_COLUMNS = 1;
 	private KeyHandler sharedKeyHandler;
 	private RepeatEventAction repeatEventAction;
+	private DebugTimeComposite debugTimeEditPart;
 
 	@Override
 	public void createPartControl(final Composite parent) {
 		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		GridLayoutFactory.fillDefaults().numColumns(NUM_COLUMNS).margins(0, 0).generateLayout(parent);
 		createGraphicalViewer(parent);
+		debugTimeEditPart = new DebugTimeComposite(parent);
 		createToolBarEntries();
 		hookDebugListeners();
 	}
@@ -256,9 +259,10 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 			final Object source = structSel.getFirstElement();
 			if (source == null) {
 				setContents(null);
+				debugTimeEditPart.setEditPartVisible(false);
 			} else {
 				final EvaluatorProcess evaluator = getFBEvaluatorDebugContext(source);
-
+				debugTimeEditPart.setEditPartVisible(true);
 				if (!isViewerContent(evaluator)) {
 					setContents(evaluator);
 				}
@@ -269,6 +273,8 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 	private void setContents(final EvaluatorProcess evaluator) {
 		viewer.setContents(evaluator);
 		repeatEventAction.updateEvaluator(evaluator);
+		debugTimeEditPart.setContent(evaluator);
+		debugTimeEditPart.updateEditPartVisible();
 		setScrollPosition();
 	}
 

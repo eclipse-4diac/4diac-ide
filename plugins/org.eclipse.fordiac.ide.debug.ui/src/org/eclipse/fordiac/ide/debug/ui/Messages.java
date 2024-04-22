@@ -24,6 +24,18 @@ public final class Messages extends NLS {
 	public static String MainLaunchConfigurationTab_ErrorUpdatingArguments;
 	public static String MainLaunchConfigurationTab_InvalidValueMessage;
 	public static String MainLaunchConfigurationTab_InvalidValueTitle;
+
+	public static String FBLaunchConfigurationTab_ClockInterval;
+	public static String FBLaunchConfigurationTab_DebugTime;
+	public static String FBLaunchConfigurationTab_ERROR_InvalidDebugTime;
+	public static String FBLaunchConfigurationTab_Event;
+	public static String FBLaunchConfigurationTab_IncrementClockAfterEachEventBySpecifiedAmount;
+	public static String FBLaunchConfigurationTab_KeepDebuggerRunningWhenIdle;
+	public static String FBLaunchConfigurationTab_RepeatEvent;
+
+	public static String FBLaunchConfigurationTab_UseFixedClockWithSpecifiedTime;
+	public static String FBLaunchConfigurationTab_UseSystemClock;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

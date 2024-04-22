@@ -45,25 +45,25 @@ public class BorderCrossingReconnectCommand extends CompoundCommand {
 		this.connection = connection;
 		this.isSourceReconnect = isSourceReconnect;
 
-		if (isSourceReconnect) {
-			initSourceReconnect();
-		} else {
-			initTargetReconnect();
-		}
+		init();
 	}
 
-	private void initSourceReconnect() {
+	private void init() {
 		final var sinks = new ArrayList<IInterfaceElement>();
+		final var sources = new ArrayList<IInterfaceElement>();
 		collectSinksRec(connection, this, sinks);
-		for (final var sink : sinks) {
-			add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source, sink));
-		}
-	}
+		collectSourcesRec(connection, this, sources);
+		sources.add(source);
 
-	private void initTargetReconnect() {
-		add(new DeleteConnectionCommand(connection));
-		add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(connection.getSource(),
-				target));
+		if (isSourceReconnect) {
+			for (final var sink : sinks) {
+				add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source, sink));
+			}
+		} else {
+			for (final var source : sources) {
+				add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source, target));
+			}
+		}
 	}
 
 	private static void collectSinksRec(final Connection conn, final CompoundCommand cmd,
@@ -79,6 +79,21 @@ public class BorderCrossingReconnectCommand extends CompoundCommand {
 			}
 		} else {
 			sinks.add(conn.getDestination());
+		}
+	}
+
+	private static void collectSourcesRec(final Connection conn, final CompoundCommand cmd,
+			final List<IInterfaceElement> sources) {
+		if (isEpxandedSubapp(conn.getSource())) {
+			final var source = conn.getSource();
+			if (source.getOutputConnections().size() == 1) {
+				for (final var outConn : source.getInputConnections()) {
+					collectSourcesRec(outConn, cmd, sources);
+				}
+				cmd.add(new DeleteInterfaceCommand(source));
+			}
+		} else {
+			sources.add(conn.getSource());
 		}
 	}
 
