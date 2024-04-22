@@ -148,6 +148,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 		if (fbnElement instanceof final ConfigurableFB configFb) {
 			addAttributes(configFb.getConfigurationAsAttributes());
+			addDependency(configFb.getDataType());
 		}
 		addAttributes(fbnElement.getAttributes());
 
