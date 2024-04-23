@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.requests.CreateConnectionRequest;
@@ -79,7 +78,7 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		final var conn = (Connection) request.getConnectionEditPart().getModel();
 		final var sourcePin = conn.getSource();
 		final var targetPin = conn.getDestination();
-		final var newPin = (IInterfaceElement) request.getTarget().getModel();
+		final var newPin = (IInterfaceElement) getHost().getModel();
 
 		// border crossing source reconnect
 		if (isSourceReconnect && isBorderCrossing(targetPin, newPin)) {
@@ -92,8 +91,7 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		}
 
 		// local reconnect
-		final AbstractReconnectConnectionCommand cmd = createReconnectCommand(conn, isSourceReconnect,
-				getRequestTarget(request));
+		final AbstractReconnectConnectionCommand cmd = createReconnectCommand(conn, isSourceReconnect, newPin);
 		final FBNetwork newParent = checkConnectionParent(cmd.getNewSource(), cmd.getNewDestination(), cmd.getParent());
 		if (newParent != null) {
 			cmd.setParent(newParent);
@@ -177,14 +175,6 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 			if (pin.eContainer().eContainer() instanceof final CompositeFBType cfbType) {
 				return cfbType.getFBNetwork();
 			}
-		}
-		return null;
-	}
-
-	private static IInterfaceElement getRequestTarget(final ReconnectRequest request) {
-		final EditPart target = request.getTarget();
-		if (target.getModel() instanceof final IInterfaceElement ie) {
-			return ie;
 		}
 		return null;
 	}
