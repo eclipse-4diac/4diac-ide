@@ -13,6 +13,8 @@
 				<With Var="PT_ON"/>
 				<With Var="PT_OFF"/>
 			</Event>
+			<Event Name="R" Type="Event" Comment="Reset">
+			</Event>
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
@@ -38,20 +40,22 @@
 		<FB Name="E_DELAY_OFF" Type="E_DELAY" Comment="" x="353.33333333333337" y="-986.6666666666667">
 		</FB>
 		<EventConnections>
-			<Connection Source="REQ" Destination="E_SWITCH.EI" Comment="" dx1="286.6666666666667"/>
-			<Connection Source="E_SWITCH.EO1" Destination="E_DELAY_ON.START" Comment="" dx1="360.0"/>
-			<Connection Source="E_SWITCH.EO0" Destination="E_DELAY_ON.STOP" Comment="" dx1="246.66666666666669"/>
+			<Connection Source="REQ" Destination="E_SWITCH.EI" Comment="" dx1="213.33333333333334"/>
+			<Connection Source="E_SWITCH.EO1" Destination="E_DELAY_ON.START" Comment="" dx1="273.33333333333337"/>
+			<Connection Source="E_SWITCH.EO0" Destination="E_DELAY_ON.STOP" Comment="" dx1="240.0"/>
 			<Connection Source="E_DELAY_ON.EO" Destination="E_RS.S" Comment="" dx1="253.33333333333334"/>
 			<Connection Source="E_RS.EO" Destination="CNF" Comment="" dx1="966.6666666666667"/>
 			<Connection Source="E_DELAY_OFF.EO" Destination="E_RS.R" Comment=""/>
 			<Connection Source="E_SWITCH.EO0" Destination="E_DELAY_OFF.START" Comment=""/>
 			<Connection Source="E_SWITCH.EO1" Destination="E_DELAY_OFF.STOP" Comment=""/>
+			<Connection Source="R" Destination="E_RS.R" Comment="" dx1="246.66666666666669" dx2="253.33333333333334" dy="-213.33333333333334"/>
+			<Connection Source="R" Destination="E_DELAY_OFF.STOP" Comment="" dx1="246.66666666666669" dx2="233.33333333333334" dy="-213.33333333333334"/>
 		</EventConnections>
 		<DataConnections>
-			<Connection Source="IN" Destination="E_SWITCH.G" Comment="" dx1="253.33333333333334"/>
-			<Connection Source="PT_ON" Destination="E_DELAY_ON.DT" Comment="" dx1="186.66666666666669"/>
+			<Connection Source="IN" Destination="E_SWITCH.G" Comment="" dx1="266.6666666666667"/>
+			<Connection Source="PT_ON" Destination="E_DELAY_ON.DT" Comment="" dx1="200.0"/>
 			<Connection Source="E_RS.Q" Destination="Q" Comment="" dx1="1000.0"/>
-			<Connection Source="PT_OFF" Destination="E_DELAY_OFF.DT" Comment="" dx1="220.0" dx2="480.0" dy="333.33333333333337"/>
+			<Connection Source="PT_OFF" Destination="E_DELAY_OFF.DT" Comment="" dx1="233.33333333333334" dx2="300.0" dy="233.33333333333334"/>
 		</DataConnections>
 	</FBNetwork>
 </FBType>
