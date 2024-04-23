@@ -9,7 +9,7 @@
 			<Event Name="REQ" Type="Event" Comment="Service Request">
 				<With Var="PT"/>
 			</Event>
-			<Event Name="R" Type="Event" Comment="RESET">
+			<Event Name="R" Type="Event" Comment="Reset">
 			</Event>
 		</EventInputs>
 		<EventOutputs>
