@@ -25,6 +25,10 @@ public final class Messages extends NLS {
 	public static String UAODeploymentExecutor_CreateFBInstanceFailedNoTypeFound;
 	public static String UAODeploymentExecutor_ClientRequestTimeout;
 	public static String UAODeploymentExecutor_RequestRejected;
+	public static String UAODeploymentExecutor_CreateConnectionFailedNoDataFound;
+	public static String UAODeploymentExecutor_InvalidCreateConnection;
+	public static String UAODeploymentExecutor_FeatureNotImplemented;
+	public static String UAODeploymentExecutor_CommandNotImplemented;
 
 	static {
 		// initialize resource bundle
