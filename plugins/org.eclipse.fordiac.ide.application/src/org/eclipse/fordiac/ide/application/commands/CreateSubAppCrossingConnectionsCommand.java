@@ -87,7 +87,8 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		// own checks
 
 		// equal types for source and dest
-		if (!source.getClass().equals(destination.getClass())) {
+		if (!source.getClass().isAssignableFrom(destination.getClass())
+				&& !destination.getClass().isAssignableFrom(source.getClass())) {
 			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_ConnectingIncompatibleInterfaceTypes);
 			return false;
 		}
