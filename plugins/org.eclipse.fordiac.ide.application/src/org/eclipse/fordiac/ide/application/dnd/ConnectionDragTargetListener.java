@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,15 +9,20 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *               - added connection re-connection across editor boundaries
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.dnd;
 
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import java.util.List;
+
+import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
 import org.eclipse.gef.requests.CreateConnectionRequest;
+import org.eclipse.gef.requests.ReconnectRequest;
 
 public class ConnectionDragTargetListener extends AbstractTransferDropTargetListener {
 
@@ -28,23 +33,42 @@ public class ConnectionDragTargetListener extends AbstractTransferDropTargetList
 
 	@Override
 	protected Request createTargetRequest() {
-		final CreateConnectionRequest req = new CreateConnectionRequest();
-		req.setType(RequestConstants.REQ_CONNECTION_START);
-		final InterfaceEditPart source = ConnSourceTransfer.getInstance().getObject();
-		req.setSourceEditPart(source);
-		req.setStartCommand(source.getCommand(req));
-		req.setType(RequestConstants.REQ_CONNECTION_END);
-		return req;
+		final Request req = ConnSourceTransfer.getInstance().getObject();
+		if (req != null) {
+			return req;
+		}
+		return super.createTargetRequest();
 	}
 
 	@Override
-	protected CreateConnectionRequest getTargetRequest() {
-		return (CreateConnectionRequest) super.getTargetRequest();
+	protected Command getCommand() {
+		final Request req = getTargetRequest();
+		if (req instanceof final ReconnectRequest reconReq) {
+			@SuppressWarnings("unchecked")
+			final List<ConnectionEditPart> connections = (List<ConnectionEditPart>) req.getExtendedData()
+					.get(ConnSourceTransfer.CONNECTIONS_LIST);
+			if (connections != null) {
+				// we
+				final CompoundCommand cmd = new CompoundCommand();
+				connections.forEach(con -> {
+					reconReq.setConnectionEditPart(con);
+					cmd.add(getTargetEditPart().getCommand(reconReq));
+				});
+				return cmd;
+			}
+		}
+		return super.getCommand();
 	}
 
 	@Override
 	protected void updateTargetRequest() {
-		getTargetRequest().setLocation(getDropLocation());
+		final Request req = getTargetRequest();
+		if (req instanceof final CreateConnectionRequest createConReq) {
+			createConReq.setLocation(getDropLocation());
+		} else if (req instanceof final ReconnectRequest reconReq) {
+			reconReq.setLocation(getDropLocation());
+			reconReq.setTargetEditPart(getTargetEditPart());
+		}
 	}
 
 }
