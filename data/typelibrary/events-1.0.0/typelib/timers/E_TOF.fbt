@@ -4,6 +4,8 @@
 	</Identification>
 	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Hoepfinger" Date="2024-03-04">
 	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Hoepfinger" Date="2024-04-23" Remarks="Add a Reset to Timer FBs">
+	</VersionInfo>
 	<CompilerInfo>
 	</CompilerInfo>
 	<InterfaceList>
