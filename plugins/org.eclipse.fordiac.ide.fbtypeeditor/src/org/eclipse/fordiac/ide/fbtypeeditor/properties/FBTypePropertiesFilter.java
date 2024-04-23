@@ -24,22 +24,25 @@ public class FBTypePropertiesFilter implements IFilter {
 
 	@Override
 	public boolean select(final Object toTest) {
-		return getFBTypeFromSelectedElement(toTest) != null;
+		final Object retval = getFBTypeFromSelectedElement(toTest);
+		return ((retval != null));
 	}
 
-	static FBType getFBTypeFromSelectedElement(final Object element) {
+	protected static FBType getFBTypeFromSelectedElement(final Object element) {
 		Object retval = element;
 		if (element instanceof TextSelection) {
 			retval = getTypeFromActiveEditor();
 
 		}
 
-		if (retval instanceof EditPart) {
-			retval = ((EditPart) retval).getModel();
+		if (retval instanceof final EditPart ep) {
+			retval = ep.getModel();
 		}
-		if ((retval instanceof FBNetwork) && (((FBNetwork) retval).eContainer() instanceof FBType)) {
-			retval = ((FBNetwork) retval).eContainer();
+
+		if ((retval instanceof final FBNetwork fbnetwork) && ((fbnetwork.eContainer() instanceof FBType))) {
+			retval = fbnetwork.eContainer();
 		}
+
 		return (retval instanceof FBType) ? (FBType) retval : null;
 	}
 

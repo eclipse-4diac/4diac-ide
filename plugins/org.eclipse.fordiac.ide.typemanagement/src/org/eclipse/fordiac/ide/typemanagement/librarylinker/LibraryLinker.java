@@ -162,7 +162,7 @@ public class LibraryLinker implements ILibraryLinker {
 		final java.net.URI resolvedUri = varMan.resolveURI(uri);
 		final File directory = new File(resolvedUri);
 		final Manifest libManifest = ManifestHelper.getFolderManifest(directory);
-		final Manifest projManifest = ManifestHelper.getContainerManifest(selectedProject);
+		final Manifest projManifest = ManifestHelper.getOrCreateProjectManifest(selectedProject);
 		if (libManifest == null) {
 			return;
 		}

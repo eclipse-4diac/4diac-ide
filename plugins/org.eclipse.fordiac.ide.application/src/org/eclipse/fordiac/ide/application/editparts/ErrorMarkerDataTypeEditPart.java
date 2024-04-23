@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2024 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,15 +16,13 @@ package org.eclipse.fordiac.ide.application.editparts;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.application.figures.StructuredTypeFigure;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationCompoundBorder;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationFeedbackBorder;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 public class ErrorMarkerDataTypeEditPart extends AbstractGraphicalEditPart {
-	public ErrorMarkerDataTypeEditPart() {
-	}
 
 	@Override
 	public ErrorMarkerDataType getModel() {
@@ -43,9 +41,7 @@ public class ErrorMarkerDataTypeEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	public StructuredTypeFigure getFigure() {
-		final StructuredTypeFigure fig = (StructuredTypeFigure) super.getFigure();
-		fig.setBorder(new AnnotationCompoundBorder(figure.getBorder(), GraphicalAnnotationStyles.ERROR_RED));
-		return fig;
+		return (StructuredTypeFigure) super.getFigure();
 	}
 
 	@Override
@@ -58,6 +54,7 @@ public class ErrorMarkerDataTypeEditPart extends AbstractGraphicalEditPart {
 	protected IFigure createFigure() {
 		final StructuredTypeFigure fig = new StructuredTypeFigure();
 		fig.setIcon(FordiacImage.ICON_DATA_TYPE.getImage());
+		fig.setBorder(new AnnotationFeedbackBorder(GraphicalAnnotationStyles.ERROR_RED));
 		return fig;
 	}
 }

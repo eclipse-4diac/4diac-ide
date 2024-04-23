@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -90,13 +92,33 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 		@Override
 		protected Control createTitleMenuArea(final Composite parent) {
-
 			final Composite titleAreaComposite = (Composite) super.createTitleMenuArea(parent);
 
 			final GridData gdLabel = new GridData(GridData.FILL);
 			gdLabel.horizontalIndent = 5;
 			titleAreaComposite.setLayoutData(gdLabel);
 			return titleAreaComposite;
+		}
+
+		private String getPinName(final IInterfaceElement iElem) {
+			final StringBuilder sb = new StringBuilder();
+			if (iElem == null) {
+				return sb.toString();
+			}
+			if (isInSameNetwork(originPin, iElem)) {
+				sb.append(iElem.getFBNetworkElement().getName());
+			} else {
+				sb.append(iElem.getFBNetworkElement().getQualifiedName());
+				sb.delete(0, sb.indexOf(".") + 1); //$NON-NLS-1$
+			}
+			sb.append('.');
+			sb.append(iElem.getName());
+			return sb.toString();
+		}
+
+		private static boolean isInSameNetwork(final IInterfaceElement src, final IInterfaceElement dest) {
+			return src != null && dest != null
+					&& src.getFBNetworkElement().getFbNetwork().equals(dest.getFBNetworkElement().getFbNetwork());
 		}
 
 		@Override
@@ -111,11 +133,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				@Override
 				public String getText(final Object element) {
 					if (element instanceof final IInterfaceElement iElem) {
-						String retVal = ""; //$NON-NLS-1$
-						if (null != iElem.getFBNetworkElement()) {
-							retVal = iElem.getFBNetworkElement().getName() + "."; //$NON-NLS-1$
-						}
-						return retVal + iElem.getName();
+						return getPinName(iElem);
 					}
 					return super.getText(element);
 				}
@@ -126,28 +144,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 					event -> HandlerHelper.selectElement(event.getStructuredSelection().getFirstElement(), viewer));
 
 			// on enter close the view
-			listViewer.getControl().addKeyListener(new KeyListener() {
-
-				@Override
-				public void keyReleased(final KeyEvent e) {
-					// we only want to close the window on enter presses
-				}
-
-				@Override
-				public void keyPressed(final KeyEvent e) {
-					if (e.character == SWT.CR) {
-						dialogArea.getShell().close();
-					}
-					if ((e.stateMask == SWT.CTRL) && (e.keyCode == SWT.ARROW_LEFT)) {
-						HandlerHelper.selectElement(originPin, viewer);
-						dialogArea.getShell().close();
-					}
-					if (e.stateMask == SWT.CTRL && e.keyCode == SWT.ARROW_RIGHT) {
-						invokeFollowRightConnectionHandler();
-						dialogArea.getShell().close();
-					}
-				}
-			});
+			listViewer.getControl().addKeyListener(new FollowConnectionKeyListener(dialogArea));
 
 			final GridData gd = new GridData(GridData.CENTER);
 			gd.horizontalIndent = 3;
@@ -158,19 +155,79 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			return dialogArea;
 		}
 
-		private static void invokeFollowRightConnectionHandler() {
+		private static IHandlerService getHandlerService() {
 			final IWorkbench wb = PlatformUI.getWorkbench();
 			final IWorkbenchWindow window = wb.getActiveWorkbenchWindow();
 			final IWorkbenchPage page = window.getActivePage();
 
 			final IWorkbenchPart active = page.getActivePart();
-			final IHandlerService handlerService = active.getSite().getService(IHandlerService.class);
+			return active.getSite().getService(IHandlerService.class);
 
+		}
+
+		private static void invokeFollowRightConnectionHandler() {
 			try {
-				handlerService.executeCommand("org.eclipse.fordiac.ide.application.commands.followRightConnection", //$NON-NLS-1$
+				getHandlerService().executeCommand("org.eclipse.fordiac.ide.application.commands.followRightConnection", //$NON-NLS-1$
 						null);
 			} catch (final Exception e) {
 				throw new RuntimeException("followRightConnection.command not found");
+			}
+		}
+
+		private static void invokeFollowLeftConnectionHandler() {
+			try {
+				getHandlerService().executeCommand("org.eclipse.fordiac.ide.application.commands.followLeftConnection", //$NON-NLS-1$
+						null);
+			} catch (final Exception e) {
+				throw new RuntimeException("followLeftConnection.command not found");
+			}
+		}
+
+		private class FollowConnectionKeyListener implements KeyListener {
+			private final Composite dialogArea;
+
+			public FollowConnectionKeyListener(final Composite dialogArea) {
+				this.dialogArea = dialogArea;
+			}
+
+			@Override
+			public void keyPressed(final KeyEvent e) {
+				if (e.character == SWT.CR) {
+					dialogArea.getShell().close();
+				}
+				if (opposites.get(0).getInputConnections().isEmpty()) {
+					handleRight(e);
+				} else {
+					handleLeft(e);
+				}
+
+			}
+
+			@Override
+			public void keyReleased(final KeyEvent e) {
+				// do nothing here
+			}
+
+			private void handleRight(final KeyEvent e) {
+				if ((e.stateMask == SWT.CTRL) && (e.keyCode == SWT.ARROW_LEFT)) {
+					HandlerHelper.selectElement(originPin, viewer);
+					dialogArea.getShell().close();
+				}
+				if (e.stateMask == SWT.CTRL && e.keyCode == SWT.ARROW_RIGHT) {
+					invokeFollowRightConnectionHandler();
+					dialogArea.getShell().close();
+				}
+			}
+
+			private void handleLeft(final KeyEvent e) {
+				if ((e.stateMask == SWT.CTRL) && (e.keyCode == SWT.ARROW_RIGHT)) {
+					HandlerHelper.selectElement(originPin, viewer);
+					dialogArea.getShell().close();
+				}
+				if (e.stateMask == SWT.CTRL && e.keyCode == SWT.ARROW_LEFT) {
+					invokeFollowLeftConnectionHandler();
+					dialogArea.getShell().close();
+				}
 			}
 		}
 
@@ -226,6 +283,25 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				.toList();
 	}
 
+	protected static List<IInterfaceElement> resolveTargetPins(final List<IInterfaceElement> opposites,
+			final GraphicalViewer viewer) {
+		final List<IInterfaceElement> resolvedOpposites = new ArrayList<>();
+		boolean changeFlag = false;
+		for (final IInterfaceElement element : opposites) {
+			final EditPart ep = (EditPart) (viewer.getEditPartRegistry().get(element));
+			if ((ep instanceof final InterfaceEditPart iep) && isBorderElement(iep)) {
+				resolvedOpposites.addAll(getTargetPins(iep));
+				changeFlag = true;
+			} else {
+				resolvedOpposites.add(element);
+			}
+		}
+		if (changeFlag) {
+			return resolvedOpposites;
+		}
+		return opposites;
+	}
+
 	private boolean useTargetPins(final InterfaceEditPart iep) {
 		return !iep.getChildren().isEmpty()
 				&& ((iep.getModel().isIsInput() && isLeft()) || (!iep.getModel().isIsInput() && !isLeft()));
@@ -238,6 +314,10 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	private static List<IInterfaceElement> getTargetPins(final InterfaceEditPart iep) {
 		return iep.getChildren().stream().filter(TargetInterfaceElementEditPart.class::isInstance)
 				.map(ep -> (TargetInterfaceElementEditPart) ep).map(ep -> ep.getModel().getRefElement()).toList();
+	}
+
+	private static boolean isBorderElement(final InterfaceEditPart iep) {
+		return iep.getChildren().stream().anyMatch(TargetInterfaceElementEditPart.class::isInstance);
 	}
 
 	protected static boolean isInsideSubappOrViewer(final IInterfaceElement ie, final FBNetwork fbNetwork) {
@@ -299,11 +379,12 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	protected static void selectOpposites(final ExecutionEvent event, final GraphicalViewer viewer,
 			final IInterfaceElement originPin, final List<IInterfaceElement> opposites) throws ExecutionException {
-		if (!opposites.isEmpty()) {
-			if (opposites.size() == 1) {
-				HandlerHelper.selectElement(opposites.get(0), viewer);
+		final List<IInterfaceElement> resolvedOpposites = resolveTargetPins(opposites, viewer);
+		if (!resolvedOpposites.isEmpty()) {
+			if (resolvedOpposites.size() == 1) {
+				HandlerHelper.selectElement(resolvedOpposites.get(0), viewer);
 			} else {
-				showOppositeSelectionDialog(opposites, event, viewer, originPin);
+				showOppositeSelectionDialog(resolvedOpposites, event, viewer, originPin);
 			}
 		}
 	}

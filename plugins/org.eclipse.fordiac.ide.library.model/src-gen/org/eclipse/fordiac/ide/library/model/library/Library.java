@@ -175,7 +175,7 @@ public interface Library extends EObject {
 	 * @return the value of the '<em>Symbolic Name</em>' attribute.
 	 * @see #setSymbolicName(String)
 	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getLibrary_SymbolicName()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
+	 * @model dataType="org.eclipse.fordiac.ide.library.model.library.SymbolicName" required="true"
 	 *        extendedMetaData="kind='attribute' name='SymbolicName' namespace='##targetNamespace'"
 	 * @generated
 	 */

@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
@@ -49,8 +50,8 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	public static class FBNetworkMarqueeDragTracker extends AdvancedMarqueeDragTracker {
 
 		@Override
-		protected Collection<EditPart> calculateMarqueeSelectedEditParts() {
-			final Collection<EditPart> marqueeSelectedEditParts = super.calculateMarqueeSelectedEditParts();
+		protected Collection<? extends GraphicalEditPart> calculateMarqueeSelectedEditParts() {
+			final Collection<? extends GraphicalEditPart> marqueeSelectedEditParts = super.calculateMarqueeSelectedEditParts();
 			// only report connections and fbelements, isMarqueeslectable can not be used
 			// for that as it affects connection selection in the wrong way
 			return marqueeSelectedEditParts.stream().filter(ep -> ep instanceof ConnectionEditPart && ep.isSelectable()

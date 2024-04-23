@@ -102,9 +102,14 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 			final CommandProvider commandProvider) {
 		return ev -> {
 			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
-			final int[] rows = selectionLayer.getFullySelectedRowPositions();
 			final ListDataProvider<?> dataProvider = (ListDataProvider<?>) NatTableWidgetFactory.getDataLayer(table)
 					.getDataProvider();
+			if (!selectionLayer.hasRowSelection()
+					|| selectionLayer.isRowPositionSelected(dataProvider.getRowCount() - 1)) {
+				return;
+			}
+
+			final int[] rows = selectionLayer.getFullySelectedRowPositions();
 			final List<Object> rowObjects = new ArrayList<>();
 			for (final int row : rows) {
 				if (row >= 0) {
@@ -116,9 +121,9 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 				executeCompoundCommandForList(table, rowObjects, executor, commandProvider);
 				for (final int row : rows) {
 					if (row == dataProvider.getRowCount() - 1) {
-						selectionLayer.selectRow(0, row, false, true);
+						selectionLayer.selectRow(0, row, true, true);
 					} else {
-						selectionLayer.selectRow(0, row + 1, false, true);
+						selectionLayer.selectRow(0, row + 1, true, true);
 					}
 				}
 			}

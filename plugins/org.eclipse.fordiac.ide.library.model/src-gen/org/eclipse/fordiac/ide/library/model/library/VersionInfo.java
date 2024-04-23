@@ -76,7 +76,7 @@ public interface VersionInfo extends EObject {
 	 * @return the value of the '<em>Version</em>' attribute.
 	 * @see #setVersion(String)
 	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getVersionInfo_Version()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
+	 * @model dataType="org.eclipse.fordiac.ide.library.model.library.VersionType" required="true"
 	 *        extendedMetaData="kind='attribute' name='Version' namespace='##targetNamespace'"
 	 * @generated
 	 */
