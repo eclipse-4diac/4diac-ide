@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,6 +53,7 @@ import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloadManager;
 import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
@@ -246,7 +248,7 @@ public class LibraryLinker implements ILibraryLinker {
 		final InstanceUpdateDialog updateDialog = new InstanceUpdateDialog(null, Messages.InstanceUpdate, null,
 				Messages.UpdatedInstances, MessageDialog.NONE, new String[] { Messages.Confirm }, 0,
 				FBUpdater.getUpdatedElements());
-		updateDialog.open();
+		Display.getDefault().syncExec(updateDialog::open);
 	}
 
 	@Override
@@ -428,18 +430,19 @@ public class LibraryLinker implements ILibraryLinker {
 			final GitLabDownloadManager downloadManager = new GitLabDownloadManager(url, token);
 			downloadManager.fetchProjectsAndPackages();
 			if (downloadManager.getPackagesAndLeaves().containsKey(libSymbolicName)) {
-				downloadManager.getPackagesAndLeaves().get(libSymbolicName).forEach(l -> {
-					if (versionComparator.contains(libVersion, l.getVersion())) {
-						try {
-							final File file = downloadManager.packageDownloader(l.getProject(), l.getPackage());
-							if (file != null) {
-								extractLibrary(file, null);
+				downloadManager.getPackagesAndLeaves().get(libSymbolicName).stream()
+						.filter(l -> versionComparator.contains(libVersion, l.getVersion())).sorted(Comparator
+								.comparing(LeafNode::getVersion, (o1, o2) -> -versionComparator.compare(o1, o2)))
+						.findFirst().ifPresent(l -> {
+							try {
+								final File file = downloadManager.packageDownloader(l.getProject(), l.getPackage());
+								if (file != null) {
+									extractLibrary(file, null);
+								}
+							} catch (final IOException e) {
+								FordiacLogHelper.logError(e.getMessage(), e);
 							}
-						} catch (final IOException e) {
-							FordiacLogHelper.logError(e.getMessage(), e);
-						}
-					}
-				});
+						});
 			}
 		}
 	}
