@@ -13,7 +13,6 @@
  *******************************************************************************/
 package aimirim.fordiac.ide.deployment.uao;
 
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -53,7 +52,6 @@ import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFrame;
-import com.google.gson.JsonObject;
 
 import aimirim.fordiac.ide.deployment.uao.helpers.UAOClient;
 
@@ -75,7 +73,6 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	private ConnectionStatus connectionStatus;
 	private final Device device;
 	private final UAOClient client;
-	private int reqid,msgnr;
 	private final List<IDeploymentListener> listeners = new ArrayList<>();
 	
 	/** Connection Status callback definitions */
@@ -94,8 +91,6 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	 * @param dev The current device.*/
 	public UAODeploymentExecutor(final Device dev) {
 		this.device = dev;
-		this.msgnr = 0;
-		this.reqid = 1;
 		this.client = createClient(dev);
 		this.connectionStatus = ConnectionStatus.NOT_CONNECTED;
 		this.DeployXml = createInitialXml(dev);
@@ -107,26 +102,24 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 		return device;
 	}
 	
-
-	/** Check if the device is connected.
-	 * @return True if connected.*/
 	@Override
 	public boolean isConnected() {
 		return connectionStatus == ConnectionStatus.CONNECTED;
 	}
 
-	/** Tries to connect with device.*/
 	@Override
 	public void connect() throws DeploymentException {
 		FordiacLogHelper.logInfo("UAODeploymentExecutor | connect");		
 		try {
 			client.connect();
+			if (client.connectionCheck()) {
+				client.authenticate();
+			}
 		} catch (WebSocketException e) {
 			throw new DeploymentException(e.getMessage());
 		}
 	}
 
-	/** Check connection and Disconnect the device.*/
 	@Override
 	public void disconnect() throws DeploymentException {
 		if(client.isOpen()) {
@@ -176,7 +169,8 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	}
 
 	@Override
-	public void createFBInstance(final FBDeploymentData fbData, final Resource res) {
+	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws DeploymentException {
+		client.connectionCheck();
 		final FBNetworkElement fb = fbData.getFb();
 		FordiacLogHelper.logInfo("UAODeploymentExecutor | createFBInstance "+fbData.getPrefix()+fb.getName()); //$NON-NLS-1$
 		fbNetwork.appendChild(
@@ -187,6 +181,7 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	@Override
 	public void writeFBParameter(final Resource resource, final String value, final FBDeploymentData fbData,
 			final VarDeclaration varDecl) throws DeploymentException {
+		client.connectionCheck();
 		FordiacLogHelper.logInfo("UAODeploymentExecutor | writeFBParameter "+varDecl.getName()+"="+value); //$NON-NLS-1$
 		final FBNetworkElement fb = fbData.getFb();
 		String fbFullName = fbData.getPrefix()+fb.getName();
@@ -199,6 +194,7 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	@Override
 	public void createConnection(final Resource res, final ConnectionDeploymentData connData)
 			throws DeploymentException {
+		client.connectionCheck();
 		FordiacLogHelper.logInfo("UAODeploymentExecutor | createConnection"); //$NON-NLS-1$
 		final IInterfaceElement sourceData = connData.getSource();
 		final IInterfaceElement destinationData = connData.getDestination();
@@ -248,7 +244,7 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	@Override
 	public void startDevice(final Device dev) throws DeploymentException {
 		FordiacLogHelper.logInfo("UAODeploymentExecutor | startDevice"); //$NON-NLS-1$
-		_connectionCheck();
+		client.connectionCheck();
 	}
 
 	@Override
@@ -279,7 +275,7 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	@Override
 	public List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> queryResources() throws DeploymentException {
 		FordiacLogHelper.logInfo("UAODeploymentExecutor | queryResources"); //$NON-NLS-1$
-		_connectionCheck();
+		client.connectionCheck();
 		return Collections.emptyList();
 	}
 
@@ -337,60 +333,36 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	/** Creates and configure the UAO connection.
 	 * @param dev The current device.*/
 	private UAOClient createClient(final Device dev) {
+		String mgrId = null;
 		try {
-			String mgrId = DeploymentHelper.getMgrID(dev);
-			// Remove Quotes from string
-			mgrId = mgrId.substring(1, mgrId.length() - 1);
-			boolean ssl = getUseSsl(dev);
-			String wsEndpoint = String.format("ws://%s",mgrId);
-			FordiacLogHelper.logInfo("Connecting to "+wsEndpoint); //$NON-NLS-1$
-			
-			UAOClient newClient = new UAOClient(wsEndpoint,1000,ssl);
-			newClient.addListener(callbacks);
-			
-			return newClient;
-			
+			mgrId = DeploymentHelper.getMgrID(dev);
 		} catch (final DeploymentException e) {
 			FordiacLogHelper.logError(MessageFormat.format(Messages.UAODeploymentExecutor_GetMgrIDFailed, e.getMessage()), e);
-		} catch (IOException e) {
-			FordiacLogHelper.logError(MessageFormat.format(Messages.UAODeploymentExecutor_CreateClientFailed, e.getMessage()), e);
 		}
-		return null;
+		// Remove Quotes from string
+		mgrId = mgrId.substring(1, mgrId.length() - 1);
+		
+		boolean ssl = false;
+		try {
+			ssl = getUseSsl(dev);
+		} catch (DeploymentException e) {
+			FordiacLogHelper.logError(MessageFormat.format(Messages.UAODeploymentExecutor_GetSSLFailed, e.getMessage()), e);
+		}
+		
+		String wsEndpoint = String.format("ws://%s",mgrId);
+		FordiacLogHelper.logInfo("Connecting to "+wsEndpoint); //$NON-NLS-1$
+		
+		UAOClient newClient = null;
+		try {
+			newClient = new UAOClient(wsEndpoint,1000,ssl);
+			newClient.addListener(callbacks);
+		} catch (DeploymentException e) {
+			FordiacLogHelper.logError(MessageFormat.format(Messages.UAODeploymentExecutor_ClientConnectionFailed, e.getMessage()), e);
+		}
+		
+		return newClient;
 	}
 	
-	/** Increment message counter. */
-	private void _incrementCounters() {
-		msgnr +=1;
-		reqid +=1;
-	}
-	
-	/** Build message body.
-	 * @param operation The operation mode to ask the runtime.*/
-	private JsonObject _messageBody(final String operation) {
-		JsonObject REQ = new JsonObject();
-		REQ.addProperty("op",operation);
-		REQ.addProperty("msgnr",msgnr);
-		REQ.addProperty("reqid",reqid);
-		return(REQ);
-	}
-	
-	/** Send data and wait for the response from server.
-	 * @param REQ Request JsonObject.
-	 * @return RESP Response JsonObject received. */
-	private JsonObject _sendReceive(final JsonObject REQ) throws DeploymentException {
-		FordiacLogHelper.logWarning("UAODeploymentExecutor | Sent: "+REQ.toString()); //$NON-NLS-1$
-		JsonObject RESP = client.sendAndWaitResponse(REQ);
-		_incrementCounters();
-		return(RESP);
-	}
-	
-	/** Send a status request and check if the response is OK.
-	 * @return True if received a good response from the runtime*/
-	private boolean _connectionCheck() throws DeploymentException {
-		JsonObject REQ = _messageBody("stat");
-		JsonObject RESP = _sendReceive(REQ);
-		return(RESP.get("result").getAsInt()==200);
-	}
 	
 	/** Build the xml document to keep the deploy data.
 	 * @param dev Device to deploy.

@@ -21,6 +21,7 @@ public final class Messages extends NLS {
 	public static String UAODeploymentExecutor_ClientConnectionFailed;
 	public static String UAODeploymentExecutor_URIParseFailed;
 	public static String UAODeploymentExecutor_GetMgrIDFailed;
+	public static String UAODeploymentExecutor_GetSSLFailed;
 	public static String UAODeploymentExecutor_RequestInterrupted;
 	public static String UAODeploymentExecutor_CreateFBInstanceFailedNoTypeFound;
 	public static String UAODeploymentExecutor_ClientRequestTimeout;
