@@ -17,19 +17,15 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import org.eclipse.draw2d.ConnectionAnchor;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.BorderCrossingReconnectCommand;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
@@ -81,12 +77,12 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		final var newPin = (IInterfaceElement) getHost().getModel();
 
 		// border crossing source reconnect
-		if (isSourceReconnect && isBorderCrossing(targetPin, newPin)) {
+		if (isSourceReconnect && isBorderCrossing(newPin, targetPin, conn.getFBNetwork())) {
 			return new BorderCrossingReconnectCommand(newPin, targetPin, conn, true);
 		}
 
 		// border crossing destination reconnect
-		if (!isSourceReconnect && isBorderCrossing(sourcePin, newPin)) {
+		if (!isSourceReconnect && isBorderCrossing(newPin, sourcePin, conn.getFBNetwork())) {
 			return new BorderCrossingReconnectCommand(sourcePin, newPin, conn, false);
 		}
 
@@ -100,15 +96,9 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		return null;
 	}
 
-	private static boolean isBorderCrossing(final IInterfaceElement ie1, final IInterfaceElement ie2) {
-		return getContainer(ie1.getFBNetworkElement()) != getContainer(ie2.getFBNetworkElement());
-	}
-
-	private static EObject getContainer(final FBNetworkElement elem) {
-		if (elem instanceof final SubApp subapp) {
-			return subapp;
-		}
-		return FBNetworkElementHelper.getContainerSubappOfFB((FB) elem);
+	private static boolean isBorderCrossing(final IInterfaceElement srcPin, final IInterfaceElement destPin,
+			final FBNetwork fbNetwork) {
+		return (null == checkConnectionParent(srcPin, destPin, fbNetwork));
 	}
 
 	protected FBNetwork getParentNetwork() {
