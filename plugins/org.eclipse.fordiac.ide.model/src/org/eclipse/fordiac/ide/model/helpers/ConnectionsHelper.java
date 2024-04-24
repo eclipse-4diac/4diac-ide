@@ -62,8 +62,13 @@ public final class ConnectionsHelper {
 				final FBNetworkElement opDestination = dest.getFBNetworkElement().getOpposite();
 				if (null != opSource && null != opDestination
 						&& opSource.getFbNetwork() == opDestination.getFbNetwork()) {
-					return findConnection(opSource.getInterfaceElement(source.getName()),
-							opDestination.getInterfaceElement(dest.getName()));
+					final IInterfaceElement opSourceIE = opSource.getInterfaceElement(source.getName());
+					final IInterfaceElement opDestIE = opDestination.getInterfaceElement(dest.getName());
+					if (opSourceIE != null && opDestIE != null) {
+						// if we didn't find source or destination at the opposite site we should search
+						// the connection
+						return findConnection(opSourceIE, opDestIE);
+					}
 				}
 			}
 		}
