@@ -79,23 +79,11 @@ public class ExportProjectLibrary extends AbstractExportFBs {
 		typelib = TypeLibraryManager.INSTANCE.getTypeLibrary(getFordiacProject());
 
 		library.getIncludes().getLibraryElement().forEach(elem -> {
-			final String p = replacePattern.matcher(elem.getValue()).replaceAll(match -> {
-				if (match.end() - match.start() > 1) {
-					return doubleStarPattern;
-				}
-				return starPattern;
-			});
-			includePatterns.add(Pattern.compile(p));
+			includePatterns.add(createPattern(elem.getValue()));
 		});
 
 		library.getExcludes().getLibraryElement().forEach(elem -> {
-			final String p = replacePattern.matcher(elem.getValue()).replaceAll(match -> {
-				if (match.end() - match.start() > 1) {
-					return doubleStarPattern;
-				}
-				return starPattern;
-			});
-			excludePatterns.add(Pattern.compile(p));
+			excludePatterns.add(createPattern(elem.getValue()));
 		});
 	}
 
@@ -120,5 +108,15 @@ public class ExportProjectLibrary extends AbstractExportFBs {
 		}
 
 		return files;
+	}
+
+	private static Pattern createPattern(final String raw) {
+		final String p = replacePattern.matcher(raw).replaceAll(match -> {
+			if (match.end() - match.start() > 1) {
+				return doubleStarPattern;
+			}
+			return starPattern;
+		});
+		return Pattern.compile(p);
 	}
 }
