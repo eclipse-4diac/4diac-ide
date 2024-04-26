@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ /*******************************************************************************
+  * Copyright (c) 2024 Primetals Technologies Austria GmbH
+  *
+  * This program and the accompanying materials are made available under the
+  * terms of the Eclipse Public License 2.0 which is available at
+  * http://www.eclipse.org/legal/epl-2.0.
+  *
+  * SPDX-License-Identifier: EPL-2.0
+  *
+  * Contributors:
+  *  Patrick Aigner - initial API and implementation and/or initial documentation
+  *******************************************************************************/
+-->
+
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.fordiac.ide.library.ui.editors.ManifestEditor"
+            extensions="MF"
+            id="org.eclipse.fordiac.ide.library.ui.editors.ManifestEditor"
+            matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy"
+            name="Manifest Editor">
+      </editor>
+      <editorContentTypeBinding
+            contentTypeId="org.eclipse.fordiac.ide.library.ui.manifest"
+            editorId="org.eclipse.fordiac.ide.library.ui.editors.ManifestEditor">
+      </editorContentTypeBinding>
+   </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            file-names="MANIFEST.MF"
+            id="org.eclipse.fordiac.ide.library.ui.manifest"
+            name="Manifest file"
+            priority="normal">
+      </content-type>
+   </extension>
+</plugin>
