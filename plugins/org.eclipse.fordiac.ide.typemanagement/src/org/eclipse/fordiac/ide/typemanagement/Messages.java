@@ -140,6 +140,7 @@ public final class Messages extends NLS {
 	public static String PreviewChange_DeleteChoice;
 	public static String PreviewChange_ChangeToAnyStruct;
 	public static String PreviewChange_ReplaceWithMarker;
+	public static String PreviewChange_NoChange;
 
 	public static String TypeLibrary_ProjectLoadingProblem;
 	public static String TypeLibrary_LibraryLoadingProblem;
@@ -150,6 +151,10 @@ public final class Messages extends NLS {
 	public static String LibraryPage_Version;
 	public static String LibraryPage_Comment;
 	public static String LibraryPage_SymbolicName;
+
+	public static String DeleteLibraryParticipant_Name;
+	public static String DeleteLibraryParticipant_Change_Title;
+	public static String AddLibraryDependency_Change_Title;
 
 	static {
 		// initialize resource bundle

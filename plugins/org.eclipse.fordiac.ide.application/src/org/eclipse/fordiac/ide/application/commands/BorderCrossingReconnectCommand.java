@@ -104,7 +104,8 @@ public class BorderCrossingReconnectCommand extends CompoundCommand {
 	@Override
 	public boolean canExecute() {
 		// equal types
-		if (!source.getClass().equals(target.getClass())) {
+		if (!source.getClass().isAssignableFrom(target.getClass())
+				&& !target.getClass().isAssignableFrom(source.getClass())) {
 			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_ConnectingIncompatibleInterfaceTypes);
 			return false;
 		}
