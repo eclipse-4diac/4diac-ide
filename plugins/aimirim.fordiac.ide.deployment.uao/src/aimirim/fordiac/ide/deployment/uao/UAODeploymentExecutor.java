@@ -62,13 +62,16 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 		CONNECTED, DISCONNECTED, NOT_CONNECTED
 	}
 	
-	private Document DeployXml ;
+	private Document deployXml ;
 	private Element systemElement;
 	private Element deviceElement;
 	private Element resourceElement;
 	private Element fbNetwork;
 	private Element eventConnection;
 	private Element dataConnection;
+	private String snapshotGuid;
+	private String projectGuid;
+	private int MAX_AUTH_RETRY = 10;
 	
 	private ConnectionStatus connectionStatus;
 	private final Device device;
@@ -93,7 +96,7 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 		this.device = dev;
 		this.client = createClient(dev);
 		this.connectionStatus = ConnectionStatus.NOT_CONNECTED;
-		this.DeployXml = createInitialXml(dev);
+		this.deployXml = createInitialXml(dev);
 	}
 
 	/** Returns the initialized device.
@@ -109,11 +112,31 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public void connect() throws DeploymentException {
-		FordiacLogHelper.logInfo("UAODeploymentExecutor | connect");		
+		boolean success = false;
+		int retry = 0;
+		String error = "";
+		
 		try {
 			client.connect();
 			if (client.connectionCheck()) {
-				client.authenticate();
+				// XXX: Sometimes the credentials get denied by the runtime
+				//      for some unknown reason. To avoid a new click on deploy,
+				//      some retries are performed reseting the client key pair.
+				while(retry<MAX_AUTH_RETRY) {
+					try {
+						success = client.authenticate();
+						if (success) {break;}
+					} catch (DeploymentException e) {
+						// It usually works on the first three retries
+						client.regenKeyPair();
+						error = e.getMessage();
+						FordiacLogHelper.logInfo("UAODeploymentExecutor | Auth retry "+(retry+1));
+					}
+					retry++;				}
+				
+				if (retry>=MAX_AUTH_RETRY) {
+					throw new DeploymentException("Max Authentication Retries exceeded. "+error);
+				}
 			}
 		} catch (WebSocketException e) {
 			throw new DeploymentException(e.getMessage());
@@ -144,14 +167,13 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	
 	@Override
 	public void createResource(final Resource resource) throws DeploymentException {
-		FordiacLogHelper.logInfo("UAODeploymentExecutor | createResource "+resource.getName()); //$NON-NLS-1$
-        resourceElement = DeployXml.createElement("Resource");
+        resourceElement = deployXml.createElement("Resource");
         resourceElement.setAttribute("Name", resource.getName());
         resourceElement.setAttribute("Type", resource.getTypeName());
         
-        fbNetwork = DeployXml.createElement("FBNetwork");
-        eventConnection = DeployXml.createElement("EventConnections");
-        dataConnection = DeployXml.createElement("DataConnections");
+        fbNetwork = deployXml.createElement("FBNetwork");
+        eventConnection = deployXml.createElement("EventConnections");
+        dataConnection = deployXml.createElement("DataConnections");
         
         resourceElement.appendChild(fbNetwork);
         deviceElement.appendChild(resourceElement);
@@ -159,12 +181,12 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public void writeResourceParameter(final Resource resource, final String parameter, final String value) throws DeploymentException {
-		FordiacLogHelper.logWarning("UAODeploymentExecutor | writeResourceParameter "+parameter+"="+value); //$NON-NLS-1$
+//		FordiacLogHelper.logWarning("UAODeploymentExecutor | writeResourceParameter "+parameter+"="+value); //$NON-NLS-1$
 	}
 
 	@Override
 	public void writeDeviceParameter(final Device device, final String parameter, final String value) throws DeploymentException {
-		FordiacLogHelper.logWarning("UAODeploymentExecutor | writeDeviceParameter "+parameter+"="+value); //$NON-NLS-1$
+//		FordiacLogHelper.logWarning("UAODeploymentExecutor | writeDeviceParameter "+parameter+"="+value); //$NON-NLS-1$
 		
 	}
 
@@ -172,9 +194,9 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws DeploymentException {
 		client.connectionCheck();
 		final FBNetworkElement fb = fbData.getFb();
-		FordiacLogHelper.logInfo("UAODeploymentExecutor | createFBInstance "+fbData.getPrefix()+fb.getName()); //$NON-NLS-1$
+		
 		fbNetwork.appendChild(
-			createFB(fbData.getPrefix()+fb.getName(), fb.getTypeName())
+			createFB(prefixUAO(fbData.getPrefix())+fb.getName(), fb.getTypeName())
 		);
 	}
 
@@ -182,9 +204,9 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	public void writeFBParameter(final Resource resource, final String value, final FBDeploymentData fbData,
 			final VarDeclaration varDecl) throws DeploymentException {
 		client.connectionCheck();
-		FordiacLogHelper.logInfo("UAODeploymentExecutor | writeFBParameter "+varDecl.getName()+"="+value); //$NON-NLS-1$
 		final FBNetworkElement fb = fbData.getFb();
-		String fbFullName = fbData.getPrefix()+fb.getName();
+		
+		String fbFullName = prefixUAO(fbData.getPrefix())+fb.getName();
 		
 		findFbByName(fbFullName).appendChild(
 			createParameter(varDecl.getName(),value)
@@ -195,7 +217,6 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	public void createConnection(final Resource res, final ConnectionDeploymentData connData)
 			throws DeploymentException {
 		client.connectionCheck();
-		FordiacLogHelper.logInfo("UAODeploymentExecutor | createConnection"); //$NON-NLS-1$
 		final IInterfaceElement sourceData = connData.getSource();
 		final IInterfaceElement destinationData = connData.getDestination();
 
@@ -204,11 +225,11 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 			throw new DeploymentException(MessageFormat
 					.format(Messages.UAODeploymentExecutor_CreateConnectionFailedNoDataFound, res.getName()));
 		}
-		
+
 		final FBNetworkElement sourceFB = sourceData.getFBNetworkElement();
 		final FBNetworkElement destinationFB = destinationData.getFBNetworkElement();
-		final String source = String.format("%s%s.%s",connData.getSourcePrefix(),sourceFB.getName(),sourceData.getName());  
-		final String destination = String.format("%s%s.%s",connData.getDestinationPrefix(),destinationFB.getName(),destinationData.getName());
+		final String source = String.format("%s%s.%s",prefixUAO(connData.getSourcePrefix()),sourceFB.getName(),sourceData.getName());  
+		final String destination = String.format("%s%s.%s",prefixUAO(connData.getDestinationPrefix()),destinationFB.getName(),destinationData.getName());
 		
 		if (sourceData.getTypeName()=="Event" && destinationData.getTypeName()=="Event") {
 			eventConnection.appendChild(
@@ -223,15 +244,13 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public void startFB(final Resource res, final FBDeploymentData fbData) throws DeploymentException {
-		FordiacLogHelper.logInfo("UAODeploymentExecutor | startFB"); //$NON-NLS-1$
-		
+//		FordiacLogHelper.logInfo("UAODeploymentExecutor | startFB"); //$NON-NLS-1$
 	}
 
 	@Override
 	public void startResource(final Resource resource) throws DeploymentException {
-		FordiacLogHelper.logInfo("UAODeploymentExecutor | startResource"); //$NON-NLS-1$
 		// XXX: UAO Runtime does now have an implicit START block. It needs to be deployed.
-		//		To fix this a new resource that does not already have a START FB is needed.
+		//      To fix this a new resource that does not already have a START FB is needed.
 		FB fb = resource.getFBNetwork().getFBNamed("START");
 		if (fb!=null) {
 			fbNetwork.appendChild(createFB(fb.getName(),fb.getTypeName()));	
@@ -243,38 +262,43 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public void startDevice(final Device dev) throws DeploymentException {
-		FordiacLogHelper.logInfo("UAODeploymentExecutor | startDevice"); //$NON-NLS-1$
 		client.connectionCheck();
+		String from = client.getDeviceState();
+		client.deploy(deployXml, projectGuid, snapshotGuid);
+		String to = client.getDeviceState();
+		FordiacLogHelper.logInfo("UAODeploymentExecutor | Runtime state from \""+from+"\" to \""+to+"\"");
 	}
 
 	@Override
 	public void deleteResource(final String resName) throws DeploymentException {
-		throw new DeploymentException(MessageFormat.format(
-			Messages.UAODeploymentExecutor_CommandNotImplemented, "deleteResource"));
+		client.connectionCheck();
+		String from = client.getDeviceState();
+		client.flow_command("clean");
+		String to = client.getDeviceState();
+		FordiacLogHelper.logInfo("UAODeploymentExecutor | Runtime state from \""+from+"\" to \""+to+"\"");
 	}
 
 	@Override
 	public void deleteFB(final Resource res, final FBDeploymentData fbData) throws DeploymentException {
 		throw new DeploymentException(MessageFormat.format(
-				Messages.UAODeploymentExecutor_CommandNotImplemented, "deleteFB"));
+				Messages.UAODeploymentExecutor_FeatureNotImplemented, "Online Change Delete FB"));
 	}
 
 	@Override
 	public void deleteConnection(final Resource res, final ConnectionDeploymentData connData) throws DeploymentException {
 		throw new DeploymentException(MessageFormat.format(
-			Messages.UAODeploymentExecutor_CommandNotImplemented, "deleteConnection"));
+			Messages.UAODeploymentExecutor_FeatureNotImplemented, "Online Change Delete Connection"));
 		
 	}
 
 	@Override
 	public void killDevice(final Device dev) throws DeploymentException {
-		throw new DeploymentException(MessageFormat.format(
-				Messages.UAODeploymentExecutor_CommandNotImplemented, "killDevice"));
+		client.connectionCheck();
+		client.restart();
 	}
 
 	@Override
 	public List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> queryResources() throws DeploymentException {
-		FordiacLogHelper.logInfo("UAODeploymentExecutor | queryResources"); //$NON-NLS-1$
 		client.connectionCheck();
 		return Collections.emptyList();
 	}
@@ -314,7 +338,17 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 				Messages.UAODeploymentExecutor_FeatureNotImplemented, "Value Force"));
 	}
 
-
+	/** Parse the 4diac '.' prefix to the UAO '_' one
+	 * @param original 4diac FB prefix.
+	 * @return UAO type of prefix.*/
+	private String prefixUAO(String original) {
+		String uaoFormat = original;
+		if(original.contains(".")) {
+			uaoFormat = original.replace(".", "_");
+		}
+		return(uaoFormat);
+	}
+	
 	/** Extract SSL information from device variables.
 	 * @param dev The current device.
 	 * @return useSSL configured value.*/
@@ -349,12 +383,9 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 			FordiacLogHelper.logError(MessageFormat.format(Messages.UAODeploymentExecutor_GetSSLFailed, e.getMessage()), e);
 		}
 		
-		String wsEndpoint = String.format("ws://%s",mgrId);
-		FordiacLogHelper.logInfo("Connecting to "+wsEndpoint); //$NON-NLS-1$
-		
 		UAOClient newClient = null;
 		try {
-			newClient = new UAOClient(wsEndpoint,1000,ssl);
+			newClient = new UAOClient(mgrId,1000,ssl);
 			newClient.addListener(callbacks);
 		} catch (DeploymentException e) {
 			FordiacLogHelper.logError(MessageFormat.format(Messages.UAODeploymentExecutor_ClientConnectionFailed, e.getMessage()), e);
@@ -396,13 +427,16 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	    String projName = dev.getTypeEntry().getTypeLibrary().getSystems().keySet().toArray()[0].toString();
 	   
 	    Element sysEl = doc.createElement("System");
-
+	    
+	    this.projectGuid = UUID.nameUUIDFromBytes(projName.getBytes()).toString();
+	    this.snapshotGuid = UUID.randomUUID().toString();
+	    
 	    sysEl.setAttribute("ProjectName", projName); //4diac Project Name
-	    sysEl.setAttribute("ProjectGuid", UUID.nameUUIDFromBytes(projName.getBytes()).toString());
+	    sysEl.setAttribute("ProjectGuid", projectGuid);
 	    sysEl.setAttribute("BuildTime", dtf.format(now));
 	    sysEl.setAttribute("DeployTime", "");
 	    sysEl.setAttribute("StudioVersion", "Eclipse 4diac IDE v"+version); // 4diac version info
-	    sysEl.setAttribute("SnapshotGuid", UUID.randomUUID().toString());
+	    sysEl.setAttribute("SnapshotGuid", snapshotGuid);
         
         return(sysEl);
 	}
@@ -439,7 +473,7 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	 * @param Value
 	 * @return */
 	private Element createParameter(String Name, String Value) {
-		Element param = DeployXml.createElement("Parameter");
+		Element param = deployXml.createElement("Parameter");
 		param.setAttribute("Name", Name);
 		param.setAttribute("Value", Value);
 		return(param);
@@ -460,7 +494,7 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	 * @param Namespace where the runtime will find the implementation
 	 * @return FB element.*/
 	private Element createFB(String Name, String Type, String Namespace) {
-		Element fbEl = DeployXml.createElement("FB");
+		Element fbEl = deployXml.createElement("FB");
         fbEl.setAttribute("Name", Name);
         fbEl.setAttribute("Type", Type);
         fbEl.setAttribute("Namespace", Namespace);
@@ -472,23 +506,11 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	 * @param Dest Name of the connection destination.
 	 * @return XML element.*/
 	private Element createConnection(String Src, String Dest) {
-		Element conEl = DeployXml.createElement("Connection");
+		Element conEl = deployXml.createElement("Connection");
 		conEl.setAttribute("Comment", "");
 		conEl.setAttribute("Source", Src);
 		conEl.setAttribute("Destination", Dest);
         return(conEl);
 	}
 	
-//	/** Debug Function to export the internal XML file.
-//	 * @param doc XML Document.
-//	 * @param output file. */
-//    private void writeXml(Document doc, OutputStream output) throws TransformerException {
-//        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-//        Transformer transformer = transformerFactory.newTransformer();
-//        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-//        DOMSource source = new DOMSource(doc);
-//        StreamResult result = new StreamResult(output);
-//        transformer.transform(source, result);
-//    }
-    
 }

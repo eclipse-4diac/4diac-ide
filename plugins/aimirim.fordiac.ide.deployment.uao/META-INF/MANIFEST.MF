@@ -11,5 +11,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.deployment,
  com.google.gson;bundle-version="2.10.1",
  com.neovisionaries.ws.client;bundle-version="2.14.0",
- bcprov;bundle-version="1.77.0"
+ bcprov;bundle-version="1.77.0",
+ org.apache.httpcomponents.httpcore;bundle-version="4.4.16",
+ org.apache.httpcomponents.httpclient;bundle-version="4.5.14",
+ org.apache.commons.commons-codec;bundle-version="1.16.0"
 Export-Package: aimirim.fordiac.ide.deployment.uao
