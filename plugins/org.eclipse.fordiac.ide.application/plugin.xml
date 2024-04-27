@@ -976,13 +976,15 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.openType"
                style="push">
-        <visibleWhen checkEnabled="true">
+        <visibleWhen checkEnabled="false">
           <with variable="selection" >
             <count value="1" />
             <iterate ifEmpty="false">
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
                 <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
+                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
               </or>
             </iterate>
           </with>
@@ -1485,6 +1487,8 @@
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
                 <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
+                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
               </or>
             </iterate>
           </with>
@@ -1499,13 +1503,15 @@
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.openType">
-        <visibleWhen checkEnabled="false">
+        <visibleWhen checkEnabled="true">
           <with variable="selection" >
             <count value="1" />
             <iterate ifEmpty="false">
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
                 <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
+                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
               </or>
             </iterate>
           </with>
