@@ -464,14 +464,6 @@
         <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.checkifConnectionBroken(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="updateRoutingData" lowerBound="1">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="final ConnectionRoutingData newRoutingData = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createConnectionRoutingData();&#xA;newRoutingData.setDx1(dx1);&#xA;newRoutingData.setDy(dy);&#xA;newRoutingData.setDx2(dx2);&#xA;setRoutingData(newRoutingData);"/>
-      </eAnnotations>
-      <eParameters name="dx1" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
-      <eParameters name="dy" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
-      <eParameters name="dx2" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
-    </eOperations>
     <eOperations name="isInterfaceConnection" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isInterfaceConnection(this);"/>
@@ -655,34 +647,34 @@
   <eClassifiers xsi:type="ecore:EClass" name="ConnectionRoutingData">
     <eOperations name="is1SegementData" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return getDx1() == 0;"/>
+        <details key="body" value="return getDx1() == 0.0;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="is3SegementData" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return getDx1() != 0 &amp;&amp; getDy() == 0;"/>
+        <details key="body" value="return getDx1() != 0.0 &amp;&amp; getDy() == 0.0;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="is5SegementData" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return getDx1() != 0 &amp;&amp; getDy() != 0;"/>
+        <details key="body" value="return getDx1() != 0.0 &amp;&amp; getDy() != 0.0;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dx1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dx1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double"
         defaultValueLiteral="0">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="dx1"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dx2" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dx2" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double"
         defaultValueLiteral="0">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="dx2"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dy" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dy" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double"
         defaultValueLiteral="0">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>

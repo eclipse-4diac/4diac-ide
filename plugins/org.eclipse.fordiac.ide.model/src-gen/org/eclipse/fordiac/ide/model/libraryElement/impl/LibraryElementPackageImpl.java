@@ -4409,11 +4409,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(connectionEClass, null, "checkIfConnectionBroken", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(connectionEClass, null, "updateRoutingData", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, theXMLTypePackage.getInt(), "dx1", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, theXMLTypePackage.getInt(), "dy", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, theXMLTypePackage.getInt(), "dx2", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
 		addEOperation(connectionEClass, ecorePackage.getEBoolean(), "isInterfaceConnection", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(connectionEClass, ecorePackage.getEBoolean(), "validateMissingSource", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
@@ -4516,9 +4511,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(connectionRoutingDataEClass, ConnectionRoutingData.class, "ConnectionRoutingData", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getConnectionRoutingData_Dx1(), theXMLTypePackage.getInt(), "dx1", "0", 0, 1, ConnectionRoutingData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
-		initEAttribute(getConnectionRoutingData_Dx2(), theXMLTypePackage.getInt(), "dx2", "0", 0, 1, ConnectionRoutingData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
-		initEAttribute(getConnectionRoutingData_Dy(), theXMLTypePackage.getInt(), "dy", "0", 0, 1, ConnectionRoutingData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getConnectionRoutingData_Dx1(), theXMLTypePackage.getDouble(), "dx1", "0", 0, 1, ConnectionRoutingData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getConnectionRoutingData_Dx2(), theXMLTypePackage.getDouble(), "dx2", "0", 0, 1, ConnectionRoutingData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getConnectionRoutingData_Dy(), theXMLTypePackage.getDouble(), "dy", "0", 0, 1, ConnectionRoutingData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 		initEAttribute(getConnectionRoutingData_NeedsValidation(), theXMLTypePackage.getBoolean(), "needsValidation", null, 0, 1, ConnectionRoutingData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(connectionRoutingDataEClass, ecorePackage.getEBoolean(), "is1SegementData", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
@@ -5910,6 +5905,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
+		  (connectionEClass.getEOperations().get(6),
+		   source,
+		   new String[] {
+			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
 		  (connectionEClass.getEOperations().get(7),
 		   source,
 		   new String[] {
@@ -5965,12 +5966,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   });
 		addAnnotation
 		  (connectionEClass.getEOperations().get(16),
-		   source,
-		   new String[] {
-			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
-		   });
-		addAnnotation
-		  (connectionEClass.getEOperations().get(17),
 		   source,
 		   new String[] {
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$

@@ -44,13 +44,13 @@ public interface ConnectionRoutingData extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Dx1</em>' attribute.
-	 * @see #setDx1(int)
+	 * @see #setDx1(double)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnectionRoutingData_Dx1()
-	 * @model default="0" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model default="0" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 *        extendedMetaData="kind='attribute' name='dx1'"
 	 * @generated
 	 */
-	int getDx1();
+	double getDx1();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDx1 <em>Dx1</em>}' attribute.
@@ -60,7 +60,7 @@ public interface ConnectionRoutingData extends EObject {
 	 * @see #getDx1()
 	 * @generated
 	 */
-	void setDx1(int value);
+	void setDx1(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Dx2</b></em>' attribute.
@@ -68,13 +68,13 @@ public interface ConnectionRoutingData extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Dx2</em>' attribute.
-	 * @see #setDx2(int)
+	 * @see #setDx2(double)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnectionRoutingData_Dx2()
-	 * @model default="0" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model default="0" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 *        extendedMetaData="kind='attribute' name='dx2'"
 	 * @generated
 	 */
-	int getDx2();
+	double getDx2();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDx2 <em>Dx2</em>}' attribute.
@@ -84,7 +84,7 @@ public interface ConnectionRoutingData extends EObject {
 	 * @see #getDx2()
 	 * @generated
 	 */
-	void setDx2(int value);
+	void setDx2(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Dy</b></em>' attribute.
@@ -92,13 +92,13 @@ public interface ConnectionRoutingData extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Dy</em>' attribute.
-	 * @see #setDy(int)
+	 * @see #setDy(double)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnectionRoutingData_Dy()
-	 * @model default="0" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model default="0" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 *        extendedMetaData="kind='attribute' name='dy'"
 	 * @generated
 	 */
-	int getDy();
+	double getDy();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData#getDy <em>Dy</em>}' attribute.
@@ -108,7 +108,7 @@ public interface ConnectionRoutingData extends EObject {
 	 * @see #getDy()
 	 * @generated
 	 */
-	void setDy(int value);
+	void setDy(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Needs Validation</b></em>' attribute.
