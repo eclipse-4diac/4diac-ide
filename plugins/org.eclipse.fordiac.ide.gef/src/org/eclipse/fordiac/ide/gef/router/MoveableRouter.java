@@ -26,13 +26,20 @@ import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.policies.AdjustConnectionEditPolicy;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.gef.EditPolicy;
 
 public class MoveableRouter extends BendpointConnectionRouter implements BendpointPolicyRouter {
 
-	public static final int MIN_CONNECTION_FB_DISTANCE = 12;
+	public static final int MIN_CONNECTION_FB_DISTANCE_SCREEN = 12;
+	public static final double MIN_CONNECTION_FB_DISTANCE_IEC61499 = fromScreen(MIN_CONNECTION_FB_DISTANCE_SCREEN);
+
+	private static final int DOUBLE_MIN_CONNECTION_FB_DISTANCE_SCREEN = 2 * MIN_CONNECTION_FB_DISTANCE_SCREEN;
+	private static final double DOUBLE_MIN_CONNECTION_FB_DISTANCE_IEC61499 = fromScreen(
+			DOUBLE_MIN_CONNECTION_FB_DISTANCE_SCREEN);
+
 	private static final PrecisionPoint START_POINT = new PrecisionPoint();
 	private static final PrecisionPoint END_POINT = new PrecisionPoint();
 
@@ -41,8 +48,8 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 		final PointList points = conn.getPoints();
 		points.removeAllPoints();
 
-		if (conn instanceof HideableConnection && ((HideableConnection) conn).getModel() != null) {
-			handleHideableConnection((HideableConnection) conn, points);
+		if (conn instanceof final HideableConnection hconn && hconn.getModel() != null) {
+			handleHideableConnection(hconn, points);
 		} else {
 			// During connection creation we don't have a right connection and no model but
 			// we want to provide the same routing as it would be one.
@@ -72,15 +79,14 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 	}
 
 	private static boolean invalidOneSegmentConnection(final ConnectionRoutingData routingData) {
-		// check if we have a 1 line that should be something else (e.g., after connection creation, problems with
-		// automatic layout generation)
-		return routingData.getDx1() == 0
-				&& (START_POINT.y != END_POINT.y || (START_POINT.x > END_POINT.x));
+		// check if we have a 1 line that should be something else (e.g., after
+		// connection creation, problems with automatic layout generation)
+		return routingData.getDx1() == 0 && (START_POINT.y != END_POINT.y || (START_POINT.x > END_POINT.x));
 	}
 
 	private static boolean needsSwap(final Connection conn) {
-		if (conn.getSourceAnchor() instanceof FixedAnchor) {
-			return ((FixedAnchor) conn.getSourceAnchor()).isInput();
+		if (conn.getSourceAnchor() instanceof final FixedAnchor fixedAnchor) {
+			return fixedAnchor.isInput();
 		}
 		return false;
 	}
@@ -108,21 +114,21 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 	private static void createBendPointList(final Point sourceP, final Point destP,
 			final ConnectionRoutingData routingData, final PointList points) {
 		if (0 != routingData.getDx1()) {
-			points.addPoint(sourceP.x + routingData.getDx1(), sourceP.y);
+			points.addPoint(sourceP.x + toScreen(routingData.getDx1()), sourceP.y);
 			if (0 == routingData.getDy()) {
 				// we have a three segment connection
-				points.addPoint(new Point(sourceP.x + routingData.getDx1(), destP.y));
+				points.addPoint(sourceP.x + toScreen(routingData.getDx1()), destP.y);
 			} else {
 				// we have a five segment connection
-				points.addPoint(new Point(sourceP.x + routingData.getDx1(), sourceP.y + routingData.getDy()));
-				points.addPoint(new Point(destP.x - (routingData.getDx2()), sourceP.y + routingData.getDy()));
-				points.addPoint(new Point(destP.x - (routingData.getDx2()), destP.y));
+				points.addPoint(sourceP.x + toScreen(routingData.getDx1()), sourceP.y + toScreen(routingData.getDy()));
+				points.addPoint(destP.x - toScreen(routingData.getDx2()), sourceP.y + toScreen(routingData.getDy()));
+				points.addPoint(destP.x - toScreen(routingData.getDx2()), destP.y);
 			}
 		}
 	}
 
-	private static void valdidateConnectionRoutingParams(final ConnectionRoutingData routingData,
-			final Point sourceP, final Point destP) {
+	private static void valdidateConnectionRoutingParams(final ConnectionRoutingData routingData, final Point sourceP,
+			final Point destP) {
 		if (0 == routingData.getDx1()) {
 			validate1SegmentConn(routingData, sourceP, destP);
 		} else if ((sourceP.y == destP.y) && !requires5SegementConnection(sourceP, destP)) {
@@ -152,8 +158,8 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 			final Point destP) {
 		if (requires5SegementConnection(sourceP, destP)) {
 			generateInitial5SegmentParams(routingData, sourceP, destP);
-		} else if ((sourceP.x + routingData.getDx1()) > (destP.x - MIN_CONNECTION_FB_DISTANCE)) {
-			routingData.setDx1(destP.x - sourceP.x - MIN_CONNECTION_FB_DISTANCE);
+		} else if ((sourceP.x + toScreen(routingData.getDx1())) > (destP.x - MIN_CONNECTION_FB_DISTANCE_SCREEN)) {
+			routingData.setDx1(fromScreen(destP.x - sourceP.x - MIN_CONNECTION_FB_DISTANCE_SCREEN));
 		}
 	}
 
@@ -168,33 +174,39 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 		}
 	}
 
-	private static void generateInitial3SegmentParams(final ConnectionRoutingData routingData,
-			final Point sourceP, final Point destP) {
-		routingData.setDx1((destP.x - sourceP.x) / 2);
+	private static void generateInitial3SegmentParams(final ConnectionRoutingData routingData, final Point sourceP,
+			final Point destP) {
+		routingData.setDx1(fromScreen((destP.x - sourceP.x) / 2));
 	}
 
-	private static void generateInitial5SegmentParams(final ConnectionRoutingData routingData,
-			final Point sourceP, final Point destP) {
-		routingData.setDx1(MIN_CONNECTION_FB_DISTANCE); // move it of the side of the fb
-		routingData.setDx2(MIN_CONNECTION_FB_DISTANCE); // move it of the side of the fb
-		routingData.setDy((destP.y - sourceP.y) / 2);
+	private static void generateInitial5SegmentParams(final ConnectionRoutingData routingData, final Point sourceP,
+			final Point destP) {
+		routingData.setDx1(MIN_CONNECTION_FB_DISTANCE_IEC61499); // move it of the side of the fb
+		routingData.setDx2(MIN_CONNECTION_FB_DISTANCE_IEC61499); // move it of the side of the fb
+		routingData.setDy(fromScreen((destP.y - sourceP.y) / 2));
 		if (0 == routingData.getDy()) {
 			// if source and dest are on the same height add a bend to it to better show it
-			routingData.setDy(2 * MIN_CONNECTION_FB_DISTANCE);
+			routingData.setDy(DOUBLE_MIN_CONNECTION_FB_DISTANCE_IEC61499);
 		}
 	}
 
 	private static boolean requires5SegementConnection(final Point sourceP, final Point destP) {
-		return sourceP.x >= (destP.x - (2 * MIN_CONNECTION_FB_DISTANCE));
+		return sourceP.x >= (destP.x - DOUBLE_MIN_CONNECTION_FB_DISTANCE_SCREEN);
 	}
 
 	@Override
 	public EditPolicy getBendpointPolicy(final Object modelObject) {
-		if (modelObject instanceof org.eclipse.fordiac.ide.model.libraryElement.Connection) {
-			return new AdjustConnectionEditPolicy(
-					(org.eclipse.fordiac.ide.model.libraryElement.Connection) modelObject);
+		if (modelObject instanceof final org.eclipse.fordiac.ide.model.libraryElement.Connection conn) {
+			return new AdjustConnectionEditPolicy(conn);
 		}
 		return null;
 	}
 
+	private static int toScreen(final double val) {
+		return CoordinateConverter.INSTANCE.iec61499ToScreen(val);
+	}
+
+	private static double fromScreen(final int val) {
+		return CoordinateConverter.INSTANCE.screenToIEC61499(val);
+	}
 }

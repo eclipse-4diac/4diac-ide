@@ -284,14 +284,13 @@ class FBNetworkExporter extends CommonElementExporter {
 		final ConnectionRoutingData routingData = connection.getRoutingData();
 		if (routingData != null && 0 != routingData.getDx1()) {
 			// only export connection routing information if not a straight line
-			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE,
-					CoordinateConverter.INSTANCE.convertTo1499XML(routingData.getDx1()));
+			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE, positionFormater.format(routingData.getDx1()));
 			if (0 != routingData.getDx2()) {
 				// only export the second two if a five segment connection
 				getWriter().writeAttribute(LibraryElementTags.DX2_ATTRIBUTE,
-						CoordinateConverter.INSTANCE.convertTo1499XML(routingData.getDx2()));
+						positionFormater.format(routingData.getDx2()));
 				getWriter().writeAttribute(LibraryElementTags.DY_ATTRIBUTE,
-						CoordinateConverter.INSTANCE.convertTo1499XML(routingData.getDy()));
+						positionFormater.format(routingData.getDy()));
 			}
 		}
 	}

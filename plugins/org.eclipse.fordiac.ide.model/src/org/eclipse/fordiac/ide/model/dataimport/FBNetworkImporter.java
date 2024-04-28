@@ -558,9 +558,9 @@ class FBNetworkImporter extends CommonElementImporter {
 	 * @param value
 	 * @return if value is valid the converted int of that otherwise 0
 	 */
-	private static int parseConnectionValue(final String value) {
+	private static double parseConnectionValue(final String value) {
 		try {
-			return CoordinateConverter.INSTANCE.convertFrom1499XML(value);
+			return Double.parseDouble(value);
 		} catch (final NumberFormatException ex) {
 			return 0;
 		}

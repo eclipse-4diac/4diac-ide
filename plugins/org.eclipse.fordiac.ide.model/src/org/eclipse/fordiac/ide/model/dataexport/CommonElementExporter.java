@@ -182,7 +182,7 @@ public class CommonElementExporter {
 	public static final String LINE_END = "\n"; //$NON-NLS-1$
 	public static final String TAB = "\t"; //$NON-NLS-1$
 	private static final Pattern CDATA_END_PATTERN = Pattern.compile("\\]\\]>"); //$NON-NLS-1$
-	private static final DecimalFormat positionFormater = new DecimalFormat("#.##"); //$NON-NLS-1$
+	protected static final DecimalFormat positionFormater = new DecimalFormat("#.##"); //$NON-NLS-1$
 
 	private final XMLStreamWriter writer;
 	private final ByteBufferOutputStream outputStream;
