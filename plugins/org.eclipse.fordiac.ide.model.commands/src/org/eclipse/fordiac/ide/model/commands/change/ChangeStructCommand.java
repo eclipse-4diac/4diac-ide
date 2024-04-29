@@ -53,8 +53,9 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 	private ChangeStructCommand(final StructManipulator demux, final DataType datatype,
 			final String newVisibleChildren) {
 		super(demux);
-		// use type entry to ensure that the latest version is loaded
-		newStructTypeEntry = datatype.getTypeEntry();
+		// use type entry to ensure that the latest version is loaded, for unconfigured
+		// datatype is null
+		newStructTypeEntry = (datatype != null) ? datatype.getTypeEntry() : null;
 		entry = demux.getTypeEntry();
 		this.newVisibleChildren = newVisibleChildren;
 	}
