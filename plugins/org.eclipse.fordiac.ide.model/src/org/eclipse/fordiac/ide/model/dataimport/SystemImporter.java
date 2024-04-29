@@ -31,7 +31,6 @@ import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
@@ -161,7 +160,7 @@ public class SystemImporter extends CommonElementImporter {
 		getXandY(segment);
 		final String dx1 = getAttributeValue(LibraryElementTags.DX1_ATTRIBUTE);
 		if (null != dx1) {
-			segment.setWidth(CoordinateConverter.INSTANCE.convertFrom1499XML(dx1));
+			segment.setWidth(Double.parseDouble(dx1));
 		}
 
 		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);

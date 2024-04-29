@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011, 2012, 2016, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Keppler University Linz
+ * Copyright (c) 2008, 2024 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Keppler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,7 +10,7 @@
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *               - initial API and implementation and/or initial documentation
  *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
@@ -31,8 +31,8 @@ public class SegmentSetConstraintCommand extends Command {
 	private final Position newPos;
 	private Position oldPos;
 
-	private final int newWidth;
-	private int oldWidth;
+	private final double newWidth;
+	private final double oldWidth;
 
 	/** The request. */
 	private final ChangeBoundsRequest request;
@@ -48,7 +48,8 @@ public class SegmentSetConstraintCommand extends Command {
 		this.segment = segment;
 		this.request = request;
 		newPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(newBounds.x, newBounds.y);
-		newWidth = newBounds.width;
+		newWidth = CoordinateConverter.INSTANCE.screenToIEC61499(newBounds.width);
+		oldWidth = segment.getWidth();
 	}
 
 	/*
@@ -74,7 +75,6 @@ public class SegmentSetConstraintCommand extends Command {
 	@Override
 	public void execute() {
 		oldPos = segment.getPosition();
-		oldWidth = segment.getWidth();
 		setSegementPosAndWidth(newPos, newWidth);
 	}
 
@@ -97,7 +97,7 @@ public class SegmentSetConstraintCommand extends Command {
 		setSegementPosAndWidth(oldPos, oldWidth);
 	}
 
-	private void setSegementPosAndWidth(final Position pos, final int width) {
+	private void setSegementPosAndWidth(final Position pos, final double width) {
 		segment.setPosition(pos);
 		segment.setWidth(width);
 	}
