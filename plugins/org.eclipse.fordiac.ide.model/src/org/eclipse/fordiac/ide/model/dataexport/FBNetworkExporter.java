@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -116,10 +115,8 @@ class FBNetworkExporter extends CommonElementExporter {
 
 		addCommentAttribute(comment.getComment());
 		addXYAttributes(comment);
-		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE,
-				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getWidth()));
-		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE,
-				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getHeight()));
+		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE, positionFormater.format(comment.getWidth()));
+		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE, positionFormater.format(comment.getHeight()));
 
 		if (comment.isInGroup()) {
 			addGroupAttribute(comment.getGroup());
@@ -134,10 +131,8 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private void addGroupAttributes(final Group group) throws XMLStreamException {
-		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE,
-				CoordinateConverter.INSTANCE.convertTo1499XML(group.getWidth()));
-		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE,
-				CoordinateConverter.INSTANCE.convertTo1499XML(group.getHeight()));
+		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE, positionFormater.format(group.getWidth()));
+		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE, positionFormater.format(group.getHeight()));
 		getWriter().writeAttribute(LibraryElementTags.LOCKED_ATTRIBUTE, Boolean.toString(group.isLocked()));
 	}
 
@@ -175,11 +170,11 @@ class FBNetworkExporter extends CommonElementExporter {
 	private void addSubappHeightAndWidthAttributes(final SubApp subApp) throws XMLStreamException {
 		if (subApp.getWidth() != 0) {
 			addAttributeElement(LibraryElementTags.WIDTH_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL,
-					CoordinateConverter.INSTANCE.convertTo1499XML(subApp.getWidth()), null);
+					positionFormater.format(subApp.getWidth()), null);
 		}
 		if (subApp.getHeight() != 0) {
 			addAttributeElement(LibraryElementTags.HEIGHT_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL,
-					CoordinateConverter.INSTANCE.convertTo1499XML(subApp.getHeight()), null);
+					positionFormater.format(subApp.getHeight()), null);
 		}
 	}
 

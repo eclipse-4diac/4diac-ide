@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -298,7 +299,8 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 	}
 
 	private Dimension getGroupSize() {
-		return new Dimension(getModel().getWidth(), getModel().getHeight());
+		return new Dimension(CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getWidth()),
+				CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getHeight()));
 	}
 
 	private GroupContentEditPart getGroupContentEP() {

@@ -33,7 +33,6 @@ import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -157,11 +156,11 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		final String width = getAttributeValue(LibraryElementTags.WIDTH_ATTRIBUTE);
 		if (width != null) {
-			group.setWidth(CoordinateConverter.INSTANCE.convertFrom1499XML(width));
+			group.setWidth(Double.parseDouble(width));
 		}
 		final String height = getAttributeValue(LibraryElementTags.HEIGHT_ATTRIBUTE);
 		if (height != null) {
-			group.setHeight(CoordinateConverter.INSTANCE.convertFrom1499XML(height));
+			group.setHeight(Double.parseDouble(height));
 		}
 		final String locked = getAttributeValue(LibraryElementTags.LOCKED_ATTRIBUTE);
 		if (locked != null) {
@@ -189,11 +188,11 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		final String width = getAttributeValue(LibraryElementTags.WIDTH_ATTRIBUTE);
 		if (width != null) {
-			comment.setWidth(CoordinateConverter.INSTANCE.convertFrom1499XML(width));
+			comment.setWidth(Double.parseDouble(width));
 		}
 		final String height = getAttributeValue(LibraryElementTags.HEIGHT_ATTRIBUTE);
 		if (height != null) {
-			comment.setHeight(CoordinateConverter.INSTANCE.convertFrom1499XML(height));
+			comment.setHeight(Double.parseDouble(height));
 		}
 
 		fbNetwork.getNetworkElements().add(comment);

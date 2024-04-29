@@ -46,7 +46,7 @@ public class FordiacLayoutData {
 	private final Map<FBNetworkElement, Position> positions = new HashMap<>();
 	private final List<ConnectionLayoutData> connData = new ArrayList<>();
 	private final Map<IInterfaceElement, Integer> pins = new HashMap<>();
-	private final Map<Group, Entry<Integer, Integer>> groups = new HashMap<>();
+	private final Map<Group, Entry<Double, Double>> groups = new HashMap<>();
 
 	public Map<FBNetworkElement, Position> getPositions() {
 		return positions;
@@ -60,7 +60,7 @@ public class FordiacLayoutData {
 		return pins;
 	}
 
-	public Map<Group, Entry<Integer, Integer>> getGroups() {
+	public Map<Group, Entry<Double, Double>> getGroups() {
 		return groups;
 	}
 
@@ -77,7 +77,8 @@ public class FordiacLayoutData {
 	}
 
 	public void addGroup(final Group group, final int height, final int width) {
-		groups.put(group, new SimpleEntry<>(Integer.valueOf(height), Integer.valueOf(width)));
+		groups.put(group, new SimpleEntry<>(Double.valueOf(CoordinateConverter.INSTANCE.screenToIEC61499(height)),
+				Double.valueOf(CoordinateConverter.INSTANCE.screenToIEC61499(width))));
 	}
 
 	private static ConnectionRoutingData createRoutingData(final PointList pointList) {
