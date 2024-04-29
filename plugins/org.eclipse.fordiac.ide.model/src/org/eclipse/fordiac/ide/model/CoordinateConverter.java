@@ -87,21 +87,6 @@ public enum CoordinateConverter {
 	}
 
 	/**
-	 * Take the string representing the value from the 61499-2 XML file to an 4diac
-	 * IDE internal coordinate
-	 *
-	 * @param value string representation of a coordinate value
-	 * @return 4diac IDE internal coordinate value
-	 */
-	public int convertFrom1499XML(final String value) {
-		double parsedValue = 0;
-		if ((null != value) && (0 != value.length())) {
-			parsedValue = Double.parseDouble(value);
-		}
-		return iec61499ToScreen(parsedValue);
-	}
-
-	/**
 	 * Convert IEC 61499 coordinate to screen coordinate
 	 *
 	 * @param value IEC 61499 coordinate value
@@ -109,17 +94,6 @@ public enum CoordinateConverter {
 	 */
 	public int iec61499ToScreen(final double value) {
 		return (int) (value * transformationScale);
-	}
-
-	/**
-	 * Take an 4diac IDE internal coordinate and transform it to a string
-	 * representation suitable for an IEC 61499-2 XML
-	 *
-	 * @param value 4diac IDE internal coordinate
-	 * @return string representation of the value in IEC 61499-2 format
-	 */
-	public String convertTo1499XML(final int value) {
-		return Double.toString(screenToIEC61499(value));
 	}
 
 	/**
