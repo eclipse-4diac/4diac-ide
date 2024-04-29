@@ -59,7 +59,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	private final ExpandedInterfacePositionMap interfacePositions;
 
 	public SubAppForFbNetworkFigure(final SubApp model, final SubAppForFBNetworkEditPart editPart) {
-		super(model, editPart);
+		super(model);
 		interfacePositions = editPart.getInterfacePositionMap();
 		updateTypeLabel(model);
 		updateExpandedFigure();

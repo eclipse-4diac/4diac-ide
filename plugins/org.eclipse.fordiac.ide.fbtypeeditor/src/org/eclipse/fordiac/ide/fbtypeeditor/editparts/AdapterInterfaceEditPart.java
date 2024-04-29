@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2011, 2024 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,25 +23,10 @@ import org.eclipse.fordiac.ide.fbtypeeditor.policies.DeleteInterfaceEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.swt.SWT;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 
 public class AdapterInterfaceEditPart extends InterfaceEditPart {
-	private final TypeLibrary typeLib;
-
-	AdapterInterfaceEditPart(final TypeLibrary typeLib) {
-		this.typeLib = typeLib;
-	}
 
 	private class AdapterInterfaceFigure extends UnderlineAlphaLabel {
 		public AdapterInterfaceFigure() {
@@ -116,27 +101,9 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 	}
 
 	@Override
-	public DragTracker getDragTracker(final Request request) {
-		if ((request instanceof final SelectionRequest selRequest)
-				&& ((selRequest.getLastButtonPressed() == 1) && (selRequest.isControlKeyPressed()))) {
-			// open the default editor for the adapter file
-			final TypeEntry entry = typeLib.getAdapterTypeEntry(getAdapter().getType().getName());
-			if (null != entry) {
-				final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
-						.getDefaultEditor(entry.getFile().getName());
-				EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
-			}
-		}
-		return super.getDragTracker(request);
-	}
-
-	@Override
 	public void refreshName() {
 		((AdapterInterfaceFigure) getFigure()).setText(getINamedElement().getName());
 		super.refreshName();
 	}
 
-	private AdapterDeclaration getAdapter() {
-		return (AdapterDeclaration) getCastedModel();
-	}
 }

@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 - 2018 fortiss GmbH, Johannes Kepler University
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2016, 2024 fortiss GmbH, Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,46 +13,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectAdapterConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.swt.SWT;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 
 public class AdapterNodeEditPolicy extends InterfaceElementEditPolicy {
 
 	@Override
 	protected AbstractConnectionCreateCommand createConnectionCreateCommand() {
-		final InterfaceEditPart host = (InterfaceEditPart) getHost();
-
-		if ((host.isAdapter()) && (0 != (host.getMouseState() & SWT.CONTROL))) {
-			openAdapterType(host);
-			return null;
-		}
-
-		final AdapterConnectionCreateCommand cmd = new AdapterConnectionCreateCommand(getParentNetwork());
-		cmd.setSource(((InterfaceEditPart) getHost()).getModel());
-		return cmd;
-
-	}
-
-	private static void openAdapterType(final InterfaceEditPart host) {
-		final AdapterTypeEntry entry = (AdapterTypeEntry) ((AdapterDeclaration) host.getModel()).getType()
-				.getTypeEntry();
-		if (null != entry) {
-			final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
-					.getDefaultEditor(entry.getFile().getName());
-			EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
-		}
+		return new AdapterConnectionCreateCommand(getParentNetwork());
 	}
 
 	@Override
