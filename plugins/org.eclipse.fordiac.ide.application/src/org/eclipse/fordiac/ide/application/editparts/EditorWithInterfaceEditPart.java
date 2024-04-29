@@ -74,6 +74,8 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 
 	private static final int MIN_EXP_SUBAPP_BAR_WIDTH_CHARS = org.eclipse.fordiac.ide.gef.Activator.getDefault()
 			.getPreferenceStore().getInt(DiagramPreferences.MIN_INTERFACE_BAR_SIZE);
+	private static final int MAX_HIDDEN_CONNECTION_LABEL_SIZE_CHARS = org.eclipse.fordiac.ide.gef.Activator.getDefault()
+			.getPreferenceStore().getInt(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
 	private static final int TOP_BOTTOM_MARGIN = 1;
 	private static final int LEFT_RIGHT_MARGIN = 5;
 	private static final Insets RIGHT_LIST_BORDER_INSET = new Insets(TOP_BOTTOM_MARGIN, 0, TOP_BOTTOM_MARGIN,
@@ -187,6 +189,10 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 
 		contentContainer = new FreeformLayer();
 		contentContainer.setLayoutManager(new FreeformLayout());
+		// add a margin to the left and right to have enough space for hidden connection
+		// labels
+		contentContainer.setBorder(
+				new MarginBorder(0, getMaxHiddenConnectionLabelSize(), 0, getMaxHiddenConnectionLabelSize()));
 		mainFigure.add(contentContainer, BorderLayout.CENTER);
 
 		createRightInterface(mainFigure);
@@ -548,6 +554,17 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 					+ ConnectorBorder.LR_MARGIN + LEFT_RIGHT_MARGIN;
 		}
 		return minSubappBarWidhtPixels;
+	}
+
+	private static int maxHiddenConnectionLabelSize = -1;
+
+	public static int getMaxHiddenConnectionLabelSize() {
+		if (maxHiddenConnectionLabelSize == -1) {
+			final Dimension singleCharLength = FigureUtilities.getStringExtents(" ", //$NON-NLS-1$
+					JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
+			maxHiddenConnectionLabelSize = singleCharLength.width * MAX_HIDDEN_CONNECTION_LABEL_SIZE_CHARS;
+		}
+		return maxHiddenConnectionLabelSize;
 	}
 
 }
