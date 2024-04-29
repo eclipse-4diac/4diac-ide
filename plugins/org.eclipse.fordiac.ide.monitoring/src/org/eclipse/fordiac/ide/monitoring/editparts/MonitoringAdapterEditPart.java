@@ -36,7 +36,7 @@ public class MonitoringAdapterEditPart extends AbstractMonitoringBaseEditPart {
 
 	@Override
 	protected IFigure createFigureForModel() {
-		return new FBNetworkElementFigure(getFB(), null);
+		return new FBNetworkElementFigure(getFB());
 	}
 
 	private FB getFB() {
@@ -56,8 +56,8 @@ public class MonitoringAdapterEditPart extends AbstractMonitoringBaseEditPart {
 
 	@Override
 	public FBNetworkElementFigure getFigure() {
-		if (super.getFigure() instanceof FBNetworkElementFigure) {
-			return (FBNetworkElementFigure) super.getFigure();
+		if (super.getFigure() instanceof final FBNetworkElementFigure fbnElFigure) {
+			return fbnElFigure;
 		}
 		return null;
 	}
@@ -88,8 +88,7 @@ public class MonitoringAdapterEditPart extends AbstractMonitoringBaseEditPart {
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-		if (childEditPart instanceof InterfaceEditPart) {
-			final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
+		if (childEditPart instanceof final InterfaceEditPart interfaceEditPart) {
 			final IFigure ieContainer = (interfaceEditPart.isInput()) ? getInputIFigure(interfaceEditPart)
 					: getOutPutFigure(interfaceEditPart);
 			ieContainer.add(child);
@@ -127,8 +126,7 @@ public class MonitoringAdapterEditPart extends AbstractMonitoringBaseEditPart {
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-		if (childEditPart instanceof InterfaceEditPart) {
-			final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
+		if (childEditPart instanceof final InterfaceEditPart interfaceEditPart) {
 			final IFigure ieContainer = (interfaceEditPart.isInput()) ? getInputIFigure(interfaceEditPart)
 					: getOutPutFigure(interfaceEditPart);
 			ieContainer.remove(child);

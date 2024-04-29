@@ -36,8 +36,16 @@ import org.eclipse.gef.requests.ReconnectRequest;
 public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy {
 
 	@Override
+	public InterfaceEditPart getHost() {
+		return (InterfaceEditPart) super.getHost();
+	}
+
+	@Override
 	protected final Command getConnectionCreateCommand(final CreateConnectionRequest request) {
 		final AbstractConnectionCreateCommand command = createConnectionCreateCommand();
+		if (command != null) {
+			command.setSource(getHost().getModel());
+		}
 		request.setStartCommand(command);
 		return command;
 	}
@@ -47,7 +55,7 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 	@Override
 	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
 		final AbstractConnectionCreateCommand command = (AbstractConnectionCreateCommand) request.getStartCommand();
-		command.setDestination(((InterfaceEditPart) getHost()).getModel());
+		command.setDestination(getHost().getModel());
 
 		final FBNetwork newParent = checkConnectionParent(command.getSource(), command.getDestination(),
 				command.getParent());
@@ -74,7 +82,7 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		final var conn = (Connection) request.getConnectionEditPart().getModel();
 		final var sourcePin = conn.getSource();
 		final var targetPin = conn.getDestination();
-		final var newPin = (IInterfaceElement) getHost().getModel();
+		final var newPin = getHost().getModel();
 
 		// border crossing source reconnect
 		if (isSourceReconnect && isBorderCrossing(newPin, targetPin, conn.getFBNetwork())) {
@@ -171,8 +179,8 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 
 	@Override
 	protected ConnectionAnchor getSourceConnectionAnchor(final CreateConnectionRequest request) {
-		if (getHost().getModel() instanceof final IInterfaceElement ie && ie.isIsInput()
-				&& ie.getFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded()) {
+		final IInterfaceElement ie = getHost().getModel();
+		if (ie.isIsInput() && ie.getFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded()) {
 			// we are unfolded and this is an internal connection
 			return new FixedAnchor(getHostFigure(), false);
 		}
