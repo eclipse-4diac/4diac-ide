@@ -12,8 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.runtime;
 
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.RefreshUtil;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -28,6 +30,7 @@ public abstract class RuntimeLaunchTab extends AbstractLaunchConfigurationTab {
 	protected static final String ATTR_LOCATION = "org.eclipse.ui.externaltools.ATTR_LOCATION"; //$NON-NLS-1$
 	protected static final String ATTR_WORKING_DIRECTORY = "org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY"; //$NON-NLS-1$
 	protected static final String ATTR_BUILD_SCOPE = "org.eclipse.ui.externaltools.ATTR_LAUNCH_CONFIGURATION_BUILD_SCOPE"; //$NON-NLS-1$
+	private static final String ATTR_APPEND_ENVIRONMENT_VARIABLES = "org.eclipse.debug.core.appendEnvironmentVariables"; //$NON-NLS-1$
 
 	private Text portField;
 
@@ -35,7 +38,11 @@ public abstract class RuntimeLaunchTab extends AbstractLaunchConfigurationTab {
 	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
 		configuration.removeAttribute(LaunchRuntimeUtils.ATTR_TOOL_ARGUMENTS);
 		configuration.removeAttribute(ATTR_WORKING_DIRECTORY);
+		configuration.removeAttribute(RefreshUtil.ATTR_REFRESH_SCOPE);
 		configuration.setAttribute(ATTR_BUILD_SCOPE, "NONE"); //$NON-NLS-1$
+		configuration.setAttribute(ATTR_APPEND_ENVIRONMENT_VARIABLES, true);
+		configuration.setAttribute("org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", false);
+		configuration.setAttribute(DebugPlugin.ATTR_MERGE_OUTPUT, true);
 	}
 
 	@Override

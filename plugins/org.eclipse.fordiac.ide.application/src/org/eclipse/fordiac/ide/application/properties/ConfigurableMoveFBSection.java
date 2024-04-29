@@ -38,6 +38,7 @@ import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
@@ -143,17 +144,22 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
-		if (event.getDetail() == CommandStack.POST_UNDO || event.getDetail() == CommandStack.POST_REDO) {
-			final Command command = event.getCommand();
-			if ((command instanceof final ConfigureFBCommand cmd)
-					&& (cmd.getOldElement() == getType() || cmd.getNewElement() == getType())) {
-				if (event.getDetail() == CommandStack.POST_UNDO) {
-					updateFB(cmd.getOldElement());
-				} else if (event.getDetail() == CommandStack.POST_REDO) {
-					updateFB(cmd.getNewElement());
+		// this method is also run as part of the commandstackeventlistener and may
+		// change command stack listener list, to avoid concurrent modifications run it
+		// asynchronously
+		Display.getDefault().asyncExec(() -> {
+			if (event.getDetail() == CommandStack.POST_UNDO || event.getDetail() == CommandStack.POST_REDO) {
+				final Command command = event.getCommand();
+				if ((command instanceof final ConfigureFBCommand cmd)
+						&& (cmd.getOldElement() == getType() || cmd.getNewElement() == getType())) {
+					if (event.getDetail() == CommandStack.POST_UNDO) {
+						updateFB(cmd.getOldElement());
+					} else if (event.getDetail() == CommandStack.POST_REDO) {
+						updateFB(cmd.getNewElement());
+					}
 				}
 			}
-		}
+		});
 	}
 
 	@Override
