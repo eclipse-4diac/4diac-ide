@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppSizeLockCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -72,7 +73,8 @@ public class SubAppPropertySection extends InstancePropertySection {
 			if (getType() != null) {
 				final int heightDelta;
 				try {
-					heightDelta = Integer.parseInt(heightText.getText()) - getType().getHeight();
+					heightDelta = Integer.parseInt(heightText.getText())
+							- CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getHeight());
 				} catch (final NumberFormatException exception) {
 					return;
 				}
@@ -93,7 +95,8 @@ public class SubAppPropertySection extends InstancePropertySection {
 
 				final int widthDelta;
 				try {
-					widthDelta = Integer.parseInt(widthText.getText()) - getType().getWidth();
+					widthDelta = Integer.parseInt(widthText.getText())
+							- CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getWidth());
 				} catch (final NumberFormatException exception) {
 					return;
 				}
@@ -116,8 +119,8 @@ public class SubAppPropertySection extends InstancePropertySection {
 		if ((getType() != null)) {
 			final CommandStack commandStackBuffer = commandStack;
 			commandStack = null;
-			heightText.setText(Integer.toString(getType().getHeight()));
-			widthText.setText(Integer.toString(getType().getWidth()));
+			heightText.setText(Integer.toString(CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getHeight())));
+			widthText.setText(Integer.toString(CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getWidth())));
 			lockCheckbox.setSelection(getType().isLocked());
 			commandStack = commandStackBuffer;
 		}

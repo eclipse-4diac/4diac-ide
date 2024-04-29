@@ -514,7 +514,7 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @generated
 	 */
 	@Override
-	public int getWidth() {
+	public double getWidth() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -524,7 +524,7 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @generated
 	 */
 	@Override
-	public int getHeight() {
+	public double getHeight() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -535,7 +535,7 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 */
 	@Override
 	public int getVisibleWidth() {
-		return getWidth();
+		return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getWidth());
 	}
 
 	/**
@@ -545,7 +545,7 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 */
 	@Override
 	public int getVisibleHeight() {
-		return getHeight();
+		return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getHeight());
 	}
 
 	/**

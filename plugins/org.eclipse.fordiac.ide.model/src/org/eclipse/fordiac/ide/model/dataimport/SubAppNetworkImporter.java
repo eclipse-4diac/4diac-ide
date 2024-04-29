@@ -18,7 +18,6 @@ import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
@@ -132,18 +131,18 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 			case LibraryElementTags.WIDTH_ATTRIBUTE:
 				final String widthValue = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 				if (widthValue != null) {
-					subApp.setWidth(CoordinateConverter.INSTANCE.convertFrom1499XML(widthValue));
+					subApp.setWidth(Double.parseDouble(widthValue));
 				}
 				break;
 			case LibraryElementTags.HEIGHT_ATTRIBUTE:
 				final String heightValue = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 				if (heightValue != null) {
-					subApp.setHeight(CoordinateConverter.INSTANCE.convertFrom1499XML(heightValue));
+					subApp.setHeight(Double.parseDouble(heightValue));
 				}
 				break;
 			case LibraryElementTags.LOCKED_ATTRIBUTE:
 				final String isLocked = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
-				subApp.setLocked(Boolean.valueOf(isLocked));
+				subApp.setLocked(Boolean.parseBoolean(isLocked));
 				break;
 			default:
 				parseGenericAttributeNode(subApp);

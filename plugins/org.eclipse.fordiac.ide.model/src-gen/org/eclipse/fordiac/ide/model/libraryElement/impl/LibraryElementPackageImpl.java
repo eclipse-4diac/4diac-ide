@@ -4313,8 +4313,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getColorizableElement_Color(), this.getColor(), null, "color", null, 1, 1, ColorizableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(commentEClass, Comment.class, "Comment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getComment_Width(), theXMLTypePackage.getInt(), "width", "200", 0, 1, Comment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
-		initEAttribute(getComment_Height(), theXMLTypePackage.getInt(), "height", "100", 0, 1, Comment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getComment_Width(), theXMLTypePackage.getDouble(), "width", "200", 0, 1, Comment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getComment_Height(), theXMLTypePackage.getDouble(), "height", "100", 0, 1, Comment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
 		addEOperation(commentEClass, this.getInterfaceList(), "getInterface", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -4592,9 +4592,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(errorMarkerFBNElementEClass, ErrorMarkerFBNElement.class, "ErrorMarkerFBNElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getErrorMarkerFBNElement_RepairedElement(), this.getFBNetworkElement(), null, "repairedElement", null, 0, 1, ErrorMarkerFBNElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(errorMarkerFBNElementEClass, theXMLTypePackage.getInt(), "getWidth", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(errorMarkerFBNElementEClass, theXMLTypePackage.getDouble(), "getWidth", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(errorMarkerFBNElementEClass, theXMLTypePackage.getInt(), "getHeight", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(errorMarkerFBNElementEClass, theXMLTypePackage.getDouble(), "getHeight", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(errorMarkerInterfaceEClass, ErrorMarkerInterface.class, "ErrorMarkerInterface", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getErrorMarkerInterface_Value(), this.getValue(), null, "value", null, 0, 1, ErrorMarkerInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -4642,9 +4642,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(fbEClass, theDataPackage.getDataType(), "getReturnType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(fbEClass, theXMLTypePackage.getInt(), "getWidth", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(fbEClass, theXMLTypePackage.getDouble(), "getWidth", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(fbEClass, theXMLTypePackage.getInt(), "getHeight", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(fbEClass, theXMLTypePackage.getDouble(), "getHeight", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(fbNetworkEClass, FBNetwork.class, "FBNetwork", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getFBNetwork_NetworkElements(), this.getFBNetworkElement(), null, "networkElements", null, 0, -1, FBNetwork.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -4734,9 +4734,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(fbNetworkElementEClass, ecorePackage.getEString(), "getQualifiedName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(fbNetworkElementEClass, theXMLTypePackage.getInt(), "getWidth", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(fbNetworkElementEClass, theXMLTypePackage.getDouble(), "getWidth", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(fbNetworkElementEClass, theXMLTypePackage.getInt(), "getHeight", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(fbNetworkElementEClass, theXMLTypePackage.getDouble(), "getHeight", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(fbNetworkElementEClass, theXMLTypePackage.getInt(), "getVisibleWidth", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -4778,8 +4778,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(groupEClass, Group.class, "Group", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getGroup_GroupElements(), this.getFBNetworkElement(), this.getFBNetworkElement_Group(), "groupElements", null, 0, -1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getGroup_Width(), theXMLTypePackage.getInt(), "width", "200", 0, 1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
-		initEAttribute(getGroup_Height(), theXMLTypePackage.getInt(), "height", "100", 0, 1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getGroup_Width(), theXMLTypePackage.getDouble(), "width", "200", 0, 1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getGroup_Height(), theXMLTypePackage.getDouble(), "height", "100", 0, 1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 		initEAttribute(getGroup_Locked(), theXMLTypePackage.getBoolean(), "locked", "false", 0, 1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
 		addEOperation(groupEClass, this.getInterfaceList(), "getInterface", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
@@ -5076,8 +5076,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(stMethodEClass, STMethod.class, "STMethod", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(subAppEClass, SubApp.class, "SubApp", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getSubApp_Width(), theXMLTypePackage.getInt(), "width", "200", 0, 1, SubApp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
-		initEAttribute(getSubApp_Height(), theXMLTypePackage.getInt(), "height", "100", 0, 1, SubApp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getSubApp_Width(), theXMLTypePackage.getDouble(), "width", "200", 0, 1, SubApp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getSubApp_Height(), theXMLTypePackage.getDouble(), "height", "100", 0, 1, SubApp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 		initEAttribute(getSubApp_Locked(), theXMLTypePackage.getBoolean(), "locked", "false", 0, 1, SubApp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
 		addEOperation(subAppEClass, this.getSubAppType(), "getType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$

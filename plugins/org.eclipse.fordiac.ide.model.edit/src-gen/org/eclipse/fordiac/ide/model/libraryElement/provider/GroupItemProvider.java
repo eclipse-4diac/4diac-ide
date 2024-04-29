@@ -112,7 +112,7 @@ public class GroupItemProvider extends FBNetworkElementItemProvider {
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -134,7 +134,7 @@ public class GroupItemProvider extends FBNetworkElementItemProvider {
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}

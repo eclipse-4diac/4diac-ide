@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
@@ -29,22 +30,22 @@ public abstract class AbstractChangeContainerBoundsCommand extends Command
 
 	private final int dx;
 	private final int dy;
-	private final int oldWidth;
-	private final int oldHeight;
-	private final int newWidth;
-	private final int newHeight;
+	private final double oldWidth;
+	private final double oldHeight;
+	private final double newWidth;
+	private final double newHeight;
 	private final PositionableElement target;
 	private CompoundCommand updatePositions;
 
 	protected AbstractChangeContainerBoundsCommand(final PositionableElement target, final int dx, final int dy,
-			final int dw, final int dh, final int oldWidth, final int oldHeight) {
+			final int dw, final int dh, final double oldWidth, final double oldHeight) {
 		this.target = Objects.requireNonNull(target);
 		this.dx = dx;
 		this.dy = dy;
 		this.oldWidth = oldWidth;
 		this.oldHeight = oldHeight;
-		newWidth = oldWidth + dw;
-		newHeight = oldHeight + dh;
+		newWidth = oldWidth + CoordinateConverter.INSTANCE.screenToIEC61499(dw);
+		newHeight = oldHeight + CoordinateConverter.INSTANCE.screenToIEC61499(dh);
 	}
 
 	@Override
@@ -97,7 +98,7 @@ public abstract class AbstractChangeContainerBoundsCommand extends Command
 		return Set.of(target);
 	}
 
-	protected abstract void updateSize(int width, int height);
+	protected abstract void updateSize(double width, double height);
 
 	protected abstract List<FBNetworkElement> getChildren();
 }

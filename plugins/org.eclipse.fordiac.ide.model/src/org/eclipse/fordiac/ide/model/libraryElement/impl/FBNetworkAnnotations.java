@@ -94,7 +94,7 @@ final class FBNetworkAnnotations {
 
 			// check parent collision
 			final Optional<FBNetworkElement> parentCollision = parent.filter(outer -> elementBounds.x < 0
-					|| elementBounds.y < 0 || x2 > outer.getWidth() || y2 > outer.getHeight());
+					|| elementBounds.y < 0 || x2 > outer.getVisibleWidth() || y2 > outer.getVisibleHeight());
 			if (diagnostics != null) {
 				parentCollision.ifPresent(other -> diagnostics.add(createCollisionDiagnostic(element, other)));
 			}

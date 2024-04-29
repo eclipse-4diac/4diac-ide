@@ -24,7 +24,7 @@ public class ChangeGroupBoundsCommand extends AbstractChangeContainerBoundsComma
 	}
 
 	@Override
-	protected void updateSize(final int width, final int height) {
+	protected void updateSize(final double width, final double height) {
 		getTarget().setWidth(width);
 		getTarget().setHeight(height);
 	}
