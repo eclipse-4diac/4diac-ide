@@ -60,7 +60,6 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 			final List<FBNetworkElement> fbelements = HandlerHelper.getSelectedFBNElements(selection);
 
 			if (!fbelements.isEmpty()) {
-
 				// get selected FBNetwork
 				final SubAppHierarchyDialog dialog = new SubAppHierarchyDialog(fbelements.get(0));
 				final FBNetwork destinationNetwork = dialog.open();
@@ -73,16 +72,23 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 						destinationNetwork); // TODO Merge with this command
 				getCommandStack(editor).execute(cmd);
 
-				// reconnect the input connections
 				final CompoundCommand reconCmd = new CompoundCommand();
-				fbelements.get(0).getInterface().getAllInterfaceElements().forEach(ie -> {
-					if (ie.isIsInput()) {
-						ie.getInputConnections().forEach(conn -> {
-							reconCmd.add(new BorderCrossingReconnectCommand(conn.getDestination(),
-									conn.getDestination(), conn, false));
-						});
-					}
-				});
+				for (final FBNetworkElement fbElement : fbelements) {
+					// reconnect the input connections
+					fbElement.getInterface().getAllInterfaceElements().forEach(ie -> {
+						if (ie.isIsInput()) {
+							ie.getInputConnections().forEach(conn -> {
+								reconCmd.add(new BorderCrossingReconnectCommand(conn.getDestination(),
+										conn.getDestination(), conn, false));
+							});
+						} else {
+							ie.getOutputConnections().forEach(conn -> {
+								reconCmd.add(new BorderCrossingReconnectCommand(conn.getSource(), conn.getSource(),
+										conn, true));
+							});
+						}
+					});
+				}
 				getCommandStack(editor).execute(reconCmd); // TODO handle reconnect to same Input
 
 				// Update editor view
