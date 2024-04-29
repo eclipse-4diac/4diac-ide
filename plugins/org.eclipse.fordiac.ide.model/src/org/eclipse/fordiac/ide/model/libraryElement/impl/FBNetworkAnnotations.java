@@ -21,6 +21,7 @@ import java.util.function.Predicate;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
@@ -28,6 +29,7 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.PreferenceConstants;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -86,26 +88,40 @@ final class FBNetworkAnnotations {
 			if (element instanceof ErrorMarkerFBNElement || !filter.test(element)) {
 				continue;
 			}
-			final Point position = element.getPosition().toScreenPoint();
-			final int x1 = position.x - marginLeftRight;
-			final int y1 = position.y - marginTopBottom;
-			final int x2 = x1 + element.getVisibleWidth() + marginLeftRight;
-			final int y2 = y1 + element.getVisibleHeight() + marginTopBottom;
+			final Rectangle elementBounds = getElementBounds(element, marginLeftRight, marginTopBottom);
+			final int x2 = elementBounds.x + elementBounds.width;
+			final int y2 = elementBounds.y + elementBounds.height;
+
 			// check parent collision
-			final Optional<FBNetworkElement> parentCollision = parent
-					.filter(outer -> x1 < 0 || y1 < 0 || x2 > outer.getWidth() || y2 > outer.getHeight());
+			final Optional<FBNetworkElement> parentCollision = parent.filter(outer -> elementBounds.x < 0
+					|| elementBounds.y < 0 || x2 > outer.getWidth() || y2 > outer.getHeight());
 			if (diagnostics != null) {
 				parentCollision.ifPresent(other -> diagnostics.add(createCollisionDiagnostic(element, other)));
 			}
 			result &= parentCollision.isEmpty();
 			// check sibling collision
-			final Set<FBNetworkElement> collisions = spatialHash.put(x1, y1, x2, y2, element);
+			final Set<FBNetworkElement> collisions = spatialHash.put(elementBounds.x, elementBounds.y, x2, y2, element);
 			if (diagnostics != null) {
 				collisions.forEach(other -> diagnostics.add(createCollisionDiagnostic(element, other)));
 			}
 			result &= collisions.isEmpty();
 		}
 		return result;
+	}
+
+	private static Rectangle getElementBounds(final FBNetworkElement element, final int marginLeftRight,
+			final int marginTopBottom) {
+		final Point position = element.getPosition().toScreenPoint();
+		final Rectangle bounds = new Rectangle(position.x, position.y, element.getVisibleWidth(),
+				element.getVisibleHeight());
+
+		if (!(element instanceof Comment)) {
+			bounds.x -= marginLeftRight;
+			bounds.y -= marginTopBottom;
+			bounds.width += marginLeftRight;
+			bounds.height += marginTopBottom;
+		}
+		return bounds;
 	}
 
 	private static Diagnostic createCollisionDiagnostic(final FBNetworkElement element, final FBNetworkElement other) {
