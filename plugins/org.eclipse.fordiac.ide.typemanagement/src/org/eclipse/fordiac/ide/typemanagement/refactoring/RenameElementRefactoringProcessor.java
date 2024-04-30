@@ -13,12 +13,18 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -59,7 +65,37 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final CompositeChange change = new CompositeChange(getProcessorName());
 		change.add(new RenameElementChange(elementURI.lastSegment(), elementURI, newName));
+		createChildChanges(change);
 		return change;
+	}
+
+	private void createChildChanges(final CompositeChange change) {
+		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(elementURI);
+		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(typeEntry);
+		final List<? extends EObject> result = search.performSearch();
+
+		final var obj = getChildByURI(typeEntry.getType(), elementURI);
+		String oldName = "";
+		if (obj instanceof final VarDeclaration varDecl) {
+			oldName = varDecl.getName();
+		}
+
+	}
+
+	public EObject getChildByURI(final EObject parent, final URI uri) {
+
+		final EObject[] found = { null };
+
+		parent.eAllContents().forEachRemaining(child -> {
+			final String uriFragment = child.eResource().getURIFragment(child);
+			if (uriFragment.equals(uri.fragment())) {
+				found[0] = child;
+			}
+
+		});
+
+		// Return null if the child EObject is not found
+		return found[0];
 	}
 
 	@Override

@@ -740,6 +740,7 @@
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeStructDeletionChange$DeleteMemberVariableChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeFBTypeDeletionChange$DeleteInternalFBChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteLibraryDependencyChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameElementChange"/>
          </or>
          </enablement>
       </changePreviewViewer>
