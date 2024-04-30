@@ -72,24 +72,8 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 						destinationNetwork); // TODO Merge with this command
 				getCommandStack(editor).execute(cmd);
 
-				final CompoundCommand reconCmd = new CompoundCommand();
-				for (final FBNetworkElement fbElement : fbelements) {
-					// reconnect the input connections
-					fbElement.getInterface().getAllInterfaceElements().forEach(ie -> {
-						if (ie.isIsInput()) {
-							ie.getInputConnections().forEach(conn -> {
-								reconCmd.add(new BorderCrossingReconnectCommand(conn.getDestination(),
-										conn.getDestination(), conn, false));
-							});
-						} else {
-							ie.getOutputConnections().forEach(conn -> {
-								reconCmd.add(new BorderCrossingReconnectCommand(conn.getSource(), conn.getSource(),
-										conn, true));
-							});
-						}
-					});
-				}
-				getCommandStack(editor).execute(reconCmd); // TODO handle reconnect to same Input
+				final CompoundCommand reconCmd = createReconnectCommand(fbelements);
+				getCommandStack(editor).execute(reconCmd);
 
 				// Update editor view
 				if (destinationNetwork.eContainer() instanceof final SubApp subapp && subapp.isUnfolded()) {
@@ -104,6 +88,27 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 			}
 		}
 		return Status.OK_STATUS;
+	}
+
+	private static CompoundCommand createReconnectCommand(final List<FBNetworkElement> fbElements) {
+		final CompoundCommand cmd = new CompoundCommand();
+		for (final FBNetworkElement fbElement : fbElements) {
+			// reconnect the input connections
+			fbElement.getInterface().getAllInterfaceElements().forEach(ie -> {
+				if (ie.isIsInput()) {
+					ie.getInputConnections().forEach(conn -> {
+						cmd.add(new BorderCrossingReconnectCommand(conn.getDestination(), conn.getDestination(), conn,
+								false));
+					});
+				} else {
+					ie.getOutputConnections().forEach(conn -> {
+						cmd.add(new BorderCrossingReconnectCommand(conn.getSource(), conn.getSource(), conn, true));
+					});
+				}
+			});
+		}
+
+		return cmd;
 	}
 
 	@Override
