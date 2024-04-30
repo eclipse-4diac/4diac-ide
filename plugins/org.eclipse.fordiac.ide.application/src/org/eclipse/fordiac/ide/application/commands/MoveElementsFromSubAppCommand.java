@@ -2,6 +2,7 @@
  * Copyright (c) 2018-2020 Johannes Kepler University
  * 				 2020 Primetals Technologies Germany GmbH
  *               2021 Primetals Technologies Austria GmbH
+ *               2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +16,7 @@
  *   Daniel Lindhuber - connection behavior for move to parent
  *   Michael Jaeger - added drag and drop functionality
  *   Bianca Wiesmayr - cleanup and fixes, positioning
+ *   Sebastian Hollersbacher - changed connection behaviour
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.application.commands;
@@ -35,20 +37,11 @@ import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
-import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
@@ -61,17 +54,13 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 	private Position destination;
 	private final FBNetwork destinationNetwork;
 	protected final List<FBNetworkElement> elements;
-	private final Map<FBNetworkElement, org.eclipse.fordiac.ide.model.libraryElement.Position> oldPos = new HashMap<>(); // for
-	// undo
-	private final Map<FBNetworkElement, org.eclipse.fordiac.ide.model.libraryElement.Position> newPos = new HashMap<>(); // for
-	// redo
+	private final Map<FBNetworkElement, Position> oldPos = new HashMap<>(); // for undo
+	private final Map<FBNetworkElement, Position> newPos = new HashMap<>(); // for redo
 	private final CompoundCommand unmappingCmds = new CompoundCommand(); // stores all needed unmap commands
-	private final CompoundCommand deleteConnectionsAndInterfaceElements = new CompoundCommand();
-	private final CompoundCommand createConnectionsCommands = new CompoundCommand();
-	protected final CompoundCommand createSubAppInterfaceElementCommands = new CompoundCommand();
 	private final CompoundCommand setUniqueName = new CompoundCommand();
 	private final CompoundCommand removeFromGroup = new CompoundCommand();
 	private final Set<Connection> connsMovedToParent = new HashSet<>();
+	private CompoundCommand reconnectConnectionsCommands = null;
 
 	public MoveElementsFromSubAppCommand(final Collection<FBNetworkElement> elements, final Point destination) {
 		this(elements, destination, null);
@@ -110,6 +99,7 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 		removeElementsFromGroup();
 		removeElementsFromSubapp();
 		addElementsToDestination();
+		reconnectConnections();
 	}
 
 	private void removeElementsFromGroup() {
@@ -143,13 +133,11 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 			}
 		}
 		sourceSubApp.getSubAppNetwork().getNetworkElements().remove(element);
-		processElementConnections(element);
 	}
 
 	protected void addElementsToDestination() {
 		elements.forEach(this::addElementToDestination);
 		elements.forEach(this::addGroupElements);
-		createConnectionsCommands.execute();
 		positionElements();
 		connsMovedToParent.forEach(destinationNetwork::addConnection);
 	}
@@ -172,17 +160,22 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 		}
 	}
 
+	private void reconnectConnections() {
+		reconnectConnectionsCommands = createReconnectCommand(this.elements);
+		reconnectConnectionsCommands.execute();
+	}
+
 	@Override
 	public void redo() {
 		removeFromGroup.redo();
 		redoRemoveElementsFromSubapp();
 		redoAddElementsToDestination();
+		reconnectConnectionsCommands.redo();
 	}
 
 	protected void redoRemoveElementsFromSubapp() {
 		unmappingCmds.redo();
 		elements.forEach(this::redoRemoveElementFromSubapp);
-		deleteConnectionsAndInterfaceElements.redo();
 	}
 
 	private void redoRemoveElementFromSubapp(final FBNetworkElement element) {
@@ -190,10 +183,8 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 	}
 
 	protected void redoAddElementsToDestination() {
-		createSubAppInterfaceElementCommands.redo();
 		elements.forEach(this::redoAddElementToDestination);
 		setUniqueName.redo();
-		createConnectionsCommands.redo();
 		connsMovedToParent.forEach(destinationNetwork::addConnection);
 	}
 
@@ -204,13 +195,13 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 
 	@Override
 	public void undo() {
+		reconnectConnectionsCommands.undo();
 		undoRemoveElementsFromSubapp();
 		undoAddElementsToDestination();
 		removeFromGroup.undo();
 	}
 
 	protected void undoRemoveElementsFromSubapp() {
-		deleteConnectionsAndInterfaceElements.undo();
 		elements.forEach(this::undoRemoveElementFromSubapp);
 		unmappingCmds.undo();
 		// check for connections being displayed right (broken or not)
@@ -223,7 +214,6 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 	}
 
 	protected void undoAddElementsToDestination() {
-		createConnectionsCommands.undo();
 		setUniqueName.undo();
 		elements.forEach(this::undoAddElementToDestination);
 		connsMovedToParent.forEach(sourceSubApp.getFbNetwork()::addConnection);
@@ -232,7 +222,6 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 	private void undoAddElementToDestination(final FBNetworkElement element) {
 		destinationNetwork.getNetworkElements().remove(element);
 		element.setPosition(oldPos.get(element));
-		createSubAppInterfaceElementCommands.undo();
 	}
 
 	public List<FBNetworkElement> getElements() {
@@ -246,122 +235,22 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 		FBNetworkHelper.moveFBNetworkToDestination(elements, destination);
 	}
 
-	private void processElementConnections(final FBNetworkElement fbNetworkElement) {
-		for (final IInterfaceElement ie : fbNetworkElement.getInterface().getAllInterfaceElements()) {
-			if (ie.isIsInput()) {
-				// we need to copy the connection list to avoid concurrent modification
-				for (final Connection con : new ArrayList<>(ie.getInputConnections())) {
-					handleConnection(con, con.getSource(), ie);
+	private static CompoundCommand createReconnectCommand(final List<FBNetworkElement> fbElements) {
+		final CompoundCommand cmd = new CompoundCommand();
+		for (final FBNetworkElement fbElement : fbElements) {
+			// reconnect the input connections
+			fbElement.getInterface().getAllInterfaceElements().forEach(ie -> {
+				if (ie.isIsInput()) {
+					ie.getInputConnections()
+							.forEach(conn -> cmd.add(new BorderCrossingReconnectCommand(conn.getDestination(),
+									conn.getDestination(), conn, false)));
+				} else {
+					ie.getOutputConnections().forEach(conn -> cmd
+							.add(new BorderCrossingReconnectCommand(conn.getSource(), conn.getSource(), conn, true)));
 				}
-			} else {
-				// we need to copy the connection list to avoid concurrent modification
-				for (final Connection con : new ArrayList<>(ie.getOutputConnections())) {
-					handleConnection(con, con.getDestination(), ie);
-				}
-			}
-		}
-	}
-
-	private void handleConnection(final Connection con, final IInterfaceElement opposite, final IInterfaceElement ie) {
-		if ((opposite.getFBNetworkElement() instanceof SubApp) && opposite.getFBNetworkElement().equals(sourceSubApp)) {
-			handleCrossingConnections(con, opposite, ie.isIsInput());
-		} else if (connIsPartOfMovedNetwork(opposite)) {
-			connsMovedToParent.add(con);
-		} else {
-			handleInnerConnections(con, ie, ie.isIsInput());
-		}
-	}
-
-	private boolean connIsPartOfMovedNetwork(final IInterfaceElement opposite) {
-		return elements.contains(opposite.getFBNetworkElement());
-	}
-
-	private void handleInnerConnections(final Connection con, final IInterfaceElement ie, final boolean isInput) {
-		final String subAppIEName = generateSubAppIEName(ie);
-		IInterfaceElement subAppIE = sourceSubApp.getInterfaceElement(subAppIEName);
-		if (null == subAppIE) {
-			// negating "isInput" results in an output pin for input connections and vice
-			// versa
-			subAppIE = createInterfaceElement(ie, subAppIEName, !isInput);
+			});
 		}
 
-		createConnection(isInput ? con.getSource() : subAppIE, isInput ? subAppIE : con.getDestination(),
-				sourceSubApp.getSubAppNetwork());
-		createConnection(isInput ? subAppIE : con.getSource(), isInput ? con.getDestination() : subAppIE,
-				sourceSubApp.getFbNetwork());
-		addDeleteConnectionOrInterfaceElementCommand(new DeleteConnectionCommand(con));
-	}
-
-	private void handleCrossingConnections(final Connection con, final IInterfaceElement opposite,
-			final boolean isInput) {
-
-		// analyze source subapp pin
-		final List<Connection> internalCons = isInput ? opposite.getOutputConnections()
-				: opposite.getInputConnections();
-		final List<Connection> outCons = isInput ? opposite.getInputConnections() : opposite.getOutputConnections();
-
-		// reconnect connections from to-be-deleted source subapp pin to the moved
-		// fbnetworkelement
-		for (final Connection outCon : new ArrayList<>(outCons)) {
-			createCrossingConnection(con, isInput, outCon);
-		}
-		if (1 == internalCons.size()) {
-			// our connection is the last one lets remove the interface element
-			addDeleteConnectionOrInterfaceElementCommand(new DeleteSubAppInterfaceElementCommand(opposite));
-		} else {
-			// still connections left, have to keep the interface element
-			addDeleteConnectionOrInterfaceElementCommand(new DeleteConnectionCommand(con));
-		}
-	}
-
-	private void addDeleteConnectionOrInterfaceElementCommand(final Command cmd) {
-		if (cmd.canExecute()) {
-			cmd.execute();
-			deleteConnectionsAndInterfaceElements.add(cmd);
-		}
-	}
-
-	private void createCrossingConnection(final Connection con, final boolean isInput, final Connection outCon) {
-		final IInterfaceElement sourcePin = isInput ? outCon.getSource() : con.getSource();
-		final IInterfaceElement destinationPin = isInput ? con.getDestination() : outCon.getDestination();
-		createConnection(sourcePin, destinationPin, destinationNetwork);
-	}
-
-	private void createConnection(final IInterfaceElement source, final IInterfaceElement destination,
-			final FBNetwork network) {
-		final AbstractConnectionCreateCommand cmd = getCreateConnectionCommand(network, destination);
-		cmd.setSource(source);
-		cmd.setDestination(destination);
-		createConnectionsCommands.add(cmd);
-	}
-
-	private IInterfaceElement createInterfaceElement(final IInterfaceElement ie, final String subAppIEName,
-			final boolean isInput) {
-		final CreateSubAppInterfaceElementCommand createSubAppInterfaceElementCommand = new CreateSubAppInterfaceElementCommand(
-				ie.getType(), sourceSubApp.getInterface(), isInput, -1);
-		createSubAppInterfaceElementCommand.execute();
-		createSubAppInterfaceElementCommand.getCreatedElement().setName(subAppIEName);
-		if (null != createSubAppInterfaceElementCommand.getMirroredElement()) {
-			createSubAppInterfaceElementCommand.getMirroredElement().getCreatedElement().setName(subAppIEName);
-		}
-		createSubAppInterfaceElementCommands.add(createSubAppInterfaceElementCommand);
-		return createSubAppInterfaceElementCommand.getCreatedElement();
-	}
-
-	private static String generateSubAppIEName(final IInterfaceElement ie) {
-		return ie.getFBNetworkElement().getName() + "_" + ie.getName(); //$NON-NLS-1$
-	}
-
-	private static AbstractConnectionCreateCommand getCreateConnectionCommand(final FBNetwork fbNetwork,
-			final IInterfaceElement subAppIE) {
-		AbstractConnectionCreateCommand cmd = null;
-		if (subAppIE instanceof Event) {
-			cmd = new EventConnectionCreateCommand(fbNetwork);
-		} else if (subAppIE instanceof AdapterDeclaration) {
-			cmd = new AdapterConnectionCreateCommand(fbNetwork);
-		} else {
-			cmd = new DataConnectionCreateCommand(fbNetwork);
-		}
 		return cmd;
 	}
 

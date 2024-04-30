@@ -24,7 +24,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.commands.BorderCrossingReconnectCommand;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.utilities.SubAppHierarchyDialog;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -38,7 +37,6 @@ import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -69,11 +67,8 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 
 				final Point destination = getDestination(editor, fbelements, destinationNetwork);
 				final MoveElementsFromSubAppCommand cmd = new MoveElementsFromSubAppCommand(fbelements, destination,
-						destinationNetwork); // TODO Merge with this command
+						destinationNetwork);
 				getCommandStack(editor).execute(cmd);
-
-				final CompoundCommand reconCmd = createReconnectCommand(fbelements);
-				getCommandStack(editor).execute(reconCmd);
 
 				// Update editor view
 				if (destinationNetwork.eContainer() instanceof final SubApp subapp && subapp.isUnfolded()) {
@@ -88,27 +83,6 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 			}
 		}
 		return Status.OK_STATUS;
-	}
-
-	private static CompoundCommand createReconnectCommand(final List<FBNetworkElement> fbElements) {
-		final CompoundCommand cmd = new CompoundCommand();
-		for (final FBNetworkElement fbElement : fbElements) {
-			// reconnect the input connections
-			fbElement.getInterface().getAllInterfaceElements().forEach(ie -> {
-				if (ie.isIsInput()) {
-					ie.getInputConnections().forEach(conn -> {
-						cmd.add(new BorderCrossingReconnectCommand(conn.getDestination(), conn.getDestination(), conn,
-								false));
-					});
-				} else {
-					ie.getOutputConnections().forEach(conn -> {
-						cmd.add(new BorderCrossingReconnectCommand(conn.getSource(), conn.getSource(), conn, true));
-					});
-				}
-			});
-		}
-
-		return cmd;
 	}
 
 	@Override
