@@ -43,6 +43,13 @@ public class BlockTypeInstanceSearch extends IEC61499ElementSearch {
 				createChildrenProvider());
 	}
 
+	public BlockTypeInstanceSearch(final Collection<TypeEntry> entries) {
+		super(createSearchContext(entries.iterator().next()),
+				searchCanditate -> searchCanditate instanceof final TypedConfigureableObject tco
+						&& entries.contains(tco.getTypeEntry()),
+				createChildrenProvider());
+	}
+
 	/*
 	 * Search inside of a LibaryElement
 	 *

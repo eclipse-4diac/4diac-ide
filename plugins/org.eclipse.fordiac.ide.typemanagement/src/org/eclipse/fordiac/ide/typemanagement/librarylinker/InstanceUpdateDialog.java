@@ -12,10 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.librarylinker;
 
-import java.util.Set;
+import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -39,11 +38,11 @@ import org.eclipse.swt.widgets.Shell;
 public class InstanceUpdateDialog extends MessageDialog {
 	protected static final int TABLE_COL_WIDTH = 300;
 
-	private final Set<INamedElement> updatedInstances;
+	private final List<FBNetworkElement> updatedInstances;
 
 	public InstanceUpdateDialog(final Shell parentShell, final String dialogTitle, final Image dialogTitleImage,
 			final String dialogMessage, final int dialogImageType, final String[] dialogButtonLabels,
-			final int defaultIndex, final Set<INamedElement> updatedInstances) {
+			final int defaultIndex, final List<FBNetworkElement> updatedInstances) {
 		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels,
 				defaultIndex);
 		this.updatedInstances = updatedInstances;
