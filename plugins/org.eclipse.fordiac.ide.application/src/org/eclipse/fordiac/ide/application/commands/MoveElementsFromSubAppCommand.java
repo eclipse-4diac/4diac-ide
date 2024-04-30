@@ -241,12 +241,19 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 			// reconnect the input connections
 			fbElement.getInterface().getAllInterfaceElements().forEach(ie -> {
 				if (ie.isIsInput()) {
-					ie.getInputConnections()
-							.forEach(conn -> cmd.add(new BorderCrossingReconnectCommand(conn.getDestination(),
-									conn.getDestination(), conn, false)));
+					ie.getInputConnections().forEach(conn -> {
+						if (!fbElements.contains(conn.getSource().eContainer().eContainer())) {
+							cmd.add(new BorderCrossingReconnectCommand(conn.getDestination(), conn.getDestination(),
+									conn, false));
+						}
+					});
 				} else {
-					ie.getOutputConnections().forEach(conn -> cmd
-							.add(new BorderCrossingReconnectCommand(conn.getSource(), conn.getSource(), conn, true)));
+					ie.getOutputConnections().forEach(conn -> {
+						if (!fbElements.contains(conn.getDestination().eContainer().eContainer())) {
+							cmd.add(new BorderCrossingReconnectCommand(conn.getSource(), conn.getSource(), conn, true));
+						}
+					});
+
 				}
 			});
 		}
