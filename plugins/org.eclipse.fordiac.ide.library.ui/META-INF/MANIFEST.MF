@@ -11,10 +11,12 @@ Bundle-ClassPath: .
 Export-Package: org.eclipse.fordiac.ide.library.ui.editors
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
+ org.eclipse.gef,
  org.eclipse.ui,
  org.eclipse.ui.editors,
  org.eclipse.ui.forms,
  org.eclipse.ui.ide,
  org.eclipse.fordiac.ide.library.model,
- org.eclipse.fordiac.ide.ui
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.fordiac.ide.model
 Bundle-ActivationPolicy: lazy

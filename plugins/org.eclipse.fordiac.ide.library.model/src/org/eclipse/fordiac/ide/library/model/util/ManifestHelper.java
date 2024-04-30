@@ -74,10 +74,7 @@ public final class ManifestHelper {
 			return null;
 		}
 		final IFile manifest = container.getFile(new Path(MANIFEST_FILENAME));
-		if (!manifest.exists()) {
-			return null;
-		}
-		return getManifest(URI.createURI(manifest.getLocationURI().toString()));
+		return getManifest(manifest);
 	}
 
 	public static Manifest getFolderManifest(final File container) {
@@ -88,7 +85,21 @@ public final class ManifestHelper {
 		if (files.length == 0) {
 			return null;
 		}
-		return getManifest(URI.createURI(files[0].toURI().toString()));
+		return getManifest(files[0]);
+	}
+
+	public static Manifest getManifest(final IFile manifest) {
+		if (manifest == null || !manifest.exists()) {
+			return null;
+		}
+		return getManifest(URI.createURI(manifest.getLocationURI().toString()));
+	}
+
+	public static Manifest getManifest(final File manifest) {
+		if (manifest == null || !manifest.exists()) {
+			return null;
+		}
+		return getManifest(URI.createURI(manifest.toURI().toString()));
 	}
 
 	public static Manifest createProjectManifest(final IProject project, final Collection<Required> dependencies) {
