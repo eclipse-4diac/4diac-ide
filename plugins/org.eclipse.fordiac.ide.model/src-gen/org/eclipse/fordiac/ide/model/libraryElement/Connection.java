@@ -199,14 +199,6 @@ public interface Connection extends ConfigurableObject, HiddenElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model dx1DataType="org.eclipse.emf.ecore.xml.type.Int" dx1Required="true" dyDataType="org.eclipse.emf.ecore.xml.type.Int" dyRequired="true" dx2DataType="org.eclipse.emf.ecore.xml.type.Int" dx2Required="true"
-	 * @generated
-	 */
-	void updateRoutingData(int dx1, int dy, int dx2);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */

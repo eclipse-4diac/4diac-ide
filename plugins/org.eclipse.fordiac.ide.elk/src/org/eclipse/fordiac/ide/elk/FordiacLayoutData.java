@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.draw2d.geometry.PointList;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -45,7 +46,7 @@ public class FordiacLayoutData {
 	private final Map<FBNetworkElement, Position> positions = new HashMap<>();
 	private final List<ConnectionLayoutData> connData = new ArrayList<>();
 	private final Map<IInterfaceElement, Integer> pins = new HashMap<>();
-	private final Map<Group, Entry<Integer, Integer>> groups = new HashMap<>();
+	private final Map<Group, Entry<Double, Double>> groups = new HashMap<>();
 
 	public Map<FBNetworkElement, Position> getPositions() {
 		return positions;
@@ -59,7 +60,7 @@ public class FordiacLayoutData {
 		return pins;
 	}
 
-	public Map<Group, Entry<Integer, Integer>> getGroups() {
+	public Map<Group, Entry<Double, Double>> getGroups() {
 		return groups;
 	}
 
@@ -76,21 +77,26 @@ public class FordiacLayoutData {
 	}
 
 	public void addGroup(final Group group, final int height, final int width) {
-		groups.put(group, new SimpleEntry<>(Integer.valueOf(height), Integer.valueOf(width)));
+		groups.put(group, new SimpleEntry<>(Double.valueOf(CoordinateConverter.INSTANCE.screenToIEC61499(height)),
+				Double.valueOf(CoordinateConverter.INSTANCE.screenToIEC61499(width))));
 	}
 
 	private static ConnectionRoutingData createRoutingData(final PointList pointList) {
 		final ConnectionRoutingData routingData = LibraryElementFactory.eINSTANCE.createConnectionRoutingData();
 		if (pointList.size() > 2) {
 			// 3 segments
-			routingData.setDx1(pointList.getPoint(1).x() - pointList.getFirstPoint().x());
+			routingData.setDx1(fromScreen(pointList.getPoint(1).x() - pointList.getFirstPoint().x()));
 			if (pointList.size() > 4) {
 				// 5 segments
-				routingData.setDy(pointList.getPoint(2).y() - pointList.getFirstPoint().y());
-				routingData.setDx2(pointList.getLastPoint().x() - pointList.getPoint(pointList.size() - 2).x());
+				routingData.setDy(fromScreen(pointList.getPoint(2).y() - pointList.getFirstPoint().y()));
+				routingData.setDx2(
+						fromScreen(pointList.getLastPoint().x() - pointList.getPoint(pointList.size() - 2).x()));
 			}
 		}
 		return routingData;
 	}
 
+	private static double fromScreen(final int val) {
+		return CoordinateConverter.INSTANCE.screenToIEC61499(val);
+	}
 }

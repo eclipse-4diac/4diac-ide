@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        java: [17]
+        java: [21]
     runs-on: ${{ matrix.os }} 
     name: OS ${{ matrix.os }} Java ${{ matrix.java }} compile
     steps:
@@ -35,7 +35,7 @@ jobs:
     - name: Set up Maven
       uses: stCarolas/setup-maven@v5
       with:
-        maven-version: 3.9.3
+        maven-version: 3.9.6
     - name: Build with Maven
       uses: coactions/setup-xvfb@v1
       with:

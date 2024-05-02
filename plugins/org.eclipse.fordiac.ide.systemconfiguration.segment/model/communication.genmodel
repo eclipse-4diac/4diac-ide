@@ -8,7 +8,7 @@
     editPluginClass="" editorPluginClass="org.eclipse.fordiac.ide.fb.intepreter.mm.OpSem.presentation.OperationalSemanticsEditorPlugin"
     nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     codeFormatting="true" commentFormatting="true" importerID="org.eclipse.emf.importer.ecore"
-    containmentProxies="true" complianceLevel="17.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.systemconfiguration.segment"
+    containmentProxies="true" complianceLevel="21.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.systemconfiguration.segment"
     editorPluginID="org.eclipse.fordiac.ide.fb.interpreter.mm.OpSem.editor" testsPluginID="org.eclipse.fordiac.ide.systemconfiguration.segment.tests"
     usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data"
     importOrganizing="true" cleanup="true" eclipsePlatformVersion="2022-09">

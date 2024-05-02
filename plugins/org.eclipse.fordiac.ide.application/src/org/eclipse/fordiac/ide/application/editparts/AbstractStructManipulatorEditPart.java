@@ -36,7 +36,7 @@ public abstract class AbstractStructManipulatorEditPart extends AbstractFBNEleme
 
 	@Override
 	protected IFigure createFigureForModel() {
-		return new FBNetworkElementFigure(getModel(), this);
+		return new FBNetworkElementFigure(getModel());
 	}
 
 	@Override

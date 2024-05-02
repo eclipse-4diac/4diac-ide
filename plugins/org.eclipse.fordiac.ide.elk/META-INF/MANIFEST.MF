@@ -29,7 +29,7 @@ Require-Bundle: org.eclipse.elk.core,
  org.eclipse.core.commands,
  org.eclipse.fordiac.ide.model.ui,
  org.eclipse.ui.ide
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.fordiac.ide.elk,
  org.eclipse.fordiac.ide.elk.commands

@@ -6,7 +6,7 @@
     editorPluginClass="xmiexport.presentation.XMIExportEditorPlugin" updateClasspath="false"
     nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     commentFormatting="true" testSuiteClass="xmiexport.tests.XMIExportAllTests" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="17.0" copyrightFields="false" usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel#//stcore"
+    complianceLevel="21.0" copyrightFields="false" usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel#//stcore"
     importOrganizing="true">
   <foreignModel>xmiexport.ecore</foreignModel>
   <genPackages prefix="XMIExport" basePackage="org.eclipse.fordiac.ide.xmiexport"

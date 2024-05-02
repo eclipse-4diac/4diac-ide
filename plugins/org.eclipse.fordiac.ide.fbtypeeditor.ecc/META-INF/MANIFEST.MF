@@ -25,7 +25,7 @@ Bundle-Name: ECC Editor
 Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.ecc;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.ecc,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider,

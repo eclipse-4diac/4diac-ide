@@ -51,7 +51,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int DX1_EDEFAULT = 0;
+	protected static final double DX1_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getDx1() <em>Dx1</em>}' attribute.
@@ -61,7 +61,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * @generated
 	 * @ordered
 	 */
-	protected int dx1 = DX1_EDEFAULT;
+	protected double dx1 = DX1_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getDx2() <em>Dx2</em>}' attribute.
@@ -71,7 +71,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int DX2_EDEFAULT = 0;
+	protected static final double DX2_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getDx2() <em>Dx2</em>}' attribute.
@@ -81,7 +81,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * @generated
 	 * @ordered
 	 */
-	protected int dx2 = DX2_EDEFAULT;
+	protected double dx2 = DX2_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getDy() <em>Dy</em>}' attribute.
@@ -91,7 +91,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int DY_EDEFAULT = 0;
+	protected static final double DY_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getDy() <em>Dy</em>}' attribute.
@@ -101,7 +101,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * @generated
 	 * @ordered
 	 */
-	protected int dy = DY_EDEFAULT;
+	protected double dy = DY_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isNeedsValidation() <em>Needs Validation</em>}' attribute.
@@ -148,7 +148,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * @generated
 	 */
 	@Override
-	public int getDx1() {
+	public double getDx1() {
 		return dx1;
 	}
 
@@ -158,8 +158,8 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * @generated
 	 */
 	@Override
-	public void setDx1(int newDx1) {
-		int oldDx1 = dx1;
+	public void setDx1(double newDx1) {
+		double oldDx1 = dx1;
 		dx1 = newDx1;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION_ROUTING_DATA__DX1, oldDx1, dx1));
@@ -171,7 +171,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * @generated
 	 */
 	@Override
-	public int getDx2() {
+	public double getDx2() {
 		return dx2;
 	}
 
@@ -181,8 +181,8 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * @generated
 	 */
 	@Override
-	public void setDx2(int newDx2) {
-		int oldDx2 = dx2;
+	public void setDx2(double newDx2) {
+		double oldDx2 = dx2;
 		dx2 = newDx2;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION_ROUTING_DATA__DX2, oldDx2, dx2));
@@ -194,7 +194,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * @generated
 	 */
 	@Override
-	public int getDy() {
+	public double getDy() {
 		return dy;
 	}
 
@@ -204,8 +204,8 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 * @generated
 	 */
 	@Override
-	public void setDy(int newDy) {
-		int oldDy = dy;
+	public void setDy(double newDy) {
+		double oldDy = dy;
 		dy = newDy;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION_ROUTING_DATA__DY, oldDy, dy));
@@ -241,7 +241,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 */
 	@Override
 	public boolean is1SegementData() {
-		return getDx1() == 0;
+		return getDx1() == 0.0;
 	}
 
 	/**
@@ -251,7 +251,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 */
 	@Override
 	public boolean is3SegementData() {
-		return getDx1() != 0 && getDy() == 0;
+		return getDx1() != 0.0 && getDy() == 0.0;
 	}
 
 	/**
@@ -261,7 +261,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 */
 	@Override
 	public boolean is5SegementData() {
-		return getDx1() != 0 && getDy() != 0;
+		return getDx1() != 0.0 && getDy() != 0.0;
 	}
 
 	/**
@@ -294,13 +294,13 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case LibraryElementPackage.CONNECTION_ROUTING_DATA__DX1:
-				setDx1((Integer)newValue);
+				setDx1((Double)newValue);
 				return;
 			case LibraryElementPackage.CONNECTION_ROUTING_DATA__DX2:
-				setDx2((Integer)newValue);
+				setDx2((Double)newValue);
 				return;
 			case LibraryElementPackage.CONNECTION_ROUTING_DATA__DY:
-				setDy((Integer)newValue);
+				setDy((Double)newValue);
 				return;
 			case LibraryElementPackage.CONNECTION_ROUTING_DATA__NEEDS_VALIDATION:
 				setNeedsValidation((Boolean)newValue);

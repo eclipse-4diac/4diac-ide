@@ -115,6 +115,7 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 			final CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, point, ecc);
 			final CreateTransitionCommand createTransitionCommand = new CreateTransitionCommand(sourceState, destState,
 					null);
+			createTransitionCommand.setDestinationLocation(point);
 			final CompoundCommand compCom = new CompoundCommand();
 			compCom.add(createStateCommand);
 			compCom.add(createTransitionCommand);

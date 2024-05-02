@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -116,10 +115,8 @@ class FBNetworkExporter extends CommonElementExporter {
 
 		addCommentAttribute(comment.getComment());
 		addXYAttributes(comment);
-		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE,
-				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getWidth()));
-		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE,
-				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getHeight()));
+		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE, positionFormater.format(comment.getWidth()));
+		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE, positionFormater.format(comment.getHeight()));
 
 		if (comment.isInGroup()) {
 			addGroupAttribute(comment.getGroup());
@@ -134,10 +131,8 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private void addGroupAttributes(final Group group) throws XMLStreamException {
-		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE,
-				CoordinateConverter.INSTANCE.convertTo1499XML(group.getWidth()));
-		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE,
-				CoordinateConverter.INSTANCE.convertTo1499XML(group.getHeight()));
+		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE, positionFormater.format(group.getWidth()));
+		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE, positionFormater.format(group.getHeight()));
 		getWriter().writeAttribute(LibraryElementTags.LOCKED_ATTRIBUTE, Boolean.toString(group.isLocked()));
 	}
 
@@ -175,11 +170,11 @@ class FBNetworkExporter extends CommonElementExporter {
 	private void addSubappHeightAndWidthAttributes(final SubApp subApp) throws XMLStreamException {
 		if (subApp.getWidth() != 0) {
 			addAttributeElement(LibraryElementTags.WIDTH_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL,
-					CoordinateConverter.INSTANCE.convertTo1499XML(subApp.getWidth()), null);
+					positionFormater.format(subApp.getWidth()), null);
 		}
 		if (subApp.getHeight() != 0) {
 			addAttributeElement(LibraryElementTags.HEIGHT_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL,
-					CoordinateConverter.INSTANCE.convertTo1499XML(subApp.getHeight()), null);
+					positionFormater.format(subApp.getHeight()), null);
 		}
 	}
 
@@ -284,14 +279,13 @@ class FBNetworkExporter extends CommonElementExporter {
 		final ConnectionRoutingData routingData = connection.getRoutingData();
 		if (routingData != null && 0 != routingData.getDx1()) {
 			// only export connection routing information if not a straight line
-			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE,
-					CoordinateConverter.INSTANCE.convertTo1499XML(routingData.getDx1()));
+			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE, positionFormater.format(routingData.getDx1()));
 			if (0 != routingData.getDx2()) {
 				// only export the second two if a five segment connection
 				getWriter().writeAttribute(LibraryElementTags.DX2_ATTRIBUTE,
-						CoordinateConverter.INSTANCE.convertTo1499XML(routingData.getDx2()));
+						positionFormater.format(routingData.getDx2()));
 				getWriter().writeAttribute(LibraryElementTags.DY_ATTRIBUTE,
-						CoordinateConverter.INSTANCE.convertTo1499XML(routingData.getDy()));
+						positionFormater.format(routingData.getDy()));
 			}
 		}
 	}

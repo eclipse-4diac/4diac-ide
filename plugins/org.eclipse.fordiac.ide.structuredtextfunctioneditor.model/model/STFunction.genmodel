@@ -8,7 +8,7 @@
     modelName="STFunction" editPluginClass="org.eclipse.fordiac.ide.structuredtextfunctioneditor.model.stfunction.provider.STFunctionEditPlugin"
     updateClasspath="false" nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     commentFormatting="true" testSuiteClass="org.eclipse.fordiac.ide.structuredtextfunctioneditor.model.stfunction.tests.STFunctionAllTests"
-    complianceLevel="17.0" copyrightFields="false" editorPluginID="org.eclipse.fordiac.ide.structuredtextfunctioneditor.model.editor"
+    complianceLevel="21.0" copyrightFields="false" editorPluginID="org.eclipse.fordiac.ide.structuredtextfunctioneditor.model.editor"
     runtimeVersion="2.33" usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel#//stcore">
   <genPackages prefix="STFunction" basePackage="org.eclipse.fordiac.ide.structuredtextfunctioneditor"
       disposableProviderFactory="true" fileExtensions="stfunc" ecorePackage="STFunction.ecore#/">

@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -384,7 +385,8 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 
 	private Dimension getSubappSize() {
 		if (getModel().isUnfolded()) {
-			return new Dimension(getModel().getWidth(), getModel().getHeight());
+			return new Dimension(CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getWidth()),
+					CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getHeight()));
 		}
 		return new Dimension(-1, -1);
 	}

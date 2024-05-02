@@ -8,7 +8,7 @@ Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider.HierarchyEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.hierarchymanager.model;visibility:=reexport,

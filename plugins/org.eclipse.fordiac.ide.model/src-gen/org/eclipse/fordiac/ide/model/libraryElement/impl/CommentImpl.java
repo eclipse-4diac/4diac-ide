@@ -48,7 +48,7 @@ public class CommentImpl extends FBNetworkElementImpl implements Comment {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int WIDTH_EDEFAULT = 200;
+	protected static final double WIDTH_EDEFAULT = 200.0;
 
 	/**
 	 * The cached value of the '{@link #getWidth() <em>Width</em>}' attribute.
@@ -58,7 +58,7 @@ public class CommentImpl extends FBNetworkElementImpl implements Comment {
 	 * @generated
 	 * @ordered
 	 */
-	protected int width = WIDTH_EDEFAULT;
+	protected double width = WIDTH_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getHeight() <em>Height</em>}' attribute.
@@ -68,7 +68,7 @@ public class CommentImpl extends FBNetworkElementImpl implements Comment {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int HEIGHT_EDEFAULT = 100;
+	protected static final double HEIGHT_EDEFAULT = 100.0;
 
 	/**
 	 * The cached value of the '{@link #getHeight() <em>Height</em>}' attribute.
@@ -78,7 +78,7 @@ public class CommentImpl extends FBNetworkElementImpl implements Comment {
 	 * @generated
 	 * @ordered
 	 */
-	protected int height = HEIGHT_EDEFAULT;
+	protected double height = HEIGHT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -105,7 +105,7 @@ public class CommentImpl extends FBNetworkElementImpl implements Comment {
 	 * @generated
 	 */
 	@Override
-	public int getWidth() {
+	public double getWidth() {
 		return width;
 	}
 
@@ -115,8 +115,8 @@ public class CommentImpl extends FBNetworkElementImpl implements Comment {
 	 * @generated
 	 */
 	@Override
-	public void setWidth(int newWidth) {
-		int oldWidth = width;
+	public void setWidth(double newWidth) {
+		double oldWidth = width;
 		width = newWidth;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMMENT__WIDTH, oldWidth, width));
@@ -128,7 +128,7 @@ public class CommentImpl extends FBNetworkElementImpl implements Comment {
 	 * @generated
 	 */
 	@Override
-	public int getHeight() {
+	public double getHeight() {
 		return height;
 	}
 
@@ -138,8 +138,8 @@ public class CommentImpl extends FBNetworkElementImpl implements Comment {
 	 * @generated
 	 */
 	@Override
-	public void setHeight(int newHeight) {
-		int oldHeight = height;
+	public void setHeight(double newHeight) {
+		double oldHeight = height;
 		height = newHeight;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.COMMENT__HEIGHT, oldHeight, height));
@@ -181,10 +181,10 @@ public class CommentImpl extends FBNetworkElementImpl implements Comment {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case LibraryElementPackage.COMMENT__WIDTH:
-				setWidth((Integer)newValue);
+				setWidth((Double)newValue);
 				return;
 			case LibraryElementPackage.COMMENT__HEIGHT:
-				setHeight((Integer)newValue);
+				setHeight((Double)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);

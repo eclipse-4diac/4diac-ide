@@ -453,20 +453,6 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	@Override
-	public void updateRoutingData(final int dx1, final int dy, final int dx2) {
-		final ConnectionRoutingData newRoutingData = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createConnectionRoutingData();
-		newRoutingData.setDx1(dx1);
-		newRoutingData.setDy(dy);
-		newRoutingData.setDx2(dx2);
-		setRoutingData(newRoutingData);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public void setVisible(final boolean visible) {
 		org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);
 	}

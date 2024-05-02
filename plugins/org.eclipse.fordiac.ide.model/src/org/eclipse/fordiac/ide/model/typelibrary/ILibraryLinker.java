@@ -24,7 +24,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 
 public interface ILibraryLinker {
-	void extractLibrary(final File file, final IProject project) throws IOException;
+	void extractLibrary(final File file, final IProject project, boolean autoimport) throws IOException;
 
 	File newFile(final File destinationDir, final ZipEntry zipEntry) throws IOException;
 
@@ -44,7 +44,7 @@ public interface ILibraryLinker {
 
 	void updateFBInstancesWithNewTypeVersion();
 
-	Set<TypeEntry> cacheOldTypes(final String oldVersion);
+	Set<TypeEntry> cacheOldTypes(final IFolder oldFolder);
 
 	List<String> findLinkedLibs();
 
@@ -53,6 +53,8 @@ public interface ILibraryLinker {
 	File[] listExtractedFiles();
 
 	File[] listStandardLibraries();
+
+	void updateLibrary(String symbolicName, String version);
 
 	void checkManifestFile(final IProject project, final TypeLibrary typeLibrary);
 

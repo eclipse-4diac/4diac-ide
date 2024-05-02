@@ -28,7 +28,7 @@ Bundle-Version: 3.0.0.qualifier
 Bundle-Name: FB Type Management
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.typemanagement;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.typemanagement.handlers,
  org.eclipse.fordiac.ide.typemanagement.navigator,

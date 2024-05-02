@@ -182,7 +182,7 @@ public class CommonElementExporter {
 	public static final String LINE_END = "\n"; //$NON-NLS-1$
 	public static final String TAB = "\t"; //$NON-NLS-1$
 	private static final Pattern CDATA_END_PATTERN = Pattern.compile("\\]\\]>"); //$NON-NLS-1$
-	private static final DecimalFormat positionFormater = new DecimalFormat("#.##"); //$NON-NLS-1$
+	protected static final DecimalFormat positionFormater = new DecimalFormat("#.##"); //$NON-NLS-1$
 
 	private final XMLStreamWriter writer;
 	private final ByteBufferOutputStream outputStream;
@@ -419,7 +419,8 @@ public class CommonElementExporter {
 	 * @return the escaped string
 	 */
 	protected static String fullyEscapeValue(final String value) {
-		String escapedValue = value.replace("&", "&amp;"); //$NON-NLS-1$ //$NON-NLS-2$
+		String escapedValue = value.replace("\r\n", "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&", "&amp;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$

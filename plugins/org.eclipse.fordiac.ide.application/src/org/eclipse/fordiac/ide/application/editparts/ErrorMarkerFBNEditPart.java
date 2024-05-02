@@ -31,7 +31,7 @@ public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 
 	@Override
 	protected IFigure createFigureForModel() {
-		errorMarkerFBNeworkElementFigure = new ErrorMarkerFBNeworkElementFigure(getModel(), this);
+		errorMarkerFBNeworkElementFigure = new ErrorMarkerFBNeworkElementFigure(getModel());
 		updateErrorText();
 		return errorMarkerFBNeworkElementFigure;
 	}

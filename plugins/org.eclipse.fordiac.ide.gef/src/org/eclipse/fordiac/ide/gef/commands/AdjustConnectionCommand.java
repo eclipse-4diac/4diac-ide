@@ -21,6 +21,7 @@ import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -71,7 +72,7 @@ public class AdjustConnectionCommand extends Command {
 	private void updateNewRoutingData() {
 		final Point sourceP = getSourcePoint();
 		final Point destP = getDestinationPoint();
-		final int scaledMinDistance = (int) Math.floor(MoveableRouter.MIN_CONNECTION_FB_DISTANCE * zoom);
+		final int scaledMinDistance = (int) Math.floor(MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN * zoom);
 
 		switch (index) {
 		case 2:
@@ -80,14 +81,14 @@ public class AdjustConnectionCommand extends Command {
 				// we have three segment connection check that we are not beyond the input
 				newDx1 = Math.min(newDx1, destP.x - sourceP.x - scaledMinDistance);
 			}
-			newRoutingData.setDx1((int) Math.floor(newDx1 / zoom));
+			newRoutingData.setDx1(fromScreen((int) Math.floor(newDx1 / zoom)));
 			break;
 		case 4:
-			newRoutingData.setDy((int) Math.floor((point.y - sourceP.y) / zoom));
+			newRoutingData.setDy(fromScreen((int) Math.floor((point.y - sourceP.y) / zoom)));
 			break;
 		case 6:
 			final int newDx2 = Math.max(destP.x - point.x, scaledMinDistance);
-			newRoutingData.setDx2((int) Math.floor(newDx2 / zoom));
+			newRoutingData.setDx2(fromScreen((int) Math.floor(newDx2 / zoom)));
 			break;
 		default:
 			FordiacLogHelper.logError(MessageFormat.format(Messages.AdjustConnectionCommand_WrongConnectionSegmentIndex,
@@ -111,4 +112,7 @@ public class AdjustConnectionCommand extends Command {
 		return connection.getSourceAnchor().getLocation(connection.getSourceAnchor().getReferencePoint()).getCopy();
 	}
 
+	private static double fromScreen(final int val) {
+		return CoordinateConverter.INSTANCE.screenToIEC61499(val);
+	}
 }

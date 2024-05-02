@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
@@ -262,7 +263,8 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 	}
 
 	private Dimension getCommentSize() {
-		return new Dimension(getModel().getWidth(), getModel().getHeight());
+		return new Dimension(CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getWidth()),
+				CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getHeight()));
 	}
 
 	@Override

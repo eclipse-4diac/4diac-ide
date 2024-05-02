@@ -47,7 +47,7 @@ public class ArchivedLibraryImportWizardPage extends LibraryImportWizardPage {
 	}
 
 	public void unzipAndImportArchive() throws IOException {
-		libraryLinker.extractLibrary(selectedFile, selectedProject);
+		libraryLinker.extractLibrary(selectedFile, selectedProject, true);
 	}
 
 	@Override

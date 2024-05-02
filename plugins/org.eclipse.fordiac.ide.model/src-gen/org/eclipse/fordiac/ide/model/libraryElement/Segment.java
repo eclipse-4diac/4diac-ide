@@ -43,13 +43,13 @@ public interface Segment extends TypedConfigureableObject, PositionableElement, 
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Width</em>' attribute.
-	 * @see #setWidth(int)
+	 * @see #setWidth(double)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSegment_Width()
-	 * @model default="200" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model default="200" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 *        extendedMetaData="kind='attribute' name='dx1'"
 	 * @generated
 	 */
-	int getWidth();
+	double getWidth();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getWidth <em>Width</em>}' attribute.
@@ -59,7 +59,7 @@ public interface Segment extends TypedConfigureableObject, PositionableElement, 
 	 * @see #getWidth()
 	 * @generated
 	 */
-	void setWidth(int value);
+	void setWidth(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Out Connections</b></em>' reference list.

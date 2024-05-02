@@ -1,0 +1,29 @@
+name: Auto-sync
+run-name: Auto-sync of upstream branches
+on:
+  workflow_dispatch:
+  schedule: 
+    - cron: "20 4-22 * * *"
+
+jobs:
+  auto-sync:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    steps:
+      - name: Sync release
+        run: |
+          gh repo sync ${{github.repository_owner}}/4diac-ide --branch release
+        
+      - name: Sync develop
+        run: |
+          gh repo sync ${{github.repository_owner}}/4diac-ide --branch develop
+        
+      - name: Sync freeze
+        run: |
+          gh repo sync ${{github.repository_owner}}/4diac-ide --branch freeze
+      
+      - name: Sync 3.0.x
+        run: |
+          gh repo sync ${{github.repository_owner}}/4diac-ide --branch 3.0.x
+          

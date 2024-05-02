@@ -18,6 +18,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.systemconfiguration,
  org.eclipse.ui.views.properties.tabbed
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.systemconfiguration.segment
 Bundle-ActivationPolicy: lazy
