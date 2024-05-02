@@ -44,7 +44,11 @@ public class StructuredDataTypeDataHandler extends AbstractTypeEntryDataHandler<
 		if (varDecl.eContainer() instanceof final StructuredType st) {
 			final DataTypeEntry stTypeEntry = (DataTypeEntry) st.getTypeEntry();
 			inputElementsSet.put(st, inputDataTypeEntry);
-			handleStruct(stTypeEntry, inputElementsSet);
+			if (stTypeEntry != null) {
+				// for attributes the type entry is null and therefore we do not need to
+				// continue our search
+				handleStruct(stTypeEntry, inputElementsSet);
+			}
 		} else if (varDecl.eContainer() instanceof InterfaceList) {
 			// we are either in an untyped subapp or in the interface of a FB or subapp type
 			inputElementsSet.put((INamedElement) varDecl.eContainer().eContainer(), inputDataTypeEntry);
