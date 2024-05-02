@@ -189,7 +189,7 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		return label.substring(0, MAX_LABEL_LENGTH) + "\u2026"; //$NON-NLS-1$
 	}
 
-	private static void openInBreadCrumb(final IInterfaceElement target) {
+	public static void openInBreadCrumb(final IInterfaceElement target) {
 		final IEditorPart editor = OpenListenerManager.openEditor(getTargetEditorElement(target));
 		HandlerHelper.selectElement(target, editor);
 

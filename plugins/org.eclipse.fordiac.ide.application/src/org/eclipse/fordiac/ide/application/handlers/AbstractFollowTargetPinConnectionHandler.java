@@ -17,7 +17,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -37,7 +36,7 @@ public abstract class AbstractFollowTargetPinConnectionHandler extends FollowCon
 
 		if (useTargetRefElement(targetIEEditPart)) {
 			// select the element the target pin is referring to
-			HandlerHelper.selectElement(targetIEEditPart.getModel().getRefElement(), viewer);
+			selectInterfaceElement(viewer, targetIEEditPart.getModel().getRefElement());
 		} else {
 			// select the elements that have incoming connections
 			selectOpposites(event, viewer, null,

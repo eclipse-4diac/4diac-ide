@@ -140,8 +140,8 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			});
 			listViewer.setInput(opposites.toArray());
 
-			listViewer.addSelectionChangedListener(
-					event -> HandlerHelper.selectElement(event.getStructuredSelection().getFirstElement(), viewer));
+			listViewer.addSelectionChangedListener(event -> selectInterfaceElement(viewer,
+					(IInterfaceElement) event.getStructuredSelection().getFirstElement()));
 
 			// on enter close the view
 			listViewer.getControl().addKeyListener(new FollowConnectionKeyListener(dialogArea));
@@ -170,7 +170,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				getHandlerService().executeCommand("org.eclipse.fordiac.ide.application.commands.followRightConnection", //$NON-NLS-1$
 						null);
 			} catch (final Exception e) {
-				throw new RuntimeException("followRightConnection.command not found");
+				throw new RuntimeException("followRightConnection.command not found"); //$NON-NLS-1$
 			}
 		}
 
@@ -179,7 +179,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				getHandlerService().executeCommand("org.eclipse.fordiac.ide.application.commands.followLeftConnection", //$NON-NLS-1$
 						null);
 			} catch (final Exception e) {
-				throw new RuntimeException("followLeftConnection.command not found");
+				throw new RuntimeException("followLeftConnection.command not found"); //$NON-NLS-1$
 			}
 		}
 
@@ -210,7 +210,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 			private void handleRight(final KeyEvent e) {
 				if ((e.stateMask == SWT.CTRL) && (e.keyCode == SWT.ARROW_LEFT)) {
-					HandlerHelper.selectElement(originPin, viewer);
+					selectInterfaceElement(viewer, originPin);
 					dialogArea.getShell().close();
 				}
 				if (e.stateMask == SWT.CTRL && e.keyCode == SWT.ARROW_RIGHT) {
@@ -221,7 +221,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 			private void handleLeft(final KeyEvent e) {
 				if ((e.stateMask == SWT.CTRL) && (e.keyCode == SWT.ARROW_RIGHT)) {
-					HandlerHelper.selectElement(originPin, viewer);
+					selectInterfaceElement(viewer, originPin);
 					dialogArea.getShell().close();
 				}
 				if (e.stateMask == SWT.CTRL && e.keyCode == SWT.ARROW_LEFT) {
@@ -283,23 +283,18 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				.toList();
 	}
 
-	protected static List<IInterfaceElement> resolveTargetPins(final List<IInterfaceElement> opposites,
+	private static List<IInterfaceElement> resolveTargetPins(final List<IInterfaceElement> opposites,
 			final GraphicalViewer viewer) {
 		final List<IInterfaceElement> resolvedOpposites = new ArrayList<>();
-		boolean changeFlag = false;
 		for (final IInterfaceElement element : opposites) {
 			final EditPart ep = (EditPart) (viewer.getEditPartRegistry().get(element));
 			if ((ep instanceof final InterfaceEditPart iep) && isBorderElement(iep)) {
 				resolvedOpposites.addAll(getTargetPins(iep));
-				changeFlag = true;
 			} else {
 				resolvedOpposites.add(element);
 			}
 		}
-		if (changeFlag) {
-			return resolvedOpposites;
-		}
-		return opposites;
+		return resolvedOpposites;
 	}
 
 	private boolean useTargetPins(final InterfaceEditPart iep) {
@@ -326,11 +321,10 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				&& (!fbNetwork.equals(fbnElement.eContainer()));
 	}
 
-	protected static void showOppositeSelectionDialog(final List<IInterfaceElement> opposites,
-			final ExecutionEvent event, final GraphicalViewer viewer, final IInterfaceElement originPin)
-			throws ExecutionException {
+	private static void showOppositeSelectionDialog(final List<IInterfaceElement> opposites, final ExecutionEvent event,
+			final GraphicalViewer viewer, final IInterfaceElement originPin) throws ExecutionException {
 
-		HandlerHelper.selectElement(opposites.get(0), viewer);
+		selectInterfaceElement(viewer, opposites.get(0));
 		viewer.flush();
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final IFigure figure = ((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement()).getFigure();
@@ -382,7 +376,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		final List<IInterfaceElement> resolvedOpposites = resolveTargetPins(opposites, viewer);
 		if (!resolvedOpposites.isEmpty()) {
 			if (resolvedOpposites.size() == 1) {
-				HandlerHelper.selectElement(resolvedOpposites.get(0), viewer);
+				selectInterfaceElement(viewer, resolvedOpposites.get(0));
 			} else {
 				showOppositeSelectionDialog(resolvedOpposites, event, viewer, originPin);
 			}
@@ -424,5 +418,12 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	protected static boolean isExpandedSubappPin(final IInterfaceElement pin) {
 		return pin.getFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded();
+	}
+
+	protected static void selectInterfaceElement(final GraphicalViewer viewer, final IInterfaceElement element) {
+		if (!HandlerHelper.selectElement(element, viewer)) {
+			// we have a subappcrossing element
+			TargetInterfaceElementEditPart.openInBreadCrumb(element);
+		}
 	}
 }
