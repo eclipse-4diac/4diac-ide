@@ -18,11 +18,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 
 public class TargetPinManager {
 
@@ -52,22 +55,38 @@ public class TargetPinManager {
 
 	private List<IInterfaceElement> getTargetPins() {
 		return getModel().getOutputConnections().stream()
-				.filter(con -> (!con.isVisible() && con.getDestination() != null)).flatMap(con -> {
-					if (con.getDestination().getFBNetworkElement() instanceof final SubApp subapp
-							&& subapp.isUnfolded()) {
-						return con.getDestination().getOutputConnections().stream();
-					}
-					return Stream.of(con);
-				}).map(Connection::getDestination).filter(Objects::nonNull).toList();
+				.filter(con -> (!con.isVisible() && con.getDestination() != null))
+				.flatMap(TargetPinManager::getTargetPins).filter(Objects::nonNull).toList();
+	}
+
+	private static Stream<IInterfaceElement> getTargetPins(final Connection con) {
+		final IInterfaceElement destination = con.getDestination();
+		if (destination != null
+				&& followConnections(destination.getFBNetworkElement(), destination.getOutputConnections())) {
+			return destination.getOutputConnections().stream().flatMap(TargetPinManager::getTargetPins);
+		}
+		return Stream.of(destination);
 	}
 
 	private List<IInterfaceElement> getSourcePins() {
 		return getModel().getInputConnections().stream().filter(con -> (!con.isVisible() && con.getSource() != null))
-				.flatMap(con -> {
-					if (con.getSource().getFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded()) {
-						return con.getSource().getInputConnections().stream();
-					}
-					return Stream.of(con);
-				}).map(Connection::getSource).filter(Objects::nonNull).toList();
+				.flatMap(TargetPinManager::getSourcePins).filter(Objects::nonNull).toList();
+	}
+
+	private static Stream<IInterfaceElement> getSourcePins(final Connection con) {
+		final IInterfaceElement source = con.getSource();
+		if (source != null && followConnections(source.getFBNetworkElement(), source.getInputConnections())) {
+			return source.getInputConnections().stream().flatMap(TargetPinManager::getSourcePins);
+		}
+		return Stream.of(source);
+	}
+
+	static boolean followConnections(final FBNetworkElement fbnEl, final EList<Connection> conList) {
+		return fbnEl instanceof final UntypedSubApp subapp && !isContainedInUnfoldedSubapp(subapp)
+				&& !conList.isEmpty();
+	}
+
+	private static boolean isContainedInUnfoldedSubapp(final UntypedSubApp subapp) {
+		return subapp.getOuterFBNetworkElement() instanceof final SubApp outerSubApp && outerSubApp.isUnfolded();
 	}
 }
