@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.With
+import org.eclipse.fordiac.ide.model.LibraryElementTags
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
@@ -384,7 +385,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def protected generateSetInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
 		«IF !variables.empty»
 			void «className»::setInitialValues(bool retain) {
-				«IF variables.exists[ it.getAttributeValue("Retain") !== null ]»
+				«IF variables.exists[ it.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE) !== null ]»
 					«generateRetainedInitialValuesDefinition(variables)»
 				«ELSE»
 					«generateVariables(variables)»
@@ -396,9 +397,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def private generateRetainedInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
 		//values that should be retained
 		if (!retain) {
-			«generateVariables(variables.filter[it.getAttributeValue("Retain") !== null && it.getAttributeValue("Retain").equals("RETAIN")])»
+			«generateVariables(variables.filter[it.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE) !== null && it.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE).equals("RETAIN")])»
 		}
-		«generateVariables(variables.filter[it.getAttributeValue("Retain") === null || !it.getAttributeValue("Retain").equals("RETAIN")])»
+		«generateVariables(variables.filter[it.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE) === null || !it.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE).equals("RETAIN")])»
 	'''
 	
 	def private generateVariables(Iterable<VarDeclaration> variables)'''
