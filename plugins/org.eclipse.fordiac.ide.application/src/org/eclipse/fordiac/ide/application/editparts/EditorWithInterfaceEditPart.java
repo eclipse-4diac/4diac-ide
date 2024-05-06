@@ -42,6 +42,10 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
@@ -54,6 +58,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
@@ -175,6 +180,71 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 
 	private InstanceComment instanceComment;
 	private Figure commentContainer;
+
+	private final Adapter contentAdapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			switch (notification.getEventType()) {
+			case Notification.ADD, Notification.ADD_MANY, Notification.MOVE, Notification.REMOVE,
+					Notification.REMOVE_MANY:
+				refreshChildren();
+				break;
+			case Notification.SET:
+				refreshVisuals();
+				break;
+			default:
+				break;
+			}
+		}
+	};
+
+	private final Adapter interfaceAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			switch (notification.getEventType()) {
+			case Notification.ADD:
+				if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
+						.equals(notification.getFeature())) {
+					refreshVisuals();
+					break;
+				}
+				//$FALL-THROUGH$
+			case Notification.ADD_MANY, Notification.MOVE, Notification.REMOVE, Notification.REMOVE_MANY:
+				refreshChildren();
+				break;
+			default:
+				break;
+			}
+		}
+	};
+
+	@Override
+	public void activate() {
+		super.activate();
+		if ((null != getModel()) && !getModel().eAdapters().contains(contentAdapter)) {
+			getModel().eAdapters().add(contentAdapter);
+			if ((null != getInterfaceList()) && !getInterfaceList().eAdapters().contains(interfaceAdapter)) {
+				getInterfaceList().eAdapters().add(interfaceAdapter);
+			}
+		}
+	}
+
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		if (null != getModel()) {
+			getModel().eAdapters().remove(contentAdapter);
+			if (null != getInterfaceList()) {
+				getInterfaceList().eAdapters().remove(interfaceAdapter);
+			}
+		}
+		if ((controlListener != null) && (getParent() != null) && (getParent().getViewer() != null)
+				&& (getParent().getViewer().getControl() != null)) {
+			getParent().getViewer().getControl().removeControlListener(controlListener);
+		}
+	}
 
 	@Override
 	protected IFigure createFigure() {
@@ -380,15 +450,6 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 			commentContainer.add(commentFigure);
 		} else {
 			super.addChildVisual(childEditPart, index);
-		}
-	}
-
-	@Override
-	public void deactivate() {
-		super.deactivate();
-		if ((controlListener != null) && (getParent() != null) && (getParent().getViewer() != null)
-				&& (getParent().getViewer().getControl() != null)) {
-			getParent().getViewer().getControl().removeControlListener(controlListener);
 		}
 	}
 
