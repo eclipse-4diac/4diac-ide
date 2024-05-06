@@ -377,19 +377,34 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateSetInitialValuesDeclaration(Iterable<VarDeclaration> variables) '''
 		«IF !variables.empty»
-			void setInitialValues() override;
+			void setInitialValues(bool retain) override;
 		«ENDIF»
 	'''
 
 	def protected generateSetInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
 		«IF !variables.empty»
-			void «className»::setInitialValues() {
-			  «FOR variable : variables»
-			  	«variable.generateName» = «variable.generateVariableDefaultValue»;
-			  «ENDFOR»
+			void «className»::setInitialValues(bool retain) {
+				«IF variables.exists[ it.getAttributeValue("Retain") !== null ]»
+					«generateRetainedInitialValuesDefinition(variables)»
+				«ELSE»
+			  		«FOR variable : variables»
+			  			«variable.generateName» = «variable.generateVariableDefaultValue»;
+			  		«ENDFOR»
+				«ENDIF»
 			}
 			
 		«ENDIF»
+	'''
+	def private generateRetainedInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
+		//values that should be retained
+		if (!retain) {
+			«FOR variable : variables.filter[it.getAttributeValue("Retain") !== null && it.getAttributeValue("Retain").equals("RETAIN")]»
+				«variable.generateName» = «variable.generateVariableDefaultValue»;
+			«ENDFOR»
+		}
+		«FOR variable : variables.filter[it.getAttributeValue("Retain") === null || !it.getAttributeValue("Retain").equals("RETAIN")]»
+			«variable.generateName» = «variable.generateVariableDefaultValue»;
+		«ENDFOR»
 	'''
 
 	def protected generateConnectionVariableDeclarations(List<VarDeclaration> variables) '''
