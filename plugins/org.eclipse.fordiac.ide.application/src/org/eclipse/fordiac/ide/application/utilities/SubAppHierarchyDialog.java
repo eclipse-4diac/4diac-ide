@@ -34,6 +34,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
 public class SubAppHierarchyDialog {
+	List<FBNetworkElement> filterList = null;
+
 	final ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(Display.getCurrent().getActiveShell(),
 			new TreeNodeLabelProvider(), new TreeNodeContentProvider()) {
 		@Override
@@ -44,7 +46,8 @@ public class SubAppHierarchyDialog {
 		}
 	};
 
-	public SubAppHierarchyDialog(final FBNetworkElement root) {
+	public SubAppHierarchyDialog(final FBNetworkElement root, final List<FBNetworkElement> filteredElements) {
+		filterList = filteredElements;
 		final List<TreeNode> nodeList = new ArrayList<>();
 		final EObject container = EcoreUtil.getRootContainer(root);
 		if (container instanceof final AutomationSystem as) {
@@ -73,10 +76,10 @@ public class SubAppHierarchyDialog {
 		return null;
 	}
 
-	private static void addFBNetwork(final TreeNode parent, final FBNetwork network) {
+	private void addFBNetwork(final TreeNode parent, final FBNetwork network) {
 		final List<TreeNode> nodeList = new ArrayList<>();
 		network.getNetworkElements().forEach(fbnE -> {
-			if (fbnE instanceof final UntypedSubApp subapp) {
+			if (fbnE instanceof final UntypedSubApp subapp && !filterList.contains(fbnE)) {
 				final TreeNode node = new TreeNode(subapp);
 				node.setParent(parent);
 				nodeList.add(node);
