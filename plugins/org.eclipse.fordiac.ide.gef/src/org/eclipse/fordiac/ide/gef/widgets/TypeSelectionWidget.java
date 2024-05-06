@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -210,7 +209,7 @@ public class TypeSelectionWidget {
 	private void disableOpenEditorForAnyType() {
 		if (configurableObject instanceof final ConfigurableFB configurableFb) {
 			openEditorButton.setEnabled(isNonGenericStructType(configurableFb.getDataType()));
-		} else if ((configurableObject instanceof Event) || (configurableObject instanceof AdapterDeclaration)) {
+		} else if (configurableObject instanceof Event) {
 			// reset parent composite and dispose button
 			final Composite typeComp = tableViewer.getTable().getParent();
 			final GridLayout gridLayout = new GridLayout(1, false);
