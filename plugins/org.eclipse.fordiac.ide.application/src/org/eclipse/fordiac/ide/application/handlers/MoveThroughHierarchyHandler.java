@@ -57,9 +57,9 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 			final ISelection selection = HandlerUtil.getCurrentSelection(event);
 			final List<FBNetworkElement> fbelements = HandlerHelper.getSelectedFBNElements(selection);
 
-			if (!fbelements.isEmpty()) {
+			if (!fbelements.isEmpty() && allElementsFromSameNetwork(fbelements)) {
 				// get selected FBNetwork
-				final SubAppHierarchyDialog dialog = new SubAppHierarchyDialog(fbelements.get(0));
+				final SubAppHierarchyDialog dialog = new SubAppHierarchyDialog(fbelements.get(0), fbelements);
 				final FBNetwork destinationNetwork = dialog.open();
 				if (destinationNetwork == null) {
 					return Status.CANCEL_STATUS;
@@ -91,7 +91,7 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 
 		final List<FBNetworkElement> fbElements = HandlerHelper.getSelectedFBNElements(selection);
-		if ((!fbElements.isEmpty()) && (fbElements.get(0).getFbNetwork().eContainer() instanceof SubApp)) {
+		if (!fbElements.isEmpty()) {
 			// we are inside of a subapp
 			final FBNetwork parent = fbElements.get(0).getFbNetwork();
 			final boolean sameParentNetwork = fbElements.stream().allMatch(el -> parent.equals(el.getFbNetwork()));
@@ -100,6 +100,11 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 		}
 
 		setBaseEnabled(false);
+	}
+
+	private static boolean allElementsFromSameNetwork(final List<FBNetworkElement> fbelements) {
+		final FBNetwork source = fbelements.get(0).getFbNetwork();
+		return fbelements.stream().allMatch(el -> source.equals(el.getFbNetwork()));
 	}
 
 	private static GraphicalViewer getViewer(final FBNetwork subappNetwork, final IEditorPart parent) {

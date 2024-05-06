@@ -238,22 +238,19 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 	private static CompoundCommand createReconnectCommand(final List<FBNetworkElement> fbElements) {
 		final CompoundCommand cmd = new CompoundCommand();
 		for (final FBNetworkElement fbElement : fbElements) {
-			// reconnect the input connections
 			fbElement.getInterface().getAllInterfaceElements().forEach(ie -> {
 				if (ie.isIsInput()) {
-					ie.getInputConnections().forEach(conn -> {
-						if (!fbElements.contains(conn.getSource().eContainer().eContainer())) {
-							cmd.add(new BorderCrossingReconnectCommand(conn.getDestination(), conn.getDestination(),
-									conn, false));
-						}
-					});
+					ie.getInputConnections().stream()
+							// filter connections between selected fbElements
+							.filter(conn -> !fbElements.contains(conn.getSource().eContainer().eContainer()))
+							// add reconnection command to same Interface
+							.forEach(conn -> cmd.add(new BorderCrossingReconnectCommand(conn.getDestination(),
+									conn.getDestination(), conn, false)));
 				} else {
-					ie.getOutputConnections().forEach(conn -> {
-						if (!fbElements.contains(conn.getDestination().eContainer().eContainer())) {
-							cmd.add(new BorderCrossingReconnectCommand(conn.getSource(), conn.getSource(), conn, true));
-						}
-					});
-
+					ie.getOutputConnections().stream()
+							.filter(conn -> !fbElements.contains(conn.getDestination().eContainer().eContainer()))
+							.forEach(conn -> cmd.add(new BorderCrossingReconnectCommand(conn.getSource(),
+									conn.getSource(), conn, true)));
 				}
 			});
 		}
