@@ -1204,7 +1204,6 @@
               </and>
               <test property="org.eclipse.fordiac.ide.application.properties.parentIsSubApp" />
             </or>
-            <test property="org.eclipse.fordiac.ide.application.utilities.isSubapplication" />
           </and>
         </visibleWhen>
       </command>

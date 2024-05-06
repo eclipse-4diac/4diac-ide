@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
@@ -50,7 +51,7 @@ import org.eclipse.swt.graphics.Point;
 
 public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 
-	protected final SubApp sourceSubApp;
+	protected final FBNetwork sourceNetwork;
 	private Position destination;
 	private final FBNetwork destinationNetwork;
 	protected final List<FBNetworkElement> elements;
@@ -70,28 +71,29 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 			final FBNetwork destinationNetwork) {
 		this.elements = new ArrayList<>(elements);
 		setDestination(destination);
-		this.sourceSubApp = getSourceSubapp();
+		this.sourceNetwork = getSourceNetwork();
 		if (destinationNetwork == null) {
-			this.destinationNetwork = sourceSubApp != null ? sourceSubApp.getFbNetwork() : null;
+			if (sourceNetwork != null && sourceNetwork.eContainer() instanceof final SubApp subapp) {
+				this.destinationNetwork = subapp.getFbNetwork();
+			} else {
+				this.destinationNetwork = null;
+			}
 		} else {
 			this.destinationNetwork = destinationNetwork;
 		}
 	}
 
-	private SubApp getSourceSubapp() {
-		if (!elements.isEmpty() && (elements.get(0).getOuterFBNetworkElement() instanceof final SubApp fbel)) {
-			return fbel;
-		}
-		return null;
+	private FBNetwork getSourceNetwork() {
+		return elements.isEmpty() ? null : elements.get(0).getFbNetwork();
 	}
 
 	@Override
 	public boolean canExecute() {
-		return (null != sourceSubApp) && allElementsFromSameSubApp();
+		return (null != destinationNetwork) && allElementsFromSameNetwork();
 	}
 
-	private boolean allElementsFromSameSubApp() {
-		return elements.stream().allMatch(el -> sourceSubApp.equals(el.getOuterFBNetworkElement()));
+	private boolean allElementsFromSameNetwork() {
+		return elements.stream().allMatch(el -> sourceNetwork.equals(el.getFbNetwork()));
 	}
 
 	@Override
@@ -132,7 +134,7 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 				unmappingCmds.add(cmd);
 			}
 		}
-		sourceSubApp.getSubAppNetwork().getNetworkElements().remove(element);
+		sourceNetwork.getNetworkElements().remove(element);
 	}
 
 	protected void addElementsToDestination() {
@@ -179,7 +181,7 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 	}
 
 	private void redoRemoveElementFromSubapp(final FBNetworkElement element) {
-		sourceSubApp.getSubAppNetwork().getNetworkElements().remove(element);
+		sourceNetwork.getNetworkElements().remove(element);
 	}
 
 	protected void redoAddElementsToDestination() {
@@ -210,13 +212,13 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 
 	private void undoRemoveElementFromSubapp(final FBNetworkElement element) {
 		newPos.put(element, element.getPosition());
-		sourceSubApp.getSubAppNetwork().getNetworkElements().add(element);
+		sourceNetwork.getNetworkElements().add(element);
 	}
 
 	protected void undoAddElementsToDestination() {
 		setUniqueName.undo();
 		elements.forEach(this::undoAddElementToDestination);
-		connsMovedToParent.forEach(sourceSubApp.getFbNetwork()::addConnection);
+		connsMovedToParent.forEach(sourceNetwork::addConnection);
 	}
 
 	private void undoAddElementToDestination(final FBNetworkElement element) {
@@ -230,7 +232,11 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 
 	private void positionElements() {
 		if (null == destination) {
-			destination = sourceSubApp.getPosition();
+			if (destinationNetwork.eContainer() instanceof final SubApp subapp) {
+				destination = subapp.getPosition();
+			} else {
+				destination = LibraryElementFactory.eINSTANCE.createPosition();
+			}
 		}
 		FBNetworkHelper.moveFBNetworkToDestination(elements, destination);
 	}
@@ -264,8 +270,8 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 
 	@Override
 	public Set<EObject> getAffectedObjects() {
-		if (sourceSubApp != null && destinationNetwork != null) {
-			return Set.of(sourceSubApp, destinationNetwork);
+		if (sourceNetwork != null && destinationNetwork != null) {
+			return Set.of(sourceNetwork, destinationNetwork);
 		}
 		return Set.of();
 	}
