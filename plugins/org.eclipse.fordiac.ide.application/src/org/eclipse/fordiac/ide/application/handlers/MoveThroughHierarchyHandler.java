@@ -24,7 +24,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
+import org.eclipse.fordiac.ide.application.commands.MoveAndReconnectCommand;
 import org.eclipse.fordiac.ide.application.utilities.SubAppHierarchyDialog;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -66,7 +66,7 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 				}
 
 				final Point destination = getDestination(editor, fbelements, destinationNetwork);
-				final MoveElementsFromSubAppCommand cmd = new MoveElementsFromSubAppCommand(fbelements, destination,
+				final MoveAndReconnectCommand cmd = new MoveAndReconnectCommand(fbelements, destination,
 						destinationNetwork);
 				getCommandStack(editor).execute(cmd);
 
