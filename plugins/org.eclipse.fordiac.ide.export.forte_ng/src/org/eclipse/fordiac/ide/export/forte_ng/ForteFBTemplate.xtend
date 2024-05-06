@@ -387,9 +387,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 				«IF variables.exists[ it.getAttributeValue("Retain") !== null ]»
 					«generateRetainedInitialValuesDefinition(variables)»
 				«ELSE»
-			  		«FOR variable : variables»
-			  			«variable.generateName» = «variable.generateVariableDefaultValue»;
-			  		«ENDFOR»
+					«generateVariables(variables)»
 				«ENDIF»
 			}
 			
@@ -398,11 +396,13 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def private generateRetainedInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
 		//values that should be retained
 		if (!retain) {
-			«FOR variable : variables.filter[it.getAttributeValue("Retain") !== null && it.getAttributeValue("Retain").equals("RETAIN")]»
-				«variable.generateName» = «variable.generateVariableDefaultValue»;
-			«ENDFOR»
+			«generateVariables(variables.filter[it.getAttributeValue("Retain") !== null && it.getAttributeValue("Retain").equals("RETAIN")])»
 		}
-		«FOR variable : variables.filter[it.getAttributeValue("Retain") === null || !it.getAttributeValue("Retain").equals("RETAIN")]»
+		«generateVariables(variables.filter[it.getAttributeValue("Retain") === null || !it.getAttributeValue("Retain").equals("RETAIN")])»
+	'''
+	
+	def private generateVariables(Iterable<VarDeclaration> variables)'''
+		«FOR variable : variables»
 			«variable.generateName» = «variable.generateVariableDefaultValue»;
 		«ENDFOR»
 	'''
