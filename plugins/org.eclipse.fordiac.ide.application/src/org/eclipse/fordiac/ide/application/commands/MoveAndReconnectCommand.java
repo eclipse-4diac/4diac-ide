@@ -48,7 +48,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.graphics.Point;
 
-public class MoveElementsFromSubAppCommand extends Command implements ScopedCommand {
+public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 
 	protected final SubApp sourceSubApp;
 	private Position destination;
@@ -62,11 +62,11 @@ public class MoveElementsFromSubAppCommand extends Command implements ScopedComm
 	private final Set<Connection> connsMovedToParent = new HashSet<>();
 	private CompoundCommand reconnectConnectionsCommands = null;
 
-	public MoveElementsFromSubAppCommand(final Collection<FBNetworkElement> elements, final Point destination) {
+	public MoveAndReconnectCommand(final Collection<FBNetworkElement> elements, final Point destination) {
 		this(elements, destination, null);
 	}
 
-	public MoveElementsFromSubAppCommand(final Collection<FBNetworkElement> elements, final Point destination,
+	public MoveAndReconnectCommand(final Collection<FBNetworkElement> elements, final Point destination,
 			final FBNetwork destinationNetwork) {
 		this.elements = new ArrayList<>(elements);
 		setDestination(destination);

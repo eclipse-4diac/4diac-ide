@@ -30,7 +30,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
+import org.eclipse.fordiac.ide.application.commands.MoveAndReconnectCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -60,7 +60,7 @@ public class MoveToParentHandler extends AbstractHandler {
 				final int destX = bounds.x;
 				final int destY = bounds.y + bounds.height + 20;
 
-				final MoveElementsFromSubAppCommand cmd = new MoveElementsFromSubAppCommand(fbelements,
+				final MoveAndReconnectCommand cmd = new MoveAndReconnectCommand(fbelements,
 						new Point(destX, destY));
 				getCommandStack(editor).execute(cmd);
 
