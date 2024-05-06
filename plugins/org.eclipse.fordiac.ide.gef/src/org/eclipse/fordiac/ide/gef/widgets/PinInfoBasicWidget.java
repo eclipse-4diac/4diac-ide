@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
@@ -54,7 +53,6 @@ public class PinInfoBasicWidget implements CommandExecutor {
 	}
 
 	protected void createWidget(final Composite parent) {
-
 		GridLayoutFactory.swtDefaults().numColumns(2).generateLayout(parent);
 
 		widgetFactory.createCLabel(parent, FordiacMessages.Name + ":"); //$NON-NLS-1$
@@ -119,21 +117,12 @@ public class PinInfoBasicWidget implements CommandExecutor {
 	protected void checkFieldEnablements() {
 		nameText.setEditable(isEditable());
 		commentText.setEditable(isEditable());
-		if (type instanceof VarDeclaration) {
-			typeSelectionWidget.setEditable(false);
-			typeSelectionWidget.getControl().setVisible(false);
-			GridDataFactory.swtDefaults().exclude(true).applyTo(typeSelectionWidget.getControl());
-			typeDeclarationEditor.setEditable(isTypeChangeable());
-			typeDeclarationEditor.getControl().setVisible(true);
-			GridDataFactory.fillDefaults().grab(true, false).applyTo(typeDeclarationEditor.getControl());
-		} else {
-			typeSelectionWidget.setEditable(isTypeChangeable());
-			typeSelectionWidget.getControl().setVisible(true);
-			GridDataFactory.fillDefaults().grab(true, false).applyTo(typeSelectionWidget.getControl());
-			typeDeclarationEditor.setEditable(false);
-			typeDeclarationEditor.getControl().setVisible(false);
-			GridDataFactory.swtDefaults().exclude(true).applyTo(typeDeclarationEditor.getControl());
-		}
+		typeSelectionWidget.setEditable(isTypeChangeable());
+		typeSelectionWidget.getControl().setVisible(true);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(typeSelectionWidget.getControl());
+		typeDeclarationEditor.setEditable(false);
+		typeDeclarationEditor.getControl().setVisible(false);
+		GridDataFactory.swtDefaults().exclude(true).applyTo(typeDeclarationEditor.getControl());
 	}
 
 	protected boolean isEditable() {
