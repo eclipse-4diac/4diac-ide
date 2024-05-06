@@ -71,15 +71,14 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 				getCommandStack(editor).execute(cmd);
 
 				// Update editor view
-				if (destinationNetwork.eContainer() instanceof final SubApp subapp && subapp.isUnfolded()) {
-					final GraphicalViewer viewer = HandlerHelper.openEditor(subapp.getFbNetwork().eContainer())
-							.getAdapter(GraphicalViewer.class);
-					HandlerHelper.selectElement(fbelements.get(0), viewer);
-				} else {
-					final GraphicalViewer viewer = HandlerHelper.openEditor(destinationNetwork.eContainer())
-							.getAdapter(GraphicalViewer.class);
-					HandlerHelper.selectElement(fbelements.get(0), viewer);
+				EObject obj = destinationNetwork.eContainer();
+				while (obj instanceof final SubApp subapp && subapp.isUnfolded()) {
+					obj = subapp.eContainer().eContainer();
 				}
+
+				final GraphicalViewer viewer = HandlerHelper.openEditor(obj).getAdapter(GraphicalViewer.class);
+				HandlerHelper.selectElement(fbelements.get(0), viewer);
+
 			}
 		}
 		return Status.OK_STATUS;
