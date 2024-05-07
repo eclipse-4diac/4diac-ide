@@ -62,7 +62,7 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 
 	private static String getOldVisibleChildren(final StructManipulator mux) {
 		if (mux instanceof final Demultiplexer demux && demux.isIsConfigured()) {
-			return ConfigurableFBManagement.buildVisibleChildrenString(demux);
+			return ConfigurableFBManagement.buildVisibleChildrenString(demux.getMemberVars());
 		}
 		return null;
 	}
