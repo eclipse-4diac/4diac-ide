@@ -379,31 +379,34 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateSetInitialValuesDeclaration(Iterable<VarDeclaration> variables) '''
 		«IF !variables.empty»
-			void setInitialValues(bool retain) override;
+			void setInitialValues(bool cold) override;
 		«ENDIF»
 	'''
 
 	def protected generateSetInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
 		«IF !variables.empty»
-			void «className»::setInitialValues(bool retain) {
+			void «className»::setInitialValues(bool cold) {
 				«IF variables.exists[ it.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE) !== null ]»
 					«generateRetainedInitialValuesDefinition(variables)»
 				«ELSE»
-					«generateVariables(variables)»
+					«generateVariableDefaultAssignment(variables)»
 				«ENDIF»
 			}
 			
 		«ENDIF»
 	'''
 	def private generateRetainedInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
-		//values that should be retained
-		if (!retain) {
-			«generateVariables(variables.filter[it.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE) !== null && it.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE).equals(RetainTag.RETAIN.string)])»
+		if (cold) {
+			«generateVariableDefaultAssignment(variables.filter[isRetainedVariable(it)])»
 		}
-		«generateVariables(variables.filter[it.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE) === null || !it.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE).equals(RetainTag.RETAIN.string)])»
+		«generateVariableDefaultAssignment(variables.filter[!isRetainedVariable(it)])»
 	'''
 	
-	def private generateVariables(Iterable<VarDeclaration> variables)'''
+	def private boolean isRetainedVariable(VarDeclaration variable) {
+		return variable.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE) !== null && variable.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE).equals(RetainTag.RETAIN.string);
+	}
+	
+	def private generateVariableDefaultAssignment(Iterable<VarDeclaration> variables)'''
 		«FOR variable : variables»
 			«variable.generateName» = «variable.generateVariableDefaultValue»;
 		«ENDFOR»
