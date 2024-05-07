@@ -20,7 +20,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -64,7 +67,8 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final CompositeChange change = new CompositeChange(getProcessorName());
-		change.add(new RenameElementChange(elementURI.lastSegment(), elementURI, newName));
+		final RenameElementChange change2 = new RenameElementChange(elementURI.lastSegment(), elementURI, newName);
+		change.add(change2);
 		createChildChanges(change);
 		return change;
 	}
@@ -74,10 +78,28 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(typeEntry);
 		final List<? extends EObject> result = search.performSearch();
 
+		for (final EObject eObject : result) {
+
+		}
+
 		final var obj = getChildByURI(typeEntry.getType(), elementURI);
 		String oldName = "";
 		if (obj instanceof final VarDeclaration varDecl) {
 			oldName = varDecl.getName();
+		}
+
+		for (final EObject eObject : result) {
+
+			if (eObject instanceof final FBNetworkElement fbNeworkElement) {
+				// System.out.println(fbNeworkElement);
+				final IInterfaceElement interfaceElement = fbNeworkElement.getInterfaceElement(newName);
+				// System.out.println(interfaceElement);
+
+				final ReconnectPinChange c = new ReconnectPinChange(EcoreUtil.getURI(eObject), FBNetworkElement.class,
+						newName, oldName, fbNeworkElement);
+				change.add(c);
+			}
+
 		}
 
 	}

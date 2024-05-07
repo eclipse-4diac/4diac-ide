@@ -52,6 +52,7 @@ public class RenameElementRefactoringParticipant extends RenameParticipant {
 			throws OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
 		IdentifierVerifier.verifyIdentifier(getArguments().getNewName()).ifPresent(status::addFatalError);
+		System.out.println(status);
 		return status;
 	}
 
