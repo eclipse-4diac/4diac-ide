@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2011, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 			Johannes Kepler University,
  * 							Primetals Technologies Austria GmbH
  *
@@ -26,6 +26,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.figures.FBTypeFigure;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
@@ -33,12 +34,12 @@ import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.widgets.Display;
 
 public class FBTypeEditPart extends AbstractConnectableEditPart {
 
@@ -46,22 +47,23 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 	final List<AbstractContainerElement> containerChildren = new ArrayList<>(6);
 	private DiagramFontChangeListener fontChangeListener;
 
-	private final Adapter adapter = new EContentAdapter() {
+	private final Adapter versionInfoAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (Notification.REMOVING_ADAPTER != notification.getEventType()) {
-				final Object feature = notification.getFeature();
-				if ((LibraryElementPackage.eINSTANCE.getVersionInfo().equals(feature))
-						|| (LibraryElementPackage.eINSTANCE.getVersionInfo_Version().equals(feature))) {
-					getFigure().updateVersionInfoLabel();
-				}
+			final Object feature = notification.getFeature();
+			if (!notification.isTouch() && (LibraryElementPackage.eINSTANCE.getVersionInfo_Version().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getLibraryElement_VersionInfo().equals(feature))) {
+				getFigure().updateVersionInfoLabel();
+			}
+		}
 
-				Display.getDefault().syncExec(() -> {
-					if ((null != getParent()) && (null != getFigure()) && (getFigure().isShowing())) {
-						refresh();
-					}
-				});
+		@Override
+		protected void addAdapter(final Notifier notifier) {
+			// in addition to the root FBType we only want to get VersionInfo updates,
+			// therefore we limit the addAdapter to VersionInfos
+			if (notifier instanceof VersionInfo) {
+				super.addAdapter(notifier);
 			}
 		}
 	};
@@ -69,7 +71,7 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 	@Override
 	public void activate() {
 		super.activate();
-		getModel().eAdapters().add(adapter);
+		getModel().eAdapters().add(versionInfoAdapter);
 		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
 		// position the FB at 0,0
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), new Rectangle(0, 0, -1, -1));
@@ -81,9 +83,8 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		if (controlListener != null) {
 			getParent().getViewer().getControl().removeControlListener(controlListener);
 		}
-		getModel().eAdapters().remove(adapter);
+		getModel().eAdapters().remove(versionInfoAdapter);
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
-
 	}
 
 	private IPropertyChangeListener getFontChangeListener() {
