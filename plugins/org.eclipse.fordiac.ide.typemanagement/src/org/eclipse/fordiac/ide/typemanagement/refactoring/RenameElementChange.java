@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
-import java.util.EnumSet;
 import java.util.Objects;
 
 import org.eclipse.core.runtime.CoreException;
@@ -26,11 +25,10 @@ import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class RenameElementChange extends AbstractCommandChange<INamedElement> implements IFordiacPreviewChange {
+public class RenameElementChange extends AbstractCommandChange<INamedElement> {
 
 	private final String newName;
 	private String oldName;
-	private final EnumSet<ChangeState> state = EnumSet.noneOf(ChangeState.class);
 
 	public RenameElementChange(final String name, final URI elementURI, final String newName) {
 		super(name, elementURI, INamedElement.class);
@@ -59,23 +57,4 @@ public class RenameElementChange extends AbstractCommandChange<INamedElement> im
 		return status;
 	}
 
-	@Override
-	public EnumSet<ChangeState> getState() {
-		return state;
-	}
-
-	@Override
-	public EnumSet<ChangeState> getAllowedChoices() {
-		return EnumSet.of(ChangeState.Reconnect, ChangeState.NO_CHANGE, ChangeState.DELETE);
-	}
-
-	@Override
-	public void addState(final ChangeState newState) {
-		state.add(newState);
-	}
-
-	@Override
-	public EnumSet<ChangeState> getDefaultSelection() {
-		return EnumSet.of(ChangeState.Reconnect);
-	}
 }
