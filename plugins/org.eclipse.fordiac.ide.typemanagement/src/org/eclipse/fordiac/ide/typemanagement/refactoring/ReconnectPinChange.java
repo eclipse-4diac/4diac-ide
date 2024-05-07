@@ -8,9 +8,12 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ReconnectEventConnectionCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
@@ -20,35 +23,20 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public class ReconnectPinChange extends AbstractCommandChange<FBNetworkElement> implements IFordiacPreviewChange {
 
-	private final EnumSet<ChangeState> state = EnumSet.noneOf(ChangeState.class);
+	private final EnumSet<ChangeState> state = EnumSet.of(ChangeState.RECONNECT);
 	private final String newName;
 	private final String oldName;
-	private final FBNetworkElement instance;
 
 	protected ReconnectPinChange(final URI elementURI, final Class<FBNetworkElement> elementClass, final String newName,
-			final String oldName, final FBNetworkElement fbNeworkElement) {
-		super(elementURI, elementClass);
+			final String oldName) {
+		super("Handle connection of : " + oldName, elementURI, elementClass);
 		this.newName = newName;
 		this.oldName = oldName;
-		this.instance = fbNeworkElement;
-	}
-
-	@Override
-	public void initializeValidationData(final FBNetworkElement element, final IProgressMonitor pm) {
-
-	}
-
-	@Override
-	public RefactoringStatus isValid(final FBNetworkElement element, final IProgressMonitor pm)
-			throws CoreException, OperationCanceledException {
-
-		return null;
 	}
 
 	@Override
 	protected Command createCommand(final FBNetworkElement element) {
-
-		return new ReconnectPinByName(oldName, newName, element, ChangeState.Reconnect);
+		return new ReconnectPinByName(oldName, newName, element, state);
 
 	}
 
@@ -59,7 +47,7 @@ public class ReconnectPinChange extends AbstractCommandChange<FBNetworkElement> 
 
 	@Override
 	public EnumSet<ChangeState> getAllowedChoices() {
-		return EnumSet.of(ChangeState.Reconnect, ChangeState.NO_CHANGE, ChangeState.DELETE);
+		return EnumSet.of(ChangeState.RECONNECT, ChangeState.NO_CHANGE, ChangeState.DELETE);
 	}
 
 	@Override
@@ -69,7 +57,18 @@ public class ReconnectPinChange extends AbstractCommandChange<FBNetworkElement> 
 
 	@Override
 	public EnumSet<ChangeState> getDefaultSelection() {
-		return EnumSet.of(ChangeState.Reconnect);
+		return EnumSet.of(ChangeState.RECONNECT);
+	}
+
+	@Override
+	public void initializeValidationData(final FBNetworkElement element, final IProgressMonitor pm) {
+
+	}
+
+	@Override
+	public RefactoringStatus isValid(final FBNetworkElement element, final IProgressMonitor pm)
+			throws CoreException, OperationCanceledException {
+		return null;
 	}
 
 }
@@ -79,10 +78,11 @@ class ReconnectPinByName extends Command {
 	final String oldName;
 	final String newName;
 	final FBNetworkElement element;
-	private final ChangeState state;
+	final CompoundCommand cmds = new CompoundCommand();
+	private final EnumSet<ChangeState> state;
 
 	public ReconnectPinByName(final String oldName, final String newName, final FBNetworkElement fbNeworkElement,
-			final ChangeState state) {
+			final EnumSet<ChangeState> state) {
 		this.oldName = oldName;
 		this.newName = newName;
 		this.element = fbNeworkElement;
@@ -91,41 +91,78 @@ class ReconnectPinByName extends Command {
 
 	@Override
 	public boolean canExecute() {
-
-		return state.equals(ChangeState.Reconnect);
+		return state.contains(ChangeState.RECONNECT) || state.contains(ChangeState.DELETE);
 	}
 
 	@Override
 	public void execute() {
-		System.out.println(element);
 		final IInterfaceElement interfaceElement = element.getInterfaceElement(newName);
-		System.out.println("new" + interfaceElement);
 		final IInterfaceElement oldinterfaceElement = element.getInterfaceElement(oldName);
-
 		if (oldinterfaceElement instanceof final ErrorMarkerInterface errorMarkerInterface) {
 			final EList<Connection> inputConnections = getConnection(errorMarkerInterface);
-			final Class<? extends EList> class1 = inputConnections.getClass();
 
-			final CompoundCommand cmds = new CompoundCommand();
-			for (final Connection c : inputConnections) {
-
-				if (c instanceof final DataConnection dc) {
-					final ReconnectDataConnectionCommand cmd = new ReconnectDataConnectionCommand(dc,
-							!errorMarkerInterface.isIsInput(), interfaceElement, element.getFbNetwork());
-					cmds.add(cmd);
-				}
-
+			if (state.contains(ChangeState.RECONNECT)) {
+				reconnect(interfaceElement, errorMarkerInterface, inputConnections);
+			} else if (state.contains(ChangeState.DELETE)) {
+				deleteConnection(inputConnections);
 			}
 
 			cmds.execute();
 		}
 
-		// System.out.println("old" + oldinterfaceElement);
 	}
 
-	private EList<Connection> getConnection(final ErrorMarkerInterface errorMarkerInterface) {
+	private void deleteConnection(final EList<Connection> inputConnections) {
+		for (final Connection c : inputConnections) {
+			cmds.add(new DeleteConnectionCommand(c));
+		}
+	}
+
+	private void reconnect(final IInterfaceElement interfaceElement, final ErrorMarkerInterface errorMarkerInterface,
+			final EList<Connection> inputConnections) {
+		for (final Connection c : inputConnections) {
+			reconnect(c, interfaceElement, errorMarkerInterface, cmds);
+		}
+	}
+
+	private void reconnect(final Connection c, final IInterfaceElement interfaceElement,
+			final ErrorMarkerInterface errorMarkerInterface, final CompoundCommand cmds) {
+		if (c instanceof final DataConnection dc) {
+			final ReconnectDataConnectionCommand cmd = new ReconnectDataConnectionCommand(dc,
+					!errorMarkerInterface.isIsInput(), interfaceElement, element.getFbNetwork());
+			cmds.add(cmd);
+		}
+
+		if (c instanceof final EventConnection dc) {
+			final ReconnectEventConnectionCommand cmd = new ReconnectEventConnectionCommand(dc,
+					!errorMarkerInterface.isIsInput(), interfaceElement, element.getFbNetwork());
+			cmds.add(cmd);
+		}
+	}
+
+	private static EList<Connection> getConnection(final IInterfaceElement errorMarkerInterface) {
 		return errorMarkerInterface.isIsInput() ? errorMarkerInterface.getInputConnections()
 				: errorMarkerInterface.getOutputConnections();
+	}
+
+	@Override
+	public boolean canUndo() {
+		return cmds.canUndo();
+	}
+
+	@Override
+	public boolean canRedo() {
+		return cmds.canRedo();
+	}
+
+	@Override
+	public void undo() {
+		cmds.undo();
+	}
+
+	@Override
+	public void redo() {
+		cmds.redo();
 	}
 
 }

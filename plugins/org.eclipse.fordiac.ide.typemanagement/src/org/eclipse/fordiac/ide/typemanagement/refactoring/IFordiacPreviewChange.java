@@ -22,7 +22,7 @@ public interface IFordiacPreviewChange {
 	public enum ChangeState {
 		DELETE(Messages.PreviewChange_DeleteChoice), CHANGE_TO_ANY(Messages.PreviewChange_ChangeToAnyStruct),
 		REPLACE_WITH_MARKER(Messages.PreviewChange_ReplaceWithMarker), NO_CHANGE(Messages.PreviewChange_NoChange),
-		Reconnect("Reconnect");
+		RECONNECT(Messages.IFordiacPreviewChange_Reconnect0);
 
 		private final String descriptor;
 
