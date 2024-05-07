@@ -466,7 +466,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		return elements;
 	}
 
-	private List<Object> getPinIndicators(final boolean input, final boolean output) {
+	protected List<Object> getPinIndicators(final boolean input, final boolean output) {
 		final List<Object> indicators = new ArrayList<>(2);
 		if (input) {
 			if (inputPinIndicator == null) {
