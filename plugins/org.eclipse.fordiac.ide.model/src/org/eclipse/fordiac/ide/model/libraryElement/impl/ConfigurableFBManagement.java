@@ -136,19 +136,40 @@ public final class ConfigurableFBManagement {
 	}
 
 	private static EList<Attribute> getConfigurableDemuxAttributes(final Demultiplexer fb) {
-		final Attribute attr = LibraryElementFactory.eINSTANCE.createAttribute();
-		attr.setName(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
-		attr.setType(ElementaryTypes.STRING);
-		attr.setValue(buildVisibleChildrenString(fb));
-		return ECollections.asEList(getStructManipulatorAttributes(fb).get(0), attr);
+		final EList<Attribute> structTypeAttr = getStructManipulatorAttributes(fb);
+		if (fb.isIsConfigured()) {
+			final Attribute attr = LibraryElementFactory.eINSTANCE.createAttribute();
+			attr.setName(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
+			attr.setType(ElementaryTypes.STRING);
+			attr.setValue(buildVisibleChildrenString(fb.getMemberVars()));
+			if (!isInDefaultConfiguration(fb, attr.getValue(), fb.getDataType())) {
+				return ECollections.asEList(structTypeAttr.get(0), attr);
+			}
+			// Until the configured state is updated automatically in the commands, save result here:
+			fb.setIsConfigured(false);
+		}
+		return structTypeAttr;
 	}
 
-	public static String buildVisibleChildrenString(final StructManipulator fb) {
-		if (fb.getMemberVars().isEmpty()) {
+	private static boolean isInDefaultConfiguration(final Demultiplexer demux, final String visibleChildrenString,
+			final DataType dataType) {
+		if (!(dataType instanceof StructuredType)) { // could be error marker
+			return true;
+		}
+		final EList<VarDeclaration> possibleChildren = ((StructuredType) dataType).getMemberVariables();
+		if (demux.getMemberVars().size() != possibleChildren.size()) {
+			return false;
+		}
+		final String unconfiguredVarList = buildVisibleChildrenString(possibleChildren);
+		return unconfiguredVarList.equals(visibleChildrenString);
+	}
+
+	public static String buildVisibleChildrenString(final EList<VarDeclaration> memberVars) {
+		if (memberVars.isEmpty()) {
 			return ""; //$NON-NLS-1$
 		}
 		final StringBuilder sb = new StringBuilder();
-		fb.getMemberVars().forEach(varDecl -> sb.append(varDecl.getName() + ",")); //$NON-NLS-1$
+		memberVars.forEach(varDecl -> sb.append(varDecl.getName() + ",")); //$NON-NLS-1$
 		return sb.substring(0, sb.length() - 1); // avoid adding "," in the end
 	}
 
@@ -166,7 +187,7 @@ public final class ConfigurableFBManagement {
 			getEventWithPins(muxer).getWith().clear();
 		} else if (muxer instanceof final Demultiplexer demux && demux.isIsConfigured()) {
 			// updating requires finding all elements again - struct may have changed!
-			updateConfiguredDemuxConfiguration(demux, buildVisibleChildrenString(muxer));
+			updateConfiguredDemuxConfiguration(demux, buildVisibleChildrenString(muxer.getMemberVars()));
 		} else {
 			// create member variables of struct as data input ports
 			final boolean createAsInputs = muxer instanceof Multiplexer;
