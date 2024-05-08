@@ -56,4 +56,5 @@ public class RenameElementChange extends AbstractCommandChange<INamedElement> {
 		}
 		return status;
 	}
+
 }

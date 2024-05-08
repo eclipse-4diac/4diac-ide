@@ -50,12 +50,12 @@ public interface SubApp extends FBNetworkElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Width</em>' attribute.
-	 * @see #setWidth(int)
+	 * @see #setWidth(double)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp_Width()
-	 * @model default="200" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model default="200" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 * @generated
 	 */
-	int getWidth();
+	double getWidth();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getWidth <em>Width</em>}' attribute.
@@ -65,7 +65,7 @@ public interface SubApp extends FBNetworkElement {
 	 * @see #getWidth()
 	 * @generated
 	 */
-	void setWidth(int value);
+	void setWidth(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Height</b></em>' attribute.
@@ -73,12 +73,12 @@ public interface SubApp extends FBNetworkElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Height</em>' attribute.
-	 * @see #setHeight(int)
+	 * @see #setHeight(double)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp_Height()
-	 * @model default="100" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model default="100" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 * @generated
 	 */
-	int getHeight();
+	double getHeight();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getHeight <em>Height</em>}' attribute.
@@ -88,7 +88,7 @@ public interface SubApp extends FBNetworkElement {
 	 * @see #getHeight()
 	 * @generated
 	 */
-	void setHeight(int value);
+	void setHeight(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Locked</b></em>' attribute.

@@ -4,7 +4,7 @@ Bundle-Name: Model Tests
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.model
 Bundle-Version: 3.0.0.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.model
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-Vendor: Eclipse 4diac
 Import-Package: org.junit.jupiter.api,
  org.junit.jupiter.api.function,

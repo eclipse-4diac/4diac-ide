@@ -116,6 +116,8 @@ public final class Messages extends NLS {
 
 	public static String MonitoringEditPart_Not_Available;
 
+	public static String MoveElementDialogTitle;
+
 	/** The New sub application action_ new subapplication text. */
 	public static String NewSubApplicationAction_NewSubapplicationText;
 

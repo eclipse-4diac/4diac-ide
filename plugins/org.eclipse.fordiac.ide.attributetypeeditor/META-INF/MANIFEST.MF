@@ -21,7 +21,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.model.search,
  org.eclipse.ltk.core.refactoring
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.attributetypeeditor
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.fordiac.ide.datatypeeditor.properties,

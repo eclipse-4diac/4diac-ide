@@ -20,7 +20,7 @@ Require-Bundle: org.eclipse.xtext,
  org.eclipse.fordiac.ide.structuredtextcore.ui,
  org.eclipse.fordiac.ide.structuredtextcore.ide,
  org.eclipse.fordiac.ide.globalconstantseditor.model;visibility:=reexport
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.globalconstantseditor,
  org.eclipse.fordiac.ide.globalconstantseditor.formatting2,
  org.eclipse.fordiac.ide.globalconstantseditor.generator,

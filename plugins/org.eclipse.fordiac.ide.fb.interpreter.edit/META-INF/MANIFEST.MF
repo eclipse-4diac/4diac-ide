@@ -4,7 +4,7 @@ Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fb.interpreter.edit;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.fb.interpreter.edit
 Bundle-Version: 3.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.fordiac.ide.fb.interpreter.provider.OperationalSemanticsEditPlugin$Implementation
 Bundle-Vendor: %providerName

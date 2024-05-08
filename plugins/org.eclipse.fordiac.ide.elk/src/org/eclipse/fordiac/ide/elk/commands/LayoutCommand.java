@@ -44,7 +44,7 @@ public class LayoutCommand extends AbstractLayoutCommand {
 
 	private final Map<FBNetworkElement, Position> oldPositions = new HashMap<>();
 	private final List<ConnectionLayoutData> oldRoutingData;
-	private final Map<Group, Entry<Integer, Integer>> oldGroupSizes = new HashMap<>();
+	private final Map<Group, Entry<Double, Double>> oldGroupSizes = new HashMap<>();
 
 	private final CompoundCommand pinPositionAttrCommand = new CompoundCommand();
 
@@ -85,7 +85,7 @@ public class LayoutCommand extends AbstractLayoutCommand {
 		data.getPositions().keySet().forEach(elem -> oldPositions.put(elem, EcoreUtil.copy(elem.getPosition())));
 		saveRoutingDataForUndo(data.getConnectionPoints(), oldRoutingData);
 		data.getGroups().keySet().forEach(group -> oldGroupSizes.put(group,
-				new SimpleEntry<>(Integer.valueOf(group.getHeight()), Integer.valueOf(group.getWidth()))));
+				new SimpleEntry<>(Double.valueOf(group.getHeight()), Double.valueOf(group.getWidth()))));
 	}
 
 	private void updateModelElements() {
@@ -98,7 +98,7 @@ public class LayoutCommand extends AbstractLayoutCommand {
 		data.getPins().forEach(this::updatePositionAttribute);
 	}
 
-	private static void setGroupSize(final Group group, final Entry<Integer, Integer> size) {
+	private static void setGroupSize(final Group group, final Entry<Double, Double> size) {
 		group.setHeight(size.getKey().intValue());
 		group.setWidth(size.getValue().intValue());
 	}

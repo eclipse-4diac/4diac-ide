@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2016, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
+ * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH, Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectEventConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
@@ -28,9 +27,7 @@ public class EventNodeEditPolicy extends InterfaceElementEditPolicy {
 
 	@Override
 	protected AbstractConnectionCreateCommand createConnectionCreateCommand() {
-		final EventConnectionCreateCommand cmd = new EventConnectionCreateCommand(getParentNetwork());
-		cmd.setSource(((InterfaceEditPart) getHost()).getModel());
-		return cmd;
+		return new EventConnectionCreateCommand(getParentNetwork());
 	}
 
 	@Override

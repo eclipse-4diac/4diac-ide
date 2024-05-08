@@ -42,6 +42,10 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
@@ -54,6 +58,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
@@ -74,6 +79,8 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 
 	private static final int MIN_EXP_SUBAPP_BAR_WIDTH_CHARS = org.eclipse.fordiac.ide.gef.Activator.getDefault()
 			.getPreferenceStore().getInt(DiagramPreferences.MIN_INTERFACE_BAR_SIZE);
+	private static final int MAX_HIDDEN_CONNECTION_LABEL_SIZE_CHARS = org.eclipse.fordiac.ide.gef.Activator.getDefault()
+			.getPreferenceStore().getInt(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
 	private static final int TOP_BOTTOM_MARGIN = 1;
 	private static final int LEFT_RIGHT_MARGIN = 5;
 	private static final Insets RIGHT_LIST_BORDER_INSET = new Insets(TOP_BOTTOM_MARGIN, 0, TOP_BOTTOM_MARGIN,
@@ -174,6 +181,71 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	private InstanceComment instanceComment;
 	private Figure commentContainer;
 
+	private final Adapter contentAdapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			switch (notification.getEventType()) {
+			case Notification.ADD, Notification.ADD_MANY, Notification.MOVE, Notification.REMOVE,
+					Notification.REMOVE_MANY:
+				refreshChildren();
+				break;
+			case Notification.SET:
+				refreshVisuals();
+				break;
+			default:
+				break;
+			}
+		}
+	};
+
+	private final Adapter interfaceAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			switch (notification.getEventType()) {
+			case Notification.ADD:
+				if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
+						.equals(notification.getFeature())) {
+					refreshVisuals();
+					break;
+				}
+				//$FALL-THROUGH$
+			case Notification.ADD_MANY, Notification.MOVE, Notification.REMOVE, Notification.REMOVE_MANY:
+				refreshChildren();
+				break;
+			default:
+				break;
+			}
+		}
+	};
+
+	@Override
+	public void activate() {
+		super.activate();
+		if ((null != getModel()) && !getModel().eAdapters().contains(contentAdapter)) {
+			getModel().eAdapters().add(contentAdapter);
+			if ((null != getInterfaceList()) && !getInterfaceList().eAdapters().contains(interfaceAdapter)) {
+				getInterfaceList().eAdapters().add(interfaceAdapter);
+			}
+		}
+	}
+
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		if (null != getModel()) {
+			getModel().eAdapters().remove(contentAdapter);
+			if (null != getInterfaceList()) {
+				getInterfaceList().eAdapters().remove(interfaceAdapter);
+			}
+		}
+		if ((controlListener != null) && (getParent() != null) && (getParent().getViewer() != null)
+				&& (getParent().getViewer().getControl() != null)) {
+			getParent().getViewer().getControl().removeControlListener(controlListener);
+		}
+	}
+
 	@Override
 	protected IFigure createFigure() {
 		final IFigure mainFigure = new Figure();
@@ -187,6 +259,10 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 
 		contentContainer = new FreeformLayer();
 		contentContainer.setLayoutManager(new FreeformLayout());
+		// add a margin to the left and right to have enough space for hidden connection
+		// labels
+		contentContainer.setBorder(
+				new MarginBorder(0, getMaxHiddenConnectionLabelSize(), 0, getMaxHiddenConnectionLabelSize()));
 		mainFigure.add(contentContainer, BorderLayout.CENTER);
 
 		createRightInterface(mainFigure);
@@ -377,15 +453,6 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		}
 	}
 
-	@Override
-	public void deactivate() {
-		super.deactivate();
-		if ((controlListener != null) && (getParent() != null) && (getParent().getViewer() != null)
-				&& (getParent().getViewer().getControl() != null)) {
-			getParent().getViewer().getControl().removeControlListener(controlListener);
-		}
-	}
-
 	/**
 	 * Removes the childEditParts figures from the correct container.
 	 *
@@ -548,6 +615,17 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 					+ ConnectorBorder.LR_MARGIN + LEFT_RIGHT_MARGIN;
 		}
 		return minSubappBarWidhtPixels;
+	}
+
+	private static int maxHiddenConnectionLabelSize = -1;
+
+	public static int getMaxHiddenConnectionLabelSize() {
+		if (maxHiddenConnectionLabelSize == -1) {
+			final Dimension singleCharLength = FigureUtilities.getStringExtents(" ", //$NON-NLS-1$
+					JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
+			maxHiddenConnectionLabelSize = singleCharLength.width * MAX_HIDDEN_CONNECTION_LABEL_SIZE_CHARS;
+		}
+		return maxHiddenConnectionLabelSize;
 	}
 
 }

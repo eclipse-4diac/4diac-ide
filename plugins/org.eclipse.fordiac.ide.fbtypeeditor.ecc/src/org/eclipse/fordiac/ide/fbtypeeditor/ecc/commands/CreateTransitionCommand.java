@@ -78,7 +78,9 @@ public class CreateTransitionCommand extends CreationCommand {
 		this.source = source;
 		this.sourceLocation = source.getPosition().toScreenPoint();
 		this.destination = destination;
-		this.destLocation = destination.getPosition().toScreenPoint();
+		if (destination.getPosition() != null) {
+			this.destLocation = destination.getPosition().toScreenPoint();
+		}
 		this.conditionEvent = conditionEvent;
 	}
 
@@ -136,7 +138,7 @@ public class CreateTransitionCommand extends CreationCommand {
 
 	@Override
 	public boolean canExecute() {
-		return ((null != source) && (null != destination) && (null != source.getECC()));
+		return ((null != source) && (null != destination) && (null != source.getECC()) && (null != destLocation));
 	}
 
 	/*

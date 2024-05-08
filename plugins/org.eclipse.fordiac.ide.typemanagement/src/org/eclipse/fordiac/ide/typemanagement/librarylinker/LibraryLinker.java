@@ -10,6 +10,8 @@
  * Contributors:
  *   Dunja Životin, Fabio Gandolfi -
  *   	initial API and implementation and/or initial documentation
+ *   Patrick Aigner
+ *   	- adjustments to library import
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.librarylinker;
 
@@ -26,13 +28,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -43,6 +43,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IPathVariableManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -58,6 +59,7 @@ import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.typelibrary.ILibraryLinker;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -66,9 +68,13 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.util.FBUpdater;
+import org.eclipse.fordiac.ide.typemanagement.wizards.ArchivedLibraryImportWizard;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 
 public class LibraryLinker implements ILibraryLinker {
 	private static final String WORKSPACE_ROOT = ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
@@ -77,13 +83,19 @@ public class LibraryLinker implements ILibraryLinker {
 	private static final File[] EMPTY_ARRAY = new File[0];
 	private static final java.net.URI WORKSPACE_URI = java.net.URI.create("WORKSPACE_LOC"); //$NON-NLS-1$
 	private static final VersionComparator versionComparator = new VersionComparator();
+	private static final Set<String> TYPE_ENDINGS = Set.of(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING,
+			TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING, TypeLibraryTags.DATA_TYPE_FILE_ENDING,
+			TypeLibraryTags.DEVICE_TYPE_FILE_ENDING, TypeLibraryTags.FB_TYPE_FILE_ENDING,
+			TypeLibraryTags.FC_TYPE_FILE_ENDING, TypeLibraryTags.GLOBAL_CONST_FILE_ENDING,
+			TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING, TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING,
+			TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING, TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING);
 
 	private IProject selectedProject;
 	private Set<TypeEntry> cachedTypes;
 	private TypeLibrary typeLibrary;
 
 	@Override
-	public void extractLibrary(final File file, final IProject project) throws IOException {
+	public void extractLibrary(final File file, final IProject project, final boolean autoimport) throws IOException {
 		final byte[] buffer = new byte[1024];
 		if (project != null) {
 			setSelectedProject(project);
@@ -116,8 +128,10 @@ public class LibraryLinker implements ILibraryLinker {
 			}
 		}
 
-		// Parent's name because we want package-version name when importing
-		importLibrary(URIUtil.append(baseUri, file.getParentFile().getName()));
+		if (autoimport) {
+			// Parent's name because we want package-version name when importing
+			importLibrary(URIUtil.append(baseUri, file.getParentFile().getName()));
+		}
 
 	}
 
@@ -210,7 +224,7 @@ public class LibraryLinker implements ILibraryLinker {
 		if (libDirectory.exists()) {
 			isNewVersion = true;
 			try {
-				cachedTypes = cacheOldTypes(libDirectory.getName());
+				cachedTypes = cacheOldTypes(libDirectory);
 				// Remove the link but keep the resource on disk
 				libDirectory.delete(true, null);
 				// Remove the entries manually
@@ -244,49 +258,35 @@ public class LibraryLinker implements ILibraryLinker {
 
 	@Override
 	public void updateFBInstancesWithNewTypeVersion() {
-		Display.getDefault().syncExec(() -> FBUpdater.updateAllInstances(selectedProject, cachedTypes, typeLibrary));
-		final InstanceUpdateDialog updateDialog = new InstanceUpdateDialog(null, Messages.InstanceUpdate, null,
-				Messages.UpdatedInstances, MessageDialog.NONE, new String[] { Messages.Confirm }, 0,
-				FBUpdater.getUpdatedElements());
-		Display.getDefault().syncExec(updateDialog::open);
+		Display.getDefault().syncExec(() -> {
+			List<FBNetworkElement> updatedElements;
+			updatedElements = FBUpdater.updateAllInstances(cachedTypes, typeLibrary);
+			final InstanceUpdateDialog updateDialog = new InstanceUpdateDialog(null, Messages.InstanceUpdate, null,
+					Messages.UpdatedInstances, MessageDialog.NONE, new String[] { Messages.Confirm }, 0,
+					updatedElements);
+			updateDialog.open();
+		});
 	}
 
 	@Override
-	public Set<TypeEntry> cacheOldTypes(final String oldVersion) {
-		try (final Stream<java.nio.file.Path> stream = Files
-				.walk(Paths.get(WORKSPACE_ROOT, LibraryUtil.EXTRACTED_LIB_DIRECTORY, oldVersion))) {
+	public Set<TypeEntry> cacheOldTypes(final IFolder oldFolder) {
+		final Set<TypeEntry> oldTypes = new HashSet<>();
 
-			final Predicate<java.nio.file.Path> fbt = i -> i.getFileName().toString().toUpperCase()
-					.endsWith(TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT);
-			final Predicate<java.nio.file.Path> adp = i -> i.getFileName().toString().toUpperCase()
-					.endsWith(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING_WITH_DOT);
-			final Predicate<java.nio.file.Path> atp = i -> i.getFileName().toString().toUpperCase()
-					.endsWith(TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING_WITH_DOT);
-			final Predicate<java.nio.file.Path> dev = i -> i.getFileName().toString().toUpperCase()
-					.endsWith(TypeLibraryTags.DEVICE_TYPE_FILE_ENDING_WITH_DOT);
-			final Predicate<java.nio.file.Path> dtp = i -> i.getFileName().toString().toUpperCase()
-					.endsWith(TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT);
-			final Predicate<java.nio.file.Path> res = i -> i.getFileName().toString().toUpperCase()
-					.endsWith(TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING_WITH_DOT);
-			final Predicate<java.nio.file.Path> seg = i -> i.getFileName().toString().toUpperCase()
-					.endsWith(TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING_WITH_DOT);
-			final Predicate<java.nio.file.Path> sub = i -> i.getFileName().toString().toUpperCase()
-					.endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
-			final Predicate<java.nio.file.Path> sys = i -> i.getFileName().toString().toUpperCase()
-					.endsWith(TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING_WITH_DOT);
-			final Predicate<java.nio.file.Path> fct = i -> i.getFileName().toString().toUpperCase()
-					.endsWith(TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT);
-			final Predicate<java.nio.file.Path> gcf = i -> i.getFileName().toString().toUpperCase()
-					.endsWith(TypeLibraryTags.GLOBAL_CONST_FILE_ENDING_WITH_DOT);
-
-			return stream.filter(Files::isRegularFile)
-					.filter(fbt.or(adp).or(atp).or(dev).or(dtp).or(res).or(seg).or(sub).or(sys).or(fct).or(gcf))
-					.map(path -> TypeLibraryManager.INSTANCE.getTypeFromLinkedFile(selectedProject,
-							path.getFileName().toString()))
-					.filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
-		} catch (final IOException e) {
-			e.printStackTrace();
+		final IResourceVisitor visitor = resource -> (switch (resource) {
+		case final IFolder folder -> true;
+		case final IFile file when TYPE_ENDINGS.contains(file.getFileExtension().toUpperCase()) -> {
+			oldTypes.add(TypeLibraryManager.INSTANCE.getTypeEntryForFile(file));
+			yield false;
 		}
+		default -> false;
+		});
+		try {
+			oldFolder.accept(visitor);
+			return oldTypes;
+		} catch (final CoreException e) {
+			// do nothing
+		}
+
 		return Collections.emptySet();
 	}
 
@@ -330,6 +330,30 @@ public class LibraryLinker implements ILibraryLinker {
 			return libDir.listFiles();
 		}
 		return EMPTY_ARRAY;
+	}
+
+	@Override
+	public void updateLibrary(final String symbolicName, final String version) {
+		final WorkspaceJob job = new WorkspaceJob("Download Gitlab package: " + symbolicName + " - " + version) { //$NON-NLS-1$//$NON-NLS-2$
+
+			@Override
+			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+				gitlabLibraryImport(symbolicName, version, false);
+
+				Display.getDefault().asyncExec(() -> {
+					final ArchivedLibraryImportWizard wizard = new ArchivedLibraryImportWizard();
+					wizard.init(PlatformUI.getWorkbench(), new StructuredSelection(selectedProject));
+					final WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
+
+					dialog.open();
+				});
+				return Status.OK_STATUS;
+			}
+		};
+		job.setRule(selectedProject);
+		job.setPriority(Job.LONG);
+		job.schedule();
+
 	}
 
 	@Override
@@ -394,7 +418,7 @@ public class LibraryLinker implements ILibraryLinker {
 
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-				gitlabLibraryImport(lib.getSymbolicName(), lib.getVersion());
+				gitlabLibraryImport(lib.getSymbolicName(), lib.getVersion(), true);
 				return Status.OK_STATUS;
 			}
 		};
@@ -423,7 +447,7 @@ public class LibraryLinker implements ILibraryLinker {
 		job.schedule();
 	}
 
-	private void gitlabLibraryImport(final String libSymbolicName, final String libVersion) {
+	private void gitlabLibraryImport(final String libSymbolicName, final String libVersion, final boolean autoimport) {
 		final String url = PreferenceConstants.getURL();
 		final String token = PreferenceConstants.getToken();
 		if (url != null && !url.isBlank() && token != null && !token.isBlank()) {
@@ -437,7 +461,7 @@ public class LibraryLinker implements ILibraryLinker {
 							try {
 								final File file = downloadManager.packageDownloader(l.getProject(), l.getPackage());
 								if (file != null) {
-									extractLibrary(file, null);
+									extractLibrary(file, null, autoimport);
 								}
 							} catch (final IOException e) {
 								FordiacLogHelper.logError(e.getMessage(), e);

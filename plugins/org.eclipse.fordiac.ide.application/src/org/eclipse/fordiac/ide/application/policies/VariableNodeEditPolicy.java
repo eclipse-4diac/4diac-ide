@@ -35,20 +35,16 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 
 	@Override
 	protected AbstractConnectionCreateCommand createConnectionCreateCommand() {
-		final IInterfaceElement pin = (IInterfaceElement) getHost().getModel();
+		final IInterfaceElement pin = getHost().getModel();
 		if ((pin instanceof VarDeclaration) && (!LinkConstraints.isWithConstraintOK(pin))) {
 			// Elements which are not connected by a with construct are not allowed to be
 			// connected
 			return null;
 		}
 
-		final AbstractConnectionCreateCommand cmd = (AbstractConnectionCreateCommand.isStructManipulatorDefPin(pin))
+		return (AbstractConnectionCreateCommand.isStructManipulatorDefPin(pin))
 				? new StructDataConnectionCreateCommand(getParentNetwork())
 				: new DataConnectionCreateCommand(getParentNetwork());
-
-		cmd.setSource(pin);
-		return cmd;
-
 	}
 
 	@Override
@@ -60,7 +56,7 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 	@Override
 	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
 		final AbstractConnectionCreateCommand command = (AbstractConnectionCreateCommand) request.getStartCommand();
-		final IInterfaceElement pin = (IInterfaceElement) getHost().getModel();
+		final IInterfaceElement pin = getHost().getModel();
 
 		if (command instanceof StructDataConnectionCreateCommand) {
 			// if we drag from a struct manipulater but target is not a struct use normal

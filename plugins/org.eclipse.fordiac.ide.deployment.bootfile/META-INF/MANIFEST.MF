@@ -7,7 +7,7 @@ Export-Package: org.eclipse.fordiac.ide.deployment.bootfile,
  org.eclipse.fordiac.ide.deployment.bootfile.wizard
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.bootfile
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.jface,

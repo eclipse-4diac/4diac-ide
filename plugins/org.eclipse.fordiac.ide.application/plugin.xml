@@ -530,6 +530,11 @@
           id="org.eclipse.fordiac.ide.application.commands.aggressiveConDelete"
           name="Aggressive Connection Delete">
     </command>
+	<command
+          categoryId="org.eclipse.fordiac.ide.commands.category"
+          id="org.eclipse.fordiac.ide.application.commands.moveThroughHierarchy"
+          name="Move elements through hierarchy">
+    </command>
 
   </extension>
   
@@ -877,6 +882,8 @@
         </with>
       </activeWhen>
     </handler>
+    <handler class="org.eclipse.fordiac.ide.application.handlers.MoveThroughHierarchyHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.moveThroughHierarchy" />
   </extension>
   
   <extension point="org.eclipse.ui.bindings">
@@ -976,13 +983,15 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.openType"
                style="push">
-        <visibleWhen checkEnabled="true">
+        <visibleWhen checkEnabled="false">
           <with variable="selection" >
             <count value="1" />
             <iterate ifEmpty="false">
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
                 <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
+                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
               </or>
             </iterate>
           </with>
@@ -1180,6 +1189,21 @@
               <test property="org.eclipse.fordiac.ide.application.properties.parentIsSubApp" />
             </or>
             <test property="org.eclipse.fordiac.ide.application.utilities.isSubapplication" />
+          </and>
+        </visibleWhen>
+      </command>
+       <command commandId="org.eclipse.fordiac.ide.application.commands.moveThroughHierarchy">
+        <visibleWhen checkEnabled="true">
+          <and>
+            <or>
+              <and>
+                <with variable="activeEditor">
+                  <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+                </with>
+                <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartMultiSelection" />
+              </and>
+              <test property="org.eclipse.fordiac.ide.application.properties.parentIsSubApp" />
+            </or>
           </and>
         </visibleWhen>
       </command>
@@ -1485,6 +1509,8 @@
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
                 <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
+                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
               </or>
             </iterate>
           </with>
@@ -1499,13 +1525,15 @@
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.openType">
-        <visibleWhen checkEnabled="false">
+        <visibleWhen checkEnabled="true">
           <with variable="selection" >
             <count value="1" />
             <iterate ifEmpty="false">
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
                 <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
+                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
               </or>
             </iterate>
           </with>

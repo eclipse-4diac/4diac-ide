@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="IORevPiDIO" Comment="Digital I/O module for Revolution Pi by KUNBUS GmbH">
+	<Identification Standard="61499-2" Description="Copyright (c) 2018 fortiss GmbH&#10;&#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="José Cabral" Date="2018-04-22">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="MAP" Type="Event" Comment="Map Pins">
+				<With Var="DigitalInput_1"/>
+				<With Var="DigitalInput_2"/>
+				<With Var="DigitalInput_5"/>
+				<With Var="DigitalInput_3"/>
+				<With Var="DigitalInput_4"/>
+				<With Var="DigitalInput_6"/>
+				<With Var="DigitalInput_7"/>
+				<With Var="DigitalInput_8"/>
+				<With Var="DigitalOutput_1"/>
+				<With Var="DigitalOutput_2"/>
+				<With Var="DigitalOutput_3"/>
+				<With Var="DigitalOutput_4"/>
+				<With Var="DigitalOutput_5"/>
+				<With Var="DigitalOutput_6"/>
+				<With Var="DigitalOutput_7"/>
+				<With Var="DigitalOutput_8"/>
+				<With Var="QI"/>
+				<With Var="DigitalInput_14"/>
+				<With Var="DigitalInput_13"/>
+				<With Var="DigitalInput_12"/>
+				<With Var="DigitalInput_11"/>
+				<With Var="DigitalInput_10"/>
+				<With Var="DigitalInput_9"/>
+				<With Var="DigitalOutput_9"/>
+				<With Var="DigitalOutput_10"/>
+				<With Var="DigitalOutput_11"/>
+				<With Var="DigitalOutput_12"/>
+				<With Var="DigitalOutput_13"/>
+				<With Var="DigitalOutput_14"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="MAPO" Type="Event" Comment="Confirm Pin Mapping">
+				<With Var="QO"/>
+			</Event>
+			<Event Name="IND" Type="Event" Comment="Indication from Resource">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+			<VarDeclaration Name="DigitalInput_1" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalInput_2" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalInput_3" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalInput_4" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalInput_5" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalInput_6" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalInput_7" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalInput_8" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalInput_9" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalInput_10" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalInput_11" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalInput_12" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalInput_13" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalInput_14" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalOutput_1" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalOutput_2" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalOutput_3" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalOutput_4" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalOutput_5" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalOutput_6" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalOutput_7" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalOutput_8" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalOutput_9" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalOutput_10" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalOutput_11" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalOutput_12" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalOutput_13" Type="STRING" Comment=""/>
+			<VarDeclaration Name="DigitalOutput_14" Type="STRING" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status"/>
+		</OutputVars>
+		<Plugs>
+			<AdapterDeclaration Name="BusAdapterOut" Type="IORevPiBusAdapter" Comment=""/>
+		</Plugs>
+		<Sockets>
+			<AdapterDeclaration Name="BusAdapterIn" Type="IORevPiBusAdapter" Comment=""/>
+		</Sockets>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Digital I/O module for Revolution Pi by KUNBUS GmbH">
+		<ServiceSequence Name="normal_establishment" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT+" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="RESOURCE" Event="initialize" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO+"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="unsuccessful_establishment" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT+" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="RESOURCE" Event="initialize" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_confirm" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ+" Parameters="SD"/>
+				<OutputPrimitive Interface="RESOURCE" Event="request" Parameters="SD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF+" Parameters="RD"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_inhibited" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ-" Parameters="SD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_error" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ+" Parameters="SD"/>
+				<OutputPrimitive Interface="RESOURCE" Event="request" Parameters="SD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="indication_response" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="RESOURCE" Event="indicate" Parameters="RD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="IND+" Parameters="RD"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="RSP" Parameters="QI,SD"/>
+				<OutputPrimitive Interface="RESOURCE" Event="response" Parameters="QI,SD"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="indication_inhibited" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="RESOURCE" Event="indicate" Parameters="RD,QI=FALSE"/>
+				<OutputPrimitive Interface="RESOURCE" Event="inhibited"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="error_indication" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="RESOURCE" Event="error" Parameters="STATUS"/>
+				<OutputPrimitive Interface="APPLICATION" Event="IND-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="application_initiated_termination" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT-"/>
+				<OutputPrimitive Interface="RESOURCE" Event="terminate"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="resource_initiated_termination" Comment="">
+			<ServiceTransaction>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+	</Service>
+</FBType>

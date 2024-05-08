@@ -13,12 +13,20 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -58,8 +66,37 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final CompositeChange change = new CompositeChange(getProcessorName());
-		change.add(new RenameElementChange(elementURI.lastSegment(), elementURI, newName));
+		change.add(new RenameElementChange("Rename Pin in type: " + elementURI.lastSegment(), elementURI, newName));
+		createChildChanges(change);
 		return change;
+	}
+
+	private void createChildChanges(final CompositeChange change) {
+		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(elementURI);
+		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(typeEntry);
+		final List<? extends EObject> result = search.performSearch();
+		final var eChild = getChildByURI(typeEntry.getType(), elementURI);
+		String oldName = "";
+		if (eChild instanceof final IInterfaceElement varDecl) {
+			oldName = varDecl.getName();
+		}
+
+		for (final EObject eObject : result) {
+			change.add(new ReconnectPinChange(EcoreUtil.getURI(eObject), FBNetworkElement.class, newName, oldName));
+		}
+
+	}
+
+	public static EObject getChildByURI(final EObject parent, final URI uri) {
+		final EObject[] found = { null };
+		parent.eAllContents().forEachRemaining(child -> {
+			final String uriFragment = child.eResource().getURIFragment(child);
+			if (uriFragment.equals(uri.fragment())) {
+				found[0] = child;
+			}
+
+		});
+		return found[0];
 	}
 
 	@Override

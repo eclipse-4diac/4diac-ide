@@ -4,7 +4,7 @@
     modelDirectory="/org.eclipse.fordiac.ide.deployment/src-gen" editDirectory="/org.eclipse.fordiac.ide.deployment.edit/src-gen"
     editorDirectory="/org.eclipse.fordiac.ide.deployment.editor/src-gen" modelPluginID="org.eclipse.fordiac.ide.deployment"
     modelName="monitoringBase" nonNLSMarkers="true" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="17.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.deployment.edit"
+    complianceLevel="21.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.deployment.edit"
     editorPluginID="org.eclipse.fordiac.ide.deployment.editor" usedGenPackages="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data"
     importOrganizing="true" cleanup="true">
   <foreignModel>monitoringBase.ecore</foreignModel>

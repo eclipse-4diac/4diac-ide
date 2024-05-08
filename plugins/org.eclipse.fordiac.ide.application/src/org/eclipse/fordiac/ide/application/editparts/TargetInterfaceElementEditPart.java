@@ -19,6 +19,7 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.policies.DeleteTargetInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
@@ -29,7 +30,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPart;
@@ -38,6 +41,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.ui.IEditorPart;
 
 public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 
@@ -149,7 +153,10 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		if ((request.getType() == RequestConstants.REQ_OPEN)) {
 			final var viewer = getViewer();
 			final EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(getRefElement());
-			if (viewer instanceof final AdvancedScrollingGraphicalViewer asgv) {
+			if (editPart == null) {
+				// we need to go to another breadcrumb item
+				openInBreadCrumb(getRefElement());
+			} else if (viewer instanceof final AdvancedScrollingGraphicalViewer asgv) {
 				asgv.selectAndRevealEditPart(editPart);
 			} else {
 				viewer.select(editPart);
@@ -180,5 +187,26 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 			return label;
 		}
 		return label.substring(0, MAX_LABEL_LENGTH) + "\u2026"; //$NON-NLS-1$
+	}
+
+	public static void openInBreadCrumb(final IInterfaceElement target) {
+		final IEditorPart editor = OpenListenerManager.openEditor(getTargetEditorElement(target));
+		HandlerHelper.selectElement(target, editor);
+
+	}
+
+	private static EObject getTargetEditorElement(final IInterfaceElement target) {
+		final FBNetworkElement fbnEl = target.getFBNetworkElement();
+		if (fbnEl == null) {
+			// we have a typed subapp or CFB Type pin
+			return target.eContainer().eContainer();
+		}
+
+		FBNetworkElement parent = fbnEl.getOuterFBNetworkElement();
+		// For unfolded subapps find the next parent that is not expanded as refElement
+		while (parent instanceof final SubApp subApp && subApp.isUnfolded()) {
+			parent = subApp.getOuterFBNetworkElement();
+		}
+		return parent;
 	}
 }

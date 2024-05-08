@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,7 +18,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
@@ -50,7 +51,8 @@ public class OpenTypeHandler extends AbstractHandler {
 			final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
 			if (null != activeWorkbenchWindow) {
 				final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-				final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+				final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
+						.getDefaultEditor(file.getName());
 				try {
 					activePage.openEditor(new FileEditorInput(file), desc.getId());
 				} catch (final Exception e) {
@@ -68,16 +70,20 @@ public class OpenTypeHandler extends AbstractHandler {
 	}
 
 	private static IFile getSelectedTypeFile(final ISelection sel) {
-		if ((sel instanceof IStructuredSelection) && !sel.isEmpty() && (((IStructuredSelection) sel).size() == 1)) {
-			Object obj = ((IStructuredSelection) sel).getFirstElement();
-			if (obj instanceof EditPart) {
-				obj = ((EditPart) obj).getModel();
+		if ((sel instanceof final IStructuredSelection structSel) && !sel.isEmpty() && (structSel.size() == 1)) {
+			Object obj = structSel.getFirstElement();
+			if (obj instanceof final EditPart ep) {
+				obj = ep.getModel();
 			}
-			if (obj instanceof FBNetworkElement) {
-				final FBType type = ((FBNetworkElement) obj).getType();
-				if ((type != null) && (type.getTypeEntry() != null)) {
-					return type.getTypeEntry().getFile();
-				}
+
+			final LibraryElement type = switch (obj) {
+			case final FBNetworkElement fbnEl -> fbnEl.getType();
+			case final IInterfaceElement ie -> ie.getType();
+			default -> null;
+			};
+
+			if ((type != null) && (type.getTypeEntry() != null)) {
+				return type.getTypeEntry().getFile();
 			}
 		}
 		return null;

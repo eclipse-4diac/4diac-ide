@@ -48,7 +48,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
@@ -118,11 +117,8 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 				}
 			});
 		}
-
-		refreshJob = new InitialValueRefreshJob(getDefaultValueContext(), this::updateDefaultValue);
-		refreshJob.schedule();
-
 		refreshVisuals();
+		refreshValue();
 	}
 
 	protected Point calculatePos() {
@@ -228,8 +224,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 					getFigure().setForegroundColor(ColorConstants.menuForeground);
 				} else {
 					getFigure().setText(FordiacMessages.ComputingPlaceholderValue);
-					if (refreshJob != null) {
-						refreshJob.refresh();
+					final InitialValueRefreshJob valueRefresh = getRefreshJob();
+					if (valueRefresh != null) {
+						valueRefresh.refresh();
 					}
 					getFigure().setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
 					getFigure().setForegroundColor(ColorConstants.gray);
@@ -295,10 +292,6 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	 */
 	public void setVisible(final boolean visible) {
 		getFigure().setVisible(visible);
-	}
-
-	protected IFigure createFigureForModel() {
-		return new ValueFigure(isInput());
 	}
 
 	@Override
@@ -381,13 +374,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	@Override
 	protected IFigure createFigure() {
-		IFigure f = null;
-		try {
-			f = createFigureForModel();
-		} catch (final IllegalArgumentException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		}
-		return f;
+		return new ValueFigure(isInput());
 	}
 
 	/**
@@ -437,6 +424,13 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	private static boolean isTypedInstance(final FBNetworkElement fb) {
 		return (fb != null) && fb.isContainedInTypedInstance();
+	}
+
+	private InitialValueRefreshJob getRefreshJob() {
+		if (refreshJob == null && isActive()) {
+			refreshJob = new InitialValueRefreshJob(getDefaultValueContext(), this::updateDefaultValue);
+		}
+		return refreshJob;
 	}
 
 }

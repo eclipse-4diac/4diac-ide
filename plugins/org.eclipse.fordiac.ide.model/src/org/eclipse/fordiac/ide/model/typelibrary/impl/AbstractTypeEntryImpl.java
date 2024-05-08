@@ -231,9 +231,17 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			return typeEditable;
 		}
 
-		// we need to get a fresh type editable in order to ensure consistency take a
-		// copy of the none editable type
-		final LibraryElement loadType = EcoreUtil.copy(getType());
+		// we need to get a fresh type editable
+		LibraryElement loadType = null;
+		if (typeRef != null && typeRef.get() != null) {
+			// only copy if the none editable type is already loaded, copying takes about
+			// the same time then loading
+			loadType = EcoreUtil.copy(getType());
+		} else {
+			lastModificationTimestamp = getFile().getModificationStamp();
+			loadType = loadType();
+		}
+
 		setTypeEditable(loadType);
 		return loadType;
 	}

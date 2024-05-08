@@ -438,23 +438,46 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		}
 	}
 
+	private ConnectionAnchor sourceConAnchor = null;
+	private ConnectionAnchor destinationConAnchor = null;
+
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
-		return new FixedAnchor(getFigure(), isInput());
+	public final ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
+		if (sourceConAnchor == null) {
+			sourceConAnchor = createSourceConAnchor();
+		}
+		return sourceConAnchor;
 	}
 
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
-		return new FixedAnchor(getFigure(), isInput());
+	public final ConnectionAnchor getSourceConnectionAnchor(final Request request) {
+		if (sourceConAnchor == null) {
+			sourceConAnchor = createSourceConAnchor();
+		}
+		return sourceConAnchor;
 	}
 
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
-		return new FixedAnchor(getFigure(), isInput());
+	public final ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
+		if (destinationConAnchor == null) {
+			destinationConAnchor = createTargetConAnchor();
+		}
+		return destinationConAnchor;
 	}
 
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(final Request request) {
+	public final ConnectionAnchor getTargetConnectionAnchor(final Request request) {
+		if (destinationConAnchor == null) {
+			destinationConAnchor = createTargetConAnchor();
+		}
+		return destinationConAnchor;
+	}
+
+	protected FixedAnchor createSourceConAnchor() {
+		return new FixedAnchor(getFigure(), isInput());
+	}
+
+	protected FixedAnchor createTargetConAnchor() {
 		return new FixedAnchor(getFigure(), isInput());
 	}
 

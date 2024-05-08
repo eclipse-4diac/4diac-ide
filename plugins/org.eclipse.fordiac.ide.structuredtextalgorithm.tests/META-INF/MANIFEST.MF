@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: org.eclipse.fordiac.ide.structuredtextalgorithm.tests
 Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextalgorithm.tests;singleton:=true
 Bundle-Version: 3.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.fordiac.ide.structuredtextalgorithm.tests;x-internal=true
 Require-Bundle: org.eclipse.xtext.testing,

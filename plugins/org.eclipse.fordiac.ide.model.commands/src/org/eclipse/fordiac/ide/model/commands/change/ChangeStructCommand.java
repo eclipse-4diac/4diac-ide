@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.ErrorDataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
@@ -62,7 +63,7 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 
 	private static String getOldVisibleChildren(final StructManipulator mux) {
 		if (mux instanceof final Demultiplexer demux && demux.isIsConfigured()) {
-			return ConfigurableFBManagement.buildVisibleChildrenString(demux);
+			return ConfigurableFBManagement.buildVisibleChildrenString(demux.getMemberVars());
 		}
 		return null;
 	}
@@ -117,19 +118,25 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 		return (StructManipulator) oldElement;
 	}
 
-	private StructuredType getDataTypeFromTypeEntry() {
+	private DataType getDataTypeFromTypeEntry() {
 		if (newStructTypeEntry == null) {
 			return IecTypes.GenericTypes.ANY_STRUCT;
 		}
 
 		LibraryElement type = newStructTypeEntry.getType();
-
+		final DataTypeLibrary datatypeLib = entry.getTypeLibrary().getDataTypeLibrary();
+		final TypeEntry reloadedTypeEntry = datatypeLib.getDerivedTypeEntry(newStructTypeEntry.getFullTypeName());
 		if (newStructTypeEntry instanceof ErrorDataTypeEntry) {
-			final TypeEntry reloadedTypeEntry = newStructTypeEntry.getTypeLibrary().find(entry.getFullTypeName());
-			type = reloadedTypeEntry.getType();
+			if (reloadedTypeEntry != null && reloadedTypeEntry != newStructTypeEntry) {
+				// type exists now
+				type = reloadedTypeEntry.getType();
+			}
+		} else // does the type entry still exist?
+		if (reloadedTypeEntry == null) {
+			// type was deleted, create error marker
+			type = datatypeLib.getType(newStructTypeEntry.getFullTypeName());
 		}
-
-		return (type instanceof final StructuredType dt) ? dt : IecTypes.GenericTypes.ANY_STRUCT;
+		return (type instanceof final DataType dt) ? dt : IecTypes.GenericTypes.ANY_STRUCT;
 	}
 
 }

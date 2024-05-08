@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application.properties;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupSizeLockCommand;
@@ -67,8 +68,8 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 			commandStack = null;
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			heightText.setText(Integer.toString(getType().getHeight()));
-			widthText.setText(Integer.toString(getType().getWidth()));
+			heightText.setText(Integer.toString(CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getHeight())));
+			widthText.setText(Integer.toString(CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getWidth())));
 			lockCheckbox.setSelection(getType().isLocked());
 			commandStack = commandStackBuffer;
 		}
@@ -119,7 +120,8 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 			if (getType() != null) {
 				final int heightDiff;
 				try {
-					heightDiff = Integer.parseInt(heightText.getText()) - getType().getHeight();
+					heightDiff = Integer.parseInt(heightText.getText())
+							- CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getHeight());
 				} catch (final Exception exc) {
 					return;
 				}
@@ -139,7 +141,8 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 			if (getType() != null) {
 				final int widthDiff;
 				try {
-					widthDiff = Integer.parseInt(widthText.getText()) - getType().getWidth();
+					widthDiff = Integer.parseInt(widthText.getText())
+							- CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getWidth());
 				} catch (final Exception exc) {
 					return;
 				}

@@ -73,7 +73,7 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int WIDTH_EDEFAULT = 200;
+	protected static final double WIDTH_EDEFAULT = 200.0;
 
 	/**
 	 * The cached value of the '{@link #getWidth() <em>Width</em>}' attribute.
@@ -83,7 +83,7 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 	 * @generated
 	 * @ordered
 	 */
-	protected int width = WIDTH_EDEFAULT;
+	protected double width = WIDTH_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getHeight() <em>Height</em>}' attribute.
@@ -93,7 +93,7 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int HEIGHT_EDEFAULT = 100;
+	protected static final double HEIGHT_EDEFAULT = 100.0;
 
 	/**
 	 * The cached value of the '{@link #getHeight() <em>Height</em>}' attribute.
@@ -103,7 +103,7 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 	 * @generated
 	 * @ordered
 	 */
-	protected int height = HEIGHT_EDEFAULT;
+	protected double height = HEIGHT_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isLocked() <em>Locked</em>}' attribute.
@@ -163,7 +163,7 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 	 * @generated
 	 */
 	@Override
-	public int getWidth() {
+	public double getWidth() {
 		return width;
 	}
 
@@ -173,8 +173,8 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 	 * @generated
 	 */
 	@Override
-	public void setWidth(int newWidth) {
-		int oldWidth = width;
+	public void setWidth(double newWidth) {
+		double oldWidth = width;
 		width = newWidth;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.GROUP__WIDTH, oldWidth, width));
@@ -186,7 +186,7 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 	 * @generated
 	 */
 	@Override
-	public int getHeight() {
+	public double getHeight() {
 		return height;
 	}
 
@@ -196,8 +196,8 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 	 * @generated
 	 */
 	@Override
-	public void setHeight(int newHeight) {
-		int oldHeight = height;
+	public void setHeight(double newHeight) {
+		double oldHeight = height;
 		height = newHeight;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.GROUP__HEIGHT, oldHeight, height));
@@ -312,10 +312,10 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 				getGroupElements().addAll((Collection<? extends FBNetworkElement>)newValue);
 				return;
 			case LibraryElementPackage.GROUP__WIDTH:
-				setWidth((Integer)newValue);
+				setWidth((Double)newValue);
 				return;
 			case LibraryElementPackage.GROUP__HEIGHT:
-				setHeight((Integer)newValue);
+				setHeight((Double)newValue);
 				return;
 			case LibraryElementPackage.GROUP__LOCKED:
 				setLocked((Boolean)newValue);
