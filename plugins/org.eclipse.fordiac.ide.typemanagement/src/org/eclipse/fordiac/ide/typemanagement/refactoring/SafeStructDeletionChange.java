@@ -28,16 +28,18 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.search.types.FBInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -283,7 +285,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 	}
 
-	public static class UpdateManipulatorChange extends CompositeChange {
+	private static class UpdateManipulatorChange extends CompositeChange {
 
 		final StructManipulator manipulator;
 
@@ -295,17 +297,15 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
-			final DataTypeLibrary lib = manipulator.getType().getTypeLibrary().getDataTypeLibrary();
-			StructuredType updated = (StructuredType) lib
-					.getTypeIfExists(PackageNameHelper.getFullTypeName(manipulator.getDataType()));
-			if (updated == null) {
-				updated = GenericTypes.ANY_STRUCT;
-			}
-
-			final Command cmd = new ChangeStructCommand(manipulator, updated);
-
-			ChangeExecutionHelper.executeChange(cmd, manipulator, pm);
+			final Command cmd = new ChangeStructCommand(manipulator, getErrorMarkerEntry(manipulator.getDataType()),
+					true);
+			AbstractLiveSearchContext.executeAndSave(cmd, manipulator, pm);
 			return super.perform(pm);
+		}
+
+		private ErrorMarkerDataType getErrorMarkerEntry(final DataType dtp) {
+			final DataTypeLibrary lib = manipulator.getTypeEntry().getTypeLibrary().getDataTypeLibrary();
+			return lib.createErrorMarkerType(dtp.getTypeEntry().getFullTypeName(), ""); //$NON-NLS-1$
 		}
 
 	}
