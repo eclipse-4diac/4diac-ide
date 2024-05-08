@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.handlers.MoveThroughHierarchyHandler.TreeNodeLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -34,7 +35,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
 public class SubAppHierarchyDialog {
-	List<FBNetworkElement> filterList = null;
 
 	final ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(Display.getCurrent().getActiveShell(),
 			new TreeNodeLabelProvider(), new TreeNodeContentProvider()) {
@@ -47,16 +47,7 @@ public class SubAppHierarchyDialog {
 	};
 
 	public SubAppHierarchyDialog(final FBNetworkElement root, final List<FBNetworkElement> filteredElements) {
-		filterList = filteredElements;
-		final List<TreeNode> nodeList = new ArrayList<>();
-		final EObject container = EcoreUtil.getRootContainer(root);
-		if (container instanceof final AutomationSystem as) {
-			as.getApplication().forEach(app -> {
-				final TreeNode node = new TreeNode(app);
-				nodeList.add(node);
-				addFBNetwork(node, app.getFBNetwork());
-			});
-		}
+		final List<TreeNode> nodeList = buildNodeList(root, filteredElements);
 		dialog.setInput(nodeList.toArray(new TreeNode[0]));
 		dialog.setTitle(Messages.MoveElementDialogTitle);
 		dialog.setAllowMultiple(false);
@@ -66,24 +57,42 @@ public class SubAppHierarchyDialog {
 		dialog.open();
 		final Object result = dialog.getResult() != null ? dialog.getResult()[0] : null;
 		if (result instanceof final TreeNode node) {
-			if (node.getValue() instanceof final SubApp subapp) {
-				return subapp.getSubAppNetwork();
-			}
-			if (node.getValue() instanceof final Application app) {
-				return app.getFBNetwork();
-			}
+			return switch (node.getValue()) {
+			case final SubApp subapp -> subapp.getSubAppNetwork();
+			case final Application app -> app.getFBNetwork();
+			case final CompositeFBType cfb -> cfb.getFBNetwork();
+			default -> null;
+			};
 		}
 		return null;
 	}
 
-	private void addFBNetwork(final TreeNode parent, final FBNetwork network) {
+	private static List<TreeNode> buildNodeList(final FBNetworkElement root, final List<FBNetworkElement> filterList) {
+		final List<TreeNode> nodeList = new ArrayList<>();
+		final EObject container = EcoreUtil.getRootContainer(root);
+		if (container instanceof final AutomationSystem as) {
+			as.getApplication().forEach(app -> {
+				final TreeNode node = new TreeNode(app);
+				nodeList.add(node);
+				addFBNetwork(node, app.getFBNetwork(), filterList);
+			});
+		} else if (container instanceof final CompositeFBType cfb) {
+			final TreeNode node = new TreeNode(cfb);
+			nodeList.add(node);
+			addFBNetwork(node, cfb.getFBNetwork(), filterList);
+		}
+		return nodeList;
+	}
+
+	private static void addFBNetwork(final TreeNode parent, final FBNetwork network,
+			final List<FBNetworkElement> filterList) {
 		final List<TreeNode> nodeList = new ArrayList<>();
 		network.getNetworkElements().forEach(fbnE -> {
 			if (fbnE instanceof final UntypedSubApp subapp && !filterList.contains(fbnE)) {
 				final TreeNode node = new TreeNode(subapp);
 				node.setParent(parent);
 				nodeList.add(node);
-				addFBNetwork(node, subapp.getSubAppNetwork());
+				addFBNetwork(node, subapp.getSubAppNetwork(), filterList);
 			}
 		});
 		parent.setChildren(nodeList.toArray(new TreeNode[0]));
