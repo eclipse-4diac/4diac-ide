@@ -169,15 +169,19 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		t.test(state.getDemultiplexer());
 		t.test(state.getStruct().getMemberVariables().size(),
 				state.getDemultiplexer().getInterface().getOutputVars().size());
+		t.test(!state.getDemultiplexer().isIsConfigured());
 	}
 
 	protected static void verifyAdded(final State state, final TestFunction t, final String name) {
 		t.test(state.getDemultiplexer());
 		t.test(!state.getDemultiplexer().getMemberVars().stream().filter(MemberVarDeclaration.class::isInstance)
 				.filter(out -> ((MemberVarDeclaration) out).getName().equals(name)).findAny().isEmpty());
-		final String attributeValue = getVisibleChildrenAttribute(state.getDemultiplexer()).getValue();
-		t.test(Arrays.asList(attributeValue.split(",")) //$NON-NLS-1$
-				.contains(name));
+		final Attribute attribute = getVisibleChildrenAttribute(state.getDemultiplexer());
+		if (state.getDemultiplexer().isIsConfigured()) {
+			t.test(Arrays.asList(attribute.getValue().split(",")) //$NON-NLS-1$
+					.contains(name));
+		}
+		t.test(state.getDemultiplexer().getMemberVars().stream().anyMatch(var -> var.getName().equals(name)));
 	}
 
 	private static Attribute getVisibleChildrenAttribute(final Demultiplexer demux) {
@@ -190,8 +194,12 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		t.test(state.getDemultiplexer());
 		t.test(state.getDemultiplexer().getInterface().getOutputVars().stream()
 				.filter(out -> out.getName().equals(name)).findAny().isEmpty());
-		t.test(!Arrays.asList(getVisibleChildrenAttribute(state.getDemultiplexer()).getValue().split(",")) //$NON-NLS-1$
-				.contains(name));
+		final Attribute attribute = getVisibleChildrenAttribute(state.getDemultiplexer());
+		if (state.getDemultiplexer().isIsConfigured()) {
+			t.test(!Arrays.asList(attribute.getValue().split(",")) //$NON-NLS-1$
+					.contains(name));
+		}
+		t.test(state.getDemultiplexer().getMemberVars().stream().noneMatch(var -> var.getName().equals(name)));
 	}
 
 	private static State executeDeleteCommand(final State state, final String name) {

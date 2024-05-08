@@ -86,7 +86,7 @@ public class ExtractStructTypeWizard extends AbstractSaveAsWizard {
 				}
 			};
 			try {
-				getContainer().run(true, true, operation);
+				getContainer().run(false, true, operation);
 			} catch (final InvocationTargetException e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			} catch (final InterruptedException e) {

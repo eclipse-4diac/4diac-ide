@@ -63,7 +63,7 @@ public class MoveElementsFromSubAppCommandTest extends FBNetworkTestBase {
 		final SubApp sub = (SubApp) s.getFbNetwork().getNetworkElements().get(0);
 		final FBNetworkElement elem = sub.getSubAppNetwork().getNetworkElements().get(0);
 		s.setCommand(
-				new MoveElementsFromSubAppCommand(Arrays.asList(elem), new Point(0, 0)));
+				new MoveAndReconnectCommand(Arrays.asList(elem), new Point(0, 0)));
 		return commandExecution(s);
 	}
 

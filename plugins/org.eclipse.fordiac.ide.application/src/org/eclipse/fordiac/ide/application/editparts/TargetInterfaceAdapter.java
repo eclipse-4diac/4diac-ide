@@ -77,23 +77,35 @@ public final class TargetInterfaceAdapter extends AdapterImpl {
 		final Set<EObject> currTargets = new HashSet<>();
 
 		if (refEditPart.isInput()) {
-			for (final Connection con : model.getInputConnections()) {
-				currTargets.add(con);
-				if (con.getSource() != null) {
-					currTargets.add(con.getSource());
-				}
-			}
+			model.getInputConnections().forEach(srcCon -> checkInputConns(currTargets, srcCon));
 		} else {
-			for (final Connection con : model.getOutputConnections()) {
-				currTargets.add(con);
-				final IInterfaceElement dest = con.getDestination();
-				if (dest != null) {
-					currTargets.add(dest);
-					currTargets.addAll(dest.getOutputConnections()); // needed for correctly handling undo
-				}
-			}
+			model.getOutputConnections().forEach(dstCon -> checkoutOutputConns(currTargets, dstCon));
 		}
 		return currTargets;
+	}
+
+	private static void checkInputConns(final Set<EObject> currTargets, final Connection con) {
+		currTargets.add(con);
+		final IInterfaceElement source = con.getSource();
+		if (source != null) {
+			currTargets.add(con.getSource());
+			if (TargetPinManager.followConnections(source.getFBNetworkElement(), source.getInputConnections())) {
+				source.getInputConnections().forEach(srcCon -> checkInputConns(currTargets, srcCon));
+			}
+		}
+	}
+
+	private static void checkoutOutputConns(final Set<EObject> currTargets, final Connection con) {
+		currTargets.add(con);
+		final IInterfaceElement dest = con.getDestination();
+		if (dest != null) {
+			currTargets.add(dest);
+			if (TargetPinManager.followConnections(dest.getFBNetworkElement(), dest.getOutputConnections())) {
+				dest.getOutputConnections().forEach(dstCon -> checkoutOutputConns(currTargets, dstCon));
+			} else {
+				currTargets.addAll(dest.getOutputConnections()); // needed for correctly handling undo
+			}
+		}
 	}
 
 }

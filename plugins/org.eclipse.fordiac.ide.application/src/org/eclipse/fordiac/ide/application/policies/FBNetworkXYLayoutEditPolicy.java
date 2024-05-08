@@ -24,7 +24,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.actions.CopyPasteData;
 import org.eclipse.fordiac.ide.application.commands.ConnectionReference;
-import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
+import org.eclipse.fordiac.ide.application.commands.MoveAndReconnectCommand;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
@@ -148,7 +148,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		final Point destination = getTranslatedAndZoomedPoint(request);
 		final List<FBNetworkElement> fbEls = collectFromSubappDraggedFBs(editParts, getFBNetwork());
 		if (!fbEls.isEmpty()) {
-			return new MoveElementsFromSubAppCommand(fbEls,
+			return new MoveAndReconnectCommand(fbEls,
 					new org.eclipse.swt.graphics.Point(destination.x, destination.y));
 		}
 		return createRemoveFromGroup(editParts, request);

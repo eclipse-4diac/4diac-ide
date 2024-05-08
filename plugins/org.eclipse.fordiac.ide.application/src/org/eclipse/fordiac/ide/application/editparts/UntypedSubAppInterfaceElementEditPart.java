@@ -22,7 +22,6 @@ import java.util.List;
 import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.CompoundBorder;
-import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
@@ -50,7 +49,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
-import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -215,21 +213,21 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	}
 
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
+	protected FixedAnchor createSourceConAnchor() {
 		if (isInput()) {
 			// we are unfolded and this is an internal connection
 			return new SubappInternalConnAnchor(getFigure(), !isInput());
 		}
-		return new FixedAnchor(getFigure(), isInput());
+		return super.createTargetConAnchor();
 	}
 
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
+	protected FixedAnchor createTargetConAnchor() {
 		if (!isInput()) {
 			// we are unfolded and this is an internal connection
 			return new SubappInternalConnAnchor(getFigure(), !isInput());
 		}
-		return super.getTargetConnectionAnchor(connection);
+		return super.createTargetConAnchor();
 	}
 
 	@Override

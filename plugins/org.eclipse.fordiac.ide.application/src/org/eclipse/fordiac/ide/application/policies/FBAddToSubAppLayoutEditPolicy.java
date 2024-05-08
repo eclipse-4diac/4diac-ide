@@ -26,7 +26,7 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
-import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
+import org.eclipse.fordiac.ide.application.commands.MoveAndReconnectCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
@@ -59,7 +59,7 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 			final Point destination = getTranslatedAndZoomedPoint((ChangeBoundsRequest) request);
 
 			if (!fbEls.isEmpty()) {
-				return new MoveElementsFromSubAppCommand(fbEls,
+				return new MoveAndReconnectCommand(fbEls,
 						new org.eclipse.swt.graphics.Point(destination.x, destination.y));
 			}
 			return new AddElementsToSubAppCommand(dropSubApp, editParts);
