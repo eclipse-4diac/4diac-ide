@@ -145,7 +145,7 @@ public final class ConfigurableFBManagement {
 			if (!isInDefaultConfiguration(fb, attr.getValue(), fb.getDataType())) {
 				return ECollections.asEList(structTypeAttr.get(0), attr);
 			}
-			// Until the
+			// Until the configured state is updated automatically in the commands, save result here:
 			fb.setIsConfigured(false);
 		}
 		return structTypeAttr;
