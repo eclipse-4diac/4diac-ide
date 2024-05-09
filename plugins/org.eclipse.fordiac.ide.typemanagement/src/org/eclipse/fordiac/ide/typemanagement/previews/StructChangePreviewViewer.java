@@ -1,6 +1,5 @@
 package org.eclipse.fordiac.ide.typemanagement.previews;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
 import org.eclipse.compare.CompareConfiguration;
@@ -26,11 +25,13 @@ import org.eclipse.ltk.ui.refactoring.ChangePreviewViewerInput;
 import org.eclipse.ltk.ui.refactoring.IChangePreviewViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.handlers.IHandlerService;
 
 @SuppressWarnings("restriction")
 public class StructChangePreviewViewer implements IChangePreviewViewer {
 
-	private Composite parent;
+	private static Composite parent;
 	private static Control previewControl;
 	private EMFCompareConfiguration emfCompareConfiguration;
 	private AdapterFactory adapterFactory;
@@ -39,7 +40,6 @@ public class StructChangePreviewViewer implements IChangePreviewViewer {
 	@Override
 	public void createControl(final Composite parent) {
 		parent.setSize(500, 500);
-		this.parent = parent;
 		this.emfCompareConfiguration = new EMFCompareConfiguration(new CompareConfiguration());
 		this.emfCompareConfiguration.setLeftEditable(false);
 		this.emfCompareConfiguration.setLeftLabel("Before Refactor");
@@ -51,7 +51,10 @@ public class StructChangePreviewViewer implements IChangePreviewViewer {
 		if (Objects.nonNull(previewControl)) {
 			previewControl.dispose();
 			previewControl = null;
+			StructChangePreviewViewer.parent.dispose();
 		}
+		StructChangePreviewViewer.parent = parent;
+
 	}
 
 	@Override
@@ -86,6 +89,10 @@ public class StructChangePreviewViewer implements IChangePreviewViewer {
 
 		try {
 
+			System.out.println("Checking...");
+
+			final IHandlerService service = PlatformUI.getWorkbench().getService(IHandlerService.class);
+
 			if (Objects.nonNull(compareEditorInput.getActionBars())) {
 				// This is an ugly workaround for a bug in EMF compare that will register
 				// certain actions twice. See bug 580988
@@ -96,6 +103,8 @@ public class StructChangePreviewViewer implements IChangePreviewViewer {
 					if (iContributionItem instanceof ActionContributionItem) {
 						final IAction action = ((ActionContributionItem) iContributionItem).getAction();
 						final String id = action.getActionDefinitionId();
+						System.out.println("Action");
+						System.out.println(id);
 						if ("org.eclipse.compare.copyAllLeftToRight".equals(id)) {
 							toolBarManager.remove(iContributionItem);
 						} else if ("org.eclipse.compare.copyAllRightToLeft".equals(id)) {
@@ -107,9 +116,11 @@ public class StructChangePreviewViewer implements IChangePreviewViewer {
 
 			compareEditorInput.run(new NullProgressMonitor());
 			compareEditorInput.setTitle("Refactor comparison");
+
 			previewControl = compareEditorInput.createContents(parent);
 
-		} catch (final InvocationTargetException | InterruptedException | IllegalStateException e) {
+		} catch (final Exception e) {
+			System.out.println("Comparison failure");
 			e.printStackTrace();
 		}
 
