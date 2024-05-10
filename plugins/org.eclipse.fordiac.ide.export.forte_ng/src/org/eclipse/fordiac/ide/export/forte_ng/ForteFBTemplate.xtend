@@ -376,34 +376,28 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			«type.interfaceList.outMappedInOutVars.generateConnectionAccessorsDefinition("getDIOOutConUnchecked", "CInOutDataConnection *")»
 		«ENDIF»
 	'''
-
+	
 	def protected generateSetInitialValuesDeclaration(Iterable<VarDeclaration> variables) '''
-		«IF !variables.empty»
-			void setInitialValues(bool cold) override;
+		«IF containsNonRetainedVariable(variables)»
+			void setInitialValues() override;
 		«ENDIF»
 	'''
-
+	
+	//todo escape new line character
 	def protected generateSetInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
-		«IF !variables.empty»
-			void «className»::setInitialValues(bool cold) {
-				«IF variables.exists[ it.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE) !== null ]»
-					«generateRetainedInitialValuesDefinition(variables)»
-				«ELSE»
-					«generateVariableDefaultAssignment(variables)»
-				«ENDIF»
+		«IF(containsNonRetainedVariable(variables))»
+			void «className»::setInitialValues() {
+				«generateVariableDefaultAssignment(variables.filter[!isRetainedVariable(it)])»
 			}
-			
-		«ENDIF»
-	'''
-	def private generateRetainedInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
-		if (cold) {
-			«generateVariableDefaultAssignment(variables.filter[isRetainedVariable(it)])»
-		}
-		«generateVariableDefaultAssignment(variables.filter[!isRetainedVariable(it)])»
+		«ENDIF»	
 	'''
 	
 	def private boolean isRetainedVariable(VarDeclaration variable) {
 		return variable.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE) !== null && variable.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE).equals(RetainTag.RETAIN.string);
+	}
+	
+	def private boolean containsNonRetainedVariable(Iterable<VarDeclaration> variables) {
+		return variables.exists[!isRetainedVariable(it)];
 	}
 	
 	def private generateVariableDefaultAssignment(Iterable<VarDeclaration> variables)'''
