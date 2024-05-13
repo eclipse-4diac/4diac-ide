@@ -71,7 +71,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
@@ -152,7 +151,8 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	}
 
 	@Override
-	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer, final ZoomManager zoomManager) {
+	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
+			final ZoomManager zoomManager) {
 		return new FordiacContextMenuProvider(viewer, zoomManager, getActionRegistry()) {
 			@Override
 			public void buildContextMenu(final IMenuManager menu) {
@@ -188,8 +188,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		getCommandStack().markSaveLocation();
-		firePropertyChange(IEditorPart.PROP_DIRTY);
+		// we do not need to do anything on save
 	}
 
 	@Override
