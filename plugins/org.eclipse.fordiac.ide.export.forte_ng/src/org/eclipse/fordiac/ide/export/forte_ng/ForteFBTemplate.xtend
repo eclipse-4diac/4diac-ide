@@ -388,8 +388,8 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			void «className»::setInitialValues() {
 				«generateVariableDefaultAssignment(variables.filter[!isRetainedVariable(it)])»
 			}
+			
 		«ENDIF»	
-		
 	'''
 	
 	def private boolean isRetainedVariable(VarDeclaration variable) {
