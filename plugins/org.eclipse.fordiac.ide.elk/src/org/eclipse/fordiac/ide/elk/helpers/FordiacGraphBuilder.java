@@ -189,7 +189,7 @@ public final class FordiacGraphBuilder {
 			final ElkNode parent, final int yOffset) {
 		final ElkNode node = FordiacLayoutFactory.createFordiacLayoutNode(editPart, parent);
 
-		final Rectangle bounds = editPart.getFigure().getFBBounds();
+		final Rectangle bounds = editPart.getFigure().getBounds();
 		node.setLocation(bounds.x, bounds.y - yOffset);
 		node.setDimensions(bounds.preciseWidth(), bounds.preciseHeight());
 
