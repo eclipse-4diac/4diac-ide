@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEdi
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
+import org.eclipse.fordiac.ide.elk.FordiacLayoutMapping;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -64,7 +65,9 @@ public class FordiacGraphDataHelper {
 		final int calculatedX = (int) (node.getX() + parentX);
 		final int calculatedY = (int) (node.getY() + parentY);
 
-		setPosition(mapping, node, ep, calculatedX, calculatedY);
+		if (ep != mapping.getProperty(FordiacLayoutMapping.NETWORK_EDIT_PART)) {
+			setPosition(mapping, node, ep, calculatedX, calculatedY);
+		}
 
 		processConnections(mapping, node, calculatedX, calculatedY);
 
