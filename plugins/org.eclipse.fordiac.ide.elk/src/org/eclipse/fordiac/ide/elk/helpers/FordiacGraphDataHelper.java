@@ -56,6 +56,7 @@ public class FordiacGraphDataHelper {
 	public static FordiacLayoutData calculate(final LayoutMapping mapping) {
 		calculateNodePositionsRecursively(mapping, mapping.getLayoutGraph(), 0, INSTANCE_COMMENT_OFFSET);
 		createPinOffsetData(mapping);
+		addFlatConnections(mapping);
 		return mapping.getProperty(LAYOUT_DATA);
 	}
 
@@ -98,6 +99,13 @@ public class FordiacGraphDataHelper {
 				mapping.getProperty(LAYOUT_DATA).addGroup((Group) ep.getModel(), (int) node.getHeight(),
 						(int) node.getWidth());
 			}
+		}
+	}
+
+	private static void addFlatConnections(final LayoutMapping mapping) {
+		// ensure that all connections are redrawn and no artifacts remain
+		for (final var connEp : mapping.getProperty(FordiacLayoutMapping.FLAT_CONNECTIONS)) {
+			mapping.getProperty(LAYOUT_DATA).addConnectionPoints(connEp.getModel(), new PointList());
 		}
 	}
 

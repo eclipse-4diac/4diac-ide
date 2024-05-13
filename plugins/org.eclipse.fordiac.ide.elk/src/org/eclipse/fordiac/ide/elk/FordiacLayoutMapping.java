@@ -49,6 +49,7 @@ public class FordiacLayoutMapping extends LayoutMapping {
 	public static final IProperty<AbstractFBNetworkEditPart> NETWORK_EDIT_PART = new Property<>("gef.networkEditPart"); //$NON-NLS-1$
 	public static final IProperty<CommandStack> COMMAND_STACK = new Property<>("gef.commandStack"); //$NON-NLS-1$
 	public static final IProperty<List<ConnectionEditPart>> CONNECTIONS = new Property<>("gef.connections"); //$NON-NLS-1$
+	public static final IProperty<List<ConnectionEditPart>> FLAT_CONNECTIONS = new Property<>("gef.flatConnections"); //$NON-NLS-1$
 	public static final IProperty<List<ConnectionEditPart>> HIERARCHY_CROSSING_CONNECTIONS = new Property<>(
 			"gef.hierarchyCrossingConnections"); //$NON-NLS-1$
 	public static final IProperty<Map<ConnectionEditPart, List<ElkEdge>>> HIERARCHY_CROSSING_CONNECTIONS_MAPPING = new Property<>(
@@ -70,6 +71,7 @@ public class FordiacLayoutMapping extends LayoutMapping {
 		final FordiacLayoutMapping mapping = new FordiacLayoutMapping(workbenchPart);
 		mapping.setProperty(FordiacLayoutMapping.COMMAND_STACK, workbenchPart.getAdapter(CommandStack.class));
 		mapping.setProperty(FordiacLayoutMapping.CONNECTIONS, new ArrayList<>());
+		mapping.setProperty(FordiacLayoutMapping.FLAT_CONNECTIONS, new ArrayList<>());
 		mapping.setProperty(FordiacLayoutMapping.HIERARCHY_CROSSING_CONNECTIONS, new ArrayList<>());
 		mapping.setProperty(FordiacLayoutMapping.HIERARCHY_CROSSING_CONNECTIONS_MAPPING, new HashMap<>());
 		mapping.setProperty(FordiacLayoutMapping.HIERARCHY_CROSSING_CONNECTIONS_REVERSE_MAPPING, new HashMap<>());
