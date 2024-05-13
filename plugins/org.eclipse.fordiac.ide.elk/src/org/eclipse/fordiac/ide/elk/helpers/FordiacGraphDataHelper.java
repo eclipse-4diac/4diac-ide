@@ -38,6 +38,7 @@ import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutMapping;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
@@ -54,7 +55,16 @@ public class FordiacGraphDataHelper {
 	private static final int INSTANCE_COMMENT_OFFSET = 8;
 
 	public static FordiacLayoutData calculate(final LayoutMapping mapping) {
-		calculateNodePositionsRecursively(mapping, mapping.getLayoutGraph(), 0, INSTANCE_COMMENT_OFFSET);
+		if (mapping.getProperty(
+				FordiacLayoutMapping.NETWORK_EDIT_PART) instanceof final UnfoldedSubappContentEditPart subapp) {
+			final int y = subapp.getParent().getFigure().getBounds().y;
+			final int input = subapp.getParent().getInterfacePositionMap().getInputDirectEnd() - y;
+			final int output = subapp.getParent().getInterfacePositionMap().getOutputDirectEnd() - y;
+			calculateNodePositionsRecursively(mapping, mapping.getLayoutGraph(), 0,
+					Math.max(Math.max(input, output), 0));
+		} else {
+			calculateNodePositionsRecursively(mapping, mapping.getLayoutGraph(), 0, INSTANCE_COMMENT_OFFSET);
+		}
 		createPinOffsetData(mapping);
 		addFlatConnections(mapping);
 		return mapping.getProperty(LAYOUT_DATA);
