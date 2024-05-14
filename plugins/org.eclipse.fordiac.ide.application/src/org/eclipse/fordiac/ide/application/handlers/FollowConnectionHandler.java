@@ -195,7 +195,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				if (e.character == SWT.CR) {
 					dialogArea.getShell().close();
 				}
-				if (!opposites.get(0).getInputConnections().isEmpty()) {
+				if (!opposites.getFirst().getInputConnections().isEmpty()) {
 					handleRight(e);
 				} else {
 					handleLeft(e);
@@ -329,7 +329,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	private static void showOppositeSelectionDialog(final List<IInterfaceElement> opposites, final ExecutionEvent event,
 			final GraphicalViewer viewer, final IInterfaceElement originPin) throws ExecutionException {
 
-		selectInterfaceElement(viewer, opposites.get(0));
+		selectInterfaceElement(viewer, opposites.getFirst());
 		viewer.flush();
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final IFigure figure = ((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement()).getFigure();
@@ -394,7 +394,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		final var visibleDestinations = destination.stream().filter(IInterfaceElement::isVisible).toList();
 
 		if (sourceIndex == -1) {
-			return visibleDestinations.get(0);
+			return visibleDestinations.getFirst();
 		}
 
 		if ((visibleDestinations.size() - 1) < sourceIndex) {
