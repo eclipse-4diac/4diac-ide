@@ -16,10 +16,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 
@@ -38,13 +37,7 @@ public interface ILibraryLinker {
 
 	void importLibraries(final Collection<java.net.URI> uris);
 
-	boolean removeOldLibVersion(final IFolder libDirectory);
-
-	void createTypeEntriesManually(final IContainer container);
-
-	void updateFBInstancesWithNewTypeVersion();
-
-	Set<TypeEntry> cacheOldTypes(final IFolder oldFolder);
+	Map<String, TypeEntry> findOldTypes(final IFolder oldFolder);
 
 	List<String> findLinkedLibs();
 

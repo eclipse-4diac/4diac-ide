@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -120,8 +119,7 @@ public final class FBUpdater {
 		return cmd;
 	}
 
-	public static List<FBNetworkElement> updateAllInstances(final Set<TypeEntry> typeEntries,
-			final TypeLibrary typeLib) {
+	public static List<FBNetworkElement> updateAllInstances(final Set<TypeEntry> typeEntries) {
 		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(typeEntries);
 		final List<FBNetworkElement> elements = search.performSearch().stream()
 				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).toList();
