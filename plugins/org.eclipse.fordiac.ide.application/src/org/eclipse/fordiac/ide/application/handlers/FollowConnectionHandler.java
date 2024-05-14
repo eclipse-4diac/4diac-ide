@@ -315,11 +315,6 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				.map(ep -> (TargetInterfaceElementEditPart) ep).map(ep -> ep.getModel().getRefElement()).toList();
 	}
 
-	private static boolean isBorderElement(final InterfaceEditPart iep) {
-		return iep.getChildren().stream().anyMatch(TargetInterfaceElementEditPart.class::isInstance); // or is input of
-																										// subapp;
-	}
-
 	protected static boolean isInsideSubappOrViewer(final IInterfaceElement ie, final FBNetwork fbNetwork) {
 		final FBNetworkElement fbnElement = ie.getFBNetworkElement();
 		return ((fbnElement instanceof SubApp) || (fbnElement instanceof CFBInstance))
