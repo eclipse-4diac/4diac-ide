@@ -124,7 +124,7 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 	}
 
 	protected static void translateToRelative(final GraphicalEditPart graphicalEditPart, final Point topLeft) {
-		GraphicalEditPart parent = (GraphicalEditPart) graphicalEditPart.getParent();
+		GraphicalEditPart parent = graphicalEditPart;
 		while (parent != null) {
 			if (parent instanceof UnfoldedSubappContentEditPart) {
 				final Rectangle subappContentBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(parent);

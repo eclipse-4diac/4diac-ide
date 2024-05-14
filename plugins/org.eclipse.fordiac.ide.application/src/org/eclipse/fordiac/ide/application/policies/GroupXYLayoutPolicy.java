@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
@@ -86,7 +87,7 @@ public class GroupXYLayoutPolicy extends ContainerContentLayoutPolicy {
 			final List<FBNetworkElement> fbEls) {
 		final Rectangle groupContentBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(getHost());
 		final Point topLeft = groupContentBounds.getTopLeft();
-		translateToRelative(getHost(), topLeft);
+		translateToRelative((GraphicalEditPart) getHost().getParent(), topLeft);
 		final Point moveDelta = getScaledMoveDelta(request);
 		topLeft.translate(-moveDelta.x, -moveDelta.y);
 		final AddElementsToGroup addElementsToGroup = new AddElementsToGroup(dropGroup, fbEls, topLeft);
