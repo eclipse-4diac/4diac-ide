@@ -28,7 +28,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -60,14 +59,16 @@ import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.ILibraryLinker;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.util.FBUpdater;
 import org.eclipse.fordiac.ide.typemanagement.wizards.ArchivedLibraryImportWizard;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -91,7 +92,8 @@ public class LibraryLinker implements ILibraryLinker {
 			TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING, TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING);
 
 	private IProject selectedProject;
-	private Set<TypeEntry> cachedTypes;
+	private Map<String, TypeEntry> cachedTypes;
+	private List<TypeEntry> oldTypes;
 	private TypeLibrary typeLibrary;
 
 	@Override
@@ -200,8 +202,8 @@ public class LibraryLinker implements ILibraryLinker {
 				projManifest.eResource().save(null);
 				createTypeEntriesManually(libDirectory);
 				if (isNewVersion) {
-					// We can only update if there was a version before
-					updateFBInstancesWithNewTypeVersion();
+					// clean up if there was a version before
+					cleanupOldLibraryVersion();
 				}
 			} catch (final CoreException | IOException e) {
 				Display.getDefault().syncExec(() -> MessageDialog.openWarning(null, Messages.Warning,
@@ -218,18 +220,15 @@ public class LibraryLinker implements ILibraryLinker {
 		}
 	}
 
-	@Override
-	public boolean removeOldLibVersion(final IFolder libDirectory) {
+	private boolean removeOldLibVersion(final IFolder libDirectory) {
 		boolean isNewVersion = false;
 		if (libDirectory.exists()) {
 			isNewVersion = true;
 			try {
-				cachedTypes = cacheOldTypes(libDirectory);
+				cachedTypes = findOldTypes(libDirectory);
+				oldTypes = new ArrayList<>(cachedTypes.values());
 				// Remove the link but keep the resource on disk
 				libDirectory.delete(true, null);
-				// Remove the entries manually
-				cachedTypes.forEach(typeEntry -> TypeLibraryManager.INSTANCE.getTypeLibrary(selectedProject)
-						.removeTypeEntry(typeEntry));
 			} catch (final CoreException e) {
 				Display.getDefault().syncExec(() -> MessageDialog.openWarning(null, Messages.Warning,
 						Messages.OldTypeLibVersionCouldNotBeDeleted));
@@ -238,44 +237,55 @@ public class LibraryLinker implements ILibraryLinker {
 		return isNewVersion;
 	}
 
-	@Override
-	public void createTypeEntriesManually(final IContainer container) {
-		try {
-			final IResource[] members = container.members();
-			for (final IResource resource : members) {
-				if (resource instanceof final IFolder folder) {
-					createTypeEntriesManually(folder);
-				}
-				if (resource instanceof final IFile file) {
-					typeLibrary.createTypeEntry(file);
-				}
+	private void createTypeEntriesManually(final IContainer container) {
+		final IResourceVisitor visitor = resource -> (switch (resource) {
+		case final IFolder folder -> true;
+		case final IFile file -> {
+			final TypeEntry entry = TypeEntryFactory.INSTANCE.createTypeEntry(file);
+			final TypeEntry oldEntry = cachedTypes.get(entry.getFullTypeName());
+			if (oldEntry != null) {
+				FordiacResourceChangeListener.updateTypeEntry(file, oldEntry);
+				cachedTypes.remove(entry.getFullTypeName());
+			} else {
+				typeLibrary.createTypeEntry(file);
 			}
+			yield false;
+		}
+		default -> false;
+		});
+		try {
+			container.accept(visitor);
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
-
 	}
 
-	@Override
-	public void updateFBInstancesWithNewTypeVersion() {
+	private void cleanupOldLibraryVersion() {
+		// remove obsolete types
+		cachedTypes.values().forEach(
+				typeEntry -> TypeLibraryManager.INSTANCE.getTypeLibrary(selectedProject).removeTypeEntry(typeEntry));
+		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(oldTypes);
+		final List<FBNetworkElement> elements = search.performSearch().stream()
+				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).toList();
+
 		Display.getDefault().syncExec(() -> {
-			List<FBNetworkElement> updatedElements;
-			updatedElements = FBUpdater.updateAllInstances(cachedTypes, typeLibrary);
 			final InstanceUpdateDialog updateDialog = new InstanceUpdateDialog(null, Messages.InstanceUpdate, null,
-					Messages.UpdatedInstances, MessageDialog.NONE, new String[] { Messages.Confirm }, 0,
-					updatedElements);
+					Messages.UpdatedInstances, MessageDialog.NONE, new String[] { Messages.Confirm }, 0, elements);
 			updateDialog.open();
+
 		});
+
 	}
 
 	@Override
-	public Set<TypeEntry> cacheOldTypes(final IFolder oldFolder) {
-		final Set<TypeEntry> oldTypes = new HashSet<>();
+	public Map<String, TypeEntry> findOldTypes(final IFolder oldFolder) {
+		final Map<String, TypeEntry> oldTypes = new HashMap<>();
 
 		final IResourceVisitor visitor = resource -> (switch (resource) {
 		case final IFolder folder -> true;
 		case final IFile file when TYPE_ENDINGS.contains(file.getFileExtension().toUpperCase()) -> {
-			oldTypes.add(TypeLibraryManager.INSTANCE.getTypeEntryForFile(file));
+			final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+			oldTypes.put(entry.getFullTypeName(), entry);
 			yield false;
 		}
 		default -> false;
@@ -287,7 +297,7 @@ public class LibraryLinker implements ILibraryLinker {
 			// do nothing
 		}
 
-		return Collections.emptySet();
+		return Collections.emptyMap();
 	}
 
 	@Override
