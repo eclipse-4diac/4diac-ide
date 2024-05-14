@@ -195,7 +195,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				if (e.character == SWT.CR) {
 					dialogArea.getShell().close();
 				}
-				if (opposites.get(0).getInputConnections().isEmpty()) {
+				if (!opposites.get(0).getInputConnections().isEmpty()) {
 					handleRight(e);
 				} else {
 					handleLeft(e);
@@ -283,13 +283,17 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				.toList();
 	}
 
-	private static List<IInterfaceElement> resolveTargetPins(final List<IInterfaceElement> opposites,
+	protected List<IInterfaceElement> resolveTargetPins(final List<IInterfaceElement> opposites,
 			final GraphicalViewer viewer) {
 		final List<IInterfaceElement> resolvedOpposites = new ArrayList<>();
 		for (final IInterfaceElement element : opposites) {
 			final EditPart ep = (EditPart) (viewer.getEditPartRegistry().get(element));
-			if ((ep instanceof final InterfaceEditPart iep) && isBorderElement(iep)) {
-				resolvedOpposites.addAll(getTargetPins(iep));
+			if ((ep instanceof final InterfaceEditPart iep) && isExpandedSubappPin(element)) {
+				if (iep.isInput()) {
+					resolvedOpposites.addAll(getConnectionOposites(iep));
+				} else {
+					resolvedOpposites.addAll(getTargetPins(iep));
+				}
 			} else {
 				resolvedOpposites.add(element);
 			}
@@ -312,7 +316,8 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	}
 
 	private static boolean isBorderElement(final InterfaceEditPart iep) {
-		return iep.getChildren().stream().anyMatch(TargetInterfaceElementEditPart.class::isInstance);
+		return iep.getChildren().stream().anyMatch(TargetInterfaceElementEditPart.class::isInstance); // or is input of
+																										// subapp;
 	}
 
 	protected static boolean isInsideSubappOrViewer(final IInterfaceElement ie, final FBNetwork fbNetwork) {
@@ -373,12 +378,11 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	protected static void selectOpposites(final ExecutionEvent event, final GraphicalViewer viewer,
 			final IInterfaceElement originPin, final List<IInterfaceElement> opposites) throws ExecutionException {
-		final List<IInterfaceElement> resolvedOpposites = resolveTargetPins(opposites, viewer);
-		if (!resolvedOpposites.isEmpty()) {
-			if (resolvedOpposites.size() == 1) {
-				selectInterfaceElement(viewer, resolvedOpposites.get(0));
+		if (!opposites.isEmpty()) {
+			if (opposites.size() == 1) {
+				selectInterfaceElement(viewer, opposites.getFirst());
 			} else {
-				showOppositeSelectionDialog(resolvedOpposites, event, viewer, originPin);
+				showOppositeSelectionDialog(opposites, event, viewer, originPin);
 			}
 		}
 	}

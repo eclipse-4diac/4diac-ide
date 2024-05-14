@@ -55,7 +55,8 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 		}
 
 		final List<IInterfaceElement> opposites = getConnectionOposites(interfaceEditPart);
-		selectOpposites(event, viewer, originPin, opposites);
+		final List<IInterfaceElement> resolvedOpposites = resolveTargetPins(opposites, viewer);
+		selectOpposites(event, viewer, originPin, resolvedOpposites);
 		return Status.OK_STATUS;
 	}
 
