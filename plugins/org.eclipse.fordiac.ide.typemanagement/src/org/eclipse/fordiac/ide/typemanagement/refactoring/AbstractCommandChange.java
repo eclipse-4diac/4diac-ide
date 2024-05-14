@@ -144,10 +144,11 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	}
 
 	protected void commit(final LibraryElement libraryElement, final IProgressMonitor pm) throws CoreException {
+		libraryElement.getTypeEntry().save(libraryElement, pm);
 		if (editor != null) {
-			editor.doSave(pm);
-		} else {
-			libraryElement.getTypeEntry().save(libraryElement, pm);
+			// if we have an editor mark the save location in the command stack to tell the
+			// editor that it is not dirty anymore
+			Display.getDefault().syncExec(() -> editor.getAdapter(CommandStack.class).markSaveLocation());
 		}
 	}
 
