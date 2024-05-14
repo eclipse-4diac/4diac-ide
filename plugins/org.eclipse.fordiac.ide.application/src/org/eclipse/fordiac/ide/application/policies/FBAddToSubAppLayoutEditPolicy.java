@@ -59,8 +59,7 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 			final Point destination = getTranslatedAndZoomedPoint((ChangeBoundsRequest) request);
 
 			if (!fbEls.isEmpty()) {
-				return new MoveAndReconnectCommand(fbEls,
-						new org.eclipse.swt.graphics.Point(destination.x, destination.y));
+				return new MoveAndReconnectCommand(fbEls, new Point(destination.x, destination.y));
 			}
 			return new AddElementsToSubAppCommand(dropSubApp, editParts);
 		}

@@ -148,8 +148,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		final Point destination = getTranslatedAndZoomedPoint(request);
 		final List<FBNetworkElement> fbEls = collectFromSubappDraggedFBs(editParts, getFBNetwork());
 		if (!fbEls.isEmpty()) {
-			return new MoveAndReconnectCommand(fbEls,
-					new org.eclipse.swt.graphics.Point(destination.x, destination.y));
+			return new MoveAndReconnectCommand(fbEls, destination, (FBNetwork) getHost().getModel());
 		}
 		return createRemoveFromGroup(editParts, request);
 	}
@@ -168,11 +167,11 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return null;
 	}
 
-	protected org.eclipse.draw2d.geometry.Point getTranslatedAndZoomedPoint(final ChangeBoundsRequest request) {
+	protected Point getTranslatedAndZoomedPoint(final ChangeBoundsRequest request) {
 		final FigureCanvas viewerControl = (FigureCanvas) getTargetEditPart(request).getViewer().getControl();
-		final org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
-		return new org.eclipse.draw2d.geometry.Point(request.getLocation().x + location.x,
-				request.getLocation().y + location.y).scale(1.0 / getZoomManager().getZoom());
+		final Point location = viewerControl.getViewport().getViewLocation();
+		return new Point(request.getLocation().x + location.x, request.getLocation().y + location.y)
+				.scale(1.0 / getZoomManager().getZoom());
 	}
 
 	private static List<FBNetworkElement> collectFromSubappDraggedFBs(final List<? extends EditPart> editParts,
