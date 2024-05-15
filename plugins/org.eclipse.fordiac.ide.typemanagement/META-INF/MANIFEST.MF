@@ -21,7 +21,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.model.ui,
  org.eclipse.fordiac.ide.library.model,
- org.eclipse.fordiac.ide.gitlab
+ org.eclipse.fordiac.ide.gitlab,
+ org.eclipse.compare,
+ org.eclipse.emf.compare,
+ org.eclipse.emf.compare.edit,
+ org.eclipse.emf.compare.ide.ui;bundle-version="4.4.3"
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.0.0.qualifier
@@ -37,4 +41,5 @@ Export-Package: org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.typemanagement.util,
  org.eclipse.fordiac.ide.typemanagement.wizards
 Automatic-Module-Name: org.eclipse.fordiac.ide.typemanagement
-Import-Package: org.eclipse.fordiac.ide.model.ui.editors
+Import-Package: org.eclipse.emf.compare,
+ org.eclipse.fordiac.ide.model.ui.editors

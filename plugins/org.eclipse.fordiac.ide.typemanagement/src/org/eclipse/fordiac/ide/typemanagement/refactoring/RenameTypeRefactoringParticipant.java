@@ -15,10 +15,8 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -26,10 +24,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
-import org.eclipse.fordiac.ide.model.search.types.FBInstanceSearch;
+import org.eclipse.fordiac.ide.model.search.types.IEC61499ElementSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
@@ -106,7 +103,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		}
 	}
 
-	private CompositeChange createStructDataChange(final StructuredType type) {
+	private CompositeChange createStructDataChange() {
 		final CompositeChange parentChange = new CompositeChange(
 				MessageFormat.format(Messages.Refactoring_RenameFromTo, typeEntry.getTypeName(), newName));
 
@@ -134,7 +131,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 	private CompositeChange createFBDataChange() {
 		final CompositeChange parentChange = new CompositeChange(
 				MessageFormat.format(Messages.Refactoring_RenameFromTo, typeEntry.getTypeName(), newName));
-		parentChange.add(new UpdateTypeEntryChange(file, typeEntry, newName, oldName));
+		parentChange.add(new UpdateTypeLibraryEntryChange(file, typeEntry, newName, oldName));
 		final CompositeChange change = new CompositeChange(Messages.Refactoring_AffectedInstancesOfFB);
 
 		final IEC61499ElementSearch search = new BlockTypeInstanceSearch(typeEntry);
