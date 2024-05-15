@@ -89,7 +89,10 @@ public class LayoutCommand extends AbstractLayoutCommand {
 	}
 
 	private void updateModelElements() {
-		data.getPositions().forEach(FBNetworkElement::setPosition);
+		for (final var entry : data.getPositions().entrySet()) {
+			final var pos = entry.getValue();
+			entry.getKey().updatePositionFromScreenCoordinates((int) pos.getX(), (int) pos.getY());
+		}
 		setRoutingData(data.getConnectionPoints());
 		data.getGroups().forEach(LayoutCommand::setGroupSize);
 	}
