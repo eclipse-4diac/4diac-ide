@@ -204,6 +204,8 @@ public class LibraryLinker implements ILibraryLinker {
 				if (isNewVersion) {
 					// clean up if there was a version before
 					cleanupOldLibraryVersion();
+					// show affected elements
+					showUpdatedElements();
 				}
 			} catch (final CoreException | IOException e) {
 				Display.getDefault().syncExec(() -> MessageDialog.openWarning(null, Messages.Warning,
@@ -264,6 +266,9 @@ public class LibraryLinker implements ILibraryLinker {
 		// remove obsolete types
 		cachedTypes.values().forEach(
 				typeEntry -> TypeLibraryManager.INSTANCE.getTypeLibrary(selectedProject).removeTypeEntry(typeEntry));
+	}
+
+	private void showUpdatedElements() {
 		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(oldTypes);
 		final List<FBNetworkElement> elements = search.performSearch().stream()
 				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).toList();
@@ -274,7 +279,6 @@ public class LibraryLinker implements ILibraryLinker {
 			updateDialog.open();
 
 		});
-
 	}
 
 	@Override
