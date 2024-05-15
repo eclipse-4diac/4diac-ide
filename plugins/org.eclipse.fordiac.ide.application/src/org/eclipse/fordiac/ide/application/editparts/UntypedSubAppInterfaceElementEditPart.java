@@ -66,6 +66,8 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	protected TargetInterfaceAdapter targetInteraceAdapter = null;
 	protected static int subappInterfaceBarMaxWidth = -1;
 
+	private boolean isOverflow = false;
+
 	private final class SubappInternalConnAnchor extends FixedAnchor {
 		private SubappInternalConnAnchor(final IFigure owner, final boolean isInput) {
 			super(owner, isInput);
@@ -170,8 +172,42 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		return new LabelDirectEditManager(this, getNameLabel());
 	}
 
+	public int getUncollapsedFigureHeight() {
+		final var children = targetPinManager.getModelChildren(false);
+		if (children.isEmpty()) {
+			return getFigure().getBounds().height;
+		}
+		int height = -(children.size() - 1) * 2;
+		for (final TargetInterfaceElement modelObject : children) {
+			final IFigure child = ((GraphicalEditPart) createChild(modelObject)).getFigure();
+			height += child.getPreferredSize().height;
+		}
+		return height;
+	}
+
+	public int getCollapsedFigureHeight() {
+		final var children = targetPinManager.getModelChildren(true);
+		if (children.isEmpty()) {
+			return getFigure().getBounds().height;
+		}
+		int height = -(children.size() - 1) * 2;
+		for (final TargetInterfaceElement modelObject : children) {
+			final IFigure child = ((GraphicalEditPart) createChild(modelObject)).getFigure();
+			height += child.getPreferredSize().height;
+		}
+		return height;
+	}
+
 	public Label getNameLabel() {
 		return (Label) getFigure();
+	}
+
+	public boolean isOverflow() {
+		return isOverflow;
+	}
+
+	public void setOverflow(final boolean isOverflow) {
+		this.isOverflow = isOverflow;
 	}
 
 	@Override
@@ -233,7 +269,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	@Override
 	protected List getModelChildren() {
 		if (isInExpandedSubapp()) {
-			return targetPinManager.getModelChildren();
+			return targetPinManager.getModelChildren(isOverflow);
 		}
 		return super.getModelChildren();
 	}

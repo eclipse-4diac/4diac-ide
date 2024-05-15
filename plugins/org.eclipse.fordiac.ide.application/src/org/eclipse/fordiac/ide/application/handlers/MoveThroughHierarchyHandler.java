@@ -26,23 +26,13 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.MoveAndReconnectCommand;
 import org.eclipse.fordiac.ide.application.utilities.SubAppHierarchyDialog;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
-import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.StyledString;
-import org.eclipse.jface.viewers.TreeNode;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
@@ -136,37 +126,5 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 		final int destY = bounds.y + bounds.height + 20;
 
 		return new Point(destX, destY);
-	}
-
-	public static class TreeNodeLabelProvider extends LabelProvider implements IStyledLabelProvider {
-
-		@Override
-		public String getText(final Object element) {
-			if (element instanceof final TreeNode treeNode && treeNode.getValue() instanceof final INamedElement e) {
-				return e.getName();
-			}
-			return element.toString();
-		}
-
-		@Override
-		public Image getImage(final Object element) {
-			if (element instanceof final TreeNode node) {
-				if (node.getValue() instanceof UntypedSubApp) {
-					return FordiacImage.ICON_SUB_APP.getImage();
-				}
-				if (node.getValue() instanceof TypedSubApp) {
-					return FordiacImage.ICON_SUB_APP_TYPE.getImage();
-				}
-				if (node.getValue() instanceof Application) {
-					return FordiacImage.ICON_APPLICATION.getImage();
-				}
-			}
-			return super.getImage(element);
-		}
-
-		@Override
-		public StyledString getStyledText(final Object element) {
-			return null;
-		}
 	}
 }

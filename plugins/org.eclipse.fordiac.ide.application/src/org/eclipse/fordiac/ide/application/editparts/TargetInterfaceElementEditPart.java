@@ -179,7 +179,7 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	}
 
 	private boolean isSubappInterfaceTarget() {
-		return getModel() instanceof TargetInterfaceElement.SubapTargetInterfaceElement;
+		return getModel() instanceof TargetInterfaceElement.SubappTargetInterfaceElement;
 	}
 
 	private static String labelTruncate(final String label) {
