@@ -22,10 +22,14 @@ import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
@@ -119,6 +123,45 @@ public class VarDeclarationAnnotations {
 		return true;
 	}
 
+	public static boolean validateVarInOutSubappInterface(@NonNull final VarDeclaration varDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (varDeclaration.isInOutVar() && varDeclaration.getFBNetworkElement() instanceof SubApp
+				&& hasAnyOutputConnections(varDeclaration) && !hasAnyInputConnections(varDeclaration)) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_INTERFACE,
+						MessageFormat.format(
+								varDeclaration.isIsInput() ? Messages.VarDeclarationAnnotations_VarInOutLeftNotConnected
+										: Messages.VarDeclarationAnnotations_VarInOutRightNotConnected,
+								varDeclaration.getName()),
+						FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean validateVarInOutSubappNetwork(@NonNull final VarDeclaration varDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (varDeclaration.isInOutVar() && !varDeclaration.isIsInput()
+				&& (isUntypedSubappInterface(varDeclaration) || isSubappTypeInterface(varDeclaration))
+				&& !varDeclaration.getInOutVarOpposite().getOutputConnections().isEmpty()) {
+			final VarDeclaration source = VarInOutHelper.getDefiningVarInOutDeclaration(varDeclaration);
+			if (source != null && source.eContainer() != varDeclaration.eContainer()) {
+				if (diagnostics != null) {
+					diagnostics
+							.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+									LibraryElementValidator.VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_NETWORK,
+									MessageFormat.format(Messages.VarDeclarationAnnotations_VarInOutSubappNetwork,
+											varDeclaration.getName()),
+									FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
+				}
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static VarDeclaration getInOutVarOpposite(@NonNull final VarDeclaration inOutVar) {
 		final InterfaceList interfaceList = (InterfaceList) inOutVar.eContainer();
 		if (inOutVar.isInOutVar()) {
@@ -139,6 +182,36 @@ public class VarDeclarationAnnotations {
 	static boolean isSubappTypeInterface(final VarDeclaration varDeclaration) {
 		return varDeclaration.eContainer() instanceof final InterfaceList interfaceList
 				&& interfaceList.eContainer() instanceof SubAppType;
+	}
+
+	static boolean isUntypedSubappInterface(final VarDeclaration varDeclaration) {
+		return varDeclaration.getFBNetworkElement() instanceof final SubApp subapp && !subapp.isTyped();
+	}
+
+	static boolean hasAnyInputConnections(final VarDeclaration varDeclaration) {
+		return varDeclaration != null && (!varDeclaration.getInputConnections().isEmpty()
+				|| !getTypeVariable(varDeclaration).getInputConnections().isEmpty());
+	}
+
+	static boolean hasAnyOutputConnections(final VarDeclaration varDeclaration) {
+		return varDeclaration != null && (!varDeclaration.getOutputConnections().isEmpty()
+				|| !getTypeVariable(varDeclaration).getOutputConnections().isEmpty());
+	}
+
+	public static VarDeclaration getTypeVariable(final VarDeclaration varDeclaration) {
+		if (varDeclaration != null) {
+			final FBNetworkElement fbne = varDeclaration.getFBNetworkElement();
+			if (fbne != null) {
+				final FBType type = fbne.getType();
+				if (type != null) {
+					final VarDeclaration typeVariable = type.getInterfaceList().getVariable(varDeclaration.getName());
+					return typeVariable.isInOutVar() && typeVariable.isIsInput() != varDeclaration.isIsInput()
+							? typeVariable.getInOutVarOpposite()
+							: typeVariable;
+				}
+			}
+		}
+		return varDeclaration;
 	}
 
 	private VarDeclarationAnnotations() {

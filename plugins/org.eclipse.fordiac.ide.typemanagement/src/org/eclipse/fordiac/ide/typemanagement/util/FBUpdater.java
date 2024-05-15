@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
@@ -34,13 +33,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.search.types.TypeLibraryUpdateInstanceSearch;
+import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
+import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
@@ -121,29 +120,16 @@ public final class FBUpdater {
 		return cmd;
 	}
 
-	public static void updateAllInstances(final IProject project, final Set<TypeEntry> typeEntries,
+	public static List<FBNetworkElement> updateAllInstances(final Set<TypeEntry> typeEntries,
 			final TypeLibrary typeLib) {
-		final Command cmd = collectUpdateInstanceCommands(project, typeEntries, typeLib);
-		executeCommand(cmd);
-	}
-
-	private static Command collectUpdateInstanceCommands(final IProject project, final Set<TypeEntry> typeEntries,
-			final TypeLibrary typeLib) {
-		final CompoundCommand cmd = new CompoundCommand();
-		updatedElements = new TypeLibraryUpdateInstanceSearch(typeEntries, typeLib).performProjectSearch(project);
-		updatedElements.stream().map(FBNetworkElement.class::cast). //
-				forEach(elem -> cmd.add(new UpdateFBTypeCommand(elem, typeLib.getFBTypeEntry(elem.getFullTypeName()))));
-		return cmd;
-	}
-
-	private static void executeCommand(final Command cmd) {
-		final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActiveEditor();
-		if (editor == null) {
-			cmd.execute();
-		} else {
-			editor.getAdapter(CommandStack.class).execute(cmd);
-		}
+		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(typeEntries);
+		final List<FBNetworkElement> elements = search.performSearch().stream()
+				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).toList();
+		elements.forEach(el -> {
+			final var cmd = new UpdateFBTypeCommand(el, el.getTypeEntry());
+			AbstractLiveSearchContext.executeAndSave(cmd, el, null);
+		});
+		return elements;
 	}
 
 }

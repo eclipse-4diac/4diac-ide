@@ -16,6 +16,7 @@
             name="SubapplicationEditor">
     </editor>
   </extension>
+  
   <extension point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
     <propertyContributor contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
       <propertyCategory category="FB">
@@ -32,6 +33,7 @@
       </propertyCategory>
     </propertyContributor>
   </extension>
+  
   <extension point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
     <propertyTabs contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
       <propertyTab category="FB"
@@ -148,6 +150,7 @@
       </propertyTab>
     </propertyTabs>
   </extension>
+  
   <extension
         point="org.eclipse.ui.views.properties.tabbed.propertySections">
      <propertySections
@@ -301,6 +304,7 @@
         </propertySection>
      </propertySections>
   </extension>
+  
   <extension point="org.eclipse.fordiac.ide.model.ui.openListener">
     <openListener class="org.eclipse.fordiac.ide.application.actions.OpenApplicationEditorAction"
                   icon="fordiacimage://ICON_APPLICATION"
@@ -308,6 +312,7 @@
                   label="Open Application">
     </openListener>
   </extension>
+  
   <extension point="org.eclipse.fordiac.ide.model.ui.openListener">
     <openListener class="org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"
                   icon="fordiacimage://ICON_SUB_APP"
@@ -315,12 +320,14 @@
                   label="Open Subapplication">
     </openListener>
   </extension>
+  
   <extension point="org.eclipse.fordiac.ide.model.ui.openListener">
     <openListener class="org.eclipse.fordiac.ide.application.actions.OpenGroupEditorAction"
                   id="org.eclipse.fordiac.ide.application.actions.OpenGroupEditorAction"
                   label="Select Group">
     </openListener>
   </extension>
+  
   <extension point="org.eclipse.ui.commands">
     <category id="org.eclipse.fordiac.ide.commands.category"
               name="4diac IDE Commands">
@@ -470,7 +477,7 @@
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              description="Transfer all instance comments"
              id="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins"
-             name="Transfer all comments of connected pins on output">
+             name="Transfer comments of connected pins on output">
     </command>
     <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
@@ -523,6 +530,11 @@
           id="org.eclipse.fordiac.ide.application.commands.aggressiveConDelete"
           name="Aggressive Connection Delete">
     </command>
+	<command
+          categoryId="org.eclipse.fordiac.ide.commands.category"
+          id="org.eclipse.fordiac.ide.application.commands.moveThroughHierarchy"
+          name="Move elements through hierarchy">
+    </command>
 
   </extension>
   
@@ -539,14 +551,56 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftConnectionHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
+        <with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+            	</or>
+          	</iterate>
+        </with>
       </activeWhen>
     </handler>
     
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftConnectionHandler"
              commandId="org.eclipse.ui.edit.text.goto.wordPrevious">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
+		<with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+            	</or>
+          	</iterate>
+        </with>        	
+      </activeWhen>
+    </handler>
+    
+    <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftTargetPinConnectionHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection">
+	  <activeWhen>
+        <with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart" />
+            	</or>
+          	</iterate>
+        </with>
+      </activeWhen>
+    </handler>
+    
+    <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftTargetPinConnectionHandler"
+             commandId="org.eclipse.ui.edit.text.goto.wordPrevious">
+	  <activeWhen>
+		<with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart" />
+            	</or>
+          	</iterate>
+        </with>        	
       </activeWhen>
     </handler>
     
@@ -555,14 +609,56 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowRightConnectionHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
+        <with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+            	</or>
+          	</iterate>
+        </with>
       </activeWhen>
     </handler>
     
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowRightConnectionHandler"
              commandId="org.eclipse.ui.edit.text.goto.wordNext">
 	  <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
+        <with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+            	</or>
+          	</iterate>
+        </with>
+      </activeWhen>
+    </handler>
+    
+     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowRightTargetPinConnectionHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection">
+	  <activeWhen>
+        <with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart" />
+            	</or>
+          	</iterate>
+        </with>
+      </activeWhen>
+    </handler>
+    
+    <handler class="org.eclipse.fordiac.ide.application.handlers.FollowRightTargetPinConnectionHandler"
+             commandId="org.eclipse.ui.edit.text.goto.wordNext">
+	  <activeWhen>
+		<with variable="selection">
+			<count value="1"/>
+        	<iterate>
+            	<or>
+              		<instanceof value="org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart" />
+            	</or>
+          	</iterate>
+        </with>        	
       </activeWhen>
     </handler>
     
@@ -745,10 +841,9 @@
                    ifEmpty="false">
             <and>
             	<or>
-              		<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
-              		</instanceof>
-              		<instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
-              		</instanceof>
+              		<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement"/>
+              		<instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart"/>
+              		<instanceof value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork"/>
             	</or>
             	<test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
             </and>
@@ -787,7 +882,10 @@
         </with>
       </activeWhen>
     </handler>
+    <handler class="org.eclipse.fordiac.ide.application.handlers.MoveThroughHierarchyHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.moveThroughHierarchy" />
   </extension>
+  
   <extension point="org.eclipse.ui.bindings">
     <key commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
          contextId="org.eclipse.ui.contexts.window"
@@ -853,6 +951,7 @@
           sequence="M2+DEL">
     </key>
   </extension>
+  
   <extension point="org.eclipse.ui.menus">
     <menuContribution locationURI="menu:navigate?after=additions">
       <command commandId="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor" />
@@ -884,13 +983,15 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.openType"
                style="push">
-        <visibleWhen checkEnabled="true">
+        <visibleWhen checkEnabled="false">
           <with variable="selection" >
             <count value="1" />
             <iterate ifEmpty="false">
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
                 <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
+                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
               </or>
             </iterate>
           </with>
@@ -911,8 +1012,7 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.transferInstanceComments"/>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins">
-      </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.convertToStruct"
                label="Extract Struct">
         <visibleWhen checkEnabled="false">
@@ -1092,6 +1192,21 @@
           </and>
         </visibleWhen>
       </command>
+       <command commandId="org.eclipse.fordiac.ide.application.commands.moveThroughHierarchy">
+        <visibleWhen checkEnabled="true">
+          <and>
+            <or>
+              <and>
+                <with variable="activeEditor">
+                  <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+                </with>
+                <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartMultiSelection" />
+              </and>
+              <test property="org.eclipse.fordiac.ide.application.properties.parentIsSubApp" />
+            </or>
+          </and>
+        </visibleWhen>
+      </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
                label="New subapplication"
                tooltip="Create a new subapplication">
@@ -1108,6 +1223,7 @@
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
+                  <instanceof value="org.eclipse.fordiac.ide.subapptypeeditor.editparts.TypedSubAppNetworkEditPart"/>
                 </or>
               </iterate>
             </with>
@@ -1324,13 +1440,13 @@
       	</command>
       <command
             commandId="org.eclipse.fordiac.ide.application.commands.transferInstanceComments"
-            label="Transfer all instance comments"
             style="push">
+      		<visibleWhen checkEnabled="true"/>
       </command>
             <command
             commandId="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins"
-            label="Transfer all comments of connected pins on output"
             style="push">
+        	<visibleWhen checkEnabled="true"/>
       </command>
     </menuContribution>
     <menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=org.fordiac.ide.group.navigate">
@@ -1393,6 +1509,8 @@
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
                 <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
+                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
               </or>
             </iterate>
           </with>
@@ -1407,13 +1525,15 @@
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.openType">
-        <visibleWhen checkEnabled="false">
+        <visibleWhen checkEnabled="true">
           <with variable="selection" >
             <count value="1" />
             <iterate ifEmpty="false">
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
                 <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
+                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
               </or>
             </iterate>
           </with>
@@ -1440,6 +1560,7 @@
       </command>
     </menuContribution>
   </extension>
+  
   <extension point="org.eclipse.ui.ide.markerSupport">
     <markerTypeCategory
           name="4diac IDE Problem">
@@ -1451,6 +1572,7 @@
        </markerTypeReference>
     </markerTypeCategory>
   </extension>
+  
   <extension point="org.eclipse.ui.elementFactories">
     <factory class="org.eclipse.fordiac.ide.application.editors.ApplicationEditorInputFactory"
              id="org.eclipse.fordiac.ide.application.ApplicationEditorInputFactory">
@@ -1459,6 +1581,7 @@
              id="org.eclipse.fordiac.ide.application.SubApplicationEditorInputFactory">
     </factory>
   </extension>
+  
   <extension point="org.eclipse.ui.navigator.viewer">
     <viewer viewerId="org.eclipse.fordiac.ide.fbpaletteviewer">
     </viewer>
@@ -1474,6 +1597,7 @@
                    viewerId="org.eclipse.fordiac.ide.fbpaletteviewer">
     </dragAssistant>
   </extension>
+  
   <extension point="org.eclipse.ui.navigator.navigatorContent">
     <commonFilter activeByDefault="true"
                   id="org.eclipse.fordiac.ide.fbpaletteviewer.filters.showonlyFBTypesAndSubAppTypes"
@@ -1519,6 +1643,7 @@
       </triggerPoints>
     </navigatorContent>
   </extension>
+  
   <extension point="org.eclipse.core.expressions.definitions">
     <definition id="org.eclipse.fordiac.ide.application.InterfaceElementSelection">
       <with variable="selection">
@@ -1618,6 +1743,7 @@
               <iterate>
                 <or>
                   <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
+                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart" />
                 </or>
               </iterate>
             </with>
@@ -1633,6 +1759,7 @@
           </and>
     </definition>
   </extension>
+  
   <extension point="org.eclipse.core.expressions.propertyTesters">
     <propertyTester class="org.eclipse.fordiac.ide.application.utilities.ViewerPropertyTester"
                     id="org.eclipse.fordiac.ide.application.utilities.viewerPropertyTester"

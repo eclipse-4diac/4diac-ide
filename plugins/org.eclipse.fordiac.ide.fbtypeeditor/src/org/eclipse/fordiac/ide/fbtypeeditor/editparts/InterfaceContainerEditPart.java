@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2011, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,7 +22,6 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.EventInputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.EventOutputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.PlugContainerLayoutEditPolicy;
@@ -31,6 +30,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.policies.VarInOutInputContainerLayou
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.VarInOutOutputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.VariableInputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.VariableOutputContainerLayoutEditPolicy;
+import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -49,7 +49,7 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 		}
 	}
 
-	private final Adapter econtentAdapter = new EContentAdapter() {
+	private final Adapter econtentAdapter = new SingleRecursiveContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			refresh();

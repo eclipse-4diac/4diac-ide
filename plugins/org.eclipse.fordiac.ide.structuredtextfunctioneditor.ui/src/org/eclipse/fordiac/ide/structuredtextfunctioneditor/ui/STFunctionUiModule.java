@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPart
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreURIEditorOpener;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.formatting.STCoreWhitespaceInformationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuickAssistProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDocumentReconcileStrategy;
@@ -37,7 +38,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvide
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreLinkedPositionGroupCalculator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRecordingXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreReferenceUpdater;
@@ -45,7 +45,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedEm
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameNameValidator;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreResourceLifecycleManager;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSimpleNameProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSyncUtil;
@@ -60,9 +59,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreResourceUI
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocument;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocumentPartitioner;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocumentUpdaterChangeAdapterFilter;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionLinkedPositionGroupCalculator;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionRenameStrategy;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
+import org.eclipse.xtext.formatting.IWhitespaceInformationProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 import org.eclipse.xtext.ide.refactoring.IRenameNameValidator;
 import org.eclipse.xtext.ide.refactoring.IRenameStrategy2;
@@ -263,7 +265,7 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	@Override
 	public Class<? extends ILinkedPositionGroupCalculator> bindILinkedPositionGroupCalculator() {
-		return STCoreLinkedPositionGroupCalculator.class;
+		return STFunctionLinkedPositionGroupCalculator.class;
 	}
 
 	public Class<? extends ISimpleNameProvider> bindISimpleNameProvider() {
@@ -272,7 +274,7 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	@Override
 	public Class<? extends IRenameStrategy2> bindIRenameStrategy2() {
-		return STCoreRenameStrategy.class;
+		return STFunctionRenameStrategy.class;
 	}
 
 	public Class<? extends IRenameNameValidator> bindIRenameNameValidator() {
@@ -309,5 +311,10 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	public Class<? extends ResourceLifecycleManager> bindResourceLifecycleManager() {
 		return STCoreResourceLifecycleManager.class;
+	}
+
+	@Override
+	public Class<? extends IWhitespaceInformationProvider> bindIWhitespaceInformationProvider() {
+		return STCoreWhitespaceInformationProvider.class;
 	}
 }

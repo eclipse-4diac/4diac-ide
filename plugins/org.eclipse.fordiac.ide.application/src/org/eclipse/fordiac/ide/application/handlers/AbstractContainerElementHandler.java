@@ -39,7 +39,6 @@ import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElem
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
-import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
@@ -59,7 +58,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws org.eclipse.core.commands.ExecutionException {
-		group = null;  // reset the group to be save from previous executions
+		group = null; // reset the group to be save from previous executions
 		final IEditorPart activeEditor = HandlerUtil.getActiveEditor(event);
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final GraphicalViewer viewer = getViewer(activeEditor);
@@ -96,7 +95,8 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 			if (createNewEmptyContainerElement(selection)) {
 				enabeled = true;
 			} else {
-				// only enable this handler if all FBNetworkElements are within the same parent network
+				// only enable this handler if all FBNetworkElements are within the same parent
+				// network
 				enabeled = (selection.toList().stream().map(AbstractContainerElementHandler::getModelElement)
 						.filter(FBNetworkElement.class::isInstance)
 						.map(fbel -> ((FBNetworkElement) fbel).getFbNetwork()).distinct().count() == 1);
@@ -105,8 +105,8 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 		setBaseEnabled(enabeled);
 	}
 
-	protected abstract Command createContainerCreationCommand(
-			final List<?> selection, final FBNetwork network, final Rectangle posSizeRef);
+	protected abstract Command createContainerCreationCommand(final List<?> selection, final FBNetwork network,
+			final Rectangle posSizeRef);
 
 	private FBNetwork getFBNetwork(final StructuredSelection selection, final ExecutionEvent event) {
 		if (createNewEmptyContainerElement(selection)) {
@@ -114,7 +114,8 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 		}
 		for (final Object o : selection) {
 			if ((o instanceof final EditPart ep) && (ep.getModel() instanceof final FBNetworkElement fbnEl)) {
-				// we check already in the setEnabled() that we are in the same group and same network so we can
+				// we check already in the setEnabled() that we are in the same group and same
+				// network so we can
 				// stop at the first element
 				group = fbnEl.getGroup();
 				return fbnEl.getFbNetwork();
@@ -123,8 +124,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 		return null;
 	}
 
-	protected FBNetwork getFBNetworkFromContainer(final Object selection,
-			final ExecutionEvent event) {
+	protected FBNetwork getFBNetworkFromContainer(final Object selection, final ExecutionEvent event) {
 		if (selection instanceof final AbstractContainerContentEditPart cEP) {
 			final FBNetworkElement containerElement = cEP.getContainerElement();
 			if (containerElement instanceof final Group group) {
@@ -150,9 +150,9 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 					&& gEP.getModel() instanceof final FBNetworkElement fbnEl) {
 				// only consider the selected FBNetworkElements
 				final Rectangle fbBounds = gEP.getFigure().getBounds();
-				final Position position = fbnEl.getPosition();
-				fbBounds.x = position.getX();
-				fbBounds.y = position.getY();
+				final Point position = fbnEl.getPosition().toScreenPoint();
+				fbBounds.x = position.x;
+				fbBounds.y = position.y;
 				if (selectionExtend == null) {
 					selectionExtend = fbBounds.getCopy();
 				} else {
@@ -172,7 +172,8 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 		final IFigure targetFigure = getTargetFigure(event, viewer, network);
 		targetFigure.translateToRelative(selectionExtend);
 		if (!isEditorRootNetwork(event, network)) {
-			// if the target is not the root figure we need to remove its bounds to get to the correct position
+			// if the target is not the root figure we need to remove its bounds to get to
+			// the correct position
 			final Rectangle bounds = targetFigure.getBounds();
 			selectionExtend.translate(-bounds.x, -bounds.y);
 		}
@@ -201,8 +202,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 	}
 
 	protected static boolean createNewEmptyContainerElement(final StructuredSelection selection) {
-		return (selection.size() == 1)
-				&& (selection.getFirstElement() instanceof final EditPart ep)
+		return (selection.size() == 1) && (selection.getFirstElement() instanceof final EditPart ep)
 				&& !(ep.getModel() instanceof FBNetworkElement);
 	}
 

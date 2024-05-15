@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.fordiac</groupId>
 	<artifactId>parent</artifactId>
-	<version>2.0.1-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Eclipse 4diac IDE Parent Project</name>
 	<modules>
@@ -16,19 +16,20 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
 		<maven.compiler.release/>
-		<tycho.version>4.0.4</tycho.version>
-		<tycho-repo.url>https://download.eclipse.org/releases/2023-12</tycho-repo.url>
+		<tycho.version>4.0.6</tycho.version>
+		<tycho-repo.url>https://download.eclipse.org/releases/2024-03</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
-		<sonar.java.source>17</sonar.java.source>
-		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/17/updates/release/latest</org.eclipse.justj.jre.repository>
-        <xtend-version>2.33.0</xtend-version>
-        <eclipse.platform.version>4.30</eclipse.platform.version>
-        <equinox.executable.version>3.8.2300</equinox.executable.version>
-        <eclipse.cbi.version>1.4.2</eclipse.cbi.version>
+		<sonar.java.source>21</sonar.java.source>
+		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/21/updates/release/latest</org.eclipse.justj.jre.repository>
+        <xtend-version>2.34.0</xtend-version>
+        <xtend-java-version>17</xtend-java-version>
+        <eclipse.platform.version>4.31</eclipse.platform.version>
+        <equinox.executable.version>3.8.2400</equinox.executable.version>
+        <eclipse.cbi.version>1.4.3</eclipse.cbi.version>
 	</properties>
 
 	<repositories>
@@ -62,7 +63,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>3.3.2</version>
 				<configuration>
 					<filesets>
 						<fileset>
@@ -95,6 +96,7 @@
 					<outputDirectory>${basedir}/xtend-gen</outputDirectory>
 					<testOutputDirectory>${basedir}/xtend-gen</testOutputDirectory>
 					<showEmptyDirWarning>false</showEmptyDirWarning>
+					<javaSourceVersion>${xtend-java-version}</javaSourceVersion>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -118,7 +120,7 @@
 						<artifact>
 							<groupId>org.eclipse.fordiac</groupId>
 							<artifactId>org.eclipse.fordiac.ide.product</artifactId>
-							<version>2.0.1-SNAPSHOT</version>
+							<version>3.0.0-SNAPSHOT</version>
 						</artifact>
 					</target>
 					
@@ -255,7 +257,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.10.0</version>
+			<version>5.10.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.xtend</groupId>

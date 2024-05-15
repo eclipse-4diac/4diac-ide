@@ -116,8 +116,8 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	 * @generated
 	 */
 	@Override
-	public int getWidth() {
-		return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);
+	public double getWidth() {
+		return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.screenToIEC61499(org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this));
 	}
 
 	/**
@@ -126,8 +126,8 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	 * @generated
 	 */
 	@Override
-	public int getHeight() {
-		return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);
+	public double getHeight() {
+		return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.screenToIEC61499(org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this));
 	}
 
 	/**

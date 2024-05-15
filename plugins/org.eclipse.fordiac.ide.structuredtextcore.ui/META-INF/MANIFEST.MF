@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.fordiac.ide.structuredtextcore.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: org.eclipse.fordiac.ide.structuredtextcore.ui
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextcore.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.fordiac.ide.model,
@@ -29,13 +29,14 @@ Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.typemanagement
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.ui.codemining;resolution:=optional
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.structuredtextcore.ui,
  org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup,
  org.eclipse.fordiac.ide.structuredtextcore.ui.codemining,
  org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist,
  org.eclipse.fordiac.ide.structuredtextcore.ui.document,
  org.eclipse.fordiac.ide.structuredtextcore.ui.editor,
+ org.eclipse.fordiac.ide.structuredtextcore.ui.editor.formatting,
  org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences,
  org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix,
  org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler,

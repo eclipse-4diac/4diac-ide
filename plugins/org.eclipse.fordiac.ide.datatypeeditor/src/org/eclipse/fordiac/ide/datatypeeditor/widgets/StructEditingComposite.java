@@ -83,7 +83,6 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 	private RowPostSelectionProvider<VarDeclaration> selectionProvider;
 	private final IWorkbenchSite site;
 
-	private boolean blockRefresh;
 	private Label titleLabel;
 
 	private final Adapter adapter = new AdapterImpl() {
@@ -91,7 +90,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (!notification.isTouch() && !blockRefresh) {
+			if (!notification.isTouch()) {
 				notifyRefresh();
 			}
 		}
@@ -227,9 +226,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 	@Override
 	public void executeCommand(final Command cmd) {
 		if ((null != getType()) && (null != cmdStack) && (null != cmd) && cmd.canExecute()) {
-			blockRefresh = true;
 			cmdStack.execute(cmd);
-			blockRefresh = false;
 		}
 	}
 

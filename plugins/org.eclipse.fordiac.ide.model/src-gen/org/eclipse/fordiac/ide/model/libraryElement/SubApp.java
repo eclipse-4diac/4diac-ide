@@ -26,38 +26,23 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork <em>Sub App Network</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getWidth <em>Width</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getHeight <em>Height</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#isLocked <em>Locked</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface SubApp extends FBNetworkElement {
 	/**
-	 * Returns the value of the '<em><b>Sub App Network</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Sub App Network</em>' containment reference.
-	 * @see #setSubAppNetwork(FBNetwork)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp_SubAppNetwork()
-	 * @model containment="true" resolveProxies="true"
+	 * @model kind="operation"
 	 * @generated
 	 */
 	FBNetwork getSubAppNetwork();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getSubAppNetwork <em>Sub App Network</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Sub App Network</em>' containment reference.
-	 * @see #getSubAppNetwork()
-	 * @generated
-	 */
-	void setSubAppNetwork(FBNetwork value);
 
 	/**
 	 * Returns the value of the '<em><b>Width</b></em>' attribute.
@@ -65,12 +50,12 @@ public interface SubApp extends FBNetworkElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Width</em>' attribute.
-	 * @see #setWidth(int)
+	 * @see #setWidth(double)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp_Width()
-	 * @model default="200" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model default="200" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 * @generated
 	 */
-	int getWidth();
+	double getWidth();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getWidth <em>Width</em>}' attribute.
@@ -80,7 +65,7 @@ public interface SubApp extends FBNetworkElement {
 	 * @see #getWidth()
 	 * @generated
 	 */
-	void setWidth(int value);
+	void setWidth(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Height</b></em>' attribute.
@@ -88,12 +73,12 @@ public interface SubApp extends FBNetworkElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Height</em>' attribute.
-	 * @see #setHeight(int)
+	 * @see #setHeight(double)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp_Height()
-	 * @model default="100" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model default="100" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 * @generated
 	 */
-	int getHeight();
+	double getHeight();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getHeight <em>Height</em>}' attribute.
@@ -103,7 +88,7 @@ public interface SubApp extends FBNetworkElement {
 	 * @see #getHeight()
 	 * @generated
 	 */
-	void setHeight(int value);
+	void setHeight(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Locked</b></em>' attribute.
@@ -155,9 +140,6 @@ public interface SubApp extends FBNetworkElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * if it is an untyped subapp and the fbnetwork is not yet loaded load it from the type
-	 * <!-- end-model-doc -->
 	 * @model
 	 * @generated
 	 */

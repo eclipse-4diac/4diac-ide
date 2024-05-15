@@ -59,6 +59,7 @@ public class RenameElementRefactoringParticipant extends RenameParticipant {
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final CompositeChange change = new CompositeChange(getName());
 		change.add(new RenameElementChange(elementURI.lastSegment(), elementURI, getArguments().getNewName()));
+
 		return change;
 	}
 

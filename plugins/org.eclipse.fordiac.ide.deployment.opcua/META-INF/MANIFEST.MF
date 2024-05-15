@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: OPCUA Deployment
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.opcua;singleton:=true
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.opcua
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: org.apache.log4j,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,

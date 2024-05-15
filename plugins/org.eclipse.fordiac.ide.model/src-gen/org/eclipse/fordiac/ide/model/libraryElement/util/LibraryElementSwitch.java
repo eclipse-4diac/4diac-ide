@@ -660,6 +660,18 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.MEMBER_VAR_DECLARATION: {
+				MemberVarDeclaration memberVarDeclaration = (MemberVarDeclaration)theEObject;
+				T result = caseMemberVarDeclaration(memberVarDeclaration);
+				if (result == null) result = caseVarDeclaration(memberVarDeclaration);
+				if (result == null) result = caseIInterfaceElement(memberVarDeclaration);
+				if (result == null) result = caseITypedElement(memberVarDeclaration);
+				if (result == null) result = caseHiddenElement(memberVarDeclaration);
+				if (result == null) result = caseINamedElement(memberVarDeclaration);
+				if (result == null) result = caseConfigurableObject(memberVarDeclaration);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.METHOD: {
 				Method method = (Method)theEObject;
 				T result = caseMethod(method);
@@ -971,6 +983,32 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseITypedElement(typedConfigureableObject);
 				if (result == null) result = caseConfigurableObject(typedConfigureableObject);
 				if (result == null) result = caseINamedElement(typedConfigureableObject);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.TYPED_SUB_APP: {
+				TypedSubApp typedSubApp = (TypedSubApp)theEObject;
+				T result = caseTypedSubApp(typedSubApp);
+				if (result == null) result = caseSubApp(typedSubApp);
+				if (result == null) result = caseFBNetworkElement(typedSubApp);
+				if (result == null) result = caseTypedConfigureableObject(typedSubApp);
+				if (result == null) result = casePositionableElement(typedSubApp);
+				if (result == null) result = caseITypedElement(typedSubApp);
+				if (result == null) result = caseConfigurableObject(typedSubApp);
+				if (result == null) result = caseINamedElement(typedSubApp);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.UNTYPED_SUB_APP: {
+				UntypedSubApp untypedSubApp = (UntypedSubApp)theEObject;
+				T result = caseUntypedSubApp(untypedSubApp);
+				if (result == null) result = caseSubApp(untypedSubApp);
+				if (result == null) result = caseFBNetworkElement(untypedSubApp);
+				if (result == null) result = caseTypedConfigureableObject(untypedSubApp);
+				if (result == null) result = casePositionableElement(untypedSubApp);
+				if (result == null) result = caseITypedElement(untypedSubApp);
+				if (result == null) result = caseConfigurableObject(untypedSubApp);
+				if (result == null) result = caseINamedElement(untypedSubApp);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -2478,6 +2516,36 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Typed Sub App</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Typed Sub App</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseTypedSubApp(TypedSubApp object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Untyped Sub App</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Untyped Sub App</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseUntypedSubApp(UntypedSubApp object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Value</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -2534,6 +2602,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseWith(With object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Member Var Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Member Var Declaration</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMemberVarDeclaration(MemberVarDeclaration object) {
 		return null;
 	}
 

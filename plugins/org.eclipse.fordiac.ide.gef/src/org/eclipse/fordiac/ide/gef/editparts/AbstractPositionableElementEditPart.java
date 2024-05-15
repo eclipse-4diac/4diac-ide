@@ -43,7 +43,7 @@ public abstract class AbstractPositionableElementEditPart extends AbstractViewEd
 	protected void refreshPosition() {
 		if (getParent() != null) {
 			final Position position = getPositionableElement().getPosition();
-			final Rectangle bounds = new Rectangle(position.asPoint(), new Dimension(-1, -1));
+			final Rectangle bounds = new Rectangle(position.toScreenPoint(), new Dimension(-1, -1));
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}

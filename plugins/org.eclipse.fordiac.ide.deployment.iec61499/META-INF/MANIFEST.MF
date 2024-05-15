@@ -19,10 +19,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.application
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Name: IEC 61499 Deployment
 Bundle-Activator: org.eclipse.fordiac.ide.deployment.iec61499.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.iec61499;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.iec61499

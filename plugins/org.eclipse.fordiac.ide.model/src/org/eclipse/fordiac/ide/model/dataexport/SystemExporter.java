@@ -21,7 +21,6 @@ package org.eclipse.fordiac.ide.model.dataexport;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -85,8 +84,7 @@ public class SystemExporter extends AbstractTypeExporter {
 			addStartElement(LibraryElementTags.SEGMENT_ELEMENT);
 			addNameTypeCommentAttribute(segment, segment.getType());
 			addXYAttributes(segment);
-			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE,
-					CoordinateConverter.INSTANCE.convertTo1499XML(segment.getWidth()));
+			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE, positionFormater.format(segment.getWidth()));
 			addColorAttributeElement(segment);
 			addAttributes(segment.getAttributes());
 			addParamsConfig(segment.getCommunication().getParameters());

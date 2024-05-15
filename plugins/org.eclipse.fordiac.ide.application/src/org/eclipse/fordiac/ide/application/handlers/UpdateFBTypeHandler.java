@@ -22,12 +22,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -59,16 +55,8 @@ public class UpdateFBTypeHandler extends AbstractHandler {
 	}
 
 	public static Command getUpdateCommand(final FBNetworkElement element) {
-		if (element instanceof final StructManipulator mux) {
-			final DataTypeLibrary lib = mux.getType().getTypeLibrary().getDataTypeLibrary();
-			// check type entry for reference to original struct even for configured mux:
-			final String fullTypeName = mux.getStructType().getTypeEntry().getFullTypeName();
-			final DataType datatype = lib.getType(fullTypeName);
-			if (datatype instanceof final StructuredType updated) {
-				return new ChangeStructCommand(mux, updated);
-			}
-			// structured type not found:
-			return new ChangeStructCommand(mux, GenericTypes.ANY_STRUCT);
+		if (element instanceof final StructManipulator muxer) {
+			return new ChangeStructCommand(muxer);
 		}
 		return new UpdateFBTypeCommand(element);
 	}
@@ -83,13 +71,13 @@ public class UpdateFBTypeHandler extends AbstractHandler {
 		selectedNetworkElements.clear();
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		if (selection instanceof StructuredSelection) {
-			for (Object element : ((StructuredSelection) selection).toList()) {
-				if (element instanceof EditPart) {
-					element = ((EditPart) element).getModel();
+		if (selection instanceof final StructuredSelection structSel) {
+			for (Object element : structSel.toList()) {
+				if (element instanceof final EditPart ep) {
+					element = ep.getModel();
 				}
-				if ((element instanceof FBNetworkElement) && (null != ((FBNetworkElement) element).getType())) {
-					selectedNetworkElements.add((FBNetworkElement) element);
+				if ((element instanceof final FBNetworkElement fb) && (null != fb.getType())) {
+					selectedNetworkElements.add(fb);
 				}
 			}
 		}

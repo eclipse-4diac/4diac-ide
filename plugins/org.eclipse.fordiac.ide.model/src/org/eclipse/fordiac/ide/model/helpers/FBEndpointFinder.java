@@ -116,6 +116,22 @@ public class FBEndpointFinder {
 		}
 		return connectedInt;
 	}
+	
+	/**
+	 * find the interfaces connected to the source (if traceThroughInput is true)
+	 * or destination (if traceThroughInput is false) of this connection
+	 *
+	 * @param connection the connection to trace
+	 * @param traceThroughInput if set to true the connection will be traced through the left (source side),
+	 *                          if set to false it will be traced through the right (destination side)
+	 * @return a Set of end-point interfaces/pins
+	 */
+	public static Set<IInterfaceElement> findConnectedInterfaceElements(final Connection connection, final boolean traceThroughInput) {
+		final Set<IInterfaceElement> connectedInt = new HashSet<>();
+		trace(new RecursionState(new ArrayDeque<>(), traceThroughInput,
+				traceThroughInput ? connection.getSource() : connection.getDestination(), connectedInt));
+		return connectedInt;
+	}
 
 	/**
 	 * find all connected interfaces for the supplied FB (only checks the output
@@ -393,7 +409,7 @@ public class FBEndpointFinder {
 		final FBNetworkElement fb = state.ifElem.getFBNetworkElement();
 
 		// trace find right interface from the interface stack
-		for (final IInterfaceElement structMem : ((StructManipulator) fb).getStructType().getMemberVariables().stream()
+		for (final IInterfaceElement structMem : ((StructManipulator) fb).getMemberVars().stream()
 				.filter(mem -> fb.getInterfaceElement(mem.getName()) != null).toList()) {
 			final IInterfaceElement realInt = fb.getInterfaceElement(structMem.getName());
 

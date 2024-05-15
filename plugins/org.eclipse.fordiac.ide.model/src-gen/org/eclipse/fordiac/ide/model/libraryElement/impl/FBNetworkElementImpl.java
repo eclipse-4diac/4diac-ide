@@ -514,7 +514,7 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @generated
 	 */
 	@Override
-	public int getWidth() {
+	public double getWidth() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -524,7 +524,7 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @generated
 	 */
 	@Override
-	public int getHeight() {
+	public double getHeight() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -535,7 +535,7 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 */
 	@Override
 	public int getVisibleWidth() {
-		return getWidth();
+		return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getWidth());
 	}
 
 	/**
@@ -545,7 +545,7 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 */
 	@Override
 	public int getVisibleHeight() {
-		return getHeight();
+		return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getHeight());
 	}
 
 	/**
@@ -574,12 +574,8 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @generated
 	 */
 	@Override
-	public void updatePosition(final int x, final int y) {
-		final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createPosition();
-		pos.setX(x);
-		pos.setY(y);
-		
-		setPosition(pos);
+	public void updatePositionFromScreenCoordinates(final int x, final int y) {
+		PositionAnnotation.updatePositionFromScreenCoordinates(this, x,y);
 	}
 
 	/**
@@ -588,8 +584,8 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @generated
 	 */
 	@Override
-	public void updatePosition(final Point newPos) {
-		updatePosition(newPos.x, newPos.y);
+	public void updatePositionFromScreenCoordinates(final Point newPos) {
+		updatePositionFromScreenCoordinates(newPos.x, newPos.y);
 	}
 
 	/**

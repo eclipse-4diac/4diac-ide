@@ -40,7 +40,7 @@ class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 
 	override protected getFirstLine(EObject o) {
 		val label = switch (o) {
-			VarDeclaration: o.label + " : " + o.type.name
+			VarDeclaration, STVarDeclaration: o.label + " : " + o.type.name
 			FB: o.typeEntry.type.name
 			default: o.label
 		}

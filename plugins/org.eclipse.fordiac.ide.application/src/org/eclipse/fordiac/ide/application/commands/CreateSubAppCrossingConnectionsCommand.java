@@ -19,13 +19,13 @@ package org.eclipse.fordiac.ide.application.commands;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -87,7 +87,8 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		// own checks
 
 		// equal types for source and dest
-		if (!source.getClass().equals(destination.getClass())) {
+		if (!source.getClass().isAssignableFrom(destination.getClass())
+				&& !destination.getClass().isAssignableFrom(source.getClass())) {
 			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_ConnectingIncompatibleInterfaceTypes);
 			return false;
 		}
@@ -165,8 +166,8 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 	private static FBNetwork addSubAppNetworkToList(final IInterfaceElement ie, final List<FBNetwork> networkList) {
 		FBNetwork subAppNetwork = null;
-		if (ie.getFBNetworkElement() instanceof final SubApp fBNetworkElement) {
-			subAppNetwork = fBNetworkElement.getSubAppNetwork();
+		if (ie.getFBNetworkElement() instanceof final SubApp subApp && !subApp.isTyped()) {
+			subAppNetwork = subApp.getSubAppNetwork();
 			networkList.add(0, subAppNetwork);
 		}
 		return subAppNetwork;
@@ -442,8 +443,12 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 	@Override
 	public Set<EObject> getAffectedObjects() {
-		return Stream.concat(sourceNetworks.stream(), destinationNetworks.stream())
-				.collect(Collectors.toUnmodifiableSet());
+		final Set<ScopedCommand> scopedCommands = commands.stream().filter(ScopedCommand.class::isInstance)
+				.map(c -> (ScopedCommand) c).collect(Collectors.toSet());
+		final Set<EObject> se = new HashSet<>();
+		scopedCommands.forEach(c -> se.addAll(c.getAffectedObjects()));
+		return se;
+
 	}
 
 	private static boolean connShouldBeVisible(final FBNetwork parentNW, final IInterfaceElement src,

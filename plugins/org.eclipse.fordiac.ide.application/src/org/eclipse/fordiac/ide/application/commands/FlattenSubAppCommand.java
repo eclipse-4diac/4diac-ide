@@ -46,11 +46,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.swt.graphics.Point;
 
 public class FlattenSubAppCommand extends Command implements ScopedCommand {
 	private final SubApp subapp;
@@ -64,7 +64,7 @@ public class FlattenSubAppCommand extends Command implements ScopedCommand {
 	private final CompoundCommand createCommands = new CompoundCommand();
 	private final CompoundCommand mapCommands = new CompoundCommand();
 	private final CompoundCommand setUniqueName = new CompoundCommand();
-	private final Point fbnetworkPosInSubapp;
+	private final Position fbnetworkPosInSubapp;
 	private boolean select = true;
 
 	public FlattenSubAppCommand(final SubApp subapp) {
@@ -186,12 +186,12 @@ public class FlattenSubAppCommand extends Command implements ScopedCommand {
 
 	}
 
-	private int getOriginalPositionX() {
-		return -subapp.getPosition().getX() + fbnetworkPosInSubapp.x;
+	private double getOriginalPositionX() {
+		return -subapp.getPosition().getX() + fbnetworkPosInSubapp.getX();
 	}
 
-	private int getOriginalPositionY() {
-		return -subapp.getPosition().getY() + fbnetworkPosInSubapp.y;
+	private double getOriginalPositionY() {
+		return -subapp.getPosition().getY() + fbnetworkPosInSubapp.getY();
 	}
 
 	private void createMapCommands() {

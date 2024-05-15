@@ -86,13 +86,17 @@ class STFunctionFormatter extends STCoreFormatter {
 		if (stFunction.returnType !== null) {
 			// We have a return type
 			stFunction.regionFor.keyword(STFunctionAccess.colonKeyword_3_0).surround[oneSpace]
-			stFunction.regionFor.feature(STFunctionPackage.Literals.ST_FUNCTION__RETURN_TYPE).prepend[oneSpace].append[setNewLines(1, 1, 2)]
+			stFunction.regionFor.feature(STFunctionPackage.Literals.ST_FUNCTION__RETURN_TYPE).prepend[oneSpace].append [
+				setNewLines(1, 1, 2)
+			]
 		} else {
 			stFunction.regionFor.assignment(STFunctionAccess.nameAssignment_2).append[setNewLines(1, 1, 2)]
 		}
 
 		stFunction.varDeclarations.forEach[format]
-		stFunction.varDeclarations.last?.append[setNewLines(1, 2, 2)]
+		if (!stFunction.varDeclarations.empty) {
+			stFunction.varDeclarations.last.append[setNewLines(1, 2, 2)]
+		}
 
 		stFunction.code.forEach[format]
 

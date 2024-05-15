@@ -38,6 +38,9 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 		final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 
+		final IInterfaceElement originPin = ((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement())
+				.getModel();
+
 		final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) ((IStructuredSelection) selection)
 				.getFirstElement();
 		if (isEditorBorderPin(interfaceEditPart.getModel(), getFBNetwork(editor))
@@ -52,13 +55,7 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 		}
 
 		final List<IInterfaceElement> opposites = getConnectionOposites(interfaceEditPart);
-		if (!opposites.isEmpty()) {
-			if (opposites.size() == 1) {
-				HandlerHelper.selectElement(opposites.get(0), viewer);
-			} else {
-				showOppositeSelectionDialog(opposites, event, viewer, null);
-			}
-		}
+		selectOpposites(event, viewer, originPin, opposites);
 		return Status.OK_STATUS;
 	}
 

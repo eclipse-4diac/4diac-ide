@@ -31,18 +31,28 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class TransferCommentsOfConnectedPinsHandler extends AbstractHandler {
-
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection sel = HandlerUtil.getCurrentStructuredSelection(event);
-		final FBNetworkElement element = (FBNetworkElement) ((EditPart) sel.getFirstElement()).getModel();
+		final Object element = ((EditPart) sel.getFirstElement()).getModel();
 
-		final Map<IInterfaceElement, List<IInterfaceElement>> commentsToCopy = findConnectedPins(element);
+		final Map<IInterfaceElement, List<IInterfaceElement>> commentsToCopy = new HashMap<>();
+		if (element instanceof final FBNetworkElement fbnElement) {
+			commentsToCopy.putAll(findConnectedPins(fbnElement));
+		} else if (element instanceof final IInterfaceElement interfaceElement) {
+			if (interfaceElement.isIsInput()) {
+				commentsToCopy.put(interfaceElement,
+						interfaceElement.getInputConnections().stream().map(Connection::getSource).toList());
+
+			} else {
+				commentsToCopy.put(interfaceElement,
+						interfaceElement.getOutputConnections().stream().map(Connection::getDestination).toList());
+			}
+		}
 
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final CommandStack commandStack = editor.getAdapter(CommandStack.class);
-		final TransferCommentsOfConnectedPinsCommand cmd = new TransferCommentsOfConnectedPinsCommand(commentsToCopy);
-		commandStack.execute(cmd);
+		commandStack.execute(new TransferCommentsOfConnectedPinsCommand(commentsToCopy));
 		return null;
 	}
 
@@ -58,7 +68,8 @@ public class TransferCommentsOfConnectedPinsHandler extends AbstractHandler {
 
 		for (final IInterfaceElement event : src.getInterface().getEventOutputs()) {
 			if (!event.getOutputConnections().isEmpty()) {
-				commentsToCopy.put(event, event.getOutputConnections().stream().map(Connection::getDestination).toList());
+				commentsToCopy.put(event,
+						event.getOutputConnections().stream().map(Connection::getDestination).toList());
 			}
 		}
 

@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.fordiac.ide.typeeditor.feature"
       label="Function Block Type Editor"
-      version="2.0.1.qualifier"
+      version="3.0.0.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>

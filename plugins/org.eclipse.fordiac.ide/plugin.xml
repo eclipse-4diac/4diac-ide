@@ -190,9 +190,7 @@
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.jdt\.ui/.*" /> 
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.jdt\.debug\.ui/.*" />
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.pde/.*" />
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.ui\.externaltools/.*"/>
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.emf\.mwe2.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.ant.*"/>
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtext\.ui/.*"/>
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtext\.xtext\.ui/.*"/>   
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtend\.ide/.*"/>   

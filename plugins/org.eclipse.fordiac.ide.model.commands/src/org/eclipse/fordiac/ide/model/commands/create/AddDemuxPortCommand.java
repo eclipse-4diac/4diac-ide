@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2020, 2024 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,36 +13,22 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import static org.eclipse.fordiac.ide.model.LibraryElementTags.DEMUX_VISIBLE_CHILDREN;
-import static org.eclipse.fordiac.ide.model.LibraryElementTags.VARIABLE_SEPARATOR;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
-import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
-import org.eclipse.fordiac.ide.model.data.DataFactory;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.gef.commands.Command;
 
 public class AddDemuxPortCommand extends Command implements ScopedCommand {
 
 	private Demultiplexer type;
-	private final String oldVisibleChildren;
-	private String newVisibleChildren;
 	private final String varName;
 	private Demultiplexer oldMux;
-
 	private ChangeStructCommand cmd;
 	private final CheckableStructTreeNode node;
 
@@ -50,55 +36,28 @@ public class AddDemuxPortCommand extends Command implements ScopedCommand {
 		this.node = Objects.requireNonNull(node);
 		this.type = Objects.requireNonNull(type);
 		this.varName = node.getPinName();
-		this.oldVisibleChildren = node.getTree().getRoot().visibleToString();
 	}
 
 	@Override
 	public void execute() {
 		node.updateNode(true);
-
-		if (null == newVisibleChildren) {
-			newVisibleChildren = node.getTree().getRoot().visibleToString();
+		final String newVisibleChildren = node.getTree().getRoot().visibleToString();
+		cmd = new ChangeStructCommand(type, newVisibleChildren);
+		if (cmd.canExecute()) {
+			cmd.execute();
 		}
-		createChangeStructCommand();
-		cmd.execute();
 		oldMux = type;
 		type = (Demultiplexer) cmd.getNewMux();
-		setVisibleChildrenAttribute(newVisibleChildren);
-	}
-
-	private void createChangeStructCommand() {
-		final StructuredType configuredStruct = DataFactory.eINSTANCE.createStructuredType();
-		configuredStruct.setName(type.getStructType().getName());
-
-		final List<String> visibleChildrenNames = Arrays
-				.asList(newVisibleChildren.trim().split(LibraryElementTags.VARIABLE_SEPARATOR));
-		final List<VarDeclaration> varDecls = new ArrayList<>();
-		for (final VarDeclaration varDeclaration : CheckableStructTreeNode.getVarDeclarations(visibleChildrenNames,
-				node)) {
-			final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-			variable.setName(varDeclaration.getName());
-			variable.setComment(varDeclaration.getComment());
-			variable.setType(varDeclaration.getType());
-			varDecls.add(variable);
-		}
-		configuredStruct.getMemberVariables().addAll(varDecls);
-		configuredStruct.setTypeEntry(type.getStructType().getTypeEntry());
-		cmd = new ChangeStructCommand(type, configuredStruct) {
-			@Override
-			protected void copyAttributes() {
-				super.copyAttributes();
-				getNewMux().setAttribute(DEMUX_VISIBLE_CHILDREN, ElementaryTypes.STRING, newVisibleChildren, ""); //$NON-NLS-1$
-			}
-		};
 	}
 
 	@Override
 	public boolean canExecute() {
+		if (varName == null) {
+			return false;
+		}
 		// can execute if port doesn't exist in demux yet
-		return (varName != null)
-				&& ((oldVisibleChildren == null) || Arrays.stream(oldVisibleChildren.split(VARIABLE_SEPARATOR))
-						.filter(name -> name.equals(varName)).findAny().isEmpty());
+		return type.getMemberVars().stream().map(MemberVarDeclaration.class::cast)
+				.noneMatch(member -> node.getPinName().equals(member.getName()));
 	}
 
 	@Override
@@ -106,7 +65,6 @@ public class AddDemuxPortCommand extends Command implements ScopedCommand {
 		node.updateNode(true);
 		cmd.redo();
 		type = (Demultiplexer) cmd.getNewMux();
-		setVisibleChildrenAttribute(newVisibleChildren);
 	}
 
 	@Override
@@ -114,12 +72,6 @@ public class AddDemuxPortCommand extends Command implements ScopedCommand {
 		node.updateNode(false);
 		type = oldMux;
 		cmd.undo();
-		setVisibleChildrenAttribute(oldVisibleChildren);
-
-	}
-
-	private void setVisibleChildrenAttribute(final String value) {
-		type.setAttribute(DEMUX_VISIBLE_CHILDREN, ElementaryTypes.STRING, value, ""); //$NON-NLS-1$
 	}
 
 	public Demultiplexer getType() {

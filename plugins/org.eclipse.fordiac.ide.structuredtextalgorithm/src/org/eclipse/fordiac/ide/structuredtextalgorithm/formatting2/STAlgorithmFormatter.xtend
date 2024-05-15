@@ -66,7 +66,9 @@ class STAlgorithmFormatter extends STCoreFormatter {
 		sTAlgorithm.regionFor.assignment(STAlgorithmAccess.nameAssignment_1).append[setNewLines(1, 1, 2)]
 
 		sTAlgorithm.body.varTempDeclarations.forEach[format]
-		sTAlgorithm.body.varTempDeclarations.last?.append[setNewLines(1, 2, 2)]
+		if (!sTAlgorithm.body.varTempDeclarations.empty) {
+			sTAlgorithm.body.varTempDeclarations.last.append[setNewLines(1, 2, 2)]
+		}
 
 		sTAlgorithm.body.statements.forEach[format]
 
@@ -85,7 +87,9 @@ class STAlgorithmFormatter extends STCoreFormatter {
 		}
 
 		sTMethod.body.varDeclarations.forEach[format]
-		sTMethod.body.varDeclarations.last?.append[setNewLines(1, 2, 2)]
+		if (!sTMethod.body.varDeclarations.empty) {
+			sTMethod.body.varDeclarations.last.append[setNewLines(1, 2, 2)]
+		}
 
 		sTMethod.body.statements.forEach[format]
 

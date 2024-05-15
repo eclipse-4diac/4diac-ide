@@ -105,7 +105,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int WIDTH_EDEFAULT = 200;
+	protected static final double WIDTH_EDEFAULT = 200.0;
 
 	/**
 	 * The cached value of the '{@link #getWidth() <em>Width</em>}' attribute.
@@ -115,7 +115,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * @generated
 	 * @ordered
 	 */
-	protected int width = WIDTH_EDEFAULT;
+	protected double width = WIDTH_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getOutConnections() <em>Out Connections</em>}' reference list.
@@ -298,7 +298,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * @generated
 	 */
 	@Override
-	public int getWidth() {
+	public double getWidth() {
 		return width;
 	}
 
@@ -308,8 +308,8 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * @generated
 	 */
 	@Override
-	public void setWidth(int newWidth) {
-		int oldWidth = width;
+	public void setWidth(double newWidth) {
+		double oldWidth = width;
 		width = newWidth;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SEGMENT__WIDTH, oldWidth, width));
@@ -450,12 +450,8 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * @generated
 	 */
 	@Override
-	public void updatePosition(final int x, final int y) {
-		final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createPosition();
-		pos.setX(x);
-		pos.setY(y);
-		
-		setPosition(pos);
+	public void updatePositionFromScreenCoordinates(final int x, final int y) {
+		PositionAnnotation.updatePositionFromScreenCoordinates(this, x,y);
 	}
 
 	/**
@@ -464,8 +460,8 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * @generated
 	 */
 	@Override
-	public void updatePosition(final Point newPos) {
-		updatePosition(newPos.x, newPos.y);
+	public void updatePositionFromScreenCoordinates(final Point newPos) {
+		updatePositionFromScreenCoordinates(newPos.x, newPos.y);
 	}
 
 	/**
@@ -555,7 +551,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 				getVarDeclarations().addAll((Collection<? extends VarDeclaration>)newValue);
 				return;
 			case LibraryElementPackage.SEGMENT__WIDTH:
-				setWidth((Integer)newValue);
+				setWidth((Double)newValue);
 				return;
 			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 				getOutConnections().clear();

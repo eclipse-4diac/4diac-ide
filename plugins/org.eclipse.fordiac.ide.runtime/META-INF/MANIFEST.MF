@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Runtime
 Bundle-SymbolicName: org.eclipse.fordiac.ide.runtime;singleton:=true
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Vendor: Eclipse 4diac
 Export-Package: org.eclipse.fordiac.ide.runtime,
  org.eclipse.fordiac.ide.runtime.views
@@ -16,8 +16,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.ui.workbench,
  org.eclipse.ui.forms,
  org.eclipse.e4.ui.di
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
-Import-Package: javax.annotation;version="1.0.0";resolution:=optional,
- javax.inject;version="1.0.0"
 Automatic-Module-Name: org.eclipse.fordiac.ide.runtime

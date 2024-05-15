@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.data.DataType;
 
 
 /**
@@ -24,12 +25,40 @@ import org.eclipse.emf.common.util.EList;
  * A representation of the model object '<em><b>Configurable FB</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <p>
+ * The following features are supported:
+ * </p>
+ * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB#getDataType <em>Data Type</em>}</li>
+ * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConfigurableFB()
  * @model abstract="true"
  * @generated
  */
 public interface ConfigurableFB extends FB {
+	/**
+	 * Returns the value of the '<em><b>Data Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Data Type</em>' reference.
+	 * @see #setDataType(DataType)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConfigurableFB_DataType()
+	 * @model
+	 * @generated
+	 */
+	DataType getDataType();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB#getDataType <em>Data Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Data Type</em>' reference.
+	 * @see #getDataType()
+	 * @generated
+	 */
+	void setDataType(DataType value);
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -44,7 +73,7 @@ public interface ConfigurableFB extends FB {
 	 * @model
 	 * @generated
 	 */
-	void loadConfiguration(Attribute config);
+	void loadConfiguration(String attributeName, String typeName);
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 public abstract class AbstractStructManipulatorEditPart extends AbstractFBNElementEditPart {
 	protected AbstractStructManipulatorEditPart() {
@@ -35,7 +36,7 @@ public abstract class AbstractStructManipulatorEditPart extends AbstractFBNEleme
 
 	@Override
 	protected IFigure createFigureForModel() {
-		return new FBNetworkElementFigure(getModel(), this);
+		return new FBNetworkElementFigure(getModel());
 	}
 
 	@Override
@@ -48,8 +49,8 @@ public abstract class AbstractStructManipulatorEditPart extends AbstractFBNEleme
 	protected List<Object> getModelChildren() {
 		final List<Object> elements = super.getModelChildren();
 		final StructManipulator model = getModel();
-		if (model.getStructType() != null) {
-			elements.add(model.getStructType());
+		if (model.getDataType() != null) {
+			elements.add(model.getDataType());
 		} else {
 			elements.add(GenericTypes.ANY_STRUCT);
 		}
@@ -58,8 +59,8 @@ public abstract class AbstractStructManipulatorEditPart extends AbstractFBNEleme
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		if (childEditPart instanceof final StructuredTypeEditPart childStructuredEP) {
-			getFigure().getMiddle().add(childStructuredEP.getFigure(),
+		if (childEditPart instanceof StructuredTypeEditPart || childEditPart instanceof ErrorMarkerDataTypeEditPart) {
+			getFigure().getMiddle().add(((AbstractGraphicalEditPart) childEditPart).getFigure(),
 					new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 		} else {
 			super.addChildVisual(childEditPart, index);
@@ -68,8 +69,8 @@ public abstract class AbstractStructManipulatorEditPart extends AbstractFBNEleme
 
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		if (childEditPart instanceof final StructuredTypeEditPart childStructuredEP) {
-			getFigure().getMiddle().remove(childStructuredEP.getFigure());
+		if (childEditPart instanceof StructuredTypeEditPart || childEditPart instanceof ErrorMarkerDataTypeEditPart) {
+			getFigure().getMiddle().remove(((AbstractGraphicalEditPart) childEditPart).getFigure());
 		} else {
 			super.removeChildVisual(childEditPart);
 		}

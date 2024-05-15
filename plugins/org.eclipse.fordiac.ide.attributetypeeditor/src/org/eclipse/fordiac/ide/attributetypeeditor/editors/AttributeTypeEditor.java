@@ -45,13 +45,13 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeDeclarationT
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
+import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.model.ui.editors.ITypeEntryEditor;
-import org.eclipse.fordiac.ide.model.ui.editors.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -495,6 +495,11 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 			setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
 		}
 		setInputWithNotify(input);
+	}
+
+	@Override
+	public LibraryElement getEditedElement() {
+		return attributeDeclaration;
 	}
 
 }

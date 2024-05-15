@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Bianca Wiesmayr - initial API and implementation and/or initial documentation
+ *   Melanie Winter - added synchronization
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.handler;
 
@@ -31,7 +32,9 @@ import org.eclipse.fordiac.ide.fb.interpreter.testappgen.TestFbGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -82,27 +85,48 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 		testType.getTypeEntry().save(testType, monitor);
 
 		// matches the expected with the actual behaviour
-		final FBType matchType = new MatchFBGenerator(type, testSuite).generateMatchFB();
-		matchType.getTypeEntry().save(matchType, monitor);
-
-		// sends the outcome of the test and the testname to the outputs of the
-		// composite
-		final FBType muxType = new MuxFBGenerator(type, testSuite).generateMuxFB();
-		muxType.getTypeEntry().save(muxType, monitor);
-
-		// generates the signals for the testsignal and mux fb
-		final FBType runAllType = new RunAllFBGenerator(type, testSuite).generateRunAllFB();
-		runAllType.getTypeEntry().save(runAllType, monitor);
-
-		// don't change order, generateCompositeFB won't work then
 		final List<FBType> list = new ArrayList<>();
-		list.add(testType);
-		list.add(type);
-		list.add(matchType);
-		list.add(muxType);
-		list.add(runAllType);
+		Display.getDefault().syncExec(() -> {
+			final FBType matchType = new MatchFBGenerator(type, testSuite).generateMatchFB();
 
-		final CompositeFBType compositeType = new CompositeTestFBGenerator(type, testSuite, list).generateCompositeFB();
-		compositeType.getTypeEntry().save(compositeType, monitor);
+			try {
+				matchType.getTypeEntry().save(matchType, monitor);
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage());
+			}
+
+			// sends the outcome of the test and the testname to the outputs of the
+			// composite
+			final FBType muxType = new MuxFBGenerator(type, testSuite).generateMuxFB();
+			try {
+				muxType.getTypeEntry().save(muxType, monitor);
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage());
+			}
+
+			// generates the signals for the testsignal and mux fb
+			final FBType runAllType = new RunAllFBGenerator(type, testSuite).generateRunAllFB();
+			try {
+				runAllType.getTypeEntry().save(runAllType, monitor);
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage());
+			}
+
+			// don't change order, generateCompositeFB won't work then
+			list.add(testType);
+			list.add(type);
+			list.add(matchType);
+			list.add(muxType);
+			list.add(runAllType);
+
+			final CompositeFBType compositeType = new CompositeTestFBGenerator(type, testSuite, list)
+					.generateCompositeFB();
+
+			try {
+				compositeType.getTypeEntry().save(compositeType, monitor);
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage());
+			}
+		});
 	}
 }

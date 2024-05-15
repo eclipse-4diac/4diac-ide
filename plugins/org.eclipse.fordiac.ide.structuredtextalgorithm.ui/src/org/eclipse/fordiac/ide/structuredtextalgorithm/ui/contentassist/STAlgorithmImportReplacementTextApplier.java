@@ -18,13 +18,15 @@ import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextRe
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreImportReplacementTextApplier;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.xtext.formatting.IWhitespaceInformationProvider;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal;
 
 public class STAlgorithmImportReplacementTextApplier extends STCoreImportReplacementTextApplier {
 
-	public STAlgorithmImportReplacementTextApplier(final XtextResource resource, final String importedNamespace) {
-		super(resource, importedNamespace);
+	public STAlgorithmImportReplacementTextApplier(final XtextResource resource, final String importedNamespace,
+			final IWhitespaceInformationProvider whitespaceInformationProvider) {
+		super(resource, importedNamespace, whitespaceInformationProvider);
 	}
 
 	@Override

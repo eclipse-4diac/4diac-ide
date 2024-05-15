@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
@@ -76,8 +77,7 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 		for (final Object selectedObject : selection) {
 			if (selectedObject instanceof final EditPart ep) {
 				if (selectedObject instanceof final MonitoringEditPart mEP) {
-					final IInterfaceElement ie = mEP.getModel().getPort()
-							.getInterfaceElement();
+					final IInterfaceElement ie = mEP.getModel().getPort().getInterfaceElement();
 					if (manager.containsPort(ie)) {
 						foundElements.add(ie);
 					}
@@ -93,8 +93,12 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 
 	private static Set<IInterfaceElement> getWatchedelementsForLibrayElement(final MonitoringManager manager,
 			final EObject element) {
+
 		final Set<IInterfaceElement> foundElements = new HashSet<>();
-		if (element instanceof final FBNetworkElement fbe) {
+		if (element instanceof final SubApp subapp) {
+			foundElements.addAll(getWatchedIfElementsForFB(manager, subapp));
+			foundElements.addAll(getWatchedElementsFromFBNetwork(manager, subapp.getSubAppNetwork()));
+		} else if (element instanceof final FBNetworkElement fbe) {
 			foundElements.addAll(getWatchedIfElementsForFB(manager, fbe));
 		} else if (element instanceof final FBNetwork fbn) {
 			foundElements.addAll(getWatchedElementsFromFBNetwork(manager, fbn));
@@ -113,20 +117,29 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 	private static Set<IInterfaceElement> getWatchedElementsFromFBNetwork(final MonitoringManager manager,
 			final FBNetwork fbNetwork) {
 		final Set<IInterfaceElement> foundElements = new HashSet<>();
-		for (final FBNetworkElement fbnElement : fbNetwork.getNetworkElements()) {
-			foundElements.addAll(getWatchedIfElementsForFB(manager, fbnElement));
+		// fbnetwork can be null when we checking a cfb or typed subapp instance where
+		// the network was not loaded sofar
+		if (fbNetwork != null) {
+			for (final FBNetworkElement fbnElement : fbNetwork.getNetworkElements()) {
+				foundElements.addAll(getWatchedIfElementsForFB(manager, fbnElement));
+				if (fbnElement instanceof final SubApp subapp && subapp.getSubAppNetwork() != null) {
+					foundElements.addAll(getWatchedElementsFromFBNetwork(manager, subapp.getSubAppNetwork()));
+				}
+			}
 		}
 		return foundElements;
 	}
 
 	public static Set<IInterfaceElement> getWatchedIfElementsForFB(final MonitoringManager manager,
 			final FBNetworkElement model) {
+
 		final Set<IInterfaceElement> foundElements = new HashSet<>();
-			for (final IInterfaceElement element : model.getInterface().getAllInterfaceElements()) {
-				if (manager.containsPort(element)) {
-					foundElements.add(element);
-				}
+		for (final IInterfaceElement element : model.getInterface().getAllInterfaceElements()) {
+			if (manager.containsPort(element)) {
+				foundElements.add(element);
+			}
 		}
+
 		return foundElements;
 	}
 

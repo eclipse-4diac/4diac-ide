@@ -25,9 +25,9 @@ public abstract class AbstractTypeEntryDataHandler<T extends TypeEntry> {
 	protected final T typeEntry;
 
 	protected final Map<String, Set<INamedElement>> children;
-	protected HashMap<INamedElement, T> inputSet;
+	protected Map<INamedElement, T> inputSet;
 
-	public AbstractTypeEntryDataHandler(final T typeEntry) {
+	protected AbstractTypeEntryDataHandler(final T typeEntry) {
 		this.typeEntry = typeEntry;
 		children = new HashMap<>();
 		setInputSet(new HashMap<>());
@@ -37,11 +37,11 @@ public abstract class AbstractTypeEntryDataHandler<T extends TypeEntry> {
 		return typeEntry;
 	}
 
-	public HashMap<INamedElement, T> getInputSet() {
+	public Map<INamedElement, T> getInputSet() {
 		return inputSet;
 	}
 
-	public void setInputSet(final HashMap<INamedElement, T> inputSet) {
+	public void setInputSet(final Map<INamedElement, T> inputSet) {
 		this.inputSet = inputSet;
 	}
 
@@ -72,5 +72,10 @@ public abstract class AbstractTypeEntryDataHandler<T extends TypeEntry> {
 		return elements.stream().map(e -> getTypeOfElement(e)).toList();
 	}
 
-	public abstract HashMap<INamedElement, T> createInputSet(final T inputTypeEntry);
+	public boolean loadInputSet() {
+		inputSet = createInputSet(typeEntry);
+		return inputSet.isEmpty();
+	}
+
+	protected abstract Map<INamedElement, T> createInputSet(final T inputTypeEntry);
 }

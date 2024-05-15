@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -21,11 +22,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.FBInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -70,7 +73,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		final RefactoringStatus status = new RefactoringStatus();
 		try {
 			monitor.beginTask("Checking preconditions...", 1); //$NON-NLS-1$
-			checkFileEnding(status, typeEntry);
+			checkFileEnding(status);
 
 		} finally {
 			monitor.done();
@@ -78,7 +81,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		return status;
 	}
 
-	public void checkFileEnding(final RefactoringStatus result, final TypeEntry typeEntry) {
+	protected void checkFileEnding(final RefactoringStatus result) {
 		if (!getArguments().getNewName().endsWith(file.getFileExtension())) {
 			result.addFatalError("The file-ending is different to the old one!"); //$NON-NLS-1$
 		}
@@ -90,11 +93,11 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 			monitor.beginTask("Creating change...", 1); //$NON-NLS-1$
 
 			final LibraryElement type = typeEntry.getType();
-			if (type instanceof final StructuredType structType) {
-				return createStructDataChange(structType);
+			if (type instanceof StructuredType) {
+				return createStructDataChange();
 			}
-			if (type instanceof final FBType fbType) {
-				return createFBDataChange(fbType);
+			if (type instanceof FBType) {
+				return createFBDataChange();
 			}
 			return null;
 
@@ -128,23 +131,18 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		return parentChange;
 	}
 
-	private CompositeChange createFBDataChange(final FBType type) {
+	private CompositeChange createFBDataChange() {
 		final CompositeChange parentChange = new CompositeChange(
 				MessageFormat.format(Messages.Refactoring_RenameFromTo, typeEntry.getTypeName(), newName));
-		parentChange.add(new UpdateTypeLibraryEntryChange(file, typeEntry, newName, oldName));
-		Set<INamedElement> allFBs;
+		parentChange.add(new UpdateTypeEntryChange(file, typeEntry, newName, oldName));
 		final CompositeChange change = new CompositeChange(Messages.Refactoring_AffectedInstancesOfFB);
-		final IProject project = type.getTypeEntry().getFile().getProject();
 
-		final var search = new FBInstanceSearch(type);
+		final IEC61499ElementSearch search = new BlockTypeInstanceSearch(typeEntry);
+		final List<? extends EObject> searchResults = search.performSearch();
+		searchResults.stream().filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
+				.map(fbn -> new UpdateInstancesChange(fbn, typeEntry)).forEach(change::add);
 
-		allFBs = search.performProjectSearch(project);
-
-		allFBs.addAll(search.performInternalFBSearch(type.getTypeLibrary()));
-
-		allFBs.stream().map(FBNetworkElement.class::cast).map(fbn -> new UpdateInstancesChange(fbn, typeEntry))
-				.forEach(change::add);
-		if (!allFBs.isEmpty()) {
+		if (!searchResults.isEmpty()) {
 			parentChange.add(change);
 		}
 		return parentChange;

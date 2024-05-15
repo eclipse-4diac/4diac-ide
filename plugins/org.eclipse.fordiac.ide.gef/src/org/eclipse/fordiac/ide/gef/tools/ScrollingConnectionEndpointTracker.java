@@ -39,14 +39,12 @@ import org.eclipse.swt.events.MouseEvent;
 
 public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracker {
 
-	// Safety border around the canvas to ensure that during dragging connections the canvas is not growing
-	private static final Insets CONNECTION_CANVAS_BORDER = new Insets(
-			ConnectionPreferenceValues.HANDLE_SIZE,
-			MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE
-			+ ConnectionPreferenceValues.HANDLE_SIZE,
-			ConnectionPreferenceValues.HANDLE_SIZE,
-			ConnectionPreferenceValues.HANDLE_SIZE);
-
+	// Safety border around the canvas to ensure that during dragging connections
+	// the canvas is not growing
+	private static final Insets CONNECTION_CANVAS_BORDER = new Insets(ConnectionPreferenceValues.HANDLE_SIZE,
+			MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN + HideableConnection.BEND_POINT_BEVEL_SIZE
+					+ ConnectionPreferenceValues.HANDLE_SIZE,
+			ConnectionPreferenceValues.HANDLE_SIZE, ConnectionPreferenceValues.HANDLE_SIZE);
 
 	private InlineConnectionCreationTool conCreationTool = null;
 
@@ -56,15 +54,14 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 
 	@Override
 	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
-		if (isActive() && (viewer instanceof AdvancedScrollingGraphicalViewer)) {
-			final Point oldViewPort = ((AdvancedScrollingGraphicalViewer) viewer).getViewLocation();
-			((AdvancedScrollingGraphicalViewer) viewer)
-			.checkScrollPositionDuringDragBounded(me,
-					new Point(
-							MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE
-							+ ConnectionPreferenceValues.HANDLE_SIZE,
+		if (isActive() && (viewer instanceof final AdvancedScrollingGraphicalViewer advViewer)) {
+			final Point oldViewPort = advViewer.getViewLocation();
+			advViewer.checkScrollPositionDuringDragBounded(me,
+					new Point(MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN
+							+ HideableConnection.BEND_POINT_BEVEL_SIZE + ConnectionPreferenceValues.HANDLE_SIZE,
 							ConnectionPreferenceValues.HANDLE_SIZE));
-			final Dimension delta = oldViewPort.getDifference(((AdvancedScrollingGraphicalViewer) viewer).getViewLocation());
+			final Dimension delta = oldViewPort
+					.getDifference(((AdvancedScrollingGraphicalViewer) viewer).getViewLocation());
 			// Compensate the moved scrolling in the start position for correct dropping of
 			// moved parts
 			setStartLocation(getStartLocation().getTranslated(delta));
@@ -80,7 +77,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 		}
 	}
 
-	@SuppressWarnings("static-method")  // allow sub-classes to override the border calculation
+	@SuppressWarnings("static-method") // allow sub-classes to override the border calculation
 	protected Insets getCanvasBorder() {
 		return CONNECTION_CANVAS_BORDER;
 	}
@@ -98,7 +95,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	private void startConnCreation() {
 		final EditPart target = (getCommandName().equals(RequestConstants.REQ_RECONNECT_SOURCE))
 				? getConnectionEditPart().getTarget()
-						: getConnectionEditPart().getSource();
+				: getConnectionEditPart().getSource();
 		conCreationTool = InlineConnectionCreationTool.createInlineConnCreationTool(target, getDomain(),
 				getCurrentViewer(), getLocation());
 		updateTarget(getStartLocation());
@@ -109,7 +106,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 		request.setLocation(p);
 		final EditPart target = (getCommandName().equals(RequestConstants.REQ_RECONNECT_SOURCE))
 				? getConnectionEditPart().getSource()
-						: getConnectionEditPart().getTarget();
+				: getConnectionEditPart().getTarget();
 		request.setTargetEditPart(target);
 		getConnectionEditPart().showSourceFeedback(request);
 		getConnectionEditPart().showTargetFeedback(request);

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -90,13 +92,33 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 		@Override
 		protected Control createTitleMenuArea(final Composite parent) {
-
 			final Composite titleAreaComposite = (Composite) super.createTitleMenuArea(parent);
 
 			final GridData gdLabel = new GridData(GridData.FILL);
 			gdLabel.horizontalIndent = 5;
 			titleAreaComposite.setLayoutData(gdLabel);
 			return titleAreaComposite;
+		}
+
+		private String getPinName(final IInterfaceElement iElem) {
+			final StringBuilder sb = new StringBuilder();
+			if (iElem == null) {
+				return sb.toString();
+			}
+			if (isInSameNetwork(originPin, iElem)) {
+				sb.append(iElem.getFBNetworkElement().getName());
+			} else {
+				sb.append(iElem.getFBNetworkElement().getQualifiedName());
+				sb.delete(0, sb.indexOf(".") + 1); //$NON-NLS-1$
+			}
+			sb.append('.');
+			sb.append(iElem.getName());
+			return sb.toString();
+		}
+
+		private static boolean isInSameNetwork(final IInterfaceElement src, final IInterfaceElement dest) {
+			return src != null && dest != null
+					&& src.getFBNetworkElement().getFbNetwork().equals(dest.getFBNetworkElement().getFbNetwork());
 		}
 
 		@Override
@@ -111,43 +133,18 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				@Override
 				public String getText(final Object element) {
 					if (element instanceof final IInterfaceElement iElem) {
-						String retVal = ""; //$NON-NLS-1$
-						if (null != iElem.getFBNetworkElement()) {
-							retVal = iElem.getFBNetworkElement().getName() + "."; //$NON-NLS-1$
-						}
-						return retVal + iElem.getName();
+						return getPinName(iElem);
 					}
 					return super.getText(element);
 				}
 			});
 			listViewer.setInput(opposites.toArray());
 
-			listViewer.addSelectionChangedListener(
-					event -> HandlerHelper.selectElement(event.getStructuredSelection().getFirstElement(), viewer));
+			listViewer.addSelectionChangedListener(event -> selectInterfaceElement(viewer,
+					(IInterfaceElement) event.getStructuredSelection().getFirstElement()));
 
 			// on enter close the view
-			listViewer.getControl().addKeyListener(new KeyListener() {
-
-				@Override
-				public void keyReleased(final KeyEvent e) {
-					// we only want to close the window on enter presses
-				}
-
-				@Override
-				public void keyPressed(final KeyEvent e) {
-					if (e.character == SWT.CR) {
-						dialogArea.getShell().close();
-					}
-					if ((e.stateMask == SWT.CTRL) && (e.keyCode == SWT.ARROW_LEFT)) {
-						HandlerHelper.selectElement(originPin, viewer);
-						dialogArea.getShell().close();
-					}
-					if (e.stateMask == SWT.CTRL && e.keyCode == SWT.ARROW_RIGHT) {
-						invokeFollowRightConnectionHandler();
-						dialogArea.getShell().close();
-					}
-				}
-			});
+			listViewer.getControl().addKeyListener(new FollowConnectionKeyListener(dialogArea));
 
 			final GridData gd = new GridData(GridData.CENTER);
 			gd.horizontalIndent = 3;
@@ -158,19 +155,79 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			return dialogArea;
 		}
 
-		private static void invokeFollowRightConnectionHandler() {
+		private static IHandlerService getHandlerService() {
 			final IWorkbench wb = PlatformUI.getWorkbench();
 			final IWorkbenchWindow window = wb.getActiveWorkbenchWindow();
 			final IWorkbenchPage page = window.getActivePage();
 
 			final IWorkbenchPart active = page.getActivePart();
-			final IHandlerService handlerService = active.getSite().getService(IHandlerService.class);
+			return active.getSite().getService(IHandlerService.class);
 
+		}
+
+		private static void invokeFollowRightConnectionHandler() {
 			try {
-				handlerService.executeCommand("org.eclipse.fordiac.ide.application.commands.followRightConnection", //$NON-NLS-1$
+				getHandlerService().executeCommand("org.eclipse.fordiac.ide.application.commands.followRightConnection", //$NON-NLS-1$
 						null);
 			} catch (final Exception e) {
-				throw new RuntimeException("followRightConnection.command not found");
+				throw new RuntimeException("followRightConnection.command not found"); //$NON-NLS-1$
+			}
+		}
+
+		private static void invokeFollowLeftConnectionHandler() {
+			try {
+				getHandlerService().executeCommand("org.eclipse.fordiac.ide.application.commands.followLeftConnection", //$NON-NLS-1$
+						null);
+			} catch (final Exception e) {
+				throw new RuntimeException("followLeftConnection.command not found"); //$NON-NLS-1$
+			}
+		}
+
+		private class FollowConnectionKeyListener implements KeyListener {
+			private final Composite dialogArea;
+
+			public FollowConnectionKeyListener(final Composite dialogArea) {
+				this.dialogArea = dialogArea;
+			}
+
+			@Override
+			public void keyPressed(final KeyEvent e) {
+				if (e.character == SWT.CR) {
+					dialogArea.getShell().close();
+				}
+				if (opposites.get(0).getInputConnections().isEmpty()) {
+					handleRight(e);
+				} else {
+					handleLeft(e);
+				}
+
+			}
+
+			@Override
+			public void keyReleased(final KeyEvent e) {
+				// do nothing here
+			}
+
+			private void handleRight(final KeyEvent e) {
+				if ((e.stateMask == SWT.CTRL) && (e.keyCode == SWT.ARROW_LEFT)) {
+					selectInterfaceElement(viewer, originPin);
+					dialogArea.getShell().close();
+				}
+				if (e.stateMask == SWT.CTRL && e.keyCode == SWT.ARROW_RIGHT) {
+					invokeFollowRightConnectionHandler();
+					dialogArea.getShell().close();
+				}
+			}
+
+			private void handleLeft(final KeyEvent e) {
+				if ((e.stateMask == SWT.CTRL) && (e.keyCode == SWT.ARROW_RIGHT)) {
+					selectInterfaceElement(viewer, originPin);
+					dialogArea.getShell().close();
+				}
+				if (e.stateMask == SWT.CTRL && e.keyCode == SWT.ARROW_LEFT) {
+					invokeFollowLeftConnectionHandler();
+					dialogArea.getShell().close();
+				}
 			}
 		}
 
@@ -203,13 +260,17 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		final IEditorPart editor = (IEditorPart) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_EDITOR_NAME);
 
-		if (selection != null && ((IStructuredSelection) selection).size() == 1) {
-			setBaseEnabled(editor != null
-					&& ((IStructuredSelection) selection).getFirstElement() instanceof InterfaceEditPart);
+		if (selection instanceof final IStructuredSelection structSel && structSel.size() == 1) {
+			setBaseEnabled(editor != null && isValidSelectedElement(structSel));
 		} else {
 			setBaseEnabled(false);
 		}
 
+	}
+
+	@SuppressWarnings("static-method") // allow subclasses to override this method
+	protected boolean isValidSelectedElement(final IStructuredSelection structSel) {
+		return structSel.getFirstElement() instanceof InterfaceEditPart;
 	}
 
 	protected List<IInterfaceElement> getConnectionOposites(final InterfaceEditPart iep) {
@@ -220,6 +281,20 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		final EList<Connection> connList = getConnectionList(ie);
 		return connList.stream().map(con -> (con.getSource().equals(ie) ? con.getDestination() : con.getSource()))
 				.toList();
+	}
+
+	private static List<IInterfaceElement> resolveTargetPins(final List<IInterfaceElement> opposites,
+			final GraphicalViewer viewer) {
+		final List<IInterfaceElement> resolvedOpposites = new ArrayList<>();
+		for (final IInterfaceElement element : opposites) {
+			final EditPart ep = (EditPart) (viewer.getEditPartRegistry().get(element));
+			if ((ep instanceof final InterfaceEditPart iep) && isBorderElement(iep)) {
+				resolvedOpposites.addAll(getTargetPins(iep));
+			} else {
+				resolvedOpposites.add(element);
+			}
+		}
+		return resolvedOpposites;
 	}
 
 	private boolean useTargetPins(final InterfaceEditPart iep) {
@@ -236,17 +311,20 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				.map(ep -> (TargetInterfaceElementEditPart) ep).map(ep -> ep.getModel().getRefElement()).toList();
 	}
 
+	private static boolean isBorderElement(final InterfaceEditPart iep) {
+		return iep.getChildren().stream().anyMatch(TargetInterfaceElementEditPart.class::isInstance);
+	}
+
 	protected static boolean isInsideSubappOrViewer(final IInterfaceElement ie, final FBNetwork fbNetwork) {
 		final FBNetworkElement fbnElement = ie.getFBNetworkElement();
 		return ((fbnElement instanceof SubApp) || (fbnElement instanceof CFBInstance))
 				&& (!fbNetwork.equals(fbnElement.eContainer()));
 	}
 
-	protected static void showOppositeSelectionDialog(final List<IInterfaceElement> opposites,
-			final ExecutionEvent event, final GraphicalViewer viewer, final IInterfaceElement originPin)
-			throws ExecutionException {
+	private static void showOppositeSelectionDialog(final List<IInterfaceElement> opposites, final ExecutionEvent event,
+			final GraphicalViewer viewer, final IInterfaceElement originPin) throws ExecutionException {
 
-		HandlerHelper.selectElement(opposites.get(0), viewer);
+		selectInterfaceElement(viewer, opposites.get(0));
 		viewer.flush();
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final IFigure figure = ((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement()).getFigure();
@@ -293,6 +371,18 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		return false;
 	}
 
+	protected static void selectOpposites(final ExecutionEvent event, final GraphicalViewer viewer,
+			final IInterfaceElement originPin, final List<IInterfaceElement> opposites) throws ExecutionException {
+		final List<IInterfaceElement> resolvedOpposites = resolveTargetPins(opposites, viewer);
+		if (!resolvedOpposites.isEmpty()) {
+			if (resolvedOpposites.size() == 1) {
+				selectInterfaceElement(viewer, resolvedOpposites.get(0));
+			} else {
+				showOppositeSelectionDialog(resolvedOpposites, event, viewer, originPin);
+			}
+		}
+	}
+
 	protected static IInterfaceElement calcInternalOppositePin(final EList<? extends IInterfaceElement> source,
 			final EList<? extends IInterfaceElement> destination, final InterfaceEditPart pin) {
 
@@ -328,5 +418,12 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	protected static boolean isExpandedSubappPin(final IInterfaceElement pin) {
 		return pin.getFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded();
+	}
+
+	protected static void selectInterfaceElement(final GraphicalViewer viewer, final IInterfaceElement element) {
+		if (!HandlerHelper.selectElement(element, viewer)) {
+			// we have a subappcrossing element
+			TargetInterfaceElementEditPart.openInBreadCrumb(element);
+		}
 	}
 }

@@ -55,13 +55,7 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 		}
 
 		final List<IInterfaceElement> opposites = getConnectionOposites(interfaceEditPart);
-		if (!opposites.isEmpty()) {
-			if (opposites.size() == 1) {
-				HandlerHelper.selectElement(opposites.get(0), viewer);
-			} else {
-				showOppositeSelectionDialog(opposites, event, viewer, originPin);
-			}
-		}
+		selectOpposites(event, viewer, originPin, opposites);
 		return Status.OK_STATUS;
 	}
 

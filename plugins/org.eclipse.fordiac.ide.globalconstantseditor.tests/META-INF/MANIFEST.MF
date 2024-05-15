@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.eclipse.fordiac.ide.globalconstantseditor.tests
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.globalconstantseditor.tests; singleton:=true
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.fordiac.ide.globalconstantseditor.tests
@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.fordiac.ide.globalconstantseditor,
  org.eclipse.xtext.xbase.testing,
  org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
  org.eclipse.fordiac.ide.model
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.globalconstantseditor.tests
 Import-Package: org.junit.jupiter.api,
  org.junit.jupiter.api.extension,

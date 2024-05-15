@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts;
 
+import java.util.regex.Pattern;
+
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -44,12 +46,17 @@ public class ContractElementDialog extends MessageDialog {
 	protected void buttonPressed(final int buttonId) {
 		inputTime = inputTimeText.getText();
 		final String[] s = DefineContractUtils.getTimeIntervalFromString(inputTimeText.getText());
-		if (inputTime.isBlank() || (s.length == 2 && (Integer.parseInt(s[0]) > Integer.parseInt(s[1])))) {
-			MessageDialog.openError(this.getShell(), Messages.DefineFBReactionOnePinDialog_Error,
-					Messages.DefineFBReactionOnePinDialog_PleaseFill);
+		if (!isTextCompliant(inputTime)) {
+			MessageDialog.openError(this.getShell(), "Wrong Format", "Text is not in the right format.");
 		} else {
 			super.buttonPressed(buttonId);
 		}
+	}
+
+	protected static boolean isTextCompliant(final String text) {
+		final Pattern pattern = Pattern
+				.compile("^\\d+((\\.\\d+)?)$|^(([\\(\\[])(\\d*\\.?\\d+), (\\d*\\.?\\d+)([\\)\\]]))$"); //$NON-NLS-1$
+		return pattern.matcher(text).find();
 	}
 
 	@Override

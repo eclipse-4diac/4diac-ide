@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.commands.create;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -44,7 +45,7 @@ public class CreateGroupCommand extends AbstractCreateFBNetworkElementCommand {
 
 	@Override
 	public void execute() {
-		updateCreatePosition(posSizeRef.x, posSizeRef.y);
+		updateCreatePosition(posSizeRef.getTopLeft());
 		getElement().setWidth(posSizeRef.width);
 		getElement().setHeight(posSizeRef.height);
 		super.execute();
@@ -81,14 +82,17 @@ public class CreateGroupCommand extends AbstractCreateFBNetworkElementCommand {
 
 	private final Rectangle checkPosSizeRef(final Rectangle posSizeRef) {
 		if (!addElements.getElementsToAdd().isEmpty()) {
-			// if we do not have an empty group move it a bit to the left and up so that the FBs stay at their positions
+			// if we do not have an empty group move it a bit to the left and up so that the
+			// FBs stay at their positions
 			posSizeRef.x -= GROUP_BORDER;
 			posSizeRef.y -= GROUP_TOP_BORDER;
 			posSizeRef.width += 2 * GROUP_BORDER;
 			posSizeRef.height += GROUP_TOP_BORDER + GROUP_BORDER;
 			// ensure that in the beginning the group has at least our default size
-			posSizeRef.width = Math.max(posSizeRef.width, getElement().getWidth());
-			posSizeRef.height = Math.max(posSizeRef.height, getElement().getHeight());
+			posSizeRef.width = Math.max(posSizeRef.width,
+					CoordinateConverter.INSTANCE.iec61499ToScreen(getElement().getWidth()));
+			posSizeRef.height = Math.max(posSizeRef.height,
+					CoordinateConverter.INSTANCE.iec61499ToScreen(getElement().getHeight()));
 		}
 		return posSizeRef;
 	}

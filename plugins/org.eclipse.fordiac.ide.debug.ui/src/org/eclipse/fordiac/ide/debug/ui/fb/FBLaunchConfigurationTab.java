@@ -24,9 +24,11 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.fordiac.ide.debug.fb.FBDebugClockMode;
 import org.eclipse.fordiac.ide.debug.fb.FBLaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.debug.fb.FBLaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.debug.ui.MainLaunchConfigurationTab;
+import org.eclipse.fordiac.ide.debug.ui.Messages;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -42,15 +44,22 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTab {
 
 	private ComboViewer eventCombo;
 	private Button repeatEventCheckbox;
 	private Button keepDebuggerRunningCheckbox;
+	private Button systemTimeRadio;
+	private Button incrementTimeRadio;
+	private Button manualTimeRadio;
+	private Text debugTimeText;
 
 	@Override
 	public void createControl(final Composite parent) {
@@ -69,21 +78,25 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		final Composite comp = (Composite) group.getChildren()[0];
 
 		repeatEventCheckbox = new Button(comp, SWT.CHECK);
-		repeatEventCheckbox.setText("Repeat event"); //$NON-NLS-1$
+		repeatEventCheckbox.setText(Messages.FBLaunchConfigurationTab_RepeatEvent);
 		repeatEventCheckbox.addSelectionListener(widgetSelectedAdapter(e -> updateLaunchConfigurationDialog()));
 		GridDataFactory.fillDefaults().applyTo(repeatEventCheckbox);
 
 		keepDebuggerRunningCheckbox = new Button(comp, SWT.CHECK);
-		keepDebuggerRunningCheckbox.setText("Keep debugger running when idle"); //$NON-NLS-1$
+		keepDebuggerRunningCheckbox.setText(Messages.FBLaunchConfigurationTab_KeepDebuggerRunningWhenIdle);
 		keepDebuggerRunningCheckbox.addSelectionListener(widgetSelectedAdapter(e -> updateLaunchConfigurationDialog()));
 		GridDataFactory.fillDefaults().applyTo(keepDebuggerRunningCheckbox);
+
+		final Composite debugTimeComponent = createDebugTimeComponent(comp);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(debugTimeComponent);
+
 		return group;
 	}
 
 	protected Composite createEventComponent(final Composite parent) {
 		final Group group = new Group(parent, SWT.BORDER);
 		GridLayoutFactory.swtDefaults().applyTo(group);
-		group.setText("Event"); //$NON-NLS-1$
+		group.setText(Messages.FBLaunchConfigurationTab_Event);
 
 		final Composite comp = new Composite(group, SWT.NONE);
 		GridLayoutFactory.swtDefaults().numColumns(1).applyTo(comp);
@@ -98,12 +111,55 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		return group;
 	}
 
+	protected Composite createDebugTimeComponent(final Composite parent) {
+		final Group group = new Group(parent, SWT.BORDER);
+		GridLayoutFactory.swtDefaults().applyTo(group);
+		group.setText(Messages.FBLaunchConfigurationTab_DebugTime);
+
+		final Composite radioComp = new Composite(group, SWT.NONE);
+		GridLayoutFactory.swtDefaults().numColumns(1).applyTo(radioComp);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(radioComp);
+
+		systemTimeRadio = new Button(radioComp, SWT.RADIO);
+		systemTimeRadio.setText(Messages.FBLaunchConfigurationTab_UseSystemClock);
+		systemTimeRadio.addListener(SWT.Selection, e -> updateLaunchConfigurationDialog());
+		GridDataFactory.fillDefaults().applyTo(systemTimeRadio);
+
+		incrementTimeRadio = new Button(radioComp, SWT.RADIO);
+		incrementTimeRadio.setText(Messages.FBLaunchConfigurationTab_IncrementClockAfterEachEventBySpecifiedAmount);
+		incrementTimeRadio.addListener(SWT.Selection, e -> updateLaunchConfigurationDialog());
+		GridDataFactory.fillDefaults().applyTo(incrementTimeRadio);
+
+		manualTimeRadio = new Button(radioComp, SWT.RADIO);
+		manualTimeRadio.setText(Messages.FBLaunchConfigurationTab_UseFixedClockWithSpecifiedTime);
+		manualTimeRadio.addListener(SWT.Selection, e -> updateLaunchConfigurationDialog());
+		GridDataFactory.fillDefaults().applyTo(manualTimeRadio);
+
+		final Composite c = new Composite(group, SWT.NONE);
+		GridLayoutFactory.swtDefaults().numColumns(3).applyTo(c);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(c);
+
+		final Label clockIntervalLabel = new Label(c, SWT.NONE);
+		clockIntervalLabel.setText(Messages.FBLaunchConfigurationTab_ClockInterval);
+		debugTimeText = new Text(c, SWT.BORDER);
+		debugTimeText.setText("0"); //$NON-NLS-1$
+		debugTimeText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		debugTimeText.addSegmentListener(e -> updateLaunchConfigurationDialog());
+		final Label debugTimeLabel = new Label(c, SWT.NONE);
+		debugTimeLabel.setText("ms"); //$NON-NLS-1$
+		debugTimeLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+
+		return group;
+	}
+
 	@Override
 	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
 		super.setDefaults(configuration);
 		configuration.removeAttribute(FBLaunchConfigurationAttributes.EVENT);
 		configuration.removeAttribute(FBLaunchConfigurationAttributes.REPEAT_EVENT);
 		configuration.removeAttribute(FBLaunchConfigurationAttributes.KEEP_RUNNING_WHEN_IDLE);
+		configuration.removeAttribute(FBLaunchConfigurationAttributes.CLOCK_MODE);
+		configuration.removeAttribute(FBLaunchConfigurationAttributes.CLOCK_INTERVAL);
 	}
 
 	@Override
@@ -119,7 +175,11 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 			}
 			repeatEventCheckbox.setSelection(FBLaunchConfigurationAttributes.isRepeatEvent(configuration));
 			keepDebuggerRunningCheckbox
-			.setSelection(FBLaunchConfigurationAttributes.isKeepRunningWhenIdle(configuration));
+					.setSelection(FBLaunchConfigurationAttributes.isKeepRunningWhenIdle(configuration));
+			systemTimeRadio.setSelection(FBLaunchConfigurationAttributes.isSystem(configuration));
+			incrementTimeRadio.setSelection(FBLaunchConfigurationAttributes.isIncrement(configuration));
+			manualTimeRadio.setSelection(FBLaunchConfigurationAttributes.isManual(configuration));
+			debugTimeText.setText(FBLaunchConfigurationAttributes.getClockIntervalText(configuration));
 		} catch (final CoreException e) {
 			// ignore
 		}
@@ -138,6 +198,23 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		configuration.setAttribute(FBLaunchConfigurationAttributes.REPEAT_EVENT, repeatEventCheckbox.getSelection());
 		configuration.setAttribute(FBLaunchConfigurationAttributes.KEEP_RUNNING_WHEN_IDLE,
 				keepDebuggerRunningCheckbox.getSelection());
+
+		if (systemTimeRadio.getSelection()) {
+			configuration.setAttribute(FBLaunchConfigurationAttributes.CLOCK_MODE, FBDebugClockMode.SYSTEM.toString());
+		}
+		if (incrementTimeRadio.getSelection()) {
+			configuration.setAttribute(FBLaunchConfigurationAttributes.CLOCK_MODE,
+					FBDebugClockMode.INCREMENT.toString());
+		}
+		if (manualTimeRadio.getSelection()) {
+			configuration.setAttribute(FBLaunchConfigurationAttributes.CLOCK_MODE, FBDebugClockMode.MANUAL.toString());
+		}
+		final String debugTime = debugTimeText.getText();
+		if (!debugTime.isBlank()) {
+			configuration.setAttribute(FBLaunchConfigurationAttributes.CLOCK_INTERVAL, debugTime);
+		} else {
+			configuration.setAttribute(FBLaunchConfigurationAttributes.CLOCK_INTERVAL, "0"); //$NON-NLS-1$
+		}
 	}
 
 	@Override
@@ -168,7 +245,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 			result.addAll(fbType.getInterfaceList().getEventInputs());
 			Stream.concat(fbType.getInterfaceList().getSockets().stream(),
 					fbType.getInterfaceList().getPlugs().stream()).map(AdapterDeclaration::getAdapterFB)
-			.map(AdapterFB::getInterface).map(InterfaceList::getEventOutputs).forEachOrdered(result::addAll);
+					.map(AdapterFB::getInterface).map(InterfaceList::getEventOutputs).forEachOrdered(result::addAll);
 		}
 		return result;
 	}
@@ -184,29 +261,44 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 
 	@Override
 	protected boolean filterTargetResource(final IResource resource) throws CoreException {
-		if (resource instanceof IFile && resource.getFileExtension() != null
+		if (resource instanceof final IFile file && resource.getFileExtension() != null
 				&& resource.getFileExtension().equalsIgnoreCase(TypeLibraryTags.FB_TYPE_FILE_ENDING)) {
-			final var typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) resource);
+			final var typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 			if (typeEntry != null) {
 				final var libraryElement = typeEntry.getType();
-				if (libraryElement instanceof FBType) {
-					return filterTargetFBType((FBType) libraryElement);
+				if (libraryElement instanceof final FBType fbType) {
+					return filterTargetFBType(fbType);
 				}
 			}
 		}
 		return super.filterTargetResource(resource);
 	}
 
+	@Override
+	public boolean isValid(final ILaunchConfiguration launchConfig) {
+		setErrorMessage(null);
+		try {
+			final int debugTime = Integer.parseInt(debugTimeText.getText());
+			if (debugTime < 0) {
+				throw new NumberFormatException();
+			}
+		} catch (final NumberFormatException nfe) {
+			setErrorMessage(Messages.FBLaunchConfigurationTab_ERROR_InvalidDebugTime);
+			return false;
+		}
+		return true;
+	}
+
 	protected abstract boolean filterTargetFBType(FBType fbType) throws CoreException;
 
 	protected FBType getFBType() {
 		final IResource resource = getResource();
-		if (resource instanceof IFile) {
-			final var typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) resource);
+		if (resource instanceof final IFile file) {
+			final var typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 			if (typeEntry != null) {
 				final var libraryElement = typeEntry.getType();
-				if (libraryElement instanceof FBType) {
-					return (FBType) libraryElement;
+				if (libraryElement instanceof final FBType fbType) {
+					return fbType;
 				}
 			}
 		}
@@ -224,8 +316,8 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 
 		@Override
 		public String getText(final Object element) {
-			if (element instanceof Event) {
-				return getEventName((Event) element);
+			if (element instanceof final Event event) {
+				return getEventName(event);
 			}
 			return super.getText(element);
 		}

@@ -214,18 +214,18 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 * @generated
 	 */
-	int getWidth();
+	double getWidth();
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 * @generated
 	 */
-	int getHeight();
+	double getHeight();
 
 	/**
 	 * <!-- begin-user-doc -->

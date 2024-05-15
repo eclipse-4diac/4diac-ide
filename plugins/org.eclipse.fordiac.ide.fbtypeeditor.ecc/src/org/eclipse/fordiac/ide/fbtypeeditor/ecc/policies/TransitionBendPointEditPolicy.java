@@ -39,7 +39,6 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 	private final ECTransition transition;
 
 	public TransitionBendPointEditPolicy(final ECTransition transition) {
-		super();
 		this.transition = transition;
 	}
 
@@ -71,7 +70,6 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected List createSelectionHandles() {
 		final List list = new ArrayList();
-		final ConnectionEditPart connEP = (ConnectionEditPart) getHost();
 		final PointList points = getConnection().getPoints();
 		List bendPoints = (List) getConnection().getRoutingConstraint();
 		int bendPointIndex = 0;
@@ -87,7 +85,7 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 			// If the current user bendpoint matches a bend location, show a move handle
 			if (i < points.size() - 1 && bendPointIndex < bendPoints.size()
 					&& points.getPoint(i + 1).equals(currBendPoint)) {
-				list.add(createBendPointMoveHandle(connEP, bendPointIndex, i));
+				list.add(createBendPointMoveHandle(getHost(), bendPointIndex, i));
 
 				// Go to the next user bendpoint
 				bendPointIndex++;
@@ -100,7 +98,8 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 		return list;
 	}
 
-	private static BendpointMoveHandle createBendPointMoveHandle(final ConnectionEditPart connEP, final int bendPointIndex, final int i) {
+	private static BendpointMoveHandle createBendPointMoveHandle(final ConnectionEditPart connEP,
+			final int bendPointIndex, final int i) {
 		final BendpointMoveHandle handle = new BendpointMoveHandle(connEP, bendPointIndex, i + 1) {
 
 			@Override

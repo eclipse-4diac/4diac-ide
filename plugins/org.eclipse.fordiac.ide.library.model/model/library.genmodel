@@ -4,11 +4,15 @@
     creationSubmenus="true" editDirectory="/org.eclipse.fordiac.ide.library.model.edit/src-gen"
     editorDirectory="/org.eclipse.fordiac.ide.library.model.editor/src-gen" modelPluginID="org.eclipse.fordiac.ide.library.model"
     modelName="library" nonNLSMarkers="true" commentFormatting="true" testsDirectory="/org.eclipse.fordiac.ide.library.model.tests/src-gen"
-    importerID="org.eclipse.xsd.ecore.importer" containmentProxies="true" complianceLevel="17.0"
+    importerID="org.eclipse.xsd.ecore.importer" containmentProxies="true" complianceLevel="21.0"
     copyrightFields="false" importOrganizing="true">
   <foreignModel>library.xsd</foreignModel>
   <genPackages prefix="Library" basePackage="org.eclipse.fordiac.ide.library.model"
       resource="XML" disposableProviderFactory="true" ecorePackage="library.ecore#/">
+    <genDataTypes ecoreDataType="library.ecore#//NameSpaceFilter"/>
+    <genDataTypes ecoreDataType="library.ecore#//SymbolicName"/>
+    <genDataTypes ecoreDataType="library.ecore#//VersionType"/>
+    <genDataTypes ecoreDataType="library.ecore#//VersionType1"/>
     <genClasses ecoreClass="library.ecore#//Dependencies">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Dependencies/required"/>
     </genClasses>
@@ -29,7 +33,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Library/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Library/symbolicName"/>
     </genClasses>
-    <genClasses ecoreClass="library.ecore#//LibraryElement"/>
+    <genClasses ecoreClass="library.ecore#//LibraryElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//LibraryElement/value"/>
+    </genClasses>
     <genClasses ecoreClass="library.ecore#//Manifest">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Manifest/dependencies"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Manifest/product"/>

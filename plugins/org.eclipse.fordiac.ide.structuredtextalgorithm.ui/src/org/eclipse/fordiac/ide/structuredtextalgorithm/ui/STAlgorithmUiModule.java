@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPart
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreURIEditorOpener;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.formatting.STCoreWhitespaceInformationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuickAssistProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDocumentReconcileStrategy;
@@ -66,6 +67,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreResourceUI
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
+import org.eclipse.xtext.formatting.IWhitespaceInformationProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 import org.eclipse.xtext.ide.refactoring.IRenameNameValidator;
 import org.eclipse.xtext.ide.refactoring.IRenameStrategy2;
@@ -333,5 +335,10 @@ public class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	public Class<? extends ResourceLifecycleManager> bindResourceLifecycleManager() {
 		return STCoreResourceLifecycleManager.class;
+	}
+
+	@Override
+	public Class<? extends IWhitespaceInformationProvider> bindIWhitespaceInformationProvider() {
+		return STCoreWhitespaceInformationProvider.class;
 	}
 }

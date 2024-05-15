@@ -39,18 +39,18 @@ public class FBPaletteLabelProvider extends LabelProvider {
 
 	@Override
 	public String getText(final Object element) {
-		if (element instanceof IFile) {
+		if (element instanceof final IFile file) {
 			// we want to hide the extension of the fb type
-			return TypeEntry.getTypeNameFromFile((IFile) element);
+			return TypeEntry.getTypeNameFromFile(file);
 		}
 		return wbLabelProvider.getText(element);
 	}
 
 	@Override
 	public Image getImage(final Object element) {
-		if (element instanceof IFile) {
-			final ImageDescriptor imageDescriptor = FBTypeLabelProvider.getImageForFile((IFile) element);
-			return (Image) resourceManager.get(imageDescriptor);
+		if (element instanceof final IFile file) {
+			final ImageDescriptor imageDescriptor = FBTypeLabelProvider.getImageForFile(file);
+			return resourceManager.get(imageDescriptor);
 		}
 		return wbLabelProvider.getImage(element);
 	}

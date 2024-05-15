@@ -87,6 +87,7 @@ public final class NatTableWidgetFactory {
 
 	public static final String CHECKBOX_CELL = "CHECKBOX_CELL"; //$NON-NLS-1$
 	public static final String VAR_GONFIGURATION_CELL = "VAR_GONFIGURATION_CELL"; //$NON-NLS-1$
+	public static final String RETAIN_CONFIG_CELL = "RETAIN_CONFIG_CELL"; //$NON-NLS-1$
 
 	static final char[] ACTIVATION_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
 			'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
@@ -239,6 +240,9 @@ public final class NatTableWidgetFactory {
 		ILayer viewportLayer = null;
 		if (table.getLayer() instanceof final GridLayer gridLayer) {
 			viewportLayer = gridLayer.getBodyLayer();
+		} else if (table.getLayer() instanceof final CompositeLayer compLayer) {
+			viewportLayer = compLayer.getUnderlyingLayersByColumnPosition(0).stream()
+					.filter(ViewportLayer.class::isInstance).findFirst().orElse(null);
 		}
 
 		if (viewportLayer != null) {

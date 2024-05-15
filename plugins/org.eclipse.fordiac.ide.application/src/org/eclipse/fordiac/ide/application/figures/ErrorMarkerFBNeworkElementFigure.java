@@ -12,15 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationFeedbackBorder;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 
 public class ErrorMarkerFBNeworkElementFigure extends FBNetworkElementFigure {
 
-	public ErrorMarkerFBNeworkElementFigure(final FBNetworkElement model, final AbstractFBNElementEditPart editPart) {
-		super(model, editPart);
+	public ErrorMarkerFBNeworkElementFigure(final FBNetworkElement model) {
+		super(model);
 		getFbFigureContainer().setBorder(new AnnotationFeedbackBorder(GraphicalAnnotationStyles.ERROR_RED));
 	}
 

@@ -15,14 +15,15 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.util,
  org.eclipse.swt,
  org.eclipse.jface,
+ org.eclipse.fordiac.ide.model.edit,
  org.eclipse.fordiac.ide.model.ui,
  org.eclipse.fordiac.ide.fb.interpreter
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Name: Service Sequence Editor
 Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor.servicesequence

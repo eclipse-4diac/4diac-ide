@@ -18,15 +18,19 @@ package org.eclipse.fordiac.ide.model.commands.create;
 
 import java.util.Set;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
@@ -38,15 +42,19 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command
 
 	private final FBNetworkElement element;
 	private final FBNetwork fbNetwork;
-	private int x;
-	private int y;
+	private Position position;
+
+	protected AbstractCreateFBNetworkElementCommand(final FBNetwork fbNetwork, final FBNetworkElement element,
+			final Position position) {
+		this.fbNetwork = fbNetwork;
+		this.element = element;
+		this.position = (position.eContainer() != null) ? // if we get a position that is currently used create a copy
+				EcoreUtil.copy(position) : position;
+	}
 
 	protected AbstractCreateFBNetworkElementCommand(final FBNetwork fbNetwork, final FBNetworkElement element,
 			final int x, final int y) {
-		this.fbNetwork = fbNetwork;
-		this.element = element;
-		this.x = x;
-		this.y = y;
+		this(fbNetwork, element, CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(x, y));
 	}
 
 	@Override
@@ -62,7 +70,7 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command
 			transferVisibleAndVarConfigAttributes(element.getType().getInterfaceList().getInputVars());
 			transferVisibleAndVarConfigAttributes(element.getType().getInterfaceList().getOutputVars());
 		}
-		element.updatePosition(x, y);
+		element.setPosition(position);
 		insertFBNetworkElement();
 		checkName();
 	}
@@ -107,9 +115,8 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command
 		return null;
 	}
 
-	public void updateCreatePosition(final int x, final int y) {
-		this.x = x;
-		this.y = y;
+	public void updateCreatePosition(final Point createPos) {
+		position = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(createPos.x, createPos.y);
 	}
 
 	private void insertFBNetworkElement() {
@@ -139,4 +146,5 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command
 		}
 		return Set.of();
 	}
+
 }

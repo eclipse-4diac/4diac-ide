@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -70,8 +71,8 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 			if (getHost() instanceof GroupEditPart) {
 				final String str = (String) request.getCellEditor().getValue();
 				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
-					return new ResizeGroupOrSubappCommand((GraphicalEditPart) getHost(),
-							(Command) new ChangeCommentCommand(((GroupEditPart) getHost()).getModel(), str));
+					return new ResizeGroupOrSubappCommand(getHost(),
+							new ChangeCommentCommand(((GroupEditPart) getHost()).getModel(), str));
 				}
 			}
 			return null;
@@ -262,7 +263,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 	protected void refreshPosition() {
 		if (getParent() != null) {
 			final Position position = getModel().getPosition();
-			final Point asPoint = position.asPoint();
+			final Point asPoint = position.toScreenPoint();
 			final Rectangle bounds = new Rectangle(asPoint, getGroupSize());
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
@@ -298,7 +299,8 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 	}
 
 	private Dimension getGroupSize() {
-		return new Dimension(getModel().getWidth(), getModel().getHeight());
+		return new Dimension(CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getWidth()),
+				CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getHeight()));
 	}
 
 	private GroupContentEditPart getGroupContentEP() {

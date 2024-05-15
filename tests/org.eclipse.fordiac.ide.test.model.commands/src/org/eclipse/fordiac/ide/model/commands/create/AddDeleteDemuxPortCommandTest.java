@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CheckableStructTree;
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
@@ -27,11 +28,13 @@ import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateMemberVariableCommandTestBase.State;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -94,8 +97,8 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			typeLib.addTypeEntry(te);
 			d.setTypeEntry(te);
 
-			d.setStructType(struct);
-			d.setStructTypeElementsAtInterface(struct);
+			d.setDataType(struct);
+			d.updateConfiguration();
 			final FBNetwork dummyFbN = LibraryElementFactory.eINSTANCE.createFBNetwork();
 			dummyFbN.getNetworkElements().add(d);
 
@@ -166,26 +169,37 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 		t.test(state.getDemultiplexer());
 		t.test(state.getStruct().getMemberVariables().size(),
 				state.getDemultiplexer().getInterface().getOutputVars().size());
+		t.test(!state.getDemultiplexer().isIsConfigured());
 	}
 
 	protected static void verifyAdded(final State state, final TestFunction t, final String name) {
 		t.test(state.getDemultiplexer());
-		t.test(!state.getDemultiplexer().getInterface().getOutputVars().stream()
-				.filter(out -> out.getName().equals(name)).findAny().isEmpty());
-		t.test(Arrays
-				.asList(state.getDemultiplexer().getAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN).getValue()
-						.split(",")) //$NON-NLS-1$
-				.contains(name));
+		t.test(!state.getDemultiplexer().getMemberVars().stream().filter(MemberVarDeclaration.class::isInstance)
+				.filter(out -> ((MemberVarDeclaration) out).getName().equals(name)).findAny().isEmpty());
+		final Attribute attribute = getVisibleChildrenAttribute(state.getDemultiplexer());
+		if (state.getDemultiplexer().isIsConfigured()) {
+			t.test(Arrays.asList(attribute.getValue().split(",")) //$NON-NLS-1$
+					.contains(name));
+		}
+		t.test(state.getDemultiplexer().getMemberVars().stream().anyMatch(var -> var.getName().equals(name)));
+	}
+
+	private static Attribute getVisibleChildrenAttribute(final Demultiplexer demux) {
+		final EList<Attribute> attributes = demux.getConfigurationAsAttributes();
+		return attributes.stream().filter(attr -> attr.getName().equals(LibraryElementTags.DEMUX_VISIBLE_CHILDREN))
+				.findFirst().orElse(null);
 	}
 
 	protected static void verifyDeleted(final State state, final TestFunction t, final String name) {
 		t.test(state.getDemultiplexer());
 		t.test(state.getDemultiplexer().getInterface().getOutputVars().stream()
 				.filter(out -> out.getName().equals(name)).findAny().isEmpty());
-		t.test(!Arrays
-				.asList(state.getDemultiplexer().getAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN).getValue()
-						.split(",")) //$NON-NLS-1$
-				.contains(name));
+		final Attribute attribute = getVisibleChildrenAttribute(state.getDemultiplexer());
+		if (state.getDemultiplexer().isIsConfigured()) {
+			t.test(!Arrays.asList(attribute.getValue().split(",")) //$NON-NLS-1$
+					.contains(name));
+		}
+		t.test(state.getDemultiplexer().getMemberVars().stream().noneMatch(var -> var.getName().equals(name)));
 	}
 
 	private static State executeDeleteCommand(final State state, final String name) {

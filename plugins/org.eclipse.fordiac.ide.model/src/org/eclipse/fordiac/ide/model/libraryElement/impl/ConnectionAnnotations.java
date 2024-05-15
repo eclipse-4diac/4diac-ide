@@ -14,22 +14,26 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.text.MessageFormat;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
@@ -104,7 +108,7 @@ public class ConnectionAnnotations {
 		if (isDuplicateConnection(connection)) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_DESTINATION_ENDPOINT,
+						LibraryElementValidator.CONNECTION__VALIDATE_DUPLICATE,
 						MessageFormat.format(Messages.ConnectionAnnotations_DuplicateConnection,
 								connection.getSource().getQualifiedName(),
 								connection.getDestination().getQualifiedName()),
@@ -117,19 +121,49 @@ public class ConnectionAnnotations {
 
 	public static boolean validateTypeMismatch(@NonNull final Connection connection, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (!LinkConstraints.typeCheck(connection.getSource(), connection.getDestination())) {
+		final IInterfaceElement src = connection.getSource();
+		final IInterfaceElement dest = connection.getDestination();
+		if (!LinkConstraints.typeCheck(src, dest)) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_DESTINATION_ENDPOINT,
-						MessageFormat.format(Messages.ConnectionAnnotations_TypeMismatch,
-								connection.getSource().getQualifiedName(), connection.getSource().getFullTypeName(),
-								connection.getDestination().getQualifiedName(),
-								connection.getDestination().getFullTypeName()),
+						LibraryElementValidator.CONNECTION__VALIDATE_TYPE_MISMATCH,
+						MessageFormat.format(Messages.ConnectionAnnotations_TypeMismatch, src.getQualifiedName(),
+								src.getFullTypeName(), dest.getQualifiedName(), dest.getFullTypeName()),
+						FordiacMarkerHelper.getDiagnosticData(connection)));
+			}
+			return false;
+		}
+		if (src != null && dest != null && GenericTypes.isAnyType(src.getType())
+				&& GenericTypes.isAnyType(connection.getDestination().getType())
+				&& !isContainerPin(src.eContainer().eContainer(), dest.eContainer().eContainer())) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.CONNECTION__VALIDATE_TYPE_MISMATCH,
+						MessageFormat.format(Messages.ConnectionAnnotations_GenericEndpoints, src.getQualifiedName(),
+								src.getFullTypeName(), dest.getQualifiedName(), dest.getFullTypeName()),
 						FordiacMarkerHelper.getDiagnosticData(connection)));
 			}
 			return false;
 		}
 		return true;
+	}
+
+	private static boolean isContainerPin(final EObject srcParent, final EObject destParent) {
+		if ((srcParent instanceof FBType) || (destParent instanceof FBType)) {
+			// one of the pins is on the type so we are fine
+			return true;
+		}
+
+		if ((srcParent instanceof final FBNetworkElement srcElem
+				&& destParent instanceof final FBNetworkElement destElem)
+				&& ((srcParent instanceof UntypedSubApp) || (destParent instanceof UntypedSubApp))) {
+			// if at least one of the parents is an untyped subapp the connection will need
+			// to cross the interface, i.e., the two FBNetworkElement must not be in the
+			// same network
+			return (srcElem.getFbNetwork() != destElem.getFbNetwork());
+		}
+
+		return false;
 	}
 
 	public static boolean validateMappedVarInOutsDoNotCrossResourceBoundaries(@NonNull final Connection connection,
@@ -161,7 +195,8 @@ public class ConnectionAnnotations {
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (connection.getDestination() instanceof final VarDeclaration connectionDestinationVar
 				&& connectionDestinationVar.isInOutVar()) { // If the destination is a VAR_IN_OUT the source is also one
-			final VarDeclaration definingVarDeclaration = getVarInOutSourceVarDeclaration(connection);
+			final VarDeclaration definingVarDeclaration = VarInOutHelper
+					.getDefiningVarInOutDeclaration(connectionDestinationVar);
 			if ((definingVarDeclaration != null && definingVarDeclaration.isArray()
 					&& connectionDestinationVar.isArray())
 					&& !definingVarDeclaration.getArraySize().getValue()
@@ -185,7 +220,8 @@ public class ConnectionAnnotations {
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (connection.getDestination() instanceof final VarDeclaration connectionDestinationVar
 				&& connectionDestinationVar.isInOutVar()) { // If the destination is a VAR_IN_OUT the source is also one
-			final VarDeclaration definingVarDeclaration = getVarInOutSourceVarDeclaration(connection);
+			final VarDeclaration definingVarDeclaration = VarInOutHelper
+					.getDefiningVarInOutDeclaration(connectionDestinationVar);
 			if (definingVarDeclaration != null
 					&& definingVarDeclaration.getType() instanceof final AnyStringType sourceType
 					&& connectionDestinationVar.getType() instanceof final AnyStringType destinationType
@@ -222,7 +258,8 @@ public class ConnectionAnnotations {
 
 	public static boolean validateVarInOutConnectionsFormsNoLoop(final Connection connection,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		if (hasConnectionAVarInOutLoop(connection)) {
+		if (connection.getDestination() instanceof final VarDeclaration destinationVar && destinationVar.isInOutVar()
+				&& VarInOutHelper.getDefiningVarInOutDeclaration(destinationVar) == null) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.CONNECTION__VALIDATE_VAR_IN_OUT_CONNECTIONS_FORMS_NO_LOOP,
@@ -232,49 +269,6 @@ public class ConnectionAnnotations {
 			return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Get the VarDeclaration of the first FB in a chain of VAR_IN_OUT connections
-	 *
-	 * @param connection a VAR_IN_OUT connection to start from
-	 * @return The source VarDeclaration
-	 */
-	private static VarDeclaration getVarInOutSourceVarDeclaration(@NonNull final Connection connection) {
-		// Reverse search
-		if (connection.getSource() instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()) {
-			VarDeclaration outputVarInOut = sourceVar;
-			VarDeclaration inputVarInOut = outputVarInOut.getInOutVarOpposite();
-			final Set<VarDeclaration> visitedPins = new HashSet<>();
-			visitedPins.add(outputVarInOut);
-			while (!inputVarInOut.getInputConnections().isEmpty()) { // no fan in possible
-				outputVarInOut = (VarDeclaration) inputVarInOut.getInputConnections().get(0).getSource();
-				if (!visitedPins.add(outputVarInOut)) {
-					return null; // We revisited an already visited pin
-				}
-				inputVarInOut = outputVarInOut.getInOutVarOpposite();
-			}
-			return inputVarInOut;
-		}
-		return null;
-	}
-
-	private static boolean hasConnectionAVarInOutLoop(@NonNull final Connection connection) {
-		// Reverse search
-		if (connection.getSource() instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()) {
-			VarDeclaration outputVarInOut = sourceVar;
-			VarDeclaration inputVarInOut = outputVarInOut.getInOutVarOpposite();
-			final Set<VarDeclaration> visitedPins = new HashSet<>();
-			visitedPins.add(outputVarInOut);
-			while (!inputVarInOut.getInputConnections().isEmpty()) { // no fan in possible
-				outputVarInOut = (VarDeclaration) inputVarInOut.getInputConnections().get(0).getSource();
-				if (!visitedPins.add(outputVarInOut)) {
-					return true; // We revisited an already visited pin
-				}
-				inputVarInOut = outputVarInOut.getInOutVarOpposite();
-			}
-		}
-		return false;
 	}
 
 	private static boolean isDuplicateConnection(@NonNull final Connection connection) {

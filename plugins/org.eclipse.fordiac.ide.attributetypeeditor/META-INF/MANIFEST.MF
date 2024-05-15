@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Attribute Type Editor
 Bundle-SymbolicName: org.eclipse.fordiac.ide.attributetypeeditor;singleton:=true
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.ui,
@@ -21,7 +21,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.model.search,
  org.eclipse.ltk.core.refactoring
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.attributetypeeditor
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.fordiac.ide.datatypeeditor.properties,

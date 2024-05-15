@@ -12,20 +12,19 @@
  */
 package org.eclipse.fordiac.ide.structuredtextalgorithm.util;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
 
@@ -85,47 +84,13 @@ public class STAlgorithmReconciler implements STCoreReconciler {
 	protected static boolean merge(final STMethod dest, final STMethod source) {
 		dest.setComment(source.getComment());
 		dest.setText(source.getText());
-		mergeParameters(dest.getInputParameters(), source.getInputParameters());
-		mergeParameters(dest.getOutputParameters(), source.getOutputParameters());
-		mergeParameters(dest.getInOutParameters(), source.getInOutParameters());
+		ECollections.setEList(dest.getInputParameters(),
+				source.getInputParameters().stream().map(EcoreUtil::copy).toList());
+		ECollections.setEList(dest.getOutputParameters(),
+				source.getOutputParameters().stream().map(EcoreUtil::copy).toList());
+		ECollections.setEList(dest.getInOutParameters(),
+				source.getInOutParameters().stream().map(EcoreUtil::copy).toList());
 		dest.setReturnType(source.getReturnType());
-		return true;
-	}
-
-	protected static void mergeParameters(final EList<INamedElement> dest, final List<INamedElement> source) {
-		// remove from dest if not in source
-		dest.removeIf(destParam -> source.stream()
-				.noneMatch(sourceParam -> Objects.equals(sourceParam.getName(), destParam.getName())));
-		// add or merge/move according to source
-		IntStream.range(0, source.size()).forEach(index -> {
-			final INamedElement sourceParam = source.get(index);
-			final Optional<INamedElement> candidate = dest.stream()
-					.filter(destParam -> Objects.equals(sourceParam.getName(), destParam.getName())).findFirst();
-			if (candidate.isPresent() && mergeParameter(candidate.get(), sourceParam)) {
-				// move to position (dest must contain at least index params since we insert as
-				// we go)
-				dest.move(index, candidate.get());
-			} else {
-				candidate.ifPresent(dest::remove); // remove candidate (if exists)
-				dest.add(index, sourceParam); // insert at position
-			}
-		});
-	}
-
-	protected static boolean mergeParameter(final INamedElement dest, final INamedElement source) {
-		if (dest instanceof final VarDeclaration destVarDeclaration
-				&& source instanceof final VarDeclaration sourceVarDeclaration) {
-			return mergeParameter(destVarDeclaration, sourceVarDeclaration);
-		}
-		return false;
-	}
-
-	protected static boolean mergeParameter(final VarDeclaration dest, final VarDeclaration source) {
-		dest.setName(source.getName());
-		dest.setComment(source.getComment());
-		dest.setType(source.getType());
-		ArraySizeHelper.setArraySize(dest, ArraySizeHelper.getArraySize(source));
-		dest.setIsInput(source.isIsInput());
 		return true;
 	}
 

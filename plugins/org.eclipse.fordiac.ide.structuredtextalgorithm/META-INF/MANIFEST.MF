@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.fordiac.ide.structuredtextalgorithm
 Bundle-ManifestVersion: 2
 Bundle-Name: org.eclipse.fordiac.ide.structuredtextalgorithm
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextalgorithm; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext,
@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.xtext,
  org.eclipse.fordiac.ide.structuredtextcore;visibility:=reexport,
  org.eclipse.fordiac.ide.structuredtextalgorithm.model;visibility:=reexport,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.model
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.structuredtextalgorithm.formatting2,
  org.eclipse.fordiac.ide.structuredtextalgorithm.naming,

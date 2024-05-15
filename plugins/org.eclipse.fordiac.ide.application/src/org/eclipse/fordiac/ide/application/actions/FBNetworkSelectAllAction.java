@@ -49,6 +49,7 @@ public class FBNetworkSelectAllAction extends SelectAllAction {
 
 		for (final Object child : children) {
 			if ((child instanceof AbstractFBNElementEditPart) || (child instanceof GroupEditPart)) {
+				final GraphicalEditPart childPart = (GraphicalEditPart) child;
 				final EditPart childPart = (EditPart) child;
 				if (childPart.isSelectable()) {
 					selectableChildren.add(childPart);
@@ -59,6 +60,7 @@ public class FBNetworkSelectAllAction extends SelectAllAction {
 		return Collections.unmodifiableList(selectableChildren);
 	}
 
+	private static void addConnectionsTo(final List<EditPart> selectableChildren, final GraphicalEditPart child) {
 	private static void addConnectionsTo(final List<EditPart> selectableChildren, final EditPart child) {
 		// the editparts are in charge of managing the connections if we take all source
 		// connections

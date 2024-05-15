@@ -10,10 +10,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.util
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Name: Export Utils
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.export;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.export
 Bundle-Activator: org.eclipse.fordiac.ide.export.plugin.ExportPlugin

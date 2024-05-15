@@ -18,7 +18,6 @@ import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
@@ -28,6 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 
@@ -57,13 +58,19 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 
 	private void parseSubApp() throws TypeImportException, XMLStreamException {
 		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		final FBNetworkElement subApp = createSubapp(type);
+		final FBNetworkElement subApp;
+		if (type == null) {
+			subApp = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
+		} else {
+			subApp = createTypedSubapp(type);
+		}
+
 		readNameCommentAttributes(subApp);
 		getXandY(subApp);
 		addFBNetworkElement(subApp);
 
-		if (type == null) {
-			parseUntypedSubapp((SubApp) subApp);
+		if (subApp instanceof final UntypedSubApp untypedSubApp) {
+			parseUntypedSubapp(untypedSubApp);
 		} else {
 			parseFBChildren(subApp, LibraryElementTags.SUBAPP_ELEMENT);
 		}
@@ -80,12 +87,8 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		}
 	}
 
-	public FBNetworkElement createSubapp(final String type) {
-		final FBNetworkElement subApp = LibraryElementFactory.eINSTANCE.createSubApp();
-		if (type == null) {
-			return subApp;
-		}
-
+	public FBNetworkElement createTypedSubapp(final String type) {
+		final TypedSubApp subApp = LibraryElementFactory.eINSTANCE.createTypedSubApp();
 		final SubAppTypeEntry subEntry = addDependency(getTypeLibrary().getSubAppTypeEntry(type));
 		if (subEntry == null) {
 			return addDependency(FordiacMarkerHelper.createTypeErrorMarkerFB(type, getTypeLibrary(),
@@ -96,7 +99,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		return subApp;
 	}
 
-	private void parseUntypedSubapp(final SubApp subApp) throws TypeImportException, XMLStreamException {
+	private void parseUntypedSubapp(final UntypedSubApp subApp) throws TypeImportException, XMLStreamException {
 		processChildren(LibraryElementTags.SUBAPP_ELEMENT, name -> (switch (name) {
 		case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT -> {
 			final SubAppTImporter interfaceImporter = new SubAppTImporter(this);
@@ -128,18 +131,18 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 			case LibraryElementTags.WIDTH_ATTRIBUTE:
 				final String widthValue = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 				if (widthValue != null) {
-					subApp.setWidth(CoordinateConverter.INSTANCE.convertFrom1499XML(widthValue));
+					subApp.setWidth(Double.parseDouble(widthValue));
 				}
 				break;
 			case LibraryElementTags.HEIGHT_ATTRIBUTE:
 				final String heightValue = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 				if (heightValue != null) {
-					subApp.setHeight(CoordinateConverter.INSTANCE.convertFrom1499XML(heightValue));
+					subApp.setHeight(Double.parseDouble(heightValue));
 				}
 				break;
 			case LibraryElementTags.LOCKED_ATTRIBUTE:
 				final String isLocked = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
-				subApp.setLocked(Boolean.valueOf(isLocked));
+				subApp.setLocked(Boolean.parseBoolean(isLocked));
 				break;
 			default:
 				parseGenericAttributeNode(subApp);

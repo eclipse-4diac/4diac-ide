@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -194,8 +195,9 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 	}
 
 	protected void refreshPosition() {
-		final Rectangle bounds = new Rectangle(getModel().getPosition().getX(), getModel().getPosition().getY(),
-				getModel().getWidth(), -1);
+		final Point position = getModel().getPosition().toScreenPoint();
+		final Rectangle bounds = new Rectangle(position.x, position.y,
+				CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getWidth()), -1);
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 	}
 

@@ -18,8 +18,13 @@ import org.eclipse.swt.widgets.FileDialog;
 
 public class FileChooserControl extends AbstractChooserControl {
 
+	public FileChooserControl(final Composite parent, final int style, final String label,
+			final boolean labelInParent) {
+		super(parent, style, label, labelInParent);
+	}
+
 	public FileChooserControl(final Composite parent, final int style, final String label) {
-		super(parent, style, label);
+		super(parent, style, label, false);
 	}
 
 	@Override

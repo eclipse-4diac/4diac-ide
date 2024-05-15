@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2011, 2024 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,9 +25,9 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ShortestPathConnectionRouter;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
+import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPolicy;
@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.Display;
 
 public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 
-	private Adapter adapter;
+	private Adapter interfaceAdapter;
 	private final Map<IInterfaceElement, CommentTypeField> commentTypeFieldCache = new HashMap<>();
 
 	@Override
@@ -48,7 +48,7 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			getModel().eAdapters().add(getContentAdapter());
+			getModel().getInterfaceList().eAdapters().add(getInterfaceAdapter());
 		}
 	}
 
@@ -56,13 +56,13 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			getModel().eAdapters().remove(getContentAdapter());
+			getModel().getInterfaceList().eAdapters().remove(getInterfaceAdapter());
 		}
 	}
 
-	public Adapter getContentAdapter() {
-		if (null == adapter) {
-			adapter = new EContentAdapter() {
+	public Adapter getInterfaceAdapter() {
+		if (null == interfaceAdapter) {
+			interfaceAdapter = new SingleRecursiveContentAdapter() {
 				@Override
 				public void notifyChanged(final Notification notification) {
 					super.notifyChanged(notification);
@@ -79,7 +79,7 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 				}
 			};
 		}
-		return adapter;
+		return interfaceAdapter;
 	}
 
 	@Override

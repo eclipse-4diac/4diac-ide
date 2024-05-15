@@ -21,6 +21,7 @@ public class STAlgorithmReferenceProposalCreator extends STCoreReferenceProposal
 	@Override
 	protected IReplacementTextApplier getImportReplacementTextApplier(final XtextResource resource,
 			final String importedNamespace) {
-		return new STAlgorithmImportReplacementTextApplier(resource, importedNamespace);
+		return new STAlgorithmImportReplacementTextApplier(resource, importedNamespace,
+				getWhitespaceInformationProvider());
 	}
 }

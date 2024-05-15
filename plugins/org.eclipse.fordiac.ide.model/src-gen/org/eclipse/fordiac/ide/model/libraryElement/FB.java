@@ -90,17 +90,17 @@ public interface FB extends FBNetworkElement, ICallable {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 * @generated
 	 */
-	int getWidth();
+	double getWidth();
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 * @generated
 	 */
-	int getHeight();
+	double getHeight();
 
 } // FB

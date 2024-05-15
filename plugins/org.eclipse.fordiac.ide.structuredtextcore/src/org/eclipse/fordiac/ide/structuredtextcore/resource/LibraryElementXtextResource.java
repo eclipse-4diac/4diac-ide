@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.xtext.linking.lazy.LazyLinkingResource;
+import org.eclipse.xtext.util.CancelIndicator;
 
 public class LibraryElementXtextResource extends LazyLinkingResource {
 	private LibraryElement libraryElement;
@@ -86,6 +87,12 @@ public class LibraryElementXtextResource extends LazyLinkingResource {
 		} catch (final IllegalArgumentException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public void resolveLazyCrossReferences(final CancelIndicator mon) {
+		clearCache();
+		super.resolveLazyCrossReferences(mon);
 	}
 
 	public static URI getExternalURI(final EObject object) {

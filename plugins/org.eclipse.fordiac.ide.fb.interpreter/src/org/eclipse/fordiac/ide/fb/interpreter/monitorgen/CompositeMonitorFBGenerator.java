@@ -118,9 +118,9 @@ public class CompositeMonitorFBGenerator extends AbstractCompositeFBGenerator {
 	protected void addFBsToNetwork() {
 		final FBNetwork net = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		compositeFB.setFBNetwork(net);
-		addedSourceType = addFBToNetwork(net, sourceType.getTypeEntry(), 400, 0);
+		addedSourceType = addFBToNetwork(net, sourceType, 400, 0);
 		for (int i = 0; i < monitorFBs.size(); i++) {
-			addedMonitorFBs.add(addFBToNetwork(net, monitorFBs.get(i).getTypeEntry(), 400, 300 * (i + 1)));
+			addedMonitorFBs.add(addFBToNetwork(net, monitorFBs.get(i), 400, 300 * (i + 1)));
 		}
 	}
 

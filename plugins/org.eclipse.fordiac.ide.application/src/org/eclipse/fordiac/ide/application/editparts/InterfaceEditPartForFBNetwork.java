@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.Border;
-import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -41,7 +40,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
-import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
@@ -79,8 +77,12 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 		}
 
 		private boolean valueHasAnnotation() {
-			final Border border = getValueFigure().getBorder();
-			return border instanceof AnnotationFeedbackBorder || border instanceof AnnotationCompoundBorder;
+			final IFigure fig = getValueFigure();
+			if (fig != null) {
+				final Border border = fig.getBorder();
+				return border instanceof AnnotationFeedbackBorder || border instanceof AnnotationCompoundBorder;
+			}
+			return false;
 		}
 
 		private Value getValue() {
@@ -179,11 +181,11 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 	}
 
 	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
+	protected FixedAnchor createTargetConAnchor() {
 		if (getModel() instanceof VarDeclaration && getModel().isIsInput()) {
 			return new VarInputConnAnchor(this);
 		}
-		return super.getTargetConnectionAnchor(connection);
+		return super.createTargetConAnchor();
 	}
 
 	@Override

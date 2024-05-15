@@ -64,7 +64,7 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 		final FBTypeUpdateDialog<DataTypeEntry> structUpdateDialog = new FBTypeUpdateDialog<>(null,
 				Messages.TransferInstanceComments_WizardTitle, null, "", MessageDialog.NONE, labels,
 				DEFAULT_BUTTON_INDEX,
-				new StructuredDataTypeDataHandler((DataTypeEntry) struct.getModel().getStructType().getTypeEntry()) {
+				new StructuredDataTypeDataHandler((DataTypeEntry) struct.getModel().getDataType().getTypeEntry()) {
 					@Override
 					public final Set<INamedElement> performStructSearch() {
 						final StructManipulatorSearch structSearch = new StructManipulatorSearch(typeEntry);

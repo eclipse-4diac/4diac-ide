@@ -67,6 +67,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -134,7 +135,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 					&& EcoreUtil.getRootContainer(getType()) instanceof final LibraryElement libraryElement) {
 				importCommand = new AddNewImportCommand(libraryElement, newStructName);
 			}
-			
+
 			final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
 			commandStack.execute(cmd.chain(importCommand));
 			updateStructManipulatorFB(cmd.getNewMux());
@@ -142,19 +143,24 @@ public class StructManipulatorSection extends AbstractSection implements Command
 	}
 
 	public boolean newStructSelected(final String newStructName) {
-		return !newStructName.equalsIgnoreCase(PackageNameHelper.getFullTypeName(getType().getStructType()))
+		return !newStructName.equalsIgnoreCase(PackageNameHelper.getFullTypeName(getType().getDataType()))
 				&& getDataTypeLib().getStructuredType(newStructName) != null;
 	}
 
 	protected static void updateStructManipulatorFB(final StructManipulator newMux) {
-		final EditorPart activeEditor = (EditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-				.getActivePage().getActiveEditor();
-		final GraphicalViewer viewer = activeEditor.getAdapter(GraphicalViewer.class);
-		if (null != viewer) {
-			viewer.flush();
-			EditorUtils.refreshPropertySheetWithSelection(activeEditor, viewer,
-					viewer.getEditPartRegistry().get(newMux));
-		}
+		// this method is also run as part of the commandstackeventlistener and may
+		// change command stack listener list, to avoid concurrent modifications run it
+		// asynchronously
+		Display.getDefault().asyncExec(() -> {
+			final EditorPart activeEditor = (EditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+					.getActivePage().getActiveEditor();
+			final GraphicalViewer viewer = activeEditor.getAdapter(GraphicalViewer.class);
+			if (null != viewer) {
+				viewer.flush();
+				EditorUtils.refreshPropertySheetWithSelection(activeEditor, viewer,
+						viewer.getEditPartRegistry().get(newMux));
+			}
+		});
 	}
 
 	@Override
@@ -281,7 +287,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 
 	public void initTree(final StructManipulator manipulator, final TreeViewer viewer) {
 		final StructuredType struct = manipulator.getTypeEntry().getTypeLibrary().getDataTypeLibrary()
-				.getStructuredType(PackageNameHelper.getFullTypeName(manipulator.getStructType()));
+				.getStructuredType(PackageNameHelper.getFullTypeName(manipulator.getDataType()));
 
 		final CheckableStructTree tree;
 		if (viewer != null) {
@@ -305,15 +311,13 @@ public class StructManipulatorSection extends AbstractSection implements Command
 	public void stackChanged(final CommandStackEvent event) {
 		if (event.getDetail() == CommandStack.POST_UNDO || event.getDetail() == CommandStack.POST_REDO) {
 			final Command command = event.getCommand();
-			if (command instanceof final ChangeStructCommand cmd) {
-				if (cmd.getOldMux() == getType() || cmd.getNewMux() == getType()) {
-					if (event.getDetail() == CommandStack.POST_UNDO) {
-						updateStructManipulatorFB(cmd.getOldMux());
-					} else if (event.getDetail() == CommandStack.POST_REDO) {
-						updateStructManipulatorFB(cmd.getNewMux());
-					}
+			if ((command instanceof final ChangeStructCommand cmd)
+					&& (cmd.getOldMux() == getType() || cmd.getNewMux() == getType())) {
+				if (event.getDetail() == CommandStack.POST_UNDO) {
+					updateStructManipulatorFB(cmd.getOldMux());
+				} else if (event.getDetail() == CommandStack.POST_REDO) {
+					updateStructManipulatorFB(cmd.getNewMux());
 				}
-				refreshStructTypeTable();
 			}
 		}
 	}

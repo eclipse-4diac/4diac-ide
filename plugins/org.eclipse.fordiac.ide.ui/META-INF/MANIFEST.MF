@@ -15,7 +15,6 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.core.commands,
  org.eclipse.e4.core.services,
- org.eclipse.osgi.services,
  org.eclipse.e4.core.contexts,
  org.eclipse.fordiac.ide.ui.errormessages,
  org.eclipse.nebula.widgets.grid;visibility:=reexport,
@@ -23,12 +22,13 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.e4.ui.workbench,
  org.eclipse.e4.ui.model.workbench,
  org.eclipse.emf.ecore
+Import-Package: org.osgi.service.event 
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Name: Common UI Controls
 Bundle-Activator: org.eclipse.fordiac.ide.ui.UIPlugin
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.ui;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.ui

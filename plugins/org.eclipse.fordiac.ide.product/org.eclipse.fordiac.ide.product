@@ -17,7 +17,7 @@
       <programArgs>-nl en
 --launcher.appendVmargs
       </programArgs>
-      <vmArgs>-Dosgi.requiredJavaVersion=1.17
+      <vmArgs>-Dosgi.requiredJavaVersion=1.21
 -Dosgi.instance.area.default=@user.home/4diacIDE-workspace
 -XX:+UseG1GC
 -XX:+UseStringDeduplication

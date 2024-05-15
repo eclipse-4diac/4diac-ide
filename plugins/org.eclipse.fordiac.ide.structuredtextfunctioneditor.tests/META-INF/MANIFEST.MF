@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.fordiac.ide.structuredtextfunctioneditor.test
 Bundle-ManifestVersion: 2
 Bundle-Name: org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests; singleton:=true
 Bundle-ActivationPolicy: lazy
 Import-Package: org.junit.jupiter.api,
@@ -17,5 +17,5 @@ Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.xtext.testing,
  org.eclipse.xtext.xbase.testing,
  org.eclipse.xtext.xbase.lib;bundle-version="2.14.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests;x-internal=true

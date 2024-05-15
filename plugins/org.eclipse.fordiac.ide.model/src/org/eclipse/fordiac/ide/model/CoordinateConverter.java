@@ -17,6 +17,8 @@
 package org.eclipse.fordiac.ide.model;
 
 import org.eclipse.draw2d.FigureUtilities;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Font;
@@ -85,29 +87,23 @@ public enum CoordinateConverter {
 	}
 
 	/**
-	 * Take the string representing the value from the 61499-2 XML file to an 4diac
-	 * IDE internal coordinate
+	 * Convert IEC 61499 coordinate to screen coordinate
 	 *
-	 * @param value string representation of a coordinate value
-	 * @return 4diac IDE internal coordinate value
+	 * @param value IEC 61499 coordinate value
+	 * @return according screen coordinate value
 	 */
-	public int convertFrom1499XML(final String value) {
-		double parsedValue = 0;
-		if ((null != value) && (0 != value.length())) {
-			parsedValue = Double.parseDouble(value);
-		}
-		return (int) (parsedValue * transformationScale);
+	public int iec61499ToScreen(final double value) {
+		return (int) (value * transformationScale);
 	}
 
 	/**
-	 * Take an 4diac IDE internal coordinate and transform it to a string
-	 * representation suitable for an IEC 61499-2 XML
+	 * Convert screen coordinate value to IEC 61499 coordinate system
 	 *
-	 * @param value 4diac IDE internal coordinate
-	 * @return string representation of the value in IEC 61499-2 format
+	 * @param value screen coordinate value
+	 * @return according IEC 61499 coordinate value
 	 */
-	public String convertTo1499XML(final int value) {
-		return Double.toString(value / transformationScale);
+	public double screenToIEC61499(final int value) {
+		return value / transformationScale;
 	}
 
 	public double getLineHeight() {
@@ -116,5 +112,12 @@ public enum CoordinateConverter {
 
 	public double getAverageCharacterWidth() {
 		return averageCharacterWidth;
+	}
+
+	public Position createPosFromScreenCoordinates(final int x, final int y) {
+		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+		pos.setX(screenToIEC61499(x));
+		pos.setY(screenToIEC61499(y));
+		return pos;
 	}
 }

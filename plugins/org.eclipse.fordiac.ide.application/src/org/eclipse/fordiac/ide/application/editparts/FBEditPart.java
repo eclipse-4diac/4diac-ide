@@ -30,10 +30,6 @@ import org.eclipse.gef.RequestConstants;
  */
 public class FBEditPart extends AbstractFBNElementEditPart {
 
-	public FBEditPart() {
-		super();
-	}
-
 	/**
 	 * Creates the figure (for the specified model) to be used as this parts
 	 * visuals.
@@ -44,11 +40,10 @@ public class FBEditPart extends AbstractFBNElementEditPart {
 	protected IFigure createFigureForModel() {
 		// extend this if FunctionBlock gets extended!
 		FBNetworkElementFigure f = null;
-		if (getModel() != null) {
-			f = new FBNetworkElementFigure(getModel(), this);
-		} else {
+		if (getModel() == null) {
 			throw new IllegalArgumentException(Messages.FBEditPart_ERROR_UnsupportedFBType);
 		}
+		f = new FBNetworkElementFigure(getModel());
 		return f;
 	}
 

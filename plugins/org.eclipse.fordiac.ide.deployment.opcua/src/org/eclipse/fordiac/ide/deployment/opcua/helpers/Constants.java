@@ -16,6 +16,8 @@ package org.eclipse.fordiac.ide.deployment.opcua.helpers;
 import java.util.AbstractMap;
 import java.util.Map;
 
+import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
+import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.milo.opcua.stack.core.StatusCodes;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.milo.opcua.stack.core.types.builtin.StatusCode;
@@ -40,6 +42,13 @@ public class Constants {
 	public static final NodeId DELETE_RESOURCE_NODE = new NodeId(1, "deleteResource"); //$NON-NLS-1$
 	public static final NodeId DELETE_FB_NODE = new NodeId(1, "deleteFB"); //$NON-NLS-1$
 	public static final NodeId DELETE_CONNECTION_NODE = new NodeId(1, "deleteConnection"); //$NON-NLS-1$
+	public static final NodeId ADD_WATCH_NODE = new NodeId(1, "addWatch"); //$NON-NLS-1$
+	public static final NodeId READ_WATCHES_NODE = new NodeId(1, "readWatches"); //$NON-NLS-1$
+	public static final NodeId REMOVE_WATCH_NODE = new NodeId(1, "removeWatch"); //$NON-NLS-1$
+	public static final NodeId TRIGGER_EVENT_NODE = new NodeId(1, "triggerEvent"); //$NON-NLS-1$
+	public static final NodeId FORCE_VALUE_NODE = new NodeId(1, "forceValue"); //$NON-NLS-1$
+	public static final NodeId CLEAR_FORCE_NODE = new NodeId(1, "clearForce"); //$NON-NLS-1$
+	public static final NodeId QUERY_RESOURCES_NODE = new NodeId(1, "queryResources"); //$NON-NLS-1$
 
 	/** Deployment Console Messages **/
 	public static final String CREATE_RESOURCE_INSTANCE = "<Request Action=\"CREATE RESOURCE\"><FB Name=\"{0}\" Type=\"{1}\" /></Request>"; //$NON-NLS-1$
@@ -56,8 +65,22 @@ public class Constants {
 	public static final String DELETE_RESOURCE = "<Request Action=\"DELETE RESOURCE\"><FB Name=\"{0}\" Type=\"{1}\" /></Request>"; //$NON-NLS-1$
 	public static final String DELETE_FB_INSTANCE = "<Request Action=\"DELETE FB\"><FB Name=\"{0}\" /></Request>"; //$NON-NLS-1$
 	public static final String DELETE_CONNECTION = "<Request Action=\"DELETE CONNECTION\"><Connection Destination=\"{0}\" Source=\"{1}\" /></Request>"; //$NON-NLS-1$
+	public static final String ADD_WATCH = "<Request Action=\"ADD WATCH\"><Connection Destination=\"{0}\" /></Request>"; //$NON-NLS-1$
+	public static final String READ_WATCHES = "<Request Action=\"READ\"><Watches/></Request>"; //$NON-NLS-1$
+	public static final String REMOVE_WATCH = "<Request Action=\"REMOVE WATCH\"><Connection Destination=\"{0}\" /></Request>"; //$NON-NLS-1$
+	public static final String TRIGGER_EVENT = "<Request Action=\"WRITE\"><Connection Destination=\"{0}\" /></Request>"; //$NON-NLS-1$
+	public static final String FORCE_VALUE = "<Request Action=\"WRITE\"><Connection Destination=\"{0}\" Value=\"{1}\" /></Request>"; //$NON-NLS-1$
+	public static final String CLEAR_FORCE = "<Request Action=\"WRITE\"><Connection Destination=\"{0}\" /></Request>"; //$NON-NLS-1$
+	public static final String QUERY_RESOURCES = "<Request Action=\"QUERY\"></Request>"; //$NON-NLS-1$
 
 	public static final String RESPONSE = "<Response Reason=\"{0}\" />\n"; //$NON-NLS-1$
+
+	public static final String WATCHES_RESPONSE = "<Response>\n  <Watches>\n    {0}\n  </Watches>\n</Response>"; //$NON-NLS-1$
+	public static final String QUERY_RESPONSE = "<Response>\n  <FBList>\n    {0}\n  </FBList>\n</Response>"; //$NON-NLS-1$
+	public static final Response EMPTY_RESPONSE;
+
+	public static final String FB_NAME_FORMAT = "{0}{1}"; //$NON-NLS-1$
+	public static final String FB_PORT_NAME_FORMAT = "{0}{1}.{2}"; //$NON-NLS-1$
 
 	/* IEC61499 Status Codes */
 	public static final String MGM_RESPONSE_READY = "Ready"; //$NON-NLS-1$
@@ -75,18 +98,29 @@ public class Constants {
 	public static final String MGM_RESPONSE_UNKNOWN = "Unknown"; //$NON-NLS-1$
 
 	public static final Map<Long, String> RESPONSE_MAP = Map.ofEntries(
-			new AbstractMap.SimpleEntry<>(StatusCode.GOOD.getValue(), MGM_RESPONSE_READY),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_InvalidArgument, MGM_RESPONSE_BAD_PARAMS),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_Shutdown, MGM_RESPONSE_LOCAL_TERMINATION),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_ResourceUnavailable, MGM_RESPONSE_SYSTEM_TERMINATION),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_StateNotActive, MGM_RESPONSE_NOT_READY),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_NotImplemented, MGM_RESPONSE_UNSUPPORTED_CMD),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_DataTypeIdUnknown, MGM_RESPONSE_UNSUPPORTED_TYPE),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_NotFound, MGM_RESPONSE_NO_SUCH_OBJECT),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_NotSupported, MGM_RESPONSE_INVALID_OBJECT),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_RequestNotAllowed, MGM_RESPONSE_INVALID_OPERATION),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_InvalidState, MGM_RESPONSE_INVALID_STATE),
-			new AbstractMap.SimpleEntry<>(StatusCodes.Bad_TcpNotEnoughResources, MGM_RESPONSE_OVERFLOW));
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCode.GOOD.getValue()), MGM_RESPONSE_READY),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_InvalidArgument), MGM_RESPONSE_BAD_PARAMS),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_Shutdown), MGM_RESPONSE_LOCAL_TERMINATION),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_ResourceUnavailable),
+					MGM_RESPONSE_SYSTEM_TERMINATION),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_StateNotActive), MGM_RESPONSE_NOT_READY),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_NotImplemented), MGM_RESPONSE_UNSUPPORTED_CMD),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_DataTypeIdUnknown),
+					MGM_RESPONSE_UNSUPPORTED_TYPE),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_NotFound), MGM_RESPONSE_NO_SUCH_OBJECT),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_NotSupported), MGM_RESPONSE_INVALID_OBJECT),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_RequestNotAllowed),
+					MGM_RESPONSE_INVALID_OPERATION),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_InvalidState), MGM_RESPONSE_INVALID_STATE),
+			new AbstractMap.SimpleEntry<>(Long.valueOf(StatusCodes.Bad_TcpNotEnoughResources), MGM_RESPONSE_OVERFLOW));
+
+	static {
+		// ensure that all entries in the empty response return appropriate empty values
+		EMPTY_RESPONSE = DevResponseFactory.eINSTANCE.createResponse();
+		EMPTY_RESPONSE.setFblist(DevResponseFactory.eINSTANCE.createFBList());
+		EMPTY_RESPONSE.setID("0"); //$NON-NLS-1$
+		EMPTY_RESPONSE.setWatches(DevResponseFactory.eINSTANCE.createWatches());
+	}
 
 	private Constants() {
 		// empty private constructor

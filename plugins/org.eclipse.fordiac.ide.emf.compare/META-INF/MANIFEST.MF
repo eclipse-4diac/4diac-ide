@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Compare
 Bundle-SymbolicName: org.eclipse.fordiac.ide.emf.compare;singleton:=true
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.emf.compare
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-Vendor: Eclipse 4diac
 Require-Bundle: org.eclipse.fordiac.ide.systemmanagement.ui,
  org.eclipse.emf.ecore.xmi,

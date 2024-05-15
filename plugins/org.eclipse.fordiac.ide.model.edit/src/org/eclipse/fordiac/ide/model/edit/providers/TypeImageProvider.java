@@ -28,13 +28,14 @@ public class TypeImageProvider {
 
 	private static final Map<EClass, FordiacImage> TYPE_IMAGES = Map.of( //
 			LibraryElementPackage.Literals.ADAPTER_TYPE, FordiacImage.ICON_ADAPTER_TYPE, //
+			LibraryElementPackage.Literals.ATTRIBUTE_DECLARATION, FordiacImage.ICON_ATTRIBUTE_DECLARATION,
 			LibraryElementPackage.Literals.SUB_APP_TYPE, FordiacImage.ICON_SUB_APP_TYPE,
 			LibraryElementPackage.Literals.BASIC_FB_TYPE, FordiacImage.ICON_BASIC_FB,
 			LibraryElementPackage.Literals.COMPOSITE_FB_TYPE, FordiacImage.ICON_COMPOSITE_FB,
 			LibraryElementPackage.Literals.SIMPLE_FB_TYPE, FordiacImage.ICON_SIMPLE_FB,
 			LibraryElementPackage.Literals.SERVICE_INTERFACE_FB_TYPE, FordiacImage.ICON_SIFB,
 			LibraryElementPackage.Literals.FUNCTION_FB_TYPE, FordiacImage.ICON_FUNCTION, //
-			DataPackage.Literals.DATA_TYPE, FordiacImage.ICON_DATA_TYPE);
+			DataPackage.Literals.ANY_DERIVED_TYPE, FordiacImage.ICON_DATA_TYPE);
 
 	public static FordiacImage get4diacImageForTypeEntry(final TypeEntry typeEntry) {
 		if (typeEntry != null) {

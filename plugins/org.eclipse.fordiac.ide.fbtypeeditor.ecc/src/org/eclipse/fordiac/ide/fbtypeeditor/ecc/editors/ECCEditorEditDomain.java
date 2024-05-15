@@ -112,9 +112,10 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 
 		public void performCreation() {
 			final ECState destState = (ECState) getFactory().getNewObject();
-			destState.updatePosition(point);
 			final CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, point, ecc);
-			final CreateTransitionCommand createTransitionCommand = new CreateTransitionCommand(sourceState, destState, null);
+			final CreateTransitionCommand createTransitionCommand = new CreateTransitionCommand(sourceState, destState,
+					null);
+			createTransitionCommand.setDestinationLocation(point);
 			final CompoundCommand compCom = new CompoundCommand();
 			compCom.add(createStateCommand);
 			compCom.add(createTransitionCommand);
@@ -162,9 +163,9 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 	public void mouseDrag(final MouseEvent mouseEvent, final EditPartViewer viewer) {
 		if (((AdvancedPanningSelectionTool) getDefaultTool()).getTargetEditPart() instanceof ECStateEditPart) {
 			transition = true;
-			transitionStateCreationTool
-			.setSourceState(((ECStateEditPart) (((AdvancedPanningSelectionTool) getDefaultTool())
-					.getTargetEditPart())).getModel());
+			transitionStateCreationTool.setSourceState(
+					((ECStateEditPart) (((AdvancedPanningSelectionTool) getDefaultTool()).getTargetEditPart()))
+							.getModel());
 		}
 		super.mouseDrag(mouseEvent, viewer);
 	}
@@ -176,7 +177,7 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 			if (createTransitionAndState && ((AdvancedPanningSelectionTool) getDefaultTool())
 					.getTargetEditPart() instanceof FreeformGraphicalRootEditPart) {
 				transitionStateCreationTool
-				.setLocationActivation(((ECCPanningSelectionTool) getDefaultTool()).getLastLocation());
+						.setLocationActivation(((ECCPanningSelectionTool) getDefaultTool()).getLastLocation());
 				setActiveTool(transitionStateCreationTool);
 				transitionStateCreationTool.performCreation();
 				setActiveTool(getDefaultTool());

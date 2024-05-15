@@ -51,7 +51,7 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 			return createInterfaceEditPart(varDecl);
 		}
 		if (modelElement instanceof AdapterDeclaration) {
-			return new AdapterInterfaceEditPart(typeLib);
+			return new AdapterInterfaceEditPart();
 		}
 		if (modelElement instanceof With) {
 			return new WithEditPart();

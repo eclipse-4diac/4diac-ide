@@ -30,7 +30,7 @@ public final class BlockInstanceFactory {
 			return LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
 		}
 		if (entry instanceof SubAppTypeEntry) {
-			return LibraryElementFactory.eINSTANCE.createSubApp();
+			return LibraryElementFactory.eINSTANCE.createTypedSubApp();
 		}
 		if (entry instanceof AdapterTypeEntry) {
 			return LibraryElementFactory.eINSTANCE.createAdapterFB();

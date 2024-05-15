@@ -33,14 +33,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.NotificationImpl;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.ConcurrentNotifierImpl;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
@@ -221,12 +219,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	protected void encloseInResource(final LibraryElement newType) {
-		if (getFile() != null && newType.eResource() == null) {
-			final IPath path = getFile().getFullPath();
-			if (path != null) {
-				new FordiacTypeResource(URI.createPlatformResourceURI(path.toString(), true)).getContents()
-						.add(newType);
-			}
+		if (newType.eResource() == null) {
+			new FordiacTypeResource(getURI()).getContents().add(newType);
 		}
 	}
 
@@ -237,9 +231,17 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			return typeEditable;
 		}
 
-		// we need to get a fresh type editable in order to ensure consistency take a
-		// copy of the none editable type
-		final LibraryElement loadType = EcoreUtil.copy(getType());
+		// we need to get a fresh type editable
+		LibraryElement loadType = null;
+		if (typeRef != null && typeRef.get() != null) {
+			// only copy if the none editable type is already loaded, copying takes about
+			// the same time then loading
+			loadType = EcoreUtil.copy(getType());
+		} else {
+			lastModificationTimestamp = getFile().getModificationStamp();
+			loadType = loadType();
+		}
+
 		setTypeEditable(loadType);
 		return loadType;
 	}
@@ -308,9 +310,26 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 				|| notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE)
 				&& dependencies.get().contains(notification.getNotifier())) {
 			synchronized (this) {
+
 				setType(null);
 				setTypeEditable(null);
+
+				if (notification.getNewValue() != null && notification.getOldValue() != null) {
+					// if there is an editor opened then this notification will be delagted to the
+					// corresponding editor,
+					// If not, then nothing will happen
+					delagateNotifiactionToEditor(notification);
+				}
+
 			}
+		}
+	}
+
+	private void delagateNotifiactionToEditor(final Notification notification) {
+		if (eNotificationRequired() && notification.getNewValue() instanceof final LibraryElement element) {
+			eNotify(new TypeEntryNotificationImpl(this, Notification.SET,
+					TypeEntry.TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE, notification.getOldValue(),
+					element.getTypeEntry()));
 		}
 	}
 
@@ -403,7 +422,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			checkAndCreateFolderHierarchy(getFile(), monitor);
 			getFile().create(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
 		}
-		// "reset" the modification timestamp in the TypeEntry to avoid reload - as for
+		// "reset" the modification timestamp in the TypeEntry to avoid reload - as
+		// for
 		// this timestamp it is not necessary as the data is in memory
 		setLastModificationTimestamp(getFile().getModificationStamp());
 		updateDependencies(exporter.getDependencies());

@@ -48,7 +48,6 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	 * @param insets the insets
 	 */
 	public ModifiedNonResizeableEditPolicy(final int arc, final Insets insets) {
-		super();
 		this.arc = arc;
 		this.insets = insets;
 	}
@@ -57,7 +56,6 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	 * Default constructor.
 	 */
 	public ModifiedNonResizeableEditPolicy() {
-		super();
 	}
 
 	@Override
@@ -69,7 +67,7 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	@Override
 	protected List<? extends IFigure> createSelectionHandles() {
 		final List<ModifiedMoveHandle> list = new ArrayList<>(1);
-		list.add(new ModifiedMoveHandle((GraphicalEditPart) getHost(), insets, arc));
+		list.add(new ModifiedMoveHandle(getHost(), insets, arc));
 		removeSelectionFeedbackFigure();
 		return list;
 	}
@@ -95,8 +93,7 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	}
 
 	private boolean isValidConnectionRequest(final Request request) {
-		return (getHost() instanceof AbstractConnectableEditPart)
-				&& ((AbstractConnectableEditPart) getHost()).isConnectable()
+		return (getHost() instanceof final AbstractConnectableEditPart acEP) && acEP.isConnectable()
 				&& (REQ_RECONNECT_SOURCE.equals(request.getType()) || REQ_RECONNECT_TARGET.equals(request.getType())
 						|| REQ_CONNECTION_END.equals(request.getType()));
 	}
@@ -106,8 +103,7 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	}
 
 	public static RoundedRectangle createSelectionFeedbackFigure(final EditPart editPart, final int arc) {
-		if (editPart instanceof GraphicalEditPart) {
-			final GraphicalEditPart ep = ((GraphicalEditPart) editPart);
+		if (editPart instanceof final GraphicalEditPart ep) {
 			final RoundedRectangle newSelFeedbackFigure = new RoundedRectangle();
 			newSelFeedbackFigure.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
 			newSelFeedbackFigure.setOutline(false);

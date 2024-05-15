@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ant
 Bundle-SymbolicName: org.eclipse.fordiac.ide.ant;singleton:=true
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.ant
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.ant.core,
@@ -14,6 +14,7 @@ Require-Bundle: org.eclipse.core.resources,
  org.eclipse.fordiac.ide.export.forte_ng,
  org.eclipse.fordiac.ide.export,
  org.eclipse.fordiac.ide.typemanagement,
- org.eclipse.fordiac.ide.export.xmi
+ org.eclipse.fordiac.ide.export.xmi,
+ org.eclipse.fordiac.ide.library.model
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy

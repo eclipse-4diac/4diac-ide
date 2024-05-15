@@ -26,56 +26,32 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.module.ModuleDescriptor.Version;
 import java.text.Collator;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
-import org.eclipse.core.internal.resources.ProjectDescription;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloadManager;
-import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.library.model.library.Manifest;
-import org.eclipse.fordiac.ide.library.model.library.Required;
-import org.eclipse.fordiac.ide.library.model.library.util.LibraryResourceImpl;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
@@ -84,10 +60,12 @@ import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorAdapterTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorFBTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorSubAppTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
@@ -107,9 +85,11 @@ public final class TypeLibrary {
 	private final Map<String, SubAppTypeEntry> subAppTypes = new ConcurrentHashMap<>();
 	private final Map<String, SystemEntry> systems = new ConcurrentHashMap<>();
 	private final Map<String, GlobalConstantsEntry> globalConstants = new ConcurrentHashMap<>();
+	private final Map<String, TypeEntry> programTypes = new ConcurrentHashMap<>();
 	private final Map<String, TypeEntry> errorTypes = new ConcurrentHashMap<>();
 	private final Map<IFile, TypeEntry> fileMap = new ConcurrentHashMap<>();
 	private final Map<String, AtomicInteger> packages = new ConcurrentHashMap<>();
+	private final Queue<TypeEntry> duplicates = new ConcurrentLinkedQueue<>();
 
 	public Map<String, AdapterTypeEntry> getAdapterTypes() {
 		return adapterTypes;
@@ -151,6 +131,10 @@ public final class TypeLibrary {
 
 	public Map<String, GlobalConstantsEntry> getGlobalConstants() {
 		return globalConstants;
+	}
+
+	public Map<String, TypeEntry> getProgramTypes() {
+		return Collections.unmodifiableMap(programTypes);
 	}
 
 	public Set<String> getPackages() {
@@ -222,6 +206,7 @@ public final class TypeLibrary {
 		getSystems().clear();
 		getGlobalConstants().clear();
 		dataTypeLib.clear();
+		programTypes.clear();
 		fileMap.clear();
 		packages.clear();
 		deleteTypeLibraryMarkers(project);
@@ -241,18 +226,17 @@ public final class TypeLibrary {
 		return buildpath;
 	}
 
-	public Optional<TypeEntry> getTypeFromLinkedFile(final String filename) {
-		return fileMap.entrySet().stream().filter(entry -> entry.getKey().getName().equals(filename))
-				.map(Entry::getValue).findFirst();
-	}
-
 	/** Instantiates a new fB type library. */
 	TypeLibrary(final IProject project) {
 		this.project = project;
 		if (project != null && project.isAccessible()) {
 			buildpath = BuildpathUtil.loadBuildpath(project);
 			checkAdditions(project);
-			checkManifestFile(project);
+			final ILibraryLinker libLinker = TypeLibraryManager
+					.loadExtension("org.eclipse.fordiac.ide.model.libraryLinkerExtension", ILibraryLinker.class); //$NON-NLS-1$
+			if (libLinker != null) {
+				libLinker.checkManifestFile(project, this);
+			}
 		}
 	}
 
@@ -272,46 +256,7 @@ public final class TypeLibrary {
 		return entry;
 	}
 
-	public void checkManifestFile(final IProject project) {
-		final ResourceSet libraryResouceSet = new ResourceSetImpl();
-		final Map<String, Object> loadOptions = new HashMap<>();
-		try {
-			final List<IResource> resources = Arrays.asList(project.members());
-			final Optional<IResource> manifestFile = resources.stream()
-					.filter(res -> res.getName().equals("MANIFEST.MF")).findFirst(); //$NON-NLS-1$
-			if (manifestFile.isPresent()) {
-				final Resource resource = new LibraryResourceImpl(
-						URI.createURI(manifestFile.get().getLocationURI().toString()));
-				libraryResouceSet.getResources().add(resource);
-				resource.load(loadOptions);
-				final Manifest manifest = (Manifest) resource.getContents().get(0);
-
-				final Optional<IResource> projectFile = resources.stream()
-						.filter(res -> ".project".equals(res.getName())).findFirst(); //$NON-NLS-1$
-
-				final ProjectDescription projectDescription = (ProjectDescription) ResourcesPlugin.getWorkspace()
-						.loadProjectDescription(projectFile.get().getLocation());
-
-				Map<String, List<String>> projectLibs = new HashMap<>();
-				if (projectDescription.getLinks() != null) {
-					projectLibs = parseLibraryNameAndVersion(
-							projectDescription.getLinks().keySet().stream().map(IPath::lastSegment).toList());
-				}
-
-				if (manifest.getScope() != null && "Project".equals(manifest.getScope())) { //$NON-NLS-1$
-					for (final Required req : manifest.getDependencies().getRequired()) {
-						loadLibLinker(req, projectLibs, project);
-					}
-				}
-			}
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError(Messages.TypeLibrary_ProjectLoadingProblem, e);
-		} catch (final IOException e) {
-			FordiacLogHelper.logError(Messages.TypeLibrary_LibraryLoadingProblem, e);
-		}
-	}
-
-	void loadLibLinker(final Required lib, final Map<String, List<String>> projectLibs, final IProject project) {
+	static ILibraryLinker loadLibLinker() {
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
 		final IExtensionPoint point = registry
 				.getExtensionPoint("org.eclipse.fordiac.ide.model.libraryLinkerExtension"); //$NON-NLS-1$
@@ -322,121 +267,14 @@ public final class TypeLibrary {
 				try {
 					final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 					if (obj instanceof final ILibraryLinker libLinker) {
-						checkLibrary(libLinker, lib, projectLibs, project);
+						return libLinker;
 					}
 				} catch (final Exception e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 			}
 		}
-	}
-
-	void checkLibrary(final ILibraryLinker libLinker, final Required lib, final Map<String, List<String>> projectLibs,
-			final IProject project) {
-		libLinker.setSelectedProjectWithTypeLib(project, this);
-		if (projectLibs.containsKey(lib.getSymbolicName())) {
-			// check if already linked
-			if (projectLibs.get(lib.getSymbolicName()).stream().filter(p -> compareVersion(lib.getVersion(), p))
-					.count() == 0) {
-
-				final WorkspaceJob job = new WorkspaceJob(
-						"Download Gitlab package: " + lib.getSymbolicName() + " - " + lib.getVersion()) { //$NON-NLS-1$//$NON-NLS-2$
-
-					@Override
-					public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-						gitlabLibraryImport(lib.getSymbolicName(), lib.getVersion(), libLinker);
-						return Status.OK_STATUS;
-					}
-				};
-				job.setRule(project);
-				job.setPriority(Job.LONG);
-				job.schedule();
-
-			}
-		} else {
-			// check local lib
-			final List<File> libDir = Arrays.asList(libLinker.listExtractedFiles());
-			final Map<String, List<String>> localLibs = parseLibraryNameAndVersion(
-					libDir.stream().map(File::getName).toList());
-
-			if (localLibs.containsKey(lib.getSymbolicName()) && localLibs.get(lib.getSymbolicName()).stream()
-					.anyMatch(l -> compareVersion(lib.getVersion(), l))) {
-
-				libLinker.importLibrary(lib.getSymbolicName() + "-" + localLibs.get(lib.getSymbolicName()).stream() //$NON-NLS-1$
-						.filter(l -> compareVersion(lib.getVersion(), l))
-						.sorted((o1, o2) -> -Version.parse(o1).compareTo(Version.parse(o2))).findFirst().get());
-				return;
-			}
-			gitlabLibraryImport(lib.getSymbolicName(), lib.getVersion(), libLinker);
-		}
-	}
-
-	static void gitlabLibraryImport(final String libSymbolicName, final String libVersion,
-			final ILibraryLinker libLinker) {
-		if (PreferenceConstants.getURL() != null && PreferenceConstants.getToken() != null) {
-			final GitLabDownloadManager downloadManager = new GitLabDownloadManager(PreferenceConstants.getURL(),
-					PreferenceConstants.getToken());
-			downloadManager.fetchProjectsAndPackages();
-			if (downloadManager.getPackagesAndLeaves().containsKey(libSymbolicName)) {
-				downloadManager.getPackagesAndLeaves().get(libSymbolicName).forEach(l -> {
-					if (compareVersion(libVersion, l.getVersion())) {
-						try {
-							final File file = downloadManager.packageDownloader(l.getProject(), l.getPackage());
-							if (file != null) {
-								libLinker.extractLibrary(file, null);
-							}
-						} catch (final IOException e) {
-							FordiacLogHelper.logError(e.getMessage(), e);
-						}
-					}
-				});
-			}
-		}
-	}
-
-	static Map<String, List<String>> parseLibraryNameAndVersion(final List<String> libs) {
-
-		final Map<String, List<String>> nameVersionMap = new HashMap<>();
-		String name;
-		String version;
-		for (final String lib : libs) {
-			if (lib.lastIndexOf("-") != -1) { //$NON-NLS-1$
-				name = lib.substring(0, lib.lastIndexOf("-")); //$NON-NLS-1$
-				version = lib.substring(lib.lastIndexOf("-") + 1, lib.length()); //$NON-NLS-1$
-			} else {
-				name = lib;
-				version = "0.0.0"; //$NON-NLS-1$
-			}
-
-			if (nameVersionMap.containsKey(name)) {
-				nameVersionMap.get(name).add(version);
-			} else {
-				nameVersionMap.put(name, new ArrayList<>(Arrays.asList(version)));
-			}
-		}
-
-		return nameVersionMap;
-	}
-
-	@SuppressWarnings("nls")
-	static boolean compareVersion(final String version, final String localVersion) {
-		final Version locVersion = Version.parse(localVersion);
-		if ((version.startsWith("(") || version.startsWith("[")) && (version.endsWith(")") || version.endsWith("]"))
-				&& version.contains("-")) { // $NON-NLS
-			final Version lowerBound = Version.parse(version.substring(1, version.indexOf("-")));
-			final Version upperBound = Version.parse(version.substring(version.indexOf("-") + 1, version.length() - 1));
-			return (((version.startsWith("(") && lowerBound.compareTo(locVersion) < 0)
-					|| (version.startsWith("[") && lowerBound.compareTo(locVersion) <= 0))
-					&& ((version.endsWith(")") && upperBound.compareTo(locVersion) > 0)
-							|| (version.endsWith("]") && upperBound.compareTo(locVersion) >= 0)));
-
-		}
-		if (!(version.contains("(") || version.contains("[") || version.contains("]") || version.contains(")")
-				|| version.contains("-"))) {
-			final Version singleVersion = Version.parse(version);
-			return (singleVersion.compareTo(locVersion) == 0);
-		}
-		return false;
+		return null;
 	}
 
 	public TypeEntry createErrorTypeEntry(final String typeName, final EClass typeClass) {
@@ -452,6 +290,9 @@ public final class TypeLibrary {
 	}
 
 	private static TypeEntry createErrorTypeEntry(final FBType fbType) {
+		if (fbType instanceof AdapterType) {
+			return new ErrorAdapterTypeEntryImpl();
+		}
 		if (fbType instanceof SubAppType) {
 			return new ErrorSubAppTypeEntryImpl();
 		}
@@ -487,11 +328,15 @@ public final class TypeLibrary {
 				handleDuplicateTypeName(entry);
 			}
 		}
+		if (isProgramTypeEntry(entry) && programTypes.putIfAbsent(entry.getFullTypeName(), entry) != null) {
+			handleDuplicateTypeName(entry);
+		}
 		addPackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
 	}
 
-	private static void handleDuplicateTypeName(final TypeEntry entry) {
-		if (entry.getFile() != null) {
+	private void handleDuplicateTypeName(final TypeEntry entry) {
+		if (entry.getFile() != null && entry.getFile().exists()) {
+			duplicates.add(entry);
 			createTypeLibraryMarker(entry.getFile(),
 					MessageFormat.format(Messages.TypeLibrary_TypeExists, entry.getFullTypeName()));
 		} else {
@@ -513,8 +358,32 @@ public final class TypeLibrary {
 		} else {
 			removeBlockTypeEntry(entry);
 		}
+		if (isProgramTypeEntry(entry)) {
+			programTypes.remove(entry.getFullTypeName(), entry);
+		}
 		removePackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
 		deleteTypeLibraryMarkers(entry.getFile());
+		retryDuplicates();
+	}
+
+	private void retryDuplicates() {
+		duplicates.removeIf(this::retryDuplicate);
+	}
+
+	private boolean retryDuplicate(final TypeEntry entry) {
+		if (!exists(entry)) {
+			return true;
+		}
+		if (entry instanceof final DataTypeEntry dtEntry) {
+			if (dataTypeLib.addTypeEntry(dtEntry)) {
+				deleteTypeLibraryMarkers(entry.getFile());
+				return true;
+			}
+		} else if (addBlockTypeEntry(entry)) {
+			deleteTypeLibraryMarkers(entry.getFile());
+			return true;
+		}
+		return false;
 	}
 
 	protected void addPackageNameReference(final String packageName) {
@@ -560,7 +429,8 @@ public final class TypeLibrary {
 	}
 
 	private boolean exists(final TypeEntry entry) {
-		return entry.getFile().exists() && BuildpathUtil.findSourceFolder(buildpath, entry.getFile()).isPresent();
+		return entry.getFile() != null && entry.getFile().exists()
+				&& BuildpathUtil.findSourceFolder(buildpath, entry.getFile()).isPresent();
 	}
 
 	private void checkAdditions(final IContainer container) {
@@ -587,30 +457,12 @@ public final class TypeLibrary {
 	}
 
 	public TypeEntry find(final String name) {
-		TypeEntry entry = getSubAppTypeEntry(name);
-		if (entry != null) {
-			return entry;
-		}
-
-		entry = getFBTypeEntry(name);
-		if (entry != null) {
-			return entry;
-		}
-
-		entry = dataTypeLib.getDerivedTypeEntry(name);
-		if (entry != null) {
-			return entry;
-		}
-
-		return getAdapterTypeEntry(name);
+		return programTypes.get(name);
 	}
 
 	public List<TypeEntry> findUnqualified(final String name) {
 		final String unqualifiedName = PackageNameHelper.extractPlainTypeName(name);
-		return Stream
-				.of(getSubAppTypes().values(), getFbTypes().values(), dataTypeLib.getDerivedDataTypes(),
-						getAdapterTypes().values())
-				.<TypeEntry>flatMap(Collection::stream).filter(entry -> unqualifiedName.equals(entry.getTypeName()))
+		return programTypes.values().stream().filter(entry -> unqualifiedName.equalsIgnoreCase(entry.getTypeName()))
 				.toList();
 	}
 
@@ -670,13 +522,18 @@ public final class TypeLibrary {
 		}
 	}
 
+	private static boolean isProgramTypeEntry(final TypeEntry entry) {
+		return entry instanceof FBTypeEntry || entry instanceof SubAppTypeEntry || entry instanceof DataTypeEntry;
+	}
+
 	private static void createTypeLibraryMarker(final IResource resource, final String message) {
 		FordiacMarkerHelper.createMarkers(resource, List.of(
 				ErrorMarkerBuilder.createErrorMarkerBuilder(message).setType(FordiacErrorMarker.TYPE_LIBRARY_MARKER)));
 	}
 
 	private static void deleteTypeLibraryMarkers(final IResource resource) {
-		FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.TYPE_LIBRARY_MARKER, Collections.emptyList());
+		FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.TYPE_LIBRARY_MARKER, Collections.emptyList(),
+				true);
 	}
 
 	void setProject(final IProject newProject) {

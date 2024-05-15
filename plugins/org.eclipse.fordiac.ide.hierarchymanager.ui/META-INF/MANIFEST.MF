@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Hierarchy Manager UI
 Bundle-SymbolicName: org.eclipse.fordiac.ide.hierarchymanager.ui;singleton:=true
-Bundle-Version: 2.1.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Require-Bundle: org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.emf.edit,
@@ -22,4 +22,4 @@ Require-Bundle: org.eclipse.core.resources,
  org.eclipse.ui.views.properties.tabbed
 Bundle-Vendor: Eclipse 4diac Project
 Automatic-Module-Name: org.eclipse.fordiac.ide.hierarchymanager.ui
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21

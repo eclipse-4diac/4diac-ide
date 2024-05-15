@@ -339,6 +339,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createMappingTargetAdapter();
 			}
 			@Override
+			public Adapter caseMemberVarDeclaration(MemberVarDeclaration object) {
+				return createMemberVarDeclarationAdapter();
+			}
+			@Override
 			public Adapter caseMethod(Method object) {
 				return createMethodAdapter();
 			}
@@ -473,6 +477,14 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseTypedConfigureableObject(TypedConfigureableObject object) {
 				return createTypedConfigureableObjectAdapter();
+			}
+			@Override
+			public Adapter caseTypedSubApp(TypedSubApp object) {
+				return createTypedSubAppAdapter();
+			}
+			@Override
+			public Adapter caseUntypedSubApp(UntypedSubApp object) {
+				return createUntypedSubAppAdapter();
 			}
 			@Override
 			public Adapter caseValue(Value object) {
@@ -1887,6 +1899,34 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp <em>Typed Sub App</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp
+	 * @generated
+	 */
+	public Adapter createTypedSubAppAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp <em>Untyped Sub App</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp
+	 * @generated
+	 */
+	public Adapter createUntypedSubAppAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.Value <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -1939,6 +1979,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createWithAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration <em>Member Var Declaration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration
+	 * @generated
+	 */
+	public Adapter createMemberVarDeclarationAdapter() {
 		return null;
 	}
 

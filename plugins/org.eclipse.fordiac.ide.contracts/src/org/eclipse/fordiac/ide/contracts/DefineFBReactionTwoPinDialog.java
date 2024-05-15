@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts;
 
-import org.eclipse.fordiac.ide.application.utilities.IntervalVerifyListener;
 import org.eclipse.fordiac.ide.contracts.model.ContractKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -56,7 +55,6 @@ public class DefineFBReactionTwoPinDialog extends ContractElementDialog {
 		label.setText(ContractKeywords.OCCURS + " " + ContractKeywords.WITHIN); //$NON-NLS-1$
 
 		inputTimeText = new Text(group, SWT.RIGHT);
-		inputTimeText.addListener(SWT.KeyDown, new IntervalVerifyListener(inputTimeText));
 		inputTimeText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		label = new Label(group, SWT.None);

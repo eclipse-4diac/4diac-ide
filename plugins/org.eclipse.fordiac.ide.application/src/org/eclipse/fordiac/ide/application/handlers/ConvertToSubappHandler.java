@@ -20,7 +20,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.commands.ConvertGroupToSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
-import org.eclipse.fordiac.ide.model.commands.change.UntypeSubAppCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -30,8 +29,6 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CommandStackEvent;
-import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
@@ -39,8 +36,7 @@ import org.eclipse.ui.ISources;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class ConvertToSubappHandler extends AbstractHandler implements CommandStackEventListener {
-	private CommandStack commandStack;
+public class ConvertToSubappHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -48,11 +44,7 @@ public class ConvertToSubappHandler extends AbstractHandler implements CommandSt
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		final Group group = getSelectedGroup(selection);
 		if (null != group) {
-			if (commandStack != null) {
-				commandStack.removeCommandStackEventListener(this);
-			}
-
-			commandStack = HandlerHelper.getCommandStack(editor);
+			final CommandStack commandStack = HandlerHelper.getCommandStack(editor);
 			final ConvertGroupToSubappCommand conversion = new ConvertGroupToSubappCommand(group);
 			if (conversion.canExecute()) {
 				commandStack.execute(conversion);
@@ -62,8 +54,6 @@ public class ConvertToSubappHandler extends AbstractHandler implements CommandSt
 				final EditPart newSubappEP = (EditPart) v.getEditPartRegistry().get(conversion.getCreatedElement());
 				adjustMinBounds(commandStack, newSubappEP);
 			}
-
-			commandStack.addCommandStackEventListener(this);
 		}
 		return Status.OK_STATUS;
 	}
@@ -93,8 +83,7 @@ public class ConvertToSubappHandler extends AbstractHandler implements CommandSt
 	}
 
 	private static Group getSelectedGroup(final Object selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structSel = ((IStructuredSelection) selection);
+		if (selection instanceof final IStructuredSelection structSel) {
 			if (!structSel.isEmpty() && (structSel.size() == 1)) {
 				return getGroup(structSel.getFirstElement());
 			}
@@ -104,7 +93,7 @@ public class ConvertToSubappHandler extends AbstractHandler implements CommandSt
 
 	private static Group getGroup(final Object currentElement) {
 		Object elementToCheck = currentElement;
-		if(elementToCheck instanceof EditPart) {
+		if (elementToCheck instanceof EditPart) {
 			elementToCheck = ((EditPart) elementToCheck).getModel();
 		}
 
@@ -114,26 +103,10 @@ public class ConvertToSubappHandler extends AbstractHandler implements CommandSt
 		return null;
 	}
 
-	@Override
-	public void stackChanged(final CommandStackEvent event) {
-		if ((event.getCommand() instanceof UntypeSubAppCommand)
-				&& ((event.getDetail() == CommandStack.POST_UNDO) || (event.getDetail() == CommandStack.POST_REDO))) {
-			refreshSelection(((UntypeSubAppCommand) event.getCommand()).getSubapp());
-		}
-	}
-
 	private static void refreshSelection(final SubApp subapp) {
 		final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
 		HandlerHelper.getViewer(editor).deselectAll();
 		HandlerHelper.selectElement(subapp, HandlerHelper.getViewer(editor));
-	}
-
-	@Override
-	public void dispose() {
-		if (commandStack != null) {
-			commandStack.removeCommandStackEventListener(this);
-		}
-		super.dispose();
 	}
 }

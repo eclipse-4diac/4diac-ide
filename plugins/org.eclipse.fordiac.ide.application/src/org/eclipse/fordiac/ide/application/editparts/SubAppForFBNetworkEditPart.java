@@ -31,7 +31,6 @@ import java.util.List;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -48,6 +47,7 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -378,15 +378,15 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	protected void refreshPosition() {
 		if (getParent() != null) {
 			final Position position = getModel().getPosition();
-			final Point asPoint = position.asPoint();
-			final Rectangle bounds = new Rectangle(asPoint, getSubappSize());
+			final Rectangle bounds = new Rectangle(position.toScreenPoint(), getSubappSize());
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}
 
 	private Dimension getSubappSize() {
 		if (getModel().isUnfolded()) {
-			return new Dimension(getModel().getWidth(), getModel().getHeight());
+			return new Dimension(CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getWidth()),
+					CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getHeight()));
 		}
 		return new Dimension(-1, -1);
 	}

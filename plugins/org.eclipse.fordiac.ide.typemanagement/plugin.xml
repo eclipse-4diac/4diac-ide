@@ -583,6 +583,17 @@
         	</and>   
      	</enablement> 
       </deleteParticipant>
+      <deleteParticipant
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteLibraryRefactoringParticipant"
+            id="org.eclipse.fordiac.ide.typemanagement.deleteLibrary"
+            name="Delete Library Folder Handler">
+         <enablement>
+            <and>
+               <instanceof
+                     value="org.eclipse.core.resources.IFolder">
+               </instanceof>
+            </and></enablement>
+      </deleteParticipant>
    </extension>
     <extension
          point="org.eclipse.ui.navigator.viewer">
@@ -727,7 +738,9 @@
          <or>
          <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeInterfaceChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeStructDeletionChange$DeleteMemberVariableChange"/>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeFBTypeDeletionChange$DeleteInternalFBChange"/>   
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeFBTypeDeletionChange$DeleteInternalFBChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteLibraryDependencyChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinChange"/>
          </or>
          </enablement>
       </changePreviewViewer>

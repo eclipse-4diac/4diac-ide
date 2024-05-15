@@ -46,7 +46,7 @@ public final class StructParser {
 	private static void buildTree(final WatchValueTreeNode parent, final StructuredType type, final String struct) {
 		// do not consider outer parentheses
 		final int START = 1;
-		final int END = struct.length() - 2;
+		final int END = struct.length() - 1;
 
 		boolean insideString = false;
 		boolean process = true;

@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Util Tests
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.util
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Fragment-Host: org.eclipse.fordiac.ide.util
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.util
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-Vendor: Eclipse 4diac
 Import-Package: org.junit.jupiter.api,
  org.opentest4j

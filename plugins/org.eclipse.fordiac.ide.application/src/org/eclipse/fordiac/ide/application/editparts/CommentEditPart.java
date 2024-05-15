@@ -23,7 +23,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.text.FlowPage;
@@ -37,6 +36,7 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
@@ -244,8 +244,7 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 	protected void refreshPosition() {
 		if (getParent() != null) {
 			final Position position = getModel().getPosition();
-			final Point asPoint = position.asPoint();
-			final Rectangle bounds = new Rectangle(asPoint, getCommentSize());
+			final Rectangle bounds = new Rectangle(position.toScreenPoint(), getCommentSize());
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}
@@ -264,7 +263,8 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 	}
 
 	private Dimension getCommentSize() {
-		return new Dimension(getModel().getWidth(), getModel().getHeight());
+		return new Dimension(CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getWidth()),
+				CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getHeight()));
 	}
 
 	@Override

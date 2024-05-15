@@ -116,6 +116,8 @@ public final class Messages extends NLS {
 
 	public static String MonitoringEditPart_Not_Available;
 
+	public static String MoveElementDialogTitle;
+
 	/** The New sub application action_ new subapplication text. */
 	public static String NewSubApplicationAction_NewSubapplicationText;
 
@@ -215,6 +217,8 @@ public final class Messages extends NLS {
 	public static String ToggleConnections_Singular_Hide;
 
 	public static String ToggleConnections_Singular_Show;
+
+	public static String ToggleConnections_Target_Show;
 
 	public static String VarConfigurationSection_VarConfigs;
 

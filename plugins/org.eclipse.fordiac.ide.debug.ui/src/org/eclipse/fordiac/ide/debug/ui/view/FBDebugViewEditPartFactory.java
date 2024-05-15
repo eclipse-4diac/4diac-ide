@@ -36,7 +36,7 @@ import org.eclipse.gef.EditPart;
 public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 
 	public FBDebugViewEditPartFactory() {
-		super(null, null);  // in our case both can safely be null
+		super(null, null); // in our case both can safely be null
 	}
 
 	@Override
@@ -49,14 +49,15 @@ public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 			return new FBDebugViewRootEditPart();
 		}
 		if (modelElement instanceof FBType) {
-			// we can not use the version of parent as this expects a FBTypeRootEditPart as context which we don't have
+			// we can not use the version of parent as this expects a FBTypeRootEditPart as
+			// context which we don't have
 			// here
 			return new FBTypeEditPart();
 		}
 		if (modelElement instanceof InterfaceValueEntity) {
 			return new InterfaceValueEditPart();
 		}
-		if(modelElement instanceof EventValueEntity) {
+		if (modelElement instanceof EventValueEntity) {
 			return new EventValueEditPart();
 		}
 		if (modelElement instanceof Event && ((Event) modelElement).isIsInput()) {

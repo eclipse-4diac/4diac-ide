@@ -18,11 +18,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Name: Composite FB Network
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.network;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.network,
  org.eclipse.fordiac.ide.fbtypeeditor.network.actions,
  org.eclipse.fordiac.ide.fbtypeeditor.network.editparts,

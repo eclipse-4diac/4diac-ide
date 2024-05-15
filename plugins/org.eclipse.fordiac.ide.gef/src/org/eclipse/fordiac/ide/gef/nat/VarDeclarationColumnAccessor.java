@@ -18,14 +18,18 @@ import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeRetainAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
 import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
+import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -51,8 +55,18 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case INITIAL_VALUE -> getInitialValue(rowObject);
 		case VAR_CONFIG -> Boolean.valueOf(rowObject.isVarConfig());
 		case VISIBLE -> Boolean.valueOf(rowObject.isVisible());
+		case RETAIN -> getAttributeValueAsString(rowObject);
+
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
+	}
+
+	private static String getAttributeValueAsString(final VarDeclaration rowObject) {
+		final Attribute attribute = rowObject.getAttribute(LibraryElementTags.RETAIN_ATTRIBUTE);
+		if (attribute == null) {
+			return NULL_DEFAULT;
+		}
+		return Objects.toString(RetainHelper.deriveTag(attribute.getValue()).getString(), NULL_DEFAULT);
 	}
 
 	@Override
@@ -66,6 +80,9 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case VAR_CONFIG -> new ChangeVarConfigurationCommand(rowObject,
 				Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 		case VISIBLE -> new HidePinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
+		case RETAIN -> new ChangeRetainAttributeCommand(rowObject,
+				RetainHelper.deriveTag(rowObject.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE)),
+				RetainHelper.deriveTag(Objects.toString(newValue, NULL_DEFAULT)));
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
 	}

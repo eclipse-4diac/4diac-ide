@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.fordiac.ide.structuredtextalgorithm.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: org.eclipse.fordiac.ide.structuredtextalgorithm.ui
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextalgorithm.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.fordiac.ide.structuredtextalgorithm,
@@ -28,7 +28,7 @@ Require-Bundle: org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.xtext
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.ui.codemining;resolution:=optional
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.structuredtextalgorithm.ui,
  org.eclipse.fordiac.ide.structuredtextalgorithm.ui.codemining,
  org.eclipse.fordiac.ide.structuredtextalgorithm.ui.contentassist,

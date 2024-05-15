@@ -87,6 +87,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
@@ -112,10 +113,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
@@ -222,6 +224,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.LOCAL_VARIABLE: return createLocalVariable();
 			case LibraryElementPackage.MAPPING: return createMapping();
 			case LibraryElementPackage.MAPPING_TARGET: return createMappingTarget();
+			case LibraryElementPackage.MEMBER_VAR_DECLARATION: return createMemberVarDeclaration();
 			case LibraryElementPackage.MULTIPLEXER: return createMultiplexer();
 			case LibraryElementPackage.ORIGINAL_SOURCE: return createOriginalSource();
 			case LibraryElementPackage.OTHER_ALGORITHM: return createOtherAlgorithm();
@@ -246,11 +249,12 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.ST_FUNCTION: return createSTFunction();
 			case LibraryElementPackage.ST_FUNCTION_BODY: return createSTFunctionBody();
 			case LibraryElementPackage.ST_METHOD: return createSTMethod();
-			case LibraryElementPackage.SUB_APP: return createSubApp();
 			case LibraryElementPackage.STRUCT_MANIPULATOR: return createStructManipulator();
 			case LibraryElementPackage.SUB_APP_TYPE: return createSubAppType();
 			case LibraryElementPackage.SYSTEM_CONFIGURATION: return createSystemConfiguration();
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT: return createTypedConfigureableObject();
+			case LibraryElementPackage.TYPED_SUB_APP: return createTypedSubApp();
+			case LibraryElementPackage.UNTYPED_SUB_APP: return createUntypedSubApp();
 			case LibraryElementPackage.VALUE: return createValue();
 			case LibraryElementPackage.VAR_DECLARATION: return createVarDeclaration();
 			case LibraryElementPackage.VERSION_INFO: return createVersionInfo();
@@ -1164,17 +1168,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public SubApp createSubApp() {
-		SubAppImpl subApp = new SubAppImpl();
-		return subApp;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public StructManipulator createStructManipulator() {
 		StructManipulatorImpl structManipulator = new StructManipulatorImpl();
 		return structManipulator;
@@ -1219,6 +1212,28 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public TypedSubApp createTypedSubApp() {
+		TypedSubAppImpl typedSubApp = new TypedSubAppImpl();
+		return typedSubApp;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public UntypedSubApp createUntypedSubApp() {
+		UntypedSubAppImpl untypedSubApp = new UntypedSubAppImpl();
+		return untypedSubApp;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Value createValue() {
 		ValueImpl value = new ValueImpl();
 		return value;
@@ -1255,6 +1270,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public With createWith() {
 		WithImpl with = new WithImpl();
 		return with;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MemberVarDeclaration createMemberVarDeclaration() {
+		MemberVarDeclarationImpl memberVarDeclaration = new MemberVarDeclarationImpl();
+		return memberVarDeclaration;
 	}
 
 	/**

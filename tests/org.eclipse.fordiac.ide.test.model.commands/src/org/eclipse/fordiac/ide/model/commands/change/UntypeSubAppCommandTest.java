@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.application.commands.NewSubAppCommandTest;
+import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -37,17 +37,16 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 
 	private static State initState() {
 		State s = new State();
-		s = NewSubAppCommandTest.createEmptySubApp(s);
-		final SubApp subapp = (SubApp) s.getFbNetwork().getElementNamed(SUBAPP);
 
 		final SubAppType subappType = LibraryElementFactory.eINSTANCE.createSubAppType();
 		subappType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		subappType.setName(SUBAPP);
-		subappType.setFBNetwork(subapp.getSubAppNetwork());
-		subapp.setSubAppNetwork(null);
+		subappType.setFBNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
 
-		subapp.setTypeEntry(
-				new SubAppTypeEntryMock(subappType, TypeLibraryManager.INSTANCE.getTypeLibrary(null), null));
+		final SubAppTypeEntryMock typeEntry = new SubAppTypeEntryMock(subappType,
+				TypeLibraryManager.INSTANCE.getTypeLibrary(null), null);
+		s.setCommand(new CreateSubAppInstanceCommand(typeEntry, s.getFbNetwork(), 0, 0));
+		s = commandExecution(s);
 
 		return s;
 	}
@@ -123,8 +122,8 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 						new ExecutionDescription<>("untype subapp", //$NON-NLS-1$
 								UntypeSubAppCommandTest::untypeSubApp, //
 								UntypeSubAppCommandTest::verifyUntypeSubApp //
-								)) //
-				));
+						)) //
+		));
 
 		a.addAll(describeCommand("Start with typed subapp and two FBs in subapp network", //$NON-NLS-1$
 				UntypeSubAppCommandTest::initStateWithFilledSubAppNetwork, //
@@ -133,8 +132,8 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 						new ExecutionDescription<>("untype subapp", //$NON-NLS-1$
 								UntypeSubAppCommandTest::untypeSubApp, //
 								UntypeSubAppCommandTest::verifyUntypeSubAppWithFilledSubAppNetwork //
-								)) //
-				));
+						)) //
+		));
 
 		return a;
 	}

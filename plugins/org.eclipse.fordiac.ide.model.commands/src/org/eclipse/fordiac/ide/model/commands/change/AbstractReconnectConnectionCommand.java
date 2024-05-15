@@ -14,8 +14,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
@@ -119,10 +122,15 @@ public abstract class AbstractReconnectConnectionCommand extends Command impleme
 
 	@Override
 	public Set<EObject> getAffectedObjects() {
-		if (parent != null) {
-			return Set.of(parent);
+		final Set<EObject> result = Stream.of(parent, connection).filter(Objects::nonNull)
+				.collect(Collectors.toCollection(HashSet::new));
+		if (connectionCreateCmd != null) {
+			result.addAll(connectionCreateCmd.getAffectedObjects());
 		}
-		return Set.of(connection);
+		if (deleteConnectionCmd != null) {
+			result.addAll(deleteConnectionCmd.getAffectedObjects());
+		}
+		return Set.copyOf(result);
 	}
 
 	protected abstract AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent);

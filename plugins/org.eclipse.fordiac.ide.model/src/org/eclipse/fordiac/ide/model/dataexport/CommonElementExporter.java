@@ -25,6 +25,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -40,7 +41,6 @@ import javax.xml.stream.XMLStreamWriter;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.PreferenceConstants;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -182,6 +182,7 @@ public class CommonElementExporter {
 	public static final String LINE_END = "\n"; //$NON-NLS-1$
 	public static final String TAB = "\t"; //$NON-NLS-1$
 	private static final Pattern CDATA_END_PATTERN = Pattern.compile("\\]\\]>"); //$NON-NLS-1$
+	protected static final DecimalFormat positionFormater = new DecimalFormat("#.##"); //$NON-NLS-1$
 
 	private final XMLStreamWriter writer;
 	private final ByteBufferOutputStream outputStream;
@@ -418,7 +419,8 @@ public class CommonElementExporter {
 	 * @return the escaped string
 	 */
 	protected static String fullyEscapeValue(final String value) {
-		String escapedValue = value.replace("&", "&amp;"); //$NON-NLS-1$ //$NON-NLS-2$
+		String escapedValue = value.replace("\r\n", "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&", "&amp;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -514,9 +516,9 @@ public class CommonElementExporter {
 		addXYAttributes(fb.getPosition().getX(), fb.getPosition().getY());
 	}
 
-	protected void addXYAttributes(final int x, final int y) throws XMLStreamException {
-		writer.writeAttribute(LibraryElementTags.X_ATTRIBUTE, CoordinateConverter.INSTANCE.convertTo1499XML(x));
-		writer.writeAttribute(LibraryElementTags.Y_ATTRIBUTE, CoordinateConverter.INSTANCE.convertTo1499XML(y));
+	protected void addXYAttributes(final double x, final double y) throws XMLStreamException {
+		writer.writeAttribute(LibraryElementTags.X_ATTRIBUTE, positionFormater.format(x));
+		writer.writeAttribute(LibraryElementTags.Y_ATTRIBUTE, positionFormater.format(y));
 	}
 
 	protected void writeCDataSection(final String cdataText) throws XMLStreamException {

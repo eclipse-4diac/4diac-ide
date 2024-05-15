@@ -26,7 +26,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
-import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
+import org.eclipse.fordiac.ide.application.commands.MoveAndReconnectCommand;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -59,7 +59,7 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 						.filter(FBNetworkElement::isInGroup).toList();
 
 				if (!fbWithoutGroup.isEmpty()) {
-					cmd.add(new MoveElementsFromSubAppCommand(fbWithoutGroup,
+					cmd.add(new MoveAndReconnectCommand(fbWithoutGroup,
 							new org.eclipse.swt.graphics.Point(destination.x, destination.y)));
 				}
 
