@@ -18,12 +18,9 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 public class WatchesCommentLabelProvider extends ColumnLabelProvider {
 	@Override
 	public String getText(final Object element) {
-
-		if (element instanceof WatchValueTreeNode) {
-			final WatchValueTreeNode tn = (WatchValueTreeNode) element;
+		if (element instanceof final WatchValueTreeNode tn) {
 			return tn.getMonitoringBaseElement().getPort().getInterfaceElement().getComment();
 		}
-
 		return ""; //$NON-NLS-1$
 	}
 }

@@ -30,25 +30,24 @@ public class WatchesValueLabelProvider extends ColumnLabelProvider {
 	@Override
 	public String getText(final Object element) {
 
-		if (element instanceof WatchValueTreeNode) {
-			final WatchValueTreeNode tn = (WatchValueTreeNode) element;
+		if (element instanceof final WatchValueTreeNode tn) {
 			final IInterfaceElement ie = tn.getMonitoringBaseElement().getPort().getInterfaceElement();
 			if (ie.getType() instanceof RealType && !tn.getValue().contains(".") //$NON-NLS-1$
-					&& (ie instanceof VarDeclaration && !((VarDeclaration) ie).isArray())) {
+					&& (ie instanceof final VarDeclaration varDecl && !varDecl.isArray())) {
 				// display integers as decimals
 				return tn.getValue() + ".0"; //$NON-NLS-1$
 
 			}
-			if (tn.isStructNode()) { // if element is of type struct, then convert all strings of that struct which are
+			if (tn.isStructNode()) { // if element is of type struct, then convert all strings of that struct which
+										// are
 				// of type ANY_BIT to 16#xx
 				WatchValueTreeNodeUtils.adaptAnyBitValues(tn.getChildren());
 			}
 			if (WatchValueTreeNodeUtils.isHexDecorationNecessary(tn.getValue(), ie.getType())) {
 				return WatchValueTreeNodeUtils.decorateHexNumber(tn.getValue());
 			}
-			return (tn.isStructNode() && tn.hasChildren()) ? "" : tn.getValue(); // Hide struct-string in watches view,
-			// because it cannot be displayed
-			// properly
+			// Hide struct-string in watches view, because it cannot be displayed properly
+			return (tn.isStructNode() && tn.hasChildren()) ? "" : tn.getValue(); //$NON-NLS-1$
 		}
 
 		return ""; //$NON-NLS-1$
@@ -56,12 +55,10 @@ public class WatchesValueLabelProvider extends ColumnLabelProvider {
 
 	@Override
 	public Color getBackground(final Object element) {
-		if (element instanceof WatchValueTreeNode) {
+		if (element instanceof final WatchValueTreeNode tn) {
 			final MonitoringElement monitoringElement = (MonitoringElement) MonitoringManager.getInstance()
-					.getMonitoringElement(
-							((WatchValueTreeNode) element).getMonitoringBaseElement().getPort().getInterfaceElement());
-			if (monitoringElement != null && monitoringElement.isForce()
-					&& !(((WatchValueTreeNode) element).isStructRootNode())) {
+					.getMonitoringElement(tn.getMonitoringBaseElement().getPort().getInterfaceElement());
+			if (monitoringElement != null && monitoringElement.isForce() && !tn.isStructRootNode()) {
 				return PreferenceGetter.getColor(Activator.getDefault().getPreferenceStore(),
 						org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants.P_FORCE_COLOR);
 			}

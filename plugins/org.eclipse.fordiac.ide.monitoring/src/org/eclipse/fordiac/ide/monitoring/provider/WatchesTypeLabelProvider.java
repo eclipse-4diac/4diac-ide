@@ -21,11 +21,9 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 public class WatchesTypeLabelProvider extends ColumnLabelProvider {
 	@Override
 	public String getText(final Object element) {
-
-		if (element instanceof WatchValueTreeNode) {
-			return getTypeText((WatchValueTreeNode) element);
+		if (element instanceof final WatchValueTreeNode tn) {
+			return getTypeText(tn);
 		}
-
 		return ""; //$NON-NLS-1$
 	}
 
