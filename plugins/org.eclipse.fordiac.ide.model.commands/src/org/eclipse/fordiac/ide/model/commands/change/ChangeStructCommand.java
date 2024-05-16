@@ -18,6 +18,8 @@
 
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.text.MessageFormat;
+
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -139,7 +141,8 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 				}
 			} else if (reloadedTypeEntry == null) {
 				// type was deleted, create error marker
-				type = datatypeLib.getType(newStructTypeEntry.getFullTypeName());
+				type = datatypeLib.createErrorMarkerType(newStructTypeEntry.getFullTypeName(), MessageFormat
+						.format("Typeentry for StructManipulator `{0}` not available!", getOldMux().getName())); //$NON-NLS-1$
 			}
 		}
 		return (type instanceof final DataType dt) ? dt : IecTypes.GenericTypes.ANY_STRUCT;
