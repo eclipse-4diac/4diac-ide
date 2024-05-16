@@ -38,28 +38,25 @@ public class StructForceEditingSupport extends EditingSupport {
 
 	@Override
 	protected boolean canEdit(final Object element) {
-		if (element instanceof WatchValueTreeNode) {
-			return ((WatchValueTreeNode) element).isStructLeaf();
+		if (element instanceof final WatchValueTreeNode tn) {
+			return tn.isStructLeaf();
 		}
 		return false;
 	}
 
 	@Override
 	protected Object getValue(final Object element) {
-		if (element instanceof WatchValueTreeNode) {
-			return ((WatchValueTreeNode) element).getValue();
+		if (element instanceof final WatchValueTreeNode tn) {
+			return tn.getValue();
 		}
 		return ""; //$NON-NLS-1$
 	}
 
 	@Override
 	protected void setValue(final Object element, final Object value) {
-		if (element instanceof WatchValueTreeNode) {
-			final WatchValueTreeNode node = (WatchValueTreeNode) element;
-			if (isValid((String) value, node.getVariable())) {
-				node.setValue((String) value);
-				getViewer().refresh();
-			}
+		if ((element instanceof final WatchValueTreeNode tn) && isValid((String) value, tn.getVariable())) {
+			tn.setValue((String) value);
+			getViewer().refresh();
 		}
 	}
 
