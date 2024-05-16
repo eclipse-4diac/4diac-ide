@@ -46,7 +46,7 @@ public class WatchesValueEditingSupport extends EditingSupport {
 		if (element instanceof final WatchValueTreeNode node) {
 			final MonitoringElement monitoringElement = (MonitoringElement) node.getMonitoringBaseElement();
 
-			if (isValid((String) value, monitoringElement)) {
+			if (isValid((String) value, node.getVariable())) {
 
 				if (node.isStructNode() && node.getVariable() != null) {
 					node.setValue((String) value);
@@ -98,13 +98,19 @@ public class WatchesValueEditingSupport extends EditingSupport {
 	public static boolean isValid(final String newValue, final MonitoringBaseElement monElement) {
 		if (!newValue.isBlank()) {
 			final IInterfaceElement ie = monElement.getPort().getInterfaceElement();
-			final String validationMsg = (ie instanceof final VarDeclaration varDecl)
-					? VariableOperations.validateValue(varDecl, newValue)
-					: null;
-			if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
-				ErrorMessenger.popUpErrorMessage(validationMsg);
-				return false;
-			}
+
+			return isValid(newValue, ie);
+		}
+		return true;
+	}
+
+	private static boolean isValid(final String newValue, final IInterfaceElement ie) {
+		final String validationMsg = (ie instanceof final VarDeclaration varDecl)
+				? VariableOperations.validateValue(varDecl, newValue)
+				: null;
+		if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
+			ErrorMessenger.popUpErrorMessage(validationMsg);
+			return false;
 		}
 		return true;
 	}
