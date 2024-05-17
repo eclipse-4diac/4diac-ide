@@ -2,14 +2,18 @@
 <FBType Name="E_PULSE" Comment="standard timer function block (pulse)">
 	<Identification Standard="61499-2" Description="This program and the accompanying materials are made   &#10;available under the terms of the Eclipse Public License 2.0   &#10;which is available at https://www.eclipse.org/legal/epl-2.0/   &#10;   &#10;SPDX-License-Identifier: EPL-2.0  &#10;   &#10;   &#10;E_TP -- Impulse forming FB  &#10;  &#10;Generate a Impulse with a given Time.  &#10;This FB makes a Impulse of Duration TM on the Output QO." >
 	</Identification>
-	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Hoepfinger" Date="2023-08-21">
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Hoepfinger" Date="2023-08-21" Remarks="initial implementation as E_IMPULSE">
+	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Hoepfinger" Date="2024-03-05" Remarks="renamed to E_PULSE">
+	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Hoepfinger" Date="2024-04-23" Remarks="Add a Reset to Timer FBs">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event" Comment="Service Request">
 				<With Var="PT"/>
 			</Event>
-			<Event Name="R" Type="Event" Comment="RESET">
+			<Event Name="R" Type="Event" Comment="Reset">
 			</Event>
 		</EventInputs>
 		<EventOutputs>
