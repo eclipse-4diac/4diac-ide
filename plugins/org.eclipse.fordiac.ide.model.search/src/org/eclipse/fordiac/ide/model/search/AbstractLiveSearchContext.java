@@ -63,7 +63,7 @@ public abstract class AbstractLiveSearchContext implements ISearchContext {
 			final TypeEntry entry = elem.getTypeEntry();
 			final IEditorPart editor = getEditor(entry);
 			execute(cmd, editor);
-			save(entry, editor, pm);
+			save(entry, elem, editor, pm);
 		}
 	}
 
@@ -75,7 +75,7 @@ public abstract class AbstractLiveSearchContext implements ISearchContext {
 
 	public static void save(final TypeEntry typeEntry) {
 		final IEditorPart editor = getEditor(typeEntry);
-		save(typeEntry, editor, new NullProgressMonitor());
+		save(typeEntry, getLiveType(typeEntry), editor, new NullProgressMonitor());
 
 	}
 
@@ -109,14 +109,6 @@ public abstract class AbstractLiveSearchContext implements ISearchContext {
 				.logError("It was not possible to find a type for the typeEntry: " + typeEntry.getFullTypeName()); //$NON-NLS-1$
 		return null;
 
-	}
-
-	private static void saveTypeEntry(final TypeEntry typeEntry) {
-		try {
-			typeEntry.save(getLiveType(typeEntry));
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Saving TypeEntry " + typeEntry.getFullTypeName() + " failed", e); //$NON-NLS-1$//$NON-NLS-2$
-		}
 	}
 
 	private static IEditorPart getEditor(final TypeEntry typeEntry) {
@@ -158,11 +150,17 @@ public abstract class AbstractLiveSearchContext implements ISearchContext {
 		}
 	}
 
-	private static void save(final TypeEntry typeEntry, final IEditorPart editor, final IProgressMonitor pm) {
-		if (editor != null) {
-			editor.doSave(pm);
-		} else {
-			saveTypeEntry(typeEntry);
+	private static void save(final TypeEntry typeEntry, final LibraryElement libraryElement, final IEditorPart editor,
+			final IProgressMonitor pm) {
+		try {
+			typeEntry.save(libraryElement, pm);
+			if (editor != null) {
+				// if we have an editor mark the save location in the command stack to tell the
+				// editor that it is not dirty anymore
+				Display.getDefault().syncExec(() -> editor.getAdapter(CommandStack.class).markSaveLocation());
+			}
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError("Saving TypeEntry " + typeEntry.getFullTypeName() + " failed", e); //$NON-NLS-1$//$NON-NLS-2$
 		}
 	}
 

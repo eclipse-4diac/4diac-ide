@@ -196,7 +196,6 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	}
 
 	private void doSaveInternal(final IProgressMonitor monitor) {
-		getCommandStack().markSaveLocation();
 
 		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(typeEntry.getFile().getParent()) {
 			@Override
@@ -217,7 +216,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			Thread.currentThread().interrupt();
 		}
 
-		firePropertyChange(IEditorPart.PROP_DIRTY);
+		getCommandStack().markSaveLocation();
 		interfaceChanges = 0;
 	}
 

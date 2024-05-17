@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -47,10 +48,20 @@ public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 	}
 
 	private static IEC61499SearchFilter createSearchFilter(final DataTypeEntry dtEntry) {
-		return searchCanditate -> (searchCanditate instanceof final VarDeclaration varDecl
+		return searchCandidate -> (searchCandidate instanceof final VarDeclaration varDecl
 				&& dtEntry == varDecl.getType().getTypeEntry())
-				|| (searchCanditate instanceof final ConfigurableFB confFB
-						&& dtEntry == confFB.getDataType().getTypeEntry());
+				|| (searchCandidate instanceof final ConfigurableFB configFb
+						&& isConfiguredWithDataType(configFb, dtEntry));
+	}
+
+	private static boolean isConfiguredWithDataType(final ConfigurableFB confFB, final DataTypeEntry dtEntry) {
+		if (confFB.getDataType() == null) {
+			return false; // unconfigured FB, corresponds to ANY_STRUCT
+		}
+		if (confFB.getDataType() instanceof ErrorMarkerDataType || dtEntry.getType() instanceof ErrorMarkerDataType) {
+			return confFB.getDataType().getTypeEntry().getFullTypeName().equals(dtEntry.getFullTypeName());
+		}
+		return dtEntry == confFB.getDataType().getTypeEntry();
 	}
 
 	private static final class DataTypeInstanceSearchChildrenProivder implements ISearchChildrenProvider {

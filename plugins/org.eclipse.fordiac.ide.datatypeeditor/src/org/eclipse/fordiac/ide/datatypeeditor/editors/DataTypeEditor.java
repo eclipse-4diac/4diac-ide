@@ -180,7 +180,6 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 	}
 
 	private void doSaveInternal(final IProgressMonitor monitor) {
-		commandStack.markSaveLocation();
 		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(dataTypeEntry.getFile().getParent()) {
 
 			@Override
@@ -198,7 +197,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 			Thread.currentThread().interrupt();
 		}
 		addListenerToDataTypeObj();
-		firePropertyChange(IEditorPart.PROP_DIRTY);
+		commandStack.markSaveLocation();
 	}
 
 	@Override

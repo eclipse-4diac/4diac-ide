@@ -36,6 +36,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.With
+import org.eclipse.fordiac.ide.model.LibraryElementTags
+import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
@@ -374,22 +376,34 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			«type.interfaceList.outMappedInOutVars.generateConnectionAccessorsDefinition("getDIOOutConUnchecked", "CInOutDataConnection *")»
 		«ENDIF»
 	'''
-
+	
 	def protected generateSetInitialValuesDeclaration(Iterable<VarDeclaration> variables) '''
-		«IF !variables.empty»
+		«IF containsNonRetainedVariable(variables)»
 			void setInitialValues() override;
 		«ENDIF»
 	'''
-
+	
 	def protected generateSetInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
-		«IF !variables.empty»
+		«IF(containsNonRetainedVariable(variables))»
 			void «className»::setInitialValues() {
-			  «FOR variable : variables»
-			  	«variable.generateName» = «variable.generateVariableDefaultValue»;
-			  «ENDFOR»
+				«generateVariableDefaultAssignment(variables.filter[!isRetainedVariable(it)])»
 			}
 			
-		«ENDIF»
+		«ENDIF»	
+	'''
+	
+	def private boolean isRetainedVariable(VarDeclaration variable) {
+		return variable.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE) !== null && variable.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE).equals(RetainTag.RETAIN.string);
+	}
+	
+	def private boolean containsNonRetainedVariable(Iterable<VarDeclaration> variables) {
+		return variables.exists[!isRetainedVariable(it)];
+	}
+	
+	def private generateVariableDefaultAssignment(Iterable<VarDeclaration> variables)'''
+		«FOR variable : variables»
+			«variable.generateName» = «variable.generateVariableDefaultValue»;
+		«ENDFOR»
 	'''
 
 	def protected generateConnectionVariableDeclarations(List<VarDeclaration> variables) '''

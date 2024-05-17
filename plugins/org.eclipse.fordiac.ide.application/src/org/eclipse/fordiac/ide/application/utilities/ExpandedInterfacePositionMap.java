@@ -25,10 +25,14 @@ import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 
 public class ExpandedInterfacePositionMap {
@@ -37,11 +41,13 @@ public class ExpandedInterfacePositionMap {
 	public Map<IFigure, Integer> inputPositions = null;
 	public Map<IFigure, Integer> outputPositions = null;
 	public Map<IFigure, Integer> directPositions = null;
+	public Map<IFigure, InterfaceEditPart> editPartMap = new HashMap<>();
+	public Map<IFigure, Integer> sizes = null;
 
 	private int inputUnconnectedStart = Integer.MAX_VALUE;
 	private int outputUnconnectedStart = Integer.MAX_VALUE;
-	private int inputDirectEnd = Integer.MAX_VALUE;
-	private int outputDirectEnd = Integer.MAX_VALUE;
+	private int inputDirectEnd;
+	private int outputDirectEnd;
 
 	public ExpandedInterfacePositionMap(final SubAppForFBNetworkEditPart ep) {
 		this.ep = ep;
@@ -55,7 +61,21 @@ public class ExpandedInterfacePositionMap {
 		return outputUnconnectedStart;
 	}
 
+	public void refreshParent() {
+		ep.getChildren().stream().filter(InterfaceEditPart.class::isInstance).forEach(EditPart::refresh);
+	}
+
+	public int getInputDirectEnd() {
+		return inputDirectEnd;
+	}
+
+	public int getOutputDirectEnd() {
+		return outputDirectEnd;
+	}
+
 	public void calculate() {
+		editPartMap.clear();
+
 		// @formatter:off
 		final var interfaceMap = ep.getChildren().stream()
 			.filter(InterfaceEditPart.class::isInstance)
@@ -66,7 +86,13 @@ public class ExpandedInterfacePositionMap {
 		final var inputList = interfaceMap.getOrDefault(Boolean.TRUE, new ArrayList<>());
 		final var outputList = interfaceMap.getOrDefault(Boolean.FALSE, new ArrayList<>());
 
-		directPositions = calculateDirectPositions(inputList);
+		final Rectangle clientArea = getClientArea(inputList, outputList);
+		if (clientArea == null) {
+			return;
+		}
+
+		sizes = getPinSizes(inputList, outputList);
+		directPositions = calculateDirectPositions(inputList, clientArea.top());
 
 		final var inputMap = calculateInput(inputList);
 		resolveCollisions(inputMap);
@@ -83,6 +109,128 @@ public class ExpandedInterfacePositionMap {
 			outputUnconnectedStart = outputDirectEnd;
 		}
 		outputPositions = outputMap;
+
+		stackToFit(clientArea, inputPositions, true);
+		stackToFit(clientArea, outputPositions, false);
+	}
+
+	private static Map<IFigure, Integer> getPinSizes(final List<InterfaceEditPart> inputList,
+			final List<InterfaceEditPart> outputList) {
+		final var sizes = new HashMap<IFigure, Integer>();
+		for (final var pin : inputList) {
+			final var ep = (UntypedSubAppInterfaceElementEditPart) pin;
+			if (ep.isOverflow()) {
+				ep.setOverflow(false);
+				ep.refresh();
+				sizes.put(ep.getFigure(), Integer.valueOf(ep.getUncollapsedFigureHeight()));
+			} else {
+				sizes.put(ep.getFigure(), Integer.valueOf(ep.getFigure().getBounds().height));
+			}
+		}
+		for (final var pin : outputList) {
+			final var ep = (UntypedSubAppInterfaceElementEditPart) pin;
+			if (ep.isOverflow()) {
+				ep.setOverflow(false);
+				ep.refresh();
+				sizes.put(ep.getFigure(), Integer.valueOf(ep.getUncollapsedFigureHeight()));
+			} else {
+				sizes.put(ep.getFigure(), Integer.valueOf(ep.getFigure().getBounds().height));
+			}
+		}
+		return sizes;
+	}
+
+	private static Rectangle getClientArea(final List<InterfaceEditPart> inputList,
+			final List<InterfaceEditPart> outputList) {
+		if (!inputList.isEmpty()) {
+			return inputList.get(0).getFigure().getParent().getBounds();
+		}
+		if (!outputList.isEmpty()) {
+			return outputList.get(0).getFigure().getParent().getBounds();
+		}
+		return null;
+	}
+
+	private void stackToFit(final Rectangle clientArea, final Map<IFigure, Integer> positions, final boolean isInput) {
+		if (positions.isEmpty()) {
+			return;
+		}
+
+		final var entryList = positions.entrySet().stream().filter(e -> !directPositions.containsKey(e.getKey()))
+				.collect(Collectors.toList());
+		entryList.sort(Comparator.comparing(Map.Entry::getValue));
+
+		final int bottom = clientArea.bottom() - 10; // add padding to ensure no pin is drawn out of bounds
+		int i = entryList.size() - 1;
+		int totalSize = 0;
+
+		// add unconnected pins from the end
+		for (; i >= 0; i--) {
+			final var entry = entryList.get(i);
+			if (entry.getValue().intValue() != Integer.MAX_VALUE) {
+				break;
+			}
+			totalSize += sizes.get(entry.getKey()).intValue();
+		}
+
+		// all pins were unconnected
+		if (i < 0) {
+			return;
+		}
+
+		// all pins fit, no need to continue
+		if ((isInput) ? inputUnconnectedStart + totalSize < bottom : outputUnconnectedStart + totalSize < bottom) {
+			return;
+		}
+
+		int lastY = -1;
+
+		// find out when stacking is enough and collapse pins in the process
+		for (; i >= 0; i--) {
+			final var fig = entryList.get(i).getKey();
+			final var ep = (UntypedSubAppInterfaceElementEditPart) editPartMap.get(fig);
+			ep.setOverflow(true);
+			ep.refresh();
+			final int size = ep.getCollapsedFigureHeight();
+			sizes.put(fig, Integer.valueOf(size));
+
+			totalSize += size;
+
+			final int y = entryList.get(i).getValue().intValue();
+
+			final int collapsedY = y + ((ep.getUncollapsedFigureHeight() - size) / 2);
+			if (totalSize + collapsedY < bottom) {
+				lastY = collapsedY;
+				break;
+			}
+		}
+
+		int y;
+		if (i == -1) {
+			i = 0;
+			y = isInput ? inputDirectEnd : outputDirectEnd;
+		} else {
+			y = lastY;
+		}
+
+		// do the actual stacking
+		for (; i < entryList.size(); i++) {
+			// reached unconnected pins again
+			if (entryList.get(i).getValue().intValue() == Integer.MAX_VALUE) {
+				break;
+			}
+			final var fig = entryList.get(i).getKey();
+			positions.put(fig, Integer.valueOf(y));
+
+			final Integer newSize = sizes.get(fig);
+			y += (newSize != null) ? newSize.intValue() : fig.getBounds().height;
+		}
+
+		if (isInput) {
+			inputUnconnectedStart = y;
+		} else {
+			outputUnconnectedStart = y;
+		}
 	}
 
 	/**
@@ -92,7 +240,7 @@ public class ExpandedInterfacePositionMap {
 	 * would be drawn beyond the client area, where the connection cannot be drawn
 	 * straight.
 	 */
-	private Map<IFigure, Integer> calculateDirectPositions(final List<InterfaceEditPart> inputList) {
+	private Map<IFigure, Integer> calculateDirectPositions(final List<InterfaceEditPart> inputList, final int top) {
 		// @formatter:off
 		final var connections = inputList
 				.stream()
@@ -104,8 +252,7 @@ public class ExpandedInterfacePositionMap {
 
 		final var inputMap = new HashMap<IFigure, Integer>();
 		final var outputMap = new HashMap<IFigure, Integer>();
-		final var clientAreaY = (inputList.isEmpty()) ? 0 : inputList.get(0).getFigure().getParent().getBounds().y;
-		int inputY = clientAreaY;
+		int inputY = top;
 
 		for (final var conn : connections) {
 			final var inputFigure = ((GraphicalEditPart) conn.getSource()).getFigure();
@@ -117,7 +264,7 @@ public class ExpandedInterfacePositionMap {
 			if (!outputMap.containsKey(outputFigure)) {
 				final int connStart = inputMap.get(inputFigure).intValue() + (inputFigure.getBounds().height / 2);
 				final int outputY = connStart - (outputFigure.getBounds().height / 2);
-				outputMap.put(outputFigure, Integer.valueOf(Math.max(outputY, clientAreaY)));
+				outputMap.put(outputFigure, Integer.valueOf(Math.max(outputY, top)));
 			}
 		}
 
@@ -128,8 +275,9 @@ public class ExpandedInterfacePositionMap {
 		if (max.isPresent()) {
 			outputDirectEnd = max.get().getValue().intValue() + max.get().getKey().getBounds().height;
 		} else {
-			outputDirectEnd = clientAreaY;
+			outputDirectEnd = top;
 		}
+
 		inputMap.putAll(outputMap);
 		return inputMap;
 	}
@@ -138,13 +286,13 @@ public class ExpandedInterfacePositionMap {
 	 * Calculates the start position for unconnected pins which is always below the
 	 * connected pins.
 	 */
-	private static int calculateUnconnectedStartPositions(final Map<IFigure, Integer> map) {
+	private int calculateUnconnectedStartPositions(final Map<IFigure, Integer> map) {
 		final Optional<Entry<IFigure, Integer>> inputOptional = map.entrySet().stream()
 				.filter(entry -> entry.getValue().intValue() != Integer.MAX_VALUE)
 				.max((entry1, entry2) -> Integer.compare(entry1.getValue().intValue(), entry2.getValue().intValue()));
 		if (inputOptional.isPresent()) {
 			final var entry = inputOptional.get();
-			return entry.getValue().intValue() + entry.getKey().getBounds().height;
+			return entry.getValue().intValue() + sizes.get(entry.getKey()).intValue();
 		}
 		return Integer.MAX_VALUE;
 	}
@@ -160,8 +308,8 @@ public class ExpandedInterfacePositionMap {
 			if (max.isPresent()) {
 				final ConnectionEditPart connEp = (ConnectionEditPart) max.get();
 				final Point end = connEp.getConnectionFigure().getEnd();
-				final int pinHeight = ((GraphicalEditPart) max.get().getSource()).getFigure().getBounds().height;
-				final int y = end.y - (pinHeight / 2);
+				final var fig = ((GraphicalEditPart) max.get().getSource()).getFigure();
+				final int y = end.y - (sizes.get(fig).intValue() / 2);
 
 				if (!isSkipConnection(connEp)) {
 					map.put(ie.getFigure(), Integer.valueOf(Math.max(y, inputDirectEnd)));
@@ -169,6 +317,7 @@ public class ExpandedInterfacePositionMap {
 			} else {
 				map.put(ie.getFigure(), Integer.valueOf(Integer.MAX_VALUE));
 			}
+			editPartMap.put(ie.getFigure(), ie);
 		}
 		return map;
 	}
@@ -184,8 +333,8 @@ public class ExpandedInterfacePositionMap {
 			if (max.isPresent()) {
 				final ConnectionEditPart connEp = (ConnectionEditPart) max.get();
 				final Point start = connEp.getConnectionFigure().getStart();
-				final int pinHeight = ((GraphicalEditPart) max.get().getTarget()).getFigure().getBounds().height;
-				final int y = start.y - (pinHeight / 2);
+				final var fig = ((GraphicalEditPart) max.get().getTarget()).getFigure();
+				final int y = start.y - (sizes.get(fig).intValue() / 2);
 
 				if (!isSkipConnection(connEp)) {
 					map.put(ie.getFigure(), Integer.valueOf(Math.max(y, outputDirectEnd)));
@@ -193,6 +342,7 @@ public class ExpandedInterfacePositionMap {
 			} else {
 				map.put(ie.getFigure(), Integer.valueOf(Integer.MAX_VALUE));
 			}
+			editPartMap.put(ie.getFigure(), ie);
 		}
 		return map;
 	}
@@ -200,19 +350,20 @@ public class ExpandedInterfacePositionMap {
 	private static boolean isSkipConnection(final ConnectionEditPart ep) {
 		final var sourceModel = (IInterfaceElement) ep.getSource().getModel();
 		final var targetModel = (IInterfaceElement) ep.getTarget().getModel();
-		return sourceModel.getFBNetworkElement() == targetModel.getFBNetworkElement();
+		return sourceModel.eContainer().eContainer() instanceof final SubApp sourceSub
+				&& targetModel.eContainer().eContainer() instanceof final SubApp targetSub && sourceSub == targetSub;
 	}
 
-	private static void resolveCollisions(final Map<IFigure, Integer> positions) {
+	private void resolveCollisions(final Map<IFigure, Integer> positions) {
 		final var entryList = new ArrayList<>(positions.entrySet());
 		entryList.sort(Comparator.comparing(Map.Entry::getValue));
 
 		for (int i = 1; i < entryList.size(); i++) {
 			final var prevEntry = entryList.get(i - 1);
 			final var currEntry = entryList.get(i);
-			final int prevHeight = prevEntry.getKey().getBounds().height;
 			final int prev = prevEntry.getValue().intValue();
 			final int curr = currEntry.getValue().intValue();
+			final int prevHeight = sizes.get(prevEntry.getKey()).intValue();
 
 			// reached the end of connected pins
 			if (curr == Integer.MAX_VALUE) {

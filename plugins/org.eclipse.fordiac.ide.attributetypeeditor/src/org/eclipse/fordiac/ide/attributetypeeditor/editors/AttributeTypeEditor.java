@@ -180,7 +180,6 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 	}
 
 	private void doSaveInternal(final IProgressMonitor monitor) {
-		commandStack.markSaveLocation();
 		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(
 				attributeTypeEntry.getFile().getParent()) {
 
@@ -198,8 +197,8 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 			FordiacLogHelper.logError(e.getMessage(), e);
 			Thread.currentThread().interrupt();
 		}
+		commandStack.markSaveLocation();
 		addListenerToAttributeDeclaration();
-		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
 	@Override
