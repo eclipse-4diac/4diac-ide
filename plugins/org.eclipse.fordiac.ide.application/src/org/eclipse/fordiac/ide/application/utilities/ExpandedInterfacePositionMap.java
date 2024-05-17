@@ -21,8 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -30,6 +32,8 @@ import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
@@ -37,7 +41,10 @@ import org.eclipse.gef.GraphicalEditPart;
 
 public class ExpandedInterfacePositionMap {
 
+	private final static String PREFERENCE_STORE = "org.eclipse.fordiac.ide.gef"; //$NON-NLS-1$
+
 	private final SubAppForFBNetworkEditPart ep;
+	private Rectangle clientArea = null;
 	public Map<IFigure, Integer> inputPositions = null;
 	public Map<IFigure, Integer> outputPositions = null;
 	public Map<IFigure, Integer> directPositions = null;
@@ -83,35 +90,103 @@ public class ExpandedInterfacePositionMap {
 			.collect(Collectors.groupingBy(InterfaceEditPart::isInput));
 		// @formatter:on
 
-		final var inputList = interfaceMap.getOrDefault(Boolean.TRUE, new ArrayList<>());
-		final var outputList = interfaceMap.getOrDefault(Boolean.FALSE, new ArrayList<>());
+		var inputList = interfaceMap.getOrDefault(Boolean.TRUE, new ArrayList<>());
+		var outputList = interfaceMap.getOrDefault(Boolean.FALSE, new ArrayList<>());
 
-		final Rectangle clientArea = getClientArea(inputList, outputList);
+		clientArea = getClientArea(inputList, outputList);
 		if (clientArea == null) {
 			return;
 		}
 
 		sizes = getPinSizes(inputList, outputList);
-		directPositions = calculateDirectPositions(inputList, clientArea.top());
+
+		final boolean directFlag = Platform.getPreferencesService().getBoolean(PREFERENCE_STORE,
+				DiagramPreferences.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR, false, null);
+		if (directFlag) {
+			directPositions = calculateDirectPositionsStack(inputList, outputList);
+		} else {
+			directPositions = calculateDirectPositions(inputList);
+		}
+
+		inputList = inputList.stream().filter(ie -> !directPositions.containsKey(ie.getFigure())).toList();
+		outputList = outputList.stream().filter(ie -> !directPositions.containsKey(ie.getFigure())).toList();
 
 		final var inputMap = calculateInput(inputList);
+		final var outputMap = calculateOutput(outputList);
+
 		resolveCollisions(inputMap);
+		resolveCollisions(outputMap);
+
 		inputUnconnectedStart = calculateUnconnectedStartPositions(inputMap);
+		outputUnconnectedStart = calculateUnconnectedStartPositions(outputMap);
+
 		if (inputUnconnectedStart == Integer.MAX_VALUE && !directPositions.isEmpty()) {
 			inputUnconnectedStart = inputDirectEnd;
 		}
-		inputPositions = inputMap;
-
-		final var outputMap = calculateOutput(outputList);
-		resolveCollisions(outputMap);
-		outputUnconnectedStart = calculateUnconnectedStartPositions(outputMap);
 		if (outputUnconnectedStart == Integer.MAX_VALUE && !directPositions.isEmpty()) {
 			outputUnconnectedStart = outputDirectEnd;
 		}
+
+		inputPositions = inputMap;
 		outputPositions = outputMap;
 
 		stackToFit(clientArea, inputPositions, true);
 		stackToFit(clientArea, outputPositions, false);
+	}
+
+	private Map<IFigure, Integer> calculateDirectPositionsStack(final List<InterfaceEditPart> inputList,
+			final List<InterfaceEditPart> outputList) {
+		// @formatter:off
+		final var direct = inputList
+				.stream()
+				.map(InterfaceEditPart::getSourceConnections)
+				.flatMap(Collection::stream)
+				.map(ConnectionEditPart.class::cast)
+				.filter(ExpandedInterfacePositionMap::isSkipConnection)
+				.toList();
+		// @formatter:on
+
+		final var pos = new HashMap<IFigure, Integer>();
+
+		// cannot use a set as we need the order to stay intact
+		final var input = new ArrayList<InterfaceEditPart>();
+		final var output = new ArrayList<InterfaceEditPart>();
+
+		for (final var conn : direct) {
+			final var source = (InterfaceEditPart) conn.getSource();
+			final var target = (InterfaceEditPart) conn.getTarget();
+			if (!input.contains(source)) {
+				input.add(source);
+			}
+			if (!output.contains(source)) {
+				output.add(target);
+			}
+		}
+
+		final boolean eventFlag = Platform.getPreferencesService().getBoolean(PREFERENCE_STORE,
+				DiagramPreferences.EXPANDED_INTERFACE_EVENTS_TOP, false, null);
+		if (eventFlag) {
+			input.addAll(inputList.stream().filter(ie -> ie.getModel() instanceof Event)
+					.filter(Predicate.not(input::contains)).toList());
+			output.addAll(outputList.stream().filter(ie -> ie.getModel() instanceof Event)
+					.filter(Predicate.not(output::contains)).toList());
+		}
+
+		int y = clientArea.top();
+		for (final var pin : input) {
+			pos.put(pin.getFigure(), Integer.valueOf(y));
+			y += sizes.get(pin.getFigure()).intValue();
+		}
+		inputDirectEnd = y;
+
+		y = clientArea.top();
+		for (final var pin : output) {
+			pos.put(pin.getFigure(), Integer.valueOf(y));
+			y += sizes.get(pin.getFigure()).intValue();
+		}
+		outputDirectEnd = y;
+
+		return pos;
 	}
 
 	private static Map<IFigure, Integer> getPinSizes(final List<InterfaceEditPart> inputList,
@@ -240,19 +315,20 @@ public class ExpandedInterfacePositionMap {
 	 * would be drawn beyond the client area, where the connection cannot be drawn
 	 * straight.
 	 */
-	private Map<IFigure, Integer> calculateDirectPositions(final List<InterfaceEditPart> inputList, final int top) {
+	private Map<IFigure, Integer> calculateDirectPositions(final List<InterfaceEditPart> inputList) {
 		// @formatter:off
 		final var connections = inputList
 				.stream()
-				.map(ie -> (List<ConnectionEditPart>) ie.getSourceConnections())
+				.map(InterfaceEditPart::getSourceConnections)
 				.flatMap(Collection::stream)
+				.map(ConnectionEditPart.class::cast)
 				.filter(ExpandedInterfacePositionMap::isSkipConnection)
 				.collect(Collectors.toList());
 		// @formatter:on
 
 		final var inputMap = new HashMap<IFigure, Integer>();
 		final var outputMap = new HashMap<IFigure, Integer>();
-		int inputY = top;
+		int inputY = clientArea.top();
 
 		for (final var conn : connections) {
 			final var inputFigure = ((GraphicalEditPart) conn.getSource()).getFigure();
@@ -264,7 +340,7 @@ public class ExpandedInterfacePositionMap {
 			if (!outputMap.containsKey(outputFigure)) {
 				final int connStart = inputMap.get(inputFigure).intValue() + (inputFigure.getBounds().height / 2);
 				final int outputY = connStart - (outputFigure.getBounds().height / 2);
-				outputMap.put(outputFigure, Integer.valueOf(Math.max(outputY, top)));
+				outputMap.put(outputFigure, Integer.valueOf(Math.max(outputY, clientArea.top())));
 			}
 		}
 
@@ -275,7 +351,7 @@ public class ExpandedInterfacePositionMap {
 		if (max.isPresent()) {
 			outputDirectEnd = max.get().getValue().intValue() + max.get().getKey().getBounds().height;
 		} else {
-			outputDirectEnd = top;
+			outputDirectEnd = clientArea.top();
 		}
 
 		inputMap.putAll(outputMap);
