@@ -204,7 +204,7 @@ public final class DataTypeLibrary {
 		return null;
 	}
 
-	private ErrorMarkerDataType createErrorMarkerType(final String typeName, final String message) {
+	public ErrorMarkerDataType createErrorMarkerType(final String typeName, final String message) {
 		return errorTypes.computeIfAbsent(typeName.toUpperCase(), name -> {
 			FordiacLogHelper.logInfo(message);
 			final ErrorMarkerDataType type = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();

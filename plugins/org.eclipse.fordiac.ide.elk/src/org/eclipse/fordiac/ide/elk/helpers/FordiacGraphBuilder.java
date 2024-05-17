@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.elk.helpers;
 
 import static org.eclipse.fordiac.ide.elk.FordiacLayoutMapping.CONNECTIONS;
 import static org.eclipse.fordiac.ide.elk.FordiacLayoutMapping.DUMMY_PORTS;
+import static org.eclipse.fordiac.ide.elk.FordiacLayoutMapping.FLAT_CONNECTIONS;
 import static org.eclipse.fordiac.ide.elk.FordiacLayoutMapping.HIERARCHY_CROSSING_CONNECTIONS;
 import static org.eclipse.fordiac.ide.elk.FordiacLayoutMapping.HIERARCHY_CROSSING_CONNECTIONS_MAPPING;
 import static org.eclipse.fordiac.ide.elk.FordiacLayoutMapping.HIERARCHY_CROSSING_CONNECTIONS_REVERSE_MAPPING;
@@ -43,6 +44,7 @@ import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutMapping;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
@@ -149,9 +151,12 @@ public final class FordiacGraphBuilder {
 		if (!mapping.getProperty(CONNECTIONS).contains(conn)) {
 			final Object sourceContainer = conn.getSource().getParent().getParent();
 			final Object targetContainer = conn.getTarget().getParent().getParent();
-			// save connections for later
-			if ((sourceContainer instanceof GroupContentEditPart || targetContainer instanceof GroupContentEditPart)
-					&& sourceContainer != targetContainer) {
+
+			if (sourceContainer instanceof UnfoldedSubappContentEditPart
+					|| targetContainer instanceof UnfoldedSubappContentEditPart) {
+				mapping.getProperty(FLAT_CONNECTIONS).add(conn);
+			} else if ((sourceContainer instanceof GroupContentEditPart
+					|| targetContainer instanceof GroupContentEditPart) && sourceContainer != targetContainer) {
 				mapping.getProperty(HIERARCHY_CROSSING_CONNECTIONS).add(conn);
 			} else {
 				mapping.getProperty(CONNECTIONS).add(conn);
@@ -189,7 +194,7 @@ public final class FordiacGraphBuilder {
 			final ElkNode parent, final int yOffset) {
 		final ElkNode node = FordiacLayoutFactory.createFordiacLayoutNode(editPart, parent);
 
-		final Rectangle bounds = editPart.getFigure().getFBBounds();
+		final Rectangle bounds = editPart.getFigure().getBounds();
 		node.setLocation(bounds.x, bounds.y - yOffset);
 		node.setDimensions(bounds.preciseWidth(), bounds.preciseHeight());
 

@@ -25,7 +25,7 @@ public class TargetInterfaceElement implements Comparable<TargetInterfaceElement
 			final FBNetwork parentNW) {
 		if (refElement.getFBNetworkElement() == null || (refElement.getFBNetworkElement() instanceof final SubApp subapp
 				&& subapp.getSubAppNetwork() == parentNW)) {
-			return new SubapTargetInterfaceElement(host, refElement);
+			return new SubappTargetInterfaceElement(host, refElement);
 		}
 		return new TargetInterfaceElement(host, refElement);
 	}
@@ -61,14 +61,14 @@ public class TargetInterfaceElement implements Comparable<TargetInterfaceElement
 
 	@Override
 	public int compareTo(final TargetInterfaceElement other) {
-		if (other instanceof SubapTargetInterfaceElement) {
+		if (other instanceof SubappTargetInterfaceElement) {
 			return 1;
 		}
 		return getRefPinFullName().compareTo(other.getRefPinFullName());
 	}
 
-	public static class SubapTargetInterfaceElement extends TargetInterfaceElement {
-		private SubapTargetInterfaceElement(final IInterfaceElement host, final IInterfaceElement refElement) {
+	public static class SubappTargetInterfaceElement extends TargetInterfaceElement {
+		private SubappTargetInterfaceElement(final IInterfaceElement host, final IInterfaceElement refElement) {
 			super(host, refElement);
 		}
 
@@ -79,11 +79,29 @@ public class TargetInterfaceElement implements Comparable<TargetInterfaceElement
 
 		@Override
 		public int compareTo(final TargetInterfaceElement other) {
-			if (other instanceof SubapTargetInterfaceElement) {
+			if (other instanceof SubappTargetInterfaceElement) {
 				return getRefPinFullName().compareTo(other.getRefPinFullName());
 			}
 			return -1;
 		}
+	}
+
+	public static class GroupTargetInterfaceElement extends SubappTargetInterfaceElement {
+		final SubApp subapp;
+		final int numConns;
+
+		public GroupTargetInterfaceElement(final IInterfaceElement host, final IInterfaceElement refElement,
+				final SubApp subapp, final int numConns) {
+			super(host, refElement);
+			this.subapp = subapp;
+			this.numConns = numConns;
+		}
+
+		@Override
+		public String getRefPinFullName() {
+			return subapp.getName() + ": " + numConns; //$NON-NLS-1$
+		}
+
 	}
 
 }

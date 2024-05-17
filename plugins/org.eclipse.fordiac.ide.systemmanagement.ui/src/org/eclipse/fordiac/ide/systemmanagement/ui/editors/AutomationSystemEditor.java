@@ -275,7 +275,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 				Thread.currentThread().interrupt();
 			}
 			getCommandStack().markSaveLocation();
-			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
 
 	}
