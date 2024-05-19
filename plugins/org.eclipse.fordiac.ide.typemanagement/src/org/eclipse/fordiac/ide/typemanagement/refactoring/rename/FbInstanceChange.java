@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2024 Johannes Kepler University
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Martin Schwarz - initial implementation
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
 import java.util.HashMap;
@@ -60,6 +72,7 @@ public class FbInstanceChange extends CompositeChange {
 	}
 
 	private List<FBNetworkElement> searchAffectedStructuredType() {
+		// TODO use new search
 		final InstanceSearch structMemberSearch = StructDataTypeSearch
 				.createStructMemberSearch((StructuredType) oldTypeEntry.getTypeEditable());
 

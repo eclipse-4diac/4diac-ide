@@ -107,7 +107,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		final CompositeChange parentChange = new CompositeChange(
 				MessageFormat.format(Messages.Refactoring_RenameFromTo, typeEntry.getTypeName(), newName));
 
-		final Change typeLibraryChange = new UpdateTypeLibraryEntryChange(file, typeEntry, newName, oldName);
+		final Change typeLibraryChange = new UpdateTypeEntryChange(file, typeEntry, newName, oldName);
 		parentChange.add(typeLibraryChange);
 
 		final CompositeChange fbTypeChange = new FbTypeChange(file);
@@ -131,7 +131,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 	private CompositeChange createFBDataChange() {
 		final CompositeChange parentChange = new CompositeChange(
 				MessageFormat.format(Messages.Refactoring_RenameFromTo, typeEntry.getTypeName(), newName));
-		parentChange.add(new UpdateTypeLibraryEntryChange(file, typeEntry, newName, oldName));
+		parentChange.add(new UpdateTypeEntryChange(file, typeEntry, newName, oldName));
 		final CompositeChange change = new CompositeChange(Messages.Refactoring_AffectedInstancesOfFB);
 
 		final IEC61499ElementSearch search = new BlockTypeInstanceSearch(typeEntry);
