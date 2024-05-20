@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.fordiac.ide.deployment.devicemanagementinteractor">
       <DeviceManagementInteractorProvider
-            class="aimirim.fordiac.ide.deployment.uao.providers.UAODevMgmtInteractorProvider">
+            class="org.eclipse.fordiac.ide.deployment.uao.providers.UAODevMgmtInteractorProvider">
       </DeviceManagementInteractorProvider>
    </extension>
    <extension

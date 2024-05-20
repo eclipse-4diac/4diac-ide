@@ -104,7 +104,7 @@
 		</location>
 		<location includeDependencyDepth="infinite" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 
-			<feature id="aimirim.fordiac.ide.websocket" label="Websocket Dependencies" provider-name="Aimirim" version="0.1.0.qualifier">
+			<feature id="org.eclipse.fordiac.ide.websocket" label="Websocket Dependencies" provider-name="Aimirim" version="0.1.0.qualifier">
 
    
 

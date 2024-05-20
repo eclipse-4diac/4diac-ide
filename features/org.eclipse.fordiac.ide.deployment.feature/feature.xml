@@ -172,7 +172,7 @@ United States, other countries, or both.\n
          id="org.eclipse.fordiac.ide.milo"
          version="0.0.0"/>
    <includes
-         id="aimirim.fordiac.ide.websocket"
+         id="org.eclipse.fordiac.ide.websocket"
          version="0.0.0"/>
 
    <requires>
@@ -237,7 +237,7 @@ United States, other countries, or both.\n
          unpack="false"/>,
 
    <plugin
-         id="aimirim.fordiac.ide.deployment.uao"
+         id="org.eclipse.fordiac.ide.deployment.uao"
          download-size="0"
          install-size="0"
          version="0.0.0"

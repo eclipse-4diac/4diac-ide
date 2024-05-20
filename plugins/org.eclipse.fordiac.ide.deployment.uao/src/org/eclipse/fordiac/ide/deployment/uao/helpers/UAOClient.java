@@ -11,7 +11,7 @@
  *   Pedro Ricardo
  *   Felipe Adriano
  *******************************************************************************/
-package aimirim.fordiac.ide.deployment.uao.helpers;
+package org.eclipse.fordiac.ide.deployment.uao.helpers;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -76,7 +76,7 @@ import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketListener;
 
-import aimirim.fordiac.ide.deployment.uao.Messages;
+import org.eclipse.fordiac.ide.deployment.uao.Messages;
 
 public class UAOClient {
 	

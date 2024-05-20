@@ -11,7 +11,7 @@
  *   Pedro Ricardo
  *   Felipe Adriano
  *******************************************************************************/
-package aimirim.fordiac.ide.deployment.uao.helpers;
+package org.eclipse.fordiac.ide.deployment.uao.helpers;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

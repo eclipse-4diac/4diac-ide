@@ -11,12 +11,12 @@
  *   Pedro Ricardo
  *   Felipe Adriano
  *******************************************************************************/
-package aimirim.fordiac.ide.deployment.uao.providers;
+package org.eclipse.fordiac.ide.deployment.uao.providers;
 
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractorProvider;
-import aimirim.fordiac.ide.deployment.uao.UAODeploymentExecutor;
+import org.eclipse.fordiac.ide.deployment.uao.UAODeploymentExecutor;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
 public class UAODevMgmtInteractorProvider implements IDeviceManagementInteractorProvider {

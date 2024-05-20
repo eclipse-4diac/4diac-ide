@@ -11,7 +11,7 @@
  *   Pedro Ricardo
  *   Felipe Adriano
  *******************************************************************************/
-package aimirim.fordiac.ide.deployment.uao;
+package org.eclipse.fordiac.ide.deployment.uao;
 
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
@@ -33,7 +33,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 
-import aimirim.fordiac.ide.deployment.uao.helpers.Constants;
+import org.eclipse.fordiac.ide.deployment.uao.helpers.Constants;
 
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
@@ -53,7 +53,7 @@ import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
-import aimirim.fordiac.ide.deployment.uao.helpers.UAOClient;
+import org.eclipse.fordiac.ide.deployment.uao.helpers.UAOClient;
 
 
 public class UAODeploymentExecutor implements IDeviceManagementInteractor {

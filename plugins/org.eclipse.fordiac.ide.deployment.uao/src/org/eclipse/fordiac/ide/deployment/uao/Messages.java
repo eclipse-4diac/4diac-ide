@@ -11,12 +11,12 @@
  *   Pedro Ricardo
  *   Felipe Adriano
  *******************************************************************************/
-package aimirim.fordiac.ide.deployment.uao;
+package org.eclipse.fordiac.ide.deployment.uao;
 
 import org.eclipse.osgi.util.NLS;
 
 public final class Messages extends NLS {
-	private static final String BUNDLE_NAME = "aimirim.fordiac.ide.deployment.uao.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.deployment.uao.messages"; //$NON-NLS-1$
 	public static String UAODeploymentExecutor_CreateClientFailed;
 	public static String UAODeploymentExecutor_ClientConnectionFailed;
 	public static String UAODeploymentExecutor_URIParseFailed;
