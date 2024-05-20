@@ -64,6 +64,7 @@
 			<unit id="org.eclipse.swtbot.feature.group" version="4.1.0.202306071420"/>
 			<unit id="org.eclipse.swtbot.ide.feature.group" version="4.1.0.202306071420"/>
 			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.34.0.v20240227-0940"/>
+			<unit id="org.eclipse.tips.feature.feature.group" version="0.4.300.v20240207-1044"/>
 		</location>
 		<location includeDependencyDepth="infinite" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 
@@ -122,12 +123,6 @@
    </license>
 			</feature>
 			<dependencies>
-				<dependency>
-					<groupId>com.google.code.gson</groupId>
-					<artifactId>gson</artifactId>
-					<version>2.10.1</version>
-					<type>jar</type>
-				</dependency>
 				<dependency>
 					<groupId>com.neovisionaries</groupId>
 					<artifactId>nv-websocket-client</artifactId>
