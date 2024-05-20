@@ -80,9 +80,11 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	
 	/** Connection Status callback definitions */
 	private WebSocketAdapter callbacks = new WebSocketAdapter() {
+		@Override
 		public void onConnected(WebSocket websocket, Map<String, List<String>> headers) {
 			connectionStatus = ConnectionStatus.CONNECTED;
 		}
+		@Override
 		public void onDisconnected(WebSocket websocket,
 		        WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame,
 		        boolean closedByServer) {
@@ -114,7 +116,7 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	public void connect() throws DeploymentException {
 		boolean success = false;
 		int retry = 0;
-		String error = "";
+		String error = ""; //$NON-NLS-1$
 		
 		try {
 			client.connect();
@@ -130,12 +132,12 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 						// It usually works on the first three retries
 						client.regenKeyPair();
 						error = e.getMessage();
-						FordiacLogHelper.logInfo("UAODeploymentExecutor | Auth retry "+(retry+1));
+						FordiacLogHelper.logInfo("UAODeploymentExecutor | Auth retry "+(retry+1)); //$NON-NLS-1$
 					}
 					retry++;				}
 				
 				if (retry>=MAX_AUTH_RETRY) {
-					throw new DeploymentException("Max Authentication Retries exceeded. "+error);
+					throw new DeploymentException("Max Authentication Retries exceeded. "+error); //$NON-NLS-1$
 				}
 			}
 		} catch (WebSocketException e) {
@@ -167,13 +169,13 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	
 	@Override
 	public void createResource(final Resource resource) throws DeploymentException {
-        resourceElement = deployXml.createElement("Resource");
-        resourceElement.setAttribute("Name", resource.getName());
-        resourceElement.setAttribute("Type", resource.getTypeName());
+        resourceElement = deployXml.createElement("Resource"); //$NON-NLS-1$
+        resourceElement.setAttribute("Name", resource.getName()); //$NON-NLS-1$
+        resourceElement.setAttribute("Type", resource.getTypeName()); //$NON-NLS-1$
         
-        fbNetwork = deployXml.createElement("FBNetwork");
-        eventConnection = deployXml.createElement("EventConnections");
-        dataConnection = deployXml.createElement("DataConnections");
+        fbNetwork = deployXml.createElement("FBNetwork"); //$NON-NLS-1$
+        eventConnection = deployXml.createElement("EventConnections"); //$NON-NLS-1$
+        dataConnection = deployXml.createElement("DataConnections"); //$NON-NLS-1$
         
         resourceElement.appendChild(fbNetwork);
         deviceElement.appendChild(resourceElement);
@@ -228,10 +230,10 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 
 		final FBNetworkElement sourceFB = sourceData.getFBNetworkElement();
 		final FBNetworkElement destinationFB = destinationData.getFBNetworkElement();
-		final String source = String.format("%s%s.%s",prefixUAO(connData.getSourcePrefix()),sourceFB.getName(),sourceData.getName());  
-		final String destination = String.format("%s%s.%s",prefixUAO(connData.getDestinationPrefix()),destinationFB.getName(),destinationData.getName());
+		final String source = String.format("%s%s.%s",prefixUAO(connData.getSourcePrefix()),sourceFB.getName(),sourceData.getName()); //$NON-NLS-1$  
+		final String destination = String.format("%s%s.%s",prefixUAO(connData.getDestinationPrefix()),destinationFB.getName(),destinationData.getName()); //$NON-NLS-1$
 		
-		if (sourceData.getTypeName()=="Event" && destinationData.getTypeName()=="Event") {
+		if (sourceData.getTypeName()=="Event" && destinationData.getTypeName()=="Event") { //$NON-NLS-1$ //$NON-NLS-2$
 			eventConnection.appendChild(
 				createConnection(source,destination)
 			);
@@ -251,7 +253,7 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	public void startResource(final Resource resource) throws DeploymentException {
 		// XXX: UAO Runtime does now have an implicit START block. It needs to be deployed.
 		//      To fix this a new resource that does not already have a START FB is needed.
-		FB fb = resource.getFBNetwork().getFBNamed("START");
+		FB fb = resource.getFBNetwork().getFBNamed("START"); //$NON-NLS-1$
 		if (fb!=null) {
 			fbNetwork.appendChild(createFB(fb.getName(),fb.getTypeName()));	
 		}
@@ -266,28 +268,28 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 		String from = client.getDeviceState();
 		client.deploy(deployXml, projectGuid, snapshotGuid);
 		String to = client.getDeviceState();
-		FordiacLogHelper.logInfo("UAODeploymentExecutor | Runtime state from \""+from+"\" to \""+to+"\"");
+		FordiacLogHelper.logInfo("UAODeploymentExecutor | Runtime state from \""+from+"\" to \""+to+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override
 	public void deleteResource(final String resName) throws DeploymentException {
 		client.connectionCheck();
 		String from = client.getDeviceState();
-		client.flow_command("clean");
+		client.flow_command("clean"); //$NON-NLS-1$
 		String to = client.getDeviceState();
-		FordiacLogHelper.logInfo("UAODeploymentExecutor | Runtime state from \""+from+"\" to \""+to+"\"");
+		FordiacLogHelper.logInfo("UAODeploymentExecutor | Runtime state from \""+from+"\" to \""+to+"\""); //$NON-NLS-1$  //$NON-NLS-2$  //$NON-NLS-3$
 	}
 
 	@Override
 	public void deleteFB(final Resource res, final FBDeploymentData fbData) throws DeploymentException {
 		throw new DeploymentException(MessageFormat.format(
-				Messages.UAODeploymentExecutor_FeatureNotImplemented, "Online Change Delete FB"));
+				Messages.UAODeploymentExecutor_FeatureNotImplemented, "Online Change Delete FB")); //$NON-NLS-1$
 	}
 
 	@Override
 	public void deleteConnection(final Resource res, final ConnectionDeploymentData connData) throws DeploymentException {
 		throw new DeploymentException(MessageFormat.format(
-			Messages.UAODeploymentExecutor_FeatureNotImplemented, "Online Change Delete Connection"));
+			Messages.UAODeploymentExecutor_FeatureNotImplemented, "Online Change Delete Connection")); //$NON-NLS-1$
 		
 	}
 
@@ -311,40 +313,40 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	@Override
 	public void addWatch(final MonitoringBaseElement element) throws DeploymentException {
 		throw new DeploymentException(MessageFormat.format(
-				Messages.UAODeploymentExecutor_FeatureNotImplemented, "Watch"));
+				Messages.UAODeploymentExecutor_FeatureNotImplemented, "Watch"));  //$NON-NLS-1$
 	}
 
 	@Override
 	public void removeWatch(final MonitoringBaseElement element) throws DeploymentException {
 		throw new DeploymentException(MessageFormat.format(
-				Messages.UAODeploymentExecutor_FeatureNotImplemented, "Watch"));
+				Messages.UAODeploymentExecutor_FeatureNotImplemented, "Watch")); //$NON-NLS-1$
 	}
 
 	@Override
 	public void triggerEvent(final MonitoringBaseElement element) throws DeploymentException {
 		throw new DeploymentException(MessageFormat.format(
-				Messages.UAODeploymentExecutor_FeatureNotImplemented, "Event Trigger"));
+				Messages.UAODeploymentExecutor_FeatureNotImplemented, "Event Trigger")); //$NON-NLS-1$
 	}
 
 	@Override
 	public void forceValue(final MonitoringBaseElement element, final String value) throws DeploymentException {
 		throw new DeploymentException(MessageFormat.format(
-				Messages.UAODeploymentExecutor_FeatureNotImplemented, "Value Force"));
+				Messages.UAODeploymentExecutor_FeatureNotImplemented, "Value Force")); //$NON-NLS-1$
 	}
 
 	@Override
 	public void clearForce(final MonitoringBaseElement element) throws DeploymentException {
 		throw new DeploymentException(MessageFormat.format(
-				Messages.UAODeploymentExecutor_FeatureNotImplemented, "Value Force"));
+				Messages.UAODeploymentExecutor_FeatureNotImplemented, "Value Force")); //$NON-NLS-1$
 	}
 
 	/** Parse the 4diac '.' prefix to the UAO '_' one
 	 * @param original 4diac FB prefix.
 	 * @return UAO type of prefix.*/
-	private String prefixUAO(String original) {
+	private static String prefixUAO(String original) {
 		String uaoFormat = original;
-		if(original.contains(".")) {
-			uaoFormat = original.replace(".", "_");
+		if(original.contains(".")) { //$NON-NLS-1$
+			uaoFormat = original.replace(".", "_"); //$NON-NLS-1$  //$NON-NLS-2$
 		}
 		return(uaoFormat);
 	}
@@ -352,22 +354,22 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	/** Extract SSL information from device variables.
 	 * @param dev The current device.
 	 * @return useSSL configured value.*/
-	private boolean getUseSsl(final Device dev) throws DeploymentException {
+	private static boolean getUseSsl(final Device dev) throws DeploymentException {
 		for (final VarDeclaration varDecl : dev.getVarDeclarations()) {
-			if ("SSL".equalsIgnoreCase(varDecl.getName())) {
+			if ("SSL".equalsIgnoreCase(varDecl.getName())) { //$NON-NLS-1$
 				final String val = DeploymentHelper.getVariableValue(varDecl);
 				if (null != val) {
 					return(Boolean.parseBoolean(val));
 				}
 			}
 		}
-		return false; //$NON-NLS-1$
+		return false;
 	}
 	
 	/** Creates and configure the UAO connection.
 	 * @param dev The current device.*/
 	private UAOClient createClient(final Device dev) {
-		String mgrId = null;
+		String mgrId = ""; //$NON-NLS-1$
 		try {
 			mgrId = DeploymentHelper.getMgrID(dev);
 		} catch (final DeploymentException e) {
@@ -406,12 +408,14 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		}
-		Document doc = docBuilder.newDocument();
-		systemElement = createSystem(doc, dev);
-		deviceElement = createDevice(doc, dev);
-		systemElement.appendChild(deviceElement);
-		doc.appendChild(systemElement);
-		
+		Document doc = null;
+		if (docBuilder!=null) {
+			doc = docBuilder.newDocument();
+			systemElement = createSystem(doc, dev);
+			deviceElement = createDevice(doc, dev);
+			systemElement.appendChild(deviceElement);
+			doc.appendChild(systemElement);
+		}
 	    return(doc);
 	}
 	
@@ -420,23 +424,23 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	 * @param dev Device to deploy.
 	 * @return XML Element.*/
 	private Element createSystem(Document doc, final Device dev) {
-	    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+	    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss"); //$NON-NLS-1$
 	    LocalDateTime now = LocalDateTime.now();
-	    String version = System.getProperty("org.eclipse.fordiac.ide.version");
+	    String version = System.getProperty("org.eclipse.fordiac.ide.version"); //$NON-NLS-1$
 	  
 	    String projName = dev.getTypeEntry().getTypeLibrary().getSystems().keySet().toArray()[0].toString();
 	   
-	    Element sysEl = doc.createElement("System");
+	    Element sysEl = doc.createElement("System"); //$NON-NLS-1$
 	    
 	    this.projectGuid = UUID.nameUUIDFromBytes(projName.getBytes()).toString();
 	    this.snapshotGuid = UUID.randomUUID().toString();
 	    
-	    sysEl.setAttribute("ProjectName", projName); //4diac Project Name
-	    sysEl.setAttribute("ProjectGuid", projectGuid);
-	    sysEl.setAttribute("BuildTime", dtf.format(now));
-	    sysEl.setAttribute("DeployTime", "");
-	    sysEl.setAttribute("StudioVersion", "Eclipse 4diac IDE v"+version); // 4diac version info
-	    sysEl.setAttribute("SnapshotGuid", snapshotGuid);
+	    sysEl.setAttribute("ProjectName", projName); //4diac Project Name //$NON-NLS-1$
+	    sysEl.setAttribute("ProjectGuid", projectGuid); //$NON-NLS-1$
+	    sysEl.setAttribute("BuildTime", dtf.format(now)); //$NON-NLS-1$
+	    sysEl.setAttribute("DeployTime", ""); //$NON-NLS-1$ //$NON-NLS-2$
+	    sysEl.setAttribute("StudioVersion", "Eclipse 4diac IDE v"+version); // 4diac version info //$NON-NLS-1$ //$NON-NLS-2$
+	    sysEl.setAttribute("SnapshotGuid", snapshotGuid); //$NON-NLS-1$
         
         return(sysEl);
 	}
@@ -445,10 +449,10 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	 * @param doc XML document.
 	 * @param dev Device to deploy.
 	 * @return XML Element.*/
-	private Element createDevice(Document doc, final Device dev) {
-        Element devEl = doc.createElement("Device");
-        devEl.setAttribute("Name", dev.getName());
-        devEl.setAttribute("Type", dev.getTypeName());
+	private static Element createDevice(Document doc, final Device dev) {
+        Element devEl = doc.createElement("Device"); //$NON-NLS-1$
+        devEl.setAttribute("Name", dev.getName()); //$NON-NLS-1$
+        devEl.setAttribute("Type", dev.getTypeName()); //$NON-NLS-1$
         return(devEl);
 	}
 	
@@ -457,10 +461,10 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	 * @return XML Element.*/
 	private Element findFbByName(String fbFullName) {
 		Element fb = null;
-		NodeList fblist = fbNetwork.getElementsByTagName("FB");
+		NodeList fblist = fbNetwork.getElementsByTagName("FB"); //$NON-NLS-1$
 		for (int i=0; i<fblist.getLength(); i++) {
 		   Element fbi = (Element) fblist.item(i);
-		   if (fbi.getAttribute("Name").equals(fbFullName)) {
+		   if (fbi.getAttribute("Name").equals(fbFullName)) { //$NON-NLS-1$
 			   fb = fbi;
 			   break;
 		   }
@@ -473,9 +477,9 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	 * @param Value
 	 * @return */
 	private Element createParameter(String Name, String Value) {
-		Element param = deployXml.createElement("Parameter");
-		param.setAttribute("Name", Name);
-		param.setAttribute("Value", Value);
+		Element param = deployXml.createElement("Parameter"); //$NON-NLS-1$
+		param.setAttribute("Name", Name); //$NON-NLS-1$
+		param.setAttribute("Value", Value); //$NON-NLS-1$
 		return(param);
 	}
 	
@@ -485,7 +489,7 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	 * @param Type
 	 * @return FB element.*/
 	private Element createFB(String Name, String Type) {
-        return(createFB(Name,Type,"IEC61499.Standard"));
+        return(createFB(Name,Type,"IEC61499.Standard")); //$NON-NLS-1$
 	}
 	
 	/** Creates a FB xml element.
@@ -494,10 +498,10 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	 * @param Namespace where the runtime will find the implementation
 	 * @return FB element.*/
 	private Element createFB(String Name, String Type, String Namespace) {
-		Element fbEl = deployXml.createElement("FB");
-        fbEl.setAttribute("Name", Name);
-        fbEl.setAttribute("Type", Type);
-        fbEl.setAttribute("Namespace", Namespace);
+		Element fbEl = deployXml.createElement("FB"); //$NON-NLS-1$
+        fbEl.setAttribute("Name", Name); //$NON-NLS-1$
+        fbEl.setAttribute("Type", Type); //$NON-NLS-1$
+        fbEl.setAttribute("Namespace", Namespace); //$NON-NLS-1$
         return(fbEl);
 	}
 
@@ -506,10 +510,10 @@ public class UAODeploymentExecutor implements IDeviceManagementInteractor {
 	 * @param Dest Name of the connection destination.
 	 * @return XML element.*/
 	private Element createConnection(String Src, String Dest) {
-		Element conEl = deployXml.createElement("Connection");
-		conEl.setAttribute("Comment", "");
-		conEl.setAttribute("Source", Src);
-		conEl.setAttribute("Destination", Dest);
+		Element conEl = deployXml.createElement("Connection"); //$NON-NLS-1$
+		conEl.setAttribute("Comment", ""); //$NON-NLS-1$ //$NON-NLS-2$
+		conEl.setAttribute("Source", Src); //$NON-NLS-1$
+		conEl.setAttribute("Destination", Dest); //$NON-NLS-1$
         return(conEl);
 	}
 	

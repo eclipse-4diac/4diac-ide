@@ -51,7 +51,7 @@ public class UAOBinFile {
 		stringList = extractStringList(root);
 		stringList = removeDuplicates(stringList);
 		
-		List<Byte> bin = new ArrayList<Byte>();
+		List<Byte> bin = new ArrayList<>();
 		
 		bin.addAll(binHeader());
 		bin.addAll(stringListInBytes());
@@ -119,8 +119,8 @@ public class UAOBinFile {
 		NamedNodeMap tagAttribs = tag.getAttributes();
 		int nattr = tagAttribs.getLength(); 
 		for (int n=0; n<nattr; n++ ) {
-			if (tagAttribs.item(n).getNodeValue()!="") {
-				tmpList.add( tagAttribs.item(n).getNodeName()+"=" );
+			if (tagAttribs.item(n).getNodeValue()!="") { //$NON-NLS-1$
+				tmpList.add( tagAttribs.item(n).getNodeName()+"=" ); //$NON-NLS-1$
 			}
 		}
 		
@@ -136,8 +136,8 @@ public class UAOBinFile {
 	/**  Remove the duplicate entries in a list.
 	 * @param strlist List of strings.
 	 * @return Unique list of strings*/
-	private List<String> removeDuplicates(List<String> strlist) {
-		return(new ArrayList<String>(new LinkedHashSet<String>(strlist)));
+	private static List<String> removeDuplicates(List<String> strlist) {
+		return(new ArrayList<>(new LinkedHashSet<>(strlist)));
 	}
 
 	/** Convert array to list and append to an existing list.
@@ -145,13 +145,13 @@ public class UAOBinFile {
 	 * @param bytearray Array to convert.
 	 * @return Bytes*/
 	private static void concatBytesInList(List<Byte> list ,byte [] bytearray) {
-		for (byte b : bytearray) {list.add(b);}
+		for (byte b : bytearray) {list.add(Byte.valueOf(b));}
 	}
 
 	/** Initial bytes in Bin in file.
 	 * @return Bytes */
 	private List<Byte> binHeader() {
-		List<Byte> header = new ArrayList<Byte>();
+		List<Byte> header = new ArrayList<>();
 		
 		final byte[] ini = {0x03, 0x00, 0x00, 0x00, 0x00, 0x6A, 0x00, 0x00, 0x00};
 		concatBytesInList(header, ini);
@@ -183,7 +183,7 @@ public class UAOBinFile {
 	/** Format a string and into bytes.
 	 * @param str A name to encode in bytes.
 	 * @return Bytes.*/
-	private byte[] formatStringBytes(String str) {
+	private static byte[] formatStringBytes(String str) {
 		final ByteBuffer bb = ByteBuffer.allocate(str.length()+1);
 		bb.put(str.getBytes());
 		bb.put((byte) 0x00);
@@ -193,7 +193,7 @@ public class UAOBinFile {
 	/** Transform the whole string list into bytes
 	 * @return List of Bytes representing the string list.*/
 	private List<Byte> stringListInBytes() {
-		List<Byte> byteStrList = new ArrayList<Byte>();
+		List<Byte> byteStrList = new ArrayList<>();
 		for (String s : stringList) {
 			concatBytesInList(byteStrList,formatStringBytes(s));
 		}
@@ -204,7 +204,7 @@ public class UAOBinFile {
 	 * @param name Tag or Attribute name.
 	 * @return Byte index of this string.*/
 	private List<Byte> tagNameInBytes(String name) {
-		List<Byte> byteStrList = new ArrayList<Byte>();
+		List<Byte> byteStrList = new ArrayList<>();
 		int strListIndex = searchStringList(name);
 		concatBytesInList(byteStrList, write_word(strListIndex));
 		return(byteStrList);
@@ -214,14 +214,14 @@ public class UAOBinFile {
 	 * @param attribList List of attributes on XML element.
 	 * @return List of bytes in bin format */
 	private List<Byte> attribListInBytes(NamedNodeMap attribList) {
-		List<Byte> byteAttrList = new ArrayList<Byte>();
+		List<Byte> byteAttrList = new ArrayList<>();
 		int nattr = attribList.getLength(); 
 		for (int n=0; n<nattr; n++ ) {
 			String name = attribList.item(n).getNodeName();
 			String value = attribList.item(n).getNodeValue();
-			if (value!="") {
+			if (value!="") { //$NON-NLS-1$
 				concatBytesInList(byteAttrList, write_byte(ATTRIB_NAME));
-				byteAttrList.addAll(tagNameInBytes(name+"="));
+				byteAttrList.addAll(tagNameInBytes(name+"=")); //$NON-NLS-1$
 				concatBytesInList(byteAttrList, write_byte(ATTRIB_VALUE));
 				concatBytesInList(byteAttrList, formatStringBytes(value));
 			}
@@ -233,7 +233,7 @@ public class UAOBinFile {
 	/** Convert 'Byte' array to primitive type 'byte' array.
 	 * @param src Array of 'Byte'.
 	 * @return Array of 'byte'.*/
-	private byte[] toPrimitive(Byte[] src) {
+	private static byte[] toPrimitive(Byte[] src) {
 		byte[] dest = new byte[src.length];
 		int i=0;
 		for(Byte b: src)
@@ -247,7 +247,7 @@ public class UAOBinFile {
 	 * @param ele XML element.
 	 * @return List of bin file Bytes.*/
 	private List<Byte> xmlInBytes(Element ele) {
-		List<Byte> byteXmlList = new ArrayList<Byte>();
+		List<Byte> byteXmlList = new ArrayList<>();
 		
 		boolean hasAt = ele.hasAttributes();
 		boolean hasChild = ele.hasChildNodes();
