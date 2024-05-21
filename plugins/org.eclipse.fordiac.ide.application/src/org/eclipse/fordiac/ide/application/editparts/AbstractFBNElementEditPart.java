@@ -388,7 +388,11 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		}
 		if (interfaceEditPart.isVariable()) {
 			if (((VarDeclaration) interfaceEditPart.getModel()).isInOutVar()) {
-				return interfaceList.getInOutVars().indexOf(interfaceEditPart.getModel());
+				final List<VarDeclaration> visList = interfaceList.getInOutVars().stream()
+						.filter(VarDeclaration::isVisible).toList();
+				System.out.println(interfaceEditPart.getModel().getFBNetworkElement().getName() + " "
+						+ interfaceEditPart.getModel().getName() + " " + visList.indexOf(interfaceEditPart.getModel()));
+				return visList.indexOf(interfaceEditPart.getModel());
 			}
 			return interfaceList.getVisibleInputVars().indexOf(interfaceEditPart.getModel());
 		}
@@ -409,7 +413,12 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		}
 		if (interfaceEditPart.isVariable()) {
 			if (((VarDeclaration) interfaceEditPart.getModel()).isInOutVar()) {
-				return interfaceList.getOutMappedInOutVars().indexOf(interfaceEditPart.getModel());
+				final List<VarDeclaration> visList = interfaceList.getOutMappedInOutVars().stream()
+						.filter(VarDeclaration::isVisible).toList();
+				System.out.println(interfaceEditPart.getModel().getFBNetworkElement().getName() + " "
+						+ interfaceEditPart.getModel().getName() + " " + visList.indexOf(interfaceEditPart.getModel()));
+				return visList.indexOf(interfaceEditPart.getModel());
+
 			}
 			return interfaceList.getVisibleOutputVars().indexOf(interfaceEditPart.getModel());
 		}
@@ -460,8 +469,19 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				.filter(it -> !it.isVisible()).toList();
 		final List<VarDeclaration> outputRemovalList = getModel().getInterface().getOutputVars().stream()
 				.filter(it -> !it.isVisible()).toList();
+
+		final List<VarDeclaration> inoutInConList = getModel().getInterface().getOutMappedInOutVars().stream()
+				.filter(it -> !it.getOutputConnections().isEmpty()).map(VarDeclaration::getInOutVarOpposite).toList();
+		// System.out.println("To be banned inputs: " + inoutInRemList);
+		final List<VarDeclaration> inoutOutConList = getModel().getInterface().getInOutVars().stream()
+				.filter(it -> !it.getInputConnections().isEmpty()).map(VarDeclaration::getInOutVarOpposite).toList();
+		// System.out.println("To be banned outputs: " + inoutOutRemList);
+
 		elements.removeAll(inputRemovalList);
 		elements.removeAll(outputRemovalList);
+		elements.removeAll(inoutInConList);
+		elements.removeAll(inoutOutConList);
+		elements.addAll(getPinIndicators(!inoutInConList.isEmpty(), !inoutOutConList.isEmpty()));
 		elements.addAll(getPinIndicators(!inputRemovalList.isEmpty(), !outputRemovalList.isEmpty()));
 		return elements;
 	}
