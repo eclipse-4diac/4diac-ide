@@ -192,7 +192,6 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	public static void openInBreadCrumb(final IInterfaceElement target) {
 		final IEditorPart editor = OpenListenerManager.openEditor(getTargetEditorElement(target));
 		HandlerHelper.selectElement(target, editor);
-
 	}
 
 	private static EObject getTargetEditorElement(final IInterfaceElement target) {
@@ -205,6 +204,9 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		FBNetworkElement parent = fbnEl.getOuterFBNetworkElement();
 		// For unfolded subapps find the next parent that is not expanded as refElement
 		while (parent instanceof final SubApp subApp && subApp.isUnfolded()) {
+			if (subApp.getOuterFBNetworkElement() == null) {
+				return parent.getFbNetwork().getApplication();
+			}
 			parent = subApp.getOuterFBNetworkElement();
 		}
 		return parent;
