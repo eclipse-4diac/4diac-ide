@@ -49,18 +49,17 @@ public class BorderCrossingReconnectCommand extends CompoundCommand {
 	}
 
 	private void init() {
-		final var sinks = new ArrayList<IInterfaceElement>();
-		final var sources = new ArrayList<IInterfaceElement>();
-		collectSinksRec(connection, this, sinks);
-		collectSourcesRec(connection, this, sources);
-
 		if (isSourceReconnect) {
+			final var sinks = new ArrayList<IInterfaceElement>();
+			collectSinksRec(connection, this, sinks);
 			for (final var sink : sinks) {
 				add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source, sink));
 			}
 		} else {
-			for (final var source : sources) {
-				add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source, target));
+			final var sources = new ArrayList<IInterfaceElement>();
+			collectSourcesRec(connection, this, sources);
+			for (final var src : sources) {
+				add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(src, target));
 			}
 		}
 	}
@@ -83,13 +82,14 @@ public class BorderCrossingReconnectCommand extends CompoundCommand {
 
 	private static void collectSourcesRec(final Connection conn, final CompoundCommand cmd,
 			final List<IInterfaceElement> sources) {
+		cmd.add(new DeleteConnectionCommand(conn));
 		if (!conn.getSource().getInputConnections().isEmpty()) {
-			final var source = conn.getSource();
-			for (final var outConn : source.getInputConnections()) {
+			final var src = conn.getSource();
+			for (final var outConn : src.getInputConnections()) {
 				collectSourcesRec(outConn, cmd, sources);
 			}
-			if (source.getOutputConnections().size() == 1) {
-				cmd.add(new DeleteInterfaceCommand(source));
+			if (src.getOutputConnections().size() == 1) {
+				cmd.add(new DeleteInterfaceCommand(src));
 			}
 		} else {
 			sources.add(conn.getSource());
