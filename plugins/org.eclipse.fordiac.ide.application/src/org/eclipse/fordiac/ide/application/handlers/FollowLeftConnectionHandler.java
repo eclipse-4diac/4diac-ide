@@ -35,7 +35,7 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
+		final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 
 		final IInterfaceElement originPin = ((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement())
@@ -56,7 +56,7 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 
 		final List<IInterfaceElement> opposites = getConnectionOposites(interfaceEditPart);
 		final List<IInterfaceElement> resolvedOpposites = resolveTargetPins(opposites, viewer);
-		selectOpposites(event, viewer, originPin, resolvedOpposites);
+		selectOpposites(event, viewer, originPin, resolvedOpposites, editor);
 		return Status.OK_STATUS;
 	}
 
