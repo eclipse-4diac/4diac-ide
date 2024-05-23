@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPa
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
 import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
@@ -46,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -148,8 +150,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		final Point destination = getTranslatedAndZoomedPoint(request);
 		final List<FBNetworkElement> fbEls = collectFromSubappDraggedFBs(editParts, getFBNetwork());
 		if (!fbEls.isEmpty()) {
-			return new MoveAndReconnectCommand(fbEls,
-					new org.eclipse.swt.graphics.Point(destination.x, destination.y));
+			return new MoveAndReconnectCommand(fbEls, new org.eclipse.swt.graphics.Point(destination.x, destination.y));
 		}
 		return createRemoveFromGroup(editParts, request);
 	}
@@ -241,11 +242,13 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	private static Point getAlignmentDelta(final PositionableElement model, final Object constraint) {
 		if (constraint instanceof final Rectangle rect) {
-			final Point newPos = rect.getTopLeft();
-			return new Point(newPos.x - model.getPosition().getX(), newPos.y - model.getPosition().getY());
+			final Position newPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(rect.x, rect.y);
+			newPos.setX(newPos.getX() - model.getPosition().getX());
+			newPos.setY(newPos.getY() - model.getPosition().getY());
+			return newPos.toScreenPoint();
 		}
 		// we don't have new positions keep the old one
-		return new Point(model.getPosition().getX(), model.getPosition().getY());
+		return model.getPosition().toScreenPoint();
 	}
 
 	protected Dimension getScaledSizeDelta(final ChangeBoundsRequest request) {
