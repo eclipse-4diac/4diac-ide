@@ -67,19 +67,16 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	private static class OppositeSelectionDialog extends PopupDialog {
 
 		private final List<IInterfaceElement> opposites;
-		private final GraphicalViewer viewer;
 		private final IInterfaceElement originPin;
 		private final Point popupPosition;
 		private final IEditorPart editor;
 		private boolean allowClosing;
 
 		public OppositeSelectionDialog(final Shell parent, final List<IInterfaceElement> opposites,
-				final GraphicalViewer viewer, final IInterfaceElement originPin, final Point popupPostion,
-				final IEditorPart editor) {
+				final IInterfaceElement originPin, final Point popupPostion, final IEditorPart editor) {
 			super(parent, INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false,
 					Messages.FBPaletteViewer_SelectConnectionEnd, null);
 			this.opposites = opposites;
-			this.viewer = viewer;
 			this.originPin = originPin;
 			this.popupPosition = popupPostion;
 			this.editor = editor;
@@ -99,12 +96,6 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			if (isCloseable()) {
 				return super.close();
 			}
-
-			getShell().getDisplay().asyncExec(() -> {
-				if (getShell() != null && !getShell().isDisposed()) {
-					getShell().forceFocus();
-				}
-			});
 
 			return false;
 		}
@@ -176,16 +167,21 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			// on enter close the view
 			listViewer.getControl().addKeyListener(new FollowConnectionKeyListener(dialogArea));
 
-			getShell().addFocusListener(new FocusListener() {
+			listViewer.getControl().addFocusListener(new FocusListener() {
 
 				@Override
 				public void focusLost(final FocusEvent e) {
 					setPopupClosable(false);
+					getShell().getDisplay().asyncExec(() -> {
+						if (getShell() != null && !getShell().isDisposed()) {
+							listViewer.getControl().setFocus();
+						}
+					});
 				}
 
 				@Override
 				public void focusGained(final FocusEvent e) {
-
+					// do nothing here
 				}
 
 			});
@@ -241,7 +237,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 			@Override
 			public void keyPressed(final KeyEvent e) {
-				if (e.character == SWT.CR) {
+				if (e.character == SWT.CR || e.character == SWT.ESC) {
 					closePopup();
 				}
 				if (!opposites.getFirst().getInputConnections().isEmpty()) {
@@ -332,7 +328,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				.toList();
 	}
 
-	private static List<IInterfaceElement> resolveTargetPins(final List<IInterfaceElement> opposites,
+	protected static List<IInterfaceElement> resolveTargetPins(final List<IInterfaceElement> opposites,
 			final GraphicalViewer viewer) {
 		final List<IInterfaceElement> resolvedOpposites = new ArrayList<>();
 		for (final IInterfaceElement element : opposites) {
@@ -386,7 +382,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				.toDisplay(new Point(pinLocation.x, pinLocation.y));
 
 		final OppositeSelectionDialog dialog = new OppositeSelectionDialog(HandlerUtil.getActiveShellChecked(event),
-				opposites, viewer, originPin, pinLocationDisplayCoordinates, editor);
+				opposites, originPin, pinLocationDisplayCoordinates, editor);
 		dialog.open();
 	}
 
