@@ -49,7 +49,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.IWorkbench;
@@ -69,14 +68,21 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		private final IInterfaceElement originPin;
 		private final Point popupPosition;
 
-		public OppositeSelectionDialog(final Shell parent, final List<IInterfaceElement> opposites,
-				final GraphicalViewer viewer, final IInterfaceElement originPin, final Point popupPostion) {
-			super(parent, INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false,
+		public OppositeSelectionDialog(final List<IInterfaceElement> opposites, final GraphicalViewer viewer,
+				final IInterfaceElement originPin, final IFigure popupRefFigure) {
+			super(viewer.getControl().getShell(), INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false,
 					Messages.FBPaletteViewer_SelectConnectionEnd, null);
 			this.opposites = opposites;
 			this.viewer = viewer;
 			this.originPin = originPin;
-			this.popupPosition = popupPostion;
+			this.popupPosition = getPopupPosition(viewer, popupRefFigure);
+		}
+
+		private static Point getPopupPosition(final GraphicalViewer viewer, final IFigure popupRefFigure) {
+			final org.eclipse.draw2d.geometry.Point pinLocation = popupRefFigure.getLocation();
+			pinLocation.y += popupRefFigure.getBounds().height * 1.5f;
+			popupRefFigure.translateToAbsolute(pinLocation);
+			return viewer.getControl().toDisplay(new Point(pinLocation.x, pinLocation.y));
 		}
 
 		@Override
@@ -322,21 +328,14 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	}
 
 	private static void showOppositeSelectionDialog(final List<IInterfaceElement> opposites, final ExecutionEvent event,
-			final GraphicalViewer viewer, final IInterfaceElement originPin) throws ExecutionException {
+			final GraphicalViewer viewer, final IInterfaceElement originPin) {
 
 		selectInterfaceElement(viewer, opposites.get(0));
 		viewer.flush();
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final IFigure figure = ((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement()).getFigure();
 
-		final org.eclipse.draw2d.geometry.Point pinLocation = figure.getLocation();
-		pinLocation.y += figure.getBounds().height * 1.5f;
-		figure.translateToAbsolute(pinLocation);
-		final Point pinLocationDisplayCoordinates = viewer.getControl()
-				.toDisplay(new Point(pinLocation.x, pinLocation.y));
-
-		final OppositeSelectionDialog dialog = new OppositeSelectionDialog(HandlerUtil.getActiveShellChecked(event),
-				opposites, viewer, originPin, pinLocationDisplayCoordinates);
+		final OppositeSelectionDialog dialog = new OppositeSelectionDialog(opposites, viewer, originPin, figure);
 		dialog.open();
 	}
 
@@ -372,7 +371,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	}
 
 	protected static void selectOpposites(final ExecutionEvent event, final GraphicalViewer viewer,
-			final IInterfaceElement originPin, final List<IInterfaceElement> opposites) throws ExecutionException {
+			final IInterfaceElement originPin, final List<IInterfaceElement> opposites) {
 		final List<IInterfaceElement> resolvedOpposites = resolveTargetPins(opposites, viewer);
 		if (!resolvedOpposites.isEmpty()) {
 			if (resolvedOpposites.size() == 1) {
