@@ -61,7 +61,7 @@ import org.eclipse.ui.handlers.IHandlerService;
 
 public abstract class FollowConnectionHandler extends AbstractHandler {
 
-	private static class OppositeSelectionDialog extends PopupDialog {
+	public static class OppositeSelectionDialog extends PopupDialog {
 
 		private final List<IInterfaceElement> opposites;
 		private final GraphicalViewer viewer;

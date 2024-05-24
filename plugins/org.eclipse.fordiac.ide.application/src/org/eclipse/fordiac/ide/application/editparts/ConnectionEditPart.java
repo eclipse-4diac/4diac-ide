@@ -40,6 +40,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkConnectionLabel;
+import org.eclipse.fordiac.ide.application.handlers.FollowConnectionHandler;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNConnectionEndpointPolicy;
 import org.eclipse.fordiac.ide.application.tools.ConnectionSelectEditPartTracker;
@@ -71,6 +72,8 @@ import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
@@ -332,21 +335,43 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 	public void performRequest(final Request request) {
 		if ((request.getType() == RequestConstants.REQ_OPEN && request instanceof final SelectionRequest selReq)) {
 			if (isDecoratorTargeted(selReq.getLocation(), getFigure().getSourceDecoration())) {
-				followConnection(getTargetEP());
+				final IInterfaceElement sourcePin = getModel().getSource();
+				if (sourcePin.getOutputConnections().size() > 1) {
+					followMultipleTargetConnections(sourcePin,
+							sourcePin.getOutputConnections().stream().map(Connection::getDestination).toList());
+				} else {
+					followConnection(getTargetEP());
+				}
 			}
 			if (isDecoratorTargeted(selReq.getLocation(), getFigure().getTargetDecoration())) {
-				followConnection(getSource());
+				final IInterfaceElement destPin = getModel().getDestination();
+				if (destPin.getInputConnections().size() > 1) {
+					followMultipleTargetConnections(destPin,
+							destPin.getInputConnections().stream().map(Connection::getSource).toList());
+				} else {
+					followConnection(getSource());
+				}
 			}
 		}
 		super.performRequest(request);
 	}
 
+	private void followMultipleTargetConnections(final IInterfaceElement originPin,
+			final List<IInterfaceElement> targetList) {
+		final GraphicalViewer viewer = (GraphicalViewer) getViewer();
+		final GraphicalEditPart firstTargetEP = (GraphicalEditPart) viewer.getEditPartRegistry()
+				.get(targetList.getFirst());
+		HandlerHelper.selectEditPart(viewer, firstTargetEP);
+		viewer.flush();
+
+		final var dialog = new FollowConnectionHandler.OppositeSelectionDialog(targetList, viewer, originPin,
+				firstTargetEP.getFigure());
+		dialog.open();
+	}
+
 	private void followConnection(final EditPart targetEP) {
 		final EditPartViewer viewer = getViewer();
 		HandlerHelper.selectEditPart(viewer, targetEP);
-
-		viewer.select(targetEP);
-		viewer.reveal(targetEP);
 	}
 
 	private static boolean isDecoratorTargeted(Point location, final FBNetworkConnectionLabel decoration) {
