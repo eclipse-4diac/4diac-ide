@@ -16,13 +16,13 @@ the terms of [Eclipse Contributor Agreement](http://www.eclipse.org/legal/ECA.ph
 
 For building 4diac IDE simple run
 
-   mvn install
+   `mvn install`
    
-in the root directory of 4diac IDE source code. After the build completes you can finde 4diac IDE packages for Windows, Linux and MacOS in the directory:
+in the root directory of 4diac IDE source code. After the build completes you can find 4diac IDE packages for Windows, Linux and MacOS in the directory:
     
-   plugins/org.eclipse.fordiac.ide.product/target 
+   `plugins/org.eclipse.fordiac.ide.product/target` 
 
-More information on how to build, run and extend 4diac IDe can be found in our [Building 4diac IDE Documentation](https://www.eclipse.org/4diac/en_help.php?helppage=html/development/building4diac.html)
+More information on how to build, run and extend 4diac IDE can be found in our [Building 4diac IDE Documentation](https://www.eclipse.org/4diac/en_help.php?helppage=html/development/building4diac.html)
 
 
 ## Links
