@@ -81,6 +81,7 @@ import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.ui.PlatformUI;
 
 public class ConnectionEditPart extends AbstractConnectionEditPart implements AnnotableGraphicalEditPart {
 
@@ -364,8 +365,9 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 		HandlerHelper.selectEditPart(viewer, firstTargetEP);
 		viewer.flush();
 
-		final var dialog = new FollowConnectionHandler.OppositeSelectionDialog(targetList, viewer, originPin,
-				firstTargetEP.getFigure());
+		final var dialog = new FollowConnectionHandler.OppositeSelectionDialog(targetList, originPin,
+				viewer.getControl(), firstTargetEP.getFigure(),
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor());
 		dialog.open();
 	}
 
