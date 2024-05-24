@@ -36,11 +36,11 @@ public abstract class AbstractFollowTargetPinConnectionHandler extends FollowCon
 
 		if (useTargetRefElement(targetIEEditPart)) {
 			// select the element the target pin is referring to
-			selectInterfaceElement(viewer, targetIEEditPart.getModel().getRefElement());
+			selectInterfaceElement(targetIEEditPart.getModel().getRefElement(), editor);
 		} else {
 			// select the elements that have incoming connections
 			selectOpposites(event, viewer, null,
-					getConnectionOposites((InterfaceEditPart) targetIEEditPart.getParent()));
+					getConnectionOposites((InterfaceEditPart) targetIEEditPart.getParent()), editor);
 		}
 
 		return Status.OK_STATUS;
