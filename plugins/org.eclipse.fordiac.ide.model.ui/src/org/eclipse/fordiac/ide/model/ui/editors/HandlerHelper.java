@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
@@ -61,17 +62,21 @@ public final class HandlerHelper {
 		if (viewer != null) {
 			final EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(element);
 			if (null != editPart) {
-				viewer.flush(); // ensure that the viewer is ready
-				if (viewer instanceof final AdvancedScrollingGraphicalViewer asgv) {
-					asgv.selectAndRevealEditPart(editPart);
-				} else {
-					viewer.select(editPart);
-					viewer.reveal(editPart);
-				}
+				selectEditPart(viewer, editPart);
 				return true;
 			}
 		}
 		return false;
+	}
+
+	public static void selectEditPart(final EditPartViewer viewer, final EditPart editPart) {
+		viewer.flush(); // ensure that the viewer is ready
+		if (viewer instanceof final AdvancedScrollingGraphicalViewer asgv) {
+			asgv.selectAndRevealEditPart(editPart);
+		} else {
+			viewer.select(editPart);
+			viewer.reveal(editPart);
+		}
 	}
 
 	public static IEditorPart openEditor(final EObject model) {
