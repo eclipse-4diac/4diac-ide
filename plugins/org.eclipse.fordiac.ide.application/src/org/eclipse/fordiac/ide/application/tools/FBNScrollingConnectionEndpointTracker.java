@@ -24,6 +24,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.swt.SWT;
 
 public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEndpointTracker {
@@ -43,6 +44,14 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 			performSelection();
 		}
 		return super.handleButtonDown(button);
+	}
+
+	@Override
+	protected boolean handleDoubleClick(final int button) {
+		if (button == 1) {
+			performOpen();
+		}
+		return true;
 	}
 
 	/**
@@ -140,6 +149,13 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 			return conn;
 		}
 		return null;
+	}
+
+	private void performOpen() {
+		final SelectionRequest request = new SelectionRequest();
+		request.setLocation(getLocation());
+		request.setType(RequestConstants.REQ_OPEN);
+		getConnectionEditPart().performRequest(request);
 	}
 
 }
