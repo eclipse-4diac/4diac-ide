@@ -65,6 +65,14 @@ public class ExpandedInterfacePositionMap {
 		ep.getChildren().stream().filter(InterfaceEditPart.class::isInstance).forEach(EditPart::refresh);
 	}
 
+	public int getInputDirectEnd() {
+		return inputDirectEnd;
+	}
+
+	public int getOutputDirectEnd() {
+		return outputDirectEnd;
+	}
+
 	public void calculate() {
 		editPartMap.clear();
 

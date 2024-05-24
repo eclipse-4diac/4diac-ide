@@ -16,5 +16,5 @@ import org.eclipse.emf.ecore.EObject;
 
 @FunctionalInterface
 public interface IEC61499SearchFilter {
-	boolean apply(EObject searchCanditate);
+	boolean apply(EObject searchCandidate);
 }

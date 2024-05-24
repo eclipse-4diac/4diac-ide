@@ -204,8 +204,7 @@ public final class StructParser {
 		final StringBuilder builder = new StringBuilder();
 		final boolean isArray = isArray(root);
 		toString(root, builder, isArray);
-		return isArray ? removeArrayIndexes(builder.toString()) : builder.toString();
-
+		return builder.toString();
 	}
 
 	private static boolean isArray(final WatchValueTreeNode root) {
@@ -228,9 +227,11 @@ public final class StructParser {
 
 		for (final AbstractStructTreeNode tmp : startNode.getChildren()) {
 			final WatchValueTreeNode node = (WatchValueTreeNode) tmp;
-			builder.append(node.getVarName());
-			builder.append(":="); //$NON-NLS-1$
-			toString(node, builder, false);
+			if (!node.getVarName().startsWith("[")) { //$NON-NLS-1$
+				builder.append(node.getVarName());
+				builder.append(":="); //$NON-NLS-1$
+			}
+			toString(node, builder, isArrayChild(node));
 			builder.append(","); //$NON-NLS-1$
 		}
 		// remove last semicolon if necessary
@@ -245,9 +246,19 @@ public final class StructParser {
 		}
 	}
 
+	protected static boolean isArrayChild(final WatchValueTreeNode node) {
+		if (node.getVariable() != null) {
+			return node.getVariable().isArray();
+		}
+
+		// when our children also have no variable we have a multi dimensional array and
+		// need to return true
+		return (!node.getChildren().isEmpty()
+				&& ((WatchValueTreeNode) node.getChildren().getFirst()).getVariable() == null);
+	}
+
 	public static String removeArrayIndexes(final String input) {
-		final String parsedInput = input.replaceAll("\\[[0-9]+\\]:=", ""); //$NON-NLS-1$ //$NON-NLS-2$
-		return "[" + parsedInput.substring(1, parsedInput.length() - 1) + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+		return input.replaceAll("\\[[0-9]+\\]:=", ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private StructParser() {
