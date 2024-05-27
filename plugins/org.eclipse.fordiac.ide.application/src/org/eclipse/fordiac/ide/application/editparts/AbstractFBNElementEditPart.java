@@ -390,8 +390,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			if (((VarDeclaration) interfaceEditPart.getModel()).isInOutVar()) {
 				final List<VarDeclaration> visList = interfaceList.getInOutVars().stream()
 						.filter(VarDeclaration::isVisible).toList();
-				System.out.println(interfaceEditPart.getModel().getFBNetworkElement().getName() + " "
-						+ interfaceEditPart.getModel().getName() + " " + visList.indexOf(interfaceEditPart.getModel()));
+//				System.out.println(interfaceEditPart.getModel().getFBNetworkElement().getName() + " "
+//						+ interfaceEditPart.getModel().getName() + " " + visList.indexOf(interfaceEditPart.getModel()));
 				return visList.indexOf(interfaceEditPart.getModel());
 			}
 			return interfaceList.getVisibleInputVars().indexOf(interfaceEditPart.getModel());
@@ -415,8 +415,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			if (((VarDeclaration) interfaceEditPart.getModel()).isInOutVar()) {
 				final List<VarDeclaration> visList = interfaceList.getOutMappedInOutVars().stream()
 						.filter(VarDeclaration::isVisible).toList();
-				System.out.println(interfaceEditPart.getModel().getFBNetworkElement().getName() + " "
-						+ interfaceEditPart.getModel().getName() + " " + visList.indexOf(interfaceEditPart.getModel()));
+//				System.out.println(interfaceEditPart.getModel().getFBNetworkElement().getName() + " "
+//						+ interfaceEditPart.getModel().getName() + " " + visList.indexOf(interfaceEditPart.getModel()));
 				return visList.indexOf(interfaceEditPart.getModel());
 
 			}
@@ -472,10 +472,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 		final List<VarDeclaration> inoutInConList = getModel().getInterface().getOutMappedInOutVars().stream()
 				.filter(it -> !it.getOutputConnections().isEmpty()).map(VarDeclaration::getInOutVarOpposite).toList();
-		// System.out.println("To be banned inputs: " + inoutInRemList);
 		final List<VarDeclaration> inoutOutConList = getModel().getInterface().getInOutVars().stream()
 				.filter(it -> !it.getInputConnections().isEmpty()).map(VarDeclaration::getInOutVarOpposite).toList();
-		// System.out.println("To be banned outputs: " + inoutOutRemList);
 
 		elements.removeAll(inputRemovalList);
 		elements.removeAll(outputRemovalList);
