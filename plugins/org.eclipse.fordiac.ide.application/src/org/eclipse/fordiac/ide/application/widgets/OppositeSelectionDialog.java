@@ -167,7 +167,7 @@ public class OppositeSelectionDialog extends PopupDialog {
 
 			@Override
 			public void focusGained(final FocusEvent e) {
-				// do nothing here
+				setPopupClosable(true);
 			}
 
 		});
