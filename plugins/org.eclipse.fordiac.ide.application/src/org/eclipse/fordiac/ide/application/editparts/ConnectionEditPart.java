@@ -40,10 +40,10 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkConnectionLabel;
-import org.eclipse.fordiac.ide.application.handlers.FollowConnectionHandler;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNConnectionEndpointPolicy;
 import org.eclipse.fordiac.ide.application.tools.ConnectionSelectEditPartTracker;
+import org.eclipse.fordiac.ide.application.widgets.OppositeSelectionDialog;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
@@ -365,7 +365,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 		HandlerHelper.selectEditPart(viewer, firstTargetEP);
 		viewer.flush();
 
-		final var dialog = new FollowConnectionHandler.OppositeSelectionDialog(targetList, originPin,
+		final var dialog = new OppositeSelectionDialog(targetList, originPin,
 				viewer.getControl(), firstTargetEP.getFigure(),
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor());
 		dialog.open();
