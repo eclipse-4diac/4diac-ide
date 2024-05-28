@@ -26,9 +26,11 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.ScrollPane;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -46,6 +48,7 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 
 /** The Class SubAppForFbNetworkFigure. */
 public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
@@ -118,8 +121,8 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	 */
 	public void layoutExpandedInterface() {
 		interfacePositions.calculate();
-		expandedInputFigure.getChildren().get(0).getLayoutManager().layout(expandedInputFigure.getChildren().get(0));
-		expandedOutputFigure.getChildren().get(0).getLayoutManager().layout(expandedOutputFigure.getChildren().get(0));
+		expandedInputFigure.getLayoutManager().layout(expandedInputFigure);
+		expandedOutputFigure.getLayoutManager().layout(expandedOutputFigure);
 	}
 
 	public final void updateExpandedFigure() {
@@ -200,19 +203,22 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		interfaceBar.setMinimumSize(new Dimension(getMinExpandedInterfaceBarWidth(), -1));
 		interfaceBar.setOutline(false);
 		interfaceBar.setBackgroundColor(EditorWithInterfaceEditPart.INTERFACE_BAR_BG_COLOR);
-		interfaceBar.setLayoutManager(createInterfaceBarLayout());
-		parent.add(interfaceBar, new GridData(SWT.BEGINNING, SWT.FILL, false, true));
 
-		createToolbarLayoutContainer(interfaceBar, isInput);
+		interfaceBar.setLayoutManager(new ExpandedSubappInterfaceLayout(interfacePositions, isInput));
+
+		final var shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		final var lws = new LightweightSystem(shell);
+
+		final ScrollPane scrollPane = new ScrollPane();
+		scrollPane.setVerticalScrollBarVisibility(ScrollPane.AUTOMATIC);
+		scrollPane.setHorizontalScrollBarVisibility(ScrollPane.NEVER);
+
+		scrollPane.setContents(interfaceBar);
+		lws.setContents(scrollPane);
+
+		parent.add(scrollPane, new GridData(SWT.BEGINNING, SWT.FILL, false, true));
 
 		return interfaceBar;
-	}
-
-	private void createToolbarLayoutContainer(final RoundedRectangle interfaceBar, final boolean isInput) {
-		final IFigure container = new Figure();
-		final ExpandedSubappInterfaceLayout layout = new ExpandedSubappInterfaceLayout(interfacePositions, isInput);
-		container.setLayoutManager(layout);
-		interfaceBar.add(container, createInterfaceBarGroupLayoutData());
 	}
 
 	private void removeTopMiddleBottom() {
