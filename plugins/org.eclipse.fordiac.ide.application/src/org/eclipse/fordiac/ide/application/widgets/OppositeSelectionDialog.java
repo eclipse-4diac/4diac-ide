@@ -150,7 +150,6 @@ public class OppositeSelectionDialog extends PopupDialog {
 		listViewer.addSelectionChangedListener(event -> FollowConnectionHandler
 				.selectInterfaceElement((IInterfaceElement) event.getStructuredSelection().getFirstElement(), editor));
 
-		// on enter close the view
 		listViewer.getControl().addKeyListener(new FollowConnectionKeyListener(dialogArea));
 
 		listViewer.getControl().addFocusListener(new FocusListener() {
