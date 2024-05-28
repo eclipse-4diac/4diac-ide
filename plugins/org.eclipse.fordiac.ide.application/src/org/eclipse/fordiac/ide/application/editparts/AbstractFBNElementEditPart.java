@@ -256,8 +256,6 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	private HiddenPinIndicator inputPinIndicator;
 	private HiddenPinIndicator outputPinIndicator;
-	private static List<VarDeclaration> inoutInConList;
-	private static List<VarDeclaration> inoutOutConList;
 
 	/**
 	 * Returns an <code>IPropertyChangeListener</code> with implemented
@@ -380,7 +378,17 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	}
 
-	private static int getInterfaceInputElementIndex(final InterfaceEditPart interfaceEditPart,
+	private List<VarDeclaration> getRemovedInOutConnections(final boolean isInput) {
+		if (isInput) {
+			return getModel().getInterface().getOutMappedInOutVars().stream()
+					.filter(it -> !it.getOutputConnections().isEmpty()).map(VarDeclaration::getInOutVarOpposite)
+					.toList();
+		}
+		return getModel().getInterface().getInOutVars().stream().filter(it -> !it.getInputConnections().isEmpty())
+				.map(VarDeclaration::getInOutVarOpposite).toList();
+	}
+
+	private int getInterfaceInputElementIndex(final InterfaceEditPart interfaceEditPart,
 			final InterfaceList interfaceList) {
 		if (interfaceEditPart.isEvent()) {
 			return interfaceList.getEventInputs().indexOf(interfaceEditPart.getModel());
@@ -391,7 +399,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		if (interfaceEditPart.isVariable()) {
 			if (((VarDeclaration) interfaceEditPart.getModel()).isInOutVar()) {
 				final List<VarDeclaration> visInOutList = interfaceList.getInOutVars().stream()
-						.filter(x -> !inoutInConList.contains(x)).toList();
+						.filter(x -> !getRemovedInOutConnections(true).contains(x)).toList();
 				return visInOutList.indexOf(interfaceEditPart.getModel());
 			}
 			return interfaceList.getVisibleInputVars().indexOf(interfaceEditPart.getModel());
@@ -403,7 +411,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	}
 
-	private static int getInterfaceOutputElementIndex(final InterfaceEditPart interfaceEditPart,
+	private int getInterfaceOutputElementIndex(final InterfaceEditPart interfaceEditPart,
 			final InterfaceList interfaceList) {
 		if (interfaceEditPart.isEvent()) {
 			return interfaceList.getEventOutputs().indexOf(interfaceEditPart.getModel());
@@ -414,7 +422,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		if (interfaceEditPart.isVariable()) {
 			if (((VarDeclaration) interfaceEditPart.getModel()).isInOutVar()) {
 				final List<VarDeclaration> visInOutList = interfaceList.getOutMappedInOutVars().stream()
-						.filter(x -> !inoutOutConList.contains(x)).toList();
+						.filter(x -> !getRemovedInOutConnections(false).contains(x)).toList();
 				return visInOutList.indexOf(interfaceEditPart.getModel());
 			}
 			return interfaceList.getVisibleOutputVars().indexOf(interfaceEditPart.getModel());
@@ -467,10 +475,11 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		final List<VarDeclaration> outputRemovalList = getModel().getInterface().getOutputVars().stream()
 				.filter(it -> !it.isVisible()).toList();
 
-		inoutInConList = getModel().getInterface().getOutMappedInOutVars().stream()
-				.filter(it -> !it.getOutputConnections().isEmpty()).map(VarDeclaration::getInOutVarOpposite).toList();
-		inoutOutConList = getModel().getInterface().getInOutVars().stream()
-				.filter(it -> !it.getInputConnections().isEmpty()).map(VarDeclaration::getInOutVarOpposite).toList();
+		final List<VarDeclaration> inoutInConList = getRemovedInOutConnections(true);
+		final List<VarDeclaration> inoutOutConList = getRemovedInOutConnections(false);
+
+		inoutInConList.stream().forEach(vd -> vd.setValue(null));
+		inoutOutConList.stream().forEach(vd -> vd.setValue(null));
 
 		elements.removeAll(inputRemovalList);
 		elements.removeAll(outputRemovalList);
