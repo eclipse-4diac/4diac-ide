@@ -41,7 +41,7 @@ public class SearchTypeReferences extends AbstractHandler {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		final TypeEntry typeEntry = getTypeEntryFromSelection(selection);
 		if (typeEntry != null) {
-			final ModelQuerySpec searchSpec = new ModelQuerySpec(typeEntry.getTypeName(), false, false, true, false,
+			final ModelQuerySpec searchSpec = new ModelQuerySpec(typeEntry.getFullTypeName(), false, false, true, false,
 					false, true, SearchScope.PROJECT, typeEntry.getFile().getProject());
 			final ModelSearchQuery query = createModelSearchQuery(typeEntry, searchSpec);
 			NewSearchUI.runQueryInBackground(query, NewSearchUI.getSearchResultView());

@@ -49,13 +49,20 @@ public class SearchNameDictionary {
 			final var root = EcoreUtil.getRootContainer(fbne);
 			final StringBuilder sb = new StringBuilder();
 			if (root instanceof final AutomationSystem system) {
-				sb.append(system.getName() + ".");
+				sb.append(system.getName() + "."); //$NON-NLS-1$
 			}
 			return sb.toString() + FBNetworkHelper.getFullHierarchicalName(fbne);
 		}
 		if (element instanceof final IInterfaceElement ie) {
-			final String FBName = FBNetworkHelper.getFullHierarchicalName(ie.getFBNetworkElement());
-			return FBName + "." + ie.getName(); //$NON-NLS-1$
+			String parentName = FBNetworkHelper.getFullHierarchicalName(ie.getFBNetworkElement());
+			if (parentName == null && ie.eContainer() != null) {
+				if (ie.eContainer() instanceof final INamedElement econ) {
+					parentName = econ.getName();
+				} else if (ie.eContainer().eContainer() instanceof final INamedElement econParent) {
+					parentName = econParent.getName();
+				}
+			}
+			return parentName + "." + ie.getName(); //$NON-NLS-1$
 		}
 		if (element instanceof final Device device) {
 			// systemname.device
@@ -63,7 +70,7 @@ public class SearchNameDictionary {
 		}
 		if (element instanceof final Resource res) {
 			// systemname.devicename.resource
-			return res.getDevice().getAutomationSystem().getName() + "." + res.getDevice().getName() + "." //$NON-NLS-1$
+			return res.getDevice().getAutomationSystem().getName() + "." + res.getDevice().getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
 					+ res.getName();
 		}
 		if (element instanceof final INamedElement namedElement) {

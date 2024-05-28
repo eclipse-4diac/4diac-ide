@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.model.search;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -24,21 +25,28 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.URI;
+import org.eclipse.fordiac.ide.model.data.ArrayType;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;
@@ -78,14 +86,14 @@ public class ModelSearchQuery implements ISearchQuery {
 
 	private void performSearch(final List<ISearchContext> searchContexts) {
 		for (final ISearchContext context : searchContexts) {
-			for (final URI libraryElementURI : context.getAllTypes()) {
+			context.getTypes().forEach(libraryElementURI -> {
 				final LibraryElement libraryElement = context.getLibraryElement(libraryElementURI);
 				if (libraryElement instanceof final AutomationSystem sys) {
 					searchSystem(sys);
 				} else if (matchTypeEntry(libraryElement)) {
 					searchResult.addResult(libraryElement);
 				}
-			}
+			});
 		}
 	}
 
@@ -126,18 +134,27 @@ public class ModelSearchQuery implements ISearchQuery {
 					}
 				}
 			}
+			if (fbnetworkElement instanceof final ConfigurableFB conf && matchEObject(conf.getDataType())) {
+				searchResult.addResult(conf);
+			}
 			if (fbnetworkElement instanceof final SubApp subApp && !subApp.isTyped()
 					&& subApp.getSubAppNetwork() != null) {
 				searchFBNetwork(subApp.getSubAppNetwork(), path);
 			}
-			if (modelQuerySpec.isCheckedPinName() && fbnetworkElement.getInterface() != null) {
-				final List<IInterfaceElement> matchingPins = fbnetworkElement.getInterface().getAllInterfaceElements()
-						.stream().filter(pin -> pin.getName() != null && compareStrings(pin.getName())).toList();
-				if (!matchingPins.isEmpty()) {
-					if (!path.isEmpty()) {
-						searchResult.getDictionary().addEntry(fbnetworkElement, path);
+			if (fbnetworkElement.getInterface() != null) {
+				if (modelQuerySpec.isCheckedPinName()) {
+					final List<IInterfaceElement> matchingPins = fbnetworkElement.getInterface()
+							.getAllInterfaceElements().stream()
+							.filter(pin -> pin.getName() != null && compareStrings(pin.getName())).toList();
+					if (!matchingPins.isEmpty()) {
+						if (!path.isEmpty()) {
+							searchResult.getDictionary().addEntry(fbnetworkElement, path);
+						}
+						searchResult.addResults(matchingPins);
 					}
-					searchResult.addResults(matchingPins);
+				}
+				if (modelQuerySpec.isCheckedType()) {
+					searchInterface(fbnetworkElement.getInterface());
 				}
 			}
 		}
@@ -164,16 +181,65 @@ public class ModelSearchQuery implements ISearchQuery {
 	}
 
 	private boolean matchTypeEntry(final LibraryElement elem) {
-		if (elem instanceof final CompositeFBType comp) {
+		switch (elem) {
+		case final CompositeFBType comp -> {
 			searchFBNetwork(comp.getFBNetwork(), new ArrayList<>());
-		} else if (elem instanceof final BaseFBType type) {
+		}
+		case final BaseFBType type -> {
 			for (final FB fb : type.getInternalFbs()) {
 				if (matchEObject(fb)) {
 					searchResult.addResult(fb);
 				}
 			}
+			for (final VarDeclaration varDecl : type.getInternalVars()) {
+				if (matchEObject(varDecl)) {
+					searchResult.addResult(varDecl);
+				}
+			}
+		}
+		case final ArrayType array -> {
+			final DataType base = array.getBaseType();
+			if (matchEObject(base)) {
+				searchResult.addResult(base);
+			}
+		}
+		case final StructuredType struct -> {
+			matchStruct(struct);
+		}
+		case final AttributeDeclaration attDecl -> {
+			if (attDecl.getType() instanceof final StructuredType struct) {
+				matchStruct(struct);
+			} else if (matchEObject(attDecl.getType())) {
+				searchResult.addResult(attDecl.getType());
+			}
+		}
+		default -> {
+			// no default case
+		}
+		}
+
+		if (elem instanceof final FBType type && type.getInterfaceList() != null) {
+			searchInterface(type.getInterfaceList());
 		}
 		return matchEObject(elem);
+	}
+
+	private void matchStruct(final StructuredType struct) {
+		for (final VarDeclaration varDecl : struct.getMemberVariables()) {
+			if (varDecl.isArray()) {
+				if (matchEObject(varDecl.getType())) {
+					searchResult.addResult(varDecl);
+				}
+			} else if (matchEObject(varDecl)) {
+				searchResult.addResult(varDecl);
+			}
+		}
+	}
+
+	private void searchInterface(final InterfaceList interfaceList) {
+		Stream.concat(Stream.concat(interfaceList.getInputs(), interfaceList.getOutputVars().stream()),
+				Stream.concat(interfaceList.getEventOutputs().stream(), interfaceList.getPlugs().stream()))
+				.filter(this::matchEObject).forEach(searchResult::addResult);
 	}
 
 	private boolean matchEObject(final INamedElement modelElement) {
@@ -193,10 +259,17 @@ public class ModelSearchQuery implements ISearchQuery {
 		}
 		if (modelQuerySpec.isCheckedType()) {
 			if (modelElement instanceof final TypedConfigureableObject config) {
-				return compareStrings(config.getTypeName());
+				return compareStrings(config.getTypeName())
+						|| (config.getTypeEntry() != null && compareStrings(config.getTypeEntry().getFullTypeName()));
 			}
 			if (modelElement instanceof final LibraryElement namElem) {
-				return compareStrings(namElem.getName());
+				return compareStrings(namElem.getName())
+						|| (namElem.getTypeEntry() != null && compareStrings(namElem.getTypeEntry().getFullTypeName()));
+			}
+			if (modelElement instanceof final VarDeclaration varDecl) {
+				return compareStrings(varDecl.getTypeName())
+						|| (varDecl.getType() != null && varDecl.getType().getTypeEntry() != null
+								&& compareStrings(varDecl.getType().getTypeEntry().getFullTypeName()));
 			}
 		}
 		return false;
