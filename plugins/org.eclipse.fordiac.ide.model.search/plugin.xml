@@ -78,6 +78,7 @@
                             <test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="fbt" />
                             <test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="sub" />
                             <test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="dtd" />
+                            <test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="dtp" />
                         </or>    
                         </adapt>
                   	</iterate>
