@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.ScrollPane;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
@@ -108,6 +109,13 @@ public class ExpandedInterfacePositionMap {
 			directPositions = calculateDirectPositions(inputList);
 		}
 
+		final var inputScrollPane = (!inputList.isEmpty())
+				? (ScrollPane) inputList.get(0).getFigure().getParent().getParent().getParent()
+				: null;
+		final var outputScrollPane = (!outputList.isEmpty())
+				? (ScrollPane) outputList.get(0).getFigure().getParent().getParent().getParent()
+				: null;
+
 		inputList = inputList.stream().filter(ie -> !directPositions.containsKey(ie.getFigure())).toList();
 		outputList = outputList.stream().filter(ie -> !directPositions.containsKey(ie.getFigure())).toList();
 
@@ -132,6 +140,38 @@ public class ExpandedInterfacePositionMap {
 
 		stackToFit(clientArea, inputPositions, true);
 		stackToFit(clientArea, outputPositions, false);
+
+		applyScrollOffset(inputScrollPane, outputScrollPane);
+	}
+
+	private void applyScrollOffset(final ScrollPane inputScrollPane, final ScrollPane outputScrollPane) {
+		final int inputScrollValue = (inputScrollPane != null) ? inputScrollPane.getVerticalScrollBar().getValue() : 0;
+		final int outputScrollValue = (outputScrollPane != null) ? outputScrollPane.getVerticalScrollBar().getValue()
+				: 0;
+
+		if (inputScrollValue != 0) {
+			inputDirectEnd -= inputScrollValue;
+			inputUnconnectedStart -= inputScrollValue;
+			for (final var entry : inputPositions.entrySet()) {
+				inputPositions.put(entry.getKey(), Integer.valueOf(entry.getValue().intValue() - inputScrollValue));
+			}
+		}
+
+		if (outputScrollValue != 0) {
+			outputDirectEnd -= outputScrollValue;
+			outputUnconnectedStart -= outputScrollValue;
+			for (final var entry : outputPositions.entrySet()) {
+				outputPositions.put(entry.getKey(), Integer.valueOf(entry.getValue().intValue() - outputScrollValue));
+			}
+		}
+
+		for (final var entry : directPositions.entrySet()) {
+			if (editPartMap.get(entry.getKey()).isInput()) {
+				directPositions.put(entry.getKey(), Integer.valueOf(entry.getValue().intValue() - inputScrollValue));
+			} else {
+				directPositions.put(entry.getKey(), Integer.valueOf(entry.getValue().intValue() - outputScrollValue));
+			}
+		}
 	}
 
 	private Map<IFigure, Integer> calculateDirectPositionsStack(final List<InterfaceEditPart> inputList,
@@ -189,11 +229,12 @@ public class ExpandedInterfacePositionMap {
 		return pos;
 	}
 
-	private static Map<IFigure, Integer> getPinSizes(final List<InterfaceEditPart> inputList,
+	private Map<IFigure, Integer> getPinSizes(final List<InterfaceEditPart> inputList,
 			final List<InterfaceEditPart> outputList) {
 		final var sizes = new HashMap<IFigure, Integer>();
 		for (final var pin : inputList) {
 			final var ep = (UntypedSubAppInterfaceElementEditPart) pin;
+			editPartMap.put(ep.getFigure(), ep);
 			if (ep.isOverflow()) {
 				ep.setOverflow(false);
 				ep.refresh();
@@ -204,6 +245,7 @@ public class ExpandedInterfacePositionMap {
 		}
 		for (final var pin : outputList) {
 			final var ep = (UntypedSubAppInterfaceElementEditPart) pin;
+			editPartMap.put(ep.getFigure(), ep);
 			if (ep.isOverflow()) {
 				ep.setOverflow(false);
 				ep.refresh();
@@ -393,7 +435,6 @@ public class ExpandedInterfacePositionMap {
 			} else {
 				map.put(ie.getFigure(), Integer.valueOf(Integer.MAX_VALUE));
 			}
-			editPartMap.put(ie.getFigure(), ie);
 		}
 		return map;
 	}
@@ -418,7 +459,6 @@ public class ExpandedInterfacePositionMap {
 			} else {
 				map.put(ie.getFigure(), Integer.valueOf(Integer.MAX_VALUE));
 			}
-			editPartMap.put(ie.getFigure(), ie);
 		}
 		return map;
 	}

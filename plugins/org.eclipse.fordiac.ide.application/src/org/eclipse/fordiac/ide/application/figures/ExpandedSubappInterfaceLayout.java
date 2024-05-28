@@ -80,8 +80,6 @@ public class ExpandedSubappInterfaceLayout extends ToolbarLayout {
 
 			child.setBounds(transposer.t(newBounds));
 		}
-
-		parent.getBounds().height = parent.getParent().getBounds().height;
 	}
 
 	private int getDirectPosition(final IFigure child) {
