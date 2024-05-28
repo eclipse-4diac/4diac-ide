@@ -327,6 +327,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			return getTargetInputFigure(interfaceEditPart);
 		}
 		return getTargetOutputFigure(interfaceEditPart);
+
 	}
 
 	private IFigure getTargetInputFigure(final InterfaceEditPart interfaceEditPart) {
