@@ -202,6 +202,12 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		}
 
 		FBNetworkElement parent = fbnEl.getOuterFBNetworkElement();
+
+		// we went from inside to outside and reached toplevel
+		if (parent == null) {
+			return fbnEl.getFbNetwork().getApplication();
+		}
+
 		// For unfolded subapps find the next parent that is not expanded as refElement
 		while (parent instanceof final SubApp subApp && subApp.isUnfolded()) {
 			if (subApp.getOuterFBNetworkElement() == null) {
@@ -209,6 +215,7 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 			}
 			parent = subApp.getOuterFBNetworkElement();
 		}
+
 		return parent;
 	}
 }

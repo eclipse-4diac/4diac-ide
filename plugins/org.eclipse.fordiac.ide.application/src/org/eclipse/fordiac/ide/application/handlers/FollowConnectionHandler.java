@@ -94,13 +94,17 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 				.toList();
 	}
 
-	protected static List<IInterfaceElement> resolveTargetPins(final List<IInterfaceElement> opposites,
+	protected List<IInterfaceElement> resolveTargetPins(final List<IInterfaceElement> opposites,
 			final GraphicalViewer viewer) {
 		final List<IInterfaceElement> resolvedOpposites = new ArrayList<>();
 		for (final IInterfaceElement element : opposites) {
 			final EditPart ep = (EditPart) (viewer.getEditPartRegistry().get(element));
-			if ((ep instanceof final InterfaceEditPart iep) && isBorderElement(iep)) {
-				resolvedOpposites.addAll(getTargetPins(iep));
+			if ((ep instanceof final InterfaceEditPart iep) && isExpandedSubappPin(element)) {
+				if (useTargetPins(iep)) {
+					resolvedOpposites.addAll(getTargetPins(iep));
+				} else {
+					resolvedOpposites.addAll(getConnectionOposites(iep));
+				}
 			} else {
 				resolvedOpposites.add(element);
 			}
@@ -120,10 +124,6 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	private static List<IInterfaceElement> getTargetPins(final InterfaceEditPart iep) {
 		return iep.getChildren().stream().filter(TargetInterfaceElementEditPart.class::isInstance)
 				.map(ep -> (TargetInterfaceElementEditPart) ep).map(ep -> ep.getModel().getRefElement()).toList();
-	}
-
-	private static boolean isBorderElement(final InterfaceEditPart iep) {
-		return iep.getChildren().stream().anyMatch(TargetInterfaceElementEditPart.class::isInstance);
 	}
 
 	protected static boolean isInsideSubappOrViewer(final IInterfaceElement ie, final FBNetwork fbNetwork) {
