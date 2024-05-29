@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -145,7 +146,8 @@ public final class ConfigurableFBManagement {
 			if (!isInDefaultConfiguration(fb, attr.getValue(), fb.getDataType())) {
 				return ECollections.asEList(structTypeAttr.get(0), attr);
 			}
-			// Until the configured state is updated automatically in the commands, save result here:
+			// Until the configured state is updated automatically in the commands, save
+			// result here:
 			fb.setIsConfigured(false);
 		}
 		return structTypeAttr;
@@ -233,6 +235,7 @@ public final class ConfigurableFBManagement {
 		copy.setType(memberVar.getType());
 		copy.setValue(LibraryElementFactory.eINSTANCE.createValue());
 		copy.setIsInput(isInput);
+		copy.setArraySize(EcoreUtil.copy(memberVar.getArraySize()));
 		return copy;
 	}
 
