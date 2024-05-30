@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.export.forte_ng.adapter
 import java.nio.file.Path
 import java.util.List
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -104,6 +105,15 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterType> {
 			TEventID «event.generateName»() {
 			  return mParentAdapterListEventID + scmEvent«event.name»ID;
 			}
+			
+		«ENDFOR»
+	'''
+
+	def protected generateAccessors(List<AdapterDeclaration> adapters) '''
+		«FOR adapter : adapters»
+			«adapter.type.generateTypeName» &«adapter.generateName» {
+			  return *static_cast<«adapter.type.generateTypeName»*>(mAdapters[«adapters.indexOf(adapter)»]);
+			};
 			
 		«ENDFOR»
 	'''

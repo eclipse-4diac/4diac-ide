@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2023 fortiss GmbH, Johannes Kepler Unviersity Linz
+ * Copyright (c) 2019, 2024 fortiss GmbH, Johannes Kepler Unviersity Linz
  * 				 			TU Wien, Martin Erich Jobst.
  *               			Primetals Technologies Austria GmbH
  * 
@@ -26,8 +26,12 @@ package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Path
 import java.util.List
+import java.util.Map
+import java.util.Set
+import org.eclipse.fordiac.ide.model.LibraryElementTags
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
+import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
@@ -36,8 +40,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.With
-import org.eclipse.fordiac.ide.model.LibraryElementTags
-import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
@@ -87,8 +89,8 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateAdapterIncludes(Iterable<AdapterDeclaration> vars) '''
-		«FOR include : vars.map[it.typeName].sort.toSet»
-			#include "«include».h"
+		«FOR include : vars.map[type.generateDefiningInclude].toSet»
+			#include "«include»"
 		«ENDFOR»
 	'''
 
@@ -324,14 +326,16 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«generateAccessorDeclarations()»
 		«generateEventAccessorDefinitions»
 	'''
-	
-	protected def CharSequence generateAccessorDeclarations()'''
+
+	protected def CharSequence generateAccessorDeclarations() '''
 		«generateAccessorDeclaration("getDI", false)»
 		«generateAccessorDeclaration("getDO", false)»
 		«IF (!type.interfaceList.inOutVars.empty)»
 			«generateAccessorDeclaration("getDIO", false)»
 		«ENDIF»
-		«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
+		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
+			«generateAccessorDeclaration("getAdapterUnchecked", "CAdapter *", false)»
+		«ENDIF»
 		«generateConnectionAccessorsDeclaration("getEOConUnchecked", "CEventConnection *")»
 		«generateConnectionAccessorsDeclaration("getDIConUnchecked", "CDataConnection **")»
 		«generateConnectionAccessorsDeclaration("getDOConUnchecked", "CDataConnection *")»
@@ -342,20 +346,21 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			«generateConnectionAccessorsDeclaration("getDIOOutConUnchecked", "CInOutDataConnection *")»
 		«ENDIF»
 	'''
-	
-	
+
 	protected def CharSequence generateInterfaceVariableAndConnectionDeclarations() '''
 		«type.interfaceList.inputVars.generateVariableDeclarations(false)»
 		«type.interfaceList.outputVars.generateVariableDeclarations(false)»
-		«type.interfaceList.outputVars.generateConnectionVariableDeclarations»
 		«type.interfaceList.inOutVars.generateVariableDeclarations(false)»
+		«type.interfaceList.sockets.generateAdapterDeclarations»
+		«type.interfaceList.plugs.generateAdapterDeclarations»
+		«type.interfaceList.outputVars.generateConnectionVariableDeclarations»
 		«type.interfaceList.outMappedInOutVars.generateConnectionVariableDeclarations»
 		«type.interfaceList.eventOutputs.generateEventConnectionDeclarations»
 		«type.interfaceList.inputVars.generateDataConnectionDeclarations(true)»
 		«type.interfaceList.outputVars.generateDataConnectionDeclarations(false)»
 		«type.interfaceList.inOutVars.generateDataConnectionDeclarations(true)»
-		«type.interfaceList.outMappedInOutVars.generateDataConnectionDeclarations(false)»'''
-	
+		«type.interfaceList.outMappedInOutVars.generateDataConnectionDeclarations(false)»
+	'''
 
 	def protected generateInterfaceDefinitions() '''
 		«generateReadInputDataDefinition»
@@ -367,6 +372,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«IF (!type.interfaceList.inOutVars.empty)»
 			«type.interfaceList.inOutVars.generateAccessorDefinition("getDIO", false)»
 		«ENDIF»
+		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
+			«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessorDefinition("getAdapterUnchecked", "CAdapter *", false)»
+		«ENDIF»
 		«type.interfaceList.eventOutputs.generateConnectionAccessorsDefinition("getEOConUnchecked", "CEventConnection *")»
 		«type.interfaceList.inputVars.generateConnectionAccessorsDefinition("getDIConUnchecked", "CDataConnection **")»
 		«type.interfaceList.outputVars.generateConnectionAccessorsDefinition("getDOConUnchecked", "CDataConnection *")»
@@ -376,31 +384,32 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			«type.interfaceList.outMappedInOutVars.generateConnectionAccessorsDefinition("getDIOOutConUnchecked", "CInOutDataConnection *")»
 		«ENDIF»
 	'''
-	
+
 	def protected generateSetInitialValuesDeclaration(Iterable<VarDeclaration> variables) '''
 		«IF containsNonRetainedVariable(variables)»
 			void setInitialValues() override;
 		«ENDIF»
 	'''
-	
+
 	def protected generateSetInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
-		«IF(containsNonRetainedVariable(variables))»
+		«IF (containsNonRetainedVariable(variables))»
 			void «className»::setInitialValues() {
 				«generateVariableDefaultAssignment(variables.filter[!isRetainedVariable(it)])»
 			}
 			
 		«ENDIF»	
 	'''
-	
+
 	def private boolean isRetainedVariable(VarDeclaration variable) {
-		return variable.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE) !== null && variable.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE).equals(RetainTag.RETAIN.string);
+		return variable.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE) !== null &&
+			variable.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE).equals(RetainTag.RETAIN.string);
 	}
-	
+
 	def private boolean containsNonRetainedVariable(Iterable<VarDeclaration> variables) {
 		return variables.exists[!isRetainedVariable(it)];
 	}
-	
-	def private generateVariableDefaultAssignment(Iterable<VarDeclaration> variables)'''
+
+	def private generateVariableDefaultAssignment(Iterable<VarDeclaration> variables) '''
 		«FOR variable : variables»
 			«variable.generateName» = «variable.generateVariableDefaultValue»;
 		«ENDFOR»
@@ -424,8 +433,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def protected generateDataConnectionDeclarations(List<VarDeclaration> elements, boolean input) {
 		generateDataConnectionDeclarations(elements, input, false)
 	}
-	
-	def protected generateDataConnectionDeclarations(List<VarDeclaration> elements, boolean input, boolean internalConnection) '''
+
+	def protected generateDataConnectionDeclarations(List<VarDeclaration> elements, boolean input,
+		boolean internalConnection) '''
 		«FOR element : elements AFTER '\n'»
 			«IF element.isInOutVar»CInOutDataConnection«ELSE»CDataConnection«ENDIF» «IF input»*«ENDIF»«element.generateNameAsConnection(internalConnection)»;
 		«ENDFOR»
@@ -445,7 +455,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def protected generateDataConnectionInitializer(List<VarDeclaration> variables) {
 		generateDataConnectionInitializer(variables, false);
 	}
-	
+
 	def protected generateDataConnectionInitializer(List<VarDeclaration> variables, boolean internal) //
 	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateNameAsConnection(internal)»(this, «variables.indexOf(variable)», &«IF internal»«variable.generateName»«ELSE»«variable.generateNameAsConnectionVariable»«ENDIF»)«ENDFOR»'''
 
@@ -458,9 +468,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateConnectionAccessorsDefinition(List<? extends INamedElement> elements, String function,
 		String type) {
-			generateConnectionAccessorsDefinition(elements, function, type, false)
+		generateConnectionAccessorsDefinition(elements, function, type, false)
 	}
-	
+
 	def protected generateConnectionAccessorsDefinition(List<? extends INamedElement> elements, String function,
 		String type, boolean internal) '''
 		«IF elements.empty»
@@ -484,7 +494,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def protected CharSequence generateNameAsConnection(VarDeclaration varDeclaration) {
 		generateNameAsConnection(varDeclaration, false)
 	}
-	
+
 	def protected CharSequence generateNameAsConnection(VarDeclaration varDeclaration, boolean internal) '''
 	«IF varDeclaration.inOutVar»conn_«varDeclaration.name»«IF varDeclaration.isIsInput»In«ELSE»Out«ENDIF»«IF internal»Internal«ENDIF»«ELSE»conn_«varDeclaration.name»«ENDIF»'''
 
@@ -494,21 +504,12 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			default: '''conn_«element.name»'''
 		}
 	}
-	
+
 	def protected CharSequence generateNameAsConnection(INamedElement element) {
 		generateNameAsConnection(element, false)
 	}
 
 	def protected CharSequence generateNameAsConnectionVariable(INamedElement element) '''var_conn_«element.name»'''
-
-	def protected generateAccessors(List<AdapterDeclaration> adapters) '''
-		«FOR adapter : adapters»
-			«adapter.type.generateTypeName» &«adapter.generateName» {
-			  return *static_cast<«adapter.type.generateTypeName»*>(mAdapters[«adapters.indexOf(adapter)»]);
-			};
-			
-		«ENDFOR»
-	'''
 
 	def protected generateInternalFBAccessors(List<FB> fbs) '''
 		«FOR fb : fbs»
@@ -594,4 +595,35 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		  «FOR elem : type.internalFbs SEPARATOR ",\n"»{«elem.name.FORTEStringId», «elem.type.generateTypeSpec»}«ENDFOR»
 		};
 	'''
+
+	def protected generateInitializeDeclaration() '''
+		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
+			bool initialize() override;
+		«ENDIF»
+	'''
+
+	def protected generateInitializeDefinition() '''
+		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
+			
+			bool «FBClassName»::initialize() {
+««« initialize adapters before base class to support establishing connections in CCompositeFB::initialize()
+			  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitialize»
+			  return «baseClass»::initialize();
+			}
+		«ENDIF»
+	'''
+
+	def protected generateAdapterInitialize(List<AdapterDeclaration> adapters) '''
+		«FOR adapter : adapters»
+			if(!«adapter.generateName».initialize()) { return false; }
+		«ENDFOR»
+		«FOR adapter : adapters»
+			«adapter.generateName».setParentFB(this, «adapters.indexOf(adapter)»);
+		«ENDFOR»
+	'''
+
+	override Set<INamedElement> getDependencies(Map<?, ?> options) {
+		(super.getDependencies(options) + (type.interfaceList.sockets + type.interfaceList.plugs).map[getType]
+			).toSet
+	}
 }
