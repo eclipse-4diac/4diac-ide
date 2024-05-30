@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.tools.ScrollingConnectionEndpointTracker;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
@@ -103,7 +104,7 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 				// to take the first
 				// segment into account for the border
 				final Insets adjustedBorder = new Insets(super.getCanvasBorder());
-				adjustedBorder.right += conn.getRoutingData().getDx1();
+				adjustedBorder.right += toScreen(conn.getRoutingData().getDx1());
 				return adjustedBorder;
 			}
 			if (conn.getRoutingData().is5SegementData()) {
@@ -117,13 +118,13 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 	private Insets get5SegmentCanvasBorder(final ConnectionRoutingData routingData) {
 		final Insets adjustedBorder = new Insets(super.getCanvasBorder());
 		if (RequestConstants.REQ_RECONNECT_SOURCE.equals(getCommandName())) {
-			adjustedBorder.right += routingData.getDx1();
+			adjustedBorder.right += toScreen(routingData.getDx1());
 			if (routingData.getDy() < 0) {
-				adjustedBorder.top -= routingData.getDy();
+				adjustedBorder.top -= toScreen(routingData.getDy());
 			}
 		}
 		if (RequestConstants.REQ_RECONNECT_TARGET.equals(getCommandName())) {
-			adjustedBorder.left += routingData.getDx2();
+			adjustedBorder.left += toScreen(routingData.getDx2());
 		}
 		return adjustedBorder;
 	}
@@ -156,6 +157,10 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 		request.setLocation(getLocation());
 		request.setType(RequestConstants.REQ_OPEN);
 		getConnectionEditPart().performRequest(request);
+	}
+
+	private static int toScreen(final double val) {
+		return CoordinateConverter.INSTANCE.iec61499ToScreen(val);
 	}
 
 }
