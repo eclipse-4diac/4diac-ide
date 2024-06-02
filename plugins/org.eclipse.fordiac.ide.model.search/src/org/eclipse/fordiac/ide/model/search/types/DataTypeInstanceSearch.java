@@ -113,7 +113,7 @@ public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 
 		private static Stream<? extends EObject> getInterfaceListChildren(final InterfaceList interfaceList) {
 			Stream<? extends EObject> retval = Stream.concat(interfaceList.getInputVars().stream(),
-					interfaceList.getInputVars().stream());
+					interfaceList.getOutputVars().stream());
 			retval = Stream.concat(retval, interfaceList.getInOutVars().stream());
 			return retval;
 		}
