@@ -19,26 +19,22 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.util.FBUpdater;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
-import org.eclipse.swt.widgets.Display;
 
 public class InterfaceDataTypeChange extends Change {
 
 	private final FBType fbType;
-	private final TypeEntry typeEntry;
-	private final String oldName;
+	private final DataTypeEntry typeEntry;
 	private final List<String> pinNames;
 
-	public InterfaceDataTypeChange(final FBType fbType, final TypeEntry oldTypeEntry, final String oldName) {
+	public InterfaceDataTypeChange(final FBType fbType, final DataTypeEntry oldTypeEntry) {
 		this.fbType = fbType;
 		this.typeEntry = oldTypeEntry;
-		this.oldName = oldName;
 		this.pinNames = new ArrayList<>();
 	}
 
@@ -55,7 +51,7 @@ public class InterfaceDataTypeChange extends Change {
 	}
 
 	private Command getUpdatePinInTypeDelcarationCommand() {
-		return FBUpdater.createUpdatePinInTypeDeclarationCommand(fbType, (DataTypeEntry) typeEntry, oldName);
+		return FBUpdater.createUpdatePinInTypeDeclarationCommand(fbType, typeEntry);
 	}
 
 	@Override
@@ -68,14 +64,7 @@ public class InterfaceDataTypeChange extends Change {
 		// we have to execute in UI thread, otherwise SWT crashes if the editor of the
 		// type is open
 		final Command cmd = getUpdatePinInTypeDelcarationCommand();
-		Display.getDefault().syncExec(() -> {
-			cmd.execute();
-			try {
-				fbType.getTypeEntry().save(fbType, pm);
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			}
-		});
+		AbstractLiveSearchContext.executeAndSave(cmd, fbType, pm);
 		return null;
 	}
 
