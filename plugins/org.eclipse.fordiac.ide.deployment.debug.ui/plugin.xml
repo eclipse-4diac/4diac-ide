@@ -193,7 +193,7 @@
 		</handler>
 		<handler
 			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.RestartDeviceHandler"
-			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.RestartDevice">
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.restartDevice">
 			<activeWhen>
 				<reference
 					definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
@@ -381,6 +381,12 @@
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice"
 				icon="fordiacimage://ICON_KILL_DEVICE"
 				label="Kill Device"
+				style="push">
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.restartDevice"
+				icon="fordiacimage://ICON_DEVICE_RESTART"
+				label="Restart Device"
 				style="push">
 			</command>
 			<command
