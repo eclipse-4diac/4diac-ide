@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.typemanagement.navigator;
 import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.jface.viewers.IDecoration;
@@ -62,16 +63,20 @@ public class TypeDecorator implements ILightweightLabelDecorator {
 		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 		if (entry != null) {
 			// try to load comment from editor
-			final String[] editorComment = new String[1];
-			Display.getDefault().syncExec(() -> {
+			final String editorComment = Display.getDefault().syncCall(() -> {
 				final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 						.findEditor(new FileEditorInput(file));
 				if (editor != null) {
-					editorComment[0] = entry.getTypeEditable().getComment();
+					final LibraryElement typeEditable = entry.getTypeEditable();
+					if (typeEditable != null) {
+						// only get the comment when the type could be loaded
+						return typeEditable.getComment();
+					}
 				}
+				return null;
 			});
 			// fall back to (cached) comment from type entry
-			return Objects.requireNonNullElse(editorComment[0], entry.getComment());
+			return Objects.requireNonNullElse(editorComment, entry.getComment());
 		}
 		return null;
 	}

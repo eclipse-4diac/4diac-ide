@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Martin Erich Jobst,
+ * Copyright (c) 2022, 2024 Martin Erich Jobst,
  *               			Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
@@ -75,6 +75,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		
 		  public:
 		    «FBClassName»(CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer);
+		    «generateInitializeDeclaration»
 		    «IF !type.internalFbs.empty»
 		    	
 		    	EMGMResponse changeFBExecutionState(EMGMCommandType paCommand) override;

@@ -122,12 +122,12 @@ final class InterfaceListAnnotations {
 
 	public static Stream<IInterfaceElement> getInputs(final InterfaceList il) {
 		return Stream.concat(Stream.concat(il.getEventInputs().stream(), il.getInputVars().stream()),
-				il.getInOutVars().stream());
+				Stream.concat(il.getInOutVars().stream(), il.getSockets().stream()));
 	}
 
 	public static Stream<IInterfaceElement> getOutputs(final InterfaceList il) {
 		return Stream.concat(Stream.concat(il.getEventOutputs().stream(), il.getOutputVars().stream()),
-				il.getOutMappedInOutVars().stream());
+				Stream.concat(il.getOutMappedInOutVars().stream(), il.getPlugs().stream()));
 	}
 
 	private InterfaceListAnnotations() {

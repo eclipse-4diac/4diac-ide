@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2019 fortiss GmbH
- * 				 2020 Johannes Kepler Unviersity Linz
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2019, 2024 fortiss GmbH
+ *                          Johannes Kepler Unviersity Linz
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,6 +23,8 @@ import java.util.Map
 import java.util.Set
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -86,18 +88,35 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	def protected generateVariableInitializerFromParameters(Iterable<VarDeclaration> variables) //
 	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateName»(«variable.generateNameAsParameter»)«ENDFOR»'''
 
-	def protected generateAccessorDeclaration(String function, boolean const) '''
-		«IF const»const «ENDIF»CIEC_ANY *«function»(size_t)«IF const» const«ENDIF» override;
+	def protected generateAdapterDeclarations(List<AdapterDeclaration> adapters) '''
+		«FOR adapter : adapters AFTER '\n'»
+			«adapter.type.generateTypeName» «adapter.generateName»;
+		«ENDFOR»
 	'''
 
-	def protected generateAccessorDefinition(List<VarDeclaration> variables, String function, boolean const) '''
+	def protected generateAdapterInitializer(Iterable<AdapterDeclaration> adapters) ///
+	'''«FOR adapter : adapters BEFORE ",\n" SEPARATOR ",\n"»«adapter.generateName»(«adapter.name.FORTEStringId», getContainer(), «!adapter.isIsInput»)«ENDFOR»'''
+
+	def protected generateAccessorDeclaration(String function, boolean const) {
+		generateAccessorDeclaration(function, "CIEC_ANY *", const)
+	}
+
+	def protected generateAccessorDeclaration(String function, String type, boolean const) '''
+		«IF const»const «ENDIF»«type»«function»(size_t)«IF const» const«ENDIF» override;
+	'''
+
+	def protected generateAccessorDefinition(List<VarDeclaration> variables, String function, boolean const) {
+		generateAccessorDefinition(variables, function, "CIEC_ANY *", const)
+	}
+
+	def protected generateAccessorDefinition(List<? extends IInterfaceElement> variables, String function, String type, boolean const) '''
 		«IF variables.empty»
-			«IF const»const «ENDIF»CIEC_ANY *«className»::«function»(size_t)«IF const» const«ENDIF» {
+			«IF const»const «ENDIF»«type»«className»::«function»(size_t)«IF const» const«ENDIF» {
 			  return nullptr;
 			}
 			
 		«ELSE»
-			«IF const»const «ENDIF»CIEC_ANY *«className»::«function»(const size_t paIndex)«IF const» const«ENDIF» {
+			«IF const»const «ENDIF»«type»«className»::«function»(const size_t paIndex)«IF const» const«ENDIF» {
 			  switch(paIndex) {
 			    «FOR variable : variables»
 			    	case «variables.indexOf(variable)»: return &«variable.generateName»;
@@ -108,7 +127,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 			
 		«ENDIF»
 	'''
-
+	
 	def protected CharSequence generateNameAsParameter(VarDeclaration variable) '''pa«variable.name»'''
 
 	def CharSequence generateVariableDefaultValue(VarDeclaration decl) {

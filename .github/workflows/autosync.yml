@@ -13,17 +13,17 @@ jobs:
     steps:
       - name: Sync release
         run: |
-          gh repo sync ${{github.repository_owner}}/4diac-ide --branch release
+          gh repo sync ${{github.repository}} --branch release
         
       - name: Sync develop
         run: |
-          gh repo sync ${{github.repository_owner}}/4diac-ide --branch develop
+          gh repo sync ${{github.repository}} --branch develop
         
       - name: Sync freeze
         run: |
-          gh repo sync ${{github.repository_owner}}/4diac-ide --branch freeze
+          gh repo sync ${{github.repository}} --branch freeze
       
       - name: Sync 3.0.x
         run: |
-          gh repo sync ${{github.repository_owner}}/4diac-ide --branch 3.0.x
+          gh repo sync ${{github.repository}} --branch 3.0.x
           

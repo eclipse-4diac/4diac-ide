@@ -335,9 +335,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			getFigure().getExpandedContentArea().add(contentFigure, contentGridData, -1);
 		} else if (childEditPart instanceof final InterfaceEditPart interfaceEditPart && getModel().isUnfolded()) {
 			if (interfaceEditPart.isInput()) {
-				getFigure().getExpandedInputFigure().getChildren().get(0).add(interfaceEditPart.getFigure());
+				getFigure().getExpandedInputFigure().add(interfaceEditPart.getFigure());
 			} else {
-				getFigure().getExpandedOutputFigure().getChildren().get(0).add(interfaceEditPart.getFigure());
+				getFigure().getExpandedOutputFigure().add(interfaceEditPart.getFigure());
 			}
 		} else {
 			super.addChildVisual(childEditPart, index);
@@ -352,9 +352,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			}
 		} else if (childEditPart instanceof final InterfaceEditPart interfaceEditPart && getModel().isUnfolded()) {
 			if (interfaceEditPart.isInput()) {
-				getFigure().getExpandedInputFigure().getChildren().get(0).remove(interfaceEditPart.getFigure());
+				getFigure().getExpandedInputFigure().remove(interfaceEditPart.getFigure());
 			} else {
-				getFigure().getExpandedOutputFigure().getChildren().get(0).remove(interfaceEditPart.getFigure());
+				getFigure().getExpandedOutputFigure().remove(interfaceEditPart.getFigure());
 			}
 		} else {
 			super.removeChildVisual(childEditPart);

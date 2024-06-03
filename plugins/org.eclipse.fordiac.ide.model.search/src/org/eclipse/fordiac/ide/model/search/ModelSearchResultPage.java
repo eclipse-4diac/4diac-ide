@@ -229,7 +229,15 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		}
 		EObject parent = null;
 		if (eobj instanceof final IInterfaceElement ie) {
-			parent = ie.getFBNetworkElement().eContainer().eContainer();
+			parent = ie.getFBNetworkElement();
+			if (parent != null) {
+				parent = parent.eContainer().eContainer();
+			} else {
+				parent = ie.eContainer();
+				if (parent.eContainer() != null) {
+					parent = parent.eContainer();
+				}
+			}
 		} else if (isInternalFb(eobj)) {
 			parent = eobj.eContainer();
 		} else {

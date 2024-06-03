@@ -75,6 +75,10 @@ public final class Messages extends NLS {
 
 	public static String DiagramPreferences_Restart;
 
+	public static String DiagramPreferences_ExpandedInterfaceGroupText;
+	public static String DiagramPreferences_ExpandedInterfaceStackPins;
+	public static String DiagramPreferences_ExpandedInterfaceEvents;
+
 	public static String DiagramPreferences_VirtualGroupInterfaceOptions;
 	public static String FBFigure_TYPE_NOT_SET;
 	public static String FordiacContextMenuProvider_Align;
