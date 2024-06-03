@@ -17,24 +17,27 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editparts.ErrorMarkerFBNEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ErrorMarkerInterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
-import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
-import org.eclipse.fordiac.ide.model.search.dialog.FBTypeSearchResultTable;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.typemanagement.util.TypeCreator;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizardPage;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewTypeWizard;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -62,13 +65,14 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.views.markers.MarkerItem;
 
 public class RepairCommandHandler extends AbstractHandler {
 
 	private IStructuredSelection sel;
 
 	private enum Choices {
-		ADD(FordiacMessages.Dialog_Repair_Add), REMOVE(FordiacMessages.Dialog_Repair_Remove);
+		CREATE_MISSING_TYPE(FordiacMessages.Dialog_Repair_Pin), DELETE_AFFECTED_ELEMENTS(FordiacMessages.Delete_Elements);
 
 		private final String text;
 
@@ -85,17 +89,78 @@ public class RepairCommandHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		TypeLibrary typeLib;
+		final TypeLibrary typeLib;
+
 		IEditorPart editor;
 		sel = HandlerUtil.getCurrentStructuredSelection(event);
 		editor = HandlerUtil.getActiveEditor(event);
-		final AbstractConnectableEditPart editPart = getEditPartFromSelection(sel);
-		typeLib = getTypeLibraryFromEditorInput(editor.getEditorInput());
-		if (editPart != null) {
-			repairEditPart(editPart, typeLib.getProject().getName());
+		final EObject eObject = getEObjectFromSelection(sel);
+
+		if (eObject instanceof final VarDeclaration varDecl
+				&& varDecl.getType() instanceof final ErrorMarkerDataType errorDataType) {
+
+			openWizard(varDecl);
+
 		}
-		typeLib.reload();
+
 		return null;
+	}
+
+	private void openWizard(final EObject type) {
+		final ChooseActionWizardPage<Choices> choosePage = new ChooseActionWizardPage<>(FordiacMessages.Delete_Elements,
+				Choices.class);
+		final ChangedTypesWizardPage infoPage = new ChangedTypesWizardPage("Repair Missing type:" + type.toString());
+		final var wizard = new Wizard() {
+
+			@Override
+			public boolean performFinish() {
+				// TODO depending on choice, search instances with faulty pin, and delete pins
+				// or simply add pin to typentry.
+				Choices choice = null;
+				choice = choosePage.getSelection();
+				switch (choice) {
+				case CREATE_MISSING_TYPE:
+					System.out.println("CREATE_MISSING_TYPE");
+					TypeCreator.repairMissingDataType(type);
+					break;
+				case DELETE_AFFECTED_ELEMENTS:
+					//not supported yet
+					System.out.println("REMove");
+					break;
+				default:
+					break;
+				}
+				return true;
+			}
+
+			@Override
+			public IWizardPage getNextPage(final IWizardPage page) {
+				if ((page instanceof final ChooseActionWizardPage<?> choosePage)
+						&& choosePage.choice.equals(Choices.DELETE_AFFECTED_ELEMENTS)) {
+					return Arrays.stream(getPages()).filter(ChangedTypesWizardPage.class::isInstance).findFirst()
+							.orElse(null);
+				}
+				return null;
+			}
+
+			@Override
+			public boolean canFinish() {
+				return true;
+			}
+
+		};
+		final WizardDialog dialog = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getActivePage().getActiveEditor().getSite().getShell(), wizard);
+		final ActionListener alist = e -> dialog.updateButtons();
+
+		choosePage.addButtonListener(alist);
+		wizard.addPage(choosePage);
+		infoPage.setPreviousPage(choosePage);
+		wizard.addPage(infoPage);
+
+		dialog.create();
+		dialog.open();
+
 	}
 
 	private static TypeLibrary getTypeLibraryFromEditorInput(final IEditorInput input) {
@@ -120,10 +185,10 @@ public class RepairCommandHandler extends AbstractHandler {
 	}
 
 	private void showAddOrRemoveWizard(final ErrorMarkerInterfaceEditPart interfaceEditPart) {
-		final ChooseActionWizardPage<Choices> choosePage = new ChooseActionWizardPage<>(
-				FordiacMessages.Dialog_Add_Or_Remove_Pin, Choices.class);
-		final ChangedTypesWizardPage infoPage = new ChangedTypesWizardPage("Pending changes",
-				interfaceEditPart.getParent().getAdapter(SubApp.class).getTypeEntry());
+		final ChooseActionWizardPage<Choices> choosePage = new ChooseActionWizardPage<>(FordiacMessages.Delete_Elements,
+				Choices.class);
+		final ChangedTypesWizardPage infoPage = new ChangedTypesWizardPage("Pending changes");
+
 		final var wizard = new Wizard() {
 
 			@Override
@@ -133,10 +198,11 @@ public class RepairCommandHandler extends AbstractHandler {
 				Choices choice = null;
 				choice = choosePage.getSelection();
 				switch (choice) {
-				case ADD: // TODO add method here to add the pin to the typeEditable
+				case CREATE_MISSING_TYPE:
+					System.out.println("CREATE_MISSING_TYPE");
 					break;
-				case REMOVE:
-					removeInterfaceElementFromInstances(interfaceEditPart);
+				case DELETE_AFFECTED_ELEMENTS:
+					System.out.println("Remove");
 					break;
 				default:
 					break;
@@ -147,7 +213,7 @@ public class RepairCommandHandler extends AbstractHandler {
 			@Override
 			public IWizardPage getNextPage(final IWizardPage page) {
 				if ((page instanceof final ChooseActionWizardPage<?> choosePage)
-						&& choosePage.choice.equals(Choices.REMOVE)) {
+						&& choosePage.choice.equals(Choices.DELETE_AFFECTED_ELEMENTS)) {
 					return Arrays.stream(getPages()).filter(ChangedTypesWizardPage.class::isInstance).findFirst()
 							.orElse(null);
 				}
@@ -183,11 +249,35 @@ public class RepairCommandHandler extends AbstractHandler {
 //		});
 	}
 
-	private static AbstractConnectableEditPart getEditPartFromSelection(final IStructuredSelection sel) {
-		final Optional<AbstractConnectableEditPart> part = sel.toList().stream()
-				.filter(AbstractConnectableEditPart.class::isInstance).map(AbstractConnectableEditPart.class::cast)
-				.findFirst();
-		return part.isPresent() ? part.get() : null;
+	private static EObject getEObjectFromSelection(final IStructuredSelection sel) {
+
+		final Object firstElement = sel.getFirstElement();
+
+		// selection from problem view
+		if (firstElement instanceof final MarkerItem item) {
+			final EObject eObj = getEObjectFromMarkerItem(item);
+			// this should already be validated by the property tester therefore we want to
+			// know early if this fails.
+			Assert.isNotNull(eObj);
+
+			return eObj;
+		}
+
+		return null;
+	}
+
+	public static EObject getEObjectFromMarkerItem(final MarkerItem item) {
+		final IMarker marker = item.getMarker();
+		try {
+			final EObject target = FordiacErrorMarker.getTarget(marker);
+			if (target != null) {
+				return target;
+			}
+
+		} catch (IllegalArgumentException | CoreException e) {
+			return null;
+		}
+		return null;
 	}
 
 	private void showRestrictedNewTypeWizard(final String name, final String fileEnding, final String projectName) {
@@ -272,11 +362,9 @@ public class RepairCommandHandler extends AbstractHandler {
 	}
 
 	private class ChangedTypesWizardPage extends WizardPage {
-		private final TypeEntry type;
 
-		protected ChangedTypesWizardPage(final String pageName, final TypeEntry type) {
+		protected ChangedTypesWizardPage(final String pageName) {
 			super(pageName);
-			this.type = type;
 		}
 
 		@Override
@@ -287,9 +375,13 @@ public class RepairCommandHandler extends AbstractHandler {
 			container.setLayout(layout);
 
 			// search instances with pin and delete pins.
-			final FBTypeSearchResultTable table = new FBTypeSearchResultTable(container,
-					new FBTypeEntryDataHandler(type));
-			table.setLayout(layout);
+			/*
+			 * final FBTypeSearchResultTable table = new FBTypeSearchResultTable(container,
+			 * new FBTypeEntryDataHandler(type));
+			 */
+
+			// table.setLayout(layout);
+
 			this.setControl(container);
 			this.setDescription(FordiacMessages.Dialog_Repair_Remove);
 			this.setTitle(FordiacMessages.Dialog_Repair_Pin);
@@ -338,7 +430,7 @@ public class RepairCommandHandler extends AbstractHandler {
 			});
 //			@formatter:on
 			this.setControl(container);
-			this.setDescription(FordiacMessages.Dialog_Add_Or_Remove_Pin);
+			this.setDescription(FordiacMessages.Delete_Elements);
 			this.setTitle(FordiacMessages.Dialog_Repair_Pin);
 			getShell().pack();
 			this.setPageComplete(true);
