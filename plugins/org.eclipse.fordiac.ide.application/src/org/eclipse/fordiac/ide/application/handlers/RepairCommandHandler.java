@@ -25,18 +25,16 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.editparts.ErrorMarkerFBNEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ErrorMarkerInterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
+import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.util.TypeCreator;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizardPage;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewTypeWizard;
@@ -69,10 +67,11 @@ import org.eclipse.ui.views.markers.MarkerItem;
 
 public class RepairCommandHandler extends AbstractHandler {
 
-	private IStructuredSelection sel;
+	private IStructuredSelection selection;
 
 	private enum Choices {
-		CREATE_MISSING_TYPE(FordiacMessages.Dialog_Repair_Pin), DELETE_AFFECTED_ELEMENTS(FordiacMessages.Delete_Elements);
+		CREATE_MISSING_TYPE(FordiacMessages.Dialog_Repair_Pin),
+		DELETE_AFFECTED_ELEMENTS(FordiacMessages.Delete_Elements);
 
 		private final String text;
 
@@ -92,21 +91,15 @@ public class RepairCommandHandler extends AbstractHandler {
 		final TypeLibrary typeLib;
 
 		IEditorPart editor;
-		sel = HandlerUtil.getCurrentStructuredSelection(event);
+		selection = HandlerUtil.getCurrentStructuredSelection(event);
 		editor = HandlerUtil.getActiveEditor(event);
-		final EObject eObject = getEObjectFromSelection(sel);
+		final EObject eObject = getEObjectFromProblemViewSelection(selection);
 
-		if (eObject instanceof final VarDeclaration varDecl
-				&& varDecl.getType() instanceof final ErrorMarkerDataType errorDataType) {
-
-			openWizard(varDecl);
-
-		}
-
+		repairMissingDataType(null);
 		return null;
 	}
 
-	private void openWizard(final EObject type) {
+	private void openMissingDataTypeWizard(final EObject type) {
 		final ChooseActionWizardPage<Choices> choosePage = new ChooseActionWizardPage<>(FordiacMessages.Delete_Elements,
 				Choices.class);
 		final ChangedTypesWizardPage infoPage = new ChangedTypesWizardPage("Repair Missing type:" + type.toString());
@@ -124,8 +117,7 @@ public class RepairCommandHandler extends AbstractHandler {
 					TypeCreator.repairMissingDataType(type);
 					break;
 				case DELETE_AFFECTED_ELEMENTS:
-					//not supported yet
-					System.out.println("REMove");
+					final DataTypeInstanceSearch search = new DataTypeInstanceSearch(null);
 					break;
 				default:
 					break;
@@ -167,21 +159,17 @@ public class RepairCommandHandler extends AbstractHandler {
 		return TypeLibraryManager.INSTANCE.getTypeEntryForFile(((FileEditorInput) input).getFile()).getTypeLibrary();
 	}
 
-	private void repairEditPart(final AbstractConnectableEditPart editPart, final String projectName) {
-		final ErrorMarkerDataType dataTypeMarker = editPart.getAdapter(ErrorMarkerDataTypeImpl.class);
-		if (dataTypeMarker != null) {
-			showRestrictedNewTypeWizard(dataTypeMarker.getTypeEntry().getTypeName(),
-					TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT, projectName);
+	private void repair(final EObject eObject) {
+
+		if (eObject instanceof final VarDeclaration varDecl
+				&& varDecl.getType() instanceof final ErrorMarkerDataType errorDataType) {
+			repairMissingDataType(errorDataType);
 		}
-		final ErrorMarkerFBNEditPart fBNEditPartMarker = editPart.getAdapter(ErrorMarkerFBNEditPart.class);
-		if (fBNEditPartMarker != null) {
-			showRestrictedNewTypeWizard(((FBNetworkElement) fBNEditPartMarker.getINamedElement()).getTypeName(),
-					TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT, projectName);
-		}
-		final ErrorMarkerInterfaceEditPart interfaceEditPart = editPart.getAdapter(ErrorMarkerInterfaceEditPart.class);
-		if (interfaceEditPart != null) {
-			showAddOrRemoveWizard(interfaceEditPart);
-		}
+
+	}
+
+	private void repairMissingDataType(final ErrorMarkerDataType errorDataType) {
+		openMissingDataTypeWizard(errorDataType);
 	}
 
 	private void showAddOrRemoveWizard(final ErrorMarkerInterfaceEditPart interfaceEditPart) {
@@ -202,7 +190,6 @@ public class RepairCommandHandler extends AbstractHandler {
 					System.out.println("CREATE_MISSING_TYPE");
 					break;
 				case DELETE_AFFECTED_ELEMENTS:
-					System.out.println("Remove");
 					break;
 				default:
 					break;
@@ -249,7 +236,26 @@ public class RepairCommandHandler extends AbstractHandler {
 //		});
 	}
 
-	private static EObject getEObjectFromSelection(final IStructuredSelection sel) {
+	public static EObject getEObjectFromEditorSelection(final Object model) {
+		if (model instanceof final VarDeclaration varDecl
+				&& varDecl.getType() instanceof final ErrorMarkerDataType errorType) {
+			return errorType;
+		}
+
+		// missing pin
+		if (model instanceof final ErrorMarkerInterface ie) {
+			return ie;
+		}
+
+		// missing block
+		if (model instanceof final ErrorMarkerFBNElement errorBlock) {
+			return errorBlock;
+		}
+
+		return null;
+	}
+
+	private static EObject getEObjectFromProblemViewSelection(final IStructuredSelection sel) {
 
 		final Object firstElement = sel.getFirstElement();
 
@@ -284,7 +290,7 @@ public class RepairCommandHandler extends AbstractHandler {
 		final NewTypeWizard wizard = new NewTypeWizard() {
 			@Override
 			protected NewFBTypeWizardPage createNewFBTypeWizardPage() {
-				return new NewFBTypeWizardPage(sel);
+				return new NewFBTypeWizardPage(selection);
 			}
 
 		};
