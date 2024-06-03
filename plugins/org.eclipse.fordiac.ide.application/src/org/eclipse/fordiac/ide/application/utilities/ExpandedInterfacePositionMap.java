@@ -425,12 +425,14 @@ public class ExpandedInterfacePositionMap {
 							((ConnectionEditPart) conn2).getConnectionFigure().getEnd().y));
 			if (max.isPresent()) {
 				final ConnectionEditPart connEp = (ConnectionEditPart) max.get();
-				final Point end = connEp.getConnectionFigure().getEnd();
-				final var fig = ((GraphicalEditPart) max.get().getSource()).getFigure();
-				final int y = end.y - (sizes.get(fig).intValue() / 2);
+				if (connEp.getSource() instanceof final GraphicalEditPart graphicalEditPart) {
+					final Point end = connEp.getConnectionFigure().getEnd();
 
-				if (!isSkipConnection(connEp)) {
-					map.put(ie.getFigure(), Integer.valueOf(Math.max(y, inputDirectEnd)));
+					final int y = end.y - (sizes.get(graphicalEditPart.getFigure()).intValue() / 2);
+
+					if (!isSkipConnection(connEp)) {
+						map.put(ie.getFigure(), Integer.valueOf(Math.max(y, inputDirectEnd)));
+					}
 				}
 			} else {
 				map.put(ie.getFigure(), Integer.valueOf(Integer.MAX_VALUE));
@@ -449,12 +451,13 @@ public class ExpandedInterfacePositionMap {
 							((ConnectionEditPart) conn2).getConnectionFigure().getStart().y));
 			if (max.isPresent()) {
 				final ConnectionEditPart connEp = (ConnectionEditPart) max.get();
-				final Point start = connEp.getConnectionFigure().getStart();
-				final var fig = ((GraphicalEditPart) max.get().getTarget()).getFigure();
-				final int y = start.y - (sizes.get(fig).intValue() / 2);
+				if (connEp.getTarget() instanceof final GraphicalEditPart graphicalEditPart) {
+					final Point start = connEp.getConnectionFigure().getStart();
+					final int y = start.y - (sizes.get(graphicalEditPart.getFigure()).intValue() / 2);
 
-				if (!isSkipConnection(connEp)) {
-					map.put(ie.getFigure(), Integer.valueOf(Math.max(y, outputDirectEnd)));
+					if (!isSkipConnection(connEp)) {
+						map.put(ie.getFigure(), Integer.valueOf(Math.max(y, outputDirectEnd)));
+					}
 				}
 			} else {
 				map.put(ie.getFigure(), Integer.valueOf(Integer.MAX_VALUE));
@@ -464,10 +467,14 @@ public class ExpandedInterfacePositionMap {
 	}
 
 	private static boolean isSkipConnection(final ConnectionEditPart ep) {
-		final var sourceModel = (IInterfaceElement) ep.getSource().getModel();
-		final var targetModel = (IInterfaceElement) ep.getTarget().getModel();
-		return sourceModel.eContainer().eContainer() instanceof final SubApp sourceSub
-				&& targetModel.eContainer().eContainer() instanceof final SubApp targetSub && sourceSub == targetSub;
+		if (ep.getSource() != null && ep.getTarget() != null) {
+			final var sourceModel = (IInterfaceElement) ep.getSource().getModel();
+			final var targetModel = (IInterfaceElement) ep.getTarget().getModel();
+			return sourceModel.eContainer().eContainer() instanceof final SubApp sourceSub
+					&& targetModel.eContainer().eContainer() instanceof final SubApp targetSub
+					&& sourceSub == targetSub;
+		}
+		return false;
 	}
 
 	private void resolveCollisions(final Map<IFigure, Integer> positions) {
