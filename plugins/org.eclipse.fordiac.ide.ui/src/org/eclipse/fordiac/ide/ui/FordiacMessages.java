@@ -123,7 +123,7 @@ public final class FordiacMessages extends NLS {
 
 	public static String Group_LABEL_DisableAutoResize; // NOSONAR
 	public static String Group_TOOLTIP_DisableAutoResize; // NOSONAR
-	public static String Dialog_Add_Or_Remove_Pin; // NOSONAR
+	public static String Delete_Elements; // NOSONAR
 	public static String Dialog_Repair_Pin;// NOSONAR
 	public static String Dialog_Repair_Add;// NOSONAR
 	public static String Dialog_Repair_Remove;// NOSONAR
