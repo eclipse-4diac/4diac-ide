@@ -1143,17 +1143,12 @@
                  style="toggle">
         </command>
       </toolbar>
-      
-      
-      
-      
     </menuContribution>
     <menuContribution
             locationURI="popup:org.eclipse.ui.ide.MarkersView">
             <command commandId="org.eclipse.fordiac.ide.application.commands.repair"
                label="Repair Errormarker"
                tooltip="Attempt to repair Errormarker">
-               
          <visibleWhen checkEnabled="false">
           <and>
            <test property="org.eclipse.fordiac.ide.application.properties.repairSupported"/>
@@ -1277,9 +1272,6 @@
                <and>
                		<or>
                		<test property="org.eclipse.fordiac.ide.application.properties.repairSupported"/> 
-               		<adapt type="org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl"/>               			               		
-                  	<adapt type="org.eclipse.fordiac.ide.application.editparts.ErrorMarkerFBNEditPart"/>
-                  	<adapt type="org.eclipse.fordiac.ide.application.editparts.ErrorMarkerInterfaceEditPart"/>
                   	</or>
                   	<not>
                   	<instanceof value="org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart"/>
