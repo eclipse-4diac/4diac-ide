@@ -210,7 +210,7 @@ final class ForteNgExportUtil {
 				"STRING"
 			WstringType:
 				"WSTRING"
-			LibraryElement: '''«type.compilerInfo?.packageName?.replace(':', '_')?.concat("__")»«type.name»'''
+			LibraryElement: '''«type.generateTypePath?.concat(type.generateTypePath.blank ? "" : "__")»«type.name»'''
 			default:
 				type.name
 		}
