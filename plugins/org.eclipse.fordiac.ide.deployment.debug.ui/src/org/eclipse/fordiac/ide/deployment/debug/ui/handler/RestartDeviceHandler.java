@@ -13,21 +13,32 @@
 
 package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 public class RestartDeviceHandler extends AbstractDeviceDeploymentCommand {
 
 	@Override
 	protected void executeCommand(final IDeviceManagementInteractor executor) throws DeploymentException {
-		// TODO Auto-generated method stub
+		final List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> resources = executor.queryResources();
+		final List<String> resourceNames = resources.stream()
+				.map(org.eclipse.fordiac.ide.deployment.devResponse.Resource::getName).toList();
 
+		for (final String resourceName : resourceNames) {
+			final Resource resource = getDevice().getResourceNamed(resourceName);
+
+			executor.stopResource(resource);
+			executor.resetResource(resourceName);
+			executor.startResource(resource);
+		}
 	}
 
 	@Override
 	protected String getErrorMessageHeader() {
-		// TODO Auto-generated method stub
-		return null;
+		return ""; //$NON-NLS-1$
 	}
 
 }

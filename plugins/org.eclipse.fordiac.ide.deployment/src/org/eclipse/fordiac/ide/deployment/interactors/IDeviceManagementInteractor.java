@@ -230,4 +230,10 @@ public interface IDeviceManagementInteractor {
 
 	void clearForce(MonitoringBaseElement element) throws DeploymentException;
 
+	void resetResource(final String resName) throws DeploymentException;
+
+	void killResource(final String resName) throws DeploymentException;
+
+	void stopResource(final Resource res) throws DeploymentException;
+
 }
