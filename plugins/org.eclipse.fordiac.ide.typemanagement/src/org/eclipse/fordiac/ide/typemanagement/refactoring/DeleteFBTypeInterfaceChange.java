@@ -45,9 +45,6 @@ public class DeleteFBTypeInterfaceChange extends CompositeChange implements IFor
 		this.type = type;
 		this.struct = struct;
 		this.state.addAll(getDefaultSelection());
-		if (!SafeStructDeletionChange.hasOpenEditor(type)) {
-			SafeFBTypeDeletionChange.addUpdateChanges(this, type, false);
-		}
 	}
 
 	@Override
