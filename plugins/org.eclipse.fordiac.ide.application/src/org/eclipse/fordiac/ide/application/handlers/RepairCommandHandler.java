@@ -27,12 +27,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editparts.ErrorMarkerInterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.widgets.TypeSelectionWidget;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -40,8 +40,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
-import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider;
-import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
+import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.typemanagement.util.TypeCreator;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizardPage;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewTypeWizard;
@@ -78,8 +77,8 @@ public class RepairCommandHandler extends AbstractHandler {
 	private IStructuredSelection selection;
 
 	private enum Choices {
-		CHANGE_TYPE("Change Type"), CREATE_MISSING_TYPE(FordiacMessages.Dialog_Repair_Pin),
-		DELETE_AFFECTED_ELEMENTS(FordiacMessages.Delete_Elements);
+		CREATE_MISSING_TYPE(FordiacMessages.Dialog_Repair_Pin),
+		DELETE_AFFECTED_ELEMENTS(FordiacMessages.Delete_Elements), CHANGE_TYPE("Change Data Type");
 
 		private final String text;
 
@@ -385,16 +384,15 @@ public class RepairCommandHandler extends AbstractHandler {
 
 	private class ChooseRepairOperationPage<T extends Enum<T>> extends WizardPage {
 		private Class<T> choicesEnum = null;
-		private T choice;
+		private Choices choice;
 		private final EObject eObj;
 
 		private final List<ActionListener> listeners = new ArrayList<>();
-		private TypeSelectionWidget typeSelectionWidget;
 
 		protected ChooseRepairOperationPage(final String pageName, final Class<T> choicesEnum, final EObject eObj) {
 			super(pageName);
 			this.choicesEnum = choicesEnum;
-			this.choice = choicesEnum.getEnumConstants()[0];// make default selection work
+			this.choice = Choices.CHANGE_TYPE;// make default selection work
 			this.eObj = eObj;
 		}
 
@@ -409,69 +407,61 @@ public class RepairCommandHandler extends AbstractHandler {
 			final GridLayout layout = new GridLayout();
 			container.setLayout(layout);
 			layout.numColumns = 1;
-//			@formatter:off
-			Arrays.stream(choicesEnum.getEnumConstants())
-			.forEach(s -> {
-				final Button b = new Button(container, SWT.RADIO);
-				b.setText(s.toString());
-				b.addSelectionListener(new SelectionAdapter(){
-				    @Override
-				    public void widgetSelected(final SelectionEvent e){
-				        super.widgetSelected(e);
-				        if(b.getSelection()){
-				            choice=s;
-				            listeners.forEach(l-> l.actionPerformed(null));
-				        }
-				    }
-				});
+
+			final Choices c = Choices.CHANGE_TYPE;
+
+			final Button b = new Button(container, SWT.RADIO);
+			b.setText(Choices.CHANGE_TYPE.toString());
+			b.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					super.widgetSelected(e);
+					if (b.getSelection()) {
+						choice = c;
+						listeners.forEach(l -> l.actionPerformed(null));
+					}
+				}
 			});
 
-
-
-
-
-	//		final TreeViewer viewer = dialog.getViewer();
-
-	//		final Button selectAll = new Button(container,SWT.RADIO);
-	//		selectAll.setText("abc");
-
 			final Group group = new Group(container, SWT.NONE);
-			group.setLayout(new GridLayout(2, false));
-			final Button changeStructType = new Button(container,SWT.RADIO);
-			changeStructType.setText("Change Data Type: ");
-			final Button open = new Button(group,SWT.PUSH);
+			group.setEnabled(false);
+			group.setLayout(new GridLayout(3, false));
 
-			final TypeLibrary lib=null;
-			//new TypeSelectionButton(this::getTypeLibrary, DataTypeSelectionContentProvider.INSTANCE,
-	//				DataTypeSelectionTreeContentProvider.INSTANCE);
+			final Label label = new Label(group, SWT.NONE);
+			label.setText("Data Type: ");
+			final Text currentType = new Text(group, SWT.AUTO_TEXT_DIRECTION);
+			currentType.setText("");
+			currentType.setEditable(false);
 
-		//	final TypeSelectionButton b = new TypeSelectionButton(lib, DataTypeSelectionContentProvider.INSTANCE,
-		//			DataTypeSelectionTreeContentProvider.INSTANCE);
+			final Button openDialogButton = new Button(group, SWT.PUSH);
 
-			final TypeSelectionButton typeSelectionButton = new TypeSelectionButton(this::getTypeLibrary, DataTypeSelectionContentProvider.INSTANCE,
-					DataTypeSelectionTreeContentProvider.INSTANCE);
-
-		//	typeSelectionButton.createEditorControl(parent);
-		//	typeSelectionButton.
-
-			open.setText("...");
-			open.addListener(SWT.Selection, e -> {
+			openDialogButton.setText("...");
+			openDialogButton.addListener(SWT.Selection, e -> {
 				final DataTypeSelectionTreeContentProvider instance = DataTypeSelectionTreeContentProvider.INSTANCE;
-				//instance.inputChanged(null, typeSelectionButton, e)
+				// instance.inputChanged(null, typeSelectionButton, e)
 
 				final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(getShell(), instance);
-
 				dialog.setInput(getTypeLibrary());
-	            dialog.open();
-	           // dialog.get
-	        });
+				if ((dialog.open() == Window.OK)
+						&& (dialog.getFirstResult() instanceof final TypeNode node && !node.isDirectory())) {
+					final String x = node.getFullName();
+					final LibraryElement type = node.getType();
+					currentType.setText(x);
 
+				}
 
-		//	typeSelectionWidget = new TypeSelectionWidget(getWidgetFactory(), this::handleStructSelectionChanged);
-		//	typeSelectionWidget.createControls(container);
-		//	typeSelectionWidget.setEditable(true);
+				final Object firstResult = dialog.getFirstResult();
+				// dialog.get
+				final int k = 0;
 
-//			@formatter:on
+			});
+
+			// typeSelectionWidget = new TypeSelectionWidget(getWidgetFactory(),
+			// this::handleStructSelectionChanged);
+			// typeSelectionWidget.createControls(container);
+			// typeSelectionWidget.setEditable(true);
+
+			//			@formatter:on
 			this.setControl(container);
 			this.setDescription(FordiacMessages.Delete_Elements);
 			this.setTitle(FordiacMessages.Dialog_Repair_Pin);
@@ -479,7 +469,7 @@ public class RepairCommandHandler extends AbstractHandler {
 			this.setPageComplete(true);
 		}
 
-		public T getSelection() {
+		public Choices getSelection() {
 			return choice;
 		}
 
