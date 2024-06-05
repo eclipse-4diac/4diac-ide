@@ -30,11 +30,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.LiveSearchContext;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 
 	public DataTypeInstanceSearch(final DataTypeEntry dtEntry) {
 		super(new LiveSearchContext(dtEntry.getTypeLibrary()), createSearchFilter(dtEntry),
+				new DataTypeInstanceSearchChildrenProivder());
+	}
+
+	public DataTypeInstanceSearch(final ErrorTypeEntry dtEntry, final TypeLibrary library) {
+		super(new LiveSearchContext(library), createSearchFilter(dtEntry),
 				new DataTypeInstanceSearchChildrenProivder());
 	}
 
@@ -47,14 +55,14 @@ public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 				new DataTypeInstanceSearchChildrenProivder());
 	}
 
-	private static IEC61499SearchFilter createSearchFilter(final DataTypeEntry dtEntry) {
+	private static IEC61499SearchFilter createSearchFilter(final TypeEntry dtEntry) {
 		return searchCandidate -> (searchCandidate instanceof final VarDeclaration varDecl
 				&& dtEntry == varDecl.getType().getTypeEntry())
 				|| (searchCandidate instanceof final ConfigurableFB configFb
 						&& isConfiguredWithDataType(configFb, dtEntry));
 	}
 
-	private static boolean isConfiguredWithDataType(final ConfigurableFB confFB, final DataTypeEntry dtEntry) {
+	private static boolean isConfiguredWithDataType(final ConfigurableFB confFB, final TypeEntry dtEntry) {
 		if (confFB.getDataType() == null) {
 			return false; // unconfigured FB, corresponds to ANY_STRUCT
 		}

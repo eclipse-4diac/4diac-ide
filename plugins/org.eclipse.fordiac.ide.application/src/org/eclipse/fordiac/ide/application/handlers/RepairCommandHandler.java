@@ -26,22 +26,22 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.application.editparts.ErrorMarkerInterfaceEditPart;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorDataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
-import org.eclipse.fordiac.ide.typemanagement.util.TypeCreator;
+import org.eclipse.fordiac.ide.typemanagement.util.ErrorMarkerResolver;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizardPage;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewTypeWizard;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -60,16 +60,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.markers.MarkerItem;
 
 public class RepairCommandHandler extends AbstractHandler {
@@ -79,6 +77,8 @@ public class RepairCommandHandler extends AbstractHandler {
 	private enum Choices {
 		CREATE_MISSING_TYPE(FordiacMessages.Dialog_Repair_Pin),
 		DELETE_AFFECTED_ELEMENTS(FordiacMessages.Delete_Elements), CHANGE_TYPE("Change Data Type");
+
+		private EObject result;
 
 		private final String text;
 
@@ -91,17 +91,20 @@ public class RepairCommandHandler extends AbstractHandler {
 			return text;
 		}
 
+		public void setResult(final EObject result) {
+			this.result = result;
+		}
+
+		public EObject getResult() {
+			return result;
+		}
+
 	}
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final TypeLibrary typeLib;
-
-		IEditorPart editor;
 		selection = HandlerUtil.getCurrentStructuredSelection(event);
-		editor = HandlerUtil.getActiveEditor(event);
 		final EObject eObject = getEObjectFromProblemViewSelection(selection);
-
 		repair(eObject); // varDecl
 		return null;
 	}
@@ -109,22 +112,46 @@ public class RepairCommandHandler extends AbstractHandler {
 	private void openMissingDataTypeWizard(final EObject type) {
 		final ChooseRepairOperationPage<Choices> choosePage = new ChooseRepairOperationPage<>(
 				FordiacMessages.Delete_Elements, Choices.class, type);
-		final ChangedTypesWizardPage infoPage = new ChangedTypesWizardPage("Repair Missing type:" + type.toString());
-		final var wizard = new Wizard() {
 
+		final var wizard = new Wizard() {
 			@Override
 			public boolean performFinish() {
-				// TODO depending on choice, search instances with faulty pin, and delete pins
-				// or simply add pin to typentry.
+
 				Choices choice = null;
 				choice = choosePage.getSelection();
 				switch (choice) {
+				case CHANGE_TYPE:
+
+					final var t = choice.getResult();
+
+					if (type instanceof final VarDeclaration varDecl) {
+
+						TypeLibrary lib = null;
+						if (EcoreUtil.getRootContainer(varDecl) instanceof final LibraryElement le) {
+							lib = le.getTypeLibrary();
+						}
+
+						final DataTypeInstanceSearch search = new DataTypeInstanceSearch(
+								(ErrorDataTypeEntry) varDecl.getType().getTypeEntry(), lib);
+
+						final List<? extends EObject> result = search.performSearch();
+
+						for (final var r : result) {
+							if (r instanceof final VarDeclaration vD && t instanceof final DataType d) {
+								Display.getDefault()
+										.asyncExec(() -> ChangeDataTypeCommand.forDataType(vD, d).execute());
+
+							}
+						}
+
+					}
+
+					break;
 				case CREATE_MISSING_TYPE:
-					System.out.println("CREATE_MISSING_TYPE");
-					TypeCreator.repairMissingDataType(type);
+					ErrorMarkerResolver.repairMissingStructuredDataType(type);
 					break;
 				case DELETE_AFFECTED_ELEMENTS:
-					final DataTypeInstanceSearch search = new DataTypeInstanceSearch(null);
+					// TODO needs to be implemented
 					break;
 				default:
 					break;
@@ -134,11 +161,6 @@ public class RepairCommandHandler extends AbstractHandler {
 
 			@Override
 			public IWizardPage getNextPage(final IWizardPage page) {
-				if ((page instanceof final ChooseRepairOperationPage<?> choosePage)
-						&& choosePage.choice.equals(Choices.DELETE_AFFECTED_ELEMENTS)) {
-					return Arrays.stream(getPages()).filter(ChangedTypesWizardPage.class::isInstance).findFirst()
-							.orElse(null);
-				}
 				return null;
 			}
 
@@ -154,22 +176,17 @@ public class RepairCommandHandler extends AbstractHandler {
 
 		choosePage.addButtonListener(alist);
 		wizard.addPage(choosePage);
-		infoPage.setPreviousPage(choosePage);
-		wizard.addPage(infoPage);
+		// infoPage.setPreviousPage(choosePage);
+		// wizard.addPage(infoPage);
 
 		dialog.create();
 		dialog.open();
 
 	}
 
-	private static TypeLibrary getTypeLibraryFromEditorInput(final IEditorInput input) {
-		return TypeLibraryManager.INSTANCE.getTypeEntryForFile(((FileEditorInput) input).getFile()).getTypeLibrary();
-	}
-
 	private void repair(final EObject eObject) {
 
-		if (eObject instanceof final VarDeclaration varDecl
-				&& varDecl.getType() instanceof final ErrorMarkerDataType errorDataType) {
+		if (eObject instanceof final VarDeclaration varDecl && varDecl.getType() instanceof ErrorMarkerDataType) {
 			repairMissingDataType(varDecl);
 		}
 
@@ -177,51 +194,6 @@ public class RepairCommandHandler extends AbstractHandler {
 
 	private void repairMissingDataType(final VarDeclaration errorDataType) {
 		openMissingDataTypeWizard(errorDataType);
-	}
-
-	private void showAddOrRemoveWizard(final ErrorMarkerInterfaceEditPart interfaceEditPart) {
-		/*
-		 * final ChooseRepairOperationPage<Choices> choosePage = new
-		 * ChooseRepairOperationPage<>( FordiacMessages.Delete_Elements, Choices.class);
-		 * final ChangedTypesWizardPage infoPage = new
-		 * ChangedTypesWizardPage("Pending changes");
-		 *
-		 * final var wizard = new Wizard() {
-		 *
-		 * @Override public boolean performFinish() { // TODO depending on choice,
-		 * search instances with faulty pin, and delete pins // or simply add pin to
-		 * typentry. Choices choice = null; choice = choosePage.getSelection(); switch
-		 * (choice) { case CREATE_MISSING_TYPE: break; case DELETE_AFFECTED_ELEMENTS:
-		 * break; default: break; } return true; }
-		 *
-		 * @Override public IWizardPage getNextPage(final IWizardPage page) { if ((page
-		 * instanceof final ChooseRepairOperationPage<?> choosePage) &&
-		 * choosePage.choice.equals(Choices.DELETE_AFFECTED_ELEMENTS)) { return
-		 * Arrays.stream(getPages()).filter(ChangedTypesWizardPage.class::isInstance).
-		 * findFirst() .orElse(null); } return null; }
-		 *
-		 * @Override public boolean canFinish() { return true; }
-		 *
-		 * }; final WizardDialog dialog = new
-		 * WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-		 * .getActivePage().getActiveEditor().getSite().getShell(), wizard); final
-		 * ActionListener alist = e -> dialog.updateButtons();
-		 *
-		 * choosePage.addButtonListener(alist); wizard.addPage(choosePage);
-		 * infoPage.setPreviousPage(choosePage); wizard.addPage(infoPage);
-		 *
-		 * dialog.create(); dialog.open();
-		 */
-
-	}
-
-	private static void removeInterfaceElementFromInstances(final ErrorMarkerInterfaceEditPart elem) {
-//		TODO use the element to remove similar pins from all instances
-//		final FBType te = ((FBType) elem.getParent().getModel()).getTypeEntry().getTypeEditable();
-//		te.getInterfaceList().getAllInterfaceElements().removeIf(el -> {
-//			System.out.println(el);
-//			return true;
-//		});
 	}
 
 	public static EObject getEObjectFromEditorSelection(final Object model) {
@@ -355,35 +327,7 @@ public class RepairCommandHandler extends AbstractHandler {
 		return flattenedSet;
 	}
 
-	private class ChangedTypesWizardPage extends WizardPage {
-
-		protected ChangedTypesWizardPage(final String pageName) {
-			super(pageName);
-		}
-
-		@Override
-		public void createControl(final Composite parent) {
-			Composite container;
-			container = new Composite(parent, SWT.NONE);
-			final GridLayout layout = new GridLayout();
-			container.setLayout(layout);
-
-			// search instances with pin and delete pins.
-			/*
-			 * final FBTypeSearchResultTable table = new FBTypeSearchResultTable(container,
-			 * new FBTypeEntryDataHandler(type));
-			 */
-
-			// table.setLayout(layout);
-
-			this.setControl(container);
-			this.setDescription(FordiacMessages.Dialog_Repair_Remove);
-		}
-
-	}
-
 	private class ChooseRepairOperationPage<T extends Enum<T>> extends WizardPage {
-		private Class<T> choicesEnum = null;
 		private Choices choice;
 		private final EObject eObj;
 
@@ -391,7 +335,6 @@ public class RepairCommandHandler extends AbstractHandler {
 
 		protected ChooseRepairOperationPage(final String pageName, final Class<T> choicesEnum, final EObject eObj) {
 			super(pageName);
-			this.choicesEnum = choicesEnum;
 			this.choice = Choices.CHANGE_TYPE;// make default selection work
 			this.eObj = eObj;
 		}
@@ -408,29 +351,24 @@ public class RepairCommandHandler extends AbstractHandler {
 			container.setLayout(layout);
 			layout.numColumns = 1;
 
-			final Choices c = Choices.CHANGE_TYPE;
-
-			final Button b = new Button(container, SWT.RADIO);
-			b.setText(Choices.CHANGE_TYPE.toString());
-			b.addSelectionListener(new SelectionAdapter() {
+			final Button changeTypeButton = new Button(container, SWT.RADIO);
+			final Group group = new Group(container, SWT.NONE);
+			group.setEnabled(true);
+			group.setLayout(new GridLayout(2, false));
+			changeTypeButton.setText(Choices.CHANGE_TYPE.toString());
+			changeTypeButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
 					super.widgetSelected(e);
-					if (b.getSelection()) {
-						choice = c;
-						listeners.forEach(l -> l.actionPerformed(null));
+					if (changeTypeButton.getSelection()) {
+						choice = Choices.CHANGE_TYPE;
+
 					}
 				}
 			});
 
-			final Group group = new Group(container, SWT.NONE);
-			group.setEnabled(false);
-			group.setLayout(new GridLayout(3, false));
-
-			final Label label = new Label(group, SWT.NONE);
-			label.setText("Data Type: ");
 			final Text currentType = new Text(group, SWT.AUTO_TEXT_DIRECTION);
-			currentType.setText("");
+			currentType.setText("Select"); //$NON-NLS-1$
 			currentType.setEditable(false);
 
 			final Button openDialogButton = new Button(group, SWT.PUSH);
@@ -444,24 +382,24 @@ public class RepairCommandHandler extends AbstractHandler {
 				dialog.setInput(getTypeLibrary());
 				if ((dialog.open() == Window.OK)
 						&& (dialog.getFirstResult() instanceof final TypeNode node && !node.isDirectory())) {
-					final String x = node.getFullName();
-					final LibraryElement type = node.getType();
-					currentType.setText(x);
+					choice.setResult(node.getType());
+					currentType.setText(node.getFullName());
 
 				}
-
-				final Object firstResult = dialog.getFirstResult();
-				// dialog.get
-				final int k = 0;
-
 			});
 
-			// typeSelectionWidget = new TypeSelectionWidget(getWidgetFactory(),
-			// this::handleStructSelectionChanged);
-			// typeSelectionWidget.createControls(container);
-			// typeSelectionWidget.setEditable(true);
+			final Button creatTypeButton = new Button(container, SWT.RADIO);
+			creatTypeButton.setText(Choices.CREATE_MISSING_TYPE.toString());
+			creatTypeButton.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					super.widgetSelected(e);
+					if (changeTypeButton.getSelection()) {
+						choice = Choices.CREATE_MISSING_TYPE;
+					}
+				}
+			});
 
-			//			@formatter:on
 			this.setControl(container);
 			this.setDescription(FordiacMessages.Delete_Elements);
 			this.setTitle(FordiacMessages.Dialog_Repair_Pin);
@@ -474,15 +412,11 @@ public class RepairCommandHandler extends AbstractHandler {
 		}
 
 		public final TypeLibrary getTypeLibrary() {
-			final EObject rootContainer = EcoreUtil.getRootContainer(eObj);
-
-			if (rootContainer instanceof final AutomationSystem sys) {
-				return sys.getTypeLibrary();
+			if (EcoreUtil.getRootContainer(eObj) instanceof final LibraryElement le) {
+				return le.getTypeLibrary();
 			}
-
 			return null;
 		}
-
 	}
 
 }

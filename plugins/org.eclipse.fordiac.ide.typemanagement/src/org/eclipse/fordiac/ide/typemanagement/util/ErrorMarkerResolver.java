@@ -15,9 +15,7 @@ package org.eclipse.fordiac.ide.typemanagement.util;
 import java.io.File;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -25,49 +23,18 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
-public class TypeCreator {
+public class ErrorMarkerResolver {
 
 	public static final String TEMPLATE_PATH = Platform.getInstallLocation().getURL().getFile() + File.separatorChar
 			+ "template";
 
-	public static void run(final IMarker marker) {
-
-		try {
-			final EObject target = FordiacErrorMarker.getTarget(marker);
-
-			if (target instanceof VarDeclaration) {
-				repairMissingDataType(target);
-
-			}
-
-		} catch (IllegalArgumentException | CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// MessageDialog.openInformation(null, "MissingTypeQuickFix Demo", "This
-		// quick-fix
-		// is not yet implemented");
-
-		// Display.getDefault().asyncExec(() -> {
-		// final CustomWizard wizard = new CustomWizard(marker);
-		// final WizardDialog dialog = new WizardDialog(
-		// PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wizard);
-		// dialog.open();
-		// dialog.open();
-//		});
-
-	}
-
-	public static void repairMissingDataType(final EObject target) {
-		final File template = new File(TypeCreator.TEMPLATE_PATH + File.separatorChar + "Struct.dtp");
+	public static void repairMissingStructuredDataType(final EObject target) {
+		final File template = new File(ErrorMarkerResolver.TEMPLATE_PATH + File.separatorChar + "Struct.dtp"); //$NON-NLS-1$
 
 		final EObject rootContainer = EcoreUtil.getRootContainer(target);
 
@@ -82,27 +49,16 @@ public class TypeCreator {
 
 		final DataType type = ((VarDeclaration) target).getType();
 
-		if (type instanceof final ErrorMarkerDataType errorType) {
-			final TypeEntry typeEntry = errorType.getTypeEntry();
-
-			final IFile file = typeEntry.getFile();
-			final int k = 0;
-
-			// final IFile targetTypeFile = getTargetFile();
-
-			// final TypeFromTemplateCreator creator = new
-			// TypeFromTemplateCreator(getTargetFile(), template,
-			// packageName);
-
-			final IFile targetFile = getTargetFile(type.getName(), fullPath);
+		if (type instanceof ErrorMarkerDataType) {
+			final IFile targetFile = getTargetFile(type.getName(), fullPath, ".dtp");
 			final TypeFromTemplateCreator creator = new TypeFromTemplateCreator(targetFile, template, "");
 			creator.createTypeFromTemplate(new NullProgressMonitor());
 		}
 	}
 
-	private static IFile getTargetFile(final String typeName, final IPath path) {
+	private static IFile getTargetFile(final String typeName, final IPath path, final String fileEnding) {
 		return ResourcesPlugin.getWorkspace().getRoot()
-				.getFile(new Path(path + File.separator + "Type Library" + File.separator + typeName + ".dtp"));
+				.getFile(new Path(path + File.separator + "Type Library" + File.separator + typeName + fileEnding));
 
 	}
 }
