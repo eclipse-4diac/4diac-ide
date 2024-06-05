@@ -84,19 +84,10 @@ public class Connections2StructHandler extends AbstractHandler {
 			IStructuredSelection selection = (IStructuredSelection) window.getSelectionService().getSelection();
 			Object firstElement = selection.getFirstElement();
 			FBNetwork fbn = ((ConnectionEditPart) firstElement).getModel().getFBNetwork();
-			FBNetworkElement sourceElement = ((ConnectionEditPart) firstElement).getModel().getSourceElement();
-			FBNetworkElement destinationElement = ((ConnectionEditPart) firstElement).getModel().getDestinationElement();
-			InterfaceList sourceInterface = ((ConnectionEditPart) firstElement).getModel().getSourceElement().getInterface();
-			InterfaceList destenationInterface = ((ConnectionEditPart) firstElement).getModel().getDestinationElement().getInterface();
-			System.out.println(selection);
-			
-			
-			
+					
 			List<String> sourceVarNames = selection.stream().map(t -> ((ConnectionEditPart) t).getModel().getSource().getName()).toList();
 
 			List<String> destinationVarNames = selection.stream().map(t -> ((ConnectionEditPart) t).getModel().getDestination().getName()).toList();
-			
-			
 			
 
 			List<VarDeclaration> varDecls = selection.stream()
@@ -114,23 +105,80 @@ public class Connections2StructHandler extends AbstractHandler {
 			dialog.create();
 			dialog.open();
 			estw.getDatatypeName();
+			FBNetworkElement fbns = ((ConnectionEditPart) firstElement).getModel().getSourceElement();
+			FBNetworkElement fbnd = ((ConnectionEditPart) firstElement).getModel().getDestinationElement();
 			FBType les = ((ConnectionEditPart) firstElement).getModel().getSourceElement().getType();
-			LibraryElement led = ((ConnectionEditPart) firstElement).getModel().getDestinationElement().getType();
+			FBType led = ((ConnectionEditPart) firstElement).getModel().getDestinationElement().getType();
 			
-//			DeleteInterfaceCommand dic = new DeleteInterfaceCommand(les.getInterfaceList().getOutput(sourceVarNames.get(0)));
-//			commandStack.execute(dic);
-//			try {
-//				les.getTypeEntry().save(les);
-//			} catch (CoreException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+
+			CompoundCommand cc = new CompoundCommand();
+			
+			String name = "testname";
+			selection.forEach(sel -> cc.add(new DeleteConnectionCommand(((ConnectionEditPart) sel).getModel())));
+			sourceVarNames.forEach(var -> cc.add(new DeleteInterfaceCommand(les.getInterfaceList().getOutput(var))));
+			destinationVarNames.forEach(var -> cc.add(new DeleteInterfaceCommand(led.getInterfaceList().getInput(var))));
+			CreateInterfaceElementCommand sourceStruct = new CreateInterfaceElementCommand(les.getTypeLibrary().getDataTypeLibrary().getType(estw.getDatatypeName()), name, les.getInterfaceList(), false, (int)les.getInterfaceList().getOutputs().count());
+			CreateInterfaceElementCommand destinationStruct = new CreateInterfaceElementCommand(led.getTypeLibrary().getDataTypeLibrary().getType(estw.getDatatypeName()), name, led.getInterfaceList(), true, (int)led.getInterfaceList().getInputs().count());
+			cc.add(sourceStruct);
+			cc.add(destinationStruct);
+			commandStack.execute(cc);
+			
+			CompoundCommand cc2 = new CompoundCommand();
+			
+			varWiths.forEach(eve -> cc2.add(new WithCreateCommand(les.getInterfaceList().getEvent(eve),(VarDeclaration) sourceStruct.getCreatedElement())));
+			varWithd.forEach(eve -> cc2.add(new WithCreateCommand(led.getInterfaceList().getEvent(eve),(VarDeclaration) destinationStruct.getCreatedElement())));
+			
+			commandStack.execute(cc2);
+			
+			
+			final String[] labels = {"Save and Update", //Messages.FBTypeEditor_AlteringButton_SaveAndUpdate, // Messages.StructAlteringButton_SaveAs,
+						SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
+			//FBTypeEditor.Messages
+			FBTypeUpdateDialog<TypeEntry> fbSaveDialog = new FBTypeUpdateDialog<TypeEntry>(null, "Function Block Editor", null, "", //$NON-NLS-1$
+					MessageDialog.NONE, labels, 0, new FBTypeEntryDataHandler(les.getTypeEntry()));
+
+			// Depending on the button clicked:
+			switch (fbSaveDialog.open()) {
+			case 0:
+				try {
+					CompoundCommand cc3 = new CompoundCommand();
+					les.getTypeEntry().save(les);
+					UpdateFBTypeCommand sourceUpdate = new UpdateFBTypeCommand(fbns);
+					cc3.add(sourceUpdate);
+					led.getTypeEntry().save(led);
+					UpdateFBTypeCommand destinationUpdate = new UpdateFBTypeCommand(fbnd);
+					cc3.add(destinationUpdate);
+					commandStack.execute(cc3);
+					fbns = sourceUpdate.getNewElement();
+					fbnd = destinationUpdate.getNewElement();
+				} catch (CoreException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			case 1:
+				MessageDialog.openInformation(null, "Function Block Editor",
+						"The changes have not been saved!");
+				break;
+			default:
+				break;
+			}
+			
+			
+			
+			
 //			UpdateFBTypeCommand ufbtc = new UpdateFBTypeCommand(((ConnectionEditPart) firstElement).getModel().getSourceElement());
 //			commandStack.execute(ufbtc);
 			
-			InterfaceList ils = ((ConnectionEditPart) firstElement).getModel().getSourceElement().getInterface();
-			InterfaceList ild = ((ConnectionEditPart) firstElement).getModel().getDestinationElement().getInterface();
+			//InterfaceList ils = ((ConnectionEditPart) firstElement).getModel().getSourceElement().getInterface();
+			//InterfaceList ild = ((ConnectionEditPart) firstElement).getModel().getDestinationElement().getInterface();
 
+			StructDataConnectionCreateCommand sdccc = new StructDataConnectionCreateCommand(fbn);
+			sdccc.setSource(fbns.getInterface().getOutput(sourceStruct.getCreatedElement().getName()));
+			sdccc.setDestination(fbnd.getInterface().getInput(destinationStruct.getCreatedElement().getName()));
+			
+			commandStack.execute(sdccc);
+			
 			/*
 			 * Display.getDefault().asyncExec(() -> {
 			 * 
@@ -141,104 +189,7 @@ public class Connections2StructHandler extends AbstractHandler {
 			// Typeentry
 			// FBtypeUPdatedialog
 
-			CompoundCommand cc = new CompoundCommand();
 			
-			selection.forEach(t -> {
-				DeleteConnectionCommand dcc = new DeleteConnectionCommand(((ConnectionEditPart) t).getModel());
-				// DeleteInternalVariableCommand sdivc = new
-				// DeleteInternalVariableCommand((BaseFBType)((ConnectionEditPart)
-				// t).getModel().getSourceElement().getType(),
-				// (VarDeclaration)((ConnectionEditPart) t).getModel().getSource());
-				// DeleteInternalVariableCommand ddivc = new
-				// DeleteInternalVariableCommand((BaseFBType)((ConnectionEditPart)
-				// t).getModel().getDestinationElement().getType(),
-				// (VarDeclaration)((ConnectionEditPart) t).getModel().getDestination());
-				//DeleteInterfaceCommand dic1 = new DeleteInterfaceCommand(
-				//		((ConnectionEditPart) t).getModel().getSource());
-				//DeleteInterfaceCommand dic2 = new DeleteInterfaceCommand(
-				//		((ConnectionEditPart) t).getModel().getDestination());
-				cc.add(dcc);
-				//cc.add(dic1);
-				//cc.add(dic2);
-				// cc.add(sdivc);
-				// cc.add(ddivc);
-				// System.out.println(((ConnectionEditPart)
-				// t).getModel().getSourceElement().getType() instanceof BaseFBType);
-
-			});
-			commandStack.execute(cc);
-			String sourceName = null, destinationName = null;
-			String name = JOptionPane.showInputDialog("IO Name");
-			final IWorkbench workbench = PlatformUI.getWorkbench();
-			if (null != workbench) {
-				final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-				if (null != activeWorkbenchWindow) {
-					final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-					final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
-							.getDefaultEditor(les.getTypeEntry().getFile().getName());
-					try {
-						final ITypeEntryEditor fbeditor = (ITypeEntryEditor)activePage.openEditor(new FileEditorInput(les.getTypeEntry().getFile()), desc.getId());
-						final CommandStack fbcommandStack = fbeditor.getAdapter(CommandStack.class);
-						InterfaceList sourceInterfaceList = ((FBType)fbeditor.getEditedElement()).getInterfaceList();
-						CompoundCommand ccs = new CompoundCommand();
-						sourceVarNames.forEach(varName -> ccs.add(new DeleteInterfaceCommand(sourceInterfaceList.getOutput(varName))));
-						CreateInterfaceElementCommand createStructInterfaceCommand = new CreateInterfaceElementCommand(((FBType)fbeditor.getEditedElement()).getTypeLibrary().getDataTypeLibrary().getType(estw.getDatatypeName()), name, sourceInterfaceList, false, (int)sourceInterfaceList.getOutputs().count());
-						ccs.add(createStructInterfaceCommand);
-						fbcommandStack.execute(ccs);
-						sourceName = createStructInterfaceCommand.getCreatedElement().getName();
-						CompoundCommand ccdw = new CompoundCommand();
-						varWiths.forEach(ev -> ccdw.add(new WithCreateCommand(sourceInterfaceList.getEventOutputs().stream().filter(t -> t.getName().equals(ev)).findFirst().get(), (VarDeclaration) createStructInterfaceCommand.getCreatedElement())));
-						fbcommandStack.execute(ccdw);
-						fbeditor.doSave(new NullProgressMonitor());
-					} catch (final Exception e) {
-						FordiacLogHelper.logError(e.getMessage(), e);
-					}
-				}
-			}
-			final IWorkbench workbench1 = PlatformUI.getWorkbench();
-			if (null != workbench) {
-				final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-				if (null != activeWorkbenchWindow) {
-					final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-					final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
-							.getDefaultEditor(led.getTypeEntry().getFile().getName());
-					
-					try {
-						final ITypeEntryEditor fbeditor = (ITypeEntryEditor)activePage.openEditor(new FileEditorInput(led.getTypeEntry().getFile()), desc.getId());
-						final CommandStack fbcommandStack = fbeditor.getAdapter(CommandStack.class);
-						InterfaceList destinationInterfaceList = ((FBType)fbeditor.getEditedElement()).getInterfaceList();
-						CompoundCommand ccd = new CompoundCommand();
-						destinationVarNames.forEach(varName -> ccd.add(new DeleteInterfaceCommand(destinationInterfaceList.getInput(varName))));
-						CreateInterfaceElementCommand createStructInterfaceCommand = new CreateInterfaceElementCommand(((FBType)fbeditor.getEditedElement()).getTypeLibrary().getDataTypeLibrary().getType(estw.getDatatypeName()), name, destinationInterfaceList, true, (int)destinationInterfaceList.getInputs().count());
-						ccd.add(createStructInterfaceCommand);
-						fbcommandStack.execute(ccd);
-						destinationName = createStructInterfaceCommand.getCreatedElement().getName();
-						CompoundCommand ccdw = new CompoundCommand();
-						varWithd.forEach(ev -> ccdw.add(new WithCreateCommand(destinationInterfaceList.getEventInputs().stream().filter(t -> t.getName().equals(ev)).findFirst().get(), (VarDeclaration) createStructInterfaceCommand.getCreatedElement())));
-						fbcommandStack.execute(ccdw);
-						fbeditor.doSave(new NullProgressMonitor());
-					} catch (final Exception e) {
-						FordiacLogHelper.logError(e.getMessage(), e);
-					}
-				}
-			}
-			
-			
-			CompoundCommand cc2 = new CompoundCommand();
-//			
-//			varWiths.forEach(t -> cc2.add(new WithCreateCommand(t,(VarDeclaration) ciecs.getCreatedElement())));
-//			varWithd.forEach(t -> cc2.add(new WithCreateCommand(t,(VarDeclaration) ciecd.getCreatedElement())));
-			StructDataConnectionCreateCommand sdccc = new StructDataConnectionCreateCommand(fbn);
-			sdccc.setSource(sourceElement.getInterface().getOutput(sourceName));
-			sdccc.setDestination(destinationElement.getInterface().getInput(destinationName));
-//			commandStack.execute(cc2);
-			commandStack.execute(sdccc);
-//			try {
-//				les.getTypeEntry().save(les);
-//			} catch (CoreException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
 //
 //			BlockTypeInstanceSearch btis = new BlockTypeInstanceSearch(les.getTypeEntry());
 //			btis.performSearch().stream().forEach(t -> ((FBNetworkElement) t).setComment("hello"));
