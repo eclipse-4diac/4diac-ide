@@ -99,6 +99,7 @@ public final class Messages extends NLS {
 	public static String InstanceUpdate;
 	public static String NewFBTypeWizard_TemplateNotAvailable;
 	public static String NewFBTypeWizardPage_TypeAlreadyExists;
+	public static String NewFBTypeWizardPage_FileAlreadyExists;
 	public static String NewFBTypeWizardPage_CreateNewType;
 	public static String NewFBTypeWizardPage_CreateNewTypeFromTemplateType;
 	public static String NewFBTypeWizardPage_CouldNotFindTemplateFiles;

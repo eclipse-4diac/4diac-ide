@@ -124,7 +124,7 @@ public class TypeEntryAdapter extends AdapterImpl {
 	private void handleDependencyUpdate(final TypeEntry typeEntry) {
 		final LibraryElement editedElement = editor.getEditedElement();
 		if (editedElement != null) {
-			Display.getDefault().syncExec(() -> {
+			Display.getDefault().asyncExec(() -> {
 				if ((typeEntry instanceof FBTypeEntry || typeEntry instanceof SubAppTypeEntry)) {
 					handleBlockTypeDependencyUpdate(editedElement, typeEntry);
 				}

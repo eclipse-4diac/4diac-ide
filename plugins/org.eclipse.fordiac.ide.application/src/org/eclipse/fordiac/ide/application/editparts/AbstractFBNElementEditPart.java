@@ -389,7 +389,6 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 					.filter(it -> !it.getInputConnections().isEmpty()).map(VarDeclaration::getInOutVarOpposite)
 					.toList();
 		}
-		removedVarInOutPins.forEach(vd -> vd.setValue(null));
 		return removedVarInOutPins;
 	}
 

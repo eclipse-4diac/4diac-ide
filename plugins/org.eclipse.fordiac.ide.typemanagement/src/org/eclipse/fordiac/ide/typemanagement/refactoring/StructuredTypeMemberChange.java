@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -28,15 +29,12 @@ public class StructuredTypeMemberChange extends Change {
 
 	private final StructuredType affectedStruct;
 	private final TypeEntry typeEntry;
-	private final String oldName;
 
 	private final CompoundCommand cmd = new CompoundCommand();
 
-	public StructuredTypeMemberChange(final StructuredType affectedStruct, final TypeEntry oldTypeEntry,
-			final String oldName, final String newName) {
+	public StructuredTypeMemberChange(final StructuredType affectedStruct, final TypeEntry oldTypeEntry) {
 		this.affectedStruct = affectedStruct;
 		this.typeEntry = oldTypeEntry;
-		this.oldName = oldName;
 	}
 
 	@Override
@@ -59,18 +57,13 @@ public class StructuredTypeMemberChange extends Change {
 	/** TODO here we need to return the Undo change */
 	@Override
 	public Change perform(final IProgressMonitor pm) throws CoreException {
-
-		final StructuredType structuredTypeEditable = (StructuredType) affectedStruct.getTypeEntry().getTypeEditable();
-		for (final VarDeclaration varDeclaration : structuredTypeEditable.getMemberVariables()) {
-			final String typeName = varDeclaration.getTypeName();
-			if (typeName.equals(oldName)) {
+		for (final VarDeclaration varDeclaration : affectedStruct.getMemberVariables()) {
+			if (varDeclaration.getType() != null && typeEntry == varDeclaration.getType().getTypeEntry()) {
 				cmd.add(ChangeDataTypeCommand.forDataType(varDeclaration, (DataType) typeEntry.getTypeEditable()));
 			}
 		}
 
-		cmd.execute();
-		structuredTypeEditable.getTypeEntry().save(structuredTypeEditable, pm);
-
+		AbstractLiveSearchContext.executeAndSave(cmd, affectedStruct, pm);
 		return null;
 	}
 
