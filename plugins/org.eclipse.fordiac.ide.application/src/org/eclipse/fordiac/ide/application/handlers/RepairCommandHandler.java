@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
@@ -393,13 +394,13 @@ public class RepairCommandHandler extends AbstractHandler {
 					super.widgetSelected(e);
 					if (changeTypeButton.getSelection()) {
 						choice = Choices.CHANGE_TYPE;
-
+						choice.setResult(IecTypes.GenericTypes.ANY_STRUCT);
 					}
 				}
 			});
 
 			final Text currentType = new Text(group, SWT.AUTO_TEXT_DIRECTION);
-			currentType.setText("Select"); //$NON-NLS-1$
+			currentType.setText("ANY_STRUCT"); //$NON-NLS-1$
 			currentType.setEditable(false);
 
 			final Button openDialogButton = new Button(group, SWT.PUSH);
@@ -425,7 +426,7 @@ public class RepairCommandHandler extends AbstractHandler {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
 					super.widgetSelected(e);
-					if (changeTypeButton.getSelection()) {
+					if (creatTypeButton.getSelection()) {
 						choice = Choices.CREATE_MISSING_TYPE;
 					}
 				}
