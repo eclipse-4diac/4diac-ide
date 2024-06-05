@@ -34,7 +34,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
@@ -207,6 +209,11 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 			return false;
 		}
 
+		if (fileExists()) {
+			setErrorMessage(MessageFormat.format(Messages.NewFBTypeWizardPage_FileAlreadyExists, getFileName()));
+			return false;
+		}
+
 		return super.validatePage();
 	}
 
@@ -226,6 +233,21 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 			types = lib.getProgramTypes();
 		}
 		return types.containsKey(getFullTypeName());
+	}
+
+	private boolean fileExists() {
+		final String fileName = getFileName().toLowerCase();
+		try {
+			for (final IResource member : ResourcesPlugin.getWorkspace().getRoot().getFolder(getContainerFullPath())
+					.members()) {
+				if (fileName.equalsIgnoreCase(member.getName())) {
+					return true;
+				}
+			}
+		} catch (final CoreException e) {
+			return false;
+		}
+		return false;
 	}
 
 	public File getTemplate() {
