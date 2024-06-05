@@ -28,14 +28,18 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
@@ -158,6 +162,15 @@ public class RepairCommandHandler extends AbstractHandler {
 							AbstractLiveSearchContext.executeAndSave(ChangeDataTypeCommand.forDataType(iE, d), iE,
 									new NullProgressMonitor());
 						}
+
+						if (r instanceof final StructManipulator fb && typeChoice instanceof final DataType d) {
+							AbstractLiveSearchContext.executeAndSave(new ChangeStructCommand(fb, d), fb,
+									new NullProgressMonitor());
+						} else if (r instanceof final ConfigurableFB fb && typeChoice instanceof final DataType d) {
+							AbstractLiveSearchContext.executeAndSave(new ConfigureFBCommand(fb, d), fb,
+									new NullProgressMonitor());
+						}
+
 					}
 
 				}
