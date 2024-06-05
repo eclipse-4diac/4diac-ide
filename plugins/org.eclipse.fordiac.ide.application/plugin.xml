@@ -1144,6 +1144,18 @@
         </command>
       </toolbar>
     </menuContribution>
+    <menuContribution
+            locationURI="popup:org.eclipse.ui.ide.MarkersView">
+            <command commandId="org.eclipse.fordiac.ide.application.commands.repair"
+               label="Repair Errormarker"
+               tooltip="Attempt to repair Errormarker">
+         <visibleWhen checkEnabled="false">
+          <and>
+           <test property="org.eclipse.fordiac.ide.application.properties.repairSupported"/>
+          </and>
+        </visibleWhen>     
+      </command> 
+     </menuContribution>
     <menuContribution locationURI="toolbar:org.eclipse.ui.workbench.navigate">
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotochild"/>
@@ -1259,9 +1271,7 @@
              <iterate ifEmpty="true">
                <and>
                		<or>
-               		<adapt type="org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl"/>               			               		
-                  	<adapt type="org.eclipse.fordiac.ide.application.editparts.ErrorMarkerFBNEditPart"/>
-                  	<adapt type="org.eclipse.fordiac.ide.application.editparts.ErrorMarkerInterfaceEditPart"/>
+               		<test property="org.eclipse.fordiac.ide.application.properties.repairSupported"/> 
                   	</or>
                   	<not>
                   	<instanceof value="org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart"/>
@@ -1817,5 +1827,12 @@
           			properties="isCFBFile"
           			type="java.lang.Object">
     </propertyTester>
+     <propertyTester
+            class="org.eclipse.fordiac.ide.application.properties.RepairElementPropertyTester"
+            id="org.eclipse.fordiac.ide.application.properties.RepairElementPropertyTester"
+            namespace="org.eclipse.fordiac.ide.application.properties"
+            properties="repairSupported"
+            type="java.lang.Object">
+      </propertyTester>
   </extension>
 </plugin>

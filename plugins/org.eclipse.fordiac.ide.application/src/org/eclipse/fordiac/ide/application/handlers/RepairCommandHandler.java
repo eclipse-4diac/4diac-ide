@@ -17,27 +17,44 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.fordiac.ide.application.editparts.ErrorMarkerFBNEditPart;
-import org.eclipse.fordiac.ide.application.editparts.ErrorMarkerInterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
-import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
-import org.eclipse.fordiac.ide.model.search.dialog.FBTypeSearchResultTable;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
+import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorDataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
+import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
+import org.eclipse.fordiac.ide.typemanagement.util.ErrorMarkerResolver;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizardPage;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewTypeWizard;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -53,22 +70,25 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.views.markers.MarkerItem;
 
 public class RepairCommandHandler extends AbstractHandler {
 
-	private IStructuredSelection sel;
+	private IStructuredSelection selection;
 
 	private enum Choices {
-		ADD(FordiacMessages.Dialog_Repair_Add), REMOVE(FordiacMessages.Dialog_Repair_Remove);
+		CREATE_MISSING_TYPE(FordiacMessages.Dialog_Repair_Pin),
+		DELETE_AFFECTED_ELEMENTS(FordiacMessages.Delete_Elements),
+		CHANGE_TYPE(FordiacMessages.RepairCommandHandler_ChangeType0);
+
+		private EObject result;
 
 		private final String text;
 
@@ -81,62 +101,49 @@ public class RepairCommandHandler extends AbstractHandler {
 			return text;
 		}
 
+		public void setResult(final EObject result) {
+			this.result = result;
+		}
+
+		public EObject getResult() {
+			return result;
+		}
+
 	}
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		TypeLibrary typeLib;
-		IEditorPart editor;
-		sel = HandlerUtil.getCurrentStructuredSelection(event);
-		editor = HandlerUtil.getActiveEditor(event);
-		final AbstractConnectableEditPart editPart = getEditPartFromSelection(sel);
-		typeLib = getTypeLibraryFromEditorInput(editor.getEditorInput());
-		if (editPart != null) {
-			repairEditPart(editPart, typeLib.getProject().getName());
+		selection = HandlerUtil.getCurrentStructuredSelection(event);
+		EObject eObject = getEObjectFromProblemViewSelection(selection);
+
+		if (eObject == null) {
+			eObject = getEObjectFromEditorSelection(selection);
 		}
-		typeLib.reload();
+
+		repair(eObject); // varDecl
 		return null;
 	}
 
-	private static TypeLibrary getTypeLibraryFromEditorInput(final IEditorInput input) {
-		return TypeLibraryManager.INSTANCE.getTypeEntryForFile(((FileEditorInput) input).getFile()).getTypeLibrary();
-	}
+	private void openMissingDataTypeWizard(final EObject type) {
 
-	private void repairEditPart(final AbstractConnectableEditPart editPart, final String projectName) {
-		final ErrorMarkerDataType dataTypeMarker = editPart.getAdapter(ErrorMarkerDataTypeImpl.class);
-		if (dataTypeMarker != null) {
-			showRestrictedNewTypeWizard(dataTypeMarker.getTypeEntry().getTypeName(),
-					TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT, projectName);
-		}
-		final ErrorMarkerFBNEditPart fBNEditPartMarker = editPart.getAdapter(ErrorMarkerFBNEditPart.class);
-		if (fBNEditPartMarker != null) {
-			showRestrictedNewTypeWizard(((FBNetworkElement) fBNEditPartMarker.getINamedElement()).getTypeName(),
-					TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT, projectName);
-		}
-		final ErrorMarkerInterfaceEditPart interfaceEditPart = editPart.getAdapter(ErrorMarkerInterfaceEditPart.class);
-		if (interfaceEditPart != null) {
-			showAddOrRemoveWizard(interfaceEditPart);
-		}
-	}
+		final ChooseRepairOperationPage<Choices> choosePage = new ChooseRepairOperationPage<>(
+				FordiacMessages.Delete_Elements, type);
 
-	private void showAddOrRemoveWizard(final ErrorMarkerInterfaceEditPart interfaceEditPart) {
-		final ChooseActionWizardPage<Choices> choosePage = new ChooseActionWizardPage<>(
-				FordiacMessages.Dialog_Add_Or_Remove_Pin, Choices.class);
-		final ChangedTypesWizardPage infoPage = new ChangedTypesWizardPage("Pending changes",
-				interfaceEditPart.getParent().getAdapter(SubApp.class).getTypeEntry());
 		final var wizard = new Wizard() {
-
 			@Override
 			public boolean performFinish() {
-				// TODO depending on choice, search instances with faulty pin, and delete pins
-				// or simply add pin to typentry.
+
 				Choices choice = null;
 				choice = choosePage.getSelection();
 				switch (choice) {
-				case ADD: // TODO add method here to add the pin to the typeEditable
+				case CHANGE_TYPE:
+					handleChangeDataType(choice);
 					break;
-				case REMOVE:
-					removeInterfaceElementFromInstances(interfaceEditPart);
+				case CREATE_MISSING_TYPE:
+					ErrorMarkerResolver.repairMissingStructuredDataType(type);
+					break;
+				case DELETE_AFFECTED_ELEMENTS:
+					// TODO needs to be implemented
 					break;
 				default:
 					break;
@@ -144,13 +151,34 @@ public class RepairCommandHandler extends AbstractHandler {
 				return true;
 			}
 
+			private void handleChangeDataType(final Choices choice) {
+				final var typeChoice = choice.getResult();
+				if (type instanceof final IInterfaceElement interfaceElement
+						&& interfaceElement.getType().getTypeEntry() instanceof final ErrorDataTypeEntry errorEntry) {
+					final DataTypeInstanceSearch search = new DataTypeInstanceSearch(errorEntry,
+							getTypeLibrary(interfaceElement));
+					final List<? extends EObject> result = search.performSearch();
+					for (final var r : result) {
+						if (r instanceof final IInterfaceElement iE && typeChoice instanceof final DataType d) {
+							AbstractLiveSearchContext.executeAndSave(ChangeDataTypeCommand.forDataType(iE, d), iE,
+									new NullProgressMonitor());
+						}
+
+						if (r instanceof final StructManipulator fb && typeChoice instanceof final DataType d) {
+							AbstractLiveSearchContext.executeAndSave(new ChangeStructCommand(fb, d), fb,
+									new NullProgressMonitor());
+						} else if (r instanceof final ConfigurableFB fb && typeChoice instanceof final DataType d) {
+							AbstractLiveSearchContext.executeAndSave(new ConfigureFBCommand(fb, d), fb,
+									new NullProgressMonitor());
+						}
+
+					}
+
+				}
+			}
+
 			@Override
 			public IWizardPage getNextPage(final IWizardPage page) {
-				if ((page instanceof final ChooseActionWizardPage<?> choosePage)
-						&& choosePage.choice.equals(Choices.REMOVE)) {
-					return Arrays.stream(getPages()).filter(ChangedTypesWizardPage.class::isInstance).findFirst()
-							.orElse(null);
-				}
 				return null;
 			}
 
@@ -166,35 +194,95 @@ public class RepairCommandHandler extends AbstractHandler {
 
 		choosePage.addButtonListener(alist);
 		wizard.addPage(choosePage);
-		infoPage.setPreviousPage(choosePage);
-		wizard.addPage(infoPage);
-
 		dialog.create();
 		dialog.open();
 
 	}
 
-	private static void removeInterfaceElementFromInstances(final ErrorMarkerInterfaceEditPart elem) {
-//		TODO use the element to remove similar pins from all instances
-//		final FBType te = ((FBType) elem.getParent().getModel()).getTypeEntry().getTypeEditable();
-//		te.getInterfaceList().getAllInterfaceElements().removeIf(el -> {
-//			System.out.println(el);
-//			return true;
-//		});
+	private void repair(final EObject eObject) {
+
+		if (eObject instanceof final VarDeclaration varDecl && varDecl.getType() instanceof ErrorMarkerDataType) {
+			repairMissingDataType(varDecl);
+		}
+
+		if (eObject instanceof FBNetworkElement) {
+			handleMissingBlockType();
+		}
 	}
 
-	private static AbstractConnectableEditPart getEditPartFromSelection(final IStructuredSelection sel) {
-		final Optional<AbstractConnectableEditPart> part = sel.toList().stream()
-				.filter(AbstractConnectableEditPart.class::isInstance).map(AbstractConnectableEditPart.class::cast)
-				.findFirst();
-		return part.isPresent() ? part.get() : null;
+	private void handleMissingBlockType() {
+		// TODO Open wizard for Missing Block
+	}
+
+	private void repairMissingDataType(final VarDeclaration errorDataType) {
+		openMissingDataTypeWizard(errorDataType);
+	}
+
+	public static EObject getEObjectFromEditorSelection(final IStructuredSelection sel) {
+		Object model = sel.getFirstElement();
+
+		if (model instanceof final EditPart editPart) {
+			model = editPart.getModel();
+		}
+
+		return getEObjectFromEditor(model);
+
+	}
+
+	public static EObject getEObjectFromEditor(final Object model) {
+		if (model instanceof final VarDeclaration varDecl
+				&& varDecl.getType() instanceof final ErrorMarkerDataType errorType) {
+			return varDecl;
+		}
+
+		// missing pin
+		if (model instanceof final ErrorMarkerInterface ie) {
+			return ie;
+		}
+
+		// missing block
+		if (model instanceof final ErrorMarkerFBNElement errorBlock) {
+			return errorBlock;
+		}
+		return null;
+	}
+
+	private static EObject getEObjectFromProblemViewSelection(final IStructuredSelection sel) {
+
+		final Object firstElement = sel.getFirstElement();
+
+		// selection from problem view
+		if (firstElement instanceof final MarkerItem item) {
+			final EObject eObj = getEObjectFromMarkerItem(item);
+			// this should already be validated by the property tester therefore we want to
+			// know early if this fails.
+			Assert.isNotNull(eObj);
+
+			return eObj;
+		}
+
+		return null;
+	}
+
+	public static EObject getEObjectFromMarkerItem(final MarkerItem item) {
+		final IMarker marker = item.getMarker();
+		try {
+			final EObject target = FordiacErrorMarker.getTarget(marker);
+			if (target != null) {
+				return target;
+			}
+
+		} catch (IllegalArgumentException | CoreException e) {
+			return null;
+		}
+		return null;
 	}
 
 	private void showRestrictedNewTypeWizard(final String name, final String fileEnding, final String projectName) {
 		final NewTypeWizard wizard = new NewTypeWizard() {
 			@Override
 			protected NewFBTypeWizardPage createNewFBTypeWizardPage() {
-				return new NewFBTypeWizardPage(sel);
+				return new NewFBTypeWizardPage(selection);
 			}
 
 		};
@@ -271,42 +359,16 @@ public class RepairCommandHandler extends AbstractHandler {
 		return flattenedSet;
 	}
 
-	private class ChangedTypesWizardPage extends WizardPage {
-		private final TypeEntry type;
-
-		protected ChangedTypesWizardPage(final String pageName, final TypeEntry type) {
-			super(pageName);
-			this.type = type;
-		}
-
-		@Override
-		public void createControl(final Composite parent) {
-			Composite container;
-			container = new Composite(parent, SWT.NONE);
-			final GridLayout layout = new GridLayout();
-			container.setLayout(layout);
-
-			// search instances with pin and delete pins.
-			final FBTypeSearchResultTable table = new FBTypeSearchResultTable(container,
-					new FBTypeEntryDataHandler(type));
-			table.setLayout(layout);
-			this.setControl(container);
-			this.setDescription(FordiacMessages.Dialog_Repair_Remove);
-			this.setTitle(FordiacMessages.Dialog_Repair_Pin);
-		}
-
-	}
-
-	private class ChooseActionWizardPage<T extends Enum<T>> extends WizardPage {
-		private Class<T> choicesEnum = null;
-		private T choice;
+	private class ChooseRepairOperationPage<T extends Enum<T>> extends WizardPage {
+		private Choices choice;
+		private final EObject eObj;
 
 		private final List<ActionListener> listeners = new ArrayList<>();
 
-		protected ChooseActionWizardPage(final String pageName, final Class<T> choicesEnum) {
+		protected ChooseRepairOperationPage(final String pageName, final EObject eObj) {
 			super(pageName);
-			this.choicesEnum = choicesEnum;
-			this.choice = choicesEnum.getEnumConstants()[0];// make default selection work
+			this.choice = Choices.CHANGE_TYPE;// make default selection work
+			this.eObj = eObj;
 		}
 
 		public void addButtonListener(final ActionListener l) {
@@ -320,34 +382,73 @@ public class RepairCommandHandler extends AbstractHandler {
 			final GridLayout layout = new GridLayout();
 			container.setLayout(layout);
 			layout.numColumns = 1;
-//			@formatter:off
-			Arrays.stream(choicesEnum.getEnumConstants())
-			.forEach(s -> {
-				final Button b = new Button(container, SWT.RADIO);
-				b.setText(s.toString());
-				b.addSelectionListener(new SelectionAdapter(){
-				    @Override
-				    public void widgetSelected(final SelectionEvent e){
-				        super.widgetSelected(e);
-				        if(b.getSelection()){
-				            choice=s;
-				            listeners.forEach(l-> l.actionPerformed(null));
-				        }
-				    }
-				});
+
+			final Button changeTypeButton = new Button(container, SWT.RADIO);
+			final Group group = new Group(container, SWT.NONE);
+			group.setEnabled(true);
+			group.setLayout(new GridLayout(2, false));
+			changeTypeButton.setText(Choices.CHANGE_TYPE.toString());
+			changeTypeButton.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					super.widgetSelected(e);
+					if (changeTypeButton.getSelection()) {
+						choice = Choices.CHANGE_TYPE;
+						choice.setResult(IecTypes.GenericTypes.ANY_STRUCT);
+					}
+				}
 			});
-//			@formatter:on
+
+			final Text currentType = new Text(group, SWT.AUTO_TEXT_DIRECTION);
+			currentType.setText("ANY_STRUCT"); //$NON-NLS-1$
+			currentType.setEditable(false);
+
+			final Button openDialogButton = new Button(group, SWT.PUSH);
+
+			openDialogButton.setText("..."); //$NON-NLS-1$
+			openDialogButton.addListener(SWT.Selection, e -> {
+				final DataTypeSelectionTreeContentProvider instance = DataTypeSelectionTreeContentProvider.INSTANCE;
+				// instance.inputChanged(null, typeSelectionButton, e)
+
+				final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(getShell(), instance);
+				dialog.setInput(getTypeLibrary(eObj));
+				if ((dialog.open() == Window.OK)
+						&& (dialog.getFirstResult() instanceof final TypeNode node && !node.isDirectory())) {
+					choice.setResult(node.getType());
+					currentType.setText(node.getFullName());
+
+				}
+			});
+
+			final Button creatTypeButton = new Button(container, SWT.RADIO);
+			creatTypeButton.setText(Choices.CREATE_MISSING_TYPE.toString());
+			creatTypeButton.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					super.widgetSelected(e);
+					if (creatTypeButton.getSelection()) {
+						choice = Choices.CREATE_MISSING_TYPE;
+					}
+				}
+			});
+
 			this.setControl(container);
-			this.setDescription(FordiacMessages.Dialog_Add_Or_Remove_Pin);
+			this.setDescription(FordiacMessages.Delete_Elements);
 			this.setTitle(FordiacMessages.Dialog_Repair_Pin);
 			getShell().pack();
 			this.setPageComplete(true);
 		}
 
-		public T getSelection() {
+		public Choices getSelection() {
 			return choice;
 		}
 
 	}
 
+	public static TypeLibrary getTypeLibrary(final EObject eObj) {
+		if (EcoreUtil.getRootContainer(eObj) instanceof final LibraryElement le) {
+			return le.getTypeLibrary();
+		}
+		return null;
+	}
 }
