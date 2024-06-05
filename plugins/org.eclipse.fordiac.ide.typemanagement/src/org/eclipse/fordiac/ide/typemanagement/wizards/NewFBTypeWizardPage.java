@@ -240,7 +240,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		try {
 			for (final IResource member : ResourcesPlugin.getWorkspace().getRoot().getFolder(getContainerFullPath())
 					.members()) {
-				if (fileName.equals(member.getName().toLowerCase())) {
+				if (fileName.equalsIgnoreCase(member.getName())) {
 					return true;
 				}
 			}
