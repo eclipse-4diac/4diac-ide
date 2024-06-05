@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -75,7 +76,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		try {
 			monitor.beginTask("Checking preconditions...", 1); //$NON-NLS-1$
 			checkFileEnding(status);
-
+			checkFileName(status);
 		} finally {
 			monitor.done();
 		}
@@ -85,6 +86,21 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 	protected void checkFileEnding(final RefactoringStatus result) {
 		if (!getArguments().getNewName().endsWith(file.getFileExtension())) {
 			result.addFatalError("The file-ending is different to the old one!"); //$NON-NLS-1$
+		}
+	}
+
+	protected void checkFileName(final RefactoringStatus result) {
+		if (!oldName.equalsIgnoreCase(newName)) {
+			try {
+				final String name = getArguments().getNewName();
+				for (final IResource resource : file.getParent().members()) {
+					if (name.equalsIgnoreCase(resource.getName())) {
+						result.addFatalError("File already exists!"); //$NON-NLS-1$
+					}
+				}
+			} catch (final CoreException e) {
+				// do nothing
+			}
 		}
 	}
 
