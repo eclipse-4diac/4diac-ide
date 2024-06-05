@@ -28,7 +28,6 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
@@ -123,9 +122,5 @@ public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
 			}
 			return super.getImage(element);
 		}
-	}
-
-	public TreeViewer getViewer() {
-		return getTreeViewer();
 	}
 }

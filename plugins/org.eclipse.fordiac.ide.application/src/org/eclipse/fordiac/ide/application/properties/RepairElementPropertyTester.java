@@ -42,7 +42,7 @@ public class RepairElementPropertyTester extends PropertyTester {
 	}
 
 	private static boolean isErrorMarkerFromEditor(final Object model) {
-		return RepairCommandHandler.getEObjectFromEditorSelection(model) != null;
+		return RepairCommandHandler.getEObjectFromEditor(model) != null;
 	}
 
 	private static boolean isMarkerFromProblemsView(final List<?> markerList) {

@@ -24,6 +24,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
@@ -32,8 +33,11 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.ErrorDataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -45,6 +49,7 @@ import org.eclipse.fordiac.ide.typemanagement.util.ErrorMarkerResolver;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizardPage;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewTypeWizard;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -60,7 +65,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -76,7 +80,8 @@ public class RepairCommandHandler extends AbstractHandler {
 
 	private enum Choices {
 		CREATE_MISSING_TYPE(FordiacMessages.Dialog_Repair_Pin),
-		DELETE_AFFECTED_ELEMENTS(FordiacMessages.Delete_Elements), CHANGE_TYPE("Change Data Type");
+		DELETE_AFFECTED_ELEMENTS(FordiacMessages.Delete_Elements),
+		CHANGE_TYPE(FordiacMessages.RepairCommandHandler_ChangeType0);
 
 		private EObject result;
 
@@ -104,14 +109,20 @@ public class RepairCommandHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		selection = HandlerUtil.getCurrentStructuredSelection(event);
-		final EObject eObject = getEObjectFromProblemViewSelection(selection);
+		EObject eObject = getEObjectFromProblemViewSelection(selection);
+
+		if (eObject == null) {
+			eObject = getEObjectFromEditorSelection(selection);
+		}
+
 		repair(eObject); // varDecl
 		return null;
 	}
 
 	private void openMissingDataTypeWizard(final EObject type) {
+
 		final ChooseRepairOperationPage<Choices> choosePage = new ChooseRepairOperationPage<>(
-				FordiacMessages.Delete_Elements, Choices.class, type);
+				FordiacMessages.Delete_Elements, type);
 
 		final var wizard = new Wizard() {
 			@Override
@@ -121,31 +132,7 @@ public class RepairCommandHandler extends AbstractHandler {
 				choice = choosePage.getSelection();
 				switch (choice) {
 				case CHANGE_TYPE:
-
-					final var t = choice.getResult();
-
-					if (type instanceof final VarDeclaration varDecl) {
-
-						TypeLibrary lib = null;
-						if (EcoreUtil.getRootContainer(varDecl) instanceof final LibraryElement le) {
-							lib = le.getTypeLibrary();
-						}
-
-						final DataTypeInstanceSearch search = new DataTypeInstanceSearch(
-								(ErrorDataTypeEntry) varDecl.getType().getTypeEntry(), lib);
-
-						final List<? extends EObject> result = search.performSearch();
-
-						for (final var r : result) {
-							if (r instanceof final VarDeclaration vD && t instanceof final DataType d) {
-								Display.getDefault()
-										.asyncExec(() -> ChangeDataTypeCommand.forDataType(vD, d).execute());
-
-							}
-						}
-
-					}
-
+					handleChangeDataType(choice);
 					break;
 				case CREATE_MISSING_TYPE:
 					ErrorMarkerResolver.repairMissingStructuredDataType(type);
@@ -157,6 +144,23 @@ public class RepairCommandHandler extends AbstractHandler {
 					break;
 				}
 				return true;
+			}
+
+			private void handleChangeDataType(final Choices choice) {
+				final var typeChoice = choice.getResult();
+				if (type instanceof final IInterfaceElement interfaceElement
+						&& interfaceElement.getType().getTypeEntry() instanceof final ErrorDataTypeEntry errorEntry) {
+					final DataTypeInstanceSearch search = new DataTypeInstanceSearch(errorEntry,
+							getTypeLibrary(interfaceElement));
+					final List<? extends EObject> result = search.performSearch();
+					for (final var r : result) {
+						if (r instanceof final IInterfaceElement iE && typeChoice instanceof final DataType d) {
+							AbstractLiveSearchContext.executeAndSave(ChangeDataTypeCommand.forDataType(iE, d), iE,
+									new NullProgressMonitor());
+						}
+					}
+
+				}
 			}
 
 			@Override
@@ -176,9 +180,6 @@ public class RepairCommandHandler extends AbstractHandler {
 
 		choosePage.addButtonListener(alist);
 		wizard.addPage(choosePage);
-		// infoPage.setPreviousPage(choosePage);
-		// wizard.addPage(infoPage);
-
 		dialog.create();
 		dialog.open();
 
@@ -190,16 +191,34 @@ public class RepairCommandHandler extends AbstractHandler {
 			repairMissingDataType(varDecl);
 		}
 
+		if (eObject instanceof FBNetworkElement) {
+			handleMissingBlockType();
+		}
+	}
+
+	private void handleMissingBlockType() {
+		// TODO Open wizard for Missing Block
 	}
 
 	private void repairMissingDataType(final VarDeclaration errorDataType) {
 		openMissingDataTypeWizard(errorDataType);
 	}
 
-	public static EObject getEObjectFromEditorSelection(final Object model) {
+	public static EObject getEObjectFromEditorSelection(final IStructuredSelection sel) {
+		Object model = sel.getFirstElement();
+
+		if (model instanceof final EditPart editPart) {
+			model = editPart.getModel();
+		}
+
+		return getEObjectFromEditor(model);
+
+	}
+
+	public static EObject getEObjectFromEditor(final Object model) {
 		if (model instanceof final VarDeclaration varDecl
 				&& varDecl.getType() instanceof final ErrorMarkerDataType errorType) {
-			return errorType;
+			return varDecl;
 		}
 
 		// missing pin
@@ -211,7 +230,6 @@ public class RepairCommandHandler extends AbstractHandler {
 		if (model instanceof final ErrorMarkerFBNElement errorBlock) {
 			return errorBlock;
 		}
-
 		return null;
 	}
 
@@ -333,7 +351,7 @@ public class RepairCommandHandler extends AbstractHandler {
 
 		private final List<ActionListener> listeners = new ArrayList<>();
 
-		protected ChooseRepairOperationPage(final String pageName, final Class<T> choicesEnum, final EObject eObj) {
+		protected ChooseRepairOperationPage(final String pageName, final EObject eObj) {
 			super(pageName);
 			this.choice = Choices.CHANGE_TYPE;// make default selection work
 			this.eObj = eObj;
@@ -373,13 +391,13 @@ public class RepairCommandHandler extends AbstractHandler {
 
 			final Button openDialogButton = new Button(group, SWT.PUSH);
 
-			openDialogButton.setText("...");
+			openDialogButton.setText("..."); //$NON-NLS-1$
 			openDialogButton.addListener(SWT.Selection, e -> {
 				final DataTypeSelectionTreeContentProvider instance = DataTypeSelectionTreeContentProvider.INSTANCE;
 				// instance.inputChanged(null, typeSelectionButton, e)
 
 				final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(getShell(), instance);
-				dialog.setInput(getTypeLibrary());
+				dialog.setInput(getTypeLibrary(eObj));
 				if ((dialog.open() == Window.OK)
 						&& (dialog.getFirstResult() instanceof final TypeNode node && !node.isDirectory())) {
 					choice.setResult(node.getType());
@@ -411,12 +429,12 @@ public class RepairCommandHandler extends AbstractHandler {
 			return choice;
 		}
 
-		public final TypeLibrary getTypeLibrary() {
-			if (EcoreUtil.getRootContainer(eObj) instanceof final LibraryElement le) {
-				return le.getTypeLibrary();
-			}
-			return null;
-		}
 	}
 
+	public static TypeLibrary getTypeLibrary(final EObject eObj) {
+		if (EcoreUtil.getRootContainer(eObj) instanceof final LibraryElement le) {
+			return le.getTypeLibrary();
+		}
+		return null;
+	}
 }

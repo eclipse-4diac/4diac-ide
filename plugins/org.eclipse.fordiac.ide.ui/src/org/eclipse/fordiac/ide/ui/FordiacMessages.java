@@ -72,6 +72,8 @@ public final class FordiacMessages extends NLS {
 	public static String Product; // NOSONAR
 	public static String Properties; // NOSONAR
 	public static String Remarks; // NOSONAR
+
+	public static String RepairCommandHandler_ChangeType0;
 	public static String Resource; // NOSONAR
 	public static String SelectType; // NOSONAR
 	public static String Standard; // NOSONAR
