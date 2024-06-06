@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -71,7 +72,7 @@ public class DeleteFBTypeInterfaceChange extends CompositeChange implements IFor
 				cmd = new DeleteInterfaceCommand(varDec);
 			}
 
-			ChangeExecutionHelper.executeChange(cmd, type, pm);
+			AbstractLiveSearchContext.executeAndSave(cmd, type, pm);
 		}
 		return super.perform(pm);
 	}

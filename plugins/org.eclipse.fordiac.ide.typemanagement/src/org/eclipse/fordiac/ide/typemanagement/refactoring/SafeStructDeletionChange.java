@@ -140,12 +140,15 @@ public class SafeStructDeletionChange extends CompositeChange {
 		private final List<Change> updateChanges = new ArrayList<>();
 
 		public RootNodeChange(final INamedElement node) {
-			super("Changes for occurrence: " + getName(node));
+			super(Messages.SafeStructDeletionChange_RootNodeChangeText + getName(node));
 		}
 
 		private static String getName(final INamedElement node) {
 			if (node instanceof final IInterfaceElement iel && iel.getFBNetworkElement() != null) {
 				return iel.getFBNetworkElement().getQualifiedName() + iel.getQualifiedName();
+			}
+			if (node instanceof VarDeclaration && node.eContainer() instanceof final StructuredType struct) {
+				return struct.getName() + "." + node.getName(); //$NON-NLS-1$
 			}
 			return node.getQualifiedName();
 		}
@@ -176,8 +179,8 @@ public class SafeStructDeletionChange extends CompositeChange {
 		private final VarDeclaration toChange;
 
 		public DeleteMemberVariableChange(final VarDeclaration toChange) {
-			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteMemberVariable,
-					toChange.getTypeName()));
+			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteMemberVariable, toChange.getName(),
+					toChange.getTypeName(), ((INamedElement) toChange.eContainer()).getName()));
 			this.entry = toChange.getType().getTypeEntry();
 			this.toChange = toChange;
 			this.state.addAll(getDefaultSelection());
@@ -229,7 +232,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 		VarDeclaration varDecl;
 
 		public DeleteUntypedSubappPinChange(final VarDeclaration varDecl) {
-			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteSubappPins,
+			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteSubappPins, varDecl.getName(),
 					getSubappName(varDecl)));
 			this.varDecl = varDecl;
 		}
