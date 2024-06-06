@@ -50,7 +50,7 @@ public class InterfaceDataTypeChange extends Change {
 
 	}
 
-	private Command getUpdatePinInTypeDelcarationCommand() {
+	private Command getUpdatePinInTypeDeclarationCommand() {
 		return FBUpdater.createUpdatePinInTypeDeclarationCommand(fbType, typeEntry);
 	}
 
@@ -63,7 +63,7 @@ public class InterfaceDataTypeChange extends Change {
 	public Change perform(final IProgressMonitor pm) throws CoreException {
 		// we have to execute in UI thread, otherwise SWT crashes if the editor of the
 		// type is open
-		final Command cmd = getUpdatePinInTypeDelcarationCommand();
+		final Command cmd = getUpdatePinInTypeDeclarationCommand();
 		AbstractLiveSearchContext.executeAndSave(cmd, fbType, pm);
 		return null;
 	}
