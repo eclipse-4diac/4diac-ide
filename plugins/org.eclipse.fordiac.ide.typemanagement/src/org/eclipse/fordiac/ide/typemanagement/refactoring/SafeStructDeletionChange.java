@@ -15,8 +15,13 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
@@ -32,6 +37,8 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -47,58 +54,77 @@ import org.eclipse.ltk.core.refactoring.CompositeChange;
 
 public class SafeStructDeletionChange extends CompositeChange {
 	final DataTypeEntry deletedStruct;
+	/* map connecting root nodes with their composite change */
+	final Map<EObject, RootNodeChange> changeMap = new HashMap<>();
 
 	public SafeStructDeletionChange(final StructuredType struct) {
 		super(Messages.DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle);
 		deletedStruct = (DataTypeEntry) struct.getTypeEntry();
-		createChanges(deletedStruct, this);
+		createChanges(deletedStruct);
 	}
 
-	private void createChanges(final DataTypeEntry entry, final CompositeChange change) {
-		final Set<EObject> rootElements = new HashSet<>();
+	private void createChanges(final DataTypeEntry entry) {
+		final Set<EObject> doneElements = new HashSet<>();
 		if (entry != null) {
 			final var results = new DataTypeInstanceSearch(entry).performSearch();
 			results.forEach(obj -> {
-				if (obj instanceof final VarDeclaration varDecl && rootElements.add(varDecl)) {
+				final RootNodeChange rootChange = createSubChange(obj);
+				if (obj instanceof final VarDeclaration varDecl && doneElements.add(varDecl)) {
 					if (varDecl.eContainer() instanceof StructuredType) {
-						change.add(new DeleteMemberVariableChange(varDecl));
+						rootChange.add(new DeleteMemberVariableChange(varDecl));
 					} else if (isUntypedSubappPin(varDecl)) {
-						change.add(new DeleteUntypedSubappPinChange(varDecl));
+						rootChange.add(new DeleteUntypedSubappPinChange(varDecl));
 					} else if (isFbTypePin(varDecl)) {
-						change.add(new DeleteFBTypeInterfaceChange((FBType) varDecl.eContainer().eContainer(),
+						rootChange.add(new DeleteFBTypeInterfaceChange((FBType) varDecl.eContainer().eContainer(),
 								(StructuredType) varDecl.getType()));
 					}
-					change.add(handleRootElement(varDecl, rootElements));
-				} else if (obj instanceof final StructManipulator muxer && rootElements.add(muxer)) {
+					handleRootElement(varDecl, rootChange, doneElements);
+				} else if (obj instanceof final StructManipulator muxer && doneElements.add(muxer)) {
 					final boolean isDeletion = deletedStruct == muxer.getDataType().getTypeEntry();
-					change.add(new UpdateManipulatorChange(muxer, isDeletion));
+					rootChange.addUpdate(new UpdateManipulatorChange(muxer, isDeletion));
 				}
 			});
 		}
 	}
 
-	private Change handleRootElement(final VarDeclaration varDecl, final Set<EObject> rootElements) {
-		final DataTypeEntry dataTypeEntry = (DataTypeEntry) varDecl.getType().getTypeEntry();
-		if (varDecl.getFBNetworkElement() != null) {
-			if (rootElements.add(varDecl.getFBNetworkElement())) {
-				return new UpdateInstancesChange(varDecl.getFBNetworkElement(), dataTypeEntry);
-			}
-		} else {
-			final EObject rootContainer = EcoreUtil.getRootContainer(varDecl);
-			if (rootElements.add(rootContainer)) {
-				if (rootContainer instanceof final StructuredType stElement) {
-					final CompositeChange change = new CompositeChange(MessageFormat.format(
-							Messages.Refactoring_AffectedStruct, stElement.getName(), dataTypeEntry.getTypeName()));
-					change.add(new StructuredTypeMemberChange(stElement, dataTypeEntry));
-					createChanges((DataTypeEntry) stElement.getTypeEntry(), change);
-					return change;
-				}
-				if (rootContainer instanceof final FBType fbType) {
-					return new InterfaceDataTypeChange(fbType, dataTypeEntry);
-				}
+	private RootNodeChange createSubChange(EObject obj) {
+		if (obj instanceof final IInterfaceElement el) {
+			if (el.getFBNetworkElement() != null) { // e.g., untyped subapp pin
+				obj = el.getFBNetworkElement();
+			} else if (el.eContainer() != null && el.eContainer().eContainer() != null) {
+				// e.g., fb type pin
+				obj = el.eContainer().eContainer();
 			}
 		}
-		return null;
+		if (obj instanceof final INamedElement node) {
+			final RootNodeChange change = new RootNodeChange(node);
+			if (!changeMap.containsKey(obj)) {
+				changeMap.put(obj, change);
+				this.add(change);
+			}
+		}
+		return changeMap.get(obj);
+	}
+
+	private void handleRootElement(final VarDeclaration varDecl, final RootNodeChange rootChange,
+			final Set<EObject> rootElements) {
+		final DataTypeEntry dataTypeEntry = (DataTypeEntry) varDecl.getType().getTypeEntry();
+		final EObject rootContainer = EcoreUtil.getRootContainer(varDecl);
+		if (varDecl.getFBNetworkElement() != null) {
+			if (rootElements.add(varDecl.getFBNetworkElement())) {
+				rootChange.addUpdate(new UpdateInstancesChange(varDecl.getFBNetworkElement(), dataTypeEntry));
+			}
+		} else if (rootElements.add(rootContainer)) {
+			if (rootContainer instanceof final StructuredType stElement) {
+				final CompositeChange change = new CompositeChange(MessageFormat
+						.format(Messages.Refactoring_AffectedStruct, stElement.getName(), dataTypeEntry.getTypeName()));
+				rootChange.addUpdate(change);
+				change.add(new StructuredTypeMemberChange(stElement, dataTypeEntry));
+				createChanges((DataTypeEntry) stElement.getTypeEntry());
+			} else if (rootContainer instanceof final FBType fbType) {
+				rootChange.addUpdate(new InterfaceDataTypeChange(fbType, dataTypeEntry));
+			}
+		}
 	}
 
 	private static boolean isUntypedSubappPin(final VarDeclaration varDecl) {
@@ -108,6 +134,40 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 	private static boolean isFbTypePin(final VarDeclaration varDecl) {
 		return varDecl.eContainer() != null && varDecl.eContainer().eContainer() instanceof FBType;
+	}
+
+	public static class RootNodeChange extends CompositeChange {
+		private final List<Change> updateChanges = new ArrayList<>();
+
+		public RootNodeChange(final INamedElement node) {
+			super("Changes for occurrence: " + getName(node));
+		}
+
+		private static String getName(final INamedElement node) {
+			if (node instanceof final IInterfaceElement iel && iel.getFBNetworkElement() != null) {
+				return iel.getFBNetworkElement().getQualifiedName() + iel.getQualifiedName();
+			}
+			return node.getQualifiedName();
+		}
+
+		public void addUpdate(final Change change) {
+			updateChanges.add(change);
+		}
+
+		@Override
+		public Change[] getChildren() {
+			final ArrayList<Change> list = new ArrayList<>();
+			list.addAll(Arrays.asList(super.getChildren()));
+			list.addAll(updateChanges);
+			return list.toArray(new Change[0]);
+		}
+
+		@Override
+		public Change perform(final IProgressMonitor pm) throws CoreException {
+			// add update changes to the end of the list for correct execution order
+			addAll(updateChanges.toArray(new Change[0]));
+			return super.perform(pm);
+		}
 	}
 
 	public static class DeleteMemberVariableChange extends CompositeChange implements IFordiacPreviewChange {
