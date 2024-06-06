@@ -46,14 +46,15 @@ import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 
 public class SafeStructDeletionChange extends CompositeChange {
+	final DataTypeEntry deletedStruct;
 
 	public SafeStructDeletionChange(final StructuredType struct) {
 		super(Messages.DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle);
-		final DataTypeEntry typeEntry = (DataTypeEntry) struct.getTypeEntry();
-		createChanges(typeEntry, this);
+		deletedStruct = (DataTypeEntry) struct.getTypeEntry();
+		createChanges(deletedStruct, this);
 	}
 
-	private static void createChanges(final DataTypeEntry entry, final CompositeChange change) {
+	private void createChanges(final DataTypeEntry entry, final CompositeChange change) {
 		final Set<EObject> rootElements = new HashSet<>();
 		if (entry != null) {
 			final var results = new DataTypeInstanceSearch(entry).performSearch();
@@ -69,13 +70,14 @@ public class SafeStructDeletionChange extends CompositeChange {
 					}
 					change.add(handleRootElement(varDecl, rootElements));
 				} else if (obj instanceof final StructManipulator muxer && rootElements.add(muxer)) {
-					change.add(new UpdateManipulatorChange(muxer));
+					final boolean isDeletion = deletedStruct == muxer.getDataType().getTypeEntry();
+					change.add(new UpdateManipulatorChange(muxer, isDeletion));
 				}
 			});
 		}
 	}
 
-	private static Change handleRootElement(final VarDeclaration varDecl, final Set<EObject> rootElements) {
+	private Change handleRootElement(final VarDeclaration varDecl, final Set<EObject> rootElements) {
 		final DataTypeEntry dataTypeEntry = (DataTypeEntry) varDecl.getType().getTypeEntry();
 		if (varDecl.getFBNetworkElement() != null) {
 			if (rootElements.add(varDecl.getFBNetworkElement())) {
@@ -87,13 +89,12 @@ public class SafeStructDeletionChange extends CompositeChange {
 				if (rootContainer instanceof final StructuredType stElement) {
 					final CompositeChange change = new CompositeChange(MessageFormat.format(
 							Messages.Refactoring_AffectedStruct, stElement.getName(), dataTypeEntry.getTypeName()));
-					change.add(new StructuredTypeMemberChange(stElement, dataTypeEntry, dataTypeEntry.getTypeName(),
-							dataTypeEntry.getTypeName()));
+					change.add(new StructuredTypeMemberChange(stElement, dataTypeEntry));
 					createChanges((DataTypeEntry) stElement.getTypeEntry(), change);
 					return change;
 				}
 				if (rootContainer instanceof final FBType fbType) {
-					return new InterfaceDataTypeChange(fbType, dataTypeEntry, varDecl.getName());
+					return new InterfaceDataTypeChange(fbType, dataTypeEntry);
 				}
 			}
 		}
@@ -188,19 +189,27 @@ public class SafeStructDeletionChange extends CompositeChange {
 	private static class UpdateManipulatorChange extends CompositeChange {
 
 		final StructManipulator manipulator;
+		final boolean structWasDeleted;
 
-		public UpdateManipulatorChange(final StructManipulator manipulator) {
+		public UpdateManipulatorChange(final StructManipulator manipulator, final boolean structWasDeleted) {
 			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_UpdateManipulator,
 					manipulator.getQualifiedName()));
 			this.manipulator = manipulator;
+			this.structWasDeleted = structWasDeleted;
 		}
 
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
-			final Command cmd = new ChangeStructCommand(manipulator, getErrorMarkerEntry(manipulator.getDataType()),
-					true);
+			final Command cmd = getCommand();
 			AbstractLiveSearchContext.executeAndSave(cmd, manipulator, pm);
 			return super.perform(pm);
+		}
+
+		private Command getCommand() {
+			if (structWasDeleted) {
+				return new ChangeStructCommand(manipulator, getErrorMarkerEntry(manipulator.getDataType()), true);
+			}
+			return new ChangeStructCommand(manipulator);
 		}
 
 		private ErrorMarkerDataType getErrorMarkerEntry(final DataType dtp) {
