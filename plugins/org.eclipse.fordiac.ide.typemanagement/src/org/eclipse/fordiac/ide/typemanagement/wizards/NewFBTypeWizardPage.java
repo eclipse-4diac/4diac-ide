@@ -329,6 +329,9 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		final GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		data.widthHint = 250;
 		templateTableViewer.getControl().setLayoutData(data);
+
+		final Table table = templateTableViewer.getTable();
+		table.setData("org.eclipse.swtbot.widget.key", "org.eclipse.fordiac.ide.typemanagement.templateTableViewer");
 	}
 
 	private static void configureTypeTableLayout(final Table table) {
