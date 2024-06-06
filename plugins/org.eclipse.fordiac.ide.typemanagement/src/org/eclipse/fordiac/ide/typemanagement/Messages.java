@@ -159,6 +159,8 @@ public final class Messages extends NLS {
 	public static String DeleteLibraryParticipant_Change_Title;
 	public static String AddLibraryDependency_Change_Title;
 
+	public static String SafeStructDeletionChange_RootNodeChangeText;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
