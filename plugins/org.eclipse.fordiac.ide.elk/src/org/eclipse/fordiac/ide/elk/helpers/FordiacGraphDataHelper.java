@@ -58,8 +58,8 @@ public class FordiacGraphDataHelper {
 		if (mapping.getProperty(
 				FordiacLayoutMapping.NETWORK_EDIT_PART) instanceof final UnfoldedSubappContentEditPart subapp) {
 			final int y = subapp.getParent().getFigure().getBounds().y;
-			final int input = subapp.getParent().getInterfacePositionMap().getInputDirectEnd() - y;
-			final int output = subapp.getParent().getInterfacePositionMap().getOutputDirectEnd() - y;
+			final int input = subapp.getParent().getInterfacePositionMap().getInputDirectEndWithoutEvents() - y;
+			final int output = subapp.getParent().getInterfacePositionMap().getOutputDirectEndWithoutEvents() - y;
 			calculateNodePositionsRecursively(mapping, mapping.getLayoutGraph(), 0,
 					Math.max(Math.max(input, output), 0));
 		} else {
