@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University Linz
  * 				 2020 Primetals Technologies Germany GmbH
- * 				 2021, 2022 Primetals Technologies Austria GmbH
+ * 				 2021, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,13 +18,22 @@ package org.eclipse.fordiac.ide.elk;
 
 import static org.eclipse.fordiac.ide.elk.FordiacLayoutMapping.COMMAND_STACK;
 
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.NotEnabledException;
+import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.elk.core.service.IDiagramLayoutConnector;
 import org.eclipse.elk.core.service.LayoutMapping;
 import org.eclipse.elk.graph.properties.IPropertyHolder;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.elk.commands.LayoutCommand;
 import org.eclipse.fordiac.ide.elk.helpers.FordiacGraphBuilder;
 import org.eclipse.fordiac.ide.elk.helpers.FordiacGraphDataHelper;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.handlers.IHandlerService;
 
 public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 
@@ -43,6 +52,25 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 	public void applyLayout(final LayoutMapping mapping, final IPropertyHolder settings) {
 		final FordiacLayoutData data = FordiacGraphDataHelper.calculate(mapping);
 		mapping.getProperty(COMMAND_STACK).execute(new LayoutCommand(data));
+
+		// schedule as async to ensure the changes from the layout command have been
+		// processed
+		Display.getDefault().asyncExec(() -> {
+			final var handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
+			final var networkEditPart = mapping.getProperty(FordiacLayoutMapping.NETWORK_EDIT_PART);
+
+			try {
+				if (networkEditPart instanceof UnfoldedSubappContentEditPart) {
+					final var event = new Event();
+					event.data = networkEditPart.getParent(); // pass to the handler
+					handlerService.executeCommand("org.eclipse.fordiac.ide.elk.expandedSubappConnectionLayout", event); //$NON-NLS-1$
+				} else {
+					handlerService.executeCommand("org.eclipse.fordiac.ide.elk.connectionLayout", null); //$NON-NLS-1$
+				}
+			} catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 }
