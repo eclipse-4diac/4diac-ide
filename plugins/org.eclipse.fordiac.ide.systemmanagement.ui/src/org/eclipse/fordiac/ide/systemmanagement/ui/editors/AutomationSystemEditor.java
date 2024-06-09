@@ -202,7 +202,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		}
 
 		if (model instanceof final SubApp subApp) {
-			if (subApp.isTyped() || subApp.isContainedInTypedInstance() || subApp.isUnfolded()) {
+			if (subApp.isTyped() || subApp.isContainedInTypedInstance()) {
 				return new SubappInstanceViewer();
 			}
 			return new SubAppNetworkEditor();
@@ -230,7 +230,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return getEditorInput();
 		}
 		if (model instanceof final SubApp subApp) {
-			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance()) || subApp.isUnfolded()) {
+			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance())) {
 				return new CompositeAndSubAppInstanceViewerInput(subApp);
 			}
 			return new SubApplicationEditorInput(subApp);
