@@ -22,6 +22,7 @@
 package org.eclipse.fordiac.ide.application.editors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.application.actions.CopyEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.CutEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.DeleteFBNetworkAction;
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.application.dnd.ConnectionDragSourceListener;
 import org.eclipse.fordiac.ide.application.dnd.ConnectionDragTargetListener;
 import org.eclipse.fordiac.ide.application.editparts.ElementEditPartFactory;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
+import org.eclipse.fordiac.ide.application.figures.FBNetworkConnectionLayerClippingStrategy;
 import org.eclipse.fordiac.ide.application.tools.FBNetworkPanningSelectionTool;
 import org.eclipse.fordiac.ide.application.utilities.FbTypeTemplateTransferDropTargetListener;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
@@ -45,6 +47,7 @@ import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
+import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -128,6 +131,11 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		getGraphicalViewer().addSelectionChangedListener(openAction);
 		getGraphicalViewer().addDragSourceListener(new ConnectionDragSourceListener(getGraphicalViewer()));
 		getGraphicalViewer().addDropTargetListener(new ConnectionDragTargetListener(getGraphicalViewer()));
+
+		final ScalableFreeformRootEditPart rootEP = (ScalableFreeformRootEditPart) getGraphicalViewer()
+				.getRootEditPart();
+		final IFigure connectionLayer = rootEP.getLayer(LayerConstants.CONNECTION_LAYER);
+		connectionLayer.setClippingStrategy(new FBNetworkConnectionLayerClippingStrategy(getGraphicalViewer()));
 	}
 
 	@Override
