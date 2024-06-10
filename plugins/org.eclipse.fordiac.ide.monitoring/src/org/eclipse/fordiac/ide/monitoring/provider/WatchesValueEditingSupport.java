@@ -46,7 +46,7 @@ public class WatchesValueEditingSupport extends EditingSupport {
 		if (element instanceof final WatchValueTreeNode node) {
 			final MonitoringElement monitoringElement = (MonitoringElement) node.getMonitoringBaseElement();
 
-			if (isValid((String) value, monitoringElement)) {
+			if (isValid((String) value, node.getVariable())) {
 
 				if (node.isStructNode() && node.getVariable() != null) {
 					node.setValue((String) value);
@@ -69,10 +69,9 @@ public class WatchesValueEditingSupport extends EditingSupport {
 
 	@Override
 	protected Object getValue(final Object element) {
-		if (element instanceof WatchValueTreeNode) {
-			final String value = ((WatchValueTreeNode) element).getValue();
-			final IInterfaceElement ie = ((WatchValueTreeNode) element).getMonitoringBaseElement().getPort()
-					.getInterfaceElement();
+		if (element instanceof final WatchValueTreeNode treeNode) {
+			final String value = treeNode.getValue();
+			final IInterfaceElement ie = treeNode.getMonitoringBaseElement().getPort().getInterfaceElement();
 			if (value != null && ie.getType() != null
 					&& WatchValueTreeNodeUtils.isHexDecorationNecessary(value, ie.getType())) {
 				return WatchValueTreeNodeUtils.decorateHexNumber(value);
@@ -99,13 +98,19 @@ public class WatchesValueEditingSupport extends EditingSupport {
 	public static boolean isValid(final String newValue, final MonitoringBaseElement monElement) {
 		if (!newValue.isBlank()) {
 			final IInterfaceElement ie = monElement.getPort().getInterfaceElement();
-			final String validationMsg = (ie instanceof VarDeclaration)
-					? VariableOperations.validateValue((VarDeclaration) ie, newValue)
-					: null;
-			if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
-				ErrorMessenger.popUpErrorMessage(validationMsg);
-				return false;
-			}
+
+			return isValid(newValue, ie);
+		}
+		return true;
+	}
+
+	private static boolean isValid(final String newValue, final IInterfaceElement ie) {
+		final String validationMsg = (ie instanceof final VarDeclaration varDecl)
+				? VariableOperations.validateValue(varDecl, newValue)
+				: null;
+		if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
+			ErrorMessenger.popUpErrorMessage(validationMsg);
+			return false;
 		}
 		return true;
 	}
@@ -113,9 +118,10 @@ public class WatchesValueEditingSupport extends EditingSupport {
 	public static boolean needsOfflineSave(final Object element) {
 		// checks for preference, is input, has no connections, not in typedSubapp
 		return Activator.getDefault().getPreferenceStore()
-				.getBoolean(PreferenceConstants.P_MONITORING_WRITEBACKONLINEVALUES) && element instanceof VarDeclaration
-				&& ((VarDeclaration) element).isIsInput() && ((VarDeclaration) element).getInputConnections().isEmpty()
-				&& !FBNetworkElementHelper.isContainedInTypedInstance(((VarDeclaration) element).getFBNetworkElement());
+				.getBoolean(PreferenceConstants.P_MONITORING_WRITEBACKONLINEVALUES)
+				&& element instanceof final VarDeclaration varDecl && varDecl.isIsInput()
+				&& varDecl.getInputConnections().isEmpty()
+				&& !FBNetworkElementHelper.isContainedInTypedInstance(varDecl.getFBNetworkElement());
 	}
 
 	public static void writeOnlineValueToOffline(final MonitoringElement element, final String value) {

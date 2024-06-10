@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.search;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -23,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
@@ -130,7 +132,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		table.setLayout(createTableLayout());
 
 		final TableViewerColumn colKind = new TableViewerColumn(viewer, SWT.LEAD);
-		colKind.getColumn().setText("Element Kind");
+		colKind.getColumn().setText("Element Kind"); //$NON-NLS-1$
 		colKind.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
@@ -173,11 +175,17 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 				}
 				if (element instanceof final TypedConfigureableObject to) {
 					final LibraryElement type = to.getType();
-					return type != null ? type.getName() : "untyped";
+					return type != null ? type.getName() : "untyped"; //$NON-NLS-1$
 				}
 				if (element instanceof final IInterfaceElement ie) {
 					final LibraryElement type = ie.getType();
-					return type != null ? type.getName() : "unknown";
+					return type != null ? type.getName() : "unknown"; //$NON-NLS-1$
+				}
+				if (element instanceof Algorithm) {
+					return "Algorithm"; //$NON-NLS-1$
+				}
+				if (element instanceof Method) {
+					return "Method"; //$NON-NLS-1$
 				}
 				if (element instanceof final INamedElement namedElement) {
 					return namedElement.getName();
@@ -229,8 +237,18 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		}
 		EObject parent = null;
 		if (eobj instanceof final IInterfaceElement ie) {
-			parent = ie.getFBNetworkElement().eContainer().eContainer();
+			parent = ie.getFBNetworkElement();
+			if (parent != null) {
+				parent = parent.eContainer().eContainer();
+			} else {
+				parent = ie.eContainer();
+				if (parent.eContainer() != null) {
+					parent = parent.eContainer();
+				}
+			}
 		} else if (isInternalFb(eobj)) {
+			parent = eobj.eContainer();
+		} else if (eobj instanceof Algorithm || eobj instanceof Method) {
 			parent = eobj.eContainer();
 		} else {
 			if (eobj.eContainer() == null) {
@@ -296,8 +314,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		private final ModelSearchResultPage fPage;
 
 		public ShowInEditorAction(final AbstractTextSearchViewPage page) {
-			super("Show in Editor");
-			setToolTipText("Shows element in the editor");
+			super("Show in Editor"); //$NON-NLS-1$
+			setToolTipText("Shows element in the editor"); //$NON-NLS-1$
 			fPage = (ModelSearchResultPage) page;
 		}
 

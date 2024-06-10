@@ -30,11 +30,9 @@ public class ForcesView extends WatchesView {
 			public Object[] filter(final Viewer viewer, final Object parent, final Object[] elements) {
 				final ArrayList<Object> returns = new ArrayList<>();
 				for (final Object element : elements) {
-					if (element instanceof WatchValueTreeNode
-							&& ((WatchValueTreeNode) element).getMonitoringBaseElement() instanceof MonitoringElement
-							&& ((MonitoringElement) ((WatchValueTreeNode) element).getMonitoringBaseElement())
-									.isForce()) {
-							returns.add(element);
+					if (element instanceof final WatchValueTreeNode tn
+							&& tn.getMonitoringBaseElement() instanceof final MonitoringElement me && me.isForce()) {
+						returns.add(element);
 					}
 				}
 				return super.filter(viewer, parent, returns.toArray());

@@ -51,6 +51,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		  public:
 		    «FBClassName»(CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer);
+		    «generateInitializeDeclaration»
 		
 		    «generateInterfaceDeclarations»
 		};

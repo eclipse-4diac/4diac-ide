@@ -4,6 +4,8 @@
 	</Identification>
 	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Hoepfinger" Date="2024-03-04">
 	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Hoepfinger" Date="2024-04-23" Remarks="Add a Reset to Timer FBs">
+	</VersionInfo>
 	<CompilerInfo>
 	</CompilerInfo>
 	<InterfaceList>
@@ -11,6 +13,8 @@
 			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
 				<With Var="IN"/>
 				<With Var="PT"/>
+			</Event>
+			<Event Name="R" Type="Event" Comment="Reset">
 			</Event>
 		</EventInputs>
 		<EventOutputs>
@@ -34,16 +38,18 @@
 		<FB Name="E_RS" Type="E_RS" Comment="" x="1373.3333333333335" y="-986.6666666666667">
 		</FB>
 		<EventConnections>
-			<Connection Source="REQ" Destination="E_SWITCH.EI" Comment="" dx1="200.0"/>
+			<Connection Source="REQ" Destination="E_SWITCH.EI" Comment="" dx1="146.66666666666669"/>
 			<Connection Source="E_RS.EO" Destination="CNF" Comment="" dx1="1033.3333333333335"/>
 			<Connection Source="E_DELAY.EO" Destination="E_RS.R" Comment=""/>
 			<Connection Source="E_SWITCH.EO1" Destination="E_RS.S" Comment="" dx1="273.33333333333337" dx2="260.0" dy="380.0"/>
 			<Connection Source="E_SWITCH.EO0" Destination="E_DELAY.START" Comment=""/>
 			<Connection Source="E_SWITCH.EO1" Destination="E_DELAY.STOP" Comment=""/>
+			<Connection Source="R" Destination="E_RS.R" Comment="" dx1="180.0" dx2="253.33333333333334" dy="-213.33333333333334"/>
+			<Connection Source="R" Destination="E_DELAY.STOP" Comment="" dx1="180.0" dx2="193.33333333333334" dy="-213.33333333333334"/>
 		</EventConnections>
 		<DataConnections>
-			<Connection Source="IN" Destination="E_SWITCH.G" Comment="" dx1="166.66666666666669"/>
-			<Connection Source="PT" Destination="E_DELAY.DT" Comment="" dx1="133.33333333333334" dx2="266.6666666666667" dy="433.33333333333337"/>
+			<Connection Source="IN" Destination="E_SWITCH.G" Comment="" dx1="186.66666666666669"/>
+			<Connection Source="PT" Destination="E_DELAY.DT" Comment="" dx1="153.33333333333334" dx2="266.6666666666667" dy="333.33333333333337"/>
 			<Connection Source="E_RS.Q" Destination="Q" Comment="" dx1="1066.6666666666667"/>
 		</DataConnections>
 	</FBNetwork>

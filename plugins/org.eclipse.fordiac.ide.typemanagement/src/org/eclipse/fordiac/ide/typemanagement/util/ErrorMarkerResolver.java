@@ -1,0 +1,64 @@
+/*******************************************************************************
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+package org.eclipse.fordiac.ide.typemanagement.util;
+
+import java.io.File;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+
+public class ErrorMarkerResolver {
+
+	public static final String TEMPLATE_PATH = Platform.getInstallLocation().getURL().getFile() + File.separatorChar
+			+ "template";
+
+	public static void repairMissingStructuredDataType(final EObject target) {
+		final File template = new File(ErrorMarkerResolver.TEMPLATE_PATH + File.separatorChar + "Struct.dtp"); //$NON-NLS-1$
+
+		final EObject rootContainer = EcoreUtil.getRootContainer(target);
+
+		IPath fullPath = null;
+
+		if (rootContainer instanceof final AutomationSystem system) {
+			fullPath = system.getTypeEntry().getTypeLibrary().getProject().getFullPath();
+		}
+		if (rootContainer instanceof final FBType fbType) {
+			fullPath = fbType.getTypeEntry().getTypeLibrary().getProject().getFullPath();
+		}
+
+		final DataType type = ((VarDeclaration) target).getType();
+
+		if (type instanceof ErrorMarkerDataType) {
+			final IFile targetFile = getTargetFile(type.getName(), fullPath, ".dtp");
+			final TypeFromTemplateCreator creator = new TypeFromTemplateCreator(targetFile, template, "");
+			creator.createTypeFromTemplate(new NullProgressMonitor());
+		}
+	}
+
+	private static IFile getTargetFile(final String typeName, final IPath path, final String fileEnding) {
+		return ResourcesPlugin.getWorkspace().getRoot()
+				.getFile(new Path(path + File.separator + "Type Library" + File.separator + typeName + fileEnding));
+
+	}
+}

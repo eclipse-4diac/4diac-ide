@@ -156,12 +156,12 @@ public class PasteCommand extends Command implements ScopedCommand {
 		if (calculateDelta) {
 			if (null != pasteRefPos) {
 				double x = Double.MAX_VALUE;
-				double y = Integer.MAX_VALUE;
+				double y = Double.MAX_VALUE;
 
 				for (final FBNetworkElement element : copyPasteData.elements()) {
-					final Position outermostPos = getPositionOfOutermostNetwork(element);
-					x = Math.min(x, outermostPos.getX());
-					y = Math.min(y, outermostPos.getY());
+					final Position pos = element.getPosition();
+					x = Math.min(x, pos.getX());
+					y = Math.min(y, pos.getY());
 				}
 				xDelta = pasteRefPos.getX() - x;
 				yDelta = pasteRefPos.getY() - y;
@@ -170,29 +170,6 @@ public class PasteCommand extends Command implements ScopedCommand {
 				yDelta = DEFAULT_DELTA;
 			}
 		}
-	}
-
-	private static Position getPositionOfOutermostNetwork(final FBNetworkElement element) {
-		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
-		pos.setX(element.getPosition().getX());
-		pos.setY(element.getPosition().getY());
-		FBNetworkElement parent;
-		if (element.getGroup() != null) {
-			parent = element.getGroup();
-		} else {
-			parent = element.getOuterFBNetworkElement();
-		}
-
-		while (parent != null) {
-			pos.setX(pos.getX() + parent.getPosition().getX());
-			pos.setY(pos.getY() + parent.getPosition().getY());
-			if (parent.getGroup() != null) {
-				parent = parent.getGroup();
-			} else {
-				parent = parent.getOuterFBNetworkElement();
-			}
-		}
-		return pos;
 	}
 
 	private FBNetworkElement copyAndCreateFB(final FBNetworkElement element) {
@@ -333,7 +310,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 
 	private Position calculatePastePos(final FBNetworkElement element) {
 		final Position pastePos = LibraryElementFactory.eINSTANCE.createPosition();
-		final Position outermostPos = getPositionOfOutermostNetwork(element);
+		final Position outermostPos = element.getPosition();
 		pastePos.setX(outermostPos.getX() + xDelta);
 		pastePos.setY(outermostPos.getY() + yDelta);
 		return pastePos;

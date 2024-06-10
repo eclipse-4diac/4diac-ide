@@ -72,6 +72,8 @@ public final class FordiacMessages extends NLS {
 	public static String Product; // NOSONAR
 	public static String Properties; // NOSONAR
 	public static String Remarks; // NOSONAR
+
+	public static String RepairCommandHandler_ChangeType0;
 	public static String Resource; // NOSONAR
 	public static String SelectType; // NOSONAR
 	public static String Standard; // NOSONAR
@@ -123,7 +125,7 @@ public final class FordiacMessages extends NLS {
 
 	public static String Group_LABEL_DisableAutoResize; // NOSONAR
 	public static String Group_TOOLTIP_DisableAutoResize; // NOSONAR
-	public static String Dialog_Add_Or_Remove_Pin; // NOSONAR
+	public static String Delete_Elements; // NOSONAR
 	public static String Dialog_Repair_Pin;// NOSONAR
 	public static String Dialog_Repair_Add;// NOSONAR
 	public static String Dialog_Repair_Remove;// NOSONAR

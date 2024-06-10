@@ -26,12 +26,20 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.ScrollBar;
+import org.eclipse.draw2d.ScrollPane;
+import org.eclipse.draw2d.ScrollPaneLayout;
+import org.eclipse.draw2d.ScrollPaneSolver;
+import org.eclipse.draw2d.ScrollPaneSolver.Result;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.utilities.ExpandedInterfacePositionMap;
@@ -46,6 +54,7 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 
 /** The Class SubAppForFbNetworkFigure. */
 public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
@@ -118,8 +127,8 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	 */
 	public void layoutExpandedInterface() {
 		interfacePositions.calculate();
-		expandedInputFigure.getChildren().get(0).getLayoutManager().layout(expandedInputFigure.getChildren().get(0));
-		expandedOutputFigure.getChildren().get(0).getLayoutManager().layout(expandedOutputFigure.getChildren().get(0));
+		expandedInputFigure.getLayoutManager().layout(expandedInputFigure);
+		expandedOutputFigure.getLayoutManager().layout(expandedOutputFigure);
 	}
 
 	public final void updateExpandedFigure() {
@@ -200,19 +209,23 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		interfaceBar.setMinimumSize(new Dimension(getMinExpandedInterfaceBarWidth(), -1));
 		interfaceBar.setOutline(false);
 		interfaceBar.setBackgroundColor(EditorWithInterfaceEditPart.INTERFACE_BAR_BG_COLOR);
-		interfaceBar.setLayoutManager(createInterfaceBarLayout());
-		parent.add(interfaceBar, new GridData(SWT.BEGINNING, SWT.FILL, false, true));
 
-		createToolbarLayoutContainer(interfaceBar, isInput);
+		interfaceBar.setLayoutManager(new ExpandedSubappInterfaceLayout(interfacePositions, isInput));
+
+		final var shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		final var lws = new LightweightSystem(shell);
+
+		final ScrollPane scrollPane = new ScrollPane();
+		scrollPane.setLayoutManager(new ExpandedInterfaceScrollPaneLayout(isInput));
+		scrollPane.setVerticalScrollBarVisibility(ScrollPane.AUTOMATIC);
+		scrollPane.setHorizontalScrollBarVisibility(ScrollPane.NEVER);
+
+		scrollPane.setContents(interfaceBar);
+		lws.setContents(scrollPane);
+
+		parent.add(scrollPane, new GridData(SWT.BEGINNING, SWT.FILL, false, true));
 
 		return interfaceBar;
-	}
-
-	private void createToolbarLayoutContainer(final RoundedRectangle interfaceBar, final boolean isInput) {
-		final IFigure container = new Figure();
-		final ExpandedSubappInterfaceLayout layout = new ExpandedSubappInterfaceLayout(interfacePositions, isInput);
-		container.setLayoutManager(layout);
-		interfaceBar.add(container, createInterfaceBarGroupLayoutData());
 	}
 
 	private void removeTopMiddleBottom() {
@@ -289,6 +302,85 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 					+ ConnectorBorder.LR_MARGIN; // we have connectors on both sides
 		}
 		return minExpSubappBarWidhtPixels;
+	}
+
+	private static class ExpandedInterfaceScrollPaneLayout extends ScrollPaneLayout {
+
+		private final boolean isInput;
+
+		public ExpandedInterfaceScrollPaneLayout(final boolean isInput) {
+			this.isInput = isInput;
+		}
+
+		@Override
+		public void layout(final IFigure parent) {
+			final ScrollPane scrollpane = (ScrollPane) parent;
+			final Viewport viewport = scrollpane.getViewport();
+			final ScrollBar hBar = scrollpane.getHorizontalScrollBar(), vBar = scrollpane.getVerticalScrollBar();
+
+			if (isInput) {
+				layoutInput(parent, scrollpane, viewport, hBar, vBar);
+			} else {
+				layoutOutput(parent, scrollpane, viewport, hBar, vBar);
+			}
+
+			incrementPage(vBar);
+		}
+
+		private static void incrementPage(final ScrollBar vBar) {
+			final int vStepInc = vBar.getStepIncrement();
+			int vPageInc = vBar.getRangeModel().getExtent() - vStepInc;
+			if (vPageInc < vStepInc) {
+				vPageInc = vStepInc;
+			}
+			vBar.setPageIncrement(vPageInc);
+		}
+
+		private static Result solve(final Rectangle clientArea, final ScrollPane scrollpane, final Viewport viewport,
+				final ScrollBar hBar, final ScrollBar vBar) {
+			// @formatter:off
+			return ScrollPaneSolver.solve(
+					clientArea,
+					viewport,
+					scrollpane.getHorizontalScrollBarVisibility(),
+					scrollpane.getVerticalScrollBarVisibility(),
+					vBar.getPreferredSize().width,
+					hBar.getPreferredSize().height
+					);
+			// @formatter:on
+		}
+
+		private static void layoutOutput(final IFigure parent, final ScrollPane scrollpane, final Viewport viewport,
+				final ScrollBar hBar, final ScrollBar vBar) {
+			final ScrollPaneSolver.Result result = solve(parent.getClientArea(), scrollpane, viewport, hBar, vBar);
+
+			if (result.showV) {
+				vBar.setBounds(new Rectangle(result.viewportArea.right(), result.viewportArea.y, result.insets.right,
+						result.viewportArea.height));
+			}
+
+			vBar.setVisible(result.showV);
+		}
+
+		private static void layoutInput(final IFigure parent, final ScrollPane scrollpane, final Viewport viewport,
+				final ScrollBar hBar, final ScrollBar vBar) {
+			final Rectangle clientArea = parent.getClientArea().getCopy();
+			final ScrollPaneSolver.Result result = solve(clientArea, scrollpane, viewport, hBar, vBar);
+
+			if (result.showV) {
+				final int scrollBarWidth = vBar.getPreferredSize().width;
+				clientArea.x += scrollBarWidth;
+
+				// need to do another solve in order for the scrollbar to have enough space
+				final ScrollPaneSolver.Result scrollResult = solve(clientArea, scrollpane, viewport, hBar, vBar);
+
+				vBar.setBounds(new Rectangle(scrollResult.viewportArea.left() - scrollBarWidth,
+						scrollResult.viewportArea.y, scrollResult.insets.right, scrollResult.viewportArea.height));
+			}
+
+			vBar.setVisible(result.showV);
+		}
+
 	}
 
 }

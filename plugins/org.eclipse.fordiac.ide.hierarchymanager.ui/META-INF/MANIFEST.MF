@@ -23,3 +23,4 @@ Require-Bundle: org.eclipse.core.resources,
 Bundle-Vendor: Eclipse 4diac Project
 Automatic-Module-Name: org.eclipse.fordiac.ide.hierarchymanager.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-21
+Export-Package: org.eclipse.fordiac.ide.hierarchymanager.ui.util

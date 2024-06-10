@@ -76,11 +76,14 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		@Override
 		public Point getLocation(final Point reference) {
 			final Point location = super.getLocation(reference);
-			final IFigure subappFigure = ((GraphicalEditPart) getParent()).getFigure();
-			final Rectangle bounds = subappFigure.getBounds().getCopy();
-			subappFigure.translateToAbsolute(bounds);
-			location.y = Math.max(location.y, bounds.y);
-			location.y = Math.min(location.y, bounds.y + bounds.height);
+			final GraphicalEditPart contentEP = ((IContainerEditPart) getParent()).getContentEP();
+			if (contentEP != null) {
+				final IFigure subappFigure = contentEP.getFigure();
+				final Rectangle bounds = subappFigure.getBounds().getCopy();
+				subappFigure.translateToAbsolute(bounds);
+				location.y = Math.max(location.y, bounds.y);
+				location.y = Math.min(location.y, bounds.y + bounds.height);
+			}
 			return location;
 		}
 	}

@@ -55,6 +55,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
 import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -62,6 +63,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
@@ -431,8 +433,9 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 			if (selection instanceof final StructuredSelection structSel
 					&& structSel.getFirstElement() instanceof final URI uri) {
 				final EObject selectedElement = fbType.eResource().getEObject(uri.fragment());
-				if (selectedElement instanceof final FBNetworkElement fbEl) {
-					handleContentOutlineSelection(new StructuredSelection(fbEl));
+				if (selectedElement instanceof FBNetworkElement || selectedElement instanceof Algorithm
+						|| selectedElement instanceof Method) {
+					handleContentOutlineSelection(new StructuredSelection(selectedElement));
 				}
 			} else {
 				handleContentOutlineSelection(selection);

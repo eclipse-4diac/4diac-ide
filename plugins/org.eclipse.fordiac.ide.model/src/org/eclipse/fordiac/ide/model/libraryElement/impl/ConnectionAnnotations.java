@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -33,7 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
@@ -156,7 +157,8 @@ public class ConnectionAnnotations {
 
 		if ((srcParent instanceof final FBNetworkElement srcElem
 				&& destParent instanceof final FBNetworkElement destElem)
-				&& ((srcParent instanceof UntypedSubApp) || (destParent instanceof UntypedSubApp))) {
+				&& (srcParent instanceof SubApp || srcParent instanceof CFBInstance || destParent instanceof SubApp
+						|| destParent instanceof CFBInstance)) {
 			// if at least one of the parents is an untyped subapp the connection will need
 			// to cross the interface, i.e., the two FBNetworkElement must not be in the
 			// same network

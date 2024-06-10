@@ -79,8 +79,7 @@ public final class WatchValueTreeNodeUtils {
 		// @formatter:off
 		return Arrays.stream(value.substring(1, value.length() - 1).split(",")) //$NON-NLS-1$
 			.map(val -> decorateHexValue(val, type, model))
-			.collect(Collectors.joining(",", "[", "]")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			.toString();
+			.collect(Collectors.joining(",", "[", "]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		// @formatter:on
 	}
 
