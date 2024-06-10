@@ -48,9 +48,12 @@ public class CheckTypeLibrary extends Task {
 
 		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		final IProject project = workspace.getRoot().getProject(projectNameString);
-		if (project == null) {
+		if (project == null || !project.exists()) {
 			throw new BuildException("Project named '" + projectNameString + "' not in workspace");//$NON-NLS-1$ //$NON-NLS-2$
 		}
+
+		Import4diacProject.runFullBuild(project);
+		Import4diacProject.waitBuilderJobsComplete();
 
 		// log Markers, only visible in console output
 		try {
