@@ -21,6 +21,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.gef.requests.ReconnectRequest;
 
@@ -68,6 +69,8 @@ public class ConnectionDragTargetListener extends AbstractTransferDropTargetList
 		} else if (req instanceof final ReconnectRequest reconReq) {
 			reconReq.setLocation(getDropLocation());
 			reconReq.setTargetEditPart(getTargetEditPart());
+		} else if (req instanceof final ChangeBoundsRequest boundReq) {
+			boundReq.setLocation(getDropLocation());
 		}
 	}
 

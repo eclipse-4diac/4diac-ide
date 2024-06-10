@@ -22,6 +22,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.handlers.AdvancedGraphicalViewerKeyHandler;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.LayerConstants;
@@ -30,6 +31,7 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.dnd.AbstractTransferDragSourceListener;
 import org.eclipse.gef.editparts.LayerManager;
 import org.eclipse.gef.handles.ConnectionEndpointHandle;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.gef.requests.ReconnectRequest;
 import org.eclipse.swt.SWT;
@@ -80,6 +82,9 @@ public class ConnectionDragSourceListener extends AbstractTransferDragSourceList
 		if (selectedEditParts.size() == 1 && selectedEditParts.get(0) instanceof final InterfaceEditPart iep) {
 			return createConnectionCreationRequest(iep);
 		}
+		if (selectedEditParts.size() == 1 && selectedEditParts.get(0).getModel() instanceof FBNetworkElement) {
+			return createChangeBoundsRequest(selectedEditParts);
+		}
 		final List<ConnectionEditPart> connections = selectedEditParts.stream()
 				.filter(ConnectionEditPart.class::isInstance).map(ep -> (ConnectionEditPart) ep).toList();
 		if (!connections.isEmpty()) {
@@ -115,6 +120,13 @@ public class ConnectionDragSourceListener extends AbstractTransferDragSourceList
 			return req;
 		}
 		return null;
+	}
+
+	private static Request createChangeBoundsRequest(final List<? extends EditPart> selectedEditParts) {
+		final ChangeBoundsRequest request = new ChangeBoundsRequest();
+		request.setEditParts(selectedEditParts);
+		request.setType(RequestConstants.REQ_ADD);
+		return request;
 	}
 
 	private static String getReconnectType(final ConnectionEditPart first, final Point point) {
