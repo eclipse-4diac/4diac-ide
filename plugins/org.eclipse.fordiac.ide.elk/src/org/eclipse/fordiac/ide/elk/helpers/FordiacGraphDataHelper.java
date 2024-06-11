@@ -15,14 +15,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.elk.helpers;
 
-import static org.eclipse.fordiac.ide.elk.FordiacLayoutMapping.LAYOUT_DATA;
-
-import org.eclipse.elk.core.service.LayoutMapping;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
-import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutMapping;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -35,9 +31,8 @@ public class FordiacGraphDataHelper {
 
 	private static final int INSTANCE_COMMENT_OFFSET = 8;
 
-	public static FordiacLayoutData calculate(final LayoutMapping mapping) {
-		if (mapping.getProperty(
-				FordiacLayoutMapping.NETWORK_EDIT_PART) instanceof final UnfoldedSubappContentEditPart subapp) {
+	public static void calculate(final FordiacLayoutMapping mapping) {
+		if (mapping.getNetworkEditPart() instanceof final UnfoldedSubappContentEditPart subapp) {
 			final int y = subapp.getParent().getFigure().getBounds().y;
 			final int input = subapp.getParent().getInterfacePositionMap().getInputDirectEndWithoutEvents() - y;
 			final int output = subapp.getParent().getInterfacePositionMap().getOutputDirectEndWithoutEvents() - y;
@@ -46,17 +41,15 @@ public class FordiacGraphDataHelper {
 		} else {
 			calculateNodePositionsRecursively(mapping, mapping.getLayoutGraph(), 0, INSTANCE_COMMENT_OFFSET);
 		}
-
-		return mapping.getProperty(LAYOUT_DATA);
 	}
 
-	private static void calculateNodePositionsRecursively(final LayoutMapping mapping, final ElkNode node,
+	private static void calculateNodePositionsRecursively(final FordiacLayoutMapping mapping, final ElkNode node,
 			final double parentX, final double parentY) {
 		final GraphicalEditPart ep = (GraphicalEditPart) mapping.getGraphMap().get(node);
 		final int calculatedX = (int) (node.getX() + parentX);
 		final int calculatedY = (int) (node.getY() + parentY);
 
-		if (ep != mapping.getProperty(FordiacLayoutMapping.NETWORK_EDIT_PART)) {
+		if (ep != mapping.getNetworkEditPart()) {
 			setPosition(mapping, node, ep, calculatedX, calculatedY);
 		}
 
@@ -72,7 +65,7 @@ public class FordiacGraphDataHelper {
 		}
 	}
 
-	private static void setPosition(final LayoutMapping mapping, final ElkNode node, final GraphicalEditPart ep,
+	private static void setPosition(final FordiacLayoutMapping mapping, final ElkNode node, final GraphicalEditPart ep,
 			final int calculatedX, final int calculatedY) {
 		final boolean isContainer = ep instanceof AbstractContainerContentEditPart;
 		final boolean isNoNetwork = !(ep instanceof AbstractFBNetworkEditPart);
@@ -81,11 +74,10 @@ public class FordiacGraphDataHelper {
 			final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
 			pos.setX(calculatedX);
 			pos.setY(calculatedY);
-			mapping.getProperty(LAYOUT_DATA).addPosition((FBNetworkElement) ep.getModel(), pos);
+			mapping.getLayoutData().addPosition((FBNetworkElement) ep.getModel(), pos);
 
 			if (ep instanceof GroupEditPart) {
-				mapping.getProperty(LAYOUT_DATA).addGroup((Group) ep.getModel(), (int) node.getHeight(),
-						(int) node.getWidth());
+				mapping.getLayoutData().addGroup((Group) ep.getModel(), (int) node.getHeight(), (int) node.getWidth());
 			}
 		}
 	}

@@ -27,8 +27,6 @@ import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkGraphElement;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.ElkPort;
-import org.eclipse.elk.graph.properties.IProperty;
-import org.eclipse.elk.graph.properties.Property;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
@@ -46,58 +44,83 @@ public class FordiacLayoutMapping extends LayoutMapping {
 
 	private static final long serialVersionUID = 363049909751709783L;
 
-	public static final IProperty<AbstractFBNetworkEditPart> NETWORK_EDIT_PART = new Property<>("gef.networkEditPart"); //$NON-NLS-1$
-	public static final IProperty<CommandStack> COMMAND_STACK = new Property<>("gef.commandStack"); //$NON-NLS-1$
-	public static final IProperty<List<ConnectionEditPart>> CONNECTIONS = new Property<>("gef.connections"); //$NON-NLS-1$
-	public static final IProperty<List<ConnectionEditPart>> FLAT_CONNECTIONS = new Property<>("gef.flatConnections"); //$NON-NLS-1$
-	public static final IProperty<List<ConnectionEditPart>> HIERARCHY_CROSSING_CONNECTIONS = new Property<>(
-			"gef.hierarchyCrossingConnections"); //$NON-NLS-1$
-	public static final IProperty<Map<ConnectionEditPart, List<ElkEdge>>> HIERARCHY_CROSSING_CONNECTIONS_MAPPING = new Property<>(
-			"gef.hierarchyCrossingConnectionsMapping"); //$NON-NLS-1$
-	public static final IProperty<Map<ElkEdge, ConnectionEditPart>> HIERARCHY_CROSSING_CONNECTIONS_REVERSE_MAPPING = new Property<>(
-			"gef.hierarchyCrossingConnectionsReverseMapping"); //$NON-NLS-1$
-	public static final IProperty<Map<GraphicalEditPart, ElkGraphElement>> REVERSE_MAPPING = new Property<>(
-			"gef.reverseMapping"); //$NON-NLS-1$
-	public static final IProperty<Map<ElkPort, ElkPort>> DUMMY_PORTS = new Property<>("gef.dummyPorts"); //$NON-NLS-1$
-	public static final IProperty<FordiacLayoutData> LAYOUT_DATA = new Property<>("gef.layoutData"); //$NON-NLS-1$
+	private final List<ConnectionEditPart> connections = new ArrayList<>();
+	private final List<ConnectionEditPart> flatConnections = new ArrayList<>();
+	private final List<ConnectionEditPart> hierarchyCrossingConnections = new ArrayList<>();
+	private final Map<ConnectionEditPart, List<ElkEdge>> hierarchyCrossingConnectionsMapping = new HashMap<>();
+	private final Map<ElkEdge, ConnectionEditPart> hierarchyCrossingConnectionsReverseMapping = new HashMap<>();
+	private final Map<GraphicalEditPart, ElkGraphElement> reverseMapping = new HashMap<>();
+	private final Map<ElkPort, ElkPort> dummyPorts = new HashMap<>();
+	private final FordiacLayoutData layoutData = new FordiacLayoutData();
 
-	private boolean hasNetwork = true;
+	private final AbstractFBNetworkEditPart networkEditPart;
+	private final CommandStack commandStack;
+
+	private final boolean hasNetwork;
+
+	public FordiacLayoutMapping(final IWorkbenchPart workbenchPart, final boolean hasProperties) {
+		super(workbenchPart);
+		commandStack = workbenchPart.getAdapter(CommandStack.class);
+
+		networkEditPart = findRootEditPart(workbenchPart);
+
+		hasNetwork = (networkEditPart != null);
+		if (hasNetwork) {
+			createGraphRoot(hasProperties);
+		}
+	}
 
 	public boolean hasNetwork() {
 		return hasNetwork;
 	}
 
-	public static FordiacLayoutMapping create(final IWorkbenchPart workbenchPart, final boolean hasProperties) {
-		final FordiacLayoutMapping mapping = new FordiacLayoutMapping(workbenchPart);
-		mapping.setProperty(FordiacLayoutMapping.COMMAND_STACK, workbenchPart.getAdapter(CommandStack.class));
-		mapping.setProperty(FordiacLayoutMapping.CONNECTIONS, new ArrayList<>());
-		mapping.setProperty(FordiacLayoutMapping.FLAT_CONNECTIONS, new ArrayList<>());
-		mapping.setProperty(FordiacLayoutMapping.HIERARCHY_CROSSING_CONNECTIONS, new ArrayList<>());
-		mapping.setProperty(FordiacLayoutMapping.HIERARCHY_CROSSING_CONNECTIONS_MAPPING, new HashMap<>());
-		mapping.setProperty(FordiacLayoutMapping.HIERARCHY_CROSSING_CONNECTIONS_REVERSE_MAPPING, new HashMap<>());
-		mapping.setProperty(FordiacLayoutMapping.REVERSE_MAPPING, new HashMap<>());
-		mapping.setProperty(FordiacLayoutMapping.DUMMY_PORTS, new HashMap<>());
-		mapping.setProperty(FordiacLayoutMapping.LAYOUT_DATA, new FordiacLayoutData());
-
-		findRootEditPart(mapping, workbenchPart);
-
-		if (mapping.getProperty(FordiacLayoutMapping.NETWORK_EDIT_PART) != null) {
-			createGraphRoot(mapping, hasProperties);
-		} else {
-			mapping.hasNetwork = false;
-		}
-
-		return mapping;
+	public List<ConnectionEditPart> getConnections() {
+		return connections;
 	}
 
-	private static void createGraphRoot(final LayoutMapping mapping, final boolean hasProperties) {
-		final AbstractFBNetworkEditPart networkEditPart = mapping.getProperty(FordiacLayoutMapping.NETWORK_EDIT_PART);
+	public List<ConnectionEditPart> getFlatConnections() {
+		return flatConnections;
+	}
+
+	public List<ConnectionEditPart> getHierarchyCrossingConnections() {
+		return hierarchyCrossingConnections;
+	}
+
+	public Map<ConnectionEditPart, List<ElkEdge>> getHierarchyCrossingConnectionsMapping() {
+		return hierarchyCrossingConnectionsMapping;
+	}
+
+	public Map<ElkEdge, ConnectionEditPart> getHierarchyCrossingConnectionsReverseMapping() {
+		return hierarchyCrossingConnectionsReverseMapping;
+	}
+
+	public Map<GraphicalEditPart, ElkGraphElement> getReverseMapping() {
+		return reverseMapping;
+	}
+
+	public Map<ElkPort, ElkPort> getDummyPorts() {
+		return dummyPorts;
+	}
+
+	public FordiacLayoutData getLayoutData() {
+		return layoutData;
+	}
+
+	public AbstractFBNetworkEditPart getNetworkEditPart() {
+		return networkEditPart;
+	}
+
+	public CommandStack getCommandStack() {
+		return commandStack;
+	}
+
+	private void createGraphRoot(final boolean hasProperties) {
 		final ElkNode graph = FordiacLayoutFactory.createFordiacLayoutGraph(hasProperties);
 		setGraphBounds(graph, networkEditPart);
-		mapping.setLayoutGraph(graph);
-		mapping.setParentElement(networkEditPart);
-		mapping.getGraphMap().put(graph, networkEditPart);
-		mapping.getProperty(FordiacLayoutMapping.REVERSE_MAPPING).put(networkEditPart, graph);
+		setLayoutGraph(graph);
+		setParentElement(networkEditPart);
+		getGraphMap().put(graph, networkEditPart);
+		reverseMapping.put(networkEditPart, graph);
 	}
 
 	private static void setGraphBounds(final ElkNode graph, final AbstractFBNetworkEditPart networkEditPart) {
@@ -123,7 +146,7 @@ public class FordiacLayoutMapping extends LayoutMapping {
 		}
 	}
 
-	private static void findRootEditPart(final LayoutMapping mapping, final IWorkbenchPart workbenchPart) {
+	private static AbstractFBNetworkEditPart findRootEditPart(final IWorkbenchPart workbenchPart) {
 		final var networkEP = (AbstractFBNetworkEditPart) workbenchPart.getAdapter(GraphicalViewer.class)
 				.getRootEditPart().getChildren().get(0);
 
@@ -131,16 +154,12 @@ public class FordiacLayoutMapping extends LayoutMapping {
 		final AbstractContainerContentEditPart containerEP = GetEditPartFromGraficalViewerHelper
 				.findAbstractContainerContentEditPartAtPosition((IEditorPart) workbenchPart, pt, networkEP.getModel());
 
-		mapping.setProperty(FordiacLayoutMapping.NETWORK_EDIT_PART, (containerEP != null) ? containerEP : networkEP);
+		return (containerEP != null) ? containerEP : networkEP;
 	}
 
 	private static Point getPositionInViewer(final IEditorPart editor) {
 		final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 		return ((FBNetworkContextMenuProvider) viewer.getContextMenu()).getTranslatedAndZoomedPoint();
-	}
-
-	private FordiacLayoutMapping(final IWorkbenchPart workbenchPart) {
-		super(workbenchPart);
 	}
 
 }

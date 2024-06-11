@@ -16,8 +16,6 @@
 
 package org.eclipse.fordiac.ide.elk;
 
-import static org.eclipse.fordiac.ide.elk.FordiacLayoutMapping.COMMAND_STACK;
-
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
@@ -39,7 +37,7 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 
 	@Override
 	public LayoutMapping buildLayoutGraph(final IWorkbenchPart workbenchPart, final Object diagramPart) {
-		final FordiacLayoutMapping mapping = FordiacLayoutMapping.create(workbenchPart, true);
+		final FordiacLayoutMapping mapping = new FordiacLayoutMapping(workbenchPart, true);
 
 		if (mapping.hasNetwork()) {
 			FordiacGraphBuilder.build(mapping);
@@ -50,14 +48,15 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 
 	@Override
 	public void applyLayout(final LayoutMapping mapping, final IPropertyHolder settings) {
-		final FordiacLayoutData data = FordiacGraphDataHelper.calculate(mapping);
-		mapping.getProperty(COMMAND_STACK).execute(new LayoutCommand(data));
+		final var fordiacMapping = (FordiacLayoutMapping) mapping;
+		FordiacGraphDataHelper.calculate(fordiacMapping);
+		fordiacMapping.getCommandStack().execute(new LayoutCommand(fordiacMapping.getLayoutData()));
 
 		// schedule as async to ensure the changes from the layout command have been
 		// processed
 		Display.getDefault().asyncExec(() -> {
 			final var handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
-			final var networkEditPart = mapping.getProperty(FordiacLayoutMapping.NETWORK_EDIT_PART);
+			final var networkEditPart = fordiacMapping.getNetworkEditPart();
 
 			try {
 				if (networkEditPart instanceof UnfoldedSubappContentEditPart) {
