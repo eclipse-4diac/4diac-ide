@@ -89,7 +89,7 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 
 	@Override
 	public boolean canExecute() {
-		return (null != destinationNetwork) && allElementsFromSameNetwork();
+		return (null != destinationNetwork) && destinationNetwork != sourceNetwork && allElementsFromSameNetwork();
 	}
 
 	private boolean allElementsFromSameNetwork() {
