@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -237,9 +238,16 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 	private boolean fileExists() {
 		final String fileName = getFileName().toLowerCase();
+		final IPath containerPath = getContainerFullPath();
+		if (containerPath == null || containerPath.segmentCount() < 2) {
+			return false;
+		}
+		final IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder(containerPath);
+		if (!folder.exists()) {
+			return false;
+		}
 		try {
-			for (final IResource member : ResourcesPlugin.getWorkspace().getRoot().getFolder(getContainerFullPath())
-					.members()) {
+			for (final IResource member : folder.members()) {
 				if (fileName.equalsIgnoreCase(member.getName())) {
 					return true;
 				}
