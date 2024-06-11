@@ -37,12 +37,12 @@ import org.eclipse.gef.requests.ReconnectRequest;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DragSourceEvent;
 
-public class ConnectionDragSourceListener extends AbstractTransferDragSourceListener {
+public class CustomDragSourceListener extends AbstractTransferDragSourceListener {
 
 	private Request lastReq = null;
 
-	public ConnectionDragSourceListener(final EditPartViewer viewer) {
-		super(viewer, ConnSourceTransfer.getInstance());
+	public CustomDragSourceListener(final EditPartViewer viewer) {
+		super(viewer, CustomSourceTransfer.getInstance());
 		Assert.isTrue(viewer.getKeyHandler() instanceof AdvancedGraphicalViewerKeyHandler);
 	}
 
@@ -56,7 +56,7 @@ public class ConnectionDragSourceListener extends AbstractTransferDragSourceList
 			return;
 		}
 		lastReq = req;
-		ConnSourceTransfer.getInstance().setObject(req);
+		CustomSourceTransfer.getInstance().setObject(req);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class ConnectionDragSourceListener extends AbstractTransferDragSourceList
 	@Override
 	public void dragFinished(final DragSourceEvent event) {
 		super.dragFinished(event);
-		ConnSourceTransfer.getInstance().setObject(null);
+		CustomSourceTransfer.getInstance().setObject(null);
 		lastReq = null;
 	}
 
@@ -112,7 +112,7 @@ public class ConnectionDragSourceListener extends AbstractTransferDragSourceList
 			req.setConnectionEditPart(first);
 			if (connections.size() > 1) {
 				// we are reconnecting a fanned connection
-				req.getExtendedData().put(ConnSourceTransfer.CONNECTIONS_LIST, connections);
+				req.getExtendedData().put(CustomSourceTransfer.CONNECTIONS_LIST, connections);
 			}
 			final EditPart target = (req.getType().equals(RequestConstants.REQ_RECONNECT_SOURCE)) ? first.getSource()
 					: first.getTarget();

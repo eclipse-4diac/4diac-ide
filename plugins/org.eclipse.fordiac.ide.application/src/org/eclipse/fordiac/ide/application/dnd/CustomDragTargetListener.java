@@ -25,16 +25,16 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.gef.requests.ReconnectRequest;
 
-public class ConnectionDragTargetListener extends AbstractTransferDropTargetListener {
+public class CustomDragTargetListener extends AbstractTransferDropTargetListener {
 
-	public ConnectionDragTargetListener(final EditPartViewer viewer) {
-		super(viewer, ConnSourceTransfer.getInstance());
+	public CustomDragTargetListener(final EditPartViewer viewer) {
+		super(viewer, CustomSourceTransfer.getInstance());
 		setEnablementDeterminedByCommand(true);
 	}
 
 	@Override
 	protected Request createTargetRequest() {
-		final Request req = ConnSourceTransfer.getInstance().getObject();
+		final Request req = CustomSourceTransfer.getInstance().getObject();
 		if (req != null) {
 			return req;
 		}
@@ -47,7 +47,7 @@ public class ConnectionDragTargetListener extends AbstractTransferDropTargetList
 		if (req instanceof final ReconnectRequest reconReq) {
 			@SuppressWarnings("unchecked")
 			final List<ConnectionEditPart> connections = (List<ConnectionEditPart>) req.getExtendedData()
-					.get(ConnSourceTransfer.CONNECTIONS_LIST);
+					.get(CustomSourceTransfer.CONNECTIONS_LIST);
 			if (connections != null) {
 				// we
 				final CompoundCommand cmd = new CompoundCommand();

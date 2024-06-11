@@ -15,15 +15,15 @@ package org.eclipse.fordiac.ide.application.dnd;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.dnd.SimpleObjectTransfer;
 
-final class ConnSourceTransfer extends SimpleObjectTransfer {
+final class CustomSourceTransfer extends SimpleObjectTransfer {
 
 	public static final String CONNECTIONS_LIST = "Connections"; //$NON-NLS-1$
 
-	private static final ConnSourceTransfer INSTANCE = new ConnSourceTransfer();
-	private static final String TYPE_NAME = "ConnSourceTransver";//$NON-NLS-1$
+	private static final CustomSourceTransfer INSTANCE = new CustomSourceTransfer();
+	private static final String TYPE_NAME = "CustomSourceTransfer";//$NON-NLS-1$
 	private static final int TYPEID = registerType(TYPE_NAME);
 
-	public static ConnSourceTransfer getInstance() {
+	public static CustomSourceTransfer getInstance() {
 		return INSTANCE;
 	}
 
@@ -35,7 +35,7 @@ final class ConnSourceTransfer extends SimpleObjectTransfer {
 	@Override
 	public void setObject(final Object obj) {
 		if (obj != null && !(obj instanceof Request)) {
-			throw new IllegalArgumentException("ConnSourceTransfer requires a request as object!"); //$NON-NLS-1$
+			throw new IllegalArgumentException("CustomSourceTransfer requires a request as object!"); //$NON-NLS-1$
 		}
 		super.setObject(obj);
 	}
