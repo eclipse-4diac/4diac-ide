@@ -43,7 +43,12 @@ public class AttributeColumnAccessor extends AbstractColumnAccessor<Attribute, A
 	public Object getDataValue(final Attribute rowObject, final AttributeTableColumn column) {
 		return switch (column) {
 		case NAME -> rowObject.getName();
-		case TYPE -> rowObject.getFullTypeName();
+		case TYPE -> {
+			if (rowObject.getAttributeDeclaration() != null) {
+				yield PackageNameHelper.getFullTypeName(rowObject.getAttributeDeclaration());
+			}
+			yield rowObject.getFullTypeName();
+		}
 		case VALUE -> InitialValueHelper.getInitialOrDefaultValue(rowObject);
 		case COMMENT -> CommentHelper.getInstanceComment(rowObject);
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
