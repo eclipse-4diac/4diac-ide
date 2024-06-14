@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.deployment.debug;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.OutputKeys;
@@ -28,6 +30,7 @@ import org.eclipse.debug.core.model.IStreamsProxy;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener2;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListener2 {
 
@@ -41,6 +44,7 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 	private final DeploymentStreamMonitor outputStreamMonitor = new DeploymentStreamMonitor();
 	private final DeploymentStreamMonitor errorStreamMonitor = new DeploymentStreamMonitor();
 	private final Transformer transformer;
+	private final List<String> resources = new ArrayList<>();
 
 	public DeploymentStreamsProxy() throws DeploymentException {
 		try {
@@ -68,6 +72,13 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 		// ignore input
 	}
 
+	public List<Resource> getConfiguredResources(final Device dev) {
+		final List<String> allowedNames = resources.stream().distinct().toList();
+		final List<Resource> res = dev.getResource();
+		return res.stream()
+				.filter(r -> allowedNames.stream().anyMatch(allowedName -> allowedName.contains(r.getName()))).toList();
+	}
+
 	@Override
 	public void connectionOpened(final Device dev) {
 		outputStreamMonitor.message("<!--  Connected to device: " + dev.getName() + " -->\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -75,7 +86,7 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 
 	@Override
 	public void postCommandSent(final String info, final String destination, final String command) {
-		// do nothing
+		resources.add(info);
 	}
 
 	@Override
@@ -103,6 +114,18 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 
 	@Override
 	public void connectionClosed(final Device dev) {
+		final List<String> res = new ArrayList<>();
+
+		outputStreamMonitor.message(">> Deployed: \n"); //$NON-NLS-1$
+		for (final Resource r : getConfiguredResources(dev)) {
+			res.add("   " + r.getName() + " with " + r.getFBNetwork().getNetworkElements().size() + " elements and "
+					+ (r.getFBNetwork().getAdapterConnections().size() + r.getFBNetwork().getDataConnections().size()
+							+ r.getFBNetwork().getEventConnections().size())
+					+ " connections"); //$NON-NLS-1$
+		}
+		final String joinedResources = String.join("\n", res); //$NON-NLS-1$
+
+		outputStreamMonitor.message(joinedResources + "\n"); //$NON-NLS-1$
 		outputStreamMonitor.message("<!--  Disconnected from device: " + dev.getName() + " -->\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
