@@ -82,7 +82,7 @@ public class CustomDragSourceListener extends AbstractTransferDragSourceListener
 		if (selectedEditParts.size() == 1 && selectedEditParts.get(0) instanceof final InterfaceEditPart iep) {
 			return createConnectionCreationRequest(iep);
 		}
-		if (selectedEditParts.size() == 1 && selectedEditParts.get(0).getModel() instanceof FBNetworkElement) {
+		if (atLeastOneFBSelected(selectedEditParts)) {
 			return createChangeBoundsRequest(selectedEditParts);
 		}
 		final List<ConnectionEditPart> connections = selectedEditParts.stream()
@@ -100,6 +100,10 @@ public class CustomDragSourceListener extends AbstractTransferDragSourceListener
 		req.setStartCommand(iep.getCommand(req));
 		req.setType(RequestConstants.REQ_CONNECTION_END);
 		return req;
+	}
+
+	protected static boolean atLeastOneFBSelected(final List<? extends EditPart> selectedEditParts) {
+		return selectedEditParts.stream().anyMatch(ep -> ep.getModel() instanceof FBNetworkElement);
 	}
 
 	private static Request createReconnectRequest(final List<ConnectionEditPart> connections, final Point point) {
