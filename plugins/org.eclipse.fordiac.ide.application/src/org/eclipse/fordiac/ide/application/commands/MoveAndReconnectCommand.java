@@ -89,11 +89,23 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 
 	@Override
 	public boolean canExecute() {
-		return (null != destinationNetwork) && destinationNetwork != sourceNetwork && allElementsFromSameNetwork();
+		return (null != destinationNetwork) && destinationNetwork != sourceNetwork && allElementsFromSameNetwork()
+      && !destinationNetworkChildOfElements();
 	}
 
 	private boolean allElementsFromSameNetwork() {
 		return elements.stream().allMatch(el -> sourceNetwork.equals(el.getFbNetwork()));
+	}
+
+	private boolean destinationNetworkChildOfElements() {
+		EObject obj = destinationNetwork.eContainer();
+		while (obj != null) {
+			if (elements.contains(obj)) {
+				return true;
+			}
+			obj = obj.eContainer();
+		}
+		return false;
 	}
 
 	@Override
