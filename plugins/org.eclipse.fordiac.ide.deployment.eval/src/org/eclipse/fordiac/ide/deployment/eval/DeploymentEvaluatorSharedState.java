@@ -97,6 +97,10 @@ public class DeploymentEvaluatorSharedState implements Closeable {
 		deviceManagementInteractor.writeFBParameter(resource, value, deploymentData, varDeclaration);
 	}
 
+	public void writeDeviceParameter(final String name, final String value) throws DeploymentException {
+		deviceManagementInteractor.writeDeviceParameter(resource.getDevice(), name, value);
+	}
+
 	public Resource getResource() {
 		return resource;
 	}
