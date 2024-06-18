@@ -50,12 +50,13 @@ public class InterfaceDataTypeChange extends Change {
 
 	@Override
 	public String getName() {
-		return "Update Interface Pins: " + this.inputPinNames.toString() + "<->" + this.outputPinNames.toString(); //$NON-NLS-1$
+		return "Update Interface Pins - Inputs: " + this.inputPinNames.toString() + " / Outputs: " //$NON-NLS-1$//$NON-NLS-2$
+				+ this.outputPinNames.toString();
 	}
 
 	@Override
 	public void initializeValidationData(final IProgressMonitor pm) {
-
+		// Unused
 	}
 
 	private Command getUpdatePinInTypeDelcarationCommand() {
@@ -87,6 +88,10 @@ public class InterfaceDataTypeChange extends Change {
 	@Override
 	public Object getModifiedElement() {
 		return fbType;
+	}
+
+	public TypeEntry getOldTypeEntry() {
+		return oldTypeEntry;
 	}
 
 }

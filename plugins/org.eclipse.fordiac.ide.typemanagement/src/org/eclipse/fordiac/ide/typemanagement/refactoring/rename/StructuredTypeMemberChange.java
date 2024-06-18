@@ -10,7 +10,7 @@
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
 import java.util.List;
 

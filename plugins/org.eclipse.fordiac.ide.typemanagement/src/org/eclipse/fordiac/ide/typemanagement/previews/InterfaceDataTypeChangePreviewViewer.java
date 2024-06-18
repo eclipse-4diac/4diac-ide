@@ -27,15 +27,16 @@ import org.eclipse.emf.compare.ide.ui.internal.editor.ComparisonEditorInput;
 import org.eclipse.emf.compare.scope.DefaultComparisonScope;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.rename.StructuredTypeMemberChange;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.InterfaceDataTypeChange;
 import org.eclipse.ltk.ui.refactoring.ChangePreviewViewerInput;
 import org.eclipse.ltk.ui.refactoring.IChangePreviewViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 @SuppressWarnings("restriction")
-public class StructChangePreviewViewer implements IChangePreviewViewer {
+public class InterfaceDataTypeChangePreviewViewer implements IChangePreviewViewer {
 
 	private static Composite parent;
 	private static Control previewControl;
@@ -57,9 +58,9 @@ public class StructChangePreviewViewer implements IChangePreviewViewer {
 		if (Objects.nonNull(previewControl)) {
 			previewControl.dispose();
 			previewControl = null;
-			StructChangePreviewViewer.parent.dispose();
+			InterfaceDataTypeChangePreviewViewer.parent.dispose();
 		}
-		StructChangePreviewViewer.parent = parent;
+		InterfaceDataTypeChangePreviewViewer.parent = parent;
 
 	}
 
@@ -70,25 +71,32 @@ public class StructChangePreviewViewer implements IChangePreviewViewer {
 
 	@Override
 	public void setInput(final ChangePreviewViewerInput input) {
-		if (!(input.getChange() instanceof StructuredTypeMemberChange)) {
+		if (!(input.getChange() instanceof InterfaceDataTypeChange)) {
 			return;
 		}
 
-		final StructuredTypeMemberChange change = (StructuredTypeMemberChange) input.getChange();
-		final StructuredType originalStructuredType = change.getModifiedElement();
-		final StructuredType refactoredStructuredType = EcoreUtil.copy(originalStructuredType);
+		final InterfaceDataTypeChange change = (InterfaceDataTypeChange) input.getChange();
+		final TypeEntry oldTypeEntry = change.getOldTypeEntry();
+		final FBType originalFbType = (FBType) change.getModifiedElement();
+		final FBType refactoredFbType = EcoreUtil.copy(originalFbType);
 
-		refactoredStructuredType.getMemberVariables().stream()
-				.filter(var -> var.getType().getTypeEntry() == change.getModifiedTypeEntry()).forEach(var -> {
+		refactoredFbType.getInterfaceList().getInputs()
+				.filter(var -> var.getTypeName().equals(oldTypeEntry.getTypeName())).forEach(var -> {
 					var.setType(EcoreUtil.copy(var.getType()));
-					var.getType().setName(change.getNewTypeEntryName());
+					var.getType().setName("TODO");
+				});
+
+		refactoredFbType.getInterfaceList().getOutputs()
+				.filter(var -> var.getTypeName().equals(oldTypeEntry.getTypeName())).forEach(var -> {
+					var.setType(EcoreUtil.copy(var.getType()));
+					var.getType().setName("TODO");
 				});
 
 		final Comparison comparison = this.emfCompare
-				.compare(new DefaultComparisonScope(originalStructuredType, refactoredStructuredType, null));
+				.compare(new DefaultComparisonScope(originalFbType, refactoredFbType, null));
 
-		final ICompareEditingDomain editingDomain = EMFCompareEditingDomain.create(originalStructuredType,
-				refactoredStructuredType, null);
+		final ICompareEditingDomain editingDomain = EMFCompareEditingDomain.create(originalFbType, refactoredFbType,
+				null);
 
 		final CompareEditorInput compareEditorInput = new ComparisonEditorInput(this.emfCompareConfiguration,
 				comparison, editingDomain, this.adapterFactory);

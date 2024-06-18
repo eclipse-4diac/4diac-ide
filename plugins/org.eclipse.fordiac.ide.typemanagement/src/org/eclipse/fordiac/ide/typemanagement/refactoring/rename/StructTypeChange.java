@@ -19,19 +19,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
-import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
-import org.eclipse.fordiac.ide.model.search.types.IEC61499ElementSearch;
 import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.StructuredTypeMemberChange;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 
@@ -90,10 +84,11 @@ public class StructTypeChange extends CompositeChange {
 				.searchStructuredTypes(oldTypeEntry.getTypeLibrary()));
 
 		// TODO new search does not yet work
-		final IEC61499ElementSearch search2 = new DataTypeInstanceSearch((DataTypeEntry) oldTypeEntry.getTypeEditable());
-		final List<? extends EObject> searchResults = search2.performSearch();
+		// final IEC61499ElementSearch search2 = new
+		// DataTypeInstanceSearch((DataTypeEntry) oldTypeEntry.getTypeEditable());
+		/// final List<? extends EObject> searchResults = search2.performSearch();
 
-		return searchResults.stream().filter(StructuredType.class::isInstance).map(StructuredType.class::cast).toList();
+		return search.stream().filter(StructuredType.class::isInstance).map(StructuredType.class::cast).toList();
 	}
 
 	private String buildLabel(final String fbFileName, final String projectName) {

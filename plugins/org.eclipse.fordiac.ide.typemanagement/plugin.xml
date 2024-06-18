@@ -750,7 +750,27 @@
          <enablement>
             <or>
                <instanceof
-                     value="org.eclipse.fordiac.ide.typemanagement.refactoring.StructuredTypeMemberChange">
+                     value="org.eclipse.fordiac.ide.typemanagement.refactoring.rename.StructuredTypeMemberChange">
+               </instanceof>
+            </or></enablement>
+      </changePreviewViewer>
+      <changePreviewViewer
+            class="org.eclipse.fordiac.ide.typemanagement.previews.InterfaceDataTypeChangePreviewViewer"
+            id="org.eclipse.fordiac.ide.typemanagement.previews.InterfaceDataTypeChangePreviewViewer">
+         <enablement>
+            <or>
+               <instanceof
+                     value="org.eclipse.fordiac.ide.typemanagement.refactoring.InterfaceDataTypeChange">
+               </instanceof>
+            </or></enablement>
+      </changePreviewViewer>
+      <changePreviewViewer
+            class="org.eclipse.fordiac.ide.typemanagement.previews.UpdateInstancesChangePreviewViewer"
+            id="org.eclipse.fordiac.ide.typemanagement.previews.UpdateInstancesChangePreviewViewer">
+         <enablement>
+            <or>
+               <instanceof
+                     value="org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateInstancesChange">
                </instanceof>
             </or></enablement>
       </changePreviewViewer>
