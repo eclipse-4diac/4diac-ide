@@ -92,7 +92,7 @@ public class LibraryLinker implements ILibraryLinker {
 			TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING, TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING);
 
 	private IProject selectedProject;
-	private Map<String, TypeEntry> cachedTypes;
+	private Map<String, TypeEntry> cachedTypes = new HashMap<>();
 	private List<TypeEntry> oldTypes;
 	private TypeLibrary typeLibrary;
 
