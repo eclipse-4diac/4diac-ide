@@ -92,8 +92,8 @@ public class LibraryLinker implements ILibraryLinker {
 			TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING, TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING);
 
 	private IProject selectedProject;
-	private Map<String, TypeEntry> cachedTypes;
-	private List<TypeEntry> oldTypes;
+	private Map<String, TypeEntry> cachedTypes = new HashMap<>();
+	private List<TypeEntry> oldTypes = new ArrayList<>();
 	private TypeLibrary typeLibrary;
 
 	@Override
@@ -269,6 +269,9 @@ public class LibraryLinker implements ILibraryLinker {
 	}
 
 	private void showUpdatedElements() {
+		if (oldTypes.isEmpty()) {
+			return;
+		}
 		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(oldTypes);
 		final List<FBNetworkElement> elements = search.performSearch().stream()
 				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).toList();

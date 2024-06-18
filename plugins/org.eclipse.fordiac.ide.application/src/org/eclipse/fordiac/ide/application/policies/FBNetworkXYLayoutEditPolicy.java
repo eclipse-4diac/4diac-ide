@@ -148,7 +148,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	private Command handleDragToRootRequest(final ChangeBoundsRequest request) {
 		final List<? extends EditPart> editParts = request.getEditParts();
 		final Point destination = getTranslatedAndZoomedPoint(request);
-		final List<FBNetworkElement> fbEls = collectFromSubappDraggedFBs(editParts, getFBNetwork());
+		final List<FBNetworkElement> fbEls = collectDraggedFBs(editParts, getFBNetwork());
 		if (!fbEls.isEmpty()) {
 			return new MoveAndReconnectCommand(fbEls, destination, (FBNetwork) getHost().getModel());
 		}
@@ -176,12 +176,11 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 				.scale(1.0 / getZoomManager().getZoom());
 	}
 
-	private static List<FBNetworkElement> collectFromSubappDraggedFBs(final List<? extends EditPart> editParts,
+	private static List<FBNetworkElement> collectDraggedFBs(final List<? extends EditPart> editParts,
 			final FBNetwork fbNetwork) {
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
-				.map(ep -> (FBNetworkElement) ep.getModel()).filter(FBNetworkElement::isNestedInSubApp)
-				.filter(el -> !el.getFbNetwork().equals(fbNetwork)) // only take fbentworkelements that are not in the
-				// same subapp
+				.map(ep -> (FBNetworkElement) ep.getModel()).filter(el -> !el.getFbNetwork().equals(fbNetwork))
+				// only take fbentworkelements that are not in the same subapp
 				.toList();
 	}
 

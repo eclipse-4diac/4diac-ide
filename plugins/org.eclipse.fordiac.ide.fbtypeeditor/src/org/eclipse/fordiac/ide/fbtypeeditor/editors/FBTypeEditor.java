@@ -66,6 +66,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
@@ -434,7 +435,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 					&& structSel.getFirstElement() instanceof final URI uri) {
 				final EObject selectedElement = fbType.eResource().getEObject(uri.fragment());
 				if (selectedElement instanceof FBNetworkElement || selectedElement instanceof Algorithm
-						|| selectedElement instanceof Method) {
+						|| selectedElement instanceof Method || selectedElement instanceof VarDeclaration) {
 					handleContentOutlineSelection(new StructuredSelection(selectedElement));
 				}
 			} else {
