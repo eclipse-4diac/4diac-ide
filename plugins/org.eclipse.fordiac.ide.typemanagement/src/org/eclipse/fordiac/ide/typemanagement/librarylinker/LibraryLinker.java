@@ -93,7 +93,7 @@ public class LibraryLinker implements ILibraryLinker {
 
 	private IProject selectedProject;
 	private Map<String, TypeEntry> cachedTypes = new HashMap<>();
-	private List<TypeEntry> oldTypes;
+	private List<TypeEntry> oldTypes = new ArrayList<>();
 	private TypeLibrary typeLibrary;
 
 	@Override
@@ -269,6 +269,9 @@ public class LibraryLinker implements ILibraryLinker {
 	}
 
 	private void showUpdatedElements() {
+		if (oldTypes.isEmpty()) {
+			return;
+		}
 		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(oldTypes);
 		final List<FBNetworkElement> elements = search.performSearch().stream()
 				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).toList();
