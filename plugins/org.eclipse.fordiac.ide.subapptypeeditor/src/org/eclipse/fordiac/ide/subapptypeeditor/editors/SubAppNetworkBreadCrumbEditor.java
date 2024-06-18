@@ -29,8 +29,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.subapptypeeditor.providers.TypedSubappProviderAdapterFactory;
@@ -206,7 +208,8 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			if (selectedElement instanceof final FBNetwork fbn) {
 				selectedElement = fbn.eContainer();
 			}
-			if ((selectedElement instanceof FBNetworkElement) || (selectedElement instanceof SubAppType)) {
+			if ((selectedElement instanceof FBNetworkElement) || (selectedElement instanceof SubAppType)
+					|| (selectedElement instanceof VarDeclaration)) {
 				EObject refElement = null;
 				if (selectedElement instanceof final FB fb) {
 					refElement = fb;
@@ -214,6 +217,9 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 				} else if (selectedElement instanceof final SubApp subApp) {
 					refElement = subApp;
 					selectedElement = refElement.eContainer().eContainer();
+				} else if (selectedElement instanceof final VarDeclaration varDecl) {
+					refElement = varDecl;
+					selectedElement = varDecl.eContainer().eContainer();
 				}
 				getBreadcrumb().setInput(selectedElement);
 				if (null != refElement) {
