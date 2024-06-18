@@ -188,6 +188,11 @@ final class ForteNgExportUtil {
 		}
 	}
 
+	def static String generateMangledPackageName(LibraryElement type) {
+		val packageName = type.compilerInfo?.packageName?.replace(":", "_")
+		packageName.nullOrEmpty ? "" : packageName + "__"
+	}
+
 	def static String generateTypeNamePlain(INamedElement type) {
 		switch (type) {
 			TimeType:
@@ -212,7 +217,7 @@ final class ForteNgExportUtil {
 				"STRING"
 			WstringType:
 				"WSTRING"
-			LibraryElement: '''«type.generateTypePath?.concat(type.generateTypePath.blank ? "" : "__")»«type.name»'''
+			LibraryElement: '''«type.generateMangledPackageName»«type.name»'''
 			default:
 				type.name
 		}
