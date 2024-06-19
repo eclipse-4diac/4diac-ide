@@ -60,8 +60,8 @@ public final class EventManagerFactory {
 			fbType.setService(ServiceFactory.createDefaultServiceModel());
 		}
 		final ResourceSet reset = new ResourceSetImpl();
-		final Resource resource = reset
-				.createResource(URI.createURI("platform:/resource/" + fbType.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
+		final Resource resource = reset.createResource(
+				URI.createURI(fbType.getTypeEntry().getURI().trimFileExtension().toString() + ".opsem")); //$NON-NLS-1$
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
 		resource.getContents().add(eventManager);
 
