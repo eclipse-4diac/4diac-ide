@@ -180,9 +180,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		final FBType typeCopy = EcoreUtil.copy(fbType);
 		final EventManager eventManager = EventManagerFactory.createEventManager(typeCopy, eventList, isRandom,
 				startState);
-		if (!isRandom) {
-			TransactionFactory.addTraceInfoTo(eventManager.getTransactions());
-		}
+		TransactionFactory.addTraceInfoTo(eventManager.getTransactions());
 		EventManagerUtils.process(eventManager);
 		if (!isAppend) {
 			seq.getServiceTransaction().clear();
