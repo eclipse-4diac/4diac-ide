@@ -116,7 +116,17 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 		root = new Composite(parent, SWT.NONE);
 		root.setLayout(new GridLayout());
 		filteredTree = new FilteredTree(root, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION, getPatternFilter(),
-				true, true);
+				true, true) {
+			@Override
+			protected TreeViewer doCreateTreeViewer(final Composite parent, final int style) {
+				return new TreeViewer(parent, style) {
+					@Override
+					public void cancelEditing() {
+						// we don't want the editor to be deactivated on refreshes
+					}
+				};
+			}
+		};
 
 		final GridData treeGridData = new GridData();
 		treeGridData.grabExcessHorizontalSpace = true;
