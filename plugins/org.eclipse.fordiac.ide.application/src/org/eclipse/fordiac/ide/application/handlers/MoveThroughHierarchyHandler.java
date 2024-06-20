@@ -127,4 +127,5 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 
 		return new Point(destX, destY);
 	}
+
 }
