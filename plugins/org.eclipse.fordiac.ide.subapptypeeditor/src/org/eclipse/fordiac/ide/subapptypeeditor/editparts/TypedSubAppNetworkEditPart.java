@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 fortiss GmbH
+ * Copyright (c) 2019, 2024 fortiss GmbH, Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.subapptypeeditor.editparts;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart;
 import org.eclipse.fordiac.ide.subapptypeeditor.policies.SubAppTypeFBNetworkLayoutEditPolicy;
 import org.eclipse.gef.EditPart;
@@ -20,6 +22,16 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
 public class TypedSubAppNetworkEditPart extends CompositeNetworkEditPart {
+
+	@Override
+	protected List<?> getModelChildren() {
+		@SuppressWarnings("unchecked")
+		final List<Object> modelChildren = (List<Object>) super.getModelChildren();
+		if (getModel() != null) {
+			modelChildren.addAll(getInterfaceList().getOutMappedInOutVars());
+		}
+		return modelChildren;
+	}
 
 	@Override
 	protected boolean isVarVisible(final EditPart childEditPart) {
