@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Germany GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -36,24 +36,23 @@ public class DeleteInternalFBCommand extends Command implements ScopedCommand {
 	/** The old index. */
 	private int oldIndex;
 
-	public DeleteInternalFBCommand(final BaseFBType baseFbtype, final FB fb) {
-		this.baseFbtype = Objects.requireNonNull(baseFbtype);
+	public DeleteInternalFBCommand(final FB fb) {
 		this.fbToDelete = Objects.requireNonNull(fb);
-	}
-
-	private EList<FB> getInteralFBList() {
-		return baseFbtype.getInternalFbs();
+		if (!(fb.eContainer() instanceof final BaseFBType baseFBtype)) {
+			throw new IllegalArgumentException("FB to delete is not contained in BaseFBType!"); //$NON-NLS-1$
+		}
+		this.baseFbtype = baseFBtype;
 	}
 
 	@Override
 	public void execute() {
 		oldIndex = getIndexOfFBtoDelete();
-		redo();
+		removeFB();
 	}
 
 	@Override
 	public void redo() {
-		getInteralFBList().remove(oldIndex);
+		removeFB();
 	}
 
 	@Override
@@ -61,13 +60,20 @@ public class DeleteInternalFBCommand extends Command implements ScopedCommand {
 		getInteralFBList().add(oldIndex, fbToDelete);
 	}
 
-	private int getIndexOfFBtoDelete() {
-		return getInteralFBList().indexOf(getInteralFBList().stream()
-				.filter(fb -> fb.getName().equals(fbToDelete.getName())).findFirst().orElse(fbToDelete));
-	}
-
 	@Override
 	public Set<EObject> getAffectedObjects() {
 		return Set.of(baseFbtype);
+	}
+
+	private int getIndexOfFBtoDelete() {
+		return getInteralFBList().indexOf(fbToDelete);
+	}
+
+	private EList<FB> getInteralFBList() {
+		return baseFbtype.getInternalFbs();
+	}
+
+	private void removeFB() {
+		getInteralFBList().remove(fbToDelete);
 	}
 }
