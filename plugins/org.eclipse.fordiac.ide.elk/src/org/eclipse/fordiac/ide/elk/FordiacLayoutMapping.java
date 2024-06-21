@@ -70,6 +70,19 @@ public class FordiacLayoutMapping extends LayoutMapping {
 		}
 	}
 
+	public FordiacLayoutMapping(final IWorkbenchPart workbenchPart, final boolean hasProperties,
+			final AbstractFBNetworkEditPart networkEditPart) {
+		super(workbenchPart);
+		commandStack = workbenchPart.getAdapter(CommandStack.class);
+
+		this.networkEditPart = networkEditPart;
+
+		hasNetwork = (networkEditPart != null);
+		if (hasNetwork) {
+			createGraphRoot(hasProperties);
+		}
+	}
+
 	public boolean hasNetwork() {
 		return hasNetwork;
 	}
