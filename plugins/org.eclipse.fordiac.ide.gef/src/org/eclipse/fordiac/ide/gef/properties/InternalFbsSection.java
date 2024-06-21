@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Primetals Technologies Germany GmbH
- * 				 2023 Johannes Kepler University, Linz
+ * Copyright (c) 2021, 2024 Primetals Technologies Germany GmbH,
+ *                          Johannes Kepler University, Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -99,7 +99,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 
 		buttons.bindToTableViewer(table, this,
 				ref -> new CreateInternalFBCommand(getType(), getInsertionIndex(), getName(), getFBTypeEntry()),
-				ref -> new DeleteInternalFBCommand(getType(), getLastSelectedFB()),
+				ref -> new DeleteInternalFBCommand((FB) ref),
 				ref -> new ChangeInternalFBOrderCommand(getType(), (FB) ref, IndexUpDown.UP),
 				ref -> new ChangeInternalFBOrderCommand(getType(), (FB) ref, IndexUpDown.DOWN));
 
@@ -186,7 +186,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	@Override
 	public void removeEntry(final Object entry, final CompoundCommand cmd) {
 		if (entry instanceof final FB fb) {
-			cmd.add(new DeleteInternalFBCommand(getType(), fb));
+			cmd.add(new DeleteInternalFBCommand(fb));
 		}
 	}
 
