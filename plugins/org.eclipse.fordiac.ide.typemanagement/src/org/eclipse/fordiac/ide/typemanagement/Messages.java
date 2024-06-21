@@ -115,6 +115,8 @@ public final class Messages extends NLS {
 	public static String RenameElementChange_NameChanged;
 	public static String RenameElementRefactoringParticipant_Name;
 	public static String RenameElementRefactoringProcessor_Name;
+
+	public static String RenameElementRefactoringProcessor_RenamePinInType;
 	public static String RenameElementRefactoringWizardPage_Name;
 	public static String RenameType_Name;
 	public static String RenameType_TypeExists;
