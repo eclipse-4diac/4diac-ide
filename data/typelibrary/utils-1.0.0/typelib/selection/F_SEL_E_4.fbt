@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="F_SEL_E_4" Comment="selection event-based selection)">
-	<Identification Standard="61131-3" Classification="standard selection function" Description="Copyright (c) 2012, 2023 TU Wien ACIN, HR Agrartechnik GmbH
-&#10;  
-&#10;This program and the accompanying materials are made 
-&#10;available under the terms of the Eclipse Public License 2.0 
-&#10;which is available at https://www.eclipse.org/legal/epl-2.0/ 
-&#10; 
-&#10;SPDX-License-Identifier: EPL-2.0" >
+	<Identification Standard="61131-3" Classification="standard selection function" Description="Copyright (c) 2012, 2022 TU Wien ACIN, HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Organization="TU Wien ACIN" Version="1.0" Author="Monika Wenger" Date="2012-03-25">
 	</VersionInfo>
