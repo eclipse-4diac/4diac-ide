@@ -41,31 +41,18 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               id="org.eclipse.fordiac.ide.refactor.menus.sampleMenu"
-               label="Sample Menu"
-               mnemonic="M">
-            <command
-                  commandId="org.eclipse.fordiac.ide.refactor.commands.sampleCommand"
-                  id="org.eclipse.fordiac.ide.refactor.menus.sampleCommand"
-                  mnemonic="S">
-            </command>
-         </menu>
-      </menuContribution>
-      <menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.edit">
-         <command
-               commandId="org.eclipse.fordiac.ide.refactor.commands.sampleCommand"
-               id="org.eclipse.fordiac.ide.refactor.popupmenus.sampleCommand"
-               tooltip="Hello">
-         </command>
          <menu
                id="org.eclipse.fordiac.ide.refactor.menu"
                label="Refactor">
             <command
                   commandId="org.eclipse.fordiac.ide.refactor.commands.connections2Struct"
                   id="org.eclipse.fordiac.ide.refactor.menu.connections2struct"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.eclipse.fordiac.ide.refactor.commands.sampleCommand"
+                  id="org.eclipse.fordiac.ide.refactor.menu.sampleCommand"
                   style="push">
             </command>
          </menu>
