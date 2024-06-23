@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011, 2013, 2017 Profactor GbmH, fortiss GmbH
+ * Copyright (c) 2008, 2024 Profactor GbmH, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -33,11 +33,9 @@ public class OpenSystemConfEditorAction extends AbstractOpenSystemElementListene
 
 	@Override
 	public void selectionChanged(final IAction action, final ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structuredSel = (IStructuredSelection) selection;
-			if (structuredSel.getFirstElement() instanceof SystemConfiguration) {
-				sysConf = (SystemConfiguration) structuredSel.getFirstElement();
-			}
+		if (selection instanceof final IStructuredSelection structuredSel
+				&& structuredSel.getFirstElement() instanceof final SystemConfiguration firstEl) {
+			sysConf = firstEl;
 		}
 	}
 
