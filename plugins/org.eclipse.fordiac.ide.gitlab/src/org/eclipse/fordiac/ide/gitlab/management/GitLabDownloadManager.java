@@ -61,7 +61,11 @@ public class GitLabDownloadManager {
 	private final String token;
 
 	public GitLabDownloadManager(final String url, final String token) {
-		this.url = url;
+		if (url.endsWith("/")) { //$NON-NLS-1$
+			this.url = url;
+		} else {
+			this.url = url + "/"; //$NON-NLS-1$
+		}
 		this.token = token;
 	}
 
