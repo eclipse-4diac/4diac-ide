@@ -80,20 +80,23 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 
 	@Override
 	public void postCommandSent(final String info, final String destination, final String command) {
-		if (!destination.isBlank() && !destination.equals(currentDest)) {
-			if (currentDest != null && !currentDest.isBlank()) {
-				printDeployStatistics(currentDest, count);
+		if ((destination != null && !destination.isEmpty()) && !destination.isBlank()) {
+			if (!destination.equals(currentDest)) {
+				if (currentDest != null && !currentDest.isBlank()) {
+					printDeployStatistics();
+				}
+				printDeployingResource(destination);
+				currentDest = destination;
+				count = 1;
+			} else {
+				count++;
 			}
-			printDeployingResource(destination);
-			currentDest = destination;
-			count = 1;
-		} else if (!destination.isBlank()) {
-			count++;
 		}
 	}
 
-	private void printDeployStatistics(final String currentDest2, final int count2) {
-		outputStreamMonitor.message("Deployed: " + currentDest2 + " with " + count2 + " elements\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	private void printDeployStatistics() {
+		outputStreamMonitor.message("Deployed: " + currentDest + " with " + count + " elements\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+																									// }
 	}
 
 	private void printDeployingResource(final String destination) {
@@ -126,7 +129,7 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 	@Override
 	public void connectionClosed(final Device dev) {
 		if (currentDest != null && !currentDest.isBlank()) {
-			printDeployStatistics(currentDest, count);
+			printDeployStatistics();
 		}
 
 		outputStreamMonitor.message("<!--  Disconnected from device: " + dev.getName() + " -->\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
