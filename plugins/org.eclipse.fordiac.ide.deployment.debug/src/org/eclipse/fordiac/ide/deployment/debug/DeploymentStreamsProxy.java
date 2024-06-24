@@ -15,8 +15,6 @@ package org.eclipse.fordiac.ide.deployment.debug;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.OutputKeys;
@@ -43,7 +41,10 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 	private final DeploymentStreamMonitor outputStreamMonitor = new DeploymentStreamMonitor();
 	private final DeploymentStreamMonitor errorStreamMonitor = new DeploymentStreamMonitor();
 	private final Transformer transformer;
-	private final HashMap<String, Integer> resources = new HashMap<>();
+	// private final HashMap<String, Integer> resources = new HashMap<>();
+
+	private String currentDest;
+	private int count;
 
 	public DeploymentStreamsProxy() throws DeploymentException {
 		try {
@@ -73,14 +74,30 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 
 	@Override
 	public void connectionOpened(final Device dev) {
+		currentDest = null;
 		outputStreamMonitor.message("<!--  Connected to device: " + dev.getName() + " -->\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
 	public void postCommandSent(final String info, final String destination, final String command) {
-		if (destination != null && !destination.isEmpty()) {
-			resources.merge(destination, 1, Integer::sum);
+		if (!destination.isBlank() && !destination.equals(currentDest)) {
+			if (currentDest != null && !currentDest.isBlank()) {
+				printDeployStatistics(currentDest, count);
+			}
+			printDeployingResource(destination);
+			currentDest = destination;
+			count = 1;
+		} else if (!destination.isBlank()) {
+			count++;
 		}
+	}
+
+	private void printDeployStatistics(final String currentDest2, final int count2) {
+		outputStreamMonitor.message("Deployed: " + currentDest2 + " with " + count2 + " elements\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	}
+
+	private void printDeployingResource(final String destination) {
+		outputStreamMonitor.message("Deploying: " + destination + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -108,24 +125,11 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 
 	@Override
 	public void connectionClosed(final Device dev) {
-		final StringBuilder sb = new StringBuilder();
-		outputStreamMonitor.message(">> Deployed: \n"); //$NON-NLS-1$
-		for (final Entry<String, Integer> entry : resources.entrySet()) {
-			sb.append("   "); //$NON-NLS-1$
-			sb.append(entry.getKey());
-			sb.append(" with "); //$NON-NLS-1$
-			sb.append(entry.getValue());
-			sb.append(" elements\n"); //$NON-NLS-1$
+		if (currentDest != null && !currentDest.isBlank()) {
+			printDeployStatistics(currentDest, count);
 		}
-		final int totalElements = resources.values().stream().mapToInt(Integer::intValue).sum();
-
-		sb.append(">> Total: "); //$NON-NLS-1$
-		sb.append(totalElements);
-		sb.append(" elements\n"); //$NON-NLS-1$
-		outputStreamMonitor.message(sb.toString());
 
 		outputStreamMonitor.message("<!--  Disconnected from device: " + dev.getName() + " -->\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		resources.clear();
 	}
 
 	private String getFormattedXML(final String input) throws TransformerFactoryConfigurationError {
