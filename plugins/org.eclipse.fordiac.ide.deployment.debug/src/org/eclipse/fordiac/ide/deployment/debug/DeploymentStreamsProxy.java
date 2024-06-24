@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.deployment.debug;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.OutputKeys;
@@ -41,6 +43,7 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 	private final DeploymentStreamMonitor outputStreamMonitor = new DeploymentStreamMonitor();
 	private final DeploymentStreamMonitor errorStreamMonitor = new DeploymentStreamMonitor();
 	private final Transformer transformer;
+	private final HashMap<String, Integer> resources = new HashMap<>();
 
 	public DeploymentStreamsProxy() throws DeploymentException {
 		try {
@@ -75,7 +78,9 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 
 	@Override
 	public void postCommandSent(final String info, final String destination, final String command) {
-		// do nothing
+		if (destination != null && !destination.isEmpty()) {
+			resources.merge(destination, 1, Integer::sum);
+		}
 	}
 
 	@Override
@@ -103,7 +108,24 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 
 	@Override
 	public void connectionClosed(final Device dev) {
+		final StringBuilder sb = new StringBuilder();
+		outputStreamMonitor.message(">> Deployed: \n"); //$NON-NLS-1$
+		for (final Entry<String, Integer> entry : resources.entrySet()) {
+			sb.append("   "); //$NON-NLS-1$
+			sb.append(entry.getKey());
+			sb.append(" with "); //$NON-NLS-1$
+			sb.append(entry.getValue());
+			sb.append(" elements\n"); //$NON-NLS-1$
+		}
+		final int totalElements = resources.values().stream().mapToInt(Integer::intValue).sum();
+
+		sb.append(">> Total: "); //$NON-NLS-1$
+		sb.append(totalElements);
+		sb.append(" elements\n"); //$NON-NLS-1$
+		outputStreamMonitor.message(sb.toString());
+
 		outputStreamMonitor.message("<!--  Disconnected from device: " + dev.getName() + " -->\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		resources.clear();
 	}
 
 	private String getFormattedXML(final String input) throws TransformerFactoryConfigurationError {
