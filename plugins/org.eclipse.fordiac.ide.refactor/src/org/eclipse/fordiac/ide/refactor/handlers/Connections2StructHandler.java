@@ -1,8 +1,11 @@
 package org.eclipse.fordiac.ide.refactor.handlers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
@@ -48,10 +51,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.search.dialog.StructuredDataTypeDataHandler;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.search.types.FBInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -117,11 +122,19 @@ public class Connections2StructHandler extends AbstractHandler {
 			FBType les = ((ConnectionEditPart) firstElement).getModel().getSourceElement().getType();
 			FBType led = ((ConnectionEditPart) firstElement).getModel().getDestinationElement().getType();
 			
-
-			CompoundCommand cc = new CompoundCommand();
+			//TODO: what if two destinations?
+			Map<String, String> replacableConMap = new HashMap<String, String>();
+			Map<FBNetworkElement, List<FBNetworkElement>> structconnectionMap = new HashMap<FBNetworkElement, List<FBNetworkElement>>();
 			
+			
+			CompoundCommand cc = new CompoundCommand();
+			//TODO: user input for name 
 			String name = "testname";
-			selection.forEach(sel -> cc.add(new DeleteConnectionCommand(((ConnectionEditPart) sel).getModel())));
+			selection.forEach(sel -> {
+				ConnectionEditPart con = (ConnectionEditPart) sel;
+				replacableConMap.put(con.getModel().getSource().getName(), con.getModel().getDestination().getName());
+				//cc.add(new DeleteConnectionCommand(((ConnectionEditPart) sel).getModel()));
+			});
 			sourceVarNames.forEach(var -> cc.add(new DeleteInterfaceCommand(les.getInterfaceList().getOutput(var))));
 			destinationVarNames.forEach(var -> cc.add(new DeleteInterfaceCommand(led.getInterfaceList().getInput(var))));
 			CreateInterfaceElementCommand sourceStruct = new CreateInterfaceElementCommand(les.getTypeLibrary().getDataTypeLibrary().getType(estw.getDatatypeName()), name, les.getInterfaceList(), false, (int)les.getInterfaceList().getOutputs().count());
@@ -152,18 +165,24 @@ public class Connections2StructHandler extends AbstractHandler {
 					UpdateFBTypeCommand sourceUpdate = new UpdateFBTypeCommand(fbns);
 					cc3.add(sourceUpdate);
 					led.getTypeEntry().save(led);
+					
+					//TODO:
+					//AbstractLiveSearchContext.save(led.getTypeEntry());
+					//executeandsave verweden
+					
+					
 					UpdateFBTypeCommand destinationUpdate = new UpdateFBTypeCommand(fbnd);
 					cc3.add(destinationUpdate);
-					commandStack.execute(cc3);
+					//commandStack.execute(cc3);
 					fbns = sourceUpdate.getNewElement();
 					fbnd = destinationUpdate.getNewElement();
 					
 //
 					StructDataConnectionCreateCommand sdccc = new StructDataConnectionCreateCommand(fbn);
-					sdccc.setSource(fbns.getInterface().getOutput(sourceStruct.getCreatedElement().getName()));
-					sdccc.setDestination(fbnd.getInterface().getInput(destinationStruct.getCreatedElement().getName()));
+					//sdccc.setSource(fbns.getInterface().getOutput(sourceStruct.getCreatedElement().getName()));
+					//sdccc.setDestination(fbnd.getInterface().getInput(destinationStruct.getCreatedElement().getName()));
 					
-					commandStack.execute(sdccc);
+					//commandStack.execute(sdccc);
 					
 					/*
 					 * Display.getDefault().asyncExec(() -> {
@@ -175,6 +194,7 @@ public class Connections2StructHandler extends AbstractHandler {
 					
 
 					BlockTypeInstanceSearch btis = new BlockTypeInstanceSearch(les.getTypeEntry());
+					BlockTypeInstanceSearch btid = new BlockTypeInstanceSearch(led.getTypeEntry());
 //					btis.performSearch().stream().forEach(t -> ((FBNetworkElement) t).setComment("hello"));
 //					final String[] labels = { "Save", "Cancel" };
 //					FBTypeUpdateDialog<TypeEntry> fbtud1 = new FBTypeUpdateDialog<TypeEntry>(null, "STRUCT Editor", null, "", 0,
@@ -184,54 +204,204 @@ public class Connections2StructHandler extends AbstractHandler {
 //						
 //					}
 					
+					//FBNetworkElements cachen types updaten mit errormarkers neu verbinden
 
 					CompoundCommand reconnectupdatecompcmd = new CompoundCommand();
 					CompoundCommand connectcompcd = new CompoundCommand();
-					new ArrayList<EObject>(btis.performSearch()).stream()
-					.filter(t -> (!t.equals(sourceUpdate.getNewElement()) && !t.equals(destinationUpdate.getNewElement()) && t instanceof FBNetworkElement))
-					.map(t -> (FBNetworkElement) t)
-					.forEach(t -> {
-						FBCreateCommand fbcc1 = new FBCreateCommand(t.getTypeLibrary().getFBTypeEntry("STRUCT_DEMUX"), t.getFbNetwork(), (int)(t.getPosition().getX()+t.getWidth()), (int)t.getPosition().getY());
-						commandStack.execute(fbcc1);
-						ChangeStructCommand csc = new ChangeStructCommand((StructManipulator)fbcc1.getElement(), t.getTypeLibrary().getDataTypeLibrary().getType("structtest"));
-						commandStack.execute(csc);
-						
-//						for (int i = 0; i < sourceVarNames.size(); i++) {
-//							EList<Connection> e = t.getOutput(sourceVarNames.get(i)).getOutputConnections();
-//							if (e != null && !e.isEmpty()) {
-//								for (int j = 0; j < e.size(); j++) {
-//									ReconnectDataConnectionCommand rdcc = new ReconnectDataConnectionCommand(e.get(j), true, csc.getNewElement().getOutput(sourceVarNames.get(i)), fbn);
-//									commandStack.execute(rdcc);
-//								}
-//							}
-//						}
-						
-						sourceVarNames.stream().flatMap(outputname -> t.getOutput(outputname).getOutputConnections().stream()).toList().stream().forEach(con -> {
-							ReconnectDataConnectionCommand rdcc = new ReconnectDataConnectionCommand(con, true, csc.getNewElement().getOutput(con.getSource().getName()), fbn);
-							commandStack.execute(rdcc);//reconnectupdatecompcmd.add(rdcc);
-//							commandStack.execute(rdcc);
-//							DeleteConnectionCommand dcc = new DeleteConnectionCommand(con);
-//							commandStack.execute(dcc);
-							System.out.println(con);
-						});
-						
-						UpdateFBTypeCommand updatefb = new UpdateFBTypeCommand(t);
-						commandStack.execute(updatefb);//reconnectupdatecompcmd.add(updatefb);
-						StructDataConnectionCreateCommand muxcon = new StructDataConnectionCreateCommand(fbn);
-						muxcon.setSource(updatefb.getNewElement().getInterface().getOutput(sourceStruct.getCreatedElement().getName()));
-						muxcon.setDestination(csc.getNewElement().getInterface().getInput("IN"));
-						commandStack.execute(muxcon);//connectcompcd.add(muxcon);
-//						sourceVarNames.forEach(x -> {
-//							EList<Connection> e = t.getOutput(x).getOutputConnections();
-//							e.stream().findAny().ifPresent(z -> System.out.println(z));
-//							if (e != null && e.size() > 0) {
-//								e.forEach(y -> {
-//									ReconnectDataConnectionCommand rdcc = new ReconnectDataConnectionCommand(y, true, csc.getNewElement().getOutput(x), fbn);
-//									commandStack.execute(rdcc);
-//								});
-//							}
-//						});
+					CompoundCommand demuxcmd = new CompoundCommand();
+					Map <FBNetworkElement, FBNetworkElement> demuxMap = new HashMap<FBNetworkElement, FBNetworkElement>();
+					Map <FBNetworkElement, FBNetworkElement> muxMap = new HashMap<FBNetworkElement, FBNetworkElement>();
+					
+					btis.performSearch().stream().forEach(instance -> {
+						Map<FBNetworkElement, Integer> corrConnCount = new HashMap<FBNetworkElement, Integer>();
+						if (instance instanceof FBNetworkElement fbinstance) {
+							FBCreateCommand demuxCreate = new FBCreateCommand(fbinstance.getTypeLibrary().getFBTypeEntry("STRUCT_DEMUX"), fbinstance.getFbNetwork(), (int)(fbinstance.getPosition().getX()+10), (int)fbinstance.getPosition().getY());
+							commandStack.execute(demuxCreate);
+							ChangeStructCommand csc = new ChangeStructCommand((StructManipulator)demuxCreate.getElement(), fbinstance.getTypeLibrary().getDataTypeLibrary().getType("structtest"));
+							commandStack.execute(csc);
+							demuxMap.put(fbinstance, csc.getNewElement());
+							
+							replacableConMap.forEach((outname, inname) -> {
+								fbinstance.getOutput(outname).getOutputConnections().stream()
+								.filter(con -> con.getDestination().getName().equals(inname))
+								.forEach(con -> corrConnCount.put(con.getDestinationElement(), corrConnCount.getOrDefault(con.getDestinationElement(), 0)+1));
+							});
+							corrConnCount.entrySet().stream().forEach(entry -> {
+								if (entry.getValue()==replacableConMap.size()) {
+									List<FBNetworkElement> list = structconnectionMap.getOrDefault(fbinstance, new ArrayList<FBNetworkElement>());
+									list.add(entry.getKey());
+									structconnectionMap.put(fbinstance, list);
+								}
+							});
+						}
 					});
+										
+					CompoundCommand alterConnectioncmd = new CompoundCommand();
+					btis.performSearch().stream().map(instance -> (FBNetworkElement) instance).forEach(instance -> replacableConMap.forEach((outname, inname) -> {
+						instance.getOutput(outname).getOutputConnections().forEach(con -> {
+							if (structconnectionMap.containsKey(instance) && structconnectionMap.get(instance).contains(con.getDestinationElement()) 
+									&& con.getSource().getName().equals(outname) 
+									&& con.getDestination().getName().equals(inname)) {
+								alterConnectioncmd.add(new DeleteConnectionCommand(con));
+							} else {
+								alterConnectioncmd.add(new ReconnectDataConnectionCommand(con, true, demuxMap.get(instance).getOutput(con.getSource().getName()), fbn));
+							}
+						});
+					}));
+					
+					commandStack.execute(alterConnectioncmd);
+					
+					CompoundCommand alterConnectioncmd1 = new CompoundCommand();
+					new ArrayList<EObject>(btid.performSearch()).stream().forEach(instance -> {
+						if (instance instanceof FBNetworkElement fbinstance) {
+							if (!structconnectionMap.values().stream().flatMap(t -> t.stream()).anyMatch(t -> t.equals(instance))) {
+								FBCreateCommand muxCreate = new FBCreateCommand(fbinstance.getTypeLibrary().getFBTypeEntry("STRUCT_MUX"), fbinstance.getFbNetwork(), (int)(fbinstance.getPosition().getX()-10), (int)fbinstance.getPosition().getY());
+								commandStack.execute(muxCreate);
+								ChangeStructCommand csc = new ChangeStructCommand((StructManipulator)muxCreate.getElement(), fbinstance.getTypeLibrary().getDataTypeLibrary().getType("structtest"));
+								commandStack.execute(csc);
+								muxMap.put(fbinstance, csc.getNewElement());
+								
+								replacableConMap.forEach((outname, inname) -> {
+									fbinstance.getInput(inname).getInputConnections().forEach(con -> {
+										alterConnectioncmd1.add(new ReconnectDataConnectionCommand(con, true, muxMap.get(instance).getOutput(con.getSource().getName()), fbn));
+									});
+								});
+							}
+						}
+					});
+					
+					commandStack.execute(alterConnectioncmd1);
+					
+					btis.performSearch().forEach(instance -> {
+						if (instance instanceof FBNetworkElement fbinstance) {
+							UpdateFBTypeCommand srcUpdate = new UpdateFBTypeCommand(fbinstance);
+							commandStack.execute(srcUpdate);
+							
+							demuxMap.put(srcUpdate.getNewElement(), demuxMap.get(instance));
+							demuxMap.remove(instance);
+							if (structconnectionMap.containsKey(instance)) {
+								structconnectionMap.put(srcUpdate.getNewElement(), structconnectionMap.get(instance));
+								structconnectionMap.remove(instance);
+							}
+							structconnectionMap.values().stream().filter(t -> t.contains(instance)).forEach(t -> {
+								t.remove(instance);
+								t.add(srcUpdate.getNewElement());
+							});
+							if (muxMap.containsKey(instance)) {
+								muxMap.put(srcUpdate.getNewElement(), muxMap.get(instance));
+								muxMap.remove(instance);
+							}
+														
+							StructDataConnectionCreateCommand demuxcon = new StructDataConnectionCreateCommand(fbn);
+							demuxcon.setSource(srcUpdate.getNewElement().getOutput(sourceStruct.getCreatedElement().getName()));
+							demuxcon.setDestination(demuxMap.get(srcUpdate.getNewElement()).getInput("IN"));
+							commandStack.execute(demuxcon);
+
+							if (structconnectionMap.containsKey(srcUpdate.getNewElement())) {
+								new ArrayList<FBNetworkElement>(structconnectionMap.get(srcUpdate.getNewElement())).forEach(dest -> {
+									UpdateFBTypeCommand destUpdate = new UpdateFBTypeCommand(dest);
+									commandStack.execute(destUpdate);
+									
+									muxMap.put(destUpdate.getNewElement(), muxMap.get(destUpdate.getOldElement()));
+									muxMap.remove(destUpdate.getOldElement());
+									if (structconnectionMap.containsKey(destUpdate.getOldElement())) {
+										structconnectionMap.put(destUpdate.getNewElement(), structconnectionMap.get(destUpdate.getOldElement()));
+										structconnectionMap.remove(destUpdate.getOldElement());
+									}
+									structconnectionMap.values().stream().filter(t -> t.contains(destUpdate.getOldElement())).forEach(t -> {
+										t.remove(destUpdate.getOldElement());
+										t.add(destUpdate.getNewElement());
+									});
+									if (demuxMap.containsKey(destUpdate.getOldElement())) {
+										demuxMap.put(destUpdate.getNewElement(), demuxMap.get(destUpdate.getOldElement()));
+										demuxMap.remove(destUpdate.getOldElement());
+									}
+									
+									StructDataConnectionCreateCommand newcon = new StructDataConnectionCreateCommand(fbn);
+									newcon.setSource(srcUpdate.getNewElement().getOutput(sourceStruct.getCreatedElement().getName()));
+									newcon.setDestination(destUpdate.getNewElement().getInput(destinationStruct.getCreatedElement().getName()));
+									commandStack.execute(newcon);
+								});
+							}
+						}
+					});
+					
+					new ArrayList<EObject>(btid.performSearch()).forEach(instance -> {
+						if (instance instanceof FBNetworkElement fbinstance) {
+							if (!structconnectionMap.values().stream().flatMap(t -> t.stream()).anyMatch(t -> t.equals(instance))) {
+								UpdateFBTypeCommand srcUpdate = new UpdateFBTypeCommand(fbinstance);
+								commandStack.execute(srcUpdate);
+								muxMap.put(srcUpdate.getNewElement(), muxMap.get(instance));
+								muxMap.remove(instance);
+								if (structconnectionMap.containsKey(instance)) {
+									structconnectionMap.put(srcUpdate.getNewElement(), structconnectionMap.get(instance));
+									structconnectionMap.remove(instance);
+								}
+								structconnectionMap.values().stream().filter(t -> t.contains(instance)).forEach(t -> {
+									t.remove(instance);
+									t.add(srcUpdate.getNewElement());
+								});
+								if (demuxMap.containsKey(instance)) {
+									demuxMap.put(srcUpdate.getNewElement(), muxMap.get(instance));
+									demuxMap.remove(instance);
+								}
+								
+								StructDataConnectionCreateCommand muxcon = new StructDataConnectionCreateCommand(fbn);
+								muxcon.setSource(muxMap.get(srcUpdate.getNewElement()).getOutput("OUT"));
+								muxcon.setDestination(srcUpdate.getNewElement().getInput(destinationStruct.getCreatedElement().getName()));
+								commandStack.execute(muxcon);
+							}
+							
+							
+						}
+					});
+					
+					
+//					new ArrayList<EObject>(btis.performSearch()).stream()
+//					.filter(t -> (!t.equals(sourceUpdate.getNewElement()) && !t.equals(destinationUpdate.getNewElement()) && t instanceof FBNetworkElement))
+//					.map(t -> (FBNetworkElement) t)
+//					.forEach(t -> {
+//						FBCreateCommand fbcc1 = new FBCreateCommand(t.getTypeLibrary().getFBTypeEntry("STRUCT_DEMUX"), t.getFbNetwork(), (int)(t.getPosition().getX()+50), (int)t.getPosition().getY());
+//						commandStack.execute(fbcc1);
+//						ChangeStructCommand csc = new ChangeStructCommand((StructManipulator)fbcc1.getElement(), t.getTypeLibrary().getDataTypeLibrary().getType("structtest"));
+//						commandStack.execute(csc);
+//						
+////						for (int i = 0; i < sourceVarNames.size(); i++) {
+////							EList<Connection> e = t.getOutput(sourceVarNames.get(i)).getOutputConnections();
+////							if (e != null && !e.isEmpty()) {
+////								for (int j = 0; j < e.size(); j++) {
+////									ReconnectDataConnectionCommand rdcc = new ReconnectDataConnectionCommand(e.get(j), true, csc.getNewElement().getOutput(sourceVarNames.get(i)), fbn);
+////									commandStack.execute(rdcc);
+////								}
+////							}
+////						}
+//						
+//						sourceVarNames.stream().flatMap(outputname -> t.getOutput(outputname).getOutputConnections().stream()).toList().stream().forEach(con -> {
+//							ReconnectDataConnectionCommand rdcc = new ReconnectDataConnectionCommand(con, true, csc.getNewElement().getOutput(con.getSource().getName()), fbn);
+//							commandStack.execute(rdcc);//reconnectupdatecompcmd.add(rdcc);
+////							commandStack.execute(rdcc);
+////							DeleteConnectionCommand dcc = new DeleteConnectionCommand(con);
+////							commandStack.execute(dcc);
+//							System.out.println(con);
+//						});
+//						
+//						UpdateFBTypeCommand updatefb = new UpdateFBTypeCommand(t);
+//						commandStack.execute(updatefb);//reconnectupdatecompcmd.add(updatefb);
+//						StructDataConnectionCreateCommand muxcon = new StructDataConnectionCreateCommand(fbn);
+//						muxcon.setSource(updatefb.getNewElement().getInterface().getOutput(sourceStruct.getCreatedElement().getName()));
+//						muxcon.setDestination(csc.getNewElement().getInterface().getInput("IN"));
+//						commandStack.execute(muxcon);//connectcompcd.add(muxcon);
+////						sourceVarNames.forEach(x -> {
+////							EList<Connection> e = t.getOutput(x).getOutputConnections();
+////							e.stream().findAny().ifPresent(z -> System.out.println(z));
+////							if (e != null && e.size() > 0) {
+////								e.forEach(y -> {
+////									ReconnectDataConnectionCommand rdcc = new ReconnectDataConnectionCommand(y, true, csc.getNewElement().getOutput(x), fbn);
+////									commandStack.execute(rdcc);
+////								});
+////							}
+////						});
+//					});
 //					((FBNetworkElement)btis.performSearch().get(2)).getOutput("DO1").getOutputConnections().get(0);
 					//commandStack.execute(reconnectupdatecompcmd);
 					//commandStack.execute(connectcompcd);
