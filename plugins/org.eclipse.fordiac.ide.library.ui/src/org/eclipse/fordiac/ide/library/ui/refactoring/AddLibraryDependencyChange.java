@@ -11,7 +11,7 @@
  *   Patrick Aigner
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.library.ui.refactoring;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;

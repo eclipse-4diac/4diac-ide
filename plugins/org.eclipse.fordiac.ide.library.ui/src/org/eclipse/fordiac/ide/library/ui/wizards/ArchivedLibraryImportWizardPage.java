@@ -10,16 +10,15 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.wizards;
+package org.eclipse.fordiac.ide.library.ui.wizards;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.fordiac.ide.library.LibraryLinker;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.librarylinker.ArchivedLibraryImportContentProvider;
-import org.eclipse.fordiac.ide.typemanagement.librarylinker.LibraryLinker;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;

@@ -11,7 +11,7 @@
  *   Patrick Aigner
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.librarylinker;
+package org.eclipse.fordiac.ide.library;
 
 import java.io.File;
 import java.io.FilenameFilter;

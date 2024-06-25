@@ -11,7 +11,7 @@
  *   Patrick Aigner
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.wizards;
+package org.eclipse.fordiac.ide.library.ui.wizards;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -20,12 +20,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.library.LibraryUtil;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.librarylinker.LibraryUtil;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -248,6 +248,7 @@ public class LibrarySelectionPage extends WizardPage {
 		});
 	}
 
+	@SuppressWarnings("static-method")
 	private TableLayout createTableLayout() {
 		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(100));

@@ -583,17 +583,6 @@
         	</and>   
      	</enablement> 
       </deleteParticipant>
-      <deleteParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteLibraryRefactoringParticipant"
-            id="org.eclipse.fordiac.ide.typemanagement.deleteLibrary"
-            name="Delete Library Folder Handler">
-         <enablement>
-            <and>
-               <instanceof
-                     value="org.eclipse.core.resources.IFolder">
-               </instanceof>
-            </and></enablement>
-      </deleteParticipant>
    </extension>
     <extension
          point="org.eclipse.ui.navigator.viewer">
@@ -604,31 +593,6 @@
             class="org.eclipse.fordiac.ide.typemanagement.FBTypeDragAssistant"
             viewerId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer">
       </dragAssistant>
-   </extension>
-   <extension
-         point="org.eclipse.ui.importWizards">
-      <category
-            id="org.eclipse.fordiac.ide.typemanagement.wizards.sampleCategory"
-            name="Library Importer">
-      </category>
-      <wizard
-            category="org.eclipse.fordiac.ide.typemanagement.wizards.sampleCategory"
-            class="org.eclipse.fordiac.ide.typemanagement.wizards.ArchivedLibraryImportWizard"
-            id="org.eclipse.fordiac.ide.typemanagement.wizards.ArchivedLibraryImportWizard"
-            name="Archived Package Import">
-         <description>
-            Import a zipped package into the workspace.
-         </description>
-      </wizard>
-      <wizard
-            category="org.eclipse.fordiac.ide.typemanagement.wizards.sampleCategory"
-            class="org.eclipse.fordiac.ide.typemanagement.wizards.ExtractedLibraryImportWizard"
-            id="org.eclipse.fordiac.ide.typemanagement.wizards.ExtractedLibraryImportWizard"
-            name="Existing Package Import">
-         <description>
-            Import an existing file into the workspace.
-         </description>
-      </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -680,37 +644,7 @@
       </propertyTester>
    </extension>  
 
-   <extension
-         point="org.eclipse.ui.activities">
-    <activity
-    	name="Library Import Wizard Hiding Activity"
-    	description="Activity for disabling the library import wizards when the selection is not correct"
-    	id="org.eclipse.fordiac.ide.ui.wizardDisabling">
-    	<enabledWhen>
-    		<and>
-    			<count value="1"/>
-      			<iterate ifEmpty="false">
-      				<or>
-      					<and>
-                        	<instanceof value="org.eclipse.core.resources.IFolder"/>
-                          	<test property="org.eclipse.core.resources.name"
-                             	value="Type Library"/>
-                        </and>
-        				<instanceof value="org.eclipse.core.resources.IProject"/>
-        			</or>
-    			</iterate>
-    		</and>
-   		</enabledWhen>
-  	</activity>
-  	<activityPatternBinding 
-  		activityId="org.eclipse.fordiac.ide.ui.wizardDisabling" 
-  		pattern=".*/org.eclipse.fordiac.ide.typemanagement.wizards.ArchivedLibraryImportWizard">
-	</activityPatternBinding>
-	<activityPatternBinding 
-  		activityId="org.eclipse.fordiac.ide.ui.wizardDisabling" 
-  		pattern=".*/org.eclipse.fordiac.ide.typemanagement.wizards.ExtractedLibraryImportWizard">
-	</activityPatternBinding>
-   </extension>
+   
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
@@ -739,7 +673,6 @@
          <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeInterfaceChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeStructDeletionChange$DeleteMemberVariableChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeFBTypeDeletionChange$DeleteInternalFBChange"/>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteLibraryDependencyChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinChange"/>
          </or>
          </enablement>
@@ -782,10 +715,4 @@
          </command>
       </menuContribution>
    </extension>
-       <extension
-          point="org.eclipse.fordiac.ide.model.libraryLinkerExtension">
-       <client
-             class="org.eclipse.fordiac.ide.typemanagement.librarylinker.LibraryLinker">
-       </client>
-    </extension>   
 </plugin>

@@ -10,40 +10,35 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.librarylinker;
+package org.eclipse.fordiac.ide.library.ui.editors;
 
 import java.io.File;
+import java.util.stream.Stream;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
-public class ArchivedLibraryImportContentProvider implements ITreeContentProvider {
-	
-	private static final Object[] EMPTY_ARR = new Object[0];
+public class ExtractedLibraryImportContentProvider implements ITreeContentProvider {
 
+	private static final Object[] EMPTY_ARR = new Object[0];
+	
 	@Override
 	public Object[] getElements(Object inputElement) {
-		return ((File[])inputElement);
+		return Stream.of((File[])inputElement).filter(File::isDirectory).toArray();
 	}
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if (parentElement instanceof File file && file.isDirectory()) {
-			return file.listFiles();
-		}
 		return EMPTY_ARR;
 	}
 
 	@Override
 	public Object getParent(Object element) {
-		if (element instanceof File file) {
-			return file.getParentFile();
-		}
-		return new Object();
+		return EMPTY_ARR;
 	}
 
 	@Override
 	public boolean hasChildren(Object element) {
-		return element instanceof File file && file.isDirectory();
+		return false;
 	}
 
 }

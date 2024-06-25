@@ -1,13 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
-Bundle-SymbolicName: org.eclipse.fordiac.ide.library.ui;singleton:=true
+Bundle-Name: Library
+Bundle-SymbolicName: org.eclipse.fordiac.ide.library;singleton:=true
 Bundle-Version: 3.0.0.qualifier
-Automatic-Module-Name: org.eclipse.fordiac.ide.library.ui
+Automatic-Module-Name: org.eclipse.fordiac.ide.library
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.eclipse.fordiac.ide.library.LibraryPlugin
 Bundle-RequiredExecutionEnvironment: JavaSE-21
-Bundle-Vendor: %providerName
-Bundle-Localization: plugin
-Bundle-ClassPath: .
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.ltk.core.refactoring,
@@ -16,14 +15,14 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.editors,
  org.eclipse.ui.forms,
  org.eclipse.ui.ide,
- org.eclipse.fordiac.ide.library,
+ org.eclipse.fordiac.ide.gitlab,
  org.eclipse.fordiac.ide.library.model,
  org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.search,
+ org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.e4.core.contexts,
  org.eclipse.e4.core.services,
  org.osgi.service.event
-Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.fordiac.ide.library.ui.editors,
- org.eclipse.fordiac.ide.library.ui.wizards
+Export-Package: org.eclipse.fordiac.ide.library
