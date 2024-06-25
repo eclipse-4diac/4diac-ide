@@ -42,6 +42,11 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 			return null;
 		}
 
+		if (getHost().getRoot() == null) {
+			// we are in an intermediate configuration stage
+			return null;
+		}
+
 		return (AbstractConnectionCreateCommand.isStructManipulatorDefPin(pin))
 				? new StructDataConnectionCreateCommand(getParentNetwork())
 				: new DataConnectionCreateCommand(getParentNetwork());
