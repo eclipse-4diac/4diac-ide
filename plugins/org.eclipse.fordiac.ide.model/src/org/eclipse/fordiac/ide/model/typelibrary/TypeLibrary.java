@@ -232,11 +232,11 @@ public final class TypeLibrary {
 		if (project != null && project.isAccessible()) {
 			buildpath = BuildpathUtil.loadBuildpath(project);
 			checkAdditions(project);
-			final ILibraryLinker libLinker = TypeLibraryManager
-					.loadExtension("org.eclipse.fordiac.ide.model.libraryLinkerExtension", ILibraryLinker.class); //$NON-NLS-1$
-			if (libLinker != null) {
-				libLinker.checkManifestFile(project, this);
-			}
+//			final ILibraryLinker libLinker = TypeLibraryManager
+//					.loadExtension("org.eclipse.fordiac.ide.model.libraryLinkerExtension", ILibraryLinker.class); //$NON-NLS-1$
+//			if (libLinker != null) {
+//				libLinker.checkManifestFile(project, this);
+//			}
 		}
 	}
 

@@ -13,7 +13,7 @@
  *   Patrick Aigner
  *   	- adjustments to library import
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.librarylinker;
+package org.eclipse.fordiac.ide.library;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -69,13 +69,9 @@ import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.wizards.ArchivedLibraryImportWizard;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 
 public class LibraryLinker implements ILibraryLinker {
 	private static final String WORKSPACE_ROOT = ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
@@ -357,13 +353,13 @@ public class LibraryLinker implements ILibraryLinker {
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 				gitlabLibraryImport(symbolicName, version, false);
 
-				Display.getDefault().asyncExec(() -> {
-					final ArchivedLibraryImportWizard wizard = new ArchivedLibraryImportWizard();
-					wizard.init(PlatformUI.getWorkbench(), new StructuredSelection(selectedProject));
-					final WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
-
-					dialog.open();
-				});
+//				Display.getDefault().asyncExec(() -> {
+//					final ArchivedLibraryImportWizard wizard = new ArchivedLibraryImportWizard();
+//					wizard.init(PlatformUI.getWorkbench(), new StructuredSelection(selectedProject));
+//					final WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
+//
+//					dialog.open();
+//				});
 				return Status.OK_STATUS;
 			}
 		};

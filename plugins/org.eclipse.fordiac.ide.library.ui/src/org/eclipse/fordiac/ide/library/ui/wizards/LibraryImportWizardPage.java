@@ -10,7 +10,7 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.wizards;
+package org.eclipse.fordiac.ide.library.ui.wizards;
 
 import java.io.File;
 

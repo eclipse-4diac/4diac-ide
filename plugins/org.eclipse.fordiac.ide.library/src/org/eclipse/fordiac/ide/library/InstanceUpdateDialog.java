@@ -10,7 +10,7 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.librarylinker;
+package org.eclipse.fordiac.ide.library;
 
 import java.util.List;
 
@@ -79,6 +79,7 @@ public class InstanceUpdateDialog extends MessageDialog {
 		colType.setLabelProvider(createLabelProvider());
 	}
 
+	@SuppressWarnings("static-method")
 	protected TableLayout createTableLayout() {
 		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));

@@ -43,10 +43,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.ModelPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -57,9 +60,11 @@ public enum TypeLibraryManager {
 	// !> Holds type libraries of all open 4diac IDE projects
 	private final Map<IProject, TypeLibrary> typeLibraryList = new HashMap<>();
 
+	private final IEventBroker eventBroker = initEventBroker();
+
 	public TypeLibrary getTypeLibrary(final IProject proj) {
 		synchronized (typeLibraryList) {
-			return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
+			return typeLibraryList.computeIfAbsent(proj, this::createTypeLibrary);
 		}
 	}
 
@@ -124,14 +129,20 @@ public enum TypeLibraryManager {
 		return null;
 	}
 
+	private TypeLibrary createTypeLibrary(final IProject project) {
+		final TypeLibrary library = new TypeLibrary(project);
+		eventBroker.send("testevent", library); //$NON-NLS-1$
+		return library;
+	}
+
 	public void loadToolLibrary() {
 		synchronized (typeLibraryList) {
 			final IProject toolLibProject = getToolLibProject();
-			typeLibraryList.computeIfAbsent(toolLibProject, TypeLibraryManager::createToolLibrary);
+			typeLibraryList.computeIfAbsent(toolLibProject, this::createToolLibrary);
 		}
 	}
 
-	private static TypeLibrary createToolLibrary(final IProject toolLibProject) {
+	private TypeLibrary createToolLibrary(final IProject toolLibProject) {
 		if (toolLibProject.exists()) {
 			// clean-up old links
 			try {
@@ -143,7 +154,7 @@ public enum TypeLibraryManager {
 
 		createToolLibProject(toolLibProject);
 
-		return new TypeLibrary(toolLibProject);
+		return createTypeLibrary(toolLibProject);
 	}
 
 	public void refreshTypeLib(final IResource res) {
@@ -213,6 +224,12 @@ public enum TypeLibraryManager {
 		} else {
 			// invalid location, throw an exception or warn user
 		}
+	}
+
+	private static IEventBroker initEventBroker() {
+		loadExtension("org.eclipse.fordiac.ide.model.libraryLinkerExtension", ILibraryLinker.class); //$NON-NLS-1$
+		return EclipseContextFactory.getServiceContext(ModelPlugin.getDefault().getBundle().getBundleContext())
+				.get(IEventBroker.class);
 	}
 
 	// TODO: move to more appropriate utility class
