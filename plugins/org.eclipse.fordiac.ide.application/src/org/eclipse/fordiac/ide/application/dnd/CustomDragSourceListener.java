@@ -74,11 +74,24 @@ public class CustomDragSourceListener extends AbstractTransferDragSourceListener
 	private boolean isAltKeyPressed() {
 		final AdvancedGraphicalViewerKeyHandler keyHandler = (AdvancedGraphicalViewerKeyHandler) getViewer()
 				.getKeyHandler();
-		return keyHandler.getCurrentKeyCode() == SWT.ALT;
+
+		return (keyHandler.getCurrentStateMask() & SWT.ALT) != 0;
+	}
+
+	private boolean isCtrlKeyPressed() {
+		final AdvancedGraphicalViewerKeyHandler keyHandler = (AdvancedGraphicalViewerKeyHandler) getViewer()
+				.getKeyHandler();
+
+		return (keyHandler.getCurrentStateMask() & SWT.CTRL) != 0;
 	}
 
 	private Request createRequest(final Point point) {
 		final List<? extends EditPart> selectedEditParts = getViewer().getSelectedEditParts();
+
+		if (isCtrlKeyPressed() && selectedEditParts.size() == 1
+				&& selectedEditParts.get(0) instanceof final ConnectionEditPart conne) {
+			return createConnectionCreationRequest((InterfaceEditPart) conne.getSource());
+		}
 		if (selectedEditParts.size() == 1 && selectedEditParts.get(0) instanceof final InterfaceEditPart iep) {
 			return createConnectionCreationRequest(iep);
 		}
