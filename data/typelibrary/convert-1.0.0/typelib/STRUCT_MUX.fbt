@@ -15,6 +15,4 @@
 			<VarDeclaration Name="OUT" Type="ANY_STRUCT" Comment="Output"/>
 		</OutputVars>
 	</InterfaceList>
-	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
-	</Service>
 </FBType>

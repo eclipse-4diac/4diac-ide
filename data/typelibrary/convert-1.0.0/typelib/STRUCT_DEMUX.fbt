@@ -15,6 +15,4 @@
 			<VarDeclaration Name="IN" Type="ANY_STRUCT" Comment=""/>
 		</InputVars>
 	</InterfaceList>
-	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
-	</Service>
 </FBType>
