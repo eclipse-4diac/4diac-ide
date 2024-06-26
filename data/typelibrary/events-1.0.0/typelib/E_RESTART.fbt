@@ -13,24 +13,4 @@
     <InputVars/>
     <OutputVars/>
   </InterfaceList>
-  <Service Comment="Service Interface Function Block Type" LeftInterface="E_RESTART" RightInterface="RESOURCE">
-    <ServiceSequence Comment="" Name="cold_restart">
-      <ServiceTransaction>
-        <InputPrimitive Event="start" Interface="RESOURCE"/>
-        <OutputPrimitive Event="START" Interface="E_RESTART"/>
-      </ServiceTransaction>
-    </ServiceSequence>
-    <ServiceSequence Comment="" Name="warm_restart">
-      <ServiceTransaction>
-        <InputPrimitive Event="restart" Interface="RESOURCE"/>
-        <OutputPrimitive Event="WARM" Interface="E_RESTART"/>
-      </ServiceTransaction>
-    </ServiceSequence>
-    <ServiceSequence Comment="" Name="stopping">
-      <ServiceTransaction>
-        <InputPrimitive Event="stop" Interface="RESOURCE"/>
-        <OutputPrimitive Event="STOP" Interface="E_RESTART"/>
-      </ServiceTransaction>
-    </ServiceSequence>
-  </Service>
 </FBType>
