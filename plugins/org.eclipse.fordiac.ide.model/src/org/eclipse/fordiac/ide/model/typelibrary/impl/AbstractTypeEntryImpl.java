@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -311,14 +312,13 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 				&& dependencies.get().contains(notification.getNotifier())) {
 			synchronized (this) {
 
-				// if
-				// (!getTypeEClass().equals(LibraryElementPackage.Literals.AUTOMATION_SYSTEM)) {
-				// currently we only want to purge the models if it is not an automation system,
-				// as it is used as identification in system explorer and monitoring
-				// FIXME remove if when monitoring is fixed
-				setType(null);
-				setTypeEditable(null);
-				// }
+				if (!getTypeEClass().equals(LibraryElementPackage.Literals.AUTOMATION_SYSTEM)) {
+					// currently we only want to purge the models if it is not an automation system,
+					// as it is used as identification in system explorer and monitoring
+					// FIXME remove if when monitoring is fixed
+					setType(null);
+					setTypeEditable(null);
+				}
 
 				if (notification.getNewValue() != null && notification.getOldValue() != null) {
 					// if there is an editor opened then this notification will be delegated to the

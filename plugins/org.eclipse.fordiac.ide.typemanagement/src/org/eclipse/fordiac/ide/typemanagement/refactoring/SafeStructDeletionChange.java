@@ -218,12 +218,12 @@ public class SafeStructDeletionChange extends CompositeChange {
 
 		@Override
 		public EnumSet<ChangeState> getAllowedChoices() {
-			return EnumSet.of(ChangeState.DELETE, ChangeState.CHANGE_TO_ANY);
+			return EnumSet.of(ChangeState.DELETE, ChangeState.CHANGE_TO_ANY, ChangeState.NO_CHANGE);
 		}
 
 		@Override
 		public EnumSet<ChangeState> getDefaultSelection() {
-			return EnumSet.of(ChangeState.CHANGE_TO_ANY);
+			return EnumSet.of(ChangeState.NO_CHANGE);
 		}
 
 	}

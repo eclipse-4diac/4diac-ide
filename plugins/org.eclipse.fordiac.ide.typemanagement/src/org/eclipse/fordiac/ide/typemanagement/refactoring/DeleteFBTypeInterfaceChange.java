@@ -93,11 +93,11 @@ public class DeleteFBTypeInterfaceChange extends CompositeChange implements IFor
 
 	@Override
 	public EnumSet<ChangeState> getAllowedChoices() {
-		return EnumSet.of(ChangeState.CHANGE_TO_ANY, ChangeState.DELETE);
+		return EnumSet.of(ChangeState.CHANGE_TO_ANY, ChangeState.DELETE, ChangeState.NO_CHANGE);
 	}
 
 	@Override
 	public EnumSet<ChangeState> getDefaultSelection() {
-		return EnumSet.of(ChangeState.CHANGE_TO_ANY);
+		return EnumSet.of(ChangeState.NO_CHANGE);
 	}
 }
