@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -230,6 +231,12 @@ public class RepairCommandHandler extends AbstractHandler {
 	}
 
 	public static EObject getEObjectFromEditor(final Object model) {
+
+		if (model instanceof final ArraySize arraySize
+				&& arraySize.eContainer() instanceof final VarDeclaration varDecl) {
+			return getEObjectFromEditor(varDecl);
+		}
+
 		if (model instanceof final VarDeclaration varDecl
 				&& varDecl.getType() instanceof final ErrorMarkerDataType errorType) {
 			return varDecl;
@@ -253,9 +260,15 @@ public class RepairCommandHandler extends AbstractHandler {
 
 		// selection from problem view
 		if (firstElement instanceof final MarkerItem item) {
-			final EObject eObj = getEObjectFromMarkerItem(item);
+			EObject eObj = getEObjectFromMarkerItem(item);
 			// this should already be validated by the property tester therefore we want to
 			// know early if this fails.
+
+			if (eObj instanceof final ArraySize arraySize
+					&& arraySize.eContainer() instanceof final VarDeclaration varDecl) {
+				eObj = varDecl;
+			}
+
 			Assert.isNotNull(eObj);
 
 			return eObj;

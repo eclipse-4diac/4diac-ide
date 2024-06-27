@@ -63,7 +63,7 @@ public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 	}
 
 	private static boolean isConfiguredWithDataType(final ConfigurableFB confFB, final TypeEntry dtEntry) {
-		if (confFB.getDataType() == null) {
+		if (confFB.getDataType() == null || confFB.getDataType().getTypeEntry() == null) {
 			return false; // unconfigured FB, corresponds to ANY_STRUCT
 		}
 		if (confFB.getDataType() instanceof ErrorMarkerDataType || dtEntry.getType() instanceof ErrorMarkerDataType) {
