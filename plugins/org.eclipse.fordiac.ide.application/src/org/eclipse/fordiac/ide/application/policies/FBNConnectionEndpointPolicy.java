@@ -17,6 +17,8 @@ import java.util.List;
 import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -120,12 +122,32 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 			}
 		};
 		if (con.getSourceDecoration() != null) {
+			figure.add(selectonOverlayFigure(con.getSourceDecoration()));
 			figure.add(createHidenSelectionFeedbackEndpoint(con.getSourceDecoration()));
 		}
 		if (con.getTargetDecoration() != null) {
+			figure.add(selectonOverlayFigure(con.getTargetDecoration()));
 			figure.add(createHidenSelectionFeedbackEndpoint(con.getTargetDecoration()));
 		}
 		return figure;
+	}
+
+	private static IFigure selectonOverlayFigure(final FBNetworkConnectionLabel label) {
+		final Figure a = new Figure();
+		final Rectangle bounds = getSelectableFigureBounds(label);
+		a.setBounds(bounds);
+		a.setBackgroundColor(org.eclipse.draw2d.ColorConstants.white);
+		a.setOpaque(true);
+
+		final Label lab = new Label(label.getLabel().getText());
+		lab.setBackgroundColor(org.eclipse.draw2d.ColorConstants.white);
+		lab.setForegroundColor(label.getForegroundColor());
+		lab.setBounds(bounds);
+		lab.setBorder(new LineBorder(label.getForegroundColor(), 2));
+		lab.setOpaque(true);
+
+		a.add(lab);
+		return a;
 	}
 
 	private static IFigure createHidenSelectionFeedbackEndpoint(final FBNetworkConnectionLabel label) {
