@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -28,8 +30,6 @@ import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTableItem;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.AfterClass;
@@ -49,7 +49,6 @@ public class CreateFBTTest {
 	private static final String DELETE_PROJECT_WARNING = "Delete project contents on disk (cannot be undone)"; //$NON-NLS-1$
 	private static final String DELETE_RESOURCES = "Delete Resources"; //$NON-NLS-1$
 	private static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
-	private static final String TEMPLATE_TABLE_ID = "org.eclipse.fordiac.ide.typemanagement.templateTableViewer"; //$NON-NLS-1$
 	private static final String SYSTEM_EXPLORER_LABEL = "System Explorer"; //$NON-NLS-1$
 	private static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
 	private static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
@@ -57,15 +56,12 @@ public class CreateFBTTest {
 	private static final String UI_TEST_PROJECT1 = "UiTestProject1"; //$NON-NLS-1$
 	private static final String UI_TEST_PROJECT2 = "UiTestProject2"; //$NON-NLS-1$
 	private static final String PARENT_FOLDER_NAME_LABEL = "Enter or select the parent folder:"; //$NON-NLS-1$
-	private static final String TYPE_NAME_LABEL = "Type Name:"; //$NON-NLS-1$
-	private static final String TYPE_NAVIGATOR_LABEL = "Type Navigator"; //$NON-NLS-1$
-	private static final String PACKAGE_NAME_LABEL = "Package:"; //$NON-NLS-1$
-	private static final String SELECT_TYPE_LABEL = "Select Type:"; //$NON-NLS-1$
-	private static final String NEW_TYPE = "New Type"; //$NON-NLS-1$
+	private static final String TYPE_NAME_LABEL = FordiacMessages.TypeName + ":"; //$NON-NLS-1$
+	private static final String SELECT_TYPE_LABEL = FordiacMessages.SelectType + ":"; //$NON-NLS-1$
+	private static final String NEW_TYPE = FordiacMessages.NewType;
 	private static final String TYPE_PROJECT = "Type..."; //$NON-NLS-1$
 	private static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
 	private static final String TEST_TEMPLATE_NAME = "Adapter"; //$NON-NLS-1$
-	private static final String NEW_4DIAC_PROJECT = "New 4diacProject"; //$NON-NLS-1$
 	private static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
 	private static SWTWorkbenchBot bot = new SWTWorkbenchBot();
 
@@ -131,36 +127,20 @@ public class CreateFBTTest {
 		assertTrue(bot.button(CANCEL).isEnabled());
 		assertFalse(bot.button(FINISH).isEnabled());
 
-//		final SWTBotTable parentFolderList = bot.table();
-//		if (parentFolderList.rowCount() > 0) {
-//			// Parent Folder:
-//			final SWTBotTableItem selectedItem = parentFolderList.getTableItem(TEST_PARENT_FOLDER);
-//			selectedItem.select();
-//
-//			assertTrue(selectedItem.isEnabled());
-//			assertEquals(selectedItem.getText(), bot.textWithLabel(PARENT_FOLDER_NAME_LABEL).getText());
-//		}
+		final SWTBotTree containerTree = bot.tree();
+		final SWTBotTreeItem containerItem = containerTree.getTreeItem(TEST_PARENT_FOLDER);
+		containerItem.select();
 
-//		assertEquals(PARENT_FOLDER_NAME_LABEL, TEST_PARENT_FOLDER);
-
-		bot.textWithLabel(PARENT_FOLDER_NAME_LABEL).setText(TEST_PARENT_FOLDER);
+		assertEquals(TEST_PARENT_FOLDER, bot.textWithLabel(PARENT_FOLDER_NAME_LABEL).getText());
 
 		// Type Name:
 		bot.textWithLabel(TYPE_NAME_LABEL).setText(UI_TEST_PROJECT1);
 		assertFalse(bot.button(FINISH).isEnabled());
 
 		// Select Type:
-//		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem("Adapter").select();
-		final SWTBotTable templateTable = bot.tableWithId(TEMPLATE_TABLE_ID);
-		final SWTBotTableItem item = templateTable.getTableItem(0);
-		item.select();
-//		final String expectedTypeNameItem = "Adapter";
-//		final String expectedTypeDescriptionItem = " Adapter Interface";
-
-//		assertEquals(bot.tableWithLabel(SELECT_TYPE_LABEL), expectedTypeNameItem);
+		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(0).select();
 
 		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), UI_TEST_PROJECT1);
-//		assertEquals(bot.textWithLabel(INITIAL_APPLICATION_NAME_LABEL).getText(), UI_TEST_PROJECT1 + APP);
 		assertTrue(bot.button(CANCEL).isEnabled());
 		assertTrue(bot.button(FINISH).isEnabled());
 
@@ -170,23 +150,11 @@ public class CreateFBTTest {
 		final SWTBotView systemExplorerView = bot.viewByTitle(SYSTEM_EXPLORER_LABEL);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
-
-		Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
+		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
-		SWTBotTreeItem parentItem = tree.getTreeItem(TEST_PARENT_FOLDER);
+		final SWTBotTreeItem parentItem = tree.getTreeItem(TEST_PARENT_FOLDER);
 		parentItem.expand();
 		final SWTBotTreeItem projectItem = parentItem.getNode(UI_TEST_PROJECT1);
-		assertEquals(projectItem.getText(), UI_TEST_PROJECT1);
-
-		final SWTBotView typeNavigatorView = bot.viewByTitle(TYPE_NAVIGATOR_LABEL);
-		typeNavigatorView.show();
-		final Composite typeNavigatorComposite = (Composite) typeNavigatorView.getWidget();
-		swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), typeNavigatorComposite);
-		final SWTBotTree typeNavigatorTree = new SWTBotTree(swtTree);
-		parentItem = typeNavigatorTree.getTreeItem(TEST_PARENT_FOLDER);
-		parentItem.expand();
-//		projectItem = parentItem.getNode(UI_TEST_PROJECT1);
-
 		assertEquals(projectItem.getText(), UI_TEST_PROJECT1);
 
 		deleteProject(TEST_PARENT_FOLDER);
@@ -262,7 +230,6 @@ public class CreateFBTTest {
 		bot.textWithLabel(PARENT_FOLDER_NAME_LABEL).setText(TEST_PARENT_FOLDER);
 		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), typeName);
 		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(TEST_TEMPLATE_NAME).select();
-//		assertEquals(bot.textWithLabel(INITIAL_APPLICATION_NAME_LABEL).getText(), typeName + APP);
 		bot.button(FINISH).click();
 		bot.waitUntil(shellCloses(shell));
 	}
@@ -274,39 +241,12 @@ public class CreateFBTTest {
 	 */
 	private static void createProject(final String projectName) {
 		bot.menu(FILE).menu(NEW).menu(FORDIAC_IDE_PROJECT).click();
-		final SWTBotShell shell = bot.shell(NEW_4DIAC_PROJECT);
+		final SWTBotShell shell = bot.shell(Messages.New4diacProjectWizard_WizardName);
 		shell.activate();
 		bot.textWithLabel(PROJECT_NAME_LABEL).setText(projectName);
 		assertEquals(bot.textWithLabel(INITIAL_SYSTEM_NAME_LABEL).getText(), projectName);
 		assertEquals(bot.textWithLabel(INITIAL_APPLICATION_NAME_LABEL).getText(), projectName + APP);
 		bot.button(FINISH).click();
-		bot.waitUntil(shellCloses(shell));
-	}
-
-	/**
-	 * Deletes the FB Type project with given name
-	 *
-	 * @param parentNodeName Name of the parent folder
-	 * @param projectName    Name of the project to be deleted
-	 */
-	private static void deleteFBType(final String parentNodeName, final String projectName) {
-		final SWTBotView systemExplorerView = bot.viewByTitle(SYSTEM_EXPLORER_LABEL);
-		systemExplorerView.show();
-		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
-
-		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
-		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem parentItem = tree.getTreeItem(parentNodeName);
-		parentItem.expand();
-		final SWTBotTreeItem projectItem = parentItem.getNode(projectName);
-		projectItem.select();
-		bot.menu(EDIT).menu(DELETE).click();
-
-		// the project deletion confirmation dialog
-		final SWTBotShell shell = bot.shell(DELETE_RESOURCES);
-		shell.activate();
-//		bot.checkBox(DELETE_PROJECT_WARNING).select();
-		bot.button(OK).click();
 		bot.waitUntil(shellCloses(shell));
 	}
 
