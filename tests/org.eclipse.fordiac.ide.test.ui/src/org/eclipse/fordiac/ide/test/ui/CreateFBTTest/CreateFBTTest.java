@@ -65,7 +65,7 @@ public class CreateFBTTest extends Abstract4diacUITests {
 		assertFalse(bot.button(FINISH).isEnabled());
 
 		// Select Type:
-		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(0).select();
+		bot.table().select(TEST_TYPE_TEMPLATE_NAME);
 
 		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), FBT_TEST_PROJECT1);
 		assertTrue(bot.button(CANCEL).isEnabled());
@@ -120,11 +120,11 @@ public class CreateFBTTest extends Abstract4diacUITests {
 		assertFalse(bot.button(FINISH).isEnabled());
 
 		// Package:
-		bot.textWithLabel(PACKAGE_NAME_LABEL).setText("pkg1::pkg2");
+		bot.textWithLabel(PACKAGE_NAME_LABEL).setText(PACKAGE_NAME);
 		assertFalse(bot.button(FINISH).isEnabled());
 
 		// Select Type:
-		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(0).select();
+		bot.table().select(TEST_TYPE_TEMPLATE_NAME);
 
 		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), FBT_TEST_PROJECT2);
 		assertTrue(bot.button(CANCEL).isEnabled());
@@ -161,7 +161,7 @@ public class CreateFBTTest extends Abstract4diacUITests {
 		bot.textWithLabel(TYPE_NAME_LABEL).setText(FBT_TEST_PROJECT3);
 		bot.textWithLabel(PARENT_FOLDER_NAME_LABEL).setText(PROJECT_NAME);
 		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), FBT_TEST_PROJECT3);
-		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(TEST_TEMPLATE_NAME).select();
+		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(TEST_TYPE_TEMPLATE_NAME).select();
 		assertFalse(bot.button(FINISH).isEnabled());
 		bot.button(CANCEL).click();
 		bot.waitUntil(shellCloses(shell));

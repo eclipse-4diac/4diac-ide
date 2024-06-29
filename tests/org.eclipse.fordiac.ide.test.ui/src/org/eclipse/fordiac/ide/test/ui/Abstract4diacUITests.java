@@ -51,6 +51,7 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.AfterClass;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 
 public class Abstract4diacUITests {
@@ -105,13 +106,16 @@ public class Abstract4diacUITests {
 	protected static final String FBT_TEST_PROJECT2 = "FBTTestProject2"; //$NON-NLS-1$
 	protected static final String FBT_TEST_PROJECT3 = "FBTTestProject3"; //$NON-NLS-1$
 	protected static final String FBT_TEST_PROJECT4 = "FBTTestProject4"; //$NON-NLS-1$
+	protected static final String PACKAGE_NAME1 = "pkg1"; //$NON-NLS-1$
+	protected static final String PACKAGE_NAME2 = "pkg2"; //$NON-NLS-1$
+	protected static final String PACKAGE_NAME = PACKAGE_NAME1 + "::" + PACKAGE_NAME2; //$NON-NLS-1$
 	protected static final String PARENT_FOLDER_NAME_LABEL = "Enter or select the parent folder:"; //$NON-NLS-1$
 	protected static final String TYPE_NAME_LABEL = FordiacMessages.TypeName + ":"; //$NON-NLS-1$
 	protected static final String SELECT_TYPE_LABEL = FordiacMessages.SelectType + ":"; //$NON-NLS-1$
 	protected static final String NEW_TYPE = FordiacMessages.NewType;
 	protected static final String PACKAGE_NAME_LABEL = FordiacMessages.Package + ":"; //$NON-NLS-1$
 	protected static final String TYPE_PROJECT = "Type..."; //$NON-NLS-1$
-	protected static final String TEST_TEMPLATE_NAME = "Adapter"; //$NON-NLS-1$
+	protected static final String TEST_TYPE_TEMPLATE_NAME = "Adapter"; //$NON-NLS-1$
 
 	// FB pins and values
 	protected static final String START = "START"; //$NON-NLS-1$
@@ -379,7 +383,7 @@ public class Abstract4diacUITests {
 		bot.textWithLabel(TYPE_NAME_LABEL).setText(typeName);
 		bot.textWithLabel(PARENT_FOLDER_NAME_LABEL).setText(parentName);
 		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), typeName);
-		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(TEST_TEMPLATE_NAME).select();
+		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(TEST_TYPE_TEMPLATE_NAME).select();
 		bot.button(FINISH).click();
 		bot.waitUntil(shellCloses(shell));
 	}
@@ -445,7 +449,7 @@ public class Abstract4diacUITests {
 	 * Cleans the canvas from all objects.
 	 */
 	@SuppressWarnings("static-method")
-//	@AfterEach
+	@AfterEach
 	protected void cleanEditorArea() {
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
