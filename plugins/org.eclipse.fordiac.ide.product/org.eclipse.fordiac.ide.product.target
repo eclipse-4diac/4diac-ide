@@ -64,7 +64,8 @@
 			<unit id="org.eclipse.swtbot.feature.group" version="4.1.0.202306071420"/>
 			<unit id="org.eclipse.swtbot.ide.feature.group" version="4.1.0.202306071420"/>
 			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.34.0.v20240227-0940"/>
-		</location>		
+			<unit id="org.eclipse.swtbot.generator.feature.feature.group" version="0.0.0"/>
+		</location>	
 		<location includeDependencyDepth="infinite" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 
 			<feature id="org.eclipse.fordiac.ide.milo" label="Milo Dependencies" provider-name="Eclipse 4diac" version="2.0.1.qualifier">
