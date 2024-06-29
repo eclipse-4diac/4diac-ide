@@ -36,8 +36,8 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 /**
- * This policy creates an MoveAndReconnectCommand when user moves selected FBs over
- * a subapp. When this is possible the subapp is marked as selected.
+ * This policy creates an MoveAndReconnectCommand when user moves selected FBs
+ * over a subapp. When this is possible the subapp is marked as selected.
  */
 public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy {
 
@@ -52,7 +52,7 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 				final Point destination = getTranslatedAndZoomedPoint((ChangeBoundsRequest) request);
 				translateToRelative(getHost(), destination);
 				final List<FBNetworkElement> elements = editParts.stream().map(EditPart::getModel)
-						.map(FBNetworkElement.class::cast).toList();
+						.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).toList();
 				cmd.add(new MoveAndReconnectCommand(elements, destination, getParentModel().getSubAppNetwork()));
 			}
 

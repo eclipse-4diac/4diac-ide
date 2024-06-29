@@ -17,9 +17,12 @@
 package org.eclipse.fordiac.ide.model.ui.actions;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
@@ -66,12 +69,13 @@ public abstract class OpenListener implements IOpenListener {
 		final IEditorPart openedEditor = getOpenedEditor();
 		if (null != openedEditor) {
 			final AbstractBreadCrumbEditor breadCrumbEditor = getBreadCrumbEditor(openedEditor);
-			if (null != breadCrumbEditor) {
-				if (sameLevelAsParent(element)) {
-					breadCrumbEditor.getBreadcrumb().setInput(element.eContainer().eContainer());
-					HandlerHelper.selectElement(element, getOpenedEditor());
+			final EObject elementToOpen = getElementToOpen(openedEditor, element);
+			if (breadCrumbEditor != null && elementToOpen != null) {
+				if (sameLevelAsParent(elementToOpen)) {
+					breadCrumbEditor.getBreadcrumb().setInput(elementToOpen.eContainer().eContainer());
+					HandlerHelper.selectElement(elementToOpen, openedEditor);
 				} else {
-					breadCrumbEditor.getBreadcrumb().setInput(element);
+					breadCrumbEditor.getBreadcrumb().setInput(elementToOpen);
 				}
 			}
 		}
@@ -87,8 +91,8 @@ public abstract class OpenListener implements IOpenListener {
 
 	public static AbstractBreadCrumbEditor getBreadCrumbEditor(final IEditorPart openedEditor) {
 		AbstractBreadCrumbEditor breadCrumbEditor = openedEditor.getAdapter(AbstractBreadCrumbEditor.class);
-		if ((breadCrumbEditor == null) && (openedEditor instanceof FormEditor)) {
-			breadCrumbEditor = getBreadCrumbFromMultiPageEditor((FormEditor) openedEditor);
+		if ((breadCrumbEditor == null) && (openedEditor instanceof final FormEditor formEditor)) {
+			breadCrumbEditor = getBreadCrumbFromMultiPageEditor(formEditor);
 		}
 		return breadCrumbEditor;
 	}
@@ -97,9 +101,9 @@ public abstract class OpenListener implements IOpenListener {
 		final IEditorInput input = openedEditor.getActiveEditor().getEditorInput();
 
 		for (final IEditorPart subEditor : openedEditor.findEditors(input)) {
-			if (subEditor instanceof AbstractBreadCrumbEditor) {
+			if (subEditor instanceof final AbstractBreadCrumbEditor bcEditor) {
 				openedEditor.setActiveEditor(subEditor);
-				return (AbstractBreadCrumbEditor) subEditor;
+				return bcEditor;
 			}
 		}
 		return null;
@@ -107,6 +111,20 @@ public abstract class OpenListener implements IOpenListener {
 
 	private static boolean sameLevelAsParent(final Object element) {
 		return element instanceof Group;
+	}
+
+	public static EObject getElementToOpen(final IEditorPart openedEditor, final EObject element) {
+		final LibraryElement editorLibElement = openedEditor.getAdapter(LibraryElement.class);
+		if (editorLibElement == null) {
+			return null;
+		}
+
+		if (editorLibElement == EcoreUtil.getRootContainer(element)) {
+			// we are in the same model we can safely use element
+			return element;
+		}
+		final URI elementURI = EcoreUtil.getURI(element);
+		return editorLibElement.eResource().getEObject(elementURI.fragment());
 	}
 
 }

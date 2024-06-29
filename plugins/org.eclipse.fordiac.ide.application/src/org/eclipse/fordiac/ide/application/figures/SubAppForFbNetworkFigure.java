@@ -190,7 +190,11 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 
 	private void createContentContainer() {
 		expandedContentArea = new Figure();
-		expandedContentArea.setLayoutManager(new GridLayout());
+		final GridLayout expContentLayout = new GridLayout();
+		expContentLayout.marginWidth = 0;
+		expContentLayout.verticalSpacing = 0;
+		expContentLayout.horizontalSpacing = 0;
+		expandedContentArea.setLayoutManager(expContentLayout);
 		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		expandedMainFigure.add(expandedContentArea, gridData);
@@ -255,15 +259,6 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		return gridData;
 	}
 
-	private static GridLayout createInterfaceBarLayout() {
-		final GridLayout topLayout = new GridLayout(1, false);
-		topLayout.marginHeight = 0;
-		topLayout.marginWidth = 0;
-		topLayout.verticalSpacing = 0;
-		topLayout.horizontalSpacing = 0;
-		return topLayout;
-	}
-
 	public int getExpandedIOHeight() {
 		if (getModel().isUnfolded()) {
 			return Math.max(expandedInputFigure.getPreferredSize().height,
@@ -316,7 +311,8 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		public void layout(final IFigure parent) {
 			final ScrollPane scrollpane = (ScrollPane) parent;
 			final Viewport viewport = scrollpane.getViewport();
-			final ScrollBar hBar = scrollpane.getHorizontalScrollBar(), vBar = scrollpane.getVerticalScrollBar();
+			final ScrollBar hBar = scrollpane.getHorizontalScrollBar();
+			final ScrollBar vBar = scrollpane.getVerticalScrollBar();
 
 			if (isInput) {
 				layoutInput(parent, scrollpane, viewport, hBar, vBar);

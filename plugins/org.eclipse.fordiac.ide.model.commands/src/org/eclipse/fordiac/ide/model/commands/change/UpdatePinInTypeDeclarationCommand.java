@@ -21,16 +21,10 @@ import org.eclipse.gef.commands.Command;
 public class UpdatePinInTypeDeclarationCommand extends Command {
 	private final DataTypeEntry dataTypeEntry;
 	private final FBType fbType;
-	private final String oldName;
 
 	public UpdatePinInTypeDeclarationCommand(final FBType fbnElement, final DataTypeEntry type) {
-		this(fbnElement, type, type.getTypeName());
-	}
-
-	public UpdatePinInTypeDeclarationCommand(final FBType fbnElement, final DataTypeEntry type, final String oldName) {
 		this.fbType = fbnElement;
 		this.dataTypeEntry = type;
-		this.oldName = oldName;
 	}
 
 	@Override
@@ -41,7 +35,8 @@ public class UpdatePinInTypeDeclarationCommand extends Command {
 	@Override
 	public void execute() {
 		fbType.getInterfaceList().getAllInterfaceElements().stream().filter(VarDeclaration.class::isInstance)
-				.map(VarDeclaration.class::cast).filter(i -> i.getTypeName().equals(oldName)).forEach(el -> {
+				.map(VarDeclaration.class::cast).filter(i -> i.getType().getTypeEntry() == dataTypeEntry)
+				.forEach(el -> {
 					el.setType(dataTypeEntry.getTypeEditable());
 				});
 	}

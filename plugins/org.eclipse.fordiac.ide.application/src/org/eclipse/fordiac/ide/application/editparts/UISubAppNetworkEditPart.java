@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2024 Profactor GmbH, AIT, fortiss GmbH,
- *                          Johannes Kepler University Linz
+ *                          Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +18,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -27,6 +30,18 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	public SubApp getSubApp() {
 		return (SubApp) getModel().eContainer();
+	}
+
+	@Override
+	protected List<?> getModelChildren() {
+		@SuppressWarnings("unchecked")
+		final List<Object> modelChildren = (List<Object>) super.getModelChildren();
+		if (getModel() != null) {
+			final InterfaceList ifList = getInterfaceList();
+			modelChildren.addAll(ifList.getInOutVars());
+			modelChildren.addAll(ifList.getOutMappedInOutVars());
+		}
+		return modelChildren;
 	}
 
 	@Override

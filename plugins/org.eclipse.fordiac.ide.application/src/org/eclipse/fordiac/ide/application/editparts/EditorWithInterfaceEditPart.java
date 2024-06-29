@@ -174,6 +174,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	private Figure rightInterfaceContainer;
 	private Figure rightEventContainer;
 	private Figure rightVarContainer;
+	private Figure rightVarInOutContainer;
 	private Figure rightAdapterContainer;
 	private FreeformLayer contentContainer;
 	private ControlListener controlListener;
@@ -300,6 +301,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 
 		rightEventContainer = createInterfaceElementsContainer(rightInnerContainer);
 		rightVarContainer = createInterfaceElementsContainer(rightInnerContainer);
+		rightVarInOutContainer = createInterfaceElementsContainer(rightInnerContainer);
 		rightAdapterContainer = createInterfaceElementsContainer(rightInnerContainer);
 	}
 
@@ -394,6 +396,10 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		return rightVarContainer;
 	}
 
+	public Figure getRightVarInOutInterfaceContainer() {
+		return rightVarInOutContainer;
+	}
+
 	public Figure getRightAdapterInterfaceContainer() {
 		return rightAdapterContainer;
 	}
@@ -442,14 +448,14 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		if (childEditPart instanceof final InterfaceEditPart iep) {
-			addChildVisualInterfaceElement(iep);
-		} else if (childEditPart instanceof final InstanceCommentEditPart icep) {
+		switch (childEditPart) {
+		case final InterfaceEditPart iep -> addChildVisualInterfaceElement(iep);
+		case final InstanceCommentEditPart icep -> {
 			final Figure commentFigure = icep.getFigure();
 			commentFigure.setBorder(null);
 			commentContainer.add(commentFigure);
-		} else {
-			super.addChildVisual(childEditPart, index);
+		}
+		default -> super.addChildVisual(childEditPart, index);
 		}
 	}
 
@@ -460,12 +466,10 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	 */
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		if (childEditPart instanceof final InterfaceEditPart iep) {
-			removeChildVisualInterfaceElement(iep);
-		} else if (childEditPart instanceof final InstanceCommentEditPart icep) {
-			commentContainer.remove(icep.getFigure());
-		} else {
-			super.removeChildVisual(childEditPart);
+		switch (childEditPart) {
+		case final InterfaceEditPart iep -> removeChildVisualInterfaceElement(iep);
+		case final InstanceCommentEditPart icep -> commentContainer.remove(icep.getFigure());
+		default -> super.removeChildVisual(childEditPart);
 		}
 	}
 
@@ -496,10 +500,11 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	}
 
 	private Figure getVarVisualContainer(final InterfaceEditPart childEditPart) {
-		if (childEditPart.getModel() instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
-			return getLeftVarInOutInterfaceContainer();
+		final IInterfaceElement model = childEditPart.getModel();
+		if (model instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
+			return model.isIsInput() ? getLeftVarInOutInterfaceContainer() : getRightVarInOutInterfaceContainer();
 		}
-		return childEditPart.getModel().isIsInput() ? getLeftVarInterfaceContainer() : getRightVarInterfaceContainer();
+		return model.isIsInput() ? getLeftVarInterfaceContainer() : getRightVarInterfaceContainer();
 	}
 
 	private Figure getAdapterVisualContainer(final InterfaceEditPart childEditPart) {

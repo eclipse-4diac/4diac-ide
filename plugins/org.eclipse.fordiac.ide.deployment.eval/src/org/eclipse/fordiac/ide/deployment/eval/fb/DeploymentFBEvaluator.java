@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
+import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -45,6 +46,7 @@ import org.eclipse.fordiac.ide.monitoring.MonitoringManagerUtils;
 
 public class DeploymentFBEvaluator<T extends FBType> extends FBEvaluator<T> {
 
+	private static final String FAKE_TIME_DEV_PARAM_NAME = "FakeTime"; //$NON-NLS-1$
 	private DeploymentEvaluatorSharedState sharedState;
 	private FBDeploymentData deploymentData;
 	private Map<String, MonitoringElement> monitoringElements;
@@ -118,6 +120,7 @@ public class DeploymentFBEvaluator<T extends FBType> extends FBEvaluator<T> {
 		try {
 			writeVariables(getType().getInterfaceList().getInputVars());
 			writeVariables(getType().getInterfaceList().getInOutVars());
+			sharedState.writeDeviceParameter(FAKE_TIME_DEV_PARAM_NAME, StandardFunctions.NOW_MONOTONIC().toString());
 			sharedState.triggerEvent(monitoringElements.get(event.getName()));
 			pollWatches();
 		} catch (final DeploymentException e) {

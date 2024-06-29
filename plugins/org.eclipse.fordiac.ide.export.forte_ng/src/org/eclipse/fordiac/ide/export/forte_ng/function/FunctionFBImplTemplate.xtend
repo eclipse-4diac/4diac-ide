@@ -43,12 +43,12 @@ class FunctionFBImplTemplate extends ForteFBTemplate<FunctionFBType> {
 		
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
 		    «baseClass»(paContainer, &scmFBInterfaceSpec, paInstanceNameId)«// no newline
-			»«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
+			»«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
 			»«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterInitializer»«generateConnectionInitializer» {
 		}
 		«generateInitializeDefinition»
 		
-		«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
+		«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
 		«generateInterfaceDefinitions»
 		«generateExecuteEvent»
 		
@@ -71,7 +71,7 @@ class FunctionFBImplTemplate extends ForteFBTemplate<FunctionFBType> {
 	'''«FOR variable : bodyCallArguments SEPARATOR ", "»«variable.generateName»«ENDFOR»'''
 
 	def protected getBodyCallArguments() {
-		(type.interfaceList.inputVars + type.interfaceList.outputVars).filter[!name.nullOrEmpty]
+		(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).filter[!name.nullOrEmpty]
 	}
 
 	def protected getBodyReturnVariable() {

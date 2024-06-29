@@ -394,7 +394,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def protected generateSetInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
 		«IF (containsNonRetainedVariable(variables))»
 			void «className»::setInitialValues() {
-				«generateVariableDefaultAssignment(variables.filter[!isRetainedVariable(it)])»
+			  «generateVariableDefaultAssignment(variables.filter[!isRetainedVariable(it)])»
 			}
 			
 		«ENDIF»	

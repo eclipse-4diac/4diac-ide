@@ -99,6 +99,7 @@ public final class Messages extends NLS {
 	public static String InstanceUpdate;
 	public static String NewFBTypeWizard_TemplateNotAvailable;
 	public static String NewFBTypeWizardPage_TypeAlreadyExists;
+	public static String NewFBTypeWizardPage_FileAlreadyExists;
 	public static String NewFBTypeWizardPage_CreateNewType;
 	public static String NewFBTypeWizardPage_CreateNewTypeFromTemplateType;
 	public static String NewFBTypeWizardPage_CouldNotFindTemplateFiles;
@@ -114,6 +115,8 @@ public final class Messages extends NLS {
 	public static String RenameElementChange_NameChanged;
 	public static String RenameElementRefactoringParticipant_Name;
 	public static String RenameElementRefactoringProcessor_Name;
+
+	public static String RenameElementRefactoringProcessor_RenamePinInType;
 	public static String RenameElementRefactoringWizardPage_Name;
 	public static String RenameType_Name;
 	public static String RenameType_TypeExists;
@@ -157,6 +160,8 @@ public final class Messages extends NLS {
 	public static String DeleteLibraryParticipant_Name;
 	public static String DeleteLibraryParticipant_Change_Title;
 	public static String AddLibraryDependency_Change_Title;
+
+	public static String SafeStructDeletionChange_RootNodeChangeText;
 
 	static {
 		// initialize resource bundle

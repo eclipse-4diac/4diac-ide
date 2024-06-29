@@ -27,8 +27,6 @@ import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
@@ -67,23 +65,6 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	protected static int subappInterfaceBarMaxWidth = -1;
 
 	private boolean isOverflow = false;
-
-	private final class SubappInternalConnAnchor extends FixedAnchor {
-		private SubappInternalConnAnchor(final IFigure owner, final boolean isInput) {
-			super(owner, isInput);
-		}
-
-		@Override
-		public Point getLocation(final Point reference) {
-			final Point location = super.getLocation(reference);
-			final IFigure subappFigure = ((IContainerEditPart) getParent()).getContentEP().getFigure();
-			final Rectangle bounds = subappFigure.getBounds().getCopy();
-			subappFigure.translateToAbsolute(bounds);
-			location.y = Math.max(location.y, bounds.y);
-			location.y = Math.min(location.y, bounds.y + bounds.height);
-			return location;
-		}
-	}
 
 	public class UntypedSubappIEAdapter extends EContentAdapter {
 		@Override
@@ -252,7 +233,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	protected FixedAnchor createSourceConAnchor() {
 		if (isInput()) {
 			// we are unfolded and this is an internal connection
-			return new SubappInternalConnAnchor(getFigure(), !isInput());
+			return new FixedAnchor(getFigure(), !isInput());
 		}
 		return super.createTargetConAnchor();
 	}
@@ -261,7 +242,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	protected FixedAnchor createTargetConAnchor() {
 		if (!isInput()) {
 			// we are unfolded and this is an internal connection
-			return new SubappInternalConnAnchor(getFigure(), !isInput());
+			return new FixedAnchor(getFigure(), !isInput());
 		}
 		return super.createTargetConAnchor();
 	}

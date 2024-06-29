@@ -175,13 +175,15 @@ public final class TransactionFactory {
 	}
 
 	public static List<Transaction> addTraceInfoTo(final EList<Transaction> transactions) {
-		final FBRuntimeAbstract fbRuntime = transactions.get(0).getInputEventOccurrence().getFbRuntime();
-		if (fbRuntime != null) {
-			final EObject executedModel = fbRuntime.getModel();
-			if (!(executedModel instanceof BasicFBType) || !(transactions.get(0) instanceof FBTransaction)) {
-				throw new UnsupportedOperationException("not implemented"); //$NON-NLS-1$
+		if (!transactions.isEmpty()) {
+			final FBRuntimeAbstract fbRuntime = transactions.get(0).getInputEventOccurrence().getFbRuntime();
+			if (fbRuntime != null) {
+				final EObject executedModel = fbRuntime.getModel();
+				if (!(executedModel instanceof BasicFBType) || !(transactions.get(0) instanceof FBTransaction)) {
+					throw new UnsupportedOperationException("not implemented"); //$NON-NLS-1$
+				}
+				transactions.forEach(TransactionFactory::createBasicFbTrace);
 			}
-			transactions.forEach(t -> createBasicFbTrace(t));
 		}
 		return transactions;
 	}

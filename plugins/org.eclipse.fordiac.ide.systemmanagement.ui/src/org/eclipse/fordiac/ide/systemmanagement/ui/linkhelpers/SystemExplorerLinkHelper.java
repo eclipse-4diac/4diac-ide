@@ -78,8 +78,8 @@ public class SystemExplorerLinkHelper implements ILinkHelper {
 			handleModelElementSelection(aPage, eObj);
 		}
 
-		if (sel instanceof IFile) {
-			handleFileSelection(aPage, (IFile) aSelection.getFirstElement());
+		if (sel instanceof final IFile iFile) {
+			handleFileSelection(aPage, iFile);
 		}
 	}
 
@@ -120,11 +120,12 @@ public class SystemExplorerLinkHelper implements ILinkHelper {
 		final IEditorPart editor = getRootEditor(aPage, sel);
 		if (editor != null) {
 			final AbstractBreadCrumbEditor breadCrumbEditor = OpenListener.getBreadCrumbEditor(editor);
-			if (breadCrumbEditor != null) {
-				final EObject breadCrumbRef = getBreadCrumbRefElement(sel);
+			final EObject elementToOpen = OpenListener.getElementToOpen(editor, sel);
+			if (breadCrumbEditor != null && elementToOpen != null) {
+				final EObject breadCrumbRef = getBreadCrumbRefElement(elementToOpen);
 				breadCrumbEditor.getBreadcrumb().setInput(breadCrumbRef);
-				if (breadCrumbRef != sel || sel instanceof Device) {
-					HandlerHelper.selectElement(sel, editor);
+				if (breadCrumbRef != elementToOpen || elementToOpen instanceof Device) {
+					HandlerHelper.selectElement(elementToOpen, editor);
 				}
 			}
 		}

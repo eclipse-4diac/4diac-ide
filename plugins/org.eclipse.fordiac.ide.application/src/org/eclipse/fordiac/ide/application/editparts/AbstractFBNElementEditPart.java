@@ -21,6 +21,7 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -378,19 +379,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	}
 
-	private List<VarDeclaration> getRemovedVarInOutPins(final boolean isInput) {
-		List<VarDeclaration> removedVarInOutPins;
-		if (isInput) {
-			removedVarInOutPins = getModel().getInterface().getOutMappedInOutVars().stream()
-					.filter(it -> !it.getOutputConnections().isEmpty()).map(VarDeclaration::getInOutVarOpposite)
-					.toList();
-		} else {
-			removedVarInOutPins = getModel().getInterface().getInOutVars().stream()
-					.filter(it -> !it.getInputConnections().isEmpty()).map(VarDeclaration::getInOutVarOpposite)
-					.toList();
-		}
-		removedVarInOutPins.forEach(vd -> vd.setValue(null));
-		return removedVarInOutPins;
+	@SuppressWarnings("static-method")
+	protected List<VarDeclaration> getRemovedVarInOutPins(final boolean isInput) {
+		return Collections.emptyList();
 	}
 
 	private int getInterfaceInputElementIndex(final InterfaceEditPart interfaceEditPart,

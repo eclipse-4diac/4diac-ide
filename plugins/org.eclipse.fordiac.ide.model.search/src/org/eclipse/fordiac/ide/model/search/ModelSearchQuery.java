@@ -28,6 +28,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -43,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
@@ -196,6 +199,16 @@ public class ModelSearchQuery implements ISearchQuery {
 					searchResult.addResult(varDecl);
 				}
 			}
+			for (final Algorithm algo : type.getAlgorithm()) {
+				if (matchEObject(algo)) {
+					searchResult.addResult(algo);
+				}
+			}
+			for (final Method meth : type.getMethods()) {
+				if (matchEObject(meth)) {
+					searchResult.addResult(meth);
+				}
+			}
 		}
 		case final ArrayType array -> {
 			final DataType base = array.getBaseType();
@@ -270,6 +283,13 @@ public class ModelSearchQuery implements ISearchQuery {
 				return compareStrings(varDecl.getTypeName())
 						|| (varDecl.getType() != null && varDecl.getType().getTypeEntry() != null
 								&& compareStrings(varDecl.getType().getTypeEntry().getFullTypeName()));
+			}
+			if (modelElement instanceof Algorithm || modelElement instanceof Method) {
+				for (final String fqn : VariableOperations.getAllDependencies(modelElement)) {
+					if (compareStrings(fqn)) {
+						return true;
+					}
+				}
 			}
 		}
 		return false;
