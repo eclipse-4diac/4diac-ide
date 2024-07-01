@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,7 +18,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.xtext.resource.XtextResource;
 
 public interface STCorePartitioner {
+
 	String combine(LibraryElement libraryElement);
 
-	Optional<? extends STCorePartition> partition(XtextResource resource);
+	Optional<STCorePartition> partition(XtextResource resource);
 }
