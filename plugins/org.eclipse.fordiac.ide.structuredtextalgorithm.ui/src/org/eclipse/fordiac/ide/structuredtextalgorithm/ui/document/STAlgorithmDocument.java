@@ -1,5 +1,5 @@
-/*******************************************************************************
- * Copyright (c) 2023, 2024 Martin Erich Jobst
+/**
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,8 +9,8 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
- *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document;
+ */
+package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document;
 
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocument;
 import org.eclipse.xtext.ui.editor.model.DocumentTokenSource;
@@ -18,10 +18,10 @@ import org.eclipse.xtext.ui.editor.model.edit.ITextEditComposer;
 
 import com.google.inject.Inject;
 
-public class STFunctionDocument extends LibraryElementXtextDocument {
+public class STAlgorithmDocument extends LibraryElementXtextDocument {
 
 	@Inject
-	public STFunctionDocument(final DocumentTokenSource tokenSource, final ITextEditComposer composer) {
+	public STAlgorithmDocument(final DocumentTokenSource tokenSource, final ITextEditComposer composer) {
 		super(tokenSource, composer);
 	}
 }
