@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="WORD_TO_BYTES" Comment="">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="OUT_00"/>
+				<With Var="OUT_01"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="WORD" Comment="WORD Input"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT_00" Type="BYTE" Comment="BYTE 00"/>
+			<VarDeclaration Name="OUT_01" Type="BYTE" Comment="BYTE 01"/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[FUNCTION WORD_TO_BYTES
+
+VAR_INPUT
+	IN : WORD;    // WORD Input
+END_VAR
+
+VAR_OUTPUT
+	OUT_00 : BYTE;    // BYTE 00
+	OUT_01 : BYTE;    // BYTE 01
+END_VAR
+
+(* this Function extracts the 2 BYTE from a word *)
+OUT_00 := WORD_TO_BYTE(SHR(IN AND WORD_BYTE_00, SHFT_BYTE_00));
+OUT_01 := WORD_TO_BYTE(SHR(IN AND WORD_BYTE_01, SHFT_BYTE_01));
+
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+</Function>
