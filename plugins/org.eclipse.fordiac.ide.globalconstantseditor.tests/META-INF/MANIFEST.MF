@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.fordiac.ide.globalconstantseditor,
  org.eclipse.xtext.testing,
  org.eclipse.xtext.xbase.testing,
  org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
- org.eclipse.fordiac.ide.model
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.globalconstantseditor.tests
 Import-Package: org.junit.jupiter.api,
