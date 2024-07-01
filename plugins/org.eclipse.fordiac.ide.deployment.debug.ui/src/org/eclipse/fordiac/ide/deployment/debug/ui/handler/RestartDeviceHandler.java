@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.deployment.debug.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -30,15 +31,16 @@ public class RestartDeviceHandler extends AbstractDeviceDeploymentCommand {
 		for (final String resourceName : resourceNames) {
 			final Resource resource = getDevice().getResourceNamed(resourceName);
 
-			executor.stopResource(resource);
+			executor.killResource(resourceName);
 			executor.resetResource(resourceName);
 			executor.startResource(resource);
 		}
+
 	}
 
 	@Override
 	protected String getErrorMessageHeader() {
-		return ""; //$NON-NLS-1$
+		return Messages.RestartDeviceHandler_RestartError;
 	}
 
 }
