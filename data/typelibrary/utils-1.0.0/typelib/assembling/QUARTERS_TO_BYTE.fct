@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="QUARTERS_TO_BYTE" Comment="">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="IN_00"/>
+				<With Var="IN_01"/>
+				<With Var="IN_02"/>
+				<With Var="IN_03"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN_00" Type="BYTE" Comment="QUARTER BYTE 00"/>
+			<VarDeclaration Name="IN_01" Type="BYTE" Comment="QUARTER BYTE 01"/>
+			<VarDeclaration Name="IN_02" Type="BYTE" Comment="QUARTER BYTE 02"/>
+			<VarDeclaration Name="IN_03" Type="BYTE" Comment="QUARTER BYTE 03"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="" Type="BYTE" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[FUNCTION QUARTERS_TO_BYTE : BYTE
+
+VAR_INPUT
+	IN_00 : BYTE;    // QUARTER BYTE 00
+	IN_01 : BYTE;    // QUARTER BYTE 01
+	IN_02 : BYTE;    // QUARTER BYTE 02
+	IN_03 : BYTE;    // QUARTER BYTE 03
+END_VAR
+
+(* this Function combines the 4 QUARTER BYTES to a byte *)
+QUARTERS_TO_BYTE := BYTE_QUARTER_ZZ;
+QUARTERS_TO_BYTE := QUARTERS_TO_BYTE OR SHL(IN_03, SHFT_QUARTER_03);
+QUARTERS_TO_BYTE := QUARTERS_TO_BYTE OR SHL(IN_02, SHFT_QUARTER_02);
+QUARTERS_TO_BYTE := QUARTERS_TO_BYTE OR SHL(IN_01, SHFT_QUARTER_01);
+QUARTERS_TO_BYTE := QUARTERS_TO_BYTE OR SHL(IN_00, SHFT_QUARTER_00);
+
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+</Function>
