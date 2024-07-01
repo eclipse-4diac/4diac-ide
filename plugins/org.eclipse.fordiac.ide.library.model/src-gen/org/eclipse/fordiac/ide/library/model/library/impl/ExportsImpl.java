@@ -81,8 +81,9 @@ public class ExportsImpl extends EObjectImpl implements Exports {
 		switch (featureID) {
 			case LibraryPackage.EXPORTS__LIBRARY:
 				return ((InternalEList<?>)getLibrary()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -95,8 +96,9 @@ public class ExportsImpl extends EObjectImpl implements Exports {
 		switch (featureID) {
 			case LibraryPackage.EXPORTS__LIBRARY:
 				return getLibrary();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -112,8 +114,10 @@ public class ExportsImpl extends EObjectImpl implements Exports {
 				getLibrary().clear();
 				getLibrary().addAll((Collection<? extends Library>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -127,8 +131,10 @@ public class ExportsImpl extends EObjectImpl implements Exports {
 			case LibraryPackage.EXPORTS__LIBRARY:
 				getLibrary().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -141,8 +147,9 @@ public class ExportsImpl extends EObjectImpl implements Exports {
 		switch (featureID) {
 			case LibraryPackage.EXPORTS__LIBRARY:
 				return library != null && !library.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } //ExportsImpl

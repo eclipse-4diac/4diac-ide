@@ -59,6 +59,61 @@ public interface LibraryPackage extends EPackage {
 	LibraryPackage eINSTANCE = org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl.init();
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.AttributeImpl <em>Attribute</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.library.model.library.impl.AttributeImpl
+	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getAttribute()
+	 * @generated
+	 */
+	int ATTRIBUTE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATTRIBUTE__COMMENT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATTRIBUTE__NAME = 1;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATTRIBUTE__TYPE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATTRIBUTE__VALUE = 3;
+
+	/**
+	 * The number of structural features of the '<em>Attribute</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATTRIBUTE_FEATURE_COUNT = 4;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.DependenciesImpl <em>Dependencies</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -66,7 +121,7 @@ public interface LibraryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getDependencies()
 	 * @generated
 	 */
-	int DEPENDENCIES = 0;
+	int DEPENDENCIES = 1;
 
 	/**
 	 * The feature id for the '<em><b>Required</b></em>' containment reference list.
@@ -94,7 +149,7 @@ public interface LibraryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getExcludes()
 	 * @generated
 	 */
-	int EXCLUDES = 1;
+	int EXCLUDES = 2;
 
 	/**
 	 * The feature id for the '<em><b>Library Element</b></em>' containment reference list.
@@ -122,7 +177,7 @@ public interface LibraryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getExports()
 	 * @generated
 	 */
-	int EXPORTS = 2;
+	int EXPORTS = 3;
 
 	/**
 	 * The feature id for the '<em><b>Library</b></em>' containment reference list.
@@ -150,7 +205,7 @@ public interface LibraryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getIncludes()
 	 * @generated
 	 */
-	int INCLUDES = 3;
+	int INCLUDES = 4;
 
 	/**
 	 * The feature id for the '<em><b>Library Element</b></em>' containment reference list.
@@ -178,7 +233,7 @@ public interface LibraryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getLibrary()
 	 * @generated
 	 */
-	int LIBRARY = 4;
+	int LIBRARY = 5;
 
 	/**
 	 * The feature id for the '<em><b>Includes</b></em>' containment reference.
@@ -199,7 +254,7 @@ public interface LibraryPackage extends EPackage {
 	int LIBRARY__EXCLUDES = 1;
 
 	/**
-	 * The feature id for the '<em><b>Attribute</b></em>' attribute.
+	 * The feature id for the '<em><b>Attribute</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -251,7 +306,7 @@ public interface LibraryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getLibraryElement()
 	 * @generated
 	 */
-	int LIBRARY_ELEMENT = 5;
+	int LIBRARY_ELEMENT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -279,27 +334,81 @@ public interface LibraryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getSymbolicName()
 	 * @generated
 	 */
-	int SYMBOLIC_NAME = 11;
+	int SYMBOLIC_NAME = 12;
 
 	/**
-	 * The meta object id for the '<em>Version Type</em>' data type.
+	 * The meta object id for the '<em>Version Range</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see java.lang.String
-	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getVersionType()
+	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getVersionRange()
 	 * @generated
 	 */
-	int VERSION_TYPE = 12;
+	int VERSION_RANGE = 13;
 
 	/**
-	 * The meta object id for the '<em>Version Type1</em>' data type.
+	 * The meta object id for the '<em>Version Simple</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see java.lang.String
-	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getVersionType1()
+	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getVersionSimple()
 	 * @generated
 	 */
-	int VERSION_TYPE1 = 13;
+	int VERSION_SIMPLE = 14;
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.library.model.library.Attribute <em>Attribute</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Attribute</em>'.
+	 * @see org.eclipse.fordiac.ide.library.model.library.Attribute
+	 * @generated
+	 */
+	EClass getAttribute();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.library.model.library.Attribute#getComment <em>Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Comment</em>'.
+	 * @see org.eclipse.fordiac.ide.library.model.library.Attribute#getComment()
+	 * @see #getAttribute()
+	 * @generated
+	 */
+	EAttribute getAttribute_Comment();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.library.model.library.Attribute#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.eclipse.fordiac.ide.library.model.library.Attribute#getName()
+	 * @see #getAttribute()
+	 * @generated
+	 */
+	EAttribute getAttribute_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.library.model.library.Attribute#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see org.eclipse.fordiac.ide.library.model.library.Attribute#getType()
+	 * @see #getAttribute()
+	 * @generated
+	 */
+	EAttribute getAttribute_Type();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.library.model.library.Attribute#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see org.eclipse.fordiac.ide.library.model.library.Attribute#getValue()
+	 * @see #getAttribute()
+	 * @generated
+	 */
+	EAttribute getAttribute_Value();
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.ManifestImpl <em>Manifest</em>}' class.
@@ -309,7 +418,7 @@ public interface LibraryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getManifest()
 	 * @generated
 	 */
-	int MANIFEST = 6;
+	int MANIFEST = 7;
 
 	/**
 	 * The feature id for the '<em><b>Dependencies</b></em>' containment reference.
@@ -364,7 +473,7 @@ public interface LibraryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getProduct()
 	 * @generated
 	 */
-	int PRODUCT = 7;
+	int PRODUCT = 8;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference.
@@ -376,7 +485,7 @@ public interface LibraryPackage extends EPackage {
 	int PRODUCT__VERSION_INFO = 0;
 
 	/**
-	 * The feature id for the '<em><b>Attribute</b></em>' attribute list.
+	 * The feature id for the '<em><b>Attribute</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -428,7 +537,7 @@ public interface LibraryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getRequired()
 	 * @generated
 	 */
-	int REQUIRED = 8;
+	int REQUIRED = 9;
 
 	/**
 	 * The feature id for the '<em><b>Symbolic Name</b></em>' attribute.
@@ -465,7 +574,7 @@ public interface LibraryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getVersionInfo()
 	 * @generated
 	 */
-	int VERSION_INFO = 9;
+	int VERSION_INFO = 10;
 
 	/**
 	 * The feature id for the '<em><b>Author</b></em>' attribute.
@@ -511,7 +620,7 @@ public interface LibraryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getNameSpaceFilter()
 	 * @generated
 	 */
-	int NAME_SPACE_FILTER = 10;
+	int NAME_SPACE_FILTER = 11;
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.library.model.library.Dependencies <em>Dependencies</em>}'.
@@ -630,15 +739,15 @@ public interface LibraryPackage extends EPackage {
 	EReference getLibrary_Excludes();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.library.model.library.Library#getAttribute <em>Attribute</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.library.model.library.Library#getAttribute <em>Attribute</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Attribute</em>'.
+	 * @return the meta object for the containment reference list '<em>Attribute</em>'.
 	 * @see org.eclipse.fordiac.ide.library.model.library.Library#getAttribute()
 	 * @see #getLibrary()
 	 * @generated
 	 */
-	EAttribute getLibrary_Attribute();
+	EReference getLibrary_Attribute();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.library.model.library.Library#getComment <em>Comment</em>}'.
@@ -707,28 +816,28 @@ public interface LibraryPackage extends EPackage {
 	EDataType getSymbolicName();
 
 	/**
-	 * Returns the meta object for data type '{@link java.lang.String <em>Version Type</em>}'.
+	 * Returns the meta object for data type '{@link java.lang.String <em>Version Range</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for data type '<em>Version Type</em>'.
+	 * @return the meta object for data type '<em>Version Range</em>'.
 	 * @see java.lang.String
 	 * @model instanceClass="java.lang.String"
-	 *        extendedMetaData="name='Version_._1_._type' baseType='http://www.eclipse.org/emf/2003/XMLType#token' pattern='[0-9]+(\\.[0-9]+)*'"
+	 *        extendedMetaData="name='VersionRange' baseType='http://www.eclipse.org/emf/2003/XMLType#token' pattern='[0-9]+(\\.[0-9]+)*|[\\[\\(][0-9]+(\\.[0-9]+)*\\-[0-9]+(\\.[0-9]+)*[\\]\\)]'"
 	 * @generated
 	 */
-	EDataType getVersionType();
+	EDataType getVersionRange();
 
 	/**
-	 * Returns the meta object for data type '{@link java.lang.String <em>Version Type1</em>}'.
+	 * Returns the meta object for data type '{@link java.lang.String <em>Version Simple</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for data type '<em>Version Type1</em>'.
+	 * @return the meta object for data type '<em>Version Simple</em>'.
 	 * @see java.lang.String
 	 * @model instanceClass="java.lang.String"
-	 *        extendedMetaData="name='Version_._type' baseType='http://www.eclipse.org/emf/2003/XMLType#token' pattern='[0-9]+(\\.[0-9]+)*|[\\[\\(][0-9]+(\\.[0-9]+)*\\-[0-9]+(\\.[0-9]+)*[\\]\\)]'"
+	 *        extendedMetaData="name='VersionSimple' baseType='http://www.eclipse.org/emf/2003/XMLType#token' pattern='[0-9]+(\\.[0-9]+)*'"
 	 * @generated
 	 */
-	EDataType getVersionType1();
+	EDataType getVersionSimple();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.library.model.library.Manifest <em>Manifest</em>}'.
@@ -806,15 +915,15 @@ public interface LibraryPackage extends EPackage {
 	EReference getProduct_VersionInfo();
 
 	/**
-	 * Returns the meta object for the attribute list '{@link org.eclipse.fordiac.ide.library.model.library.Product#getAttribute <em>Attribute</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.library.model.library.Product#getAttribute <em>Attribute</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Attribute</em>'.
+	 * @return the meta object for the containment reference list '<em>Attribute</em>'.
 	 * @see org.eclipse.fordiac.ide.library.model.library.Product#getAttribute()
 	 * @see #getProduct()
 	 * @generated
 	 */
-	EAttribute getProduct_Attribute();
+	EReference getProduct_Attribute();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.library.model.library.Product#getComment <em>Comment</em>}'.
@@ -960,6 +1069,48 @@ public interface LibraryPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.AttributeImpl <em>Attribute</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.library.model.library.impl.AttributeImpl
+		 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getAttribute()
+		 * @generated
+		 */
+		EClass ATTRIBUTE = eINSTANCE.getAttribute();
+
+		/**
+		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ATTRIBUTE__COMMENT = eINSTANCE.getAttribute_Comment();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ATTRIBUTE__NAME = eINSTANCE.getAttribute_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ATTRIBUTE__TYPE = eINSTANCE.getAttribute_Type();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ATTRIBUTE__VALUE = eINSTANCE.getAttribute_Value();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.DependenciesImpl <em>Dependencies</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1058,12 +1209,12 @@ public interface LibraryPackage extends EPackage {
 		EReference LIBRARY__EXCLUDES = eINSTANCE.getLibrary_Excludes();
 
 		/**
-		 * The meta object literal for the '<em><b>Attribute</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Attribute</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute LIBRARY__ATTRIBUTE = eINSTANCE.getLibrary_Attribute();
+		EReference LIBRARY__ATTRIBUTE = eINSTANCE.getLibrary_Attribute();
 
 		/**
 		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
@@ -1118,24 +1269,24 @@ public interface LibraryPackage extends EPackage {
 		EDataType SYMBOLIC_NAME = eINSTANCE.getSymbolicName();
 
 		/**
-		 * The meta object literal for the '<em>Version Type</em>' data type.
+		 * The meta object literal for the '<em>Version Range</em>' data type.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @see java.lang.String
-		 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getVersionType()
+		 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getVersionRange()
 		 * @generated
 		 */
-		EDataType VERSION_TYPE = eINSTANCE.getVersionType();
+		EDataType VERSION_RANGE = eINSTANCE.getVersionRange();
 
 		/**
-		 * The meta object literal for the '<em>Version Type1</em>' data type.
+		 * The meta object literal for the '<em>Version Simple</em>' data type.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @see java.lang.String
-		 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getVersionType1()
+		 * @see org.eclipse.fordiac.ide.library.model.library.impl.LibraryPackageImpl#getVersionSimple()
 		 * @generated
 		 */
-		EDataType VERSION_TYPE1 = eINSTANCE.getVersionType1();
+		EDataType VERSION_SIMPLE = eINSTANCE.getVersionSimple();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.ManifestImpl <em>Manifest</em>}' class.
@@ -1198,12 +1349,12 @@ public interface LibraryPackage extends EPackage {
 		EReference PRODUCT__VERSION_INFO = eINSTANCE.getProduct_VersionInfo();
 
 		/**
-		 * The meta object literal for the '<em><b>Attribute</b></em>' attribute list feature.
+		 * The meta object literal for the '<em><b>Attribute</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute PRODUCT__ATTRIBUTE = eINSTANCE.getProduct_Attribute();
+		EReference PRODUCT__ATTRIBUTE = eINSTANCE.getProduct_Attribute();
 
 		/**
 		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.

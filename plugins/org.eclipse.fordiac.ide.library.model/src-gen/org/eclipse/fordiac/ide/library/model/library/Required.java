@@ -52,7 +52,7 @@ public interface Required extends EObject {
 	 * @return the value of the '<em>Version</em>' attribute.
 	 * @see #setVersion(String)
 	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getRequired_Version()
-	 * @model dataType="org.eclipse.fordiac.ide.library.model.library.VersionType1" required="true"
+	 * @model dataType="org.eclipse.fordiac.ide.library.model.library.VersionRange" required="true"
 	 *        extendedMetaData="kind='attribute' name='Version' namespace='##targetNamespace'"
 	 * @generated
 	 */

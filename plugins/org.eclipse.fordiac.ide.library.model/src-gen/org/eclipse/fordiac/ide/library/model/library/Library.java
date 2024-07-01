@@ -2,6 +2,7 @@
  */
 package org.eclipse.fordiac.ide.library.model.library;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -73,54 +74,17 @@ public interface Library extends EObject {
 	void setExcludes(Excludes value);
 
 	/**
-	 * Returns the value of the '<em><b>Attribute</b></em>' attribute.
+	 * Returns the value of the '<em><b>Attribute</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.library.model.library.Attribute}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Attribute</em>' attribute.
-	 * @see #isSetAttribute()
-	 * @see #unsetAttribute()
-	 * @see #setAttribute(String)
+	 * @return the value of the '<em>Attribute</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getLibrary_Attribute()
-	 * @model unsettable="true" dataType="org.eclipse.emf.ecore.xml.type.String"
+	 * @model containment="true"
 	 *        extendedMetaData="kind='element' name='Attribute' namespace='##targetNamespace'"
 	 * @generated
 	 */
-	String getAttribute();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.library.model.library.Library#getAttribute <em>Attribute</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Attribute</em>' attribute.
-	 * @see #isSetAttribute()
-	 * @see #unsetAttribute()
-	 * @see #getAttribute()
-	 * @generated
-	 */
-	void setAttribute(String value);
-
-	/**
-	 * Unsets the value of the '{@link org.eclipse.fordiac.ide.library.model.library.Library#getAttribute <em>Attribute</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetAttribute()
-	 * @see #getAttribute()
-	 * @see #setAttribute(String)
-	 * @generated
-	 */
-	void unsetAttribute();
-
-	/**
-	 * Returns whether the value of the '{@link org.eclipse.fordiac.ide.library.model.library.Library#getAttribute <em>Attribute</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Attribute</em>' attribute is set.
-	 * @see #unsetAttribute()
-	 * @see #getAttribute()
-	 * @see #setAttribute(String)
-	 * @generated
-	 */
-	boolean isSetAttribute();
+	EList<Attribute> getAttribute();
 
 	/**
 	 * Returns the value of the '<em><b>Comment</b></em>' attribute.

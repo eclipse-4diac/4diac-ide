@@ -22,6 +22,15 @@ public interface LibraryFactory extends EFactory {
 	LibraryFactory eINSTANCE = org.eclipse.fordiac.ide.library.model.library.impl.LibraryFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>Attribute</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Attribute</em>'.
+	 * @generated
+	 */
+	Attribute createAttribute();
+
+	/**
 	 * Returns a new object of class '<em>Dependencies</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

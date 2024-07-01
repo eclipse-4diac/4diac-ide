@@ -272,8 +272,9 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 				return basicSetProduct(null, msgs);
 			case LibraryPackage.MANIFEST__EXPORTS:
 				return basicSetExports(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -292,8 +293,9 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 				return getExports();
 			case LibraryPackage.MANIFEST__SCOPE:
 				return getScope();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -316,8 +318,10 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 			case LibraryPackage.MANIFEST__SCOPE:
 				setScope((String)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -340,8 +344,10 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 			case LibraryPackage.MANIFEST__SCOPE:
 				setScope(SCOPE_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -360,8 +366,9 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 				return exports != null;
 			case LibraryPackage.MANIFEST__SCOPE:
 				return SCOPE_EDEFAULT == null ? scope != null : !SCOPE_EDEFAULT.equals(scope);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

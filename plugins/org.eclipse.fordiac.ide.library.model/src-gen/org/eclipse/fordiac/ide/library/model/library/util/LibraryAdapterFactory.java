@@ -67,6 +67,10 @@ public class LibraryAdapterFactory extends AdapterFactoryImpl {
 	protected LibrarySwitch<Adapter> modelSwitch =
 		new LibrarySwitch<Adapter>() {
 			@Override
+			public Adapter caseAttribute(Attribute object) {
+				return createAttributeAdapter();
+			}
+			@Override
 			public Adapter caseDependencies(Dependencies object) {
 				return createDependenciesAdapter();
 			}
@@ -125,6 +129,20 @@ public class LibraryAdapterFactory extends AdapterFactoryImpl {
 		return modelSwitch.doSwitch((EObject)target);
 	}
 
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.library.model.library.Attribute <em>Attribute</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.library.model.library.Attribute
+	 * @generated
+	 */
+	public Adapter createAttributeAdapter() {
+		return null;
+	}
 
 	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.library.model.library.Dependencies <em>Dependencies</em>}'.

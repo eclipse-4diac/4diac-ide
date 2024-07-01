@@ -2,12 +2,17 @@
  */
 package org.eclipse.fordiac.ide.library.model.library.impl;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.fordiac.ide.library.model.library.Attribute;
 import org.eclipse.fordiac.ide.library.model.library.Excludes;
 import org.eclipse.fordiac.ide.library.model.library.Includes;
 import org.eclipse.fordiac.ide.library.model.library.Library;
@@ -53,33 +58,14 @@ public class LibraryImpl extends EObjectImpl implements Library {
 	protected Excludes excludes;
 
 	/**
-	 * The default value of the '{@link #getAttribute() <em>Attribute</em>}' attribute.
+	 * The cached value of the '{@link #getAttribute() <em>Attribute</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getAttribute()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String ATTRIBUTE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getAttribute() <em>Attribute</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAttribute()
-	 * @generated
-	 * @ordered
-	 */
-	protected String attribute = ATTRIBUTE_EDEFAULT;
-
-	/**
-	 * This is true if the Attribute attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean attributeESet;
+	protected EList<Attribute> attribute;
 
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -256,48 +242,11 @@ public class LibraryImpl extends EObjectImpl implements Library {
 	 * @generated
 	 */
 	@Override
-	public String getAttribute() {
+	public EList<Attribute> getAttribute() {
+		if (attribute == null) {
+			attribute = new EObjectContainmentEList<Attribute>(Attribute.class, this, LibraryPackage.LIBRARY__ATTRIBUTE);
+		}
 		return attribute;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setAttribute(String newAttribute) {
-		String oldAttribute = attribute;
-		attribute = newAttribute;
-		boolean oldAttributeESet = attributeESet;
-		attributeESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.LIBRARY__ATTRIBUTE, oldAttribute, attribute, !oldAttributeESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetAttribute() {
-		String oldAttribute = attribute;
-		boolean oldAttributeESet = attributeESet;
-		attribute = ATTRIBUTE_EDEFAULT;
-		attributeESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, LibraryPackage.LIBRARY__ATTRIBUTE, oldAttribute, ATTRIBUTE_EDEFAULT, oldAttributeESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetAttribute() {
-		return attributeESet;
 	}
 
 	/**
@@ -381,8 +330,11 @@ public class LibraryImpl extends EObjectImpl implements Library {
 				return basicSetIncludes(null, msgs);
 			case LibraryPackage.LIBRARY__EXCLUDES:
 				return basicSetExcludes(null, msgs);
+			case LibraryPackage.LIBRARY__ATTRIBUTE:
+				return ((InternalEList<?>)getAttribute()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -405,8 +357,9 @@ public class LibraryImpl extends EObjectImpl implements Library {
 				return getName();
 			case LibraryPackage.LIBRARY__SYMBOLIC_NAME:
 				return getSymbolicName();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -414,6 +367,7 @@ public class LibraryImpl extends EObjectImpl implements Library {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -424,7 +378,8 @@ public class LibraryImpl extends EObjectImpl implements Library {
 				setExcludes((Excludes)newValue);
 				return;
 			case LibraryPackage.LIBRARY__ATTRIBUTE:
-				setAttribute((String)newValue);
+				getAttribute().clear();
+				getAttribute().addAll((Collection<? extends Attribute>)newValue);
 				return;
 			case LibraryPackage.LIBRARY__COMMENT:
 				setComment((String)newValue);
@@ -435,8 +390,10 @@ public class LibraryImpl extends EObjectImpl implements Library {
 			case LibraryPackage.LIBRARY__SYMBOLIC_NAME:
 				setSymbolicName((String)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -454,7 +411,7 @@ public class LibraryImpl extends EObjectImpl implements Library {
 				setExcludes((Excludes)null);
 				return;
 			case LibraryPackage.LIBRARY__ATTRIBUTE:
-				unsetAttribute();
+				getAttribute().clear();
 				return;
 			case LibraryPackage.LIBRARY__COMMENT:
 				setComment(COMMENT_EDEFAULT);
@@ -465,8 +422,10 @@ public class LibraryImpl extends EObjectImpl implements Library {
 			case LibraryPackage.LIBRARY__SYMBOLIC_NAME:
 				setSymbolicName(SYMBOLIC_NAME_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -482,15 +441,16 @@ public class LibraryImpl extends EObjectImpl implements Library {
 			case LibraryPackage.LIBRARY__EXCLUDES:
 				return excludes != null;
 			case LibraryPackage.LIBRARY__ATTRIBUTE:
-				return isSetAttribute();
+				return attribute != null && !attribute.isEmpty();
 			case LibraryPackage.LIBRARY__COMMENT:
 				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 			case LibraryPackage.LIBRARY__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case LibraryPackage.LIBRARY__SYMBOLIC_NAME:
 				return SYMBOLIC_NAME_EDEFAULT == null ? symbolicName != null : !SYMBOLIC_NAME_EDEFAULT.equals(symbolicName);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**
@@ -503,9 +463,7 @@ public class LibraryImpl extends EObjectImpl implements Library {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (attribute: "); //$NON-NLS-1$
-		if (attributeESet) result.append(attribute); else result.append("<unset>"); //$NON-NLS-1$
-		result.append(", comment: "); //$NON-NLS-1$
+		result.append(" (comment: "); //$NON-NLS-1$
 		result.append(comment);
 		result.append(", name: "); //$NON-NLS-1$
 		result.append(name);
