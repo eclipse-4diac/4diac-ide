@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Andrea Zoitl
+ * Copyright (c) 2023, 2024 Andrea Zoitl, Prashantkumar Khatri
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Andrea Zoitl - initial API and implementation and/or initial documentation
+ *   Prashantkumar Khatri - added methods for creating and deleting FB types
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui;
 
@@ -116,6 +117,7 @@ public class Abstract4diacUITests {
 	protected static final String PACKAGE_NAME_LABEL = FordiacMessages.Package + ":"; //$NON-NLS-1$
 	protected static final String TYPE_PROJECT = "Type..."; //$NON-NLS-1$
 	protected static final String TEST_TYPE_TEMPLATE_NAME = "Adapter"; //$NON-NLS-1$
+	protected static final String FORBIDDEN_TYPE_NAME = "00_fbtype"; //$NON-NLS-1$
 
 	// FB pins and values
 	protected static final String START = "START"; //$NON-NLS-1$
@@ -374,7 +376,8 @@ public class Abstract4diacUITests {
 	/**
 	 * Creates a New Type with given name.
 	 *
-	 * @param typeName Name of the new type.
+	 * @param parentName Name of the parent project.
+	 * @param typeName   Name of the new type.
 	 */
 	protected static void createFBType(final String parentName, final String typeName) {
 		bot.menu(FILE).menu(NEW).menu(TYPE_PROJECT).click();

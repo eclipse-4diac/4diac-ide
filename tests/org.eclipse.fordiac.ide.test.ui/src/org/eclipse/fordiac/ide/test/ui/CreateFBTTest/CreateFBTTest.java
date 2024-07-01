@@ -146,6 +146,44 @@ public class CreateFBTTest extends Abstract4diacUITests {
 	}
 
 	/**
+	 * Checks if a new FB Type can be created with an forbidden type name
+	 *
+	 * The method tries to create a New Type with an forbidden type name. This
+	 * should not be possible and the Finish button should be not enabled.
+	 *
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void tryToCreateFBTypeWithForbiddenName() {
+		final SWTBotMenu fileMenu = bot.menu(FILE).menu(NEW).menu(TYPE_PROJECT).click();
+		assertNotNull(fileMenu);
+		final SWTBotShell shell = bot.shell(NEW_TYPE);
+		shell.activate();
+		assertTrue(bot.button(CANCEL).isEnabled());
+		assertFalse(bot.button(FINISH).isEnabled());
+
+		final SWTBotTree containerTree = bot.tree();
+		final SWTBotTreeItem containerItem = containerTree.getTreeItem(PROJECT_NAME);
+		containerItem.select();
+
+		assertEquals(PROJECT_NAME, bot.textWithLabel(PARENT_FOLDER_NAME_LABEL).getText());
+
+		// Type Name:
+		bot.textWithLabel(TYPE_NAME_LABEL).setText(FORBIDDEN_TYPE_NAME);
+		assertFalse(bot.button(FINISH).isEnabled());
+
+		// Select Type:
+		bot.table().select(TEST_TYPE_TEMPLATE_NAME);
+
+		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), FORBIDDEN_TYPE_NAME);
+		assertTrue(bot.button(CANCEL).isEnabled());
+		assertFalse(bot.button(FINISH).isEnabled());
+
+		bot.button(CANCEL).click();
+		bot.waitUntil(shellCloses(shell));
+	}
+
+	/**
 	 * Checks if a new FB Type can be created with an existing project name
 	 *
 	 * The method tries to create a New Type with an already existing name. This
