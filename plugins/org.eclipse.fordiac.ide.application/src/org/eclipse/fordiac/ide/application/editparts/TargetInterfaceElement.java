@@ -49,6 +49,13 @@ public class TargetInterfaceElement implements Comparable<TargetInterfaceElement
 		if (fbelement != null) {
 			final FBNetworkElement parent = fbelement.getOuterFBNetworkElement();
 			if (parent != null) {
+				final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
+				if (grandParent != null && getHost().getFBNetworkElement() != null
+						&& getHost().getFBNetworkElement() != grandParent
+						&& getHost().getFBNetworkElement().getOuterFBNetworkElement() != grandParent) {
+					retVal.append(grandParent.getName());
+					retVal.append('.');
+				}
 				retVal.append(parent.getName());
 				retVal.append('.');
 			}
