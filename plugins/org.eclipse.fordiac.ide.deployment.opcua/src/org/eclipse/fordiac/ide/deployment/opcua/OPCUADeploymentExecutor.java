@@ -888,4 +888,19 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		return Constants.MGM_RESPONSE_UNKNOWN;
 	}
 
+	@Override
+	public void resetResource(final String resName) throws DeploymentException {
+		// TODO Thx Markus Meingast
+	}
+
+	@Override
+	public void killResource(final String resName) throws DeploymentException {
+		// TODO Thx Markus Meingast
+	}
+
+	@Override
+	public void stopResource(final Resource res) throws DeploymentException {
+		// TODO Thx Markus Meingast
+	}
+
 }
