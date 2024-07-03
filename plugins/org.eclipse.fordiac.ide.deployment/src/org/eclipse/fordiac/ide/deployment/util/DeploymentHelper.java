@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -45,9 +46,9 @@ public interface DeploymentHelper {
 		return null;
 	}
 
-	static Function<VarDeclaration, String> getVariableValueRetargetable(final VarDeclaration varDecl)
-			throws DeploymentException {
-		if (hasInitalValue(varDecl)) {
+	static Function<VarDeclaration, String> getVariableValueRetargetable(final VarDeclaration varDecl,
+			final SubApp subapp) throws DeploymentException {
+		if (useSubappTypeInitialValue(subapp, varDecl) || hasInitalValue(varDecl)) {
 			try {
 				final Value value = VariableOperations.newVariable(varDecl).getValue();
 				return destination -> VariableOperations.newVariable(destination, value).toString(false);
@@ -60,6 +61,10 @@ public interface DeploymentHelper {
 			}
 		}
 		return null;
+	}
+
+	private static boolean useSubappTypeInitialValue(final SubApp subApp, final VarDeclaration varDec) {
+		return subApp.isTyped() && !DeploymentHelper.hasInitalValue(varDec);
 	}
 
 	static boolean hasInitalValue(final VarDeclaration varDecl) {
