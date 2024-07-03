@@ -24,7 +24,10 @@
 package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -131,7 +134,7 @@ public enum TypeLibraryManager {
 
 	private TypeLibrary createTypeLibrary(final IProject project) {
 		final TypeLibrary library = new TypeLibrary(project);
-		eventBroker.send("testevent", library); //$NON-NLS-1$
+		eventBroker.send(TypeLibraryTags.TYPE_LIBRARY_CREATION_TOPIC, library);
 		return library;
 	}
 
@@ -227,13 +230,20 @@ public enum TypeLibraryManager {
 	}
 
 	private static IEventBroker initEventBroker() {
-		loadExtension("org.eclipse.fordiac.ide.model.libraryLinkerExtension", ILibraryLinker.class); //$NON-NLS-1$
+		useExtensions("org.eclipse.fordiac.ide.model.TypeLibraryStarter", ITypeLibraryStarter.class, //$NON-NLS-1$
+				ITypeLibraryStarter::start);
 		return EclipseContextFactory.getServiceContext(ModelPlugin.getDefault().getBundle().getBundleContext())
 				.get(IEventBroker.class);
 	}
 
 	// TODO: move to more appropriate utility class
-	public static <T> T loadExtension(final String extensionPoint, final Class<T> type) {
+	public static <T> List<T> listExtensions(final String extensionPoint, final Class<T> type) {
+		final List<T> classes = new LinkedList<>();
+		useExtensions(extensionPoint, type, classes::add);
+		return classes;
+	}
+
+	public static <T> void useExtensions(final String extensionPoint, final Class<T> type, final Consumer<T> consumer) {
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
 		final IExtensionPoint point = registry.getExtensionPoint(extensionPoint);
 		final IExtension[] extensions = point.getExtensions();
@@ -243,13 +253,12 @@ public enum TypeLibraryManager {
 				try {
 					final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 					if (type.isInstance(obj)) {
-						return type.cast(obj);
+						consumer.accept(type.cast(obj));
 					}
 				} catch (final Exception e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 			}
 		}
-		return null;
 	}
 }

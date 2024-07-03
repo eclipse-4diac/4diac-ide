@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.fordiac.ide.model" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.eclipse.fordiac.ide.library" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
-      <appInfo>
-         <meta.schema plugin="org.eclipse.fordiac.ide.model" id="libraryLinkerExtension" name="Extension for the Library linker"/>
-      </appInfo>
+      <appinfo>
+         <meta.schema plugin="org.eclipse.fordiac.ide.library" id="ArchiveDownloaderExtension" name="Extension for Archive Downloader"/>
+      </appinfo>
       <documentation>
          [Enter description of this extension point.]
       </documentation>
@@ -12,9 +12,9 @@
 
    <element name="extension">
       <annotation>
-         <appInfo>
+         <appinfo>
             <meta.element />
-         </appInfo>
+         </appinfo>
       </annotation>
       <complexType>
          <choice minOccurs="1" maxOccurs="unbounded">
@@ -39,9 +39,9 @@
                <documentation>
                   
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute translatable="true"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>
@@ -49,50 +49,50 @@
 
    <element name="client">
       <complexType>
-         <attribute name="class" type="string" use="required">
+         <attribute name="class" type="string">
             <annotation>
                <documentation>
                   
                </documentation>
-               <appInfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.model.typelibrary.ILibraryLinker"/>
-               </appInfo>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.library.IArchiveDownloader"/>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>
    </element>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="since"/>
-      </appInfo>
+      </appinfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         3.0
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="examples"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          [Enter extension point usage example here.]
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="apiinfo"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          [Enter API information here.]
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="implementation"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          [Enter information about supplied implementation of this extension point.]
       </documentation>

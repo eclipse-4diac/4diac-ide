@@ -13,37 +13,38 @@
 package org.eclipse.fordiac.ide.library.ui.wizards;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
+import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
 public class ArchivedLibraryImportContentProvider implements ITreeContentProvider {
-	
 	private static final Object[] EMPTY_ARR = new Object[0];
 
 	@Override
-	public Object[] getElements(Object inputElement) {
-		return ((File[])inputElement);
+	public Object[] getElements(final Object inputElement) {
+		return ((Path[]) inputElement);
 	}
 
 	@Override
-	public Object[] getChildren(Object parentElement) {
-		if (parentElement instanceof File file && file.isDirectory()) {
-			return file.listFiles();
+	public Object[] getChildren(final Object parentElement) {
+		if (parentElement instanceof final Path path && Files.isDirectory(path)) {
+			return LibraryManager.INSTANCE.listArchiveFolders(path);
 		}
 		return EMPTY_ARR;
 	}
 
 	@Override
-	public Object getParent(Object element) {
-		if (element instanceof File file) {
+	public Object getParent(final Object element) {
+		if (element instanceof final File file) {
 			return file.getParentFile();
 		}
-		return new Object();
+		return null;
 	}
 
 	@Override
-	public boolean hasChildren(Object element) {
-		return element instanceof File file && file.isDirectory();
+	public boolean hasChildren(final Object element) {
+		return element instanceof final Path path && Files.isDirectory(path);
 	}
-
 }
