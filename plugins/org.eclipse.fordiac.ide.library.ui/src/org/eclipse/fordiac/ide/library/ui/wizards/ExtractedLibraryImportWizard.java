@@ -14,8 +14,8 @@ package org.eclipse.fordiac.ide.library.ui.wizards;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.fordiac.ide.library.LibraryLinker;
-import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.library.LibraryManager;
+import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -45,9 +45,7 @@ public class ExtractedLibraryImportWizard extends Wizard implements IImportWizar
 
 	@Override
 	public boolean performFinish() {
-		final LibraryLinker libraryLinker = new LibraryLinker();
-		libraryLinker.setSelectedProject(selectedProject);
-		libraryLinker.importLibraries(firstPage.getChosenLibraries().values());
+		LibraryManager.INSTANCE.importLibraries(selectedProject, firstPage.getChosenLibraries().values());
 		return true;
 	}
 

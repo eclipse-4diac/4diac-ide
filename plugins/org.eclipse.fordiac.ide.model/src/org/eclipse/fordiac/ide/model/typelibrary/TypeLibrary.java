@@ -45,12 +45,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -232,11 +227,6 @@ public final class TypeLibrary {
 		if (project != null && project.isAccessible()) {
 			buildpath = BuildpathUtil.loadBuildpath(project);
 			checkAdditions(project);
-//			final ILibraryLinker libLinker = TypeLibraryManager
-//					.loadExtension("org.eclipse.fordiac.ide.model.libraryLinkerExtension", ILibraryLinker.class); //$NON-NLS-1$
-//			if (libLinker != null) {
-//				libLinker.checkManifestFile(project, this);
-//			}
 		}
 	}
 
@@ -254,27 +244,6 @@ public final class TypeLibrary {
 			}
 		}
 		return entry;
-	}
-
-	static ILibraryLinker loadLibLinker() {
-		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final IExtensionPoint point = registry
-				.getExtensionPoint("org.eclipse.fordiac.ide.model.libraryLinkerExtension"); //$NON-NLS-1$
-		final IExtension[] extensions = point.getExtensions();
-		for (final IExtension extension : extensions) {
-			final IConfigurationElement[] elements = extension.getConfigurationElements();
-			for (final IConfigurationElement element : elements) {
-				try {
-					final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
-					if (obj instanceof final ILibraryLinker libLinker) {
-						return libLinker;
-					}
-				} catch (final Exception e) {
-					FordiacLogHelper.logError(e.getMessage(), e);
-				}
-			}
-		}
-		return null;
 	}
 
 	public TypeEntry createErrorTypeEntry(final String typeName, final EClass typeClass) {

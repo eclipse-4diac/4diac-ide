@@ -15,9 +15,11 @@ package org.eclipse.fordiac.ide.library.model.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -53,10 +55,16 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public final class ManifestHelper {
-	private static final String MANIFEST_FILENAME = "MANIFEST.MF";
-	private static final String SCOPE_PROJECT = "Project";
-	private static final String SCOPE_LIBRARY = "Library";
-	private static final String BASE_VERSION = "1.0.0";
+	private static final String MANIFEST_FILENAME = "MANIFEST.MF"; //$NON-NLS-1$
+	private static final String SCOPE_PROJECT = "Project"; //$NON-NLS-1$
+	private static final String SCOPE_LIBRARY = "Library"; //$NON-NLS-1$
+	private static final String BASE_VERSION = "1.0.0"; //$NON-NLS-1$
+
+	private static final String EXCLUDES = "excludes"; //$NON-NLS-1$
+	private static final String INCLUDES = "includes"; //$NON-NLS-1$
+	private static final String LIBRARY = "library"; //$NON-NLS-1$
+	private static final String LIBRARY_ELEMENT = "libraryElement"; //$NON-NLS-1$
+	private static final String SYMBOLIC_NAME = "symbolicName"; //$NON-NLS-1$
 
 	private static LibraryFactory factory = LibraryFactory.eINSTANCE;
 	private static LibraryResourceFactoryImpl resourceFactory = new LibraryResourceFactoryImpl();
@@ -88,6 +96,21 @@ public final class ManifestHelper {
 		return getManifest(files[0]);
 	}
 
+	public static Manifest getFolderManifest(final java.nio.file.Path path) {
+		if (path == null || !Files.isDirectory(path)) {
+			return null;
+		}
+		try (var stream = Files.newDirectoryStream(path, MANIFEST_FILENAME)) {
+			final Iterator<java.nio.file.Path> it = stream.iterator();
+			if (it.hasNext()) {
+				return getManifest(it.next());
+			}
+		} catch (final IOException e) {
+			// empty
+		}
+		return null;
+	}
+
 	public static Manifest getManifest(final IFile manifest) {
 		if (manifest == null || !manifest.exists()) {
 			return null;
@@ -100,6 +123,13 @@ public final class ManifestHelper {
 			return null;
 		}
 		return getManifest(URI.createURI(manifest.toURI().toString()));
+	}
+
+	public static Manifest getManifest(final java.nio.file.Path manifest) {
+		if (manifest == null || Files.notExists(manifest)) {
+			return null;
+		}
+		return getManifest(URI.createURI(manifest.toUri().toString()));
 	}
 
 	public static Manifest createProjectManifest(final IProject project, final Collection<Required> dependencies) {
@@ -126,9 +156,9 @@ public final class ManifestHelper {
 		final Manifest manifest = factory.createManifest();
 		manifest.setScope(scope);
 
-		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); //$NON-NLS-1$
 		final VersionInfo versionInfo = factory.createVersionInfo();
-		versionInfo.setAuthor("");
+		versionInfo.setAuthor(""); //$NON-NLS-1$
 		versionInfo.setVersion(BASE_VERSION);
 		versionInfo.setDate(formatter.format(LocalDate.now()));
 
@@ -240,10 +270,10 @@ public final class ManifestHelper {
 				final Document document = builder.parse(uri.toFileString());
 				document.getDocumentElement().normalize();
 
-				final NodeList libs = document.getElementsByTagName("library"); //$NON-NLS-1$
+				final NodeList libs = document.getElementsByTagName(LIBRARY);
 				for (int i = 0; i < libs.getLength(); i++) {
 					final Node libNode = libs.item(i);
-					final String libSymbName = libNode.getAttributes().getNamedItem("symbolicName").getNodeValue();
+					final String libSymbName = libNode.getAttributes().getNamedItem(SYMBOLIC_NAME).getNodeValue();
 					final Library lib = libraries.stream().filter(l -> l.getSymbolicName().equals(libSymbName))
 							.findAny().orElse(null);
 					if (lib == null) {
@@ -253,9 +283,9 @@ public final class ManifestHelper {
 					for (int j = 0; j < children.getLength(); j++) {
 						final Node child = children.item(j);
 						EList<LibraryElement> libElements;
-						if ("includes".equals(child.getNodeName())) {
+						if (INCLUDES.equals(child.getNodeName())) {
 							libElements = lib.getIncludes().getLibraryElement();
-						} else if ("excludes".equals(child.getNodeName())) {
+						} else if (EXCLUDES.equals(child.getNodeName())) {
 							libElements = lib.getExcludes().getLibraryElement();
 						} else {
 							continue;
@@ -264,7 +294,7 @@ public final class ManifestHelper {
 						int l = 0;
 						for (int k = 0; k < libElemNodes.getLength() && l < libElements.size(); k++) {
 							final Node node = libElemNodes.item(k);
-							if ("libraryElement".equals(node.getNodeName())) {
+							if (LIBRARY_ELEMENT.equals(node.getNodeName())) {
 								libElements.get(l).setValue(node.getTextContent());
 								l++;
 							}

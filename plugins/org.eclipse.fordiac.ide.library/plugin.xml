@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-    <extension point="org.eclipse.fordiac.ide.model.libraryLinkerExtension">
-       <client class="org.eclipse.fordiac.ide.library.LibraryLinker">
-       </client>
-    </extension>  
+   <extension-point id="ArchiveDownloaderExtension" name="Extension point for Archive Downloader" schema="schema/ArchiveDownloaderExtension.exsd"/>
+   <extension
+         point="org.eclipse.fordiac.ide.model.TypeLibraryStarter">
+      <client
+            class="org.eclipse.fordiac.ide.library.LibraryStarter">
+      </client>
+   </extension>
 </plugin>

@@ -18,7 +18,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.fordiac.ide.library.LibraryUtil;
+import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
@@ -34,7 +34,7 @@ public class DeleteLibraryRefactoringParticipant extends DeleteParticipant {
 	@Override
 	protected boolean initialize(final Object element) {
 		if (element instanceof final IFolder folder
-				&& folder.getParent().getName().equals(LibraryUtil.TYPE_LIB_FOLDER_NAME)) {
+				&& folder.getParent().getName().equals(LibraryManager.TYPE_LIB_FOLDER_NAME)) {
 			manifest = ManifestHelper.getContainerManifest(folder);
 			project = folder.getProject();
 			return manifest != null && ManifestHelper.isLibrary(manifest);

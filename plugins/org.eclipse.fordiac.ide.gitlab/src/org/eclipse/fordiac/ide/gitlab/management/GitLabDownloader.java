@@ -13,17 +13,19 @@
 package org.eclipse.fordiac.ide.gitlab.management;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,10 +36,13 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
+import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
+import org.eclipse.fordiac.ide.library.IArchiveDownloader;
+import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class GitLabDownloadManager {
+public class GitLabDownloader implements IArchiveDownloader {
 
 	private static final String PACKAGE_TYPE = "packageType"; //$NON-NLS-1$
 	private static final String PACKAGE_VERSION = "packageVersion"; //$NON-NLS-1$
@@ -57,16 +62,22 @@ public class GitLabDownloadManager {
 	private static final String URL_PAGE_PARAMETER = "&page="; //$NON-NLS-1$
 	private static final String NEXT_PAGE_HEADER = "X-Next-Page"; //$NON-NLS-1$
 
-	private final String url;
-	private final String token;
+	private final VersionComparator versionComparator;
 
-	public GitLabDownloadManager(final String url, final String token) {
-		if (url.endsWith("/")) { //$NON-NLS-1$
-			this.url = url;
-		} else {
-			this.url = url + "/"; //$NON-NLS-1$
+	private String baseUrl;
+	private String token;
+
+	public GitLabDownloader() {
+		init();
+		versionComparator = new VersionComparator();
+	}
+
+	public void init() {
+		baseUrl = PreferenceConstants.getURL();
+		if (!baseUrl.endsWith("/")) { //$NON-NLS-1$
+			baseUrl = baseUrl + "/"; //$NON-NLS-1$
 		}
-		this.token = token;
+		token = PreferenceConstants.getToken();
 	}
 
 	public Map<String, List<LeafNode>> getPackagesAndLeaves() {
@@ -105,14 +116,19 @@ public class GitLabDownloadManager {
 	}
 
 	private HttpURLConnection createConnection(final String target) throws IOException {
-		final URL url = new URL(target);
+		URL url;
+		try {
+			url = new URI(target).toURL();
+		} catch (final URISyntaxException e) {
+			throw new IOException(e);
+		}
 		final HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
 		httpConn.setRequestMethod(Messages.GET);
 		httpConn.setRequestProperty(Messages.Private_Token, token);
 		return httpConn;
 	}
 
-	public File packageDownloader(final Project project, final Package p) throws IOException {
+	public Path packageDownloader(final Project project, final Package p) throws IOException {
 		for (final String filename : findFilenamesInPackage(p, project)) {
 			final HttpURLConnection httpConn = createConnection(buildDownloadURL(p, project, filename));
 			try (InputStream responseStream = httpConn.getInputStream()) { // closed automatically
@@ -121,7 +137,7 @@ public class GitLabDownloadManager {
 				Files.copy(responseStream, Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version(), filename), //$NON-NLS-1$
 						StandardCopyOption.REPLACE_EXISTING);
 				httpConn.disconnect();
-				return new File(Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version(), filename).toString()); //$NON-NLS-1$
+				return Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version(), filename); //$NON-NLS-1$
 			}
 		}
 		return null;
@@ -137,20 +153,21 @@ public class GitLabDownloadManager {
 	}
 
 	private String buildDownloadURL(final Package p, final Object project, final String filename) {
-		return url + API_VERSION + "/" + ((Project) project).id() + PACKAGES + p.packageType() + "/" + p.name() + "/" //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+		return baseUrl + API_VERSION + "/" + ((Project) project).id() + PACKAGES + p.packageType() + "/" + p.name() //$NON-NLS-1$//$NON-NLS-2$
+				+ "/" //$NON-NLS-1$
 				+ p.version() + "/" + filename; //$NON-NLS-1$
 	}
 
 	private String buildPackageFileURL(final Package p, final Project project) {
-		return url + API_VERSION + "/" + project.id() + PACKAGES + p.id() + PACKAGE_FILES; //$NON-NLS-1$
+		return baseUrl + API_VERSION + "/" + project.id() + PACKAGES + p.id() + PACKAGE_FILES; //$NON-NLS-1$
 	}
 
 	private String buildConnectionURL(final String page) {
-		return url + API_VERSION + URL_PARAMETERS + CUSTOM_PARAMETERS + URL_PAGE_PARAMETER + page;
+		return baseUrl + API_VERSION + URL_PARAMETERS + CUSTOM_PARAMETERS + URL_PAGE_PARAMETER + page;
 	}
 
 	private String buildPackagesForProjectURL(final Project project, final String page) {
-		return url + API_VERSION + "/" + project.id() + PACKAGES + URL_PARAMETERS + CUSTOM_PARAMETERS //$NON-NLS-1$
+		return baseUrl + API_VERSION + "/" + project.id() + PACKAGES + URL_PARAMETERS + CUSTOM_PARAMETERS //$NON-NLS-1$
 				+ URL_PAGE_PARAMETER + page;
 	}
 
@@ -223,5 +240,59 @@ public class GitLabDownloadManager {
 			filenames.add(m.group(1));
 		}
 		return filenames;
+	}
+
+	@Override
+	public List<String> availableLibraries() throws IOException {
+		if (baseUrl == null || baseUrl.isBlank() || token == null || token.isBlank()) {
+			return List.of();
+		}
+		fetchProjectsAndPackages();
+		return new ArrayList<>(packagesAndLeaves.keySet());
+	}
+
+	@Override
+	public List<String> availableVersions(final String symbolicName) throws IOException {
+		if (baseUrl == null || baseUrl.isBlank() || token == null || token.isBlank()) {
+			return List.of();
+		}
+		fetchProjectsAndPackages();
+		final List<LeafNode> leaves = packagesAndLeaves.get(symbolicName);
+		if (leaves != null) {
+			return leaves.stream().map(LeafNode::getVersion).toList();
+		}
+		return List.of();
+	}
+
+	@Override
+	public Path downloadLibrary(final String symbolicName, final String version, final String preferredVersion)
+			throws IOException {
+		if (baseUrl == null || baseUrl.isBlank() || token == null || token.isBlank()) {
+			return null;
+		}
+		fetchProjectsAndPackages();
+		if (packagesAndLeaves.containsKey(symbolicName)) {
+			final List<LeafNode> nodes = packagesAndLeaves.get(symbolicName).stream()
+					.filter(l -> versionComparator.contains(version, l.getVersion()))
+					.sorted(Comparator.comparing(LeafNode::getVersion, (o1, o2) -> -versionComparator.compare(o1, o2)))
+					.toList();
+			if (nodes.isEmpty()) {
+				return null;
+			}
+			LeafNode node = null;
+			if (preferredVersion != null) {
+				node = nodes.stream().filter(l -> (versionComparator.compare(l.getVersion(), preferredVersion) == 0))
+						.findFirst().orElse(null);
+			}
+			if (node == null) {
+				node = nodes.getFirst();
+			}
+			try {
+				return packageDownloader(node.getProject(), node.getPackage());
+			} catch (final IOException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
+		}
+		return null;
 	}
 }

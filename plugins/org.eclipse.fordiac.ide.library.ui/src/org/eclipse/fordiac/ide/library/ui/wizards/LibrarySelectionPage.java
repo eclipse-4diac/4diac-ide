@@ -18,14 +18,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.eclipse.fordiac.ide.library.LibraryUtil;
+import org.eclipse.fordiac.ide.library.LibraryManager;
+import org.eclipse.fordiac.ide.library.LibraryRecord;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -121,26 +120,24 @@ public class LibrarySelectionPage extends WizardPage {
 	}
 
 	private void findLibs() {
-		libraries = new ArrayList<>();
+		libGroupings = new HashMap<>();
 		if (showStandard) {
-			libraries
-					.addAll(LibraryUtil.getStandardLibraries(TypeLibraryManager.getToolLibProject()).entrySet().stream()
-							.map(entry -> new LibDisplay(false, entry.getKey().getProduct().getName(),
-									entry.getKey().getProduct().getSymbolicName(),
-									entry.getKey().getProduct().getVersionInfo().getVersion(),
-									entry.getKey().getProduct().getComment(), entry.getValue()))
-							.toList());
+			LibraryManager.INSTANCE.getStandardLibraries().forEach((symbolicName, reclist) -> {
+				final List<LibDisplay> libd = libGroupings.computeIfAbsent(symbolicName,
+						s -> new ArrayList<LibDisplay>());
+				reclist.forEach(rec -> libd.add(new LibDisplay(rec)));
+			});
 		}
-		if (showWorkspace) {
-			libraries.addAll(
-					LibraryUtil.getWorkspaceLibraries(TypeLibraryManager.getToolLibProject()).entrySet().stream()
-							.map(entry -> new LibDisplay(false, entry.getKey().getProduct().getName(),
-									entry.getKey().getProduct().getSymbolicName(),
-									entry.getKey().getProduct().getVersionInfo().getVersion(),
-									entry.getKey().getProduct().getComment(), entry.getValue()))
-							.toList());
+
+		if (showStandard) {
+			LibraryManager.INSTANCE.getExtractedLibraries().forEach((symbolicName, reclist) -> {
+				final List<LibDisplay> libd = libGroupings.computeIfAbsent(symbolicName,
+						s -> new ArrayList<LibDisplay>());
+				reclist.forEach(rec -> libd.add(new LibDisplay(rec)));
+			});
 		}
-		libGroupings = libraries.stream().collect(Collectors.groupingBy(lib -> lib.symbolicName));
+		libraries = new ArrayList<>();
+		libGroupings.values().forEach(libraries::addAll);
 	}
 
 	public Map<Required, URI> getChosenLibraries() {
@@ -303,6 +300,10 @@ public class LibrarySelectionPage extends WizardPage {
 			this.version = version;
 			this.comment = comment;
 			this.uri = uri;
+		}
+
+		public LibDisplay(final LibraryRecord record) {
+			this(false, record.Name(), record.symbolicName(), record.version(), record.Comment(), record.uri());
 		}
 
 		public void setSelected(final boolean selected) {
