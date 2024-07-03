@@ -205,7 +205,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		if (varDeclaration.type.name != "") {
 			val typeRegion = varDeclaration.regionFor.assignment(STVarDeclarationAccess.getTypeAssignment_5)
 			if (typeRegion !== null) {
-				document.addReplacer(new KeywordCaseTextReplacer(document, typeRegion, varDeclaration.type.name))
+				document.addReplacer(new QualifiedNameReplacer(typeRegion, varDeclaration.type))
 			}
 		}
 
@@ -400,15 +400,9 @@ class STCoreFormatter extends AbstractFormatter2 {
 			}
 
 			if (binaryExpression.op == STBinaryOperator.AMPERSAND) {
-				document.addReplacer(new AbstractTextReplacer(document, opRegion) {
-					override createReplacements(ITextReplacerContext context) {
-						context.addReplacement(opRegion.replaceWith(STBinaryOperator.AND.toString))
-						return context
-					}
-
-				})
+				document.addReplacer(new KeywordTextReplacer(opRegion, STBinaryOperator.AND.toString))
 			} else if (binaryExpression.op == STBinaryOperator.AND) {
-				document.addReplacer(new KeywordCaseTextReplacer(document, opRegion))
+				document.addReplacer(new KeywordCaseTextReplacer(opRegion))
 			}
 		}
 
