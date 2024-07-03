@@ -63,7 +63,7 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 		final EditPartViewer viewer = getCurrentViewer();
 		final List<? extends EditPart> selectedObjects = viewer.getSelectedEditParts();
 
-		if (getCurrentInput().isModKeyDown(SWT.MOD1)) {
+		if (getCurrentInput().isModKeyDown(SWT.MOD1) && !getCurrentInput().isModKeyDown(SWT.MOD3)) {
 			if (selectedObjects.contains(getConnectionEditPart())) {
 				viewer.deselect(getConnectionEditPart());
 			} else {

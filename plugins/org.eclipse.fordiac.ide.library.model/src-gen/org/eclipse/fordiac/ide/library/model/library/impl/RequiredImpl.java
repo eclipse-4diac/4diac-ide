@@ -141,8 +141,9 @@ public class RequiredImpl extends EObjectImpl implements Required {
 				return getSymbolicName();
 			case LibraryPackage.REQUIRED__VERSION:
 				return getVersion();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -159,8 +160,10 @@ public class RequiredImpl extends EObjectImpl implements Required {
 			case LibraryPackage.REQUIRED__VERSION:
 				setVersion((String)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -177,8 +180,10 @@ public class RequiredImpl extends EObjectImpl implements Required {
 			case LibraryPackage.REQUIRED__VERSION:
 				setVersion(VERSION_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -193,8 +198,9 @@ public class RequiredImpl extends EObjectImpl implements Required {
 				return SYMBOLIC_NAME_EDEFAULT == null ? symbolicName != null : !SYMBOLIC_NAME_EDEFAULT.equals(symbolicName);
 			case LibraryPackage.REQUIRED__VERSION:
 				return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

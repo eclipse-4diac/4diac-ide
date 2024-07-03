@@ -51,17 +51,17 @@ public interface Product extends EObject {
 	void setVersionInfo(VersionInfo value);
 
 	/**
-	 * Returns the value of the '<em><b>Attribute</b></em>' attribute list.
-	 * The list contents are of type {@link java.lang.String}.
+	 * Returns the value of the '<em><b>Attribute</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.library.model.library.Attribute}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Attribute</em>' attribute list.
+	 * @return the value of the '<em>Attribute</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getProduct_Attribute()
-	 * @model unique="false" dataType="org.eclipse.emf.ecore.xml.type.String"
+	 * @model containment="true"
 	 *        extendedMetaData="kind='element' name='Attribute' namespace='##targetNamespace'"
 	 * @generated
 	 */
-	EList<String> getAttribute();
+	EList<Attribute> getAttribute();
 
 	/**
 	 * Returns the value of the '<em><b>Comment</b></em>' attribute.

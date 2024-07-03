@@ -74,11 +74,24 @@ public class CustomDragSourceListener extends AbstractTransferDragSourceListener
 	private boolean isAltKeyPressed() {
 		final AdvancedGraphicalViewerKeyHandler keyHandler = (AdvancedGraphicalViewerKeyHandler) getViewer()
 				.getKeyHandler();
-		return keyHandler.getCurrentKeyCode() == SWT.ALT;
+
+		return (keyHandler.getCurrentStateMask() & SWT.ALT) != 0;
+	}
+
+	private boolean isCtrlKeyPressed() {
+		final AdvancedGraphicalViewerKeyHandler keyHandler = (AdvancedGraphicalViewerKeyHandler) getViewer()
+				.getKeyHandler();
+
+		return (keyHandler.getCurrentStateMask() & SWT.CTRL) != 0;
 	}
 
 	private Request createRequest(final Point point) {
 		final List<? extends EditPart> selectedEditParts = getViewer().getSelectedEditParts();
+
+		if (isCtrlKeyPressed() && !selectedEditParts.isEmpty()
+				&& selectedEditParts.get(0) instanceof final ConnectionEditPart connEditpart) {
+			return createConnectionFromEndpointRequest(point, connEditpart);
+		}
 		if (selectedEditParts.size() == 1 && selectedEditParts.get(0) instanceof final InterfaceEditPart iep) {
 			return createConnectionCreationRequest(iep);
 		}
@@ -91,6 +104,15 @@ public class CustomDragSourceListener extends AbstractTransferDragSourceListener
 			return createReconnectRequest(connections, point);
 		}
 		return null;
+	}
+
+	private static Request createConnectionFromEndpointRequest(final Point point,
+			final ConnectionEditPart connEditpart) {
+		final ConnectionEndpointHandle endpointHandle = getConnectionHandle(connEditpart, point);
+		if (endpointHandle != null && endpointHandle.getEndPoint() == ConnectionLocator.SOURCE) {
+			return createConnectionCreationRequest((InterfaceEditPart) connEditpart.getTarget());
+		}
+		return createConnectionCreationRequest((InterfaceEditPart) connEditpart.getSource());
 	}
 
 	private static Request createConnectionCreationRequest(final InterfaceEditPart iep) {
