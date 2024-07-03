@@ -48,7 +48,7 @@ class STAlgorithmFormatter extends STCoreFormatter {
 				default: false
 			}
 		].forEach [
-			document.addReplacer(new KeywordCaseTextReplacer(document, it))
+			document.addReplacer(new KeywordCaseTextReplacer(it))
 		]
 		sTAlgorithmSource.allRegionsFor.keywords(STPrimaryExpressionAccess.leftParenthesisKeyword_0_0).forEach [
 			append[noSpace]
