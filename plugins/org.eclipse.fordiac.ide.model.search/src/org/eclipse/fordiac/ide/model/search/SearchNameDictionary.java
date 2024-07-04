@@ -18,6 +18,7 @@ import java.util.Stack;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -27,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
@@ -79,6 +81,9 @@ public class SearchNameDictionary {
 		if (element instanceof final ICallable call && (element instanceof Algorithm || element instanceof Method)
 				&& call.eContainer() instanceof final INamedElement namedElement) {
 			return namedElement.getName() + "." + call.getName(); //$NON-NLS-1$
+		}
+		if (element instanceof final LibraryElement libElement) {
+			return PackageNameHelper.getFullTypeName(libElement);
 		}
 		if (element instanceof final INamedElement namedElement) {
 			return namedElement.getName();
