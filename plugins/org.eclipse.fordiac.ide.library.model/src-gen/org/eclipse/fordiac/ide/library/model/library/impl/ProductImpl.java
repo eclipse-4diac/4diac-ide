@@ -11,7 +11,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.emf.ecore.util.EDataTypeEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.fordiac.ide.library.model.library.Attribute;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 import org.eclipse.fordiac.ide.library.model.library.Product;
 import org.eclipse.fordiac.ide.library.model.library.VersionInfo;
@@ -45,14 +47,14 @@ public class ProductImpl extends EObjectImpl implements Product {
 	protected VersionInfo versionInfo;
 
 	/**
-	 * The cached value of the '{@link #getAttribute() <em>Attribute</em>}' attribute list.
+	 * The cached value of the '{@link #getAttribute() <em>Attribute</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getAttribute()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<String> attribute;
+	protected EList<Attribute> attribute;
 
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -184,9 +186,9 @@ public class ProductImpl extends EObjectImpl implements Product {
 	 * @generated
 	 */
 	@Override
-	public EList<String> getAttribute() {
+	public EList<Attribute> getAttribute() {
 		if (attribute == null) {
-			attribute = new EDataTypeEList<String>(String.class, this, LibraryPackage.PRODUCT__ATTRIBUTE);
+			attribute = new EObjectContainmentEList<Attribute>(Attribute.class, this, LibraryPackage.PRODUCT__ATTRIBUTE);
 		}
 		return attribute;
 	}
@@ -270,8 +272,11 @@ public class ProductImpl extends EObjectImpl implements Product {
 		switch (featureID) {
 			case LibraryPackage.PRODUCT__VERSION_INFO:
 				return basicSetVersionInfo(null, msgs);
+			case LibraryPackage.PRODUCT__ATTRIBUTE:
+				return ((InternalEList<?>)getAttribute()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -292,8 +297,9 @@ public class ProductImpl extends EObjectImpl implements Product {
 				return getName();
 			case LibraryPackage.PRODUCT__SYMBOLIC_NAME:
 				return getSymbolicName();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -310,7 +316,7 @@ public class ProductImpl extends EObjectImpl implements Product {
 				return;
 			case LibraryPackage.PRODUCT__ATTRIBUTE:
 				getAttribute().clear();
-				getAttribute().addAll((Collection<? extends String>)newValue);
+				getAttribute().addAll((Collection<? extends Attribute>)newValue);
 				return;
 			case LibraryPackage.PRODUCT__COMMENT:
 				setComment((String)newValue);
@@ -321,8 +327,10 @@ public class ProductImpl extends EObjectImpl implements Product {
 			case LibraryPackage.PRODUCT__SYMBOLIC_NAME:
 				setSymbolicName((String)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -348,8 +356,10 @@ public class ProductImpl extends EObjectImpl implements Product {
 			case LibraryPackage.PRODUCT__SYMBOLIC_NAME:
 				setSymbolicName(SYMBOLIC_NAME_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -370,8 +380,9 @@ public class ProductImpl extends EObjectImpl implements Product {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case LibraryPackage.PRODUCT__SYMBOLIC_NAME:
 				return SYMBOLIC_NAME_EDEFAULT == null ? symbolicName != null : !SYMBOLIC_NAME_EDEFAULT.equals(symbolicName);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**
@@ -384,9 +395,7 @@ public class ProductImpl extends EObjectImpl implements Product {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (attribute: "); //$NON-NLS-1$
-		result.append(attribute);
-		result.append(", comment: "); //$NON-NLS-1$
+		result.append(" (comment: "); //$NON-NLS-1$
 		result.append(comment);
 		result.append(", name: "); //$NON-NLS-1$
 		result.append(name);

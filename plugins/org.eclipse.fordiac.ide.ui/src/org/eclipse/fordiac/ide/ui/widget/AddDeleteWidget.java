@@ -240,7 +240,7 @@ public class AddDeleteWidget {
 	protected static void executeCompoundCommandForList(final NatTable table, final List<Object> selection,
 			final CommandExecutor executor, final CommandProvider commandProvider) {
 		final CompoundCommand cmd = new CompoundCommand();
-		selection.stream().forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
+		selection.forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
 		executor.executeCommand(cmd);
 		table.refresh();
 	}

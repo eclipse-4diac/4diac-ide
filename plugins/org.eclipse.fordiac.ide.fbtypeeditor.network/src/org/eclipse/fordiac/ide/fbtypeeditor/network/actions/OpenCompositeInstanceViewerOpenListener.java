@@ -39,22 +39,20 @@ public class OpenCompositeInstanceViewerOpenListener extends AbstractOpenSystemE
 	@Override
 	public void run(final IAction action) {
 		final EObject root = EcoreUtil.getRootContainer(compositeFBInstance);
-		if (root instanceof AutomationSystem) {
-			openInSystemEditor(((AutomationSystem) root).getTypeEntry().getFile(), compositeFBInstance);
-		} else if (root instanceof SubAppType) {
-			openInSubappTypeEditor((SubAppType) root, compositeFBInstance);
-		} else if (root instanceof CompositeFBType) {
-			openInFBTypeEditor((CompositeFBType) root, compositeFBInstance);
+		if (root instanceof final AutomationSystem as) {
+			openInSystemEditor(as.getTypeEntry().getFile(), compositeFBInstance);
+		} else if (root instanceof final SubAppType subAppType) {
+			openInSubappTypeEditor(subAppType, compositeFBInstance);
+		} else if (root instanceof final CompositeFBType cfbType) {
+			openInFBTypeEditor(cfbType, compositeFBInstance);
 		}
 	}
 
 	@Override
 	public void selectionChanged(final IAction action, final ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structuredSel = (IStructuredSelection) selection;
-			if (structuredSel.getFirstElement() instanceof FB) {
-				compositeFBInstance = (FB) structuredSel.getFirstElement();
-			}
+		if (selection instanceof final IStructuredSelection structuredSel
+				&& structuredSel.getFirstElement() instanceof final FB firstEl) {
+			compositeFBInstance = firstEl;
 		}
 	}
 

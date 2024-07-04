@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
@@ -100,10 +99,9 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 
 		@Override
 		public Change perform(final IProgressMonitor pm) throws CoreException {
-			final TypeEntry typeEntry = baseFb.getTypeEntry();
 			Command cmd = null;
 			if (state.contains(ChangeState.DELETE)) {
-				cmd = new DeleteInternalFBCommand((BaseFBType) typeEntry.getTypeEditable(), internalFb);
+				cmd = new DeleteInternalFBCommand(internalFb);
 			} else if (state.contains(ChangeState.REPLACE_WITH_MARKER)) {
 				// use empty string to force errormarker
 				cmd = new ChangeFbTypeCommand(internalFb, getErrorMarkerEntry(internalFb));

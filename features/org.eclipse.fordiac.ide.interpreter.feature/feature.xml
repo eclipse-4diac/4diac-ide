@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.fordiac.ide.interpreter.feature"
+      label="Interpreter"
+      version="3.0.0.qualifier"
+      provider-name="Eclipse 4diac">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.fb.interpreter"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.fb.interpreter.editor"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.fb.interpreter.design"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.fb.interpreter.edit"
+         version="0.0.0"/>
+
+</feature>

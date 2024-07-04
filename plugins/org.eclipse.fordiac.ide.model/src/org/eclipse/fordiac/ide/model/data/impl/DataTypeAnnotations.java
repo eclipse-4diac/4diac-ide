@@ -63,6 +63,7 @@ import org.eclipse.fordiac.ide.model.data.UsintType;
 import org.eclipse.fordiac.ide.model.data.WcharType;
 import org.eclipse.fordiac.ide.model.data.WordType;
 import org.eclipse.fordiac.ide.model.data.WstringType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 
 final class DataTypeAnnotations {
@@ -104,8 +105,9 @@ final class DataTypeAnnotations {
 	}
 
 	static boolean isAssignableFrom(final StructuredType type, final DataType other) {
-		// only strict name equality for structs
-		return PackageNameHelper.getFullTypeName(type).equalsIgnoreCase(PackageNameHelper.getFullTypeName(other));
+		// only strict name equality for structs or assignment to any_struct
+		return PackageNameHelper.getFullTypeName(type).equalsIgnoreCase(PackageNameHelper.getFullTypeName(other))
+				|| (GenericTypes.ANY_STRUCT == type && other instanceof StructuredType);
 	}
 
 	static boolean isAssignableFrom(final AnyElementaryType type, final DataType other) {

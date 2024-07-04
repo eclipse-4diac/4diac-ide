@@ -11,8 +11,14 @@
       resource="XML" disposableProviderFactory="true" ecorePackage="library.ecore#/">
     <genDataTypes ecoreDataType="library.ecore#//NameSpaceFilter"/>
     <genDataTypes ecoreDataType="library.ecore#//SymbolicName"/>
-    <genDataTypes ecoreDataType="library.ecore#//VersionType"/>
-    <genDataTypes ecoreDataType="library.ecore#//VersionType1"/>
+    <genDataTypes ecoreDataType="library.ecore#//VersionRange"/>
+    <genDataTypes ecoreDataType="library.ecore#//VersionSimple"/>
+    <genClasses ecoreClass="library.ecore#//Attribute">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Attribute/comment"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Attribute/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Attribute/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Attribute/value"/>
+    </genClasses>
     <genClasses ecoreClass="library.ecore#//Dependencies">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Dependencies/required"/>
     </genClasses>
@@ -28,7 +34,7 @@
     <genClasses ecoreClass="library.ecore#//Library">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Library/includes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Library/excludes"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Library/attribute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference library.ecore#//Library/attribute"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Library/comment"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Library/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Library/symbolicName"/>
@@ -44,7 +50,7 @@
     </genClasses>
     <genClasses ecoreClass="library.ecore#//Product">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Product/versionInfo"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Product/attribute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference library.ecore#//Product/attribute"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Product/comment"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Product/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Product/symbolicName"/>

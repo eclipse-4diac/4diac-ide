@@ -12,18 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import java.text.MessageFormat;
-
-import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 
 public class StructDataConnectionCreateCommand extends DataConnectionCreateCommand {
 	private ChangeStructCommand changeStructCommand;
@@ -34,12 +30,17 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 
 	@Override
 	protected boolean canExecuteConType() {
-		if (isStructPin(getSource()) && isStructPin(getDestination())) {
-			// only when source and destination are structs this command shall be exectuable
-			return canExistDataConnection(getSource(), getDestination(), getParent(), null);
-
+		final IInterfaceElement source = getSource();
+		final IInterfaceElement target = getDestination();
+		if (isStructPin(source) && isStructPin(target)) {
+			return LinkConstraints.canExistDataConnection(getSource(), getDestination(), getParent(), null);
 		}
 		return false;
+	}
+
+	@Override
+	public boolean canRedo() {
+		return true;
 	}
 
 	@Override
@@ -51,12 +52,12 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 				&& target.getType() instanceof final StructuredType targetVar
 				&& !sourceVar.getName().equals(targetVar.getName())) {
 
-			if (AbstractConnectionCreateCommand.isStructManipulatorDefPin(source)) {
+			if (isUnconfiguredStructManipulatorDefPin(source)) {
 				changeStructCommand = new ChangeStructCommand((StructManipulator) source.getFBNetworkElement(),
 						targetVar);
 				changeStructCommand.execute();
 				setSource(changeStructCommand.getNewMux().getInterfaceElement(getSource().getName()));
-			} else {
+			} else if (isUnconfiguredStructManipulatorDefPin(target)) {
 				changeStructCommand = new ChangeStructCommand((StructManipulator) target.getFBNetworkElement(),
 						sourceVar);
 				changeStructCommand.execute();
@@ -82,38 +83,14 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 		super.redo();
 	}
 
-	// a subset of the same function in the LinkConstraints
-	private static boolean canExistDataConnection(IInterfaceElement source, IInterfaceElement target,
-			final FBNetwork parent, final Connection con) {
-
-		if (!LinkConstraints.isDataPin(source) || !LinkConstraints.isDataPin(target)) {
-			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_ConnectingIncompatibleInterfaceTypes);
-			return false;
-		}
-
-		if (LinkConstraints.isSwapNeeded(source, parent)) {
-			final IInterfaceElement temp = source;
-			source = target;
-			target = temp;
-		}
-
-		if (!LinkConstraints.sourceAndDestCheck(source, target, parent)) {
-			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
-			return false;
-		}
-
-		if (!LinkConstraints.hasAlreadyInputConnectionsCheck(source, target, con)) {
-			ErrorMessenger.popUpErrorMessage(MessageFormat
-					.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection, target.getName()));
-			return false;
-		}
-
-		return LinkConstraints.isWithConstraintOK(source) && LinkConstraints.isWithConstraintOK(target);
-	}
-
 	private static boolean isStructPin(final IInterfaceElement pin) {
 		return pin instanceof final VarDeclaration varDecl && !varDecl.isArray()
 				&& varDecl.getType() instanceof StructuredType;
+	}
+
+	private static boolean isUnconfiguredStructManipulatorDefPin(final IInterfaceElement pin) {
+		return AbstractConnectionCreateCommand.isStructManipulatorDefPin(pin)
+				&& GenericTypes.ANY_STRUCT == pin.getType();
 	}
 
 }

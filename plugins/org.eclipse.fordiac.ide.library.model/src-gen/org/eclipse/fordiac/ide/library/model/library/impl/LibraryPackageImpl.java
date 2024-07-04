@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
+import org.eclipse.fordiac.ide.library.model.library.Attribute;
 import org.eclipse.fordiac.ide.library.model.library.Dependencies;
 import org.eclipse.fordiac.ide.library.model.library.Excludes;
 import org.eclipse.fordiac.ide.library.model.library.Exports;
@@ -33,6 +34,13 @@ import org.eclipse.fordiac.ide.library.model.library.util.LibraryValidator;
  * @generated
  */
 public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass attributeEClass = null;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -122,14 +130,14 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EDataType versionTypeEDataType = null;
+	private EDataType versionRangeEDataType = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EDataType versionType1EDataType = null;
+	private EDataType versionSimpleEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -202,6 +210,56 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(LibraryPackage.eNS_URI, theLibraryPackage);
 		return theLibraryPackage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getAttribute() {
+		return attributeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAttribute_Comment() {
+		return (EAttribute)attributeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAttribute_Name() {
+		return (EAttribute)attributeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAttribute_Type() {
+		return (EAttribute)attributeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAttribute_Value() {
+		return (EAttribute)attributeEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -320,8 +378,8 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getLibrary_Attribute() {
-		return (EAttribute)libraryEClass.getEStructuralFeatures().get(2);
+	public EReference getLibrary_Attribute() {
+		return (EReference)libraryEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -390,8 +448,8 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 	 * @generated
 	 */
 	@Override
-	public EDataType getVersionType() {
-		return versionTypeEDataType;
+	public EDataType getVersionRange() {
+		return versionRangeEDataType;
 	}
 
 	/**
@@ -400,8 +458,8 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 	 * @generated
 	 */
 	@Override
-	public EDataType getVersionType1() {
-		return versionType1EDataType;
+	public EDataType getVersionSimple() {
+		return versionSimpleEDataType;
 	}
 
 	/**
@@ -480,8 +538,8 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getProduct_Attribute() {
-		return (EAttribute)productEClass.getEStructuralFeatures().get(1);
+	public EReference getProduct_Attribute() {
+		return (EReference)productEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -623,6 +681,12 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		isCreated = true;
 
 		// Create classes and their features
+		attributeEClass = createEClass(ATTRIBUTE);
+		createEAttribute(attributeEClass, ATTRIBUTE__COMMENT);
+		createEAttribute(attributeEClass, ATTRIBUTE__NAME);
+		createEAttribute(attributeEClass, ATTRIBUTE__TYPE);
+		createEAttribute(attributeEClass, ATTRIBUTE__VALUE);
+
 		dependenciesEClass = createEClass(DEPENDENCIES);
 		createEReference(dependenciesEClass, DEPENDENCIES__REQUIRED);
 
@@ -638,7 +702,7 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		libraryEClass = createEClass(LIBRARY);
 		createEReference(libraryEClass, LIBRARY__INCLUDES);
 		createEReference(libraryEClass, LIBRARY__EXCLUDES);
-		createEAttribute(libraryEClass, LIBRARY__ATTRIBUTE);
+		createEReference(libraryEClass, LIBRARY__ATTRIBUTE);
 		createEAttribute(libraryEClass, LIBRARY__COMMENT);
 		createEAttribute(libraryEClass, LIBRARY__NAME);
 		createEAttribute(libraryEClass, LIBRARY__SYMBOLIC_NAME);
@@ -654,7 +718,7 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 
 		productEClass = createEClass(PRODUCT);
 		createEReference(productEClass, PRODUCT__VERSION_INFO);
-		createEAttribute(productEClass, PRODUCT__ATTRIBUTE);
+		createEReference(productEClass, PRODUCT__ATTRIBUTE);
 		createEAttribute(productEClass, PRODUCT__COMMENT);
 		createEAttribute(productEClass, PRODUCT__NAME);
 		createEAttribute(productEClass, PRODUCT__SYMBOLIC_NAME);
@@ -671,8 +735,8 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		// Create data types
 		nameSpaceFilterEDataType = createEDataType(NAME_SPACE_FILTER);
 		symbolicNameEDataType = createEDataType(SYMBOLIC_NAME);
-		versionTypeEDataType = createEDataType(VERSION_TYPE);
-		versionType1EDataType = createEDataType(VERSION_TYPE1);
+		versionRangeEDataType = createEDataType(VERSION_RANGE);
+		versionSimpleEDataType = createEDataType(VERSION_SIMPLE);
 	}
 
 	/**
@@ -708,6 +772,12 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		// Add supertypes to classes
 
 		// Initialize classes and features; add operations and parameters
+		initEClass(attributeEClass, Attribute.class, "Attribute", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getAttribute_Comment(), theXMLTypePackage.getString(), "comment", null, 0, 1, Attribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getAttribute_Name(), theXMLTypePackage.getString(), "name", null, 1, 1, Attribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getAttribute_Type(), theXMLTypePackage.getString(), "type", null, 1, 1, Attribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getAttribute_Value(), theXMLTypePackage.getString(), "value", null, 1, 1, Attribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(dependenciesEClass, Dependencies.class, "Dependencies", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getDependencies_Required(), this.getRequired(), null, "required", null, 0, -1, Dependencies.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
@@ -723,7 +793,7 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		initEClass(libraryEClass, Library.class, "Library", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getLibrary_Includes(), this.getIncludes(), null, "includes", null, 0, 1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getLibrary_Excludes(), this.getExcludes(), null, "excludes", null, 0, 1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getLibrary_Attribute(), theXMLTypePackage.getString(), "attribute", null, 0, 1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getLibrary_Attribute(), this.getAttribute(), null, "attribute", null, 0, -1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getLibrary_Comment(), theXMLTypePackage.getString(), "comment", null, 1, 1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getLibrary_Name(), theXMLTypePackage.getString(), "name", null, 1, 1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getLibrary_SymbolicName(), this.getSymbolicName(), "symbolicName", null, 1, 1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -739,25 +809,25 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 
 		initEClass(productEClass, Product.class, "Product", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getProduct_VersionInfo(), this.getVersionInfo(), null, "versionInfo", null, 1, 1, Product.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getProduct_Attribute(), theXMLTypePackage.getString(), "attribute", null, 0, -1, Product.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getProduct_Attribute(), this.getAttribute(), null, "attribute", null, 0, -1, Product.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getProduct_Comment(), theXMLTypePackage.getString(), "comment", null, 0, 1, Product.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getProduct_Name(), theXMLTypePackage.getString(), "name", null, 0, 1, Product.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getProduct_SymbolicName(), this.getSymbolicName(), "symbolicName", null, 0, 1, Product.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(requiredEClass, Required.class, "Required", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getRequired_SymbolicName(), this.getSymbolicName(), "symbolicName", null, 1, 1, Required.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getRequired_Version(), this.getVersionType1(), "version", null, 1, 1, Required.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getRequired_Version(), this.getVersionRange(), "version", null, 1, 1, Required.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(versionInfoEClass, VersionInfo.class, "VersionInfo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getVersionInfo_Author(), theXMLTypePackage.getString(), "author", null, 1, 1, VersionInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getVersionInfo_Date(), theXMLTypePackage.getString(), "date", null, 1, 1, VersionInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getVersionInfo_Version(), this.getVersionType(), "version", null, 1, 1, VersionInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getVersionInfo_Version(), this.getVersionSimple(), "version", null, 1, 1, VersionInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize data types
 		initEDataType(nameSpaceFilterEDataType, String.class, "NameSpaceFilter", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEDataType(symbolicNameEDataType, String.class, "SymbolicName", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEDataType(versionTypeEDataType, String.class, "VersionType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEDataType(versionType1EDataType, String.class, "VersionType1", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEDataType(versionRangeEDataType, String.class, "VersionRange", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEDataType(versionSimpleEDataType, String.class, "VersionSimple", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);
@@ -780,6 +850,45 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		   source,
 		   new String[] {
 			   "qualified", "false" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (attributeEClass,
+		   source,
+		   new String[] {
+			   "name", "Attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "kind", "empty" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getAttribute_Comment(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "Comment", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getAttribute_Name(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "Name", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getAttribute_Type(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "Type", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getAttribute_Value(),
+		   source,
+		   new String[] {
+			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "Value", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
 		  (dependenciesEClass,
@@ -1067,20 +1176,20 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
-		  (versionTypeEDataType,
+		  (versionRangeEDataType,
 		   source,
 		   new String[] {
-			   "name", "Version_._1_._type", //$NON-NLS-1$ //$NON-NLS-2$
-			   "baseType", "http://www.eclipse.org/emf/2003/XMLType#token", //$NON-NLS-1$ //$NON-NLS-2$
-			   "pattern", "[0-9]+(\\.[0-9]+)*" //$NON-NLS-1$ //$NON-NLS-2$
-		   });
-		addAnnotation
-		  (versionType1EDataType,
-		   source,
-		   new String[] {
-			   "name", "Version_._type", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "VersionRange", //$NON-NLS-1$ //$NON-NLS-2$
 			   "baseType", "http://www.eclipse.org/emf/2003/XMLType#token", //$NON-NLS-1$ //$NON-NLS-2$
 			   "pattern", "[0-9]+(\\.[0-9]+)*|[\\[\\(][0-9]+(\\.[0-9]+)*\\-[0-9]+(\\.[0-9]+)*[\\]\\)]" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (versionSimpleEDataType,
+		   source,
+		   new String[] {
+			   "name", "VersionSimple", //$NON-NLS-1$ //$NON-NLS-2$
+			   "baseType", "http://www.eclipse.org/emf/2003/XMLType#token", //$NON-NLS-1$ //$NON-NLS-2$
+			   "pattern", "[0-9]+(\\.[0-9]+)*" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 	}
 

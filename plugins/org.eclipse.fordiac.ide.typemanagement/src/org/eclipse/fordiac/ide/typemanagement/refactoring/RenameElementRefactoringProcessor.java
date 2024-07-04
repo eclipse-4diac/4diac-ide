@@ -25,6 +25,8 @@ import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -66,23 +68,27 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final CompositeChange change = new CompositeChange(getProcessorName());
-		change.add(new RenameElementChange("Rename Pin in type: " + elementURI.lastSegment(), elementURI, newName));
+		change.add(new RenameElementChange(MessageFormat.format(Messages.RenameElementRefactoringProcessor_RenamePinInType, elementURI.lastSegment()),
+				elementURI, newName));
 		createChildChanges(change);
 		return change;
 	}
 
 	private void createChildChanges(final CompositeChange change) {
 		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(elementURI);
-		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(typeEntry);
-		final List<? extends EObject> result = search.performSearch();
+		final List<? extends EObject> result = (typeEntry instanceof final DataTypeEntry dtEntry)
+				? new DataTypeInstanceSearch(dtEntry).performSearch()
+				: new BlockTypeInstanceSearch(typeEntry).performSearch();
 		final var eChild = getChildByURI(typeEntry.getType(), elementURI);
-		String oldName = "";
+		String oldName = ""; //$NON-NLS-1$
 		if (eChild instanceof final IInterfaceElement varDecl) {
 			oldName = varDecl.getName();
 		}
 
 		for (final EObject eObject : result) {
-			change.add(new ReconnectPinChange(EcoreUtil.getURI(eObject), FBNetworkElement.class, newName, oldName));
+			if (eObject instanceof FBNetworkElement) {
+				change.add(new ReconnectPinChange(EcoreUtil.getURI(eObject), FBNetworkElement.class, newName, oldName));
+			}
 		}
 
 	}
