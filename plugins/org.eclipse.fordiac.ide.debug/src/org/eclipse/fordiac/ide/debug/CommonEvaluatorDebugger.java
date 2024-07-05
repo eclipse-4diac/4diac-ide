@@ -82,12 +82,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			// update model
 			frame.setCurrentContext(context);
 			thread.setCurrentEvaluator(eval);
-			thread.setSuspended(true);
-			if (request != null) {
-				thread.fireEvent(new DebugEvent(thread, request.getKind(), request.getDetail()));
-			} else {
-				thread.fireEvent(new DebugEvent(thread, DebugEvent.SUSPEND, DebugEvent.BREAKPOINT));
-			}
+			thread.suspended(request != null ? request.getDetail() : DebugEvent.BREAKPOINT);
 			try {
 				// wait for resume
 				request = thread.awaitResumeRequest();
@@ -95,13 +90,8 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 				handleResumeRequest(request, thread, frame);
 			} finally {
 				// update model
-				thread.setSuspended(false);
 				thread.setCurrentEvaluator(getPersistentEvaluator(eval));
-				if (request != null) {
-					thread.fireEvent(new DebugEvent(thread, request.getKind(), request.getDetail()));
-				} else {
-					thread.fireEvent(new DebugEvent(thread, DebugEvent.RESUME, DebugEvent.UNSPECIFIED));
-				}
+				thread.resumed(request != null ? request.getDetail() : DebugEvent.UNSPECIFIED);
 			}
 		}
 	}
