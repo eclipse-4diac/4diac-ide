@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022-2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -91,4 +91,6 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 		context.value = new FBVariable(CONTEXT_NAME, type, variables).value
 		update(context.value.members.values)
 	}
+
+	override isPersistent() { true }
 }
