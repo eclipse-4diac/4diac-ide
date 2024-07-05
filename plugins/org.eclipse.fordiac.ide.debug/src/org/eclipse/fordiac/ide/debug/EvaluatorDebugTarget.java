@@ -87,7 +87,7 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 
 	@Override
 	public boolean isSuspended() {
-		return debugger.getThreads().stream().anyMatch(EvaluatorDebugThread::isSuspended);
+		return debugger.getThreads().stream().allMatch(EvaluatorDebugThread::isSuspended);
 	}
 
 	@Override

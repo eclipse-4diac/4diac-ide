@@ -96,8 +96,20 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 		return suspended.get();
 	}
 
-	public void setSuspended(final boolean suspended) {
-		this.suspended.set(suspended);
+	public void resumed(final int detail) {
+		if (suspended.getAndSet(false)) {
+			fireResumeEvent(detail);
+			getDebugTarget().fireResumeEvent(detail);
+		}
+	}
+
+	public void suspended(final int detail) {
+		if (!suspended.getAndSet(true)) {
+			fireSuspendEvent(detail);
+			if (getDebugTarget().isSuspended()) {
+				getDebugTarget().fireSuspendEvent(detail);
+			}
+		}
 	}
 
 	@Override
