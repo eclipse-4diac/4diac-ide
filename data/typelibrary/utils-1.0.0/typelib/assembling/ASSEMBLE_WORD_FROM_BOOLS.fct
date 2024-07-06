@@ -8,7 +8,7 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+			<Event Name="REQ" Type="Event" Comment="">
 				<With Var="IN_00"/>
 				<With Var="IN_01"/>
 				<With Var="IN_02"/>
@@ -28,8 +28,8 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
-				<With Var="OUT"/>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
@@ -51,11 +51,11 @@
 			<VarDeclaration Name="IN_15" Type="BOOL" Comment="BIT 15"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="OUT" Type="WORD" Comment="WORD Output"/>
+			<VarDeclaration Name="" Type="WORD" Comment=""/>
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
-		<ST><![CDATA[FUNCTION BOOLS_TO_WORD
+		<ST><![CDATA[FUNCTION ASSEMBLE_WORD_FROM_BOOLS : WORD
 
 VAR_INPUT
 	IN_00 : BOOL;    // BIT 00
@@ -76,27 +76,26 @@ VAR_INPUT
 	IN_15 : BOOL;    // BIT 15
 END_VAR
 
-VAR_OUTPUT
-	OUT : WORD;    // WORD Output
-END_VAR
-
+// VAR_OUTPUT
+// ASSEMBLE_WORD_FROM_BOOLS : WORD; // WORD ASSEMBLE_WORD_FROM_BOOLSput
+// END_VAR
 (* this Function combines the 16 BOOLS to a word *)
-OUT.0 := IN_00;
-OUT.1 := IN_01;
-OUT.2 := IN_02;
-OUT.3 := IN_03;
-OUT.4 := IN_04;
-OUT.5 := IN_05;
-OUT.6 := IN_06;
-OUT.7 := IN_07;
-OUT.8 := IN_08;
-OUT.9 := IN_09;
-OUT.10 := IN_10;
-OUT.11 := IN_11;
-OUT.12 := IN_12;
-OUT.13 := IN_13;
-OUT.14 := IN_14;
-OUT.15 := IN_15;
+ASSEMBLE_WORD_FROM_BOOLS.0 := IN_00;
+ASSEMBLE_WORD_FROM_BOOLS.1 := IN_01;
+ASSEMBLE_WORD_FROM_BOOLS.2 := IN_02;
+ASSEMBLE_WORD_FROM_BOOLS.3 := IN_03;
+ASSEMBLE_WORD_FROM_BOOLS.4 := IN_04;
+ASSEMBLE_WORD_FROM_BOOLS.5 := IN_05;
+ASSEMBLE_WORD_FROM_BOOLS.6 := IN_06;
+ASSEMBLE_WORD_FROM_BOOLS.7 := IN_07;
+ASSEMBLE_WORD_FROM_BOOLS.8 := IN_08;
+ASSEMBLE_WORD_FROM_BOOLS.9 := IN_09;
+ASSEMBLE_WORD_FROM_BOOLS.10 := IN_10;
+ASSEMBLE_WORD_FROM_BOOLS.11 := IN_11;
+ASSEMBLE_WORD_FROM_BOOLS.12 := IN_12;
+ASSEMBLE_WORD_FROM_BOOLS.13 := IN_13;
+ASSEMBLE_WORD_FROM_BOOLS.14 := IN_14;
+ASSEMBLE_WORD_FROM_BOOLS.15 := IN_15;
 
 END_FUNCTION
 ]]></ST>
