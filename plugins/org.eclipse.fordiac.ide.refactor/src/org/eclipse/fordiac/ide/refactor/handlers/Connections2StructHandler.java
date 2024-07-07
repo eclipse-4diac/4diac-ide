@@ -1,5 +1,6 @@
 package org.eclipse.fordiac.ide.refactor.handlers;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,9 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -41,6 +44,7 @@ import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -96,7 +100,6 @@ public class Connections2StructHandler extends AbstractHandler {
 		if (window != null) {
 			IStructuredSelection selection = (IStructuredSelection) window.getSelectionService().getSelection();
 			Object firstElement = selection.getFirstElement();
-			FBNetwork fbn = ((ConnectionEditPart) firstElement).getModel().getFBNetwork();
 			List<String> sourceVarNames = selection.stream().map(t -> ((ConnectionEditPart) t).getModel().getSource().getName()).toList();
 
 			List<String> destinationVarNames = selection.stream().map(t -> ((ConnectionEditPart) t).getModel().getDestination().getName()).toList();
@@ -110,331 +113,198 @@ public class Connections2StructHandler extends AbstractHandler {
 					.map(t -> (VarDeclaration) ((ConnectionEditPart) t).getModel().getDestination()).toList();
 			List<String> varWithd = varDecld.stream().map(t -> t.getWiths()).flatMap(List::stream).map(t -> ((Event)t.eContainer()).getName()).distinct().toList();
 
-			ExtractStructTypeWizard estw = new ExtractStructTypeWizard(varDecls,
+			List<ConnectionEditPart> connections = selection.stream()
+					.filter(ConnectionEditPart.class::isInstance)
+					.map(ConnectionEditPart.class::cast).toList();
+			FBType sourceType = connections.get(0).getModel().getSourceElement().getType();
+			FBType destinationType = connections.get(0).getModel().getDestinationElement().getType();			
+			
+			//TODO: check if cast to VarDeclaration is valid
+			List<VarDeclaration> sourceVarDeclarations = connections.stream()
+					.map(con -> (VarDeclaration)con.getModel().getSource()).toList();
+			List<String> sourceWiths = varDecls.stream()
+					.map(var -> var.getWiths())
+					.flatMap(List::stream)
+					.map(width -> ((Event)width.eContainer()).getName()).distinct().toList();
+
+			List<VarDeclaration> destinationVarDeclarations = connections.stream()
+					.map(con -> (VarDeclaration)con.getModel().getDestination()).toList();
+			List<String> destinationWiths = varDecld.stream()
+					.map(var -> var.getWiths())
+					.flatMap(List::stream)
+					.map(width -> ((Event)width.eContainer()).getName()).distinct().toList();
+			
+			ExtractStructTypeWizard structWizard = new ExtractStructTypeWizard(varDecls,
 					getProject(((ConnectionEditPart) firstElement).getModel().getSourceElement()),
 					Messages.ConvertToStructHandler_Title);
-			final WizardDialog dialog = new WizardDialog(editor.getSite().getShell(), estw);
-			dialog.create();
-			dialog.open();
-			estw.getDatatypeName();
-			FBNetworkElement fbns = ((ConnectionEditPart) firstElement).getModel().getSourceElement();
-			FBNetworkElement fbnd = ((ConnectionEditPart) firstElement).getModel().getDestinationElement();
-			FBType les = ((ConnectionEditPart) firstElement).getModel().getSourceElement().getType();
-			FBType led = ((ConnectionEditPart) firstElement).getModel().getDestinationElement().getType();
+			final WizardDialog structDialog = new WizardDialog(editor.getSite().getShell(), structWizard);
+			structDialog.create();
+			structDialog.open();
 			
 			//TODO: what if two destinations?
 			Map<String, String> replacableConMap = new HashMap<String, String>();
 			Map<FBNetworkElement, List<FBNetworkElement>> structconnectionMap = new HashMap<FBNetworkElement, List<FBNetworkElement>>();
+			connections.stream().forEach(con -> replacableConMap.put(con.getModel().getSource().getName(), con.getModel().getDestination().getName()));
 			
 			
-			CompoundCommand cc = new CompoundCommand();
-			//TODO: user input for name 
-			String name = "testname";
-			selection.forEach(sel -> {
-				ConnectionEditPart con = (ConnectionEditPart) sel;
-				replacableConMap.put(con.getModel().getSource().getName(), con.getModel().getDestination().getName());
-				//cc.add(new DeleteConnectionCommand(((ConnectionEditPart) sel).getModel()));
-			});
-			sourceVarNames.forEach(var -> cc.add(new DeleteInterfaceCommand(les.getInterfaceList().getOutput(var))));
-			destinationVarNames.forEach(var -> cc.add(new DeleteInterfaceCommand(led.getInterfaceList().getInput(var))));
-			CreateInterfaceElementCommand sourceStruct = new CreateInterfaceElementCommand(les.getTypeLibrary().getDataTypeLibrary().getType(estw.getDatatypeName()), name, les.getInterfaceList(), false, (int)les.getInterfaceList().getOutputs().count());
-			CreateInterfaceElementCommand destinationStruct = new CreateInterfaceElementCommand(led.getTypeLibrary().getDataTypeLibrary().getType(estw.getDatatypeName()), name, led.getInterfaceList(), true, (int)led.getInterfaceList().getInputs().count());
-			cc.add(sourceStruct);
-			cc.add(destinationStruct);
-			commandStack.execute(cc);
 			
-			CompoundCommand cc2 = new CompoundCommand();
 			
-			varWiths.forEach(eve -> cc2.add(new WithCreateCommand(les.getInterfaceList().getEvent(eve),(VarDeclaration) sourceStruct.getCreatedElement())));
-			varWithd.forEach(eve -> cc2.add(new WithCreateCommand(led.getInterfaceList().getEvent(eve),(VarDeclaration) destinationStruct.getCreatedElement())));
+			//Edit FBs
+			CompoundCommand editFBsCommand = new CompoundCommand();
+			replacableConMap.keySet().forEach(sourceVar -> editFBsCommand.add(new DeleteInterfaceCommand(sourceType.getInterfaceList().getOutput(sourceVar))));
+			replacableConMap.values().forEach(destinationVar -> editFBsCommand.add(new DeleteInterfaceCommand(destinationType.getInterfaceList().getInput(destinationVar))));
 			
-			commandStack.execute(cc2);
+			//TODO: get name from user
+			String name = "teststruct";
+			CreateInterfaceElementCommand sourceStruct = new CreateInterfaceElementCommand(sourceType.getTypeLibrary().getDataTypeLibrary().getType(structWizard.getDatatypeName()), name, sourceType.getInterfaceList(), false, (int)sourceType.getInterfaceList().getOutputs().count());
+			CreateInterfaceElementCommand destinationStruct = new CreateInterfaceElementCommand(destinationType.getTypeLibrary().getDataTypeLibrary().getType(structWizard.getDatatypeName()), name, destinationType.getInterfaceList(), true, (int)destinationType.getInterfaceList().getInputs().count());
+			editFBsCommand.add(sourceStruct);
+			editFBsCommand.add(destinationStruct);
+			commandStack.execute(editFBsCommand);
+			
+			//Recreate event bindings
+			CompoundCommand createWidths = new CompoundCommand();
+			sourceWiths.forEach(width -> createWidths.add(new WithCreateCommand(sourceType.getInterfaceList().getEvent(width),(VarDeclaration) sourceStruct.getCreatedElement())));
+			destinationWiths.forEach(width -> createWidths.add(new WithCreateCommand(destinationType.getInterfaceList().getEvent(width),(VarDeclaration) destinationStruct.getCreatedElement())));
+			commandStack.execute(createWidths);
 			
 			
 			final String[] labels = {"Save and Update", //Messages.FBTypeEditor_AlteringButton_SaveAndUpdate, // Messages.StructAlteringButton_SaveAs,
 						SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 			//FBTypeEditor.Messages
 			FBTypeUpdateDialog<TypeEntry> fbSaveDialog = new FBTypeUpdateDialog<TypeEntry>(null, "Function Block Editor", null, "", //$NON-NLS-1$
-					MessageDialog.NONE, labels, 0, new FBTypeEntryDataHandler(les.getTypeEntry()));
+					MessageDialog.NONE, labels, 0, new FBTypeEntryDataHandler(sourceType.getTypeEntry()));
 
+			BlockTypeInstanceSearch sourceSearch = new BlockTypeInstanceSearch(sourceType.getTypeEntry());
+			BlockTypeInstanceSearch destinationSearch = new BlockTypeInstanceSearch(destinationType.getTypeEntry());
+			
+			//TODO: same dialog as for FBTypeEditor
+			//Open update dialog
 			switch (fbSaveDialog.open()) {
 			case 0:
-				try {
-					CompoundCommand cc3 = new CompoundCommand();
-					les.getTypeEntry().save(les);
-					UpdateFBTypeCommand sourceUpdate = new UpdateFBTypeCommand(fbns);
-					cc3.add(sourceUpdate);
-					led.getTypeEntry().save(led);
+				AbstractLiveSearchContext.save(sourceType.getTypeEntry());
+				AbstractLiveSearchContext.save(destinationType.getTypeEntry());
+				
+				List<FBNetworkElement> sourceSearchResults = sourceSearch.performSearch().stream().map(FBNetworkElement.class::cast).toList();
+				List<FBNetworkElement> destinationSearchResults = destinationSearch.performSearch().stream().map(FBNetworkElement.class::cast).toList();
+				
+				Map <FBNetworkElement, FBNetworkElement> demuxMap = new HashMap<FBNetworkElement, FBNetworkElement>();
+				Map <FBNetworkElement, FBNetworkElement> muxMap = new HashMap<FBNetworkElement, FBNetworkElement>();
+				
+				//Update FBs
+				CompoundCommand updateCommands = new CompoundCommand();
+				sourceSearchResults.stream()
+				.forEach(fbnelement -> updateCommands.add(new UpdateFBTypeCommand(fbnelement)));;
+				destinationSearchResults.stream()
+				.forEach(fbnelement -> updateCommands.add(new UpdateFBTypeCommand(fbnelement)));
+				commandStack.execute(updateCommands);
+				
+				destinationSearchResults = destinationSearch.performSearch().stream().map(FBNetworkElement.class::cast).toList();
+				sourceSearchResults = sourceSearch.performSearch().stream().map(FBNetworkElement.class::cast).toList();
+				
+				CompoundCommand muxCreateCommand = new CompoundCommand();
+				
+				Map<FBNetworkElement, FBNetworkElement> structConnectionMap = new HashMap<FBNetworkElement, FBNetworkElement>();
+				
+				//Create map between correct connected FBs and create MUX
+				destinationSearchResults.stream().forEach(instance -> {
+					instance.getInterface().getErrorMarker().stream().flatMap(err -> err.getInputConnections().stream());
 					
-					//TODO:
-					//AbstractLiveSearchContext.save(led.getTypeEntry());
-					//executeandsave verweden
+					List<Connection> cons = instance.getInterface().getErrorMarker().stream()
+							.flatMap(err -> err.getInputConnections().stream())
+							.filter(con -> replacableConMap.containsKey(con.getSource().getName()) 
+									&& replacableConMap.get(con.getSource().getName()).equals(con.getDestination().getName()) 
+									&& con.getSourceElement().getType().getName().equals(sourceType.getName()))
+							.toList();
 					
-					
-					UpdateFBTypeCommand destinationUpdate = new UpdateFBTypeCommand(fbnd);
-					cc3.add(destinationUpdate);
-					//commandStack.execute(cc3);
-					fbns = sourceUpdate.getNewElement();
-					fbnd = destinationUpdate.getNewElement();
-					
-//
-					StructDataConnectionCreateCommand sdccc = new StructDataConnectionCreateCommand(fbn);
-					//sdccc.setSource(fbns.getInterface().getOutput(sourceStruct.getCreatedElement().getName()));
-					//sdccc.setDestination(fbnd.getInterface().getInput(destinationStruct.getCreatedElement().getName()));
-					
-					//commandStack.execute(sdccc);
-					
-					/*
-					 * Display.getDefault().asyncExec(() -> {
-					 * 
-					 * final WizardDialog dialog = new WizardDialog(editor.getSite().getShell(),
-					 * estw); dialog.create(); dialog.open(); });
-					 */
-
-					
-
-					BlockTypeInstanceSearch btis = new BlockTypeInstanceSearch(les.getTypeEntry());
-					BlockTypeInstanceSearch btid = new BlockTypeInstanceSearch(led.getTypeEntry());
-//					btis.performSearch().stream().forEach(t -> ((FBNetworkElement) t).setComment("hello"));
-//					final String[] labels = { "Save", "Cancel" };
-//					FBTypeUpdateDialog<TypeEntry> fbtud1 = new FBTypeUpdateDialog<TypeEntry>(null, "STRUCT Editor", null, "", 0,
-//							labels, 0, new FBTypeEntryDataHandler(led.getTypeEntry()));
-//					if (fbtud1.open() == 0) {
-//						System.out.println("Hello");
-//						
-//					}
-					
-					//FBNetworkElements cachen types updaten mit errormarkers neu verbinden
-
-					CompoundCommand reconnectupdatecompcmd = new CompoundCommand();
-					CompoundCommand connectcompcd = new CompoundCommand();
-					CompoundCommand demuxcmd = new CompoundCommand();
-					Map <FBNetworkElement, FBNetworkElement> demuxMap = new HashMap<FBNetworkElement, FBNetworkElement>();
-					Map <FBNetworkElement, FBNetworkElement> muxMap = new HashMap<FBNetworkElement, FBNetworkElement>();
-					
-					btis.performSearch().stream().forEach(instance -> {
-						Map<FBNetworkElement, Integer> corrConnCount = new HashMap<FBNetworkElement, Integer>();
-						if (instance instanceof FBNetworkElement fbinstance) {
-							FBCreateCommand demuxCreate = new FBCreateCommand(fbinstance.getTypeLibrary().getFBTypeEntry("STRUCT_DEMUX"), fbinstance.getFbNetwork(), (int)(fbinstance.getPosition().getX()+10), (int)fbinstance.getPosition().getY());
-							commandStack.execute(demuxCreate);
-							ChangeStructCommand csc = new ChangeStructCommand((StructManipulator)demuxCreate.getElement(), fbinstance.getTypeLibrary().getDataTypeLibrary().getType("structtest"));
-							commandStack.execute(csc);
-							demuxMap.put(fbinstance, csc.getNewElement());
-							
-							replacableConMap.forEach((outname, inname) -> {
-								fbinstance.getOutput(outname).getOutputConnections().stream()
-								.filter(con -> con.getDestination().getName().equals(inname))
-								.forEach(con -> corrConnCount.put(con.getDestinationElement(), corrConnCount.getOrDefault(con.getDestinationElement(), 0)+1));
-							});
-							corrConnCount.entrySet().stream().forEach(entry -> {
-								if (entry.getValue()==replacableConMap.size()) {
-									List<FBNetworkElement> list = structconnectionMap.getOrDefault(fbinstance, new ArrayList<FBNetworkElement>());
-									list.add(entry.getKey());
-									structconnectionMap.put(fbinstance, list);
-								}
-							});
-						}
-					});
-										
-					CompoundCommand alterConnectioncmd = new CompoundCommand();
-					btis.performSearch().stream().map(instance -> (FBNetworkElement) instance).forEach(instance -> replacableConMap.forEach((outname, inname) -> {
-						instance.getOutput(outname).getOutputConnections().forEach(con -> {
-							if (structconnectionMap.containsKey(instance) && structconnectionMap.get(instance).contains(con.getDestinationElement()) 
-									&& con.getSource().getName().equals(outname) 
-									&& con.getDestination().getName().equals(inname)) {
-								alterConnectioncmd.add(new DeleteConnectionCommand(con));
-							} else {
-								alterConnectioncmd.add(new ReconnectDataConnectionCommand(con, true, demuxMap.get(instance).getOutput(con.getSource().getName()), fbn));
-							}
+					if (cons.stream().map(con -> con.getSourceElement()).distinct().count() == 1 
+							&& cons.stream().count() == replacableConMap.size()) {
+						structConnectionMap.put(instance, instance.getInterface().getErrorMarker().stream()
+								.flatMap(err -> err.getInputConnections().stream())
+								.filter(con -> replacableConMap.containsValue(con.getDestination().getName()))
+								.findFirst().get().getSourceElement());
+					} else {
+						FBCreateCommand muxcreate = new FBCreateCommand(instance.getTypeLibrary().getFBTypeEntry("STRUCT_MUX"), instance.getFbNetwork(), 0,0);//(int)(instance.getPosition().getX()+10), (int)instance.getPosition().getY());
+						muxCreateCommand.add(muxcreate);
+						commandStack.execute(muxcreate);
+						ChangeStructCommand changeStruct = new ChangeStructCommand((StructManipulator)muxcreate.getElement(), muxcreate.getElement().getTypeLibrary().getDataTypeLibrary().getType(structWizard.getDatatypeName()));
+						muxCreateCommand.add(changeStruct);
+						commandStack.execute(changeStruct);
+						muxMap.put(instance, changeStruct.getNewElement());
+					}
+				});
+				
+				//Create DEMUX if needed
+				sourceSearchResults.stream().forEach(instance -> {
+					if (instance.getInterface().getErrorMarker().stream()
+							.flatMap(err -> err.getOutputConnections().stream())
+							.filter(con -> !(structConnectionMap.containsKey(con.getDestinationElement())
+									&& structConnectionMap.get(con.getDestinationElement()).equals(instance)
+									&& replacableConMap.containsKey(con.getSource().getName())
+									&& replacableConMap.get(con.getSource().getName()).equals(con.getDestination().getName())))
+							.count() != 0) {
+						FBCreateCommand muxcreate = new FBCreateCommand(instance.getTypeLibrary().getFBTypeEntry("STRUCT_DEMUX"), instance.getFbNetwork(), 0,0);//(int)(instance.getPosition().getX()+10), (int)instance.getPosition().getY());
+						muxCreateCommand.add(muxcreate);
+						commandStack.execute(muxcreate);
+						ChangeStructCommand changeStruct = new ChangeStructCommand((StructManipulator)muxcreate.getElement(), muxcreate.getElement().getTypeLibrary().getDataTypeLibrary().getType(structWizard.getDatatypeName()));
+						muxCreateCommand.add(changeStruct);
+						commandStack.execute(changeStruct);
+						demuxMap.put(instance, changeStruct.getNewElement());
+					}
+				});
+				//commandstack.execute(MuxCreateCommand) not needed
+				
+				//Edit destination connections
+				CompoundCommand destinationConnectionEditCommand = new CompoundCommand();
+				destinationSearchResults.stream().forEach(instance -> {
+					if (structConnectionMap.containsKey(instance)) {
+						StructDataConnectionCreateCommand structCon = new StructDataConnectionCreateCommand(instance.getFbNetwork());
+						structCon.setDestination(instance.getInput(destinationStruct.getCreatedElement().getName()));
+						structCon.setSource(structConnectionMap.get(instance).getOutput(sourceStruct.getCreatedElement().getName()));
+						destinationConnectionEditCommand.add(structCon);
+						instance.getInterface().getErrorMarker().stream()
+						.flatMap(err -> err.getInputConnections().stream())
+						.filter(con -> replacableConMap.containsValue(con.getDestination().getName()))
+						.forEach(con -> destinationConnectionEditCommand.add(new DeleteConnectionCommand(con)));
+					} else {
+						StructDataConnectionCreateCommand structCon = new StructDataConnectionCreateCommand(instance.getFbNetwork());
+						structCon.setDestination(instance.getInput(destinationStruct.getCreatedElement().getName()));
+						structCon.setSource(muxMap.get(instance).getOutput("OUT"));
+						destinationConnectionEditCommand.add(structCon);
+						instance.getInterface().getErrorMarker().stream()
+						.flatMap(err -> err.getInputConnections().stream())
+						.filter(con -> replacableConMap.containsValue(con.getDestination().getName()))
+						.forEach(con -> {
+							String var = replacableConMap.entrySet().stream().filter(entry -> entry.getValue().equals(con.getDestination().getName())).findAny().get().getKey();
+							destinationConnectionEditCommand.add(new ReconnectDataConnectionCommand(con, false, muxMap.get(instance).getInput(var), instance.getFbNetwork()));
 						});
-					}));
-					
-					commandStack.execute(alterConnectioncmd);
-					
-					CompoundCommand alterConnectioncmd1 = new CompoundCommand();
-					new ArrayList<EObject>(btid.performSearch()).stream().forEach(instance -> {
-						if (instance instanceof FBNetworkElement fbinstance) {
-							if (!structconnectionMap.values().stream().flatMap(t -> t.stream()).anyMatch(t -> t.equals(instance))) {
-								FBCreateCommand muxCreate = new FBCreateCommand(fbinstance.getTypeLibrary().getFBTypeEntry("STRUCT_MUX"), fbinstance.getFbNetwork(), (int)(fbinstance.getPosition().getX()-10), (int)fbinstance.getPosition().getY());
-								commandStack.execute(muxCreate);
-								ChangeStructCommand csc = new ChangeStructCommand((StructManipulator)muxCreate.getElement(), fbinstance.getTypeLibrary().getDataTypeLibrary().getType("structtest"));
-								commandStack.execute(csc);
-								muxMap.put(fbinstance, csc.getNewElement());
-								
-								replacableConMap.forEach((outname, inname) -> {
-									fbinstance.getInput(inname).getInputConnections().forEach(con -> {
-										alterConnectioncmd1.add(new ReconnectDataConnectionCommand(con, true, muxMap.get(instance).getOutput(con.getSource().getName()), fbn));
-									});
-								});
-							}
-						}
-					});
-					
-					commandStack.execute(alterConnectioncmd1);
-					
-					btis.performSearch().forEach(instance -> {
-						if (instance instanceof FBNetworkElement fbinstance) {
-							UpdateFBTypeCommand srcUpdate = new UpdateFBTypeCommand(fbinstance);
-							commandStack.execute(srcUpdate);
-							
-							demuxMap.put(srcUpdate.getNewElement(), demuxMap.get(instance));
-							demuxMap.remove(instance);
-							if (structconnectionMap.containsKey(instance)) {
-								structconnectionMap.put(srcUpdate.getNewElement(), structconnectionMap.get(instance));
-								structconnectionMap.remove(instance);
-							}
-							structconnectionMap.values().stream().filter(t -> t.contains(instance)).forEach(t -> {
-								t.remove(instance);
-								t.add(srcUpdate.getNewElement());
-							});
-							if (muxMap.containsKey(instance)) {
-								muxMap.put(srcUpdate.getNewElement(), muxMap.get(instance));
-								muxMap.remove(instance);
-							}
-														
-							StructDataConnectionCreateCommand demuxcon = new StructDataConnectionCreateCommand(fbn);
-							demuxcon.setSource(srcUpdate.getNewElement().getOutput(sourceStruct.getCreatedElement().getName()));
-							demuxcon.setDestination(demuxMap.get(srcUpdate.getNewElement()).getInput("IN"));
-							commandStack.execute(demuxcon);
-
-							if (structconnectionMap.containsKey(srcUpdate.getNewElement())) {
-								new ArrayList<FBNetworkElement>(structconnectionMap.get(srcUpdate.getNewElement())).forEach(dest -> {
-									UpdateFBTypeCommand destUpdate = new UpdateFBTypeCommand(dest);
-									commandStack.execute(destUpdate);
-									
-									muxMap.put(destUpdate.getNewElement(), muxMap.get(destUpdate.getOldElement()));
-									muxMap.remove(destUpdate.getOldElement());
-									if (structconnectionMap.containsKey(destUpdate.getOldElement())) {
-										structconnectionMap.put(destUpdate.getNewElement(), structconnectionMap.get(destUpdate.getOldElement()));
-										structconnectionMap.remove(destUpdate.getOldElement());
-									}
-									structconnectionMap.values().stream().filter(t -> t.contains(destUpdate.getOldElement())).forEach(t -> {
-										t.remove(destUpdate.getOldElement());
-										t.add(destUpdate.getNewElement());
-									});
-									if (demuxMap.containsKey(destUpdate.getOldElement())) {
-										demuxMap.put(destUpdate.getNewElement(), demuxMap.get(destUpdate.getOldElement()));
-										demuxMap.remove(destUpdate.getOldElement());
-									}
-									
-									StructDataConnectionCreateCommand newcon = new StructDataConnectionCreateCommand(fbn);
-									newcon.setSource(srcUpdate.getNewElement().getOutput(sourceStruct.getCreatedElement().getName()));
-									newcon.setDestination(destUpdate.getNewElement().getInput(destinationStruct.getCreatedElement().getName()));
-									commandStack.execute(newcon);
-								});
-							}
-						}
-					});
-					
-					new ArrayList<EObject>(btid.performSearch()).forEach(instance -> {
-						if (instance instanceof FBNetworkElement fbinstance) {
-							if (!structconnectionMap.values().stream().flatMap(t -> t.stream()).anyMatch(t -> t.equals(instance))) {
-								UpdateFBTypeCommand srcUpdate = new UpdateFBTypeCommand(fbinstance);
-								commandStack.execute(srcUpdate);
-								muxMap.put(srcUpdate.getNewElement(), muxMap.get(instance));
-								muxMap.remove(instance);
-								if (structconnectionMap.containsKey(instance)) {
-									structconnectionMap.put(srcUpdate.getNewElement(), structconnectionMap.get(instance));
-									structconnectionMap.remove(instance);
-								}
-								structconnectionMap.values().stream().filter(t -> t.contains(instance)).forEach(t -> {
-									t.remove(instance);
-									t.add(srcUpdate.getNewElement());
-								});
-								if (demuxMap.containsKey(instance)) {
-									demuxMap.put(srcUpdate.getNewElement(), muxMap.get(instance));
-									demuxMap.remove(instance);
-								}
-								
-								StructDataConnectionCreateCommand muxcon = new StructDataConnectionCreateCommand(fbn);
-								muxcon.setSource(muxMap.get(srcUpdate.getNewElement()).getOutput("OUT"));
-								muxcon.setDestination(srcUpdate.getNewElement().getInput(destinationStruct.getCreatedElement().getName()));
-								commandStack.execute(muxcon);
-							}
-							
-							
-						}
-					});
-					
-					
-//					new ArrayList<EObject>(btis.performSearch()).stream()
-//					.filter(t -> (!t.equals(sourceUpdate.getNewElement()) && !t.equals(destinationUpdate.getNewElement()) && t instanceof FBNetworkElement))
-//					.map(t -> (FBNetworkElement) t)
-//					.forEach(t -> {
-//						FBCreateCommand fbcc1 = new FBCreateCommand(t.getTypeLibrary().getFBTypeEntry("STRUCT_DEMUX"), t.getFbNetwork(), (int)(t.getPosition().getX()+50), (int)t.getPosition().getY());
-//						commandStack.execute(fbcc1);
-//						ChangeStructCommand csc = new ChangeStructCommand((StructManipulator)fbcc1.getElement(), t.getTypeLibrary().getDataTypeLibrary().getType("structtest"));
-//						commandStack.execute(csc);
-//						
-////						for (int i = 0; i < sourceVarNames.size(); i++) {
-////							EList<Connection> e = t.getOutput(sourceVarNames.get(i)).getOutputConnections();
-////							if (e != null && !e.isEmpty()) {
-////								for (int j = 0; j < e.size(); j++) {
-////									ReconnectDataConnectionCommand rdcc = new ReconnectDataConnectionCommand(e.get(j), true, csc.getNewElement().getOutput(sourceVarNames.get(i)), fbn);
-////									commandStack.execute(rdcc);
-////								}
-////							}
-////						}
-//						
-//						sourceVarNames.stream().flatMap(outputname -> t.getOutput(outputname).getOutputConnections().stream()).toList().stream().forEach(con -> {
-//							ReconnectDataConnectionCommand rdcc = new ReconnectDataConnectionCommand(con, true, csc.getNewElement().getOutput(con.getSource().getName()), fbn);
-//							commandStack.execute(rdcc);//reconnectupdatecompcmd.add(rdcc);
-////							commandStack.execute(rdcc);
-////							DeleteConnectionCommand dcc = new DeleteConnectionCommand(con);
-////							commandStack.execute(dcc);
-//							System.out.println(con);
-//						});
-//						
-//						UpdateFBTypeCommand updatefb = new UpdateFBTypeCommand(t);
-//						commandStack.execute(updatefb);//reconnectupdatecompcmd.add(updatefb);
-//						StructDataConnectionCreateCommand muxcon = new StructDataConnectionCreateCommand(fbn);
-//						muxcon.setSource(updatefb.getNewElement().getInterface().getOutput(sourceStruct.getCreatedElement().getName()));
-//						muxcon.setDestination(csc.getNewElement().getInterface().getInput("IN"));
-//						commandStack.execute(muxcon);//connectcompcd.add(muxcon);
-////						sourceVarNames.forEach(x -> {
-////							EList<Connection> e = t.getOutput(x).getOutputConnections();
-////							e.stream().findAny().ifPresent(z -> System.out.println(z));
-////							if (e != null && e.size() > 0) {
-////								e.forEach(y -> {
-////									ReconnectDataConnectionCommand rdcc = new ReconnectDataConnectionCommand(y, true, csc.getNewElement().getOutput(x), fbn);
-////									commandStack.execute(rdcc);
-////								});
-////							}
-////						});
-//					});
-//					((FBNetworkElement)btis.performSearch().get(2)).getOutput("DO1").getOutputConnections().get(0);
-					//commandStack.execute(reconnectupdatecompcmd);
-					//commandStack.execute(connectcompcd);
-//
-					
-				} catch (CoreException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+					}
+				});
+				commandStack.execute(destinationConnectionEditCommand);
+				
+				//Edit source connections
+				CompoundCommand sourceConnectionEditCommand = new CompoundCommand();
+				sourceSearchResults.stream().forEach(instance -> {
+					if (!structConnectionMap.containsValue(instance)) {
+						StructDataConnectionCreateCommand structCon = new StructDataConnectionCreateCommand(instance.getFbNetwork());
+						structCon.setDestination(demuxMap.get(instance).getInput("IN"));
+						structCon.setSource(instance.getOutput(sourceStruct.getCreatedElement().getName()));
+						sourceConnectionEditCommand.add(structCon);
+						instance.getInterface().getErrorMarker().stream()
+						.flatMap(err -> err.getOutputConnections().stream())
+						.filter(con -> replacableConMap.containsKey(con.getSource().getName()))
+						.forEach(con -> sourceConnectionEditCommand.add(new ReconnectDataConnectionCommand(con, true, demuxMap.get(instance).getOutput(con.getSource().getName()), instance.getFbNetwork())));
+					}
+				});
+				commandStack.execute(sourceConnectionEditCommand);
 				break;
 			case 1:
-				MessageDialog.openInformation(null, "Function Block Editor",
-						"The changes have not been saved!");
-				break;
-			default:
+//				commandStack.undo();
+//				commandStack.undo();
+//				commandStack.undo();
+				MessageDialog.openInformation(null, "Function Block Editor", "The changes have not been saved!");
 				break;
 			}
-			
-			
-			
-			
-//			UpdateFBTypeCommand ufbtc = new UpdateFBTypeCommand(((ConnectionEditPart) firstElement).getModel().getSourceElement());
-//			commandStack.execute(ufbtc);
-			
-			//InterfaceList ils = ((ConnectionEditPart) firstElement).getModel().getSourceElement().getInterface();
-			//InterfaceList ild = ((ConnectionEditPart) firstElement).getModel().getDestinationElement().getInterface();
-
-			
-			
-			
-
-//			FBCreateCommand fbcc = new FBCreateCommand((FBTypeEntry)fbns.getTypeEntry(), fbns.getFbNetwork(), 0, 0);
-//			commandStack.execute(fbcc);
 			
 		}
 		
