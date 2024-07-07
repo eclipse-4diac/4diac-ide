@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Function Name="QUARTERS_TO_DWORD" Comment="">
+<Function Name="ASSEMBLE_DWORD_FROM_QUARTERS" Comment="">
 	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
@@ -8,7 +8,7 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+			<Event Name="REQ" Type="Event" Comment="">
 				<With Var="IN_00"/>
 				<With Var="IN_01"/>
 				<With Var="IN_02"/>
@@ -28,7 +28,8 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
 				<With Var="OUT"/>
 			</Event>
 		</EventOutputs>
@@ -51,11 +52,12 @@
 			<VarDeclaration Name="IN_15" Type="BYTE" Comment="QUARTER BYTE 15"/>
 		</InputVars>
 		<OutputVars>
+			<VarDeclaration Name="" Type="ANY" Comment=""/>
 			<VarDeclaration Name="OUT" Type="DWORD" Comment="DWORD Output"/>
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
-		<ST><![CDATA[FUNCTION QUARTERS_TO_DWORD
+		<ST><![CDATA[FUNCTION ASSEMBLE_DWORD_FROM_QUARTERS
 
 VAR_INPUT
 	IN_00 : BYTE;    // QUARTER BYTE 00
