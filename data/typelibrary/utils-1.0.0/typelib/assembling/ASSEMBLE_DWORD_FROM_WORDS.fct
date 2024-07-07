@@ -16,7 +16,6 @@
 		<EventOutputs>
 			<Event Name="CNF" Type="Event" Comment="">
 				<With Var=""/>
-				<With Var="OUT"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
@@ -24,24 +23,22 @@
 			<VarDeclaration Name="IN_01" Type="WORD" Comment="WORD 01"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="" Type="ANY" Comment=""/>
-			<VarDeclaration Name="OUT" Type="DWORD" Comment="DWORD Output"/>
+			<VarDeclaration Name="" Type="DWORD" Comment=""/>
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
-		<ST><![CDATA[FUNCTION ASSEMBLE_DWORD_FROM_WORDS
+		<ST><![CDATA[FUNCTION ASSEMBLE_DWORD_FROM_WORDS : DWORD
 
 VAR_INPUT
 	IN_00 : WORD;    // WORD 00
 	IN_01 : WORD;    // WORD 01
 END_VAR
 
-VAR_OUTPUT
-	OUT : DWORD;    // DWORD Output
-END_VAR
-
+// VAR_OUTPUT
+// OUT : DWORD; // DWORD Output
+// END_VAR
 (* this Function combines the 2 WORDS to a dword *)
-OUT := SHL(WORD_TO_DWORD(IN_01), SHIFT_WORD_01) 
+ASSEMBLE_DWORD_FROM_WORDS := SHL(WORD_TO_DWORD(IN_01), SHIFT_WORD_01) 
 	OR SHL(WORD_TO_DWORD(IN_00), SHIFT_WORD_00);
 
 END_FUNCTION
