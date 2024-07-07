@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Function Name="BYTES_TO_WORD" Comment="">
+<Function Name="ASSEMBLE_WORD_FROM_BYTES" Comment="">
 	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
@@ -27,7 +27,7 @@
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
-		<ST><![CDATA[FUNCTION BYTES_TO_WORD : WORD
+		<ST><![CDATA[FUNCTION ASSEMBLE_WORD_FROM_BYTES : WORD
 
 VAR_INPUT
 	IN_00 : BYTE;    // BYTE 00
@@ -35,9 +35,9 @@ VAR_INPUT
 END_VAR
 
 (* this Function combines the 2 BYTES to a word *)
-BYTES_TO_WORD := WORD_BYTE_ZZ;
-BYTES_TO_WORD := BYTES_TO_WORD OR SHL(BYTE_TO_WORD(IN_01), SHFT_BYTE_01);
-BYTES_TO_WORD := BYTES_TO_WORD OR SHL(BYTE_TO_WORD(IN_00), SHFT_BYTE_00);
+ASSEMBLE_WORD_FROM_BYTES := WORD_BYTE_ZZ;
+ASSEMBLE_WORD_FROM_BYTES := ASSEMBLE_WORD_FROM_BYTES OR SHL(BYTE_TO_WORD(IN_01), SHFT_BYTE_01);
+ASSEMBLE_WORD_FROM_BYTES := ASSEMBLE_WORD_FROM_BYTES OR SHL(BYTE_TO_WORD(IN_00), SHFT_BYTE_00);
 
 END_FUNCTION
 ]]></ST>
