@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
@@ -45,6 +46,7 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 	private final ILaunch launch;
 	private final EvaluatorProcess process;
 	private final CommonEvaluatorDebugger debugger;
+	private final AtomicLong variableUpdateCount = new AtomicLong();
 
 	public EvaluatorDebugTarget(final String name, final Evaluator evaluator, final ILaunch launch)
 			throws CoreException {
@@ -73,6 +75,14 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 
 	public CommonEvaluatorDebugger getDebugger() {
 		return debugger;
+	}
+
+	public long getVariableUpdateCount() {
+		return variableUpdateCount.get();
+	}
+
+	public long incrementVariableUpdateCount() {
+		return variableUpdateCount.incrementAndGet();
 	}
 
 	@Override
@@ -203,6 +213,7 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 
 		@Override
 		protected IStatus run(final IProgressMonitor monitor) {
+			incrementVariableUpdateCount();
 			final DebugEvent[] events = queue.getAndSet(ConcurrentHashMap.newKeySet()).stream()
 					.map(debugger::getVariable)
 					.map(variable -> new DebugEvent(variable, DebugEvent.CHANGE, DebugEvent.CONTENT))
