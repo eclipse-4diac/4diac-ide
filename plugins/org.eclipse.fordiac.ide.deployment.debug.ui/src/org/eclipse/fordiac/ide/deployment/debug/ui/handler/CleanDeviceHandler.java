@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 import org.eclipse.fordiac.ide.deployment.debug.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 /**
  * The Class SendClearAction.
@@ -27,10 +26,8 @@ public class CleanDeviceHandler extends AbstractDeviceDeploymentCommand {
 
 	@Override
 	protected void executeCommand(final IDeviceManagementInteractor executor) throws DeploymentException {
-		for (final Resource res : getDevice().getResource()) {
-			if (!res.isDeviceTypeResource()) {
-				executor.deleteResource(res.getName());
-			}
+		for (final org.eclipse.fordiac.ide.deployment.devResponse.Resource res : executor.queryResources()) {
+			executor.deleteResource(res.getName());
 		}
 	}
 
