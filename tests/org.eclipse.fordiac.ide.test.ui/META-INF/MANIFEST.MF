@@ -28,6 +28,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.fbtypeeditor.network,
  org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.systemmanagement.ui;bundle-version="3.0.0",
+ org.eclipse.fordiac.ide.typemanagement;bundle-version="3.0.0",
  org.eclipse.swt,
  org.hamcrest.core,
  org.eclipse.draw2d
