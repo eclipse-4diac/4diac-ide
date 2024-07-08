@@ -105,9 +105,11 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 
 	public void suspended(final int detail) {
 		if (!suspended.getAndSet(true)) {
+			final EvaluatorDebugTarget debugTarget = getDebugTarget();
+			debugTarget.incrementVariableUpdateCount();
 			fireSuspendEvent(detail);
-			if (getDebugTarget().isSuspended()) {
-				getDebugTarget().fireSuspendEvent(detail);
+			if (debugTarget.isSuspended()) {
+				debugTarget.fireSuspendEvent(detail);
 			}
 		}
 	}
