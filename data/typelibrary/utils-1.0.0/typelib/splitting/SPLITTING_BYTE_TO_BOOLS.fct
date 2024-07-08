@@ -8,13 +8,12 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ" Type="Event" Comment="">
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
 				<With Var="IN"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="">
-				<With Var=""/>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
 				<With Var="OUT_00"/>
 				<With Var="OUT_01"/>
 				<With Var="OUT_02"/>
@@ -29,7 +28,6 @@
 			<VarDeclaration Name="IN" Type="BYTE" Comment="BYTE Input"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="" Type="ANY" Comment=""/>
 			<VarDeclaration Name="OUT_00" Type="BOOL" Comment="BIT 00"/>
 			<VarDeclaration Name="OUT_01" Type="BOOL" Comment="BIT 01"/>
 			<VarDeclaration Name="OUT_02" Type="BOOL" Comment="BIT 02"/>
