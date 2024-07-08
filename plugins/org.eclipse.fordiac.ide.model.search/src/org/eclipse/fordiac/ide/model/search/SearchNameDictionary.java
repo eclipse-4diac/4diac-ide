@@ -18,7 +18,6 @@ import java.util.Stack;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -83,7 +82,7 @@ public class SearchNameDictionary {
 			return namedElement.getName() + "." + call.getName(); //$NON-NLS-1$
 		}
 		if (element instanceof final LibraryElement libElement) {
-			return PackageNameHelper.getFullTypeName(libElement);
+			return libElement.getTypeEntry().getFullTypeName();
 		}
 		if (element instanceof final INamedElement namedElement) {
 			return namedElement.getName();

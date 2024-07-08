@@ -15,7 +15,6 @@
 
 package org.eclipse.fordiac.ide.model.edit.providers;
 
-import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -40,7 +39,7 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 		if (element instanceof final TypeEntry entry) {
 			styledString = new StyledString(entry.getTypeName());
 
-			final String packageName = PackageNameHelper.extractPackageName(entry.getFullTypeName());
+			final String packageName = entry.getPackageName();
 			if (!packageName.isEmpty()) {
 				styledString.append(" - " + packageName, StyledString.DECORATIONS_STYLER); //$NON-NLS-1$
 			}
