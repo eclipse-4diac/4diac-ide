@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Function Name="DWORD_TO_BOOLS" Comment="">
+<Function Name="SPLITTING_DWORD_TO_BOOLS" Comment="">
 	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
@@ -8,12 +8,13 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+			<Event Name="REQ" Type="Event" Comment="">
 				<With Var="IN"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
 				<With Var="OUT_00"/>
 				<With Var="OUT_01"/>
 				<With Var="OUT_02"/>
@@ -52,6 +53,7 @@
 			<VarDeclaration Name="IN" Type="DWORD" Comment="DWORD Input"/>
 		</InputVars>
 		<OutputVars>
+			<VarDeclaration Name="" Type="ANY" Comment=""/>
 			<VarDeclaration Name="OUT_00" Type="BOOL" Comment="BIT 00"/>
 			<VarDeclaration Name="OUT_01" Type="BOOL" Comment="BIT 01"/>
 			<VarDeclaration Name="OUT_02" Type="BOOL" Comment="BIT 02"/>
@@ -87,7 +89,7 @@
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
-		<ST><![CDATA[FUNCTION DWORD_TO_BOOLS
+		<ST><![CDATA[FUNCTION SPLITTING_DWORD_TO_BOOLS
 
 VAR_INPUT
 	IN : DWORD;    // DWORD Input
