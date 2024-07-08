@@ -53,6 +53,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	public static final String CREATE_CONNECTION = "<Request ID=\"{0}\" Action=\"CREATE\"><Connection Source=\"{1}\" Destination=\"{2}\" /></Request>"; //$NON-NLS-1$
 	public static final String WRITE_PARAMETER = "<Request ID=\"{0}\" Action=\"WRITE\"><Connection Source=\"{1}\" Destination=\"{2}\" /></Request>"; //$NON-NLS-1$
 	public static final String START = "<Request ID=\"{0}\" Action=\"START\"/>"; //$NON-NLS-1$
+	public static final String STOP = "<Request ID=\"{0}\" Action=\"STOP\"/>"; //$NON-NLS-1$
 	public static final String START_FB = "<Request ID=\"{0}\" Action=\"START\"><FB Name=\"{1}\" Type=\"{2}\"/></Request>"; //$NON-NLS-1$
 	public static final String KILL_FB = "<Request ID=\"{0}\" Action=\"KILL\"><FB Name=\"{1}\" Type=\"\"/></Request>"; //$NON-NLS-1$
 	public static final String KILL_DEVICE = "<Request ID=\"{0}\" Action=\"KILL\"></Request>"; //$NON-NLS-1$
@@ -66,6 +67,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	public static final String ADD_WATCH = "<Request ID=\"{0}\" Action=\"CREATE\"><Watch Source=\"{1}\" Destination=\"{2}\" /></Request>"; //$NON-NLS-1$
 	public static final String DELETE_WATCH = "<Request ID=\"{0}\" Action=\"DELETE\"><Watch Source=\"{1}\" Destination=\"{2}\" /></Request>"; //$NON-NLS-1$
 	public static final String FORCE_VALUE = "<Request ID=\"{0}\" Action=\"WRITE\"><Connection Source=\"{1}\" Destination=\"{2}\" force=\"{3}\" /></Request>"; //$NON-NLS-1$
+
+	public static final String RESET_RESOURCE = "<Request ID=\"{0}\" Action=\"RESET\"><FB Name=\"{1}\" Type=\"\"/></Request>"; //$NON-NLS-1$
 
 	public static final Response EMPTY_RESPONSE;
 
@@ -209,6 +212,18 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	}
 
 	@Override
+	public void stopResource(final Resource res) throws DeploymentException {
+		final String request = MessageFormat.format(STOP, Integer.valueOf(id));
+		id++;
+		try {
+			sendREQ(res.getName(), request);
+		} catch (final IOException e) {
+			throw new DeploymentException(
+					MessageFormat.format(Messages.DeploymentExecutor_StartingResourceFailed, res.getName()), e);
+		}
+	}
+
+	@Override
 	public void startDevice(final Device dev) throws DeploymentException {
 		final String request = MessageFormat.format(START, Integer.valueOf(id));
 		id++;
@@ -237,17 +252,32 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void deleteResource(final String resName) throws DeploymentException {
-		final String kill = MessageFormat.format(KILL_FB, getNextId(), resName);
 		final String delete = MessageFormat.format(DELETE_FB, getNextId(), resName);
+		try {
+			killResource(resName);
+			sendREQ("", delete); //$NON-NLS-1$
+		} catch (final IOException e) {
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_DeleteFBFailed, resName), e);
+		}
+	}
+
+	@Override
+	public void resetResource(final String resName) throws DeploymentException {
+		final String reset = MessageFormat.format(RESET_RESOURCE, getNextId(), resName);
+		try {
+			sendREQ("", reset); //$NON-NLS-1$
+		} catch (final IOException e) {
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_DeleteFBFailed, resName), e);
+		}
+	}
+
+	@Override
+	public void killResource(final String resName) throws DeploymentException {
+		final String kill = MessageFormat.format(KILL_FB, getNextId(), resName);
 		try {
 			sendREQ("", kill); //$NON-NLS-1$
 		} catch (final IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_KillFBFailed, resName), e);
-		}
-		try {
-			sendREQ("", delete); //$NON-NLS-1$
-		} catch (final IOException e) {
-			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_DeleteFBFailed, resName), e);
 		}
 	}
 
