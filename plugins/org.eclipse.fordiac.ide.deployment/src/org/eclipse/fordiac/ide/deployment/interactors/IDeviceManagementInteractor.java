@@ -158,6 +158,33 @@ public interface IDeviceManagementInteractor {
 	void startResource(Resource res) throws DeploymentException;
 
 	/**
+	 * Reset resource.
+	 *
+	 * @param res the res
+	 *
+	 * @throws Exception the exception
+	 */
+	void resetResource(final String resName) throws DeploymentException;
+
+	/**
+	 * Kill resource.
+	 *
+	 * @param res the res
+	 *
+	 * @throws Exception the exception
+	 */
+	void killResource(final String resName) throws DeploymentException;
+
+	/**
+	 * Stop resource.
+	 *
+	 * @param res the res
+	 *
+	 * @throws Exception the exception
+	 */
+	void stopResource(final Resource res) throws DeploymentException;
+
+	/**
 	 * Start device.
 	 *
 	 * @param dev the dev
