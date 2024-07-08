@@ -890,17 +890,20 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public void resetResource(final String resName) throws DeploymentException {
-		// TODO Thx Markus Meingast
+		// TODO Needs to be implemented due to interface changes in
+		// IDeviceManagementInteractor
 	}
 
 	@Override
 	public void killResource(final String resName) throws DeploymentException {
-		// TODO Thx Markus Meingast
+		// TODO Needs to be implemented due to interface changes in
+		// IDeviceManagementInteractor
 	}
 
 	@Override
 	public void stopResource(final Resource res) throws DeploymentException {
-		// TODO Thx Markus Meingast
+		// TOD Needs to be implemented due to interface changes in
+		// IDeviceManagementInteractor
 	}
 
 }
