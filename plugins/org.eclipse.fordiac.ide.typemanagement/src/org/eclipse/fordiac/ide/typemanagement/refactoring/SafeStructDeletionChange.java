@@ -29,23 +29,20 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElementCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
@@ -55,7 +52,7 @@ import org.eclipse.ltk.core.refactoring.CompositeChange;
 public class SafeStructDeletionChange extends CompositeChange {
 	final DataTypeEntry deletedStruct;
 	/* map connecting root nodes with their composite change */
-	final Map<EObject, RootNodeChange> changeMap = new HashMap<>();
+	final Map<EObject, RootNodeChange> rootChanges = new HashMap<>();
 
 	public SafeStructDeletionChange(final StructuredType struct) {
 		super(Messages.DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle);
@@ -68,14 +65,14 @@ public class SafeStructDeletionChange extends CompositeChange {
 		if (entry != null) {
 			final var results = new DataTypeInstanceSearch(entry).performSearch();
 			results.forEach(obj -> {
-				final RootNodeChange rootChange = createSubChange(obj);
+				final RootNodeChange rootChange = createRootChange(obj);
 				if (obj instanceof final VarDeclaration varDecl && doneElements.add(varDecl)) {
 					if (varDecl.eContainer() instanceof StructuredType) {
 						rootChange.add(new DeleteMemberVariableChange(varDecl));
 					} else if (isUntypedSubappPin(varDecl)) {
 						rootChange.add(new DeleteUntypedSubappPinChange(varDecl));
 					} else if (isFbTypePin(varDecl)) {
-						rootChange.add(new DeleteFBTypeInterfaceChange((FBType) varDecl.eContainer().eContainer(),
+						rootChange.add(new UpdateFBTypeInterfaceChange((FBType) varDecl.eContainer().eContainer(),
 								(StructuredType) varDecl.getType()));
 					}
 					handleRootElement(varDecl, rootChange, doneElements);
@@ -87,23 +84,16 @@ public class SafeStructDeletionChange extends CompositeChange {
 		}
 	}
 
-	private RootNodeChange createSubChange(EObject obj) {
-		if (obj instanceof final IInterfaceElement el) {
-			if (el.getFBNetworkElement() != null) { // e.g., untyped subapp pin
-				obj = el.getFBNetworkElement();
-			} else if (el.eContainer() != null && el.eContainer().eContainer() != null) {
-				// e.g., fb type pin
-				obj = el.eContainer().eContainer();
-			}
-		}
-		if (obj instanceof final INamedElement node) {
-			final RootNodeChange change = new RootNodeChange(node);
-			if (!changeMap.containsKey(obj)) {
-				changeMap.put(obj, change);
+	private RootNodeChange createRootChange(EObject eObject) {
+		if (eObject instanceof final INamedElement node) {
+			eObject = EcoreUtil.getRootContainer(eObject);
+			final RootNodeChange change = new RootNodeChange(eObject);
+			if (!rootChanges.containsKey(eObject)) {
+				rootChanges.put(eObject, change);
 				this.add(change);
 			}
 		}
-		return changeMap.get(obj);
+		return rootChanges.get(eObject);
 	}
 
 	private void handleRootElement(final VarDeclaration varDecl, final RootNodeChange rootChange,
@@ -112,7 +102,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 		final EObject rootContainer = EcoreUtil.getRootContainer(varDecl);
 		if (varDecl.getFBNetworkElement() != null) {
 			if (rootElements.add(varDecl.getFBNetworkElement())) {
-				rootChange.addUpdate(new UpdateInstancesChange(varDecl.getFBNetworkElement(), dataTypeEntry));
+				rootChange.addUpdate(new UpdateInstanceChange(varDecl.getFBNetworkElement(), dataTypeEntry));
 			}
 		} else if (rootElements.add(rootContainer)) {
 			if (rootContainer instanceof final StructuredType stElement) {
@@ -139,11 +129,24 @@ public class SafeStructDeletionChange extends CompositeChange {
 	public static class RootNodeChange extends CompositeChange {
 		private final List<Change> updateChanges = new ArrayList<>();
 
-		public RootNodeChange(final INamedElement node) {
-			super(Messages.SafeStructDeletionChange_RootNodeChangeText + getName(node));
+		public RootNodeChange(final EObject node) {
+			super(Messages.SafeStructDeletionChange_RootNodeChangeText + getName(node) + getFileEnding(node));
 		}
 
-		private static String getName(final INamedElement node) {
+		private static String getFileEnding(final EObject node) {
+			if (node instanceof final LibraryElement le && le.getTypeEntry() != null) {
+				return "." + le.getTypeEntry().getFile().getFileExtension();
+			}
+			return null;
+		}
+
+		private static String getName(final EObject eObj) {
+			INamedElement node = null;
+			if (!(eObj instanceof final INamedElement n)) {
+				return "";
+			}
+			node = n;
+
 			if (node instanceof final IInterfaceElement iel && iel.getFBNetworkElement() != null) {
 				return iel.getFBNetworkElement().getQualifiedName() + iel.getQualifiedName();
 			}
@@ -247,46 +250,5 @@ public class SafeStructDeletionChange extends CompositeChange {
 			AbstractLiveSearchContext.executeAndSave(cmd, varDecl, pm);
 			return super.perform(pm);
 		}
-	}
-
-	private static class UpdateManipulatorChange extends CompositeChange {
-
-		final StructManipulator manipulator;
-		final boolean structWasDeleted;
-
-		public UpdateManipulatorChange(final StructManipulator manipulator, final boolean structWasDeleted) {
-			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_UpdateManipulator,
-					manipulator.getQualifiedName()));
-			this.manipulator = manipulator;
-			this.structWasDeleted = structWasDeleted;
-		}
-
-		@Override
-		public Change perform(final IProgressMonitor pm) throws CoreException {
-			final Command cmd = getCommand();
-			AbstractLiveSearchContext.executeAndSave(cmd, manipulator, pm);
-			return super.perform(pm);
-		}
-
-		private Command getCommand() {
-			if (structWasDeleted) {
-				return new ChangeStructCommand(manipulator, getErrorMarkerEntry(manipulator.getDataType()), true);
-			}
-			return new ChangeStructCommand(manipulator);
-		}
-
-		private ErrorMarkerDataType getErrorMarkerEntry(final DataType dtp) {
-			final DataTypeLibrary lib = manipulator.getTypeEntry().getTypeLibrary().getDataTypeLibrary();
-			return lib.createErrorMarkerType(dtp.getTypeEntry().getFullTypeName(), ""); //$NON-NLS-1$
-		}
-
-	}
-
-	public static class UpdateFBTypeChange extends CompositeChange {
-
-		public UpdateFBTypeChange(final FBType type) {
-			super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_UpdateFBType, type.getName()));
-		}
-
 	}
 }

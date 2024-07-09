@@ -670,7 +670,7 @@
             id="org.eclipse.fordiac.ide.typemanagement.wizards.DeleteStructChangeViewer">
          <enablement>
          <or>
-         <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeInterfaceChange"/>
+         <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBTypeInterfaceChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeStructDeletionChange$DeleteMemberVariableChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeFBTypeDeletionChange$DeleteInternalFBChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinChange"/>

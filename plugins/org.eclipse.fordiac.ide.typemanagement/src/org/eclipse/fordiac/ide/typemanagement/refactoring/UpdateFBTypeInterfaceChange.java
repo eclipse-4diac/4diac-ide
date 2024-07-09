@@ -34,14 +34,14 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 
-public class DeleteFBTypeInterfaceChange extends CompositeChange implements IFordiacPreviewChange {
+public class UpdateFBTypeInterfaceChange extends CompositeChange implements IFordiacPreviewChange {
 
 	final FBType type;
 	final StructuredType struct;
 
 	private final EnumSet<ChangeState> state = EnumSet.noneOf(ChangeState.class);
 
-	public DeleteFBTypeInterfaceChange(final FBType type, final StructuredType struct) {
+	public UpdateFBTypeInterfaceChange(final FBType type, final StructuredType struct) {
 		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteFBTypeInterface, type.getName()));
 		this.type = type;
 		this.struct = struct;
