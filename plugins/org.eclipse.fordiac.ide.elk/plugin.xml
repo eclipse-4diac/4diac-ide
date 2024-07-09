@@ -30,6 +30,10 @@
         commandId="org.eclipse.fordiac.ide.elk.expandedSubappConnectionLayout">
     </handler>
     <handler
+        class="org.eclipse.fordiac.ide.elk.handlers.NestedExpandedSubappHandler"
+        commandId="org.eclipse.fordiac.ide.elk.nestedExpandedSubappLayout">
+    </handler>
+    <handler
             class="org.eclipse.fordiac.ide.elk.handlers.SystemLayoutHandler"
             commandId="org.eclipse.fordiac.ide.elk.systemExplorerLayout">
      </handler>
@@ -153,6 +157,18 @@
             	</with>
             </visibleWhen>
           </command>
+          <command
+            commandId="org.eclipse.fordiac.ide.elk.nestedExpandedSubappLayout"
+            label="Layout all nested expanded Subapps"
+            style="push">
+            <visibleWhen checkEnabled="false">
+            	<with variable="selection">
+            			<iterate operator="or">
+            					<test property="org.eclipse.fordiac.ide.application.utilities.isExpandedSubapp" />
+        				</iterate>
+            	</with>
+            </visibleWhen>
+          </command>
 	</menuContribution> 
 	<menuContribution
          allPopups="false"
@@ -199,6 +215,18 @@
             					<test property="org.eclipse.fordiac.ide.application.utilities.isExpandedSubapp" />
             				</iterate>
             			</and>
+            	</with>
+            </visibleWhen>
+          </command>
+           <command
+            commandId="org.eclipse.fordiac.ide.elk.nestedExpandedSubappLayout"
+            label="Layout all nested expanded Subapps"
+            style="push">
+            <visibleWhen checkEnabled="false">
+            	<with variable="selection">
+            			<iterate operator="or">
+            					<test property="org.eclipse.fordiac.ide.application.utilities.isExpandedSubapp" />
+        				</iterate>
             	</with>
             </visibleWhen>
           </command>
