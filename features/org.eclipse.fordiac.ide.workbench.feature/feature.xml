@@ -306,9 +306,12 @@ United States, other countries, or both.\n
    <plugin
          id="org.eclipse.fordiac.ide.library.ui"
          version="0.0.0"/>
+<<<<<<< Upstream, based on origin/develop
            
 	<plugin
          id="org.eclipse.fordiac.ide.refactorTest"
          version="0.0.0"/>
+=======
+>>>>>>> eca71e6 Moved to org.eclipse.fordiac.ide.typemanagement.refactoring Removed RefactorTest Plugin from feature
 
 </feature>

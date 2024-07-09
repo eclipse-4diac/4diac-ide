@@ -120,6 +120,10 @@
      <command
            id="org.eclipse.fordiac.ide.typemanagement.renameElement"
            name="Rename Element">
+     </command>
+     <command
+           id="org.eclipse.fordiac.ide.typemanagement.connectionstostruct"
+           name="Connections To Struct">
      </command> 
 	</extension>
    <extension
@@ -151,6 +155,10 @@
                  </test>
               </iterate>
            </with></enabledWhen>
+     </handler>
+     <handler
+           class="org.eclipse.fordiac.ide.typemanagement.refactoring.ConnectionsToStructHandler"
+           commandId="org.eclipse.fordiac.ide.typemanagement.connectionstostruct">
      </handler>
 
 	</extension>
@@ -698,6 +706,14 @@
             <command
                   commandId="org.eclipse.fordiac.ide.typemanagement.renameElement"
                   label="Rename Element"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="true">
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="org.eclipse.fordiac.ide.typemanagement.connectionstostruct"
+                  label="Connections to Struct"
                   style="push">
                <visibleWhen
                      checkEnabled="true">
