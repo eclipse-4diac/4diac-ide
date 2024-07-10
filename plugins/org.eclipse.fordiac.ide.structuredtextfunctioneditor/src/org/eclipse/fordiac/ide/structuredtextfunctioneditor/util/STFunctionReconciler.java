@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.ECollections;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -32,7 +33,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
-import org.eclipse.fordiac.ide.structuredtextcore.util.STRecoveringPartitioner;
 
 public class STFunctionReconciler implements STCoreReconciler {
 	private static final String DEFAULT_INPUT_EVENT_NAME = "REQ"; //$NON-NLS-1$
@@ -120,10 +120,10 @@ public class STFunctionReconciler implements STCoreReconciler {
 			final STFunctionPartition source) {
 		return source.getFunctions().stream().filter(callable -> dest.getName().equals(callable.getName())).findFirst()
 				.or(source.getFunctions().stream().filter(callable -> !callable.getName()
-						.startsWith(STRecoveringPartitioner.LOST_AND_FOUND_NAME))::findFirst);
+						.startsWith(STFunctionPartition.LOST_AND_FOUND_NAME))::findFirst);
 	}
 
-	protected static boolean checkDuplicates(final List<? extends ICallable> list) {
+	protected static boolean checkDuplicates(final EList<? extends ICallable> list) {
 		return list.stream().map(ICallable::getName).distinct().count() != list.size();
 	}
 }

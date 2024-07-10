@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,6 @@
  */
 package org.eclipse.fordiac.ide.structuredtextalgorithm.util;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -95,7 +94,7 @@ public class STAlgorithmReconciler implements STCoreReconciler {
 		return true;
 	}
 
-	protected static boolean checkDuplicates(final List<? extends ICallable> list) {
+	protected static boolean checkDuplicates(final EList<? extends ICallable> list) {
 		return list.stream().filter(STAlgorithmReconciler::isSTElement).map(INamedElement::getName).distinct()
 				.count() != list.stream().filter(STAlgorithmReconciler::isSTElement).count();
 	}

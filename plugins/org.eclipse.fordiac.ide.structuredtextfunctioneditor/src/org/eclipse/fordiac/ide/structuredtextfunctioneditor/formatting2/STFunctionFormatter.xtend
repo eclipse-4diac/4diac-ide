@@ -49,7 +49,7 @@ class STFunctionFormatter extends STCoreFormatter {
 				default: false
 			}
 		].forEach [
-			document.addReplacer(new KeywordCaseTextReplacer(it))
+			document.addReplacer(new KeywordCaseTextReplacer(document, it))
 		]
 
 		stFunctionSource.allRegionsFor.keywords(STPrimaryExpressionAccess.leftParenthesisKeyword_0_0).forEach [

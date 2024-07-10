@@ -63,7 +63,6 @@
 			<unit id="org.eclipse.swtbot.eclipse.gef.feature.group" version="4.2.0.202405291350"/>
 			<unit id="org.eclipse.swtbot.feature.group" version="4.2.0.202405291350"/>
 			<unit id="org.eclipse.swtbot.ide.feature.group" version="4.2.0.202405291350"/>
-			<unit id="org.eclipse.swtbot.generator.feature.feature.group" version="4.2.0.202405291350"/>
 			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.35.0.v20240528-1523"/>
 		</location>
 		<location includeDependencyDepth="infinite" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">

@@ -56,7 +56,7 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 			if (null != celleditor) {
 				final Control control = celleditor.getControl();
 				final Point pref = control.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-				control.setBounds(refPoint.x - 1, refPoint.y - 1, pref.x * 2 + 1, pref.y + 1);
+				control.setBounds(refPoint.x - 1, refPoint.y - 1, pref.x + 1, pref.y + 1);
 			}
 		}
 

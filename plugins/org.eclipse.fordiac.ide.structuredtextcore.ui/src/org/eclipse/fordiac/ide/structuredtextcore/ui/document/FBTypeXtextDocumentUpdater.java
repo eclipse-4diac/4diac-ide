@@ -12,13 +12,22 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.document;
 
-import java.util.Optional;
+import org.eclipse.xtext.Constants;
 
-import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
-import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
-import org.eclipse.xtext.ui.editor.model.XtextDocument;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
-public interface STCoreDocumentPartitioner extends STCorePartitioner {
+/** @deprecated Use {@link LibraryElementXtextDocumentUpdater} directly */
+@Deprecated(forRemoval = true)
+public class FBTypeXtextDocumentUpdater extends LibraryElementXtextDocumentUpdater {
 
-	Optional<? extends STCorePartition> partition(XtextDocument document);
+	@Inject
+	public FBTypeXtextDocumentUpdater(@Named(Constants.LANGUAGE_NAME) final String name) {
+		super(name, new DefaultLibraryElementChangeAdapterFilter());
+	}
+
+	@Override
+	public FBTypeXtextDocument getDocument() {
+		return (FBTypeXtextDocument) super.getDocument();
+	}
 }

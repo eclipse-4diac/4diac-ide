@@ -10,18 +10,29 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document;
+package org.eclipse.fordiac.ide.structuredtextcore.ui.document;
 
-import org.eclipse.fordiac.ide.structuredtextcore.ui.document.FBTypeXtextDocument;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.xtext.ui.editor.model.DocumentTokenSource;
 import org.eclipse.xtext.ui.editor.model.edit.ITextEditComposer;
 
 import com.google.inject.Inject;
 
-public class STFunctionDocument extends FBTypeXtextDocument {
+/** @deprecated Use {@link LibraryElementXtextDocument} directly */
+@Deprecated(forRemoval = true)
+public class FBTypeXtextDocument extends LibraryElementXtextDocument {
 
 	@Inject
-	public STFunctionDocument(final DocumentTokenSource tokenSource, final ITextEditComposer composer) {
+	public FBTypeXtextDocument(final DocumentTokenSource tokenSource, final ITextEditComposer composer) {
 		super(tokenSource, composer);
+	}
+
+	/** @deprecated Use {@link LibraryElementXtextDocument#getResourceLibraryElement} directly */
+	@Deprecated(forRemoval = true)
+	public FBType getResourceFBType() {
+		if (getResourceLibraryElement() instanceof final FBType fbType) {
+			return fbType;
+		}
+		return null;
 	}
 }
