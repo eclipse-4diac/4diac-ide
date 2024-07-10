@@ -139,11 +139,6 @@
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
-			id="org.eclipse.fordiac.ide.deployment.debug.ui.fullyCleanDevice"
-			name="Fully Clean Device">
-		</command>
-		<command
-			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice"
 			name="Kill Device">
 		</command>
@@ -208,14 +203,6 @@
 			</activeWhen>
 		</handler>
 		<handler
-			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.FullyCleanDeviceHandler"
-			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.fullyCleanDevice">
-			<activeWhen>
-				<reference
-					definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
-			</activeWhen>
-		</handler>
-		<handler
 			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.OnlineCreateFBHandler"
 			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateFB">
 			<activeWhen>
@@ -265,18 +252,7 @@
 					<reference
 						definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
 				</visibleWhen>
-			</command>
-			<command
-				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.fullyCleanDevice"
-				icon="fordiacimage://ICON_CLEAR_DEVICE"
-				label="Fully Clean Device"
-				style="push">
-				<visibleWhen
-					checkEnabled="false">
-					<reference
-						definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
-				</visibleWhen>
-			</command>
+			</command>			
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice"
 				icon="fordiacimage://ICON_KILL_DEVICE"
@@ -369,12 +345,6 @@
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.cleanDevice"
 				icon="fordiacimage://ICON_CLEAR_DEVICE"
 				label="Clean Device"
-				style="push">
-			</command>
-			<command
-				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.fullyCleanDevice"
-				icon="fordiacimage://ICON_CLEAR_DEVICE"
-				label="Fully Clean Device"
 				style="push">
 			</command>
 			<command
