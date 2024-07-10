@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,10 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.globalconstantseditor.util;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.emf.common.util.ECollections;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -61,7 +61,7 @@ public class GlobalConstantsReconciler implements STCoreReconciler {
 		}
 	}
 
-	protected static boolean checkDuplicates(final EList<? extends VarDeclaration> list) {
+	protected static boolean checkDuplicates(final List<? extends VarDeclaration> list) {
 		return list.stream().map(VarDeclaration::getName).distinct().count() != list.size();
 	}
 }

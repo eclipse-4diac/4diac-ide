@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,21 +12,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.util;
 
-import org.eclipse.emf.common.util.EList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 
 public class STAlgorithmPartition extends STCorePartition {
-	private final EList<ICallable> callables;
+	private final List<ICallable> callables;
 
-	public STAlgorithmPartition(final String packageName, final EList<Import> imports, final String originalSource,
-			final EList<ICallable> callables) {
+	public STAlgorithmPartition(final String packageName, final List<Import> imports, final String originalSource,
+			final List<ICallable> callables) {
 		super(packageName, imports, originalSource);
-		this.callables = callables;
+		this.callables = Objects.requireNonNullElseGet(callables, Collections::emptyList);
 	}
 
-	public EList<ICallable> getCallables() {
+	public List<ICallable> getCallables() {
 		return callables;
 	}
 }

@@ -38,6 +38,11 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 		StyledString styledString = null;
 		if (element instanceof final TypeEntry entry) {
 			styledString = new StyledString(entry.getTypeName());
+
+			final String packageName = entry.getPackageName();
+			if (!packageName.isEmpty()) {
+				styledString.append(" - " + packageName, StyledString.DECORATIONS_STYLER); //$NON-NLS-1$
+			}
 			styledString.append(" - " + entry.getComment(), StyledString.QUALIFIER_STYLER); //$NON-NLS-1$
 
 			int lastIndex = 0;

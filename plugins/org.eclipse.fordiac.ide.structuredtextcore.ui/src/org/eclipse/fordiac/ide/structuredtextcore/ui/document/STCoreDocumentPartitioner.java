@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,5 +20,5 @@ import org.eclipse.xtext.ui.editor.model.XtextDocument;
 
 public interface STCoreDocumentPartitioner extends STCorePartitioner {
 
-	Optional<? extends STCorePartition> partition(XtextDocument document);
+	Optional<STCorePartition> partition(XtextDocument document);
 }

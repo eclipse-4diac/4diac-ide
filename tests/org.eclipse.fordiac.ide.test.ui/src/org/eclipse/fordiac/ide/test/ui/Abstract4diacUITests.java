@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Andrea Zoitl
+ * Copyright (c) 2023, 2024 Andrea Zoitl, Prashantkumar Khatri
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Andrea Zoitl - initial API and implementation and/or initial documentation
+ *   Prashantkumar Khatri - added methods for creating and deleting FB types
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui;
 
@@ -28,6 +29,7 @@ import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -98,6 +100,24 @@ public class Abstract4diacUITests {
 	protected static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
 	protected static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
 	protected static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
+	protected static final String CANCEL = "Cancel"; //$NON-NLS-1$
+	protected static final String SYSTEM_EXPLORER_LABEL = "System Explorer"; //$NON-NLS-1$
+	protected static final String TEST_PARENT_FOLDER = "TestParentProject"; //$NON-NLS-1$
+	protected static final String FBT_TEST_PROJECT1 = "FBTTestProject1"; //$NON-NLS-1$
+	protected static final String FBT_TEST_PROJECT2 = "FBTTestProject2"; //$NON-NLS-1$
+	protected static final String FBT_TEST_PROJECT3 = "FBTTestProject3"; //$NON-NLS-1$
+	protected static final String FBT_TEST_PROJECT4 = "FBTTestProject4"; //$NON-NLS-1$
+	protected static final String PACKAGE_NAME1 = "pkg1"; //$NON-NLS-1$
+	protected static final String PACKAGE_NAME2 = "pkg2"; //$NON-NLS-1$
+	protected static final String PACKAGE_NAME = PACKAGE_NAME1 + "::" + PACKAGE_NAME2; //$NON-NLS-1$
+	protected static final String PARENT_FOLDER_NAME_LABEL = "Enter or select the parent folder:"; //$NON-NLS-1$
+	protected static final String TYPE_NAME_LABEL = FordiacMessages.TypeName + ":"; //$NON-NLS-1$
+	protected static final String SELECT_TYPE_LABEL = FordiacMessages.SelectType + ":"; //$NON-NLS-1$
+	protected static final String NEW_TYPE = FordiacMessages.NewType;
+	protected static final String PACKAGE_NAME_LABEL = FordiacMessages.Package + ":"; //$NON-NLS-1$
+	protected static final String TYPE_PROJECT = "Type..."; //$NON-NLS-1$
+	protected static final String TEST_TYPE_TEMPLATE_NAME = "Adapter"; //$NON-NLS-1$
+	protected static final String FORBIDDEN_TYPE_NAME = "00_fbtype"; //$NON-NLS-1$
 
 	// FB pins and values
 	protected static final String START = "START"; //$NON-NLS-1$
@@ -351,6 +371,51 @@ public class Abstract4diacUITests {
 		assertNotNull(parent);
 		parent.doubleClick();
 		return editor;
+	}
+
+	/**
+	 * Creates a New Type with given name.
+	 *
+	 * @param parentName Name of the parent project.
+	 * @param typeName   Name of the new type.
+	 */
+	protected static void createFBType(final String parentName, final String typeName) {
+		bot.menu(FILE).menu(NEW).menu(TYPE_PROJECT).click();
+		final SWTBotShell shell = bot.shell(NEW_TYPE);
+		shell.activate();
+		bot.textWithLabel(TYPE_NAME_LABEL).setText(typeName);
+		bot.textWithLabel(PARENT_FOLDER_NAME_LABEL).setText(parentName);
+		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), typeName);
+		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(TEST_TYPE_TEMPLATE_NAME).select();
+		bot.button(FINISH).click();
+		bot.waitUntil(shellCloses(shell));
+	}
+
+	/**
+	 * Deletes FB Type with give name.
+	 *
+	 * @param typeName Name of the new type.
+	 */
+	protected static void deleteFBType(final String typeName) {
+		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
+		systemExplorerView.show();
+		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
+
+		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
+		final SWTBotTree tree = new SWTBotTree(swtTree);
+		final SWTBotTreeItem parentItem = tree.getTreeItem(PROJECT_NAME);
+		parentItem.expand();
+		final SWTBotTreeItem projectItem = parentItem.getNode(typeName);
+		projectItem.select();
+		bot.menu(EDIT).menu(DELETE).click();
+
+		// the project deletion confirmation dialog
+		final SWTBotShell shell = bot.shell(DELETE_RESOURCES);
+		shell.activate();
+		bot.button(OK).click();
+		bot.waitUntil(shellCloses(shell));
+		final List<String> nodeList = parentItem.getNodes();
+		assertFalse(nodeList.contains(typeName));
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Martin Erich Jobst
+ * Copyright (c) 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,16 +10,13 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextcore.util;
+package org.eclipse.fordiac.ide.structuredtextcore.formatting2;
 
-import java.util.Optional;
+import org.eclipse.xtext.formatting2.regionaccess.ITextSegment;
 
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.xtext.resource.XtextResource;
+public class KeywordCaseTextReplacer extends KeywordTextReplacer {
 
-public interface STCorePartitioner {
-
-	String combine(LibraryElement libraryElement);
-
-	Optional<STCorePartition> partition(XtextResource resource);
+	public KeywordCaseTextReplacer(final ITextSegment region) {
+		super(region, region.getText().toUpperCase());
+	}
 }
