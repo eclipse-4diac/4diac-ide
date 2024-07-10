@@ -105,6 +105,7 @@ public class ConnectionsToStructWizard extends Wizard { // abstractsaveaswizard
 //		// TODO Auto-generated method stub
 //		return false;
 //	}
+	
 
 	// @Override
 	public IFile getTargetTypeFile() {

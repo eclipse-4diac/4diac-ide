@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
@@ -19,9 +20,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -46,6 +48,8 @@ public class ConnectionsToStructCommand extends Command {
 	private CompoundCommand muxCreateCommand;
 	private CompoundCommand destinationConnectionEditCommand;
 	private CompoundCommand sourceConnectionEditCommand;
+	private long sourceModify;
+	private long destinationModify;
 
 	public ConnectionsToStructCommand(final FBType sourceType, final FBType destinationType, final DataType structType,
 			final String sourceVarName, final String destinationVarName, final Map<String, String> conMap) {
@@ -66,12 +70,14 @@ public class ConnectionsToStructCommand extends Command {
 
 	@Override
 	public boolean canUndo() {
-		return false;
+		return sourceType.getTypeEntry().getLastModificationTimestamp() == sourceModify
+				&& destinationType.getTypeEntry().getLastModificationTimestamp() == destinationModify;
 	}
 
 	@Override
 	public boolean canRedo() {
-		return false;
+		return sourceType.getTypeEntry().getLastModificationTimestamp() == sourceModify
+				&& destinationType.getTypeEntry().getLastModificationTimestamp() == destinationModify;
 	}
 
 	@Override
@@ -86,16 +92,16 @@ public class ConnectionsToStructCommand extends Command {
 		updateCommands.undo();
 		createWithsCommand.undo();
 		editFBsCommand.undo();
-		AbstractLiveSearchContext.save(sourceType.getTypeEntry());
-		AbstractLiveSearchContext.save(destinationType.getTypeEntry());
+//		AbstractLiveSearchContext.save(sourceType.getTypeEntry());
+//		AbstractLiveSearchContext.save(destinationType.getTypeEntry());
+		saveFBs();
 	}
 
 	@Override
 	public void redo() {
 		editFBsCommand.redo();
 		createWithsCommand.redo();
-		AbstractLiveSearchContext.save(sourceType.getTypeEntry());
-		AbstractLiveSearchContext.save(destinationType.getTypeEntry());
+		saveFBs();
 		updateCommands.redo();
 		muxCreateCommand.redo();
 		destinationConnectionEditCommand.redo();
@@ -114,6 +120,18 @@ public class ConnectionsToStructCommand extends Command {
 		updateFBs();
 		createMUX();
 		reconnectCon();
+	}
+
+	private void saveFBs() {
+		try {
+			sourceType.getTypeEntry().save(sourceType);
+			sourceModify = sourceType.getTypeEntry().getLastModificationTimestamp();
+			destinationType.getTypeEntry().save(destinationType);
+			destinationModify = destinationType.getTypeEntry().getLastModificationTimestamp();
+		} catch (final CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private boolean editFBTypes() {
@@ -155,10 +173,12 @@ public class ConnectionsToStructCommand extends Command {
 		createWithsCommand.execute();
 
 		// save
-		AbstractLiveSearchContext.save(sourceType.getTypeEntry());
+//		EcoreUtil.copy(sourceType);
+//		AbstractLiveSearchContext.save(sourceType.getTypeEntry());
 //		sourceType = (FBType)sourceType.getTypeEntry().getType();
-		AbstractLiveSearchContext.save(destinationType.getTypeEntry());
+//		AbstractLiveSearchContext.save(destinationType.getTypeEntry());
 //		destinationType = (FBType)destinationType.getTypeEntry().getType();
+		saveFBs();
 		return true;
 	}
 
@@ -202,10 +222,11 @@ public class ConnectionsToStructCommand extends Command {
 								.findFirst().get().getSourceElement());
 				// Create MUX if selected in wizard
 			} else if (conflictResolution) {
+				final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+				pos.setX((int) instance.getPosition().getX() - 1000);
+				pos.setY((int) instance.getPosition().getY());
 				final FBCreateCommand muxcreate = new FBCreateCommand(
-						instance.getTypeLibrary().getFBTypeEntry("STRUCT_MUX"), instance.getFbNetwork(), 0, 0);// TODO:
-																												// (int)(instance.getPosition().getX()+10),
-																												// (int)instance.getPosition().getY());
+						instance.getTypeLibrary().getFBTypeEntry("STRUCT_MUX"), instance.getFbNetwork(), pos);
 				muxCreateCommand.add(muxcreate);
 				muxcreate.execute();
 				final ChangeStructCommand changeStruct = new ChangeStructCommand(
@@ -227,9 +248,11 @@ public class ConnectionsToStructCommand extends Command {
 								&& replacableConMap.containsKey(con.getSource().getName()) && replacableConMap
 										.get(con.getSource().getName()).equals(con.getDestination().getName())))
 						.count() != 0) {
+					final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+					pos.setX((int) instance.getPosition().getX() + 1000);
+					pos.setY((int) instance.getPosition().getY());
 					final FBCreateCommand muxcreate = new FBCreateCommand(
-							instance.getTypeLibrary().getFBTypeEntry("STRUCT_DEMUX"), instance.getFbNetwork(), 0, 0);// (int)(instance.getPosition().getX()+10),
-																														// (int)instance.getPosition().getY());
+							instance.getTypeLibrary().getFBTypeEntry("STRUCT_DEMUX"), instance.getFbNetwork(), pos);
 					muxCreateCommand.add(muxcreate);
 					muxcreate.execute();
 					final ChangeStructCommand changeStruct = new ChangeStructCommand(
@@ -283,7 +306,9 @@ public class ConnectionsToStructCommand extends Command {
 		// Connect DEMUX if selected in Wizard
 		if (conflictResolution) {
 			getElementsOfType(sourceType).stream().forEach(instance -> {
-				if (!structConnectionMap.containsValue(instance)) {
+				if (instance.getInterface().getErrorMarker().stream()
+						.flatMap(err -> err.getOutputConnections().stream())
+						.filter(con -> replacableConMap.containsKey(con.getSource().getName())).count() != 0) {
 					final StructDataConnectionCreateCommand structCon = new StructDataConnectionCreateCommand(
 							instance.getFbNetwork());
 					structCon.setDestination(demuxMap.get(instance).getInput("IN"));

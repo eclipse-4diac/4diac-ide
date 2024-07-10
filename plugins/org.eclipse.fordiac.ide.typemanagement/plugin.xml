@@ -159,6 +159,13 @@
      <handler
            class="org.eclipse.fordiac.ide.typemanagement.refactoring.ConnectionsToStructHandler"
            commandId="org.eclipse.fordiac.ide.typemanagement.connectionstostruct">
+           <enabledWhen>
+           <with
+                 variable="selection">
+                 <test
+                       property="org.eclipse.fordiac.ide.typemanagement.ConnectionsToStructSupported">
+                 </test>
+           </with></enabledWhen>
      </handler>
 
 	</extension>
@@ -648,6 +655,13 @@
             id="org.eclipse.fordiac.ide.typemanagement.refactorElementTester"
             namespace="org.eclipse.fordiac.ide.typemanagement"
             properties="renameSupported"
+            type="java.lang.Object">
+      </propertyTester>
+      <propertyTester
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.ConnectionsToStructPropertyTester"
+            id="org.eclipse.fordiac.ide.typemanagement.connectionsToStructTester"
+            namespace="org.eclipse.fordiac.ide.typemanagement"
+            properties="ConnectionsToStructSupported"
             type="java.lang.Object">
       </propertyTester>
    </extension>  

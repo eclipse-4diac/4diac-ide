@@ -3,16 +3,13 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.typemanagement.wizards.ConnectionsToStructWizard;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
@@ -62,29 +59,29 @@ public class ConnectionsToStructHandler extends AbstractHandler {
 		return null;
 	}
 
-	@Override
-	public void setEnabled(final Object evaluationContext) {
-		setBaseEnabled(isSelectedConnection());
-	}
-
-	private static boolean isSelectedConnection() {
-		// final ISelection selection = HandlerUtil.selection
-		final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		if (window != null) {
-			final IInterfaceElement src;
-			final IStructuredSelection selection = (IStructuredSelection) window.getSelectionService().getSelection();
-			final Optional opt = selection.stream()
-					.filter(sel -> !(sel instanceof final EditPart con && con.getModel() instanceof DataConnection))
-					.findAny();
-			if (opt.isEmpty()) {
-				// selection.stream().forEach(t ->
-				// ((ConnectionEditPart)t).getModel().setBrokenConnection(true));
-				return selection.stream().map(t -> ((Connection) ((EditPart) t).getModel()).getSourceElement())
-						.distinct().count() == 1
-						&& selection.stream().map(t -> ((Connection) ((EditPart) t).getModel()).getDestinationElement())
-								.distinct().count() == 1;
-			}
-		}
-		return false;
-	}
+//	@Override
+//	public void setEnabled(final Object evaluationContext) {
+//		setBaseEnabled(isSelectedConnection());
+//	}
+//
+//	private static boolean isSelectedConnection() {
+//		// final ISelection selection = HandlerUtil.selection
+//		final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+//		if (window != null) {
+//			final IInterfaceElement src;
+//			final IStructuredSelection selection = (IStructuredSelection) window.getSelectionService().getSelection();
+//			final Optional opt = selection.stream()
+//					.filter(sel -> !(sel instanceof final EditPart con && con.getModel() instanceof DataConnection))
+//					.findAny();
+//			if (opt.isEmpty()) {
+//				// selection.stream().forEach(t ->
+//				// ((ConnectionEditPart)t).getModel().setBrokenConnection(true));
+//				return selection.stream().map(t -> ((Connection) ((EditPart) t).getModel()).getSourceElement())
+//						.distinct().count() == 1
+//						&& selection.stream().map(t -> ((Connection) ((EditPart) t).getModel()).getDestinationElement())
+//								.distinct().count() == 1;
+//			}
+//		}
+//		return false;
+//	}
 }
