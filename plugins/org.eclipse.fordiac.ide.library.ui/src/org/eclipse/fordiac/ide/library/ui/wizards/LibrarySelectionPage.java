@@ -302,8 +302,9 @@ public class LibrarySelectionPage extends WizardPage {
 			this.uri = uri;
 		}
 
-		public LibDisplay(final LibraryRecord record) {
-			this(false, record.Name(), record.symbolicName(), record.version(), record.Comment(), record.uri());
+		public LibDisplay(final LibraryRecord libRecord) {
+			this(false, libRecord.Name(), libRecord.symbolicName(), libRecord.version().toString(), libRecord.Comment(),
+					libRecord.uri());
 		}
 
 		public void setSelected(final boolean selected) {

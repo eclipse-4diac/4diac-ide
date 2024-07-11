@@ -54,7 +54,7 @@ public class ArchivedLibraryImportWizardPage extends WizardPage {
 	}
 
 	public void unzipAndImportArchive() throws IOException {
-		LibraryManager.INSTANCE.extractLibrary(selectedPath, selectedProject, true);
+		LibraryManager.INSTANCE.extractLibrary(selectedPath, selectedProject, true, true);
 	}
 
 	protected void configureSelectionListener() {
