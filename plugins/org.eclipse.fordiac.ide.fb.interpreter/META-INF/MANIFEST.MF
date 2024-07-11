@@ -35,5 +35,7 @@ Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.emf.compare.edit,
  org.eclipse.ui.ide,
  org.eclipse.fordiac.ide.model.commands,
- org.eclipse.fordiac.ide.fbtypeeditor.ecc
+ org.eclipse.fordiac.ide.fbtypeeditor.ecc,
+ org.junit,
+ junit-jupiter-api
 Bundle-ActivationPolicy: lazy

@@ -125,7 +125,9 @@ public class TestFbGenerator extends AbstractBasicFBGenerator {
 		for (final OutputPrimitive outP : testState.getTestOutputs()) {
 			if (outP.getParameters() != null && !outP.getParameters().equals("")) { //$NON-NLS-1$
 				containsParameters = true;
-				algText.append(createDataPinName(outP.getParameters().replace(";", ";\n"))); //$NON-NLS-1$ //$NON-NLS-2$
+				String s = outP.getParameters().replace(";", ";\n");//$NON-NLS-1$ //$NON-NLS-2$
+				s = createDataPinName(s);
+				algText.append(s);// createDataPinName(outP.getParameters().replace(";", ";\n")));
 			}
 		}
 
@@ -140,7 +142,7 @@ public class TestFbGenerator extends AbstractBasicFBGenerator {
 		for (int i = 0; i < s.length(); i++) {
 			if (s.charAt(i) == ':') {
 				sb.append("_expected:"); //$NON-NLS-1$
-			} else {
+			} else if (s.charAt(i) != ' ') {
 				sb.append(s.charAt(i));
 			}
 		}
