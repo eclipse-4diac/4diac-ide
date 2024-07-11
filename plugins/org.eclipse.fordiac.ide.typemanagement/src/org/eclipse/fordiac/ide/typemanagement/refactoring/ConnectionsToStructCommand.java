@@ -14,6 +14,7 @@ import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -245,6 +246,7 @@ public class ConnectionsToStructCommand extends Command {
 						.forEach(con -> destinationConnectionEditCommand.add(new DeleteConnectionCommand(con)));
 				// Connect MUX if selected in Wizard
 			} else if (conflictResolution) {
+
 				final StructDataConnectionCreateCommand structCon = new StructDataConnectionCreateCommand(
 						instance.getFbNetwork());
 				structCon.setDestination(instance.getInput(destinationVarName));
@@ -273,13 +275,15 @@ public class ConnectionsToStructCommand extends Command {
 							instance.getFbNetwork());
 					structCon.setDestination(demuxMap.get(instance).getInput("IN"));
 					structCon.setSource(instance.getOutput(sourceVarName));
-					sourceConnectionEditCommand.add(structCon);
+					// sourceConnectionEditCommand.add(structCon);
 					instance.getInterface().getErrorMarker().stream()
 							.flatMap(err -> err.getOutputConnections().stream())
 							.filter(con -> replacableConMap.containsKey(con.getSource().getName()))
-							.forEach(con -> sourceConnectionEditCommand.add(new ReconnectDataConnectionCommand(con,
-									true, demuxMap.get(instance).getOutput(con.getSource().getName()),
-									instance.getFbNetwork())));
+							.forEach(con -> new RepairBrokenConnectionCommand(con, (StructuredType) structType,
+									con.getSource().getName()).execute());
+//							.forEach(con -> sourceConnectionEditCommand.add(new ReconnectDataConnectionCommand(con,
+//									true, demuxMap.get(instance).getOutput(con.getSource().getName()),
+//									instance.getFbNetwork())));
 				}
 			});
 		}

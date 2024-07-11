@@ -20,11 +20,11 @@ public class ReplaceVarsWithStructCommand extends Command {
 	private final InterfaceList interfacelist;
 	private final boolean isInput;
 	private final int position;
-	final List<String> withs;
-	final CreateInterfaceElementCommand createStruct;
+	List<String> withs;
+	CreateInterfaceElementCommand createStruct;
 
-	private final CompoundCommand editFBsCommand;
-	private final CompoundCommand createWithsCommand;
+	private CompoundCommand editFBsCommand;
+	private CompoundCommand createWithsCommand;
 
 	public ReplaceVarsWithStructCommand(final Set<String> vars, final DataType struct, final String name,
 			final InterfaceList interfacelist, final boolean isInput, final int position) {
@@ -35,6 +35,15 @@ public class ReplaceVarsWithStructCommand extends Command {
 		this.isInput = isInput;
 		this.position = position;
 
+	}
+
+	@Override
+	public boolean canExecute() {
+		return editFBsCommand.canExecute();
+	}
+
+	@Override
+	public void execute() {
 		editFBsCommand = new CompoundCommand();
 		createWithsCommand = new CompoundCommand();
 
@@ -48,15 +57,6 @@ public class ReplaceVarsWithStructCommand extends Command {
 		// Create Struct Vars
 		createStruct = new CreateInterfaceElementCommand(struct, name, interfacelist, isInput, position);
 		editFBsCommand.add(createStruct);
-	}
-
-	@Override
-	public boolean canExecute() {
-		return editFBsCommand.canExecute();
-	}
-
-	@Override
-	public void execute() {
 
 		editFBsCommand.execute();
 
