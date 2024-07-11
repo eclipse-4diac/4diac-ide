@@ -266,4 +266,15 @@
           value="false">
     </persistent>
  </extension>  
+ <extension
+       id="library"
+       name="4diac IDE Library Problem"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.model.problem">
+    </super>
+    <persistent
+          value="false">
+    </persistent>
+ </extension>
 </plugin>
