@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
 import org.eclipse.gef.EditPart;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 
@@ -38,6 +39,16 @@ public class ConnectionsToStructWizard extends Wizard { // abstractsaveaswizard
 	@Override
 	public boolean performFinish() {
 		final IFile targetFile = getTargetTypeFile();
+//		protected boolean perform() {
+//			newFilePage.saveWidgetValues();
+//
+//			final IFile targetFile = getTargetTypeFile();
+		if (targetFile.exists() && !MessageDialog.openConfirm(getShell(), "Datatype already exists",
+				"Overwrite existing datatype file?")) {
+			return false;
+		}
+//			return true;
+//		}
 		final TypeEntry entry = createTypeEntry(targetFile);
 
 		final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
@@ -99,13 +110,6 @@ public class ConnectionsToStructWizard extends Wizard { // abstractsaveaswizard
 						.getTypeLibrary().getProject())
 				.createTypeEntry(targetTypeFile);
 	}
-
-//	@Override
-//	protected boolean askOverwrite() {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
-	
 
 	// @Override
 	public IFile getTargetTypeFile() {

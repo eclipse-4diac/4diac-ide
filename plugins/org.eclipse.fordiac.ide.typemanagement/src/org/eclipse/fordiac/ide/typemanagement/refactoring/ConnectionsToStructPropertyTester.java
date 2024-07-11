@@ -3,6 +3,7 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -45,8 +46,9 @@ public class ConnectionsToStructPropertyTester extends PropertyTester {
 			} else {
 				dest = con.getDestinationElement();
 			}
-
-			// TODO: check if inoutvar
+		}
+		if (src instanceof SubApp || dest instanceof SubApp) {
+			return false;
 		}
 		return true;
 	}

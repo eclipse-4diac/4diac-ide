@@ -1,15 +1,90 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
+import java.util.List;
+import java.util.Set;
+
+import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 
 public class ReplaceVarsWithStructCommand extends Command {
+	private final Set<String> vars;
+	private final DataType struct;
+	private final String name;
+	private final InterfaceList interfacelist;
+	private final boolean isInput;
+	private final int position;
+	final List<String> withs;
+	final CreateInterfaceElementCommand createStruct;
 
-	public ReplaceVarsWithStructCommand() {
-		// TODO Auto-generated constructor stub
+	private final CompoundCommand editFBsCommand;
+	private final CompoundCommand createWithsCommand;
+
+	public ReplaceVarsWithStructCommand(final Set<String> vars, final DataType struct, final String name,
+			final InterfaceList interfacelist, final boolean isInput, final int position) {
+		this.vars = vars;
+		this.struct = struct;
+		this.name = name;
+		this.interfacelist = interfacelist;
+		this.isInput = isInput;
+		this.position = position;
+
+		editFBsCommand = new CompoundCommand();
+		createWithsCommand = new CompoundCommand();
+
+		withs = (isInput ? interfacelist.getInputVars() : interfacelist.getOutputVars()).stream()
+				.filter(vardec -> vars.contains(vardec.getName())).map(VarDeclaration::getWiths).flatMap(List::stream)
+				.map(with -> ((Event) with.eContainer()).getName()).distinct().toList();
+
+		// Delete old Vars
+		vars.forEach(var -> editFBsCommand.add(isInput ? new DeleteInterfaceCommand(interfacelist.getInput(var))
+				: new DeleteInterfaceCommand(interfacelist.getOutput(var))));
+		// Create Struct Vars
+		createStruct = new CreateInterfaceElementCommand(struct, name, interfacelist, isInput, position);
+		editFBsCommand.add(createStruct);
+	}
+
+	@Override
+	public boolean canExecute() {
+		return editFBsCommand.canExecute();
 	}
 
 	@Override
 	public void execute() {
 
+		editFBsCommand.execute();
+
+		// Create Withs
+		withs.forEach(width -> createWithsCommand.add(new WithCreateCommand(interfacelist.getEvent(width),
+				(VarDeclaration) createStruct.getCreatedElement())));
+		createWithsCommand.execute();
+	}
+
+	@Override
+	public boolean canUndo() {
+		return editFBsCommand.canUndo() && createWithsCommand.canUndo();
+	}
+
+	@Override
+	public void undo() {
+		createWithsCommand.undo();
+		editFBsCommand.undo();
+	}
+
+	@Override
+	public boolean canRedo() {
+		return editFBsCommand.canRedo() && createWithsCommand.canRedo();
+	}
+
+	@Override
+	public void redo() {
+		editFBsCommand.redo();
+		createWithsCommand.redo();
 	}
 }

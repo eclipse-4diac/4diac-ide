@@ -1,6 +1,7 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -9,24 +10,31 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.FileEditorInput;
 
 public class ConnectionsToStructCommand extends Command {
 	private final FBType sourceType;
@@ -42,7 +50,6 @@ public class ConnectionsToStructCommand extends Command {
 	Map<FBNetworkElement, FBNetworkElement> muxMap;
 
 	private CompoundCommand editFBsCommand;
-	private CompoundCommand createWithsCommand;
 	// save
 	private CompoundCommand updateCommands;
 	private CompoundCommand muxCreateCommand;
@@ -82,25 +89,17 @@ public class ConnectionsToStructCommand extends Command {
 
 	@Override
 	public void undo() {
-
-//		sourceType.getTypeEntry().setType(sourceType);
-//		destinationType.getTypeEntry().setType(destinationType);
-
 		sourceConnectionEditCommand.undo();
 		destinationConnectionEditCommand.undo();
 		muxCreateCommand.undo();
 		updateCommands.undo();
-		createWithsCommand.undo();
 		editFBsCommand.undo();
-//		AbstractLiveSearchContext.save(sourceType.getTypeEntry());
-//		AbstractLiveSearchContext.save(destinationType.getTypeEntry());
 		saveFBs();
 	}
 
 	@Override
 	public void redo() {
 		editFBsCommand.redo();
-		createWithsCommand.redo();
 		saveFBs();
 		updateCommands.redo();
 		muxCreateCommand.redo();
@@ -134,65 +133,27 @@ public class ConnectionsToStructCommand extends Command {
 		}
 	}
 
-	private boolean editFBTypes() {
+	private void editFBTypes() {
+
 		editFBsCommand = new CompoundCommand();
-		createWithsCommand = new CompoundCommand();
-
-		// Extract Withs from existing Vars
-		final List<String> sourceWiths = sourceType.getInterfaceList().getOutputVars().stream()
-				.filter(vardec -> replacableConMap.containsKey(vardec.getName())).map(VarDeclaration::getWiths)
-				.flatMap(List::stream).map(width -> ((Event) width.eContainer()).getName()).distinct().toList();
-		final List<String> destinationWiths = destinationType.getInterfaceList().getInputVars().stream()
-				.filter(vardec -> replacableConMap.containsValue(vardec.getName())).map(VarDeclaration::getWiths)
-				.flatMap(List::stream).map(width -> ((Event) width.eContainer()).getName()).distinct().toList();
-
-		// Delete old Vars
-		replacableConMap.keySet().forEach(sourceVar -> editFBsCommand
-				.add(new DeleteInterfaceCommand(sourceType.getInterfaceList().getOutput(sourceVar))));
-		replacableConMap.values().forEach(destinationVar -> editFBsCommand
-				.add(new DeleteInterfaceCommand(destinationType.getInterfaceList().getInput(destinationVar))));
-
-		// Create Struct Vars
-		final CreateInterfaceElementCommand sourceStruct = new CreateInterfaceElementCommand(structType, sourceVarName,
-				sourceType.getInterfaceList(), false, (int) sourceType.getInterfaceList().getOutputs().count());
-		final CreateInterfaceElementCommand destinationStruct = new CreateInterfaceElementCommand(structType,
-				destinationVarName, destinationType.getInterfaceList(), true,
-				(int) destinationType.getInterfaceList().getInputs().count());
-		editFBsCommand.add(sourceStruct);
-		editFBsCommand.add(destinationStruct);
-
+		editFBsCommand.add(new ReplaceVarsWithStructCommand(replacableConMap.keySet(), structType, sourceVarName,
+				sourceType.getInterfaceList(), false, 0));
+		editFBsCommand.add(new ReplaceVarsWithStructCommand(new HashSet<>(replacableConMap.values()), structType,
+				destinationVarName, destinationType.getInterfaceList(), true, 0));
 		editFBsCommand.execute();
-
-		// Create Withs
-		sourceWiths.forEach(
-				width -> createWithsCommand.add(new WithCreateCommand(sourceType.getInterfaceList().getEvent(width),
-						(VarDeclaration) sourceStruct.getCreatedElement())));
-		destinationWiths.forEach(width -> createWithsCommand
-				.add(new WithCreateCommand(destinationType.getInterfaceList().getEvent(width),
-						(VarDeclaration) destinationStruct.getCreatedElement())));
-		createWithsCommand.execute();
-
-		// save
-//		EcoreUtil.copy(sourceType);
-//		AbstractLiveSearchContext.save(sourceType.getTypeEntry());
-//		sourceType = (FBType)sourceType.getTypeEntry().getType();
-//		AbstractLiveSearchContext.save(destinationType.getTypeEntry());
-//		destinationType = (FBType)destinationType.getTypeEntry().getType();
 		saveFBs();
-		return true;
 	}
 
-	private boolean updateFBs() {
+	private void updateFBs() {
 		// Update all instances of edited FBTypes
 		updateCommands = new CompoundCommand();
 		getElementsOfType(sourceType).stream().forEach(fbnelem -> updateCommands.add(new UpdateFBTypeCommand(fbnelem)));
 		getElementsOfType(destinationType).stream()
 				.forEach(fbnelem -> updateCommands.add(new UpdateFBTypeCommand(fbnelem)));
 		updateCommands.execute();
-		return true;
 	}
 
-	private boolean createMUX() {
+	private void createMUX() {
 		muxCreateCommand = new CompoundCommand();
 
 		structConnectionMap = new HashMap<>();
@@ -263,10 +224,9 @@ public class ConnectionsToStructCommand extends Command {
 				}
 			});
 		}
-		return true;
 	}
 
-	private boolean reconnectCon() {
+	private void reconnectCon() {
 		destinationConnectionEditCommand = new CompoundCommand();
 		sourceConnectionEditCommand = new CompoundCommand();
 
@@ -324,11 +284,51 @@ public class ConnectionsToStructCommand extends Command {
 			});
 		}
 		sourceConnectionEditCommand.execute();
-		return true;
 	}
 
 	private static List<FBNetworkElement> getElementsOfType(final FBType type) {
 		return new BlockTypeInstanceSearch(type.getTypeEntry()).performSearch().stream()
 				.map(FBNetworkElement.class::cast).toList();
+	}
+
+	public boolean isPossible() {
+		final IEditorPart sourceEditor = getEditor(sourceType.getTypeEntry());
+		final IEditorPart destinationEditor = getEditor(sourceType.getTypeEntry());
+		if (sourceEditor != null && sourceEditor.isDirty()
+				|| destinationEditor != null && destinationEditor.isDirty()) {
+			return false;
+		}
+		return true;
+	}
+
+	// TODO: copied from AbstractLiveSearchContext
+	private static IEditorPart getEditor(final TypeEntry typeEntry) {
+		final IWorkbench workbench = PlatformUI.getWorkbench();
+
+		return Display.getDefault().syncCall(() -> {
+			final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+
+			if (activeWorkbenchWindow == null) {
+				final IWorkbenchWindow[] workbenchWindows = workbench.getWorkbenchWindows();
+				if (workbench.getWorkbenchWindows().length > 0 && workbenchWindows[0].getActivePage() != null) {
+					final IWorkbenchPage activePage = workbenchWindows[0].getActivePage();
+					for (final IEditorReference ref : activePage.getEditorReferences()) {
+						try {
+							final IEditorInput editorInput = ref.getEditorInput();
+							if (editorInput instanceof final FileEditorInput fileInput
+									&& fileInput.getFile().equals(typeEntry.getFile())) {
+								return ref.getEditor(true);
+							}
+						} catch (final PartInitException e) {
+							FordiacLogHelper.logWarning("Could not open Editor for type entry in search", e); //$NON-NLS-1$
+						}
+					}
+				}
+
+				return null;
+			}
+
+			return activeWorkbenchWindow.getActivePage().findEditor(new FileEditorInput(typeEntry.getFile()));
+		});
 	}
 }

@@ -46,13 +46,13 @@ public class ConnectionsToStructWizardPage extends WizardNewFileCreationPage {
 		container.setLayout(gridl);
 
 		final Label sourceNameLabel = new Label(container, NONE);
-		sourceNameLabel.setText("Function Block Output Name" + ":");
+		sourceNameLabel.setText("Function Block &Output Name" + ":");
 		sourceNameText = new Text(container, SWT.SINGLE | SWT.BORDER);
 		// TODO: wrong ID?
 		sourceNameText.addListener(SWT.ERROR, this);
 
 		final Label destinationNameLabel = new Label(container, NONE);
-		destinationNameLabel.setText("Function Block Input Name" + ":");
+		destinationNameLabel.setText("Function Block &Input Name" + ":");
 		destinationNameText = new Text(container, SWT.BORDER);
 		destinationNameText.addListener(SWT.ERROR, this);
 
@@ -63,7 +63,7 @@ public class ConnectionsToStructWizardPage extends WizardNewFileCreationPage {
 		destinationNameText.setLayoutData(textGridData);
 
 		conflictButton = new Button(container, SWT.CHECK);
-		conflictButton.setText("Solve conflicts with Multiplexer/Demultiplexer");
+		conflictButton.setText("&Solve conflicts with Multiplexer/Demultiplexer");
 		conflictButton.setSelection(true);
 		final GridData checkboxGridData = new GridData();
 		checkboxGridData.horizontalSpan = 2;

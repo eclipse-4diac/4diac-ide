@@ -13,8 +13,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.typemanagement.wizards.ConnectionsToStructWizard;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -51,9 +53,14 @@ public class ConnectionsToStructHandler extends AbstractHandler {
 				connections.stream().forEach(
 						con -> replacableConMap.put(con.getSource().getName(), con.getDestination().getName()));
 
-				commandStack.execute(new ConnectionsToStructCommand(sourceType, destinationType,
+				final ConnectionsToStructCommand cmd = new ConnectionsToStructCommand(sourceType, destinationType,
 						wizard.getCreatedDataType(), wizard.getSourceName(), wizard.getDestinationName(),
-						replacableConMap, wizard.getConflictResolution()));
+						replacableConMap, wizard.getConflictResolution());
+				if (!cmd.isPossible() && !MessageDialog.openConfirm(Display.getDefault().getActiveShell(),
+						"FBType open in Editor", "Overwrite changes?")) {
+					return null;
+				}
+				commandStack.execute(cmd);
 			}
 		}
 		return null;
