@@ -58,7 +58,9 @@ import org.junit.jupiter.api.BeforeAll;
 public class Abstract4diacUITests {
 
 	protected static SWT4diacGefBot bot;
+	// alphabetical order of static variable names
 	protected static final String APP = "App"; //$NON-NLS-1$
+	protected static final String CANCEL = "Cancel"; //$NON-NLS-1$
 	protected static final String DELETE = "Delete"; //$NON-NLS-1$
 	protected static final String DELETE_PROJECT_WARNING = "Delete project contents on disk (cannot be undone)"; //$NON-NLS-1$
 	protected static final String DELETE_RESOURCES = "Delete Resources"; //$NON-NLS-1$
@@ -84,8 +86,13 @@ public class Abstract4diacUITests {
 	protected static final String E_SWITCH_TREE_ITEM = "E_SWITCH [Switching (demultiplexing) an event based on boolean input G]"; //$NON-NLS-1$
 	protected static final String E_TABLE_CTRL_FB = "E_TABLE_CTRL"; //$NON-NLS-1$
 	protected static final String E_TABLE_CTRL_TREE_ITEM = "E_TABLE_CTRL [Support function block for E_TABLE]"; //$NON-NLS-1$
+	protected static final String FBT_TEST_PROJECT1 = "FBTTestProject1"; //$NON-NLS-1$
+	protected static final String FBT_TEST_PROJECT2 = "FBTTestProject2"; //$NON-NLS-1$
+	protected static final String FBT_TEST_PROJECT3 = "FBTTestProject3"; //$NON-NLS-1$
+	protected static final String FBT_TEST_PROJECT4 = "FBTTestProject4"; //$NON-NLS-1$
 	protected static final String FILE = "File"; //$NON-NLS-1$
 	protected static final String FINISH = "Finish"; //$NON-NLS-1$
+	protected static final String FORBIDDEN_TYPE_NAME = "00_fbtype"; //$NON-NLS-1$
 	protected static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
 	protected static final String F_SUB = "F_SUB"; //$NON-NLS-1$
 	protected static final String GO_TO_PARENT = "Go To Parent"; //$NON-NLS-1$
@@ -94,30 +101,27 @@ public class Abstract4diacUITests {
 	protected static final String NAVIGATE = "Navigate"; //$NON-NLS-1$
 	protected static final String NEW = "New"; //$NON-NLS-1$
 	protected static final String NEW_4DIAC_PROJECT = "New 4diacProject"; //$NON-NLS-1$
+	protected static final String NEW_SUBAPPLICATION = "New subapplication"; //$NON-NLS-1$
+	protected static final String NEW_TYPE = FordiacMessages.NewType;
 	protected static final String OK = "OK"; //$NON-NLS-1$
-	protected static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
-	protected static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
-	protected static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
-	protected static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
-	protected static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
-	protected static final String CANCEL = "Cancel"; //$NON-NLS-1$
-	protected static final String SYSTEM_EXPLORER_LABEL = "System Explorer"; //$NON-NLS-1$
-	protected static final String TEST_PARENT_FOLDER = "TestParentProject"; //$NON-NLS-1$
-	protected static final String FBT_TEST_PROJECT1 = "FBTTestProject1"; //$NON-NLS-1$
-	protected static final String FBT_TEST_PROJECT2 = "FBTTestProject2"; //$NON-NLS-1$
-	protected static final String FBT_TEST_PROJECT3 = "FBTTestProject3"; //$NON-NLS-1$
-	protected static final String FBT_TEST_PROJECT4 = "FBTTestProject4"; //$NON-NLS-1$
 	protected static final String PACKAGE_NAME1 = "pkg1"; //$NON-NLS-1$
 	protected static final String PACKAGE_NAME2 = "pkg2"; //$NON-NLS-1$
 	protected static final String PACKAGE_NAME = PACKAGE_NAME1 + "::" + PACKAGE_NAME2; //$NON-NLS-1$
-	protected static final String PARENT_FOLDER_NAME_LABEL = "Enter or select the parent folder:"; //$NON-NLS-1$
-	protected static final String TYPE_NAME_LABEL = FordiacMessages.TypeName + ":"; //$NON-NLS-1$
-	protected static final String SELECT_TYPE_LABEL = FordiacMessages.SelectType + ":"; //$NON-NLS-1$
-	protected static final String NEW_TYPE = FordiacMessages.NewType;
 	protected static final String PACKAGE_NAME_LABEL = FordiacMessages.Package + ":"; //$NON-NLS-1$
-	protected static final String TYPE_PROJECT = "Type..."; //$NON-NLS-1$
+	protected static final String PARENT_FOLDER_NAME_LABEL = "Enter or select the parent folder:"; //$NON-NLS-1$
+	protected static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
+	protected static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
+	protected static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
+	protected static final String SELECT_TYPE_LABEL = FordiacMessages.SelectType + ":"; //$NON-NLS-1$
+	protected static final String SOURCE = "Source"; //$NON-NLS-1$
+	protected static final String SUBAPP = "SubApp"; //$NON-NLS-1$
+	protected static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
+	protected static final String SYSTEM_EXPLORER_LABEL = "System Explorer"; //$NON-NLS-1$
+	protected static final String TEST_PARENT_FOLDER = "TestParentProject"; //$NON-NLS-1$
 	protected static final String TEST_TYPE_TEMPLATE_NAME = "Adapter"; //$NON-NLS-1$
-	protected static final String FORBIDDEN_TYPE_NAME = "00_fbtype"; //$NON-NLS-1$
+	protected static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
+	protected static final String TYPE_NAME_LABEL = FordiacMessages.TypeName + ":"; //$NON-NLS-1$
+	protected static final String TYPE_PROJECT = "Type..."; //$NON-NLS-1$
 
 	// FB pins and values
 	protected static final String START = "START"; //$NON-NLS-1$
