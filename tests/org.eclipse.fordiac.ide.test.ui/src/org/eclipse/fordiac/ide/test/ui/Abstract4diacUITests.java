@@ -9,7 +9,8 @@
  *
  * Contributors:
  *   Andrea Zoitl - initial API and implementation and/or initial documentation
- *   Prashantkumar Khatri - added methods for creating and deleting FB types
+ *   Prashantkumar Khatri - added methods for creating, deleting FB types and
+ *   						selecting property tabs
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui;
 
@@ -34,22 +35,33 @@ import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
+import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.results.BoolResult;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
+import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+import org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyList;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.AfterClass;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -118,6 +130,9 @@ public class Abstract4diacUITests {
 	protected static final String TYPE_PROJECT = "Type..."; //$NON-NLS-1$
 	protected static final String TEST_TYPE_TEMPLATE_NAME = "Adapter"; //$NON-NLS-1$
 	protected static final String FORBIDDEN_TYPE_NAME = "00_fbtype"; //$NON-NLS-1$
+	protected static final String PROPERTIES_TITLE = "Properties"; //$NON-NLS-1$
+	protected static final String INTERFACE = "Interface"; //$NON-NLS-1$
+	protected static final String VAR_INOUT = "Var InOuts"; //$NON-NLS-1$
 
 	// FB pins and values
 	protected static final String START = "START"; //$NON-NLS-1$
@@ -416,6 +431,69 @@ public class Abstract4diacUITests {
 		bot.waitUntil(shellCloses(shell));
 		final List<String> nodeList = parentItem.getNodes();
 		assertFalse(nodeList.contains(typeName));
+	}
+
+	/**
+	 * copied from
+	 * org.eclipse.sirius.tests.swtbot.support.api.editor.SWTBotSiriusHelper
+	 *
+	 * Select the tab with the name label in the property views.
+	 *
+	 * @param label         Label to find.
+	 * @param propertiesBot the bot corresponding to the property view.
+	 * @return true if the property tab is found, false otherwise
+	 */
+	public static boolean selectPropertyTabItem(final String label, final SWTBot propertiesBot) {
+		@SuppressWarnings({ "unchecked" })
+		final Matcher<TabbedPropertyList> matcher = Matchers
+				.allOf(WidgetMatcherFactory.widgetOfType(TabbedPropertyList.class));
+		final TabbedPropertyList widgets = propertiesBot.widget(matcher);
+
+		final Boolean result = UIThreadRunnable.syncExec(SWTUtils.display(), (BoolResult) () -> {
+			boolean result1 = false;
+
+			final Control[] children = widgets.getTabList();
+			for (final Control control : children) {
+				if (control.toString().equals(label)) {
+					final Event mouseEvent = createEvent(control, control.getBounds().x, control.getBounds().y, 1,
+							SWT.BUTTON1, 1);
+					control.notifyListeners(SWT.MouseUp, mouseEvent);
+
+					result1 = true;
+					break; // quit the for
+				}
+			}
+			return result1;
+		});
+
+		return result != null && result.booleanValue();
+	}
+
+	/**
+	 * copied from
+	 * org.eclipse.sirius.tests.swtbot.support.api.editor.SWTBotSiriusHelper
+	 *
+	 * Create a event <br>
+	 *
+	 * @param x         the x coordinate of the mouse event.
+	 * @param y         the y coordinate of the mouse event.
+	 * @param button    the mouse button that was clicked.
+	 * @param stateMask the state of the keyboard modifier keys.
+	 * @param count     the number of times the mouse was clicked.
+	 * @return an event that encapsulates {@link #widget} and {@link #display}
+	 */
+	private static Event createEvent(final Widget widget, final int x, final int y, final int button,
+			final int stateMask, final int count) {
+		final Event event = new Event();
+		event.time = (int) System.currentTimeMillis();
+		event.widget = widget;
+		event.display = bot.getDisplay();
+		event.x = x;
+		event.y = y;
+		event.button = button;
+		event.stateMask = stateMask;
+		event.count = count;
+		return event;
 	}
 
 	/**
