@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_DEMUX8" Comment="Event demultiplexor 8 Events">
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017, 2024 fortiss GmbH, HR Agrartechnik GmbH  &#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI" Type="Event" Comment="Event to demultiplex">
+				<With Var="K"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO0" Type="Event" Comment="">
+			</Event>
+			<Event Name="EO1" Type="Event" Comment="">
+			</Event>
+			<Event Name="EO2" Type="Event" Comment="">
+			</Event>
+			<Event Name="EO3" Type="Event" Comment="">
+			</Event>
+			<Event Name="EO4" Type="Event" Comment="">
+			</Event>
+			<Event Name="EO5" Type="Event" Comment="">
+			</Event>
+			<Event Name="EO6" Type="Event" Comment="">
+			</Event>
+			<Event Name="EO7" Type="Event" Comment="">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="K" Type="UINT" Comment="Event index"/>
+		</InputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="-2400" y="4266.67">
+			</ECState>
+			<ECState Name="State" Comment="" x="2666.67" y="4800">
+			</ECState>
+			<ECState Name="State_1" Comment="" x="-533.33" y="533.33">
+				<ECAction Output="EO0"/>
+			</ECState>
+			<ECState Name="State_2" Comment="" x="-533.33" y="1066.67">
+				<ECAction Output="EO1"/>
+			</ECState>
+			<ECState Name="State_3" Comment="" x="-533.33" y="1600">
+				<ECAction Output="EO2"/>
+			</ECState>
+			<ECState Name="State_4" Comment="" x="-533.33" y="2133.33">
+				<ECAction Output="EO3"/>
+			</ECState>
+			<ECState Name="State_5" Comment="" x="-533.33" y="2666.67">
+				<ECAction Output="EO4"/>
+			</ECState>
+			<ECState Name="State_6" Comment="" x="-533.33" y="3200">
+				<ECAction Output="EO5"/>
+			</ECState>
+			<ECState Name="State_7" Comment="" x="-533.33" y="3733.33">
+				<ECAction Output="EO6"/>
+			</ECState>
+			<ECState Name="State_8" Comment="" x="-533.33" y="4266.67">
+				<ECAction Output="EO7"/>
+			</ECState>
+			<ECTransition Source="State_1" Destination="START" Condition="1" Comment="" x="-1613.33" y="620"/>
+			<ECTransition Source="State_2" Destination="START" Condition="1" Comment="" x="-1546.67" y="1280"/>
+			<ECTransition Source="State_3" Destination="START" Condition="1" Comment="" x="-1266.67" y="1740"/>
+			<ECTransition Source="State_4" Destination="START" Condition="1" Comment="" x="-1146.67" y="2100"/>
+			<ECTransition Source="START" Destination="State" Condition="EI" Comment="" x="73.33" y="4986.67"/>
+			<ECTransition Source="State" Destination="State_1" Condition="[K = 0]" Comment="" x="1820" y="1173.33"/>
+			<ECTransition Source="State" Destination="State_2" Condition="[K = 1]" Comment="" x="1586.67" y="1640"/>
+			<ECTransition Source="State" Destination="State_3" Condition="[K = 2]" Comment="" x="1400" y="2240"/>
+			<ECTransition Source="State" Destination="State_4" Condition="[K = 3]" Comment="" x="1393.33" y="2726.67"/>
+			<ECTransition Source="State" Destination="State_5" Condition="[K = 4]" Comment="" x="1153.33" y="3113.33"/>
+			<ECTransition Source="State" Destination="State_6" Condition="[K = 5]" Comment="" x="1146.67" y="3613.33"/>
+			<ECTransition Source="State" Destination="State_7" Condition="[K = 6]" Comment="" x="1013.33" y="4073.33"/>
+			<ECTransition Source="State" Destination="State_8" Condition="[K = 7]" Comment="" x="713.33" y="4586.67"/>
+			<ECTransition Source="State" Destination="START" Condition="[K &gt; 7]" Comment="" x="100" y="5186.67"/>
+			<ECTransition Source="State_5" Destination="START" Condition="1" Comment="" x="-1153.33" y="2626.67"/>
+			<ECTransition Source="State_6" Destination="START" Condition="1" Comment="" x="-1040" y="3146.67"/>
+			<ECTransition Source="State_7" Destination="START" Condition="1" Comment="" x="-980" y="3620"/>
+			<ECTransition Source="State_8" Destination="START" Condition="1" Comment="" x="-1086.67" y="4060"/>
+		</ECC>
+	</BasicFB>
+</FBType>
