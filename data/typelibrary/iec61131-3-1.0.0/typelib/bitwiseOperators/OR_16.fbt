@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="OR_16" Comment="FB to calculate bitwise boolean OR (generic FB)">
+	<Identification Standard="61131-3" Classification="standard bitwise boolean function" Description="Copyright (c) 2014 Profactor GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="Profactor GmbH" Version="1.0" Author="Matthias Plasch" Date="2014-10-11">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN1"/>
+				<With Var="IN2"/>
+				<With Var="IN3"/>
+				<With Var="IN4"/>
+				<With Var="IN5"/>
+				<With Var="IN6"/>
+				<With Var="IN7"/>
+				<With Var="IN8"/>
+				<With Var="IN9"/>
+				<With Var="IN10"/>
+				<With Var="IN11"/>
+				<With Var="IN12"/>
+				<With Var="IN13"/>
+				<With Var="IN14"/>
+				<With Var="IN15"/>
+				<With Var="IN16"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN1" Type="ANY_BIT" Comment="OR input 1"/>
+			<VarDeclaration Name="IN2" Type="ANY_BIT" Comment="OR input 2"/>
+			<VarDeclaration Name="IN3" Type="ANY_BIT" Comment="OR input 3"/>
+			<VarDeclaration Name="IN4" Type="ANY_BIT" Comment="OR input 4"/>
+			<VarDeclaration Name="IN5" Type="ANY_BIT" Comment="OR input 5"/>
+			<VarDeclaration Name="IN6" Type="ANY_BIT" Comment="OR input 6"/>
+			<VarDeclaration Name="IN7" Type="ANY_BIT" Comment="OR input 7"/>
+			<VarDeclaration Name="IN8" Type="ANY_BIT" Comment="OR input 8"/>
+			<VarDeclaration Name="IN9" Type="ANY_BIT" Comment="OR input 9"/>
+			<VarDeclaration Name="IN10" Type="ANY_BIT" Comment="OR input 10"/>
+			<VarDeclaration Name="IN11" Type="ANY_BIT" Comment="OR input 11"/>
+			<VarDeclaration Name="IN12" Type="ANY_BIT" Comment="OR input 12"/>
+			<VarDeclaration Name="IN13" Type="ANY_BIT" Comment="OR input 13"/>
+			<VarDeclaration Name="IN14" Type="ANY_BIT" Comment="OR input 14"/>
+			<VarDeclaration Name="IN15" Type="ANY_BIT" Comment="OR input 15"/>
+			<VarDeclaration Name="IN16" Type="ANY_BIT" Comment="OR input 16"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="ANY_BIT" Comment="OR result"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>
