@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="F_SEL_E_2" Comment="selection (event-based selection)">
-	<Identification Standard="61131-3" Classification="standard selection function" Description="Copyright (c) 2012, 2022 TU Wien ACIN, HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
+	<Identification Standard="61131-3" Classification="standard selection function" Description="Copyright (c) 2012, 2022 TU Wien ACIN, HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;This work is inspired by https://holobloc.com/doc/fb/rt/select/E_SEL_xxx.htm" >
 	</Identification>
 	<VersionInfo Organization="TU Wien ACIN" Version="1.0" Author="Monika Wenger" Date="2012-03-25">
 	</VersionInfo>
 	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Höpfinger" Date="2022-08-04">
+	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.2" Author="Franz Höpfinger" Date="2024-07-13" Remarks="changed to Basic FB">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
@@ -28,4 +30,34 @@
 			<VarDeclaration Name="OUT" Type="ANY" Comment="Selected input"/>
 		</OutputVars>
 	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="403.33" y="805">
+			</ECState>
+			<ECState Name="COPY0" Comment="" x="1333.33" y="533.33">
+				<ECAction Algorithm="COPY0" Output="CNF"/>
+			</ECState>
+			<ECState Name="COPY1" Comment="" x="1333.33" y="1200">
+				<ECAction Algorithm="COPY1" Output="CNF"/>
+			</ECState>
+			<ECTransition Source="START" Destination="COPY0" Condition="REQ0" Comment="" x="1000" y="766.67"/>
+			<ECTransition Source="START" Destination="COPY1" Condition="REQ1" Comment="" x="1013.33" y="1093.33"/>
+			<ECTransition Source="COPY0" Destination="START" Condition="1" Comment="" x="600" y="420"/>
+			<ECTransition Source="COPY1" Destination="START" Condition="1" Comment="" x="660" y="1473.33"/>
+		</ECC>
+		<Algorithm Name="COPY0" Comment="">
+			<ST><![CDATA[ALGORITHM COPY0
+OUT := IN0;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="COPY1" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM COPY1
+OUT := IN1;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
 </FBType>
