@@ -9,7 +9,7 @@
         <With Var="QI"/>
         <With Var="ID"/>
       </Event>
-      <Event Comment="" Name="REQ" Type="Event">
+      <Event Name="REQ" Type="Event" Comment="Normal Execution Request">
         <With Var="QI"/>
         <With Var="SD_1"/>
         <With Var="SD_2"/>
@@ -23,7 +23,7 @@
         <With Var="QO"/>
         <With Var="STATUS"/>
       </Event>
-      <Event Comment="" Name="CNF" Type="Event">
+      <Event Name="CNF" Type="Event" Comment="Execution Confirmation">
         <With Var="QO"/>
         <With Var="STATUS"/>
       </Event>
