@@ -139,6 +139,14 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTArrayInitElementAdapter();
 			}
 			@Override
+			public Adapter caseSTSingleArrayInitElement(STSingleArrayInitElement object) {
+				return createSTSingleArrayInitElementAdapter();
+			}
+			@Override
+			public Adapter caseSTRepeatArrayInitElement(STRepeatArrayInitElement object) {
+				return createSTRepeatArrayInitElementAdapter();
+			}
+			@Override
 			public Adapter caseSTStatement(STStatement object) {
 				return createSTStatementAdapter();
 			}
@@ -513,6 +521,34 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTArrayInitElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement <em>ST Single Array Init Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement
+	 * @generated
+	 */
+	public Adapter createSTSingleArrayInitElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement <em>ST Repeat Array Init Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement
+	 * @generated
+	 */
+	public Adapter createSTRepeatArrayInitElementAdapter() {
 		return null;
 	}
 

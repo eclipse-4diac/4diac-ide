@@ -573,14 +573,34 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STArrayInitElement:
-	//    indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (','
-	//    initExpressions+=STInitializerExpression)* ')')?;
+	//    STSingleArrayInitElement | STRepeatArrayInitElement;
 	public STCoreGrammarAccess.STArrayInitElementElements getSTArrayInitElementAccess() {
 		return gaSTCore.getSTArrayInitElementAccess();
 	}
 	
 	public ParserRule getSTArrayInitElementRule() {
 		return getSTArrayInitElementAccess().getRule();
+	}
+	
+	//STSingleArrayInitElement:
+	//    initExpression=STInitializerExpression;
+	public STCoreGrammarAccess.STSingleArrayInitElementElements getSTSingleArrayInitElementAccess() {
+		return gaSTCore.getSTSingleArrayInitElementAccess();
+	}
+	
+	public ParserRule getSTSingleArrayInitElementRule() {
+		return getSTSingleArrayInitElementAccess().getRule();
+	}
+	
+	//STRepeatArrayInitElement:
+	//    repetitions=INT '(' initExpressions+=STInitializerExpression (','
+	//    initExpressions+=STInitializerExpression)* ')';
+	public STCoreGrammarAccess.STRepeatArrayInitElementElements getSTRepeatArrayInitElementAccess() {
+		return gaSTCore.getSTRepeatArrayInitElementAccess();
+	}
+	
+	public ParserRule getSTRepeatArrayInitElementRule() {
+		return getSTRepeatArrayInitElementAccess().getRule();
 	}
 	
 	//STStructInitializerExpression:
@@ -993,7 +1013,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	
 	//STFeatureExpression returns STExpression:
 	//    {STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName]
-	//    (=>call?='('
+	//    (call?='('
 	//        (
 	//            parameters+=STCallArgument (',' parameters+=STCallArgument)*
 	//        )?
@@ -1017,7 +1037,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STBuiltinFeatureExpression returns STExpression:
-	//    {STBuiltinFeatureExpression} feature=STBuiltinFeature (=>call?='(' (parameters+=STCallArgument
+	//    {STBuiltinFeatureExpression} feature=STBuiltinFeature (call?='(' (parameters+=STCallArgument
 	//    (',' parameters+=STCallArgument)*)? ')')?;
 	public STCoreGrammarAccess.STBuiltinFeatureExpressionElements getSTBuiltinFeatureExpressionAccess() {
 		return gaSTCore.getSTBuiltinFeatureExpressionAccess();
@@ -1275,7 +1295,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//QualifiedName:
-	//    ID (=>'::' ID)*;
+	//    ID ('::' ID)*;
 	public STCoreGrammarAccess.QualifiedNameElements getQualifiedNameAccess() {
 		return gaSTCore.getQualifiedNameAccess();
 	}

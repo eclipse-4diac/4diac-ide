@@ -98,8 +98,14 @@ STArrayInitializerExpression:
 	'[' values+=STArrayInitElement (',' values+=STArrayInitElement)* ']';
 
 STArrayInitElement:
-	indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (','
-	initExpressions+=STInitializerExpression)* ')')?;
+	STSingleArrayInitElement | STRepeatArrayInitElement;
+
+STSingleArrayInitElement:
+	initExpression=STInitializerExpression;
+
+STRepeatArrayInitElement:
+	repetitions=INT '(' initExpressions+=STInitializerExpression (','
+	initExpressions+=STInitializerExpression)* ')';
 
 STStructInitializerExpression:
 	'(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
@@ -238,7 +244,7 @@ STPrimaryExpression returns STExpression:
 
 STFeatureExpression returns STExpression:
 	{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] 
-	(=>call?='(' 
+	(call?='(' 
 		(
 			parameters+=STCallArgument (',' parameters+=STCallArgument)*
 		)?
@@ -248,7 +254,7 @@ STFeatureName:
 	QualifiedName | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
 
 STBuiltinFeatureExpression returns STExpression:
-	{STBuiltinFeatureExpression} feature=STBuiltinFeature (=>call?='(' (parameters+=STCallArgument
+	{STBuiltinFeatureExpression} feature=STBuiltinFeature (call?='(' (parameters+=STCallArgument
 	(',' parameters+=STCallArgument)*)? ')')?;
 
 enum STBuiltinFeature:
@@ -338,7 +344,7 @@ STAnyCharsType:
 	'STRING' | 'WSTRING' | 'CHAR' | 'WCHAR';
 
 QualifiedName:
-	ID (=>'::' ID)*;
+	ID ('::' ID)*;
 
 QualifiedNameWithWildcard:
 	QualifiedName '::*'?;

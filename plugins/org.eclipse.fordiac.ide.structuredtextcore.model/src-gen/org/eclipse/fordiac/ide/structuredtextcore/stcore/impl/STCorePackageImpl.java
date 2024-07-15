@@ -77,8 +77,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifi
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
@@ -197,6 +199,20 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	private EClass stArrayInitElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stSingleArrayInitElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stRepeatArrayInitElementEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -823,8 +839,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getSTArrayInitElement_IndexOrInitExpression() {
-		return (EReference)stArrayInitElementEClass.getEStructuralFeatures().get(0);
+	public EClass getSTSingleArrayInitElement() {
+		return stSingleArrayInitElementEClass;
 	}
 
 	/**
@@ -833,8 +849,38 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getSTArrayInitElement_InitExpressions() {
-		return (EReference)stArrayInitElementEClass.getEStructuralFeatures().get(1);
+	public EReference getSTSingleArrayInitElement_InitExpression() {
+		return (EReference)stSingleArrayInitElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSTRepeatArrayInitElement() {
+		return stRepeatArrayInitElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSTRepeatArrayInitElement_Repetitions() {
+		return (EAttribute)stRepeatArrayInitElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTRepeatArrayInitElement_InitExpressions() {
+		return (EReference)stRepeatArrayInitElementEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -2287,8 +2333,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		createEReference(stArrayInitializerExpressionEClass, ST_ARRAY_INITIALIZER_EXPRESSION__VALUES);
 
 		stArrayInitElementEClass = createEClass(ST_ARRAY_INIT_ELEMENT);
-		createEReference(stArrayInitElementEClass, ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION);
-		createEReference(stArrayInitElementEClass, ST_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS);
+
+		stSingleArrayInitElementEClass = createEClass(ST_SINGLE_ARRAY_INIT_ELEMENT);
+		createEReference(stSingleArrayInitElementEClass, ST_SINGLE_ARRAY_INIT_ELEMENT__INIT_EXPRESSION);
+
+		stRepeatArrayInitElementEClass = createEClass(ST_REPEAT_ARRAY_INIT_ELEMENT);
+		createEAttribute(stRepeatArrayInitElementEClass, ST_REPEAT_ARRAY_INIT_ELEMENT__REPETITIONS);
+		createEReference(stRepeatArrayInitElementEClass, ST_REPEAT_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS);
 
 		stStatementEClass = createEClass(ST_STATEMENT);
 
@@ -2515,6 +2566,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		stVarTempDeclarationBlockEClass.getESuperTypes().add(this.getSTVarDeclarationBlock());
 		stElementaryInitializerExpressionEClass.getESuperTypes().add(this.getSTInitializerExpression());
 		stArrayInitializerExpressionEClass.getESuperTypes().add(this.getSTInitializerExpression());
+		stSingleArrayInitElementEClass.getESuperTypes().add(this.getSTArrayInitElement());
+		stRepeatArrayInitElementEClass.getESuperTypes().add(this.getSTArrayInitElement());
 		stAssignmentEClass.getESuperTypes().add(this.getSTExpression());
 		stCallUnnamedArgumentEClass.getESuperTypes().add(this.getSTCallArgument());
 		stCallNamedInputArgumentEClass.getESuperTypes().add(this.getSTCallArgument());
@@ -2591,13 +2644,26 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		addEOperation(stArrayInitializerExpressionEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(stArrayInitElementEClass, STArrayInitElement.class, "STArrayInitElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getSTArrayInitElement_IndexOrInitExpression(), this.getSTInitializerExpression(), null, "indexOrInitExpression", null, 0, 1, STArrayInitElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getSTArrayInitElement_InitExpressions(), this.getSTInitializerExpression(), null, "initExpressions", null, 0, -1, STArrayInitElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEClass(stArrayInitElementEClass, STArrayInitElement.class, "STArrayInitElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		addEOperation(stArrayInitElementEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(stArrayInitElementEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(stSingleArrayInitElementEClass, STSingleArrayInitElement.class, "STSingleArrayInitElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSTSingleArrayInitElement_InitExpression(), this.getSTInitializerExpression(), null, "initExpression", null, 0, 1, STSingleArrayInitElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stSingleArrayInitElementEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stSingleArrayInitElementEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(stRepeatArrayInitElementEClass, STRepeatArrayInitElement.class, "STRepeatArrayInitElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getSTRepeatArrayInitElement_Repetitions(), ecorePackage.getEBigInteger(), "repetitions", null, 0, 1, STRepeatArrayInitElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTRepeatArrayInitElement_InitExpressions(), this.getSTInitializerExpression(), null, "initExpressions", null, 0, -1, STRepeatArrayInitElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stRepeatArrayInitElementEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stRepeatArrayInitElementEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stStatementEClass, STStatement.class, "STStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 

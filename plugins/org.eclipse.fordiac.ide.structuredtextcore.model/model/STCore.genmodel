@@ -103,11 +103,24 @@
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STArrayInitElement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STArrayInitElement/indexOrInitExpression"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STArrayInitElement/initExpressions"/>
       <genOperations ecoreOperation="STCore.ecore#//STArrayInitElement/getResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
       <genOperations ecoreOperation="STCore.ecore#//STArrayInitElement/getDeclaredResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
+    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STSingleArrayInitElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STSingleArrayInitElement/initExpression"/>
+      <genOperations ecoreOperation="STCore.ecore#//STSingleArrayInitElement/getResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STSingleArrayInitElement/getDeclaredResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
+    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STRepeatArrayInitElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STRepeatArrayInitElement/repetitions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STRepeatArrayInitElement/initExpressions"/>
+      <genOperations ecoreOperation="STCore.ecore#//STRepeatArrayInitElement/getResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STRepeatArrayInitElement/getDeclaredResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STStatement"/>
