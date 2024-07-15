@@ -29,7 +29,7 @@ public class QualifiedNameReplacer implements ITextReplacer {
 
 	@Override
 	public ITextReplacerContext createReplacements(final ITextReplacerContext context) {
-		if (region.getText().equalsIgnoreCase(replacementText)) {
+		if (!region.getText().equals(replacementText) && region.getText().equalsIgnoreCase(replacementText)) {
 			context.addReplacement(region.replaceWith(replacementText));
 		}
 		return context;
