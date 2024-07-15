@@ -1395,15 +1395,6 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
 			STCoreValidator.ARRAY_ACCESS_RECEIVER_INVALID)
-		'''
-			FUNCTION ArrayTestDeclarationTest
-			VAR
-				intTest : INT;
-			END_VAR
-			intTest := 2.0[1];
-			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
-			STCoreValidator.ARRAY_ACCESS_RECEIVER_INVALID)
 	}
 
 	@Test
