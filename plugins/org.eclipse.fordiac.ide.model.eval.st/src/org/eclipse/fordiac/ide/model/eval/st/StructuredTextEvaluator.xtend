@@ -664,6 +664,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			error('''Cannot create evaluator for callable «receiver.type.eClass.name»''')
 			throw new UnsupportedOperationException('''Cannot create evaluator for callable «receiver.type.eClass.name»''')
 		}
+		eval.prepare
 		inputs.forEach [ parameter, argument |
 			if(argument !== null) eval.variables.get(parameter.name).value = argument.argument.evaluateExpression
 		]
