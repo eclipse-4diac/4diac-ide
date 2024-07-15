@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.deployment.debug;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.text.MessageFormat;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.OutputKeys;
@@ -41,7 +42,6 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 	private final DeploymentStreamMonitor outputStreamMonitor = new DeploymentStreamMonitor();
 	private final DeploymentStreamMonitor errorStreamMonitor = new DeploymentStreamMonitor();
 	private final Transformer transformer;
-	// private final HashMap<String, Integer> resources = new HashMap<>();
 
 	private String currentDest;
 	private int count;
@@ -75,7 +75,7 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 	@Override
 	public void connectionOpened(final Device dev) {
 		currentDest = null;
-		outputStreamMonitor.message("<!--  Connected to device: " + dev.getName() + " -->\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		outputStreamMonitor.message(MessageFormat.format(Messages.DeploymentStreamsProxy_ConnectedToDevice, dev.getName()));
 	}
 
 	@Override
@@ -95,12 +95,11 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 	}
 
 	private void printDeployStatistics() {
-		outputStreamMonitor.message("Deployed: " + currentDest + " with " + count + " elements\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-																									// }
+		outputStreamMonitor.message(MessageFormat.format(Messages.DeploymentStreamsProxy_DeployedElements, currentDest, count));
 	}
 
 	private void printDeployingResource(final String destination) {
-		outputStreamMonitor.message("Deploying: " + destination + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		outputStreamMonitor.message(MessageFormat.format(Messages.DeploymentStreamsProxy_Deploying, destination));
 	}
 
 	@Override
@@ -131,8 +130,7 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 		if (currentDest != null && !currentDest.isBlank()) {
 			printDeployStatistics();
 		}
-
-		outputStreamMonitor.message("<!--  Disconnected from device: " + dev.getName() + " -->\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		outputStreamMonitor.message(MessageFormat.format(Messages.DeploymentStreamsProxy_DisconnectedFromDevice, dev.getName()));
 	}
 
 	private String getFormattedXML(final String input) throws TransformerFactoryConfigurationError {
