@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,11 +12,13 @@
  *   Ulzii Jargalsaikhan - initial API and implementation and/or initial documentation,
  * 		comment formatter
  *   Martin Melik-Merkumians - comment formatter
+ *   Martin Jobst - return type autowrap support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.formatting2
 
 import com.google.inject.Inject
 import org.eclipse.fordiac.ide.structuredtextcore.formatting2.KeywordCaseTextReplacer
+import org.eclipse.fordiac.ide.structuredtextcore.formatting2.STCoreAutowrapFormatter
 import org.eclipse.fordiac.ide.structuredtextcore.formatting2.STCoreFormatter
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.services.STFunctionGrammarAccess
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
@@ -30,12 +33,6 @@ class STFunctionFormatter extends STCoreFormatter {
 	@Inject extension STFunctionGrammarAccess
 
 	def dispatch void format(STFunctionSource stFunctionSource, extension IFormattableDocument document) {
-
-		val regions = textRegionAccess.regionForRootEObject.allSemanticRegions;
-		regions.forEach [
-			it.append[autowrap]
-		]
-
 		stFunctionSource.allSemanticRegions.filter [
 			switch (element : grammarElement) {
 				Keyword case element.value.matches("[_a-zA-Z]+"): true
@@ -86,7 +83,11 @@ class STFunctionFormatter extends STCoreFormatter {
 
 		if (stFunction.returnType !== null) {
 			// We have a return type
-			stFunction.regionFor.keyword(STFunctionAccess.colonKeyword_3_0).surround[oneSpace]
+			stFunction.regionFor.keyword(STFunctionAccess.colonKeyword_3_0).surround[oneSpace].prepend [
+				autowrap
+				onAutowrap = new STCoreAutowrapFormatter(
+					stFunction.regionFor.feature(STFunctionPackage.Literals.ST_FUNCTION__RETURN_TYPE).nextHiddenRegion)
+			]
 			stFunction.regionFor.feature(STFunctionPackage.Literals.ST_FUNCTION__RETURN_TYPE).prepend[oneSpace].append [
 				setNewLines(1, 1, 2)
 			]
