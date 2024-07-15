@@ -14,16 +14,20 @@ package org.eclipse.fordiac.ide.test.ui;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
+import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
+import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.junit.jupiter.api.Test;
 
 public class SubapplicationTests extends Abstract4diacUITests {
@@ -73,12 +77,9 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	public void createSubappViaMenuWithConnectionBetweenFBs() {
 		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(100, 100));
 		dragAndDropEventsFB(E_SR_TREE_ITEM, new Point(300, 100));
-		SWTBot4diacGefViewer viewer = createConnection(EO0, S);
-		assertDoesNotThrow(viewer::waitForConnection);
-		viewer = createConnection(EO1, R);
-//		assertDoesNotThrow(viewer::waitForConnection);
-		viewer = createConnection(Q, G);
-//		assertDoesNotThrow(viewer::waitForConnection);
+		assertNotNull(createConnection(EO0, S));
+		assertNotNull(createConnection(EO1, R));
+		assertNotNull(createConnection(Q, G));
 
 		// drag rectangle over to FB, therefore FB should be selected
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
@@ -117,8 +118,7 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(100, 100));
 		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(300, 100));
 		dragAndDropEventsFB(E_SR_TREE_ITEM, new Point(500, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(EO, EI);
-		assertDoesNotThrow(viewer::waitForConnection);
+		assertNotNull(createConnection(EO, EI));
 
 		// drag rectangle over to FB, therefore FB should be selected
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
@@ -138,6 +138,38 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		assertTrue(selectedEditParts.stream().filter(p -> p.part() instanceof SubAppForFBNetworkEditPart)
 				.map(p -> (SubAppForFBNetworkEditPart) p.part())
 				.anyMatch(fb -> SUBAPP.equals(fb.getModel().getName())));
+	}
+
+	/**
+	 * Checks if connections can be created after a subapplication was created
+	 *
+	 * First, two FBs are dragged&dropped onto the editing area, then a
+	 * subapplication is created with them. afterwards it is checked if connection
+	 * can be created in the subapplication.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void createSubappViaMenuThenCreatingConnection() {
+		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(E_SR_TREE_ITEM, new Point(300, 100));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+
+		editor.drag(50, 50, 400, 400);
+		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
+
+		goToCompositeInstanceViewer(SUBAPP);
+		final SWTBotGefEditor editorSubApp = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editorSubApp);
+
+		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editorSubApp.getSWTBotGefViewer();
+		assertNotNull(viewer);
+		final SWTBotGefEditPart editPart = editorSubApp.getEditPart(E_SWITCH_FB);
+
+		// syncExec() is needed in order to find the connection correctly
+		UIThreadRunnable.syncExec(() -> HandlerHelper.selectEditPart(viewer.getGraphicalViewer(), editPart.part()));
+		assertNotNull(createConnection(EO0, S));
+		assertNotNull(createConnection(EO1, R));
+		assertNotNull(createConnection(Q, G));
 	}
 
 }
