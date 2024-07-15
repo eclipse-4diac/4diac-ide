@@ -104,9 +104,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 				// interface figures need to be manually added in order for them to be put
 				// into the right container
 				reloadInterfaceFigures();
-				if (isUnfoldedAttribute(notification.getNewValue())) {
-					Display.getDefault().asyncExec(() -> layoutExpandedInterface());
-				}
+				layoutExpandedInterface();
 			}
 			refreshToolTip();
 			backgroundColorChanged(getFigure());
@@ -136,7 +134,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 				refreshInterfaceEditParts();
 				refreshRoot();
 			}
-			Display.getDefault().asyncExec(() -> layoutExpandedInterface());
+			layoutExpandedInterface();
 		}
 
 		private void handleRemove(final Notification notification) {
@@ -150,11 +148,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 				refreshRoot();
 			}
 
-			if (!isUnfoldedAttribute(notification.getOldValue())) {
-				// do not layout when we collapse the subapp as the edit part is gone when it
-				// would be needed for the connection layout
-				Display.getDefault().asyncExec(() -> layoutExpandedInterface());
-			}
+			layoutExpandedInterface();
 		}
 
 		private void handleSet(final Notification notification) {
@@ -456,18 +450,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	}
 
 	public void layoutExpandedInterface() {
-		getFigure().layoutExpandedInterface();
-		// auto layout is currently not used as it messes with other things that rely on
-		// the display thread to an extend where the actual view is not working
-		// correctly anymore
-//		final var handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
-//		final var event = new Event();
-//		event.data = this; // pass to the handler
-//		try {
-//			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.expandedSubappConnectionLayout", event); //$NON-NLS-1$
-//		} catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e) {
-//			e.printStackTrace();
-//		}
+		if (getModel().isUnfolded()) {
+			Display.getDefault().asyncExec(() -> getFigure().layoutExpandedInterface());
+		}
 	}
 
 }
