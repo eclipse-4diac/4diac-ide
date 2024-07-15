@@ -980,7 +980,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STUnaryExpression returns STExpression:
-	//    => STAccessExpression | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
+	//    STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
 	public STCoreGrammarAccess.STUnaryExpressionElements getSTUnaryExpressionAccess() {
 		return gaSTCore.getSTUnaryExpressionAccess();
 	}
@@ -1002,7 +1002,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STPrimaryExpression returns STExpression:
-	//    '(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression | STLiteralExpressions;
+	//    '(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression;
 	public STCoreGrammarAccess.STPrimaryExpressionElements getSTPrimaryExpressionAccess() {
 		return gaSTCore.getSTPrimaryExpressionAccess();
 	}
@@ -1093,6 +1093,16 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTLiteralExpressionsAccess().getRule();
 	}
 	
+	//STSignedLiteralExpressions returns STExpression:
+	//    STSignedNumericLiteral;
+	public STCoreGrammarAccess.STSignedLiteralExpressionsElements getSTSignedLiteralExpressionsAccess() {
+		return gaSTCore.getSTSignedLiteralExpressionsAccess();
+	}
+	
+	public ParserRule getSTSignedLiteralExpressionsRule() {
+		return getSTSignedLiteralExpressionsAccess().getRule();
+	}
+	
 	//STNumericLiteralType:
 	//    STAnyBitType | STAnyNumType;
 	public STCoreGrammarAccess.STNumericLiteralTypeElements getSTNumericLiteralTypeAccess() {
@@ -1104,14 +1114,25 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STNumericLiteral:
-	//    (type=[datatype::DataType|STNumericLiteralType] '#')?
-	//    value=Numeric;
+	//    (type=[datatype::DataType|STNumericLiteralType] '#' value=SignedNumeric) |
+	//    ((type=[datatype::DataType|STNumericLiteralType] '#')?
+	//    value=Numeric);
 	public STCoreGrammarAccess.STNumericLiteralElements getSTNumericLiteralAccess() {
 		return gaSTCore.getSTNumericLiteralAccess();
 	}
 	
 	public ParserRule getSTNumericLiteralRule() {
 		return getSTNumericLiteralAccess().getRule();
+	}
+	
+	//STSignedNumericLiteral returns STNumericLiteral:
+	//    value=SignedNumeric;
+	public STCoreGrammarAccess.STSignedNumericLiteralElements getSTSignedNumericLiteralAccess() {
+		return gaSTCore.getSTSignedNumericLiteralAccess();
+	}
+	
+	public ParserRule getSTSignedNumericLiteralRule() {
+		return getSTSignedNumericLiteralAccess().getRule();
 	}
 	
 	//STDateLiteralType:
@@ -1325,13 +1346,33 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//Number hidden():
-	//    ('+' | '-')? (INT | DECIMAL) (=>'.' (INT | DECIMAL))?;
+	//    INT ('.' (INT | DECIMAL))?;
 	public STCoreGrammarAccess.NumberElements getNumberAccess() {
 		return gaSTCore.getNumberAccess();
 	}
 	
 	public ParserRule getNumberRule() {
 		return getNumberAccess().getRule();
+	}
+	
+	//SignedNumeric returns ecore::EJavaObject:
+	//    SignedNumber;
+	public STCoreGrammarAccess.SignedNumericElements getSignedNumericAccess() {
+		return gaSTCore.getSignedNumericAccess();
+	}
+	
+	public ParserRule getSignedNumericRule() {
+		return getSignedNumericAccess().getRule();
+	}
+	
+	//SignedNumber hidden():
+	//    ('+' | '-') INT ('.' (INT | DECIMAL))?;
+	public STCoreGrammarAccess.SignedNumberElements getSignedNumberAccess() {
+		return gaSTCore.getSignedNumberAccess();
+	}
+	
+	public ParserRule getSignedNumberRule() {
+		return getSignedNumberAccess().getRule();
 	}
 	
 	//Time returns STTime hidden():
@@ -1355,7 +1396,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//DateAndTime returns STDateAndTime:
-	//    INT '-' INT '-' INT '-' INT ':' INT ':' INT (=>'.' INT)?;
+	//    INT '-' INT '-' INT '-' INT ':' INT ':' INT ('.' INT)?;
 	public STCoreGrammarAccess.DateAndTimeElements getDateAndTimeAccess() {
 		return gaSTCore.getDateAndTimeAccess();
 	}
@@ -1365,7 +1406,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//TimeOfDay returns STTimeOfDay:
-	//    INT ':' INT ':' INT (=>'.' INT)?;
+	//    INT ':' INT ':' INT ('.' INT)?;
 	public STCoreGrammarAccess.TimeOfDayElements getTimeOfDayAccess() {
 		return gaSTCore.getTimeOfDayAccess();
 	}
