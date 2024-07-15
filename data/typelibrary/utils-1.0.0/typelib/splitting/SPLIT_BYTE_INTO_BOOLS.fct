@@ -40,6 +40,7 @@
 	</InterfaceList>
 	<FunctionBody>
 		<ST><![CDATA[FUNCTION SPLIT_BYTE_INTO_BOOLS
+(* this Function extracts the 8 BOOLS from a byte *)
 
 VAR_INPUT
 	IN : BYTE;    // BYTE Input
@@ -56,15 +57,14 @@ VAR_OUTPUT
 	OUT_07 : BOOL;    // BIT 07
 END_VAR
 
-(* this Function extracts the 8 BOOLS from a byte *)
-OUT_00 := IN.0;
-OUT_01 := IN.1;
-OUT_02 := IN.2;
-OUT_03 := IN.3;
-OUT_04 := IN.4;
-OUT_05 := IN.5;
-OUT_06 := IN.6;
-OUT_07 := IN.7;
+OUT_00 := IN.%X0;
+OUT_01 := IN.%X1;
+OUT_02 := IN.%X2;
+OUT_03 := IN.%X3;
+OUT_04 := IN.%X4;
+OUT_05 := IN.%X5;
+OUT_06 := IN.%X6;
+OUT_07 := IN.%X7;
 
 END_FUNCTION
 ]]></ST>

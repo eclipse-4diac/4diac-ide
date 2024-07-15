@@ -32,6 +32,7 @@
 	</InterfaceList>
 	<FunctionBody>
 		<ST><![CDATA[FUNCTION SPLIT_BYTE_INTO_QUARTERS
+(* this Function extracts the 4 QUARTER BYTE from a byte *)
 
 VAR_INPUT
 	IN : BYTE;    // BYTE Input
@@ -44,7 +45,6 @@ VAR_OUTPUT
 	OUT_03 : BYTE;    // QUARTER BYTE 03
 END_VAR
 
-(* this Function extracts the 4 QUARTER BYTE from a byte *)
 OUT_00 := SHR(IN AND BYTE_QUARTER_00, SHFT_QUARTER_00);
 OUT_01 := SHR(IN AND BYTE_QUARTER_01, SHFT_QUARTER_01);
 OUT_02 := SHR(IN AND BYTE_QUARTER_02, SHFT_QUARTER_02);
