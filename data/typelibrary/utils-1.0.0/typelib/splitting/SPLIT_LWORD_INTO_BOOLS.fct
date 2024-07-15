@@ -152,6 +152,7 @@
 	</InterfaceList>
 	<FunctionBody>
 		<ST><![CDATA[FUNCTION SPLIT_LWORD_INTO_BOOLS
+(* this Function extracts the 64 BOOLS from a lword *)
 
 VAR_INPUT
 	IN : LWORD;    // LWORD Input
@@ -224,71 +225,70 @@ VAR_OUTPUT
 	OUT_63 : BOOL;    // BIT 63
 END_VAR
 
-(* this Function extracts the 64 BOOLS from a lword *)
-OUT_00 := IN.0;
-OUT_01 := IN.1;
-OUT_02 := IN.2;
-OUT_03 := IN.3;
-OUT_04 := IN.4;
-OUT_05 := IN.5;
-OUT_06 := IN.6;
-OUT_07 := IN.7;
-OUT_08 := IN.8;
-OUT_09 := IN.9;
-OUT_10 := IN.10;
-OUT_11 := IN.11;
-OUT_12 := IN.12;
-OUT_13 := IN.13;
-OUT_14 := IN.14;
-OUT_15 := IN.15;
-OUT_16 := IN.16;
-OUT_17 := IN.17;
-OUT_18 := IN.18;
-OUT_19 := IN.19;
-OUT_20 := IN.20;
-OUT_21 := IN.21;
-OUT_22 := IN.22;
-OUT_23 := IN.23;
-OUT_24 := IN.24;
-OUT_25 := IN.25;
-OUT_26 := IN.26;
-OUT_27 := IN.27;
-OUT_28 := IN.28;
-OUT_29 := IN.29;
-OUT_30 := IN.30;
-OUT_31 := IN.31;
-OUT_32 := IN.32;
-OUT_33 := IN.33;
-OUT_34 := IN.34;
-OUT_35 := IN.35;
-OUT_36 := IN.36;
-OUT_37 := IN.37;
-OUT_38 := IN.38;
-OUT_39 := IN.39;
-OUT_40 := IN.40;
-OUT_41 := IN.41;
-OUT_42 := IN.42;
-OUT_43 := IN.43;
-OUT_44 := IN.44;
-OUT_45 := IN.45;
-OUT_46 := IN.46;
-OUT_47 := IN.47;
-OUT_48 := IN.48;
-OUT_49 := IN.49;
-OUT_50 := IN.50;
-OUT_51 := IN.51;
-OUT_52 := IN.52;
-OUT_53 := IN.53;
-OUT_54 := IN.54;
-OUT_55 := IN.55;
-OUT_56 := IN.56;
-OUT_57 := IN.57;
-OUT_58 := IN.58;
-OUT_59 := IN.59;
-OUT_60 := IN.60;
-OUT_61 := IN.61;
-OUT_62 := IN.62;
-OUT_63 := IN.63;
+OUT_00 := IN.%X0;
+OUT_01 := IN.%X1;
+OUT_02 := IN.%X2;
+OUT_03 := IN.%X3;
+OUT_04 := IN.%X4;
+OUT_05 := IN.%X5;
+OUT_06 := IN.%X6;
+OUT_07 := IN.%X7;
+OUT_08 := IN.%X8;
+OUT_09 := IN.%X9;
+OUT_10 := IN.%X10;
+OUT_11 := IN.%X11;
+OUT_12 := IN.%X12;
+OUT_13 := IN.%X13;
+OUT_14 := IN.%X14;
+OUT_15 := IN.%X15;
+OUT_16 := IN.%X16;
+OUT_17 := IN.%X17;
+OUT_18 := IN.%X18;
+OUT_19 := IN.%X19;
+OUT_20 := IN.%X20;
+OUT_21 := IN.%X21;
+OUT_22 := IN.%X22;
+OUT_23 := IN.%X23;
+OUT_24 := IN.%X24;
+OUT_25 := IN.%X25;
+OUT_26 := IN.%X26;
+OUT_27 := IN.%X27;
+OUT_28 := IN.%X28;
+OUT_29 := IN.%X29;
+OUT_30 := IN.%X30;
+OUT_31 := IN.%X31;
+OUT_32 := IN.%X32;
+OUT_33 := IN.%X33;
+OUT_34 := IN.%X34;
+OUT_35 := IN.%X35;
+OUT_36 := IN.%X36;
+OUT_37 := IN.%X37;
+OUT_38 := IN.%X38;
+OUT_39 := IN.%X39;
+OUT_40 := IN.%X40;
+OUT_41 := IN.%X41;
+OUT_42 := IN.%X42;
+OUT_43 := IN.%X43;
+OUT_44 := IN.%X44;
+OUT_45 := IN.%X45;
+OUT_46 := IN.%X46;
+OUT_47 := IN.%X47;
+OUT_48 := IN.%X48;
+OUT_49 := IN.%X49;
+OUT_50 := IN.%X50;
+OUT_51 := IN.%X51;
+OUT_52 := IN.%X52;
+OUT_53 := IN.%X53;
+OUT_54 := IN.%X54;
+OUT_55 := IN.%X55;
+OUT_56 := IN.%X56;
+OUT_57 := IN.%X57;
+OUT_58 := IN.%X58;
+OUT_59 := IN.%X59;
+OUT_60 := IN.%X60;
+OUT_61 := IN.%X61;
+OUT_62 := IN.%X62;
+OUT_63 := IN.%X63;
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
