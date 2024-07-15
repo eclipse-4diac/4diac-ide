@@ -88,6 +88,7 @@
 	</InterfaceList>
 	<FunctionBody>
 		<ST><![CDATA[FUNCTION SPLIT_DWORD_INTO_BOOLS
+(* this Function extracts the 32 BOOLS from a dword *)
 
 VAR_INPUT
 	IN : DWORD;    // DWORD Input
@@ -128,7 +129,6 @@ VAR_OUTPUT
 	OUT_31 : BOOL;    // BIT 31
 END_VAR
 
-(* this Function extracts the 32 BOOLS from a dword *)
 OUT_00 := IN.0;
 OUT_01 := IN.1;
 OUT_02 := IN.2;

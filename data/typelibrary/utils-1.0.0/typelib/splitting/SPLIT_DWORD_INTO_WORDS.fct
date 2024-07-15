@@ -28,6 +28,7 @@
 	</InterfaceList>
 	<FunctionBody>
 		<ST><![CDATA[FUNCTION SPLIT_DWORD_INTO_WORDS
+(* this Function extracts the 2 WORD from a dword *)
 
 VAR_INPUT
 	IN : DWORD;    // DWORD Input
@@ -38,7 +39,6 @@ VAR_OUTPUT
 	OUT_01 : WORD;    // WORD 01
 END_VAR
 
-(* this Function extracts the 2 WORD from a dword *)
 OUT_00 := DWORD_TO_WORD(SHR(IN AND DWORD_WORD_00, SHIFT_WORD_00));
 OUT_01 := DWORD_TO_WORD(SHR(IN AND DWORD_WORD_01, SHIFT_WORD_01));
 
