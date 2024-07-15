@@ -43,8 +43,8 @@ class STAlgorithmFormattingTest {
 				ALGORITHM hubert
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner THEN
+					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -72,8 +72,8 @@ class STAlgorithmFormattingTest {
 				METHOD hubert
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner THEN
+					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -245,12 +245,14 @@ class STAlgorithmFormattingTest {
 				END_IF;
 				
 				END_METHOD
+				
 			'''
 			expectation = '''
 				METHOD hubert
 				
 				IF langerVariablenBezeichnerlangerVariablenBezeichnerlangerVariablenBezeichnerlangerVariablenBezeichner
-					OR langerVariablenBezeichner THEN
+					OR langerVariablenBezeichner
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -276,7 +278,8 @@ class STAlgorithmFormattingTest {
 				ALGORITHM hubert
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner THEN
+					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -301,8 +304,8 @@ class STAlgorithmFormattingTest {
 			expectation = '''
 				ALGORITHM hubert
 				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR a THEN
+				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR a
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -332,8 +335,8 @@ class STAlgorithmFormattingTest {
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
 					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner THEN
+					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -397,7 +400,7 @@ class STAlgorithmFormattingTest {
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
 					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner 
+					OR langerVariablenBezeichner
 				THEN
 					bol1 := langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
 						OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner;

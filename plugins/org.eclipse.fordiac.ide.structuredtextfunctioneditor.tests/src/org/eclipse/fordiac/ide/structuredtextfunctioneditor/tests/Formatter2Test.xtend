@@ -1359,7 +1359,8 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				IF langerVariablenBezeichnerlangerVariablenBezeichnerlangerVariablenBezeichnerlangerVariablenBezeichner
-					AND langerVariablenBezeichner THEN
+					AND langerVariablenBezeichner
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -1384,8 +1385,8 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner XOR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner THEN
+					OR langerVariablenBezeichner XOR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -1409,8 +1410,8 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR a THEN
+				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR a
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				

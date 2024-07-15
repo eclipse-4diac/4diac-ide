@@ -248,8 +248,11 @@ class STCoreFormatter extends AbstractFormatter2 {
 				: ifStatement.elseifs.get(0).regionFor.keyword("ELSIF"),
 			[indent]
 		)
-		ifStatement.condition.format
-		ifStatement.regionFor.keyword("THEN").append[newLine]
+		ifStatement.condition.formatCondition(
+			ifStatement.regionFor.keyword("IF"),
+			ifStatement.regionFor.keyword("THEN"),
+			document
+		)
 		ifStatement.statements.forEach[format]
 		ifStatement.elseifs.forEach[format]
 		ifStatement.^else.format
@@ -259,8 +262,11 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	/** Formats the STElseIfStatements */
 	def dispatch void format(STElseIfPart elseIfStatement, extension IFormattableDocument document) {
-		elseIfStatement.condition.format
-		elseIfStatement.regionFor.keyword(STElseIfPartAccess.THENKeyword_2).append[newLine]
+		elseIfStatement.condition.formatCondition(
+			elseIfStatement.regionFor.keyword("ELSIF"),
+			elseIfStatement.regionFor.keyword("THEN"),
+			document
+		)
 		elseIfStatement.statements.forEach[surround[indent] format]
 	}
 
@@ -302,8 +308,11 @@ class STCoreFormatter extends AbstractFormatter2 {
 			whileStatement.regionFor.keyword("END_WHILE"),
 			[indent]
 		)
-		whileStatement.condition.format
-		whileStatement.regionFor.keyword("DO").append[newLine]
+		whileStatement.condition.formatCondition(
+			whileStatement.regionFor.keyword("WHILE"),
+			whileStatement.regionFor.keyword("DO"),
+			document
+		)
 		whileStatement.statements.forEach[format]
 		whileStatement.regionFor.keyword(";").surround[noSpace]
 		whileStatement.append[setNewLines(1, 2, 2)]
@@ -536,6 +545,33 @@ class STCoreFormatter extends AbstractFormatter2 {
 				format
 			]
 		}
+	}
+
+	def protected void formatCondition(EObject semanticElement, ISemanticRegion begin, ISemanticRegion end,
+		extension IFormattableDocument document) {
+		if (semanticElement.multiline) {
+			semanticElement.format
+			end.prepend[newLine]
+		} else {
+			formatConditionally(begin.offset, end.endOffset - begin.offset, [ subDocument |
+				semanticElement.formatSinglelineCondition(end, subDocument.requireFitsInLine)
+			], [ subDocument |
+				semanticElement.formatMultilineCondition(end, subDocument)
+			])
+		}
+		end.append[newLine]
+	}
+
+	def protected void formatSinglelineCondition(EObject semanticElement, ISemanticRegion end,
+		extension IFormattableDocument document) {
+		semanticElement.format
+		end.prepend[oneSpace]
+	}
+
+	def protected void formatMultilineCondition(EObject semanticElement, ISemanticRegion end,
+		extension IFormattableDocument document) {
+		semanticElement.format
+		end.prepend[newLine]
 	}
 
 	override ITextReplacer createWhitespaceReplacer(ITextSegment hiddens, IHiddenRegionFormatting formatting) {
