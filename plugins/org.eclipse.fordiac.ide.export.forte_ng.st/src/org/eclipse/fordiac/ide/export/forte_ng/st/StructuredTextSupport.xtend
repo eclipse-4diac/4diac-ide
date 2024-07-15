@@ -52,7 +52,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
@@ -75,8 +74,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifi
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
@@ -130,11 +131,12 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateInitializerExpression(STArrayInitializerExpression expr) //
 	'''«expr.expectedType.generateTypeName»{«FOR elem : expr.values SEPARATOR ", "»«elem.generateArrayInitElement»«ENDFOR»}'''
 
-	def protected CharSequence generateArrayInitElement(STArrayInitElement elem) //
-	'''«IF elem.initExpressions.empty»«elem.indexOrInitExpression.generateInitializerExpression»«ELSE»«elem.generateMultiArrayInitElement»«ENDIF»'''
+	def protected dispatch CharSequence generateArrayInitElement(STSingleArrayInitElement elem) {
+		elem.initExpression.generateInitializerExpression
+	}
 
-	def protected CharSequence generateMultiArrayInitElement(STArrayInitElement elem) //
-	'''«FOR i : 0..<(elem.indexOrInitExpression as STElementaryInitializerExpression).value.integerFromConstantExpression SEPARATOR ", "»«FOR initExpression : elem.initExpressions SEPARATOR ", "»«initExpression.generateInitializerExpression»«ENDFOR»«ENDFOR»'''
+	def protected dispatch CharSequence generateArrayInitElement(STRepeatArrayInitElement elem) //
+	'''«FOR i : 0..<elem.repetitions.intValueExact SEPARATOR ", "»«FOR initExpression : elem.initExpressions SEPARATOR ", "»«initExpression.generateInitializerExpression»«ENDFOR»«ENDFOR»'''
 
 	def protected dispatch CharSequence generateInitializerExpression(STStructInitializerExpression expr) //
 	'''«expr.expectedType.generateTypeName»(«FOR elem : expr.generateStructInitElements SEPARATOR ", "»«elem»«ENDFOR»)'''

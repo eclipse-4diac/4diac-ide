@@ -172,6 +172,20 @@ public class STCoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case STCorePackage.ST_SINGLE_ARRAY_INIT_ELEMENT: {
+				STSingleArrayInitElement stSingleArrayInitElement = (STSingleArrayInitElement)theEObject;
+				T result = caseSTSingleArrayInitElement(stSingleArrayInitElement);
+				if (result == null) result = caseSTArrayInitElement(stSingleArrayInitElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT: {
+				STRepeatArrayInitElement stRepeatArrayInitElement = (STRepeatArrayInitElement)theEObject;
+				T result = caseSTRepeatArrayInitElement(stRepeatArrayInitElement);
+				if (result == null) result = caseSTArrayInitElement(stRepeatArrayInitElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case STCorePackage.ST_STATEMENT: {
 				STStatement stStatement = (STStatement)theEObject;
 				T result = caseSTStatement(stStatement);
@@ -656,6 +670,36 @@ public class STCoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSTArrayInitElement(STArrayInitElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Single Array Init Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Single Array Init Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTSingleArrayInitElement(STSingleArrayInitElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Repeat Array Init Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Repeat Array Init Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTRepeatArrayInitElement(STRepeatArrayInitElement object) {
 		return null;
 	}
 

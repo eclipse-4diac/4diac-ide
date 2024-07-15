@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
+import java.math.BigInteger;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -27,41 +28,51 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
+
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>ST Array Init Element</b></em>'.
+ * An implementation of the model object '<em><b>ST Repeat Array Init Element</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STArrayInitElementImpl#getIndexOrInitExpression <em>Index Or Init Expression</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STArrayInitElementImpl#getInitExpressions <em>Init Expressions</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STRepeatArrayInitElementImpl#getRepetitions <em>Repetitions</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STRepeatArrayInitElementImpl#getInitExpressions <em>Init Expressions</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class STArrayInitElementImpl extends MinimalEObjectImpl.Container implements STArrayInitElement {
+public class STRepeatArrayInitElementImpl extends MinimalEObjectImpl.Container implements STRepeatArrayInitElement {
 	/**
-	 * The cached value of the '{@link #getIndexOrInitExpression() <em>Index Or Init Expression</em>}' containment reference.
+	 * The default value of the '{@link #getRepetitions() <em>Repetitions</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getIndexOrInitExpression()
+	 * @see #getRepetitions()
 	 * @generated
 	 * @ordered
 	 */
-	protected STInitializerExpression indexOrInitExpression;
+	protected static final BigInteger REPETITIONS_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getRepetitions() <em>Repetitions</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRepetitions()
+	 * @generated
+	 * @ordered
+	 */
+	protected BigInteger repetitions = REPETITIONS_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getInitExpressions() <em>Init Expressions</em>}' containment reference list.
@@ -78,7 +89,7 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected STArrayInitElementImpl() {
+	protected STRepeatArrayInitElementImpl() {
 		super();
 	}
 
@@ -89,7 +100,7 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return STCorePackage.Literals.ST_ARRAY_INIT_ELEMENT;
+		return STCorePackage.Literals.ST_REPEAT_ARRAY_INIT_ELEMENT;
 	}
 
 	/**
@@ -98,23 +109,8 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 */
 	@Override
-	public STInitializerExpression getIndexOrInitExpression() {
-		return indexOrInitExpression;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetIndexOrInitExpression(STInitializerExpression newIndexOrInitExpression, NotificationChain msgs) {
-		STInitializerExpression oldIndexOrInitExpression = indexOrInitExpression;
-		indexOrInitExpression = newIndexOrInitExpression;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION, oldIndexOrInitExpression, newIndexOrInitExpression);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public BigInteger getRepetitions() {
+		return repetitions;
 	}
 
 	/**
@@ -123,18 +119,11 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 */
 	@Override
-	public void setIndexOrInitExpression(STInitializerExpression newIndexOrInitExpression) {
-		if (newIndexOrInitExpression != indexOrInitExpression) {
-			NotificationChain msgs = null;
-			if (indexOrInitExpression != null)
-				msgs = ((InternalEObject)indexOrInitExpression).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION, null, msgs);
-			if (newIndexOrInitExpression != null)
-				msgs = ((InternalEObject)newIndexOrInitExpression).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION, null, msgs);
-			msgs = basicSetIndexOrInitExpression(newIndexOrInitExpression, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION, newIndexOrInitExpression, newIndexOrInitExpression));
+	public void setRepetitions(BigInteger newRepetitions) {
+		BigInteger oldRepetitions = repetitions;
+		repetitions = newRepetitions;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT__REPETITIONS, oldRepetitions, repetitions));
 	}
 
 	/**
@@ -145,7 +134,7 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	@Override
 	public EList<STInitializerExpression> getInitExpressions() {
 		if (initExpressions == null) {
-			initExpressions = new EObjectContainmentEList<STInitializerExpression>(STInitializerExpression.class, this, STCorePackage.ST_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS);
+			initExpressions = new EObjectContainmentEList<STInitializerExpression>(STInitializerExpression.class, this, STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS);
 		}
 		return initExpressions;
 	}
@@ -178,9 +167,7 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case STCorePackage.ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION:
-				return basicSetIndexOrInitExpression(null, msgs);
-			case STCorePackage.ST_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS:
+			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS:
 				return ((InternalEList<?>)getInitExpressions()).basicRemove(otherEnd, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -195,9 +182,9 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case STCorePackage.ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION:
-				return getIndexOrInitExpression();
-			case STCorePackage.ST_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS:
+			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT__REPETITIONS:
+				return getRepetitions();
+			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS:
 				return getInitExpressions();
 			default:
 				return super.eGet(featureID, resolve, coreType);
@@ -213,10 +200,10 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case STCorePackage.ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION:
-				setIndexOrInitExpression((STInitializerExpression)newValue);
+			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT__REPETITIONS:
+				setRepetitions((BigInteger)newValue);
 				return;
-			case STCorePackage.ST_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS:
+			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS:
 				getInitExpressions().clear();
 				getInitExpressions().addAll((Collection<? extends STInitializerExpression>)newValue);
 				return;
@@ -234,10 +221,10 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case STCorePackage.ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION:
-				setIndexOrInitExpression((STInitializerExpression)null);
+			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT__REPETITIONS:
+				setRepetitions(REPETITIONS_EDEFAULT);
 				return;
-			case STCorePackage.ST_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS:
+			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS:
 				getInitExpressions().clear();
 				return;
 			default:
@@ -254,13 +241,29 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case STCorePackage.ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION:
-				return indexOrInitExpression != null;
-			case STCorePackage.ST_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS:
+			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT__REPETITIONS:
+				return REPETITIONS_EDEFAULT == null ? repetitions != null : !REPETITIONS_EDEFAULT.equals(repetitions);
+			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS:
 				return initExpressions != null && !initExpressions.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}
 	}
 
-} //STArrayInitElementImpl
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (repetitions: "); //$NON-NLS-1$
+		result.append(repetitions);
+		result.append(')');
+		return result.toString();
+	}
+
+} //STRepeatArrayInitElementImpl

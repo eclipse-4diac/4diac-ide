@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobal
 import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGrammarAccess;
 import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSemanticSequencer;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
@@ -53,8 +52,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpressio
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression;
@@ -99,9 +100,6 @@ public class GlobalConstantsSemanticSequencer extends STCoreSemanticSequencer {
 			switch (semanticObject.eClass().getClassifierID()) {
 			case STCorePackage.ST_ARRAY_ACCESS_EXPRESSION:
 				sequence_STAccessExpression(context, (STArrayAccessExpression) semanticObject); 
-				return; 
-			case STCorePackage.ST_ARRAY_INIT_ELEMENT:
-				sequence_STArrayInitElement(context, (STArrayInitElement) semanticObject); 
 				return; 
 			case STCorePackage.ST_ARRAY_INITIALIZER_EXPRESSION:
 				sequence_STArrayInitializerExpression(context, (STArrayInitializerExpression) semanticObject); 
@@ -184,11 +182,17 @@ public class GlobalConstantsSemanticSequencer extends STCoreSemanticSequencer {
 			case STCorePackage.ST_NUMERIC_LITERAL:
 				sequence_STNumericLiteral(context, (STNumericLiteral) semanticObject); 
 				return; 
+			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT:
+				sequence_STRepeatArrayInitElement(context, (STRepeatArrayInitElement) semanticObject); 
+				return; 
 			case STCorePackage.ST_REPEAT_STATEMENT:
 				sequence_STRepeatStatement(context, (STRepeatStatement) semanticObject); 
 				return; 
 			case STCorePackage.ST_RETURN:
 				sequence_STStatement(context, (STReturn) semanticObject); 
+				return; 
+			case STCorePackage.ST_SINGLE_ARRAY_INIT_ELEMENT:
+				sequence_STSingleArrayInitElement(context, (STSingleArrayInitElement) semanticObject); 
 				return; 
 			case STCorePackage.ST_STRING_LITERAL:
 				sequence_STStringLiteral(context, (STStringLiteral) semanticObject); 

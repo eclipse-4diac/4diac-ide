@@ -101,19 +101,8 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 			STArrayAccessExpression case index.contains(expression), // suppress in array subscript
 			STMultibitPartialExpression: // suppress in bit access
 				false
-			STInitializerExpression:
-				showLiteralTypeCodeMining
 			STExpression:
 				showLiteralTypeCodeMining
-			default:
-				true
-		}
-	}
-
-	def static boolean isShowLiteralTypeCodeMining(STInitializerExpression expression) {
-		switch (it : expression.eContainer) {
-			STArrayInitElement: // only show if array value (suppress in repeat count)
-				initExpressions.empty || expression !== indexOrInitExpression
 			default:
 				true
 		}

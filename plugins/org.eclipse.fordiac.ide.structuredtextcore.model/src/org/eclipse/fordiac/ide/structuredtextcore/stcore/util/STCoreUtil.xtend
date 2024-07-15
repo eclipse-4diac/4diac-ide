@@ -341,10 +341,7 @@ final class STCoreUtil {
 			STInitializerExpression:
 				expectedType
 			STArrayInitElement:
-				if (initExpressions.empty || expression !== indexOrInitExpression)
-					expectedType
-				else
-					ElementaryTypes.INT
+				expectedType
 			STStructInitElement:
 				variable.featureType
 			STCallArgument:
@@ -358,7 +355,7 @@ final class STCoreUtil {
 		switch (it : expression.eContainer) {
 			STVarDeclaration:
 				featureType
-			STArrayInitElement case initExpressions.empty || initExpressions.contains(expression):
+			STArrayInitElement:
 				expectedType
 			STStructInitElement:
 				variable.featureType

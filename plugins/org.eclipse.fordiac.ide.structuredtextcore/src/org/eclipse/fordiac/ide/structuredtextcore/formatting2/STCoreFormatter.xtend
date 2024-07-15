@@ -71,6 +71,8 @@ import org.eclipse.xtext.formatting2.regionaccess.ITextSegment
 import org.eclipse.xtext.grammaranalysis.impl.GrammarElementTitleSwitch
 
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage.Literals.*
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement
 
 class STCoreFormatter extends AbstractFormatter2 {
 
@@ -350,9 +352,16 @@ class STCoreFormatter extends AbstractFormatter2 {
 		arrayInitExpression.values.forEach[format]
 	}
 
-	/** Formats the STArrayInitElement */
-	def dispatch void format(STArrayInitElement element, extension IFormattableDocument document) {
-		element.indexOrInitExpression.format
+	/** Formats the STSingleArrayInitElement */
+	def dispatch void format(STSingleArrayInitElement element, extension IFormattableDocument document) {
+		element.initExpression.format
+	}
+
+	/** Formats the STRepeatArrayInitElement */
+	def dispatch void format(STRepeatArrayInitElement element, extension IFormattableDocument document) {
+		element.regionFor.keyword('(').prepend[noSpace].append[noSpace]
+		element.regionFor.keyword(',').prepend[noSpace].append[oneSpace]
+		element.regionFor.keyword(')').prepend[noSpace]
 		element.initExpressions.forEach[format]
 	}
 
