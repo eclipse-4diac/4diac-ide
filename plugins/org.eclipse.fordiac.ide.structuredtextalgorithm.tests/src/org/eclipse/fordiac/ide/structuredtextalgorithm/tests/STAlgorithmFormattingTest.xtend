@@ -43,8 +43,8 @@ class STAlgorithmFormattingTest {
 				ALGORITHM hubert
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-				THEN
+					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
+					OR langerVariablenBezeichner THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -72,11 +72,25 @@ class STAlgorithmFormattingTest {
 				METHOD hubert
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-				THEN
+					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
+					OR langerVariablenBezeichner THEN
 					bol1 := TRUE;
 				END_IF;
 				
+				END_METHOD
+				
+			'''
+		]
+		assertFormatted[
+			toBeFormatted = '''
+				METHOD hubert : extremelylongTypeName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+				END_METHOD
+				
+			'''
+
+			expectation = '''
+				METHOD hubert
+					: extremelylongTypeName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
 				END_METHOD
 				
 			'''
@@ -318,8 +332,8 @@ class STAlgorithmFormattingTest {
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
 					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-				THEN
+					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
+					OR langerVariablenBezeichner THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -387,39 +401,6 @@ class STAlgorithmFormattingTest {
 				THEN
 					bol1 := langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
 						OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner;
-				END_IF;
-				
-				END_METHOD
-				
-			'''
-		]
-	}
-
-	@Test
-	def void splitOperatorKeepsLineBreaksTest() {
-		assertFormatted[
-			toBeFormatted = '''
-				METHOD hubert
-				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner
-				THEN
-					bol1 := true;
-				END_IF;
-				
-				END_METHOD
-				
-			'''
-
-			expectation = '''
-				METHOD hubert
-				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner
-				THEN
-					bol1 := TRUE;
 				END_IF;
 				
 				END_METHOD
