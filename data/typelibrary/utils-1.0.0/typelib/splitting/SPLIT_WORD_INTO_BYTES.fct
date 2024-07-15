@@ -28,6 +28,7 @@
 	</InterfaceList>
 	<FunctionBody>
 		<ST><![CDATA[FUNCTION SPLIT_WORD_INTO_BYTES
+(* this Function extracts the 2 BYTE from a word *)
 
 VAR_INPUT
 	IN : WORD;    // WORD Input
@@ -38,9 +39,8 @@ VAR_OUTPUT
 	OUT_01 : BYTE;    // BYTE 01
 END_VAR
 
-(* this Function extracts the 2 BYTE from a word *)
-OUT_00 := WORD_TO_BYTE(SHR(IN AND WORD_BYTE_00, SHFT_BYTE_00));
-OUT_01 := WORD_TO_BYTE(SHR(IN AND WORD_BYTE_01, SHFT_BYTE_01));
+OUT_00 := IN.%B0;
+OUT_01 := IN.%B1;
 
 END_FUNCTION
 ]]></ST>
