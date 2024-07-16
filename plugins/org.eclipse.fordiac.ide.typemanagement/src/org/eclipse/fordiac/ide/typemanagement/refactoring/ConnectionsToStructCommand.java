@@ -83,8 +83,10 @@ public class ConnectionsToStructCommand extends Command {
 
 	@Override
 	public void undo() {
-		sourceConnectionEditCommand.undo();
-		destinationConnectionEditCommand.undo();
+		if (conflictResolution) {
+			sourceConnectionEditCommand.undo();
+			destinationConnectionEditCommand.undo();
+		}
 		connectStructCommand.undo();
 		updateCommands.undo();
 		editFBsCommand.undo();
@@ -97,8 +99,10 @@ public class ConnectionsToStructCommand extends Command {
 		saveFBs();
 		updateCommands.redo();
 		connectStructCommand.redo();
-		destinationConnectionEditCommand.redo();
-		sourceConnectionEditCommand.redo();
+		if (conflictResolution) {
+			destinationConnectionEditCommand.redo();
+			sourceConnectionEditCommand.redo();
+		}
 	}
 
 	@Override
