@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="OR_16" Comment="FB to calculate bitwise boolean OR (generic FB)">
-	<Identification Standard="61131-3" Classification="standard bitwise boolean function" Description="Copyright (c) 2014 Profactor GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	<Identification Standard="61131-3" Classification="standard bitwise boolean function" Description="Copyright (c) 2014 Profactor GmbH &#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Organization="Profactor GmbH" Version="1.0" Author="Matthias Plasch" Date="2014-10-11">
 	</VersionInfo>
