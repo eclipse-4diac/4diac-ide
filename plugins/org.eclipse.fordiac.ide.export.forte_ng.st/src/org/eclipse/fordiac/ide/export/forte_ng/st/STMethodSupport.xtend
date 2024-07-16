@@ -35,7 +35,7 @@ class STMethodSupport extends StructuredTextSupport {
 
 	STMethod parseResult
 
-	override prepare(Map<?, ?> options) {
+	override prepare() {
 		if (parseResult === null && errors.empty) {
 			parseResult = method.parse(errors, warnings, infos)
 		}
@@ -43,7 +43,7 @@ class STMethodSupport extends StructuredTextSupport {
 	}
 
 	override generate(Map<?, ?> options) throws ExportException {
-		prepare(options)
+		prepare()
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 			parseResult?.generateStructuredTextMethodHeader
 		else
@@ -96,7 +96,7 @@ class STMethodSupport extends StructuredTextSupport {
 	def private getFBType() { switch (root : method.rootContainer) { BaseFBType: root } }
 
 	override getDependencies(Map<?, ?> options) {
-		prepare(options)
+		prepare()
 		if (parseResult !== null) {
 			if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 				(#[parseResult.returnType].filterNull + parseResult.body.varDeclarations.filter [
