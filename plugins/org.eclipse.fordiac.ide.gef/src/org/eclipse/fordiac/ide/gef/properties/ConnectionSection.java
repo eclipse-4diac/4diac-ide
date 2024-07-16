@@ -1,7 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
- *               2019 Johannes Kepler University Linz
- *               2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -28,7 +27,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -44,6 +42,7 @@ public class ConnectionSection extends AbstractSection {
 	private Text sourceText;
 	private Text targetText;
 	private Button showConnectionButton;
+
 	@Override
 	protected Connection getType() {
 		return (Connection) type;
@@ -85,31 +84,25 @@ public class ConnectionSection extends AbstractSection {
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			if (null != getType().getSource()) {
-				sourceText.setText(
-						getFBNameFromIInterfaceElement(getType().getSource()) + "." + getType().getSource().getName()); //$NON-NLS-1$
-				if (isViewer()) {
-					commentText.setEditable(false);
-					commentText.setEnabled(false);
-				} else {
-					commentText.setEditable(true);
-					commentText.setEnabled(true);
-				}
+	protected void performRefresh() {
+		commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+		if (null != getType().getSource()) {
+			sourceText.setText(
+					getFBNameFromIInterfaceElement(getType().getSource()) + "." + getType().getSource().getName()); //$NON-NLS-1$
+			if (isViewer()) {
+				commentText.setEditable(false);
+				commentText.setEnabled(false);
+			} else {
+				commentText.setEditable(true);
+				commentText.setEnabled(true);
 			}
-			if (null != getType().getDestination()) {
-				targetText.setText(getFBNameFromIInterfaceElement(getType().getDestination()) + "." //$NON-NLS-1$
-						+ getType().getDestination().getName());
-			}
-
-			showConnectionButton.setSelection(getConnection().isVisible());
-
 		}
-		commandStack = commandStackBuffer;
+		if (null != getType().getDestination()) {
+			targetText.setText(getFBNameFromIInterfaceElement(getType().getDestination()) + "." //$NON-NLS-1$
+					+ getType().getDestination().getName());
+		}
+
+		showConnectionButton.setSelection(getConnection().isVisible());
 	}
 
 	private boolean isViewer() {
@@ -128,8 +121,10 @@ public class ConnectionSection extends AbstractSection {
 	}
 
 	private static boolean isValidConnection(final Connection con) {
-		// only allow connections that are fully included in the model. In rare cases it can be that during command
-		// execution we may get half updated connections. This should protect against it.
+		// only allow connections that are fully included in the model. In rare cases it
+		// can be that during command
+		// execution we may get half updated connections. This should protect against
+		// it.
 		return con.eContainer() != null && con.getSource() != null && con.getDestination() != null
 				&& con.getSource().eContainer() != null && con.getDestination().eContainer() != null;
 	}

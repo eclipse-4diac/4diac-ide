@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH, Profactor GmbH
- *               2019 Johannes Kepler University Linz
+ * Copyright (c) 2015, 2024 fortiss GmbH, Profactor GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -69,14 +69,14 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 
 	@Override
 	protected INamedElement getType() {
-		if (type instanceof FBNetworkElement) {
-			return (FBNetworkElement) type;
+		if (type instanceof final FBNetworkElement fbnEl) {
+			return fbnEl;
 		}
-		if (type instanceof Device) {
-			return (Device) type;
+		if (type instanceof final Device dev) {
+			return dev;
 		}
-		if (type instanceof Resource) {
-			return (Resource) type;
+		if (type instanceof final Resource res) {
+			return res;
 		}
 		return null;
 	}
@@ -152,8 +152,8 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		Assert.isTrue(selection instanceof IStructuredSelection);
 		final Object input = ((IStructuredSelection) selection).getFirstElement();
-		commandStack = getCommandStack(part, input);
-		if (null == commandStack) {
+		setCurrentCommandStack(part, input);
+		if (null == getCurrentCommandStack()) {
 			disableAllFields();
 		}
 		setType(input);
@@ -166,22 +166,20 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 	}
 
 	@Override
-	public void refresh() {
-		if (null != type) {
-			Display.getDefault().asyncExec(() -> {
-				if (!nameText.isDisposed() && !nameText.getParent().isDisposed()) {
-					final CommandStack commandStackBuffer = commandStack;
-					commandStack = null;
-					if (type instanceof AdapterFB) {
-						nameText.setEnabled(false);
-					}
-					nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-					commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-					inputViewer.setInput(getType());
-					commandStack = commandStackBuffer;
+	protected void performRefresh() {
+		Display.getDefault().asyncExec(() -> {
+			if (!nameText.isDisposed() && !nameText.getParent().isDisposed()) {
+				final CommandStack commandStackBuffer = getCurrentCommandStack();
+				setCurrentCommandStack(null);
+				if (type instanceof AdapterFB) {
+					nameText.setEnabled(false);
 				}
-			});
-		}
+				nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
+				commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+				inputViewer.setInput(getType());
+				setCurrentCommandStack(commandStackBuffer);
+			}
+		});
 	}
 
 	private class ValueCommentCellModifier implements ICellModifier {
@@ -194,7 +192,8 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 		public Object getValue(final Object element, final String property) {
 			return switch (property) {
 			case VALUE_PROPERTY -> getVarDeclarationValue((VarDeclaration) element);
-			case COMMENT_PROPERTY -> ((INamedElement) element).getComment() != null ? ((INamedElement) element).getComment() : ""; //$NON-NLS-1$
+			case COMMENT_PROPERTY ->
+				((INamedElement) element).getComment() != null ? ((INamedElement) element).getComment() : ""; //$NON-NLS-1$
 			default -> null;
 			};
 		}
@@ -214,7 +213,7 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 			default:
 				break;
 			}
-			if ((null != cmd) && (null != commandStack)) {
+			if ((null != cmd) && (null != getCurrentCommandStack())) {
 				executeCommand(cmd);
 				inputViewer.refresh(data);
 			}
@@ -225,14 +224,14 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 	public static class InputContentProvider implements IStructuredContentProvider {
 		@Override
 		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof FBNetworkElement) {
-				return ((FBNetworkElement) inputElement).getInterface().getInputVars().toArray();
+			if (inputElement instanceof final FBNetworkElement fbnEl) {
+				return fbnEl.getInterface().getInputVars().toArray();
 			}
-			if (inputElement instanceof Device) {
-				return ((Device) inputElement).getVarDeclarations().toArray();
+			if (inputElement instanceof final Device dev) {
+				return dev.getVarDeclarations().toArray();
 			}
-			if (inputElement instanceof Resource) {
-				return ((Resource) inputElement).getVarDeclarations().toArray();
+			if (inputElement instanceof final Resource res) {
+				return res.getVarDeclarations().toArray();
 			}
 			return new Object[] {};
 		}
@@ -246,15 +245,14 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof VarDeclaration) {
+			if (element instanceof final VarDeclaration varDecl) {
 				switch (columnIndex) {
 				case 0:
-					return ((VarDeclaration) element).getName();
+					return varDecl.getName();
 				case 1:
-					return getVarDeclarationValue((VarDeclaration) element);
+					return getVarDeclarationValue(varDecl);
 				case 2:
-					return ((VarDeclaration) element).getComment() != null ? ((VarDeclaration) element).getComment()
-							: ""; //$NON-NLS-1$
+					return varDecl.getComment() != null ? varDecl.getComment() : ""; //$NON-NLS-1$
 				default:
 					break;
 				}

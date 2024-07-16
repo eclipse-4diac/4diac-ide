@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2017 fortiss GmbH
- *               2019 Johannes Kepler University Linz
+ * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -31,7 +30,6 @@ import org.eclipse.fordiac.ide.model.ui.widgets.EventTypeSelectionContentProvide
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TableLayout;
@@ -104,26 +102,21 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 		if (getType() != null) {
 			eventComposite.setVisible(!(getType().eContainer().eContainer() instanceof SubAppType));
 		}
-		if (null == commandStack) { // disable all fields
+		if (null == getCurrentCommandStack()) { // disable all fields
 			withEventsViewer.setInput(null);
 			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setGrayed(true));
 		}
 	}
 
 	@Override
-	public void refresh() {
-		super.refresh();
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != getType()) {
-			withEventsViewer.setInput(getType());
-			withEventsViewer.getTable().setEnabled(isEditable());
-			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
-			getType().getWith().stream().filter(with -> (with.getVariables() != null))
-					.map(with -> withEventsViewer.testFindItem(with.getVariables())).filter(TableItem.class::isInstance)
-					.forEach(item -> ((TableItem) item).setChecked(true));
-		}
-		commandStack = commandStackBuffer;
+	protected void performRefresh() {
+		super.performRefresh();
+		withEventsViewer.setInput(getType());
+		withEventsViewer.getTable().setEnabled(isEditable());
+		Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
+		getType().getWith().stream().filter(with -> (with.getVariables() != null))
+				.map(with -> withEventsViewer.testFindItem(with.getVariables())).filter(TableItem.class::isInstance)
+				.forEach(item -> ((TableItem) item).setChecked(true));
 	}
 
 	@Override

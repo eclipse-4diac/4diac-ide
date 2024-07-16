@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppSizeLockCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -114,16 +113,11 @@ public class SubAppPropertySection extends InstancePropertySection {
 	}
 
 	@Override
-	public void refresh() {
-		super.refresh();
-		if ((getType() != null)) {
-			final CommandStack commandStackBuffer = commandStack;
-			commandStack = null;
-			heightText.setText(Integer.toString(CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getHeight())));
-			widthText.setText(Integer.toString(CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getWidth())));
-			lockCheckbox.setSelection(getType().isLocked());
-			commandStack = commandStackBuffer;
-		}
+	protected void performRefresh() {
+		super.performRefresh();
+		heightText.setText(Integer.toString(CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getHeight())));
+		widthText.setText(Integer.toString(CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getWidth())));
+		lockCheckbox.setSelection(getType().isLocked());
 	}
 
 	@Override

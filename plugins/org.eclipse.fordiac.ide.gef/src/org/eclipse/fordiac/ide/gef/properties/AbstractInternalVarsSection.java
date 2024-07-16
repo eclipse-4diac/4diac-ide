@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2024 fortiss GmbH, Johannes Kepler University Linz,
- * 							 Primetals Technologies Germany GmbH,
- * 							 Martin Erich Jobst
+ * Copyright (c) 2015, 2024 fortiss GmbH, Johannes Kepler University Linz,
+ * 							Primetals Technologies Germany GmbH,
+ * 							Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -188,7 +188,7 @@ public abstract class AbstractInternalVarsSection extends AbstractSection
 	}
 
 	@Override
-	public void refresh() {
+	protected void performRefresh() {
 		table.refresh();
 	}
 

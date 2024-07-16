@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2023 fortiss GmbH, Johannes Kepler University Linz (JKU)
+ * Copyright (c) 2015, 2024 fortiss GmbH, Johannes Kepler University Linz (JKU)
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -73,17 +72,17 @@ public class ActionSection extends AbstractSection {
 
 	@Override
 	protected Object getInputType(final Object input) {
-		if (input instanceof ECActionAlgorithmEditPart) {
-			return ((ECActionAlgorithmEditPart) input).getAction();
+		if (input instanceof final ECActionAlgorithmEditPart aaEP) {
+			return aaEP.getAction();
 		}
-		if (input instanceof ECActionAlgorithm) {
-			return ((ECActionAlgorithm) input).getAction();
+		if (input instanceof final ECActionAlgorithm aa) {
+			return aa.getAction();
 		}
-		if (input instanceof ECActionOutputEventEditPart) {
-			return ((ECActionOutputEventEditPart) input).getAction();
+		if (input instanceof final ECActionOutputEventEditPart oeEP) {
+			return oeEP.getAction();
 		}
-		if (input instanceof ECActionOutputEvent) {
-			return ((ECActionOutputEvent) input).getAction();
+		if (input instanceof final ECActionOutputEvent oe) {
+			return oe.getAction();
 		}
 		if (input instanceof ECAction) {
 			return input;
@@ -144,8 +143,8 @@ public class ActionSection extends AbstractSection {
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		Assert.isTrue(selection instanceof IStructuredSelection);
 		final Object input = ((IStructuredSelection) selection).getFirstElement();
-		commandStack = getCommandStack(part, input);
-		if (null == commandStack) { // disable all fields
+		setCurrentCommandStack(part, input);
+		if (null == getCurrentCommandStack()) { // disable all fields
 			outputEventCombo.removeAll();
 			outputEventCombo.setEnabled(false);
 			algorithmCombo.removeAll();
@@ -160,10 +159,8 @@ public class ActionSection extends AbstractSection {
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if ((null != type) && (null != getFBType())) {
+	protected void performRefresh() {
+		if (getFBType() != null) {
 			// during delete phases it can be that the input (i.e., Action) is not attached
 			// to its type anymore. Therefore also the check if getFBType() is not null
 			updateDropdown(outputEventCombo, ECCContentAndLabelProvider.getOutputEventNames(getFBType()));
@@ -177,7 +174,6 @@ public class ActionSection extends AbstractSection {
 			algorithmGroup.setAlgorithm(getAlgorithm());
 			algorithmList.refresh();
 		}
-		commandStack = commandStackBuffer;
 	}
 
 	private static void updateDropdown(final CCombo comboBox, final List<String> names) {
@@ -192,7 +188,7 @@ public class ActionSection extends AbstractSection {
 
 	private void selectAlgorithm(final Algorithm alg) {
 		algorithmCombo
-		.select((null == alg) ? algorithmCombo.getItemCount() - 1 : algorithmCombo.indexOf(alg.getName()));
+				.select((null == alg) ? algorithmCombo.getItemCount() - 1 : algorithmCombo.indexOf(alg.getName()));
 	}
 
 	@Override
