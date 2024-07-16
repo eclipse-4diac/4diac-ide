@@ -35,7 +35,7 @@ class VarGlobalConstantsSupport extends StructuredTextSupport {
 		this.source = source
 	}
 	
-	override prepare(Map<?, ?> options) {
+	override prepare() {
 		if (source === null && errors.empty) {
 			source = globalConstants.parse(errors, warnings, infos)
 		}
@@ -43,7 +43,7 @@ class VarGlobalConstantsSupport extends StructuredTextSupport {
 	}
 
 	override generate(Map<?, ?> options) throws ExportException {
-		prepare(options)
+		prepare()
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 			source.generateStructuredTextGlobalVariablesSourceHeader
 		else
@@ -91,7 +91,7 @@ class VarGlobalConstantsSupport extends StructuredTextSupport {
 	'''
 
 	override getDependencies(Map<?, ?> options) {
-		prepare(options)
+		prepare()
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 			source.elements.flatMap[varDeclarations].map[type].toSet
 		else

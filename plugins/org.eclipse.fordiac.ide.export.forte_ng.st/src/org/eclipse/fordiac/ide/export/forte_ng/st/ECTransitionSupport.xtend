@@ -29,7 +29,7 @@ class ECTransitionSupport extends StructuredTextSupport {
 
 	STExpressionSource parseResult
 
-	override prepare(Map<?, ?> options) {
+	override prepare() {
 		if (parseResult === null && errors.empty) {
 			parseResult = transition.conditionExpression.parse(
 				ElementaryTypes.BOOL,
@@ -41,12 +41,12 @@ class ECTransitionSupport extends StructuredTextSupport {
 	}
 
 	override generate(Map<?, ?> options) throws ExportException {
-		prepare(options)
+		prepare()
 		parseResult?.expression?.generateExpression
 	}
 
 	override getDependencies(Map<?, ?> options) {
-		prepare(options)
+		prepare()
 		parseResult?.containedDependencies ?: emptySet
 	}
 }

@@ -34,7 +34,7 @@ class STFunctionBodySupport implements ILanguageSupport {
 	STFunctionSource parseResult
 	STFunctionSupport support
 
-	override prepare(Map<?, ?> options) {
+	override prepare() {
 		if (parseResult === null && errors.empty) {
 			parseResult = body.parse(errors, warnings, infos)
 			if (parseResult !== null) {
@@ -45,12 +45,12 @@ class STFunctionBodySupport implements ILanguageSupport {
 	}
 
 	override generate(Map<?, ?> options) throws ExportException {
-		prepare(options)
+		prepare()
 		support?.generate(options)
 	}
 
 	override getDependencies(Map<?, ?> options) {
-		prepare(options)
+		prepare()
 		support?.getDependencies(options)
 	}
 }
