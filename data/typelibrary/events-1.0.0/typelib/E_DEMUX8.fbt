@@ -4,7 +4,7 @@
 	</Identification>
 	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
 	</VersionInfo>
-	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Höpfinger" Date="2024-07-15" Remarks="copy and make a DEMUX8">
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Höpfinger" Date="2024-07-15" Remarks="copy from E_DEMUX and make a E_DEMUX8 in the same way">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
