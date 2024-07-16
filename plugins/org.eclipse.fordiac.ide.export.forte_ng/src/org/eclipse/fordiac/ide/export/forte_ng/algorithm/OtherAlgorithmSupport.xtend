@@ -22,7 +22,7 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 class OtherAlgorithmSupport implements ILanguageSupport {
 	final OtherAlgorithm algorithm
 	
-	override prepare(Map<?, ?> options) { true }
+	override prepare() { true }
 	
 	override generate(Map<?, ?> options) throws ExportException '''
 		#pragma GCC warning "Algorithm of type: '«algorithm.language»' may lead to unexpected results!"

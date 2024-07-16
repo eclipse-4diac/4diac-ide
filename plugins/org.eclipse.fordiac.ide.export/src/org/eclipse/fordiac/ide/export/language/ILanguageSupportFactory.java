@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,19 +12,25 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.language;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.export.language.impl.LanguageSupportRegistryImpl;
 
 public interface ILanguageSupportFactory {
-	ILanguageSupport createLanguageSupport(final Object source);
+	ILanguageSupport createLanguageSupport(final Object source, Map<?, ?> options);
 
 	static <T extends EObject> ILanguageSupport createLanguageSupport(final String filter, final T source) {
+		return createLanguageSupport(filter, source, Collections.emptyMap());
+	}
+
+	static <T extends EObject> ILanguageSupport createLanguageSupport(final String filter, final T source,
+			final Map<?, ?> options) {
 		final ILanguageSupportFactory factory = Registry.INSTANCE.getFactory(filter,
 				source.eClass().getInstanceClass());
 		if (factory != null) {
-			return factory.createLanguageSupport(source);
+			return factory.createLanguageSupport(source, options);
 		}
 		return null;
 	}

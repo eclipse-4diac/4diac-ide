@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 public interface ILanguageSupport {
 
 	/** Prepare for export */
-	boolean prepare(Map<?, ?> options);
+	boolean prepare();
 
 	/** Generate the template contents. */
 	CharSequence generate(Map<?, ?> options) throws ExportException;
