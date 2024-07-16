@@ -1,16 +1,12 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -18,9 +14,6 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Position;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -53,7 +46,7 @@ public class ConnectionsToStructCommand extends Command {
 	private CompoundCommand editFBsCommand;
 	// save
 	private CompoundCommand updateCommands;
-	private CompoundCommand muxCreateCommand;
+	private CompoundCommand connectStructCommand;
 	private CompoundCommand destinationConnectionEditCommand;
 	private CompoundCommand sourceConnectionEditCommand;
 	private long sourceModify;
@@ -92,7 +85,7 @@ public class ConnectionsToStructCommand extends Command {
 	public void undo() {
 		sourceConnectionEditCommand.undo();
 		destinationConnectionEditCommand.undo();
-		muxCreateCommand.undo();
+		connectStructCommand.undo();
 		updateCommands.undo();
 		editFBsCommand.undo();
 		saveFBs();
@@ -103,7 +96,7 @@ public class ConnectionsToStructCommand extends Command {
 		editFBsCommand.redo();
 		saveFBs();
 		updateCommands.redo();
-		muxCreateCommand.redo();
+		connectStructCommand.redo();
 		destinationConnectionEditCommand.redo();
 		sourceConnectionEditCommand.redo();
 	}
@@ -118,8 +111,10 @@ public class ConnectionsToStructCommand extends Command {
 	public void execute() {
 		editFBTypes();
 		updateFBs();
-		createMUX();
-		reconnectCon();
+		connectStruct();
+		if (conflictResolution) {
+			conflictResolution();
+		}
 	}
 
 	private void saveFBs() {
@@ -154,12 +149,8 @@ public class ConnectionsToStructCommand extends Command {
 		updateCommands.execute();
 	}
 
-	private void createMUX() {
-		muxCreateCommand = new CompoundCommand();
-
-		structConnectionMap = new HashMap<>();
-		demuxMap = new HashMap<>();
-		muxMap = new HashMap<>();
+	private void connectStruct() {
+		connectStructCommand = new CompoundCommand();
 
 		// Create map between correct connected FBs and create MUX
 		getElementsOfType(destinationType).stream().forEach(instance -> {
@@ -176,117 +167,55 @@ public class ConnectionsToStructCommand extends Command {
 			// Check if all connections between 2 instances are correct -> store in map
 			if (cons.stream()
 					.map((Function<? super Connection, ? extends FBNetworkElement>) Connection::getSourceElement)
-					.distinct().count() == 1 && cons.stream().count() == replacableConMap.size()) {
-				structConnectionMap.put(instance,
-						instance.getInterface().getErrorMarker().stream()
-								.flatMap(err -> err.getInputConnections().stream())
-								.filter(con -> replacableConMap.containsValue(con.getDestination().getName()))
-								.findFirst().get().getSourceElement());
-				// Create MUX if selected in wizard
-			} else if (conflictResolution) {
-				final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
-				pos.setX((int) instance.getPosition().getX() - 1000);
-				pos.setY((int) instance.getPosition().getY());
-				final FBCreateCommand muxcreate = new FBCreateCommand(
-						instance.getTypeLibrary().getFBTypeEntry("STRUCT_MUX"), instance.getFbNetwork(), pos);
-				muxCreateCommand.add(muxcreate);
-				muxcreate.execute();
-				final ChangeStructCommand changeStruct = new ChangeStructCommand(
-						(StructManipulator) muxcreate.getElement(), structType);
-				muxCreateCommand.add(changeStruct);
-				changeStruct.execute();
-				muxMap.put(instance, changeStruct.getNewElement());
+					.distinct().count() == 1 && cons.size() == replacableConMap.size()) {
+
+				final FBNetworkElement source = instance.getInterface().getErrorMarker().stream()
+						.flatMap(err -> err.getInputConnections().stream())
+						.filter(con -> replacableConMap.containsValue(con.getDestination().getName())).findFirst().get()
+						.getSourceElement();
+				final StructDataConnectionCreateCommand structCon = new StructDataConnectionCreateCommand(
+						instance.getFbNetwork());
+				structCon.setDestination(instance.getInput(destinationVarName));
+				structCon.setSource(source.getOutput(sourceVarName));
+				connectStructCommand.add(structCon);
+				instance.getInterface().getErrorMarker().stream().flatMap(err -> err.getInputConnections().stream())
+						.filter(con -> replacableConMap.containsValue(con.getDestination().getName()))
+						.forEach(con -> connectStructCommand.add(new DeleteConnectionCommand(con)));
 			}
 		});
-
-		// Create DEMUX if selected in wizard if any connections can not be replaced
-		// with Struct
-		if (conflictResolution) {
-			getElementsOfType(sourceType).stream().forEach(instance -> {
-				if (instance.getInterface().getErrorMarker().stream()
-						.flatMap(err -> err.getOutputConnections().stream())
-						.filter(con -> !(structConnectionMap.containsKey(con.getDestinationElement())
-								&& structConnectionMap.get(con.getDestinationElement()).equals(instance)
-								&& replacableConMap.containsKey(con.getSource().getName()) && replacableConMap
-										.get(con.getSource().getName()).equals(con.getDestination().getName())))
-						.count() != 0) {
-					final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
-					pos.setX((int) instance.getPosition().getX() + 1000);
-					pos.setY((int) instance.getPosition().getY());
-					final FBCreateCommand muxcreate = new FBCreateCommand(
-							instance.getTypeLibrary().getFBTypeEntry("STRUCT_DEMUX"), instance.getFbNetwork(), pos);
-					muxCreateCommand.add(muxcreate);
-					muxcreate.execute();
-					final ChangeStructCommand changeStruct = new ChangeStructCommand(
-							(StructManipulator) muxcreate.getElement(), structType);
-					muxCreateCommand.add(changeStruct);
-					changeStruct.execute();
-					demuxMap.put(instance, changeStruct.getNewElement());
-				}
-			});
-		}
+		connectStructCommand.execute();
 	}
 
-	private void reconnectCon() {
+	private void conflictResolution() {
 		destinationConnectionEditCommand = new CompoundCommand();
 		sourceConnectionEditCommand = new CompoundCommand();
 
 		// Edit destination connections
 		getElementsOfType(destinationType).stream().forEach(instance -> {
-			if (structConnectionMap.containsKey(instance)) {
-				final StructDataConnectionCreateCommand structCon = new StructDataConnectionCreateCommand(
-						instance.getFbNetwork());
-				// TODO: getInput if input is altered during creation (due to vars with same
-				// name)
-				structCon.setDestination(instance.getInput(destinationVarName));
-				structCon.setSource(structConnectionMap.get(instance).getOutput(sourceVarName));
-				destinationConnectionEditCommand.add(structCon);
-				instance.getInterface().getErrorMarker().stream().flatMap(err -> err.getInputConnections().stream())
-						.filter(con -> replacableConMap.containsValue(con.getDestination().getName()))
-						.forEach(con -> destinationConnectionEditCommand.add(new DeleteConnectionCommand(con)));
-				// Connect MUX if selected in Wizard
-			} else if (conflictResolution) {
-
-				final StructDataConnectionCreateCommand structCon = new StructDataConnectionCreateCommand(
-						instance.getFbNetwork());
-				structCon.setDestination(instance.getInput(destinationVarName));
-				structCon.setSource(muxMap.get(instance).getOutput("OUT"));
-				destinationConnectionEditCommand.add(structCon);
-				instance.getInterface().getErrorMarker().stream().flatMap(err -> err.getInputConnections().stream())
-						.filter(con -> replacableConMap.containsValue(con.getDestination().getName())).forEach(con -> {
-							final String var = replacableConMap.entrySet().stream()
-									.filter(entry -> entry.getValue().equals(con.getDestination().getName())).findAny()
-									.get().getKey();
-							destinationConnectionEditCommand.add(new ReconnectDataConnectionCommand(con, false,
-									muxMap.get(instance).getInput(var), instance.getFbNetwork()));
-						});
-			}
+			instance.getInterface().getErrorMarker().stream().flatMap(err -> err.getInputConnections().stream())
+					.filter(con -> replacableConMap.containsValue(con.getDestination().getName())).forEach(con -> {
+						final String var = replacableConMap.entrySet().stream()
+								.filter(entry -> entry.getValue().equals(con.getDestination().getName())).findAny()
+								.get().getKey();
+						final RepairBrokenConnectionCommand rep = new RepairBrokenConnectionCommand(con, false,
+								(StructuredType) structType, var);
+						destinationConnectionEditCommand.add(rep);
+					});
 		});
 		destinationConnectionEditCommand.execute();
 
 		// Edit source connections
-		// Connect DEMUX if selected in Wizard
-		if (conflictResolution) {
-			getElementsOfType(sourceType).stream().forEach(instance -> {
-				if (instance.getInterface().getErrorMarker().stream()
-						.flatMap(err -> err.getOutputConnections().stream())
-						.filter(con -> replacableConMap.containsKey(con.getSource().getName())).count() != 0) {
-					final StructDataConnectionCreateCommand structCon = new StructDataConnectionCreateCommand(
-							instance.getFbNetwork());
-					structCon.setDestination(demuxMap.get(instance).getInput("IN"));
-					structCon.setSource(instance.getOutput(sourceVarName));
-					// sourceConnectionEditCommand.add(structCon);
-					instance.getInterface().getErrorMarker().stream()
-							.flatMap(err -> err.getOutputConnections().stream())
-							.filter(con -> replacableConMap.containsKey(con.getSource().getName()))
-							.forEach(con -> new RepairBrokenConnectionCommand(con, (StructuredType) structType,
-									con.getSource().getName()).execute());
-//							.forEach(con -> sourceConnectionEditCommand.add(new ReconnectDataConnectionCommand(con,
-//									true, demuxMap.get(instance).getOutput(con.getSource().getName()),
-//									instance.getFbNetwork())));
-				}
-			});
-		}
+		getElementsOfType(sourceType).stream().forEach(instance -> {
+			if (instance.getInterface().getErrorMarker().stream().flatMap(err -> err.getOutputConnections().stream())
+					.filter(con -> replacableConMap.containsKey(con.getSource().getName())).count() != 0) {
+				instance.getInterface().getErrorMarker().stream().flatMap(err -> err.getOutputConnections().stream())
+						.filter(con -> replacableConMap.containsKey(con.getSource().getName())).forEach(con -> {
+							final RepairBrokenConnectionCommand rep = new RepairBrokenConnectionCommand(con, true,
+									(StructuredType) structType, con.getSource().getName());
+							sourceConnectionEditCommand.add(rep);
+						});
+			}
+		});
 		sourceConnectionEditCommand.execute();
 	}
 

@@ -15,6 +15,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
@@ -47,7 +48,7 @@ public class ConnectionsToStructHandler extends AbstractHandler {
 					.getActivePage().getActiveEditor().getSite().getShell(), wizard);
 			dialog.create();
 
-			if (dialog.open() == 0) {
+			if (dialog.open() == Window.OK) {
 
 				final Map<String, String> replacableConMap = new HashMap<>();
 				connections.stream().forEach(

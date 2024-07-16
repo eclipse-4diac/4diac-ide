@@ -124,6 +124,10 @@
      <command
            id="org.eclipse.fordiac.ide.typemanagement.connectionstostruct"
            name="Connections To Struct">
+     </command>
+     <command
+           id="org.eclipse.fordiac.ide.typemanagement.repairbrokenconnection"
+           name="Repair broken connection">
      </command> 
 	</extension>
    <extension
@@ -166,6 +170,18 @@
                        property="org.eclipse.fordiac.ide.typemanagement.ConnectionsToStructSupported">
                  </test>
            </with></enabledWhen>
+     </handler>
+     <handler
+           class="org.eclipse.fordiac.ide.typemanagement.refactoring.RepairBrokenConnectionHandler"
+           commandId="org.eclipse.fordiac.ide.typemanagement.repairbrokenconnection">
+        <enabledWhen>
+           <with
+                 variable="selection">
+              <test
+                    property="org.eclipse.fordiac.ide.typemanagement.RepairConnectionSupported">
+              </test>
+           </with>
+        </enabledWhen>
      </handler>
 
 	</extension>
@@ -664,6 +680,13 @@
             properties="ConnectionsToStructSupported"
             type="java.lang.Object">
       </propertyTester>
+      <propertyTester
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RepairBrokenConnectionPropertyTester"
+            id="org.eclipse.fordiac.ide.typemanagement.RepairBrokenConnectionTester"
+            namespace="org.eclipse.fordiac.ide.typemanagement"
+            properties="RepairConnectionSupported"
+            type="java.lang.Object">
+      </propertyTester>
    </extension>  
 
    
@@ -728,6 +751,14 @@
             <command
                   commandId="org.eclipse.fordiac.ide.typemanagement.connectionstostruct"
                   label="Connections to Struct"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="true">
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="org.eclipse.fordiac.ide.typemanagement.repairbrokenconnection"
+                  label="Repair broken Connection"
                   style="push">
                <visibleWhen
                      checkEnabled="true">
