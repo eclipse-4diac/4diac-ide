@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -26,7 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.ui.nat.AdapterTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.AdapterTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -56,13 +54,10 @@ public class AdapterInterfaceElementSection extends AbstractDoubleColumnSection 
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type && pinInfoBasicWidget != null) {
+	protected void performRefresh() {
+		if (pinInfoBasicWidget != null) {
 			pinInfoBasicWidget.refresh();
 		}
-		commandStack = commandStackBuffer;
 	}
 
 	public boolean isEditable() {

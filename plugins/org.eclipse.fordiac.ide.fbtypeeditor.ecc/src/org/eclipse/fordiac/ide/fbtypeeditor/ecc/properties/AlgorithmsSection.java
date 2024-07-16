@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 fortiss GmbH, Johannes Kepler University Linz (JKU)
+ * Copyright (c) 2015, 2024 fortiss GmbH, Johannes Kepler University Linz (JKU)
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -54,7 +54,8 @@ public class AlgorithmsSection extends AbstractSection {
 		algorithmList = new AlgorithmList(view, getWidgetFactory());
 
 		getAlgorithmList().getViewer().addSelectionChangedListener(event -> {
-			final Object selection = ((IStructuredSelection) getAlgorithmList().getViewer().getSelection()).getFirstElement();
+			final Object selection = ((IStructuredSelection) getAlgorithmList().getViewer().getSelection())
+					.getFirstElement();
 			algorithmGroup.setAlgorithm((selection instanceof final Algorithm alg) ? alg : null);
 		});
 
@@ -81,12 +82,8 @@ public class AlgorithmsSection extends AbstractSection {
 	}
 
 	@Override
-	public void refresh() {
+	protected void performRefresh() {
 		getAlgorithmList().refresh();
 	}
-
-
-
-
 
 }

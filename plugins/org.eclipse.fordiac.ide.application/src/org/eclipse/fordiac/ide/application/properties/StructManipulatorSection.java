@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Johannes Kepler University Linz
- *                          Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2024 Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH,
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -137,7 +137,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 			}
 
 			final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);
-			commandStack.execute(cmd.chain(importCommand));
+			executeCommand(cmd.chain(importCommand));
 			updateStructManipulatorFB(cmd.getNewMux());
 		}
 	}
@@ -252,22 +252,22 @@ public class StructManipulatorSection extends AbstractSection implements Command
 	}
 
 	@Override
-	public void refresh() {
-		if ((null != getType()) && (null != getType().getFbNetwork()) && !blockRefresh) {
+	protected void performRefresh() {
+		if ((null != getType().getFbNetwork()) && !blockRefresh) {
 			refreshStructTypeTable();
 		}
 	}
 
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		if (commandStack != null) {
-			commandStack.removeCommandStackEventListener(this);
+		if (getCurrentCommandStack() != null) {
+			getCurrentCommandStack().removeCommandStackEventListener(this);
 		}
 		Assert.isTrue(selection instanceof IStructuredSelection);
 		final Object input = ((IStructuredSelection) selection).getFirstElement();
 
-		commandStack = getCommandStack(part, input);
-		if (null == commandStack) { // disable all fields
+		setCurrentCommandStack(part, input);
+		if (null == getCurrentCommandStack()) { // disable all fields
 			muxLabel.setEnabled(false);
 			memberVarViewer.setInput(null);
 		}
@@ -280,8 +280,8 @@ public class StructManipulatorSection extends AbstractSection implements Command
 		typeSelectionWidget.initialize(getType(), StructuredTypeSelectionContentProvider.INSTANCE,
 				StructuredTypeSelectionTreeContentProvider.INSTANCE);
 
-		if (commandStack != null) {
-			commandStack.addCommandStackEventListener(this);
+		if (getCurrentCommandStack() != null) {
+			getCurrentCommandStack().addCommandStackEventListener(this);
 		}
 	}
 
@@ -302,8 +302,8 @@ public class StructManipulatorSection extends AbstractSection implements Command
 	@Override
 	public void dispose() {
 		super.dispose();
-		if (commandStack != null) {
-			commandStack.removeCommandStackEventListener(this);
+		if (getCurrentCommandStack() != null) {
+			getCurrentCommandStack().removeCommandStackEventListener(this);
 		}
 	}
 

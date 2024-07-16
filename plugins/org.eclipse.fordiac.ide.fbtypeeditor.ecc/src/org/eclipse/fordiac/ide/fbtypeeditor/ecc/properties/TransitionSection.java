@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2023 fortiss GmbH, Johannes Kepler University Linz,
+ * Copyright (c) 2015, 2024 fortiss GmbH, Johannes Kepler University Linz,
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgo
 import org.eclipse.fordiac.ide.ui.providers.SourceViewerColorProvider;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.text.DocumentEvent;
@@ -51,7 +50,10 @@ import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditor;
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorModelAccess;
 import org.eclipse.xtext.ui.editor.embedded.IEditedResourceProvider;
 
-/** Section that appears in the Properties view, when a Transition is selected in the ECC */
+/**
+ * Section that appears in the Properties view, when a Transition is selected in
+ * the ECC
+ */
 @SuppressWarnings("restriction")
 public class TransitionSection extends AbstractSection {
 	private Text commentText;
@@ -179,10 +181,8 @@ public class TransitionSection extends AbstractSection {
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if ((null != type) && (null != getBasicFBType())) {
+	protected void performRefresh() {
+		if (null != getBasicFBType()) {
 			fillEventConditionDropdown();
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			if ((getType().getConditionExpression() != null)
@@ -195,7 +195,6 @@ public class TransitionSection extends AbstractSection {
 			}
 			updateConditionEditor();
 		}
-		commandStack = commandStackBuffer;
 	}
 
 	private int getEventIndex(final Event conditionEvent) {
@@ -205,6 +204,6 @@ public class TransitionSection extends AbstractSection {
 	public void fillEventConditionDropdown() {
 		eventCombo.removeAll();
 		ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType()).stream()
-		.forEach(name -> eventCombo.add(name));
+				.forEach(name -> eventCombo.add(name));
 	}
 }
