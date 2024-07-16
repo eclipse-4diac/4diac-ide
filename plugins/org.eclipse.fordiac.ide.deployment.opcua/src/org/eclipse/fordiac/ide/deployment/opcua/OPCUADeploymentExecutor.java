@@ -888,4 +888,22 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		return Constants.MGM_RESPONSE_UNKNOWN;
 	}
 
+	@Override
+	public void resetResource(final String resName) throws DeploymentException {
+		// TODO Needs to be implemented due to interface changes in
+		// IDeviceManagementInteractor
+	}
+
+	@Override
+	public void killResource(final String resName) throws DeploymentException {
+		// TODO Needs to be implemented due to interface changes in
+		// IDeviceManagementInteractor
+	}
+
+	@Override
+	public void stopResource(final Resource res) throws DeploymentException {
+		// TOD Needs to be implemented due to interface changes in
+		// IDeviceManagementInteractor
+	}
+
 }

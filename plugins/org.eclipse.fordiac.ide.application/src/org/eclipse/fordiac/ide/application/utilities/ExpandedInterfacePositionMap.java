@@ -56,6 +56,8 @@ public class ExpandedInterfacePositionMap {
 	private int outputUnconnectedStart = Integer.MAX_VALUE;
 	private int inputDirectEnd;
 	private int outputDirectEnd;
+	private int inputDirectEndWithoutEvents;
+	private int outputDirectEndWithoutEvents;
 
 	public ExpandedInterfacePositionMap(final SubAppForFBNetworkEditPart ep) {
 		this.ep = ep;
@@ -79,6 +81,14 @@ public class ExpandedInterfacePositionMap {
 
 	public int getOutputDirectEnd() {
 		return outputDirectEnd;
+	}
+
+	public int getInputDirectEndWithoutEvents() {
+		return inputDirectEndWithoutEvents;
+	}
+
+	public int getOutputDirectEndWithoutEvents() {
+		return outputDirectEndWithoutEvents;
 	}
 
 	public void calculate() {
@@ -205,28 +215,43 @@ public class ExpandedInterfacePositionMap {
 
 		final boolean eventFlag = Platform.getPreferencesService().getBoolean(PREFERENCE_STORE,
 				DiagramPreferences.EXPANDED_INTERFACE_EVENTS_TOP, false, null);
-		if (eventFlag) {
-			input.addAll(inputList.stream().filter(ie -> ie.getModel() instanceof Event)
-					.filter(Predicate.not(input::contains)).toList());
-			output.addAll(outputList.stream().filter(ie -> ie.getModel() instanceof Event)
-					.filter(Predicate.not(output::contains)).toList());
-		}
 
 		int y = clientArea.top();
 		for (final var pin : input) {
-			pos.put(pin.getFigure(), Integer.valueOf(y));
-			y += sizes.get(pin.getFigure()).intValue();
+			y = applySize(pos, y, pin);
+		}
+		inputDirectEndWithoutEvents = y;
+		if (eventFlag) {
+			for (final var pin : getEvents(inputList, input)) {
+				y = applySize(pos, y, pin);
+			}
 		}
 		inputDirectEnd = y;
 
 		y = clientArea.top();
 		for (final var pin : output) {
-			pos.put(pin.getFigure(), Integer.valueOf(y));
-			y += sizes.get(pin.getFigure()).intValue();
+			y = applySize(pos, y, pin);
+		}
+		outputDirectEndWithoutEvents = y;
+		if (eventFlag) {
+			for (final var pin : getEvents(outputList, output)) {
+				y = applySize(pos, y, pin);
+			}
 		}
 		outputDirectEnd = y;
 
 		return pos;
+	}
+
+	private static List<InterfaceEditPart> getEvents(final List<InterfaceEditPart> eventPins,
+			final List<InterfaceEditPart> directPins) {
+		return eventPins.stream().filter(ie -> ie.getModel() instanceof Event)
+				.filter(Predicate.not(directPins::contains)).toList();
+	}
+
+	private int applySize(final Map<IFigure, Integer> pos, final int y, final InterfaceEditPart pin) {
+		pos.put(pin.getFigure(), Integer.valueOf(y));
+		return y + sizes.get(pin.getFigure()).intValue();
 	}
 
 	private Map<IFigure, Integer> getPinSizes(final List<InterfaceEditPart> inputList,
