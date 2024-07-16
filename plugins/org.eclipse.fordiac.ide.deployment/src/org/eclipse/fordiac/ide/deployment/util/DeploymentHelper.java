@@ -48,7 +48,7 @@ public interface DeploymentHelper {
 
 	static Function<VarDeclaration, String> getVariableValueRetargetable(final VarDeclaration varDecl,
 			final SubApp subapp) throws DeploymentException {
-		if (useSubappTypeInitialValue(subapp, varDecl) || hasInitalValue(varDecl)) {
+		if (hasTypeOrInstanceInitialValue(subapp, varDecl)) {
 			try {
 				final Value value = VariableOperations.newVariable(varDecl).getValue();
 				return destination -> VariableOperations.newVariable(destination, value).toString(false);
@@ -63,11 +63,11 @@ public interface DeploymentHelper {
 		return null;
 	}
 
-	private static boolean useSubappTypeInitialValue(final SubApp subApp, final VarDeclaration varDec) {
-		return subApp.isTyped() && !DeploymentHelper.hasInitalValue(varDec);
+	private static boolean hasTypeOrInstanceInitialValue(final SubApp subApp, final VarDeclaration varDec) {
+		return DeploymentHelper.hasInitalValue(varDec) || subApp.isTyped();
 	}
 
-	static boolean hasInitalValue(final VarDeclaration varDecl) {
+	private static boolean hasInitalValue(final VarDeclaration varDecl) {
 		return varDecl.getValue() != null && varDecl.getValue().getValue() != null
 				&& !varDecl.getValue().getValue().isEmpty();
 	}
