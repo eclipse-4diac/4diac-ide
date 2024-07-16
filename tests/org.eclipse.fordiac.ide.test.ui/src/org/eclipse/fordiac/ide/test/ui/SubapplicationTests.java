@@ -165,7 +165,8 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		assertNotNull(viewer);
 		final SWTBotGefEditPart editPart = editorSubApp.getEditPart(E_SWITCH_FB);
 
-		// syncExec() is needed in order to find the connection correctly
+		// syncExec() is needed to update selection of UI and therefore it needs to run
+		// in UI thread. Without this, the connections are not created correctly
 		UIThreadRunnable.syncExec(() -> HandlerHelper.selectEditPart(viewer.getGraphicalViewer(), editPart.part()));
 		assertNotNull(createConnection(EO0, S));
 		assertNotNull(createConnection(EO1, R));
