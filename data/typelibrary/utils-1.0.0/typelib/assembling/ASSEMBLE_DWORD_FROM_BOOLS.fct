@@ -88,6 +88,7 @@
 	</InterfaceList>
 	<FunctionBody>
 		<ST><![CDATA[FUNCTION ASSEMBLE_DWORD_FROM_BOOLS : DWORD
+(* this Function combines the 32 BOOLS to a DWORD *)
 
 VAR_INPUT
 	IN_00 : BOOL;    // BIT 00
@@ -124,7 +125,6 @@ VAR_INPUT
 	IN_31 : BOOL;    // BIT 31
 END_VAR
 
-(* this Function combines the 32 BOOLS to a dword *)
 ASSEMBLE_DWORD_FROM_BOOLS.%X0 := IN_00;
 ASSEMBLE_DWORD_FROM_BOOLS.%X1 := IN_01;
 ASSEMBLE_DWORD_FROM_BOOLS.%X2 := IN_02;

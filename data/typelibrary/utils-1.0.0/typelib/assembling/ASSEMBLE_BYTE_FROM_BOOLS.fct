@@ -40,6 +40,7 @@
 	</InterfaceList>
 	<FunctionBody>
 		<ST><![CDATA[FUNCTION ASSEMBLE_BYTE_FROM_BOOLS : BYTE
+(* this Function combines the 8 BOOLS to a BYTE *)
 
 VAR_INPUT
 	IN_00 : BOOL;    // BIT 00
@@ -52,7 +53,6 @@ VAR_INPUT
 	IN_07 : BOOL;    // BIT 07
 END_VAR
 
-(* this Function combines the 8 BOOLS to a byte *)
 ASSEMBLE_BYTE_FROM_BOOLS.%X0 := IN_00;
 ASSEMBLE_BYTE_FROM_BOOLS.%X1 := IN_01;
 ASSEMBLE_BYTE_FROM_BOOLS.%X2 := IN_02;
