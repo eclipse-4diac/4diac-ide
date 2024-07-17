@@ -28,16 +28,13 @@
 	</InterfaceList>
 	<FunctionBody>
 		<ST><![CDATA[FUNCTION ASSEMBLE_DWORD_FROM_WORDS : DWORD
+(* this Function combines the 2 WORDS to a dword *)
 
 VAR_INPUT
 	IN_00 : WORD;    // WORD 00
 	IN_01 : WORD;    // WORD 01
 END_VAR
 
-// VAR_OUTPUT
-// OUT : DWORD; // DWORD Output
-// END_VAR
-(* this Function combines the 2 WORDS to a dword *)
 ASSEMBLE_DWORD_FROM_WORDS.%W0 := IN_00;
 ASSEMBLE_DWORD_FROM_WORDS.%W1 := IN_01;
 
