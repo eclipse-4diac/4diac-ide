@@ -67,7 +67,7 @@ public class STCoreRenameElementRefactoringParticpant extends AbstractProcessorB
 	}
 
 	protected static URI getTypeURI(final URI uri) {
-		if (isCanonicalURI(uri) && !isDTPResourceURI(uri)) {
+		if (isCanonicalURI(uri) && !isDTPResourceURI(uri) && !isATPResourceURI(uri)) {
 			return uri.trimFragment().appendFragment("/1" + uri.fragment().substring(1)); //$NON-NLS-1$
 		}
 		return uri;
@@ -75,6 +75,10 @@ public class STCoreRenameElementRefactoringParticpant extends AbstractProcessorB
 
 	protected static boolean isCanonicalURI(final URI uri) {
 		return uri != null && uri.hasFragment() && uri.fragment().startsWith("/") && !uri.fragment().startsWith("/1"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	protected static boolean isATPResourceURI(final URI uri) {
+		return TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING.equalsIgnoreCase(uri.fileExtension());
 	}
 
 	protected static boolean isDTPResourceURI(final URI uri) {
