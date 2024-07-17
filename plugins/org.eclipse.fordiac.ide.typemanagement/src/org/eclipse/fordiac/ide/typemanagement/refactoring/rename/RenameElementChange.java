@@ -26,6 +26,9 @@ import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
+/**
+ * A change for renaming individual {@link INamedElement}s.
+ */
 public class RenameElementChange extends AbstractCommandChange<INamedElement> {
 
 	private final String newName;

@@ -29,6 +29,10 @@ import org.eclipse.ltk.core.refactoring.participants.RenameRefactoring;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+/**
+ * A handler for triggering a rename refactoring on a structured view or editor,
+ * such as a property sheet.
+ */
 public class RenameElementRefactoringHandler extends AbstractHandler {
 
 	@Override

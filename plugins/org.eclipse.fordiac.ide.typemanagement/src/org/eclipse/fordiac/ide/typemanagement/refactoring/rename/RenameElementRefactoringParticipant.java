@@ -27,6 +27,9 @@ import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.RenameParticipant;
 import org.eclipse.xtext.ui.refactoring.ui.IRenameElementContext;
 
+/**
+ * A participant for rename refactorings triggered within an Xtext context.
+ */
 @SuppressWarnings("restriction")
 public class RenameElementRefactoringParticipant extends RenameParticipant {
 

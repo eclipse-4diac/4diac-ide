@@ -42,6 +42,10 @@ import org.eclipse.ltk.core.refactoring.participants.RenameArguments;
 import org.eclipse.ltk.core.refactoring.participants.RenameProcessor;
 import org.eclipse.ltk.core.refactoring.participants.SharableParticipants;
 
+/**
+ * A processor for rename refactorings triggered within a model context, such as
+ * a property sheet.
+ */
 public class RenameElementRefactoringProcessor extends RenameProcessor {
 
 	private URI elementURI;

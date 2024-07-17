@@ -15,6 +15,10 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 import org.eclipse.ltk.core.refactoring.participants.RenameRefactoring;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
 
+/**
+ * A wizard for rename refactorings triggered within a model context, such as a
+ * property sheet.
+ */
 public class RenameElementRefactoringWizard extends RefactoringWizard {
 
 	public RenameElementRefactoringWizard(final RenameRefactoring refactoring) {

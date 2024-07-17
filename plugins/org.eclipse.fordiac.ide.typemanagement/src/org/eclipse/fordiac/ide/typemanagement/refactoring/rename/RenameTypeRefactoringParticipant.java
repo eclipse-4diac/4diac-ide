@@ -48,6 +48,10 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.RenameParticipant;
 
+/**
+ * A participant for type rename refactorings triggered within a model context,
+ * such as file rename.
+ */
 public class RenameTypeRefactoringParticipant extends RenameParticipant {
 
 	private IFile file;
