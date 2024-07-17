@@ -30,6 +30,11 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
+/**
+ * Replaces multiple Data Connections between two Function Blocks with a new
+ * Struct Connection. Conflicts with branching Connections get resolved by
+ * placing Struct (De-)Multiplexers.
+ */
 public class ConnectionsToStructCommand extends Command {
 	private final FBType sourceType;
 	private final FBType destinationType;

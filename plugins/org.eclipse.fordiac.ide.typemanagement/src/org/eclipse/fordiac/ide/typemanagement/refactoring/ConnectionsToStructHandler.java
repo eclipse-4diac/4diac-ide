@@ -37,6 +37,7 @@ public class ConnectionsToStructHandler extends AbstractHandler {
 		if (window != null) {
 			final IStructuredSelection selection = (IStructuredSelection) window.getSelectionService().getSelection();
 
+			// Convert selection to list of Connections
 			final List<Connection> connections = selection.stream().filter(EditPart.class::isInstance)
 					.map(EditPart.class::cast).map((Function<? super EditPart, ? extends Object>) EditPart::getModel)
 					.filter(Connection.class::isInstance).map(Connection.class::cast).toList();
@@ -49,11 +50,13 @@ public class ConnectionsToStructHandler extends AbstractHandler {
 			dialog.create();
 
 			if (dialog.open() == Window.OK) {
-
+				// Generate a map from destination inputs to source outputs (this direction is
+				// unique)
 				final Map<String, String> replacableConMap = new HashMap<>();
 				connections.stream().forEach(
 						con -> replacableConMap.put(con.getSource().getName(), con.getDestination().getName()));
 
+				// Execute Command
 				final ConnectionsToStructCommand cmd = new ConnectionsToStructCommand(sourceType, destinationType,
 						wizard.getCreatedDataType(), wizard.getSourceName(), wizard.getDestinationName(),
 						replacableConMap, wizard.getConflictResolution());
