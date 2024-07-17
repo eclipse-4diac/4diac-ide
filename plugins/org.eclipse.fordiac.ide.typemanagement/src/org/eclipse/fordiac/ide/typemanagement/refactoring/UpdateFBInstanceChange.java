@@ -37,17 +37,17 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class UpdateInstanceChange extends Change {
+public class UpdateFBInstanceChange extends Change {
 
 	private final FBNetworkElement instance;
 	private final TypeEntry typeEntry;
 
-	public UpdateInstanceChange(final FBNetworkElement instance, final TypeEntry typeEntry) {
+	public UpdateFBInstanceChange(final FBNetworkElement instance, final TypeEntry typeEntry) {
 		this.instance = instance;
 		this.typeEntry = typeEntry;
 	}
 
-	public UpdateInstanceChange(final FBNetworkElement instance) {
+	public UpdateFBInstanceChange(final FBNetworkElement instance) {
 		this(instance, null);
 	}
 

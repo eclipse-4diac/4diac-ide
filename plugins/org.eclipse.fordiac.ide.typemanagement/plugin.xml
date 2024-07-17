@@ -545,7 +545,7 @@
    <extension
          point="org.eclipse.ltk.core.refactoring.deleteParticipants">
       <deleteParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteTypeRefactoringParticipant"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteTypeRefactoringParticipant"
             id="org.eclipse.fordiac.ide.typemanagement.deleteFBType"
             name="Delete FB Type Handler">
      	<enablement>
@@ -671,8 +671,9 @@
          <enablement>
          <or>
          <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBTypeInterfaceChange"/>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeStructDeletionChange$DeleteMemberVariableChange"/>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeFBTypeDeletionChange$DeleteInternalFBChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.UpdateStructDataTypeMemberVariableChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.SafeFBTypeDeletionChange$DeleteInternalFBChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.UpdateUntypedSubappPinChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinChange"/>
          </or>
          </enablement>
