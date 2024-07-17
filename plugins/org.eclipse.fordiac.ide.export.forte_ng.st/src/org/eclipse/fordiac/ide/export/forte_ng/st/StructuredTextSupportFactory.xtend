@@ -27,9 +27,9 @@ class StructuredTextSupportFactory implements ILanguageSupportFactory {
 
 	override createLanguageSupport(Object source, Map<?, ?> options) {
 		if (source instanceof STAlgorithm) {
-			new STAlgorithmSupport(source)
+			new STAlgorithmSupport(source, options)
 		} else if (source instanceof STMethod) {
-			new STMethodSupport(source)
+			new STMethodSupport(source, options)
 		} else if (source instanceof STFunctionSource) {
 			new STFunctionSupport(source)
 		} else if (source instanceof ECTransition) {
