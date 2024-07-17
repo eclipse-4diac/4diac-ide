@@ -47,7 +47,8 @@ public class RenameElementRefactoringParticipant extends RenameParticipant {
 	@SuppressWarnings("static-method") // subclasses may override
 	protected boolean isRelevant(final IRenameElementContext context) {
 		return LibraryElementPackage.Literals.INAMED_ELEMENT.isSuperTypeOf(context.getTargetElementEClass())
-				&& (isTypeURI(context.getTargetElementURI()) || isDataTypeURI(context.getTargetElementURI()));
+				&& (isTypeURI(context.getTargetElementURI()) || isDataTypeURI(context.getTargetElementURI())
+						|| isAttributeTypeURI(context.getTargetElementURI()));
 	}
 
 	@Override
@@ -79,6 +80,10 @@ public class RenameElementRefactoringParticipant extends RenameParticipant {
 
 	protected static boolean isDataTypeURI(final URI uri) {
 		return TypeLibraryTags.DATA_TYPE_FILE_ENDING.equalsIgnoreCase(uri.fileExtension());
+	}
+
+	protected static boolean isAttributeTypeURI(final URI uri) {
+		return TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING.equalsIgnoreCase(uri.fileExtension());
 	}
 
 	@Override
