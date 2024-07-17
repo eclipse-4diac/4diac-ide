@@ -22,6 +22,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElement;
+import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElement.GroupTargetInterfaceElement;
 import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.application.widgets.OppositeSelectionDialog;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
@@ -122,8 +124,17 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	protected abstract EList<Connection> getConnectionList(final IInterfaceElement ie);
 
 	private static List<IInterfaceElement> getTargetPins(final InterfaceEditPart iep) {
-		return iep.getChildren().stream().filter(TargetInterfaceElementEditPart.class::isInstance)
-				.map(ep -> (TargetInterfaceElementEditPart) ep).map(ep -> ep.getModel().getRefElement()).toList();
+		final List<IInterfaceElement> result = new ArrayList<>();
+		for (final EditPart ep : iep.getChildren()) {
+			switch (ep.getModel()) {
+			case final GroupTargetInterfaceElement gtIE -> result.addAll(gtIE.getRefElements());
+			case final TargetInterfaceElement targetIE -> result.add(targetIE.getRefElement());
+			default -> {
+				// we should never get here, even if we do we don't want to do anything
+			}
+			}
+		}
+		return result;
 	}
 
 	protected static boolean isInsideSubappOrViewer(final IInterfaceElement ie, final FBNetwork fbNetwork) {
