@@ -49,7 +49,7 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN" Type="DWORD" Comment="DWORD Input"/>
+			<VarDeclaration Name="IN" Type="DWORD" Comment=""/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="OUT_00" Type="BOOL" Comment="BIT 00"/>
@@ -91,7 +91,7 @@
 (* this Function extracts the 32 BOOLS from a dword *)
 
 VAR_INPUT
-	IN : DWORD;    // DWORD Input
+	IN : DWORD;
 END_VAR
 
 VAR_OUTPUT
