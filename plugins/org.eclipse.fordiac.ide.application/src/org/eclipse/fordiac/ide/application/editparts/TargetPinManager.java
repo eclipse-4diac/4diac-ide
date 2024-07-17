@@ -62,8 +62,8 @@ public class TargetPinManager {
 						if(e.getValue().size() == 1) {
 							return  TargetInterfaceElement.createFor(getModel(), e.getValue().get(0), parentNW);
 						}
-						return (TargetInterfaceElement) new GroupTargetInterfaceElement(getModel(), e.getValue().get(0),
-							e.getKey(), e.getValue().size());
+						return (TargetInterfaceElement) new GroupTargetInterfaceElement(getModel(), e.getValue(),
+								e.getKey());
 					})
 					.collect(Collectors.toList());
 
