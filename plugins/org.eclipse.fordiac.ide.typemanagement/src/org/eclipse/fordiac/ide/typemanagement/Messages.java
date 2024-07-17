@@ -73,7 +73,7 @@ public final class Messages extends NLS {
 	public static String DeleteFBTypeParticipant_Name;
 	public static String DeleteFBTypeParticipant_TypeInUseWarning;
 	public static String DeleteFBTypeParticipant_Change_DeleteFBTypeInterface;
-	public static String DeleteFBTypeParticipant_Change_DeleteMemberVariable;
+	public static String DeleteFBTypeParticipant_Change_UpdateMemberVariable;
 	public static String DeleteFBTypeParticipant_Change_DeleteSubappPins;
 	public static String DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle;
 	public static String DeleteFBTypeParticipant_Change_UpdateFBType;
