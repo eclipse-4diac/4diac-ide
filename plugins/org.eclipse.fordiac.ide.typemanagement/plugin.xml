@@ -137,7 +137,7 @@
         	commandId="org.eclipse.fordiac.ide.typemanagement.openType">
     	</handler>
      <handler
-           class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameElementRefactoringHandler"
+           class="org.eclipse.fordiac.ide.typemanagement.refactoring.rename.RenameElementRefactoringHandler"
            commandId="org.eclipse.fordiac.ide.typemanagement.renameElement">
         <enabledWhen>
            <with
@@ -470,7 +470,7 @@
    <extension
          point="org.eclipse.ltk.core.refactoring.renameParticipants">
       <renameParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameTypeRefactoringParticipant"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.rename.RenameTypeRefactoringParticipant"
             id="org.eclipse.fordiac.ide.typemanagement.renameType"
             name="Rename Type handler">
          <enablement>
@@ -524,7 +524,7 @@
          </enablement>
       </renameParticipant>
       <renameParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameElementRefactoringParticipant"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.rename.RenameElementRefactoringParticipant"
             id="org.eclipse.fordiac.ide.typemanagement.renameElement"
             name="Rename Model Element">
          <enablement>
