@@ -19,7 +19,7 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN" Type="WORD" Comment="WORD Input"/>
+			<VarDeclaration Name="IN" Type="WORD" Comment=""/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="OUT_00" Type="BYTE" Comment="BYTE 00"/>
@@ -31,7 +31,7 @@
 (* this Function extracts the 2 BYTE from a word *)
 
 VAR_INPUT
-	IN : WORD;    // WORD Input
+	IN : WORD;
 END_VAR
 
 VAR_OUTPUT

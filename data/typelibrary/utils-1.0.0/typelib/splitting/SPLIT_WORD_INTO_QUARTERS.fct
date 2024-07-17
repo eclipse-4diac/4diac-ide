@@ -25,7 +25,7 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN" Type="WORD" Comment="WORD Input"/>
+			<VarDeclaration Name="IN" Type="WORD" Comment=""/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="OUT_00" Type="BYTE" Comment="QUARTER BYTE 00"/>
@@ -43,7 +43,7 @@
 (* this Function extracts the 8 QUARTER BYTE from a word *)
 
 VAR_INPUT
-	IN : WORD;    // WORD Input
+	IN : WORD;
 END_VAR
 
 VAR_OUTPUT
