@@ -28,13 +28,13 @@
 	</InterfaceList>
 	<FunctionBody>
 		<ST><![CDATA[FUNCTION ASSEMBLE_WORD_FROM_BYTES : WORD
+(* this Function combines the 2 BYTES to a WORD *)
 
 VAR_INPUT
 	IN_00 : BYTE;    // BYTE 00
 	IN_01 : BYTE;    // BYTE 01
 END_VAR
 
-(* this Function combines the 2 BYTES to a word *)
 ASSEMBLE_WORD_FROM_BYTES.%B0 := IN_00;
 ASSEMBLE_WORD_FROM_BYTES.%B1 := IN_01;
 

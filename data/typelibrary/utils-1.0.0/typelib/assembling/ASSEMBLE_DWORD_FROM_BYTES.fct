@@ -32,6 +32,7 @@
 	</InterfaceList>
 	<FunctionBody>
 		<ST><![CDATA[FUNCTION ASSEMBLE_DWORD_FROM_BYTES : DWORD
+(* this Function combines the 2 BYTES to a DWORD *)
 
 VAR_INPUT
 	IN_00 : BYTE;    // BYTE 00
@@ -40,7 +41,6 @@ VAR_INPUT
 	IN_03 : BYTE;    // BYTE 03
 END_VAR
 
-(* this Function combines the 2 BYTES to a word *)
 ASSEMBLE_DWORD_FROM_BYTES.%B0 := IN_00;
 ASSEMBLE_DWORD_FROM_BYTES.%B1 := IN_01;
 ASSEMBLE_DWORD_FROM_BYTES.%B2 := IN_02;
