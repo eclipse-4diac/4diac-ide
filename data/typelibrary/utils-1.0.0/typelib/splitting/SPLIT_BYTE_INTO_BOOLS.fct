@@ -25,7 +25,7 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN" Type="BYTE" Comment="BYTE Input"/>
+			<VarDeclaration Name="IN" Type="BYTE" Comment=""/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="OUT_00" Type="BOOL" Comment="BIT 00"/>
@@ -43,7 +43,7 @@
 (* this Function extracts the 8 BOOLS from a byte *)
 
 VAR_INPUT
-	IN : BYTE;    // BYTE Input
+	IN : BYTE;
 END_VAR
 
 VAR_OUTPUT
