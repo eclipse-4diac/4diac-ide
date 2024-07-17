@@ -18,6 +18,7 @@ import java.util.function.Predicate;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -45,6 +46,13 @@ public class UntypedSubappConnectorBorder extends ConnectorBorder {
 			secondPaint = true;
 			super.paint(figure, graphics, insets);
 			secondPaint = false;
+			if (!isInput() && getEditPartModelOject().getOutputConnections().stream()
+					.filter(Predicate.not(Connection::isVisible)).count() > 1) {
+				// draw a vertical line to show which target pins belong together
+				final Rectangle where = getPaintRectangle(figure, insets);
+				graphics.setLineWidth(2);
+				graphics.drawLine(where.x + 1, where.y + 3, where.x + 1, where.y + where.height - 3);
+			}
 		}
 	}
 
