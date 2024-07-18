@@ -100,7 +100,7 @@ public class SystemLayoutHandler extends AbstractHandler {
 				systems.forEach(sys -> files.add(sys.getTypeEntry().getFile()));
 				final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 				typeLibrary.getCompositeFBTypes().forEach(cfb -> files.add(cfb.getTypeEntry().getFile()));
-				typeLibrary.getSubAppTypes().values().forEach(typeEntry -> files.add(typeEntry.getFile()));
+				typeLibrary.getSubAppTypes().forEach(typeEntry -> files.add(typeEntry.getFile()));
 			}
 		}
 
@@ -137,7 +137,7 @@ public class SystemLayoutHandler extends AbstractHandler {
 				collectElements(elements, applications);
 				final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 				typeLibrary.getCompositeFBTypes().forEach(cfb -> elements.add(cfb.getTypeEntry().getFile()));
-				typeLibrary.getSubAppTypes().values().forEach(typeEntry -> elements.add(typeEntry.getFile()));
+				typeLibrary.getSubAppTypes().forEach(typeEntry -> elements.add(typeEntry.getFile()));
 			}
 		}
 
