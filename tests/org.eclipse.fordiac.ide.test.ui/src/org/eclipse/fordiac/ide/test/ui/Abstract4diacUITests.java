@@ -248,8 +248,9 @@ public class Abstract4diacUITests {
 		assertNotNull(appNode);
 		appNode.select();
 		appNode.expand();
-		bot.waitUntil(treeItemHasNode(appNode, element));
-		return appNode.getNode(element).isVisible();
+		final SWTBotTreeItem elementNode = appNode.getNode(element);
+		assertNotNull(elementNode);
+		return elementNode.isVisible();
 	}
 
 	/**
@@ -279,8 +280,9 @@ public class Abstract4diacUITests {
 		assertNotNull(subAppNode);
 		subAppNode.select();
 		subAppNode.expand();
-		bot.waitUntil(treeItemHasNode(subAppNode, fbName));
-		return subAppNode.getNode(fbName).isVisible();
+		final SWTBotTreeItem fbNode = subAppNode.getNode(fbName);
+		assertNotNull(fbNode);
+		return fbNode.isVisible();
 	}
 
 	/**

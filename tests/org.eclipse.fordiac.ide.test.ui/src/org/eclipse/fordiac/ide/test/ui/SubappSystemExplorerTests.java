@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.test.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
+import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.junit.jupiter.api.Test;
 
 public class SubappSystemExplorerTests extends Abstract4diacUITests {
@@ -30,8 +32,8 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 	 *
 	 * First, a the function block E_CYCLE is dragged&dropped onto the editing area,
 	 * afterwards a subapplication is created with this FB and then it is checked if
-	 * the FB is also visible in the Application of the System in the SystemExplorer
-	 * tree.
+	 * the FB is also visible as child of the App node of the System in the
+	 * SystemExplorer tree.
 	 */
 	@SuppressWarnings("static-method")
 	@Test
@@ -50,6 +52,8 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
 		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
+
+		// checks for SystemExplorer tree
 		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
 		assertTrue(isFBInSubAppOfSystemInSystemExplorer(E_CYCLE_FB));
 	}
@@ -60,8 +64,8 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 	 *
 	 * First, a the function blocks E_CYCLE and E_SWITCH are dragged&dropped onto
 	 * the editing area, afterwards a subapplication is created with E_CYCLE and
-	 * then it is checked if the FB is also visible in the SubApp of the Application
-	 * in the SystemExplorer tree.
+	 * then it is checked if the FB is also visible as child of the SubApp node of
+	 * the Application in the SystemExplorer tree.
 	 *
 	 * It is also checked whether E_SWITCH, which does not belong to the SubApp, is
 	 * displayed as Application node.
@@ -83,10 +87,15 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
+
+		// checks for App node
 		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
 		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
 		assertTrue(isElementInApplicationOfSystemInSystemExplorer(E_SWITCH_FB));
+
+		// checks for SubApp node
 		assertTrue(isFBInSubAppOfSystemInSystemExplorer(E_CYCLE_FB));
+		assertThrows(WidgetNotFoundException.class, () -> isFBInSubAppOfSystemInSystemExplorer(E_SWITCH_FB));
 	}
 
 }
