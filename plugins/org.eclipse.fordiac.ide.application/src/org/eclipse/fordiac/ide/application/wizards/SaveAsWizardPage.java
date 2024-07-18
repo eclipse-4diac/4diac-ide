@@ -20,6 +20,8 @@ import java.util.Optional;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
@@ -28,7 +30,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 public class SaveAsWizardPage extends WizardNewFileCreationPage {
@@ -77,12 +81,26 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 		restoreWidgetValues();
 	}
 
+	private void createPackageNameContainer(final Composite parent) {
+		final Composite packageContainer = new Composite(parent, SWT.NONE);
+		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(packageContainer);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(packageContainer);
+
+		final Label enterPackageNameLabel = new Label(packageContainer, SWT.NONE);
+		enterPackageNameLabel.setText("Enter package name: ");
+
+		final Text packageText = new Text(packageContainer, SWT.BORDER);
+		packageText.setEnabled(true);
+		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).hint(250, SWT.DEFAULT)
+				.applyTo(packageText);
+	}
+
 	@Override
 	protected void createAdvancedControls(final Composite parent) {
+		createPackageNameContainer(parent);
 		if (replaceSourceText != null) {
 			createReplaceSourceEntry(parent);
 		}
-
 		super.createAdvancedControls(parent);
 	}
 
@@ -180,7 +198,6 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 		return new SaveAsWizardPage(pageName, selection, Messages.SaveAsWizardPage_SaveAsStructType_WizardPageTitle,
 				Messages.SaveAsWizardPage_SaveAsStructType_Description,
 				Messages.SaveAsWizardPage_SaveAsStructType_PageName,
-				Messages.SaveAsSubApplicationTypeAction_WizardPageOpenType,
-				null);
+				Messages.SaveAsSubApplicationTypeAction_WizardPageOpenType, null);
 	}
 }
