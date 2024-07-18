@@ -66,16 +66,13 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		if (!isActive()) {
 			super.activate();
 			getRefElement().eAdapters().add(nameChangeAdapter);
-			if (!isSubappInterfaceTarget()) {
-				final FBNetworkElement parent = getRefElement().getFBNetworkElement();
-				if (parent instanceof final SubApp subapp && subapp.isUnfolded()) {
-					parent.eAdapters().add(nameChangeAdapter);
-					final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
-					if (grandParent instanceof SubApp) {
-						grandParent.eAdapters().add(nameChangeAdapter);
-					}
+			final FBNetworkElement parent = getRefElement().getFBNetworkElement();
+			if (parent != null) {
+				parent.eAdapters().add(nameChangeAdapter);
+				final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
+				if (grandParent != null) {
+					grandParent.eAdapters().add(nameChangeAdapter);
 				}
-
 			}
 		}
 	}
@@ -84,14 +81,12 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			getRefElement().eAdapters().remove(nameChangeAdapter);
-			if (!isSubappInterfaceTarget()) {
-				final FBNetworkElement parent = getRefElement().getFBNetworkElement();
-				if (parent != null && parent.eAdapters().contains(nameChangeAdapter)) {
-					parent.eAdapters().remove(nameChangeAdapter);
-					final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
-					if (grandParent != null && grandParent.eAdapters().contains(nameChangeAdapter)) {
-						grandParent.eAdapters().remove(nameChangeAdapter);
-					}
+			final FBNetworkElement parent = getRefElement().getFBNetworkElement();
+			if (parent != null && parent.eAdapters().contains(nameChangeAdapter)) {
+				parent.eAdapters().remove(nameChangeAdapter);
+				final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
+				if (grandParent != null && grandParent.eAdapters().contains(nameChangeAdapter)) {
+					grandParent.eAdapters().remove(nameChangeAdapter);
 				}
 			}
 			super.deactivate();
@@ -176,10 +171,6 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 			return PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR);
 		}
 		return PreferenceGetter.getDataColor(getRefElement().getType().getName());
-	}
-
-	private boolean isSubappInterfaceTarget() {
-		return getModel() instanceof TargetInterfaceElement.SubappTargetInterfaceElement;
 	}
 
 	private static String labelTruncate(final String label) {
