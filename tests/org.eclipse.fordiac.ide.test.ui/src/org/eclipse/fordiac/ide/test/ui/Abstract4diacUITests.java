@@ -111,6 +111,8 @@ public class Abstract4diacUITests {
 	protected static final String PACKAGE_NAME_LABEL = FordiacMessages.Package + ":"; //$NON-NLS-1$
 	protected static final String PARENT_FOLDER_NAME_LABEL = "Enter or select the parent folder:"; //$NON-NLS-1$
 	protected static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
+	protected static final String PROJECT_NAME_APP = PROJECT_NAME + "App"; //$NON-NLS-1$
+	protected static final String PROJECT_NAME_TREE_ITEM = PROJECT_NAME + " []"; //$NON-NLS-1$
 	protected static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
 	protected static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
 	protected static final String SELECT_TYPE_LABEL = FordiacMessages.SelectType + ":"; //$NON-NLS-1$
@@ -220,6 +222,65 @@ public class Abstract4diacUITests {
 
 		assertNotNull(canvas);
 		eCycleNode.dragAndDrop(canvas, point);
+	}
+
+	/**
+	 * Checks if given element is visible in the Application of the System in the
+	 * SystemExplorer Tree.
+	 *
+	 * @param element The name of the element (function block or SubApp) searched
+	 *                for in the Application of the System in the SystemExplorer
+	 *                tree.
+	 */
+	protected static boolean isElementInApplicationOfSystemInSystemExplorer(final String element) {
+		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
+		systemExplorerView.show();
+		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
+		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
+		final SWTBotTree tree = new SWTBotTree(swtTree);
+		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
+		treeProjectItem.select();
+		treeProjectItem.expand();
+		final SWTBotTreeItem systemNode = treeProjectItem.getNode(PROJECT_NAME_TREE_ITEM);
+		systemNode.select();
+		systemNode.expand();
+		final SWTBotTreeItem appNode = systemNode.getNode(PROJECT_NAME_APP);
+		assertNotNull(appNode);
+		appNode.select();
+		appNode.expand();
+		bot.waitUntil(treeItemHasNode(appNode, element));
+		return appNode.getNode(element).isVisible();
+	}
+
+	/**
+	 * Checks if given Function Block is visible in the SubApp node of the
+	 * Application the System in the SystemExplorer Tree.
+	 *
+	 * @param fbName The name of the function block searched for in the SubApp node
+	 *               of the Application in the System in the SystemExplorer tree.
+	 */
+	protected static boolean isFBInSubAppOfSystemInSystemExplorer(final String fbName) {
+		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
+		systemExplorerView.show();
+		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
+		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
+		final SWTBotTree tree = new SWTBotTree(swtTree);
+		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
+		treeProjectItem.select();
+		treeProjectItem.expand();
+		final SWTBotTreeItem systemNode = treeProjectItem.getNode(PROJECT_NAME_TREE_ITEM);
+		systemNode.select();
+		systemNode.expand();
+		final SWTBotTreeItem appNode = systemNode.getNode(PROJECT_NAME_APP);
+		assertNotNull(appNode);
+		appNode.select();
+		appNode.expand();
+		final SWTBotTreeItem subAppNode = appNode.getNode(SUBAPP);
+		assertNotNull(subAppNode);
+		subAppNode.select();
+		subAppNode.expand();
+		bot.waitUntil(treeItemHasNode(subAppNode, fbName));
+		return subAppNode.getNode(fbName).isVisible();
 	}
 
 	/**
