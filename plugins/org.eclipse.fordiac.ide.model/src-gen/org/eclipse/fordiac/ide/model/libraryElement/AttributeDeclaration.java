@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 
 
 /**
@@ -57,5 +58,29 @@ public interface AttributeDeclaration extends ITypedElement, LibraryElement {
 	 * @generated
 	 */
 	void setType(AnyDerivedType value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void setLock(StructuredType lock);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	StructuredType getLock();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean" unique="false"
+	 * @generated
+	 */
+	boolean isValidObject(ConfigurableObject object);
 
 } // AttributeDeclaration

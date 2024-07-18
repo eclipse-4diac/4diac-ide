@@ -24,6 +24,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -348,6 +349,19 @@ public final class Annotations {
 		return "true".equals(configurationAttribute); //$NON-NLS-1$
 	}
 
+	// *** AttributeDeclaration ***//
+	public static void setLock(@NonNull final AttributeDeclaration attributeDeclaration, final StructuredType lock) {
+	}
+
+	public static StructuredType getLock(@NonNull final AttributeDeclaration attributeDeclaration) {
+		return null;
+	}
+
+	public static boolean isValidObject(@NonNull final AttributeDeclaration attributeDeclaration,
+			final ConfigurableObject object) {
+		return false;
+	}
+	
 	// *** ConfigurableObject ***//
 	public static void setAttribute(@NonNull final ConfigurableObject object, final String attributeName,
 			final DataType type, final String value, final String comment) {
