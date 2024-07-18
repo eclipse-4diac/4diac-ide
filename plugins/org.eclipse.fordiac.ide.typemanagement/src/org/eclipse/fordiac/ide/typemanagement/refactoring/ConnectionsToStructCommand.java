@@ -4,16 +4,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -89,8 +93,8 @@ public class ConnectionsToStructCommand extends Command {
 	@Override
 	public void undo() {
 		if (conflictResolution) {
-			sourceConnectionEditCommand.undo();
 			destinationConnectionEditCommand.undo();
+			sourceConnectionEditCommand.undo();
 		}
 		connectStructCommand.undo();
 		updateCommands.undo();
@@ -105,8 +109,8 @@ public class ConnectionsToStructCommand extends Command {
 		updateCommands.redo();
 		connectStructCommand.redo();
 		if (conflictResolution) {
-			destinationConnectionEditCommand.redo();
 			sourceConnectionEditCommand.redo();
+			destinationConnectionEditCommand.redo();
 		}
 	}
 
@@ -152,9 +156,15 @@ public class ConnectionsToStructCommand extends Command {
 	private void updateFBs() {
 		// Update all instances of edited FBTypes
 		updateCommands = new CompoundCommand();
-		getElementsOfType(sourceType).stream().forEach(fbnelem -> updateCommands.add(new UpdateFBTypeCommand(fbnelem)));
-		getElementsOfType(destinationType).stream()
-				.forEach(fbnelem -> updateCommands.add(new UpdateFBTypeCommand(fbnelem)));
+		getElementsOfType(sourceType).stream().forEach(fbnelem -> {
+			final UpdateFBTypeCommand update = new UpdateFBTypeCommand(fbnelem);
+			updateCommands.add(update);
+		});
+
+		getElementsOfType(destinationType).stream().forEach(fbnelem -> {
+			final UpdateFBTypeCommand update = new UpdateFBTypeCommand(fbnelem);
+			updateCommands.add(update);
+		});
 		updateCommands.execute();
 	}
 
@@ -198,34 +208,30 @@ public class ConnectionsToStructCommand extends Command {
 	private void conflictResolution() {
 		destinationConnectionEditCommand = new CompoundCommand();
 		sourceConnectionEditCommand = new CompoundCommand();
+		editConnections(sourceType, sourceConnectionEditCommand, true);
+		editConnections(destinationType, destinationConnectionEditCommand, false);
+	}
 
-		// Edit destination connections
-		getElementsOfType(destinationType).stream().forEach(instance -> {
-			instance.getInterface().getErrorMarker().stream().flatMap(err -> err.getInputConnections().stream())
-					.filter(con -> replacableConMap.containsValue(con.getDestination().getName())).forEach(con -> {
-						final String var = replacableConMap.entrySet().stream()
-								.filter(entry -> entry.getValue().equals(con.getDestination().getName())).findAny()
-								.get().getKey();
-						final RepairBrokenConnectionCommand rep = new RepairBrokenConnectionCommand(con, false,
-								(StructuredType) structType, var);
-						destinationConnectionEditCommand.add(rep);
-					});
-		});
-		destinationConnectionEditCommand.execute();
+	private void editConnections(final FBType type, final CompoundCommand cmd, final boolean isSource) {
+		final Stream<ErrorMarkerInterface> errormarkers = getElementsOfType(type).stream()
+				.map(FBNetworkElement::getInterface).map(InterfaceList::getErrorMarker).flatMap(EList::stream);
+		final Stream<Connection> connections;
+		final Function<Connection, String> connectToVar;
 
-		// Edit source connections
-		getElementsOfType(sourceType).stream().forEach(instance -> {
-			if (instance.getInterface().getErrorMarker().stream().flatMap(err -> err.getOutputConnections().stream())
-					.filter(con -> replacableConMap.containsKey(con.getSource().getName())).count() != 0) {
-				instance.getInterface().getErrorMarker().stream().flatMap(err -> err.getOutputConnections().stream())
-						.filter(con -> replacableConMap.containsKey(con.getSource().getName())).forEach(con -> {
-							final RepairBrokenConnectionCommand rep = new RepairBrokenConnectionCommand(con, true,
-									(StructuredType) structType, con.getSource().getName());
-							sourceConnectionEditCommand.add(rep);
-						});
-			}
-		});
-		sourceConnectionEditCommand.execute();
+		if (isSource) {
+			connections = errormarkers.filter(err -> replacableConMap.containsKey(err.getName()))
+					.map(ErrorMarkerInterface::getOutputConnections).flatMap(EList::stream);
+			connectToVar = t -> t.getSource().getName();
+		} else {
+			connections = errormarkers.filter(err -> replacableConMap.containsValue(err.getName()))
+					.map(ErrorMarkerInterface::getInputConnections).flatMap(EList::stream);
+			connectToVar = t -> replacableConMap.entrySet().stream()
+					.filter(entry -> entry.getValue().equals(t.getDestination().getName())).findAny().get().getKey();
+		}
+
+		connections.forEach(con -> cmd.add(new RepairBrokenConnectionCommand(con, isSource, (StructuredType) structType,
+				connectToVar.apply(con))));
+		cmd.execute();
 	}
 
 	private static List<FBNetworkElement> getElementsOfType(final FBType type) {

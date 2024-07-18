@@ -3,6 +3,8 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
@@ -12,8 +14,8 @@ public class ConnectionsToStructPropertyTester extends PropertyTester {
 
 	@Override
 	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
-		Object dest = null;
-		Object src = null;
+		FBNetworkElement dest = null;
+		FBNetworkElement src = null;
 		if (!(receiver instanceof final IStructuredSelection selection)) {
 			return false;
 		}
@@ -47,7 +49,8 @@ public class ConnectionsToStructPropertyTester extends PropertyTester {
 				dest = con.getDestinationElement();
 			}
 		}
-		if (src instanceof SubApp || dest instanceof SubApp) {
+		if (src == null || src instanceof SubApp || src.getType() instanceof ServiceInterfaceFBType || dest == null
+				|| dest instanceof SubApp || dest instanceof ServiceInterfaceFBType) {
 			return false;
 		}
 		return true;

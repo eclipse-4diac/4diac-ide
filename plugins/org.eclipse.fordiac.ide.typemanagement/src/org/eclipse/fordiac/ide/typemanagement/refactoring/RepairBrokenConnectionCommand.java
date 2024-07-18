@@ -1,13 +1,14 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
-import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectEventConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -15,11 +16,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Position;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -30,10 +28,8 @@ public class RepairBrokenConnectionCommand extends Command {
 	private final StructuredType structType;
 	private final String var;
 
-	FBCreateCommand muxcreate;
-	ChangeStructCommand changeStruct;
+	InsertStructManipulatorCommand insertMuxCommand;
 	ReconnectDataConnectionCommand recon;
-	StructDataConnectionCreateCommand createCon;
 	CompoundCommand eventConnectionCommand;
 
 	public RepairBrokenConnectionCommand(final Connection con, final boolean isSourceReconnect,
@@ -44,124 +40,115 @@ public class RepairBrokenConnectionCommand extends Command {
 		this.var = var;
 	}
 
-	@Override
-	public void execute() {
-		final FBNetworkElement sourceElement = connection.getSourceElement();
-		final FBNetworkElement destinationElement = connection.getDestinationElement();
+	private IInterfaceElement getPort() {
+		Optional<IInterfaceElement> port;
+		if (isSourceReconnect) {
+			port = connection.getSourceElement().getInterface().getOutputs()
+					.filter(output -> output.getType().equals(structType)).findAny();
+		} else {
+			port = connection.getDestinationElement().getInterface().getInputs()
+					.filter(input -> input.getType().equals(structType)).findAny();
+		}
 
-		final TypeLibrary lib = sourceElement.getTypeLibrary();
-		final FBNetwork fbn = sourceElement.getFbNetwork();
-		final CompoundCommand temp = new CompoundCommand();
-
-		(isSourceReconnect ? connection.getSourceElement().getInterface().getOutputs()
-				: connection.getDestinationElement().getInterface().getInputs())
-				.filter(port -> port.getType().equals(structType)).findAny().ifPresent(port -> {
-					final Optional<FBNetworkElement> optmux;
-					if (isSourceReconnect) {
-						optmux = port.getOutputConnections().stream().map(Connection::getDestinationElement).filter(
-								elem -> elem.getType().getTypeEntry().equals(lib.getFBTypeEntry("STRUCT_DEMUX")))
-								.findAny();
-					} else {
-						optmux = port.getInputConnections().stream().map(Connection::getSourceElement)
-								.filter(elem -> elem.getType().getTypeEntry().equals(lib.getFBTypeEntry("STRUCT_MUX")))
-								.findAny();
-					}
-					final FBNetworkElement mux = optmux.orElseGet(() -> {
-						final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
-						pos.setX((int) (isSourceReconnect ? sourceElement : destinationElement).getPosition().getX()
-								+ (isSourceReconnect ? 1000 : (-1000)));
-						pos.setY((int) (isSourceReconnect ? sourceElement : destinationElement).getPosition().getY());
-						muxcreate = new FBCreateCommand(
-								lib.getFBTypeEntry(isSourceReconnect ? "STRUCT_DEMUX" : "STRUCT_MUX"), fbn, pos);
-						muxcreate.execute();
-						changeStruct = new ChangeStructCommand((StructManipulator) muxcreate.getElement(), structType);
-						changeStruct.execute();
-						createCon = new StructDataConnectionCreateCommand(fbn);
-						final IInterfaceElement src = isSourceReconnect ? port
-								: changeStruct.getNewElement().getInterface().getOutputVars().getFirst();
-						final IInterfaceElement dest = isSourceReconnect
-								? changeStruct.getNewElement().getInterface().getInputVars().getFirst()
-								: port;
-						createCon.setSource(src);
-						createCon.setDestination(dest);
-						createCon.execute();
-						return changeStruct.getNewElement();
-					});
-
-					eventConnectionCommand = new CompoundCommand();
-					((VarDeclaration) port).getWiths().stream().forEach(with -> {
-						if (isSourceReconnect) {
-							((Event) with.eContainer()).getOutputConnections().stream().filter(
-									con -> connection.getDestinationElement().equals(con.getDestinationElement()))
-									.forEach(con -> {
-										if (!checkDuplicate(mux.getInterface().getEventOutputs().getFirst(),
-												con.getDestination())) {
-											final EventConnectionCreateCommand createECon = new EventConnectionCreateCommand(
-													fbn);
-											createECon.setSource(mux.getInterface().getEventOutputs().getFirst());
-											createECon.setDestination(con.getDestination());
-											eventConnectionCommand.add(createECon);
-										}
-										if (!checkDuplicate(con.getSource(),
-												mux.getInterface().getEventInputs().getFirst())) {
-											eventConnectionCommand.add(new ReconnectEventConnectionCommand(con, false,
-													mux.getInterface().getEventInputs().getFirst(), fbn));
-										} else {
-											eventConnectionCommand.add(new DeleteConnectionCommand(con));
-										}
-									});
-
-						} else {
-							((Event) with.eContainer()).getInputConnections().stream()
-									.filter(con -> connection.getSourceElement().equals(con.getSourceElement()))
-									.forEach(con -> {
-										if (!checkDuplicate(con.getSource(),
-												mux.getInterface().getEventInputs().getFirst())) {
-											final EventConnectionCreateCommand createECon = new EventConnectionCreateCommand(
-													fbn);
-											createECon.setSource(con.getSource());
-											createECon.setDestination(mux.getInterface().getEventInputs().getFirst());
-											eventConnectionCommand.add(createECon);
-										}
-										if (!checkDuplicate(mux.getInterface().getEventOutputs().getFirst(),
-												con.getDestination())) {
-											eventConnectionCommand.add(new ReconnectEventConnectionCommand(con, true,
-													mux.getInterface().getEventOutputs().getFirst(), fbn));
-										} else {
-											eventConnectionCommand.add(new DeleteConnectionCommand(con));
-										}
-									});
-
-						}
-					});
-					eventConnectionCommand.add(new ReconnectDataConnectionCommand(connection, isSourceReconnect,
-							isSourceReconnect ? mux.getInterface().getOutput(var) : mux.getInterface().getInput(var),
-							fbn));
-					eventConnectionCommand.execute();
-				});
+		return port.orElse(null);
 	}
 
-	public static boolean checkDuplicate(final IInterfaceElement source, final IInterfaceElement destination) {
-		return source.getOutputConnections().stream().filter(con -> con.getDestination().equals(destination))
-				.count() != 0;
+	private FBNetworkElement getMux(final IInterfaceElement port) {
+		final Optional<FBNetworkElement> optmux;
+		if (isSourceReconnect) {
+			optmux = port.getOutputConnections().stream().map(Connection::getDestinationElement)
+					.filter(elem -> elem.getType().getTypeEntry()
+							.equals(port.getFBNetworkElement().getTypeLibrary().getFBTypeEntry("STRUCT_DEMUX")))
+					.findAny();
+		} else {
+			optmux = port.getInputConnections().stream().map(Connection::getSourceElement)
+					.filter(elem -> elem.getType().getTypeEntry()
+							.equals(port.getFBNetworkElement().getTypeLibrary().getFBTypeEntry("STRUCT_MUX")))
+					.findAny();
+		}
+
+		return optmux.orElseGet(() -> {
+			insertMuxCommand = new InsertStructManipulatorCommand(structType, port);
+			insertMuxCommand.execute();
+			return insertMuxCommand.getNewElement();
+		});
+	}
+
+	@Override
+	public void execute() {
+		final FBNetwork fbn = connection.getSourceElement().getFbNetwork();
+		final List<IInterfaceElement> newConList = new ArrayList<>();
+		eventConnectionCommand = new CompoundCommand();
+
+		final IInterfaceElement port = getPort();
+		if (port == null) {
+			return;
+		}
+		final FBNetworkElement mux = getMux(port);
+
+		final Stream<Event> eventStream = ((VarDeclaration) port).getWiths().stream().map(With::eContainer)
+				.filter(Event.class::isInstance).map(Event.class::cast);
+		final Stream<Connection> connectionStream;
+		final IInterfaceElement eventReconTarget;
+		final IInterfaceElement eventNewTarget;
+
+		if (isSourceReconnect) {
+			connectionStream = eventStream.map(Event::getOutputConnections).flatMap(EList::stream)
+					.filter(con -> connection.getDestinationElement().equals(con.getDestinationElement()));
+			eventReconTarget = mux.getInterface().getEventInputs().getFirst();
+			eventNewTarget = mux.getInterface().getEventOutputs().getFirst();
+		} else {
+			connectionStream = eventStream.map(Event::getInputConnections).flatMap(EList::stream)
+					.filter(con -> connection.getSourceElement().equals(con.getSourceElement()));
+			eventReconTarget = mux.getInterface().getEventOutputs().getFirst();
+			eventNewTarget = mux.getInterface().getEventInputs().getFirst();
+		}
+
+		connectionStream.forEach(con -> {
+			if (!checkDuplicate(con, eventReconTarget)) {
+				eventConnectionCommand
+						.add(new ReconnectEventConnectionCommand(con, !isSourceReconnect, eventReconTarget, fbn));
+			} else {
+				eventConnectionCommand.add(new DeleteConnectionCommand(con));
+			}
+
+			final IInterfaceElement source = isSourceReconnect ? con.getDestination() : con.getSource();
+			if (!checkDuplicate(connection, eventNewTarget) && !newConList.contains(source)) {
+				final EventConnectionCreateCommand createECon = new EventConnectionCreateCommand(fbn);
+				createECon.setSource(source);
+				createECon.setDestination(eventNewTarget);
+				eventConnectionCommand.add(createECon);
+				newConList.add(source);
+			}
+		});
+
+		eventConnectionCommand.add(new ReconnectDataConnectionCommand(connection, isSourceReconnect,
+				isSourceReconnect ? mux.getInterface().getOutput(var) : mux.getInterface().getInput(var), fbn));
+		eventConnectionCommand.execute();
+
+	}
+
+	public static boolean checkDuplicate(final Connection connection, final IInterfaceElement target) {
+		if (target.isIsInput()) {
+			return target.getInputConnections().stream().filter(con -> con.getSource().equals(connection.getSource()))
+					.findAny().isPresent();
+		}
+		return target.getOutputConnections().stream()
+				.filter(con -> con.getDestination().equals(connection.getDestination())).findAny().isPresent();
 	}
 
 	@Override
 	public void undo() {
 		eventConnectionCommand.undo();
-		if (muxcreate != null) {
-			createCon.undo();
-			changeStruct.undo();
-			muxcreate.undo();
+		if (insertMuxCommand != null) {
+			insertMuxCommand.undo();
 		}
 	}
 
 	@Override
 	public void redo() {
-		if (muxcreate != null) {
-			muxcreate.redo();
-			changeStruct.redo();
-			createCon.redo();
+		if (insertMuxCommand != null) {
+			insertMuxCommand.redo();
 		}
 		eventConnectionCommand.redo();
 	}
