@@ -37,6 +37,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IContainer;
@@ -76,19 +78,19 @@ public final class TypeLibrary {
 	private IProject project;
 	private Buildpath buildpath;
 	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
-	private final Map<String, AdapterTypeEntry> adapterTypes = new ConcurrentHashMap<>();
-	private final Map<String, AttributeTypeEntry> attributeTypes = new ConcurrentHashMap<>();
-	private final Map<String, DeviceTypeEntry> deviceTypes = new ConcurrentHashMap<>();
-	private final Map<String, FBTypeEntry> fbTypes = new ConcurrentHashMap<>();
-	private final Map<String, ResourceTypeEntry> resourceTypes = new ConcurrentHashMap<>();
-	private final Map<String, SegmentTypeEntry> segmentTypes = new ConcurrentHashMap<>();
-	private final Map<String, SubAppTypeEntry> subAppTypes = new ConcurrentHashMap<>();
-	private final Map<String, SystemEntry> systems = new ConcurrentHashMap<>();
-	private final Map<String, GlobalConstantsEntry> globalConstants = new ConcurrentHashMap<>();
-	private final Map<String, TypeEntry> programTypes = new ConcurrentHashMap<>();
-	private final Map<String, TypeEntry> errorTypes = new ConcurrentHashMap<>();
+	private final Map<String, AdapterTypeEntry> adapterTypes = new CaseInsensitiveConcurrentHashMap<>();
+	private final Map<String, AttributeTypeEntry> attributeTypes = new CaseInsensitiveConcurrentHashMap<>();
+	private final Map<String, DeviceTypeEntry> deviceTypes = new CaseInsensitiveConcurrentHashMap<>();
+	private final Map<String, FBTypeEntry> fbTypes = new CaseInsensitiveConcurrentHashMap<>();
+	private final Map<String, ResourceTypeEntry> resourceTypes = new CaseInsensitiveConcurrentHashMap<>();
+	private final Map<String, SegmentTypeEntry> segmentTypes = new CaseInsensitiveConcurrentHashMap<>();
+	private final Map<String, SubAppTypeEntry> subAppTypes = new CaseInsensitiveConcurrentHashMap<>();
+	private final Map<String, SystemEntry> systems = new CaseInsensitiveConcurrentHashMap<>();
+	private final Map<String, GlobalConstantsEntry> globalConstants = new CaseInsensitiveConcurrentHashMap<>();
+	private final Map<String, TypeEntry> programTypes = new CaseInsensitiveConcurrentHashMap<>();
+	private final Map<String, TypeEntry> errorTypes = new CaseInsensitiveConcurrentHashMap<>();
 	private final Map<IFile, TypeEntry> fileMap = new ConcurrentHashMap<>();
-	private final Map<String, AtomicInteger> packages = new ConcurrentHashMap<>();
+	private final Map<String, AtomicInteger> packages = new CaseInsensitiveConcurrentHashMap<>();
 	private final Queue<TypeEntry> duplicates = new ConcurrentLinkedQueue<>();
 
 	public Map<String, AdapterTypeEntry> getAdapterTypes() {
@@ -540,4 +542,103 @@ public final class TypeLibrary {
 		project = newProject;
 		reload();
 	}
+
+	private final class CaseInsensitiveConcurrentHashMap<T> extends ConcurrentHashMap<String, T> {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public T put(final String key, final T value) {
+			if (key instanceof final String s) {
+				return super.put(s.toUpperCase(), value);
+			}
+			return null;
+		}
+
+		@Override
+		public T putIfAbsent(final String key, final T value) {
+			if (key != null) {
+				return super.putIfAbsent(key.toUpperCase(), value);
+			}
+			return null;
+		}
+
+		@Override
+		public T remove(final Object key) {
+			if (key instanceof final String s) {
+				return super.remove(s.toUpperCase());
+			}
+			return null;
+		}
+
+		@Override
+		public boolean remove(final Object key, final Object value) {
+			if (key instanceof final String s) {
+				return super.remove(s.toUpperCase(), value);
+			}
+			return false;
+		}
+
+		@Override
+		public void putAll(final Map<? extends String, ? extends T> m) {
+			throw new UnsupportedOperationException("putAll is not supported for the CaseInsensitiveConcurrentMap"); //$NON-NLS-1$
+		}
+
+		@Override
+		public boolean replace(final String s, final T oldValue, final T newValue) {
+			if (s != null) {
+				return super.replace(s.toUpperCase(), oldValue, newValue);
+			}
+			return false;
+		}
+
+		@Override
+		public T replace(final String s, final T value) {
+			if (s != null) {
+				return super.replace(s.toUpperCase(), value);
+			}
+			return null;
+		}
+
+		@Override
+		public T getOrDefault(final Object key, final T defaultValue) {
+			if (key instanceof final String s) {
+				return super.getOrDefault(s.toUpperCase(), defaultValue);
+			}
+			return defaultValue;
+		}
+
+		@Override
+		public void replaceAll(final BiFunction<? super String, ? super T, ? extends T> function) {
+			throw new UnsupportedOperationException("replaceAll is not supported for the CaseInsensitiveConcurrentMap"); //$NON-NLS-1$
+		}
+
+		@Override
+		public <U> U search(final long parallelismThreshold,
+				final BiFunction<? super String, ? super T, ? extends U> searchFunction) {
+			throw new UnsupportedOperationException("search is not supported for the CaseInsensitiveConcurrentMap"); //$NON-NLS-1$
+		}
+
+		@Override
+		public <U> U searchKeys(final long parallelismThreshold,
+				final Function<? super String, ? extends U> searchFunction) {
+			throw new UnsupportedOperationException("searchKeys is not supported for the CaseInsensitiveConcurrentMap"); //$NON-NLS-1$
+		}
+
+		@Override
+		public <U> U searchEntries(final long parallelismThreshold,
+				final Function<Entry<String, T>, ? extends U> searchFunction) {
+			throw new UnsupportedOperationException(
+					"searchEntries is not supported for the CaseInsensitiveConcurrentMap"); //$NON-NLS-1$
+		}
+
+		@Override
+		public T get(final Object key) {
+			if (key instanceof final String s) {
+				return super.get(s.toUpperCase());
+			}
+			return null;
+		}
+	}
+
 }
