@@ -20,11 +20,15 @@
 package org.eclipse.fordiac.ide.model;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -54,12 +58,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
@@ -351,17 +357,86 @@ public final class Annotations {
 
 	// *** AttributeDeclaration ***//
 	public static void setLock(@NonNull final AttributeDeclaration attributeDeclaration, final StructuredType lock) {
+		final String lockString = lock.getMemberVariables().stream()
+				.map(member -> (member.getName() + ":=" + member.getValue().getValue())) //$NON-NLS-1$
+				.collect(Collectors.joining(",", "(", ")")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+		if (!lockString.contains("FALSE")) { //$NON-NLS-1$
+			attributeDeclaration.deleteAttribute(InternalAttributeDeclarations.LOCK.getName());
+		} else {
+			attributeDeclaration.setAttribute(InternalAttributeDeclarations.LOCK, lockString, ""); //$NON-NLS-1$
+		}
 	}
 
 	public static StructuredType getLock(@NonNull final AttributeDeclaration attributeDeclaration) {
-		return null;
+		String lockString = attributeDeclaration.getAttributeValue(InternalAttributeDeclarations.LOCK.getName());
+		if (lockString == null) {
+			return null;
+		}
+
+		final StructuredType structType = DataFactory.eINSTANCE.createStructuredType();
+		lockString = lockString.substring(1, lockString.length() - 1);
+		final String[] pairs = lockString.split(","); //$NON-NLS-1$
+		for (final String pair : pairs) {
+			final String[] keyValue = pair.split(":="); //$NON-NLS-1$
+			if (keyValue.length != 2) {
+				continue;
+			}
+
+			final MemberVarDeclaration member = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
+			member.setName(keyValue[0]);
+			member.setType(ElementaryTypes.BOOL);
+
+			final Value val = LibraryElementFactory.eINSTANCE.createValue();
+			val.setValue(keyValue[1]);
+			member.setValue(val);
+
+			structType.getMemberVariables().add(member);
+		}
+
+		if (structType.getMemberVariables().size() != ((StructuredType) InternalAttributeDeclarations.LOCK.getType())
+				.getMemberVariables().size()) {
+			// Add missing members if new ones are added
+			((StructuredType) InternalAttributeDeclarations.LOCK.getType()).getMemberVariables().forEach(varDecl -> {
+				final Optional<VarDeclaration> correctMember = structType.getMemberVariables().stream()
+						.filter(member -> member.getName().equals(varDecl.getName())).findFirst();
+				if (correctMember.isEmpty()) {
+					structType.getMemberVariables().add(EcoreUtil.copy(varDecl));
+				}
+			});
+		}
+
+		return structType;
 	}
 
 	public static boolean isValidObject(@NonNull final AttributeDeclaration attributeDeclaration,
 			final ConfigurableObject object) {
-		return false;
+		final StructuredType lock = attributeDeclaration.getLock();
+		if (lock != null) {
+			return switch (object) {
+			case final IInterfaceElement o -> getValueFromClassName(lock, IInterfaceElement.class);
+			case final SubApp o -> getValueFromClassName(lock, SubApp.class);
+			case final FBType o -> getValueFromClassName(lock, FBType.class);
+			case final Application o -> getValueFromClassName(lock, Application.class);
+			case final Connection o -> getValueFromClassName(lock, Connection.class);
+			case final FB o -> getValueFromClassName(lock, FB.class);
+			case final DataType o -> getValueFromClassName(lock, DataType.class);
+			default -> false;
+			};
+		}
+		return true;
 	}
-	
+
+	private static boolean getValueFromClassName(final StructuredType lock, final Class<?> clazz) {
+		final Optional<VarDeclaration> correctMember = lock.getMemberVariables().stream()
+				.filter(member -> member.getName().equals(clazz.getSimpleName())).findFirst();
+		if (correctMember.isPresent()) {
+			final Value val = correctMember.get().getValue();
+			return Boolean.parseBoolean(val.getValue());
+		}
+		return true;
+	}
+
 	// *** ConfigurableObject ***//
 	public static void setAttribute(@NonNull final ConfigurableObject object, final String attributeName,
 			final DataType type, final String value, final String comment) {
