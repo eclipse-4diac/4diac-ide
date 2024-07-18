@@ -97,7 +97,6 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 
 	@Override
 	protected void createAdvancedControls(final Composite parent) {
-		createPackageNameContainer(parent);
 		if (replaceSourceText != null) {
 			createReplaceSourceEntry(parent);
 		}
@@ -154,8 +153,10 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 	}
 
 	private void createReplaceSourceEntry(final Composite parent) {
-		replaceSourceSubapp = new Button(parent, SWT.CHECK);
-		replaceSourceSubapp.setText(replaceSourceText);
+		if (replaceSourceText != null) {
+			replaceSourceSubapp = new Button(parent, SWT.CHECK);
+			replaceSourceSubapp.setText(replaceSourceText);
+		}
 	}
 
 	private Composite createAdvancedGroup(final Composite parent) {
@@ -186,7 +187,7 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 
 	public static SaveAsWizardPage createSaveAsSubAppWizardPage(final String pageName,
 			final IStructuredSelection selection) {
-		return new SaveAsWizardPage(pageName, selection, Messages.SaveAsSubApplicationTypeAction_WizardPageTitle,
+		return new SaveAsSubappWizardPage(pageName, selection, Messages.SaveAsSubApplicationTypeAction_WizardPageTitle,
 				Messages.SaveAsSubApplicationTypeAction_WizardPageDescription,
 				Messages.SaveAsSubApplicationTypeAction_WizardPageNameLabel,
 				Messages.SaveAsSubApplicationTypeAction_WizardPageOpenType,
@@ -199,5 +200,20 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 				Messages.SaveAsWizardPage_SaveAsStructType_Description,
 				Messages.SaveAsWizardPage_SaveAsStructType_PageName,
 				Messages.SaveAsSubApplicationTypeAction_WizardPageOpenType, null);
+	}
+
+	private static class SaveAsSubappWizardPage extends SaveAsWizardPage {
+		public SaveAsSubappWizardPage(final String pageName, final IStructuredSelection selection, final String title,
+				final String description, final String fileLabel, final String checkBoxText,
+				final String replaceSourceText) {
+			super(pageName, selection, title, description, fileLabel, checkBoxText, replaceSourceText);
+		}
+
+		@Override
+		protected void createAdvancedControls(final Composite parent) {
+			super.createPackageNameContainer(parent);
+			super.createAdvancedControls(parent);
+		}
+
 	}
 }
