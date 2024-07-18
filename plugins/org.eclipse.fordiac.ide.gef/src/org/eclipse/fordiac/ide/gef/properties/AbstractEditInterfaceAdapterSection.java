@@ -52,7 +52,7 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		if (!adapterList.isEmpty()) {
 			return adapterList.get(adapterList.size() - 1).getType();
 		}
-		return getTypeLibrary().getAdapterTypes().values().iterator().next().getType();
+		return getTypeLibrary().getAdapterTypes().iterator().next().getType();
 	}
 
 	@Override

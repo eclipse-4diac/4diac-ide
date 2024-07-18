@@ -91,50 +91,50 @@ public final class TypeLibrary {
 	private final Map<String, AtomicInteger> packages = new ConcurrentHashMap<>();
 	private final Queue<TypeEntry> duplicates = new ConcurrentLinkedQueue<>();
 
-	public Map<String, AdapterTypeEntry> getAdapterTypes() {
-		return adapterTypes;
+	public Collection<AdapterTypeEntry> getAdapterTypes() {
+		return Collections.unmodifiableCollection(adapterTypes.values());
 	}
 
 	public List<AdapterTypeEntry> getAdapterTypesSorted() {
-		return getAdapterTypes().values().stream()
+		return adapterTypes.values().stream()
 				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getFullTypeName(), o2.getFullTypeName()))
 				.toList();
 	}
 
-	public Map<String, AttributeTypeEntry> getAttributeTypes() {
-		return attributeTypes;
+	public Collection<AttributeTypeEntry> getAttributeTypes() {
+		return Collections.unmodifiableCollection(attributeTypes.values());
 	}
 
-	public Map<String, DeviceTypeEntry> getDeviceTypes() {
-		return deviceTypes;
+	public Collection<DeviceTypeEntry> getDeviceTypes() {
+		return Collections.unmodifiableCollection(deviceTypes.values());
 	}
 
-	public Map<String, FBTypeEntry> getFbTypes() {
-		return fbTypes;
+	public Collection<FBTypeEntry> getFbTypes() {
+		return Collections.unmodifiableCollection(fbTypes.values());
 	}
 
-	public Map<String, ResourceTypeEntry> getResourceTypes() {
-		return resourceTypes;
+	public Collection<ResourceTypeEntry> getResourceTypes() {
+		return Collections.unmodifiableCollection(resourceTypes.values());
 	}
 
-	public Map<String, SegmentTypeEntry> getSegmentTypes() {
-		return segmentTypes;
+	public Collection<SegmentTypeEntry> getSegmentTypes() {
+		return Collections.unmodifiableCollection(segmentTypes.values());
 	}
 
-	public Map<String, SubAppTypeEntry> getSubAppTypes() {
-		return subAppTypes;
+	public Collection<SubAppTypeEntry> getSubAppTypes() {
+		return Collections.unmodifiableCollection(subAppTypes.values());
 	}
 
-	public Map<String, SystemEntry> getSystems() {
-		return systems;
+	public Collection<SystemEntry> getSystems() {
+		return Collections.unmodifiableCollection(systems.values());
 	}
 
-	public Map<String, GlobalConstantsEntry> getGlobalConstants() {
-		return globalConstants;
+	public Collection<GlobalConstantsEntry> getGlobalConstants() {
+		return Collections.unmodifiableCollection(globalConstants.values());
 	}
 
-	public Map<String, TypeEntry> getProgramTypes() {
-		return Collections.unmodifiableMap(programTypes);
+	public Collection<TypeEntry> getProgramTypes() {
+		return Collections.unmodifiableCollection(programTypes.values());
 	}
 
 	public Set<String> getPackages() {
@@ -146,44 +146,44 @@ public final class TypeLibrary {
 	}
 
 	public List<CompositeFBType> getCompositeFBTypes() {
-		return getFbTypes().values().stream().filter(e -> e.getTypeEditable() instanceof CompositeFBType)
+		return fbTypes.values().stream().filter(e -> e.getTypeEditable() instanceof CompositeFBType)
 				.map(e -> (CompositeFBType) e.getTypeEditable()).toList();
 	}
 
 	public AdapterTypeEntry getAdapterTypeEntry(final String typeName) {
-		return getAdapterTypes().get(typeName);
+		return adapterTypes.get(typeName.toLowerCase());
 	}
 
 	public AttributeTypeEntry getAttributeTypeEntry(final String typeName) {
-		return getAttributeTypes().get(typeName);
+		return attributeTypes.get(typeName.toLowerCase());
 	}
 
 	public DeviceTypeEntry getDeviceTypeEntry(final String typeName) {
-		return getDeviceTypes().get(typeName);
+		return deviceTypes.get(typeName.toLowerCase());
 	}
 
 	public FBTypeEntry getFBTypeEntry(final String typeName) {
-		return getFbTypes().get(typeName);
+		return fbTypes.get(typeName.toLowerCase());
 	}
 
 	public ResourceTypeEntry getResourceTypeEntry(final String typeName) {
-		return getResourceTypes().get(typeName);
+		return resourceTypes.get(typeName.toLowerCase());
 	}
 
 	public SegmentTypeEntry getSegmentTypeEntry(final String typeName) {
-		return getSegmentTypes().get(typeName);
+		return segmentTypes.get(typeName.toLowerCase());
 	}
 
 	public SubAppTypeEntry getSubAppTypeEntry(final String typeName) {
-		return getSubAppTypes().get(typeName);
+		return subAppTypes.get(typeName.toLowerCase());
 	}
 
 	public SystemEntry getSystemEntry(final String name) {
-		return getSystems().get(name);
+		return systems.get(name.toLowerCase());
 	}
 
 	public GlobalConstantsEntry getGlobalConstantsEntry(final String name) {
-		return getGlobalConstants().get(name);
+		return globalConstants.get(name.toLowerCase());
 	}
 
 	public TypeEntry getFBOrSubAppType(final String typeName) {
@@ -278,7 +278,7 @@ public final class TypeLibrary {
 	}
 
 	public TypeEntry createErrorTypeEntry(final String typeName, final EClass typeClass) {
-		return errorTypes.computeIfAbsent(typeName, name -> {
+		return errorTypes.computeIfAbsent(typeName.toLowerCase(), name -> {
 			final FBType fbType = (FBType) LibraryElementFactory.eINSTANCE.create(typeClass);
 			PackageNameHelper.setFullTypeName(fbType, name);
 			fbType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
@@ -300,7 +300,7 @@ public final class TypeLibrary {
 	}
 
 	private void removeErrorTypeEntry(final String typeName) {
-		final TypeEntry entry = errorTypes.remove(typeName);
+		final TypeEntry entry = errorTypes.remove(typeName.toLowerCase());
 		if (entry != null) {
 			entry.setTypeLibrary(null);
 		}
@@ -328,7 +328,7 @@ public final class TypeLibrary {
 				handleDuplicateTypeName(entry);
 			}
 		}
-		if (isProgramTypeEntry(entry) && programTypes.putIfAbsent(entry.getFullTypeName(), entry) != null) {
+		if (isProgramTypeEntry(entry) && !addProgramTypeEntry(entry)) {
 			handleDuplicateTypeName(entry);
 		}
 		addPackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
@@ -359,7 +359,7 @@ public final class TypeLibrary {
 			removeBlockTypeEntry(entry);
 		}
 		if (isProgramTypeEntry(entry)) {
-			programTypes.remove(entry.getFullTypeName(), entry);
+			removeProgramTypeEntry(entry);
 		}
 		removePackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
 		deleteTypeLibraryMarkers(entry.getFile());
@@ -388,14 +388,25 @@ public final class TypeLibrary {
 
 	protected void addPackageNameReference(final String packageName) {
 		if (packageName != null && !packageName.isEmpty()) {
-			packages.computeIfAbsent(packageName, key -> new AtomicInteger()).incrementAndGet();
+			packages.computeIfAbsent(packageName.toLowerCase(), key -> new AtomicInteger()).incrementAndGet();
 		}
 	}
 
 	protected void removePackageNameReference(final String packageName) {
 		if (packageName != null && !packageName.isEmpty()) {
-			packages.computeIfPresent(packageName, (key, value) -> value.decrementAndGet() > 0 ? value : null);
+			packages.computeIfPresent(packageName.toLowerCase(),
+					(key, value) -> value.decrementAndGet() > 0 ? value : null);
 		}
+	}
+
+	protected boolean addProgramTypeEntry(final TypeEntry entry) {
+		final String fullTypeName = entry.getFullTypeName().toLowerCase();
+		return programTypes.putIfAbsent(fullTypeName, entry) == null;
+	}
+
+	protected boolean removeProgramTypeEntry(final TypeEntry entry) {
+		final String fullTypeName = entry.getFullTypeName().toLowerCase();
+		return programTypes.remove(fullTypeName, entry);
 	}
 
 	void refresh() {
@@ -411,15 +422,15 @@ public final class TypeLibrary {
 	}
 
 	private void checkDeletions() {
-		checkDeletionsForTypeGroup(getAdapterTypes().values());
-		checkDeletionsForTypeGroup(getAttributeTypes().values());
-		checkDeletionsForTypeGroup(getDeviceTypes().values());
-		checkDeletionsForTypeGroup(getFbTypes().values());
-		checkDeletionsForTypeGroup(getResourceTypes().values());
-		checkDeletionsForTypeGroup(getSegmentTypes().values());
-		checkDeletionsForTypeGroup(getSubAppTypes().values());
-		checkDeletionsForTypeGroup(getSystems().values());
-		checkDeletionsForTypeGroup(getGlobalConstants().values());
+		checkDeletionsForTypeGroup(adapterTypes.values());
+		checkDeletionsForTypeGroup(attributeTypes.values());
+		checkDeletionsForTypeGroup(deviceTypes.values());
+		checkDeletionsForTypeGroup(fbTypes.values());
+		checkDeletionsForTypeGroup(resourceTypes.values());
+		checkDeletionsForTypeGroup(segmentTypes.values());
+		checkDeletionsForTypeGroup(subAppTypes.values());
+		checkDeletionsForTypeGroup(systems.values());
+		checkDeletionsForTypeGroup(globalConstants.values());
 		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes());
 		fileMap.values().removeIf(Predicate.not(this::exists));
 	}
@@ -457,7 +468,7 @@ public final class TypeLibrary {
 	}
 
 	public TypeEntry find(final String name) {
-		return programTypes.get(name);
+		return programTypes.get(name.toLowerCase());
 	}
 
 	public List<TypeEntry> findUnqualified(final String name) {
@@ -467,59 +478,42 @@ public final class TypeLibrary {
 	}
 
 	private boolean addBlockTypeEntry(final TypeEntry entry) {
-		if (entry instanceof final AdapterTypeEntry adpEntry) {
-			return getAdapterTypes().putIfAbsent(entry.getFullTypeName(), adpEntry) == null;
+		final String fullTypeName = entry.getFullTypeName().toLowerCase();
+		return switch (entry) {
+		case final AdapterTypeEntry adpEntry -> adapterTypes.putIfAbsent(fullTypeName, adpEntry) == null;
+		case final AttributeTypeEntry atpEntry -> attributeTypes.putIfAbsent(fullTypeName, atpEntry) == null;
+		case final DeviceTypeEntry devEntry -> deviceTypes.putIfAbsent(fullTypeName, devEntry) == null;
+		case final FBTypeEntry fbtEntry -> fbTypes.putIfAbsent(fullTypeName, fbtEntry) == null;
+		case final ResourceTypeEntry resEntry -> resourceTypes.putIfAbsent(fullTypeName, resEntry) == null;
+		case final SegmentTypeEntry segEntry -> segmentTypes.putIfAbsent(fullTypeName, segEntry) == null;
+		case final SubAppTypeEntry subAppEntry -> subAppTypes.putIfAbsent(fullTypeName, subAppEntry) == null;
+		case final SystemEntry sysEntry -> systems.putIfAbsent(fullTypeName, sysEntry) == null;
+		case final GlobalConstantsEntry globalConstEntry ->
+			globalConstants.putIfAbsent(fullTypeName, globalConstEntry) == null;
+		default -> {
+			FordiacLogHelper.logError("Unknown type entry to be added to library: " + entry.getClass().getName()); //$NON-NLS-1$
+			yield true;
 		}
-		if (entry instanceof final AttributeTypeEntry atpEntry) {
-			return getAttributeTypes().putIfAbsent(entry.getFullTypeName(), atpEntry) == null;
-		}
-		if (entry instanceof final DeviceTypeEntry devEntry) {
-			return getDeviceTypes().putIfAbsent(entry.getFullTypeName(), devEntry) == null;
-		}
-		if (entry instanceof final FBTypeEntry fbtEntry) {
-			return getFbTypes().putIfAbsent(entry.getFullTypeName(), fbtEntry) == null;
-		}
-		if (entry instanceof final ResourceTypeEntry resEntry) {
-			return getResourceTypes().putIfAbsent(entry.getFullTypeName(), resEntry) == null;
-		}
-		if (entry instanceof final SegmentTypeEntry segEntry) {
-			return getSegmentTypes().putIfAbsent(entry.getFullTypeName(), segEntry) == null;
-		}
-		if (entry instanceof final SubAppTypeEntry subAppEntry) {
-			return getSubAppTypes().putIfAbsent(entry.getFullTypeName(), subAppEntry) == null;
-		}
-		if (entry instanceof final SystemEntry sysEntry) {
-			return getSystems().putIfAbsent(entry.getFullTypeName(), sysEntry) == null;
-		}
-		if (entry instanceof final GlobalConstantsEntry globalConstEntry) {
-			return getGlobalConstants().putIfAbsent(entry.getFullTypeName(), globalConstEntry) == null;
-		}
-		FordiacLogHelper.logError("Unknown type entry to be added to library: " + entry.getClass().getName()); //$NON-NLS-1$
-		return true;
+		};
 	}
 
-	private void removeBlockTypeEntry(final TypeEntry entry) {
-		if (entry instanceof AdapterTypeEntry) {
-			getAdapterTypes().remove(entry.getFullTypeName(), entry);
-		} else if (entry instanceof AttributeTypeEntry) {
-			getAttributeTypes().remove(entry.getFullTypeName(), entry);
-		} else if (entry instanceof DeviceTypeEntry) {
-			getDeviceTypes().remove(entry.getFullTypeName(), entry);
-		} else if (entry instanceof FBTypeEntry) {
-			getFbTypes().remove(entry.getFullTypeName(), entry);
-		} else if (entry instanceof ResourceTypeEntry) {
-			getResourceTypes().remove(entry.getFullTypeName(), entry);
-		} else if (entry instanceof SegmentTypeEntry) {
-			getSegmentTypes().remove(entry.getFullTypeName(), entry);
-		} else if (entry instanceof SubAppTypeEntry) {
-			getSubAppTypes().remove(entry.getFullTypeName(), entry);
-		} else if (entry instanceof SystemEntry) {
-			getSystems().remove(entry.getFullTypeName(), entry);
-		} else if (entry instanceof GlobalConstantsEntry) {
-			getGlobalConstants().remove(entry.getFullTypeName(), entry);
-		} else {
+	private boolean removeBlockTypeEntry(final TypeEntry entry) {
+		final String fullTypeName = entry.getFullTypeName().toLowerCase();
+		return switch (entry) {
+		case final AdapterTypeEntry adpEntry -> adapterTypes.remove(fullTypeName, adpEntry);
+		case final AttributeTypeEntry atpEntry -> attributeTypes.remove(fullTypeName, atpEntry);
+		case final DeviceTypeEntry devEntry -> deviceTypes.remove(fullTypeName, devEntry);
+		case final FBTypeEntry fbtEntry -> fbTypes.remove(fullTypeName, fbtEntry);
+		case final ResourceTypeEntry resEntry -> resourceTypes.remove(fullTypeName, resEntry);
+		case final SegmentTypeEntry segEntry -> segmentTypes.remove(fullTypeName, segEntry);
+		case final SubAppTypeEntry subAppEntry -> subAppTypes.remove(fullTypeName, subAppEntry);
+		case final SystemEntry sysEntry -> systems.remove(fullTypeName, sysEntry);
+		case final GlobalConstantsEntry globalConstEntry -> globalConstants.remove(fullTypeName, globalConstEntry);
+		default -> {
 			FordiacLogHelper.logError("Unknown type entry to be removed from library: " + entry.getClass().getName()); //$NON-NLS-1$
+			yield true;
 		}
+		};
 	}
 
 	private static boolean isProgramTypeEntry(final TypeEntry entry) {

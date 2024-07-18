@@ -44,12 +44,12 @@ public class LiveSearchContext extends AbstractLiveSearchContext {
 
 	@Override
 	public Collection<URI> getSubappTypes() {
-		return getTypelib().getSubAppTypes().values().stream().map(TypeEntry::getURI).filter(Objects::nonNull).toList();
+		return getTypelib().getSubAppTypes().stream().map(TypeEntry::getURI).filter(Objects::nonNull).toList();
 	}
 
 	@Override
 	public Collection<URI> getFBTypes() {
-		return getTypelib().getFbTypes().values().stream().map(TypeEntry::getURI).filter(Objects::nonNull).toList();
+		return getTypelib().getFbTypes().stream().map(TypeEntry::getURI).filter(Objects::nonNull).toList();
 	}
 
 }
