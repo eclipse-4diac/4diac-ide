@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.filters.AttributeFilter;
@@ -36,9 +37,11 @@ import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclaratio
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.AttributeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider;
@@ -100,9 +103,16 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 				this, false);
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
 
+		final Predicate<TypeEntry> lockFilter = entry -> {
+			if (entry.getType() instanceof final AttributeDeclaration decl) {
+				return decl.isValidObject(getType());
+			}
+			return true;
+		};
 		final AttributeNameCellEditor attributeNameCellEditor = new AttributeNameCellEditor();
-		attributeNameCellEditor.enableContentProposal(new TextContentAdapter(),
-				new TypeSelectionProposalProvider(this::getTypeLibrary, AttributeSelectionContentProvider.INSTANCE),
+		attributeNameCellEditor.enableContentProposal(
+				new TextContentAdapter(), new TypeSelectionProposalProvider(this::getTypeLibrary,
+						AttributeSelectionContentProvider.INSTANCE, lockFilter),
 				KeyStroke.getInstance(SWT.CTRL, SWT.SPACE), null);
 		table.addConfiguration(new AbstractRegistryConfiguration() {
 			@Override
