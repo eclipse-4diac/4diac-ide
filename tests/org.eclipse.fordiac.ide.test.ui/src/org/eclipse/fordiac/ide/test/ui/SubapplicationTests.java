@@ -13,14 +13,13 @@
 package org.eclipse.fordiac.ide.test.ui;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
@@ -52,16 +51,15 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
-		assertTrue(selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart)
-				.map(p -> (FBEditPart) p.part()).anyMatch(fb -> E_SWITCH_FB.equals(fb.getModel().getName())));
-		assertTrue(selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart)
-				.map(p -> (FBEditPart) p.part()).anyMatch(fb -> E_SR_FB.equals(fb.getModel().getName())));
+		assertEquals(2, selectedEditParts.size());
+		assertTrue(isFbSelected(selectedEditParts, E_SWITCH_FB));
+		assertTrue(isFbSelected(selectedEditParts, E_SR_FB));
+
 		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
 		// renew list of selectedEditParts and then check if SubApp was created
 		selectedEditParts = editor.selectedEditParts();
-		assertTrue(selectedEditParts.stream().filter(p -> p.part() instanceof SubAppForFBNetworkEditPart)
-				.map(p -> (SubAppForFBNetworkEditPart) p.part())
-				.anyMatch(fb -> SUBAPP.equals(fb.getModel().getName())));
+		assertEquals(1, selectedEditParts.size());
+		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
 	}
 
 	/**
@@ -87,20 +85,21 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
-		assertTrue(selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart)
-				.map(p -> (FBEditPart) p.part()).anyMatch(fb -> E_SWITCH_FB.equals(fb.getModel().getName())));
-		assertTrue(selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart)
-				.map(p -> (FBEditPart) p.part()).anyMatch(fb -> E_SR_FB.equals(fb.getModel().getName())));
+
+		// expected 5 selected EditParts (2 GefEditPart for the FBs and
+		// 3 GefConnectionEditPars for the connections
+		assertEquals(5, selectedEditParts.size());
+		assertTrue(isFbSelected(selectedEditParts, E_SWITCH_FB));
+		assertTrue(isFbSelected(selectedEditParts, E_SR_FB));
+		assertTrue(checkIfConnectionCanBeFound(EO0, S));
+		assertTrue(checkIfConnectionCanBeFound(EO1, R));
+		assertTrue(checkIfConnectionCanBeFound(Q, G));
+
 		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
 		// renew list of selectedEditParts and then check if SubApp was created
 		selectedEditParts = editor.selectedEditParts();
-		assertTrue(selectedEditParts.stream().filter(p -> p.part() instanceof SubAppForFBNetworkEditPart)
-				.map(p -> (SubAppForFBNetworkEditPart) p.part())
-				.anyMatch(fb -> SUBAPP.equals(fb.getModel().getName())));
-		selectedEditParts = editor.selectedEditParts();
-		assertTrue(selectedEditParts.stream().filter(p -> p.part() instanceof SubAppForFBNetworkEditPart)
-				.map(p -> (SubAppForFBNetworkEditPart) p.part())
-				.anyMatch(fb -> SUBAPP.equals(fb.getModel().getName())));
+		assertEquals(1, selectedEditParts.size());
+		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
 	}
 
 	/**
@@ -120,24 +119,25 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		dragAndDropEventsFB(E_SR_TREE_ITEM, new Point(500, 100));
 		assertNotNull(createConnection(EO, EI));
 
-		// drag rectangle over to FB, therefore FB should be selected
+		// drag rectangle over to FBs E_SWITCH and E_SR, therefore FBs should be
+		// selected
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
 		editor.drag(250, 50, 600, 200);
 		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
-		assertTrue(selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart)
-				.map(p -> (FBEditPart) p.part()).anyMatch(fb -> E_SWITCH_FB.equals(fb.getModel().getName())));
-		assertTrue(selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart)
-				.map(p -> (FBEditPart) p.part()).anyMatch(fb -> E_SR_FB.equals(fb.getModel().getName())));
-		assertFalse(selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart)
-				.map(p -> (FBEditPart) p.part()).anyMatch(fb -> E_CYCLE_TREE_ITEM.equals(fb.getModel().getName())));
+		assertEquals(2, selectedEditParts.size());
+		assertTrue(isFbSelected(selectedEditParts, E_SWITCH_FB));
+		assertTrue(isFbSelected(selectedEditParts, E_SR_FB));
+		assertFalse(isFbSelected(selectedEditParts, E_CYCLE_TREE_ITEM));
+		assertTrue(checkIfConnectionCanBeFound(EO, EI));
+
 		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
 		// renew list of selectedEditParts and then check if SubApp was created
 		selectedEditParts = editor.selectedEditParts();
-		assertTrue(selectedEditParts.stream().filter(p -> p.part() instanceof SubAppForFBNetworkEditPart)
-				.map(p -> (SubAppForFBNetworkEditPart) p.part())
-				.anyMatch(fb -> SUBAPP.equals(fb.getModel().getName())));
+		assertEquals(1, selectedEditParts.size());
+		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
+		assertTrue(checkIfConnectionCanBeFound(EO, EO));
 	}
 
 	/**
