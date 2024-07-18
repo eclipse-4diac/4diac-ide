@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -51,8 +50,7 @@ public class CreateInternalFBCommand extends CreationCommand implements ScopedCo
 		this.baseFbType = Objects.requireNonNull(baseFbType);
 		this.fbType = fbType;
 		if (null == fbType) {
-			final Map<String, FBTypeEntry> typeLib = baseFbType.getTypeLibrary().getFbTypes();
-			this.fbType = typeLib.values().iterator().next();
+			this.fbType = baseFbType.getTypeLibrary().getFbTypes().iterator().next();
 		}
 		this.name = (null != name) ? name : DEFAULT_INTERNAL_FB_NAME;
 		this.index = index;

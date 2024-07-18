@@ -53,15 +53,15 @@ public class ImportSelectionProposalProvider implements IContentProposalProvider
 
 	protected static Stream<String> getImportableTypeNames(final TypeLibrary typeLibrary) {
 		return Stream
-				.of(typeLibrary.getDataTypeLibrary().getDerivedDataTypes(), typeLibrary.getAdapterTypes().values(),
-						typeLibrary.getFbTypes().values(), typeLibrary.getAttributeTypes().values())
+				.of(typeLibrary.getDataTypeLibrary().getDerivedDataTypes(), typeLibrary.getAdapterTypes(),
+						typeLibrary.getFbTypes(), typeLibrary.getAttributeTypes())
 				.flatMap(Collection::stream).map(TypeEntry::getFullTypeName)
 				.filter(fullName -> fullName.contains(PackageNameHelper.PACKAGE_NAME_DELIMITER)).distinct();
 	}
 
 	protected static Stream<String> getGlobalConstantImportableNames(final TypeLibrary typeLibrary) {
-		return typeLibrary.getGlobalConstants().values().stream().map(GlobalConstantsEntry::getType)
-				.filter(Objects::nonNull).flatMap(ImportSelectionProposalProvider::getGlobalConstantImportableNames);
+		return typeLibrary.getGlobalConstants().stream().map(GlobalConstantsEntry::getType).filter(Objects::nonNull)
+				.flatMap(ImportSelectionProposalProvider::getGlobalConstantImportableNames);
 	}
 
 	protected static Stream<String> getGlobalConstantImportableNames(final GlobalConstants globalConstants) {

@@ -14,8 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editor;
 
-import java.util.Map.Entry;
-
 import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.gef.utilities.TemplateCreationFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -77,9 +75,8 @@ public final class SystemConfPaletteFactory {
 	private static PaletteDrawer createDevGroup(final PaletteRoot palette, final TypeLibrary typelib) {
 		final PaletteDrawer paletteContainer = new PaletteDrawer("Devices");
 
-		for (final Entry<String, DeviceTypeEntry> entry : typelib.getDeviceTypes().entrySet()) {
-			final PaletteEntry typeEntry = createCreationEntry(entry.getValue(),
-					FordiacImage.ICON_DEVICE.getImageDescriptor());
+		for (final DeviceTypeEntry entry : typelib.getDeviceTypes()) {
+			final PaletteEntry typeEntry = createCreationEntry(entry, FordiacImage.ICON_DEVICE.getImageDescriptor());
 			if (typeEntry != null) {
 				paletteContainer.add(typeEntry);
 			}
@@ -95,8 +92,8 @@ public final class SystemConfPaletteFactory {
 	private static PaletteDrawer createRESGroup(final PaletteRoot palette, final TypeLibrary typelib) {
 		final PaletteDrawer paletteContainer = new PaletteDrawer("Resources");
 
-		for (final Entry<String, ResourceTypeEntry> entry : typelib.getResourceTypes().entrySet()) {
-			final PaletteEntry paletteEntry = createCreationEntry(entry.getValue(),
+		for (final ResourceTypeEntry entry : typelib.getResourceTypes()) {
+			final PaletteEntry paletteEntry = createCreationEntry(entry,
 					FordiacImage.ICON_RESOURCE.getImageDescriptor());
 			if (paletteEntry != null) {
 				paletteContainer.add(paletteEntry);
@@ -113,8 +110,8 @@ public final class SystemConfPaletteFactory {
 	private static PaletteDrawer createSEGGroup(final PaletteRoot palette, final TypeLibrary typelib) {
 		final PaletteDrawer paletteContainer = new PaletteDrawer("Segments");
 
-		for (final Entry<String, SegmentTypeEntry> entry : typelib.getSegmentTypes().entrySet()) {
-			final PaletteEntry paletteEntry = createCreationEntry(entry.getValue(),
+		for (final SegmentTypeEntry entry : typelib.getSegmentTypes()) {
+			final PaletteEntry paletteEntry = createCreationEntry(entry,
 					FordiacImage.ICON_SEGMENT.getImageDescriptor());
 			if (paletteEntry != null) {
 				paletteContainer.add(paletteEntry);

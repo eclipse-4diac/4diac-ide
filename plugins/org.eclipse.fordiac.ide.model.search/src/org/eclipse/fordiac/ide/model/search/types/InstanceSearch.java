@@ -145,7 +145,7 @@ public class InstanceSearch {
 	}
 
 	public void searchSubappTypesNetworks(final TypeLibrary typeLibrary) {
-		for (final SubAppTypeEntry entry : typeLibrary.getSubAppTypes().values()) {
+		for (final SubAppTypeEntry entry : typeLibrary.getSubAppTypes()) {
 			if (entry.getTypeEditable().getFBNetwork() != null) {
 				searchFBNetwork(entry.getTypeEditable().getFBNetwork());
 			}
@@ -175,7 +175,7 @@ public class InstanceSearch {
 	public Set<INamedElement> performInternalFBSearch(final TypeLibrary typeLibrary) {
 		searchResult = new HashSet<>();
 		// @formatter:off
-		typeLibrary.getFbTypes().values().stream()
+		typeLibrary.getFbTypes().stream()
 			.map(FBTypeEntry::getTypeEditable)
 			.filter(BaseFBType.class::isInstance)
 			.map(BaseFBType.class::cast)
