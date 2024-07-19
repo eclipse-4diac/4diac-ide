@@ -79,6 +79,7 @@ public class Abstract4diacUITests {
 	protected static final String COMMENT = "Comment:"; //$NON-NLS-1$
 	protected static final String CANCEL = "Cancel"; //$NON-NLS-1$
 	protected static final String CREATE_INPUT_EVENT = "Create Input Event"; //$NON-NLS-1$
+	protected static final String CREATE_OUTPUT_EVENT = "Create Output Event"; //$NON-NLS-1$
 	protected static final String CREATE_DATA_INPUT = "Create Data Input"; //$NON-NLS-1$
 	protected static final String CREATE_DATA_OUTPUT = "Create Data Output"; //$NON-NLS-1$
 	protected static final String DATA = "Data"; //$NON-NLS-1$
@@ -446,7 +447,13 @@ public class Abstract4diacUITests {
 		final SWTBotTree tree = new SWTBotTree(swtTree);
 		final SWTBotTreeItem parentItem = tree.getTreeItem(PROJECT_NAME);
 		parentItem.expand();
-		final SWTBotTreeItem projectItem = parentItem.getNode(typeName);
+		SWTBotTreeItem projectItem = null;
+		for (final SWTBotTreeItem item : parentItem.getItems()) {
+			if (item.getText().contains(typeName)) {
+				projectItem = item;
+				break;
+			}
+		}
 		projectItem.select();
 		bot.menu(EDIT).menu(DELETE).click();
 
@@ -473,8 +480,14 @@ public class Abstract4diacUITests {
 		final SWTBotTree tree = new SWTBotTree(swtTree);
 		final SWTBotTreeItem parentItem = tree.getTreeItem(parentName);
 		parentItem.expand();
-		final SWTBotTreeItem projectItem = parentItem.getNode(typeName);
-		assertEquals(projectItem.getText(), typeName);
+		SWTBotTreeItem projectItem = null;
+		for (final SWTBotTreeItem item : parentItem.getItems()) {
+			if (item.getText().contains(typeName)) {
+				projectItem = item;
+				break;
+			}
+		}
+		assertTrue(projectItem.getText().contains(typeName));
 	}
 
 	/**
