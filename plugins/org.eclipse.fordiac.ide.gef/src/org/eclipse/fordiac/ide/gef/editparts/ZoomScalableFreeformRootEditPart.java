@@ -97,7 +97,8 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		private void drawVerLines(final Graphics g, final Rectangle clip) {
 			final int majorInterleaveX = gridX * MAJOR_INTERLEAVE;
 			final int medInterleaveX = gridX * MEDIUM_INTERLEAVE;
-			final int realInterleaveX = determineInterleave(gridX, medInterleaveX, majorInterleaveX, g.getAbsoluteScale());
+			final int realInterleaveX = determineInterleave(gridX, medInterleaveX, majorInterleaveX,
+					g.getAbsoluteScale());
 
 			if (realInterleaveX > 0) {
 				for (int i = getLineStart(origin.x, clip.x, realInterleaveX); i < clip.x
@@ -111,7 +112,8 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		private void drawHorLines(final Graphics g, final Rectangle clip) {
 			final int majorInterleaveY = gridY * MAJOR_INTERLEAVE;
 			final int medInterleaveY = gridY * MEDIUM_INTERLEAVE;
-			final int realInterleaveY = determineInterleave(gridY, medInterleaveY, majorInterleaveY, g.getAbsoluteScale());
+			final int realInterleaveY = determineInterleave(gridY, medInterleaveY, majorInterleaveY,
+					g.getAbsoluteScale());
 			if (realInterleaveY > 0) {
 				for (int i = getLineStart(origin.y, clip.y, realInterleaveY); i < clip.y
 						+ clip.height; i += realInterleaveY) {
@@ -224,7 +226,8 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		zoomLevels.add(ZoomManager.FIT_WIDTH);
 		zoomLevels.add(ZoomManager.FIT_HEIGHT);
 		getZoomManager().setZoomLevelContributions(zoomLevels);
-		getZoomManager().setZoomLevels(new double[] { .25, .5, .75, .80, .85, .90, 1.0, 1.5, 2.0, 2.5, 3, 4 });
+		getZoomManager().setZoomLevels(
+				new double[] { .25, .45, .5, .55, .6, .65, .75, .80, .85, .90, .95, 1.0, 1.25, 1.5, 1.75, 2.0 });
 		getZoomManager().setZoomAnimationStyle(AbstractZoomManager.ANIMATE_ZOOM_IN_OUT);
 	}
 
