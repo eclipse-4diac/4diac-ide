@@ -33,4 +33,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.swt,
  org.hamcrest.core,
  org.eclipse.draw2d,
- org.hamcrest.library;bundle-version="[1.3.0,2.0.0)"
+ org.hamcrest.library;bundle-version="[1.3.0,2.2.1)"
