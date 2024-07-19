@@ -36,4 +36,5 @@ Export-Package: org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.typemanagement.util,
  org.eclipse.fordiac.ide.typemanagement.wizards
 Automatic-Module-Name: org.eclipse.fordiac.ide.typemanagement
-Import-Package: org.eclipse.fordiac.ide.model.ui.editors
+Import-Package: org.eclipse.fordiac.ide.model.ui.editors,
+ org.eclipse.fordiac.ide.typemanagement.refactoring

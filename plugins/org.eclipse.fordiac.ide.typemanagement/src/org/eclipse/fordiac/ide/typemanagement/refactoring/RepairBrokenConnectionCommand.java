@@ -2,6 +2,7 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -34,10 +35,10 @@ public class RepairBrokenConnectionCommand extends Command {
 
 	public RepairBrokenConnectionCommand(final Connection con, final boolean isSourceReconnect,
 			final StructuredType structType, final String var) {
-		this.connection = con;
-		this.isSourceReconnect = isSourceReconnect;
-		this.structType = structType;
-		this.var = var;
+		this.connection = Objects.requireNonNull(con);
+		this.isSourceReconnect = Objects.requireNonNull(isSourceReconnect);
+		this.structType = Objects.requireNonNull(structType);
+		this.var = Objects.requireNonNull(var);
 	}
 
 	private IInterfaceElement getPort() {

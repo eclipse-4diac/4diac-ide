@@ -1,6 +1,7 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
@@ -28,10 +29,10 @@ public class ReplaceVarsWithStructCommand extends Command {
 
 	public ReplaceVarsWithStructCommand(final Set<String> vars, final DataType struct, final String name,
 			final InterfaceList interfacelist, final boolean isInput, final int position) {
-		this.vars = vars;
-		this.struct = struct;
-		this.name = name;
-		this.interfacelist = interfacelist;
+		this.vars = Objects.requireNonNull(vars);
+		this.struct = Objects.requireNonNull(struct);
+		this.name = Objects.requireNonNull(name);
+		this.interfacelist = Objects.requireNonNull(interfacelist);
 		this.isInput = isInput;
 		this.position = position;
 
@@ -39,7 +40,9 @@ public class ReplaceVarsWithStructCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return editFBsCommand.canExecute();
+		// TODO: depending on fbtype
+		// return editFBsCommand.canExecute();
+		return true;
 	}
 
 	@Override

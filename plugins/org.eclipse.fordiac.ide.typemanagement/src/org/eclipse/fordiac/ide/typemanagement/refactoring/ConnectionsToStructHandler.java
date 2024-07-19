@@ -31,7 +31,6 @@ public class ConnectionsToStructHandler extends AbstractHandler {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final CommandStack commandStack = editor.getAdapter(CommandStack.class);
 
-		System.out.println(HandlerUtil.getCurrentSelection(event));
 		window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
 		if (window != null) {
@@ -55,6 +54,21 @@ public class ConnectionsToStructHandler extends AbstractHandler {
 				final Map<String, String> replacableConMap = new HashMap<>();
 				connections.stream().forEach(
 						con -> replacableConMap.put(con.getSource().getName(), con.getDestination().getName()));
+
+//				try {
+//					final ConnectionsToStructChange c2sChange = new ConnectionsToStructChange(
+//							EcoreUtil.getURI(connections.getFirst().getSourceElement().getFbNetwork()), FBNetwork.class,
+//							sourceType, destinationType, (StructuredType) wizard.getCreatedDataType(),
+//							wizard.getSourceName(), wizard.getDestinationName(), replacableConMap,
+//							wizard.getConflictResolution());
+//					RefactoringCore.getUndoManager().aboutToPerformChange(c2sChange);
+//					final Change undo = c2sChange.perform(new NullProgressMonitor());
+//					RefactoringCore.getUndoManager().changePerformed(c2sChange, true);
+//					RefactoringCore.getUndoManager().addUndo(RefactoringUIMessages.RenameResourceHandler_title, undo);
+//				} catch (final CoreException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 
 				// Execute Command
 				final ConnectionsToStructCommand cmd = new ConnectionsToStructCommand(sourceType, destinationType,

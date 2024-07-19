@@ -1,5 +1,7 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
+import java.util.Objects;
+
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
@@ -20,9 +22,9 @@ public class InsertStructManipulatorCommand extends Command {
 	private StructDataConnectionCreateCommand createCon;
 
 	public InsertStructManipulatorCommand(final StructuredType structType, final IInterfaceElement port) {
-		this.structType = structType;
-		this.port = port;
-		this.isMUX = port.isIsInput();
+		this.structType = Objects.requireNonNull(structType);
+		this.port = Objects.requireNonNull(port);
+		this.isMUX = Objects.requireNonNull(port.isIsInput());
 	}
 
 	@Override
