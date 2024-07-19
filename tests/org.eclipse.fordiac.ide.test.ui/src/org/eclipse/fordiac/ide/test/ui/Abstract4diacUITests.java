@@ -16,9 +16,11 @@ package org.eclipse.fordiac.ide.test.ui;
 
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Map;
@@ -53,8 +55,10 @@ import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.BoolResult;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotCTabItem;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyList;
@@ -71,6 +75,7 @@ public class Abstract4diacUITests {
 
 	protected static SWT4diacGefBot bot;
 	protected static final String APP = "App"; //$NON-NLS-1$
+	protected static final String COMMENT = "Comment:"; //$NON-NLS-1$
 	protected static final String DELETE = "Delete"; //$NON-NLS-1$
 	protected static final String DELETE_PROJECT_WARNING = "Delete project contents on disk (cannot be undone)"; //$NON-NLS-1$
 	protected static final String DELETE_RESOURCES = "Delete Resources"; //$NON-NLS-1$
@@ -103,6 +108,7 @@ public class Abstract4diacUITests {
 	protected static final String GO_TO_PARENT = "Go To Parent"; //$NON-NLS-1$
 	protected static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
 	protected static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
+	protected static final String NAME_LABEL = "Name:"; //$NON-NLS-1$
 	protected static final String NAVIGATE = "Navigate"; //$NON-NLS-1$
 	protected static final String NEW = "New"; //$NON-NLS-1$
 	protected static final String NEW_4DIAC_PROJECT = "New 4diacProject"; //$NON-NLS-1$
@@ -133,11 +139,25 @@ public class Abstract4diacUITests {
 	protected static final String PROPERTIES_TITLE = "Properties"; //$NON-NLS-1$
 	protected static final String INTERFACE = "Interface"; //$NON-NLS-1$
 	protected static final String VAR_INOUT = "Var InOuts"; //$NON-NLS-1$
+	protected static final String CREATE_INPUT_EVENT = "Create Input Event"; //$NON-NLS-1$
+	protected static final String CREATE_DATA_INPUT = "Create Data Input"; //$NON-NLS-1$
+	protected static final String CREATE_DATA_OUTPUT = "Create Data Output"; //$NON-NLS-1$
+	protected static final String EVENT = "Event"; //$NON-NLS-1$
+	protected static final String DATA = "Data"; //$NON-NLS-1$
+	protected static final String DOT_BUTTON = "..."; //$NON-NLS-1$
+	protected static final String TYPE_SELECTION = "Type Selection"; //$NON-NLS-1$
+	protected static final String ELEMENTARY_TYPE = "Elementary Types"; //$NON-NLS-1$
+	protected static final String TYPE_LABEL = "Type:"; //$NON-NLS-1$
+	protected static final String TEST_COMMENT = "Request from ideal Socket"; //$NON-NLS-1$
+	protected static final String WITH = "With"; //$NON-NLS-1$
 
 	// FB pins and values
+	protected static final String ANY = "ANY"; //$NON-NLS-1$
 	protected static final String START = "START"; //$NON-NLS-1$
 	protected static final String STOP = "STOP"; //$NON-NLS-1$
 	protected static final String D = "D"; //$NON-NLS-1$
+	protected static final String DI1 = "DI1"; //$NON-NLS-1$
+	protected static final String DO1 = "DO1"; //$NON-NLS-1$
 	protected static final String G = "G"; //$NON-NLS-1$
 	protected static final String N = "N"; //$NON-NLS-1$
 	protected static final String Q = "Q"; //$NON-NLS-1$
@@ -147,6 +167,7 @@ public class Abstract4diacUITests {
 	protected static final String DT = "DT"; //$NON-NLS-1$
 	protected static final String EO = "EO"; //$NON-NLS-1$
 	protected static final String EI = "EI"; //$NON-NLS-1$
+	protected static final String EI1 = "EI1"; //$NON-NLS-1$
 	protected static final String PV = "PV"; //$NON-NLS-1$
 	protected static final String QD = "QD"; //$NON-NLS-1$
 	protected static final String QU = "QU"; //$NON-NLS-1$
@@ -159,6 +180,7 @@ public class Abstract4diacUITests {
 	protected static final String REQ = "REQ"; //$NON-NLS-1$
 	protected static final String CLKO = "CLKO"; //$NON-NLS-1$
 	protected static final String INIT = "INIT"; //$NON-NLS-1$
+	protected static final String INT = "INT"; //$NON-NLS-1$
 	protected static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
 	protected static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
 
@@ -434,6 +456,24 @@ public class Abstract4diacUITests {
 	}
 
 	/**
+	 * Open FB Type in editor from explorer.
+	 *
+	 * @param parentName Name of the parent Project.
+	 * @param typeName   Name of the new type.
+	 */
+	protected static void openFBTypeInEditor(final String parentName, final String typeName) {
+		final SWTBotView systemExplorerView = bot.viewByTitle(SYSTEM_EXPLORER_LABEL);
+		systemExplorerView.show();
+		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
+		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
+		final SWTBotTree tree = new SWTBotTree(swtTree);
+		final SWTBotTreeItem parentItem = tree.getTreeItem(parentName);
+		parentItem.expand();
+		final SWTBotTreeItem projectItem = parentItem.getNode(typeName);
+		assertEquals(projectItem.getText(), typeName);
+	}
+
+	/**
 	 * copied from
 	 * org.eclipse.sirius.tests.swtbot.support.api.editor.SWTBotSiriusHelper
 	 *
@@ -494,6 +534,108 @@ public class Abstract4diacUITests {
 		event.stateMask = stateMask;
 		event.count = count;
 		return event;
+	}
+
+	/**
+	 * Deletes the given pin on the FB opened the provided editor.
+	 *
+	 * @param editor  Selected Gef Editor
+	 * @param pinName Name of pin.
+	 */
+	protected static void deletePin(final SWTBot4diacGefEditor editor, final String pinName) {
+		final SWTBotGefEditPart pin = editor.getEditPart(pinName);
+		assertNotNull(pin);
+		pin.click();
+		editor.clickContextMenu(DELETE);
+		assertNull(editor.getEditPart(pinName));
+	}
+
+	/**
+	 * Creates connection within FB Type from Property Sheet
+	 *
+	 * @param pin1   Name of pin1.
+	 * @param pin2   Name of pin2.
+	 * @param editor Selected Gef Editor
+	 */
+	protected static void createConnectionWithinFBTypeWithPropertySheet(final String pin1, final String pin2,
+			final SWTBot4diacGefEditor editor) {
+
+		final SWTBotGefEditPart port1 = editor.getEditPart(pin1);
+		port1.click();
+
+		final SWTBotGefEditPart port2 = editor.getEditPart(pin2);
+		port2.click();
+
+		SWTBot propertiesBot = bot.viewByTitle(PROPERTIES_TITLE).bot();
+		bot.viewByTitle(PROPERTIES_TITLE).setFocus();
+
+		if (selectPropertyTabItem(EVENT, propertiesBot)) {
+			propertiesBot = selectTabFromInterfaceProperties(EVENT);
+		} else {
+			propertiesBot = selectTabFromInterfaceProperties(DATA);
+		}
+
+		// Find the group with the label "With"
+		final SWTBotTable table = propertiesBot.tableInGroup(WITH);
+
+		table.select(pin1);
+		table.getTableItem(pin1).toggleCheck();
+		assertTrue(table.getTableItem(pin1).isChecked());
+		checkIfConnectionCanBeFound(pin1, pin2);
+	}
+
+	/**
+	 * Remove connection within FB Type from Property Sheet
+	 *
+	 * @param pin1   Name of pin1.
+	 * @param pin2   Name of pin2.
+	 * @param editor Selected Gef Editor
+	 */
+	protected static void removeConnectionWithinFBTypeWithPropertySheet(final String pin1, final String pin2,
+			final SWTBot4diacGefEditor editor) {
+
+		final SWTBotGefEditPart port1 = editor.getEditPart(pin1);
+		editor.click(port1);
+
+		final SWTBotGefEditPart port2 = editor.getEditPart(pin2);
+		port2.click();
+
+		SWTBot propertiesBot = bot.viewByTitle(PROPERTIES_TITLE).bot();
+		bot.viewByTitle(PROPERTIES_TITLE).setFocus();
+
+		if (selectPropertyTabItem(EVENT, propertiesBot)) {
+			propertiesBot = selectTabFromInterfaceProperties(EVENT);
+		} else {
+			propertiesBot = selectTabFromInterfaceProperties(DATA);
+		}
+
+		// Find the group with the label "With"
+		final SWTBotTable table = propertiesBot.tableInGroup(WITH);
+
+		table.select(pin1);
+		table.getTableItem(pin1).toggleCheck();
+		assertFalse(table.getTableItem(pin1).isChecked());
+		checkIfConnectionCanBeFound(pin1, pin2);
+	}
+
+	/**
+	 * Select tab from Interface's Properties
+	 *
+	 * @param tabName Name of Tab on Property Sheet under Interface
+	 */
+	protected static SWTBot selectTabFromInterfaceProperties(final String tabName) {
+		// Interface tab
+		final SWTBotCTabItem interfaceTab = bot.cTabItem(INTERFACE);
+		interfaceTab.activate();
+		interfaceTab.setFocus();
+
+		// Properties tab access
+		final SWTBot propertiesBot = bot.viewByTitle(PROPERTIES_TITLE).bot();
+		bot.viewByTitle(PROPERTIES_TITLE).setFocus();
+
+		// Tabs access inside property sheet
+		selectPropertyTabItem(tabName, propertiesBot);
+		return propertiesBot;
 	}
 
 	/**
