@@ -76,6 +76,10 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 		return openType;
 	}
 
+	public String getPackageName() {
+		return ""; //$NON-NLS-1$
+	}
+
 	public boolean getReplaceSource() {
 		return replaceSourceSubapp.getSelection();
 	}
@@ -109,24 +113,6 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 			return TypeLibraryManager.INSTANCE.getTypeLibrary(container.getProject());
 		}
 		return null;
-	}
-
-	private void createPackageNameContainer(final Composite parent) {
-		final Composite packageContainer = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(packageContainer);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(packageContainer);
-
-		final Label enterPackageNameLabel = new Label(packageContainer, SWT.NONE);
-		enterPackageNameLabel.setText("Enter package name: ");
-
-		final Text packageText = new Text(packageContainer, SWT.BORDER);
-		packageText.setEnabled(true);
-		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).hint(250, SWT.DEFAULT)
-				.applyTo(packageText);
-
-		final ContentAssistCommandAdapter packageNameProposalAdapter = new ContentAssistCommandAdapter(packageText,
-				new TextContentAdapter(), new PackageSelectionProposalProvider(this::getTypeLibrary), null, null, true);
-		packageNameProposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 	}
 
 	@Override
@@ -237,6 +223,8 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 	}
 
 	private static class SaveAsSubappWizardPage extends SaveAsWizardPage {
+		private Text packageText;
+
 		public SaveAsSubappWizardPage(final String pageName, final IStructuredSelection selection, final String title,
 				final String description, final String fileLabel, final String checkBoxText,
 				final String replaceSourceText) {
@@ -244,9 +232,44 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 		}
 
 		@Override
+		public String getPackageName() {
+			return packageText.getText();
+		}
+
+		private void createPackageNameContainer(final Composite parent) {
+			final Composite packageContainer = new Composite(parent, SWT.NONE);
+			GridLayoutFactory.fillDefaults().numColumns(2).applyTo(packageContainer);
+			GridDataFactory.fillDefaults().grab(true, false).applyTo(packageContainer);
+
+			final Label enterPackageNameLabel = new Label(packageContainer, SWT.NONE);
+			enterPackageNameLabel.setText(Messages.EnterPackageName_Text + ":"); //$NON-NLS-1$
+
+			packageText = new Text(packageContainer, SWT.BORDER);
+			packageText.setEnabled(true);
+			packageText.addListener(SWT.Modify, this);
+			GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).hint(250, SWT.DEFAULT)
+					.applyTo(packageText);
+
+			final ContentAssistCommandAdapter packageNameProposalAdapter = new ContentAssistCommandAdapter(packageText,
+					new TextContentAdapter(), new PackageSelectionProposalProvider(this::getTypeLibrary), null, null,
+					true);
+			packageNameProposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
+		}
+
+		@Override
 		protected void createAdvancedControls(final Composite parent) {
-			super.createPackageNameContainer(parent);
+			createPackageNameContainer(parent);
 			super.createAdvancedControls(parent);
+		}
+
+		@Override
+		protected boolean validatePage() {
+			final Optional<String> errorMessage = IdentifierVerifier.verifyPackageName(getPackageName());
+			if (errorMessage.isPresent()) {
+				setErrorMessage(errorMessage.get());
+				return false;
+			}
+			return super.validatePage();
 		}
 
 	}
