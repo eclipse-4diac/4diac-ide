@@ -25,9 +25,42 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class BasicFBTOperationTest extends Abstract4diacUITests {
+
+	/**
+	 * Performs necessary tasks to make environment for testing the operations on
+	 * FB.
+	 *
+	 * This method will run before each test and will create new FB Type each time
+	 * and will confirm the visibility of the newly created type in system explorer
+	 * and open the project in editor.
+	 */
+	@SuppressWarnings("static-method")
+	@BeforeEach
+	public void operationsInitialization() {
+		createFBType(PROJECT_NAME, FBT_TEST_PROJECT2);
+		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT2);
+	}
+
+	/**
+	 * Clean the editor by deleting the created FB Type.
+	 *
+	 * This method will run after each test and will delete the FB type which was
+	 * created in before start of the test so that we can perform the other
+	 * operation from another test method, basically this will prevent the
+	 * redundancy.
+	 */
+	@SuppressWarnings("static-method")
+	@AfterEach
+	public void resetEnvironment() {
+		deleteFBType(FBT_TEST_PROJECT2);
+	}
 
 	/**
 	 * Creates new input Event pin on functional block.
@@ -39,16 +72,24 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void createNewEventInput() {
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT2);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT2);
-
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
 		editor.clickContextMenu(CREATE_INPUT_EVENT);
 		assertNotNull(editor.getEditPart(EI1));
+	}
 
-		deletePin(editor, EI1);
-		deleteFBType(FBT_TEST_PROJECT2);
-
+	/**
+	 * Creates new output Event pin on functional block.
+	 *
+	 * The method checks if you can create a new output Event pin on a functional
+	 * block using editor, if the newly created event pin is visible on functional
+	 * block then it's created successfully.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void createNewEventOutput() {
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
+		editor.clickContextMenu(CREATE_OUTPUT_EVENT);
+		assertNotNull(editor.getEditPart(EI1));
 	}
 
 	/**
@@ -57,19 +98,17 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	 * The method checks if you can create a new input Data pin on a functional
 	 * block using editor, if the newly created data pin is visible on functional
 	 * block then it's created successfully.
+	 *
+	 * @param dataType Data Type to create pin
 	 */
 	@SuppressWarnings("static-method")
-	@Test
+	@ParameterizedTest
+	@ValueSource(strings = { INT })
 	public void createNewDataInput(final String dataType) {
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT3);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT3);
-
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT3);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
 		assertNotNull(editor);
 		editor.clickContextMenu(CREATE_DATA_INPUT).clickContextMenu(dataType);
-
 		assertNotNull(editor.getEditPart(DI1));
-		deleteFBType(FBT_TEST_PROJECT3);
 	}
 
 	// it's creating data input, that's error
@@ -79,19 +118,18 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	 * The method checks if you can create a new output Data pin on a functional
 	 * block using editor, if the newly created data pin is visible on functional
 	 * block then it's created successfully.
+	 *
+	 * @param dataType Data Type to create pin
 	 */
 	@SuppressWarnings("static-method")
-	@Test
+	@ParameterizedTest
+	@ValueSource(strings = { INT })
 	public void createNewDataOutput(final String dataType) {
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT3);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT3);
-
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT3);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
 		assertNotNull(editor);
 		editor.clickContextMenu(CREATE_DATA_OUTPUT).clickContextMenu(dataType);
 
 		assertNotNull(editor.getEditPart(DO1));
-		deleteFBType(FBT_TEST_PROJECT3);
 	}
 
 	/**
@@ -105,10 +143,7 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void renamePin() {
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT4);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT4);
-
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT4);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
 		assertNotNull(editor);
 		editor.clickContextMenu(CREATE_INPUT_EVENT);
 
@@ -122,24 +157,19 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 
 		assertNull(editor.getEditPart(EI1));
 		assertNotNull(editor.getEditPart(EVENT));
-
-		deleteFBType(FBT_TEST_PROJECT4);
 	}
 
 	/**
-	 * Change the comment for the pin on FB.
+	 * Change the comment for the event pin on FB.
 	 *
-	 * The method checks if you can change the comment of the pin on FB and if the
-	 * user can select the properties and tabs (tabs on property sheet) correctly.
-	 * Then check if the comment is changed properly or not.
+	 * The method checks if you can change the comment of the event pin on FB and if
+	 * the user can select the properties and tabs (tabs on property sheet)
+	 * correctly. Then check if the comment is changed properly or not.
 	 */
 	@SuppressWarnings("static-method")
 	@Test
-	public void changeEventComment() {
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT3);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT3);
-
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT3);
+	public void changeEventPinComment() {
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
 		assertNotNull(editor);
 		editor.clickContextMenu(CREATE_INPUT_EVENT);
 
@@ -150,8 +180,29 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 		propertiesBot.textWithLabel(COMMENT).setText(TEST_COMMENT);
 
 		assertEquals(propertiesBot.textWithLabel(COMMENT).getText(), TEST_COMMENT);
+	}
 
-//		deleteFBType(FBT_TEST_PROJECT3);
+	/**
+	 * Change the comment for the data pin on FB.
+	 *
+	 * The method checks if you can change the comment of the data pin on FB and if
+	 * the user can select the properties and tabs (tabs on property sheet)
+	 * correctly. Then check if the comment is changed properly or not.
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void changeDataPinComment() {
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
+		assertNotNull(editor);
+		editor.clickContextMenu(CREATE_INPUT_EVENT);
+
+		final SWTBotGefEditPart pin = editor.getEditPart(EI1);
+		pin.click();
+
+		final SWTBot propertiesBot = selectTabFromInterfaceProperties(DATA);
+		propertiesBot.textWithLabel(COMMENT).setText(TEST_COMMENT);
+
+		assertEquals(propertiesBot.textWithLabel(COMMENT).getText(), TEST_COMMENT);
 	}
 
 	/**
@@ -165,10 +216,7 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void addConnection() {
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT1);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT1);
-
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT1);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
 		editor.clickContextMenu(CREATE_INPUT_EVENT);
 		editor.clickContextMenu(CREATE_DATA_INPUT).clickContextMenu(INT);
 
@@ -181,7 +229,6 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 		outputPin.click();
 
 		createConnectionWithinFBTypeWithPropertySheet(DI1, EI1, editor);
-
 	}
 
 	/**
@@ -195,10 +242,7 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void removeConnection() {
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT1);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT1);
-
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT1);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
 		editor.clickContextMenu(CREATE_INPUT_EVENT);
 		editor.clickContextMenu(CREATE_DATA_INPUT).clickContextMenu(INT);
 
@@ -213,7 +257,6 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 		createConnectionWithinFBTypeWithPropertySheet(DI1, EI1, editor);
 
 		removeConnectionWithinFBTypeWithPropertySheet(DI1, EI1, editor);
-
 	}
 
 	/**
@@ -228,10 +271,7 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changePinDataType() {
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT3);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT3);
-
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT3);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
 		assertNotNull(editor);
 		editor.clickContextMenu(CREATE_DATA_INPUT).clickContextMenu(INT);
 
