@@ -33,12 +33,12 @@ class STFunctionSupport extends StructuredTextSupport {
 	final STFunctionSource source
 	STFunction currentFunction
 
-	override prepare(Map<?, ?> options) {
+	override prepare() {
 		return true
 	}
 
 	override generate(Map<?, ?> options) throws ExportException {
-		prepare(options)
+		prepare()
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 			source.generateStructuredTextFunctionSourceHeader
 		else
@@ -110,7 +110,7 @@ class STFunctionSupport extends StructuredTextSupport {
 	}
 
 	override getDependencies(Map<?, ?> options) {
-		prepare(options)
+		prepare()
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 			(source.functions.map[returnType].filterNull + source.functions.flatMap [
 				varDeclarations.filter [

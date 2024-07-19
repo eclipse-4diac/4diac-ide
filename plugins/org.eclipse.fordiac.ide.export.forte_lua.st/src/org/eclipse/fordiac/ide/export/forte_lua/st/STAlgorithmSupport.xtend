@@ -28,7 +28,7 @@ class STAlgorithmSupport extends StructuredTextSupport {
 
 	STAlgorithm parseResult
 
-	override prepare(Map<?, ?> options) {
+	override prepare() {
 		if (parseResult === null && errors.empty) {
 			parseResult = algorithm.parse(errors, warnings, infos)
 		}
@@ -36,7 +36,7 @@ class STAlgorithmSupport extends StructuredTextSupport {
 	}
 
 	override generate(Map<?, ?> options) throws ExportException {
-		prepare(options)
+		prepare()
 		parseResult?.generateStructuredTextAlgorithm
 	}
 
@@ -64,7 +64,7 @@ class STAlgorithmSupport extends StructuredTextSupport {
 	}
 
 	override getDependencies(Map<?, ?> options) {
-		prepare(options)
+		prepare()
 		parseResult?.containedDependencies ?: emptySet
 	}
 }

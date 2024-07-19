@@ -12,11 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.algorithm
 
+import java.util.Map
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm
 
 class OtherAlgorithmSupportFactory implements ILanguageSupportFactory {
-	override createLanguageSupport(Object source) {
+	override createLanguageSupport(Object source, Map<?,?> options) {
 		if (source instanceof OtherAlgorithm) {
 			new OtherAlgorithmSupport(source)
 		}

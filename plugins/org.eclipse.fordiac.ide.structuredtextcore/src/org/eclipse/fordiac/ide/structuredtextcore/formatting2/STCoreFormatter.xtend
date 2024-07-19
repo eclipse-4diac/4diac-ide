@@ -664,4 +664,8 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 		context
 	}
+	
+	override createTextReplacerContext(IFormattableDocument document) {
+		new STCoreTextReplacerContext(document)
+	}
 }

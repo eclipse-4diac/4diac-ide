@@ -34,7 +34,7 @@ public class FBTypeSelectionContentProvider implements ITypeSelectionContentProv
 	@Override
 	public Collection<TypeEntry> getTypeEntries(final Object input) {
 		if (input instanceof final TypeLibrary typeLibrary) {
-			return Collections.unmodifiableCollection(typeLibrary.getFbTypes().values());
+			return Collections.unmodifiableCollection(typeLibrary.getFbTypes());
 		}
 		return Collections.emptyList();
 	}

@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -95,18 +97,22 @@ public class TargetInterfaceElement implements Comparable<TargetInterfaceElement
 
 	public static class GroupTargetInterfaceElement extends SubappTargetInterfaceElement {
 		final SubApp subapp;
-		final int numConns;
+		final List<IInterfaceElement> refElements;
 
-		public GroupTargetInterfaceElement(final IInterfaceElement host, final IInterfaceElement refElement,
-				final SubApp subapp, final int numConns) {
-			super(host, refElement);
+		public GroupTargetInterfaceElement(final IInterfaceElement host, final List<IInterfaceElement> refElements,
+				final SubApp subapp) {
+			super(host, refElements.getFirst());
 			this.subapp = subapp;
-			this.numConns = numConns;
+			this.refElements = refElements;
 		}
 
 		@Override
 		public String getRefPinFullName() {
-			return subapp.getName() + ": " + numConns; //$NON-NLS-1$
+			return subapp.getName() + ": " + refElements.size(); //$NON-NLS-1$
+		}
+
+		public List<IInterfaceElement> getRefElements() {
+			return refElements;
 		}
 
 	}
