@@ -12,14 +12,23 @@
  * Contributors:
  *   Lukas Wais - initial API and implementation and/or initial documentation.
  *   			  Mostly copied from SaveAsStructWizard and SaveAsSubappWizard.
+ *   Mario Kastner - add package name to save subapp in type lib
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.wizards;
 
 import java.util.Optional;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.ui.widgets.PackageSelectionProposalProvider;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -34,6 +43,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+import org.eclipse.ui.fieldassist.ContentAssistCommandAdapter;
 
 public class SaveAsWizardPage extends WizardNewFileCreationPage {
 
@@ -81,6 +91,26 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 		restoreWidgetValues();
 	}
 
+	// move this to WizardNew File Creation Page or helper
+	protected IContainer getSelectedContainer() {
+		final IPath containerFullPath = getContainerFullPath();
+		if (containerFullPath != null && containerFullPath.segmentCount() > 0) {
+			return containerFullPath.segmentCount() == 1
+					? ResourcesPlugin.getWorkspace().getRoot().getProject(containerFullPath.segment(0))
+					: ResourcesPlugin.getWorkspace().getRoot().getFolder(containerFullPath);
+		}
+		return null;
+	}
+
+	// move this to WizardNew File Creation Page or helper
+	protected TypeLibrary getTypeLibrary() {
+		final IContainer container = getSelectedContainer();
+		if (container != null) {
+			return TypeLibraryManager.INSTANCE.getTypeLibrary(container.getProject());
+		}
+		return null;
+	}
+
 	private void createPackageNameContainer(final Composite parent) {
 		final Composite packageContainer = new Composite(parent, SWT.NONE);
 		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(packageContainer);
@@ -93,6 +123,10 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 		packageText.setEnabled(true);
 		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).hint(250, SWT.DEFAULT)
 				.applyTo(packageText);
+
+		final ContentAssistCommandAdapter packageNameProposalAdapter = new ContentAssistCommandAdapter(packageText,
+				new TextContentAdapter(), new PackageSelectionProposalProvider(this::getTypeLibrary), null, null, true);
+		packageNameProposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 	}
 
 	@Override
