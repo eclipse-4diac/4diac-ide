@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 fortiss GmbH
- *                          Johannes Kepler University Linz
+ * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz,
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -52,7 +51,6 @@ import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
@@ -167,11 +165,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
+	protected void performRefresh() {
 		provider.setInput(getFilteredAttributeList());
-		commandStack = commandStackBuffer;
 		table.refresh();
 	}
 
@@ -237,7 +232,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 
 			if (packageEntry == null
 					&& EcoreUtil.getRootContainer(getType()) instanceof final LibraryElement libraryElement) {
-				commandStack.execute(new AddNewImportCommand(libraryElement, proposal.getContent()));
+				executeCommand(new AddNewImportCommand(libraryElement, proposal.getContent()));
 			}
 		}
 	}

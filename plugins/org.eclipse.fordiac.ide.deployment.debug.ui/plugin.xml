@@ -144,6 +144,11 @@
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.restartDevice"
+			name="Restart Device">
+		</command>
+		<command
+			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.deleteResource"
 			name="Delete Resource">
 		</command>
@@ -176,6 +181,14 @@
 		<handler
 			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.KillDeviceHandler"
 			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice">
+			<activeWhen>
+				<reference
+					definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
+			</activeWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.RestartDeviceHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.restartDevice">
 			<activeWhen>
 				<reference
 					definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
@@ -244,6 +257,17 @@
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice"
 				icon="fordiacimage://ICON_KILL_DEVICE"
 				label="Kill Device"
+				style="push">
+				<visibleWhen
+					checkEnabled="false">
+					<reference
+						definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
+				</visibleWhen>
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.restartDevice"
+				icon="fordiacimage://ICON_DEVICE_RESTART"
+				label="Restart Device"
 				style="push">
 				<visibleWhen
 					checkEnabled="false">
@@ -327,6 +351,12 @@
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice"
 				icon="fordiacimage://ICON_KILL_DEVICE"
 				label="Kill Device"
+				style="push">
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.restartDevice"
+				icon="fordiacimage://ICON_DEVICE_RESTART"
+				label="Restart Device"
 				style="push">
 			</command>
 			<command

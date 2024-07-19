@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -82,12 +82,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			// update model
 			frame.setCurrentContext(context);
 			thread.setCurrentEvaluator(eval);
-			thread.setSuspended(true);
-			if (request != null) {
-				thread.fireEvent(new DebugEvent(thread, request.getKind(), request.getDetail()));
-			} else {
-				thread.fireEvent(new DebugEvent(thread, DebugEvent.SUSPEND, DebugEvent.BREAKPOINT));
-			}
+			thread.suspended(request != null ? request.getDetail() : DebugEvent.BREAKPOINT);
 			try {
 				// wait for resume
 				request = thread.awaitResumeRequest();
@@ -95,13 +90,8 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 				handleResumeRequest(request, thread, frame);
 			} finally {
 				// update model
-				thread.setSuspended(false);
-				thread.setCurrentEvaluator(null);
-				if (request != null) {
-					thread.fireEvent(new DebugEvent(thread, request.getKind(), request.getDetail()));
-				} else {
-					thread.fireEvent(new DebugEvent(thread, DebugEvent.RESUME, DebugEvent.UNSPECIFIED));
-				}
+				thread.setCurrentEvaluator(getPersistentEvaluator(eval));
+				thread.resumed(request != null ? request.getDetail() : DebugEvent.UNSPECIFIED);
 			}
 		}
 	}
@@ -224,6 +214,13 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			}
 		}
 		return null;
+	}
+
+	protected static Evaluator getPersistentEvaluator(Evaluator eval) {
+		while (eval != null && !eval.isPersistent()) {
+			eval = eval.getParent();
+		}
+		return eval;
 	}
 
 	/**

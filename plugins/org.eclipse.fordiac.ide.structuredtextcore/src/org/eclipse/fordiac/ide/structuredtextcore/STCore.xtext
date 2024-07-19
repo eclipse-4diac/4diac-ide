@@ -98,8 +98,14 @@ STArrayInitializerExpression:
 	'[' values+=STArrayInitElement (',' values+=STArrayInitElement)* ']';
 
 STArrayInitElement:
-	indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (','
-	initExpressions+=STInitializerExpression)* ')')?;
+	STSingleArrayInitElement | STRepeatArrayInitElement;
+
+STSingleArrayInitElement:
+	initExpression=STInitializerExpression;
+
+STRepeatArrayInitElement:
+	repetitions=INT '(' initExpressions+=STInitializerExpression (','
+	initExpressions+=STInitializerExpression)* ')';
 
 STStructInitializerExpression:
 	'(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
@@ -226,7 +232,7 @@ enum UnaryOperator returns STUnaryOperator:
 	MINUS='-' | PLUS='+' | NOT;
 
 STUnaryExpression returns STExpression:
-	=> STAccessExpression | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
+	STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
 
 STAccessExpression returns STExpression:
 	STPrimaryExpression (({STMemberAccessExpression.receiver=current} '.' member=(STFeatureExpression |
@@ -234,11 +240,11 @@ STAccessExpression returns STExpression:
 	({STArrayAccessExpression.receiver=current} '[' index+=STExpression (',' index+=STExpression)* ']'))*;
 
 STPrimaryExpression returns STExpression:
-	'(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression | STLiteralExpressions;
+	'(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression;
 
 STFeatureExpression returns STExpression:
 	{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] 
-	(=>call?='(' 
+	(call?='(' 
 		(
 			parameters+=STCallArgument (',' parameters+=STCallArgument)*
 		)?
@@ -248,7 +254,7 @@ STFeatureName:
 	QualifiedName | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
 
 STBuiltinFeatureExpression returns STExpression:
-	{STBuiltinFeatureExpression} feature=STBuiltinFeature (=>call?='(' (parameters+=STCallArgument
+	{STBuiltinFeatureExpression} feature=STBuiltinFeature (call?='(' (parameters+=STCallArgument
 	(',' parameters+=STCallArgument)*)? ')')?;
 
 enum STBuiltinFeature:
@@ -269,12 +275,19 @@ STLiteralExpressions returns STExpression:
 	STDateAndTimeLiteral |
 	STStringLiteral;
 
+STSignedLiteralExpressions returns STExpression:
+	STSignedNumericLiteral;
+
 STNumericLiteralType:
 	STAnyBitType | STAnyNumType;
 
 STNumericLiteral:
-	(type=[datatype::DataType|STNumericLiteralType] '#')?
-	value=Numeric;
+	(type=[datatype::DataType|STNumericLiteralType] '#' value=SignedNumeric) |
+	((type=[datatype::DataType|STNumericLiteralType] '#')?
+	value=Numeric);
+
+STSignedNumericLiteral returns STNumericLiteral:
+	value=SignedNumeric;
 
 STDateLiteralType:
 	STDateType |
@@ -338,7 +351,7 @@ STAnyCharsType:
 	'STRING' | 'WSTRING' | 'CHAR' | 'WCHAR';
 
 QualifiedName:
-	ID (=>'::' ID)*;
+	ID ('::' ID)*;
 
 QualifiedNameWithWildcard:
 	QualifiedName '::*'?;
@@ -347,7 +360,13 @@ Numeric returns ecore::EJavaObject:
 	'TRUE' | 'FALSE' | Number | NON_DECIMAL;
 
 Number hidden():
-	('+' | '-')? (INT | DECIMAL) (=>'.' (INT | DECIMAL))?;
+	INT ('.' (INT | DECIMAL))?;
+
+SignedNumeric returns ecore::EJavaObject:
+	SignedNumber;
+
+SignedNumber hidden():
+	('+' | '-') INT ('.' (INT | DECIMAL))?;
 
 Time returns STTime hidden():
 	('+' | '-')? TIME_VALUE;
@@ -356,10 +375,10 @@ Date returns STDate:
 	INT '-' INT '-' INT;
 
 DateAndTime returns STDateAndTime:
-	INT '-' INT '-' INT '-' INT ':' INT ':' INT (=>'.' INT)?;
+	INT '-' INT '-' INT '-' INT ':' INT ':' INT ('.' INT)?;
 
 TimeOfDay returns STTimeOfDay:
-	INT ':' INT ':' INT (=>'.' INT)?;
+	INT ':' INT ':' INT ('.' INT)?;
 
 enum STAccessSpecifier:
 	PROTECTED='PROTECTED' | PUBLIC='PUBLIC' | PRIVATE='PRIVATE' | INTERNAL='INTERNAL';

@@ -71,6 +71,9 @@ public final class TypeLibraryTags {
 
 	public static final String GLOBAL_CONST_FILE_ENDING_WITH_DOT = "." + GLOBAL_CONST_FILE_ENDING; //$NON-NLS-1$
 
+	/** The Constant for the IEventBroker topic called at type library creation */
+	public static final String TYPE_LIBRARY_CREATION_TOPIC = "org/eclipse/fordiac/event/type_library_creation"; //$NON-NLS-1$
+
 	private TypeLibraryTags() {
 		throw new UnsupportedOperationException("Helper class TypeLibraryTags can not be instantiated."); //$NON-NLS-1$
 	}

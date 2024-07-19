@@ -26,7 +26,6 @@ import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -219,21 +218,18 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	}
 
 	private boolean isDuplicate() {
-		final TypeLibrary lib = getTypeLibrary();
-		if (lib == null) {
+		final TypeLibrary typeLibrary = getTypeLibrary();
+		if (typeLibrary == null) {
 			return false;
 		}
 
+		final String fullTypeName = getFullTypeName();
 		final String fileExtension = IPath.fromFile(getTemplate()).getFileExtension();
-		final Map<String, ?> types;
-		if (TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING.equalsIgnoreCase(fileExtension)) {
-			types = lib.getAttributeTypes();
-		} else if (TypeLibraryTags.GLOBAL_CONST_FILE_ENDING.equalsIgnoreCase(fileExtension)) {
-			types = lib.getGlobalConstants();
-		} else {
-			types = lib.getProgramTypes();
-		}
-		return types.containsKey(getFullTypeName());
+		return switch (fileExtension.toUpperCase()) {
+		case TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING -> typeLibrary.getAttributeTypeEntry(fullTypeName) != null;
+		case TypeLibraryTags.GLOBAL_CONST_FILE_ENDING -> typeLibrary.getGlobalConstantsEntry(fullTypeName) != null;
+		default -> typeLibrary.find(fullTypeName) != null;
+		};
 	}
 
 	private boolean fileExists() {

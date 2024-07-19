@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2016 fortiss GmbH
- *               2019, 2021 Johannes Kepler University Linz
+ * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -41,7 +40,6 @@ import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -79,11 +77,11 @@ public class ServiceSequenceSection extends AbstractSection {
 
 	@Override
 	protected ServiceSequence getInputType(final Object input) {
-		if (input instanceof ServiceSequenceEditPart) {
-			return ((ServiceSequenceEditPart) input).getModel();
+		if (input instanceof final ServiceSequenceEditPart serSeqEP) {
+			return serSeqEP.getModel();
 		}
-		if (input instanceof ServiceSequence) {
-			return (ServiceSequence) input;
+		if (input instanceof final ServiceSequence serSeq) {
+			return serSeq;
 		}
 		return null;
 	}
@@ -146,7 +144,8 @@ public class ServiceSequenceSection extends AbstractSection {
 	}
 
 	private void createTransactionSection(final Composite parent) {
-		final Group transactionGroup = getWidgetFactory().createGroup(parent, Messages.ServiceSequenceSection_Transaction);
+		final Group transactionGroup = getWidgetFactory().createGroup(parent,
+				Messages.ServiceSequenceSection_Transaction);
 		transactionGroup.setLayout(new GridLayout(2, false));
 		transactionGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -163,7 +162,7 @@ public class ServiceSequenceSection extends AbstractSection {
 		return combo;
 	}
 
-	private CCombo createStartStateSelector(final Group parent) {
+	private static CCombo createStartStateSelector(final Group parent) {
 		return ComboBoxWidgetFactory.createCombo(parent);
 	}
 
@@ -217,21 +216,14 @@ public class ServiceSequenceSection extends AbstractSection {
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			final int i = Arrays.asList(serviceSequencetype.getItems()).indexOf(getType().getServiceSequenceType());
-			serviceSequencetype.select(i >= 0 ? i : 0);
-			final FBType fbtype = getType().getService().getFBType();
-			StateComboHelper.setup(fbtype, getType(), startState);
-
-			transactionsViewer.setInput(getType());
-
-		}
-		commandStack = commandStackBuffer;
+	protected void performRefresh() {
+		nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
+		commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+		final int i = Arrays.asList(serviceSequencetype.getItems()).indexOf(getType().getServiceSequenceType());
+		serviceSequencetype.select(i >= 0 ? i : 0);
+		final FBType fbtype = getType().getService().getFBType();
+		StateComboHelper.setup(fbtype, getType(), startState);
+		transactionsViewer.setInput(getType());
 	}
 
 	@Override
@@ -259,13 +251,11 @@ public class ServiceSequenceSection extends AbstractSection {
 
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof ServiceTransaction) {
-				final ServiceTransaction transaction = (ServiceTransaction) element;
+			if (element instanceof final ServiceTransaction transaction) {
 				switch (columnIndex) {
 				case INDEX_COL_INDEX:
 					return String
-							.valueOf(transaction.getServiceSequence().getServiceTransaction()
-									.indexOf(transaction) + 1);
+							.valueOf(transaction.getServiceSequence().getServiceTransaction().indexOf(transaction) + 1);
 				case INPUT_PRIMITIVE_COL_INDEX:
 					return transaction.getInputPrimitive().getEvent();
 				case OUTPUT_PRIMITIVE_COL_INDEX:
@@ -279,7 +269,7 @@ public class ServiceSequenceSection extends AbstractSection {
 
 		private static String getOutputPrimitives(final ServiceTransaction transaction) {
 			final StringBuilder sb = new StringBuilder();
-			for(final OutputPrimitive outputPrimitive : transaction.getOutputPrimitive()) {
+			for (final OutputPrimitive outputPrimitive : transaction.getOutputPrimitive()) {
 				sb.append(outputPrimitive.getEvent());
 				sb.append("; "); //$NON-NLS-1$
 			}

@@ -1,7 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 fortiss GmbH
- * 				 2018, 2019, 2020 Johannes Kepler University Linz
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz,
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -44,7 +43,6 @@ import org.eclipse.fordiac.ide.ui.widget.ISelectionProviderSection;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.SelectionProviderProxy;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
@@ -160,13 +158,8 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			setTableInput();
-		}
-		commandStack = commandStackBuffer;
+	protected void performRefresh() {
+		setTableInput();
 		inputTable.refresh();
 		outputTable.refresh();
 	}

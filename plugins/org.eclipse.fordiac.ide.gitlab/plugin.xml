@@ -27,4 +27,10 @@
             name="GitLab Package Downloader">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.library.ArchiveDownloaderExtension">
+      <client
+            class="org.eclipse.fordiac.ide.gitlab.management.GitLabDownloader">
+      </client>
+   </extension>
 </plugin>

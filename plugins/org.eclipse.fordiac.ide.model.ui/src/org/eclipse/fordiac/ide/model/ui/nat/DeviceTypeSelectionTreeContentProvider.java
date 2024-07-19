@@ -32,7 +32,7 @@ public class DeviceTypeSelectionTreeContentProvider extends TypeSelectionTreeCon
 		}
 
 		final TypeNode resourceTypes = new TypeNode(Messages.DeviceTypeSelectionTreeContentProvider_DeviceTypes);
-		addPathSubtree(resourceTypes, typeLibrary.getDeviceTypes().values());
+		addPathSubtree(resourceTypes, typeLibrary.getDeviceTypes());
 		resourceTypes.sortChildren();
 
 		return resourceTypes.getChildren();

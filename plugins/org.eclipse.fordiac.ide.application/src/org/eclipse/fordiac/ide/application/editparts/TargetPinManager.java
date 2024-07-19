@@ -57,10 +57,14 @@ public class TargetPinManager {
 			final var grouped = pins.stream()
 					.filter(ie -> TargetPinManager.getContainer(ie) != null)
 					.collect(Collectors.groupingBy(TargetPinManager::getContainer))
-					.entrySet()
-					.stream()
-					.map(e -> (TargetInterfaceElement) new GroupTargetInterfaceElement(getModel(), e.getValue().get(0),
-							e.getKey(), e.getValue().size()))
+					.entrySet().stream()
+					.map(e -> {
+						if(e.getValue().size() == 1) {
+							return  TargetInterfaceElement.createFor(getModel(), e.getValue().get(0), parentNW);
+						}
+						return (TargetInterfaceElement) new GroupTargetInterfaceElement(getModel(), e.getValue(),
+								e.getKey());
+					})
 					.collect(Collectors.toList());
 
 			final var normal = targetPinChildren.values().stream()

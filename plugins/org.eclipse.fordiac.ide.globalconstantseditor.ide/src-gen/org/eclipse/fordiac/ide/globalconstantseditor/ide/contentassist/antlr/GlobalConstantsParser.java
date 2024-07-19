@@ -45,6 +45,7 @@ public class GlobalConstantsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTVarDeclarationAccess().getAlternatives_4_1(), "rule__STVarDeclaration__Alternatives_4_1");
 			builder.put(grammarAccess.getSTTypeDeclarationAccess().getAlternatives_1_1(), "rule__STTypeDeclaration__Alternatives_1_1");
 			builder.put(grammarAccess.getSTInitializerExpressionAccess().getAlternatives(), "rule__STInitializerExpression__Alternatives");
+			builder.put(grammarAccess.getSTArrayInitElementAccess().getAlternatives(), "rule__STArrayInitElement__Alternatives");
 			builder.put(grammarAccess.getSTStatementAccess().getAlternatives(), "rule__STStatement__Alternatives");
 			builder.put(grammarAccess.getSTStatementAccess().getAlternatives_0_0(), "rule__STStatement__Alternatives_0_0");
 			builder.put(grammarAccess.getSTCallArgumentAccess().getAlternatives(), "rule__STCallArgument__Alternatives");
@@ -56,6 +57,7 @@ public class GlobalConstantsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTMultibitPartialExpressionAccess().getAlternatives_2(), "rule__STMultibitPartialExpression__Alternatives_2");
 			builder.put(grammarAccess.getSTLiteralExpressionsAccess().getAlternatives(), "rule__STLiteralExpressions__Alternatives");
 			builder.put(grammarAccess.getSTNumericLiteralTypeAccess().getAlternatives(), "rule__STNumericLiteralType__Alternatives");
+			builder.put(grammarAccess.getSTNumericLiteralAccess().getAlternatives(), "rule__STNumericLiteral__Alternatives");
 			builder.put(grammarAccess.getSTDateLiteralTypeAccess().getAlternatives(), "rule__STDateLiteralType__Alternatives");
 			builder.put(grammarAccess.getSTTimeLiteralTypeAccess().getAlternatives(), "rule__STTimeLiteralType__Alternatives");
 			builder.put(grammarAccess.getSTAnyTypeAccess().getAlternatives(), "rule__STAnyType__Alternatives");
@@ -69,9 +71,9 @@ public class GlobalConstantsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTDateAndTimeTypeAccess().getAlternatives(), "rule__STDateAndTimeType__Alternatives");
 			builder.put(grammarAccess.getSTAnyCharsTypeAccess().getAlternatives(), "rule__STAnyCharsType__Alternatives");
 			builder.put(grammarAccess.getNumericAccess().getAlternatives(), "rule__Numeric__Alternatives");
-			builder.put(grammarAccess.getNumberAccess().getAlternatives_0(), "rule__Number__Alternatives_0");
-			builder.put(grammarAccess.getNumberAccess().getAlternatives_1(), "rule__Number__Alternatives_1");
-			builder.put(grammarAccess.getNumberAccess().getAlternatives_2_1(), "rule__Number__Alternatives_2_1");
+			builder.put(grammarAccess.getNumberAccess().getAlternatives_1_1(), "rule__Number__Alternatives_1_1");
+			builder.put(grammarAccess.getSignedNumberAccess().getAlternatives_0(), "rule__SignedNumber__Alternatives_0");
+			builder.put(grammarAccess.getSignedNumberAccess().getAlternatives_2_1(), "rule__SignedNumber__Alternatives_2_1");
 			builder.put(grammarAccess.getTimeAccess().getAlternatives_0(), "rule__Time__Alternatives_0");
 			builder.put(grammarAccess.getRESERVED_KEYWORDSAccess().getAlternatives(), "rule__RESERVED_KEYWORDS__Alternatives");
 			builder.put(grammarAccess.getAndOperatorAccess().getAlternatives(), "rule__AndOperator__Alternatives");
@@ -112,9 +114,8 @@ public class GlobalConstantsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTTypeDeclarationAccess().getGroup_3(), "rule__STTypeDeclaration__Group_3__0");
 			builder.put(grammarAccess.getSTArrayInitializerExpressionAccess().getGroup(), "rule__STArrayInitializerExpression__Group__0");
 			builder.put(grammarAccess.getSTArrayInitializerExpressionAccess().getGroup_2(), "rule__STArrayInitializerExpression__Group_2__0");
-			builder.put(grammarAccess.getSTArrayInitElementAccess().getGroup(), "rule__STArrayInitElement__Group__0");
-			builder.put(grammarAccess.getSTArrayInitElementAccess().getGroup_1(), "rule__STArrayInitElement__Group_1__0");
-			builder.put(grammarAccess.getSTArrayInitElementAccess().getGroup_1_2(), "rule__STArrayInitElement__Group_1_2__0");
+			builder.put(grammarAccess.getSTRepeatArrayInitElementAccess().getGroup(), "rule__STRepeatArrayInitElement__Group__0");
+			builder.put(grammarAccess.getSTRepeatArrayInitElementAccess().getGroup_3(), "rule__STRepeatArrayInitElement__Group_3__0");
 			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getGroup(), "rule__STStructInitializerExpression__Group__0");
 			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getGroup_2(), "rule__STStructInitializerExpression__Group_2__0");
 			builder.put(grammarAccess.getSTStructInitElementAccess().getGroup(), "rule__STStructInitElement__Group__0");
@@ -164,7 +165,7 @@ public class GlobalConstantsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTPowerExpressionAccess().getGroup(), "rule__STPowerExpression__Group__0");
 			builder.put(grammarAccess.getSTPowerExpressionAccess().getGroup_1(), "rule__STPowerExpression__Group_1__0");
 			builder.put(grammarAccess.getSTPowerExpressionAccess().getGroup_1_0(), "rule__STPowerExpression__Group_1_0__0");
-			builder.put(grammarAccess.getSTUnaryExpressionAccess().getGroup_1(), "rule__STUnaryExpression__Group_1__0");
+			builder.put(grammarAccess.getSTUnaryExpressionAccess().getGroup_3(), "rule__STUnaryExpression__Group_3__0");
 			builder.put(grammarAccess.getSTAccessExpressionAccess().getGroup(), "rule__STAccessExpression__Group__0");
 			builder.put(grammarAccess.getSTAccessExpressionAccess().getGroup_1_0(), "rule__STAccessExpression__Group_1_0__0");
 			builder.put(grammarAccess.getSTAccessExpressionAccess().getGroup_1_1(), "rule__STAccessExpression__Group_1_1__0");
@@ -180,8 +181,9 @@ public class GlobalConstantsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTBuiltinFeatureExpressionAccess().getGroup_2_1_1(), "rule__STBuiltinFeatureExpression__Group_2_1_1__0");
 			builder.put(grammarAccess.getSTMultibitPartialExpressionAccess().getGroup(), "rule__STMultibitPartialExpression__Group__0");
 			builder.put(grammarAccess.getSTMultibitPartialExpressionAccess().getGroup_2_1(), "rule__STMultibitPartialExpression__Group_2_1__0");
-			builder.put(grammarAccess.getSTNumericLiteralAccess().getGroup(), "rule__STNumericLiteral__Group__0");
 			builder.put(grammarAccess.getSTNumericLiteralAccess().getGroup_0(), "rule__STNumericLiteral__Group_0__0");
+			builder.put(grammarAccess.getSTNumericLiteralAccess().getGroup_1(), "rule__STNumericLiteral__Group_1__0");
+			builder.put(grammarAccess.getSTNumericLiteralAccess().getGroup_1_0(), "rule__STNumericLiteral__Group_1_0__0");
 			builder.put(grammarAccess.getSTDateLiteralAccess().getGroup(), "rule__STDateLiteral__Group__0");
 			builder.put(grammarAccess.getSTTimeLiteralAccess().getGroup(), "rule__STTimeLiteral__Group__0");
 			builder.put(grammarAccess.getSTTimeOfDayLiteralAccess().getGroup(), "rule__STTimeOfDayLiteral__Group__0");
@@ -192,7 +194,9 @@ public class GlobalConstantsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getQualifiedNameAccess().getGroup_1(), "rule__QualifiedName__Group_1__0");
 			builder.put(grammarAccess.getQualifiedNameWithWildcardAccess().getGroup(), "rule__QualifiedNameWithWildcard__Group__0");
 			builder.put(grammarAccess.getNumberAccess().getGroup(), "rule__Number__Group__0");
-			builder.put(grammarAccess.getNumberAccess().getGroup_2(), "rule__Number__Group_2__0");
+			builder.put(grammarAccess.getNumberAccess().getGroup_1(), "rule__Number__Group_1__0");
+			builder.put(grammarAccess.getSignedNumberAccess().getGroup(), "rule__SignedNumber__Group__0");
+			builder.put(grammarAccess.getSignedNumberAccess().getGroup_2(), "rule__SignedNumber__Group_2__0");
 			builder.put(grammarAccess.getTimeAccess().getGroup(), "rule__Time__Group__0");
 			builder.put(grammarAccess.getDateAccess().getGroup(), "rule__Date__Group__0");
 			builder.put(grammarAccess.getDateAndTimeAccess().getGroup(), "rule__DateAndTime__Group__0");
@@ -238,9 +242,10 @@ public class GlobalConstantsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTElementaryInitializerExpressionAccess().getValueAssignment(), "rule__STElementaryInitializerExpression__ValueAssignment");
 			builder.put(grammarAccess.getSTArrayInitializerExpressionAccess().getValuesAssignment_1(), "rule__STArrayInitializerExpression__ValuesAssignment_1");
 			builder.put(grammarAccess.getSTArrayInitializerExpressionAccess().getValuesAssignment_2_1(), "rule__STArrayInitializerExpression__ValuesAssignment_2_1");
-			builder.put(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionAssignment_0(), "rule__STArrayInitElement__IndexOrInitExpressionAssignment_0");
-			builder.put(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsAssignment_1_1(), "rule__STArrayInitElement__InitExpressionsAssignment_1_1");
-			builder.put(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsAssignment_1_2_1(), "rule__STArrayInitElement__InitExpressionsAssignment_1_2_1");
+			builder.put(grammarAccess.getSTSingleArrayInitElementAccess().getInitExpressionAssignment(), "rule__STSingleArrayInitElement__InitExpressionAssignment");
+			builder.put(grammarAccess.getSTRepeatArrayInitElementAccess().getRepetitionsAssignment_0(), "rule__STRepeatArrayInitElement__RepetitionsAssignment_0");
+			builder.put(grammarAccess.getSTRepeatArrayInitElementAccess().getInitExpressionsAssignment_2(), "rule__STRepeatArrayInitElement__InitExpressionsAssignment_2");
+			builder.put(grammarAccess.getSTRepeatArrayInitElementAccess().getInitExpressionsAssignment_3_1(), "rule__STRepeatArrayInitElement__InitExpressionsAssignment_3_1");
 			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getValuesAssignment_1(), "rule__STStructInitializerExpression__ValuesAssignment_1");
 			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getValuesAssignment_2_1(), "rule__STStructInitializerExpression__ValuesAssignment_2_1");
 			builder.put(grammarAccess.getSTStructInitElementAccess().getVariableAssignment_0(), "rule__STStructInitElement__VariableAssignment_0");
@@ -292,8 +297,8 @@ public class GlobalConstantsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTMulDivModExpressionAccess().getRightAssignment_1_1(), "rule__STMulDivModExpression__RightAssignment_1_1");
 			builder.put(grammarAccess.getSTPowerExpressionAccess().getOpAssignment_1_0_1(), "rule__STPowerExpression__OpAssignment_1_0_1");
 			builder.put(grammarAccess.getSTPowerExpressionAccess().getRightAssignment_1_1(), "rule__STPowerExpression__RightAssignment_1_1");
-			builder.put(grammarAccess.getSTUnaryExpressionAccess().getOpAssignment_1_1(), "rule__STUnaryExpression__OpAssignment_1_1");
-			builder.put(grammarAccess.getSTUnaryExpressionAccess().getExpressionAssignment_1_2(), "rule__STUnaryExpression__ExpressionAssignment_1_2");
+			builder.put(grammarAccess.getSTUnaryExpressionAccess().getOpAssignment_3_1(), "rule__STUnaryExpression__OpAssignment_3_1");
+			builder.put(grammarAccess.getSTUnaryExpressionAccess().getExpressionAssignment_3_2(), "rule__STUnaryExpression__ExpressionAssignment_3_2");
 			builder.put(grammarAccess.getSTAccessExpressionAccess().getMemberAssignment_1_0_2(), "rule__STAccessExpression__MemberAssignment_1_0_2");
 			builder.put(grammarAccess.getSTAccessExpressionAccess().getIndexAssignment_1_1_2(), "rule__STAccessExpression__IndexAssignment_1_1_2");
 			builder.put(grammarAccess.getSTAccessExpressionAccess().getIndexAssignment_1_1_3_1(), "rule__STAccessExpression__IndexAssignment_1_1_3_1");
@@ -309,7 +314,10 @@ public class GlobalConstantsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTMultibitPartialExpressionAccess().getIndexAssignment_2_0(), "rule__STMultibitPartialExpression__IndexAssignment_2_0");
 			builder.put(grammarAccess.getSTMultibitPartialExpressionAccess().getExpressionAssignment_2_1_1(), "rule__STMultibitPartialExpression__ExpressionAssignment_2_1_1");
 			builder.put(grammarAccess.getSTNumericLiteralAccess().getTypeAssignment_0_0(), "rule__STNumericLiteral__TypeAssignment_0_0");
-			builder.put(grammarAccess.getSTNumericLiteralAccess().getValueAssignment_1(), "rule__STNumericLiteral__ValueAssignment_1");
+			builder.put(grammarAccess.getSTNumericLiteralAccess().getValueAssignment_0_2(), "rule__STNumericLiteral__ValueAssignment_0_2");
+			builder.put(grammarAccess.getSTNumericLiteralAccess().getTypeAssignment_1_0_0(), "rule__STNumericLiteral__TypeAssignment_1_0_0");
+			builder.put(grammarAccess.getSTNumericLiteralAccess().getValueAssignment_1_1(), "rule__STNumericLiteral__ValueAssignment_1_1");
+			builder.put(grammarAccess.getSTSignedNumericLiteralAccess().getValueAssignment(), "rule__STSignedNumericLiteral__ValueAssignment");
 			builder.put(grammarAccess.getSTDateLiteralAccess().getTypeAssignment_0(), "rule__STDateLiteral__TypeAssignment_0");
 			builder.put(grammarAccess.getSTDateLiteralAccess().getValueAssignment_2(), "rule__STDateLiteral__ValueAssignment_2");
 			builder.put(grammarAccess.getSTTimeLiteralAccess().getTypeAssignment_0(), "rule__STTimeLiteral__TypeAssignment_0");

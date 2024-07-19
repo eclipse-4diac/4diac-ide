@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2016 fortiss GmbH
- * 				 2020 Johannes Kepler Universiy Linz
+ * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler Universiy Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,7 +23,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -84,16 +82,11 @@ public abstract class TypeInfoSection extends AbstractDoubleColumnSection {
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			fbTypeNameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			commentText.setEditable(!(getType() instanceof FunctionFBType));
-			typeInfo.refresh();
-		}
-		commandStack = commandStackBuffer;
+	protected void performRefresh() {
+		fbTypeNameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
+		commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+		commentText.setEditable(!(getType() instanceof FunctionFBType));
+		typeInfo.refresh();
 	}
 
 	@Override

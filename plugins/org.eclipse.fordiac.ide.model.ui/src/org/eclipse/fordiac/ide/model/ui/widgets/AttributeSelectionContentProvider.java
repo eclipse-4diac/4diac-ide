@@ -34,7 +34,7 @@ public class AttributeSelectionContentProvider implements ITypeSelectionContentP
 	@Override
 	public Collection<TypeEntry> getTypeEntries(final Object input) {
 		if (input instanceof final TypeLibrary typeLibrary) {
-			return Collections.unmodifiableCollection(typeLibrary.getAttributeTypes().values());
+			return Collections.unmodifiableCollection(typeLibrary.getAttributeTypes());
 		}
 		return Collections.emptyList();
 	}

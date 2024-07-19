@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Keppler University Linz
+ * Copyright (c) 2008, 2024 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Keppler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -61,7 +61,7 @@ public class SegmentCreateCommand extends Command {
 		}
 		segment.getVarDeclarations().addAll(EcoreUtil.copyAll(type.getType().getVarDeclaration()));
 		segment.setPosition(pos);
-		segment.setWidth(width);
+		segment.setWidth(CoordinateConverter.INSTANCE.screenToIEC61499(width));
 		redo();
 		segment.setName(NameRepository.createUniqueName(segment, type.getType().getName()));
 	}

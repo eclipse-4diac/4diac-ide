@@ -33,7 +33,7 @@ class VarDeclarationSupport extends StructuredTextSupport {
 	INamedElement resultType
 	STInitializerExpressionSource parseResult
 
-	override prepare(Map<?, ?> options) {
+	override prepare() {
 		prepareResultType && prepareInitialValue
 	}
 

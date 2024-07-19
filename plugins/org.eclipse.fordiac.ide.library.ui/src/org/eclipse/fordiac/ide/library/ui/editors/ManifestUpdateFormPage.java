@@ -17,11 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
-import org.eclipse.fordiac.ide.model.typelibrary.ILibraryLinker;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -115,19 +114,15 @@ public class ManifestUpdateFormPage extends FormPage {
 			public void update(final ViewerCell cell) {
 				final Button button = new Button((Composite) cell.getControl(), SWT.NONE);
 				item = (TableItem) cell.getItem();
-				button.setText("Update");
+				button.setText("Update"); //$NON-NLS-1$
 
 				button.addSelectionListener(new SelectionListener() {
 
 					@Override
 					public void widgetSelected(final SelectionEvent e) {
-						final ILibraryLinker libLinker = TypeLibraryManager.loadExtension(
-								"org.eclipse.fordiac.ide.model.libraryLinkerExtension", ILibraryLinker.class); //$NON-NLS-1$
-						if (libLinker != null) {
-							final Required req = (Required) item.getData();
-							libLinker.setSelectedProject(manifestFile.getProject());
-							libLinker.updateLibrary(req.getSymbolicName(), req.getVersion());
-						}
+						final Required req = (Required) item.getData();
+						LibraryManager.INSTANCE.updateLibrary(manifestFile.getProject(), req.getSymbolicName(),
+								req.getVersion());
 					}
 
 					@Override

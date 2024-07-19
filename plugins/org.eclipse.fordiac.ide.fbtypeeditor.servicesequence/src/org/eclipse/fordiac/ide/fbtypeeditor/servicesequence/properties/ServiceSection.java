@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2016 fortiss GmbH
- * 				 2019, 2021 Johannes Kepler University Linz
+ * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -37,7 +36,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -197,13 +195,12 @@ public class ServiceSection extends AbstractSection {
 
 	private void executeCreateCommand() {
 		final Object selection = ((TreeSelection) sequencesViewer.getSelection()).getFirstElement();
-		if (selection instanceof ServiceSequence) {
-			executeCommand(new CreateServiceSequenceCommand(getType().getService(), (ServiceSequence) selection));
-		} else if (selection instanceof ServiceTransaction) {
-			executeCommand(new CreateTransactionCommand(((ServiceTransaction) selection).getServiceSequence()));
-		} else if (selection instanceof OutputPrimitive) {
-			executeCommand(new CreateOutputPrimitiveCommand(((OutputPrimitive) selection).getServiceTransaction(), null,
-					true));
+		if (selection instanceof final ServiceSequence serSeq) {
+			executeCommand(new CreateServiceSequenceCommand(getType().getService(), serSeq));
+		} else if (selection instanceof final ServiceTransaction serTran) {
+			executeCommand(new CreateTransactionCommand(serTran.getServiceSequence()));
+		} else if (selection instanceof final OutputPrimitive op) {
+			executeCommand(new CreateOutputPrimitiveCommand(op.getServiceTransaction(), null, true));
 		} else if (selection == null) {
 			executeCommand(new CreateServiceSequenceCommand(getType().getService()));
 		}
@@ -212,50 +209,45 @@ public class ServiceSection extends AbstractSection {
 
 	private void executeMoveCommand(final boolean moveUp) {
 		final Object selection = ((TreeSelection) sequencesViewer.getSelection()).getFirstElement();
-		if (selection instanceof ServiceSequence) {
-			executeCommand(new ChangeServiceSequenceOrderCommand((ServiceSequence) selection, moveUp));
-		} else if (selection instanceof ServiceTransaction) {
-			executeCommand(new ChangeTransactionOrderCommand((ServiceTransaction) selection, moveUp));
-		} else if (selection instanceof OutputPrimitive) {
-			executeCommand(new ChangeOutputPrimitiveOrderCommand((OutputPrimitive) selection, moveUp));
+		if (selection instanceof final ServiceSequence serSeq) {
+			executeCommand(new ChangeServiceSequenceOrderCommand(serSeq, moveUp));
+		} else if (selection instanceof final ServiceTransaction serTran) {
+			executeCommand(new ChangeTransactionOrderCommand(serTran, moveUp));
+		} else if (selection instanceof final OutputPrimitive op) {
+			executeCommand(new ChangeOutputPrimitiveOrderCommand(op, moveUp));
 		}
 		sequencesViewer.refresh();
 	}
 
 	private void executeDeleteCommand() {
 		final Object selection = ((TreeSelection) sequencesViewer.getSelection()).getFirstElement();
-		if (selection instanceof ServiceSequence) {
-			executeCommand(new DeleteServiceSequenceCommand(getType(), (ServiceSequence) selection));
-		} else if (selection instanceof ServiceTransaction) {
-			executeCommand(new DeleteTransactionCommand((ServiceTransaction) selection));
-		} else if (selection instanceof OutputPrimitive) {
-			executeCommand(new DeleteOutputPrimitiveCommand((OutputPrimitive) selection));
+		if (selection instanceof final ServiceSequence serSeq) {
+			executeCommand(new DeleteServiceSequenceCommand(getType(), serSeq));
+		} else if (selection instanceof final ServiceTransaction serTran) {
+			executeCommand(new DeleteTransactionCommand(serTran));
+		} else if (selection instanceof final OutputPrimitive op) {
+			executeCommand(new DeleteOutputPrimitiveCommand(op));
 		}
 		sequencesViewer.refresh();
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			leftNameInput.setText(null != getType().getService().getLeftInterface()
-					? getType().getService().getLeftInterface().getName()
-							: ""); //$NON-NLS-1$
-			leftCommentInput.setText(null != getType().getService().getLeftInterface()
-					&& null != getType().getService().getLeftInterface().getComment()
-					? getType().getService().getLeftInterface().getComment()
-							: ""); //$NON-NLS-1$
-			rightNameInput.setText(null != getType().getService().getRightInterface()
-					? getType().getService().getRightInterface().getName()
-							: ""); //$NON-NLS-1$
-			rightCommentInput.setText(null != getType().getService().getRightInterface()
-					&& null != getType().getService().getRightInterface().getComment()
-					? getType().getService().getRightInterface().getComment()
-							: ""); //$NON-NLS-1$
-			sequencesViewer.setInput(getType().getService());
-		}
-		commandStack = commandStackBuffer;
+	protected void performRefresh() {
+		leftNameInput.setText(
+				null != getType().getService().getLeftInterface() ? getType().getService().getLeftInterface().getName()
+						: ""); //$NON-NLS-1$
+		leftCommentInput.setText(null != getType().getService().getLeftInterface()
+				&& null != getType().getService().getLeftInterface().getComment()
+						? getType().getService().getLeftInterface().getComment()
+						: ""); //$NON-NLS-1$
+		rightNameInput.setText(null != getType().getService().getRightInterface()
+				? getType().getService().getRightInterface().getName()
+				: ""); //$NON-NLS-1$
+		rightCommentInput.setText(null != getType().getService().getRightInterface()
+				&& null != getType().getService().getRightInterface().getComment()
+						? getType().getService().getRightInterface().getComment()
+						: ""); //$NON-NLS-1$
+		sequencesViewer.setInput(getType().getService());
 	}
 
 	@Override

@@ -819,62 +819,91 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	public class STArrayInitElementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STArrayInitElement");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cIndexOrInitExpressionAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cIndexOrInitExpressionSTInitializerExpressionParserRuleCall_0_0 = (RuleCall)cIndexOrInitExpressionAssignment_0.eContents().get(0);
-		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
-		private final Keyword cLeftParenthesisKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
-		private final Assignment cInitExpressionsAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
-		private final RuleCall cInitExpressionsSTInitializerExpressionParserRuleCall_1_1_0 = (RuleCall)cInitExpressionsAssignment_1_1.eContents().get(0);
-		private final Group cGroup_1_2 = (Group)cGroup_1.eContents().get(2);
-		private final Keyword cCommaKeyword_1_2_0 = (Keyword)cGroup_1_2.eContents().get(0);
-		private final Assignment cInitExpressionsAssignment_1_2_1 = (Assignment)cGroup_1_2.eContents().get(1);
-		private final RuleCall cInitExpressionsSTInitializerExpressionParserRuleCall_1_2_1_0 = (RuleCall)cInitExpressionsAssignment_1_2_1.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_1_3 = (Keyword)cGroup_1.eContents().get(3);
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final RuleCall cSTSingleArrayInitElementParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
+		private final RuleCall cSTRepeatArrayInitElementParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
 		
 		//STArrayInitElement:
-		//    indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (','
-		//    initExpressions+=STInitializerExpression)* ')')?;
+		//    STSingleArrayInitElement | STRepeatArrayInitElement;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (','
-		//initExpressions+=STInitializerExpression)* ')')?
+		//STSingleArrayInitElement | STRepeatArrayInitElement
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//STSingleArrayInitElement
+		public RuleCall getSTSingleArrayInitElementParserRuleCall_0() { return cSTSingleArrayInitElementParserRuleCall_0; }
+		
+		//STRepeatArrayInitElement
+		public RuleCall getSTRepeatArrayInitElementParserRuleCall_1() { return cSTRepeatArrayInitElementParserRuleCall_1; }
+	}
+	public class STSingleArrayInitElementElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STSingleArrayInitElement");
+		private final Assignment cInitExpressionAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cInitExpressionSTInitializerExpressionParserRuleCall_0 = (RuleCall)cInitExpressionAssignment.eContents().get(0);
+		
+		//STSingleArrayInitElement:
+		//    initExpression=STInitializerExpression;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//initExpression=STInitializerExpression
+		public Assignment getInitExpressionAssignment() { return cInitExpressionAssignment; }
+		
+		//STInitializerExpression
+		public RuleCall getInitExpressionSTInitializerExpressionParserRuleCall_0() { return cInitExpressionSTInitializerExpressionParserRuleCall_0; }
+	}
+	public class STRepeatArrayInitElementElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STRepeatArrayInitElement");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cRepetitionsAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final RuleCall cRepetitionsINTTerminalRuleCall_0_0 = (RuleCall)cRepetitionsAssignment_0.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cInitExpressionsAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cInitExpressionsSTInitializerExpressionParserRuleCall_2_0 = (RuleCall)cInitExpressionsAssignment_2.eContents().get(0);
+		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
+		private final Keyword cCommaKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
+		private final Assignment cInitExpressionsAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
+		private final RuleCall cInitExpressionsSTInitializerExpressionParserRuleCall_3_1_0 = (RuleCall)cInitExpressionsAssignment_3_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		
+		//STRepeatArrayInitElement:
+		//    repetitions=INT '(' initExpressions+=STInitializerExpression (','
+		//    initExpressions+=STInitializerExpression)* ')';
+		@Override public ParserRule getRule() { return rule; }
+		
+		//repetitions=INT '(' initExpressions+=STInitializerExpression (','
+		//initExpressions+=STInitializerExpression)* ')'
 		public Group getGroup() { return cGroup; }
 		
-		//indexOrInitExpression=STInitializerExpression
-		public Assignment getIndexOrInitExpressionAssignment_0() { return cIndexOrInitExpressionAssignment_0; }
+		//repetitions=INT
+		public Assignment getRepetitionsAssignment_0() { return cRepetitionsAssignment_0; }
 		
-		//STInitializerExpression
-		public RuleCall getIndexOrInitExpressionSTInitializerExpressionParserRuleCall_0_0() { return cIndexOrInitExpressionSTInitializerExpressionParserRuleCall_0_0; }
-		
-		//('(' initExpressions+=STInitializerExpression (','
-		//   initExpressions+=STInitializerExpression)* ')')?
-		public Group getGroup_1() { return cGroup_1; }
+		//INT
+		public RuleCall getRepetitionsINTTerminalRuleCall_0_0() { return cRepetitionsINTTerminalRuleCall_0_0; }
 		
 		//'('
-		public Keyword getLeftParenthesisKeyword_1_0() { return cLeftParenthesisKeyword_1_0; }
+		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 		
 		//initExpressions+=STInitializerExpression
-		public Assignment getInitExpressionsAssignment_1_1() { return cInitExpressionsAssignment_1_1; }
+		public Assignment getInitExpressionsAssignment_2() { return cInitExpressionsAssignment_2; }
 		
 		//STInitializerExpression
-		public RuleCall getInitExpressionsSTInitializerExpressionParserRuleCall_1_1_0() { return cInitExpressionsSTInitializerExpressionParserRuleCall_1_1_0; }
+		public RuleCall getInitExpressionsSTInitializerExpressionParserRuleCall_2_0() { return cInitExpressionsSTInitializerExpressionParserRuleCall_2_0; }
 		
 		//(','
 		//   initExpressions+=STInitializerExpression)*
-		public Group getGroup_1_2() { return cGroup_1_2; }
+		public Group getGroup_3() { return cGroup_3; }
 		
 		//','
-		public Keyword getCommaKeyword_1_2_0() { return cCommaKeyword_1_2_0; }
+		public Keyword getCommaKeyword_3_0() { return cCommaKeyword_3_0; }
 		
 		//initExpressions+=STInitializerExpression
-		public Assignment getInitExpressionsAssignment_1_2_1() { return cInitExpressionsAssignment_1_2_1; }
+		public Assignment getInitExpressionsAssignment_3_1() { return cInitExpressionsAssignment_3_1; }
 		
 		//STInitializerExpression
-		public RuleCall getInitExpressionsSTInitializerExpressionParserRuleCall_1_2_1_0() { return cInitExpressionsSTInitializerExpressionParserRuleCall_1_2_1_0; }
+		public RuleCall getInitExpressionsSTInitializerExpressionParserRuleCall_3_1_0() { return cInitExpressionsSTInitializerExpressionParserRuleCall_3_1_0; }
 		
 		//')'
-		public Keyword getRightParenthesisKeyword_1_3() { return cRightParenthesisKeyword_1_3; }
+		public Keyword getRightParenthesisKeyword_4() { return cRightParenthesisKeyword_4; }
 	}
 	public class STStructInitializerExpressionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STStructInitializerExpression");
@@ -2018,40 +2047,48 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STUnaryExpression");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final RuleCall cSTAccessExpressionParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
-		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final Action cSTUnaryExpressionAction_1_0 = (Action)cGroup_1.eContents().get(0);
-		private final Assignment cOpAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
-		private final RuleCall cOpUnaryOperatorEnumRuleCall_1_1_0 = (RuleCall)cOpAssignment_1_1.eContents().get(0);
-		private final Assignment cExpressionAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
-		private final RuleCall cExpressionSTUnaryExpressionParserRuleCall_1_2_0 = (RuleCall)cExpressionAssignment_1_2.eContents().get(0);
+		private final RuleCall cSTLiteralExpressionsParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
+		private final RuleCall cSTSignedLiteralExpressionsParserRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
+		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
+		private final Action cSTUnaryExpressionAction_3_0 = (Action)cGroup_3.eContents().get(0);
+		private final Assignment cOpAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
+		private final RuleCall cOpUnaryOperatorEnumRuleCall_3_1_0 = (RuleCall)cOpAssignment_3_1.eContents().get(0);
+		private final Assignment cExpressionAssignment_3_2 = (Assignment)cGroup_3.eContents().get(2);
+		private final RuleCall cExpressionSTUnaryExpressionParserRuleCall_3_2_0 = (RuleCall)cExpressionAssignment_3_2.eContents().get(0);
 		
 		//STUnaryExpression returns STExpression:
-		//    => STAccessExpression | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
+		//    STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
 		@Override public ParserRule getRule() { return rule; }
 		
-		//=> STAccessExpression | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression)
+		//STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression)
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
-		//=> STAccessExpression
+		//STAccessExpression
 		public RuleCall getSTAccessExpressionParserRuleCall_0() { return cSTAccessExpressionParserRuleCall_0; }
 		
+		//STLiteralExpressions
+		public RuleCall getSTLiteralExpressionsParserRuleCall_1() { return cSTLiteralExpressionsParserRuleCall_1; }
+		
+		//=> STSignedLiteralExpressions
+		public RuleCall getSTSignedLiteralExpressionsParserRuleCall_2() { return cSTSignedLiteralExpressionsParserRuleCall_2; }
+		
 		//({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression)
-		public Group getGroup_1() { return cGroup_1; }
+		public Group getGroup_3() { return cGroup_3; }
 		
 		//{STUnaryExpression}
-		public Action getSTUnaryExpressionAction_1_0() { return cSTUnaryExpressionAction_1_0; }
+		public Action getSTUnaryExpressionAction_3_0() { return cSTUnaryExpressionAction_3_0; }
 		
 		//op=UnaryOperator
-		public Assignment getOpAssignment_1_1() { return cOpAssignment_1_1; }
+		public Assignment getOpAssignment_3_1() { return cOpAssignment_3_1; }
 		
 		//UnaryOperator
-		public RuleCall getOpUnaryOperatorEnumRuleCall_1_1_0() { return cOpUnaryOperatorEnumRuleCall_1_1_0; }
+		public RuleCall getOpUnaryOperatorEnumRuleCall_3_1_0() { return cOpUnaryOperatorEnumRuleCall_3_1_0; }
 		
 		//expression=STUnaryExpression
-		public Assignment getExpressionAssignment_1_2() { return cExpressionAssignment_1_2; }
+		public Assignment getExpressionAssignment_3_2() { return cExpressionAssignment_3_2; }
 		
 		//STUnaryExpression
-		public RuleCall getExpressionSTUnaryExpressionParserRuleCall_1_2_0() { return cExpressionSTUnaryExpressionParserRuleCall_1_2_0; }
+		public RuleCall getExpressionSTUnaryExpressionParserRuleCall_3_2_0() { return cExpressionSTUnaryExpressionParserRuleCall_3_2_0; }
 	}
 	public class STAccessExpressionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STAccessExpression");
@@ -2158,13 +2195,12 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cRightParenthesisKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
 		private final RuleCall cSTFeatureExpressionParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
 		private final RuleCall cSTBuiltinFeatureExpressionParserRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
-		private final RuleCall cSTLiteralExpressionsParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
 		
 		//STPrimaryExpression returns STExpression:
-		//    '(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression | STLiteralExpressions;
+		//    '(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression | STLiteralExpressions
+		//'(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//'(' STExpression ')'
@@ -2184,9 +2220,6 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//STBuiltinFeatureExpression
 		public RuleCall getSTBuiltinFeatureExpressionParserRuleCall_2() { return cSTBuiltinFeatureExpressionParserRuleCall_2; }
-		
-		//STLiteralExpressions
-		public RuleCall getSTLiteralExpressionsParserRuleCall_3() { return cSTLiteralExpressionsParserRuleCall_3; }
 	}
 	public class STFeatureExpressionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STFeatureExpression");
@@ -2209,7 +2242,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//STFeatureExpression returns STExpression:
 		//    {STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName]
-		//    (=>call?='('
+		//    (call?='('
 		//        (
 		//            parameters+=STCallArgument (',' parameters+=STCallArgument)*
 		//        )?
@@ -2217,7 +2250,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		@Override public ParserRule getRule() { return rule; }
 		
 		//{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName]
-		//(=>call?='('
+		//(call?='('
 		//    (
 		//        parameters+=STCallArgument (',' parameters+=STCallArgument)*
 		//    )?
@@ -2236,14 +2269,14 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//STFeatureName
 		public RuleCall getFeatureINamedElementSTFeatureNameParserRuleCall_1_0_1() { return cFeatureINamedElementSTFeatureNameParserRuleCall_1_0_1; }
 		
-		//(=>call?='('
+		//(call?='('
 		//    (
 		//        parameters+=STCallArgument (',' parameters+=STCallArgument)*
 		//    )?
 		//')')?
 		public Group getGroup_2() { return cGroup_2; }
 		
-		//=>call?='('
+		//call?='('
 		public Assignment getCallAssignment_2_0() { return cCallAssignment_2_0; }
 		
 		//'('
@@ -2341,11 +2374,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cRightParenthesisKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
 		
 		//STBuiltinFeatureExpression returns STExpression:
-		//    {STBuiltinFeatureExpression} feature=STBuiltinFeature (=>call?='(' (parameters+=STCallArgument
+		//    {STBuiltinFeatureExpression} feature=STBuiltinFeature (call?='(' (parameters+=STCallArgument
 		//    (',' parameters+=STCallArgument)*)? ')')?;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//{STBuiltinFeatureExpression} feature=STBuiltinFeature (=>call?='(' (parameters+=STCallArgument
+		//{STBuiltinFeatureExpression} feature=STBuiltinFeature (call?='(' (parameters+=STCallArgument
 		//(',' parameters+=STCallArgument)*)? ')')?
 		public Group getGroup() { return cGroup; }
 		
@@ -2358,11 +2391,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//STBuiltinFeature
 		public RuleCall getFeatureSTBuiltinFeatureEnumRuleCall_1_0() { return cFeatureSTBuiltinFeatureEnumRuleCall_1_0; }
 		
-		//(=>call?='(' (parameters+=STCallArgument
+		//(call?='(' (parameters+=STCallArgument
 		//   (',' parameters+=STCallArgument)*)? ')')?
 		public Group getGroup_2() { return cGroup_2; }
 		
-		//=>call?='('
+		//call?='('
 		public Assignment getCallAssignment_2_0() { return cCallAssignment_2_0; }
 		
 		//'('
@@ -2494,6 +2527,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//STStringLiteral
 		public RuleCall getSTStringLiteralParserRuleCall_5() { return cSTStringLiteralParserRuleCall_5; }
 	}
+	public class STSignedLiteralExpressionsElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STSignedLiteralExpressions");
+		private final RuleCall cSTSignedNumericLiteralParserRuleCall = (RuleCall)rule.eContents().get(1);
+		
+		//STSignedLiteralExpressions returns STExpression:
+		//    STSignedNumericLiteral;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//STSignedNumericLiteral
+		public RuleCall getSTSignedNumericLiteralParserRuleCall() { return cSTSignedNumericLiteralParserRuleCall; }
+	}
 	public class STNumericLiteralTypeElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STNumericLiteralType");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
@@ -2515,25 +2559,35 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	public class STNumericLiteralElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STNumericLiteral");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Group cGroup_0 = (Group)cGroup.eContents().get(0);
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Group cGroup_0 = (Group)cAlternatives.eContents().get(0);
 		private final Assignment cTypeAssignment_0_0 = (Assignment)cGroup_0.eContents().get(0);
 		private final CrossReference cTypeDataTypeCrossReference_0_0_0 = (CrossReference)cTypeAssignment_0_0.eContents().get(0);
 		private final RuleCall cTypeDataTypeSTNumericLiteralTypeParserRuleCall_0_0_0_1 = (RuleCall)cTypeDataTypeCrossReference_0_0_0.eContents().get(1);
 		private final Keyword cNumberSignKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
-		private final Assignment cValueAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cValueNumericParserRuleCall_1_0 = (RuleCall)cValueAssignment_1.eContents().get(0);
+		private final Assignment cValueAssignment_0_2 = (Assignment)cGroup_0.eContents().get(2);
+		private final RuleCall cValueSignedNumericParserRuleCall_0_2_0 = (RuleCall)cValueAssignment_0_2.eContents().get(0);
+		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
+		private final Group cGroup_1_0 = (Group)cGroup_1.eContents().get(0);
+		private final Assignment cTypeAssignment_1_0_0 = (Assignment)cGroup_1_0.eContents().get(0);
+		private final CrossReference cTypeDataTypeCrossReference_1_0_0_0 = (CrossReference)cTypeAssignment_1_0_0.eContents().get(0);
+		private final RuleCall cTypeDataTypeSTNumericLiteralTypeParserRuleCall_1_0_0_0_1 = (RuleCall)cTypeDataTypeCrossReference_1_0_0_0.eContents().get(1);
+		private final Keyword cNumberSignKeyword_1_0_1 = (Keyword)cGroup_1_0.eContents().get(1);
+		private final Assignment cValueAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cValueNumericParserRuleCall_1_1_0 = (RuleCall)cValueAssignment_1_1.eContents().get(0);
 		
 		//STNumericLiteral:
-		//    (type=[datatype::DataType|STNumericLiteralType] '#')?
-		//    value=Numeric;
+		//    (type=[datatype::DataType|STNumericLiteralType] '#' value=SignedNumeric) |
+		//    ((type=[datatype::DataType|STNumericLiteralType] '#')?
+		//    value=Numeric);
 		@Override public ParserRule getRule() { return rule; }
 		
-		//(type=[datatype::DataType|STNumericLiteralType] '#')?
-		//value=Numeric
-		public Group getGroup() { return cGroup; }
+		//(type=[datatype::DataType|STNumericLiteralType] '#' value=SignedNumeric) |
+		//((type=[datatype::DataType|STNumericLiteralType] '#')?
+		//value=Numeric)
+		public Alternatives getAlternatives() { return cAlternatives; }
 		
-		//(type=[datatype::DataType|STNumericLiteralType] '#')?
+		//(type=[datatype::DataType|STNumericLiteralType] '#' value=SignedNumeric)
 		public Group getGroup_0() { return cGroup_0; }
 		
 		//type=[datatype::DataType|STNumericLiteralType]
@@ -2548,11 +2602,51 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'#'
 		public Keyword getNumberSignKeyword_0_1() { return cNumberSignKeyword_0_1; }
 		
+		//value=SignedNumeric
+		public Assignment getValueAssignment_0_2() { return cValueAssignment_0_2; }
+		
+		//SignedNumeric
+		public RuleCall getValueSignedNumericParserRuleCall_0_2_0() { return cValueSignedNumericParserRuleCall_0_2_0; }
+		
+		//((type=[datatype::DataType|STNumericLiteralType] '#')?
+		//value=Numeric)
+		public Group getGroup_1() { return cGroup_1; }
+		
+		//(type=[datatype::DataType|STNumericLiteralType] '#')?
+		public Group getGroup_1_0() { return cGroup_1_0; }
+		
+		//type=[datatype::DataType|STNumericLiteralType]
+		public Assignment getTypeAssignment_1_0_0() { return cTypeAssignment_1_0_0; }
+		
+		//[datatype::DataType|STNumericLiteralType]
+		public CrossReference getTypeDataTypeCrossReference_1_0_0_0() { return cTypeDataTypeCrossReference_1_0_0_0; }
+		
+		//STNumericLiteralType
+		public RuleCall getTypeDataTypeSTNumericLiteralTypeParserRuleCall_1_0_0_0_1() { return cTypeDataTypeSTNumericLiteralTypeParserRuleCall_1_0_0_0_1; }
+		
+		//'#'
+		public Keyword getNumberSignKeyword_1_0_1() { return cNumberSignKeyword_1_0_1; }
+		
 		//value=Numeric
-		public Assignment getValueAssignment_1() { return cValueAssignment_1; }
+		public Assignment getValueAssignment_1_1() { return cValueAssignment_1_1; }
 		
 		//Numeric
-		public RuleCall getValueNumericParserRuleCall_1_0() { return cValueNumericParserRuleCall_1_0; }
+		public RuleCall getValueNumericParserRuleCall_1_1_0() { return cValueNumericParserRuleCall_1_1_0; }
+	}
+	public class STSignedNumericLiteralElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STSignedNumericLiteral");
+		private final Assignment cValueAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cValueSignedNumericParserRuleCall_0 = (RuleCall)cValueAssignment.eContents().get(0);
+		
+		//STSignedNumericLiteral returns STNumericLiteral:
+		//    value=SignedNumeric;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//value=SignedNumeric
+		public Assignment getValueAssignment() { return cValueAssignment; }
+		
+		//SignedNumeric
+		public RuleCall getValueSignedNumericParserRuleCall_0() { return cValueSignedNumericParserRuleCall_0; }
 	}
 	public class STDateLiteralTypeElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STDateLiteralType");
@@ -3082,19 +3176,19 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cIDTerminalRuleCall_1_1 = (RuleCall)cGroup_1.eContents().get(1);
 		
 		//QualifiedName:
-		//    ID (=>'::' ID)*;
+		//    ID ('::' ID)*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//ID (=>'::' ID)*
+		//ID ('::' ID)*
 		public Group getGroup() { return cGroup; }
 		
 		//ID
 		public RuleCall getIDTerminalRuleCall_0() { return cIDTerminalRuleCall_0; }
 		
-		//(=>'::' ID)*
+		//('::' ID)*
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//=>'::'
+		//'::'
 		public Keyword getColonColonKeyword_1_0() { return cColonColonKeyword_1_0; }
 		
 		//ID
@@ -3149,26 +3243,70 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	public class NumberElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.Number");
 		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cINTTerminalRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Keyword cFullStopKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
+		private final Alternatives cAlternatives_1_1 = (Alternatives)cGroup_1.eContents().get(1);
+		private final RuleCall cINTTerminalRuleCall_1_1_0 = (RuleCall)cAlternatives_1_1.eContents().get(0);
+		private final RuleCall cDECIMALTerminalRuleCall_1_1_1 = (RuleCall)cAlternatives_1_1.eContents().get(1);
+		
+		//Number hidden():
+		//    INT ('.' (INT | DECIMAL))?;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//INT ('.' (INT | DECIMAL))?
+		public Group getGroup() { return cGroup; }
+		
+		//INT
+		public RuleCall getINTTerminalRuleCall_0() { return cINTTerminalRuleCall_0; }
+		
+		//('.' (INT | DECIMAL))?
+		public Group getGroup_1() { return cGroup_1; }
+		
+		//'.'
+		public Keyword getFullStopKeyword_1_0() { return cFullStopKeyword_1_0; }
+		
+		//(INT | DECIMAL)
+		public Alternatives getAlternatives_1_1() { return cAlternatives_1_1; }
+		
+		//INT
+		public RuleCall getINTTerminalRuleCall_1_1_0() { return cINTTerminalRuleCall_1_1_0; }
+		
+		//DECIMAL
+		public RuleCall getDECIMALTerminalRuleCall_1_1_1() { return cDECIMALTerminalRuleCall_1_1_1; }
+	}
+	public class SignedNumericElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.SignedNumeric");
+		private final RuleCall cSignedNumberParserRuleCall = (RuleCall)rule.eContents().get(1);
+		
+		//SignedNumeric returns ecore::EJavaObject:
+		//    SignedNumber;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//SignedNumber
+		public RuleCall getSignedNumberParserRuleCall() { return cSignedNumberParserRuleCall; }
+	}
+	public class SignedNumberElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.SignedNumber");
+		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Alternatives cAlternatives_0 = (Alternatives)cGroup.eContents().get(0);
 		private final Keyword cPlusSignKeyword_0_0 = (Keyword)cAlternatives_0.eContents().get(0);
 		private final Keyword cHyphenMinusKeyword_0_1 = (Keyword)cAlternatives_0.eContents().get(1);
-		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
-		private final RuleCall cINTTerminalRuleCall_1_0 = (RuleCall)cAlternatives_1.eContents().get(0);
-		private final RuleCall cDECIMALTerminalRuleCall_1_1 = (RuleCall)cAlternatives_1.eContents().get(1);
+		private final RuleCall cINTTerminalRuleCall_1 = (RuleCall)cGroup.eContents().get(1);
 		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
 		private final Keyword cFullStopKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
 		private final Alternatives cAlternatives_2_1 = (Alternatives)cGroup_2.eContents().get(1);
 		private final RuleCall cINTTerminalRuleCall_2_1_0 = (RuleCall)cAlternatives_2_1.eContents().get(0);
 		private final RuleCall cDECIMALTerminalRuleCall_2_1_1 = (RuleCall)cAlternatives_2_1.eContents().get(1);
 		
-		//Number hidden():
-		//    ('+' | '-')? (INT | DECIMAL) (=>'.' (INT | DECIMAL))?;
+		//SignedNumber hidden():
+		//    ('+' | '-') INT ('.' (INT | DECIMAL))?;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//('+' | '-')? (INT | DECIMAL) (=>'.' (INT | DECIMAL))?
+		//('+' | '-') INT ('.' (INT | DECIMAL))?
 		public Group getGroup() { return cGroup; }
 		
-		//('+' | '-')?
+		//('+' | '-')
 		public Alternatives getAlternatives_0() { return cAlternatives_0; }
 		
 		//'+'
@@ -3177,19 +3315,13 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'-'
 		public Keyword getHyphenMinusKeyword_0_1() { return cHyphenMinusKeyword_0_1; }
 		
-		//(INT | DECIMAL)
-		public Alternatives getAlternatives_1() { return cAlternatives_1; }
-		
 		//INT
-		public RuleCall getINTTerminalRuleCall_1_0() { return cINTTerminalRuleCall_1_0; }
+		public RuleCall getINTTerminalRuleCall_1() { return cINTTerminalRuleCall_1; }
 		
-		//DECIMAL
-		public RuleCall getDECIMALTerminalRuleCall_1_1() { return cDECIMALTerminalRuleCall_1_1; }
-		
-		//(=>'.' (INT | DECIMAL))?
+		//('.' (INT | DECIMAL))?
 		public Group getGroup_2() { return cGroup_2; }
 		
-		//=>'.'
+		//'.'
 		public Keyword getFullStopKeyword_2_0() { return cFullStopKeyword_2_0; }
 		
 		//(INT | DECIMAL)
@@ -3278,10 +3410,10 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cINTTerminalRuleCall_11_1 = (RuleCall)cGroup_11.eContents().get(1);
 		
 		//DateAndTime returns STDateAndTime:
-		//    INT '-' INT '-' INT '-' INT ':' INT ':' INT (=>'.' INT)?;
+		//    INT '-' INT '-' INT '-' INT ':' INT ':' INT ('.' INT)?;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//INT '-' INT '-' INT '-' INT ':' INT ':' INT (=>'.' INT)?
+		//INT '-' INT '-' INT '-' INT ':' INT ':' INT ('.' INT)?
 		public Group getGroup() { return cGroup; }
 		
 		//INT
@@ -3317,10 +3449,10 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//INT
 		public RuleCall getINTTerminalRuleCall_10() { return cINTTerminalRuleCall_10; }
 		
-		//(=>'.' INT)?
+		//('.' INT)?
 		public Group getGroup_11() { return cGroup_11; }
 		
-		//=>'.'
+		//'.'
 		public Keyword getFullStopKeyword_11_0() { return cFullStopKeyword_11_0; }
 		
 		//INT
@@ -3339,10 +3471,10 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cINTTerminalRuleCall_5_1 = (RuleCall)cGroup_5.eContents().get(1);
 		
 		//TimeOfDay returns STTimeOfDay:
-		//    INT ':' INT ':' INT (=>'.' INT)?;
+		//    INT ':' INT ':' INT ('.' INT)?;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//INT ':' INT ':' INT (=>'.' INT)?
+		//INT ':' INT ':' INT ('.' INT)?
 		public Group getGroup() { return cGroup; }
 		
 		//INT
@@ -3360,10 +3492,10 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//INT
 		public RuleCall getINTTerminalRuleCall_4() { return cINTTerminalRuleCall_4; }
 		
-		//(=>'.' INT)?
+		//('.' INT)?
 		public Group getGroup_5() { return cGroup_5; }
 		
-		//=>'.'
+		//'.'
 		public Keyword getFullStopKeyword_5_0() { return cFullStopKeyword_5_0; }
 		
 		//INT
@@ -4012,6 +4144,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final STElementaryInitializerExpressionElements pSTElementaryInitializerExpression;
 	private final STArrayInitializerExpressionElements pSTArrayInitializerExpression;
 	private final STArrayInitElementElements pSTArrayInitElement;
+	private final STSingleArrayInitElementElements pSTSingleArrayInitElement;
+	private final STRepeatArrayInitElementElements pSTRepeatArrayInitElement;
 	private final STStructInitializerExpressionElements pSTStructInitializerExpression;
 	private final STStructInitElementElements pSTStructInitElement;
 	private final STStatementElements pSTStatement;
@@ -4058,8 +4192,10 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final STMultiBitAccessSpecifierElements eSTMultiBitAccessSpecifier;
 	private final STMultibitPartialExpressionElements pSTMultibitPartialExpression;
 	private final STLiteralExpressionsElements pSTLiteralExpressions;
+	private final STSignedLiteralExpressionsElements pSTSignedLiteralExpressions;
 	private final STNumericLiteralTypeElements pSTNumericLiteralType;
 	private final STNumericLiteralElements pSTNumericLiteral;
+	private final STSignedNumericLiteralElements pSTSignedNumericLiteral;
 	private final STDateLiteralTypeElements pSTDateLiteralType;
 	private final STDateLiteralElements pSTDateLiteral;
 	private final STTimeLiteralTypeElements pSTTimeLiteralType;
@@ -4081,6 +4217,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final QualifiedNameWithWildcardElements pQualifiedNameWithWildcard;
 	private final NumericElements pNumeric;
 	private final NumberElements pNumber;
+	private final SignedNumericElements pSignedNumeric;
+	private final SignedNumberElements pSignedNumber;
 	private final TimeElements pTime;
 	private final DateElements pDate;
 	private final DateAndTimeElements pDateAndTime;
@@ -4130,6 +4268,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pSTElementaryInitializerExpression = new STElementaryInitializerExpressionElements();
 		this.pSTArrayInitializerExpression = new STArrayInitializerExpressionElements();
 		this.pSTArrayInitElement = new STArrayInitElementElements();
+		this.pSTSingleArrayInitElement = new STSingleArrayInitElementElements();
+		this.pSTRepeatArrayInitElement = new STRepeatArrayInitElementElements();
 		this.pSTStructInitializerExpression = new STStructInitializerExpressionElements();
 		this.pSTStructInitElement = new STStructInitElementElements();
 		this.pSTStatement = new STStatementElements();
@@ -4176,8 +4316,10 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.eSTMultiBitAccessSpecifier = new STMultiBitAccessSpecifierElements();
 		this.pSTMultibitPartialExpression = new STMultibitPartialExpressionElements();
 		this.pSTLiteralExpressions = new STLiteralExpressionsElements();
+		this.pSTSignedLiteralExpressions = new STSignedLiteralExpressionsElements();
 		this.pSTNumericLiteralType = new STNumericLiteralTypeElements();
 		this.pSTNumericLiteral = new STNumericLiteralElements();
+		this.pSTSignedNumericLiteral = new STSignedNumericLiteralElements();
 		this.pSTDateLiteralType = new STDateLiteralTypeElements();
 		this.pSTDateLiteral = new STDateLiteralElements();
 		this.pSTTimeLiteralType = new STTimeLiteralTypeElements();
@@ -4199,6 +4341,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pQualifiedNameWithWildcard = new QualifiedNameWithWildcardElements();
 		this.pNumeric = new NumericElements();
 		this.pNumber = new NumberElements();
+		this.pSignedNumeric = new SignedNumericElements();
+		this.pSignedNumber = new SignedNumberElements();
 		this.pTime = new TimeElements();
 		this.pDate = new DateElements();
 		this.pDateAndTime = new DateAndTimeElements();
@@ -4441,14 +4585,34 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STArrayInitElement:
-	//    indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (','
-	//    initExpressions+=STInitializerExpression)* ')')?;
+	//    STSingleArrayInitElement | STRepeatArrayInitElement;
 	public STArrayInitElementElements getSTArrayInitElementAccess() {
 		return pSTArrayInitElement;
 	}
 	
 	public ParserRule getSTArrayInitElementRule() {
 		return getSTArrayInitElementAccess().getRule();
+	}
+	
+	//STSingleArrayInitElement:
+	//    initExpression=STInitializerExpression;
+	public STSingleArrayInitElementElements getSTSingleArrayInitElementAccess() {
+		return pSTSingleArrayInitElement;
+	}
+	
+	public ParserRule getSTSingleArrayInitElementRule() {
+		return getSTSingleArrayInitElementAccess().getRule();
+	}
+	
+	//STRepeatArrayInitElement:
+	//    repetitions=INT '(' initExpressions+=STInitializerExpression (','
+	//    initExpressions+=STInitializerExpression)* ')';
+	public STRepeatArrayInitElementElements getSTRepeatArrayInitElementAccess() {
+		return pSTRepeatArrayInitElement;
+	}
+	
+	public ParserRule getSTRepeatArrayInitElementRule() {
+		return getSTRepeatArrayInitElementAccess().getRule();
 	}
 	
 	//STStructInitializerExpression:
@@ -4828,7 +4992,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STUnaryExpression returns STExpression:
-	//    => STAccessExpression | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
+	//    STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
 	public STUnaryExpressionElements getSTUnaryExpressionAccess() {
 		return pSTUnaryExpression;
 	}
@@ -4850,7 +5014,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STPrimaryExpression returns STExpression:
-	//    '(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression | STLiteralExpressions;
+	//    '(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression;
 	public STPrimaryExpressionElements getSTPrimaryExpressionAccess() {
 		return pSTPrimaryExpression;
 	}
@@ -4861,7 +5025,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	//STFeatureExpression returns STExpression:
 	//    {STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName]
-	//    (=>call?='('
+	//    (call?='('
 	//        (
 	//            parameters+=STCallArgument (',' parameters+=STCallArgument)*
 	//        )?
@@ -4885,7 +5049,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STBuiltinFeatureExpression returns STExpression:
-	//    {STBuiltinFeatureExpression} feature=STBuiltinFeature (=>call?='(' (parameters+=STCallArgument
+	//    {STBuiltinFeatureExpression} feature=STBuiltinFeature (call?='(' (parameters+=STCallArgument
 	//    (',' parameters+=STCallArgument)*)? ')')?;
 	public STBuiltinFeatureExpressionElements getSTBuiltinFeatureExpressionAccess() {
 		return pSTBuiltinFeatureExpression;
@@ -4941,6 +5105,16 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getSTLiteralExpressionsAccess().getRule();
 	}
 	
+	//STSignedLiteralExpressions returns STExpression:
+	//    STSignedNumericLiteral;
+	public STSignedLiteralExpressionsElements getSTSignedLiteralExpressionsAccess() {
+		return pSTSignedLiteralExpressions;
+	}
+	
+	public ParserRule getSTSignedLiteralExpressionsRule() {
+		return getSTSignedLiteralExpressionsAccess().getRule();
+	}
+	
 	//STNumericLiteralType:
 	//    STAnyBitType | STAnyNumType;
 	public STNumericLiteralTypeElements getSTNumericLiteralTypeAccess() {
@@ -4952,14 +5126,25 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STNumericLiteral:
-	//    (type=[datatype::DataType|STNumericLiteralType] '#')?
-	//    value=Numeric;
+	//    (type=[datatype::DataType|STNumericLiteralType] '#' value=SignedNumeric) |
+	//    ((type=[datatype::DataType|STNumericLiteralType] '#')?
+	//    value=Numeric);
 	public STNumericLiteralElements getSTNumericLiteralAccess() {
 		return pSTNumericLiteral;
 	}
 	
 	public ParserRule getSTNumericLiteralRule() {
 		return getSTNumericLiteralAccess().getRule();
+	}
+	
+	//STSignedNumericLiteral returns STNumericLiteral:
+	//    value=SignedNumeric;
+	public STSignedNumericLiteralElements getSTSignedNumericLiteralAccess() {
+		return pSTSignedNumericLiteral;
+	}
+	
+	public ParserRule getSTSignedNumericLiteralRule() {
+		return getSTSignedNumericLiteralAccess().getRule();
 	}
 	
 	//STDateLiteralType:
@@ -5143,7 +5328,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//QualifiedName:
-	//    ID (=>'::' ID)*;
+	//    ID ('::' ID)*;
 	public QualifiedNameElements getQualifiedNameAccess() {
 		return pQualifiedName;
 	}
@@ -5173,13 +5358,33 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//Number hidden():
-	//    ('+' | '-')? (INT | DECIMAL) (=>'.' (INT | DECIMAL))?;
+	//    INT ('.' (INT | DECIMAL))?;
 	public NumberElements getNumberAccess() {
 		return pNumber;
 	}
 	
 	public ParserRule getNumberRule() {
 		return getNumberAccess().getRule();
+	}
+	
+	//SignedNumeric returns ecore::EJavaObject:
+	//    SignedNumber;
+	public SignedNumericElements getSignedNumericAccess() {
+		return pSignedNumeric;
+	}
+	
+	public ParserRule getSignedNumericRule() {
+		return getSignedNumericAccess().getRule();
+	}
+	
+	//SignedNumber hidden():
+	//    ('+' | '-') INT ('.' (INT | DECIMAL))?;
+	public SignedNumberElements getSignedNumberAccess() {
+		return pSignedNumber;
+	}
+	
+	public ParserRule getSignedNumberRule() {
+		return getSignedNumberAccess().getRule();
 	}
 	
 	//Time returns STTime hidden():
@@ -5203,7 +5408,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//DateAndTime returns STDateAndTime:
-	//    INT '-' INT '-' INT '-' INT ':' INT ':' INT (=>'.' INT)?;
+	//    INT '-' INT '-' INT '-' INT ':' INT ':' INT ('.' INT)?;
 	public DateAndTimeElements getDateAndTimeAccess() {
 		return pDateAndTime;
 	}
@@ -5213,7 +5418,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//TimeOfDay returns STTimeOfDay:
-	//    INT ':' INT ':' INT (=>'.' INT)?;
+	//    INT ':' INT ':' INT ('.' INT)?;
 	public TimeOfDayElements getTimeOfDayAccess() {
 		return pTimeOfDay;
 	}

@@ -32,7 +32,7 @@ public class ResourceTypeSelectionTreeContentProvider extends TypeSelectionTreeC
 		}
 
 		final TypeNode resourceTypes = new TypeNode(Messages.ResourceTypeSelectionTreeContentProvider_ResourceTypes);
-		addPathSubtree(resourceTypes, typeLibrary.getResourceTypes().values());
+		addPathSubtree(resourceTypes, typeLibrary.getResourceTypes());
 		resourceTypes.sortChildren();
 
 		return resourceTypes.getChildren();

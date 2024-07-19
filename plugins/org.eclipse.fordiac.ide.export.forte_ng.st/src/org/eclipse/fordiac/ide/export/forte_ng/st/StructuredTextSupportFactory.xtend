@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
+import java.util.Map
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
@@ -24,11 +25,11 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 
 class StructuredTextSupportFactory implements ILanguageSupportFactory {
 
-	override createLanguageSupport(Object source) {
+	override createLanguageSupport(Object source, Map<?, ?> options) {
 		if (source instanceof STAlgorithm) {
-			new STAlgorithmSupport(source)
+			new STAlgorithmSupport(source, options)
 		} else if (source instanceof STMethod) {
-			new STMethodSupport(source)
+			new STMethodSupport(source, options)
 		} else if (source instanceof STFunctionSource) {
 			new STFunctionSupport(source)
 		} else if (source instanceof ECTransition) {

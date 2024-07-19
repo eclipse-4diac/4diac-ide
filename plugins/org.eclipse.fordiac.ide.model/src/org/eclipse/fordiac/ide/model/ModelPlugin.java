@@ -22,6 +22,13 @@ import org.osgi.framework.BundleContext;
 
 public class ModelPlugin extends AbstractUIPlugin {
 
+	// The shared instance
+	private static ModelPlugin plugin;
+
+	private static synchronized void setPlugin(final ModelPlugin instance) {
+		plugin = instance;
+	}
+
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
@@ -42,5 +49,21 @@ public class ModelPlugin extends AbstractUIPlugin {
 		} else {
 			CoordinateConverter.INSTANCE.name();
 		}
+		setPlugin(this);
+	}
+
+	@Override
+	public void stop(final BundleContext context) throws Exception {
+		setPlugin(null);
+		super.stop(context);
+	}
+
+	/**
+	 * Returns the shared instance.
+	 *
+	 * @return the shared instance
+	 */
+	public static ModelPlugin getDefault() {
+		return plugin;
 	}
 }

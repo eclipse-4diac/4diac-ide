@@ -61,7 +61,12 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
         eType="#//STArrayInitElement" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STArrayInitElement">
+  <eClassifiers xsi:type="ecore:EClass" name="STArrayInitElement" abstract="true"
+      interface="true">
+    <eOperations name="getResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
+    <eOperations name="getDeclaredResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STSingleArrayInitElement" eSuperTypes="#//STArrayInitElement">
     <eOperations name="getResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
@@ -72,8 +77,21 @@
         <details key="body" value="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="indexOrInitExpression"
-        eType="#//STInitializerExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initExpression" eType="#//STInitializerExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STRepeatArrayInitElement" eSuperTypes="#//STArrayInitElement">
+    <eOperations name="getResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getDeclaredResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repetitions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="initExpressions" upperBound="-1"
         eType="#//STInitializerExpression" containment="true"/>
   </eClassifiers>

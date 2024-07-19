@@ -21,7 +21,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
@@ -50,8 +49,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpressio
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression;
@@ -90,9 +91,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 			switch (semanticObject.eClass().getClassifierID()) {
 			case STCorePackage.ST_ARRAY_ACCESS_EXPRESSION:
 				sequence_STAccessExpression(context, (STArrayAccessExpression) semanticObject); 
-				return; 
-			case STCorePackage.ST_ARRAY_INIT_ELEMENT:
-				sequence_STArrayInitElement(context, (STArrayInitElement) semanticObject); 
 				return; 
 			case STCorePackage.ST_ARRAY_INITIALIZER_EXPRESSION:
 				sequence_STArrayInitializerExpression(context, (STArrayInitializerExpression) semanticObject); 
@@ -173,13 +171,58 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				sequence_STStatement(context, (STNop) semanticObject); 
 				return; 
 			case STCorePackage.ST_NUMERIC_LITERAL:
-				sequence_STNumericLiteral(context, (STNumericLiteral) semanticObject); 
+				if (rule == grammarAccess.getSTLiteralExpressionsRule()
+						|| rule == grammarAccess.getSTNumericLiteralRule()) {
+					sequence_STNumericLiteral(context, (STNumericLiteral) semanticObject); 
+					return; 
+				}
+				else if (rule == grammarAccess.getSTStatementRule()
+						|| rule == grammarAccess.getSTAssignmentRule()
+						|| action == grammarAccess.getSTAssignmentAccess().getSTAssignmentLeftAction_1_0()
+						|| rule == grammarAccess.getSTExpressionRule()
+						|| rule == grammarAccess.getSTSubrangeExpressionRule()
+						|| action == grammarAccess.getSTSubrangeExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTOrExpressionRule()
+						|| action == grammarAccess.getSTOrExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTXorExpressionRule()
+						|| action == grammarAccess.getSTXorExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTAndExpressionRule()
+						|| action == grammarAccess.getSTAndExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTEqualityExpressionRule()
+						|| action == grammarAccess.getSTEqualityExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTComparisonExpressionRule()
+						|| action == grammarAccess.getSTComparisonExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTAddSubExpressionRule()
+						|| action == grammarAccess.getSTAddSubExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTMulDivModExpressionRule()
+						|| action == grammarAccess.getSTMulDivModExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTPowerExpressionRule()
+						|| action == grammarAccess.getSTPowerExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTUnaryExpressionRule()
+						|| rule == grammarAccess.getSTAccessExpressionRule()
+						|| action == grammarAccess.getSTAccessExpressionAccess().getSTMemberAccessExpressionReceiverAction_1_0_0()
+						|| action == grammarAccess.getSTAccessExpressionAccess().getSTArrayAccessExpressionReceiverAction_1_1_0()
+						|| rule == grammarAccess.getSTPrimaryExpressionRule()) {
+					sequence_STNumericLiteral_STSignedNumericLiteral(context, (STNumericLiteral) semanticObject); 
+					return; 
+				}
+				else if (rule == grammarAccess.getSTSignedLiteralExpressionsRule()
+						|| rule == grammarAccess.getSTSignedNumericLiteralRule()) {
+					sequence_STSignedNumericLiteral(context, (STNumericLiteral) semanticObject); 
+					return; 
+				}
+				else break;
+			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT:
+				sequence_STRepeatArrayInitElement(context, (STRepeatArrayInitElement) semanticObject); 
 				return; 
 			case STCorePackage.ST_REPEAT_STATEMENT:
 				sequence_STRepeatStatement(context, (STRepeatStatement) semanticObject); 
 				return; 
 			case STCorePackage.ST_RETURN:
 				sequence_STStatement(context, (STReturn) semanticObject); 
+				return; 
+			case STCorePackage.ST_SINGLE_ARRAY_INIT_ELEMENT:
+				sequence_STSingleArrayInitElement(context, (STSingleArrayInitElement) semanticObject); 
 				return; 
 			case STCorePackage.ST_STRING_LITERAL:
 				sequence_STStringLiteral(context, (STStringLiteral) semanticObject); 
@@ -354,20 +397,6 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 * </pre>
 	 */
 	protected void sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(ISerializationContext context, STBinaryExpression semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * <pre>
-	 * Contexts:
-	 *     STArrayInitElement returns STArrayInitElement
-	 *
-	 * Constraint:
-	 *     (indexOrInitExpression=STInitializerExpression (initExpressions+=STInitializerExpression initExpressions+=STInitializerExpression*)?)
-	 * </pre>
-	 */
-	protected void sequence_STArrayInitElement(ISerializationContext context, STArrayInitElement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -844,6 +873,21 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STLiteralExpressions returns STNumericLiteral
+	 *     STNumericLiteral returns STNumericLiteral
+	 *
+	 * Constraint:
+	 *     ((type=[DataType|STNumericLiteralType] value=SignedNumeric) | (type=[DataType|STNumericLiteralType]? value=Numeric))
+	 * </pre>
+	 */
+	protected void sequence_STNumericLiteral(ISerializationContext context, STNumericLiteral semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
 	 *     STStatement returns STNumericLiteral
 	 *     STAssignment returns STNumericLiteral
 	 *     STAssignment.STAssignment_1_0 returns STNumericLiteral
@@ -871,14 +915,27 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STAccessExpression.STMemberAccessExpression_1_0_0 returns STNumericLiteral
 	 *     STAccessExpression.STArrayAccessExpression_1_1_0 returns STNumericLiteral
 	 *     STPrimaryExpression returns STNumericLiteral
-	 *     STLiteralExpressions returns STNumericLiteral
-	 *     STNumericLiteral returns STNumericLiteral
 	 *
 	 * Constraint:
-	 *     (type=[DataType|STNumericLiteralType]? value=Numeric)
+	 *     ((type=[DataType|STNumericLiteralType] value=SignedNumeric) | (type=[DataType|STNumericLiteralType]? value=Numeric) | value=SignedNumeric)
 	 * </pre>
 	 */
-	protected void sequence_STNumericLiteral(ISerializationContext context, STNumericLiteral semanticObject) {
+	protected void sequence_STNumericLiteral_STSignedNumericLiteral(ISerializationContext context, STNumericLiteral semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     STArrayInitElement returns STRepeatArrayInitElement
+	 *     STRepeatArrayInitElement returns STRepeatArrayInitElement
+	 *
+	 * Constraint:
+	 *     (repetitions=INT initExpressions+=STInitializerExpression initExpressions+=STInitializerExpression*)
+	 * </pre>
+	 */
+	protected void sequence_STRepeatArrayInitElement(ISerializationContext context, STRepeatArrayInitElement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -895,6 +952,48 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 */
 	protected void sequence_STRepeatStatement(ISerializationContext context, STRepeatStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     STSignedLiteralExpressions returns STNumericLiteral
+	 *     STSignedNumericLiteral returns STNumericLiteral
+	 *
+	 * Constraint:
+	 *     value=SignedNumeric
+	 * </pre>
+	 */
+	protected void sequence_STSignedNumericLiteral(ISerializationContext context, STNumericLiteral semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTSignedNumericLiteralAccess().getValueSignedNumericParserRuleCall_0(), semanticObject.getValue());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     STArrayInitElement returns STSingleArrayInitElement
+	 *     STSingleArrayInitElement returns STSingleArrayInitElement
+	 *
+	 * Constraint:
+	 *     initExpression=STInitializerExpression
+	 * </pre>
+	 */
+	protected void sequence_STSingleArrayInitElement(ISerializationContext context, STSingleArrayInitElement semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_SINGLE_ARRAY_INIT_ELEMENT__INIT_EXPRESSION) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_SINGLE_ARRAY_INIT_ELEMENT__INIT_EXPRESSION));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTSingleArrayInitElementAccess().getInitExpressionSTInitializerExpressionParserRuleCall_0(), semanticObject.getInitExpression());
+		feeder.finish();
 	}
 	
 	
@@ -1198,8 +1297,8 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_UNARY_EXPRESSION__EXPRESSION));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTUnaryExpressionAccess().getOpUnaryOperatorEnumRuleCall_1_1_0(), semanticObject.getOp());
-		feeder.accept(grammarAccess.getSTUnaryExpressionAccess().getExpressionSTUnaryExpressionParserRuleCall_1_2_0(), semanticObject.getExpression());
+		feeder.accept(grammarAccess.getSTUnaryExpressionAccess().getOpUnaryOperatorEnumRuleCall_3_1_0(), semanticObject.getOp());
+		feeder.accept(grammarAccess.getSTUnaryExpressionAccess().getExpressionSTUnaryExpressionParserRuleCall_3_2_0(), semanticObject.getExpression());
 		feeder.finish();
 	}
 	
