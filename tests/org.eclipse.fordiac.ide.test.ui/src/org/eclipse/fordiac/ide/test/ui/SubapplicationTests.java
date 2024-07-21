@@ -27,9 +27,27 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class SubapplicationTests extends Abstract4diacUITests {
+
+	/**
+	 * Checks if a subapplication can be created via menu by selecting the
+	 * Application editor breadcrumb.
+	 */
+	@SuppressWarnings("static-method")
+	@Disabled("until bug fix")
+	@Test
+	public void createEmptySubappViaMenu() {
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
+		editor.drag(10, 10, 500, 500);
+		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
+		assertEquals(1, selectedEditParts.size());
+		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
+	}
 
 	/**
 	 * Checks if two FBs can be selected by drawing a rectangle by mouse left click
@@ -60,6 +78,16 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
 		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
+	}
+
+	@SuppressWarnings("static-method")
+	@Test
+	public void createSubapplicationViaContextMenu() {
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+
+		editor.clickContextMenu("New subapplication", 100, 100);
+		bot.sleep(6000);
+
 	}
 
 	/**

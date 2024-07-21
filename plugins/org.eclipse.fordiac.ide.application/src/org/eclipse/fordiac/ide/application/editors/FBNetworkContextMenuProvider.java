@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
- *               2019 - 2020 Johannes Kepler University
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ *                          Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -65,26 +65,32 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 	private final DiagramEditorWithFlyoutPalette editor;
 	private Point invocationLocation;
 
-	/** Instantiates a new FB network context menu provider.
+	/**
+	 * Instantiates a new FB network context menu provider.
 	 *
 	 * @param viewer      the viewer
 	 * @param registry    the registry
-	 * @param zoomManager the zoom manager */
+	 * @param zoomManager the zoom manager
+	 */
 	public FBNetworkContextMenuProvider(final DiagramEditorWithFlyoutPalette editor, final ActionRegistry registry,
 			final ZoomManager zoomManager, final TypeLibrary typeLib) {
 		super(editor.getViewer(), zoomManager, registry);
 		this.typeLib = typeLib;
 		this.editor = editor;
 
-		editor.getViewer().getControl()
-		.addMenuDetectListener(e -> invocationLocation = getViewer().getControl().toControl(e.x, e.y));
+		editor.getViewer().getControl().addMenuDetectListener(e -> {
+			invocationLocation = getViewer().getControl().toControl(e.x, e.y);
+		});
 
 	}
 
-	/** Retrieve the location of the context menu relative to the view canvas with scroll and zoom correction.
+	/**
+	 * Retrieve the location of the context menu relative to the view canvas with
+	 * scroll and zoom correction.
 	 *
-	 * @return the zoom and scroll corrected position where the pop-up menu was invoked (i.e. where the right click
-	 *         happened) */
+	 * @return the zoom and scroll corrected position where the pop-up menu was
+	 *         invoked (i.e. where the right click happened)
+	 */
 	public org.eclipse.draw2d.geometry.Point getTranslatedAndZoomedPoint() {
 		final FigureCanvas viewerControl = (FigureCanvas) editor.getViewer().getControl();
 		final org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
@@ -96,9 +102,12 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		return invocationLocation;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.ContextMenuProvider#buildContextMenu(org.eclipse.jface. action.IMenuManager) */
+	 * @see org.eclipse.gef.ContextMenuProvider#buildContextMenu(org.eclipse.jface.
+	 * action.IMenuManager)
+	 */
 	@Override
 	public void buildContextMenu(final IMenuManager menu) {
 		super.buildContextMenu(menu);
@@ -223,4 +232,15 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		return action;
 	}
 
+	/**
+	 * Allows SWTBot test to set the invocationLocation.
+	 *
+	 * Should not be used by other code!
+	 *
+	 * @param invocationLocation invocation location to be used for the next
+	 *                           invocation of the menu
+	 */
+	public void setInvocationLocation(final Point invocationLocation) {
+		this.invocationLocation = invocationLocation;
+	}
 }
