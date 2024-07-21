@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Function Name="SPLIT_BYTE_INTO_BOOLS" Comment="">
+<Function Name="SPLIT_BYTE_INTO_BOOLS" Comment="this Function extracts the 8 BOOLS from a byte">
 	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
@@ -39,8 +39,8 @@
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
-		<ST><![CDATA[FUNCTION SPLIT_BYTE_INTO_BOOLS
-(* this Function extracts the 8 BOOLS from a byte *)
+		<ST><![CDATA[(* this Function extracts the 8 BOOLS from a byte *)
+FUNCTION SPLIT_BYTE_INTO_BOOLS
 
 VAR_INPUT
 	IN : BYTE;
