@@ -80,16 +80,6 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
 	}
 
-	@SuppressWarnings("static-method")
-	@Test
-	public void createSubapplicationViaContextMenu() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
-
-		editor.clickContextMenu("New subapplication", 100, 100);
-		bot.sleep(6000);
-
-	}
-
 	/**
 	 * Checks if a subapplication can be created with two FBs with an existing
 	 * connection between them.
