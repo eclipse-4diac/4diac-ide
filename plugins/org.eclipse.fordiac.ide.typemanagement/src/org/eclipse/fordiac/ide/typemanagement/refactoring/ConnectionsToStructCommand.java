@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
@@ -27,8 +26,6 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.Change;
-import org.eclipse.ltk.core.refactoring.RefactoringCore;
-import org.eclipse.ltk.internal.ui.refactoring.RefactoringUIMessages;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -168,33 +165,33 @@ public class ConnectionsToStructCommand extends Command {
 	}
 
 	private void editFBTypes() {
-		try {
-			sourceC2sChange = new ReplaceVarsWithStructChange(EcoreUtil.getURI(sourceType), FBType.class,
-					replacableConMap.keySet(), structType, sourceVarName, sourceType.getInterfaceList(), false, 0);
-			destinationC2sChange = new ReplaceVarsWithStructChange(EcoreUtil.getURI(destinationType), FBType.class,
-					new HashSet<>(replacableConMap.values()), structType, destinationVarName,
-					destinationType.getInterfaceList(), true, 0);
-
-			RefactoringCore.getUndoManager().aboutToPerformChange(sourceC2sChange);
-			sourceUndo = sourceC2sChange.perform(new NullProgressMonitor());
-			RefactoringCore.getUndoManager().changePerformed(sourceC2sChange, true);
-			RefactoringCore.getUndoManager().addUndo(RefactoringUIMessages.RenameResourceHandler_title, sourceUndo);
-
-			RefactoringCore.getUndoManager().aboutToPerformChange(destinationC2sChange);
-			destinationUndo = destinationC2sChange.perform(new NullProgressMonitor());
-			RefactoringCore.getUndoManager().changePerformed(destinationC2sChange, true);
-			RefactoringCore.getUndoManager().addUndo(RefactoringUIMessages.RenameResourceHandler_title,
-					destinationUndo);
-		} catch (final CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			sourceC2sChange = new ReplaceVarsWithStructChange(EcoreUtil.getURI(sourceType), FBType.class,
+//					replacableConMap.keySet(), structType, sourceVarName, sourceType.getInterfaceList(), false, 0);
+//			destinationC2sChange = new ReplaceVarsWithStructChange(EcoreUtil.getURI(destinationType), FBType.class,
+//					new HashSet<>(replacableConMap.values()), structType, destinationVarName,
+//					destinationType.getInterfaceList(), true, 0);
+//
+//			RefactoringCore.getUndoManager().aboutToPerformChange(sourceC2sChange);
+//			sourceUndo = sourceC2sChange.perform(new NullProgressMonitor());
+//			RefactoringCore.getUndoManager().changePerformed(sourceC2sChange, true);
+//			RefactoringCore.getUndoManager().addUndo(RefactoringUIMessages.RenameResourceHandler_title, sourceUndo);
+//
+//			RefactoringCore.getUndoManager().aboutToPerformChange(destinationC2sChange);
+//			destinationUndo = destinationC2sChange.perform(new NullProgressMonitor());
+//			RefactoringCore.getUndoManager().changePerformed(destinationC2sChange, true);
+//			RefactoringCore.getUndoManager().addUndo(RefactoringUIMessages.RenameResourceHandler_title,
+//					destinationUndo);
+//		} catch (final CoreException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		editFBsCommand = new CompoundCommand();
-//		editFBsCommand.add(new ReplaceVarsWithStructCommand(replacableConMap.keySet(), structType, sourceVarName,
-//				sourceType.getInterfaceList(), false, 0));
-//		editFBsCommand.add(new ReplaceVarsWithStructCommand(new HashSet<>(replacableConMap.values()), structType,
-//				destinationVarName, destinationType.getInterfaceList(), true, 0));
+		editFBsCommand.add(new ReplaceVarsWithStructCommand(replacableConMap.keySet(), structType, sourceVarName,
+				sourceType.getInterfaceList(), false, 0));
+		editFBsCommand.add(new ReplaceVarsWithStructCommand(new HashSet<>(replacableConMap.values()), structType,
+				destinationVarName, destinationType.getInterfaceList(), true, 0));
 		editFBsCommand.execute();
 		saveFBs();
 	}

@@ -1,8 +1,8 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
@@ -15,7 +15,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public class ReplaceVarsWithStructCommand extends Command {
-	private final Set<String> vars;
+	private final Collection<String> vars;
 	private final DataType struct;
 	private final String name;
 	private final InterfaceList interfacelist;
@@ -27,7 +27,7 @@ public class ReplaceVarsWithStructCommand extends Command {
 	private CompoundCommand editFBsCommand;
 	private CompoundCommand createWithsCommand;
 
-	public ReplaceVarsWithStructCommand(final Set<String> vars, final DataType struct, final String name,
+	public ReplaceVarsWithStructCommand(final Collection<String> vars, final DataType struct, final String name,
 			final InterfaceList interfacelist, final boolean isInput, final int position) {
 		this.vars = Objects.requireNonNull(vars);
 		this.struct = Objects.requireNonNull(struct);
