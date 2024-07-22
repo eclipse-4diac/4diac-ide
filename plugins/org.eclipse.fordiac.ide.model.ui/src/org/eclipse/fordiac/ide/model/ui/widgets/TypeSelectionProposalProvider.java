@@ -67,4 +67,12 @@ public class TypeSelectionProposalProvider implements IContentProposalProvider {
 	protected ContentProposal createProposal(final TypeEntry typeEntry) {
 		return new ContentProposal(typeEntry.getFullTypeName(), typeEntry.getTypeName(), typeEntry.getFullTypeName());
 	}
+
+	protected TypeLibrary getTypeLibrary() {
+		return supplier.get();
+	}
+
+	protected ITypeSelectionContentProvider getContentProvider() {
+		return contentProvider;
+	}
 }
