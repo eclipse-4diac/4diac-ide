@@ -13,12 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.delete;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.text.MessageFormat;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -26,14 +22,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 
 public class RootNodeChange extends CompositeChange {
-	private final List<Change> updateChanges = new ArrayList<>();
 
 	public RootNodeChange(final EObject node) {
-		super(Messages.SafeStructDeletionChange_RootNodeChangeText + getName(node) + getFileEnding(node));
+		super(MessageFormat.format(Messages.SafeStructDeletionChange_RootNodeChangeText, getName(node),
+				getFileEnding(node)));
 	}
 
 	private static String getFileEnding(final EObject node) {
@@ -59,22 +54,4 @@ public class RootNodeChange extends CompositeChange {
 		return node.getQualifiedName();
 	}
 
-	public void addUpdate(final Change change) {
-		updateChanges.add(change);
-	}
-
-	@Override
-	public Change[] getChildren() {
-		final ArrayList<Change> list = new ArrayList<>();
-		list.addAll(Arrays.asList(super.getChildren()));
-		list.addAll(updateChanges);
-		return list.toArray(new Change[0]);
-	}
-
-	@Override
-	public Change perform(final IProgressMonitor pm) throws CoreException {
-		// add update changes to the end of the list for correct execution order
-		addAll(updateChanges.toArray(new Change[0]));
-		return super.perform(pm);
-	}
 }

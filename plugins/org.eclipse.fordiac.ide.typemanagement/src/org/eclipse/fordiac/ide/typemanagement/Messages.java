@@ -139,6 +139,8 @@ public final class Messages extends NLS {
 
 	public static String SafeStructDeletionChange_RootNodeChangeText;
 
+	public static String UpdateUntypedSubappPinChange_0;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
