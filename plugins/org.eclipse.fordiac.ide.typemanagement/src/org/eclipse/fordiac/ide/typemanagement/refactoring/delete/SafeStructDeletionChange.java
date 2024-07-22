@@ -66,7 +66,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 					}
 				} else if (eObject instanceof final StructManipulator muxer && doneElements.add(muxer)) {
 					final boolean isDeletion = deletedStruct == muxer.getDataType().getTypeEntry();
-					rootChange.addUpdate(new UpdateManipulatorChange(muxer, isDeletion));
+					rootChange.add(new UpdateManipulatorChange(muxer, isDeletion));
 				}
 			});
 		}
@@ -102,13 +102,13 @@ public class SafeStructDeletionChange extends CompositeChange {
 		final EObject rootContainer = EcoreUtil.getRootContainer(varDecl);
 		if (varDecl.getFBNetworkElement() != null) {
 			if (rootElements.add(varDecl.getFBNetworkElement())) {
-				rootChange.addUpdate(new UpdateFBInstanceChange(varDecl.getFBNetworkElement(), dataTypeEntry));
+				rootChange.add(new UpdateFBInstanceChange(varDecl.getFBNetworkElement(), dataTypeEntry));
 			}
 		} else if (rootElements.add(rootContainer)) {
 			if (rootContainer instanceof final StructuredType stElement) {
 				createChanges((DataTypeEntry) stElement.getTypeEntry());
 			} else if (rootContainer instanceof final FBType fbType) {
-				rootChange.addUpdate(new InterfaceDataTypeChange(fbType, dataTypeEntry));
+				rootChange.add(new InterfaceDataTypeChange(fbType, dataTypeEntry));
 			}
 		}
 	}

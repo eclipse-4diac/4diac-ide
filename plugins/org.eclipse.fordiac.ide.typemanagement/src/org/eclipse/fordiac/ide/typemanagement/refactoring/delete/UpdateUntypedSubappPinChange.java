@@ -34,23 +34,16 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public class UpdateUntypedSubappPinChange extends AbstractCommandChange<VarDeclaration>
 		implements IFordiacPreviewChange {
-	private final VarDeclaration varDecl;
 	private final EnumSet<ChangeState> state = EnumSet.noneOf(ChangeState.class);
 
 	public UpdateUntypedSubappPinChange(final VarDeclaration varDecl) {
-		super(EcoreUtil.getURI(varDecl), VarDeclaration.class);
-		this.varDecl = varDecl;
+		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteSubappPins, varDecl.getName(),
+				getSubappName(varDecl)), EcoreUtil.getURI(varDecl), VarDeclaration.class);
 		this.state.addAll(getDefaultSelection());
 	}
 
 	private static String getSubappName(final VarDeclaration varDecl) {
 		return ((SubApp) varDecl.eContainer().eContainer()).getQualifiedName();
-	}
-
-	@Override
-	public String getName() {
-		return MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteSubappPins, varDecl.getName(),
-				getSubappName(varDecl));
 	}
 
 	@Override
@@ -79,7 +72,7 @@ public class UpdateUntypedSubappPinChange extends AbstractCommandChange<VarDecla
 	}
 
 	@Override
-	protected Command createCommand(final VarDeclaration element) {
+	protected Command createCommand(final VarDeclaration varDecl) {
 		if (state.contains(ChangeState.DELETE)) {
 			return new DeleteSubAppInterfaceElementCommand(varDecl);
 
@@ -99,7 +92,7 @@ public class UpdateUntypedSubappPinChange extends AbstractCommandChange<VarDecla
 			throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
 		if (!(element.eContainer() instanceof UntypedSubApp)) {
-			status.addFatalError("Pin is not part of untyped subapp");
+			status.addFatalError(Messages.UpdateUntypedSubappPinChange_0);
 		}
 		return status;
 	}
