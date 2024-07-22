@@ -35,11 +35,12 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 public class UpdateStructDataTypeMemberVariableChange extends AbstractCommandChange<VarDeclaration>
 		implements IFordiacPreviewChange {
 	private final EnumSet<ChangeState> state = EnumSet.noneOf(ChangeState.class);
-	private final VarDeclaration varDeclaration;
 
 	public UpdateStructDataTypeMemberVariableChange(final VarDeclaration varDeclaration) {
-		super(EcoreUtil.getURI(varDeclaration), VarDeclaration.class);
-		this.varDeclaration = varDeclaration;
+		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_UpdateMemberVariable,
+				varDeclaration.getName(), varDeclaration.getTypeName(),
+				((INamedElement) varDeclaration.eContainer()).getName()), EcoreUtil.getURI(varDeclaration),
+				VarDeclaration.class);
 		this.state.addAll(getDefaultSelection());
 	}
 
@@ -64,15 +65,7 @@ public class UpdateStructDataTypeMemberVariableChange extends AbstractCommandCha
 	}
 
 	@Override
-	public String getName() {
-		return MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_UpdateMemberVariable,
-				varDeclaration.getName(), varDeclaration.getTypeName(),
-				((INamedElement) varDeclaration.eContainer()).getName());
-	}
-
-	@Override
 	public void initializeValidationData(final VarDeclaration element, final IProgressMonitor pm) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -89,8 +82,8 @@ public class UpdateStructDataTypeMemberVariableChange extends AbstractCommandCha
 	}
 
 	@Override
-	protected Command createCommand(final VarDeclaration element) {
-		if (state.contains(ChangeState.DELETE) && element.eContainer() instanceof final StructuredType type) {
+	protected Command createCommand(final VarDeclaration varDeclaration) {
+		if (state.contains(ChangeState.DELETE) && varDeclaration.eContainer() instanceof final StructuredType type) {
 			return new DeleteMemberVariableCommand(type, varDeclaration);
 		}
 		if (state.contains(ChangeState.CHANGE_TO_ANY)) {
