@@ -281,6 +281,13 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 		compositeFB.getFBNetwork().getEventConnections()
 				.add(createEventConnection(runAllFB.getInterface().getEventOutputs().get(index),
 						testFBs.get(index).getInterface().getEventInputs().get(index)));
+
+		compositeFB.getFBNetwork().getEventConnections()
+				.add(createEventConnection(
+						matchFBs.get(index).getInterface().getEventOutputs()
+								.get(matchFBs.get(index).getInterface().getEventOutputs().size() - 1),
+						testFBs.get(index).getInterface().getEventInputs()
+								.get(testFBs.get(index).getInterface().getEventInputs().size() - 1)));
 	}
 
 	@Override

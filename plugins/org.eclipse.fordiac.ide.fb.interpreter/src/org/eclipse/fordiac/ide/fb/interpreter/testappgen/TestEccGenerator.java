@@ -28,8 +28,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 public class TestEccGenerator {
 	private static final String NAME_ENDING = "_WAIT_1"; //$NON-NLS-1$
 	private final ECC ecc;
-	// caseCount is for positioning purposes
+	// caseCount is for vertical positioning purposes
 	private int caseCount;
+	// stateCount is for horizontal positioning purposes
+	private int stateCount;
 
 	public TestEccGenerator(final ECC ecc, final int caseCount) {
 		this.ecc = ecc;
@@ -66,19 +68,28 @@ public class TestEccGenerator {
 			name = name + "_1"; //$NON-NLS-1$
 		}
 		getLastState().setName(NameRepository.createUniqueName(getLastState(), name));
-		AbstractBlockGenerator.addPosition(state, 350 + stateCount * 350, caseCount * 75);
+		AbstractBlockGenerator.addPosition(state, 350 + (double) stateCount * 350, (double) caseCount * 75);
+		this.stateCount++;
 	}
 
 	public void createStateWithIncomingConnection(final ECState from, final Event transitionEvent,
 			final String condition, final String name, final int stateCount) {
 		createState(name + NAME_ENDING, stateCount);
 		final ECState state = getLastState();
-		AbstractBlockGenerator.addPosition(state, 350 + stateCount * 350, caseCount * (double) 75);
+		AbstractBlockGenerator.addPosition(state, 350 + (double) stateCount * 350, caseCount * (double) 75);
 		createTransitionFromTo(from, state, transitionEvent);
 		if (condition != null) {
 			ecc.getECTransition().get(ecc.getECTransition().size() - 1).setConditionExpression(""); //$NON-NLS-1$
 		}
+	}
 
+	public void createState(final String name) {
+		createState(name, this.stateCount);
+	}
+
+	public void createStateWithIncomingConnection(final ECState from, final Event transitionEvent,
+			final String condition, final String name) {
+		createStateWithIncomingConnection(from, transitionEvent, condition, name, this.stateCount);
 	}
 
 	private static boolean isInteger(final String s) {
@@ -122,6 +133,10 @@ public class TestEccGenerator {
 		return getEcc().getECState().get(getEcc().getECState().size() - 1);
 	}
 
+	public ECState getStartState() {
+		return getEcc().getStart();
+	}
+
 	// getNtimesLast(0) returns the last and getNtimesLast(1) returns the one before
 	// the last state
 	public ECState getNTimesLast(final int i) {
@@ -146,5 +161,13 @@ public class TestEccGenerator {
 
 	public int getCaseCount() {
 		return caseCount;
+	}
+
+	public void resetStateCount() {
+		stateCount = 0;
+	}
+
+	public int getStateCount() {
+		return stateCount;
 	}
 }

@@ -27,9 +27,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public class TestFbGenerator extends AbstractBasicFBGenerator {
+public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 
-	public TestFbGenerator(final FBType type, final TestSuite testSuite) {
+	public TestsignalFBGenerator(final FBType type, final TestSuite testSuite) {
 		super(type, testSuite);
 	}
 
@@ -41,7 +41,15 @@ public class TestFbGenerator extends AbstractBasicFBGenerator {
 	// each testcase needs an event that starts it
 	@Override
 	protected List<Event> createInputEventList() {
-		return testSuite.getTestCases().stream().map(n -> createEvent(n.getName() + "_TEST", true)).toList(); //$NON-NLS-1$
+		// return testSuite.getTestCases().stream().map(n -> createEvent(n.getName() +
+		// "_TEST", true)).toList(); //$NON-NLS-1$
+
+		final List<Event> list = new ArrayList<>();
+		list.addAll(testSuite.getTestCases().stream().map(n -> createEvent(n.getName() + "_TEST", true)) //$NON-NLS-1$
+				.toList());
+		list.add(createEvent("nextCase", true)); //$NON-NLS-1$ return list;
+		return list;
+
 	}
 
 	// needs all event inputs from the block to test as outputs
@@ -79,7 +87,9 @@ public class TestFbGenerator extends AbstractBasicFBGenerator {
 					eccGen.getLastState().getECAction().add(actToMatch);
 
 				} else {
-					eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(), null);
+					eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
+							destinationFB.getInterfaceList().getEventInputs()
+									.get(destinationFB.getInterfaceList().getEventInputs().size() - 1));
 				}
 
 				stateCnt++;

@@ -82,8 +82,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 			// it can also be empty, then there is no event expected
 			final String comment = event.getComment();
 			final String[] splitName = (comment).replace(";", "").split("\\."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			ECState comFrom1 = null;
-
+			ECState comFrom = eccGen.getStartState();
 			// error and success result states at the end, if the same testcase event comes
 			// in the previous result event gets sent out
 
@@ -93,6 +92,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 			eccGen.createTransitionFromTo(errState, errState, event);
 			errState.getECAction()
 					.add(TestEccGenerator.createAction(destinationFB.getInterfaceList().getEventOutputs().get(0)));
+
 			eccGen.increaseCaseCount();
 
 			// success state
@@ -101,7 +101,9 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 			eccGen.createTransitionFromTo(sucState, sucState, event);
 			sucState.getECAction()
 					.add(TestEccGenerator.createAction(destinationFB.getInterfaceList().getEventOutputs().get(1)));
+
 			eccGen.decreaseCaseCount();
+			eccGen.resetStateCount();
 
 			// 3 different scenarios, no event expected, one event expected, multiple events
 			// expected
@@ -109,22 +111,23 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 			// if no event is expected, the name of the input event is just "expected"
 			if (event.getName().equals("expected")) { //$NON-NLS-1$
 				// timeout path to check if there is actually no incoming event
-				eccGen.createState("timeout", 0); //$NON-NLS-1$
-				eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "TIMEOUT_1")); //$NON-NLS-1$
+				eccGen.createState("timeout"); //$NON-NLS-1$
 				final ECAction act = TestEccGenerator.createAction();
-
-				eccGen.createTransitionFromTo(eccGen.getEcc().getStart(), eccGen.getLastState(),
-						getEventInput("expected")); //$NON-NLS-1$
+				eccGen.createTransitionFromTo(comFrom, eccGen.getLastState(), getEventInput("expected")); //$NON-NLS-1$
 				act.setAlgorithm(createTimeOutAlg(destinationFB));
-				comFrom1 = eccGen.getLastState();
+				act.setOutput(getStartTimeoutEvent());
+				comFrom = eccGen.getLastState();
+
+				createErrorTransitions(comFrom, errState, false, ""); //$NON-NLS-1$
 			} else {
 				// start state from the test case
-				eccGen.createStateWithIncomingConnection(eccGen.getEcc().getStart(), event, null, event.getName(), 0);
+				eccGen.createStateWithIncomingConnection(eccGen.getEcc().getStart(), event, null, event.getName());
 				final ECAction a = TestEccGenerator
 						.createAction(ECCContentAndLabelProvider.getOutputEvents(destinationFB).stream()
 								.filter(s -> s.getName().equals(START_STATE)).findFirst().orElse(null));
 				a.setAlgorithm(timeout);
 				eccGen.getLastState().getECAction().add(a);
+				comFrom = eccGen.getLastState();
 
 				// retrieve the information about how many events are coming
 				final int[] numbers = Arrays.stream(splitName).filter(MatchFBGenerator::isInteger)
@@ -133,62 +136,66 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 
 				// evCnt keeps track of which expected event was already handled
 				int evCnt = 0;
-				// helps with positioning the elements
-				int posCnt = 1;
-
-				ECState comingFrom = eccGen.getLastState();
-
 				// create for each expected event a state
 				for (final int number : numbers) {
 					// scenario one expected event
 					if (number == 1) {
-						createPathOneEvent(comingFrom, ev, comment, evCnt, posCnt);
-						comingFrom = eccGen.getLastState();
-						comFrom1 = eccGen.getLastState();
-						posCnt++;
+						createPathOneEvent(comFrom, ev, comment, evCnt);
+						eccGen.getLastState().getECAction()
+								.add(TestEccGenerator.createAction(destinationFB.getInterfaceList().getEventOutputs()
+										.get(destinationFB.getInterfaceList().getEventOutputs().size() - 1)));
+						comFrom = eccGen.getLastState();
 						evCnt++;
 
-					} else if (number != 0) {
-						eccGen.createState("BindingState_1", splitName.length); //$NON-NLS-1$
-						final ECState bsState = eccGen.getLastState();
-						final ECAction timeout1 = TestEccGenerator
-								.createAction(ECCContentAndLabelProvider.getOutputEvents(destinationFB).stream()
-										.filter(s -> s.getName().equals(START_STATE)).findFirst().orElse(null));
-						timeout1.setAlgorithm(timeout);
-						eccGen.getLastState().getECAction().add(timeout1);
+					} else if (number == 0) {
+						eccGen.createStateWithIncomingConnection(comFrom, null, null, "noEvent_sendNextCase"); //$NON-NLS-1$
+						eccGen.getLastState().getECAction()
+								.add(TestEccGenerator.createAction(destinationFB.getInterfaceList().getEventOutputs()
+										.get(destinationFB.getInterfaceList().getEventOutputs().size() - 1)));
+						comFrom = eccGen.getLastState();
+					} else {
 
-						comFrom1 = eccGen.getLastState();
+						// error transitions from the wait state
+						createErrorTransitions(eccGen.getLastState(), errState, true,
+								ev.subList(evCnt, evCnt + number));
+
+						eccGen.createState("BindingState_1", eccGen.getStateCount() + number); //$NON-NLS-1$
+						final ECState bsState = eccGen.getLastState();
+
+						// add nextCase event output
+						bsState.getECAction().add(TestEccGenerator.createAction(destinationFB.getInterfaceList()
+								.getEventOutputs().get(destinationFB.getInterfaceList().getEventOutputs().size() - 1)));
 
 						// start of recursion
-						createPathMultipleExpectedEvents(ev.subList(evCnt, evCnt + number), comingFrom, event.getName(),
-								posCnt, comFrom1);
+						createPathMultipleExpectedEvents(ev.subList(evCnt, evCnt + number), comFrom, event.getName(),
+								bsState);
 
-						comingFrom = bsState;
-						// comFrom1 = bsState;
-						evCnt = +number;
+						comFrom = bsState;
+						evCnt = evCnt + number;
 
 					}
 				}
+				// overall waiting state to check for any additional events that are being sent
+				createWaitState(comFrom, event.getName(), splitName.length + 1);
+				comFrom = eccGen.getLastState();
 			}
 
-			// overall waiting state to check for any additional events that are being sent
-			createWaitState(comFrom1, event.getName(), splitName.length + 1);
-			comFrom1 = eccGen.getLastState();
 			// match state checks data if the block to test has data pins
-			createMatchState(event, comFrom1, splitName.length + 2);
+			createMatchState(event, comFrom, splitName.length + 2);
+			eccGen.increaseCaseCount();
 			eccGen.increaseCaseCount();
 			eccGen.increaseCaseCount();
 		}
 	}
 
 	private void createPathOneEvent(final ECState comingFrom, final List<String> ev, final String comment,
-			final int evCnt, final int posCnt) {
+			final int evCnt) {
 		if (evCnt == 0) {
 			// error transitions from the wait state
 			createErrorTransitions(eccGen.getLastState(), errState, true, ev.get(0));
 		}
 		eccGen.createStateWithIncomingConnection(comingFrom, getEventInput(ev.get(evCnt)), "", //$NON-NLS-1$
-				comment, posCnt);
+				comment);
 	}
 
 	private void createWaitState(final ECState comingFrom, final String name, final int posCnt) {
@@ -202,23 +209,21 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 	}
 
 	private void createPathMultipleExpectedEvents(final List<String> eventsToAdd, final ECState from, final String name,
-			int position, final ECState bindingState) {
+			final ECState bindingState) {
 		if (eventsToAdd.size() == 1) {
 			eccGen.createTransitionFromTo(eccGen.getLastState(), bindingState, getEventInput(eventsToAdd.get(0)));
 			return;
 		}
 		for (int i = 0; i < eventsToAdd.size(); i++) {
 			final String event = eventsToAdd.get(i);
-			eccGen.createStateWithIncomingConnection(from, getEventInput(eventsToAdd.get(i)), null, eventsToAdd.get(i),
-					position);
-			position++;
+			eccGen.createStateWithIncomingConnection(from, getEventInput(eventsToAdd.get(i)), null, eventsToAdd.get(i));
 			eccGen.getLastState().getECAction()
 					.add(TestEccGenerator.createAction(ECCContentAndLabelProvider.getOutputEvents(destinationFB)
 							.stream().filter(s -> s.getName().equals(START_STATE)).findFirst().orElse(null)));
 			createErrorTransitions(eccGen.getLastState(), errState, true, eventsToAdd);
 
 			final List<String> eventsWithoutThis = eventsToAdd.stream().filter(x -> !x.equals(event)).toList();
-			createPathMultipleExpectedEvents(eventsWithoutThis, eccGen.getLastState(), name, i, bindingState);
+			createPathMultipleExpectedEvents(eventsWithoutThis, eccGen.getLastState(), name, bindingState);
 
 			eccGen.increaseCaseCount();
 		}
@@ -261,6 +266,11 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 		} else {
 			eccGen.createTransitionFromTo(eccGen.getLastState(), sucState, null);
 		}
+	}
+
+	private Event getStartTimeoutEvent() {
+		return ECCContentAndLabelProvider.getOutputEvents(destinationFB).stream()
+				.filter(s -> s.getName().equals(START_STATE)).findFirst().orElse(null);
 	}
 
 	private AdapterDeclaration createTimeOutPlug() {
@@ -345,7 +355,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 
 	@Override
 	protected List<Event> createOutputEventList() {
-		return List.of(createEvent("ERR", false), createEvent("SUC", false)); //$NON-NLS-1$//$NON-NLS-2$
+		return List.of(createEvent("ERR", false), createEvent("SUC", false), createEvent("nextCase", false)); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
 	}
 
 	// match fb needs for each data output on the block to test an expected and
