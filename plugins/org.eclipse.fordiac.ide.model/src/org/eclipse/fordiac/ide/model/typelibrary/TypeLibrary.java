@@ -196,15 +196,15 @@ public final class TypeLibrary {
 	}
 
 	public void reload() {
-		getAdapterTypes().clear();
-		getAttributeTypes().clear();
-		getDeviceTypes().clear();
-		getFbTypes().clear();
-		getResourceTypes().clear();
-		getSegmentTypes().clear();
-		getSubAppTypes().clear();
-		getSystems().clear();
-		getGlobalConstants().clear();
+		adapterTypes.clear();
+		attributeTypes.clear();
+		deviceTypes.clear();
+		fbTypes.clear();
+		resourceTypes.clear();
+		segmentTypes.clear();
+		subAppTypes.clear();
+		systems.clear();
+		globalConstants.clear();
 		dataTypeLib.clear();
 		programTypes.clear();
 		fileMap.clear();
