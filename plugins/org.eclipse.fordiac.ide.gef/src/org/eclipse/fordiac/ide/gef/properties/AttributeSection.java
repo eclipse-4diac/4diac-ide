@@ -34,19 +34,18 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteAttributeCommand;
 import org.eclipse.fordiac.ide.model.data.InternalDataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
-import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
-import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.AttributeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.ImportContentProposal;
+import org.eclipse.fordiac.ide.model.ui.widgets.ImportTypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
-import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -110,8 +109,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 			return true;
 		};
 		final AttributeNameCellEditor attributeNameCellEditor = new AttributeNameCellEditor();
-		attributeNameCellEditor.enableContentProposal(
-				new TextContentAdapter(), new TypeSelectionProposalProvider(this::getTypeLibrary,
+		attributeNameCellEditor.enableContentProposal(new TextContentAdapter(),
+				new ImportTypeSelectionProposalProvider(this::getType, TypeLibrary::getAttributeTypeEntry,
 						AttributeSelectionContentProvider.INSTANCE, targetFilter),
 				KeyStroke.getInstance(SWT.CTRL, SWT.SPACE), null);
 		table.addConfiguration(new AbstractRegistryConfiguration() {
@@ -236,13 +235,9 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		}
 
 		protected void proposalAccepted(final IContentProposal proposal) {
-			final AttributeTypeEntry packageEntry = ImportHelper.resolveImport(
-					PackageNameHelper.extractPlainTypeName(proposal.getContent()), getType(),
-					getTypeLibrary()::getAttributeTypeEntry, name -> null);
-
-			if (packageEntry == null
+			if (proposal instanceof final ImportContentProposal importProposal
 					&& EcoreUtil.getRootContainer(getType()) instanceof final LibraryElement libraryElement) {
-				executeCommand(new AddNewImportCommand(libraryElement, proposal.getContent()));
+				executeCommand(new AddNewImportCommand(libraryElement, importProposal.getImportedNamespace()));
 			}
 		}
 	}
