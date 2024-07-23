@@ -141,7 +141,9 @@ public class RepairCommandHandler extends AbstractHandler {
 					handleChangeDataType(choice);
 					break;
 				case CREATE_MISSING_TYPE:
-					ErrorMarkerResolver.repairMissingStructuredDataType(type);
+					if (type instanceof final VarDeclaration varDeclaration) {
+						ErrorMarkerResolver.repairMissingStructuredDataType(varDeclaration);
+					}
 					break;
 				case DELETE_AFFECTED_ELEMENTS:
 					// TODO needs to be implemented
