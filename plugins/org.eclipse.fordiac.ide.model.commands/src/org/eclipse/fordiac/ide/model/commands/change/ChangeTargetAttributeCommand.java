@@ -23,25 +23,26 @@ import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclaratio
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.gef.commands.Command;
 
-public class ChangeLockAttributeCommand extends Command implements ScopedCommand {
+public class ChangeTargetAttributeCommand extends Command implements ScopedCommand {
 
 	private final AttributeDeclaration attributeDeclaration;
 	private final StructuredType newValue;
 	private final StructuredType oldValue;
 
-	public ChangeLockAttributeCommand(final AttributeDeclaration attributeDeclaration, final StructuredType newValue) {
+	public ChangeTargetAttributeCommand(final AttributeDeclaration attributeDeclaration,
+			final StructuredType newValue) {
 		this.attributeDeclaration = attributeDeclaration;
 		this.newValue = newValue;
-		StructuredType lock = attributeDeclaration.getLock();
-		if (lock != null) {
-			lock = (StructuredType) EcoreUtil.copy(InternalAttributeDeclarations.LOCK.getType());
+		StructuredType target = attributeDeclaration.getTarget();
+		if (target != null) {
+			target = (StructuredType) EcoreUtil.copy(InternalAttributeDeclarations.TARGET.getType());
 		}
-		this.oldValue = lock;
+		this.oldValue = target;
 	}
 
 	@Override
 	public void execute() {
-		attributeDeclaration.setLock(newValue);
+		attributeDeclaration.setTarget(newValue);
 	}
 
 	@Override
@@ -51,7 +52,7 @@ public class ChangeLockAttributeCommand extends Command implements ScopedCommand
 
 	@Override
 	public void undo() {
-		attributeDeclaration.setLock(oldValue);
+		attributeDeclaration.setTarget(oldValue);
 	}
 
 	@Override

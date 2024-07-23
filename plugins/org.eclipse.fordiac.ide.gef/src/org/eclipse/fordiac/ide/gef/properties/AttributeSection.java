@@ -103,7 +103,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 				this, false);
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
 
-		final Predicate<TypeEntry> lockFilter = entry -> {
+		final Predicate<TypeEntry> targetFilter = entry -> {
 			if (entry.getType() instanceof final AttributeDeclaration decl) {
 				return decl.isValidObject(getType());
 			}
@@ -112,7 +112,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		final AttributeNameCellEditor attributeNameCellEditor = new AttributeNameCellEditor();
 		attributeNameCellEditor.enableContentProposal(
 				new TextContentAdapter(), new TypeSelectionProposalProvider(this::getTypeLibrary,
-						AttributeSelectionContentProvider.INSTANCE, lockFilter),
+						AttributeSelectionContentProvider.INSTANCE, targetFilter),
 				KeyStroke.getInstance(SWT.CTRL, SWT.SPACE), null);
 		table.addConfiguration(new AbstractRegistryConfiguration() {
 			@Override

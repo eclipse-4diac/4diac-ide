@@ -19,7 +19,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.attributetypeeditor.editors.AttributeTypeEditor;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeLockAttributeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeTargetAttributeCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -36,19 +36,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class AttributeLockSection extends AbstractSection {
+public class AttributeTargetSection extends AbstractSection {
 	private final List<Button> buttons = new ArrayList<>();
-	private StructuredType lock;
+	private StructuredType target;
 
 	private final SelectionListener buttonListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(final SelectionEvent event) {
 			final Button btn = (Button) event.getSource();
-			lock.getMemberVariables().stream().filter(member -> member.getName().equals(btn.getText())).findFirst()
+			target.getMemberVariables().stream().filter(member -> member.getName().equals(btn.getText())).findFirst()
 					.ifPresent(correctMember -> {
 						final Value val = correctMember.getValue();
 						val.setValue(Boolean.toString(btn.getSelection()).toUpperCase());
-						executeCommand(new ChangeLockAttributeCommand(getType(), lock));
+						executeCommand(new ChangeTargetAttributeCommand(getType(), target));
 						refresh();
 					});
 		}
@@ -64,7 +64,7 @@ public class AttributeLockSection extends AbstractSection {
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		((StructuredType) InternalAttributeDeclarations.LOCK.getType()).getMemberVariables()
+		((StructuredType) InternalAttributeDeclarations.TARGET.getType()).getMemberVariables()
 				.forEach(member -> createButton(composite, member.getName()));
 	}
 
@@ -82,8 +82,8 @@ public class AttributeLockSection extends AbstractSection {
 	}
 
 	private void updateButtons(final AttributeDeclaration attributeDeclaration) {
-		final StructuredType lockStruct = getLock(attributeDeclaration);
-		lockStruct.getMemberVariables().forEach(member -> {
+		final StructuredType targetStruct = getTarget(attributeDeclaration);
+		targetStruct.getMemberVariables().forEach(member -> {
 			for (final Button button : buttons) {
 				if (member.getName().equals(button.getText())) {
 					button.setSelection(Boolean.parseBoolean(member.getValue().getValue()));
@@ -92,12 +92,12 @@ public class AttributeLockSection extends AbstractSection {
 		});
 	}
 
-	private static StructuredType getLock(final AttributeDeclaration attributeDeclaration) {
-		final StructuredType lockStruct = attributeDeclaration.getLock();
-		if (lockStruct == null) {
-			return (StructuredType) EcoreUtil.copy(InternalAttributeDeclarations.LOCK.getType());
+	private static StructuredType getTarget(final AttributeDeclaration attributeDeclaration) {
+		final StructuredType targetStruct = attributeDeclaration.getTarget();
+		if (targetStruct == null) {
+			return (StructuredType) EcoreUtil.copy(InternalAttributeDeclarations.TARGET.getType());
 		}
-		return lockStruct;
+		return targetStruct;
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class AttributeLockSection extends AbstractSection {
 		super.setInput(part, selection);
 		if (part instanceof final AttributeTypeEditor editor) {
 			setType(editor.getEditedElement());
-			lock = getLock(getType());
+			target = getTarget(getType());
 		}
 	}
 
@@ -118,7 +118,7 @@ public class AttributeLockSection extends AbstractSection {
 	protected Object getInputType(final Object input) {
 		if (input instanceof final AttributeDeclaration attDecl) {
 			updateButtons(attDecl);
-			lock = getLock(attDecl);
+			target = getTarget(attDecl);
 			return attDecl;
 		}
 		return null;
