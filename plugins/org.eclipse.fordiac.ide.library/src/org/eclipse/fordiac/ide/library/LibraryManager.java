@@ -299,7 +299,7 @@ public enum LibraryManager {
 
 		final java.net.URI importURI = URIUtil.append(WORKSPACE_LIBRARY_URI, folderName);
 
-		if (autoImport || project != null) {
+		if (autoImport && project != null) {
 			// Parent's name because we want package-version name when importing
 			importLibrary(project, null, importURI, true, resolve);
 		}
