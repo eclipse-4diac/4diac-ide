@@ -65,7 +65,7 @@ public interface AttributeDeclaration extends ITypedElement, LibraryElement {
 	 * @model
 	 * @generated
 	 */
-	void setLock(StructuredType lock);
+	void setTarget(StructuredType target);
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -73,7 +73,7 @@ public interface AttributeDeclaration extends ITypedElement, LibraryElement {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	StructuredType getLock();
+	StructuredType getTarget();
 
 	/**
 	 * <!-- begin-user-doc -->

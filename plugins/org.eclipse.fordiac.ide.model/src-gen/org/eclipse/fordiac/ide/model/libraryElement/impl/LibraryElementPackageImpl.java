@@ -4271,10 +4271,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(attributeDeclarationEClass, AttributeDeclaration.class, "AttributeDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getAttributeDeclaration_Type(), theDataPackage.getAnyDerivedType(), null, "type", null, 0, 1, AttributeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(attributeDeclarationEClass, null, "setLock", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, theDataPackage.getStructuredType(), "lock", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		op = addEOperation(attributeDeclarationEClass, null, "setTarget", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theDataPackage.getStructuredType(), "target", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(attributeDeclarationEClass, theDataPackage.getStructuredType(), "getLock", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(attributeDeclarationEClass, theDataPackage.getStructuredType(), "getTarget", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(attributeDeclarationEClass, theXMLTypePackage.getBoolean(), "isValidObject", 0, 1, !IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getConfigurableObject(), "object", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
