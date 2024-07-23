@@ -123,15 +123,15 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeDeclaration" eSuperTypes="#//ITypedElement #//LibraryElement">
-    <eOperations name="setLock">
+    <eOperations name="setTarget">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.setLock(this,lock);"/>
+        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.setTarget(this,target);"/>
       </eAnnotations>
-      <eParameters name="lock" eType="ecore:EClass data.ecore#//StructuredType"/>
+      <eParameters name="target" eType="ecore:EClass data.ecore#//StructuredType"/>
     </eOperations>
-    <eOperations name="getLock" eType="ecore:EClass data.ecore#//StructuredType">
+    <eOperations name="getTarget" eType="ecore:EClass data.ecore#//StructuredType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getLock(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getTarget(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="isValidObject" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">

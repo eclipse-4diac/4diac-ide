@@ -542,8 +542,8 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	 * @generated
 	 */
 	@Override
-	public void setLock(final StructuredType lock) {
-		org.eclipse.fordiac.ide.model.Annotations.setLock(this,lock);
+	public void setTarget(final StructuredType target) {
+		org.eclipse.fordiac.ide.model.Annotations.setTarget(this,target);
 	}
 
 	/**
@@ -552,8 +552,8 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	 * @generated
 	 */
 	@Override
-	public StructuredType getLock() {
-		return org.eclipse.fordiac.ide.model.Annotations.getLock(this);
+	public StructuredType getTarget() {
+		return org.eclipse.fordiac.ide.model.Annotations.getTarget(this);
 	}
 
 	/**
