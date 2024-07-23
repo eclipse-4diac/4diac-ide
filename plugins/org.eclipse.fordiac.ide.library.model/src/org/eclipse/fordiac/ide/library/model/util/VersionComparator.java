@@ -39,20 +39,26 @@ public class VersionComparator implements Comparator<String> {
 		return v1.compareTo(v2);
 	}
 
-	public boolean contains(final String range, final String version) {
+	public static boolean contains(final String range, final String version) {
 		if (range == null || range.isBlank() || version == null || version.isBlank()) {
 			return false;
 		}
 		final VersionRange parsedRange = parseVersionRange(range);
 		final Version parsedVersion = new Version(version);
 
-		if (parsedRange.getRight() == null) {
-			return parsedRange.getLeft().equals(parsedVersion);
-		}
 		return parsedRange.includes(parsedVersion);
 	}
 
-	public VersionRange parseVersionRange(final String range) {
+	public static boolean contains(final VersionRange range, final String version) {
+		if (range == null || version == null || version.isBlank()) {
+			return false;
+		}
+		final Version parsedVersion = new Version(version);
+
+		return range.includes(parsedVersion);
+	}
+
+	public static VersionRange parseVersionRange(final String range) {
 		if (range == null || range.isBlank()) {
 			return new VersionRange(VersionRange.LEFT_OPEN, Version.emptyVersion, Version.emptyVersion,
 					VersionRange.RIGHT_OPEN);
@@ -65,7 +71,7 @@ public class VersionComparator implements Comparator<String> {
 		return parsedRange;
 	}
 
-	public String formatVersionRange(final VersionRange range) {
+	public static String formatVersionRange(final VersionRange range) {
 		if (range.getLeftType() == VersionRange.LEFT_CLOSED && range.getRightType() == VersionRange.RIGHT_CLOSED
 				&& range.getLeft().equals(range.getRight())) {
 			return range.getLeft().toString();

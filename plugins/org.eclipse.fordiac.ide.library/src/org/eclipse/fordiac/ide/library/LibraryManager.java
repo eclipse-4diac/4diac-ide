@@ -25,7 +25,6 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -49,6 +48,7 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -76,6 +76,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 import org.osgi.service.event.EventHandler;
 
@@ -113,6 +114,8 @@ public enum LibraryManager {
 	private static final Path[] EMPTY_PATH_ARRAY = new Path[0];
 
 	private final VersionComparator versionComparator = new VersionComparator();
+	private static final VersionRange ALL_RANGE = new VersionRange(VersionRange.LEFT_CLOSED, Version.emptyVersion, null,
+			VersionRange.RIGHT_CLOSED);
 
 	private WatchService watchService;
 	private final HashMap<String, List<LibraryRecord>> stdlibraries = new HashMap<>();
@@ -596,64 +599,75 @@ public enum LibraryManager {
 		if (uninitialised) {
 			init(project);
 		}
-		try {
-			final Manifest manifest = ManifestHelper.getOrCreateProjectManifest(project);
-			if (manifest != null) {
-				Map<String, List<String>> projectLibs;
-
-				final IResource typeLib = project.findMember(TYPE_LIB_FOLDER_NAME);
-				if (typeLib != null && typeLib instanceof final IFolder typeLibFolder) {
-					projectLibs = parseLibraryNameAndVersion(Arrays.asList(typeLibFolder.members()).stream()
-							.filter(fol -> fol.isLinked() && fol instanceof IFolder).map(IFolder.class::cast).toList());
-				} else {
-					projectLibs = new HashMap<>();
-				}
-
-				if (ManifestHelper.isProject(manifest) && manifest.getDependencies() != null) {
-					for (final Required req : manifest.getDependencies().getRequired()) {
-						checkLibrary(req, projectLibs, project, typeLibrary);
-					}
-				}
-				startLocalResolveJob(project, typeLibrary);
-			}
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError(Messages.TypeLibrary_ProjectLoadingProblem, e);
+		final Manifest manifest = ManifestHelper.getOrCreateProjectManifest(project);
+		if (manifest == null || !ManifestHelper.isProject(manifest) || manifest.getDependencies() == null) {
+			return;
 		}
+		for (final Required req : manifest.getDependencies().getRequired()) {
+			checkDependency(req, project, typeLibrary);
+		}
+		startLocalResolveJob(project, typeLibrary);
+
 	}
 
 	/**
 	 * Check if library dependency is present in the {@link IProject} and
 	 * download/import as needed if not
 	 *
-	 * @param req         dependency
-	 * @param projectLibs libraries already present in project
+	 * @param req         library dependency
 	 * @param project     selected project
 	 * @param typeLibrary {@link TypeLibrary} to use
 	 */
-	private void checkLibrary(final Required req, final Map<String, List<String>> projectLibs, final IProject project,
-			final TypeLibrary typeLibrary) {
+	private void checkDependency(final Required req, final IProject project, final TypeLibrary typeLibrary) {
 		checkLibChanges();
+		String preferred = null;
+
 		// check already linked lib
-		if (projectLibs.containsKey(req.getSymbolicName()) && (projectLibs.get(req.getSymbolicName()).stream()
-				.filter(p -> versionComparator.contains(req.getVersion(), p)).count() > 0)) {
-			return;
+		final IFolder libFolder = project.getFolder(TYPE_LIB_FOLDER_NAME).getFolder(req.getSymbolicName());
+		if (libFolder.exists()) {
+			final Manifest libManifest = ManifestHelper.getContainerManifest(libFolder);
+			if (libManifest != null) {
+				if (VersionComparator.contains(req.getVersion(),
+						libManifest.getProduct().getVersionInfo().getVersion())) {
+					return;
+				}
+			} else {
+				final IPath path = libFolder.getLocation();
+				final String segment = (path.segmentCount() >= 2) ? path.segment(path.segmentCount() - 2) : ""; //$NON-NLS-1$
+				final int index = segment.lastIndexOf('-');
+				if (index > 0) {
+					preferred = segment.substring(index + 1);
+					if (!VersionComparator.contains(req.getVersion(), preferred)) {
+						preferred = null;
+					}
+				}
+			}
 		}
 
-		// check standard libs
-		if (stdlibraries.containsKey(req.getSymbolicName()) && stdlibraries.get(req.getSymbolicName()).stream()
-				.anyMatch(l -> versionComparator.parseVersionRange(req.getVersion()).includes(l.version()))) {
+		if (preferred != null) {
+			final Required prefReq = ManifestHelper.createRequired(req.getSymbolicName(), preferred);
+			// check standard libs
+			if (checkLibraries(prefReq, project, typeLibrary, stdlibraries)) {
+				return;
+			}
 
-			startLocalLinkJob(req, project, stdlibraries, typeLibrary);
-			return;
+			// check local libs
+			if (checkLibraries(prefReq, project, typeLibrary, libraries)) {
+				return;
+			}
+		} else {
+			// check standard libs
+			if (checkLibraries(req, project, typeLibrary, stdlibraries)) {
+				return;
+			}
+
+			// check local libs
+			if (checkLibraries(req, project, typeLibrary, libraries)) {
+				return;
+			}
 		}
 
-		// check local libs
-		if (libraries.containsKey(req.getSymbolicName()) && libraries.get(req.getSymbolicName()).stream()
-				.anyMatch(l -> versionComparator.parseVersionRange(req.getVersion()).includes(l.version()))) {
-
-			startLocalLinkJob(req, project, libraries, typeLibrary);
-			return;
-		}
+		final Version pref = (preferred != null) ? new Version(preferred) : null;
 
 		// download if checks were unsuccessful
 		final WorkspaceJob job = new WorkspaceJob(
@@ -661,13 +675,35 @@ public enum LibraryManager {
 
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-				libraryDownload(req.getSymbolicName(), req.getVersion(), null, project, true, false);
+				libraryDownload(req.getSymbolicName(), VersionComparator.parseVersionRange(req.getVersion()), pref,
+						project, true, false);
 				return Status.OK_STATUS;
 			}
 		};
 		job.setRule(project);
 		job.setPriority(Job.LONG);
 		job.schedule();
+	}
+
+	/**
+	 * Import the library dependency into the {@link IProject} if it is contained in
+	 * the given library map
+	 *
+	 * @param req         library dependency
+	 * @param project     selected project
+	 * @param typeLibrary {@link TypeLibrary} to use
+	 * @param libs        library map
+	 * @return {@code true} if the dependency was found in the library map, else
+	 *         {@code false}
+	 */
+	private boolean checkLibraries(final Required req, final IProject project, final TypeLibrary typeLibrary,
+			final Map<String, List<LibraryRecord>> libs) {
+		if (libs.containsKey(req.getSymbolicName()) && libs.get(req.getSymbolicName()).stream()
+				.anyMatch(l -> VersionComparator.parseVersionRange(req.getVersion()).includes(l.version()))) {
+			startLocalLinkJob(req, project, libs, typeLibrary);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -685,7 +721,7 @@ public enum LibraryManager {
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 				importLibrary(project, typeLibrary, libs.get(lib.getSymbolicName()).stream()
-						.filter(l -> versionComparator.parseVersionRange(lib.getVersion()).includes(l.version()))
+						.filter(l -> VersionComparator.parseVersionRange(lib.getVersion()).includes(l.version()))
 						.sorted((o1, o2) -> o2.version().compareTo(o1.version())).findFirst().get().uri(), true, true);
 				return Status.OK_STATUS;
 			}
@@ -717,41 +753,15 @@ public enum LibraryManager {
 	}
 
 	/**
-	 * Searches through given folders for libraries and their respective versions
-	 *
-	 * @param libs folders to search through
-	 * @return map of found libraries and their versions
-	 */
-	private static Map<String, List<String>> parseLibraryNameAndVersion(final List<IFolder> libs) {
-		final Map<String, List<String>> nameVersionMap = new HashMap<>();
-		for (final IFolder lib : libs) {
-			final Manifest manifest = ManifestHelper.getContainerManifest(lib);
-			if (manifest == null || !ManifestHelper.isLibrary(manifest)) {
-				continue;
-			}
-
-			final String name = manifest.getProduct().getSymbolicName();
-			final String version = manifest.getProduct().getVersionInfo().getVersion();
-
-			if (nameVersionMap.containsKey(name)) {
-				nameVersionMap.get(name).add(version);
-			} else {
-				nameVersionMap.put(name, new ArrayList<>(Arrays.asList(version)));
-			}
-		}
-
-		return nameVersionMap;
-	}
-
-	/**
-	 * Uses registered {@link IArchiveDownloader} to download specified library
+	 * Uses registered {@link IArchiveDownloader} to download specified library.
+	 * Will download the latest version if versionRange is {@code null} or empty.
 	 *
 	 * <p>
 	 * See {@link IArchiveDownloader#downloadLibrary} for more info
 	 *
 	 * @param symbolicName symbolic name of library
 	 * @param versionRange version range of library
-	 * @param preferred    preferred version of library
+	 * @param preferred    preferred version of library (ignored if {@code null})
 	 * @param project      project to import the library into after extracting
 	 *                     (irrelevant if {@code autoImport} is false)
 	 * @param autoImport   if library should be automatically imported into project
@@ -759,14 +769,15 @@ public enum LibraryManager {
 	 *                     (irrelevant if {@code autoImport} is false)
 	 * @return {@link java.net.URI} of the extracted library folder
 	 */
-	private java.net.URI libraryDownload(final String symbolicName, final String versionRange, final String preferred,
-			final IProject project, final boolean autoImport, final boolean resolve) {
+	private java.net.URI libraryDownload(final String symbolicName, final VersionRange versionRange,
+			final Version preferred, final IProject project, final boolean autoImport, final boolean resolve) {
 		final List<IArchiveDownloader> downloaders = TypeLibraryManager
 				.listExtensions("org.eclipse.fordiac.ide.library.ArchiveDownloaderExtension", IArchiveDownloader.class); //$NON-NLS-1$
 		Path archivePath;
+		final VersionRange range = (versionRange == null || versionRange.isEmpty()) ? ALL_RANGE : versionRange;
 		for (final var downloader : downloaders) {
 			try {
-				archivePath = downloader.downloadLibrary(symbolicName, versionRange, preferred);
+				archivePath = downloader.downloadLibrary(symbolicName, range, preferred);
 				if (archivePath != null) {
 					return extractLibrary(archivePath, project, autoImport, resolve);
 				}
@@ -790,7 +801,8 @@ public enum LibraryManager {
 
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-				libraryDownload(symbolicName, versionRange, null, project, true, true);
+				libraryDownload(symbolicName, VersionComparator.parseVersionRange(versionRange), null, project, true,
+						true);
 				return Status.OK_STATUS;
 			}
 		};
@@ -817,7 +829,7 @@ public enum LibraryManager {
 		final List<ErrorMarkerBuilder> markerList = new LinkedList<>();
 
 		projectManifest.getDependencies().getRequired().forEach(
-				req -> requirements.put(req.getSymbolicName(), versionComparator.parseVersionRange(req.getVersion())));
+				req -> requirements.put(req.getSymbolicName(), VersionComparator.parseVersionRange(req.getVersion())));
 		resolved.addAll(requirements.keySet());
 
 		final IFolder typelib = project.getFolder(TYPE_LIB_FOLDER_NAME);
@@ -849,7 +861,7 @@ public enum LibraryManager {
 				if (libRec == null) {
 					markerList.add(ErrorMarkerBuilder
 							.createErrorMarkerBuilder(MessageFormat.format(Messages.ErrorMarkerStandardLibNotAvailable,
-									symb, versionComparator.formatVersionRange(range)))
+									symb, VersionComparator.formatVersionRange(range)))
 							.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(projectManifest.getDependencies()));
 					continue;
 				}
@@ -859,7 +871,7 @@ public enum LibraryManager {
 						.sorted((o1, o2) -> o2.version().compareTo(o1.version())).findFirst().orElse(null);
 			}
 			if (libRec == null) {
-				uri = libraryDownload(symb, versionComparator.formatVersionRange(range), null, project, false, false);
+				uri = libraryDownload(symb, range, null, project, false, false);
 			} else {
 				uri = libRec.uri();
 			}
@@ -879,7 +891,7 @@ public enum LibraryManager {
 			} else {
 				markerList.add(ErrorMarkerBuilder
 						.createErrorMarkerBuilder(MessageFormat.format(Messages.ErrorMarkerLibNotAvailable, symb,
-								versionComparator.formatVersionRange(range)))
+								VersionComparator.formatVersionRange(range)))
 						.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(projectManifest.getDependencies()));
 			}
 		}
@@ -895,16 +907,16 @@ public enum LibraryManager {
 	 * @param markerList      list to add error markers to
 	 * @param req             library dependency to check
 	 */
-	private void handleRequired(final Map<String, VersionRange> requirements, final Manifest projectManifest,
+	private static void handleRequired(final Map<String, VersionRange> requirements, final Manifest projectManifest,
 			final List<ErrorMarkerBuilder> markerList, final Required req) {
 		final VersionRange oldRange = requirements.get(req.getSymbolicName());
-		final VersionRange newRange = versionComparator.parseVersionRange(req.getVersion());
+		final VersionRange newRange = VersionComparator.parseVersionRange(req.getVersion());
 		requirements.merge(req.getSymbolicName(), newRange, VersionRange::intersection);
 		if (oldRange != null && requirements.get(req.getSymbolicName()).isEmpty()) {
 			markerList.add(ErrorMarkerBuilder
 					.createErrorMarkerBuilder(MessageFormat.format(Messages.ErrorMarkerVersionRangeEmpty,
-							req.getSymbolicName(), versionComparator.formatVersionRange(oldRange),
-							versionComparator.formatVersionRange(newRange)))
+							req.getSymbolicName(), VersionComparator.formatVersionRange(oldRange),
+							VersionComparator.formatVersionRange(newRange)))
 					.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(projectManifest.getDependencies()));
 		}
 	}
