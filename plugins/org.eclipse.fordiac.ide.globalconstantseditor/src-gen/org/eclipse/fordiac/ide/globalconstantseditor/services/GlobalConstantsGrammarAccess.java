@@ -336,7 +336,7 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 	//    name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 	//    ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')?
 	//    (type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
-	//    defaultValue=STInitializerExpression)? ';';
+	//    defaultValue=STInitializerExpression)? pragma=STPragma? ';';
 	public STCoreGrammarAccess.STVarDeclarationElements getSTVarDeclarationAccess() {
 		return gaSTCore.getSTVarDeclarationAccess();
 	}
@@ -449,6 +449,37 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 	
 	public ParserRule getSTStructInitElementRule() {
 		return getSTStructInitElementAccess().getRule();
+	}
+	
+	//STPragma:
+	//    {STPragma}
+	//    '{' attributes+=STAttribute (',' attributes+=STAttribute)* '}';
+	public STCoreGrammarAccess.STPragmaElements getSTPragmaAccess() {
+		return gaSTCore.getSTPragmaAccess();
+	}
+	
+	public ParserRule getSTPragmaRule() {
+		return getSTPragmaAccess().getRule();
+	}
+	
+	//STAttribute:
+	//    declaration=[libraryElement::AttributeDeclaration|STAttributeName] ':=' value=STInitializerExpression;
+	public STCoreGrammarAccess.STAttributeElements getSTAttributeAccess() {
+		return gaSTCore.getSTAttributeAccess();
+	}
+	
+	public ParserRule getSTAttributeRule() {
+		return getSTAttributeAccess().getRule();
+	}
+	
+	//STAttributeName:
+	//    QualifiedName;
+	public STCoreGrammarAccess.STAttributeNameElements getSTAttributeNameAccess() {
+		return gaSTCore.getSTAttributeNameAccess();
+	}
+	
+	public ParserRule getSTAttributeNameRule() {
+		return getSTAttributeNameAccess().getRule();
 	}
 	
 	//STStatement:
@@ -808,7 +839,8 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 	}
 	
 	//STUnaryExpression returns STExpression:
-	//    STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
+	//    STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator
+	//    expression=STUnaryExpression);
 	public STCoreGrammarAccess.STUnaryExpressionElements getSTUnaryExpressionAccess() {
 		return gaSTCore.getSTUnaryExpressionAccess();
 	}
@@ -842,9 +874,7 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 	//STFeatureExpression returns STExpression:
 	//    {STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName]
 	//    (call?='('
-	//        (
-	//            parameters+=STCallArgument (',' parameters+=STCallArgument)*
-	//        )?
+	//    (parameters+=STCallArgument (',' parameters+=STCallArgument)*)?
 	//    ')')?;
 	public STCoreGrammarAccess.STFeatureExpressionElements getSTFeatureExpressionAccess() {
 		return gaSTCore.getSTFeatureExpressionAccess();
