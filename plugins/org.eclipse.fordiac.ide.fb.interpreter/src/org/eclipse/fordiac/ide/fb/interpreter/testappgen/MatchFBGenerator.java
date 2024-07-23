@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2024 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,10 @@
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.fb.interpreter.testappgen;
+
+import static org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants.EVENT_ERR;
+import static org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants.EVENT_NEXTCASE;
+import static org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants.EVENT_SUC;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,16 +54,6 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 	public BasicFBType generateMatchFB() {
 		createBasicFB();
 		return destinationFB;
-	}
-
-	@Override
-	protected String getTypeName() {
-		return sourceType.getName() + "_MATCH"; //$NON-NLS-1$
-	}
-
-	@Override
-	protected FBType getSourceFB() {
-		return sourceType;
 	}
 
 	@Override
@@ -116,6 +110,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 				eccGen.createTransitionFromTo(comFrom, eccGen.getLastState(), getEventInput("expected")); //$NON-NLS-1$
 				act.setAlgorithm(createTimeOutAlg(destinationFB));
 				act.setOutput(getStartTimeoutEvent());
+				eccGen.getLastState().getECAction().add(act);
 				comFrom = eccGen.getLastState();
 
 				createErrorTransitions(comFrom, errState, false, ""); //$NON-NLS-1$
@@ -141,17 +136,19 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 					// scenario one expected event
 					if (number == 1) {
 						createPathOneEvent(comFrom, ev, comment, evCnt);
-						eccGen.getLastState().getECAction()
-								.add(TestEccGenerator.createAction(destinationFB.getInterfaceList().getEventOutputs()
-										.get(destinationFB.getInterfaceList().getEventOutputs().size() - 1)));
+						eccGen.getLastState().getECAction().add(TestEccGenerator
+								.createAction(destinationFB.getInterfaceList().getEventOutputs().getLast()));
 						comFrom = eccGen.getLastState();
 						evCnt++;
 
-					} else if (number == 0) {
+					}
+					// if the number is 0 then there is no output event expected for that input
+					// event but there are other test states in that testcase where output events
+					// are expected
+					else if (number == 0) {
 						eccGen.createStateWithIncomingConnection(comFrom, null, null, "noEvent_sendNextCase"); //$NON-NLS-1$
-						eccGen.getLastState().getECAction()
-								.add(TestEccGenerator.createAction(destinationFB.getInterfaceList().getEventOutputs()
-										.get(destinationFB.getInterfaceList().getEventOutputs().size() - 1)));
+						eccGen.getLastState().getECAction().add(TestEccGenerator
+								.createAction(destinationFB.getInterfaceList().getEventOutputs().getLast()));
 						comFrom = eccGen.getLastState();
 					} else {
 
@@ -163,8 +160,8 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 						final ECState bsState = eccGen.getLastState();
 
 						// add nextCase event output
-						bsState.getECAction().add(TestEccGenerator.createAction(destinationFB.getInterfaceList()
-								.getEventOutputs().get(destinationFB.getInterfaceList().getEventOutputs().size() - 1)));
+						bsState.getECAction().add(TestEccGenerator
+								.createAction(destinationFB.getInterfaceList().getEventOutputs().getLast()));
 
 						// start of recursion
 						createPathMultipleExpectedEvents(ev.subList(evCnt, evCnt + number), comFrom, event.getName(),
@@ -256,12 +253,10 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 			sucAct.setAlgorithm(alg);
 
 			eccGen.createTransitionFromTo(eccGen.getLastState(), sucState, null);
-			eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 1)
-					.setConditionExpression("matchData"); //$NON-NLS-1$
+			eccGen.getEcc().getECTransition().getLast().setConditionExpression("matchData"); //$NON-NLS-1$
 
 			eccGen.createTransitionFromTo(eccGen.getLastState(), errState, null);
-			eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 1)
-					.setConditionExpression("NOT matchData"); //$NON-NLS-1$
+			eccGen.getEcc().getECTransition().getLast().setConditionExpression("NOT matchData"); //$NON-NLS-1$
 
 		} else {
 			eccGen.createTransitionFromTo(eccGen.getLastState(), sucState, null);
@@ -349,13 +344,13 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 		final List<Event> list = new ArrayList<>();
 		list.addAll(getExpectedEvents(true));
 		list.addAll(sourceType.getInterfaceList().getEventOutputs().stream()
-				.map(event -> createEvent(event.getName(), true)).toList());
+				.map(event -> createInputEvent(event.getName())).toList());
 		return list;
 	}
 
 	@Override
 	protected List<Event> createOutputEventList() {
-		return List.of(createEvent("ERR", false), createEvent("SUC", false), createEvent("nextCase", false)); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+		return List.of(createOutputEvent(EVENT_ERR), createOutputEvent(EVENT_SUC), createOutputEvent(EVENT_NEXTCASE));
 	}
 
 	// match fb needs for each data output on the block to test an expected and
@@ -364,22 +359,32 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 	protected List<VarDeclaration> createInputDataList() {
 		final List<VarDeclaration> list = new ArrayList<>();
 		for (final VarDeclaration varDeclaration : sourceType.getInterfaceList().getOutputVars()) {
-			list.add(createVarDeclaration(varDeclaration.getType(), varDeclaration.getName() + "_expected", true)); //$NON-NLS-1$
-			list.add(createVarDeclaration(varDeclaration.getType(), varDeclaration.getName() + "_received", true)); //$NON-NLS-1$
+			list.add(createInputVarDecl(varDeclaration.getType(), varDeclaration.getName() + "_expected")); //$NON-NLS-1$
+			list.add(createInputVarDecl(varDeclaration.getType(), varDeclaration.getName() + "_received")); //$NON-NLS-1$
 		}
 		return list;
 	}
 
 	// if there are data output pins, a bool output data pin is created for the
-	// match fb indicating wheter the data matches or not
+	// match fb indicating whether the data matches or not
 	@Override
 	protected List<VarDeclaration> createOutputDataList() {
 		final List<VarDeclaration> list = new ArrayList<>();
 		if (!sourceType.getInterfaceList().getOutputVars().isEmpty()) {
-			list.add(createVarDeclaration(
-					sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.BOOL), "matchData", //$NON-NLS-1$
-					false));
+			list.add(createOutputVarDecl(sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.BOOL),
+					"matchData"));//$NON-NLS-1$
+
 		}
 		return list;
+	}
+
+	@Override
+	protected String getTypeName() {
+		return sourceType.getName() + "_MATCH"; //$NON-NLS-1$
+	}
+
+	@Override
+	protected FBType getSourceFB() {
+		return sourceType;
 	}
 }

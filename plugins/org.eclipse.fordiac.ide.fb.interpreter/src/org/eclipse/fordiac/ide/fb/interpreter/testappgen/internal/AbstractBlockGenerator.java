@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2024 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -82,8 +82,15 @@ public abstract class AbstractBlockGenerator {
 		return newEv;
 	}
 
-	protected static VarDeclaration createVarDeclaration(final DataType type, final String name,
-			final boolean isInput) {
+	protected static Event createInputEvent(final String name) {
+		return createEvent(name, true);
+	}
+
+	protected static Event createOutputEvent(final String name) {
+		return createEvent(name, false);
+	}
+
+	private static VarDeclaration createVarDecl(final DataType type, final String name, final boolean isInput) {
 		final VarDeclaration varDecl = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDecl.setName(name);
 		varDecl.setIsInput(isInput);
@@ -92,6 +99,14 @@ public abstract class AbstractBlockGenerator {
 		varDecl.getValue().setValue(""); //$NON-NLS-1$
 		varDecl.setComment(""); //$NON-NLS-1$
 		return varDecl;
+	}
+
+	protected static VarDeclaration createInputVarDecl(final DataType type, final String name) {
+		return createVarDecl(type, name, true);
+	}
+
+	protected static VarDeclaration createOutputVarDecl(final DataType type, final String name) {
+		return createVarDecl(type, name, false);
 	}
 
 	protected static With createWith(final VarDeclaration varD) {

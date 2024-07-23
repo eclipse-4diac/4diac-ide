@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2024 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.testappgen;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants.EVENT_NEXTCASE;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.AbstractBasicFBGenerator;
@@ -45,9 +48,9 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 		// "_TEST", true)).toList(); //$NON-NLS-1$
 
 		final List<Event> list = new ArrayList<>();
-		list.addAll(testSuite.getTestCases().stream().map(n -> createEvent(n.getName() + "_TEST", true)) //$NON-NLS-1$
+		list.addAll(testSuite.getTestCases().stream().map(n -> createInputEvent(n.getName() + "_TEST")) //$NON-NLS-1$
 				.toList());
-		list.add(createEvent("nextCase", true)); //$NON-NLS-1$ return list;
+		list.add(createInputEvent(EVENT_NEXTCASE));
 		return list;
 
 	}
@@ -58,7 +61,7 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 	@Override
 	protected List<Event> createOutputEventList() {
 		final List<Event> list = new ArrayList<>();
-		list.addAll(sourceType.getInterfaceList().getEventInputs().stream().map(n -> createEvent(n.getName(), false))
+		list.addAll(sourceType.getInterfaceList().getEventInputs().stream().map(n -> createOutputEvent(n.getName()))
 				.toList());
 		list.addAll(getExpectedEvents(false));
 		return list;
@@ -88,8 +91,7 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 
 				} else {
 					eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
-							destinationFB.getInterfaceList().getEventInputs()
-									.get(destinationFB.getInterfaceList().getEventInputs().size() - 1));
+							destinationFB.getInterfaceList().getEventInputs().getLast());
 				}
 
 				stateCnt++;
@@ -120,7 +122,7 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 		boolean containsParameters = false;
 		int nameCnt = 0;
 		if (!fb.getAlgorithm().isEmpty()) {
-			nameCnt = Integer.parseInt(fb.getAlgorithm().get(fb.getAlgorithm().size() - 1).getName().substring(1));
+			nameCnt = Integer.parseInt(fb.getAlgorithm().getLast().getName().substring(1));
 			nameCnt++;
 		}
 
@@ -137,7 +139,7 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 				containsParameters = true;
 				String s = outP.getParameters().replace(";", ";\n");//$NON-NLS-1$ //$NON-NLS-2$
 				s = createDataPinName(s);
-				algText.append(s);// createDataPinName(outP.getParameters().replace(";", ";\n")));
+				algText.append(s);
 			}
 		}
 
@@ -161,7 +163,7 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 
 	@Override
 	protected String getTypeName() {
-		return sourceType.getName() + "_TEST"; //$NON-NLS-1$
+		return sourceType.getName() + "_TESTSIGNALGEN"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -172,8 +174,7 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 	// no data input needed
 	@Override
 	protected List<VarDeclaration> createInputDataList() {
-
-		return new ArrayList<>();
+		return Collections.emptyList();
 	}
 
 	// data pin needed for each input data pin on the block to test to feed it the
@@ -183,9 +184,9 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 	protected List<VarDeclaration> createOutputDataList() {
 		final List<VarDeclaration> list = new ArrayList<>();
 		list.addAll(sourceType.getInterfaceList().getInputVars().stream()
-				.map(n -> createVarDeclaration(n.getType(), n.getName(), false)).toList());
+				.map(n -> createOutputVarDecl(n.getType(), n.getName())).toList());
 		list.addAll(sourceType.getInterfaceList().getOutputVars().stream()
-				.map(n -> createVarDeclaration(n.getType(), n.getName() + "_expected", false)).toList()); //$NON-NLS-1$
+				.map(n -> createOutputVarDecl(n.getType(), n.getName() + "_expected")).toList()); //$NON-NLS-1$
 		return list;
 	}
 }

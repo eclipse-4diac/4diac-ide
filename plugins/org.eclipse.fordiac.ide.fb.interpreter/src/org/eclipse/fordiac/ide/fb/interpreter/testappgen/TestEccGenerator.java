@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2024 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -79,7 +79,7 @@ public class TestEccGenerator {
 		AbstractBlockGenerator.addPosition(state, 350 + (double) stateCount * 350, caseCount * (double) 75);
 		createTransitionFromTo(from, state, transitionEvent);
 		if (condition != null) {
-			ecc.getECTransition().get(ecc.getECTransition().size() - 1).setConditionExpression(""); //$NON-NLS-1$
+			ecc.getECTransition().getLast().setConditionExpression(""); //$NON-NLS-1$
 		}
 	}
 
@@ -130,7 +130,7 @@ public class TestEccGenerator {
 	}
 
 	public ECState getLastState() {
-		return getEcc().getECState().get(getEcc().getECState().size() - 1);
+		return getEcc().getECState().getLast();
 	}
 
 	public ECState getStartState() {

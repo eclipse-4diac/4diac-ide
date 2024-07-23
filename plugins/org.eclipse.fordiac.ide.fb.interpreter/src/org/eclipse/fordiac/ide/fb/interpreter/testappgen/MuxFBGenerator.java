@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2024 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,7 +13,15 @@
 
 package org.eclipse.fordiac.ide.fb.interpreter.testappgen;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants.EVENT_ERR;
+import static org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants.EVENT_ERROR;
+import static org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants.EVENT_SUC;
+import static org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants.EVENT_SUCCESS;
+import static org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants.VARDECL_TESTCASENAME;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.AbstractBasicFBGenerator;
@@ -44,9 +52,9 @@ public class MuxFBGenerator extends AbstractBasicFBGenerator {
 	@Override
 	protected List<Event> createInputEventList() {
 		final List<Event> list = new ArrayList<>();
-		list.addAll(testSuite.getTestCases().stream().map(n -> createEvent(n.getName() + "_TEST", true)).toList()); //$NON-NLS-1$
-		list.add(createEvent("ERR", true));//$NON-NLS-1$
-		list.add(createEvent("SUC", true)); //$NON-NLS-1$
+		list.addAll(testSuite.getTestCases().stream().map(n -> createInputEvent(n.getName() + "_TEST")).toList()); //$NON-NLS-1$
+		list.add(createInputEvent(EVENT_ERR));
+		list.add(createInputEvent(EVENT_SUC));
 		return list;
 
 	}
@@ -54,30 +62,28 @@ public class MuxFBGenerator extends AbstractBasicFBGenerator {
 	// error and success output events
 	@Override
 	protected List<Event> createOutputEventList() {
-		final List<Event> list = new ArrayList<>();
-		list.add(createEvent("ERROR", false));//$NON-NLS-1$
-		list.add(createEvent("SUCCESS", false)); //$NON-NLS-1$
-		return list;
+		final Event errorOutput = createOutputEvent(EVENT_ERROR);
+		final Event successOutput = createOutputEvent(EVENT_SUCCESS);
+		return Arrays.asList(errorOutput, successOutput);
 	}
 
 	// takes no input data
 	@Override
 	protected List<VarDeclaration> createInputDataList() {
-		return new ArrayList<>();
+		return Collections.emptyList();
 	}
 
 	// string data output for the test name
 	@Override
 	protected List<VarDeclaration> createOutputDataList() {
-		final List<VarDeclaration> list = new ArrayList<>();
-		list.add(createVarDeclaration(sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.STRING),
-				"TestCaseName", //$NON-NLS-1$
-				false));
-		return list;
+		return Arrays.asList(
+				createOutputVarDecl(sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.STRING),
+						VARDECL_TESTCASENAME));
 	}
 
 	@Override
 	protected void generateECC() {
+
 		final TestEccGenerator eccGen = new TestEccGenerator(destinationFB.getECC(), 0);
 		for (int i = 0; i < destinationFB.getInterfaceList().getEventInputs().size(); i++) {
 			final Event ev = destinationFB.getInterfaceList().getEventInputs().get(i);
@@ -113,12 +119,10 @@ public class MuxFBGenerator extends AbstractBasicFBGenerator {
 				eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
 
 				eccGen.createTransitionFromTo(eccGen.getNTimesLast(2), eccGen.getLastState(),
-						destinationFB.getInterfaceList().getEventInputs()
-								.get(destinationFB.getInterfaceList().getEventInputs().size() - 1));
+						destinationFB.getInterfaceList().getEventInputs().getLast());
 				eccGen.createTransitionFromTo(eccGen.getLastState(), eccGen.getEcc().getStart(), null);
 
-				sucAction.setOutput(destinationFB.getInterfaceList().getEventOutputs()
-						.get(destinationFB.getInterfaceList().getEventOutputs().size() - 1));
+				sucAction.setOutput(destinationFB.getInterfaceList().getEventOutputs().getLast());
 				eccGen.getLastState().getECAction().add(sucAction);
 			}
 			eccGen.increaseCaseCount();
@@ -126,10 +130,10 @@ public class MuxFBGenerator extends AbstractBasicFBGenerator {
 		}
 	}
 
-	// sets the name of the string data output
+	// the algorithm sets the string data pin to the name of the current testcase
 	public static Algorithm createMuxFbAlgorithm(final BasicFBType fb, final String name) {
 		final StringBuilder algText = new StringBuilder();
-		algText.append(fb.getInterfaceList().getOutputVars().get(0).getName());
+		algText.append(VARDECL_TESTCASENAME);
 		algText.append(":="); //$NON-NLS-1$
 		algText.append("'" + name + "'"); //$NON-NLS-1$ //$NON-NLS-2$
 		algText.append(";"); //$NON-NLS-1$
