@@ -78,6 +78,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
@@ -358,6 +359,8 @@ final class STCoreUtil {
 
 	def static INamedElement getExpectedType(STInitializerExpression expression) {
 		switch (it : expression.eContainer) {
+			STAttribute:
+				declaration.featureType
 			STVarDeclaration:
 				featureType
 			STArrayInitElement:
