@@ -98,6 +98,12 @@ public class ReplaceStructRefactoring extends Refactoring {
 				EcoreUtil.getURI(destinationType)));
 		compChange.add(new ConnectStructChange(EcoreUtil.getURI(net), FBNetwork.class, replacableConMap,
 				EcoreUtil.getURI(sourceType), EcoreUtil.getURI(destinationType)));
+		if (conflictResolution) {
+			compChange.add(new EditConnectionsChange(EcoreUtil.getURI(net), FBNetwork.class, replacableConMap,
+					EcoreUtil.getURI(sourceType), structURI, true));
+			compChange.add(new EditConnectionsChange(EcoreUtil.getURI(net), FBNetwork.class, replacableConMap,
+					EcoreUtil.getURI(destinationType), structURI, false));
+		}
 		return compChange;
 	}
 
