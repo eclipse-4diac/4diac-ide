@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="I_WBSD" Comment="Service Interface Function Block Type">
+	<Identification Standard="ISO 11783-7" Classification="PGN 65096" Function="Wheel-based Speed and Distance WBSD" Description="Copyright (c) 2024 HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;Message sent by the Tractor ECU on the implement bus on construction and agricultural implements providing to connected systems the current measured wheel-based speed. The message also includes a free-running distance counter, an indication of the direction of travel and the state of the start/stop switch or input.&#10;&#10;When the ignition key switch is turned off, both the ECU_PWR and PWR have to be maintained to send this message for an additional 2 s. This is not required when the engine is cranking (starting).&#10;&#10;Accuracies of both wheel-based and ground-based sources can be speed-dependent and degrade at low speeds. Wheel-based information might not be updated at the 100 ms rate at low speeds.&#10;&#10;&#10;https://www.isobus.net/isobus/pGNAndSPN/14648?type=PGN" >
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Hoepfinger" Date="2024-07-09">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Service Initialization">
+				<With Var="QI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="IND" Type="Event" Comment="Indication from Resource">
+				<With Var="QO"/>
+				<With Var="timestamp_data"/>
+				<With Var="WHEELBASEDMACHINESPEED"/>
+				<With Var="WHEELBASEDMACHINEDISTANCE"/>
+				<With Var="MAXI_TIMEOFTRACPOWER"/>
+				<With Var="WHEELBASEDMACHINEDIRECTION"/>
+				<With Var="KEYSWITCHSTATE"/>
+				<With Var="START_STOP_STATE"/>
+				<With Var="OPERATOR_DIREC_REVERSED"/>
+				<With Var="STATUS"/>
+				<With Var="Q_timeout"/>
+			</Event>
+			<Event Name="TIMEOUT" Type="Event" Comment="">
+				<With Var="timestamp_timeout"/>
+				<With Var="STATUS"/>
+				<With Var="Q_timeout"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="STRING" Comment=""/>
+			<VarDeclaration Name="Q_timeout" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="timestamp_timeout" Type="UINT" Comment=""/>
+			<VarDeclaration Name="timestamp_data" Type="UINT" Comment=""/>
+			<VarDeclaration Name="WHEELBASEDMACHINESPEED" Type="UINT" Comment="Wheel-based machine speed">
+				<Attribute Name="SPN" Type="INT" Value="1862"/>
+				<Attribute Name="SP_Name" Type="STRING" Value="'Wheel-based machine speed'"/>
+				<Attribute Name="SP_Position_In_PG" Type="STRING" Value="'1-2'"/>
+				<Attribute Name="SP_Length" Type="INT" Value="16" Comment="16 bits"/>
+				<Attribute Name="Scaling" Type="STRING" Value="'0.001 m/s per bit'"/>
+				<Attribute Name="Offset" Type="INT" Value=""/>
+				<Attribute Name="Link" Type="STRING" Value="'https://www.isobus.net/isobus/pGNAndSPN/14642?type=SPN'"/>
+			</VarDeclaration>
+			<VarDeclaration Name="WHEELBASEDMACHINEDISTANCE" Type="UDINT" Comment="Wheel-based machine distance">
+				<Attribute Name="SPN" Type="INT" Value="1863"/>
+				<Attribute Name="SP_Name" Type="STRING" Value="'Wheel-based machine distance'"/>
+				<Attribute Name="SP_Position_In_PG" Type="STRING" Value="'3-6'"/>
+				<Attribute Name="SP_Length" Type="INT" Value="16" Comment="32 bits"/>
+				<Attribute Name="Scaling" Type="STRING" Value="'0.001 m/bit'"/>
+				<Attribute Name="Offset" Type="INT" Value=""/>
+				<Attribute Name="Link" Type="STRING" Value="'https://www.isobus.net/isobus/pGNAndSPN/14643?type=SPN'"/>
+			</VarDeclaration>
+			<VarDeclaration Name="MAXI_TIMEOFTRACPOWER" Type="USINT" Comment="Maximum Time of Tractor Power">
+				<Attribute Name="SPN" Type="INT" Value="1866"/>
+				<Attribute Name="SP_Name" Type="STRING" Value="'Maximum Time of Tractor Power'"/>
+				<Attribute Name="SP_Position_In_PG" Type="STRING" Value="'7'"/>
+				<Attribute Name="SP_Length" Type="INT" Value="16" Comment="8 bits"/>
+				<Attribute Name="Scaling" Type="STRING" Value="'1 min/bit'"/>
+				<Attribute Name="Offset" Type="INT" Value=""/>
+				<Attribute Name="Link" Type="STRING" Value="'https://www.isobus.net/isobus/pGNAndSPN/14644?type=SPN'"/>
+			</VarDeclaration>
+			<VarDeclaration Name="WHEELBASEDMACHINEDIRECTION" Type="BYTE" Comment="Wheel-based machine direction">
+				<Attribute Name="SPN" Type="INT" Value="1864"/>
+				<Attribute Name="SP_Name" Type="STRING" Value="'Wheel-based machine direction'"/>
+				<Attribute Name="SP_Position_In_PG" Type="STRING" Value="'8.1'"/>
+				<Attribute Name="SP_Length" Type="INT" Value="16" Comment="2 bits"/>
+				<Attribute Name="Scaling" Type="STRING" Value="'4 states/2 bit'"/>
+				<Attribute Name="Offset" Type="INT" Value=""/>
+				<Attribute Name="Link" Type="STRING" Value="'https://www.isobus.net/isobus/pGNAndSPN/14645?type=SPN'"/>
+			</VarDeclaration>
+			<VarDeclaration Name="KEYSWITCHSTATE" Type="BYTE" Comment="Key switch state">
+				<Attribute Name="SPN" Type="INT" Value="1865"/>
+				<Attribute Name="SP_Name" Type="STRING" Value="'Key switch state'"/>
+				<Attribute Name="SP_Position_In_PG" Type="STRING" Value="'8.3'"/>
+				<Attribute Name="SP_Length" Type="INT" Value="16" Comment="2 bits"/>
+				<Attribute Name="Scaling" Type="STRING" Value="'4 states/2 bit'"/>
+				<Attribute Name="Offset" Type="INT" Value=""/>
+				<Attribute Name="Link" Type="STRING" Value="'https://www.isobus.net/isobus/pGNAndSPN/14646?type=SPN'"/>
+			</VarDeclaration>
+			<VarDeclaration Name="START_STOP_STATE" Type="BYTE" Comment="Implement Start/Stop operations">
+				<Attribute Name="SPN" Type="INT" Value="5203"/>
+				<Attribute Name="SP_Name" Type="STRING" Value="'Implement Start/Stop operations'"/>
+				<Attribute Name="SP_Position_In_PG" Type="STRING" Value="'8.5'"/>
+				<Attribute Name="SP_Length" Type="INT" Value="16" Comment="2 bits"/>
+				<Attribute Name="Scaling" Type="STRING" Value="'4 states/2 bit'"/>
+				<Attribute Name="Offset" Type="INT" Value=""/>
+				<Attribute Name="Link" Type="STRING" Value="'https://www.isobus.net/isobus/pGNAndSPN/14647?type=SPN'"/>
+			</VarDeclaration>
+			<VarDeclaration Name="OPERATOR_DIREC_REVERSED" Type="BYTE" Comment="Operator direction reversed">
+				<Attribute Name="SPN" Type="INT" Value="5244"/>
+				<Attribute Name="SP_Name" Type="STRING" Value="'Operator direction reversed'"/>
+				<Attribute Name="SP_Position_In_PG" Type="STRING" Value="'8.7'"/>
+				<Attribute Name="SP_Length" Type="INT" Value="16" Comment="2 bits"/>
+				<Attribute Name="Scaling" Type="STRING" Value="'4 states/2 bit'"/>
+				<Attribute Name="Offset" Type="INT" Value=""/>
+				<Attribute Name="Link" Type="STRING" Value="'https://www.isobus.net/isobus/pGNAndSPN/14648?type=SPN'"/>
+			</VarDeclaration>
+		</OutputVars>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
+		<ServiceSequence Name="normal_establishment" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT+" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="RESOURCE" Event="initialize" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO+"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="unsuccessful_establishment" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT+" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="RESOURCE" Event="initialize" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_confirm" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ+" Parameters="SD"/>
+				<OutputPrimitive Interface="RESOURCE" Event="request" Parameters="SD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF+" Parameters="RD"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_inhibited" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ-" Parameters="SD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_error" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ+" Parameters="SD"/>
+				<OutputPrimitive Interface="RESOURCE" Event="request" Parameters="SD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="indication_response" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="RESOURCE" Event="indicate" Parameters="RD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="IND+" Parameters="RD"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="RSP" Parameters="QI,SD"/>
+				<OutputPrimitive Interface="RESOURCE" Event="response" Parameters="QI,SD"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="indication_inhibited" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="RESOURCE" Event="indicate" Parameters="RD,QI=FALSE"/>
+				<OutputPrimitive Interface="RESOURCE" Event="inhibited"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="error_indication" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="RESOURCE" Event="error" Parameters="STATUS"/>
+				<OutputPrimitive Interface="APPLICATION" Event="IND-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="application_initiated_termination" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT-"/>
+				<OutputPrimitive Interface="RESOURCE" Event="terminate"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="resource_initiated_termination" Comment="">
+			<ServiceTransaction>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+	</Service>
+</FBType>
