@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSemanticSeque
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
@@ -54,6 +55,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpressio
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STPragma;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn;
@@ -119,6 +121,9 @@ public abstract class AbstractSTAlgorithmSemanticSequencer extends STCoreSemanti
 				return; 
 			case STCorePackage.ST_ASSIGNMENT:
 				sequence_STAssignment(context, (STAssignment) semanticObject); 
+				return; 
+			case STCorePackage.ST_ATTRIBUTE:
+				sequence_STAttribute(context, (STAttribute) semanticObject); 
 				return; 
 			case STCorePackage.ST_BINARY_EXPRESSION:
 				sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(context, (STBinaryExpression) semanticObject); 
@@ -234,6 +239,9 @@ public abstract class AbstractSTAlgorithmSemanticSequencer extends STCoreSemanti
 					return; 
 				}
 				else break;
+			case STCorePackage.ST_PRAGMA:
+				sequence_STPragma(context, (STPragma) semanticObject); 
+				return; 
 			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT:
 				sequence_STRepeatArrayInitElement(context, (STRepeatArrayInitElement) semanticObject); 
 				return; 

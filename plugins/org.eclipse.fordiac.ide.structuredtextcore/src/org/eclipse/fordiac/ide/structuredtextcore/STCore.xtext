@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Primetals Technologies GmbH, 
+ * Copyright (c) 2021, 2024 Primetals Technologies GmbH, 
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -20,6 +20,7 @@
  *       - (initializer) expression source
  *       - type declaration
  *       - add imports and full-qualified access
+ *       - add pragmas
  *******************************************************************************/
 grammar org.eclipse.fordiac.ide.structuredtextcore.STCore hidden(WS, ML_COMMENT, SL_COMMENT)
 
@@ -76,7 +77,7 @@ STVarDeclaration:
 	name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 	ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')?
 	(type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
-	defaultValue=STInitializerExpression)? ';';
+	defaultValue=STInitializerExpression)? pragma=STPragma? ';';
 
 STTypeDeclaration:
 	{STTypeDeclaration}
@@ -112,6 +113,16 @@ STStructInitializerExpression:
 
 STStructInitElement:
 	variable=[libraryElement::INamedElement|STFeatureName] ':=' value=STInitializerExpression;
+
+STPragma:
+	{STPragma}
+	'{' attributes+=STAttribute (',' attributes+=STAttribute)* '}';
+
+STAttribute:
+	declaration=[libraryElement::AttributeDeclaration|STAttributeName] ':=' value=STInitializerExpression;
+
+STAttributeName:
+	QualifiedName;
 
 STStatement:
 	(STIfStatement |
@@ -232,7 +243,8 @@ enum UnaryOperator returns STUnaryOperator:
 	MINUS='-' | PLUS='+' | NOT;
 
 STUnaryExpression returns STExpression:
-	STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
+	STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator
+	expression=STUnaryExpression);
 
 STAccessExpression returns STExpression:
 	STPrimaryExpression (({STMemberAccessExpression.receiver=current} '.' member=(STFeatureExpression |
@@ -243,11 +255,9 @@ STPrimaryExpression returns STExpression:
 	'(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression;
 
 STFeatureExpression returns STExpression:
-	{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] 
-	(call?='(' 
-		(
-			parameters+=STCallArgument (',' parameters+=STCallArgument)*
-		)?
+	{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName]
+	(call?='('
+	(parameters+=STCallArgument (',' parameters+=STCallArgument)*)?
 	')')?;
 
 STFeatureName:

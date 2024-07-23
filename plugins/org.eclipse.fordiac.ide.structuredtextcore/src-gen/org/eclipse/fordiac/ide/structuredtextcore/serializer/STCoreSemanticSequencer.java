@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
@@ -49,6 +50,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpressio
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STPragma;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn;
@@ -97,6 +99,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				return; 
 			case STCorePackage.ST_ASSIGNMENT:
 				sequence_STAssignment(context, (STAssignment) semanticObject); 
+				return; 
+			case STCorePackage.ST_ATTRIBUTE:
+				sequence_STAttribute(context, (STAttribute) semanticObject); 
 				return; 
 			case STCorePackage.ST_BINARY_EXPRESSION:
 				sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(context, (STBinaryExpression) semanticObject); 
@@ -212,6 +217,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 					return; 
 				}
 				else break;
+			case STCorePackage.ST_PRAGMA:
+				sequence_STPragma(context, (STPragma) semanticObject); 
+				return; 
 			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT:
 				sequence_STRepeatArrayInitElement(context, (STRepeatArrayInitElement) semanticObject); 
 				return; 
@@ -436,6 +444,29 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getSTAssignmentAccess().getSTAssignmentLeftAction_1_0(), semanticObject.getLeft());
 		feeder.accept(grammarAccess.getSTAssignmentAccess().getRightSTAssignmentParserRuleCall_1_2_0(), semanticObject.getRight());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     STAttribute returns STAttribute
+	 *
+	 * Constraint:
+	 *     (declaration=[AttributeDeclaration|STAttributeName] value=STInitializerExpression)
+	 * </pre>
+	 */
+	protected void sequence_STAttribute(ISerializationContext context, STAttribute semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_ATTRIBUTE__DECLARATION) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_ATTRIBUTE__DECLARATION));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_ATTRIBUTE__VALUE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_ATTRIBUTE__VALUE));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTAttributeAccess().getDeclarationAttributeDeclarationSTAttributeNameParserRuleCall_0_0_1(), semanticObject.eGet(STCorePackage.Literals.ST_ATTRIBUTE__DECLARATION, false));
+		feeder.accept(grammarAccess.getSTAttributeAccess().getValueSTInitializerExpressionParserRuleCall_2_0(), semanticObject.getValue());
 		feeder.finish();
 	}
 	
@@ -928,6 +959,20 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STPragma returns STPragma
+	 *
+	 * Constraint:
+	 *     (attributes+=STAttribute attributes+=STAttribute*)
+	 * </pre>
+	 */
+	protected void sequence_STPragma(ISerializationContext context, STPragma semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
 	 *     STArrayInitElement returns STRepeatArrayInitElement
 	 *     STRepeatArrayInitElement returns STRepeatArrayInitElement
 	 *
@@ -1329,7 +1374,8 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *         (array?='ARRAY' ((ranges+=STExpression ranges+=STExpression*) | (count+='*' count+='*'*)))? 
 	 *         type=[INamedElement|STAnyType] 
 	 *         maxLength=STExpression? 
-	 *         defaultValue=STInitializerExpression?
+	 *         defaultValue=STInitializerExpression? 
+	 *         pragma=STPragma?
 	 *     )
 	 * </pre>
 	 */

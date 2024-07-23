@@ -354,6 +354,10 @@ LeftSquareBracket : '[';
 
 RightSquareBracket : ']';
 
+LeftCurlyBracket : '{';
+
+RightCurlyBracket : '}';
+
 fragment RULE_HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F'|'_');
 
 RULE_NON_DECIMAL : ('2#'|'8#'|'16#') RULE_HEX_DIGIT+;
