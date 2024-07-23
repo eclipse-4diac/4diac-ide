@@ -1,4 +1,4 @@
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;

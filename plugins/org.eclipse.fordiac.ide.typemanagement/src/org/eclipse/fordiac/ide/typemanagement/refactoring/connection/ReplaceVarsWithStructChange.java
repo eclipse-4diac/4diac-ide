@@ -1,4 +1,4 @@
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -10,6 +10,8 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ReplaceVarsWithStructCommand;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
@@ -50,7 +52,7 @@ public class ReplaceVarsWithStructChange extends AbstractCommandChange<FBType> {
 				.getType() instanceof final StructuredType struct) {
 			return new ReplaceVarsWithStructCommand(vars, struct, name, element.getInterfaceList(), isInput, position);
 		}
-		// TODO: handling
+		// TODO: handling maybe move to is Valid
 		return null;
 	}
 

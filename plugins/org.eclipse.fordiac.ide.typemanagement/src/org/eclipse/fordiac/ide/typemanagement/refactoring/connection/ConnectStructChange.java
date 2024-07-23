@@ -1,4 +1,4 @@
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +16,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -25,13 +26,18 @@ public class ConnectStructChange extends AbstractCommandChange<FBNetwork> {
 	private final Map<String, String> replaceableConMap;
 	private final URI source;
 	private final URI destination;
+	private final String sourceVarName;
+	private final String destinationVarName;
 
 	protected ConnectStructChange(final URI elementURI, final Class<FBNetwork> elementClass,
-			final Map<String, String> replaceableConMap, final URI source, final URI destination) {
+			final Map<String, String> replaceableConMap, final URI source, final URI destination,
+			final String sourceVarName, final String destinationVarName) {
 		super(elementURI, elementClass);
 		this.replaceableConMap = replaceableConMap;
 		this.source = source;
 		this.destination = destination;
+		this.sourceVarName = sourceVarName;
+		this.destinationVarName = destinationVarName;
 	}
 
 	@Override
@@ -53,7 +59,7 @@ public class ConnectStructChange extends AbstractCommandChange<FBNetwork> {
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(source).getType() instanceof final FBType sourceType
 				&& TypeLibraryManager.INSTANCE.getTypeEntryForURI(destination)
 						.getType() instanceof final FBType destinationType) {
-			// Create map between correct connected FBs and create MUX
+			// Create map between correct connected FBs
 			getElementsOfType(destinationType).stream().forEach(instance -> {
 				instance.getInterface().getErrorMarker().stream().flatMap(err -> err.getInputConnections().stream());
 
@@ -77,9 +83,9 @@ public class ConnectStructChange extends AbstractCommandChange<FBNetwork> {
 							.get().getSourceElement();
 					final StructDataConnectionCreateCommand structCon = new StructDataConnectionCreateCommand(
 							instance.getFbNetwork());
-					// TODO: get right port without string
-					structCon.setDestination(instance.getInput("IN"));
-					structCon.setSource(source.getOutput("OUT"));
+
+					structCon.setDestination(instance.getInput(destinationVarName));
+					structCon.setSource(source.getOutput(sourceVarName));
 					connectStructCommand.add(structCon);
 					instance.getInterface().getErrorMarker().stream().flatMap(err -> err.getInputConnections().stream())
 							.filter(con -> replaceableConMap.containsValue(con.getDestination().getName()))

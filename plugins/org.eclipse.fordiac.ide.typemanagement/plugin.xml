@@ -161,7 +161,7 @@
            </with></enabledWhen>
      </handler>
      <handler
-           class="org.eclipse.fordiac.ide.typemanagement.refactoring.ConnectionsToStructHandler"
+           class="org.eclipse.fordiac.ide.typemanagement.refactoring.connection.ConnectionsToStructHandler"
            commandId="org.eclipse.fordiac.ide.typemanagement.connectionstostruct">
            <enabledWhen>
            <with
@@ -172,7 +172,7 @@
            </with></enabledWhen>
      </handler>
      <handler
-           class="org.eclipse.fordiac.ide.typemanagement.refactoring.RepairBrokenConnectionHandler"
+           class="org.eclipse.fordiac.ide.typemanagement.refactoring.connection.RepairBrokenConnectionHandler"
            commandId="org.eclipse.fordiac.ide.typemanagement.repairbrokenconnection">
      </handler>
 
@@ -666,14 +666,14 @@
             type="java.lang.Object">
       </propertyTester>
       <propertyTester
-            class="org.eclipse.fordiac.ide.typemanagement.refactoring.ConnectionsToStructPropertyTester"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.connection.ConnectionsToStructPropertyTester"
             id="org.eclipse.fordiac.ide.typemanagement.connectionsToStructTester"
             namespace="org.eclipse.fordiac.ide.typemanagement"
             properties="ConnectionsToStructSupported"
             type="java.lang.Object">
       </propertyTester>
       <propertyTester
-            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RepairBrokenConnectionPropertyTester"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.connection.RepairBrokenConnectionPropertyTester"
             id="org.eclipse.fordiac.ide.typemanagement.RepairBrokenConnectionTester"
             namespace="org.eclipse.fordiac.ide.typemanagement"
             properties="RepairConnectionSupported"
@@ -769,18 +769,7 @@
          </command>
       </menuContribution>
    </extension>
-
-       <extension
-          point="org.eclipse.fordiac.ide.model.libraryLinkerExtension">
-       <client
-             class="org.eclipse.fordiac.ide.typemanagement.librarylinker.LibraryLinker">
-       </client>
-    </extension>
        <extension
              point="org.eclipse.ltk.core.refactoring.refactoringContributions">
-          <contribution
-                class="org.eclipse.fordiac.ide.typemanagement.refactoring.ReplaceStructRefactoringContribution"
-                id="org.eclipse.fordiac.ide.typemanagement.replaceStruct">
-          </contribution>
        </extension>   
 </plugin>

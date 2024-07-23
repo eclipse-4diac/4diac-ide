@@ -29,7 +29,7 @@ public class EditConnectionsChange extends AbstractCommandChange<FBNetwork> {
 	private final URI structURI;
 	private final boolean isSourceReconnect;
 
-	protected EditConnectionsChange(final URI elementURI, final Class<FBNetwork> elementClass,
+	public EditConnectionsChange(final URI elementURI, final Class<FBNetwork> elementClass,
 			final Map<String, String> replacableConMap, final URI source, final URI structURI,
 			final boolean isSourceReconnect) {
 		super(elementURI, elementClass);

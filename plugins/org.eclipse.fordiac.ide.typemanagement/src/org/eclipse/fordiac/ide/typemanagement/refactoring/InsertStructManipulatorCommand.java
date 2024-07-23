@@ -21,10 +21,11 @@ public class InsertStructManipulatorCommand extends Command {
 	private ChangeStructCommand changeStruct;
 	private StructDataConnectionCreateCommand createCon;
 
-	public InsertStructManipulatorCommand(final StructuredType structType, final IInterfaceElement port) {
-		this.structType = Objects.requireNonNull(structType);
+	public InsertStructManipulatorCommand(final IInterfaceElement port) {
+		assert port.getType() instanceof StructuredType;
 		this.port = Objects.requireNonNull(port);
-		this.isMUX = Objects.requireNonNull(port.isIsInput());
+		this.structType = (StructuredType) port.getType();
+		this.isMUX = port.isIsInput();
 	}
 
 	@Override

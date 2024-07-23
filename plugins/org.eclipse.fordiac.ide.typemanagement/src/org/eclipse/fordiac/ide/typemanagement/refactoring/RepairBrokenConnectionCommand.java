@@ -36,7 +36,7 @@ public class RepairBrokenConnectionCommand extends Command {
 	public RepairBrokenConnectionCommand(final Connection con, final boolean isSourceReconnect,
 			final StructuredType structType, final String var) {
 		this.connection = Objects.requireNonNull(con);
-		this.isSourceReconnect = Objects.requireNonNull(isSourceReconnect);
+		this.isSourceReconnect = isSourceReconnect;
 		this.structType = Objects.requireNonNull(structType);
 		this.var = Objects.requireNonNull(var);
 	}
@@ -69,7 +69,7 @@ public class RepairBrokenConnectionCommand extends Command {
 		}
 
 		return optmux.orElseGet(() -> {
-			insertMuxCommand = new InsertStructManipulatorCommand(structType, port);
+			insertMuxCommand = new InsertStructManipulatorCommand(port);
 			insertMuxCommand.execute();
 			return insertMuxCommand.getNewElement();
 		});
