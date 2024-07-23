@@ -21,9 +21,9 @@ import java.util.regex.Pattern
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
@@ -42,7 +42,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STPragma
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression
@@ -75,8 +78,6 @@ import org.eclipse.xtext.formatting2.regionaccess.ITextSegment
 import org.eclipse.xtext.grammaranalysis.impl.GrammarElementTitleSwitch
 
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage.Literals.*
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement
 
 class STCoreFormatter extends AbstractFormatter2 {
 
@@ -234,8 +235,21 @@ class STCoreFormatter extends AbstractFormatter2 {
 			varDeclaration.ranges.formatList(document)
 		}
 
-		varDeclaration?.defaultValue.format
+		varDeclaration.defaultValue.format
+		varDeclaration.pragma.prepend[oneSpace]
+		varDeclaration.pragma.format
 		varDeclaration.append[newLine]
+	}
+
+	/** Formats the STPragma */
+	def dispatch void format(STPragma pragma, extension IFormattableDocument document) {
+		pragma.formatBlock(pragma.attributes, pragma.regionFor.keyword("{"), pragma.regionFor.keyword("}"), document)
+	}
+
+	/** Formats the STPragma */
+	def dispatch void format(STAttribute attribute, extension IFormattableDocument document) {
+		attribute.regionFor.keyword(":=").surround[oneSpace]
+		attribute.value.format
 	}
 
 	/** Formats the STIfStatements */
@@ -532,6 +546,34 @@ class STCoreFormatter extends AbstractFormatter2 {
 		]
 	}
 
+	def protected void formatBlock(EObject blockElement, List<? extends EObject> listElements, ISemanticRegion begin,
+		ISemanticRegion end, extension IFormattableDocument document) {
+		if (blockElement.multiline) {
+			listElements.formatBlockMultiline(begin, end, document)
+		} else {
+			formatConditionally(begin.offset, end.endOffset - begin.offset, [ subDocument |
+				listElements.formatBlockSingleline(begin, end, subDocument.requireFitsInLine)
+			], [ subDocument |
+				listElements.formatBlockMultiline(begin, end, subDocument)
+			])
+		}
+	}
+
+	def protected void formatBlockSingleline(List<? extends EObject> listElements, ISemanticRegion begin,
+		ISemanticRegion end, extension IFormattableDocument document) {
+		begin.append[noSpace]
+		listElements.formatList(document)
+		end.prepend[noSpace]
+	}
+
+	def protected void formatBlockMultiline(List<? extends EObject> listElements, ISemanticRegion begin,
+		ISemanticRegion end, extension IFormattableDocument document) {
+		begin.append[newLine]
+		interior(begin, end)[indent]
+		listElements.formatListMultiline(document)
+		end.prepend[newLine]
+	}
+
 	def protected void formatList(List<? extends EObject> semanticElements, extension IFormattableDocument document) {
 		if (!semanticElements.empty) {
 			val autowrapFormatter = new STCoreAutowrapFormatter(semanticElements.lastOrNull.nextHiddenRegion)
@@ -545,6 +587,14 @@ class STCoreFormatter extends AbstractFormatter2 {
 				format
 			]
 		}
+	}
+
+	def protected void formatListMultiline(List<? extends EObject> semanticElements,
+		extension IFormattableDocument document) {
+		semanticElements.forEach [
+			immediatelyPreceding.keyword(',').prepend[noSpace].append[newLine]
+			format
+		]
 	}
 
 	def protected void formatCondition(EObject semanticElement, ISemanticRegion begin, ISemanticRegion end,
@@ -708,7 +758,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 		context
 	}
-	
+
 	override createTextReplacerContext(IFormattableDocument document) {
 		new STCoreTextReplacerContext(document)
 	}
