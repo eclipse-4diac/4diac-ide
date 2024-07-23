@@ -224,8 +224,7 @@ public class Abstract4diacUITests {
 	 *                tree.
 	 */
 	protected static boolean isElementInApplicationOfSystemInSystemExplorer(final String element) {
-		final SWTBotTreeItem systemNode = expandProjectNameTreeItem();
-		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer(systemNode);
+		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
 		bot.waitUntil(treeItemHasNode(appNode, element));
 		final SWTBotTreeItem elementNode = appNode.getNode(element);
 		assertNotNull(elementNode);
@@ -240,24 +239,14 @@ public class Abstract4diacUITests {
 	 *               of the Application in the System in the SystemExplorer tree.
 	 */
 	protected static boolean isFBInSubAppOfSystemInSystemExplorer(final String fbName) {
-		final SWTBotTreeItem systemNode = expandProjectNameTreeItem();
-		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer(systemNode);
-		final SWTBotTreeItem subAppNode = appNode.getNode(SUBAPP);
-		assertNotNull(subAppNode);
-		subAppNode.select();
-		subAppNode.expand();
+		final SWTBotTreeItem subAppNode = expandSubAppTreeItemInSystemExplorer();
 		final SWTBotTreeItem fbNode = subAppNode.getNode(fbName);
 		assertNotNull(fbNode);
 		return fbNode.isVisible();
 	}
 
 	protected static boolean isSubAppNodeInSystemExplorerEmpty() {
-		final SWTBotTreeItem systemNode = expandProjectNameTreeItem();
-		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer(systemNode);
-		final SWTBotTreeItem subAppNode = appNode.getNode(SUBAPP);
-		assertNotNull(subAppNode);
-		subAppNode.select();
-		subAppNode.expand();
+		final SWTBotTreeItem subAppNode = expandSubAppTreeItemInSystemExplorer();
 		final List<String> subAppChildren = subAppNode.getNodes();
 		return subAppChildren.isEmpty();
 	}
@@ -544,23 +533,7 @@ public class Abstract4diacUITests {
 		bot.resetWorkbench();
 	}
 
-	private static SWTBotTreeItem expandTypeLibraryTreeItemInSystemExplorer() {
-		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
-		systemExplorerView.show();
-		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
-		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
-		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
-		treeProjectItem.select();
-		treeProjectItem.expand();
-		bot.waitUntil(treeItemHasNode(treeProjectItem, TYPE_LIBRARY_NODE));
-		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(TYPE_LIBRARY_NODE);
-		typeLibraryNode.select();
-		typeLibraryNode.expand();
-		return typeLibraryNode;
-	}
-
-	private static SWTBotTreeItem expandProjectNameTreeItem() {
+	private static SWTBotTreeItem expandProjectTreeItemInSystemExplorer() {
 		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
@@ -570,6 +543,11 @@ public class Abstract4diacUITests {
 		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
 		treeProjectItem.select();
 		treeProjectItem.expand();
+		return treeProjectItem;
+	}
+
+	private static SWTBotTreeItem expandSystemTreeItemInSystemExplorer() {
+		final SWTBotTreeItem treeProjectItem = expandProjectTreeItemInSystemExplorer();
 		bot.waitUntil(treeItemHasNode(treeProjectItem, PROJECT_NAME_TREE_ITEM));
 		final SWTBotTreeItem systemNode = treeProjectItem.getNode(PROJECT_NAME_TREE_ITEM);
 		systemNode.select();
@@ -577,12 +555,31 @@ public class Abstract4diacUITests {
 		return systemNode;
 	}
 
-	private static SWTBotTreeItem expandApplicationTreeItemInSystemExplorer(final SWTBotTreeItem systemNode) {
+	private static SWTBotTreeItem expandTypeLibraryTreeItemInSystemExplorer() {
+		final SWTBotTreeItem treeProjectItem = expandProjectTreeItemInSystemExplorer();
+		bot.waitUntil(treeItemHasNode(treeProjectItem, TYPE_LIBRARY_NODE));
+		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(TYPE_LIBRARY_NODE);
+		typeLibraryNode.select();
+		typeLibraryNode.expand();
+		return typeLibraryNode;
+	}
+
+	private static SWTBotTreeItem expandApplicationTreeItemInSystemExplorer() {
+		final SWTBotTreeItem systemNode = expandSystemTreeItemInSystemExplorer();
 		bot.waitUntil(treeItemHasNode(systemNode, PROJECT_NAME_APP));
 		final SWTBotTreeItem appNode = systemNode.getNode(PROJECT_NAME_APP);
 		assertNotNull(appNode);
 		appNode.select();
 		appNode.expand();
 		return appNode;
+	}
+
+	private static SWTBotTreeItem expandSubAppTreeItemInSystemExplorer() {
+		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
+		final SWTBotTreeItem subAppNode = appNode.getNode(SUBAPP);
+		assertNotNull(subAppNode);
+		subAppNode.select();
+		subAppNode.expand();
+		return subAppNode;
 	}
 }
