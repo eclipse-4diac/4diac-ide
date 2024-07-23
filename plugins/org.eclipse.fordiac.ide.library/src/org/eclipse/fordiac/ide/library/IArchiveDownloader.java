@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
+
 public interface IArchiveDownloader {
 	/**
 	 * Lists the available libraries
@@ -34,15 +37,18 @@ public interface IArchiveDownloader {
 	List<String> availableVersions(String symbolicName) throws IOException;
 
 	/**
-	 * Download latest available version of the specified library in regard to given
-	 * (preferred) version
+	 * Download latest available version of the specified library included in the
+	 * given range or the preferred version if it is contained in the range
+	 *
+	 * <p>
+	 * Use {@link VersionRange#includes()}) for the range check
 	 *
 	 * @param symbolicName     symbolic name of library
-	 * @param version          version (specific or range) of the specified library
+	 * @param range            version range of the specified library
 	 * @param preferredVersion preferred version to be downloaded, ignored if
 	 *                         {@code null} or not contained in version range
 	 * @return {@code Path} of the downloaded library archive, or {@code null} if
 	 *         archive couldn't be downloaded
 	 */
-	Path downloadLibrary(String symbolicName, String version, String preferredVersion) throws IOException;
+	Path downloadLibrary(String symbolicName, VersionRange range, Version preferredVersion) throws IOException;
 }

@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.gitlab.Messages;
@@ -41,6 +42,8 @@ import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
 
 public class GitLabDownloader implements IArchiveDownloader {
 
@@ -265,23 +268,27 @@ public class GitLabDownloader implements IArchiveDownloader {
 	}
 
 	@Override
-	public Path downloadLibrary(final String symbolicName, final String version, final String preferredVersion)
+	public Path downloadLibrary(final String symbolicName, final VersionRange range, final Version preferredVersion)
 			throws IOException {
 		if (baseUrl == null || baseUrl.isBlank() || token == null || token.isBlank()) {
 			return null;
 		}
 		fetchProjectsAndPackages();
 		if (packagesAndLeaves.containsKey(symbolicName)) {
-			final List<LeafNode> nodes = packagesAndLeaves.get(symbolicName).stream()
-					.filter(l -> versionComparator.contains(version, l.getVersion()))
-					.sorted(Comparator.comparing(LeafNode::getVersion, (o1, o2) -> -versionComparator.compare(o1, o2)))
+			Stream<LeafNode> st = packagesAndLeaves.get(symbolicName).stream();
+			if (range != null && !range.isEmpty()) {
+				st = st.filter(l -> VersionComparator.contains(range, l.getVersion()));
+			}
+			final List<LeafNode> nodes = st
+					.sorted(Comparator.comparing(LeafNode::getVersion, (o1, o2) -> versionComparator.compare(o2, o1)))
 					.toList();
+
 			if (nodes.isEmpty()) {
 				return null;
 			}
 			LeafNode node = null;
 			if (preferredVersion != null) {
-				node = nodes.stream().filter(l -> (versionComparator.compare(l.getVersion(), preferredVersion) == 0))
+				node = nodes.stream().filter(l -> preferredVersion.compareTo(new Version(l.getVersion())) == 0)
 						.findFirst().orElse(null);
 			}
 			if (node == null) {
