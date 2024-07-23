@@ -32,7 +32,7 @@
                label="TypeInfo">
          </propertyTab>
          <propertyTab
-               afterTab="org.eclipse.fordiac.ide.attributetypeeditor.propertyLockTab"
+               afterTab="org.eclipse.fordiac.ide.attributetypeeditor.propertyTargetTab"
                category="AttributeType"
                id="org.eclipse.fordiac.ide.attributetypeeditor.propertyAttributeTab"
                label="Attributes">
@@ -40,8 +40,8 @@
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.attributetypeeditor.propertyDataTypeInfoTab"
                category="AttributeType"
-               id="org.eclipse.fordiac.ide.attributetypeeditor.propertyLockTab"
-               label="Locks">
+               id="org.eclipse.fordiac.ide.attributetypeeditor.propertyTargetTab"
+               label="Target">
          </propertyTab>
       </propertyTabs>
    </extension>
@@ -78,9 +78,9 @@
           </input> 
          </propertySection>
          <propertySection
-	         	class="org.eclipse.fordiac.ide.attributetypeeditor.properties.AttributeLockSection"
-	          	id="org.eclipse.fordiac.ide.attributetypeeditor.properties.AttributeLockSection"
-	            tab="org.eclipse.fordiac.ide.attributetypeeditor.propertyLockTab">
+	         	class="org.eclipse.fordiac.ide.attributetypeeditor.properties.AttributeTargetSection"
+	          	id="org.eclipse.fordiac.ide.attributetypeeditor.properties.AttributeTargetSection"
+	            tab="org.eclipse.fordiac.ide.attributetypeeditor.propertyTargetTab">
 	        <input
 	           	type="org.eclipse.fordiac.ide.model.data.StructuredType">
 	        </input>  

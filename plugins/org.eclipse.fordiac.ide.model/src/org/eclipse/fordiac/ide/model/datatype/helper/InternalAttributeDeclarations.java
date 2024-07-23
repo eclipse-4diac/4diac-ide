@@ -53,10 +53,10 @@ public final class InternalAttributeDeclarations {
 			LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE, ElementaryTypes.BOOL);
 	public static final AttributeDeclaration RETAIN = createAttributeDeclaration(LibraryElementTags.RETAIN_ATTRIBUTE,
 			ElementaryTypes.USINT);
-	public static final AttributeDeclaration LOCK = createLockAttributeDeclaration();
+	public static final AttributeDeclaration TARGET = createTargetAttributeDeclaration();
 
 	private static final List<AttributeDeclaration> allAttributes = List.of(VAR_CONFIG, VISIBLE, UNFOLDED, RETAIN,
-			LOCK);
+			TARGET);
 
 	private static AttributeDeclaration createAttributeDeclaration(final String name, final DataType type) {
 		final AttributeDeclaration declaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
@@ -70,19 +70,19 @@ public final class InternalAttributeDeclarations {
 		return declaration;
 	}
 
-	private static AttributeDeclaration createLockAttributeDeclaration() {
+	private static AttributeDeclaration createTargetAttributeDeclaration() {
 		final AttributeDeclaration declaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
-		declaration.setName(LibraryElementTags.LOCK_ATTRIBUTE_DEFINITION);
+		declaration.setName(LibraryElementTags.TARGET_ATTRIBUTE_DEFINITION);
 
 		final StructuredType structType = DataFactory.eINSTANCE.createStructuredType();
 
-		structType.getMemberVariables().add(createLockMember(IInterfaceElement.class.getSimpleName()));
-		structType.getMemberVariables().add(createLockMember(SubApp.class.getSimpleName()));
-		structType.getMemberVariables().add(createLockMember(FBType.class.getSimpleName()));
-		structType.getMemberVariables().add(createLockMember(Application.class.getSimpleName()));
-		structType.getMemberVariables().add(createLockMember(Connection.class.getSimpleName()));
-		structType.getMemberVariables().add(createLockMember(FB.class.getSimpleName()));
-		structType.getMemberVariables().add(createLockMember(DataType.class.getSimpleName()));
+		structType.getMemberVariables().add(createTargetMember(IInterfaceElement.class.getSimpleName()));
+		structType.getMemberVariables().add(createTargetMember(SubApp.class.getSimpleName()));
+		structType.getMemberVariables().add(createTargetMember(FBType.class.getSimpleName()));
+		structType.getMemberVariables().add(createTargetMember(Application.class.getSimpleName()));
+		structType.getMemberVariables().add(createTargetMember(Connection.class.getSimpleName()));
+		structType.getMemberVariables().add(createTargetMember(FB.class.getSimpleName()));
+		structType.getMemberVariables().add(createTargetMember(DataType.class.getSimpleName()));
 
 		declaration.setType(structType);
 
@@ -90,7 +90,7 @@ public final class InternalAttributeDeclarations {
 		return declaration;
 	}
 
-	private static MemberVarDeclaration createLockMember(final String name) {
+	private static MemberVarDeclaration createTargetMember(final String name) {
 		final MemberVarDeclaration member = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
 		member.setName(name);
 		member.setType(ElementaryTypes.BOOL);

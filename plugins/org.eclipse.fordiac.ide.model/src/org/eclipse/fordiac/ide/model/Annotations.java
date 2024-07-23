@@ -356,27 +356,28 @@ public final class Annotations {
 	}
 
 	// *** AttributeDeclaration ***//
-	public static void setLock(@NonNull final AttributeDeclaration attributeDeclaration, final StructuredType lock) {
-		final String lockString = lock.getMemberVariables().stream()
+	public static void setTarget(@NonNull final AttributeDeclaration attributeDeclaration,
+			final StructuredType target) {
+		final String targetString = target.getMemberVariables().stream()
 				.map(member -> (member.getName() + ":=" + member.getValue().getValue())) //$NON-NLS-1$
 				.collect(Collectors.joining(",", "(", ")")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		if (!lockString.contains("FALSE")) { //$NON-NLS-1$
-			attributeDeclaration.deleteAttribute(InternalAttributeDeclarations.LOCK.getName());
+		if (!targetString.contains("FALSE")) { //$NON-NLS-1$
+			attributeDeclaration.deleteAttribute(InternalAttributeDeclarations.TARGET.getName());
 		} else {
-			attributeDeclaration.setAttribute(InternalAttributeDeclarations.LOCK, lockString, ""); //$NON-NLS-1$
+			attributeDeclaration.setAttribute(InternalAttributeDeclarations.TARGET, targetString, ""); //$NON-NLS-1$
 		}
 	}
 
-	public static StructuredType getLock(@NonNull final AttributeDeclaration attributeDeclaration) {
-		String lockString = attributeDeclaration.getAttributeValue(InternalAttributeDeclarations.LOCK.getName());
-		if (lockString == null) {
+	public static StructuredType getTarget(@NonNull final AttributeDeclaration attributeDeclaration) {
+		String targetString = attributeDeclaration.getAttributeValue(InternalAttributeDeclarations.TARGET.getName());
+		if (targetString == null) {
 			return null;
 		}
 
 		final StructuredType structType = DataFactory.eINSTANCE.createStructuredType();
-		lockString = lockString.substring(1, lockString.length() - 1);
-		final String[] pairs = lockString.split(","); //$NON-NLS-1$
+		targetString = targetString.substring(1, targetString.length() - 1);
+		final String[] pairs = targetString.split(","); //$NON-NLS-1$
 		for (final String pair : pairs) {
 			final String[] keyValue = pair.split(":="); //$NON-NLS-1$
 			if (keyValue.length != 2) {
@@ -394,10 +395,10 @@ public final class Annotations {
 			structType.getMemberVariables().add(member);
 		}
 
-		if (structType.getMemberVariables().size() != ((StructuredType) InternalAttributeDeclarations.LOCK.getType())
+		if (structType.getMemberVariables().size() != ((StructuredType) InternalAttributeDeclarations.TARGET.getType())
 				.getMemberVariables().size()) {
 			// Add missing members if new ones are added
-			((StructuredType) InternalAttributeDeclarations.LOCK.getType()).getMemberVariables().forEach(varDecl -> {
+			((StructuredType) InternalAttributeDeclarations.TARGET.getType()).getMemberVariables().forEach(varDecl -> {
 				final Optional<VarDeclaration> correctMember = structType.getMemberVariables().stream()
 						.filter(member -> member.getName().equals(varDecl.getName())).findFirst();
 				if (correctMember.isEmpty()) {
@@ -411,16 +412,16 @@ public final class Annotations {
 
 	public static boolean isValidObject(@NonNull final AttributeDeclaration attributeDeclaration,
 			final ConfigurableObject object) {
-		final StructuredType lock = attributeDeclaration.getLock();
-		if (lock != null) {
+		final StructuredType target = attributeDeclaration.getTarget();
+		if (target != null) {
 			return switch (object) {
-			case final IInterfaceElement o -> getValueFromClassName(lock, IInterfaceElement.class);
-			case final SubApp o -> getValueFromClassName(lock, SubApp.class);
-			case final FBType o -> getValueFromClassName(lock, FBType.class);
-			case final Application o -> getValueFromClassName(lock, Application.class);
-			case final Connection o -> getValueFromClassName(lock, Connection.class);
-			case final FB o -> getValueFromClassName(lock, FB.class);
-			case final DataType o -> getValueFromClassName(lock, DataType.class);
+			case final IInterfaceElement o -> getValueFromClassName(target, IInterfaceElement.class);
+			case final SubApp o -> getValueFromClassName(target, SubApp.class);
+			case final FBType o -> getValueFromClassName(target, FBType.class);
+			case final Application o -> getValueFromClassName(target, Application.class);
+			case final Connection o -> getValueFromClassName(target, Connection.class);
+			case final FB o -> getValueFromClassName(target, FB.class);
+			case final DataType o -> getValueFromClassName(target, DataType.class);
 			default -> false;
 			};
 		}
