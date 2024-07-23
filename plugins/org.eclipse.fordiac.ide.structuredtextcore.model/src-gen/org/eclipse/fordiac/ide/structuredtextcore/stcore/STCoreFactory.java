@@ -162,6 +162,24 @@ public interface STCoreFactory extends EFactory {
 	STRepeatArrayInitElement createSTRepeatArrayInitElement();
 
 	/**
+	 * Returns a new object of class '<em>ST Pragma</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Pragma</em>'.
+	 * @generated
+	 */
+	STPragma createSTPragma();
+
+	/**
+	 * Returns a new object of class '<em>ST Attribute</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Attribute</em>'.
+	 * @generated
+	 */
+	STAttribute createSTAttribute();
+
+	/**
 	 * Returns a new object of class '<em>ST Statement</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -147,6 +147,14 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTRepeatArrayInitElementAdapter();
 			}
 			@Override
+			public Adapter caseSTPragma(STPragma object) {
+				return createSTPragmaAdapter();
+			}
+			@Override
+			public Adapter caseSTAttribute(STAttribute object) {
+				return createSTAttributeAdapter();
+			}
+			@Override
 			public Adapter caseSTStatement(STStatement object) {
 				return createSTStatementAdapter();
 			}
@@ -549,6 +557,34 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTRepeatArrayInitElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STPragma <em>ST Pragma</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STPragma
+	 * @generated
+	 */
+	public Adapter createSTPragmaAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute <em>ST Attribute</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute
+	 * @generated
+	 */
+	public Adapter createSTAttributeAdapter() {
 		return null;
 	}
 

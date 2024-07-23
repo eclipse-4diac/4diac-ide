@@ -90,6 +90,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 			case STCorePackage.ST_ARRAY_INITIALIZER_EXPRESSION: return createSTArrayInitializerExpression();
 			case STCorePackage.ST_SINGLE_ARRAY_INIT_ELEMENT: return createSTSingleArrayInitElement();
 			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT: return createSTRepeatArrayInitElement();
+			case STCorePackage.ST_PRAGMA: return createSTPragma();
+			case STCorePackage.ST_ATTRIBUTE: return createSTAttribute();
 			case STCorePackage.ST_STATEMENT: return createSTStatement();
 			case STCorePackage.ST_ASSIGNMENT: return createSTAssignment();
 			case STCorePackage.ST_CALL_ARGUMENT: return createSTCallArgument();
@@ -357,6 +359,28 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	public STRepeatArrayInitElement createSTRepeatArrayInitElement() {
 		STRepeatArrayInitElementImpl stRepeatArrayInitElement = new STRepeatArrayInitElementImpl();
 		return stRepeatArrayInitElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STPragma createSTPragma() {
+		STPragmaImpl stPragma = new STPragmaImpl();
+		return stPragma;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STAttribute createSTAttribute() {
+		STAttributeImpl stAttribute = new STAttributeImpl();
+		return stAttribute;
 	}
 
 	/**

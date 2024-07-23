@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
 import java.lang.reflect.Method;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,6 +43,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeature;
@@ -77,6 +79,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifi
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STPragma;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn;
@@ -213,6 +216,20 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	private EClass stRepeatArrayInitElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stPragmaEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stAttributeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -881,6 +898,56 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	@Override
 	public EReference getSTRepeatArrayInitElement_InitExpressions() {
 		return (EReference)stRepeatArrayInitElementEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSTPragma() {
+		return stPragmaEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTPragma_Attributes() {
+		return (EReference)stPragmaEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSTAttribute() {
+		return stAttributeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTAttribute_Declaration() {
+		return (EReference)stAttributeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTAttribute_Value() {
+		return (EReference)stAttributeEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1571,6 +1638,16 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	@Override
 	public EReference getSTVarDeclaration_DefaultValue() {
 		return (EReference)stVarDeclarationEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTVarDeclaration_Pragma() {
+		return (EReference)stVarDeclarationEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -2341,6 +2418,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		createEAttribute(stRepeatArrayInitElementEClass, ST_REPEAT_ARRAY_INIT_ELEMENT__REPETITIONS);
 		createEReference(stRepeatArrayInitElementEClass, ST_REPEAT_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS);
 
+		stPragmaEClass = createEClass(ST_PRAGMA);
+		createEReference(stPragmaEClass, ST_PRAGMA__ATTRIBUTES);
+
+		stAttributeEClass = createEClass(ST_ATTRIBUTE);
+		createEReference(stAttributeEClass, ST_ATTRIBUTE__DECLARATION);
+		createEReference(stAttributeEClass, ST_ATTRIBUTE__VALUE);
+
 		stStatementEClass = createEClass(ST_STATEMENT);
 
 		stAssignmentEClass = createEClass(ST_ASSIGNMENT);
@@ -2431,6 +2515,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		createEReference(stVarDeclarationEClass, ST_VAR_DECLARATION__TYPE);
 		createEReference(stVarDeclarationEClass, ST_VAR_DECLARATION__MAX_LENGTH);
 		createEReference(stVarDeclarationEClass, ST_VAR_DECLARATION__DEFAULT_VALUE);
+		createEReference(stVarDeclarationEClass, ST_VAR_DECLARATION__PRAGMA);
 
 		stTypeDeclarationEClass = createEClass(ST_TYPE_DECLARATION);
 		createEAttribute(stTypeDeclarationEClass, ST_TYPE_DECLARATION__ARRAY);
@@ -2665,6 +2750,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		addEOperation(stRepeatArrayInitElementEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		initEClass(stPragmaEClass, STPragma.class, "STPragma", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSTPragma_Attributes(), this.getSTAttribute(), null, "attributes", null, 0, -1, STPragma.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(stAttributeEClass, STAttribute.class, "STAttribute", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSTAttribute_Declaration(), theLibraryElementPackage.getAttributeDeclaration(), null, "declaration", null, 0, 1, STAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTAttribute_Value(), this.getSTInitializerExpression(), null, "value", null, 0, 1, STAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(stStatementEClass, STStatement.class, "STStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(stAssignmentEClass, STAssignment.class, "STAssignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -2799,6 +2891,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		initEReference(getSTVarDeclaration_Type(), theLibraryElementPackage.getINamedElement(), null, "type", null, 0, 1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTVarDeclaration_MaxLength(), this.getSTExpression(), null, "maxLength", null, 0, 1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTVarDeclaration_DefaultValue(), this.getSTInitializerExpression(), null, "defaultValue", null, 0, 1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTVarDeclaration_Pragma(), this.getSTPragma(), null, "pragma", null, 0, 1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stTypeDeclarationEClass, STTypeDeclaration.class, "STTypeDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getSTTypeDeclaration_Array(), ecorePackage.getEBoolean(), "array", null, 0, 1, STTypeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

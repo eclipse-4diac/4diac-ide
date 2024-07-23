@@ -123,6 +123,13 @@
       <genOperations ecoreOperation="STCore.ecore#//STRepeatArrayInitElement/getDeclaredResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
     </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STPragma">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STPragma/attributes"/>
+    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STAttribute">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STAttribute/declaration"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAttribute/value"/>
+    </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STStatement"/>
     <genClasses ecoreClass="STCore.ecore#//STAssignment">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STAssignment/left"/>
@@ -253,6 +260,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/type"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/maxLength"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/defaultValue"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/pragma"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STTypeDeclaration">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STTypeDeclaration/array"/>
