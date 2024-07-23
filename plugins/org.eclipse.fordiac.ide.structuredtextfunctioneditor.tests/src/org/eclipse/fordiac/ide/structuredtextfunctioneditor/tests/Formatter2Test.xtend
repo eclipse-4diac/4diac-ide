@@ -106,6 +106,57 @@ class Formatter2Test {
 	}
 
 	@Test
+	def void testPragmaAttributes() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert VAR_INPUT input1 : REAL {  Pragma1:=17,Pragma2:=4  }  ; END_VAR END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_INPUT
+					input1 : REAL {Pragma1 := 17, Pragma2 := 4};
+				END_VAR
+				END_FUNCTION
+			'''
+		]
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert VAR_INPUT input1 : REAL {
+					Pragma1:=17,
+					Pragma2:=4
+				}; END_VAR END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_INPUT
+					input1 : REAL {
+						Pragma1 := 17,
+						Pragma2 := 4
+					};
+				END_VAR
+				END_FUNCTION
+			'''
+		]
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert VAR_INPUT input1 : REAL {  PragmaAttribute1:=17,verylongPragmaAttribute2:=4,verylongPragmaAttribute2:=21,verylongPragmaAttribute2:=42  }  ; END_VAR END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_INPUT
+					input1 : REAL {
+						PragmaAttribute1 := 17,
+						verylongPragmaAttribute2 := 4,
+						verylongPragmaAttribute2 := 21,
+						verylongPragmaAttribute2 := 42
+					};
+				END_VAR
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
 	def void testIfStatements() {
 		assertFormatted[
 			toBeFormatted = '''
