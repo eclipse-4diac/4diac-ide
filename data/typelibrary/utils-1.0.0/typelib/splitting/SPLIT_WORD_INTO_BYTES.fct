@@ -14,16 +14,16 @@
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
-				<With Var="OUT_00"/>
-				<With Var="OUT_01"/>
+				<With Var="BYTE_00"/>
+				<With Var="BYTE_01"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
 			<VarDeclaration Name="IN" Type="WORD" Comment=""/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="OUT_00" Type="BYTE" Comment="BYTE 00"/>
-			<VarDeclaration Name="OUT_01" Type="BYTE" Comment="BYTE 01"/>
+			<VarDeclaration Name="BYTE_00" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_01" Type="BYTE" Comment=""/>
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
@@ -35,12 +35,12 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
-	OUT_00 : BYTE;    // BYTE 00
-	OUT_01 : BYTE;    // BYTE 01
+	BYTE_00 : BYTE;
+	BYTE_01 : BYTE;
 END_VAR
 
-OUT_00 := IN.%B0;
-OUT_01 := IN.%B1;
+BYTE_00 := IN.%B0;
+BYTE_01 := IN.%B1;
 
 END_FUNCTION
 ]]></ST>

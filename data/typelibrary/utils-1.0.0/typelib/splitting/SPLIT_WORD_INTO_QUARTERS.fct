@@ -14,28 +14,28 @@
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
-				<With Var="OUT_00"/>
-				<With Var="OUT_01"/>
-				<With Var="OUT_02"/>
-				<With Var="OUT_03"/>
-				<With Var="OUT_04"/>
-				<With Var="OUT_05"/>
-				<With Var="OUT_06"/>
-				<With Var="OUT_07"/>
+				<With Var="QUARTER_BYTE_00"/>
+				<With Var="QUARTER_BYTE_01"/>
+				<With Var="QUARTER_BYTE_02"/>
+				<With Var="QUARTER_BYTE_03"/>
+				<With Var="QUARTER_BYTE_04"/>
+				<With Var="QUARTER_BYTE_05"/>
+				<With Var="QUARTER_BYTE_06"/>
+				<With Var="QUARTER_BYTE_07"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
 			<VarDeclaration Name="IN" Type="WORD" Comment=""/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="OUT_00" Type="BYTE" Comment="QUARTER BYTE 00"/>
-			<VarDeclaration Name="OUT_01" Type="BYTE" Comment="QUARTER BYTE 01"/>
-			<VarDeclaration Name="OUT_02" Type="BYTE" Comment="QUARTER BYTE 02"/>
-			<VarDeclaration Name="OUT_03" Type="BYTE" Comment="QUARTER BYTE 03"/>
-			<VarDeclaration Name="OUT_04" Type="BYTE" Comment="QUARTER BYTE 04"/>
-			<VarDeclaration Name="OUT_05" Type="BYTE" Comment="QUARTER BYTE 05"/>
-			<VarDeclaration Name="OUT_06" Type="BYTE" Comment="QUARTER BYTE 06"/>
-			<VarDeclaration Name="OUT_07" Type="BYTE" Comment="QUARTER BYTE 07"/>
+			<VarDeclaration Name="QUARTER_BYTE_00" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_01" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_02" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_03" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_04" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_05" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_06" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_07" Type="BYTE" Comment=""/>
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
@@ -47,24 +47,24 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
-	OUT_00 : BYTE;    // QUARTER BYTE 00
-	OUT_01 : BYTE;    // QUARTER BYTE 01
-	OUT_02 : BYTE;    // QUARTER BYTE 02
-	OUT_03 : BYTE;    // QUARTER BYTE 03
-	OUT_04 : BYTE;    // QUARTER BYTE 04
-	OUT_05 : BYTE;    // QUARTER BYTE 05
-	OUT_06 : BYTE;    // QUARTER BYTE 06
-	OUT_07 : BYTE;    // QUARTER BYTE 07
+	QUARTER_BYTE_00 : BYTE;
+	QUARTER_BYTE_01 : BYTE;
+	QUARTER_BYTE_02 : BYTE;
+	QUARTER_BYTE_03 : BYTE;
+	QUARTER_BYTE_04 : BYTE;
+	QUARTER_BYTE_05 : BYTE;
+	QUARTER_BYTE_06 : BYTE;
+	QUARTER_BYTE_07 : BYTE;
 END_VAR
 
-OUT_00 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_00, SHIFT_QUARTER_00));
-OUT_01 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_01, SHIFT_QUARTER_01));
-OUT_02 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_02, SHIFT_QUARTER_02));
-OUT_03 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_03, SHIFT_QUARTER_03));
-OUT_04 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_04, SHIFT_QUARTER_04));
-OUT_05 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_05, SHIFT_QUARTER_05));
-OUT_06 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_06, SHIFT_QUARTER_06));
-OUT_07 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_07, SHIFT_QUARTER_07));
+QUARTER_BYTE_00 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_00, SHIFT_QUARTER_00));
+QUARTER_BYTE_01 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_01, SHIFT_QUARTER_01));
+QUARTER_BYTE_02 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_02, SHIFT_QUARTER_02));
+QUARTER_BYTE_03 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_03, SHIFT_QUARTER_03));
+QUARTER_BYTE_04 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_04, SHIFT_QUARTER_04));
+QUARTER_BYTE_05 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_05, SHIFT_QUARTER_05));
+QUARTER_BYTE_06 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_06, SHIFT_QUARTER_06));
+QUARTER_BYTE_07 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_07, SHIFT_QUARTER_07));
 
 END_FUNCTION
 ]]></ST>
