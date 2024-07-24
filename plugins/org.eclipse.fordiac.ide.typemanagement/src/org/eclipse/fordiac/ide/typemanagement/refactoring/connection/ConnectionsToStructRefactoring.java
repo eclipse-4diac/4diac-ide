@@ -1,10 +1,21 @@
+/*******************************************************************************
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Mathias Garstenauer - initial API and implementation and/or initial documentation
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
 
 import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
@@ -35,7 +46,6 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 	private String destinationVarName;
 	private boolean conflictResolution;
 
-	private final IPath fullPath;
 	private final Collection<VarDeclaration> vars;
 
 	private final TypeLibrary lib;
@@ -49,8 +59,6 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 
 		vars = sourceType.getInterfaceList().getOutputs().filter(port -> replacableConMap.containsKey(port.getName()))
 				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).toList();
-
-		fullPath = sourceType.getTypeEntry().getTypeLibrary().getProject().getFullPath();
 
 		lib = sourceType.getTypeLibrary();
 	}
