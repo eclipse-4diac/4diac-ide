@@ -8,12 +8,13 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+			<Event Name="REQ" Type="Event" Comment="">
 				<With Var="IN"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
 				<With Var="OUT_00"/>
 				<With Var="OUT_01"/>
 				<With Var="OUT_02"/>
@@ -28,6 +29,7 @@
 			<VarDeclaration Name="IN" Type="WORD" Comment=""/>
 		</InputVars>
 		<OutputVars>
+			<VarDeclaration Name="" Type="ANY" Comment=""/>
 			<VarDeclaration Name="OUT_00" Type="BYTE" Comment="QUARTER BYTE 00"/>
 			<VarDeclaration Name="OUT_01" Type="BYTE" Comment="QUARTER BYTE 01"/>
 			<VarDeclaration Name="OUT_02" Type="BYTE" Comment="QUARTER BYTE 02"/>
@@ -57,14 +59,14 @@ VAR_OUTPUT
 	OUT_07 : BYTE;    // QUARTER BYTE 07
 END_VAR
 
-OUT_00 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_00, SHFT_QUARTER_00));
-OUT_01 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_01, SHFT_QUARTER_01));
-OUT_02 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_02, SHFT_QUARTER_02));
-OUT_03 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_03, SHFT_QUARTER_03));
-OUT_04 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_04, SHFT_QUARTER_04));
-OUT_05 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_05, SHFT_QUARTER_05));
-OUT_06 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_06, SHFT_QUARTER_06));
-OUT_07 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_07, SHFT_QUARTER_07));
+OUT_00 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_00, SHIFT_QUARTER_00));
+OUT_01 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_01, SHIFT_QUARTER_01));
+OUT_02 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_02, SHIFT_QUARTER_02));
+OUT_03 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_03, SHIFT_QUARTER_03));
+OUT_04 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_04, SHIFT_QUARTER_04));
+OUT_05 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_05, SHIFT_QUARTER_05));
+OUT_06 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_06, SHIFT_QUARTER_06));
+OUT_07 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_07, SHIFT_QUARTER_07));
 
 END_FUNCTION
 ]]></ST>
