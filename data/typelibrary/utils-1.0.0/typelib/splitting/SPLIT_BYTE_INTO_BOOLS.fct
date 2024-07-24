@@ -14,28 +14,28 @@
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
-				<With Var="OUT_00"/>
-				<With Var="OUT_01"/>
-				<With Var="OUT_02"/>
-				<With Var="OUT_03"/>
-				<With Var="OUT_04"/>
-				<With Var="OUT_05"/>
-				<With Var="OUT_06"/>
-				<With Var="OUT_07"/>
+				<With Var="BIT_00"/>
+				<With Var="BIT_01"/>
+				<With Var="BIT_02"/>
+				<With Var="BIT_03"/>
+				<With Var="BIT_04"/>
+				<With Var="BIT_05"/>
+				<With Var="BIT_06"/>
+				<With Var="BIT_07"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
 			<VarDeclaration Name="IN" Type="BYTE" Comment=""/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="OUT_00" Type="BOOL" Comment="BIT 00"/>
-			<VarDeclaration Name="OUT_01" Type="BOOL" Comment="BIT 01"/>
-			<VarDeclaration Name="OUT_02" Type="BOOL" Comment="BIT 02"/>
-			<VarDeclaration Name="OUT_03" Type="BOOL" Comment="BIT 03"/>
-			<VarDeclaration Name="OUT_04" Type="BOOL" Comment="BIT 04"/>
-			<VarDeclaration Name="OUT_05" Type="BOOL" Comment="BIT 05"/>
-			<VarDeclaration Name="OUT_06" Type="BOOL" Comment="BIT 06"/>
-			<VarDeclaration Name="OUT_07" Type="BOOL" Comment="BIT 07"/>
+			<VarDeclaration Name="BIT_00" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_01" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_02" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_03" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_04" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_05" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_06" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_07" Type="BOOL" Comment=""/>
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
@@ -47,24 +47,24 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
-	OUT_00 : BOOL;    // BIT 00
-	OUT_01 : BOOL;    // BIT 01
-	OUT_02 : BOOL;    // BIT 02
-	OUT_03 : BOOL;    // BIT 03
-	OUT_04 : BOOL;    // BIT 04
-	OUT_05 : BOOL;    // BIT 05
-	OUT_06 : BOOL;    // BIT 06
-	OUT_07 : BOOL;    // BIT 07
+	BIT_00 : BOOL;
+	BIT_01 : BOOL;
+	BIT_02 : BOOL;
+	BIT_03 : BOOL;
+	BIT_04 : BOOL;
+	BIT_05 : BOOL;
+	BIT_06 : BOOL;
+	BIT_07 : BOOL;
 END_VAR
 
-OUT_00 := IN.%X0;
-OUT_01 := IN.%X1;
-OUT_02 := IN.%X2;
-OUT_03 := IN.%X3;
-OUT_04 := IN.%X4;
-OUT_05 := IN.%X5;
-OUT_06 := IN.%X6;
-OUT_07 := IN.%X7;
+BIT_00 := IN.%X0;
+BIT_01 := IN.%X1;
+BIT_02 := IN.%X2;
+BIT_03 := IN.%X3;
+BIT_04 := IN.%X4;
+BIT_05 := IN.%X5;
+BIT_06 := IN.%X6;
+BIT_07 := IN.%X7;
 
 END_FUNCTION
 ]]></ST>
