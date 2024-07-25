@@ -225,7 +225,7 @@ public final class ConnectionHelper {
 
 			final String[] qualNames = source.split("\\."); //$NON-NLS-1$
 			if (qualNames.length < 2) {
-				return null;
+				return Messages.ConnectionHelper_pin_not_found;
 			}
 
 			return qualNames[1];
