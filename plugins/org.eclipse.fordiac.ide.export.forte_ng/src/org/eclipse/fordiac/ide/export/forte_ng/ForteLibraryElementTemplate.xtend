@@ -95,7 +95,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	'''
 
 	def protected generateAdapterInitializer(Iterable<AdapterDeclaration> adapters) ///
-	'''«FOR adapter : adapters BEFORE ",\n" SEPARATOR ",\n"»«adapter.generateName»(«adapter.name.FORTEStringId», getContainer(), «!adapter.isIsInput»)«ENDFOR»'''
+	'''«FOR adapter : adapters BEFORE ",\n" SEPARATOR ",\n"»«adapter.generateName»(«adapter.name.FORTEStringId», *this, «!adapter.isIsInput»)«ENDFOR»'''
 
 	def protected generateAccessorDeclaration(String function, boolean const) {
 		generateAccessorDeclaration(function, "CIEC_ANY *", const)

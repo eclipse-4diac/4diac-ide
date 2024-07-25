@@ -60,7 +60,7 @@ final class ForteNgExportUtil {
 		}
 	}
 
-	def static CharSequence generateName(FB feature) '''«FB_EXPORT_PREFIX»«feature.name»()'''
+	def static CharSequence generateName(FB feature) '''«FB_EXPORT_PREFIX»«feature.name»'''
 
 	def static CharSequence generateName(AdapterFB feature) '''«VARIABLE_EXPORT_PREFIX»«feature.name»'''
 
