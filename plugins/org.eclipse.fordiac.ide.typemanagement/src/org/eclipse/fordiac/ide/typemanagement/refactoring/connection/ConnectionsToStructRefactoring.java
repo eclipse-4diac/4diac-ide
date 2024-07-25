@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -75,19 +76,21 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 
 		if (structURI != null) {
 			final TypeEntry structTypeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(structURI);
-			if (structTypeEntry != null) {
-				if (structTypeEntry.getType() instanceof final StructuredType structType) {
+			if (structTypeEntry != null && structTypeEntry.getType() instanceof final DataType type) {
+				if (type instanceof final StructuredType structType) {
 					if (!structType.getMemberVariables().stream().allMatch(
 							structvar -> vars.stream().anyMatch(var -> var.getType().equals(structvar.getType())
 									&& var.getName().equals(structvar.getName())))) {
 						status.merge(RefactoringStatus.createFatalErrorStatus("Incompatible Structured Type"));
 					}
 				} else {
-					status.merge(RefactoringStatus.createFatalErrorStatus("Selectet type is no Structured Type!"));
+					status.merge(RefactoringStatus.createFatalErrorStatus("Selected type is no Structured Type!"));
 				}
+			} else if (lib.getDataTypeLibrary().getTypeIfExists(structURI.trimFileExtension().lastSegment()) != null) {
+				status.merge(RefactoringStatus.createFatalErrorStatus("Structured Type already exists"));
 			}
 		} else {
-			status.merge(RefactoringStatus.createFatalErrorStatus("Invalid Structured Type selected!"));
+			status.merge(RefactoringStatus.createFatalErrorStatus("Invalid Type selected!"));
 		}
 		if (IdentifierVerifier.verifyIdentifier(sourceVarName).isPresent()) {
 			status.merge(RefactoringStatus.createFatalErrorStatus("Invalid Output Name!"));

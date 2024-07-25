@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Text;
 public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 
 	private Text structNameText;
+	private Text existingStructText;
 	private Text sourceNameText;
 	private Text destinationNameText;
 	private Button newStructButton;
@@ -80,8 +81,8 @@ public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 		existingStructButton.setText("Use &existing Structured Type");
 		final Button structButton = new Button(container, SWT.NONE);
 		structButton.setText("&...");
-		final Text existingStructText = new Text(container, NONE);
-		existingStructText.setEditable(false);
+		existingStructText = new Text(container, SWT.SINGLE | SWT.BORDER);
+		existingStructText.setText("ANY_STRUCT");
 
 		final Label sourceNameLabel = new Label(container, NONE);
 		sourceNameLabel.setText("Function Block &Output Name" + ":");
@@ -95,6 +96,7 @@ public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 		textGridData.horizontalAlignment = GridData.FILL;
 		textGridData.grabExcessHorizontalSpace = true;
 		structNameText.setLayoutData(textGridData);
+		existingStructText.setLayoutData(textGridData);
 		final GridData textGridDataSpan = new GridData();
 		textGridDataSpan.horizontalAlignment = GridData.FILL;
 		textGridDataSpan.grabExcessHorizontalSpace = true;
@@ -140,6 +142,7 @@ public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 		structNameText.setFocus();
 		newStructButton.setSelection(true);
 		structButton.setEnabled(false);
+		existingStructText.setEnabled(false);
 	}
 
 	void handleInputChanged() {
