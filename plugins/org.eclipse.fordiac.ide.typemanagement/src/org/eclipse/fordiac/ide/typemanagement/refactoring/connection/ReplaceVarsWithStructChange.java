@@ -37,7 +37,8 @@ public class ReplaceVarsWithStructChange extends AbstractCommandChange<FBType> {
 	protected ReplaceVarsWithStructChange(final URI elementURI, final Class<FBType> elementClass,
 			final Collection<String> vars, final URI structURI, final String name, final boolean isInput,
 			final int position) {
-		super(elementURI, elementClass);
+		super(elementURI.lastSegment() + ": Replace " + (isInput ? "Inputs" : "Outputs ") + vars + " with new Struct "
+				+ structURI.trimFileExtension().lastSegment(), elementURI, elementClass);
 		this.vars = Objects.requireNonNull(vars);
 		this.structURI = Objects.requireNonNull(structURI);
 		this.name = Objects.requireNonNull(name);

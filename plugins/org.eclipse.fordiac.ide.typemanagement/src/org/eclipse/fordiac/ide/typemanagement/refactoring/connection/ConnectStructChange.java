@@ -19,21 +19,21 @@ import java.util.function.Function;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class ConnectStructChange extends AbstractCommandChange<FBNetwork> {
+public class ConnectStructChange extends Change {
 
 	private final Map<String, String> replaceableConMap;
 	private final URI source;
@@ -41,71 +41,42 @@ public class ConnectStructChange extends AbstractCommandChange<FBNetwork> {
 	private final String sourceVarName;
 	private final String destinationVarName;
 
+	private final CompositeChange connectStructChange;
+
 	protected ConnectStructChange(final URI elementURI, final Class<FBNetwork> elementClass,
 			final Map<String, String> replaceableConMap, final URI source, final URI destination,
 			final String sourceVarName, final String destinationVarName) {
-		super(elementURI, elementClass);
 		this.replaceableConMap = replaceableConMap;
 		this.source = source;
 		this.destination = destination;
 		this.sourceVarName = sourceVarName;
 		this.destinationVarName = destinationVarName;
-	}
 
-	@Override
-	public void initializeValidationData(final FBNetwork element, final IProgressMonitor pm) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public RefactoringStatus isValid(final FBNetwork element, final IProgressMonitor pm)
-			throws CoreException, OperationCanceledException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected Command createCommand(final FBNetwork element) {
-		final CompoundCommand connectStructCommand = new CompoundCommand();
+		connectStructChange = new CompositeChange("");
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(source).getType() instanceof final FBType sourceType
 				&& TypeLibraryManager.INSTANCE.getTypeEntryForURI(destination)
 						.getType() instanceof final FBType destinationType) {
-			// Create map between correct connected FBs
+
 			getElementsOfType(destinationType).stream().forEach(instance -> {
-				instance.getInterface().getErrorMarker().stream().flatMap(err -> err.getInputConnections().stream());
 
 				// Collect all correct connections
-				final List<Connection> cons = instance.getInterface().getErrorMarker().stream()
-						.flatMap(err -> err.getInputConnections().stream())
+				final List<Connection> cons = instance.getInterface().getInputs()
+						.map(IInterfaceElement::getInputConnections).flatMap(EList::stream)
 						.filter(con -> replaceableConMap.containsKey(con.getSource().getName())
 								&& replaceableConMap.get(con.getSource().getName())
 										.equals(con.getDestination().getName())
 								&& con.getSourceElement().getType().getName().equals(sourceType.getName()))
 						.toList();
 
-				// Check if all connections between 2 instances are correct -> store in map
+				// Check if all connections between 2 instances are correct
 				if (cons.stream()
 						.map((Function<? super Connection, ? extends FBNetworkElement>) Connection::getSourceElement)
 						.distinct().count() == 1 && cons.size() == replaceableConMap.size()) {
-
-					final FBNetworkElement source = instance.getInterface().getErrorMarker().stream()
-							.flatMap(err -> err.getInputConnections().stream())
-							.filter(con -> replaceableConMap.containsValue(con.getDestination().getName())).findFirst()
-							.get().getSourceElement();
-					final StructDataConnectionCreateCommand structCon = new StructDataConnectionCreateCommand(
-							instance.getFbNetwork());
-
-					structCon.setDestination(instance.getInput(destinationVarName));
-					structCon.setSource(source.getOutput(sourceVarName));
-					connectStructCommand.add(structCon);
-					instance.getInterface().getErrorMarker().stream().flatMap(err -> err.getInputConnections().stream())
-							.filter(con -> replaceableConMap.containsValue(con.getDestination().getName()))
-							.forEach(con -> connectStructCommand.add(new DeleteConnectionCommand(con)));
+					connectStructChange.add(new ConnectSingleStructChange(EcoreUtil.getURI(instance),
+							FBNetworkElement.class, replaceableConMap, sourceVarName, destinationVarName));
 				}
 			});
 		}
-		return connectStructCommand;
 	}
 
 	// TODO: find right place
@@ -114,4 +85,31 @@ public class ConnectStructChange extends AbstractCommandChange<FBNetwork> {
 				.map(FBNetworkElement.class::cast).toList();
 	}
 
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void initializeValidationData(final IProgressMonitor pm) {
+
+	}
+
+	@Override
+	public RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Change perform(final IProgressMonitor pm) throws CoreException {
+		return connectStructChange.perform(pm);
+	}
+
+	@Override
+	public Object getModifiedElement() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

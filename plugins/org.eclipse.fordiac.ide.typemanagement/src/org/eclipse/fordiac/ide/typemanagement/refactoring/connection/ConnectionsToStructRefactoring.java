@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+w * Copyright (c) 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -40,7 +40,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 	private final URI sourceURI;
 	private final URI destinationURI;
 	private final URI netURI;
-	private final Map<String, String> replacableConMap;
+	private final Map<String, String> replaceableConMap;
 
 	private URI structURI;
 	private String sourceVarName;
@@ -56,7 +56,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		this.netURI = EcoreUtil.getURI(net);
 		this.sourceURI = EcoreUtil.getURI(sourceType);
 		this.destinationURI = EcoreUtil.getURI(destinationType);
-		this.replacableConMap = replacableConMap;
+		this.replaceableConMap = replacableConMap;
 
 		vars = sourceType.getInterfaceList().getOutputs().filter(port -> replacableConMap.containsKey(port.getName()))
 				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).toList();
@@ -97,7 +97,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		}
 		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI).getType() instanceof final FBType sourceFB)
 				&& (sourceFB.getInterfaceList().getOutputs().anyMatch(port -> port.getName().equals(sourceVarName))
-						&& !replacableConMap.containsKey(sourceVarName))) {
+						&& !replaceableConMap.containsKey(sourceVarName))) {
 			status.merge(RefactoringStatus.createFatalErrorStatus("Output Name already exists!"));
 		}
 		if (IdentifierVerifier.verifyIdentifier(destinationVarName).isPresent()) {
@@ -107,7 +107,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 				.getType() instanceof final FBType destinationFB)
 				&& (destinationFB.getInterfaceList().getInputs()
 						.anyMatch(port -> port.getName().equals(destinationVarName))
-						&& !replacableConMap.containsValue(destinationVarName))) {
+						&& !replaceableConMap.containsValue(destinationVarName))) {
 			status.merge(RefactoringStatus.createFatalErrorStatus("Input Name already exists!"));
 		}
 
@@ -130,7 +130,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 				if (sourceFB instanceof ServiceInterfaceFBType) {
 					status.merge(RefactoringStatus.createFatalErrorStatus("Source FB is Service Interface!"));
 				}
-				if (replacableConMap.keySet().stream()
+				if (replaceableConMap.keySet().stream()
 						.anyMatch(var -> sourceFB.getInterfaceList().getOutput(var) == null)) {
 					status.merge(RefactoringStatus.createFatalErrorStatus("Source Outputs do not match!"));
 				}
@@ -143,7 +143,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 				if (destinationFB instanceof ServiceInterfaceFBType) {
 					status.merge(RefactoringStatus.createFatalErrorStatus("Destination FB is Service Interface!"));
 				}
-				if (replacableConMap.values().stream()
+				if (replaceableConMap.values().stream()
 						.anyMatch(var -> destinationFB.getInterfaceList().getInput(var) == null)) {
 					status.merge(RefactoringStatus.createFatalErrorStatus("Destinaion Inputs do not match!"));
 				}
@@ -169,23 +169,25 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final CompositeChange compChange = new CompositeChange("Replace Struct");
-		pm.beginTask("Replacing with Struct", 1);
+		final CompositeChange compChange = new CompositeChange("Convert Connections To Struct");
+		pm.beginTask("Convert Connections To Struct", 1);
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(structURI) == null) {
 			compChange.add(new CreateStructChange(structURI, vars));
 		}
-		compChange.add(new ReplaceVarsWithStructChange(sourceURI, FBType.class, replacableConMap.keySet(), structURI,
+		compChange.add(new ReplaceVarsWithStructChange(sourceURI, FBType.class, replaceableConMap.keySet(), structURI,
 				sourceVarName, false, 0));
-		compChange.add(new ReplaceVarsWithStructChange(destinationURI, FBType.class, replacableConMap.values(),
+		compChange.add(new ReplaceVarsWithStructChange(destinationURI, FBType.class, replaceableConMap.values(),
 				structURI, destinationVarName, true, 0));
-		compChange.add(new UpdateFBChange(netURI, FBNetwork.class, sourceURI));
-		compChange.add(new UpdateFBChange(netURI, FBNetwork.class, destinationURI));
-		compChange.add(new ConnectStructChange(netURI, FBNetwork.class, replacableConMap, sourceURI, destinationURI,
+
+		compChange.add(new UpdateFBChange(sourceURI));
+		compChange.add(new UpdateFBChange(destinationURI));
+
+		compChange.add(new ConnectStructChange(netURI, FBNetwork.class, replaceableConMap, sourceURI, destinationURI,
 				sourceVarName, destinationVarName));
 		if (conflictResolution) {
 			compChange.add(
-					new EditConnectionsChange(netURI, FBNetwork.class, replacableConMap, sourceURI, structURI, true));
-			compChange.add(new EditConnectionsChange(netURI, FBNetwork.class, replacableConMap, destinationURI,
+					new EditConnectionsChange(netURI, FBNetwork.class, replaceableConMap, sourceURI, structURI, true));
+			compChange.add(new EditConnectionsChange(netURI, FBNetwork.class, replaceableConMap, destinationURI,
 					structURI, false));
 		}
 		pm.done();
