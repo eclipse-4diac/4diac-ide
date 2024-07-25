@@ -16,6 +16,8 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
@@ -72,4 +74,55 @@ public class SWTBot4diacFigureCanvas extends SWTBotGefFigureCanvas {
 		return new org.eclipse.swt.events.MouseEvent(createMouseEvent(x, y, button, stateMask, count));
 	}
 
+	@Override
+	public void typeText(final Text textControl, final String text) {
+		UIThreadRunnable.syncExec(() -> textControl.setText(""));
+		for (int x = 0; x < text.length(); ++x) {
+			final char c = text.charAt(x);
+			UIThreadRunnable.syncExec(() -> {
+				textControl.setFocus();
+				textControl.notifyListeners(SWT.KeyDown, keyEvent(SWT.NONE, c, 0));
+				textControl.notifyListeners(SWT.KeyUp, keyEvent(SWT.NONE, c, 0));
+				textControl.setText(textControl.getText() + c);
+
+			});
+			try {
+				Thread.sleep(50L);
+			} catch (final InterruptedException e) {
+			}
+		}
+		UIThreadRunnable.syncExec(() -> {
+			textControl.notifyListeners(SWT.CR, keyEvent(SWT.NONE, '\n', 0));
+			System.out.print(textControl.getText());
+			System.out.println(textControl.getText());
+		});
+		// apply the value with a default selection event
+		UIThreadRunnable.syncExec(() -> {
+			textControl.setFocus();
+			textControl.notifyListeners(SWT.KeyDown, enterEvent());
+			textControl.notifyListeners(SWT.KeyUp, enterEvent());
+		});
+	}
+
+	public void typeEnter(final Text textControl) {
+		UIThreadRunnable.syncExec(() -> {
+			textControl.setFocus();
+			textControl.notifyListeners(SWT.KeyDown, enterEvent());
+			textControl.notifyListeners(SWT.KeyUp, enterEvent());
+		});
+	}
+
+	private Event keyEvent(final int modificationKey, final char c, final int keyCode) {
+		final Event keyEvent = createEvent();
+		keyEvent.stateMask = modificationKey;
+		keyEvent.character = c;
+		keyEvent.keyCode = keyCode;
+		return keyEvent;
+	}
+
+	private Event enterEvent() {
+		final Event keyEvent = createEvent();
+		keyEvent.keyCode = 13;
+		return keyEvent;
+	}
 }

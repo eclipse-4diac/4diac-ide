@@ -122,6 +122,7 @@ public class Abstract4diacUITests {
 	protected static final String SYSTEM_EXPLORER_LABEL = "System Explorer"; //$NON-NLS-1$
 	protected static final String TEST_PARENT_FOLDER = "TestParentProject"; //$NON-NLS-1$
 	protected static final String TEST_TYPE_TEMPLATE_NAME = "Adapter"; //$NON-NLS-1$
+	protected static final String TOOLBAR_BUTTON_ZOOM_FIT_PAGE = "Zoom fit Page"; //$NON-NLS-1$
 	protected static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
 	protected static final String TYPE_NAME_LABEL = FordiacMessages.TypeName + ":"; //$NON-NLS-1$
 	protected static final String TYPE_PROJECT = "Type..."; //$NON-NLS-1$

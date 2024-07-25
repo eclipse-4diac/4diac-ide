@@ -13,13 +13,20 @@
 
 package org.eclipse.fordiac.ide.test.ui;
 
+import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.widgetOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacFigureCanvas;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
+import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
+import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.junit.jupiter.api.Test;
 
 public class SWTBotContextMenuUITests extends Abstract4diacUITests {
@@ -36,13 +43,62 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 	public void createSubapplicationViaContextMenu() {
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
 
-		editor.clickContextMenu("New subapplication", 100, 100);
+		editor.clickContextMenu(NEW_SUBAPPLICATION, 100, 100);
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
 		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
 		// check App node and SubApp TreeItem in SystemExplorer tree
 		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
 		assertTrue(isSubAppNodeInSystemExplorerEmpty());
+	}
+
+	/**
+	 * Checks if a subapplication can be created via ContextMenu.
+	 *
+	 * SWTBot simulates a right-click to open the context menu. A new subapplication
+	 * is then created. It is checked if it is empty and displayed correctly in the
+	 * SystemExplorer
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	public void createFBViaContextMenu() {
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+
+		editor.clickContextMenu("Insert FB", 100, 100);
+		final SWTBot4diacFigureCanvas canvas = editor.getSWTBotGefViewer().getCanvas();
+		final List<? extends Text> controls = bot.widgets(widgetOfType(Text.class), canvas.widget);
+
+		final Text textControl = controls.get(0);
+		canvas.typeText(textControl, E_CYCLE_FB);
+
+		editor.directEditType(E_CYCLE_FB);
+
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(E_CYCLE_FB));
+		assertTrue(isSubAppNodeInSystemExplorerEmpty());
+	}
+
+	@SuppressWarnings("static-method")
+	@Test
+	public void goToParentViaContextMenu() {
+//		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		dragAndDropEventsFB(E_DEMUX_TREE_ITEM, new Point(100, 100));
+		createSubappWithDragRectangle(50, 50, 400, 400);
+		goToCompositeInstanceViewer(SUBAPP);
+		final SWTBotGefEditor editorSubApp = bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editorSubApp);
+		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editorSubApp.getSWTBotGefViewer();
+		assertNotNull(viewer);
+
+		// to make sure, FB is in visible area
+		bot.toolbarButton(TOOLBAR_BUTTON_ZOOM_FIT_PAGE).click();
+		editorSubApp.getEditPart(E_DEMUX_FB).select().click();
+//		editorSubApp.click(E_DEMUX_FB);
+		final SWTBotGefEditPart parent = editorSubApp.getEditPart(E_DEMUX_FB).parent();
+		assertNotNull(parent);
+		parent.select();
+//		parent.click();
+		editorSubApp.clickContextMenu("Go To Parent");
+		bot.sleep(5000);
 	}
 
 }
