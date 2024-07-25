@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.test.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -41,12 +40,7 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
 
-		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(E_CYCLE_FB));
-		editor.click(E_CYCLE_FB);
-		final SWTBotGefEditPart parent = editor.getEditPart(E_CYCLE_FB).parent();
-		assertNotNull(parent);
-		editor.click(parent);
+		selectFBWithFBNameInEditor(editor, E_CYCLE_FB);
 
 		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
@@ -77,12 +71,7 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(300, 100));
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
 
-		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(E_CYCLE_FB));
-		editor.click(E_CYCLE_FB);
-		final SWTBotGefEditPart parent = editor.getEditPart(E_CYCLE_FB).parent();
-		assertNotNull(parent);
-		editor.click(parent);
+		selectFBWithFBNameInEditor(editor, E_CYCLE_FB);
 
 		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();

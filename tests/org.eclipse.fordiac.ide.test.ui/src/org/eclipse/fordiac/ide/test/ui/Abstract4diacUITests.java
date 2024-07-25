@@ -96,6 +96,7 @@ public class Abstract4diacUITests {
 	protected static final String FORBIDDEN_TYPE_NAME = "00_fbtype"; //$NON-NLS-1$
 	protected static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
 	protected static final String F_SUB = "F_SUB"; //$NON-NLS-1$
+	protected static final String GO_TO_CHILD = "Go To Child"; //$NON-NLS-1$
 	protected static final String GO_TO_PARENT = "Go To Parent"; //$NON-NLS-1$
 	protected static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
 	protected static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
@@ -262,6 +263,27 @@ public class Abstract4diacUITests {
 	}
 
 	/**
+	 * Selects a FunctionBlock with the given Name in the editor.
+	 *
+	 * The function block is searched for with the given name in the editor.
+	 * However, as this only selects the name, the parent is retrieved and selected.
+	 * Only then is the searched function block selected as a whole.
+	 *
+	 * @param editor
+	 * @param name
+	 */
+	protected static SWTBot4diacGefEditor selectFBWithFBNameInEditor(final SWTBot4diacGefEditor editor,
+			final String name) {
+		assertNotNull(editor);
+		assertNotNull(editor.getEditPart(name));
+		editor.click(name);
+		final SWTBotGefEditPart parent = editor.getEditPart(name).parent();
+		assertNotNull(parent);
+		editor.click(parent);
+		return editor;
+	}
+
+	/**
 	 * Deletes a FB from the editing area.
 	 *
 	 * @param editor         The SWTBot4diacGefEditor from which a FB with given
@@ -413,6 +435,23 @@ public class Abstract4diacUITests {
 	}
 
 	/**
+	 * Returns the bounds of the searched function block
+	 *
+	 * @param editor
+	 * @param fBname
+	 * @return The rectangle with the bounds of the function block searched for
+	 */
+	protected static Rectangle getBoundsOfFB(final SWTBot4diacGefEditor editor, final String fBname) {
+		editor.getEditPart(fBname);
+		editor.click(fBname);
+		final SWTBotGefEditPart parent = editor.getEditPart(fBname).parent();
+		final IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
+		final Rectangle fbBounds = figure.getBounds().getCopy();
+		figure.translateToAbsolute(fbBounds);
+		return fbBounds;
+	}
+
+	/**
 	 * Select a given FB on the editing area and double click it to access the
 	 * CompositeInstanceViewer. After that the SWTBotGefEditor will be returned.
 	 *
@@ -510,10 +549,18 @@ public class Abstract4diacUITests {
 
 	/**
 	 * Cleans the canvas from all objects.
+	 *
+	 * First, the application node in the System Explorer is selected to ensure that
+	 * all objects are selected and then deleted.
+	 *
+	 * @author Andrea Zoitl
 	 */
 	@SuppressWarnings("static-method")
 	@AfterEach
 	protected void cleanEditorArea() {
+		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
+		appNode.contextMenu("Open").click();
+
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		viewer.getCanvas().setFocus();
@@ -535,6 +582,12 @@ public class Abstract4diacUITests {
 		bot.resetWorkbench();
 	}
 
+	/**
+	 * Expands the 4diac IDE Project node (SWTBotTreeItem) in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return treeProjectItem the expanded Project node
+	 */
 	private static SWTBotTreeItem expandProjectTreeItemInSystemExplorer() {
 		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
 		systemExplorerView.show();
@@ -548,6 +601,12 @@ public class Abstract4diacUITests {
 		return treeProjectItem;
 	}
 
+	/**
+	 * Expands the System node (SWTBotTreeItem) in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return systemNode the expanded System node
+	 */
 	private static SWTBotTreeItem expandSystemTreeItemInSystemExplorer() {
 		final SWTBotTreeItem treeProjectItem = expandProjectTreeItemInSystemExplorer();
 		bot.waitUntil(treeItemHasNode(treeProjectItem, PROJECT_NAME_TREE_ITEM));
@@ -557,6 +616,12 @@ public class Abstract4diacUITests {
 		return systemNode;
 	}
 
+	/**
+	 * Expands the Type Library node (SWTBotTreeItem) in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return typeLibraryNode the expanded Type Library node
+	 */
 	private static SWTBotTreeItem expandTypeLibraryTreeItemInSystemExplorer() {
 		final SWTBotTreeItem treeProjectItem = expandProjectTreeItemInSystemExplorer();
 		bot.waitUntil(treeItemHasNode(treeProjectItem, TYPE_LIBRARY_NODE));
@@ -566,6 +631,12 @@ public class Abstract4diacUITests {
 		return typeLibraryNode;
 	}
 
+	/**
+	 * Expands the Application node (SWTBotTreeItem) in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return appNode the expanded Application node
+	 */
 	private static SWTBotTreeItem expandApplicationTreeItemInSystemExplorer() {
 		final SWTBotTreeItem systemNode = expandSystemTreeItemInSystemExplorer();
 		bot.waitUntil(treeItemHasNode(systemNode, PROJECT_NAME_APP));
@@ -576,6 +647,13 @@ public class Abstract4diacUITests {
 		return appNode;
 	}
 
+	/**
+	 * Expands the Subapplication node (SWTBotTreeItem) of the 1. level of an
+	 * Application in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return appNode the expanded Application node
+	 */
 	private static SWTBotTreeItem expandSubAppTreeItemInSystemExplorer() {
 		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
 		final SWTBotTreeItem subAppNode = appNode.getNode(SUBAPP);

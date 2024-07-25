@@ -20,11 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacFigureCanvas;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class SWTBotContextMenuUITests extends Abstract4diacUITests {
@@ -58,6 +60,7 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 	 * SystemExplorer
 	 */
 	@SuppressWarnings("static-method")
+	@Disabled("until bug in test is found")
 	@Test
 	public void createFBViaContextMenu() {
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
@@ -66,14 +69,17 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 		final SWTBot4diacFigureCanvas canvas = editor.getSWTBotGefViewer().getCanvas();
 		final List<? extends Text> controls = bot.widgets(widgetOfType(Text.class), canvas.widget);
 
-		// TODO fix text so that it is working correctly
+		// TODO fix test so that it is working correctly. Right now it only work exactly
+		// in this order. First our overwritten method typeText (part of directEditType
+		// which is modified with an Enter at the end of the written text) and den the
+		// inherited method directEditType.
 		final Text textControl = controls.get(0);
 		canvas.typeText(textControl, E_CYCLE_FB);
-		bot.sleep(5000);
-//		editor.directEditType(E_CYCLE_FB);
-//		bot.sleep(5000);
-//		assertTrue(isElementInApplicationOfSystemInSystemExplorer(E_CYCLE_FB));
-//		assertTrue(isSubAppNodeInSystemExplorerEmpty());
+
+		editor.directEditType(E_CYCLE_FB);
+		bot.sleep(3000);
+
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(E_CYCLE_FB));
 	}
 
 	/**
@@ -96,7 +102,7 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 		goToCompositeInstanceViewer(SUBAPP);
 		final SWTBot4diacGefEditor editorSubApp = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
 		assertNotNull(editorSubApp);
-		// check System Explorer tree again after entering Subapplication
+		// check System Explorer tree again after entering subapplication
 		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
 		assertTrue(isSubAppNodeInSystemExplorerEmpty());
 		editorSubApp.clickContextMenu(GO_TO_PARENT, 100, 100);
@@ -125,7 +131,8 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 		goToCompositeInstanceViewer(SUBAPP);
 		final SWTBot4diacGefEditor editorSubApp = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
 		assertNotNull(editorSubApp);
-		// check System Explorer tree again after entering Subapplication
+		bot.toolbarButton(TOOLBAR_BUTTON_ZOOM_FIT_PAGE).click();
+		// check System Explorer tree again after entering subapplication
 		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
 		assertTrue(isFBInSubAppOfSystemInSystemExplorer(E_CYCLE_FB));
 		editorSubApp.clickContextMenu(GO_TO_PARENT, 100, 100);
@@ -133,4 +140,23 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
 		assertTrue(isFBInSubAppOfSystemInSystemExplorer(E_CYCLE_FB));
 	}
+
+	@SuppressWarnings("static-method")
+	@Test
+	public void goToChildViaContextMenuSubAppWithACompositeFB() {
+		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		createSubappWithDragRectangle(50, 50, 300, 300);
+		goToCompositeInstanceViewer(SUBAPP);
+		final SWTBot4diacGefEditor editorSubApp = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		assertNotNull(editorSubApp);
+		bot.toolbarButton(TOOLBAR_BUTTON_ZOOM_FIT_PAGE).click();
+
+		// check bounds of FB
+		final Rectangle fbBounds = getBoundsOfFB(editorSubApp, E_N_TABLE_FB);
+		selectFBWithFBNameInEditor(editorSubApp, E_N_TABLE_FB);
+		editorSubApp.clickContextMenu(GO_TO_CHILD, fbBounds.x, fbBounds.y);
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
+		assertTrue(isFBInSubAppOfSystemInSystemExplorer(E_N_TABLE_FB));
+	}
+
 }

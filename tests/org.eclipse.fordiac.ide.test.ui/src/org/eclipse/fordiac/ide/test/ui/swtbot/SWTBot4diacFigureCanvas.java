@@ -84,33 +84,47 @@ public class SWTBot4diacFigureCanvas extends SWTBotGefFigureCanvas {
 				textControl.notifyListeners(SWT.KeyDown, keyEvent(SWT.NONE, c, 0));
 				textControl.notifyListeners(SWT.KeyUp, keyEvent(SWT.NONE, c, 0));
 				textControl.setText(textControl.getText() + c);
-
 			});
 			try {
 				Thread.sleep(50L);
 			} catch (final InterruptedException e) {
 			}
 		}
-		UIThreadRunnable.syncExec(() -> {
-			textControl.notifyListeners(SWT.CR, keyEvent(SWT.NONE, '\n', 0));
-			System.out.print(textControl.getText());
-			System.out.println(textControl.getText());
-		});
+
 		// apply the value with a default selection event
 		UIThreadRunnable.syncExec(() -> {
 			textControl.setFocus();
-			textControl.notifyListeners(SWT.KeyDown, enterEvent());
-			textControl.notifyListeners(SWT.KeyUp, enterEvent());
+			textControl.notifyListeners(SWT.KeyDown, keyEvent(SWT.NONE, SWT.CR, 0));
+			textControl.notifyListeners(SWT.KeyUp, keyEvent(SWT.NONE, SWT.CR, 0));
 		});
+
+		// TODO find bug in this method which is part of the method directEditType of an
+		// editor. the SWT method directEditType types the text and is closing the
+		// textfield afterwards. To insert a new FB by typing in the editing area not
+		// only the text is required but also a enter keystroke afterwards.
+
+//		// apply the value with a default selection event
+//		UIThreadRunnable.syncExec(() -> {
+//			textControl.setFocus();
+//			textControl.notifyListeners(SWT.KeyDown, enterEvent());
+//			textControl.notifyListeners(SWT.KeyUp, enterEvent());
+//		});
+
+//		UIThreadRunnable.syncExec(() -> {
+//			textControl.notifyListeners(SWT.CR, keyEvent(SWT.NONE, '\n', 0));
+//			System.out.print(textControl.getText());
+//			System.out.println(textControl.getText());
+//		});
+
 	}
 
-	public void typeEnter(final Text textControl) {
-		UIThreadRunnable.syncExec(() -> {
-			textControl.setFocus();
-			textControl.notifyListeners(SWT.KeyDown, enterEvent());
-			textControl.notifyListeners(SWT.KeyUp, enterEvent());
-		});
-	}
+//	public void typeEnter(final Text textControl) {
+//		UIThreadRunnable.syncExec(() -> {
+//			textControl.setFocus();
+//			textControl.notifyListeners(SWT.KeyDown, enterEvent());
+//			textControl.notifyListeners(SWT.KeyUp, enterEvent());
+//		});
+//	}
 
 	private Event keyEvent(final int modificationKey, final char c, final int keyCode) {
 		final Event keyEvent = createEvent();
