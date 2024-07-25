@@ -35,7 +35,6 @@ import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
-import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -511,38 +510,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected CharSequence generateNameAsConnectionVariable(INamedElement element) '''var_conn_«element.name»'''
 
-	def protected generateInternalFBAccessors(List<FB> fbs) '''
-		«FOR fb : fbs»
-			«fb.generateInternalFBAccessors(fbs.indexOf(fb))»
-		«ENDFOR»
-		«IF !fbs.empty»
-			size_t getInternalFBNum() const override {
-			  return csmAmountOfInternalFBs;
-			}
-			
-			const SCFB_FBInstanceData *getInternalFBDefinition(size_t paIntFBNum) const override {
-			  if(paIntFBNum < csmAmountOfInternalFBs) {
-			    return scmInternalFBDefinitions + paIntFBNum;
-			  }
-			  return nullptr;
-			}
-			
-			CFunctionBlock *getInternalFB(size_t paIntFBNum) override {
-			  if(paIntFBNum < csmAmountOfInternalFBs) {
-			    return mInternalFBs[paIntFBNum];
-			  }
-			  return nullptr;
-			}
-			
-		«ENDIF»
-	'''
-
-	def protected generateInternalFBAccessors(FB fb, int index) '''
-		«fb.type.generateTypeName» &fb_«fb.name»() {
-		  return *static_cast<«fb.type.generateTypeName»*>(mInternalFBs[«index»]);
-		};
-		
-	'''
 
 	def protected generateEventAccessorDefinitions() '''
 		«FOR event : type.interfaceList.eventInputs BEFORE '\n'»
@@ -586,15 +553,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected getFBClassName() { className }
 
-	def generateInternalFbDefinition() '''
-		static const SCFB_FBInstanceData scmInternalFBDefinitions[];
-	'''
-
-	def generateInternalFbDeclarations(BaseFBType type) '''
-		const SCFB_FBInstanceData «FBClassName»::scmInternalFBDefinitions[] = {
-		  «FOR elem : type.internalFbs SEPARATOR ",\n"»{«elem.name.FORTEStringId», «elem.type.generateTypeSpec»}«ENDFOR»
-		};
-	'''
 
 	def protected generateInitializeDeclaration() '''
 		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
