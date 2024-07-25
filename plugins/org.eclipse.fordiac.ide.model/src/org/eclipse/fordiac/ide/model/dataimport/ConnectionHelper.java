@@ -88,7 +88,6 @@ public final class ConnectionHelper {
 				connectionState.remove(ConnectionState.VALID);
 			}
 
-
 		}
 
 		protected static InterfaceList getInterfaceFromQualString(final String source, final FBNetwork fbNetwork) {
@@ -200,10 +199,11 @@ public final class ConnectionHelper {
 			return connectionState.containsAll(EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING,
 					ConnectionState.DEST_ENDPOINT_MISSING, ConnectionState.SOURCE_EXITS, ConnectionState.DEST_EXISTS));
 		}
-		
+
 		public boolean isEmptyConnection() {
-			return connectionState.containsAll(EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING,
-					ConnectionState.DEST_ENDPOINT_MISSING, ConnectionState.SOURCE_MISSING, ConnectionState.DEST_MISSING));
+			return connectionState.containsAll(
+					EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING, ConnectionState.DEST_ENDPOINT_MISSING,
+							ConnectionState.SOURCE_MISSING, ConnectionState.DEST_MISSING));
 		}
 
 		public boolean dataInputHasMultipleConnections() {
