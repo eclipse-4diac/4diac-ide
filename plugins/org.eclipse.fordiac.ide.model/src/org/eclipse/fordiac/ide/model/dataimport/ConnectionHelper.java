@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.text.MessageFormat;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -216,7 +217,7 @@ public final class ConnectionHelper {
 		public String getSourcePinName() {
 
 			if (source == null) {
-				return Messages.ConnectionHelper_pin_not_found;
+				return MessageFormat.format(Messages.ConnectionHelper_pin_not_found, "«null»"); //$NON-NLS-1$
 			}
 
 			if (sourceEndpoint != null) {
@@ -225,7 +226,7 @@ public final class ConnectionHelper {
 
 			final String[] qualNames = source.split("\\."); //$NON-NLS-1$
 			if (qualNames.length < 2) {
-				return Messages.ConnectionHelper_pin_not_found;
+				return MessageFormat.format(Messages.ConnectionHelper_pin_not_found, source);
 			}
 
 			return qualNames[1];
@@ -234,7 +235,7 @@ public final class ConnectionHelper {
 		public String getDestinationPinName() {
 
 			if (destination == null) {
-				return Messages.ConnectionHelper_pin_not_found;
+				return MessageFormat.format(Messages.ConnectionHelper_pin_not_found, "«null»"); //$NON-NLS-1$
 			}
 
 			if (destinationEndpoint != null) {
@@ -243,7 +244,7 @@ public final class ConnectionHelper {
 
 			final String[] qualNames = destination.split("\\."); //$NON-NLS-1$
 			if (qualNames.length < 2) {
-				return Messages.ConnectionHelper_pin_not_found;
+				return MessageFormat.format(Messages.ConnectionHelper_pin_not_found, destination);
 			}
 
 			return qualNames[1];
