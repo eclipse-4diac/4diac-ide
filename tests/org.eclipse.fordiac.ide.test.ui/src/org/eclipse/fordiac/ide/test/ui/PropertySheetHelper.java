@@ -37,13 +37,16 @@ public class PropertySheetHelper {
 	private static SWTWorkbenchBot bot = new SWTWorkbenchBot();
 
 	/**
+	 * copied from
+	 * org.eclipse.sirius.tests.swtbot.support.api.editor.SWTBotSiriusHelper
+	 *
 	 * Select the tab with the name label in the property views.
 	 *
 	 * @param label         Label to find.
 	 * @param propertiesBot the bot corresponding to the property view.
 	 * @return true if the property tab is found, false otherwise
 	 */
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings("restriction")
 	public static boolean selectPropertyTabItem(final String label, final SWTBot propertiesBot) {
 		final Matcher<TabbedPropertyList> matcher = Matchers
 				.allOf(WidgetMatcherFactory.widgetOfType(TabbedPropertyList.class));
@@ -66,6 +69,9 @@ public class PropertySheetHelper {
 	}
 
 	/**
+	 * copied from
+	 * org.eclipse.sirius.tests.swtbot.support.api.editor.SWTBotSiriusHelper
+	 *
 	 * Create a event <br>
 	 *
 	 * @param x         the x coordinate of the mouse event.
