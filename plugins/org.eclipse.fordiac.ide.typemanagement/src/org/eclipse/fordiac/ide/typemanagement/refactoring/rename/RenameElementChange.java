@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
 import java.util.Objects;
 
@@ -22,9 +22,13 @@ import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
+/**
+ * A change for renaming individual {@link INamedElement}s.
+ */
 public class RenameElementChange extends AbstractCommandChange<INamedElement> {
 
 	private final String newName;

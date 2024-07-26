@@ -45,7 +45,7 @@ public class ExtractedLibraryImportWizard extends Wizard implements IImportWizar
 
 	@Override
 	public boolean performFinish() {
-		LibraryManager.INSTANCE.importLibraries(selectedProject, firstPage.getChosenLibraries().values());
+		LibraryManager.INSTANCE.importLibraries(selectedProject, firstPage.getChosenLibraries().values(), true);
 		return true;
 	}
 

@@ -11,7 +11,7 @@
  *   Fabio Gandolfi, Michael Oberlehner -
  *   	initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
 import java.text.MessageFormat;
 import java.util.HashSet;
@@ -38,18 +38,26 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.InterfaceDataTypeChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateTypeEntryChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.delete.UpdateStructDataTypeMemberVariableChange;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.RenameParticipant;
 
+/**
+ * A participant for type rename refactorings triggered within a model context,
+ * such as file rename.
+ */
 public class RenameTypeRefactoringParticipant extends RenameParticipant {
 
-	IFile file;
-	TypeEntry typeEntry;
-	String oldName;
-	String newName;
+	private IFile file;
+	private TypeEntry typeEntry;
+	private String oldName;
+	private String newName;
 
 	@Override
 	protected boolean initialize(final Object element) {
@@ -144,7 +152,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 			if (obj instanceof final VarDeclaration varDecl) {
 				structUsageChanges.add(createSubChange(varDecl, dataTypeEntry, rootElements));
 			} else if (obj instanceof final StructManipulator structMan) {
-				structUsageChanges.add(new UpdateInstancesChange(structMan, dataTypeEntry));
+				structUsageChanges.add(new UpdateFBInstanceChange(structMan, dataTypeEntry));
 			}
 		});
 	}
@@ -158,7 +166,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		final IEC61499ElementSearch search = new BlockTypeInstanceSearch(typeEntry);
 		final List<? extends EObject> searchResults = search.performSearch();
 		searchResults.stream().filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
-				.map(fbn -> new UpdateInstancesChange(fbn, typeEntry)).forEach(change::add);
+				.map(fbn -> new UpdateFBInstanceChange(fbn, typeEntry)).forEach(change::add);
 
 		if (!searchResults.isEmpty()) {
 			parentChange.add(change);
@@ -170,7 +178,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 			final Set<EObject> rootElements) {
 		if (varDecl.getFBNetworkElement() != null) {
 			if (rootElements.add(varDecl.getFBNetworkElement())) {
-				return new UpdateInstancesChange(varDecl.getFBNetworkElement(), dataTypeEntry);
+				return new UpdateFBInstanceChange(varDecl.getFBNetworkElement(), dataTypeEntry);
 			}
 		} else {
 			final EObject rootContainer = EcoreUtil.getRootContainer(varDecl);
@@ -178,7 +186,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 				if (rootContainer instanceof final StructuredType stElement) {
 					final CompositeChange change = new CompositeChange(MessageFormat.format(
 							Messages.Refactoring_AffectedStruct, stElement.getName(), dataTypeEntry.getTypeName()));
-					change.add(new StructuredTypeMemberChange(stElement, dataTypeEntry));
+					change.add(new UpdateStructDataTypeMemberVariableChange(varDecl));
 					createStructChanges((DataTypeEntry) stElement.getTypeEntry(), change);
 					return change;
 				}

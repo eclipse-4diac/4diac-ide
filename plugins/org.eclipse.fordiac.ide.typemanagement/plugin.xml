@@ -137,7 +137,7 @@
         	commandId="org.eclipse.fordiac.ide.typemanagement.openType">
     	</handler>
      <handler
-           class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameElementRefactoringHandler"
+           class="org.eclipse.fordiac.ide.typemanagement.refactoring.rename.RenameElementRefactoringHandler"
            commandId="org.eclipse.fordiac.ide.typemanagement.renameElement">
         <enabledWhen>
            <with
@@ -470,7 +470,7 @@
    <extension
          point="org.eclipse.ltk.core.refactoring.renameParticipants">
       <renameParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameTypeRefactoringParticipant"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.rename.RenameTypeRefactoringParticipant"
             id="org.eclipse.fordiac.ide.typemanagement.renameType"
             name="Rename Type handler">
          <enablement>
@@ -524,7 +524,7 @@
          </enablement>
       </renameParticipant>
       <renameParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameElementRefactoringParticipant"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.rename.RenameElementRefactoringParticipant"
             id="org.eclipse.fordiac.ide.typemanagement.renameElement"
             name="Rename Model Element">
          <enablement>
@@ -545,7 +545,7 @@
    <extension
          point="org.eclipse.ltk.core.refactoring.deleteParticipants">
       <deleteParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteTypeRefactoringParticipant"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteTypeRefactoringParticipant"
             id="org.eclipse.fordiac.ide.typemanagement.deleteFBType"
             name="Delete FB Type Handler">
      	<enablement>
@@ -670,9 +670,10 @@
             id="org.eclipse.fordiac.ide.typemanagement.wizards.DeleteStructChangeViewer">
          <enablement>
          <or>
-         <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeInterfaceChange"/>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeStructDeletionChange$DeleteMemberVariableChange"/>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.SafeFBTypeDeletionChange$DeleteInternalFBChange"/>
+         <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBTypeInterfaceChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.UpdateStructDataTypeMemberVariableChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.SafeFBTypeDeletionChange$DeleteInternalFBChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.UpdateUntypedSubappPinChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinChange"/>
          </or>
          </enablement>

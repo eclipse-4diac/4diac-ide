@@ -31,7 +31,8 @@ public final class FordiacAnnotationUtil {
 	public static boolean showOnTargetType(final GraphicalAnnotation annotation) {
 		final EStructuralFeature targetFeature = getTargetFeature(annotation);
 		return targetFeature == LibraryElementPackage.eINSTANCE.getTypedConfigureableObject_TypeEntry()
-				|| targetFeature == LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type();
+				|| targetFeature == LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type()
+				|| targetFeature == LibraryElementPackage.eINSTANCE.getAttribute_Type();
 	}
 
 	public static boolean showOnTargetValue(final GraphicalAnnotation annotation) {

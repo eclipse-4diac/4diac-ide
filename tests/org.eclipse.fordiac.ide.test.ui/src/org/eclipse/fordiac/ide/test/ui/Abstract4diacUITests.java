@@ -32,6 +32,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
@@ -160,6 +161,7 @@ public class Abstract4diacUITests {
 	protected static final String N = "N"; //$NON-NLS-1$
 	protected static final String Q = "Q"; //$NON-NLS-1$
 	protected static final String R = "R"; //$NON-NLS-1$
+	protected static final String S = "S"; //$NON-NLS-1$
 	protected static final String CD = "CD"; //$NON-NLS-1$
 	protected static final String CV = "CV"; //$NON-NLS-1$
 	protected static final String DT = "DT"; //$NON-NLS-1$
@@ -355,11 +357,26 @@ public class Abstract4diacUITests {
 	 *
 	 * @param selectedEditParts The List of selected EditParts.
 	 * @param fbName            The FB that is searched for.
-	 * @return true is fbName is in the List, otherwise false.
+	 * @return true if fbName is in the List, otherwise false.
 	 */
 	protected static boolean isFbSelected(final List<SWTBotGefEditPart> selectedEditParts, final String fbName) {
 		return selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart).map(p -> (FBEditPart) p.part())
 				.anyMatch(fb -> fb.getModel().getName().equals(fbName));
+	}
+
+	/**
+	 * Checks if Subapplication is selected by searching selectedEditParts list and
+	 * returns the corresponding boolean value.
+	 *
+	 * @param selectedEditParts The List of selected EditParts.
+	 * @param subAppName        The Subapplication that is searched for.
+	 * @return true if Subapplication is in the List, otherwise false.
+	 */
+	protected static boolean isSubappSelected(final List<SWTBotGefEditPart> selectedEditParts,
+			final String subAppName) {
+		return selectedEditParts.stream().filter(p -> p.part() instanceof SubAppForFBNetworkEditPart)
+				.map(p -> (SubAppForFBNetworkEditPart) p.part())
+				.anyMatch(fb -> subAppName.equals(fb.getModel().getName()));
 	}
 
 	/**

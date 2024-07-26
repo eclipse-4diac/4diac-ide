@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinChange;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -41,6 +42,10 @@ import org.eclipse.ltk.core.refactoring.participants.RenameArguments;
 import org.eclipse.ltk.core.refactoring.participants.RenameProcessor;
 import org.eclipse.ltk.core.refactoring.participants.SharableParticipants;
 
+/**
+ * A processor for rename refactorings triggered within a model context, such as
+ * a property sheet.
+ */
 public class RenameElementRefactoringProcessor extends RenameProcessor {
 
 	private URI elementURI;
@@ -68,8 +73,9 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final CompositeChange change = new CompositeChange(getProcessorName());
-		change.add(new RenameElementChange(MessageFormat.format(Messages.RenameElementRefactoringProcessor_RenamePinInType, elementURI.lastSegment()),
-				elementURI, newName));
+		change.add(
+				new RenameElementChange(MessageFormat.format(Messages.RenameElementRefactoringProcessor_RenamePinInType,
+						elementURI.lastSegment()), elementURI, newName));
 		createChildChanges(change);
 		return change;
 	}

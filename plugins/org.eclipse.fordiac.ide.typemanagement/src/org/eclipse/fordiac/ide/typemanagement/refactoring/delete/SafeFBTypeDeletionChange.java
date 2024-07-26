@@ -11,7 +11,7 @@
  *   Daniel Lindhuber
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.delete;
 
 import java.text.MessageFormat;
 import java.util.EnumSet;
@@ -31,6 +31,8 @@ import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;

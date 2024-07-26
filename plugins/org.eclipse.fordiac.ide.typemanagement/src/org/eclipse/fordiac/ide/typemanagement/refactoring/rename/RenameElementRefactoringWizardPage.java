@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
 import java.util.Objects;
 
@@ -27,6 +27,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * A wizard page for rename refactorings triggered within a model context, such
+ * as a property sheet.
+ */
 public class RenameElementRefactoringWizardPage extends UserInputWizardPage {
 
 	private final RenameElementRefactoringProcessor processor;

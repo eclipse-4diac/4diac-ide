@@ -40,7 +40,7 @@ public class ReconnectPinChange extends AbstractCommandChange<FBNetworkElement> 
 	private final String newName;
 	private final String oldName;
 
-	protected ReconnectPinChange(final URI elementURI, final Class<FBNetworkElement> elementClass, final String newName,
+	public ReconnectPinChange(final URI elementURI, final Class<FBNetworkElement> elementClass, final String newName,
 			final String oldName) {
 		super("Handle connection of : " + oldName, elementURI, elementClass);
 		this.newName = newName;

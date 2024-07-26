@@ -13,8 +13,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.model.util;
 
-import java.lang.module.ModuleDescriptor.Version;
 import java.util.Comparator;
+
+import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
 
 public class VersionComparator implements Comparator<String> {
 
@@ -31,30 +33,49 @@ public class VersionComparator implements Comparator<String> {
 			return 1;
 		}
 
-		final Version v1 = Version.parse(o1);
-		final Version v2 = Version.parse(o2);
+		final Version v1 = new Version(o1);
+		final Version v2 = new Version(o2);
 
 		return v1.compareTo(v2);
 	}
 
-	@SuppressWarnings("nls")
-	public boolean contains(final String version, final String localVersion) {
-		final Version locVersion = Version.parse(localVersion);
-		if ((version.startsWith("(") || version.startsWith("[")) && (version.endsWith(")") || version.endsWith("]"))
-				&& version.contains("-")) {
-			final Version lowerBound = Version.parse(version.substring(1, version.indexOf("-")));
-			final Version upperBound = Version.parse(version.substring(version.indexOf("-") + 1, version.length() - 1));
-			return (((version.startsWith("(") && lowerBound.compareTo(locVersion) < 0)
-					|| (version.startsWith("[") && lowerBound.compareTo(locVersion) <= 0))
-					&& ((version.endsWith(")") && upperBound.compareTo(locVersion) > 0)
-							|| (version.endsWith("]") && upperBound.compareTo(locVersion) >= 0)));
+	public static boolean contains(final String range, final String version) {
+		if (range == null || range.isBlank() || version == null || version.isBlank()) {
+			return false;
+		}
+		final VersionRange parsedRange = parseVersionRange(range);
+		final Version parsedVersion = new Version(version);
 
+		return parsedRange.includes(parsedVersion);
+	}
+
+	public static boolean contains(final VersionRange range, final String version) {
+		if (range == null || version == null || version.isBlank()) {
+			return false;
 		}
-		if (!(version.contains("(") || version.contains("[") || version.contains("]") || version.contains(")")
-				|| version.contains("-"))) {
-			final Version singleVersion = Version.parse(version);
-			return (singleVersion.compareTo(locVersion) == 0);
+		final Version parsedVersion = new Version(version);
+
+		return range.includes(parsedVersion);
+	}
+
+	public static VersionRange parseVersionRange(final String range) {
+		if (range == null || range.isBlank()) {
+			return new VersionRange(VersionRange.LEFT_OPEN, Version.emptyVersion, Version.emptyVersion,
+					VersionRange.RIGHT_OPEN);
 		}
-		return false;
+		final VersionRange parsedRange = new VersionRange(range.replace('-', ','));
+		if (parsedRange.getRight() == null) {
+			return new VersionRange(VersionRange.LEFT_CLOSED, parsedRange.getLeft(), parsedRange.getLeft(),
+					VersionRange.RIGHT_CLOSED);
+		}
+		return parsedRange;
+	}
+
+	public static String formatVersionRange(final VersionRange range) {
+		if (range.getLeftType() == VersionRange.LEFT_CLOSED && range.getRightType() == VersionRange.RIGHT_CLOSED
+				&& range.getLeft().equals(range.getRight())) {
+			return range.getLeft().toString();
+		}
+		return range.toString().replace(',', '-');
 	}
 }

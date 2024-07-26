@@ -42,7 +42,8 @@ public class UpdateTypeEntryChange extends Change {
 	String newName;
 	String oldName;
 
-	UpdateTypeEntryChange(final IFile file, final TypeEntry typeEntry, final String newName, final String oldName) {
+	public UpdateTypeEntryChange(final IFile file, final TypeEntry typeEntry, final String newName,
+			final String oldName) {
 		this.file = file;
 		this.typeEntry = typeEntry;
 		this.newName = newName;

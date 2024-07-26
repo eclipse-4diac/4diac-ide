@@ -13,16 +13,21 @@
 package org.eclipse.fordiac.ide.gitlab.wizard;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.GLTreeContentProvider;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
+import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.wizard.WizardPage;
@@ -35,11 +40,22 @@ import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 public class GitLabListedLibsPage extends WizardPage {
 
 	private ContainerCheckedTreeViewer treeViewer;
+	private IProject selectedProject;
 
-	protected GitLabListedLibsPage(final String pageName) {
+	protected GitLabListedLibsPage(final String pageName, final StructuredSelection selection) {
 		super(pageName);
 		setTitle(pageName);
 		setDescription(Messages.GitLab_Available_Packages);
+		final StructuredSelection sel = new StructuredSelection(selection.toList());
+		if (!sel.isEmpty()) {
+			if (sel.getFirstElement() instanceof final IProject project) {
+				selectedProject = project;
+			}
+			if ((sel.getFirstElement() instanceof final IFolder folder)
+					&& (folder.getParent() instanceof final IProject project)) {
+				selectedProject = project;
+			}
+		}
 	}
 
 	@Override
@@ -107,8 +123,11 @@ public class GitLabListedLibsPage extends WizardPage {
 		try {
 			for (final Object o : treeViewer.getCheckedElements()) {
 				if (o instanceof final LeafNode leafNode) {
-					((GitLabImportWizardPage) getPreviousPage()).getDownloadManager()
+					final Path path = ((GitLabImportWizardPage) getPreviousPage()).getDownloadManager()
 							.packageDownloader(leafNode.getProject(), leafNode.getPackage());
+					if (path != null && selectedProject != null) {
+						LibraryManager.INSTANCE.extractLibrary(path, selectedProject, true, true);
+					}
 				}
 			}
 		} catch (final IOException e) {

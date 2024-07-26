@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -27,6 +27,9 @@ import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.RenameParticipant;
 import org.eclipse.xtext.ui.refactoring.ui.IRenameElementContext;
 
+/**
+ * A participant for rename refactorings triggered within an Xtext context.
+ */
 @SuppressWarnings("restriction")
 public class RenameElementRefactoringParticipant extends RenameParticipant {
 
@@ -44,7 +47,8 @@ public class RenameElementRefactoringParticipant extends RenameParticipant {
 	@SuppressWarnings("static-method") // subclasses may override
 	protected boolean isRelevant(final IRenameElementContext context) {
 		return LibraryElementPackage.Literals.INAMED_ELEMENT.isSuperTypeOf(context.getTargetElementEClass())
-				&& (isTypeURI(context.getTargetElementURI()) || isDataTypeURI(context.getTargetElementURI()));
+				&& (isTypeURI(context.getTargetElementURI()) || isDataTypeURI(context.getTargetElementURI())
+						|| isAttributeTypeURI(context.getTargetElementURI()));
 	}
 
 	@Override
@@ -76,6 +80,10 @@ public class RenameElementRefactoringParticipant extends RenameParticipant {
 
 	protected static boolean isDataTypeURI(final URI uri) {
 		return TypeLibraryTags.DATA_TYPE_FILE_ENDING.equalsIgnoreCase(uri.fileExtension());
+	}
+
+	protected static boolean isAttributeTypeURI(final URI uri) {
+		return TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING.equalsIgnoreCase(uri.fileExtension());
 	}
 
 	@Override

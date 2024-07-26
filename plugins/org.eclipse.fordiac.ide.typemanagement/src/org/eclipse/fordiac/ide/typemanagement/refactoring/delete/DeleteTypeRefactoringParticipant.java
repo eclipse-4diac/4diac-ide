@@ -15,7 +15,7 @@
  *   Martin Erich Jobst
  *     - participate only if a type entry exists
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.delete;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;

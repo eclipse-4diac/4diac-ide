@@ -21,6 +21,10 @@ public class Messages extends NLS {
 
 	public static String Confirm;
 
+	public static String ErrorMarkerLibNotAvailable;
+	public static String ErrorMarkerStandardLibNotAvailable;
+	public static String ErrorMarkerVersionRangeEmpty;
+
 	public static String ImportFailed;
 	public static String ImportFailedOnLinkCreation;
 	public static String InstanceUpdate;

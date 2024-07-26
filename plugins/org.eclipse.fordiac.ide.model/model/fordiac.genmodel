@@ -76,6 +76,14 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AttributeDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AttributeDeclaration/type"/>
+      <genOperations ecoreOperation="lib.ecore#//AttributeDeclaration/setTarget" body="org.eclipse.fordiac.ide.model.Annotations.setTarget(this,target);">
+        <genParameters ecoreParameter="lib.ecore#//AttributeDeclaration/setTarget/target"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//AttributeDeclaration/getTarget" body="return org.eclipse.fordiac.ide.model.Annotations.getTarget(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//AttributeDeclaration/isValidObject"
+          body="return org.eclipse.fordiac.ide.model.Annotations.isValidObject(this,object);">
+        <genParameters ecoreParameter="lib.ecore#//AttributeDeclaration/isValidObject/object"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//BaseFBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalVars"/>
