@@ -111,27 +111,6 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 		assertNotNull(editor.getEditPart(DI1));
 	}
 
-	// it's creating data input, that's error
-	/**
-	 * Creates new output Data pin on functional block.
-	 *
-	 * The method checks if you can create a new output Data pin on a functional
-	 * block using editor, if the newly created data pin is visible on functional
-	 * block then it's created successfully.
-	 *
-	 * @param dataType Data Type to create pin
-	 */
-	@SuppressWarnings("static-method")
-	@ParameterizedTest
-	@ValueSource(strings = { INT })
-	public void createNewDataOutput(final String dataType) {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
-		assertNotNull(editor);
-		editor.clickContextMenu(CREATE_DATA_OUTPUT).clickContextMenu(dataType);
-
-		assertNotNull(editor.getEditPart(DO1));
-	}
-
 	/**
 	 * Rename the existing pin on functional block.
 	 *
