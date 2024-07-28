@@ -9,38 +9,38 @@
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event" Comment="">
-				<With Var="IN_00"/>
-				<With Var="IN_01"/>
-				<With Var="IN_02"/>
-				<With Var="IN_03"/>
-				<With Var="IN_04"/>
-				<With Var="IN_05"/>
-				<With Var="IN_06"/>
-				<With Var="IN_07"/>
-				<With Var="IN_08"/>
-				<With Var="IN_09"/>
-				<With Var="IN_10"/>
-				<With Var="IN_11"/>
-				<With Var="IN_12"/>
-				<With Var="IN_13"/>
-				<With Var="IN_14"/>
-				<With Var="IN_15"/>
-				<With Var="IN_16"/>
-				<With Var="IN_17"/>
-				<With Var="IN_18"/>
-				<With Var="IN_19"/>
-				<With Var="IN_20"/>
-				<With Var="IN_21"/>
-				<With Var="IN_22"/>
-				<With Var="IN_23"/>
-				<With Var="IN_24"/>
-				<With Var="IN_25"/>
-				<With Var="IN_26"/>
-				<With Var="IN_27"/>
-				<With Var="IN_28"/>
-				<With Var="IN_29"/>
-				<With Var="IN_30"/>
-				<With Var="IN_31"/>
+				<With Var="BIT_00"/>
+				<With Var="BIT_01"/>
+				<With Var="BIT_02"/>
+				<With Var="BIT_03"/>
+				<With Var="BIT_04"/>
+				<With Var="BIT_05"/>
+				<With Var="BIT_06"/>
+				<With Var="BIT_07"/>
+				<With Var="BIT_08"/>
+				<With Var="BIT_09"/>
+				<With Var="BIT_10"/>
+				<With Var="BIT_11"/>
+				<With Var="BIT_12"/>
+				<With Var="BIT_13"/>
+				<With Var="BIT_14"/>
+				<With Var="BIT_15"/>
+				<With Var="BIT_16"/>
+				<With Var="BIT_17"/>
+				<With Var="BIT_18"/>
+				<With Var="BIT_19"/>
+				<With Var="BIT_20"/>
+				<With Var="BIT_21"/>
+				<With Var="BIT_22"/>
+				<With Var="BIT_23"/>
+				<With Var="BIT_24"/>
+				<With Var="BIT_25"/>
+				<With Var="BIT_26"/>
+				<With Var="BIT_27"/>
+				<With Var="BIT_28"/>
+				<With Var="BIT_29"/>
+				<With Var="BIT_30"/>
+				<With Var="BIT_31"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
@@ -49,38 +49,38 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN_00" Type="BOOL" Comment="BIT 00"/>
-			<VarDeclaration Name="IN_01" Type="BOOL" Comment="BIT 01"/>
-			<VarDeclaration Name="IN_02" Type="BOOL" Comment="BIT 02"/>
-			<VarDeclaration Name="IN_03" Type="BOOL" Comment="BIT 03"/>
-			<VarDeclaration Name="IN_04" Type="BOOL" Comment="BIT 04"/>
-			<VarDeclaration Name="IN_05" Type="BOOL" Comment="BIT 05"/>
-			<VarDeclaration Name="IN_06" Type="BOOL" Comment="BIT 06"/>
-			<VarDeclaration Name="IN_07" Type="BOOL" Comment="BIT 07"/>
-			<VarDeclaration Name="IN_08" Type="BOOL" Comment="BIT 08"/>
-			<VarDeclaration Name="IN_09" Type="BOOL" Comment="BIT 09"/>
-			<VarDeclaration Name="IN_10" Type="BOOL" Comment="BIT 10"/>
-			<VarDeclaration Name="IN_11" Type="BOOL" Comment="BIT 11"/>
-			<VarDeclaration Name="IN_12" Type="BOOL" Comment="BIT 12"/>
-			<VarDeclaration Name="IN_13" Type="BOOL" Comment="BIT 13"/>
-			<VarDeclaration Name="IN_14" Type="BOOL" Comment="BIT 14"/>
-			<VarDeclaration Name="IN_15" Type="BOOL" Comment="BIT 15"/>
-			<VarDeclaration Name="IN_16" Type="BOOL" Comment="BIT 16"/>
-			<VarDeclaration Name="IN_17" Type="BOOL" Comment="BIT 17"/>
-			<VarDeclaration Name="IN_18" Type="BOOL" Comment="BIT 18"/>
-			<VarDeclaration Name="IN_19" Type="BOOL" Comment="BIT 19"/>
-			<VarDeclaration Name="IN_20" Type="BOOL" Comment="BIT 20"/>
-			<VarDeclaration Name="IN_21" Type="BOOL" Comment="BIT 21"/>
-			<VarDeclaration Name="IN_22" Type="BOOL" Comment="BIT 22"/>
-			<VarDeclaration Name="IN_23" Type="BOOL" Comment="BIT 23"/>
-			<VarDeclaration Name="IN_24" Type="BOOL" Comment="BIT 24"/>
-			<VarDeclaration Name="IN_25" Type="BOOL" Comment="BIT 25"/>
-			<VarDeclaration Name="IN_26" Type="BOOL" Comment="BIT 26"/>
-			<VarDeclaration Name="IN_27" Type="BOOL" Comment="BIT 27"/>
-			<VarDeclaration Name="IN_28" Type="BOOL" Comment="BIT 28"/>
-			<VarDeclaration Name="IN_29" Type="BOOL" Comment="BIT 29"/>
-			<VarDeclaration Name="IN_30" Type="BOOL" Comment="BIT 30"/>
-			<VarDeclaration Name="IN_31" Type="BOOL" Comment="BIT 31"/>
+			<VarDeclaration Name="BIT_00" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_01" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_02" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_03" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_04" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_05" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_06" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_07" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_08" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_09" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_10" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_11" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_12" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_13" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_14" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_15" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_16" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_17" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_18" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_19" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_20" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_21" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_22" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_23" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_24" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_25" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_26" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_27" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_28" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_29" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_30" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_31" Type="BOOL" Comment=""/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="" Type="DWORD" Comment=""/>
@@ -91,72 +91,72 @@
 FUNCTION ASSEMBLE_DWORD_FROM_BOOLS : DWORD
 
 VAR_INPUT
-	IN_00 : BOOL;    // BIT 00
-	IN_01 : BOOL;    // BIT 01
-	IN_02 : BOOL;    // BIT 02
-	IN_03 : BOOL;    // BIT 03
-	IN_04 : BOOL;    // BIT 04
-	IN_05 : BOOL;    // BIT 05
-	IN_06 : BOOL;    // BIT 06
-	IN_07 : BOOL;    // BIT 07
-	IN_08 : BOOL;    // BIT 08
-	IN_09 : BOOL;    // BIT 09
-	IN_10 : BOOL;    // BIT 10
-	IN_11 : BOOL;    // BIT 11
-	IN_12 : BOOL;    // BIT 12
-	IN_13 : BOOL;    // BIT 13
-	IN_14 : BOOL;    // BIT 14
-	IN_15 : BOOL;    // BIT 15
-	IN_16 : BOOL;    // BIT 16
-	IN_17 : BOOL;    // BIT 17
-	IN_18 : BOOL;    // BIT 18
-	IN_19 : BOOL;    // BIT 19
-	IN_20 : BOOL;    // BIT 20
-	IN_21 : BOOL;    // BIT 21
-	IN_22 : BOOL;    // BIT 22
-	IN_23 : BOOL;    // BIT 23
-	IN_24 : BOOL;    // BIT 24
-	IN_25 : BOOL;    // BIT 25
-	IN_26 : BOOL;    // BIT 26
-	IN_27 : BOOL;    // BIT 27
-	IN_28 : BOOL;    // BIT 28
-	IN_29 : BOOL;    // BIT 29
-	IN_30 : BOOL;    // BIT 30
-	IN_31 : BOOL;    // BIT 31
+	BIT_00 : BOOL;
+	BIT_01 : BOOL;
+	BIT_02 : BOOL;
+	BIT_03 : BOOL;
+	BIT_04 : BOOL;
+	BIT_05 : BOOL;
+	BIT_06 : BOOL;
+	BIT_07 : BOOL;
+	BIT_08 : BOOL;
+	BIT_09 : BOOL;
+	BIT_10 : BOOL;
+	BIT_11 : BOOL;
+	BIT_12 : BOOL;
+	BIT_13 : BOOL;
+	BIT_14 : BOOL;
+	BIT_15 : BOOL;
+	BIT_16 : BOOL;
+	BIT_17 : BOOL;
+	BIT_18 : BOOL;
+	BIT_19 : BOOL;
+	BIT_20 : BOOL;
+	BIT_21 : BOOL;
+	BIT_22 : BOOL;
+	BIT_23 : BOOL;
+	BIT_24 : BOOL;
+	BIT_25 : BOOL;
+	BIT_26 : BOOL;
+	BIT_27 : BOOL;
+	BIT_28 : BOOL;
+	BIT_29 : BOOL;
+	BIT_30 : BOOL;
+	BIT_31 : BOOL;
 END_VAR
 
-ASSEMBLE_DWORD_FROM_BOOLS.%X0 := IN_00;
-ASSEMBLE_DWORD_FROM_BOOLS.%X1 := IN_01;
-ASSEMBLE_DWORD_FROM_BOOLS.%X2 := IN_02;
-ASSEMBLE_DWORD_FROM_BOOLS.%X3 := IN_03;
-ASSEMBLE_DWORD_FROM_BOOLS.%X4 := IN_04;
-ASSEMBLE_DWORD_FROM_BOOLS.%X5 := IN_05;
-ASSEMBLE_DWORD_FROM_BOOLS.%X6 := IN_06;
-ASSEMBLE_DWORD_FROM_BOOLS.%X7 := IN_07;
-ASSEMBLE_DWORD_FROM_BOOLS.%X8 := IN_08;
-ASSEMBLE_DWORD_FROM_BOOLS.%X9 := IN_09;
-ASSEMBLE_DWORD_FROM_BOOLS.%X10 := IN_10;
-ASSEMBLE_DWORD_FROM_BOOLS.%X11 := IN_11;
-ASSEMBLE_DWORD_FROM_BOOLS.%X12 := IN_12;
-ASSEMBLE_DWORD_FROM_BOOLS.%X13 := IN_13;
-ASSEMBLE_DWORD_FROM_BOOLS.%X14 := IN_14;
-ASSEMBLE_DWORD_FROM_BOOLS.%X15 := IN_15;
-ASSEMBLE_DWORD_FROM_BOOLS.%X16 := IN_16;
-ASSEMBLE_DWORD_FROM_BOOLS.%X17 := IN_17;
-ASSEMBLE_DWORD_FROM_BOOLS.%X18 := IN_18;
-ASSEMBLE_DWORD_FROM_BOOLS.%X19 := IN_19;
-ASSEMBLE_DWORD_FROM_BOOLS.%X20 := IN_20;
-ASSEMBLE_DWORD_FROM_BOOLS.%X21 := IN_21;
-ASSEMBLE_DWORD_FROM_BOOLS.%X22 := IN_22;
-ASSEMBLE_DWORD_FROM_BOOLS.%X23 := IN_23;
-ASSEMBLE_DWORD_FROM_BOOLS.%X24 := IN_24;
-ASSEMBLE_DWORD_FROM_BOOLS.%X25 := IN_25;
-ASSEMBLE_DWORD_FROM_BOOLS.%X26 := IN_26;
-ASSEMBLE_DWORD_FROM_BOOLS.%X27 := IN_27;
-ASSEMBLE_DWORD_FROM_BOOLS.%X28 := IN_28;
-ASSEMBLE_DWORD_FROM_BOOLS.%X29 := IN_29;
-ASSEMBLE_DWORD_FROM_BOOLS.%X30 := IN_30;
-ASSEMBLE_DWORD_FROM_BOOLS.%X31 := IN_31;
+ASSEMBLE_DWORD_FROM_BOOLS.%X0 := BIT_00;
+ASSEMBLE_DWORD_FROM_BOOLS.%X1 := BIT_01;
+ASSEMBLE_DWORD_FROM_BOOLS.%X2 := BIT_02;
+ASSEMBLE_DWORD_FROM_BOOLS.%X3 := BIT_03;
+ASSEMBLE_DWORD_FROM_BOOLS.%X4 := BIT_04;
+ASSEMBLE_DWORD_FROM_BOOLS.%X5 := BIT_05;
+ASSEMBLE_DWORD_FROM_BOOLS.%X6 := BIT_06;
+ASSEMBLE_DWORD_FROM_BOOLS.%X7 := BIT_07;
+ASSEMBLE_DWORD_FROM_BOOLS.%X8 := BIT_08;
+ASSEMBLE_DWORD_FROM_BOOLS.%X9 := BIT_09;
+ASSEMBLE_DWORD_FROM_BOOLS.%X10 := BIT_10;
+ASSEMBLE_DWORD_FROM_BOOLS.%X11 := BIT_11;
+ASSEMBLE_DWORD_FROM_BOOLS.%X12 := BIT_12;
+ASSEMBLE_DWORD_FROM_BOOLS.%X13 := BIT_13;
+ASSEMBLE_DWORD_FROM_BOOLS.%X14 := BIT_14;
+ASSEMBLE_DWORD_FROM_BOOLS.%X15 := BIT_15;
+ASSEMBLE_DWORD_FROM_BOOLS.%X16 := BIT_16;
+ASSEMBLE_DWORD_FROM_BOOLS.%X17 := BIT_17;
+ASSEMBLE_DWORD_FROM_BOOLS.%X18 := BIT_18;
+ASSEMBLE_DWORD_FROM_BOOLS.%X19 := BIT_19;
+ASSEMBLE_DWORD_FROM_BOOLS.%X20 := BIT_20;
+ASSEMBLE_DWORD_FROM_BOOLS.%X21 := BIT_21;
+ASSEMBLE_DWORD_FROM_BOOLS.%X22 := BIT_22;
+ASSEMBLE_DWORD_FROM_BOOLS.%X23 := BIT_23;
+ASSEMBLE_DWORD_FROM_BOOLS.%X24 := BIT_24;
+ASSEMBLE_DWORD_FROM_BOOLS.%X25 := BIT_25;
+ASSEMBLE_DWORD_FROM_BOOLS.%X26 := BIT_26;
+ASSEMBLE_DWORD_FROM_BOOLS.%X27 := BIT_27;
+ASSEMBLE_DWORD_FROM_BOOLS.%X28 := BIT_28;
+ASSEMBLE_DWORD_FROM_BOOLS.%X29 := BIT_29;
+ASSEMBLE_DWORD_FROM_BOOLS.%X30 := BIT_30;
+ASSEMBLE_DWORD_FROM_BOOLS.%X31 := BIT_31;
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
