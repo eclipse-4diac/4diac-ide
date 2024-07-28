@@ -9,8 +9,8 @@
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event" Comment="">
-				<With Var="IN_00"/>
-				<With Var="IN_01"/>
+				<With Var="BYTE_00"/>
+				<With Var="BYTE_01"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
@@ -19,8 +19,8 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN_00" Type="BYTE" Comment="BYTE 00"/>
-			<VarDeclaration Name="IN_01" Type="BYTE" Comment="BYTE 01"/>
+			<VarDeclaration Name="BYTE_00" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_01" Type="BYTE" Comment=""/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="" Type="WORD" Comment=""/>
@@ -31,12 +31,12 @@
 FUNCTION ASSEMBLE_WORD_FROM_BYTES : WORD
 
 VAR_INPUT
-	IN_00 : BYTE;    // BYTE 00
-	IN_01 : BYTE;    // BYTE 01
+	BYTE_00 : BYTE;
+	BYTE_01 : BYTE;
 END_VAR
 
-ASSEMBLE_WORD_FROM_BYTES.%B0 := IN_00;
-ASSEMBLE_WORD_FROM_BYTES.%B1 := IN_01;
+ASSEMBLE_WORD_FROM_BYTES.%B0 := BYTE_00;
+ASSEMBLE_WORD_FROM_BYTES.%B1 := BYTE_01;
 
 END_FUNCTION
 ]]></ST>
