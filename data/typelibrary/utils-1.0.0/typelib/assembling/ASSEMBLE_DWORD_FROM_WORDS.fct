@@ -9,8 +9,8 @@
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event" Comment="">
-				<With Var="IN_00"/>
-				<With Var="IN_01"/>
+				<With Var="WORD_00"/>
+				<With Var="WORD_01"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
@@ -19,8 +19,8 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN_00" Type="WORD" Comment="WORD 00"/>
-			<VarDeclaration Name="IN_01" Type="WORD" Comment="WORD 01"/>
+			<VarDeclaration Name="WORD_00" Type="WORD" Comment=""/>
+			<VarDeclaration Name="WORD_01" Type="WORD" Comment=""/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="" Type="DWORD" Comment=""/>
@@ -31,12 +31,12 @@
 FUNCTION ASSEMBLE_DWORD_FROM_WORDS : DWORD
 
 VAR_INPUT
-	IN_00 : WORD;    // WORD 00
-	IN_01 : WORD;    // WORD 01
+	WORD_00 : WORD;
+	WORD_01 : WORD;
 END_VAR
 
-ASSEMBLE_DWORD_FROM_WORDS.%W0 := IN_00;
-ASSEMBLE_DWORD_FROM_WORDS.%W1 := IN_01;
+ASSEMBLE_DWORD_FROM_WORDS.%W0 := WORD_00;
+ASSEMBLE_DWORD_FROM_WORDS.%W1 := WORD_01;
 
 END_FUNCTION
 ]]></ST>
