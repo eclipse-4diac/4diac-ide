@@ -6,7 +6,7 @@
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="INIT" Type="Event" Comment="Enable Server for a Client connection">
+			<Event Name="INIT" Type="Event" Comment="Enable Server for a Client connection (QI = TRUE) / Close Server (QI = FALSE) ">
 				<With Var="QI"/>
 				<With Var="ID"/>
 			</Event>
@@ -16,7 +16,7 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="INITO" Type="Event" Comment="Ready for Client Connection">
+			<Event Name="INITO" Type="Event" Comment="Ready for Client Connection (QI = TRUE) / Closed  (QI = FALSE)">
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
