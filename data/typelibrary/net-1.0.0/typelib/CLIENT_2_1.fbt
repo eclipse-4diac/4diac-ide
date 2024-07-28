@@ -6,7 +6,7 @@
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="INIT" Type="Event" Comment="Open new connection">
+			<Event Name="INIT" Type="Event" Comment="Open new connection (QI = TRUE) / Close connection (QI = FALSE)">
 				<With Var="QI"/>
 				<With Var="ID"/>
 			</Event>
@@ -17,7 +17,7 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="INITO" Type="Event" Comment="New connection established">
+			<Event Name="INITO" Type="Event" Comment="New connection established (QI = TRUE) / connection closed (QI = FALSE)">
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
