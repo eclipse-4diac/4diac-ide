@@ -52,7 +52,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
@@ -465,9 +464,7 @@ public class CommonElementExporter {
 		final boolean hasAttributes = hasNonTrivialAttributes(ie);
 		final boolean hasInitalValue = (ie instanceof final VarDeclaration varDecl) && (varDecl.getValue() != null
 				&& varDecl.getValue().getValue() != null && !varDecl.getValue().getValue().isBlank());
-		final boolean hasComment = (ie instanceof final VarDeclaration varDecl && varDecl.getComment() != null
-				&& !varDecl.getComment().equals(""))
-				|| (ie instanceof final Event event && event.getComment() != null && !event.getComment().equals("")); //$NON-NLS-1$
+		final boolean hasComment = ie.getComment() != null && !ie.getComment().equals("");
 
 		if (hasAttributes) {
 			addStartElement(LibraryElementTags.PARAMETER_ELEMENT);
