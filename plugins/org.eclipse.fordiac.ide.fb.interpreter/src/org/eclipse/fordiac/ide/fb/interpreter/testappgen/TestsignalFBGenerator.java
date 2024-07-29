@@ -44,9 +44,6 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 	// each testcase needs an event that starts it
 	@Override
 	protected List<Event> createInputEventList() {
-		// return testSuite.getTestCases().stream().map(n -> createEvent(n.getName() +
-		// "_TEST", true)).toList(); //$NON-NLS-1$
-
 		final List<Event> list = new ArrayList<>();
 		list.addAll(testSuite.getTestCases().stream().map(n -> createInputEvent(n.getName() + "_TEST")) //$NON-NLS-1$
 				.toList());
