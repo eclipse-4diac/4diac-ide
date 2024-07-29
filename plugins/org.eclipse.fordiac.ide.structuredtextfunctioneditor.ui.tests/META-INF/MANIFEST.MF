@@ -7,17 +7,20 @@ Bundle-Version: 3.0.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.tests; singleton:=true
 Bundle-ActivationPolicy: lazy
 Import-Package: org.junit.jupiter.api,
+ org.junit.jupiter.api.extension,
  org.junit.jupiter.api.function,
  org.junit.jupiter.params,
  org.junit.jupiter.params.provider,
  org.opentest4j
-Require-Bundle: org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui,
- org.eclipse.xtext.testing,
- org.eclipse.xtext.xbase.testing,
- org.eclipse.xtext.xbase.junit,
+Require-Bundle: org.eclipse.xtext.testing,
  org.eclipse.core.runtime,
  org.eclipse.xtext.ui.testing,
  org.eclipse.ui.workbench;resolution:=optional,
- org.eclipse.xtext.xbase.ui.testing
+ org.eclipse.xtext.xbase.testing,
+ org.eclipse.xtext.xbase.ui.testing,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.test.model,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.tests;x-internal=true
