@@ -10,7 +10,7 @@
  * Contributors:
  *   Prashantkumar Khatri - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.test.ui.CreateFBTTest;
+package org.eclipse.fordiac.ide.test.ui.fbtype;
 
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.junit.jupiter.api.Assertions.assertEquals;
