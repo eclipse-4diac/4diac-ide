@@ -23,9 +23,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class ErrorMarkerResolver {
@@ -33,21 +32,18 @@ public class ErrorMarkerResolver {
 	public static final String TEMPLATE_PATH = Platform.getInstallLocation().getURL().getFile() + File.separatorChar
 			+ "template";
 
-	public static void repairMissingStructuredDataType(final EObject target) {
+	public static void repairMissingStructuredDataType(final VarDeclaration target) {
 		final File template = new File(ErrorMarkerResolver.TEMPLATE_PATH + File.separatorChar + "Struct.dtp"); //$NON-NLS-1$
 
 		final EObject rootContainer = EcoreUtil.getRootContainer(target);
 
 		IPath fullPath = null;
 
-		if (rootContainer instanceof final AutomationSystem system) {
-			fullPath = system.getTypeEntry().getTypeLibrary().getProject().getFullPath();
-		}
-		if (rootContainer instanceof final FBType fbType) {
-			fullPath = fbType.getTypeEntry().getTypeLibrary().getProject().getFullPath();
+		if (rootContainer instanceof final LibraryElement le) {
+			fullPath = le.getTypeEntry().getTypeLibrary().getProject().getFullPath();
 		}
 
-		final DataType type = ((VarDeclaration) target).getType();
+		final DataType type = target.getType();
 
 		if (type instanceof ErrorMarkerDataType) {
 			final IFile targetFile = getTargetFile(type.getName(), fullPath, ".dtp");
