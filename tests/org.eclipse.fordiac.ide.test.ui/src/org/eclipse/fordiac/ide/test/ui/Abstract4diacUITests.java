@@ -114,9 +114,11 @@ public class Abstract4diacUITests {
 	protected static final String FORBIDDEN_TYPE_NAME = "00_fbtype"; //$NON-NLS-1$
 	protected static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
 	protected static final String F_SUB = "F_SUB"; //$NON-NLS-1$
+	protected static final String GO_TO_CHILD = "Go To Child"; //$NON-NLS-1$
 	protected static final String GO_TO_PARENT = "Go To Parent"; //$NON-NLS-1$
 	protected static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
 	protected static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
+	protected static final String INSERT_FB = "Insert FB"; //$NON-NLS-1$
 	protected static final String INTERFACE = "Interface"; //$NON-NLS-1$
 	protected static final String NAME_LABEL = "Name:"; //$NON-NLS-1$
 	protected static final String NAVIGATE = "Navigate"; //$NON-NLS-1$
@@ -143,6 +145,7 @@ public class Abstract4diacUITests {
 	protected static final String SYSTEM_EXPLORER_LABEL = "System Explorer"; //$NON-NLS-1$
 	protected static final String TEST_PARENT_FOLDER = "TestParentProject"; //$NON-NLS-1$
 	protected static final String TEST_TYPE_TEMPLATE_NAME = "Adapter"; //$NON-NLS-1$
+	protected static final String TOOLBAR_BUTTON_ZOOM_FIT_PAGE = "Zoom fit Page"; //$NON-NLS-1$
 	protected static final String TEST_COMMENT = "Request from ideal Socket"; //$NON-NLS-1$
 	protected static final String TYPE_LABEL = "Type:"; //$NON-NLS-1$
 	protected static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
@@ -227,17 +230,8 @@ public class Abstract4diacUITests {
 	 * @param point  The Position of the FB on the canvas.
 	 */
 	protected static void dragAndDropEventsFB(final String fbName, final Point point) {
-		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
-		systemExplorerView.show();
-		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
-		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
-		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
-		treeProjectItem.select();
-		treeProjectItem.expand();
-		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(TYPE_LIBRARY_NODE);
-		typeLibraryNode.select();
-		typeLibraryNode.expand();
+		final SWTBotTreeItem typeLibraryNode = expandTypeLibraryTreeItemInSystemExplorer();
+		bot.waitUntil(treeItemHasNode(typeLibraryNode, EVENTS_NODE));
 		final SWTBotTreeItem eventsNode = typeLibraryNode.getNode(EVENTS_NODE);
 		eventsNode.select();
 		eventsNode.expand();
@@ -264,21 +258,8 @@ public class Abstract4diacUITests {
 	 *                tree.
 	 */
 	protected static boolean isElementInApplicationOfSystemInSystemExplorer(final String element) {
-		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
-		systemExplorerView.show();
-		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
-		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
-		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
-		treeProjectItem.select();
-		treeProjectItem.expand();
-		final SWTBotTreeItem systemNode = treeProjectItem.getNode(PROJECT_NAME_TREE_ITEM);
-		systemNode.select();
-		systemNode.expand();
-		final SWTBotTreeItem appNode = systemNode.getNode(PROJECT_NAME_APP);
-		assertNotNull(appNode);
-		appNode.select();
-		appNode.expand();
+		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
+		bot.waitUntil(treeItemHasNode(appNode, element));
 		final SWTBotTreeItem elementNode = appNode.getNode(element);
 		assertNotNull(elementNode);
 		return elementNode.isVisible();
@@ -292,28 +273,45 @@ public class Abstract4diacUITests {
 	 *               of the Application in the System in the SystemExplorer tree.
 	 */
 	protected static boolean isFBInSubAppOfSystemInSystemExplorer(final String fbName) {
-		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
-		systemExplorerView.show();
-		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
-		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
-		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
-		treeProjectItem.select();
-		treeProjectItem.expand();
-		final SWTBotTreeItem systemNode = treeProjectItem.getNode(PROJECT_NAME_TREE_ITEM);
-		systemNode.select();
-		systemNode.expand();
-		final SWTBotTreeItem appNode = systemNode.getNode(PROJECT_NAME_APP);
-		assertNotNull(appNode);
-		appNode.select();
-		appNode.expand();
-		final SWTBotTreeItem subAppNode = appNode.getNode(SUBAPP);
-		assertNotNull(subAppNode);
-		subAppNode.select();
-		subAppNode.expand();
+		final SWTBotTreeItem subAppNode = expandSubAppTreeItemInSystemExplorer();
 		final SWTBotTreeItem fbNode = subAppNode.getNode(fbName);
 		assertNotNull(fbNode);
 		return fbNode.isVisible();
+	}
+
+	protected static boolean isSubAppNodeInSystemExplorerEmpty() {
+		final SWTBotTreeItem subAppNode = expandSubAppTreeItemInSystemExplorer();
+		final List<String> subAppChildren = subAppNode.getNodes();
+		return subAppChildren.isEmpty();
+	}
+
+	protected static void createSubappWithDragRectangle(final int fromXPosition, final int fromYPosition,
+			final int toXPosition, final int toYPosition) {
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		editor.drag(fromXPosition, fromYPosition, toXPosition, toYPosition);
+		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
+
+	}
+
+	/**
+	 * Selects a FunctionBlock with the given Name in the editor.
+	 *
+	 * The function block is searched for with the given name in the editor.
+	 * However, as this only selects the name, the parent is retrieved and selected.
+	 * Only then is the searched function block selected as a whole.
+	 *
+	 * @param editor
+	 * @param name
+	 */
+	protected static SWTBot4diacGefEditor selectFBWithFBNameInEditor(final SWTBot4diacGefEditor editor,
+			final String name) {
+		assertNotNull(editor);
+		assertNotNull(editor.getEditPart(name));
+		editor.click(name);
+		final SWTBotGefEditPart parent = editor.getEditPart(name).parent();
+		assertNotNull(parent);
+		editor.click(parent);
+		return editor;
 	}
 
 	/**
@@ -465,6 +463,23 @@ public class Abstract4diacUITests {
 		assertFalse(editParts.isEmpty());
 		return editParts.stream().filter(p -> p.part() instanceof FBEditPart).map(p -> (FBEditPart) p.part())
 				.anyMatch(fb -> fb.getModel().getName().equals(fbName));
+	}
+
+	/**
+	 * Returns the bounds of the searched function block
+	 *
+	 * @param editor
+	 * @param fBname
+	 * @return The rectangle with the bounds of the function block searched for
+	 */
+	protected static Rectangle getBoundsOfFB(final SWTBot4diacGefEditor editor, final String fBname) {
+		editor.getEditPart(fBname);
+		editor.click(fBname);
+		final SWTBotGefEditPart parent = editor.getEditPart(fBname).parent();
+		final IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
+		final Rectangle fbBounds = figure.getBounds().getCopy();
+		figure.translateToAbsolute(fbBounds);
+		return fbBounds;
 	}
 
 	/**
@@ -697,10 +712,18 @@ public class Abstract4diacUITests {
 
 	/**
 	 * Cleans the canvas from all objects.
+	 *
+	 * First, the application node in the System Explorer is selected to ensure that
+	 * all objects are selected and then deleted.
+	 *
+	 * @author Andrea Zoitl
 	 */
 	@SuppressWarnings("static-method")
 	@AfterEach
 	protected void cleanEditorArea() {
+		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
+		appNode.contextMenu("Open").click();
+
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		viewer.getCanvas().setFocus();
@@ -722,4 +745,84 @@ public class Abstract4diacUITests {
 		bot.resetWorkbench();
 	}
 
+	/**
+	 * Expands the 4diac IDE Project node (SWTBotTreeItem) in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return treeProjectItem the expanded Project node
+	 */
+	private static SWTBotTreeItem expandProjectTreeItemInSystemExplorer() {
+		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
+		systemExplorerView.show();
+		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
+		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
+		final SWTBotTree tree = new SWTBotTree(swtTree);
+		assertNotNull(tree);
+		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
+		treeProjectItem.select();
+		treeProjectItem.expand();
+		return treeProjectItem;
+	}
+
+	/**
+	 * Expands the System node (SWTBotTreeItem) in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return systemNode the expanded System node
+	 */
+	private static SWTBotTreeItem expandSystemTreeItemInSystemExplorer() {
+		final SWTBotTreeItem treeProjectItem = expandProjectTreeItemInSystemExplorer();
+		bot.waitUntil(treeItemHasNode(treeProjectItem, PROJECT_NAME_TREE_ITEM));
+		final SWTBotTreeItem systemNode = treeProjectItem.getNode(PROJECT_NAME_TREE_ITEM);
+		systemNode.select();
+		systemNode.expand();
+		return systemNode;
+	}
+
+	/**
+	 * Expands the Type Library node (SWTBotTreeItem) in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return typeLibraryNode the expanded Type Library node
+	 */
+	private static SWTBotTreeItem expandTypeLibraryTreeItemInSystemExplorer() {
+		final SWTBotTreeItem treeProjectItem = expandProjectTreeItemInSystemExplorer();
+		bot.waitUntil(treeItemHasNode(treeProjectItem, TYPE_LIBRARY_NODE));
+		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(TYPE_LIBRARY_NODE);
+		typeLibraryNode.select();
+		typeLibraryNode.expand();
+		return typeLibraryNode;
+	}
+
+	/**
+	 * Expands the Application node (SWTBotTreeItem) in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return appNode the expanded Application node
+	 */
+	private static SWTBotTreeItem expandApplicationTreeItemInSystemExplorer() {
+		final SWTBotTreeItem systemNode = expandSystemTreeItemInSystemExplorer();
+		bot.waitUntil(treeItemHasNode(systemNode, PROJECT_NAME_APP));
+		final SWTBotTreeItem appNode = systemNode.getNode(PROJECT_NAME_APP);
+		assertNotNull(appNode);
+		appNode.select();
+		appNode.expand();
+		return appNode;
+	}
+
+	/**
+	 * Expands the Subapplication node (SWTBotTreeItem) of the 1. level of an
+	 * Application in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return appNode the expanded Application node
+	 */
+	private static SWTBotTreeItem expandSubAppTreeItemInSystemExplorer() {
+		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
+		final SWTBotTreeItem subAppNode = appNode.getNode(SUBAPP);
+		assertNotNull(subAppNode);
+		subAppNode.select();
+		subAppNode.expand();
+		return subAppNode;
+	}
 }
