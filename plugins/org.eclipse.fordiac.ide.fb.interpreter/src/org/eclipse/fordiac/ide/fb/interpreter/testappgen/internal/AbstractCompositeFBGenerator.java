@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2024 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -55,7 +57,7 @@ public abstract class AbstractCompositeFBGenerator extends AbstractBlockGenerato
 		}
 	}
 
-	protected static EventConnection createEventConnection(final Event source, final Event dest) {
+	protected static EventConnection createEventConn(final Event source, final Event dest) {
 		final EventConnection con = LibraryElementFactory.eINSTANCE.createEventConnection();
 		con.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
 		con.setSource(source);
@@ -63,7 +65,7 @@ public abstract class AbstractCompositeFBGenerator extends AbstractBlockGenerato
 		return con;
 	}
 
-	protected static DataConnection createDataConnection(final VarDeclaration source, final VarDeclaration dest) {
+	protected static DataConnection createDataConn(final VarDeclaration source, final VarDeclaration dest) {
 		final DataConnection con = LibraryElementFactory.eINSTANCE.createDataConnection();
 		con.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
 		con.setSource(source);
@@ -91,6 +93,15 @@ public abstract class AbstractCompositeFBGenerator extends AbstractBlockGenerato
 				.forEach(n -> setValue(n.getInterface().getInputVars()));
 		compositeFB.getFBNetwork().getNetworkElements().stream()
 				.forEach(n -> setValue(n.getInterface().getOutputVars()));
+	}
+
+	protected static AdapterConnection createAdapterConnection(final AdapterDeclaration source,
+			final AdapterDeclaration dest) {
+		final AdapterConnection con = LibraryElementFactory.eINSTANCE.createAdapterConnection();
+		con.setRoutingData(LibraryElementFactory.eINSTANCE.createConnectionRoutingData());
+		con.setSource(source);
+		con.setDestination(dest);
+		return con;
 	}
 
 	protected abstract void createWiths();

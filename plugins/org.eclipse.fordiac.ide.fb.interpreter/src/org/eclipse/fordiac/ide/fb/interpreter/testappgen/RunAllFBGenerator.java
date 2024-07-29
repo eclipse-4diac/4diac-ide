@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2024 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,9 @@
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.fb.interpreter.testappgen;
+
+import static org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants.EVENT_LASTCOMPLETE;
+import static org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants.EVENT_RUNALL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,15 +43,15 @@ public class RunAllFBGenerator extends AbstractBasicFBGenerator {
 	@Override
 	protected List<Event> createInputEventList() {
 		final List<Event> list = new ArrayList<>();
-		list.add(createEvent("run_all", true)); //$NON-NLS-1$
-		list.add(createEvent("last_complete", true)); //$NON-NLS-1$
+		list.add(createInputEvent(EVENT_RUNALL));
+		list.add(createInputEvent(EVENT_LASTCOMPLETE));
 		return list;
 	}
 
 	// event outputs are the same as the event inputs from the testsignal fb
 	@Override
 	protected List<Event> createOutputEventList() {
-		return testSuite.getTestCases().stream().map(n -> createEvent(n.getName() + "_TEST", false)).toList(); //$NON-NLS-1$
+		return testSuite.getTestCases().stream().map(n -> createOutputEvent(n.getName() + "_TEST")).toList(); //$NON-NLS-1$
 	}
 
 	// no data pins needed
@@ -65,23 +68,24 @@ public class RunAllFBGenerator extends AbstractBasicFBGenerator {
 
 	@Override
 	protected void generateECC() {
+		// the ecc should trigger should trigger each testcase subsequently
 		final TestEccGenerator eccGen = new TestEccGenerator(destinationFB.getECC(), 0);
 		for (int i = 0; i < testSuite.getTestCases().size(); i++) {
 			eccGen.createState("S", i); //$NON-NLS-1$
 			eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
 			if (i == 0) {
 				eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
-						destinationFB.getInterfaceList().getEventInputs().get(0));
+						(Event) destinationFB.getInterfaceList().getInterfaceElement(EVENT_RUNALL));
 			} else {
 				eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
-						destinationFB.getInterfaceList().getEventInputs().get(1));
+						(Event) destinationFB.getInterfaceList().getInterfaceElement(EVENT_LASTCOMPLETE));
 			}
 			final ECAction act = TestEccGenerator.createAction();
 			act.setOutput(destinationFB.getInterfaceList().getEventOutputs().get(i));
 			act.setECState(eccGen.getLastState());
 		}
 		eccGen.createTransitionFromTo(eccGen.getLastState(), eccGen.getEcc().getStart(),
-				destinationFB.getInterfaceList().getEventInputs().get(1));
+				(Event) destinationFB.getInterfaceList().getInterfaceElement(EVENT_LASTCOMPLETE));
 	}
 
 	@Override
