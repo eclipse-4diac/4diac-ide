@@ -50,6 +50,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
+import org.eclipse.fordiac.ide.model.data.AnyRealType;
 import org.eclipse.fordiac.ide.model.data.AnySignedType;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType;
@@ -475,8 +476,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	private static boolean isCastSemanticallyRelevant(final DataType argumentDataType, final DataType returnDataType) {
 		// semantically relevant casts:
 		// - signed to unsigned
+		// - integer to real
 		// - involves bit types
 		return (argumentDataType instanceof AnySignedType && returnDataType instanceof AnyUnsignedType)
+				|| (argumentDataType instanceof AnyIntType && returnDataType instanceof AnyRealType)
 				|| argumentDataType instanceof AnyBitType || returnDataType instanceof AnyBitType;
 	}
 
