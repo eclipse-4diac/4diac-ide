@@ -15,7 +15,7 @@
     </EventOutputs>
     <InputVars/>
     <OutputVars>
-      <VarDeclaration Comment="" Name="Q" Type="BOOL"/>
+      <VarDeclaration Comment="value of flip flop" Name="Q" Type="BOOL"/>
     </OutputVars>
   </InterfaceList>
   <BasicFB>
