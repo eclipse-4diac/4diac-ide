@@ -839,8 +839,8 @@ public enum LibraryManager {
 					final Manifest libManifest = ManifestHelper.getContainerManifest(container);
 					if (libManifest != null && resolved.contains(libManifest.getProduct().getSymbolicName())
 							&& libManifest.getDependencies() != null) {
-						libManifest.getDependencies().getRequired()
-								.forEach(req -> handleRequired(requirements, projectManifest, markerList, req));
+						libManifest.getDependencies().getRequired().forEach(req -> handleRequired(requirements,
+								projectManifest, markerList, req, libManifest.getProduct().getSymbolicName()));
 					}
 				}
 			}
@@ -882,7 +882,8 @@ public enum LibraryManager {
 						.getContainerManifest(project.getFolder(TYPE_LIB_FOLDER_NAME).getFolder(symb));
 				if (libManifest != null && libManifest.getDependencies() != null) {
 					libManifest.getDependencies().getRequired().forEach(req -> {
-						handleRequired(requirements, projectManifest, markerList, req);
+						handleRequired(requirements, projectManifest, markerList, req,
+								libManifest.getProduct().getSymbolicName());
 						if (!resolved.contains(req.getSymbolicName())) {
 							queue.add(req.getSymbolicName());
 						}
@@ -908,14 +909,14 @@ public enum LibraryManager {
 	 * @param req             library dependency to check
 	 */
 	private static void handleRequired(final Map<String, VersionRange> requirements, final Manifest projectManifest,
-			final List<ErrorMarkerBuilder> markerList, final Required req) {
+			final List<ErrorMarkerBuilder> markerList, final Required req, final String libSymbName) {
 		final VersionRange oldRange = requirements.get(req.getSymbolicName());
 		final VersionRange newRange = VersionComparator.parseVersionRange(req.getVersion());
 		requirements.merge(req.getSymbolicName(), newRange, VersionRange::intersection);
 		if (oldRange != null && requirements.get(req.getSymbolicName()).isEmpty()) {
 			markerList.add(ErrorMarkerBuilder
 					.createErrorMarkerBuilder(MessageFormat.format(Messages.ErrorMarkerVersionRangeEmpty,
-							req.getSymbolicName(), VersionComparator.formatVersionRange(oldRange),
+							req.getSymbolicName(), VersionComparator.formatVersionRange(oldRange), libSymbName,
 							VersionComparator.formatVersionRange(newRange)))
 					.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(projectManifest.getDependencies()));
 		}
