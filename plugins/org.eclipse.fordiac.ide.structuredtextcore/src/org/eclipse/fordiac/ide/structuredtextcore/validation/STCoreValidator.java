@@ -42,6 +42,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
@@ -62,6 +63,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -76,6 +78,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProv
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
@@ -92,6 +95,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STPragma;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
@@ -180,6 +184,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String INVALID_IMPORT = ISSUE_CODE_PREFIX + "invalidImport"; //$NON-NLS-1$
 	public static final String WILDCARD_IMPORT = ISSUE_CODE_PREFIX + "wildcardImport"; //$NON-NLS-1$
 	public static final String UNUSED_IMPORT = ISSUE_CODE_PREFIX + "unusedImport"; //$NON-NLS-1$
+	public static final String DUPLICATE_ATTRIBUTE = ISSUE_CODE_PREFIX + "duplicateAttribute"; //$NON-NLS-1$
 
 	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
 
@@ -855,6 +860,18 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	private boolean isLoopStatement(final STStatement statement) {
 		return statement instanceof STForStatement || statement instanceof STWhileStatement
 				|| statement instanceof STRepeatStatement;
+	}
+
+	@Check
+	public void checkDuplicateAttribute(final STPragma pragma) {
+		pragma.getAttributes().stream().filter(attribute -> attribute.getDeclaration() != null)
+				.collect(Collectors.groupingBy(STAttribute::getDeclaration)).values().stream()
+				.filter(list -> list.size() > 1).flatMap(List::stream)
+				.forEach(attribute -> error(
+						MessageFormat.format(Messages.STCoreValidator_DuplicateAttribute,
+								PackageNameHelper.getFullTypeName(attribute.getDeclaration())),
+						attribute, STCorePackage.Literals.ST_ATTRIBUTE__DECLARATION, DUPLICATE_ATTRIBUTE,
+						PackageNameHelper.getFullTypeName(attribute.getDeclaration())));
 	}
 
 	/*
