@@ -754,7 +754,9 @@ class STCoreFormatter extends AbstractFormatter2 {
 		replacement = replacement.replaceAll(lineSeparator + "(?=" + lineSeparator + ")",
 			lineSeparator + spaceBeforeComment + " * ")
 
-		context.addReplacement(region.replaceWith(replacement))
+		if (region.text != replacement) {
+			context.addReplacement(region.replaceWith(replacement))
+		}
 
 		context
 	}
