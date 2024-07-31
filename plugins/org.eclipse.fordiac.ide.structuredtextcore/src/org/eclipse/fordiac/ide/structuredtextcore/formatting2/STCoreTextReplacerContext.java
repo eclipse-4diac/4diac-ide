@@ -17,6 +17,8 @@ import org.eclipse.xtext.formatting2.IFormattableDocument;
 import org.eclipse.xtext.formatting2.ITextReplacer;
 import org.eclipse.xtext.formatting2.ITextReplacerContext;
 import org.eclipse.xtext.formatting2.internal.TextReplacerContext;
+import org.eclipse.xtext.formatting2.regionaccess.IHiddenRegion;
+import org.eclipse.xtext.formatting2.regionaccess.IHiddenRegionPart;
 import org.eclipse.xtext.formatting2.regionaccess.ITextRegionAccess;
 import org.eclipse.xtext.formatting2.regionaccess.ITextReplacement;
 
@@ -84,6 +86,15 @@ public class STCoreTextReplacerContext extends TextReplacerContext {
 		}
 		count += lastOffset;
 		return count;
+	}
+
+	@Override
+	protected boolean isInUndefinedRegion(final ITextReplacement replacement) {
+		return switch (getReplacer().getRegion()) {
+		case final IHiddenRegionPart hiddenRegionPart -> hiddenRegionPart.getHiddenRegion().isUndefined();
+		case final IHiddenRegion hiddenRegion -> hiddenRegion.isUndefined();
+		case null, default -> false;
+		};
 	}
 
 	@Override
