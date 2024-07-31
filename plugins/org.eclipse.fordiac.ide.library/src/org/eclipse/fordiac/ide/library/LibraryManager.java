@@ -843,7 +843,7 @@ public enum LibraryManager {
 					if (libManifest != null && resolved.contains(libManifest.getProduct().getSymbolicName())
 							&& libManifest.getDependencies() != null) {
 						libManifest.getDependencies().getRequired().forEach(req -> handleRequired(requirements, causes,
-								projectManifest, markerList, req, libManifest.getProduct().getSymbolicName()));
+								projectManifest, markerList, req, libManifest));
 					}
 				}
 			}
@@ -886,8 +886,7 @@ public enum LibraryManager {
 						.getContainerManifest(project.getFolder(TYPE_LIB_FOLDER_NAME).getFolder(symb));
 				if (libManifest != null && libManifest.getDependencies() != null) {
 					libManifest.getDependencies().getRequired().forEach(req -> {
-						handleRequired(requirements, causes, projectManifest, markerList, req,
-								libManifest.getProduct().getSymbolicName());
+						handleRequired(requirements, causes, projectManifest, markerList, req, libManifest);
 						if (!resolved.contains(req.getSymbolicName())) {
 							queue.add(req.getSymbolicName());
 						}
@@ -915,11 +914,15 @@ public enum LibraryManager {
 	 */
 	private static void handleRequired(final Map<String, VersionRange> requirements,
 			final Map<String, List<String>> causes, final Manifest projectManifest,
-			final List<ErrorMarkerBuilder> markerList, final Required req, final String libSymbName) {
+			final List<ErrorMarkerBuilder> markerList, final Required req, final Manifest libManifest) {
 		final VersionRange oldRange = requirements.get(req.getSymbolicName());
 		final VersionRange newRange = VersionComparator.parseVersionRange(req.getVersion());
+
 		requirements.merge(req.getSymbolicName(), newRange, VersionRange::intersection);
-		causes.computeIfAbsent(req.getSymbolicName(), r -> new LinkedList<>()).add(libSymbName);
+		causes.computeIfAbsent(req.getSymbolicName(), r -> new LinkedList<>())
+				.add(libManifest.getProduct().getSymbolicName() + "-" //$NON-NLS-1$
+						+ libManifest.getProduct().getVersionInfo().getVersion());
+
 		if (oldRange != null && requirements.get(req.getSymbolicName()).isEmpty()) {
 			markerList.add(ErrorMarkerBuilder
 					.createErrorMarkerBuilder(MessageFormat.format(Messages.ErrorMarkerVersionRangeEmpty,
