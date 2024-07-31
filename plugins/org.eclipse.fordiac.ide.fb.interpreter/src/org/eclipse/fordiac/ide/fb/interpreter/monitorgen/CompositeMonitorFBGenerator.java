@@ -61,22 +61,22 @@ public class CompositeMonitorFBGenerator extends AbstractCompositeFBGenerator {
 		// Connection SourceType
 		for (int i = 0; i < sourceType.getInterfaceList().getEventInputs().size(); i++) {
 			compositeFB.getFBNetwork().getEventConnections()
-					.add(createEventConnection(compositeFB.getInterfaceList().getEventInputs().get(i),
+					.add(createEventConn(compositeFB.getInterfaceList().getEventInputs().get(i),
 							addedSourceType.getInterface().getEventInputs().get(i)));
 		}
 		for (int i = 0; i < sourceType.getInterfaceList().getEventOutputs().size(); i++) {
 			compositeFB.getFBNetwork().getEventConnections()
-					.add(createEventConnection(addedSourceType.getInterface().getEventOutputs().get(i),
+					.add(createEventConn(addedSourceType.getInterface().getEventOutputs().get(i),
 							compositeFB.getInterfaceList().getEventOutputs().get(i)));
 		}
 		for (int i = 0; i < sourceType.getInterfaceList().getInputVars().size(); i++) {
 			compositeFB.getFBNetwork().getDataConnections()
-					.add(createDataConnection(compositeFB.getInterfaceList().getInputVars().get(i),
+					.add(createDataConn(compositeFB.getInterfaceList().getInputVars().get(i),
 							addedSourceType.getInterface().getInputVars().get(i)));
 		}
 		for (int i = 0; i < sourceType.getInterfaceList().getOutputVars().size(); i++) {
 			compositeFB.getFBNetwork().getDataConnections()
-					.add(createDataConnection(addedSourceType.getInterface().getOutputVars().get(i),
+					.add(createDataConn(addedSourceType.getInterface().getOutputVars().get(i),
 							compositeFB.getInterfaceList().getOutputVars().get(i)));
 		}
 
@@ -84,21 +84,21 @@ public class CompositeMonitorFBGenerator extends AbstractCompositeFBGenerator {
 		for (final FB fb : addedMonitorFBs) {
 			for (int i = 0; i < compositeFB.getInterfaceList().getEventInputs().size(); i++) {
 				compositeFB.getFBNetwork().getEventConnections()
-						.add(createEventConnection(compositeFB.getInterfaceList().getEventInputs().get(i),
+						.add(createEventConn(compositeFB.getInterfaceList().getEventInputs().get(i),
 								fb.getInterface().getEventInputs().get(i)));
 			}
 			for (int i = 0; i < sourceType.getInterfaceList().getEventOutputs().size(); i++) {
-				compositeFB.getFBNetwork().getEventConnections().add(
-						createEventConnection(addedSourceType.getInterface().getEventOutputs().get(i), fb.getInterface()
+				compositeFB.getFBNetwork().getEventConnections()
+						.add(createEventConn(addedSourceType.getInterface().getEventOutputs().get(i), fb.getInterface()
 								.getEventInputs().get(i + sourceType.getInterfaceList().getEventInputs().size())));
 			}
 			for (int i = 0; i < compositeFB.getInterfaceList().getInputVars().size(); i++) {
-				compositeFB.getFBNetwork().getDataConnections().add(createDataConnection(
+				compositeFB.getFBNetwork().getDataConnections().add(createDataConn(
 						compositeFB.getInterfaceList().getInputVars().get(i), fb.getInterface().getInputVars().get(i)));
 			}
 			for (int i = 0; i < sourceType.getInterfaceList().getOutputVars().size(); i++) {
-				compositeFB.getFBNetwork().getDataConnections().add(
-						createDataConnection(addedSourceType.getInterface().getOutputVars().get(i), fb.getInterface()
+				compositeFB.getFBNetwork().getDataConnections()
+						.add(createDataConn(addedSourceType.getInterface().getOutputVars().get(i), fb.getInterface()
 								.getInputVars().get(i + compositeFB.getInterfaceList().getInputVars().size())));
 			}
 		}
@@ -108,7 +108,7 @@ public class CompositeMonitorFBGenerator extends AbstractCompositeFBGenerator {
 				.getEventOutputs().size(); i++) {
 
 			compositeFB.getFBNetwork().getEventConnections()
-					.add(createEventConnection(addedMonitorFBs.get(fbCnt).getInterface().getEventOutputs().get(0),
+					.add(createEventConn(addedMonitorFBs.get(fbCnt).getInterface().getEventOutputs().get(0),
 							compositeFB.getInterfaceList().getEventOutputs().get(i)));
 			fbCnt++;
 		}
@@ -133,9 +133,9 @@ public class CompositeMonitorFBGenerator extends AbstractCompositeFBGenerator {
 	@Override
 	protected void createData() {
 		compositeFB.getInterfaceList().getInputVars().addAll(sourceType.getInterfaceList().getInputVars().stream()
-				.map(n -> createVarDeclaration(n.getType(), n.getName(), true)).toList());
+				.map(n -> createInputVarDecl(n.getType(), n.getName())).toList());
 		compositeFB.getInterfaceList().getOutputVars().addAll(sourceType.getInterfaceList().getOutputVars().stream()
-				.map(n -> (createVarDeclaration(n.getType(), n.getName(), false))).toList());
+				.map(n -> (createOutputVarDecl(n.getType(), n.getName()))).toList());
 
 	}
 

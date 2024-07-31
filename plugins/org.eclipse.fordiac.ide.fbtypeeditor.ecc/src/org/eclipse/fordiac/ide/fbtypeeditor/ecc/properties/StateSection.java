@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2015, 2024 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -29,7 +28,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -101,22 +99,17 @@ public class StateSection extends AbstractSection {
 	}
 
 	@Override
-	public void refresh() {
+	protected void performRefresh() {
 		actionGroup.refresh();
 		transitionGroup.refresh();
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			stateCommentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			stateNameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-		}
-		commandStack = commandStackBuffer;
+		stateCommentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+		stateNameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 	}
 
 	@Override
 	protected void setInputInit() {
 		// we have to do this here because at this point in time we have a valid type
-		actionGroup.setTypeAndCommandStack(getType(), commandStack);
-		transitionGroup.setTypeAndCommandStack(getType(), commandStack);
+		actionGroup.setTypeAndCommandStack(getType(), getCurrentCommandStack());
+		transitionGroup.setTypeAndCommandStack(getType(), getCurrentCommandStack());
 	}
 }

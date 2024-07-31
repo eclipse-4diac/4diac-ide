@@ -171,41 +171,41 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 						"The ST core resource must contain at least one element and have an associated library element"); //$NON-NLS-1$
 			}
 			// reconcile
-			reconcile(libraryElement);
+			reconcile(libraryElement, options);
 			// chain save library element to outputStream
 			try {
 				final FordiacTypeResource typeResource = new FordiacTypeResource(uri);
 				typeResource.getContents().add(EcoreUtil.copy(libraryElement));
-				typeResource.save(outputStream, Collections.emptyMap());
+				typeResource.save(outputStream, options);
 			} catch (final Exception e) {
 				throw new IOException("Error saving to library element: " + e.getMessage(), e); //$NON-NLS-1$
 			}
 		}
 	}
 
-	protected void reconcile(final LibraryElement libraryElement) throws IOException {
-		if (uri.hasQuery()) {
-			final ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			super.doSave(stream, Collections.emptyMap());
+	protected void reconcile(final LibraryElement libraryElement, final Map<?, ?> options) throws IOException {
+		try (final ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
+			super.doSave(stream, options);
 			final String text = new String(stream.toByteArray(), getEncoding());
-			final EObject sourceElement = getSourceElement(libraryElement);
-			if (sourceElement instanceof final Attribute attribute) {
-				attribute.setValue(text);
-			} else if (sourceElement instanceof final ArraySize arraySize) {
-				arraySize.setValue(text);
-			} else if (sourceElement instanceof final Value value) {
-				value.setValue(text);
+			if (uri.hasQuery()) {
+				final EObject sourceElement = getSourceElement(libraryElement);
+				switch (sourceElement) {
+				case final Attribute attribute -> attribute.setValue(text);
+				case final ArraySize arraySize -> arraySize.setValue(text);
+				case final Value value -> value.setValue(text);
+				default -> throw new IOException("Invalid query in ST resource: " + uri.query()); //$NON-NLS-1$
+				}
 			} else {
-				throw new IOException("Invalid query in ST resource: " + uri.query()); //$NON-NLS-1$
+				// reparse
+				reparse(text);
+				// partition
+				final var partition = partitioner.partition(this);
+				if (partition.isEmpty()) {
+					throw new IOException("Cannot partition source"); //$NON-NLS-1$
+				}
+				// reconcile
+				reconciler.reconcile(libraryElement, partition);
 			}
-		} else {
-			// partition
-			final var partition = partitioner.partition(this);
-			if (partition.isEmpty()) {
-				throw new IOException("Cannot partition source"); //$NON-NLS-1$
-			}
-			// reconcile
-			reconciler.reconcile(libraryElement, partition);
 		}
 	}
 

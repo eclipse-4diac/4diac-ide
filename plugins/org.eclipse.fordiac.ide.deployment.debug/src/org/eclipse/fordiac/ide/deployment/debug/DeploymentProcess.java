@@ -12,21 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -40,45 +33,46 @@ import org.eclipse.fordiac.ide.deployment.DownloadRunnable;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
-public class DeploymentProcess extends PlatformObject implements IProcess, Callable<IStatus> {
+public class DeploymentProcess extends PlatformObject implements IProcess {
 
 	private final String name;
-	private final DownloadRunnable runnable;
 	private final ILaunch launch;
-	private final FutureTask<IStatus> task;
 	private final DeploymentStreamsProxy streamsProxy = new DeploymentStreamsProxy();
 	private final Map<String, String> attributes = new HashMap<>();
+	private final Job job;
 
 	public DeploymentProcess(final String name, final Set<INamedElement> selection, final ILaunch launch)
 			throws DeploymentException {
 		this.name = name;
 		this.launch = launch;
-		runnable = new DownloadRunnable(DeploymentCoordinator.createDeploymentdata(selection.toArray()), null,
-				streamsProxy, null);
-		task = new FutureTask<>(this);
+
+		final DownloadRunnable runnable = new DownloadRunnable(
+				DeploymentCoordinator.createDeploymentdata(selection.toArray()), null, streamsProxy, null);
+
+		job = Job.create(name, monitor -> {
+			try {
+				runnable.run(monitor);
+				return Status.OK_STATUS;
+			} catch (final InterruptedException e) {
+				streamsProxy.getErrorStreamMonitor().message(Messages.DeploymentProcess_Terminated);
+				Thread.currentThread().interrupt();
+				return Status.error("Terminated"); //$NON-NLS-1$
+			} catch (final Exception t) {
+				streamsProxy.getErrorStreamMonitor()
+						.message(MessageFormat.format(Messages.DeploymentProcess_ExeceptionOccured, t.getMessage()));
+				return Status.error("Exception occurred", t); //$NON-NLS-1$
+			} finally {
+				fireTerminateEvent();
+			}
+		});
+		job.setUser(true);
+
 		launch.addProcess(this);
 		fireCreationEvent();
 	}
 
-	@Override
-	public IStatus call() throws Exception {
-		try {
-			runnable.run(new NullProgressMonitor());
-			return Status.OK_STATUS;
-		} catch (final InterruptedException e) {
-			streamsProxy.getErrorStreamMonitor().message("Terminated\n"); //$NON-NLS-1$
-			Thread.currentThread().interrupt();
-			return Status.error("Terminated"); //$NON-NLS-1$
-		} catch (final Exception t) {
-			streamsProxy.getErrorStreamMonitor().message("Exception occurred: " + t.getMessage() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
-			return Status.error("Exception occurred", t); //$NON-NLS-1$
-		} finally {
-			fireTerminateEvent();
-		}
-	}
-
 	public void start() {
-		ForkJoinPool.commonPool().execute(task);
+		job.schedule();
 	}
 
 	@Override
@@ -88,26 +82,17 @@ public class DeploymentProcess extends PlatformObject implements IProcess, Calla
 
 	@Override
 	public boolean isTerminated() {
-		return task.isDone();
+		return job.getState() == Job.NONE;
 	}
 
 	@Override
 	public void terminate() throws DebugException {
-		task.cancel(true);
+		job.cancel();
 	}
 
 	@Override
 	public int getExitValue() throws DebugException {
-		try {
-			return task.get(-1, TimeUnit.NANOSECONDS).getCode();
-		} catch (final InterruptedException e) {
-			Thread.currentThread().interrupt();
-			throw new DebugException(Status.error("Couldn't get exit code", e)); //$NON-NLS-1$
-		} catch (ExecutionException | TimeoutException e) {
-			throw new DebugException(Status.error("Couldn't get exit code", e)); //$NON-NLS-1$
-		} catch (final CancellationException e) {
-			return -1;
-		}
+		return job.getResult().getCode();
 	}
 
 	@Override
@@ -155,26 +140,26 @@ public class DeploymentProcess extends PlatformObject implements IProcess, Calla
 		return attributes.get(key);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter.equals(IProcess.class)) {
-			return (T) this;
+			return adapter.cast(this);
 		}
 		if (adapter.equals(IDebugTarget.class)) {
 			for (final IDebugTarget target : getLaunch().getDebugTargets()) {
 				if (equals(target.getProcess())) {
-					return (T) target;
+					return adapter.cast(target);
 				}
 			}
 			return null;
 		}
 		if (adapter.equals(ILaunch.class)) {
-			return (T) getLaunch();
+			return adapter.cast(getLaunch());
 		}
 		if (adapter.equals(ILaunchConfiguration.class)) {
-			return (T) getLaunch().getLaunchConfiguration();
+			return adapter.cast(getLaunch().getLaunchConfiguration());
 		}
 		return super.getAdapter(adapter);
 	}
+
 }

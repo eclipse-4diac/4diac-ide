@@ -144,13 +144,40 @@ public interface STCoreFactory extends EFactory {
 	STArrayInitializerExpression createSTArrayInitializerExpression();
 
 	/**
-	 * Returns a new object of class '<em>ST Array Init Element</em>'.
+	 * Returns a new object of class '<em>ST Single Array Init Element</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>ST Array Init Element</em>'.
+	 * @return a new object of class '<em>ST Single Array Init Element</em>'.
 	 * @generated
 	 */
-	STArrayInitElement createSTArrayInitElement();
+	STSingleArrayInitElement createSTSingleArrayInitElement();
+
+	/**
+	 * Returns a new object of class '<em>ST Repeat Array Init Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Repeat Array Init Element</em>'.
+	 * @generated
+	 */
+	STRepeatArrayInitElement createSTRepeatArrayInitElement();
+
+	/**
+	 * Returns a new object of class '<em>ST Pragma</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Pragma</em>'.
+	 * @generated
+	 */
+	STPragma createSTPragma();
+
+	/**
+	 * Returns a new object of class '<em>ST Attribute</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Attribute</em>'.
+	 * @generated
+	 */
+	STAttribute createSTAttribute();
 
 	/**
 	 * Returns a new object of class '<em>ST Statement</em>'.

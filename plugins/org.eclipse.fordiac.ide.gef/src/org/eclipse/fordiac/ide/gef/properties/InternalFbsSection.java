@@ -47,7 +47,6 @@ import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.ISelectionProviderSection;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -138,11 +137,8 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
+	protected void performRefresh() {
 		provider.setInput(getType() != null ? getType().getInternalFbs() : Collections.emptyList());
-		commandStack = commandStackBuffer;
 		table.refresh();
 	}
 

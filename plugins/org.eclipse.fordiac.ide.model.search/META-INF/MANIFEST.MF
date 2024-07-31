@@ -5,6 +5,8 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.model.search;singleton:=true
 Bundle-Version: 3.0.0.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.model.search
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.eclipse.fordiac.ide.model.search.plugin.SearchPlugin
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.model.search,
  org.eclipse.fordiac.ide.model.search.dialog,

@@ -84,7 +84,7 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 		if (null != getType() && newDataTypeSelected(newTypeName)) {
 			final DataType newDtp = getDataTypeLib().getTypeIfExists(newTypeName);
 			final ConfigureFBCommand cmd = new ConfigureFBCommand(getType(), newDtp);
-			commandStack.execute(cmd);
+			executeCommand(cmd);
 			updateFB(cmd.getNewElement());
 		}
 	}
@@ -113,14 +113,14 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		if (commandStack != null) {
-			commandStack.removeCommandStackEventListener(this);
+		if (getCurrentCommandStack() != null) {
+			getCurrentCommandStack().removeCommandStackEventListener(this);
 		}
 		Assert.isTrue(selection instanceof IStructuredSelection);
 		final Object input = ((IStructuredSelection) selection).getFirstElement();
 
-		commandStack = getCommandStack(part, input);
-		if (null == commandStack) { // disable all fields
+		setCurrentCommandStack(part, input);
+		if (null == getCurrentCommandStack()) { // disable all fields
 			configurableFbLabel.setEnabled(false);
 		}
 
@@ -129,16 +129,16 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 		typeSelectionWidget.initialize(getType(), DataTypeSelectionContentProvider.INSTANCE,
 				DataTypeSelectionTreeContentProvider.INSTANCE);
 
-		if (commandStack != null) {
-			commandStack.addCommandStackEventListener(this);
+		if (getCurrentCommandStack() != null) {
+			getCurrentCommandStack().addCommandStackEventListener(this);
 		}
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
-		if (commandStack != null) {
-			commandStack.removeCommandStackEventListener(this);
+		if (getCurrentCommandStack() != null) {
+			getCurrentCommandStack().removeCommandStackEventListener(this);
 		}
 	}
 
@@ -169,6 +169,11 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 
 	@Override
 	protected void setInputInit() {
+		// Currently nothing needs to be done here
+	}
+
+	@Override
+	protected void performRefresh() {
 		// Currently nothing needs to be done here
 	}
 }

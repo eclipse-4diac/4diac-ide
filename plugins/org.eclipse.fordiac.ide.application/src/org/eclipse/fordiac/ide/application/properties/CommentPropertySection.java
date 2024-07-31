@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.application.properties;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -36,13 +35,8 @@ public class CommentPropertySection extends AbstractSection {
 	}
 
 	@Override
-	public void refresh() {
-		if ((getType() != null)) {
-			final CommandStack commandStackBuffer = commandStack;
-			commandStack = null;
-			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			commandStack = commandStackBuffer;
-		}
+	protected void performRefresh() {
+		commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 	}
 
 	protected Composite createFBInfoContainer(final Composite parent) {

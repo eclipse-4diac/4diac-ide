@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Johannes Kepler University
+ * Copyright (c) 2022, 2024 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -50,11 +50,11 @@ public class SegmentSection extends AbstractDoubleColumnSection {
 
 	@Override
 	protected Segment getInputType(Object input) {
-		if (input instanceof EditPart) {
-			input = ((EditPart) input).getModel();
+		if (input instanceof final EditPart ep) {
+			input = ep.getModel();
 		}
-		if (input instanceof Segment) {
-			return ((Segment) input);
+		if (input instanceof final Segment segment) {
+			return segment;
 		}
 		return null;
 	}
@@ -102,8 +102,8 @@ public class SegmentSection extends AbstractDoubleColumnSection {
 
 	@Override
 	protected Segment getType() {
-		if (type instanceof Segment) {
-			return (Segment) type;
+		if (type instanceof final Segment segment) {
+			return segment;
 		}
 		return null;
 	}
@@ -119,27 +119,24 @@ public class SegmentSection extends AbstractDoubleColumnSection {
 	}
 
 	@Override
-	public void refresh() {
-		super.refresh();
-
-		if (null != getType()) {
-			nameText.setText(getType().getName());
-			commentText.setText(getType().getComment());
-			// TODO this works, but it's a bit shit as it relies on the id of the extension never being changed.
-			// Maybe find a way to make it nicer eventually
-			getRightComposite().setVisible(!"Ethernet".equals(getCommunicationType())); //$NON-NLS-1$
-			final CommunicationConfigurationDetails commConfig = CommunicationConfigurationDetails
-					.getCommConfigUiFromExtensionPoint(getCommunicationType(),
-							CommunicationConfigurationDetails.COMM_EXT_ATT_ID);
-			if (commConfig == null) {
-				ErrorMessenger.popUpErrorMessage(Messages.Segment_NoConfigErrorMessage);
-				return;
-			}
-			commConfigContents.dispose();
-			commConfigContents = commConfig.createUi(commConfigGroup, getType().getCommunication(), getSection(),
-					getWidgetFactory());
-			commConfigContents.pack();
+	protected void performRefresh() {
+		nameText.setText(getType().getName());
+		commentText.setText(getType().getComment());
+		// TODO this works, but it's a bit shit as it relies on the id of the extension
+		// never being changed.
+		// Maybe find a way to make it nicer eventually
+		getRightComposite().setVisible(!"Ethernet".equals(getCommunicationType())); //$NON-NLS-1$
+		final CommunicationConfigurationDetails commConfig = CommunicationConfigurationDetails
+				.getCommConfigUiFromExtensionPoint(getCommunicationType(),
+						CommunicationConfigurationDetails.COMM_EXT_ATT_ID);
+		if (commConfig == null) {
+			ErrorMessenger.popUpErrorMessage(Messages.Segment_NoConfigErrorMessage);
+			return;
 		}
+		commConfigContents.dispose();
+		commConfigContents = commConfig.createUi(commConfigGroup, getType().getCommunication(), getSection(),
+				getWidgetFactory());
+		commConfigContents.pack();
 	}
 
 	private String getCommunicationType() {

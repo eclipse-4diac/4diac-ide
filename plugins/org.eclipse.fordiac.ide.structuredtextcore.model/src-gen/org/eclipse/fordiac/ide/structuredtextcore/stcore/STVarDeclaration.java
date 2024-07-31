@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration#getMaxLength <em>Max Length</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration#getDefaultValue <em>Default Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration#getPragma <em>Pragma</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTVarDeclaration()
@@ -177,5 +178,27 @@ public interface STVarDeclaration extends ITypedElement {
 	 * @generated
 	 */
 	void setDefaultValue(STInitializerExpression value);
+
+	/**
+	 * Returns the value of the '<em><b>Pragma</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pragma</em>' containment reference.
+	 * @see #setPragma(STPragma)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTVarDeclaration_Pragma()
+	 * @model containment="true"
+	 * @generated
+	 */
+	STPragma getPragma();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration#getPragma <em>Pragma</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pragma</em>' containment reference.
+	 * @see #getPragma()
+	 * @generated
+	 */
+	void setPragma(STPragma value);
 
 } // STVarDeclaration

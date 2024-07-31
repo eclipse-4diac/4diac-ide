@@ -22,9 +22,18 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
 public final class InternalAttributeDeclarations {
 
@@ -44,8 +53,10 @@ public final class InternalAttributeDeclarations {
 			LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE, ElementaryTypes.BOOL);
 	public static final AttributeDeclaration RETAIN = createAttributeDeclaration(LibraryElementTags.RETAIN_ATTRIBUTE,
 			ElementaryTypes.USINT);
+	public static final AttributeDeclaration TARGET = createTargetAttributeDeclaration();
 
-	private static final List<AttributeDeclaration> allAttributes = List.of(VAR_CONFIG, VISIBLE, UNFOLDED, RETAIN);
+	private static final List<AttributeDeclaration> allAttributes = List.of(VAR_CONFIG, VISIBLE, UNFOLDED, RETAIN,
+			TARGET);
 
 	private static AttributeDeclaration createAttributeDeclaration(final String name, final DataType type) {
 		final AttributeDeclaration declaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
@@ -57,6 +68,36 @@ public final class InternalAttributeDeclarations {
 
 		addAttribbuteDeclarationToResource(declaration);
 		return declaration;
+	}
+
+	private static AttributeDeclaration createTargetAttributeDeclaration() {
+		final AttributeDeclaration declaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
+		declaration.setName(LibraryElementTags.TARGET_ATTRIBUTE_DEFINITION);
+
+		final StructuredType structType = DataFactory.eINSTANCE.createStructuredType();
+
+		structType.getMemberVariables().add(createTargetMember(IInterfaceElement.class.getSimpleName()));
+		structType.getMemberVariables().add(createTargetMember(SubApp.class.getSimpleName()));
+		structType.getMemberVariables().add(createTargetMember(FBType.class.getSimpleName()));
+		structType.getMemberVariables().add(createTargetMember(Application.class.getSimpleName()));
+		structType.getMemberVariables().add(createTargetMember(Connection.class.getSimpleName()));
+		structType.getMemberVariables().add(createTargetMember(FB.class.getSimpleName()));
+		structType.getMemberVariables().add(createTargetMember(DataType.class.getSimpleName()));
+
+		declaration.setType(structType);
+
+		addAttribbuteDeclarationToResource(declaration);
+		return declaration;
+	}
+
+	private static MemberVarDeclaration createTargetMember(final String name) {
+		final MemberVarDeclaration member = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
+		member.setName(name);
+		member.setType(ElementaryTypes.BOOL);
+		final Value val = LibraryElementFactory.eINSTANCE.createValue();
+		val.setValue("TRUE"); //$NON-NLS-1$
+		member.setValue(val);
+		return member;
 	}
 
 	public static AttributeDeclaration getInternalAttributeByName(final String name) {

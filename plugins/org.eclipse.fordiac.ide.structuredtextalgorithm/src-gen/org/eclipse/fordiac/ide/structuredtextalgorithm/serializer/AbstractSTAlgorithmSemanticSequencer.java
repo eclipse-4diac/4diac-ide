@@ -26,9 +26,9 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody;
 import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSemanticSequencer;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
@@ -55,8 +55,11 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpressio
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STPragma;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression;
@@ -113,14 +116,14 @@ public abstract class AbstractSTAlgorithmSemanticSequencer extends STCoreSemanti
 			case STCorePackage.ST_ARRAY_ACCESS_EXPRESSION:
 				sequence_STAccessExpression(context, (STArrayAccessExpression) semanticObject); 
 				return; 
-			case STCorePackage.ST_ARRAY_INIT_ELEMENT:
-				sequence_STArrayInitElement(context, (STArrayInitElement) semanticObject); 
-				return; 
 			case STCorePackage.ST_ARRAY_INITIALIZER_EXPRESSION:
 				sequence_STArrayInitializerExpression(context, (STArrayInitializerExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_ASSIGNMENT:
 				sequence_STAssignment(context, (STAssignment) semanticObject); 
+				return; 
+			case STCorePackage.ST_ATTRIBUTE:
+				sequence_STAttribute(context, (STAttribute) semanticObject); 
 				return; 
 			case STCorePackage.ST_BINARY_EXPRESSION:
 				sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(context, (STBinaryExpression) semanticObject); 
@@ -195,13 +198,61 @@ public abstract class AbstractSTAlgorithmSemanticSequencer extends STCoreSemanti
 				sequence_STStatement(context, (STNop) semanticObject); 
 				return; 
 			case STCorePackage.ST_NUMERIC_LITERAL:
-				sequence_STNumericLiteral(context, (STNumericLiteral) semanticObject); 
+				if (rule == grammarAccess.getSTLiteralExpressionsRule()
+						|| rule == grammarAccess.getSTNumericLiteralRule()) {
+					sequence_STNumericLiteral(context, (STNumericLiteral) semanticObject); 
+					return; 
+				}
+				else if (rule == grammarAccess.getSTStatementRule()
+						|| rule == grammarAccess.getSTAssignmentRule()
+						|| action == grammarAccess.getSTAssignmentAccess().getSTAssignmentLeftAction_1_0()
+						|| rule == grammarAccess.getSTExpressionRule()
+						|| rule == grammarAccess.getSTSubrangeExpressionRule()
+						|| action == grammarAccess.getSTSubrangeExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTOrExpressionRule()
+						|| action == grammarAccess.getSTOrExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTXorExpressionRule()
+						|| action == grammarAccess.getSTXorExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTAndExpressionRule()
+						|| action == grammarAccess.getSTAndExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTEqualityExpressionRule()
+						|| action == grammarAccess.getSTEqualityExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTComparisonExpressionRule()
+						|| action == grammarAccess.getSTComparisonExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTAddSubExpressionRule()
+						|| action == grammarAccess.getSTAddSubExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTMulDivModExpressionRule()
+						|| action == grammarAccess.getSTMulDivModExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTPowerExpressionRule()
+						|| action == grammarAccess.getSTPowerExpressionAccess().getSTBinaryExpressionLeftAction_1_0_0()
+						|| rule == grammarAccess.getSTUnaryExpressionRule()
+						|| rule == grammarAccess.getSTAccessExpressionRule()
+						|| action == grammarAccess.getSTAccessExpressionAccess().getSTMemberAccessExpressionReceiverAction_1_0_0()
+						|| action == grammarAccess.getSTAccessExpressionAccess().getSTArrayAccessExpressionReceiverAction_1_1_0()
+						|| rule == grammarAccess.getSTPrimaryExpressionRule()) {
+					sequence_STNumericLiteral_STSignedNumericLiteral(context, (STNumericLiteral) semanticObject); 
+					return; 
+				}
+				else if (rule == grammarAccess.getSTSignedLiteralExpressionsRule()
+						|| rule == grammarAccess.getSTSignedNumericLiteralRule()) {
+					sequence_STSignedNumericLiteral(context, (STNumericLiteral) semanticObject); 
+					return; 
+				}
+				else break;
+			case STCorePackage.ST_PRAGMA:
+				sequence_STPragma(context, (STPragma) semanticObject); 
+				return; 
+			case STCorePackage.ST_REPEAT_ARRAY_INIT_ELEMENT:
+				sequence_STRepeatArrayInitElement(context, (STRepeatArrayInitElement) semanticObject); 
 				return; 
 			case STCorePackage.ST_REPEAT_STATEMENT:
 				sequence_STRepeatStatement(context, (STRepeatStatement) semanticObject); 
 				return; 
 			case STCorePackage.ST_RETURN:
 				sequence_STStatement(context, (STReturn) semanticObject); 
+				return; 
+			case STCorePackage.ST_SINGLE_ARRAY_INIT_ELEMENT:
+				sequence_STSingleArrayInitElement(context, (STSingleArrayInitElement) semanticObject); 
 				return; 
 			case STCorePackage.ST_STRING_LITERAL:
 				sequence_STStringLiteral(context, (STStringLiteral) semanticObject); 

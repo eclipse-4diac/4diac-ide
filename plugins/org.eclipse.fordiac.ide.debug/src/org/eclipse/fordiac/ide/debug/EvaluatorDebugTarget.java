@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,12 +12,22 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug;
 
+import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
@@ -27,12 +37,16 @@ import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.fordiac.ide.debug.breakpoint.EvaluatorLineBreakpoint;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
+import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
 public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebugTarget {
 	private final String name;
 	private final ILaunch launch;
 	private final EvaluatorProcess process;
 	private final CommonEvaluatorDebugger debugger;
+	private final AtomicLong variableUpdateCount = new AtomicLong();
 
 	public EvaluatorDebugTarget(final String name, final Evaluator evaluator, final ILaunch launch)
 			throws CoreException {
@@ -42,6 +56,7 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 		process = new EvaluatorProcess(name, evaluator, launch);
 		debugger = new CommonEvaluatorDebugger(this);
 		process.getExecutor().attachDebugger(debugger);
+		process.getExecutor().addMonitor(new EvaluatorVariableMonitor());
 		launch.addDebugTarget(this);
 		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
 		Stream.of(DebugPlugin.getDefault().getBreakpointManager().getBreakpoints())
@@ -62,6 +77,14 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 		return debugger;
 	}
 
+	public long getVariableUpdateCount() {
+		return variableUpdateCount.get();
+	}
+
+	public long incrementVariableUpdateCount() {
+		return variableUpdateCount.incrementAndGet();
+	}
+
 	@Override
 	public boolean canResume() {
 		return debugger.getThreads().stream().anyMatch(EvaluatorDebugThread::canResume);
@@ -74,7 +97,7 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 
 	@Override
 	public boolean isSuspended() {
-		return debugger.getThreads().stream().anyMatch(EvaluatorDebugThread::isSuspended);
+		return debugger.getThreads().stream().allMatch(EvaluatorDebugThread::isSuspended);
 	}
 
 	@Override
@@ -180,5 +203,62 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 	@Override
 	public boolean hasThreads() throws DebugException {
 		return !debugger.getThreads().isEmpty();
+	}
+
+	private class EvaluatorVariableMonitor extends Job implements EvaluatorMonitor {
+
+		private static final int UPDATE_INTERVAL = 200;
+
+		private final AtomicReference<Set<Variable<?>>> queue = new AtomicReference<>(ConcurrentHashMap.newKeySet());
+
+		@Override
+		protected IStatus run(final IProgressMonitor monitor) {
+			incrementVariableUpdateCount();
+			final DebugEvent[] events = queue.getAndSet(ConcurrentHashMap.newKeySet()).stream()
+					.map(debugger::getVariable)
+					.map(variable -> new DebugEvent(variable, DebugEvent.CHANGE, DebugEvent.CONTENT))
+					.toArray(DebugEvent[]::new);
+			if (events.length != 0) {
+				DebugPlugin.getDefault().fireDebugEventSet(events);
+			}
+			return Status.OK_STATUS;
+		}
+
+		public EvaluatorVariableMonitor() {
+			super(MessageFormat.format(Messages.EvaluatorDebugTarget_UpdateVariablesJobName, name));
+		}
+
+		@Override
+		public void update(final Collection<? extends Variable<?>> variables, final Evaluator evaluator) {
+			if (!variables.isEmpty() && evaluator.isPersistent()) {
+				queue.get().addAll(variables);
+				schedule(UPDATE_INTERVAL);
+			}
+		}
+
+		@Override
+		public void info(final String message) {
+			// empty default
+		}
+
+		@Override
+		public void warn(final String message) {
+			// empty default
+		}
+
+		@Override
+		public void error(final String message) {
+			// empty default
+		}
+
+		@Override
+		public void error(final String message, final Throwable t) {
+			// empty default
+		}
+
+		@Override
+		public void terminated(final EvaluatorThreadPoolExecutor executor) {
+			// empty default
+		}
 	}
 }

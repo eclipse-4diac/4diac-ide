@@ -18,6 +18,7 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
@@ -25,11 +26,13 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 		implements IVariable, Comparable<EvaluatorDebugVariable> {
 	private final Variable<?> variable;
 	private EvaluatorDebugValue cachedValue;
+	private long updateCount;
 
 	public EvaluatorDebugVariable(final Variable<?> variable, final EvaluatorDebugTarget debugTarget) {
 		super(debugTarget);
 		this.variable = variable;
 		cachedValue = new EvaluatorDebugValue(variable.getValue(), getDebugTarget());
+		updateCount = debugTarget.getVariableUpdateCount();
 	}
 
 	@Override
@@ -79,8 +82,13 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 
 	@Override
 	public EvaluatorDebugValue getValue() {
-		if (hasValueChanged()) {
-			cachedValue = new EvaluatorDebugValue(variable.getValue(), getDebugTarget());
+		final Value value = variable.getValue();
+		if (value != cachedValue.getInternalValue()) {
+			final EvaluatorDebugTarget debugTarget = getDebugTarget();
+			if (!value.equals(cachedValue.getInternalValue())) {
+				updateCount = debugTarget.getVariableUpdateCount();
+			}
+			cachedValue = new EvaluatorDebugValue(value, debugTarget);
 		}
 		return cachedValue;
 	}
@@ -97,7 +105,7 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 
 	@Override
 	public boolean hasValueChanged() {
-		return !variable.getValue().equals(cachedValue.getInternalValue());
+		return updateCount == getDebugTarget().getVariableUpdateCount();
 	}
 
 	@Override

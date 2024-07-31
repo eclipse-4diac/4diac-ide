@@ -27,6 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.jface.resource.CompositeImageDescriptor;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -120,7 +122,11 @@ public class BreadcrumbItem {
 
 		final TreeViewer viewer = new TreeViewer(shell);
 		viewer.setContentProvider(contentProvider);
-		viewer.setLabelProvider(labelProvider);
+		if (labelProvider instanceof final IStyledLabelProvider styledLabelProvider) {
+			viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(styledLabelProvider));
+		} else {
+			viewer.setLabelProvider(labelProvider);
+		}
 		viewer.setInput(current);
 		viewer.getControl().addFocusListener(new FocusAdapter() {
 			@Override

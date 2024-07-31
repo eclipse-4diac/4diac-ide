@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 fortiss GmbH, Johannes Kepler University Linz,
- * 							Primetals Technologies Austria GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2016, 2024 fortiss GmbH, Johannes Kepler University Linz,
+ * 							Primetals Technologies Austria GmbH,
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -44,7 +44,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -161,44 +160,37 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
+	protected void performRefresh() {
+		refreshParameterVisibility();
+		final FBNetworkElement fb = getType().getFBNetworkElement();
+		if (fb != null) {
+			infoSection.setText(
+					MessageFormat.format(Messages.InterfaceElementSection_Instance, fb.getName(), getPinName()));
+		} else { // e.g., IP address of device
+			infoSection.setText(Messages.InterfaceElementSection_InterfaceElement);
+		}
+		typeCommentText.setText(CommentHelper.getTypeComment(getType()));
 
-		if (null != type) {
-			refreshParameterVisibility();
-			final FBNetworkElement fb = getType().getFBNetworkElement();
-			if (fb != null) {
-				infoSection.setText(
-						MessageFormat.format(Messages.InterfaceElementSection_Instance, fb.getName(), getPinName()));
-			} else { // e.g., IP address of device
-				infoSection.setText(Messages.InterfaceElementSection_InterfaceElement);
-			}
-			typeCommentText.setText(CommentHelper.getTypeComment(getType()));
+		configureOpenEditorButton();
 
-			configureOpenEditorButton();
+		instanceCommentText.setText(CommentHelper.getInstanceComment(getType()));
+		instanceCommentText.setForeground(getForegroundColor());
 
-			instanceCommentText.setText(CommentHelper.getInstanceComment(getType()));
-			instanceCommentText.setForeground(getForegroundColor());
+		refreshTypeInitialValue();
+		currentParameterEditor.setInterfaceElement(getType());
+		currentParameterEditor.refresh();
 
-			refreshTypeInitialValue();
-			currentParameterEditor.setInterfaceElement(getType());
-			currentParameterEditor.refresh();
+		typeText.setText(getPinTypeName());
 
-			typeText.setText(getPinTypeName());
+		connectionDisplayWidget.refreshConnectionsViewer(getType());
 
-			connectionDisplayWidget.refreshConnectionsViewer(getType());
-
-			if (getType() instanceof final VarDeclaration verDeclaration) {
-				currentVarConfigCheckBox.setSelection(verDeclaration.isVarConfig());
-			}
-
-			if (fb != null) {
-				setEditable(!fb.isContainedInTypedInstance());
-			}
+		if (getType() instanceof final VarDeclaration verDeclaration) {
+			currentVarConfigCheckBox.setSelection(verDeclaration.isVarConfig());
 		}
 
-		commandStack = commandStackBuffer;
+		if (fb != null) {
+			setEditable(!fb.isContainedInTypedInstance());
+		}
 	}
 
 	private void configureOpenEditorButton() {

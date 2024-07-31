@@ -16,6 +16,8 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
@@ -72,4 +74,69 @@ public class SWTBot4diacFigureCanvas extends SWTBotGefFigureCanvas {
 		return new org.eclipse.swt.events.MouseEvent(createMouseEvent(x, y, button, stateMask, count));
 	}
 
+	@Override
+	public void typeText(final Text textControl, final String text) {
+		UIThreadRunnable.syncExec(() -> textControl.setText(""));
+		for (int x = 0; x < text.length(); ++x) {
+			final char c = text.charAt(x);
+			UIThreadRunnable.syncExec(() -> {
+				textControl.setFocus();
+				textControl.notifyListeners(SWT.KeyDown, keyEvent(SWT.NONE, c, 0));
+				textControl.notifyListeners(SWT.KeyUp, keyEvent(SWT.NONE, c, 0));
+				textControl.setText(textControl.getText() + c);
+			});
+			try {
+				Thread.sleep(50L);
+			} catch (final InterruptedException e) {
+			}
+		}
+
+		// apply the value with a default selection event
+		UIThreadRunnable.syncExec(() -> {
+			textControl.setFocus();
+			textControl.notifyListeners(SWT.KeyDown, keyEvent(SWT.NONE, SWT.CR, 0));
+			textControl.notifyListeners(SWT.KeyUp, keyEvent(SWT.NONE, SWT.CR, 0));
+		});
+
+		// TODO find bug in this method which is part of the method directEditType of an
+		// editor. the SWT method directEditType types the text and is closing the
+		// textfield afterwards. To insert a new FB by typing in the editing area not
+		// only the text is required but also a enter keystroke afterwards.
+
+//		// apply the value with a default selection event
+//		UIThreadRunnable.syncExec(() -> {
+//			textControl.setFocus();
+//			textControl.notifyListeners(SWT.KeyDown, enterEvent());
+//			textControl.notifyListeners(SWT.KeyUp, enterEvent());
+//		});
+
+//		UIThreadRunnable.syncExec(() -> {
+//			textControl.notifyListeners(SWT.CR, keyEvent(SWT.NONE, '\n', 0));
+//			System.out.print(textControl.getText());
+//			System.out.println(textControl.getText());
+//		});
+
+	}
+
+//	public void typeEnter(final Text textControl) {
+//		UIThreadRunnable.syncExec(() -> {
+//			textControl.setFocus();
+//			textControl.notifyListeners(SWT.KeyDown, enterEvent());
+//			textControl.notifyListeners(SWT.KeyUp, enterEvent());
+//		});
+//	}
+
+	private Event keyEvent(final int modificationKey, final char c, final int keyCode) {
+		final Event keyEvent = createEvent();
+		keyEvent.stateMask = modificationKey;
+		keyEvent.character = c;
+		keyEvent.keyCode = keyCode;
+		return keyEvent;
+	}
+
+	private Event enterEvent() {
+		final Event keyEvent = createEvent();
+		keyEvent.keyCode = 13;
+		return keyEvent;
+	}
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH,
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -45,7 +45,6 @@ import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -117,13 +116,10 @@ public class InstancePropertySection extends AbstractSection {
 	}
 
 	@Override
-	public void refresh() {
-		if ((getType() != null) && !nameText.isDisposed() && !nameText.getParent().isDisposed()) {
-			final CommandStack commandStackBuffer = commandStack;
-			commandStack = null;
+	protected void performRefresh() {
+		if (!nameText.isDisposed() && !nameText.getParent().isDisposed()) {
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			commandStack = commandStackBuffer;
 			outputTable.refresh();
 			inputTable.refresh();
 		}

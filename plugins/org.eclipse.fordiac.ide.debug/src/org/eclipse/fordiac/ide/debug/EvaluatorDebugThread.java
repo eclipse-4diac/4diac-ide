@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -96,8 +96,22 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 		return suspended.get();
 	}
 
-	public void setSuspended(final boolean suspended) {
-		this.suspended.set(suspended);
+	public void resumed(final int detail) {
+		if (suspended.getAndSet(false)) {
+			fireResumeEvent(detail);
+			getDebugTarget().fireResumeEvent(detail);
+		}
+	}
+
+	public void suspended(final int detail) {
+		if (!suspended.getAndSet(true)) {
+			final EvaluatorDebugTarget debugTarget = getDebugTarget();
+			debugTarget.incrementVariableUpdateCount();
+			fireSuspendEvent(detail);
+			if (debugTarget.isSuspended()) {
+				debugTarget.fireSuspendEvent(detail);
+			}
+		}
 	}
 
 	@Override
@@ -182,7 +196,7 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 
 	@Override
 	public boolean hasStackFrames() throws DebugException {
-		return isSuspended();
+		return getCurrentEvaluator() != null;
 	}
 
 	@Override

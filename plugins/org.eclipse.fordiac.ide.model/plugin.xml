@@ -2,7 +2,7 @@
 <?eclipse version="3.2"?>
 <plugin>
   <extension-point id="TypeEntryCreator" name="TypeEntryCreator" schema="schema/TypeEntryCreator.exsd"/>
-  <extension-point id="libraryLinkerExtension" name="Extension for the Library Linker" schema="schema/libraryLinkerExtension.exsd"/>
+  <extension-point id="TypeLibraryStarter" name="Extension for Type Library Starter" schema="schema/TypeLibraryStarter.exsd"/>
 
   <extension point="org.eclipse.emf.ecore.generated_package">
     <package 
@@ -266,4 +266,15 @@
           value="false">
     </persistent>
  </extension>  
+ <extension
+       id="library"
+       name="4diac IDE Library Problem"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.model.problem">
+    </super>
+    <persistent
+          value="false">
+    </persistent>
+ </extension>
 </plugin>

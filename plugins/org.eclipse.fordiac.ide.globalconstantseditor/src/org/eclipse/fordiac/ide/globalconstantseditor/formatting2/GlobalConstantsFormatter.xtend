@@ -33,15 +33,11 @@ class GlobalConstantsFormatter extends STCoreFormatter {
 	@Inject extension GlobalConstantsGrammarAccess
 
 	def dispatch void format(STGlobalConstsSource stGlobalConstsSource, extension IFormattableDocument document) {
-		val regions = textRegionAccess.regionForRootEObject.allSemanticRegions;
-		regions.forEach [
-			it.append[autowrap]
-		]
-
 		stGlobalConstsSource.allSemanticRegions.filter [
 			switch (element : grammarElement) {
 				Keyword case element.value.matches("[_a-zA-Z]+"): true
 				RuleCall case element.rule == numericRule: true
+				RuleCall case element.rule == signedNumericRule: true
 				RuleCall case element.rule == STNumericLiteralTypeRule: true
 				RuleCall case element.rule == STDateLiteralTypeRule: true
 				RuleCall case element.rule == STTimeLiteralTypeRule: true

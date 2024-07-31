@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -35,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -102,7 +100,7 @@ public class CreateConnectionSection extends AbstractSection {
 				Messages.CreateConnectionSection_CreateConnection, SWT.PUSH);
 		createConnectionButton.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
 		createConnectionButton
-		.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		createConnectionButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
@@ -128,7 +126,8 @@ public class CreateConnectionSection extends AbstractSection {
 	private static FBNetwork getFBNetwork(final IInterfaceElement source, final IInterfaceElement dest) {
 		if (source.eContainer().eContainer() instanceof final CompositeFBType cfbt) {
 			return cfbt.getFBNetwork();
-		} else if ((source.getFBNetworkElement().getFbNetwork() != dest.getFBNetworkElement().getFbNetwork())
+		}
+		if ((source.getFBNetworkElement().getFbNetwork() != dest.getFBNetworkElement().getFbNetwork())
 				&& (source.getFBNetworkElement() instanceof final SubApp subApp)) {
 			// one of the both is a untyped subapp interface element
 			if (subApp.getSubAppNetwork() == dest.getFBNetworkElement().getFbNetwork()) {
@@ -142,8 +141,8 @@ public class CreateConnectionSection extends AbstractSection {
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		Assert.isTrue(selection instanceof IStructuredSelection);
-		commandStack = getCommandStack(part, selection);
-		if (null == commandStack) { // disable all fields
+		setCurrentCommandStack(part, selection);
+		if (null == getCurrentCommandStack()) { // disable all fields
 			commentText.setEnabled(false);
 			sourceText.setEnabled(false);
 			targetText.setEnabled(false);
@@ -152,14 +151,9 @@ public class CreateConnectionSection extends AbstractSection {
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			sourceText.setText(getInterfaceName(true));
-			targetText.setText(getInterfaceName(false));
-		}
-		commandStack = commandStackBuffer;
+	protected void performRefresh() {
+		sourceText.setText(getInterfaceName(true));
+		targetText.setText(getInterfaceName(false));
 	}
 
 	private IInterfaceElement getInterfaceElement(final boolean source) {

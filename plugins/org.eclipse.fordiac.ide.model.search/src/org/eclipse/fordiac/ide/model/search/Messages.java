@@ -23,10 +23,15 @@ public final class Messages extends NLS {
 	public static String InstanceName;
 	public static String SearchHeaderName;
 	public static String ProjectScope;
+	public static String SearchFactoryRegistryReader_AlreadyRegistered;
+	public static String SearchFactoryRegistryReader_CannotCreateInstance;
+	public static String SearchFactoryRegistryReader_LogMessage;
+	public static String SearchFactoryRegistryReader_SourceInvalidClass;
 	public static String SearchFor;
 	public static String PinName;
 	public static String Comment;
 	public static String ContainingText;
+	public static String TextMatch_Location;
 	public static String TypeQuery;
 	public static String Jokers;
 	public static String CaseSensitive;

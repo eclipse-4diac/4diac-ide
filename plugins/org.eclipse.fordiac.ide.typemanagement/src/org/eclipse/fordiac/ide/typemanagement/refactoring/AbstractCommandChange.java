@@ -39,6 +39,15 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
+/**
+ * An abstract change encapsulating a {@link Command} to be executed on a
+ * particular element directly in a file or via the {@link CommandStack} of an
+ * open editor.
+ *
+ * @implSpec Do NOT keep any direct references to any elements, since they may
+ *           become out of date. Always use the element parameter passed to the
+ *           respective methods.
+ */
 public abstract class AbstractCommandChange<T extends EObject> extends Change {
 
 	private final String name;
@@ -47,16 +56,33 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 
 	private IEditorPart editor;
 
+	/**
+	 * Create an abstract command change with the last segment of the element URI as
+	 * the name.
+	 *
+	 * @param elementURI   The element URI
+	 * @param elementClass The element class
+	 */
 	protected AbstractCommandChange(final URI elementURI, final Class<T> elementClass) {
 		this(elementURI.lastSegment(), elementURI, elementClass);
 	}
 
+	/**
+	 * Create an abstract command change
+	 *
+	 * @param name         The name of the change
+	 * @param elementURI   The element URI
+	 * @param elementClass The element class
+	 */
 	protected AbstractCommandChange(final String name, final URI elementURI, final Class<T> elementClass) {
 		this.name = Objects.requireNonNull(name);
 		this.elementURI = Objects.requireNonNull(elementURI);
 		this.elementClass = Objects.requireNonNull(elementClass);
 	}
 
+	/**
+	 * @implNote Also initializes the editor reference.
+	 */
 	@Override
 	public final void initializeValidationData(final IProgressMonitor pm) {
 		initializeEditor();
@@ -67,8 +93,17 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		}
 	}
 
+	/**
+	 * Initialize the validation data based on the element
+	 *
+	 * @param element The element
+	 * @param pm      The progress monitor
+	 */
 	public abstract void initializeValidationData(T element, final IProgressMonitor pm);
 
+	/**
+	 * @implNote Also checks if the element can be retrieved.
+	 */
 	@Override
 	public final RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
@@ -82,9 +117,19 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		return status;
 	}
 
+	/**
+	 * Check if valid based on the element
+	 *
+	 * @param element The element
+	 * @param pm      The progress monitor
+	 */
 	public abstract RefactoringStatus isValid(T element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException;
 
+	/**
+	 * @implNote If {@link #performInUIThread()} returns true, perform in the UI
+	 *           thread using {@link Display#syncExec(Runnable)}.
+	 */
 	@Override
 	public final Change perform(final IProgressMonitor pm) throws CoreException {
 		if (performInUIThread() && Display.getCurrent() == null) {
@@ -116,6 +161,15 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		return createUndoChange(command, libraryElement);
 	}
 
+	/**
+	 * Perform the command on the element
+	 *
+	 * @param element The element
+	 * @return The command
+	 * @throws CoreException if the command could not be executed
+	 * @implNote This should only be overridden by {@link CommandUndoChange} and
+	 *           {@link CommandRedoChange}.
+	 */
 	protected Command performCommand(final T element) throws CoreException {
 		final Command command = Objects.requireNonNull(createCommand(element));
 		if (!command.canExecute()) {
@@ -130,8 +184,22 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		return command;
 	}
 
+	/**
+	 * Create the command for the element
+	 *
+	 * @param element The element
+	 * @return The command (must not be null)
+	 */
 	protected abstract Command createCommand(T element);
 
+	/**
+	 * Acquire the library element for the element URI
+	 *
+	 * @param editable if the library element must be editable
+	 * @return The (editable) library element
+	 * @implNote This should only be overridden by {@link CommandUndoChange} and
+	 *           {@link CommandRedoChange}.
+	 */
 	protected LibraryElement acquireLibraryElement(final boolean editable) {
 		if (editor != null) {
 			return Adapters.adapt(editor, LibraryElement.class);
@@ -143,7 +211,14 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		return null;
 	}
 
-	protected void commit(final LibraryElement libraryElement, final IProgressMonitor pm) throws CoreException {
+	/**
+	 * Commit the changes to the library element
+	 *
+	 * @param libraryElement The library element
+	 * @param pm             The progress monitor
+	 * @throws CoreException if there was a problem saving the library element
+	 */
+	private void commit(final LibraryElement libraryElement, final IProgressMonitor pm) throws CoreException {
 		libraryElement.getTypeEntry().save(libraryElement, pm);
 		if (editor != null) {
 			// if we have an editor mark the save location in the command stack to tell the
@@ -152,12 +227,21 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		}
 	}
 
+	/**
+	 * Create an undo change for this change and the command and library element
+	 *
+	 * @param command        The command
+	 * @param libraryElement The library element
+	 * @return The undo change
+	 * @implNote This should only be overridden by {@link CommandUndoChange} and
+	 *           {@link CommandRedoChange}.
+	 */
 	protected Change createUndoChange(final Command command, final LibraryElement libraryElement) {
 		return new CommandUndoChange<>(name, elementURI, elementClass, command, libraryElement);
 	}
 
 	@Override
-	public IFile getModifiedElement() {
+	public final IFile getModifiedElement() {
 		if (elementURI.isPlatformResource()) {
 			return ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(elementURI.toPlatformString(true)));
 		}
@@ -165,7 +249,7 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	}
 
 	@Override
-	public Object[] getAffectedObjects() {
+	public final Object[] getAffectedObjects() {
 		final IFile modifiedElement = getModifiedElement();
 		if (modifiedElement != null) {
 			return new Object[] { modifiedElement };
@@ -174,19 +258,34 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	}
 
 	@Override
-	public String getName() {
+	public final String getName() {
 		return name;
 	}
 
-	public URI getElementURI() {
+	/**
+	 * Get the element URI
+	 *
+	 * @return The element URI (will never be null)
+	 */
+	public final URI getElementURI() {
 		return elementURI;
 	}
 
-	public Class<T> getElementClass() {
+	/**
+	 * Get the element class
+	 *
+	 * @return The element class (will never be null)
+	 */
+	public final Class<T> getElementClass() {
 		return elementClass;
 	}
 
-	public IEditorPart getEditor() {
+	/**
+	 * Get the editor if open for the element URI
+	 *
+	 * @return The editor (may be null)
+	 */
+	public final IEditorPart getEditor() {
 		return editor;
 	}
 
@@ -205,15 +304,28 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		return null;
 	}
 
-	protected CommandStack getCommandStack() {
+	/**
+	 * Get the command stack for the editor
+	 *
+	 * @return The command stack (may be null)
+	 */
+	protected final CommandStack getCommandStack() {
 		return Adapters.adapt(editor, CommandStack.class);
 	}
 
+	/**
+	 * Whether to perform the command in the UI thread
+	 *
+	 * @return true if the command should be performed in the UI thread, false
+	 *         otherwise
+	 * @implNote This typically returns whether there is an editor open for the
+	 *           corresponding file.
+	 */
 	protected boolean performInUIThread() {
 		return editor != null;
 	}
 
-	protected void initializeEditor() {
+	private void initializeEditor() {
 		final IEditorInput editorInput = new FileEditorInput(getModifiedElement());
 		// need sync exec because IWorkbenchPage.findEditor(IEditorInput) may
 		// instantiate the editor if it is not loaded (e.g., open editor after a

@@ -91,6 +91,8 @@ import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement
 
 abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	public static final String RETURN_VARIABLE_NAME = ""
@@ -202,14 +204,14 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		val value = variable.value as ArrayValue
 		var index = 0;
 		for (elem : expression.values) {
-			if (elem.initExpressions.empty)
-				value.getRaw(index++).evaluateInitializerExpression(elem.indexOrInitExpression)
-			else {
-				val repeatExpression = (elem.indexOrInitExpression as STElementaryInitializerExpression).value
-				val repeat = repeatExpression.evaluateExpression.asInteger
-				for (unused : 0 ..< repeat) {
-					for (initElement : elem.initExpressions) {
-						value.getRaw(index++).evaluateInitializerExpression(initElement)
+			switch (elem) {
+				STSingleArrayInitElement:
+					value.getRaw(index++).evaluateInitializerExpression(elem.initExpression)
+				STRepeatArrayInitElement: {
+					for (unused : 0 ..< elem.repetitions.intValueExact) {
+						for (initElement : elem.initExpressions) {
+							value.getRaw(index++).evaluateInitializerExpression(initElement)
+						}
 					}
 				}
 			}

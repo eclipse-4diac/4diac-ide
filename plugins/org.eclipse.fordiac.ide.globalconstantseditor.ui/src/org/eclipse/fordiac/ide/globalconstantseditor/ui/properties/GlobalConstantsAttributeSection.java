@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University
+ * Copyright (c) 2023, 2024 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -32,8 +32,8 @@ public class GlobalConstantsAttributeSection extends AttributeSection {
 
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		commandStack = getCommandStack(part, null);
-		if (null == commandStack) {
+		setCurrentCommandStack(part, null);
+		if (null == getCurrentCommandStack()) {
 			setInputCode();
 		}
 		setType(part);

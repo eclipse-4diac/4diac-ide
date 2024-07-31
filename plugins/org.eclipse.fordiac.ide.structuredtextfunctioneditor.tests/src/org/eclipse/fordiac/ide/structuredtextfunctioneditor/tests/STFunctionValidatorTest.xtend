@@ -1395,15 +1395,6 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
 			STCoreValidator.ARRAY_ACCESS_RECEIVER_INVALID)
-		'''
-			FUNCTION ArrayTestDeclarationTest
-			VAR
-				intTest : INT;
-			END_VAR
-			intTest := 2.0[1];
-			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
-			STCoreValidator.ARRAY_ACCESS_RECEIVER_INVALID)
 	}
 
 	@Test
@@ -1616,6 +1607,16 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
 			STCoreValidator.UNNECESSARY_LITERAL_CONVERSION, "Unnecessary conversion of literal to USINT")
+		'''
+			FUNCTION test
+			VAR_TEMP
+				INT_VAR: INT;
+				INT_VAR2: INT;
+				REAL_VAR: REAL;
+			END_VAR
+			REAL_VAR := INT_TO_REAL(INT_VAR) / INT_VAR2;
+			END_FUNCTION
+		'''.parse.assertNoIssues
 	}
 
 	@Test

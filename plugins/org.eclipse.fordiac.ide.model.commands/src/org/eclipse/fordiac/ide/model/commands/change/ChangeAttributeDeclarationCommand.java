@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -48,6 +49,10 @@ public class ChangeAttributeDeclarationCommand extends AbstractChangeAttributeCo
 			final AttributeTypeEntry entry = typeLibrary.getAttributeTypeEntry(name);
 			return entry != null ? entry.getType() : null;
 		}, name -> null);
+
+		if (newDecl != null && !newDecl.isValidObject((ConfigurableObject) attribute.eContainer())) {
+			return false;
+		}
 
 		final AttributeDeclaration oldDecl = attribute.getAttributeDeclaration();
 		return oldDecl != newDecl;

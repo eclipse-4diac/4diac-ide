@@ -464,8 +464,7 @@ public class CommonElementExporter {
 		final boolean hasAttributes = hasNonTrivialAttributes(ie);
 		final boolean hasInitalValue = (ie instanceof final VarDeclaration varDecl) && (varDecl.getValue() != null
 				&& varDecl.getValue().getValue() != null && !varDecl.getValue().getValue().isBlank());
-		final boolean hasComment = ie instanceof final VarDeclaration varDecl && varDecl.getComment() != null
-				&& !varDecl.getComment().equals(""); //$NON-NLS-1$
+		final boolean hasComment = !"".equals(ie.getComment());
 
 		if (hasAttributes) {
 			addStartElement(LibraryElementTags.PARAMETER_ELEMENT);

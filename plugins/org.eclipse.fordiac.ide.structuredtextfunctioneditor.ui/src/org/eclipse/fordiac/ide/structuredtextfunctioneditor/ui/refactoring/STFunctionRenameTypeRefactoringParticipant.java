@@ -16,7 +16,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.RenameTypeRefactoringParticipant;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.rename.RenameTypeRefactoringParticipant;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.xtext.ui.refactoring.ui.IRenameElementContext;
 
