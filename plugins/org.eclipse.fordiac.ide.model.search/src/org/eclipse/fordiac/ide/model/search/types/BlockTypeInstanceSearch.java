@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -50,6 +51,13 @@ public class BlockTypeInstanceSearch extends IEC61499ElementSearch {
 				createChildrenProvider());
 	}
 
+	public BlockTypeInstanceSearch(final TypeEntry entry, final IProject proj) {
+		super(createSearchContext(proj),
+				searchCanditate -> searchCanditate instanceof final TypedConfigureableObject tco
+						&& entry == tco.getTypeEntry(),
+				createChildrenProvider());
+	}
+
 	/*
 	 * Search inside of a LibaryElement
 	 *
@@ -62,8 +70,11 @@ public class BlockTypeInstanceSearch extends IEC61499ElementSearch {
 	}
 
 	private static ISearchContext createSearchContext(final TypeEntry entry) {
+		return createSearchContext(entry.getFile().getProject());
+	}
 
-		return new AbstractLiveSearchContext(entry.getFile().getProject()) {
+	private static ISearchContext createSearchContext(final IProject project) {
+		return new AbstractLiveSearchContext(project) {
 
 			@Override
 			public Stream<URI> getTypes() {
