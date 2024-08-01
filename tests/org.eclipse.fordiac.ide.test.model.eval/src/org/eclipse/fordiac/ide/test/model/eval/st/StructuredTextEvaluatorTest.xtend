@@ -360,6 +360,23 @@ class StructuredTextEvaluatorTest {
 		true.toBoolValue.assertEquals("NOT BOOL#FALSE".evaluateExpression)
 	}
 
+	@Test
+	def void testBinaryBitExpression() {
+		0x00000000.toDWordValue.assertEquals("DWORD#16#DEADBEEF AND BOOL#0".evaluateExpression)
+		0x00000000.toDWordValue.assertEquals("BOOL#0 AND DWORD#16#DEADBEEF".evaluateExpression)
+		0x00000001.toDWordValue.assertEquals("DWORD#16#DEADBEEF AND BOOL#1".evaluateExpression)
+		0x00000001.toDWordValue.assertEquals("BOOL#1 AND DWORD#16#DEADBEEF".evaluateExpression)
+		0x12345678.toDWordValue.assertEquals("DWORD#16#12345678 OR BOOL#0".evaluateExpression)
+		0x12345678.toDWordValue.assertEquals("BOOL#0 OR DWORD#16#12345678".evaluateExpression)
+		0x12345679.toDWordValue.assertEquals("DWORD#16#12345678 OR BOOL#1".evaluateExpression)
+		0x12345679.toDWordValue.assertEquals("BOOL#1 OR DWORD#16#12345678".evaluateExpression)
+		0xdeadbeef.toDWordValue.assertEquals("DWORD#16#DEADBEEF XOR BOOL#0".evaluateExpression)
+		0xdeadbeef.toDWordValue.assertEquals("BOOL#0 XOR DWORD#16#DEADBEEF".evaluateExpression)
+		0xdeadbeee.toDWordValue.assertEquals("DWORD#16#DEADBEEF XOR BOOL#1".evaluateExpression)
+		0xdeadbeee.toDWordValue.assertEquals("BOOL#1 XOR DWORD#16#DEADBEEF".evaluateExpression)
+		0x21524110.toDWordValue.assertEquals("NOT DWORD#16#DEADBEEF".evaluateExpression)
+	}
+
 	@ParameterizedTest(name="{index}: {1}#{2} {0} {1}#{3}")
 	@MethodSource("testBinaryExpressionArgumentsProvider")
 	def void testBinaryExpression(STBinaryOperator operator, String typeName, BigDecimal first, BigDecimal second) {
