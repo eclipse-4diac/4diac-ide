@@ -18,6 +18,7 @@ import java.util.NoSuchElementException
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyStringType
+import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StringType
@@ -73,8 +74,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpressio
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
@@ -91,8 +94,6 @@ import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement
 
 abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	public static final String RETURN_VARIABLE_NAME = ""
@@ -368,22 +369,17 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				expr.left.evaluateExpression ** expr.right.evaluateExpression
 			case AND,
 			case AMPERSAND:
-				switch (left: expr.left.evaluateExpression) {
-					BoolValue case left.boolValue: expr.right.evaluateExpression
-					BoolValue: BoolValue.FALSE
-					default: left.bitwiseAnd(expr.right.evaluateExpression)
+				switch(expr.resultType) {
+					BoolType: BoolValue.toBoolValue(expr.left.evaluateExpression.asBoolean && expr.right.evaluateExpression.asBoolean)
+					default: expr.left.evaluateExpression.bitwiseAnd(expr.right.evaluateExpression)
 				}
 			case OR:
-				switch (left: expr.left.evaluateExpression) {
-					BoolValue case !left.boolValue: expr.right.evaluateExpression
-					BoolValue: BoolValue.TRUE
-					default: left.bitwiseOr(expr.right.evaluateExpression)
+				switch(expr.resultType) {
+					BoolType: BoolValue.toBoolValue(expr.left.evaluateExpression.asBoolean || expr.right.evaluateExpression.asBoolean)
+					default: expr.left.evaluateExpression.bitwiseOr(expr.right.evaluateExpression)
 				}
 			case XOR:
-				switch (left: expr.left.evaluateExpression) {
-					BoolValue: BoolValue.toBoolValue(left.boolValue.xor(expr.right.evaluateExpression.asBoolean))
-					default: left.bitwiseXor(expr.right.evaluateExpression)
-				}
+				expr.left.evaluateExpression.bitwiseXor(expr.right.evaluateExpression)
 			case EQ:
 				BoolValue.toBoolValue(expr.left.evaluateExpression == expr.right.evaluateExpression)
 			case NE:
@@ -410,10 +406,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			case MINUS:
 				-expr.expression.evaluateExpression
 			case NOT:
-				switch (value: expr.expression.evaluateExpression) {
-					BoolValue: BoolValue.toBoolValue(!value.boolValue)
-					default: value.bitwiseNot
-				}
+				expr.expression.evaluateExpression.bitwiseNot
 			default: {
 				error('''The operator «expr.op» is not supported''')
 				throw new UnsupportedOperationException('''The operator «expr.op» is not supported''')
