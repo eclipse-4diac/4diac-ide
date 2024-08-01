@@ -17,6 +17,13 @@
     </editor>
   </extension>
   
+  <extension point="org.eclipse.ui.ide.markerResolution">
+		<markerResolutionGenerator
+			markerType="org.eclipse.fordiac.ide.model.validation"
+			class="org.eclipse.fordiac.ide.application.marker.resolution.FordiacMarkerResolutionGenerator">
+		</markerResolutionGenerator>
+  </extension>
+  
   <extension point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
     <propertyContributor contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
       <propertyCategory category="FB">
