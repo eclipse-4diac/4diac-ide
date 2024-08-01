@@ -1212,8 +1212,20 @@ class StandardFunctionsTest {
 
 	@Test
 	void testDayOfWeek() throws Throwable {
-		assertEquals(toUSIntValue((byte) 5),
-				Functions.invoke(StandardFunctions.class, "DAY_OF_WEEK", toDateValue(LocalDate.of(2022, 5, 13))));
+		assertEquals(toUSIntValue((byte) 0), // SUNDAY
+				Functions.invoke(StandardFunctions.class, "DAY_OF_WEEK", toDateValue(LocalDate.of(2023, 10, 1))));
+		assertEquals(toUSIntValue((byte) 1), // MONDAY
+				Functions.invoke(StandardFunctions.class, "DAY_OF_WEEK", toDateValue(LocalDate.of(2023, 10, 2))));
+		assertEquals(toUSIntValue((byte) 2), // TUESDAY
+				Functions.invoke(StandardFunctions.class, "DAY_OF_WEEK", toDateValue(LocalDate.of(2023, 10, 3))));
+		assertEquals(toUSIntValue((byte) 3), // WEDNESDAY
+				Functions.invoke(StandardFunctions.class, "DAY_OF_WEEK", toDateValue(LocalDate.of(2023, 10, 4))));
+		assertEquals(toUSIntValue((byte) 4), // THURSDAY
+				Functions.invoke(StandardFunctions.class, "DAY_OF_WEEK", toDateValue(LocalDate.of(2023, 10, 5))));
+		assertEquals(toUSIntValue((byte) 5), // FRIDAY
+				Functions.invoke(StandardFunctions.class, "DAY_OF_WEEK", toDateValue(LocalDate.of(2023, 10, 6))));
+		assertEquals(toUSIntValue((byte) 6), // SATURDAY
+				Functions.invoke(StandardFunctions.class, "DAY_OF_WEEK", toDateValue(LocalDate.of(2023, 10, 7))));
 	}
 
 	@Test
