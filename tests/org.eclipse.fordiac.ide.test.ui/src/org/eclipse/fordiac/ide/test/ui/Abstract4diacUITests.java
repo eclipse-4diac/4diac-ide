@@ -12,8 +12,10 @@
  *   Prashantkumar Khatri - added methods for creating and deleting FB types,
  *   						selecting property tabs, openFBTypeInEditor, deletePin,
  *   						createConnectionWithinFBTypeWithPropertySheet,
- *   						removeConnectionWithinFBTypeWithPropertySheet and
- *   						selectTabFromInterfaceProperties.
+ *   						removeConnectionWithinFBTypeWithPropertySheet,
+ *   						selectTabFromInterfaceProperties,
+ *   						createNewVariableInDataTypeEditor, deleteVariable,
+ *   						changeCellValueInNatTbale.
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui;
 
@@ -36,6 +38,7 @@ import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
+import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
@@ -69,6 +72,7 @@ public class Abstract4diacUITests {
 
 	protected static SWT4diacGefBot bot;
 	// alphabetical order of static variable names
+	protected static final String ADAPTER = "Adapter"; //$NON-NLS-1$
 	protected static final String APP = "App"; //$NON-NLS-1$
 	protected static final String COMMENT = "Comment:"; //$NON-NLS-1$
 	protected static final String CANCEL = "Cancel"; //$NON-NLS-1$
@@ -116,16 +120,20 @@ public class Abstract4diacUITests {
 	protected static final String F_SUB = "F_SUB"; //$NON-NLS-1$
 	protected static final String GO_TO_CHILD = "Go To Child"; //$NON-NLS-1$
 	protected static final String GO_TO_PARENT = "Go To Parent"; //$NON-NLS-1$
+	protected static final String IF = "IF"; //$NON-NLS-1$
 	protected static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
 	protected static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
 	protected static final String INSERT_FB = "Insert FB"; //$NON-NLS-1$
 	protected static final String INTERFACE = "Interface"; //$NON-NLS-1$
+	protected static final String NAME = "Name"; //$NON-NLS-1$
 	protected static final String NAME_LABEL = "Name:"; //$NON-NLS-1$
 	protected static final String NAVIGATE = "Navigate"; //$NON-NLS-1$
 	protected static final String NEW = "New"; //$NON-NLS-1$
 	protected static final String NEW_4DIAC_PROJECT = "New 4diacProject"; //$NON-NLS-1$
 	protected static final String NEW_SUBAPPLICATION = "New subapplication"; //$NON-NLS-1$
 	protected static final String NEW_TYPE = FordiacMessages.NewType;
+	protected static final String MOVE_ELEMENTS_UP = "Move element(s) up"; //$NON-NLS-1$
+	protected static final String MOVE_ELEMENTS_DOWN = "Move element(s) down"; //$NON-NLS-1$
 	protected static final String OK = "OK"; //$NON-NLS-1$
 	protected static final String PACKAGE_NAME1 = "pkg1"; //$NON-NLS-1$
 	protected static final String PACKAGE_NAME2 = "pkg2"; //$NON-NLS-1$
@@ -137,16 +145,21 @@ public class Abstract4diacUITests {
 	protected static final String PROJECT_NAME_TREE_ITEM = PROJECT_NAME + " []"; //$NON-NLS-1$
 	protected static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
 	protected static final String PROPERTIES_TITLE = "Properties"; //$NON-NLS-1$
+	protected static final String REFACTORING = "Refactoring"; //$NON-NLS-1$
+	protected static final String RENAME_ELEMENT = "Rename Element"; //$NON-NLS-1$
+	protected static final String REQUEST_FROM_IDEAL_SOCKET = "Request from ideal Socket"; //$NON-NLS-1$
 	protected static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
 	protected static final String SELECT_TYPE_LABEL = FordiacMessages.SelectType + ":"; //$NON-NLS-1$
 	protected static final String SOURCE = "Source"; //$NON-NLS-1$
 	protected static final String SUBAPP = "SubApp"; //$NON-NLS-1$
+	protected static final String STRUCT = "Struct"; //$NON-NLS-1$
 	protected static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
 	protected static final String SYSTEM_EXPLORER_LABEL = "System Explorer"; //$NON-NLS-1$
 	protected static final String TEST_PARENT_FOLDER = "TestParentProject"; //$NON-NLS-1$
 	protected static final String TEST_TYPE_TEMPLATE_NAME = "Adapter"; //$NON-NLS-1$
+	protected static final String TEST_COMMENT = "Test Comment"; //$NON-NLS-1$
+	protected static final String TESTVAR = "TestVar"; //$NON-NLS-1$
 	protected static final String TOOLBAR_BUTTON_ZOOM_FIT_PAGE = "Zoom fit Page"; //$NON-NLS-1$
-	protected static final String TEST_COMMENT = "Request from ideal Socket"; //$NON-NLS-1$
 	protected static final String TYPE_LABEL = "Type:"; //$NON-NLS-1$
 	protected static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
 	protected static final String TYPE_NAME_LABEL = FordiacMessages.TypeName + ":"; //$NON-NLS-1$
@@ -186,8 +199,13 @@ public class Abstract4diacUITests {
 	protected static final String CLKO = "CLKO"; //$NON-NLS-1$
 	protected static final String INIT = "INIT"; //$NON-NLS-1$
 	protected static final String INT = "INT"; //$NON-NLS-1$
+	protected static final String INT_SMALL = "int"; //$NON-NLS-1$
 	protected static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
 	protected static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
+	protected static final String VAR1 = "VAR1"; //$NON-NLS-1$
+	protected static final String VAR2 = "VAR1"; //$NON-NLS-1$
+	protected static final String VAR3 = "VAR3"; //$NON-NLS-1$
+	protected static final String TRUE = "TRUE"; //$NON-NLS-1$
 
 	/**
 	 * Performs the necessary tasks to be able to perform the tests.
@@ -509,14 +527,14 @@ public class Abstract4diacUITests {
 	 * @param parentName Name of the parent project.
 	 * @param typeName   Name of the new type.
 	 */
-	protected static void createFBType(final String parentName, final String typeName) {
+	protected static void createFBType(final String parentName, final String typeName, final String typeLabel) {
 		bot.menu(FILE).menu(NEW).menu(TYPE_PROJECT).click();
 		final SWTBotShell shell = bot.shell(NEW_TYPE);
 		shell.activate();
 		bot.textWithLabel(TYPE_NAME_LABEL).setText(typeName);
 		bot.textWithLabel(PARENT_FOLDER_NAME_LABEL).setText(parentName);
 		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), typeName);
-		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(TEST_TYPE_TEMPLATE_NAME).select();
+		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(typeLabel).select();
 		bot.button(FINISH).click();
 		bot.waitUntil(shellCloses(shell));
 	}
@@ -678,6 +696,46 @@ public class Abstract4diacUITests {
 		// Tabs access inside property sheet
 		PropertySheetHelper.selectPropertyTabItem(tabName, propertiesBot);
 		return propertiesBot;
+	}
+
+	/**
+	 * Creates New Variable In Data Type Editor
+	 *
+	 * @param inputTableBot NatTable in which variable need to create
+	 */
+	protected static void createNewVariableInDataTypeEditor(final SWTBot4diacNatTable inputTableBot) {
+		bot.editorByTitle(FBT_TEST_PROJECT2).show();
+		final int rowCount = inputTableBot.rowCount();
+		bot.button(0).click();
+		assertEquals(inputTableBot.rowCount(), rowCount + 1);
+	}
+
+	/**
+	 * Delete Variable From Data Type Editor
+	 *
+	 * @param inputTableBot NatTable from which variable have to delete
+	 */
+	protected static void deleteVariable(final SWTBot4diacNatTable inputTableBot) {
+		final int rowCount = inputTableBot.rowCount();
+		inputTableBot.click(1, 0);
+		bot.button(1).click();
+		assertEquals(inputTableBot.rowCount(), rowCount - 1);
+	}
+
+	/**
+	 * Change the value for the Cell
+	 *
+	 * @param inputTableBot NatTable which contain the targeted cell
+	 * @param newValue      The new Value which is to be set
+	 * @param row           Cell's row number
+	 * @param col           Cell's column number
+	 */
+	protected static void changeCellValueInNatTbale(final SWTBot4diacNatTable inputTableBot, final String newValue,
+			final int row, final int col) {
+		inputTableBot.doubleclick(row, col);
+		inputTableBot.setCellDataValueByPosition(row, col, newValue);
+		inputTableBot.doubleclick(row, col);
+		assertEquals(inputTableBot.getCellDataValueByPosition(row, col), newValue);
 	}
 
 	/**
