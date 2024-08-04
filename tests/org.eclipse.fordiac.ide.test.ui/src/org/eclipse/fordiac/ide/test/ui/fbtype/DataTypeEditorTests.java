@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 
 public class DataTypeEditorTests extends Abstract4diacUITests {
 
-	public static SWTBot4diacNatTable inputTableBot;
+	public static SWTBot4diacNatTable dataTypeTableBot;
 	public static NatTable natTable;
 
 	/**
@@ -51,8 +51,8 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT2);
 		final Composite inputComposite = (Composite) bot.editorByTitle(FBT_TEST_PROJECT2).getWidget();
 		natTable = bot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), inputComposite);
-		inputTableBot = new SWTBot4diacNatTable(natTable);
-		createNewVariableInDataTypeEditor(inputTableBot);
+		dataTypeTableBot = new SWTBot4diacNatTable(natTable);
+		createNewVariableInDataTypeEditor(dataTypeTableBot);
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void renameVariable() {
-		changeCellValueInNatTbale(inputTableBot, TESTVAR, 1, 1);
+		changeCellValueInNatTbale(dataTypeTableBot, TESTVAR, 1, 1);
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeVariableNameWithButton() {
-		inputTableBot.click(1, 1);
+		dataTypeTableBot.click(1, 1);
 		bot.toolbarButtonWithTooltip(RENAME_ELEMENT).click();
 		final SWTBotShell shell = bot.shell(REFACTORING);
 		assertNotNull(shell);
@@ -108,7 +108,7 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 		bot.button(OK).click();
 		bot.waitUntil(shellCloses(shell));
 
-		assertEquals(inputTableBot.getCellDataValueByPosition(1, 1), TESTVAR);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 1), TESTVAR);
 
 	}
 
@@ -123,13 +123,13 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToChangeNameOfVariableWithExistingName() {
-		createNewVariableInDataTypeEditor(inputTableBot);
-		inputTableBot.doubleclick(2, 1);
-		inputTableBot.setCellDataValueByPosition(2, 1, VAR1);
-		inputTableBot.doubleclick(2, 1);
+		createNewVariableInDataTypeEditor(dataTypeTableBot);
+		dataTypeTableBot.doubleclick(2, 1);
+		dataTypeTableBot.setCellDataValueByPosition(2, 1, VAR1);
+		dataTypeTableBot.doubleclick(2, 1);
 
 		// Name should not be changed
-		assertEquals(inputTableBot.getCellDataValueByPosition(2, 1), VAR2);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(2, 1), VAR2);
 	}
 
 	/**
@@ -142,13 +142,13 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToSetInValidName() {
-		inputTableBot.doubleclick(1, 1);
-		inputTableBot.setCellDataValueByPosition(1, 1, IF);
-//		assertTrue(inputTableBot.contextMenu().isVisible());
-		inputTableBot.doubleclick(1, 1);
+		dataTypeTableBot.doubleclick(1, 1);
+		dataTypeTableBot.setCellDataValueByPosition(1, 1, IF);
+//		assertTrue(dataTypeTableBot.contextMenu().isVisible());
+		dataTypeTableBot.doubleclick(1, 1);
 
 		// Name should not be changed
-		assertEquals(inputTableBot.getCellDataValueByPosition(1, 1), VAR1);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 1), VAR1);
 	}
 
 	/**
@@ -163,22 +163,22 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void reorderVariable() {
-		createNewVariableInDataTypeEditor(inputTableBot);
-		createNewVariableInDataTypeEditor(inputTableBot);
-		inputTableBot.click(3, 0);
+		createNewVariableInDataTypeEditor(dataTypeTableBot);
+		createNewVariableInDataTypeEditor(dataTypeTableBot);
+		dataTypeTableBot.click(3, 0);
 
 		// Move the selected variable up
 		bot.arrowButtonWithTooltip(MOVE_ELEMENTS_UP).click();
-		assertEquals(inputTableBot.getCellDataValueByPosition(2, 1), VAR3);
-		inputTableBot.click(1, 0);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(2, 1), VAR3);
+		dataTypeTableBot.click(1, 0);
 
 		// Move the selected variable down
 		bot.arrowButtonWithTooltip(MOVE_ELEMENTS_DOWN).click();
 
 		// Checks the order of the Variables
-		assertEquals(inputTableBot.getCellDataValueByPosition(1, 1), VAR3);
-		assertEquals(inputTableBot.getCellDataValueByPosition(2, 1), VAR1);
-		assertEquals(inputTableBot.getCellDataValueByPosition(3, 1), VAR2);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 1), VAR3);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(2, 1), VAR1);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(3, 1), VAR2);
 	}
 
 	/**
@@ -191,14 +191,14 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeDataTypeOfVariable() {
-		inputTableBot.doubleclick(1, 2);
+		dataTypeTableBot.doubleclick(1, 2);
 
 		// Here we have assigned the value "int"
-		inputTableBot.setCellDataValueByPosition(1, 2, INT_SMALL);
-		inputTableBot.doubleclick(1, 2);
+		dataTypeTableBot.setCellDataValueByPosition(1, 2, INT_SMALL);
+		dataTypeTableBot.doubleclick(1, 2);
 
 		// It should converted to Upper Case and Valid change
-		assertEquals(inputTableBot.getCellDataValueByPosition(1, 2), INT);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 2), INT);
 	}
 
 	/**
@@ -212,14 +212,14 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToSetInValidDataType() {
-		inputTableBot.doubleclick(1, 2);
-		inputTableBot.setCellDataValueByPosition(1, 2, TESTVAR);
-		inputTableBot.doubleclick(1, 2);
+		dataTypeTableBot.doubleclick(1, 2);
+		dataTypeTableBot.setCellDataValueByPosition(1, 2, TESTVAR);
+		dataTypeTableBot.doubleclick(1, 2);
 
 		// Data Type will successfully changed with error
-		assertEquals(inputTableBot.getCellDataValueByPosition(1, 2), TESTVAR);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 2), TESTVAR);
 		// The cell's background color will get changed to red
-		assertNotEquals(inputTableBot.click(1, 2).backgroundColor(), GUIHelper.COLOR_RED);
+		assertNotEquals(dataTypeTableBot.click(1, 2).backgroundColor(), GUIHelper.COLOR_RED);
 	}
 
 	/**
@@ -231,7 +231,7 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeCommentOfVariable() {
-		changeCellValueInNatTbale(inputTableBot, TEST_COMMENT, 1, 3);
+		changeCellValueInNatTbale(dataTypeTableBot, TEST_COMMENT, 1, 3);
 	}
 
 	/**
@@ -243,8 +243,8 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeInitialValueOfVariable() {
-		changeCellValueInNatTbale(inputTableBot, TRUE, 1, 4);
-		changeCellValueInNatTbale(inputTableBot, "1", 1, 4); //$NON-NLS-1$
+		changeCellValueInNatTbale(dataTypeTableBot, TRUE, 1, 4);
+		changeCellValueInNatTbale(dataTypeTableBot, "1", 1, 4); //$NON-NLS-1$
 	}
 
 	/**
@@ -258,15 +258,15 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToSetInValidInitialValue() {
-		inputTableBot.doubleclick(1, 4);
-		inputTableBot.setCellDataValueByPosition(1, 4, TESTVAR);
-		inputTableBot.doubleclick(1, 4);
+		dataTypeTableBot.doubleclick(1, 4);
+		dataTypeTableBot.setCellDataValueByPosition(1, 4, TESTVAR);
+		dataTypeTableBot.doubleclick(1, 4);
 
 		// Initial value will successfully changed with error
-		assertEquals(inputTableBot.getCellDataValueByPosition(1, 4), TESTVAR);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 4), TESTVAR);
 
 		// The cell's background color will get changed to red
-		assertNotEquals(inputTableBot.click(1, 4).backgroundColor(), GUIHelper.COLOR_RED);
+		assertNotEquals(dataTypeTableBot.click(1, 4).backgroundColor(), GUIHelper.COLOR_RED);
 	}
 
 }

@@ -203,7 +203,7 @@ public class Abstract4diacUITests {
 	protected static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
 	protected static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
 	protected static final String VAR1 = "VAR1"; //$NON-NLS-1$
-	protected static final String VAR2 = "VAR1"; //$NON-NLS-1$
+	protected static final String VAR2 = "VAR2"; //$NON-NLS-1$
 	protected static final String VAR3 = "VAR3"; //$NON-NLS-1$
 	protected static final String TRUE = "TRUE"; //$NON-NLS-1$
 
@@ -701,41 +701,41 @@ public class Abstract4diacUITests {
 	/**
 	 * Creates New Variable In Data Type Editor
 	 *
-	 * @param inputTableBot NatTable in which variable need to create
+	 * @param dataTypeTableBot NatTable in which variable need to create
 	 */
-	protected static void createNewVariableInDataTypeEditor(final SWTBot4diacNatTable inputTableBot) {
+	protected static void createNewVariableInDataTypeEditor(final SWTBot4diacNatTable dataTypeTableBot) {
 		bot.editorByTitle(FBT_TEST_PROJECT2).show();
-		final int rowCount = inputTableBot.rowCount();
+		final int rowCount = dataTypeTableBot.rowCount();
 		bot.button(0).click();
-		assertEquals(inputTableBot.rowCount(), rowCount + 1);
+		assertEquals(dataTypeTableBot.rowCount(), rowCount + 1);
 	}
 
 	/**
 	 * Delete Variable From Data Type Editor
 	 *
-	 * @param inputTableBot NatTable from which variable have to delete
+	 * @param dataTypeTableBot NatTable from which variable have to delete
 	 */
-	protected static void deleteVariable(final SWTBot4diacNatTable inputTableBot) {
-		final int rowCount = inputTableBot.rowCount();
-		inputTableBot.click(1, 0);
+	protected static void deleteVariable(final SWTBot4diacNatTable dataTypeTableBot) {
+		final int rowCount = dataTypeTableBot.rowCount();
+		dataTypeTableBot.click(1, 0);
 		bot.button(1).click();
-		assertEquals(inputTableBot.rowCount(), rowCount - 1);
+		assertEquals(dataTypeTableBot.rowCount(), rowCount - 1);
 	}
 
 	/**
 	 * Change the value for the Cell
 	 *
-	 * @param inputTableBot NatTable which contain the targeted cell
-	 * @param newValue      The new Value which is to be set
-	 * @param row           Cell's row number
-	 * @param col           Cell's column number
+	 * @param dataTypeTableBot NatTable which contain the targeted cell
+	 * @param newValue         The new Value which is to be set
+	 * @param row              Cell's row number
+	 * @param col              Cell's column number
 	 */
-	protected static void changeCellValueInNatTbale(final SWTBot4diacNatTable inputTableBot, final String newValue,
+	protected static void changeCellValueInNatTbale(final SWTBot4diacNatTable dataTypeTableBot, final String newValue,
 			final int row, final int col) {
-		inputTableBot.doubleclick(row, col);
-		inputTableBot.setCellDataValueByPosition(row, col, newValue);
-		inputTableBot.doubleclick(row, col);
-		assertEquals(inputTableBot.getCellDataValueByPosition(row, col), newValue);
+		dataTypeTableBot.doubleclick(row, col);
+		dataTypeTableBot.setCellDataValueByPosition(row, col, newValue);
+		dataTypeTableBot.doubleclick(row, col);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(row, col), newValue);
 	}
 
 	/**
