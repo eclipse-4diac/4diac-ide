@@ -1,5 +1,5 @@
 /*******************************************************************************
-w * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,24 +13,29 @@ w * Copyright (c) 2024 Primetals Technologies Austria GmbH
 package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.EditConnectionsChange;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.Refactoring;
@@ -179,17 +184,60 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		compChange.add(new ReplaceVarsWithStructChange(destinationURI, FBType.class, replaceableConMap.values(),
 				structURI, destinationVarName, true, 0));
 
-		compChange.add(new UpdateFBChange(sourceURI));
-		compChange.add(new UpdateFBChange(destinationURI));
+//		compChange.add(new UpdateFBChange(sourceURI));
+//		compChange.add(new UpdateFBChange(destinationURI));
 
-		compChange.add(new ConnectStructChange(netURI, FBNetwork.class, replaceableConMap, sourceURI, destinationURI,
-				sourceVarName, destinationVarName));
-		if (conflictResolution) {
-			compChange.add(
-					new EditConnectionsChange(netURI, FBNetwork.class, replaceableConMap, sourceURI, structURI, true));
-			compChange.add(new EditConnectionsChange(netURI, FBNetwork.class, replaceableConMap, destinationURI,
-					structURI, false));
+		final CompositeChange updates = new CompositeChange("");
+		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI).getType() instanceof final FBType sourceType) {
+			new BlockTypeInstanceSearch(sourceType.getTypeEntry()).performSearch().stream()
+					.map(FBNetworkElement.class::cast).forEach(fbnelem -> {
+						updates.add(new UpdateSingleFBChange(EcoreUtil.getURI(fbnelem), FBNetworkElement.class));
+					});
 		}
+		if (!sourceURI.toString().equals(destinationURI.toString()) && (TypeLibraryManager.INSTANCE
+				.getTypeEntryForURI(destinationURI).getType() instanceof final FBType destinationType)) {
+			new BlockTypeInstanceSearch(destinationType.getTypeEntry()).performSearch().stream()
+					.map(FBNetworkElement.class::cast).forEach(fbnelem -> {
+						updates.add(new UpdateSingleFBChange(EcoreUtil.getURI(fbnelem), FBNetworkElement.class));
+					});
+		}
+		compChange.add(updates);
+
+		final CompositeChange connectStructChange = new CompositeChange("");
+		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI).getType() instanceof final FBType sourceType
+				&& TypeLibraryManager.INSTANCE.getTypeEntryForURI(destinationURI)
+						.getType() instanceof final FBType destinationType) {
+
+			new BlockTypeInstanceSearch(destinationType.getTypeEntry()).performSearch().stream()
+					.map(FBNetworkElement.class::cast).forEach(instance -> {
+
+						// Collect all correct connections
+						final List<Connection> cons = instance.getInterface().getInputs()
+								.map(IInterfaceElement::getInputConnections).flatMap(EList::stream)
+								.filter(con -> replaceableConMap.containsKey(con.getSource().getName())
+										&& replaceableConMap.get(con.getSource().getName())
+												.equals(con.getDestination().getName())
+										&& con.getSourceElement().getType().getName().equals(sourceType.getName()))
+								.toList();
+
+						// Check if all connections between 2 instances are correct
+						if (cons.stream().map(Connection::getSourceElement).distinct().count() == 1
+								&& cons.size() == replaceableConMap.size()) {
+							connectStructChange.add(new ConnectSingleStructChange(EcoreUtil.getURI(instance),
+									FBNetworkElement.class, replaceableConMap, sourceVarName, destinationVarName));
+						}
+					});
+		}
+		compChange.add(connectStructChange);
+
+////		compChange.add(new ConnectStructChange(netURI, FBNetwork.class, replaceableConMap, sourceURI, destinationURI,
+////				sourceVarName, destinationVarName));
+//		if (conflictResolution) {
+//			compChange.add(
+//					new EditConnectionsChange(netURI, FBNetwork.class, replaceableConMap, sourceURI, structURI, true));
+//			compChange.add(new EditConnectionsChange(netURI, FBNetwork.class, replaceableConMap, destinationURI,
+//					structURI, false));
+//		}
 		pm.done();
 		return compChange;
 	}
