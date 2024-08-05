@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.testappgen.CompositeTestFBGenerato
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.MatchFBGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.MuxFBGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.RunAllFBGenerator;
-import org.eclipse.fordiac.ide.fb.interpreter.testappgen.TestFbGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.TestsignalFBGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -81,7 +81,7 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 	private static void perform(final FBType type, final TestSuite testSuite, final IProgressMonitor monitor)
 			throws CoreException {
 		// testsignal generator block
-		final FBType testType = new TestFbGenerator(type, testSuite).generateTestFb();
+		final FBType testType = new TestsignalFBGenerator(type, testSuite).generateTestFb();
 		testType.getTypeEntry().save(testType, monitor);
 
 		// matches the expected with the actual behaviour

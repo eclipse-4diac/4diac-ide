@@ -66,7 +66,7 @@ public class MonitorFBGenerator extends AbstractBasicFBGenerator {
 	protected List<VarDeclaration> createInputDataList() {
 		final Stream<VarDeclaration> stream = Stream.concat(sourceType.getInterfaceList().getInputVars().stream(),
 				sourceType.getInterfaceList().getOutputVars().stream());
-		return stream.map(n -> createVarDeclaration(n.getType(), n.getName(), true)).toList();
+		return stream.map(n -> createInputVarDecl(n.getType(), n.getName())).toList();
 	}
 
 	// no data output

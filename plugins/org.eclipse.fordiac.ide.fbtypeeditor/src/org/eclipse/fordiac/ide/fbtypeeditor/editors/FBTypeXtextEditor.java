@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022-2023 Martin Erich Jobst
- * 				 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -151,6 +151,15 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 	@Override
 	public Object getSelectableEditPart() {
 		return null;
+	}
+
+	@Override
+	protected void markInNavigationHistory() {
+		if (getEditorSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
+			getSite().getPage().getNavigationHistory().markLocation(multiPageEditorSite.getMultiPageEditor());
+		} else {
+			super.markInNavigationHistory();
+		}
 	}
 
 	@Override

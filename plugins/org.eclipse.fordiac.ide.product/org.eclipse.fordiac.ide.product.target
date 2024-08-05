@@ -59,13 +59,17 @@
 			<unit id="org.eclipse.sirius.samples.feature.group" version="7.4.0.202403051613"/>
 			<unit id="org.eclipse.sirius.specifier.feature.group" version="7.4.0.202403051613"/>
 			<unit id="org.eclipse.sirius.specifier.properties.feature.feature.group" version="7.4.0.202403051613"/>
-			<unit id="org.eclipse.swtbot.eclipse.feature.group" version="4.2.0.202405291350"/>
-			<unit id="org.eclipse.swtbot.eclipse.gef.feature.group" version="4.2.0.202405291350"/>
-			<unit id="org.eclipse.swtbot.feature.group" version="4.2.0.202405291350"/>
-			<unit id="org.eclipse.swtbot.ide.feature.group" version="4.2.0.202405291350"/>
-			<unit id="org.eclipse.swtbot.generator.feature.feature.group" version="4.2.0.202405291350"/>
 			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.35.0.v20240528-1523"/>
 		</location>
+		<location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      		<unit id="org.eclipse.swtbot.eclipse.feature.group" version="4.2.1.202406141605"/>
+      		<unit id="org.eclipse.swtbot.eclipse.gef.feature.group" version="4.2.1.202406141605"/>
+      		<unit id="org.eclipse.swtbot.feature.group" version="4.2.1.202406141605"/>
+      		<unit id="org.eclipse.swtbot.generator.feature.feature.group" version="4.2.1.202406141605"/>
+      		<unit id="org.eclipse.swtbot.ide.feature.group" version="4.2.1.202406141605"/>
+      		<unit id="org.eclipse.swtbot.nebula.nattable.finder" version="4.2.1.202406141605"/>
+      		<repository id="SWTBot-3_1" location="https://download.eclipse.org/technology/swtbot/releases/4.2.1/"/>
+    	</location>
 		<location includeDependencyDepth="infinite" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 
 			<feature id="org.eclipse.fordiac.ide.milo" label="Milo Dependencies" provider-name="Eclipse 4diac" version="2.0.1.qualifier">

@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2017 fortiss GmbH
- *               2019, 2021 Johannes Kepler University Linz
+ * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -34,7 +33,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -48,7 +46,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSection {
-
 
 	private Text parametersText;
 	private CCombo eventCombo;
@@ -71,7 +68,6 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 		fillDataQualifyingDropdown();
 		dataQualifyingCombo.setToolTipText(Messages.PrimitiveSection_DataQualifyingToolTip);
 	}
-
 
 	protected void createEventSection(final Group parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
@@ -192,23 +188,18 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			parametersText.setText(getType().getParameters() != null ? getType().getParameters() : ""); //$NON-NLS-1$
-			interfaceSelector.setType(getType());
-			setEventDropdown();
-			setDataQualifyingDropdown();
+	protected void performRefresh() {
+		parametersText.setText(getType().getParameters() != null ? getType().getParameters() : ""); //$NON-NLS-1$
+		interfaceSelector.setType(getType());
+		setEventDropdown();
+		setDataQualifyingDropdown();
 
-			final IInterfaceElement qiData = getType().getService().getFBType().getInterfaceList()
-					.getInterfaceElement("QI"); //$NON-NLS-1$
+		final IInterfaceElement qiData = getType().getService().getFBType().getInterfaceList()
+				.getInterfaceElement("QI"); //$NON-NLS-1$
 
-			dataQualifyingCombo.setEnabled(qiData != null && !checkBox.getSelection());
-			customEventText.setEnabled(checkBox.getSelection());
-			eventCombo.setEnabled(!checkBox.getSelection());
-		}
-		commandStack = commandStackBuffer;
+		dataQualifyingCombo.setEnabled(qiData != null && !checkBox.getSelection());
+		customEventText.setEnabled(checkBox.getSelection());
+		eventCombo.setEnabled(!checkBox.getSelection());
 	}
 
 	protected abstract EList<Event> getRelevantEvents(final FBType fb);
@@ -258,10 +249,10 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 		String currentEvent = getType().getEvent();
 
 		// handle qualifier QI
-		if(!currentEvent.isEmpty()) {
+		if (!currentEvent.isEmpty()) {
 			final char lastChar = currentEvent.charAt(currentEvent.length() - 1);
 			if (!(Character.isLetterOrDigit(lastChar) || (lastChar == ASCII_UNDERSCORE))) {
-				currentEvent = currentEvent.substring(0, currentEvent.length()-1);
+				currentEvent = currentEvent.substring(0, currentEvent.length() - 1);
 			}
 		}
 

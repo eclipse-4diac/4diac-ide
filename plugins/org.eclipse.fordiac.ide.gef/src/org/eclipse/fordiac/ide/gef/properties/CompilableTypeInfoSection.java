@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2016 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -35,7 +34,6 @@ import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -207,20 +205,17 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);
-		if (null == commandStack) { // disable all field
+		if (null == getCurrentCommandStack()) { // disable all field
 			compilerViewer.setCellModifier(null);
 		}
 	}
 
 	@Override
-	public void refresh() {
-		super.refresh();
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if ((getType() != null) && (null != getType().getCompilerInfo())) {
+	protected void performRefresh() {
+		super.performRefresh();
+		if (getType().getCompilerInfo() != null) {
 			compilerViewer.setInput(type);
 		}
-		commandStack = commandStackBuffer;
 	}
 
 	private final Adapter typeInfoAdapter = new EContentAdapter() {

@@ -14,8 +14,11 @@ package org.eclipse.fordiac.ide.test.ui.swtbot;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
@@ -81,6 +84,15 @@ public class SWTBot4diacGefEditor extends SWTBotGefEditor {
 			}
 
 		}, 1000);
+	}
+
+	public SWTBotGefEditor clickContextMenu(final String text, final int x, final int y)
+			throws WidgetNotFoundException {
+		final MenuManager contextMenu = getSWTBotGefViewer().getGraphicalViewer().getContextMenu();
+		if (contextMenu instanceof final FBNetworkContextMenuProvider fbnContenxtMenu) {
+			fbnContenxtMenu.setInvocationLocation(new Point(x, y));
+		}
+		return super.clickContextMenu(text);
 	}
 
 }

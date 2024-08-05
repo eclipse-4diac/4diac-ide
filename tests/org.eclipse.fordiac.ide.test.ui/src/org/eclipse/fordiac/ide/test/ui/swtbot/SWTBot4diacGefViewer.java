@@ -78,7 +78,7 @@ public class SWTBot4diacGefViewer extends SWTBotGefViewer {
 
 			@Override
 			public boolean test() throws Exception {
-				return editPartRegistry.values().stream().filter(v -> v instanceof ConnectionEditPart).count() == 1;
+				return editPartRegistry.values().stream().filter(ConnectionEditPart.class::isInstance).count() == 1;
 			}
 
 			@Override

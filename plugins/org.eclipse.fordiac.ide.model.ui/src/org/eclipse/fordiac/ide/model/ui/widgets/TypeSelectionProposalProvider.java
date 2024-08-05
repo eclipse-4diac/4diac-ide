@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.ui.widgets;
 
 import java.util.Comparator;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -28,20 +29,28 @@ public class TypeSelectionProposalProvider implements IContentProposalProvider {
 
 	private final Supplier<TypeLibrary> supplier;
 	private final ITypeSelectionContentProvider contentProvider;
+	private final Predicate<TypeEntry> additionalFilter;
 
 	public TypeSelectionProposalProvider(final Supplier<TypeLibrary> supplier,
 			final ITypeSelectionContentProvider contentProvider) {
+		this(supplier, contentProvider, entry -> true);
+	}
+
+	public TypeSelectionProposalProvider(final Supplier<TypeLibrary> supplier,
+			final ITypeSelectionContentProvider contentProvider, final Predicate<TypeEntry> additionalFilter) {
 		this.supplier = supplier;
 		this.contentProvider = contentProvider;
+		this.additionalFilter = additionalFilter;
 	}
 
 	@Override
 	public IContentProposal[] getProposals(final String contents, final int position) {
 		final TypeLibrary typeLibrary = supplier.get();
+		contentProvider.getTypeEntries(typeLibrary).forEach(TypeEntry::getType);
 		return Stream.concat(
 				contentProvider.getTypes(typeLibrary).stream().filter(proposal -> matches(proposal.getName(), contents))
 						.map(this::createProposal),
-				contentProvider.getTypeEntries(typeLibrary).stream()
+				contentProvider.getTypeEntries(typeLibrary).stream().filter(additionalFilter)
 						.filter(proposal -> matches(proposal.getTypeName(), contents)).map(this::createProposal))
 				.sorted(Comparator.comparing(IContentProposal::getLabel)).toArray(IContentProposal[]::new);
 	}
@@ -57,5 +66,13 @@ public class TypeSelectionProposalProvider implements IContentProposalProvider {
 
 	protected ContentProposal createProposal(final TypeEntry typeEntry) {
 		return new ContentProposal(typeEntry.getFullTypeName(), typeEntry.getTypeName(), typeEntry.getFullTypeName());
+	}
+
+	protected TypeLibrary getTypeLibrary() {
+		return supplier.get();
+	}
+
+	protected ITypeSelectionContentProvider getContentProvider() {
+		return contentProvider;
 	}
 }

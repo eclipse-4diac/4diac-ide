@@ -53,6 +53,11 @@ class STCoreValueConverters extends AbstractDeclarativeValueConverterService {
 		return numericValueConverter;
 	}
 	
+	@ValueConverter(rule="SignedNumeric")
+	def IValueConverter<Object> SignedNumeric() {
+		return numericValueConverter;
+	}
+	
 	@ValueConverter(rule="Time")
 	def IValueConverter<Duration> Time() {
 		return timeValueConverter;

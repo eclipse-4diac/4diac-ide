@@ -27,6 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.Method
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*;
+
 abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<T> {
 	final Map<Algorithm, ILanguageSupport> algorithmLanguageSupport
 	final Map<Method, ILanguageSupport> methodLanguageSupport
@@ -58,23 +60,17 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 		«IF !type.internalConstVars.isEmpty»
 			«type.internalConstVars.generateVariableDefinitions(true)»
 			
-		«ENDIF»
-		«IF !type.internalFbs.isEmpty»
-			«type.generateInternalFbDeclarations»
-			
-		«ENDIF»
+		«ENDIF»		
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
 		    «baseClass»(paContainer, &scmFBInterfaceSpec, paInstanceNameId, «IF !type.internalVars.empty»&scmInternalVars«ELSE»nullptr«ENDIF»)«// no newline
+		    			»«generateInternalFBInitializer»«// no newline
 		    			»«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
 		    			»«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterInitializer»«generateConnectionInitializer» {
+		  «generateAddInternalFB»
 		}
 		«generateInitializeDefinition»
 		
 		«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
-		«IF !type.internalFbs.isEmpty»
-			«generateChangeFBExecutionState»
-			
-		«ENDIF»	
 		«generateExecuteEvent»
 		«generateInterfaceDefinitions»
 		«type.internalVars.generateAccessorDefinition("getVarInternal", false)»
@@ -153,4 +149,10 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 			]
 		).toSet
 	}
+	
+	def private generateInternalFBInitializer() ///
+	'''«FOR fb : type.internalFbs BEFORE ",\n" SEPARATOR ",\n"»«fb.generateName»(«fb.name.FORTEStringId», *this)«ENDFOR»'''
+	
+	def private generateAddInternalFB() ///
+	'''«FOR fb : type.internalFbs SEPARATOR "\n"»addFB(&«fb.generateName»);«ENDFOR»'''
 }

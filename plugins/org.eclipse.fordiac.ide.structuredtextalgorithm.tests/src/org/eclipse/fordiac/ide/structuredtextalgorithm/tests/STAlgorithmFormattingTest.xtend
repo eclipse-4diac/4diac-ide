@@ -81,6 +81,20 @@ class STAlgorithmFormattingTest {
 				
 			'''
 		]
+		assertFormatted[
+			toBeFormatted = '''
+				METHOD hubert : extremelylongTypeName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+				END_METHOD
+				
+			'''
+
+			expectation = '''
+				METHOD hubert
+					: extremelylongTypeName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+				END_METHOD
+				
+			'''
+		]
 	}
 
 	@Test
@@ -231,12 +245,14 @@ class STAlgorithmFormattingTest {
 				END_IF;
 				
 				END_METHOD
+				
 			'''
 			expectation = '''
 				METHOD hubert
 				
 				IF langerVariablenBezeichnerlangerVariablenBezeichnerlangerVariablenBezeichnerlangerVariablenBezeichner
-					OR langerVariablenBezeichner THEN
+					OR langerVariablenBezeichner
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -262,7 +278,8 @@ class STAlgorithmFormattingTest {
 				ALGORITHM hubert
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner THEN
+					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -287,8 +304,8 @@ class STAlgorithmFormattingTest {
 			expectation = '''
 				ALGORITHM hubert
 				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR a THEN
+				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR a
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -383,43 +400,10 @@ class STAlgorithmFormattingTest {
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
 					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner 
+					OR langerVariablenBezeichner
 				THEN
 					bol1 := langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
 						OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner;
-				END_IF;
-				
-				END_METHOD
-				
-			'''
-		]
-	}
-
-	@Test
-	def void splitOperatorKeepsLineBreaksTest() {
-		assertFormatted[
-			toBeFormatted = '''
-				METHOD hubert
-				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner
-				THEN
-					bol1 := true;
-				END_IF;
-				
-				END_METHOD
-				
-			'''
-
-			expectation = '''
-				METHOD hubert
-				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner
-				THEN
-					bol1 := TRUE;
 				END_IF;
 				
 				END_METHOD

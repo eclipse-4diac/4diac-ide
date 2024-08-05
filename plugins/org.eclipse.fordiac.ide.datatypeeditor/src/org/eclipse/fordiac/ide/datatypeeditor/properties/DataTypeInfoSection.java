@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University, Linz
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2024 Johannes Kepler University, Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -94,11 +94,9 @@ public class DataTypeInfoSection extends AbstractSection {
 	}
 
 	@Override
-	public void refresh() {
-		if (null != getType()) {
-			commentText.setText((null != getType().getComment()) ? getType().getComment() : ""); //$NON-NLS-1$
-			typeInfoWidget.refresh();
-		}
+	protected void performRefresh() {
+		commentText.setText((null != getType().getComment()) ? getType().getComment() : ""); //$NON-NLS-1$
+		typeInfoWidget.refresh();
 	}
 
 	@Override

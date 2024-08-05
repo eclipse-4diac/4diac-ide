@@ -257,24 +257,22 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	}
 
 	private void handleActivationChanged(final Event event) {
-		IAction copy = null;
-		IAction cut = null;
-		IAction paste = null;
-		if (event.type == SWT.Activate) {
-			copy = getActionRegistry().getAction(ActionFactory.COPY.getId());
-			cut = getActionRegistry().getAction(ActionFactory.CUT.getId());
-			paste = getActionRegistry().getAction(ActionFactory.PASTE.getId());
-		}
-		if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.COPY.getId()) != copy) {
-			getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copy);
-		}
-		if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.CUT.getId()) != cut) {
-			getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.CUT.getId(), cut);
-		}
-		if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.PASTE.getId()) != paste) {
-			getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.PASTE.getId(), paste);
-		}
+		final boolean activated = event.type == SWT.Activate;
+
+		setAction(ActionFactory.COPY.getId(), activated);
+		setAction(ActionFactory.CUT.getId(), activated);
+		setAction(ActionFactory.PASTE.getId(), activated);
+
 		getEditorSite().getActionBars().updateActionBars();
+	}
+
+	private void setAction(final String actionId, final boolean activated) {
+		final IAction action = getActionRegistry().getAction(actionId);
+		if (activated && getEditorSite().getActionBars().getGlobalActionHandler(actionId) != action) {
+			getEditorSite().getActionBars().setGlobalActionHandler(actionId, action);
+		} else if (!activated && getEditorSite().getActionBars().getGlobalActionHandler(actionId) == action) {
+			getEditorSite().getActionBars().setGlobalActionHandler(actionId, null);
+		}
 	}
 
 	@Override

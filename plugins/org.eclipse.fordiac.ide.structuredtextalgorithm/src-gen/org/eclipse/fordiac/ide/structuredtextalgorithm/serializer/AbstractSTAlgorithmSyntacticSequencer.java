@@ -76,6 +76,7 @@ public abstract class AbstractSTAlgorithmSyntacticSequencer extends AbstractSynt
 	 *     (rule start) (ambiguity) type=[DataType|STTimeOfDayType]
 	 *     (rule start) (ambiguity) value=Numeric
 	 *     (rule start) (ambiguity) value=STRING
+	 *     (rule start) (ambiguity) value=SignedNumeric
 	 *     (rule start) (ambiguity) {STArrayAccessExpression.receiver=}
 	 *     (rule start) (ambiguity) {STBinaryExpression.left=}
 	 *     (rule start) (ambiguity) {STMemberAccessExpression.receiver=}
@@ -93,6 +94,15 @@ public abstract class AbstractSTAlgorithmSyntacticSequencer extends AbstractSynt
 	 *
 	 * This ambiguous syntax occurs at:
 	 *     (rule start) (ambiguity) op=UnaryOperator
+	 *     (rule start) (ambiguity) type=[DataType|STAnyCharsType]
+	 *     (rule start) (ambiguity) type=[DataType|STDateAndTimeType]
+	 *     (rule start) (ambiguity) type=[DataType|STDateLiteralType]
+	 *     (rule start) (ambiguity) type=[DataType|STNumericLiteralType]
+	 *     (rule start) (ambiguity) type=[DataType|STTimeLiteralType]
+	 *     (rule start) (ambiguity) type=[DataType|STTimeOfDayType]
+	 *     (rule start) (ambiguity) value=Numeric
+	 *     (rule start) (ambiguity) value=STRING
+	 *     (rule start) (ambiguity) value=SignedNumeric
 	 *     (rule start) (ambiguity) {STArrayAccessExpression.receiver=}
 	 *     (rule start) (ambiguity) {STBinaryExpression.left=}
 	 *     (rule start) (ambiguity) {STMemberAccessExpression.receiver=}

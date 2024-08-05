@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022,2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -143,7 +143,11 @@ public class VarConfigurationSection extends AbstractSection {
 	protected void setInputInit() {
 		inputDataProvider.setInput(collectVarConfigs());
 		inputTable.refresh();
+	}
 
+	@Override
+	protected void performRefresh() {
+		// currently nothing to do
 	}
 
 	private List<VarDeclaration> collectVarConfigs() {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.model.ui.nat.EventTypeSelectionTreeContentProvide
 import org.eclipse.fordiac.ide.model.ui.widgets.EventTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -87,17 +86,15 @@ public class PinEventInfoSection extends AbstractDoubleColumnSection {
 	@Override
 	protected EObject getInputType(final Object input) {
 		Object refType = input;
-		if (input instanceof EditPart) {
-			refType = ((EditPart) input).getModel();
+		if (input instanceof final EditPart ep) {
+			refType = ep.getModel();
 		}
-		return (refType instanceof IInterfaceElement) ? (IInterfaceElement) refType : null;
+		return (refType instanceof final IInterfaceElement ie) ? ie : null;
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != pinInfo && null != inConnections && null != outConnections && null != getType()) {
+	protected void performRefresh() {
+		if (null != pinInfo && null != inConnections && null != outConnections) {
 			pinInfo.refresh();
 			inConnections.refreshConnectionsViewer(getType());
 			outConnections.refreshConnectionsViewer(getType());
@@ -107,7 +104,6 @@ public class PinEventInfoSection extends AbstractDoubleColumnSection {
 				outConnections.setEditable(true);
 			}
 		}
-		commandStack = commandStackBuffer;
 	}
 
 	@Override

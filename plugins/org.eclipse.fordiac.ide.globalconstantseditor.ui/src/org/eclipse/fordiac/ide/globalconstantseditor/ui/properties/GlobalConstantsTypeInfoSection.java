@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Johannes Kepler University, Linz
+ * Copyright (c) 2020, 2024 Johannes Kepler University, Linz
  *                          Primetals Technologies Austria GmbH
  *                          Martin Erich Jobst
  *
@@ -80,8 +80,8 @@ public class GlobalConstantsTypeInfoSection extends AbstractSection {
 
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		commandStack = getCommandStack(part, null);
-		if (null == commandStack) { // disable all fields
+		setCurrentCommandStack(part, null);
+		if (null == getCurrentCommandStack()) { // disable all fields
 			setInputCode();
 		}
 		setType(part);
@@ -109,11 +109,9 @@ public class GlobalConstantsTypeInfoSection extends AbstractSection {
 	}
 
 	@Override
-	public void refresh() {
-		if (null != getType()) {
-			commentText.setText((null != getType().getComment()) ? getType().getComment() : ""); //$NON-NLS-1$
-			typeInfoWidget.refresh();
-		}
+	protected void performRefresh() {
+		commentText.setText((null != getType().getComment()) ? getType().getComment() : ""); //$NON-NLS-1$
+		typeInfoWidget.refresh();
 	}
 
 	@Override

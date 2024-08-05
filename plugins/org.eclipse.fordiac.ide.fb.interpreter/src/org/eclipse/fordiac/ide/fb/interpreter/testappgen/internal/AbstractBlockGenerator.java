@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2024 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,7 +16,9 @@ package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
@@ -61,9 +63,14 @@ public abstract class AbstractBlockGenerator {
 	}
 
 	public static void addPosition(final PositionableElement el, final double x, final double y) {
-		final Position p0 = LibraryElementFactory.eINSTANCE.createPosition();
-		p0.setX(x);
-		p0.setY(y);
+		if (el instanceof ECTransition) {
+			final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+			pos.setX(x);
+			pos.setY(y);
+			el.setPosition(pos);
+			return;
+		}
+		final Position p0 = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates((int) x, (int) y);
 		el.setPosition(p0);
 	}
 
@@ -75,8 +82,15 @@ public abstract class AbstractBlockGenerator {
 		return newEv;
 	}
 
-	protected static VarDeclaration createVarDeclaration(final DataType type, final String name,
-			final boolean isInput) {
+	protected static Event createInputEvent(final String name) {
+		return createEvent(name, true);
+	}
+
+	protected static Event createOutputEvent(final String name) {
+		return createEvent(name, false);
+	}
+
+	private static VarDeclaration createVarDecl(final DataType type, final String name, final boolean isInput) {
 		final VarDeclaration varDecl = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDecl.setName(name);
 		varDecl.setIsInput(isInput);
@@ -85,6 +99,14 @@ public abstract class AbstractBlockGenerator {
 		varDecl.getValue().setValue(""); //$NON-NLS-1$
 		varDecl.setComment(""); //$NON-NLS-1$
 		return varDecl;
+	}
+
+	protected static VarDeclaration createInputVarDecl(final DataType type, final String name) {
+		return createVarDecl(type, name, true);
+	}
+
+	protected static VarDeclaration createOutputVarDecl(final DataType type, final String name) {
+		return createVarDecl(type, name, false);
 	}
 
 	protected static With createWith(final VarDeclaration varD) {

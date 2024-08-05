@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2024 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,7 +13,13 @@
 
 package org.eclipse.fordiac.ide.fb.interpreter.testappgen;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants.EVENT_ERR;
+import static org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants.EVENT_NEXTCASE;
+import static org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants.EVENT_SUC;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.AbstractBasicFBGenerator;
@@ -32,8 +38,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class MatchFBGenerator extends AbstractBasicFBGenerator {
+
+	private static final String START_STATE = "START"; //$NON-NLS-1$
+	private TestEccGenerator eccGen;
+	private ECState sucState;
+	private ECState errState;
 
 	public MatchFBGenerator(final FBType type, final TestSuite testSuite) {
 		super(type, testSuite);
@@ -45,176 +57,215 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 	}
 
 	@Override
-	protected String getTypeName() {
-		return sourceType.getName() + "_MATCH"; //$NON-NLS-1$
-	}
-
-	@Override
-	protected FBType getSourceFB() {
-		return sourceType;
-	}
-
-	@Override
 	protected void generateECC() {
-		final TestEccGenerator eccGen = new TestEccGenerator(destinationFB.getECC(), 0);
-		final AdapterDeclaration plug = createTimeOutPlug();
+		eccGen = new TestEccGenerator(destinationFB.getECC(), 0);
+		createTimeOutPlug();
+		final Algorithm timeout = createTimeOutAlg(destinationFB);
 
+		// retrieve input events with "expected" in the name
 		final List<Event> evExpected = destinationFB.getInterfaceList().getEventInputs().subList(0,
 				destinationFB.getInterfaceList().getEventInputs().size()
 						- sourceType.getInterfaceList().getEventOutputs().size());
+
+		// loop over the expected events, create for each one a different testing route
 		for (final Event event : evExpected) {
-
-			// each splitName segment is an event name that is expected
+			// split the comment from the expected event, because information about the
+			// expected events is stored there
+			// it states how many events are expected and then the events are listed
+			// f.e. "3.E5.E3.E4", "1.E8.1.E3"
+			// it can also be empty, then there is no event expected
 			final String comment = event.getComment();
-			final String[] splitName = comment.split("\\."); //$NON-NLS-1$
+			final String[] splitName = (comment).replace(";", "").split("\\."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			ECState comFrom = eccGen.getStartState();
+			// error and success result states at the end, if the same testcase event comes
+			// in the previous result event gets sent out
 
-			// flip flop at end
-			// error
-			eccGen.createState("previous_error", splitName.length + 1); //$NON-NLS-1$
-			eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "previous_error_1")); //$NON-NLS-1$
-			final ECState errState = eccGen.getLastState();
+			// error state
+			eccGen.createState("previous_error", splitName.length + 3); //$NON-NLS-1$
+			errState = eccGen.getLastState();
 			eccGen.createTransitionFromTo(errState, errState, event);
-			final ECAction erAct = TestEccGenerator.createAction();
-			erAct.setOutput(destinationFB.getInterfaceList().getEventOutputs().get(0));
-			errState.getECAction().add(erAct);
+			errState.getECAction()
+					.add(TestEccGenerator.createAction(destinationFB.getInterfaceList().getEventOutputs().get(0)));
+
 			eccGen.increaseCaseCount();
-			// success
-			eccGen.createState("previous_success", splitName.length + 1); //$NON-NLS-1$
-			eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "previous_success")); //$NON-NLS-1$
-			final ECState sucState = eccGen.getLastState();
+
+			// success state
+			eccGen.createState("previous_success", splitName.length + 3); //$NON-NLS-1$
+			sucState = eccGen.getLastState();
 			eccGen.createTransitionFromTo(sucState, sucState, event);
-			final ECAction suAct = TestEccGenerator.createAction();
-			suAct.setOutput(destinationFB.getInterfaceList().getEventOutputs().get(1));
-			eccGen.getLastState().getECAction().add(suAct);
+			sucState.getECAction()
+					.add(TestEccGenerator.createAction(destinationFB.getInterfaceList().getEventOutputs().get(1)));
 
+			eccGen.decreaseCaseCount();
+			eccGen.resetStateCount();
+
+			// 3 different scenarios, no event expected, one event expected, multiple events
+			// expected
+
+			// if no event is expected, the name of the input event is just "expected"
 			if (event.getName().equals("expected")) { //$NON-NLS-1$
-				createPathTimeOut(eccGen, plug, sucState, errState);
+				// timeout path to check if there is actually no incoming event
+				eccGen.createState("timeout"); //$NON-NLS-1$
+				final ECAction act = TestEccGenerator.createAction();
+				eccGen.createTransitionFromTo(comFrom, eccGen.getLastState(), getEventInput("expected")); //$NON-NLS-1$
+				act.setAlgorithm(createTimeOutAlg(destinationFB));
+				act.setOutput(getStartTimeoutEvent());
+				eccGen.getLastState().getECAction().add(act);
+				comFrom = eccGen.getLastState();
+
+				createErrorTransitions(comFrom, errState, false, ""); //$NON-NLS-1$
+			} else {
+				// start state from the test case
+				eccGen.createStateWithIncomingConnection(eccGen.getEcc().getStart(), event, null, event.getName());
+				final ECAction a = TestEccGenerator
+						.createAction(ECCContentAndLabelProvider.getOutputEvents(destinationFB).stream()
+								.filter(s -> s.getName().equals(START_STATE)).findFirst().orElse(null));
+				a.setAlgorithm(timeout);
+				eccGen.getLastState().getECAction().add(a);
+				comFrom = eccGen.getLastState();
+
+				// retrieve the information about how many events are coming
+				final int[] numbers = Arrays.stream(splitName).filter(MatchFBGenerator::isInteger)
+						.mapToInt(Integer::valueOf).toArray();
+				final List<String> ev = Arrays.stream(splitName).filter(x -> !isInteger(x)).toList();
+
+				// evCnt keeps track of which expected event was already handled
+				int evCnt = 0;
+				// create for each expected event a state
+				for (final int number : numbers) {
+					// scenario one expected event
+					if (number == 1) {
+						createPathOneEvent(comFrom, ev, comment, evCnt);
+						eccGen.getLastState().getECAction().add(TestEccGenerator
+								.createAction(destinationFB.getInterfaceList().getEventOutputs().getLast()));
+						comFrom = eccGen.getLastState();
+						evCnt++;
+
+					}
+					// if the number is 0 then there is no output event expected for that input
+					// event but there are other test states in that testcase where output events
+					// are expected
+					else if (number == 0) {
+						eccGen.createStateWithIncomingConnection(comFrom, null, null, "noEvent_sendNextCase"); //$NON-NLS-1$
+						eccGen.getLastState().getECAction().add(TestEccGenerator
+								.createAction(destinationFB.getInterfaceList().getEventOutputs().getLast()));
+						comFrom = eccGen.getLastState();
+					} else {
+
+						// error transitions from the wait state
+						createErrorTransitions(eccGen.getLastState(), errState, true,
+								ev.subList(evCnt, evCnt + number));
+
+						eccGen.createState("BindingState_1", eccGen.getStateCount() + number); //$NON-NLS-1$
+						final ECState bsState = eccGen.getLastState();
+
+						// add nextCase event output
+						bsState.getECAction().add(TestEccGenerator
+								.createAction(destinationFB.getInterfaceList().getEventOutputs().getLast()));
+
+						// start of recursion
+						createPathMultipleExpectedEvents(ev.subList(evCnt, evCnt + number), comFrom, event.getName(),
+								bsState);
+
+						comFrom = bsState;
+						evCnt = evCnt + number;
+
+					}
+				}
+				// overall waiting state to check for any additional events that are being sent
+				createWaitState(comFrom, event.getName(), splitName.length + 1);
+				comFrom = eccGen.getLastState();
 			}
 
-			for (int i = 0; i < splitName.length; i++) {
-				eccGen.createState(splitName[i] + "_wait", i); //$NON-NLS-1$
-				eccGen.getLastState()
-						.setName(NameRepository.createUniqueName(eccGen.getLastState(), splitName[i] + "_WAIT_1")); //$NON-NLS-1$
-
-				// timeout action for wait state
-				final ECAction waitAct = TestEccGenerator.createAction();
-
-				waitAct.setOutput(ECCContentAndLabelProvider.getOutputEvents(destinationFB).stream()
-						.filter(s -> s.getName().equals("START")).findFirst().orElse(null));
-				waitAct.setAlgorithm(createTimeOutAlg(destinationFB));
-				eccGen.getLastState().getECAction().add(waitAct);
-
-				if (i == 0) {
-					// first event in a row needs a transition from the start start
-					eccGen.createTransitionFromTo(eccGen.getEcc().getStart(), eccGen.getLastState(), event);
-				} else {
-					// create transition from the last wait state to the new one
-					eccGen.createTransitionFromTo(eccGen.getNTimesLast(2), eccGen.getLastState(),
-							getEventInput(splitName[i - 1]));
-				}
-				eccGen.increaseCaseCount();
-
-				// error state
-				eccGen.createState("ERROR", i); //$NON-NLS-1$
-				eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "ERROR_1")); //$NON-NLS-1$
-				createErrorTransitions(eccGen, splitName[i]);
-
-				eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
-						ECCContentAndLabelProvider.getInputEvents(destinationFB).stream()
-								.filter(s -> ECCContentAndLabelProvider.getEventName(s).equals("_ETimeOut.TimeOut")) //$NON-NLS-1$
-								.findFirst().orElse(null));
-				eccGen.createTransitionFromTo(eccGen.getLastState(), errState, null);
-				eccGen.decreaseCaseCount();
-
-				if (i == splitName.length - 1) {
-					// before the success/match state a state with timeout is inserted to check for
-					// any additional incoming events
-					createTimeOutState(eccGen, splitName[i], errState, i);
-					// success/match state, sends success event when reached and checks data
-					createMatchState(eccGen, event, sucState, errState, i);
-				}
-			}
-
+			// match state checks data if the block to test has data pins
+			createMatchState(event, comFrom, splitName.length + 2);
+			eccGen.increaseCaseCount();
 			eccGen.increaseCaseCount();
 			eccGen.increaseCaseCount();
 		}
 	}
 
-	private void createTimeOutState(final TestEccGenerator eccGen, final String name, final ECState errState,
-			final int i) {
-		// state
-		eccGen.createState("WAIT", i + 1); //$NON-NLS-1$
-		eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "WAIT_1")); //$NON-NLS-1$
-		// action
-		final ECAction waitAct = TestEccGenerator.createAction();
-
-		waitAct.setOutput(ECCContentAndLabelProvider.getOutputEvents(destinationFB).stream()
-				.filter(s -> s.getName().equals("START")).findFirst().orElse(null)); //$NON-NLS-1$
-		// algorithm
-		waitAct.setAlgorithm(createTimeOutAlg(destinationFB));
-		eccGen.getLastState().getECAction().add(waitAct);
-		// transition to timeoutState
-		eccGen.createTransitionFromTo(eccGen.getNTimesLast(2), eccGen.getLastState(), getEventInput(name));
-		eccGen.increaseCaseCount();
-
-		// error state
-		eccGen.createState("ERROR", i + 1); //$NON-NLS-1$
-		eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "ERROR_1")); //$NON-NLS-1$
-		createErrorTransitions(eccGen, ""); //$NON-NLS-1$
-		eccGen.createTransitionFromTo(eccGen.getLastState(), errState, null);
-		eccGen.decreaseCaseCount();
-
+	private void createPathOneEvent(final ECState comingFrom, final List<String> ev, final String comment,
+			final int evCnt) {
+		if (evCnt == 0) {
+			// error transitions from the wait state
+			createErrorTransitions(eccGen.getLastState(), errState, true, ev.get(0));
+		}
+		eccGen.createStateWithIncomingConnection(comingFrom, getEventInput(ev.get(evCnt)), "", //$NON-NLS-1$
+				comment);
 	}
 
-	private void createMatchState(final TestEccGenerator eccGen, final Event event, final ECState sucState,
-			final ECState errState, final int i) {
-		eccGen.createState(event.getName() + "_match", i + 2); //$NON-NLS-1$
+	private void createWaitState(final ECState comingFrom, final String name, final int posCnt) {
+		eccGen.createState(name, posCnt);
+		eccGen.createTransitionFromTo(comingFrom, eccGen.getLastState(), null);
+		eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), name + "_WAIT_1")); //$NON-NLS-1$
+		final ECAction at = TestEccGenerator.createAction(ECCContentAndLabelProvider.getOutputEvents(destinationFB)
+				.stream().filter(s -> s.getName().equals(START_STATE)).findFirst().orElse(null));
+		eccGen.getLastState().getECAction().add(at);
+		createErrorTransitions(eccGen.getLastState(), errState, false, ""); //$NON-NLS-1$
+	}
+
+	private void createPathMultipleExpectedEvents(final List<String> eventsToAdd, final ECState from, final String name,
+			final ECState bindingState) {
+		if (eventsToAdd.size() == 1) {
+			eccGen.createTransitionFromTo(eccGen.getLastState(), bindingState, getEventInput(eventsToAdd.get(0)));
+			return;
+		}
+		for (int i = 0; i < eventsToAdd.size(); i++) {
+			final String event = eventsToAdd.get(i);
+			eccGen.createStateWithIncomingConnection(from, getEventInput(eventsToAdd.get(i)), null, eventsToAdd.get(i));
+			eccGen.getLastState().getECAction()
+					.add(TestEccGenerator.createAction(ECCContentAndLabelProvider.getOutputEvents(destinationFB)
+							.stream().filter(s -> s.getName().equals(START_STATE)).findFirst().orElse(null)));
+			createErrorTransitions(eccGen.getLastState(), errState, true, eventsToAdd);
+
+			final List<String> eventsWithoutThis = eventsToAdd.stream().filter(x -> !x.equals(event)).toList();
+			createPathMultipleExpectedEvents(eventsWithoutThis, eccGen.getLastState(), name, bindingState);
+
+			eccGen.increaseCaseCount();
+		}
+	}
+
+	private static boolean isInteger(final String s) {
+		try {
+			Integer.parseInt(s);
+			return true;
+		} catch (final NumberFormatException e) {
+			return false;
+		}
+	}
+
+	private void createMatchState(final Event event, final ECState from, final int i) {
+		eccGen.createState(event.getName() + "_match", i); //$NON-NLS-1$
 		eccGen.getLastState()
 				.setName(NameRepository.createUniqueName(eccGen.getLastState(), event.getName() + "_MATCH_1")); //$NON-NLS-1$
 		final ECAction sucAct = TestEccGenerator.createAction();
 		eccGen.getLastState().getECAction().add(sucAct);
-		// check to see if there are outputs, if so an algorithm needs to be created to
-		// check them
-		if (!destinationFB.getInterfaceList().getOutputVars().isEmpty()) {
-
-			final Algorithm alg = createMatchAlgorithm(destinationFB, destinationFB.getInterfaceList().getInputVars(),
-					destinationFB.getInterfaceList().getOutputVars().get(0).getName());
-			sucAct.setAlgorithm(alg);
-		}
-
-		eccGen.createTransitionFromTo(eccGen.getNTimesLast(2), eccGen.getLastState(),
+		eccGen.createTransitionFromTo(from, eccGen.getLastState(),
 				ECCContentAndLabelProvider.getInputEvents(destinationFB).stream()
 						.filter(s -> ECCContentAndLabelProvider.getEventName(s).equals("_ETimeOut.TimeOut")).findFirst() //$NON-NLS-1$
 						.orElse(null));
-		eccGen.createTransitionFromTo(eccGen.getLastState(), sucState, null);
-		eccGen.createTransitionFromTo(eccGen.getLastState(), errState, null);
-		if (!destinationFB.getInterfaceList().getInputVars().isEmpty()) {
-			eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 2)
-					.setConditionExpression("matchData"); //$NON-NLS-1$
-			eccGen.getEcc().getECTransition().get(eccGen.getEcc().getECTransition().size() - 1)
-					.setConditionExpression("NOT matchData"); //$NON-NLS-1$
-		}
 
+		// check to see if there are outputs
+		if (!destinationFB.getInterfaceList().getInputVars().isEmpty()) {
+			final Algorithm alg = createMatchAlgorithm(destinationFB, destinationFB.getInterfaceList().getInputVars(),
+					destinationFB.getInterfaceList().getOutputVars().get(0).getName());
+			sucAct.setAlgorithm(alg);
+
+			eccGen.createTransitionFromTo(eccGen.getLastState(), sucState, null);
+			eccGen.getEcc().getECTransition().getLast().setConditionExpression("matchData"); //$NON-NLS-1$
+
+			eccGen.createTransitionFromTo(eccGen.getLastState(), errState, null);
+			eccGen.getEcc().getECTransition().getLast().setConditionExpression("NOT matchData"); //$NON-NLS-1$
+
+		} else {
+			eccGen.createTransitionFromTo(eccGen.getLastState(), sucState, null);
+		}
 	}
 
-	private void createPathTimeOut(final TestEccGenerator eccGen, final AdapterDeclaration plug, final ECState suc,
-			final ECState err) {
-		eccGen.createState("S1", 0); //$NON-NLS-1$
-		eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
-		eccGen.createTransitionFromTo(eccGen.getEcc().getStart(), eccGen.getLastState(), getEventInput("expected")); //$NON-NLS-1$
-		final ECAction act = TestEccGenerator.createAction();
-		act.setAlgorithm(createTimeOutAlg(destinationFB));
-
-		act.setOutput(ECCContentAndLabelProvider.getOutputEvents(destinationFB).stream()
-				.filter(s -> s.getName().equals("START")).findFirst().orElse(null)); //$NON-NLS-1$
-		eccGen.getLastState().getECAction().add(act);
-
-		eccGen.createTransitionFromTo(eccGen.getLastState(), suc,
-				ECCContentAndLabelProvider.getInputEvents(destinationFB)
-						.get(ECCContentAndLabelProvider.getInputEvents(destinationFB).size() - 1));
-		for (final Event ev : destinationFB.getInterfaceList().getEventInputs()) {
-			eccGen.createTransitionFromTo(eccGen.getLastState(), err, ev);
-		}
+	private Event getStartTimeoutEvent() {
+		return ECCContentAndLabelProvider.getOutputEvents(destinationFB).stream()
+				.filter(s -> s.getName().equals(START_STATE)).findFirst().orElse(null);
 	}
 
 	private AdapterDeclaration createTimeOutPlug() {
@@ -226,7 +277,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 		try {
 			cmd.execute();
 		} catch (final Exception e) {
-			System.out.print(e.getMessage());
+			FordiacLogHelper.logError(e.getMessage());
 		}
 
 		final AdapterDeclaration timeOutPlug = (AdapterDeclaration) cmd.getCreatedElement();
@@ -239,12 +290,24 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 		return TestEccGenerator.createAlgorithm(fb, "TimeOutAlg", algText); //$NON-NLS-1$
 	}
 
-	private void createErrorTransitions(final TestEccGenerator eccGen, final String ev) {
+	private void createErrorTransitions(final ECState from, final ECState err, final boolean withTimeout,
+			final String ev) {
+		createErrorTransitions(from, err, withTimeout, Collections.singletonList(ev));
+	}
+
+	private void createErrorTransitions(final ECState from, final ECState err, final boolean withTimeout,
+			final List<String> ev) {
 
 		for (final Event errEv : destinationFB.getInterfaceList().getEventInputs()) {
-			if (!errEv.getName().equals(ev)) {
-				eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(), errEv);
+			if (!ev.contains(errEv.getName())) {
+				eccGen.createTransitionFromTo(from, err, errEv);
 			}
+		}
+		final Event event = ECCContentAndLabelProvider.getInputEvents(destinationFB).stream()
+				.filter(s -> ECCContentAndLabelProvider.getEventName(s).equals("_ETimeOut.TimeOut")).findFirst() //$NON-NLS-1$
+				.orElse(null);
+		if (event != null && withTimeout) {
+			eccGen.createTransitionFromTo(from, err, event);
 		}
 
 	}
@@ -281,13 +344,13 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 		final List<Event> list = new ArrayList<>();
 		list.addAll(getExpectedEvents(true));
 		list.addAll(sourceType.getInterfaceList().getEventOutputs().stream()
-				.map(event -> createEvent(event.getName(), true)).toList());
+				.map(event -> createInputEvent(event.getName())).toList());
 		return list;
 	}
 
 	@Override
 	protected List<Event> createOutputEventList() {
-		return List.of(createEvent("ERR", false), createEvent("SUC", false)); //$NON-NLS-1$//$NON-NLS-2$
+		return List.of(createOutputEvent(EVENT_ERR), createOutputEvent(EVENT_SUC), createOutputEvent(EVENT_NEXTCASE));
 	}
 
 	// match fb needs for each data output on the block to test an expected and
@@ -296,22 +359,32 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 	protected List<VarDeclaration> createInputDataList() {
 		final List<VarDeclaration> list = new ArrayList<>();
 		for (final VarDeclaration varDeclaration : sourceType.getInterfaceList().getOutputVars()) {
-			list.add(createVarDeclaration(varDeclaration.getType(), varDeclaration.getName() + "_expected", true)); //$NON-NLS-1$
-			list.add(createVarDeclaration(varDeclaration.getType(), varDeclaration.getName() + "_received", true)); //$NON-NLS-1$
+			list.add(createInputVarDecl(varDeclaration.getType(), varDeclaration.getName() + "_expected")); //$NON-NLS-1$
+			list.add(createInputVarDecl(varDeclaration.getType(), varDeclaration.getName() + "_received")); //$NON-NLS-1$
 		}
 		return list;
 	}
 
 	// if there are data output pins, a bool output data pin is created for the
-	// match fb indicating wheter the data matches or not
+	// match fb indicating whether the data matches or not
 	@Override
 	protected List<VarDeclaration> createOutputDataList() {
 		final List<VarDeclaration> list = new ArrayList<>();
 		if (!sourceType.getInterfaceList().getOutputVars().isEmpty()) {
-			list.add(createVarDeclaration(
-					sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.BOOL), "matchData", //$NON-NLS-1$
-					false));
+			list.add(createOutputVarDecl(sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.BOOL),
+					"matchData"));//$NON-NLS-1$
+
 		}
 		return list;
+	}
+
+	@Override
+	protected String getTypeName() {
+		return sourceType.getName() + "_MATCH"; //$NON-NLS-1$
+	}
+
+	@Override
+	protected FBType getSourceFB() {
+		return sourceType;
 	}
 }
