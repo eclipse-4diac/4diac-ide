@@ -17,12 +17,16 @@
 package org.eclipse.fordiac.ide.application.wizards;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
+import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.widgets.PackageSelectionProposalProvider;
@@ -233,6 +237,9 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 
 		@Override
 		public String getPackageName() {
+			if (packageText == null) {
+				return super.getPackageName();
+			}
 			return packageText.getText();
 		}
 
@@ -245,6 +252,7 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 			enterPackageNameLabel.setText(Messages.EnterPackageName_Text + ":"); //$NON-NLS-1$
 
 			packageText = new Text(packageContainer, SWT.BORDER);
+			packageText.setText(getInitialPackageName());
 			packageText.setEnabled(true);
 			packageText.addListener(SWT.Modify, this);
 			GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).hint(250, SWT.DEFAULT)
@@ -254,6 +262,21 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 					new TextContentAdapter(), new PackageSelectionProposalProvider(this::getTypeLibrary), null, null,
 					true);
 			packageNameProposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
+		}
+
+		// TODO move this to a common base class
+		// probably make a class SaveAsPackagedWizardPage which holds the common stuff
+		// for FBType as well
+		private String getInitialPackageName() {
+			final IContainer container = getSelectedContainer();
+			if (container != null) {
+				final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(container.getProject());
+				final IPath relativePath = BuildpathUtil.findRelativePath(typeLibrary.getBuildpath(), container)
+						.orElse(container.getFullPath());
+				return Stream.of(relativePath.segments())
+						.collect(Collectors.joining(PackageNameHelper.PACKAGE_NAME_DELIMITER));
+			}
+			return ""; //$NON-NLS-1$
 		}
 
 		@Override
