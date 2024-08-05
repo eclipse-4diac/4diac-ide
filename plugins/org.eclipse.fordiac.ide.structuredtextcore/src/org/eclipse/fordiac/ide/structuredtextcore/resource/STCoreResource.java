@@ -226,12 +226,14 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 	}
 
 	protected boolean isLoadPlainST(final Map<?, ?> options, final InputStream inputStream) {
-		return fileExtensionProvider.getPrimaryFileExtension().equalsIgnoreCase(uri.fileExtension())
+		return uri.fileExtension() == null
+				|| fileExtensionProvider.getPrimaryFileExtension().equalsIgnoreCase(uri.fileExtension())
 				|| Boolean.TRUE.equals(options.get(OPTION_PLAIN_ST)) || inputStream instanceof LazyStringInputStream;
 	}
 
 	protected boolean isSavePlainST(final Map<?, ?> options) {
-		return fileExtensionProvider.getPrimaryFileExtension().equalsIgnoreCase(uri.fileExtension())
+		return uri.fileExtension() == null
+				|| fileExtensionProvider.getPrimaryFileExtension().equalsIgnoreCase(uri.fileExtension())
 				|| (options != null && Boolean.TRUE.equals(options.get(OPTION_PLAIN_ST)));
 	}
 
