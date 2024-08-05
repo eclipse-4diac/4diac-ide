@@ -67,6 +67,8 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 				destinationFB.getInterfaceList().getEventInputs().size()
 						- sourceType.getInterfaceList().getEventOutputs().size());
 
+		final int testCaseCount = 0;
+
 		// loop over the expected events, create for each one a different testing route
 		for (final Event event : evExpected) {
 			// split the comment from the expected event, because information about the
@@ -129,6 +131,10 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 						.mapToInt(Integer::valueOf).toArray();
 				final List<String> ev = Arrays.stream(splitName).filter(x -> !isInteger(x)).toList();
 
+				// to check later if all testStates have been triggered, if not further nextCase
+				// events will be sent
+				final int testStateCount = 0;
+
 				// evCnt keeps track of which expected event was already handled
 				int evCnt = 0;
 				// create for each expected event a state
@@ -149,6 +155,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 						eccGen.createStateWithIncomingConnection(comFrom, null, null, "noEvent_sendNextCase"); //$NON-NLS-1$
 						eccGen.getLastState().getECAction().add(TestEccGenerator
 								.createAction(destinationFB.getInterfaceList().getEventOutputs().getLast()));
+
 						comFrom = eccGen.getLastState();
 					} else {
 
@@ -172,6 +179,16 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 
 					}
 				}
+
+//				if (testStateCount <= testSuite.getTestCases().get(i).getTestStates().size()) {
+//					eccGen.createStateWithIncomingConnection(comFrom, null, null, "trigger_nextCases"); //$NON-NLS-1$
+//					comFrom = eccGen.getLastState();
+//					for (int j = testStateCount; j < testSuite.getTestCases().get(i).getTestStates().size(); j++) {
+//						eccGen.getLastState().getECAction().add(TestEccGenerator
+//								.createAction(destinationFB.getInterfaceList().getEventOutputs().getLast()));
+//					}
+//				}
+
 				// overall waiting state to check for any additional events that are being sent
 				createWaitState(comFrom, event.getName(), splitName.length + 1);
 				comFrom = eccGen.getLastState();
@@ -243,11 +260,12 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 		eccGen.getLastState().getECAction().add(sucAct);
 		eccGen.createTransitionFromTo(from, eccGen.getLastState(),
 				ECCContentAndLabelProvider.getInputEvents(destinationFB).stream()
-						.filter(s -> ECCContentAndLabelProvider.getEventName(s).equals("_ETimeOut.TimeOut")).findFirst() //$NON-NLS-1$
-						.orElse(null));
+						.filter(s -> ECCContentAndLabelProvider.getEventName(s)
+								.equals(TestGenBlockNames.MATCH_TIMEOUT_PINNAME + ".TimeOut")) //$NON-NLS-1$
+						.findFirst().orElse(null));
 
 		// check to see if there are outputs
-		if (!destinationFB.getInterfaceList().getInputVars().isEmpty()) {
+		if (destinationFB.getInterfaceList().getInputVars().size() > 1) {
 			final Algorithm alg = createMatchAlgorithm(destinationFB, destinationFB.getInterfaceList().getInputVars(),
 					destinationFB.getInterfaceList().getOutputVars().get(0).getName());
 			sucAct.setAlgorithm(alg);
@@ -270,10 +288,9 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 
 	private AdapterDeclaration createTimeOutPlug() {
 		final TypeLibrary typelib = entry.getTypeLibrary();
-		final AdapterTypeEntry timeOutEntry = typelib.getAdapterTypeEntry("ATimeOut"); //$NON-NLS-1$
-		final CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(timeOutEntry.getType(), "_ETimeOut", //$NON-NLS-1$
-				sourceType.getInterfaceList(), false, -1);
-
+		final AdapterTypeEntry timeOutEntry = typelib.getAdapterTypeEntry(TestGenBlockNames.TIMEOUT_ADAPTER_NAME);
+		final CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(timeOutEntry.getType(),
+				TestGenBlockNames.MATCH_TIMEOUT_PINNAME, sourceType.getInterfaceList(), false, -1);
 		try {
 			cmd.execute();
 		} catch (final Exception e) {
@@ -286,7 +303,8 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 	}
 
 	public static Algorithm createTimeOutAlg(final BasicFBType fb) {
-		final String algText = "_ETimeOut.DT := TIME#1000ms; \n";//$NON-NLS-1$
+		final String algText = TestGenBlockNames.MATCH_TIMEOUT_PINNAME + "." + TestGenBlockNames.TIMEOUT_PIN_NAME //$NON-NLS-1$
+				+ " := TIME#1000ms; \n";//$NON-NLS-1$
 		return TestEccGenerator.createAlgorithm(fb, "TimeOutAlg", algText); //$NON-NLS-1$
 	}
 
@@ -304,8 +322,9 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 			}
 		}
 		final Event event = ECCContentAndLabelProvider.getInputEvents(destinationFB).stream()
-				.filter(s -> ECCContentAndLabelProvider.getEventName(s).equals("_ETimeOut.TimeOut")).findFirst() //$NON-NLS-1$
-				.orElse(null);
+				.filter(s -> ECCContentAndLabelProvider.getEventName(s)
+						.equals(TestGenBlockNames.MATCH_TIMEOUT_PINNAME + ".TimeOut")) //$NON-NLS-1$
+				.findFirst().orElse(null);
 		if (event != null && withTimeout) {
 			eccGen.createTransitionFromTo(from, err, event);
 		}
@@ -317,19 +336,19 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 				.findFirst().orElse(null);
 	}
 
-	public static Algorithm createMatchAlgorithm(final BasicFBType fb, final List<VarDeclaration> inputData,
+	public static Algorithm createMatchAlgorithm(final BasicFBType fb, final List<VarDeclaration> dataPins,
 			final String outputPinName) {
 		final StringBuilder algText = new StringBuilder();
 		algText.append("IF "); //$NON-NLS-1$
-		for (int i = 0; i < inputData.size(); i += 2) {
-			if (i > 0) {
+		for (int i = 1; i < dataPins.size(); i += 2) {
+			if (i > 1) {
 				algText.append(" AND ");//$NON-NLS-1$
 			}
-			algText.append(inputData.get(i).getName() + " = ");//$NON-NLS-1$
-			algText.append(inputData.get(i + 1).getName());
+			algText.append(dataPins.get(i).getName() + " = ");//$NON-NLS-1$
+			algText.append(dataPins.get(i + 1).getName());
 		}
 		algText.append("\nTHEN\n");//$NON-NLS-1$
-		algText.append(outputPinName + ":= BOOL#TRUE;\n");//$NON-NLS-1$
+		algText.append(outputPinName + " := BOOL#TRUE;\n");//$NON-NLS-1$
 		algText.append("ELSE\n"); //$NON-NLS-1$
 		algText.append(outputPinName + " := BOOL#FALSE;\n");//$NON-NLS-1$
 		algText.append("END_IF;\n"); //$NON-NLS-1$
@@ -358,6 +377,8 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 	@Override
 	protected List<VarDeclaration> createInputDataList() {
 		final List<VarDeclaration> list = new ArrayList<>();
+		list.add(createInputVarDecl(sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.INT),
+				GeneratedNameConstants.TESTSIGNALGEN_CASECOUNT_PINNAME));
 		for (final VarDeclaration varDeclaration : sourceType.getInterfaceList().getOutputVars()) {
 			list.add(createInputVarDecl(varDeclaration.getType(), varDeclaration.getName() + "_expected")); //$NON-NLS-1$
 			list.add(createInputVarDecl(varDeclaration.getType(), varDeclaration.getName() + "_received")); //$NON-NLS-1$

@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.AbstractBasicF
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestCase;
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestState;
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -116,7 +117,6 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 	}
 
 	public static Algorithm createValueSettingAlgorithm(final BasicFBType fb, final TestState testState) {
-		boolean containsParameters = false;
 		int nameCnt = 0;
 		if (!fb.getAlgorithm().isEmpty()) {
 			nameCnt = Integer.parseInt(fb.getAlgorithm().getLast().getName().substring(1));
@@ -124,25 +124,22 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 		}
 
 		final StringBuilder algText = new StringBuilder();
+		algText.append(GeneratedNameConstants.TESTSIGNALGEN_CASECOUNT_PINNAME + " := " //$NON-NLS-1$
+				+ testState.getTestCase().getServiceSequence().getServiceTransaction().size() + "; \n"); //$NON-NLS-1$
 
 		if (testState.getTestTrigger().getParameters() != null
 				&& !testState.getTestTrigger().getParameters().equals("")) { //$NON-NLS-1$
-			containsParameters = true;
 			algText.append(testState.getTestTrigger().getParameters().replace(";", ";\n")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		for (final OutputPrimitive outP : testState.getTestOutputs()) {
 			if (outP.getParameters() != null && !outP.getParameters().equals("")) { //$NON-NLS-1$
-				containsParameters = true;
 				String s = outP.getParameters().replace(";", ";\n");//$NON-NLS-1$ //$NON-NLS-2$
 				s = createDataPinName(s);
 				algText.append(s);
 			}
 		}
 
-		if (!containsParameters) {
-			return null;
-		}
 		return TestEccGenerator.createAlgorithm(fb, "A" + nameCnt, algText.toString()); //$NON-NLS-1$
 	}
 
@@ -180,6 +177,8 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 	@Override
 	protected List<VarDeclaration> createOutputDataList() {
 		final List<VarDeclaration> list = new ArrayList<>();
+		list.add(createOutputVarDecl(sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.INT),
+				GeneratedNameConstants.TESTSIGNALGEN_CASECOUNT_PINNAME));
 		list.addAll(sourceType.getInterfaceList().getInputVars().stream()
 				.map(n -> createOutputVarDecl(n.getType(), n.getName())).toList());
 		list.addAll(sourceType.getInterfaceList().getOutputVars().stream()
