@@ -226,8 +226,10 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 				Messages.SaveAsSubApplicationTypeAction_WizardPageOpenType, null);
 	}
 
+	// TODO move this to a common base/helper because parts of this are shared with
+	// NewFBTypeWizard
 	private static class SaveAsSubappWizardPage extends SaveAsWizardPage {
-		private Text packageText;
+		private Text packageNameText;
 
 		public SaveAsSubappWizardPage(final String pageName, final IStructuredSelection selection, final String title,
 				final String description, final String fileLabel, final String checkBoxText,
@@ -237,36 +239,33 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 
 		@Override
 		public String getPackageName() {
-			if (packageText == null) {
+			if (packageNameText == null) {
 				return super.getPackageName();
 			}
-			return packageText.getText();
+			return packageNameText.getText();
 		}
 
 		private void createPackageNameContainer(final Composite parent) {
 			final Composite packageContainer = new Composite(parent, SWT.NONE);
 			GridLayoutFactory.fillDefaults().numColumns(2).applyTo(packageContainer);
-			GridDataFactory.fillDefaults().grab(true, false).applyTo(packageContainer);
+			GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(packageContainer);
 
 			final Label enterPackageNameLabel = new Label(packageContainer, SWT.NONE);
 			enterPackageNameLabel.setText(Messages.EnterPackageName_Text + ":"); //$NON-NLS-1$
 
-			packageText = new Text(packageContainer, SWT.BORDER);
-			packageText.setText(getInitialPackageName());
-			packageText.setEnabled(true);
-			packageText.addListener(SWT.Modify, this);
-			GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).hint(250, SWT.DEFAULT)
-					.applyTo(packageText);
+			packageNameText = new Text(packageContainer, SWT.BORDER);
+			packageNameText.setText(getInitialPackageName());
+			packageNameText.setEnabled(true);
+			packageNameText.addListener(SWT.Modify, this);
+			GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).hint(250, SWT.DEFAULT)
+					.applyTo(packageNameText);
 
-			final ContentAssistCommandAdapter packageNameProposalAdapter = new ContentAssistCommandAdapter(packageText,
-					new TextContentAdapter(), new PackageSelectionProposalProvider(this::getTypeLibrary), null, null,
-					true);
+			final ContentAssistCommandAdapter packageNameProposalAdapter = new ContentAssistCommandAdapter(
+					packageNameText, new TextContentAdapter(),
+					new PackageSelectionProposalProvider(this::getTypeLibrary), null, null, true);
 			packageNameProposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 		}
 
-		// TODO move this to a common base class
-		// probably make a class SaveAsPackagedWizardPage which holds the common stuff
-		// for FBType as well
 		private String getInitialPackageName() {
 			final IContainer container = getSelectedContainer();
 			if (container != null) {
