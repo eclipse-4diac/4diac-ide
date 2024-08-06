@@ -84,8 +84,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	private int id = 0;
 
 	String getNextId() {
-		id++;
-		return Integer.toString(id);
+		return Integer.toString(id++);
 	}
 
 	private final ResponseMapping respMapping = new ResponseMapping();
