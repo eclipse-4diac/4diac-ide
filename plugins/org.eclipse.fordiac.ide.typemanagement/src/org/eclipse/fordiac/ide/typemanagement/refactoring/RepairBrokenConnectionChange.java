@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -35,13 +36,22 @@ public class RepairBrokenConnectionChange extends AbstractCommandChange<FBNetwor
 	private final Map<String, String> replaceableConMap;
 	private final boolean isSource;
 
-	protected RepairBrokenConnectionChange(final URI elementURI, final Class<FBNetworkElement> elementClass,
+	public RepairBrokenConnectionChange(final URI elementURI, final Class<FBNetworkElement> elementClass,
 			final URI structURI, final Map<String, String> replaceableConMap, final boolean isSource) {
-		super("", elementURI, elementClass);
+		super(createName(elementURI), elementURI, elementClass);
 		this.replaceableConMap = replaceableConMap;
 		this.structURI = structURI;
 		this.isSource = isSource;
 
+	}
+
+	private static String createName(final URI elementURI) {
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(elementURI);
+		if (entry != null && entry.getType().eResource()
+				.getEObject(elementURI.fragment()) instanceof final FBNetworkElement fbnelement) {
+			return "Repair " + fbnelement.getQualifiedName();
+		}
+		return "";
 	}
 
 	@Override
@@ -81,6 +91,7 @@ public class RepairBrokenConnectionChange extends AbstractCommandChange<FBNetwor
 			connections.forEach(con -> cmd
 					.add(new RepairBrokenConnectionCommand(con, isSource, structType, connectToVar.apply(con))));
 		}
+		System.out.println(getName());
 		return cmd;
 	}
 

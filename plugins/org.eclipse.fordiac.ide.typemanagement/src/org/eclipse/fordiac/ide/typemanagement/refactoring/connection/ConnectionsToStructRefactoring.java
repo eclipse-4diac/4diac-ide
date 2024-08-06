@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.RepairBrokenConnectionChange;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.Refactoring;
@@ -101,7 +103,8 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 			status.merge(RefactoringStatus.createFatalErrorStatus("Invalid Output Name!"));
 		}
 		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI).getType() instanceof final FBType sourceFB)
-				&& (sourceFB.getInterfaceList().getOutputs().anyMatch(port -> port.getName().equals(sourceVarName))
+				&& (sourceFB.getInterfaceList().getAllInterfaceElements().stream()
+						.anyMatch(port -> port.getName().equals(sourceVarName))
 						&& !replaceableConMap.containsKey(sourceVarName))) {
 			status.merge(RefactoringStatus.createFatalErrorStatus("Output Name already exists!"));
 		}
@@ -110,12 +113,16 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		}
 		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(destinationURI)
 				.getType() instanceof final FBType destinationFB)
-				&& (destinationFB.getInterfaceList().getInputs()
+				&& (destinationFB.getInterfaceList().getAllInterfaceElements().stream()
 						.anyMatch(port -> port.getName().equals(destinationVarName))
 						&& !replaceableConMap.containsValue(destinationVarName))) {
 			status.merge(RefactoringStatus.createFatalErrorStatus("Input Name already exists!"));
-		}
 
+		}
+		if (destinationURI.fragment().equals(sourceURI.fragment()) && sourceVarName.equals(destinationVarName)) {
+			status.merge(
+					RefactoringStatus.createFatalErrorStatus("Input Name cannot match Output name on the same FB"));
+		}
 		this.structURI = structURI;
 		this.sourceVarName = sourceVarName;
 		this.destinationVarName = destinationVarName;
@@ -176,6 +183,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final CompositeChange compChange = new CompositeChange("Convert Connections To Struct");
 		pm.beginTask("Convert Connections To Struct", 1);
+
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(structURI) == null) {
 			compChange.add(new CreateStructChange(structURI, vars));
 		}
@@ -184,30 +192,29 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		compChange.add(new ReplaceVarsWithStructChange(destinationURI, FBType.class, replaceableConMap.values(),
 				structURI, destinationVarName, true, 0));
 
-//		compChange.add(new UpdateFBChange(sourceURI));
-//		compChange.add(new UpdateFBChange(destinationURI));
-
-		final CompositeChange updates = new CompositeChange("");
-		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI).getType() instanceof final FBType sourceType) {
-			new BlockTypeInstanceSearch(sourceType.getTypeEntry()).performSearch().stream()
-					.map(FBNetworkElement.class::cast).forEach(fbnelem -> {
-						updates.add(new UpdateSingleFBChange(EcoreUtil.getURI(fbnelem), FBNetworkElement.class));
-					});
-		}
-		if (!sourceURI.toString().equals(destinationURI.toString()) && (TypeLibraryManager.INSTANCE
-				.getTypeEntryForURI(destinationURI).getType() instanceof final FBType destinationType)) {
-			new BlockTypeInstanceSearch(destinationType.getTypeEntry()).performSearch().stream()
-					.map(FBNetworkElement.class::cast).forEach(fbnelem -> {
-						updates.add(new UpdateSingleFBChange(EcoreUtil.getURI(fbnelem), FBNetworkElement.class));
-					});
-		}
-		compChange.add(updates);
-
-		final CompositeChange connectStructChange = new CompositeChange("");
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI).getType() instanceof final FBType sourceType
 				&& TypeLibraryManager.INSTANCE.getTypeEntryForURI(destinationURI)
 						.getType() instanceof final FBType destinationType) {
 
+			final CompositeChange updates = new CompositeChange(
+					"Update all Instances of " + sourceURI.lastSegment() + " and " + sourceURI.lastSegment());
+			new BlockTypeInstanceSearch(sourceType.getTypeEntry()).performSearch().stream()
+					.map(FBNetworkElement.class::cast).forEach(fbnelem -> {
+						updates.add(new UpdateSingleFBChange(EcoreUtil.getURI(fbnelem), FBNetworkElement.class));
+					});
+			if (!sourceURI.toString().equals(destinationURI.toString())) {
+				new BlockTypeInstanceSearch(destinationType.getTypeEntry()).performSearch().stream()
+						.map(FBNetworkElement.class::cast).forEach(fbnelem -> {
+							updates.add(new UpdateSingleFBChange(EcoreUtil.getURI(fbnelem), FBNetworkElement.class));
+						});
+			}
+			compChange.add(updates);
+
+			final CompositeChange connectStructChange = new CompositeChange(
+					"Reconnect all FBs with identical Connections");
+			final CompositeChange repairs = new CompositeChange("Repair Broken Connections");
+
+			final Map<FBNetworkElement, FBNetworkElement> map = new HashMap<>();
 			new BlockTypeInstanceSearch(destinationType.getTypeEntry()).performSearch().stream()
 					.map(FBNetworkElement.class::cast).forEach(instance -> {
 
@@ -223,21 +230,35 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 						// Check if all connections between 2 instances are correct
 						if (cons.stream().map(Connection::getSourceElement).distinct().count() == 1
 								&& cons.size() == replaceableConMap.size()) {
+							map.put(instance, cons.get(0).getSourceElement());
 							connectStructChange.add(new ConnectSingleStructChange(EcoreUtil.getURI(instance),
 									FBNetworkElement.class, replaceableConMap, sourceVarName, destinationVarName));
+						} else if (conflictResolution) {
+							repairs.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(instance),
+									FBNetworkElement.class, structURI, replaceableConMap, false));
 						}
 					});
-		}
-		compChange.add(connectStructChange);
 
-////		compChange.add(new ConnectStructChange(netURI, FBNetwork.class, replaceableConMap, sourceURI, destinationURI,
-////				sourceVarName, destinationVarName));
-//		if (conflictResolution) {
-//			compChange.add(
-//					new EditConnectionsChange(netURI, FBNetwork.class, replaceableConMap, sourceURI, structURI, true));
-//			compChange.add(new EditConnectionsChange(netURI, FBNetwork.class, replaceableConMap, destinationURI,
-//					structURI, false));
-//		}
+			compChange.add(connectStructChange);
+			if (conflictResolution) {
+				new BlockTypeInstanceSearch(sourceType.getTypeEntry()).performSearch().stream()
+						.map(FBNetworkElement.class::cast).forEach(instance -> {
+							if (instance.getInterface().getOutputs()
+									.filter(output -> replaceableConMap.containsKey(output.getName()))
+									.map(IInterfaceElement::getOutputConnections).flatMap(EList::stream)
+									.anyMatch(con -> !replaceableConMap.get(con.getSource().getName())
+											.equals(con.getDestination().getName())
+											|| map.get(con.getDestinationElement()) == null
+											|| !map.get(con.getDestinationElement()).getQualifiedName()
+													.equals(instance.getQualifiedName()))) {
+								repairs.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(instance),
+										FBNetworkElement.class, structURI, replaceableConMap, true));
+							}
+						});
+
+				compChange.add(repairs);
+			}
+		}
 		pm.done();
 		return compChange;
 	}

@@ -21,6 +21,8 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -33,10 +35,19 @@ public class ConnectSingleStructChange extends AbstractCommandChange<FBNetworkEl
 
 	protected ConnectSingleStructChange(final URI elementURI, final Class<FBNetworkElement> elementClass,
 			final Map<String, String> replaceableConMap, final String sourceVarName, final String destinationVarName) {
-		super("", elementURI, elementClass);
+		super(createName(elementURI), elementURI, elementClass);
 		this.replaceableConMap = replaceableConMap;
 		this.sourceVarName = sourceVarName;
 		this.destinationVarName = destinationVarName;
+	}
+
+	private static String createName(final URI elementURI) {
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(elementURI);
+		if (entry != null && entry.getType().eResource()
+				.getEObject(elementURI.fragment()) instanceof final FBNetworkElement fbnelement) {
+			return "Reconnect " + fbnelement.getQualifiedName();
+		}
+		return "";
 	}
 
 	@Override
@@ -70,6 +81,7 @@ public class ConnectSingleStructChange extends AbstractCommandChange<FBNetworkEl
 				.filter(con -> replaceableConMap.containsValue(con.getDestination().getName()))
 				.forEach(con -> connectStructCommand.add(new DeleteConnectionCommand(con)));
 
+		System.out.println(getName());
 		return connectStructCommand;
 	}
 
