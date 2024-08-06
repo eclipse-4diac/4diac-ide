@@ -48,7 +48,7 @@ public interface DeploymentHelper {
 
 	static Function<VarDeclaration, String> getVariableValueRetargetable(final VarDeclaration varDecl,
 			final SubApp subapp) throws DeploymentException {
-		if (hasTypeOrInstanceInitialValue(subapp, varDecl)) {
+		if (hasTypeOrInstanceInitialValue(subapp, varDecl) && !hasInputConnection(subapp, varDecl)) {
 			try {
 				final Value value = VariableOperations.newVariable(varDecl).getValue();
 				return destination -> VariableOperations.newVariable(destination, value).toString(false);
