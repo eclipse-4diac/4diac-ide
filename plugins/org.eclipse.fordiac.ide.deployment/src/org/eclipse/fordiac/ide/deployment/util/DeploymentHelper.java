@@ -48,7 +48,7 @@ public interface DeploymentHelper {
 
 	static Function<VarDeclaration, String> getVariableValueRetargetable(final VarDeclaration varDecl,
 			final SubApp subapp) throws DeploymentException {
-		if (hasTypeOrInstanceInitialValue(subapp, varDecl)) {
+		if (hasTypeOrInstanceInitialValue(subapp, varDecl) && !hasInputConnection(subapp, varDecl)) {
 			try {
 				final Value value = VariableOperations.newVariable(varDecl).getValue();
 				return destination -> VariableOperations.newVariable(destination, value).toString(false);
@@ -64,7 +64,12 @@ public interface DeploymentHelper {
 	}
 
 	private static boolean hasTypeOrInstanceInitialValue(final SubApp subApp, final VarDeclaration varDec) {
-		return DeploymentHelper.hasInitalValue(varDec) || subApp.isTyped();
+		return DeploymentHelper.hasInitalValue(varDec) || (subApp.isTyped());
+	}
+
+	private static boolean hasInputConnection(final SubApp subApp, final VarDeclaration varDec) {
+		return subApp.getInterfaceElement(varDec.getName()) != null
+				&& !subApp.getInterfaceElement(varDec.getName()).getInputConnections().isEmpty();
 	}
 
 	private static boolean hasInitalValue(final VarDeclaration varDecl) {
