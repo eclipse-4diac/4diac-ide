@@ -51,6 +51,9 @@ public final class PreferenceConstants {
 	/** The Constant P_TOGGLE_VIRTUAL_GROUP_INTERFACES. */
 	public static final String P_TOGGLE_VIRTUAL_GROUP_INTERFACES = "toggleVirtualGroupInterfaces";//$NON-NLS-1$
 
+	/** The Constant P_TOGGLE_JUMP_STEP. */
+	public static final String P_TOGGLE_JUMP_STEP = "toggleJumpStep";//$NON-NLS-1$
+
 	/**
 	 * The font to be used on all 4diac IDE graphical editors and diagrams,
 	 * currently defaults to the Text_Font
