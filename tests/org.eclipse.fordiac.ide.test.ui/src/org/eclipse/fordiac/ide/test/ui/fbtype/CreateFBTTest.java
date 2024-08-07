@@ -65,7 +65,7 @@ public class CreateFBTTest extends Abstract4diacUITests {
 		assertFalse(bot.button(FINISH).isEnabled());
 
 		// Select Type:
-		bot.table().select(TEST_TYPE_TEMPLATE_NAME);
+		bot.table().select(ADAPTER);
 
 		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), FBT_TEST_PROJECT1);
 		assertTrue(bot.button(CANCEL).isEnabled());
@@ -124,7 +124,7 @@ public class CreateFBTTest extends Abstract4diacUITests {
 		assertFalse(bot.button(FINISH).isEnabled());
 
 		// Select Type:
-		bot.table().select(TEST_TYPE_TEMPLATE_NAME);
+		bot.table().select(ADAPTER);
 
 		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), FBT_TEST_PROJECT2);
 		assertTrue(bot.button(CANCEL).isEnabled());
@@ -173,7 +173,7 @@ public class CreateFBTTest extends Abstract4diacUITests {
 		assertFalse(bot.button(FINISH).isEnabled());
 
 		// Select Type:
-		bot.table().select(TEST_TYPE_TEMPLATE_NAME);
+		bot.table().select(ADAPTER);
 
 		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), FORBIDDEN_TYPE_NAME);
 		assertTrue(bot.button(CANCEL).isEnabled());
@@ -192,14 +192,14 @@ public class CreateFBTTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToCreateANewFBTypeWithExistingName() {
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT3);
+		createFBType(PROJECT_NAME, FBT_TEST_PROJECT3, ADAPTER);
 		bot.menu(FILE).menu(NEW).menu(TYPE_PROJECT).click();
 		final SWTBotShell shell = bot.shell(NEW_TYPE);
 		shell.activate();
 		bot.textWithLabel(TYPE_NAME_LABEL).setText(FBT_TEST_PROJECT3);
 		bot.textWithLabel(PARENT_FOLDER_NAME_LABEL).setText(PROJECT_NAME);
 		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), FBT_TEST_PROJECT3);
-		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(TEST_TYPE_TEMPLATE_NAME).select();
+		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(ADAPTER).select();
 		assertFalse(bot.button(FINISH).isEnabled());
 		bot.button(CANCEL).click();
 		bot.waitUntil(shellCloses(shell));
@@ -211,7 +211,7 @@ public class CreateFBTTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void deleteExistingFBType() {
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT4);
+		createFBType(PROJECT_NAME, FBT_TEST_PROJECT4, ADAPTER);
 		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();

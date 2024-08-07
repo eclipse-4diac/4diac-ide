@@ -44,7 +44,7 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@BeforeEach
 	public void operationsInitialization() {
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT2);
+		createFBType(PROJECT_NAME, FBT_TEST_PROJECT2, ADAPTER);
 		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT2);
 	}
 

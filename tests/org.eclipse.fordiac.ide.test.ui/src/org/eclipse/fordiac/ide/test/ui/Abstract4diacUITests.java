@@ -69,6 +69,7 @@ public class Abstract4diacUITests {
 
 	protected static SWT4diacGefBot bot;
 	// alphabetical order of static variable names
+	protected static final String ADAPTER = "Adapter"; //$NON-NLS-1$
 	protected static final String APP = "App"; //$NON-NLS-1$
 	protected static final String COMMENT = "Comment:"; //$NON-NLS-1$
 	protected static final String CANCEL = "Cancel"; //$NON-NLS-1$
@@ -141,10 +142,10 @@ public class Abstract4diacUITests {
 	protected static final String SELECT_TYPE_LABEL = FordiacMessages.SelectType + ":"; //$NON-NLS-1$
 	protected static final String SOURCE = "Source"; //$NON-NLS-1$
 	protected static final String SUBAPP = "SubApp"; //$NON-NLS-1$
+	protected static final String STRUCT = "Struct"; //$NON-NLS-1$
 	protected static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
 	protected static final String SYSTEM_EXPLORER_LABEL = "System Explorer"; //$NON-NLS-1$
 	protected static final String TEST_PARENT_FOLDER = "TestParentProject"; //$NON-NLS-1$
-	protected static final String TEST_TYPE_TEMPLATE_NAME = "Adapter"; //$NON-NLS-1$
 	protected static final String TOOLBAR_BUTTON_ZOOM_FIT_PAGE = "Zoom fit Page"; //$NON-NLS-1$
 	protected static final String TEST_COMMENT = "Request from ideal Socket"; //$NON-NLS-1$
 	protected static final String TYPE_LABEL = "Type:"; //$NON-NLS-1$
@@ -508,15 +509,16 @@ public class Abstract4diacUITests {
 	 *
 	 * @param parentName Name of the parent project.
 	 * @param typeName   Name of the new type.
+	 * @param typeLabel  Name of the Type Label.
 	 */
-	protected static void createFBType(final String parentName, final String typeName) {
+	protected static void createFBType(final String parentName, final String typeName, final String typeLabel) {
 		bot.menu(FILE).menu(NEW).menu(TYPE_PROJECT).click();
 		final SWTBotShell shell = bot.shell(NEW_TYPE);
 		shell.activate();
 		bot.textWithLabel(TYPE_NAME_LABEL).setText(typeName);
 		bot.textWithLabel(PARENT_FOLDER_NAME_LABEL).setText(parentName);
 		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), typeName);
-		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(TEST_TYPE_TEMPLATE_NAME).select();
+		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(typeLabel).select();
 		bot.button(FINISH).click();
 		bot.waitUntil(shellCloses(shell));
 	}
