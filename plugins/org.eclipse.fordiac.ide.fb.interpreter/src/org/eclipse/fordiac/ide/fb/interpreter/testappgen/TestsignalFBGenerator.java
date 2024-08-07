@@ -68,7 +68,7 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 	@Override
 	protected void generateECC() {
 		createTimeOutPlug();
-		final Algorithm timeoutAlg = createTimeOutAlg(destinationFB, 300);
+		final Algorithm timeoutAlg = createTimeOutAlg(destinationFB, 250);
 
 		final TestEccGenerator eccGen = new TestEccGenerator(destinationFB.getECC(), 0);
 		for (final TestCase testCase : testSuite.getTestCases()) {

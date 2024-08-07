@@ -54,7 +54,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 	protected void generateECC() {
 		eccGen = new TestEccGenerator(destinationFB.getECC(), 0);
 		createTimeOutPlug();
-		final Algorithm timeout = createTimeOutAlg(destinationFB, 500);
+		final Algorithm timeout = createTimeOutAlgMatchFB(destinationFB, 300);
 
 		// retrieve input events with "expected" in the name
 		final List<Event> evExpected = destinationFB.getInterfaceList().getEventInputs().subList(0,
