@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverter
 import org.eclipse.fordiac.ide.structuredtextcore.documentation.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
+import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSerializer;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
@@ -43,6 +44,7 @@ import org.eclipse.xtext.resource.IResourceFactory;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
+import org.eclipse.xtext.serializer.ISerializer;
 import org.eclipse.xtext.validation.IResourceValidator;
 
 import com.google.inject.Binder;
@@ -127,5 +129,10 @@ public class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 
 	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {
 		return STCoreCommentDocumentationProvider.class;
+	}
+
+	@Override
+	public Class<? extends ISerializer> bindISerializer() {
+		return STCoreSerializer.class;
 	}
 }
