@@ -19,10 +19,15 @@ package org.eclipse.fordiac.ide.structuredtextcore;
 
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STCoreLinkingDiagnosticMessageProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSerializer;
 import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider;
+import org.eclipse.xtext.serializer.ISerializer;
 
-/** Use this class to register components to be used at runtime / without the Equinox extension registry. */
+/**
+ * Use this class to register components to be used at runtime / without the
+ * Equinox extension registry.
+ */
 @SuppressWarnings("static-method")
 public class STCoreRuntimeModule extends AbstractSTCoreRuntimeModule {
 	@Override
@@ -32,5 +37,10 @@ public class STCoreRuntimeModule extends AbstractSTCoreRuntimeModule {
 
 	public Class<? extends ILinkingDiagnosticMessageProvider> bindILinkingDiagnosticMessageProvider() {
 		return STCoreLinkingDiagnosticMessageProvider.class;
+	}
+
+	@Override
+	public Class<? extends ISerializer> bindISerializer() {
+		return STCoreSerializer.class;
 	}
 }
