@@ -29,6 +29,8 @@ public class GeneratedNameConstants {
 
 	public static final String TESTSIGNALGEN_CASECOUNT_PINNAME = "case_count"; //$NON-NLS-1$
 
+	public static final String START_STATE = "START"; //$NON-NLS-1$
+
 	private GeneratedNameConstants() {
 		// empty private constructor
 	}
