@@ -17,8 +17,8 @@
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
 import java.util.Collection;
-
 import java.util.Map;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STPragma;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 
 /**
@@ -59,6 +60,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarDeclarationImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarDeclarationImpl#getMaxLength <em>Max Length</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarDeclarationImpl#getDefaultValue <em>Default Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarDeclarationImpl#getPragma <em>Pragma</em>}</li>
  * </ul>
  *
  * @generated
@@ -183,6 +185,16 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	 * @ordered
 	 */
 	protected STInitializerExpression defaultValue;
+
+	/**
+	 * The cached value of the '{@link #getPragma() <em>Pragma</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPragma()
+	 * @generated
+	 * @ordered
+	 */
+	protected STPragma pragma;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -474,6 +486,51 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	 * @generated
 	 */
 	@Override
+	public STPragma getPragma() {
+		return pragma;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetPragma(STPragma newPragma, NotificationChain msgs) {
+		STPragma oldPragma = pragma;
+		pragma = newPragma;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_VAR_DECLARATION__PRAGMA, oldPragma, newPragma);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPragma(STPragma newPragma) {
+		if (newPragma != pragma) {
+			NotificationChain msgs = null;
+			if (pragma != null)
+				msgs = ((InternalEObject)pragma).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_VAR_DECLARATION__PRAGMA, null, msgs);
+			if (newPragma != null)
+				msgs = ((InternalEObject)newPragma).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_VAR_DECLARATION__PRAGMA, null, msgs);
+			msgs = basicSetPragma(newPragma, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_VAR_DECLARATION__PRAGMA, newPragma, newPragma));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String getTypeName() {
 		org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();
 		if(type != null){
@@ -536,6 +593,8 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 				return basicSetMaxLength(null, msgs);
 			case STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE:
 				return basicSetDefaultValue(null, msgs);
+			case STCorePackage.ST_VAR_DECLARATION__PRAGMA:
+				return basicSetPragma(null, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -569,6 +628,8 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 				return getMaxLength();
 			case STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE:
 				return getDefaultValue();
+			case STCorePackage.ST_VAR_DECLARATION__PRAGMA:
+				return getPragma();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -612,6 +673,9 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 			case STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE:
 				setDefaultValue((STInitializerExpression)newValue);
 				return;
+			case STCorePackage.ST_VAR_DECLARATION__PRAGMA:
+				setPragma((STPragma)newValue);
+				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -653,6 +717,9 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 			case STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE:
 				setDefaultValue((STInitializerExpression)null);
 				return;
+			case STCorePackage.ST_VAR_DECLARATION__PRAGMA:
+				setPragma((STPragma)null);
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -685,6 +752,8 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 				return maxLength != null;
 			case STCorePackage.ST_VAR_DECLARATION__DEFAULT_VALUE:
 				return defaultValue != null;
+			case STCorePackage.ST_VAR_DECLARATION__PRAGMA:
+				return pragma != null;
 			default:
 				return super.eIsSet(featureID);
 		}

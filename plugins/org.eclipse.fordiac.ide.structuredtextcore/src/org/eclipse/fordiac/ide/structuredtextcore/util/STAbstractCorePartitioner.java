@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -33,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
@@ -88,6 +90,10 @@ public abstract class STAbstractCorePartitioner<E extends INamedElement> impleme
 			value.setValue(extractDefaultValue(declaration));
 			result.setValue(value);
 		}
+		if (declaration.getPragma() != null) {
+			declaration.getPragma().getAttributes().stream().filter(STAbstractCorePartitioner::isValidAttribute)
+					.map(this::convertAttribute).forEachOrdered(result.getAttributes()::add);
+		}
 		return result;
 	}
 
@@ -103,6 +109,29 @@ public abstract class STAbstractCorePartitioner<E extends INamedElement> impleme
 	protected static String extractDefaultValue(final STVarDeclaration declaration) {
 		return NodeModelUtils
 				.findNodesForFeature(declaration, STCorePackage.eINSTANCE.getSTVarDeclaration_DefaultValue()).stream()
+				.map(INode::getText).collect(Collectors.joining()).trim();
+	}
+
+	protected Attribute convertAttribute(final STAttribute attribute) {
+		final Attribute result = LibraryElementFactory.eINSTANCE.createAttribute();
+		result.setName(PackageNameHelper.getFullTypeName(attribute.getDeclaration()));
+		final String comment = getDocumentationProvider().getDocumentation(attribute);
+		if (comment != null) {
+			result.setComment(comment);
+		}
+		result.setType(attribute.getDeclaration().getType());
+		result.setAttributeDeclaration(attribute.getDeclaration());
+		result.setValue(extractValue(attribute));
+		return result;
+	}
+
+	protected static boolean isValidAttribute(final STAttribute attribute) {
+		return attribute.getDeclaration() != null && attribute.getDeclaration().getType() != null
+				&& attribute.getValue() != null;
+	}
+
+	protected static String extractValue(final STAttribute attribute) {
+		return NodeModelUtils.findNodesForFeature(attribute, STCorePackage.eINSTANCE.getSTAttribute_Value()).stream()
 				.map(INode::getText).collect(Collectors.joining()).trim();
 	}
 

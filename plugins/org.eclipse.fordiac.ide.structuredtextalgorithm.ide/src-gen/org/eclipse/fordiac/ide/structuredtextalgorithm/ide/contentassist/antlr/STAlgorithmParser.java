@@ -122,6 +122,9 @@ public class STAlgorithmParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getGroup(), "rule__STStructInitializerExpression__Group__0");
 			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getGroup_2(), "rule__STStructInitializerExpression__Group_2__0");
 			builder.put(grammarAccess.getSTStructInitElementAccess().getGroup(), "rule__STStructInitElement__Group__0");
+			builder.put(grammarAccess.getSTPragmaAccess().getGroup(), "rule__STPragma__Group__0");
+			builder.put(grammarAccess.getSTPragmaAccess().getGroup_3(), "rule__STPragma__Group_3__0");
+			builder.put(grammarAccess.getSTAttributeAccess().getGroup(), "rule__STAttribute__Group__0");
 			builder.put(grammarAccess.getSTStatementAccess().getGroup_0(), "rule__STStatement__Group_0__0");
 			builder.put(grammarAccess.getSTStatementAccess().getGroup_0_0_6(), "rule__STStatement__Group_0_0_6__0");
 			builder.put(grammarAccess.getSTStatementAccess().getGroup_0_0_7(), "rule__STStatement__Group_0_0_7__0");
@@ -240,6 +243,7 @@ public class STAlgorithmParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTVarDeclarationAccess().getTypeAssignment_5(), "rule__STVarDeclaration__TypeAssignment_5");
 			builder.put(grammarAccess.getSTVarDeclarationAccess().getMaxLengthAssignment_6_1(), "rule__STVarDeclaration__MaxLengthAssignment_6_1");
 			builder.put(grammarAccess.getSTVarDeclarationAccess().getDefaultValueAssignment_7_1(), "rule__STVarDeclaration__DefaultValueAssignment_7_1");
+			builder.put(grammarAccess.getSTVarDeclarationAccess().getPragmaAssignment_8(), "rule__STVarDeclaration__PragmaAssignment_8");
 			builder.put(grammarAccess.getSTTypeDeclarationAccess().getArrayAssignment_1_0(), "rule__STTypeDeclaration__ArrayAssignment_1_0");
 			builder.put(grammarAccess.getSTTypeDeclarationAccess().getRangesAssignment_1_1_0_1(), "rule__STTypeDeclaration__RangesAssignment_1_1_0_1");
 			builder.put(grammarAccess.getSTTypeDeclarationAccess().getRangesAssignment_1_1_0_2_1(), "rule__STTypeDeclaration__RangesAssignment_1_1_0_2_1");
@@ -258,6 +262,10 @@ public class STAlgorithmParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getValuesAssignment_2_1(), "rule__STStructInitializerExpression__ValuesAssignment_2_1");
 			builder.put(grammarAccess.getSTStructInitElementAccess().getVariableAssignment_0(), "rule__STStructInitElement__VariableAssignment_0");
 			builder.put(grammarAccess.getSTStructInitElementAccess().getValueAssignment_2(), "rule__STStructInitElement__ValueAssignment_2");
+			builder.put(grammarAccess.getSTPragmaAccess().getAttributesAssignment_2(), "rule__STPragma__AttributesAssignment_2");
+			builder.put(grammarAccess.getSTPragmaAccess().getAttributesAssignment_3_1(), "rule__STPragma__AttributesAssignment_3_1");
+			builder.put(grammarAccess.getSTAttributeAccess().getDeclarationAssignment_0(), "rule__STAttribute__DeclarationAssignment_0");
+			builder.put(grammarAccess.getSTAttributeAccess().getValueAssignment_2(), "rule__STAttribute__ValueAssignment_2");
 			builder.put(grammarAccess.getSTAssignmentAccess().getRightAssignment_1_2(), "rule__STAssignment__RightAssignment_1_2");
 			builder.put(grammarAccess.getSTCallUnnamedArgumentAccess().getArgumentAssignment(), "rule__STCallUnnamedArgument__ArgumentAssignment");
 			builder.put(grammarAccess.getSTCallNamedInputArgumentAccess().getParameterAssignment_0(), "rule__STCallNamedInputArgument__ParameterAssignment_0");

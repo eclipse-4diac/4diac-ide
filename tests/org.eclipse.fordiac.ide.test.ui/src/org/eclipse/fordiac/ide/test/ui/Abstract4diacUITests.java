@@ -526,6 +526,7 @@ public class Abstract4diacUITests {
 	 *
 	 * @param parentName Name of the parent project.
 	 * @param typeName   Name of the new type.
+	 * @param typeLabel  Name of the Type Label.
 	 */
 	protected static void createFBType(final String parentName, final String typeName, final String typeLabel) {
 		bot.menu(FILE).menu(NEW).menu(TYPE_PROJECT).click();

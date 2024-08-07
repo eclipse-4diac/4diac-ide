@@ -616,9 +616,28 @@ ruleSTVarDeclaration returns [EObject current=null]
 				)
 			)
 		)?
-		otherlv_23=Semicolon
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTVarDeclarationAccess().getPragmaSTPragmaParserRuleCall_8_0());
+				}
+				lv_pragma_23_0=ruleSTPragma
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTVarDeclarationRule());
+					}
+					set(
+						$current,
+						"pragma",
+						lv_pragma_23_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STPragma");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)?
+		otherlv_24=Semicolon
 		{
-			newLeafNode(otherlv_23, grammarAccess.getSTVarDeclarationAccess().getSemicolonKeyword_8());
+			newLeafNode(otherlv_24, grammarAccess.getSTVarDeclarationAccess().getSemicolonKeyword_9());
 		}
 	)
 ;
@@ -1255,6 +1274,169 @@ ruleSTStructInitElement returns [EObject current=null]
 			)
 		)
 	)
+;
+
+// Entry rule entryRuleSTPragma
+entryRuleSTPragma returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTPragmaRule()); }
+	iv_ruleSTPragma=ruleSTPragma
+	{ $current=$iv_ruleSTPragma.current; }
+	EOF;
+
+// Rule STPragma
+ruleSTPragma returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			{
+				$current = forceCreateModelElement(
+					grammarAccess.getSTPragmaAccess().getSTPragmaAction_0(),
+					$current);
+			}
+		)
+		otherlv_1=LeftCurlyBracket
+		{
+			newLeafNode(otherlv_1, grammarAccess.getSTPragmaAccess().getLeftCurlyBracketKeyword_1());
+		}
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTPragmaAccess().getAttributesSTAttributeParserRuleCall_2_0());
+				}
+				lv_attributes_2_0=ruleSTAttribute
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTPragmaRule());
+					}
+					add(
+						$current,
+						"attributes",
+						lv_attributes_2_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STAttribute");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		(
+			otherlv_3=Comma
+			{
+				newLeafNode(otherlv_3, grammarAccess.getSTPragmaAccess().getCommaKeyword_3_0());
+			}
+			(
+				(
+					{
+						newCompositeNode(grammarAccess.getSTPragmaAccess().getAttributesSTAttributeParserRuleCall_3_1_0());
+					}
+					lv_attributes_4_0=ruleSTAttribute
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getSTPragmaRule());
+						}
+						add(
+							$current,
+							"attributes",
+							lv_attributes_4_0,
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STAttribute");
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)
+		)*
+		otherlv_5=RightCurlyBracket
+		{
+			newLeafNode(otherlv_5, grammarAccess.getSTPragmaAccess().getRightCurlyBracketKeyword_4());
+		}
+	)
+;
+
+// Entry rule entryRuleSTAttribute
+entryRuleSTAttribute returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTAttributeRule()); }
+	iv_ruleSTAttribute=ruleSTAttribute
+	{ $current=$iv_ruleSTAttribute.current; }
+	EOF;
+
+// Rule STAttribute
+ruleSTAttribute returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			(
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getSTAttributeRule());
+					}
+				}
+				{
+					newCompositeNode(grammarAccess.getSTAttributeAccess().getDeclarationAttributeDeclarationCrossReference_0_0());
+				}
+				ruleSTAttributeName
+				{
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		otherlv_1=ColonEqualsSign
+		{
+			newLeafNode(otherlv_1, grammarAccess.getSTAttributeAccess().getColonEqualsSignKeyword_1());
+		}
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTAttributeAccess().getValueSTInitializerExpressionParserRuleCall_2_0());
+				}
+				lv_value_2_0=ruleSTInitializerExpression
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTAttributeRule());
+					}
+					set(
+						$current,
+						"value",
+						lv_value_2_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STInitializerExpression");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+	)
+;
+
+// Entry rule entryRuleSTAttributeName
+entryRuleSTAttributeName returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getSTAttributeNameRule()); }
+	iv_ruleSTAttributeName=ruleSTAttributeName
+	{ $current=$iv_ruleSTAttributeName.current.getText(); }
+	EOF;
+
+// Rule STAttributeName
+ruleSTAttributeName returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	{
+		newCompositeNode(grammarAccess.getSTAttributeNameAccess().getQualifiedNameParserRuleCall());
+	}
+	this_QualifiedName_0=ruleQualifiedName
+	{
+		$current.merge(this_QualifiedName_0);
+	}
+	{
+		afterParserOrEnumRuleCall();
+	}
 ;
 
 // Entry rule entryRuleSTStatement

@@ -162,6 +162,8 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 					&& structInitializerExpression.getResultType() instanceof final StructuredType structType) {
 				return qualifiedScope(structType.getMemberVariables(), reference);
 			}
+		} else if (reference == STCorePackage.Literals.ST_ATTRIBUTE__DECLARATION) {
+			return super.getScope(context, reference);
 		}
 		return IScope.NULLSCOPE;
 	}

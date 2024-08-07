@@ -111,7 +111,29 @@ public class TestEccGenerator {
 		return act;
 	}
 
+	public static ECAction createAction(final Algorithm alg) {
+		final ECAction act = createAction();
+		act.setAlgorithm(alg);
+		return act;
+	}
+
 	public static Algorithm createAlgorithm(final BasicFBType fb, final String name, final String algText) {
+		if (fb.getAlgorithmNamed(name) != null) {
+			return fb.getAlgorithmNamed(name);
+		}
+		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
+		alg.setName(name);
+		final StringBuilder sb = new StringBuilder();
+		sb.append("\n"); //$NON-NLS-1$
+		sb.append(algText);
+		alg.setText(sb.toString());
+		fb.getCallables().add(alg);
+		return alg;
+
+	}
+
+	public static Algorithm createSchneiderComplicitAlgorithm(final BasicFBType fb, final String name,
+			final String algText) {
 		if (fb.getAlgorithmNamed(name) != null) {
 			return fb.getAlgorithmNamed(name);
 		}
@@ -119,14 +141,13 @@ public class TestEccGenerator {
 		final TextAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		alg.setName(name);
 		final StringBuilder sb = new StringBuilder();
-		sb.append("ALGORITHM "); //$NON-NLS-1$
-		sb.append(name);
-		sb.append("\n"); //$NON-NLS-1$
+		sb.append("***ALGORITHM*** \n"); //$NON-NLS-1$
 		sb.append(algText);
-		sb.append("\n END_ALGORITHM \n\n\n"); //$NON-NLS-1$
+		sb.append("\n***END_ALGORITHM*** \n\n"); //$NON-NLS-1$
 		alg.setText(sb.toString());
 		fb.getCallables().add(alg);
 		return alg;
+
 	}
 
 	public ECState getLastState() {

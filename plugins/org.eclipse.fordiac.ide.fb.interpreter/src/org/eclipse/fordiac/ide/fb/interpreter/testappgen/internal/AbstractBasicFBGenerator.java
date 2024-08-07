@@ -16,9 +16,16 @@ package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.TestEccGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.TestGenBlockNames;
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestCase;
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestState;
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
+import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -26,6 +33,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractBasicFBGenerator extends AbstractBlockGenerator {
 
@@ -133,6 +143,38 @@ public abstract class AbstractBasicFBGenerator extends AbstractBlockGenerator {
 			}
 		}
 		return list;
+	}
+
+	protected AdapterDeclaration createTimeOutPlug() {
+		final TypeLibrary typelib = entry.getTypeLibrary();
+		final AdapterTypeEntry timeOutEntry = typelib.getAdapterTypeEntry(TestGenBlockNames.TIMEOUT_ADAPTER_NAME);
+		final CreateInterfaceElementCommand cmd = new CreateInterfaceElementCommand(timeOutEntry.getType(),
+				TestGenBlockNames.MATCH_TIMEOUT_PINNAME, destinationFB.getInterfaceList(), false, -1);
+		try {
+			cmd.execute();
+		} catch (final Exception e) {
+			FordiacLogHelper.logError(e.getMessage());
+		}
+
+		final AdapterDeclaration timeOutPlug = (AdapterDeclaration) cmd.getCreatedElement();
+		destinationFB.getInterfaceList().getPlugs().add(timeOutPlug);
+		return timeOutPlug;
+	}
+
+	protected static Algorithm createTimeOutAlg(final BasicFBType fb, final int timeMS) {
+		final String algText = TestGenBlockNames.MATCH_TIMEOUT_PINNAME + "." + TestGenBlockNames.TIMEOUT_PIN_NAME //$NON-NLS-1$
+				+ " := TIME#" + timeMS + "ms; \n";//$NON-NLS-1$ //$NON-NLS-2$
+		return TestEccGenerator.createAlgorithm(fb, "TimeOutAlg", algText); //$NON-NLS-1$
+	}
+
+	protected Event getStartTimeoutEvent() {
+		return ECCContentAndLabelProvider.getOutputEvents(destinationFB).stream()
+				.filter(s -> s.getName().equals(GeneratedNameConstants.START_STATE)).findFirst().orElse(null);
+	}
+
+	protected Event getTransitionTimeOutEvent() {
+		return ECCContentAndLabelProvider.getInputEvents(destinationFB).stream().filter(s -> ECCContentAndLabelProvider
+				.getEventName(s).equals(TestGenBlockNames.MATCH_TIMEOUT_PINNAME + ".TimeOut")).findFirst().orElse(null); //$NON-NLS-1$
 	}
 
 	protected abstract List<Event> createInputEventList();

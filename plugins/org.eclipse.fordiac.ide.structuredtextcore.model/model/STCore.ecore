@@ -95,6 +95,15 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="initExpressions" upperBound="-1"
         eType="#//STInitializerExpression" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STPragma">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//STAttribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STAttribute">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="declaration" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//AttributeDeclaration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//STInitializerExpression"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STAssignment" eSuperTypes="#//STExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//STExpression"
@@ -353,6 +362,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="maxLength" eType="#//STExpression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" eType="#//STInitializerExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pragma" eType="#//STPragma"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STTypeDeclaration">

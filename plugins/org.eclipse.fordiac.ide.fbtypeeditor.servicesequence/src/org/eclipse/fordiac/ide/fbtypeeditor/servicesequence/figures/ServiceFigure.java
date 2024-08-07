@@ -39,7 +39,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontData;
 
 public final class ServiceFigure extends FreeformLayeredPane {
-	private static final int MIDDLE_LINE_WIDTH = 5;
+	private static final int MIDDLE_LINE_WIDTH = 2;
 	public static final String LABEL_FONT = "labelFont"; //$NON-NLS-1$
 
 	private Label leftLabel;
@@ -65,8 +65,7 @@ public final class ServiceFigure extends FreeformLayeredPane {
 
 	private static FontRegistry createFontRegistry() {
 		final FontRegistry newfontRegistry = new FontRegistry();
-		newfontRegistry.put(LABEL_FONT, new FontData[] {
-				new FontData("Arial", 10, SWT.NONE) //$NON-NLS-1$
+		newfontRegistry.put(LABEL_FONT, new FontData[] { new FontData("Arial", 10, SWT.NONE) //$NON-NLS-1$
 		});
 		return newfontRegistry;
 	}
@@ -81,11 +80,14 @@ public final class ServiceFigure extends FreeformLayeredPane {
 		layout.verticalSpacing = 0;
 		baseLayer.setLayoutManager(layout);
 
-
 		final Figure leftFigure = new Figure();
+		final AdvancedLineBorder leftMiddleLine = new AdvancedLineBorder(PositionConstants.EAST);
+		leftMiddleLine.setWidth(2 * MIDDLE_LINE_WIDTH);
+		leftFigure.setBorder(leftMiddleLine);
 		baseLayer.add(leftFigure);
 
-		final LineBorder middleLines = new AdvancedLineBorder(PositionConstants.EAST | PositionConstants.WEST);
+		// final LineBorder middleLines = new LineBorder();
+		final LineBorder middleLines = leftMiddleLine;
 		middleLines.setWidth(MIDDLE_LINE_WIDTH);
 		middleLines.setColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
 
@@ -118,7 +120,6 @@ public final class ServiceFigure extends FreeformLayeredPane {
 
 		add(baseLayer);
 	}
-
 
 	private void createInterfaceLayer() {
 		final Layer interfaceLayer = new FreeformLayer();
@@ -159,6 +160,7 @@ public final class ServiceFigure extends FreeformLayeredPane {
 		}
 		return label;
 	}
+
 	private void createServiceSequenceLayer() {
 		serviceSequenceContainer = new FreeformLayer();
 		serviceSequenceContainer.setBorder(new MarginBorder(20, 10, 5, 10));

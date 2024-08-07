@@ -418,21 +418,23 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cColonEqualsSignKeyword_7_0 = (Keyword)cGroup_7.eContents().get(0);
 		private final Assignment cDefaultValueAssignment_7_1 = (Assignment)cGroup_7.eContents().get(1);
 		private final RuleCall cDefaultValueSTInitializerExpressionParserRuleCall_7_1_0 = (RuleCall)cDefaultValueAssignment_7_1.eContents().get(0);
-		private final Keyword cSemicolonKeyword_8 = (Keyword)cGroup.eContents().get(8);
+		private final Assignment cPragmaAssignment_8 = (Assignment)cGroup.eContents().get(8);
+		private final RuleCall cPragmaSTPragmaParserRuleCall_8_0 = (RuleCall)cPragmaAssignment_8.eContents().get(0);
+		private final Keyword cSemicolonKeyword_9 = (Keyword)cGroup.eContents().get(9);
 		
 		//STVarDeclaration:
 		//    {STVarDeclaration}
 		//    name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 		//    ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')?
 		//    (type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
-		//    defaultValue=STInitializerExpression)? ';';
+		//    defaultValue=STInitializerExpression)? pragma=STPragma? ';';
 		@Override public ParserRule getRule() { return rule; }
 		
 		//{STVarDeclaration}
 		//name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 		//ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')?
 		//(type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
-		//defaultValue=STInitializerExpression)? ';'
+		//defaultValue=STInitializerExpression)? pragma=STPragma? ';'
 		public Group getGroup() { return cGroup; }
 		
 		//{STVarDeclaration}
@@ -572,8 +574,14 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//STInitializerExpression
 		public RuleCall getDefaultValueSTInitializerExpressionParserRuleCall_7_1_0() { return cDefaultValueSTInitializerExpressionParserRuleCall_7_1_0; }
 		
+		//pragma=STPragma?
+		public Assignment getPragmaAssignment_8() { return cPragmaAssignment_8; }
+		
+		//STPragma
+		public RuleCall getPragmaSTPragmaParserRuleCall_8_0() { return cPragmaSTPragmaParserRuleCall_8_0; }
+		
 		//';'
-		public Keyword getSemicolonKeyword_8() { return cSemicolonKeyword_8; }
+		public Keyword getSemicolonKeyword_9() { return cSemicolonKeyword_9; }
 	}
 	public class STTypeDeclarationElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STTypeDeclaration");
@@ -982,6 +990,101 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//STInitializerExpression
 		public RuleCall getValueSTInitializerExpressionParserRuleCall_2_0() { return cValueSTInitializerExpressionParserRuleCall_2_0; }
+	}
+	public class STPragmaElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STPragma");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cSTPragmaAction_0 = (Action)cGroup.eContents().get(0);
+		private final Keyword cLeftCurlyBracketKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cAttributesAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cAttributesSTAttributeParserRuleCall_2_0 = (RuleCall)cAttributesAssignment_2.eContents().get(0);
+		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
+		private final Keyword cCommaKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
+		private final Assignment cAttributesAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
+		private final RuleCall cAttributesSTAttributeParserRuleCall_3_1_0 = (RuleCall)cAttributesAssignment_3_1.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		
+		//STPragma:
+		//    {STPragma}
+		//    '{' attributes+=STAttribute (',' attributes+=STAttribute)* '}';
+		@Override public ParserRule getRule() { return rule; }
+		
+		//{STPragma}
+		//'{' attributes+=STAttribute (',' attributes+=STAttribute)* '}'
+		public Group getGroup() { return cGroup; }
+		
+		//{STPragma}
+		public Action getSTPragmaAction_0() { return cSTPragmaAction_0; }
+		
+		//'{'
+		public Keyword getLeftCurlyBracketKeyword_1() { return cLeftCurlyBracketKeyword_1; }
+		
+		//attributes+=STAttribute
+		public Assignment getAttributesAssignment_2() { return cAttributesAssignment_2; }
+		
+		//STAttribute
+		public RuleCall getAttributesSTAttributeParserRuleCall_2_0() { return cAttributesSTAttributeParserRuleCall_2_0; }
+		
+		//(',' attributes+=STAttribute)*
+		public Group getGroup_3() { return cGroup_3; }
+		
+		//','
+		public Keyword getCommaKeyword_3_0() { return cCommaKeyword_3_0; }
+		
+		//attributes+=STAttribute
+		public Assignment getAttributesAssignment_3_1() { return cAttributesAssignment_3_1; }
+		
+		//STAttribute
+		public RuleCall getAttributesSTAttributeParserRuleCall_3_1_0() { return cAttributesSTAttributeParserRuleCall_3_1_0; }
+		
+		//'}'
+		public Keyword getRightCurlyBracketKeyword_4() { return cRightCurlyBracketKeyword_4; }
+	}
+	public class STAttributeElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STAttribute");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cDeclarationAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final CrossReference cDeclarationAttributeDeclarationCrossReference_0_0 = (CrossReference)cDeclarationAssignment_0.eContents().get(0);
+		private final RuleCall cDeclarationAttributeDeclarationSTAttributeNameParserRuleCall_0_0_1 = (RuleCall)cDeclarationAttributeDeclarationCrossReference_0_0.eContents().get(1);
+		private final Keyword cColonEqualsSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cValueAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cValueSTInitializerExpressionParserRuleCall_2_0 = (RuleCall)cValueAssignment_2.eContents().get(0);
+		
+		//STAttribute:
+		//    declaration=[libraryElement::AttributeDeclaration|STAttributeName] ':=' value=STInitializerExpression;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//declaration=[libraryElement::AttributeDeclaration|STAttributeName] ':=' value=STInitializerExpression
+		public Group getGroup() { return cGroup; }
+		
+		//declaration=[libraryElement::AttributeDeclaration|STAttributeName]
+		public Assignment getDeclarationAssignment_0() { return cDeclarationAssignment_0; }
+		
+		//[libraryElement::AttributeDeclaration|STAttributeName]
+		public CrossReference getDeclarationAttributeDeclarationCrossReference_0_0() { return cDeclarationAttributeDeclarationCrossReference_0_0; }
+		
+		//STAttributeName
+		public RuleCall getDeclarationAttributeDeclarationSTAttributeNameParserRuleCall_0_0_1() { return cDeclarationAttributeDeclarationSTAttributeNameParserRuleCall_0_0_1; }
+		
+		//':='
+		public Keyword getColonEqualsSignKeyword_1() { return cColonEqualsSignKeyword_1; }
+		
+		//value=STInitializerExpression
+		public Assignment getValueAssignment_2() { return cValueAssignment_2; }
+		
+		//STInitializerExpression
+		public RuleCall getValueSTInitializerExpressionParserRuleCall_2_0() { return cValueSTInitializerExpressionParserRuleCall_2_0; }
+	}
+	public class STAttributeNameElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STAttributeName");
+		private final RuleCall cQualifiedNameParserRuleCall = (RuleCall)rule.eContents().get(1);
+		
+		//STAttributeName:
+		//    QualifiedName;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//QualifiedName
+		public RuleCall getQualifiedNameParserRuleCall() { return cQualifiedNameParserRuleCall; }
 	}
 	public class STStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STStatement");
@@ -2057,10 +2160,12 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cExpressionSTUnaryExpressionParserRuleCall_3_2_0 = (RuleCall)cExpressionAssignment_3_2.eContents().get(0);
 		
 		//STUnaryExpression returns STExpression:
-		//    STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
+		//    STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator
+		//    expression=STUnaryExpression);
 		@Override public ParserRule getRule() { return rule; }
 		
-		//STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression)
+		//STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator
+		//expression=STUnaryExpression)
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//STAccessExpression
@@ -2072,7 +2177,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//=> STSignedLiteralExpressions
 		public RuleCall getSTSignedLiteralExpressionsParserRuleCall_2() { return cSTSignedLiteralExpressionsParserRuleCall_2; }
 		
-		//({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression)
+		//({STUnaryExpression} op=UnaryOperator
+		//   expression=STUnaryExpression)
 		public Group getGroup_3() { return cGroup_3; }
 		
 		//{STUnaryExpression}
@@ -2243,17 +2349,13 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//STFeatureExpression returns STExpression:
 		//    {STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName]
 		//    (call?='('
-		//        (
-		//            parameters+=STCallArgument (',' parameters+=STCallArgument)*
-		//        )?
+		//    (parameters+=STCallArgument (',' parameters+=STCallArgument)*)?
 		//    ')')?;
 		@Override public ParserRule getRule() { return rule; }
 		
 		//{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName]
 		//(call?='('
-		//    (
-		//        parameters+=STCallArgument (',' parameters+=STCallArgument)*
-		//    )?
+		//(parameters+=STCallArgument (',' parameters+=STCallArgument)*)?
 		//')')?
 		public Group getGroup() { return cGroup; }
 		
@@ -2270,9 +2372,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		public RuleCall getFeatureINamedElementSTFeatureNameParserRuleCall_1_0_1() { return cFeatureINamedElementSTFeatureNameParserRuleCall_1_0_1; }
 		
 		//(call?='('
-		//    (
-		//        parameters+=STCallArgument (',' parameters+=STCallArgument)*
-		//    )?
+		//(parameters+=STCallArgument (',' parameters+=STCallArgument)*)?
 		//')')?
 		public Group getGroup_2() { return cGroup_2; }
 		
@@ -2282,9 +2382,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'('
 		public Keyword getCallLeftParenthesisKeyword_2_0_0() { return cCallLeftParenthesisKeyword_2_0_0; }
 		
-		//(
-		//    parameters+=STCallArgument (',' parameters+=STCallArgument)*
-		//)?
+		//(parameters+=STCallArgument (',' parameters+=STCallArgument)*)?
 		public Group getGroup_2_1() { return cGroup_2_1; }
 		
 		//parameters+=STCallArgument
@@ -4148,6 +4246,9 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final STRepeatArrayInitElementElements pSTRepeatArrayInitElement;
 	private final STStructInitializerExpressionElements pSTStructInitializerExpression;
 	private final STStructInitElementElements pSTStructInitElement;
+	private final STPragmaElements pSTPragma;
+	private final STAttributeElements pSTAttribute;
+	private final STAttributeNameElements pSTAttributeName;
 	private final STStatementElements pSTStatement;
 	private final STAssignmentElements pSTAssignment;
 	private final STCallArgumentElements pSTCallArgument;
@@ -4272,6 +4373,9 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pSTRepeatArrayInitElement = new STRepeatArrayInitElementElements();
 		this.pSTStructInitializerExpression = new STStructInitializerExpressionElements();
 		this.pSTStructInitElement = new STStructInitElementElements();
+		this.pSTPragma = new STPragmaElements();
+		this.pSTAttribute = new STAttributeElements();
+		this.pSTAttributeName = new STAttributeNameElements();
 		this.pSTStatement = new STStatementElements();
 		this.pSTAssignment = new STAssignmentElements();
 		this.pSTCallArgument = new STCallArgumentElements();
@@ -4520,7 +4624,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	//    name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 	//    ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')?
 	//    (type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
-	//    defaultValue=STInitializerExpression)? ';';
+	//    defaultValue=STInitializerExpression)? pragma=STPragma? ';';
 	public STVarDeclarationElements getSTVarDeclarationAccess() {
 		return pSTVarDeclaration;
 	}
@@ -4633,6 +4737,37 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	public ParserRule getSTStructInitElementRule() {
 		return getSTStructInitElementAccess().getRule();
+	}
+	
+	//STPragma:
+	//    {STPragma}
+	//    '{' attributes+=STAttribute (',' attributes+=STAttribute)* '}';
+	public STPragmaElements getSTPragmaAccess() {
+		return pSTPragma;
+	}
+	
+	public ParserRule getSTPragmaRule() {
+		return getSTPragmaAccess().getRule();
+	}
+	
+	//STAttribute:
+	//    declaration=[libraryElement::AttributeDeclaration|STAttributeName] ':=' value=STInitializerExpression;
+	public STAttributeElements getSTAttributeAccess() {
+		return pSTAttribute;
+	}
+	
+	public ParserRule getSTAttributeRule() {
+		return getSTAttributeAccess().getRule();
+	}
+	
+	//STAttributeName:
+	//    QualifiedName;
+	public STAttributeNameElements getSTAttributeNameAccess() {
+		return pSTAttributeName;
+	}
+	
+	public ParserRule getSTAttributeNameRule() {
+		return getSTAttributeNameAccess().getRule();
 	}
 	
 	//STStatement:
@@ -4992,7 +5127,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STUnaryExpression returns STExpression:
-	//    STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
+	//    STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator
+	//    expression=STUnaryExpression);
 	public STUnaryExpressionElements getSTUnaryExpressionAccess() {
 		return pSTUnaryExpression;
 	}
@@ -5026,9 +5162,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	//STFeatureExpression returns STExpression:
 	//    {STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName]
 	//    (call?='('
-	//        (
-	//            parameters+=STCallArgument (',' parameters+=STCallArgument)*
-	//        )?
+	//    (parameters+=STCallArgument (',' parameters+=STCallArgument)*)?
 	//    ')')?;
 	public STFeatureExpressionElements getSTFeatureExpressionAccess() {
 		return pSTFeatureExpression;

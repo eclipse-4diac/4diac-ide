@@ -186,6 +186,18 @@ public class STCoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case STCorePackage.ST_PRAGMA: {
+				STPragma stPragma = (STPragma)theEObject;
+				T result = caseSTPragma(stPragma);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case STCorePackage.ST_ATTRIBUTE: {
+				STAttribute stAttribute = (STAttribute)theEObject;
+				T result = caseSTAttribute(stAttribute);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case STCorePackage.ST_STATEMENT: {
 				STStatement stStatement = (STStatement)theEObject;
 				T result = caseSTStatement(stStatement);
@@ -700,6 +712,36 @@ public class STCoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSTRepeatArrayInitElement(STRepeatArrayInitElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Pragma</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Pragma</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTPragma(STPragma object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Attribute</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Attribute</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTAttribute(STAttribute object) {
 		return null;
 	}
 
