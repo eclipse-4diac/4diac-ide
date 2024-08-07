@@ -94,4 +94,9 @@ public class CreateServiceSequenceCommand extends AbstractCreateElementCommand<S
 		super.redo();
 	}
 
+	@Override
+	public ServiceSequence getCreatedElement() {
+		return sequence;
+	}
+
 }

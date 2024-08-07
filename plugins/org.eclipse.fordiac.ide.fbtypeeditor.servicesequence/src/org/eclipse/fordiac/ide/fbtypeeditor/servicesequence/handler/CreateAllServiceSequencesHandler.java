@@ -60,7 +60,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 
 			final List<InputObject> combinations = getAllCombinationsWithStartStates(allCombinationsSimple, states);
 
-			RecordServiceSequenceHandler.setParameters(fbtype, new ArrayList<>());
+			// RecordServiceSequenceHandler.setParameters(fbtype, new ArrayList<>());
 
 			final List<EventManager> eventManagers = createEventManagers(fbtype, combinations);
 			final ArrayList<ServiceSequence> serviceSequences = new ArrayList<>();
@@ -74,7 +74,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 				if (cmd.canExecute()) {
 					cmd.execute();
 				}
-				final ServiceSequence seq = (ServiceSequence) cmd.getCreatedElement();
+				final ServiceSequence seq = cmd.getCreatedElement();
 				seq.setStartState(combinations.get(eventManagers.indexOf(eventManager)).getStartState().getName());
 
 				seq.setComment(
