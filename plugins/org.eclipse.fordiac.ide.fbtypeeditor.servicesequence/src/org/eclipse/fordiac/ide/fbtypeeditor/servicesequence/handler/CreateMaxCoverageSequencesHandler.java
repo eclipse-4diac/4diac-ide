@@ -64,7 +64,7 @@ public class CreateMaxCoverageSequencesHandler extends AbstractHandler {
 
 			final List<InputObject> combinations = getAllCombinationsWithStartStates(allCombinationsSimple, states);
 
-			RecordServiceSequenceHandler.setParameters(fbtype, new ArrayList<>());
+			// RecordServiceSequenceHandler.setParameters(fbtype, new ArrayList<>());
 
 			final List<EventManager> eventManagers = createEventManagers(fbtype, combinations);
 			final ArrayList<ServiceSequence> serviceSequences = new ArrayList<>();
@@ -78,7 +78,7 @@ public class CreateMaxCoverageSequencesHandler extends AbstractHandler {
 				if (cmd.canExecute()) {
 					cmd.execute();
 				}
-				final ServiceSequence seq = (ServiceSequence) cmd.getCreatedElement();
+				final ServiceSequence seq = cmd.getCreatedElement();
 
 				final EccTraceHelper eccTraceHelper = new EccTraceHelper(eventManager.getTransactions(),
 						fbtype.getECC());
