@@ -172,7 +172,7 @@
            </with></enabledWhen>
      </handler>
      <handler
-           class="org.eclipse.fordiac.ide.typemanagement.refactoring.connection.RepairBrokenConnectionHandler"
+           class="org.eclipse.fordiac.ide.typemanagement.refactoring.RepairBrokenConnectionHandler"
            commandId="org.eclipse.fordiac.ide.typemanagement.repairbrokenconnection">
      </handler>
 

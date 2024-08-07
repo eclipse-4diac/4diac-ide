@@ -34,11 +34,10 @@ public class ReplaceVarsWithStructChange extends AbstractCommandChange<FBType> {
 	private final boolean isInput;
 	private final int position;
 
-	protected ReplaceVarsWithStructChange(final URI elementURI, final Class<FBType> elementClass,
-			final Collection<String> vars, final URI structURI, final String name, final boolean isInput,
-			final int position) {
-		super(elementURI.lastSegment() + ": Replace " + (isInput ? "Inputs" : "Outputs ") + vars + " with new Struct "
-				+ structURI.trimFileExtension().lastSegment(), elementURI, elementClass);
+	protected ReplaceVarsWithStructChange(final URI elementURI, final Collection<String> vars, final URI structURI,
+			final String name, final boolean isInput, final int position) {
+		super(elementURI.trimFileExtension().lastSegment() + ": Replace " + (isInput ? "Inputs" : "Outputs ") + vars
+				+ " with new Struct " + structURI.trimFileExtension().lastSegment(), elementURI, FBType.class);
 		this.vars = Objects.requireNonNull(vars);
 		this.structURI = Objects.requireNonNull(structURI);
 		this.name = Objects.requireNonNull(name);
@@ -48,14 +47,14 @@ public class ReplaceVarsWithStructChange extends AbstractCommandChange<FBType> {
 
 	@Override
 	public void initializeValidationData(final FBType element, final IProgressMonitor pm) {
-		// TODO Auto-generated method stub
+		// TODO
 
 	}
 
 	@Override
 	public RefactoringStatus isValid(final FBType element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
-		// TODO Auto-generated method stub
+		// TODO
 		return null;
 	}
 
@@ -65,7 +64,6 @@ public class ReplaceVarsWithStructChange extends AbstractCommandChange<FBType> {
 				.getType() instanceof final StructuredType struct) {
 			return new ReplaceVarsWithStructCommand(vars, struct, name, element.getInterfaceList(), isInput, position);
 		}
-		// TODO: handling maybe move to is Valid
 		return null;
 	}
 

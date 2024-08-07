@@ -10,7 +10,7 @@
  * Contributors:
  *   Mathias Garstenauer - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -27,6 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.RepairBrokenConnectionCommand;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -56,14 +58,14 @@ public class RepairBrokenConnectionChange extends AbstractCommandChange<FBNetwor
 
 	@Override
 	public void initializeValidationData(final FBNetworkElement element, final IProgressMonitor pm) {
-		// TODO Auto-generated method stub
+		// TODO
 
 	}
 
 	@Override
 	public RefactoringStatus isValid(final FBNetworkElement element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
-		// TODO Auto-generated method stub
+		// TODO
 		return null;
 	}
 
@@ -91,7 +93,6 @@ public class RepairBrokenConnectionChange extends AbstractCommandChange<FBNetwor
 			connections.forEach(con -> cmd
 					.add(new RepairBrokenConnectionCommand(con, isSource, structType, connectToVar.apply(con))));
 		}
-		System.out.println(getName());
 		return cmd;
 	}
 

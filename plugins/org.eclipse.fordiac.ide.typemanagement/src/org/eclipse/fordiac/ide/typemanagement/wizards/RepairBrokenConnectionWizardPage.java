@@ -57,8 +57,6 @@ public class RepairBrokenConnectionWizardPage extends WizardPage {
 		gridl.marginWidth = 0;
 		container.setLayout(gridl);
 
-//		final Label structLabel = new Label(container, SWT.NONE);
-//		structLabel.setText("SelectStruct");
 		final Text currentType = new Text(container, SWT.AUTO_TEXT_DIRECTION);
 		currentType.setText("ANY_STRUCT"); //$NON-NLS-1$
 		currentType.setEditable(false);

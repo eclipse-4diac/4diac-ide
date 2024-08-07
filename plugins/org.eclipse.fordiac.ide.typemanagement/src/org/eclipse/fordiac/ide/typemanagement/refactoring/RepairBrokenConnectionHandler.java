@@ -10,13 +10,12 @@
  * Contributors:
  *   Mathias Garstenauer - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
+package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.RepairBrokenConnectionCommand;
 import org.eclipse.fordiac.ide.typemanagement.wizards.RepairBrokenConnectionWizardPage;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;

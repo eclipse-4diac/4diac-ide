@@ -44,55 +44,39 @@ public class CreateStructChange extends Change {
 
 	@Override
 	public String getName() {
-		return structURI.lastSegment() + ": Create new Structured Type";
+		return structURI.trimFileExtension().lastSegment() + ": Create new Structured Type";
 	}
 
 	@Override
 	public void initializeValidationData(final IProgressMonitor pm) {
-		// TODO Auto-generated method stub
+		// TODO
 
 	}
 
 	@Override
 	public RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		// TODO Auto-generated method stub
+		// TODO
 		return null;
 	}
 
 	@Override
 	public Change perform(final IProgressMonitor pm) throws CoreException {
-//		final String TEMPLATE_PATH = Platform.getInstallLocation().getURL().getFile() + File.separatorChar + "template";
-//
-//		final File template = new File(TEMPLATE_PATH + File.separatorChar + "Struct.dtp"); //$NON-NLS-1$
-
 		final IPath path = new Path(structURI.toPlatformString(true));
 		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-
-//		final TypeFromTemplateCreator creator = new TypeFromTemplateCreator(file, template, "");
-//		creator.createTypeFromTemplate(new NullProgressMonitor());
-//
-//		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(structURI) instanceof final StructuredType struct) {
-//
-//		}
-
 		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject()).createTypeEntry(file);
-
 		final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
 
 		InterfaceListCopier.copyVarList(type.getMemberVariables(), vars, true);
-
 		TypeManagementPreferencesHelper.setupVersionInfo(type);
 		final String datatypeName = TypeEntry.getTypeNameFromFile(file);
 		type.setName(datatypeName);
-
 		entry.save(type);
-
 		return new DeleteResourceChange(path, false);
 	}
 
 	@Override
 	public Object getModifiedElement() {
-		// TODO Auto-generated method stub
+		// TODO
 		return null;
 	}
 

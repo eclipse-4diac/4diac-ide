@@ -12,20 +12,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -37,7 +41,6 @@ import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.RepairBrokenConnectionChange;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.Refactoring;
@@ -57,6 +60,8 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 	private final Collection<VarDeclaration> vars;
 
 	private final TypeLibrary lib;
+
+	private CompositeChange compChange;
 
 	public ConnectionsToStructRefactoring(final FBNetwork net, final FBType sourceType, final FBType destinationType,
 			final Map<String, String> replacableConMap) {
@@ -78,7 +83,6 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 
 	public RefactoringStatus setUserConfig(final URI structURI, final String sourceVarName,
 			final String destinationVarName, final boolean conflictResolution) {
-		// TODO: create generic function for checks
 		final RefactoringStatus status = new RefactoringStatus();
 
 		if (structURI != null) {
@@ -174,93 +178,122 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 			throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
 
-		// TODO: implement conditions
+		// TODO: implement conditions (basically checked by setUserConfig()
 
 		return status;
 	}
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final CompositeChange compChange = new CompositeChange("Convert Connections To Struct");
+		compChange = new CompositeChange("Convert Connections To Struct");
 		pm.beginTask("Convert Connections To Struct", 1);
 
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(structURI) == null) {
 			compChange.add(new CreateStructChange(structURI, vars));
 		}
-		compChange.add(new ReplaceVarsWithStructChange(sourceURI, FBType.class, replaceableConMap.keySet(), structURI,
-				sourceVarName, false, 0));
-		compChange.add(new ReplaceVarsWithStructChange(destinationURI, FBType.class, replaceableConMap.values(),
-				structURI, destinationVarName, true, 0));
+
+		compChange.add(new ReplaceVarsWithStructChange(sourceURI, replaceableConMap.keySet(), structURI, sourceVarName,
+				false, 0));
+		compChange.add(new ReplaceVarsWithStructChange(destinationURI, replaceableConMap.values(), structURI,
+				destinationVarName, true, 0));
 
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI).getType() instanceof final FBType sourceType
 				&& TypeLibraryManager.INSTANCE.getTypeEntryForURI(destinationURI)
 						.getType() instanceof final FBType destinationType) {
 
-			final CompositeChange updates = new CompositeChange(
-					"Update all Instances of " + sourceURI.lastSegment() + " and " + sourceURI.lastSegment());
-			new BlockTypeInstanceSearch(sourceType.getTypeEntry()).performSearch().stream()
-					.map(FBNetworkElement.class::cast).forEach(fbnelem -> {
-						updates.add(new UpdateSingleFBChange(EcoreUtil.getURI(fbnelem), FBNetworkElement.class));
-					});
-			if (!sourceURI.toString().equals(destinationURI.toString())) {
-				new BlockTypeInstanceSearch(destinationType.getTypeEntry()).performSearch().stream()
-						.map(FBNetworkElement.class::cast).forEach(fbnelem -> {
-							updates.add(new UpdateSingleFBChange(EcoreUtil.getURI(fbnelem), FBNetworkElement.class));
-						});
-			}
-			compChange.add(updates);
-
-			final CompositeChange connectStructChange = new CompositeChange(
-					"Reconnect all FBs with identical Connections");
-			final CompositeChange repairs = new CompositeChange("Repair Broken Connections");
-
-			final Map<FBNetworkElement, FBNetworkElement> map = new HashMap<>();
-			new BlockTypeInstanceSearch(destinationType.getTypeEntry()).performSearch().stream()
-					.map(FBNetworkElement.class::cast).forEach(instance -> {
-
-						// Collect all correct connections
-						final List<Connection> cons = instance.getInterface().getInputs()
-								.map(IInterfaceElement::getInputConnections).flatMap(EList::stream)
-								.filter(con -> replaceableConMap.containsKey(con.getSource().getName())
-										&& replaceableConMap.get(con.getSource().getName())
-												.equals(con.getDestination().getName())
-										&& con.getSourceElement().getType().getName().equals(sourceType.getName()))
-								.toList();
-
-						// Check if all connections between 2 instances are correct
-						if (cons.stream().map(Connection::getSourceElement).distinct().count() == 1
-								&& cons.size() == replaceableConMap.size()) {
-							map.put(instance, cons.get(0).getSourceElement());
-							connectStructChange.add(new ConnectSingleStructChange(EcoreUtil.getURI(instance),
-									FBNetworkElement.class, replaceableConMap, sourceVarName, destinationVarName));
-						} else if (conflictResolution) {
-							repairs.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(instance),
-									FBNetworkElement.class, structURI, replaceableConMap, false));
-						}
-					});
-
-			compChange.add(connectStructChange);
-			if (conflictResolution) {
-				new BlockTypeInstanceSearch(sourceType.getTypeEntry()).performSearch().stream()
-						.map(FBNetworkElement.class::cast).forEach(instance -> {
-							if (instance.getInterface().getOutputs()
-									.filter(output -> replaceableConMap.containsKey(output.getName()))
-									.map(IInterfaceElement::getOutputConnections).flatMap(EList::stream)
-									.anyMatch(con -> !replaceableConMap.get(con.getSource().getName())
-											.equals(con.getDestination().getName())
-											|| map.get(con.getDestinationElement()) == null
-											|| !map.get(con.getDestinationElement()).getQualifiedName()
-													.equals(instance.getQualifiedName()))) {
-								repairs.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(instance),
-										FBNetworkElement.class, structURI, replaceableConMap, true));
-							}
-						});
-
-				compChange.add(repairs);
-			}
+			update(sourceType, destinationType);
+			connect(sourceType, destinationType);
 		}
 		pm.done();
 		return compChange;
+	}
+
+	private void update(final FBType sourceType, final FBType destinationType) {
+		final Map<AutomationSystem, List<URI>> updateMap = new HashMap<>();
+		createUpdateChanges(sourceType, updateMap);
+		if (!sourceURI.toString().equals(destinationURI.toString())) {
+			createUpdateChanges(destinationType, updateMap);
+		}
+		updateMap.entrySet().forEach(entry -> {
+			compChange.add(new SystemUpdateFBChange(EcoreUtil.getURI(entry.getKey()), entry.getValue()));
+		});
+	}
+
+	private static void createUpdateChanges(final FBType sourceType, final Map<AutomationSystem, List<URI>> updateMap) {
+		new BlockTypeInstanceSearch(sourceType.getTypeEntry()).performSearch().stream()
+				.map(FBNetworkElement.class::cast).forEach(fbnelem -> {
+					Optional.ofNullable(updateMap.get(fbnelem.getFbNetwork().getAutomationSystem())).orElseGet(() -> {
+						final List<URI> list = new ArrayList<URI>();
+						updateMap.put(fbnelem.getFbNetwork().getAutomationSystem(), list);
+						return list;
+					}).add(EcoreUtil.getURI(fbnelem));
+				});
+	}
+
+	private void connect(final FBType sourceType, final FBType destinationType) {
+		final Map<AutomationSystem, List<URI>> connectMap = new HashMap<>();
+		final Map<FBNetworkElement, FBNetworkElement> correctConnectionMap = new HashMap<>();
+		final List<? extends EObject> sourceSearch = new BlockTypeInstanceSearch(sourceType.getTypeEntry())
+				.performSearch();
+		final List<? extends EObject> destinationSearch = new BlockTypeInstanceSearch(destinationType.getTypeEntry())
+				.performSearch();
+
+		destinationSearch.stream().map(FBNetworkElement.class::cast).forEach(instance -> {
+
+			// Collect all correct connections
+			final List<Connection> cons = instance.getInterface().getInputs()
+					.map(IInterfaceElement::getInputConnections).flatMap(EList::stream)
+					.filter(con -> replaceableConMap.containsKey(con.getSource().getName())
+							&& replaceableConMap.get(con.getSource().getName()).equals(con.getDestination().getName())
+							&& con.getSourceElement().getType().getName().equals(sourceType.getName()))
+					.toList();
+
+			// Check if all connections between 2 instances are correct
+			if (cons.stream().map(Connection::getSourceElement).distinct().count() == 1
+					&& cons.size() == replaceableConMap.size()) {
+				correctConnectionMap.put(instance, cons.get(0).getSourceElement());
+
+				Optional.ofNullable(connectMap.get(instance.getFbNetwork().getAutomationSystem())).orElseGet(() -> {
+					final List<URI> list = new ArrayList<URI>();
+					connectMap.put(instance.getFbNetwork().getAutomationSystem(), list);
+					return list;
+				}).add(EcoreUtil.getURI(instance));
+			}
+		});
+
+		connectMap.entrySet().forEach(entry -> {
+			compChange.add(new SystemConnectStructChange(EcoreUtil.getURI(entry.getKey()), entry.getValue(),
+					replaceableConMap, sourceVarName, destinationVarName));
+		});
+
+		if (conflictResolution) {
+			conflictResolution(sourceSearch, destinationSearch, correctConnectionMap);
+		}
+	}
+
+	private void conflictResolution(final List<? extends EObject> sourceSearch,
+			final List<? extends EObject> destinationSearch,
+			final Map<FBNetworkElement, FBNetworkElement> correctConnectionMap) {
+		final CompositeChange repairs = new CompositeChange("Repair Broken Connections");
+		destinationSearch.stream().map(FBNetworkElement.class::cast)
+				.filter(instance -> !correctConnectionMap.containsKey(instance)).forEach(instance -> {
+					if (instance.getInterface().getInputs()
+							.filter(input -> replaceableConMap.containsValue(input.getName()))
+							.map(IInterfaceElement::getInputConnections).flatMap(EList::stream).findAny().isPresent()) {
+						repairs.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(instance), FBNetworkElement.class,
+								structURI, replaceableConMap, false));
+					}
+				});
+		sourceSearch.stream().map(FBNetworkElement.class::cast).forEach(instance -> {
+			if (instance.getInterface().getOutputs().filter(output -> replaceableConMap.containsKey(output.getName()))
+					.map(IInterfaceElement::getOutputConnections).flatMap(EList::stream)
+					.anyMatch(con -> !correctConnectionMap.containsKey(con.getDestinationElement()))) {
+				repairs.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(instance), FBNetworkElement.class,
+						structURI, replaceableConMap, true));
+			}
+		});
+
+		compChange.add(repairs);
 	}
 
 	public TypeLibrary getTypeLibrary() {
