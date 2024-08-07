@@ -29,7 +29,9 @@ import org.eclipse.fordiac.ide.fb.interpreter.testappgen.MatchFBGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.MuxFBGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.RunAllFBGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.TestsignalFBGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.AbstractBlockGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -40,6 +42,7 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
+	private static final boolean SCHNEIDER_COMPLICIT = false;
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -82,7 +85,12 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 			throws CoreException {
 		// testsignal generator block
 		final FBType testType = new TestsignalFBGenerator(type, testSuite).generateTestFb();
-		testType.getTypeEntry().save(testType, monitor);
+		if (SCHNEIDER_COMPLICIT) {
+			final FBType fb = makeBlockCompliant((BasicFBType) testType);
+			fb.getTypeEntry().save(fb, monitor);
+		} else {
+			testType.getTypeEntry().save(testType, monitor);
+		}
 
 		// matches the expected with the actual behaviour
 		final List<FBType> list = new ArrayList<>();
@@ -90,7 +98,12 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 			final FBType matchType = new MatchFBGenerator(type, testSuite).generateMatchFB();
 
 			try {
-				matchType.getTypeEntry().save(matchType, monitor);
+				if (SCHNEIDER_COMPLICIT) {
+					final FBType fb = makeBlockCompliant((BasicFBType) matchType);
+					fb.getTypeEntry().save(fb, monitor);
+				} else {
+					matchType.getTypeEntry().save(matchType, monitor);
+				}
 			} catch (final CoreException e) {
 				FordiacLogHelper.logError(e.getMessage());
 			}
@@ -99,7 +112,13 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 			// composite
 			final FBType muxType = new MuxFBGenerator(type, testSuite).generateMuxFB();
 			try {
-				muxType.getTypeEntry().save(muxType, monitor);
+				if (SCHNEIDER_COMPLICIT) {
+					final FBType fb = makeBlockCompliant((BasicFBType) muxType);
+					fb.getTypeEntry().save(fb, monitor);
+				} else {
+					muxType.getTypeEntry().save(muxType, monitor);
+				}
+
 			} catch (final CoreException e) {
 				FordiacLogHelper.logError(e.getMessage());
 			}
@@ -107,7 +126,12 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 			// generates the signals for the testsignal and mux fb
 			final FBType runAllType = new RunAllFBGenerator(type, testSuite).generateRunAllFB();
 			try {
-				runAllType.getTypeEntry().save(runAllType, monitor);
+				if (SCHNEIDER_COMPLICIT) {
+					final FBType fb = makeBlockCompliant((BasicFBType) runAllType);
+					fb.getTypeEntry().save(fb, monitor);
+				} else {
+					runAllType.getTypeEntry().save(runAllType, monitor);
+				}
 			} catch (final CoreException e) {
 				FordiacLogHelper.logError(e.getMessage());
 			}
@@ -121,12 +145,16 @@ public class CreateRuntimeTestFunctionBlockHandler extends AbstractHandler {
 
 			final CompositeFBType compositeType = new CompositeTestFBGenerator(type, testSuite, list)
 					.generateCompositeFB();
-
 			try {
 				compositeType.getTypeEntry().save(compositeType, monitor);
 			} catch (final CoreException e) {
 				FordiacLogHelper.logError(e.getMessage());
 			}
+
 		});
+	}
+
+	private static BasicFBType makeBlockCompliant(final BasicFBType fb) {
+		return AbstractBlockGenerator.createComplianceEcc(fb);
 	}
 }
