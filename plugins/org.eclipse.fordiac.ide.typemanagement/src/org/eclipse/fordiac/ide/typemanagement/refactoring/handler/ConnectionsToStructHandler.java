@@ -10,7 +10,7 @@
  * Contributors:
  *   Mathias Garstenauer - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.handler;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +21,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.connection.ConnectionsToStructRefactoring;
 import org.eclipse.fordiac.ide.typemanagement.wizards.ConnectionsToStructWizard;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
@@ -44,8 +45,8 @@ public class ConnectionsToStructHandler extends AbstractHandler {
 				connections.stream().forEach(
 						con -> replacableConMap.put(con.getSource().getName(), con.getDestination().getName()));
 
-				final ConnectionsToStructRefactoring refactoring = new ConnectionsToStructRefactoring(
-						connections.getFirst().getFBNetwork(), sourceType, destinationType, replacableConMap);
+				final ConnectionsToStructRefactoring refactoring = new ConnectionsToStructRefactoring(sourceType,
+						destinationType, replacableConMap);
 				final ConnectionsToStructWizard wizard = new ConnectionsToStructWizard(selection, refactoring);
 				final RefactoringWizardOpenOperation openOperation = new RefactoringWizardOpenOperation(wizard);
 				openOperation.run(HandlerUtil.getActiveShell(event), refactoring.getName());

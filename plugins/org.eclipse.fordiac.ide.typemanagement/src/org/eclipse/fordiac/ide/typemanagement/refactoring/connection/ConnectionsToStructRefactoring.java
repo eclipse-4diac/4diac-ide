@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -49,7 +48,6 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 public class ConnectionsToStructRefactoring extends Refactoring {
 	private final URI sourceURI;
 	private final URI destinationURI;
-	private final URI netURI;
 	private final Map<String, String> replaceableConMap;
 
 	private URI structURI;
@@ -63,9 +61,8 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 
 	private CompositeChange compChange;
 
-	public ConnectionsToStructRefactoring(final FBNetwork net, final FBType sourceType, final FBType destinationType,
+	public ConnectionsToStructRefactoring(final FBType sourceType, final FBType destinationType,
 			final Map<String, String> replacableConMap) {
-		this.netURI = EcoreUtil.getURI(net);
 		this.sourceURI = EcoreUtil.getURI(sourceType);
 		this.destinationURI = EcoreUtil.getURI(destinationType);
 		this.replaceableConMap = replacableConMap;
@@ -78,7 +75,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 
 	@Override
 	public final String getName() {
-		return "Replace multiple Data Connections with Struct";
+		return Messages.ConnectionsToStructRefactoring_RefactoringTitle;
 	}
 
 	public RefactoringStatus setUserConfig(final URI structURI, final String sourceVarName,
@@ -92,40 +89,40 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 					if (!structType.getMemberVariables().stream().allMatch(
 							structvar -> vars.stream().anyMatch(var -> var.getType().equals(structvar.getType())
 									&& var.getName().equals(structvar.getName())))) {
-						status.merge(RefactoringStatus.createFatalErrorStatus("Incompatible Structured Type"));
+						status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_IncompatibleStructType));
 					}
 				} else {
-					status.merge(RefactoringStatus.createFatalErrorStatus("Selected type is no Structured Type!"));
+					status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SelectionIsNoStruct));
 				}
 			} else if (lib.getDataTypeLibrary().getTypeIfExists(structURI.trimFileExtension().lastSegment()) != null) {
-				status.merge(RefactoringStatus.createFatalErrorStatus("Structured Type already exists"));
+				status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_StructExists));
 			}
 		} else {
-			status.merge(RefactoringStatus.createFatalErrorStatus("Invalid Type selected!"));
+			status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InvalidType));
 		}
 		if (IdentifierVerifier.verifyIdentifier(sourceVarName).isPresent()) {
-			status.merge(RefactoringStatus.createFatalErrorStatus("Invalid Output Name!"));
+			status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InvalidOutName));
 		}
 		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI).getType() instanceof final FBType sourceFB)
 				&& (sourceFB.getInterfaceList().getAllInterfaceElements().stream()
 						.anyMatch(port -> port.getName().equals(sourceVarName))
 						&& !replaceableConMap.containsKey(sourceVarName))) {
-			status.merge(RefactoringStatus.createFatalErrorStatus("Output Name already exists!"));
+			status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_OutNameExists));
 		}
 		if (IdentifierVerifier.verifyIdentifier(destinationVarName).isPresent()) {
-			status.merge(RefactoringStatus.createFatalErrorStatus("Invalid Input Name!"));
+			status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InvalidInName));
 		}
 		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(destinationURI)
 				.getType() instanceof final FBType destinationFB)
 				&& (destinationFB.getInterfaceList().getAllInterfaceElements().stream()
 						.anyMatch(port -> port.getName().equals(destinationVarName))
 						&& !replaceableConMap.containsValue(destinationVarName))) {
-			status.merge(RefactoringStatus.createFatalErrorStatus("Input Name already exists!"));
+			status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InNameExists));
 
 		}
-		if (destinationURI.fragment().equals(sourceURI.fragment()) && sourceVarName.equals(destinationVarName)) {
+		if (destinationURI.toString().equals(sourceURI.toString()) && sourceVarName.equals(destinationVarName)) {
 			status.merge(
-					RefactoringStatus.createFatalErrorStatus("Input Name cannot match Output name on the same FB"));
+					RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SameFBSameName));
 		}
 		this.structURI = structURI;
 		this.sourceVarName = sourceVarName;
@@ -140,31 +137,31 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		final RefactoringStatus status = new RefactoringStatus();
 		try {
 			// TODO: create generic function for checks
-			pm.beginTask("Checking preconditions...", 1);
+			pm.beginTask(Messages.ConnectionsToStructRefactoring_CheckPreconditions, 1);
 			if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI)
 					.getType() instanceof final FBType sourceFB)) {
 				if (sourceFB instanceof ServiceInterfaceFBType) {
-					status.merge(RefactoringStatus.createFatalErrorStatus("Source FB is Service Interface!"));
+					status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceIsServiceFB));
 				}
 				if (replaceableConMap.keySet().stream()
 						.anyMatch(var -> sourceFB.getInterfaceList().getOutput(var) == null)) {
-					status.merge(RefactoringStatus.createFatalErrorStatus("Source Outputs do not match!"));
+					status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceOutputsNoMatch));
 				}
 			} else {
-				status.merge(RefactoringStatus.createFatalErrorStatus("Source is no FBType!"));
+				status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceNoFB));
 			}
 
 			if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(destinationURI)
 					.getType() instanceof final FBType destinationFB)) {
 				if (destinationFB instanceof ServiceInterfaceFBType) {
-					status.merge(RefactoringStatus.createFatalErrorStatus("Destination FB is Service Interface!"));
+					status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationIsServiceFB));
 				}
 				if (replaceableConMap.values().stream()
 						.anyMatch(var -> destinationFB.getInterfaceList().getInput(var) == null)) {
-					status.merge(RefactoringStatus.createFatalErrorStatus("Destinaion Inputs do not match!"));
+					status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationOutputsNoMatch));
 				}
 			} else {
-				status.merge(RefactoringStatus.createFatalErrorStatus("Destination is no FBType!"));
+				status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationNoFB));
 			}
 
 		} finally {
@@ -185,8 +182,8 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		compChange = new CompositeChange("Convert Connections To Struct");
-		pm.beginTask("Convert Connections To Struct", 1);
+		compChange = new CompositeChange(Messages.ConnectionsToStructRefactoring_ChangeName);
+		pm.beginTask(Messages.ConnectionsToStructRefactoring_ProgressText, 1);
 
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(structURI) == null) {
 			compChange.add(new CreateStructChange(structURI, vars));
@@ -221,12 +218,8 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 
 	private static void createUpdateChanges(final FBType sourceType, final Map<AutomationSystem, List<URI>> updateMap) {
 		new BlockTypeInstanceSearch(sourceType.getTypeEntry()).performSearch().stream()
-				.map(FBNetworkElement.class::cast).forEach(fbnelem -> {
-					Optional.ofNullable(updateMap.get(fbnelem.getFbNetwork().getAutomationSystem())).orElseGet(() -> {
-						final List<URI> list = new ArrayList<URI>();
-						updateMap.put(fbnelem.getFbNetwork().getAutomationSystem(), list);
-						return list;
-					}).add(EcoreUtil.getURI(fbnelem));
+				.map(FBNetworkElement.class::cast).forEach(instance -> {
+					addToMap(updateMap, instance);
 				});
 	}
 
@@ -252,12 +245,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 			if (cons.stream().map(Connection::getSourceElement).distinct().count() == 1
 					&& cons.size() == replaceableConMap.size()) {
 				correctConnectionMap.put(instance, cons.get(0).getSourceElement());
-
-				Optional.ofNullable(connectMap.get(instance.getFbNetwork().getAutomationSystem())).orElseGet(() -> {
-					final List<URI> list = new ArrayList<URI>();
-					connectMap.put(instance.getFbNetwork().getAutomationSystem(), list);
-					return list;
-				}).add(EcoreUtil.getURI(instance));
+				addToMap(connectMap, instance);
 			}
 		});
 
@@ -274,26 +262,39 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 	private void conflictResolution(final List<? extends EObject> sourceSearch,
 			final List<? extends EObject> destinationSearch,
 			final Map<FBNetworkElement, FBNetworkElement> correctConnectionMap) {
-		final CompositeChange repairs = new CompositeChange("Repair Broken Connections");
+		final Map<AutomationSystem, List<URI>> repairSourceMap = new HashMap<>();
+		final Map<AutomationSystem, List<URI>> repairDestinationMap = new HashMap<>();
 		destinationSearch.stream().map(FBNetworkElement.class::cast)
 				.filter(instance -> !correctConnectionMap.containsKey(instance)).forEach(instance -> {
 					if (instance.getInterface().getInputs()
 							.filter(input -> replaceableConMap.containsValue(input.getName()))
 							.map(IInterfaceElement::getInputConnections).flatMap(EList::stream).findAny().isPresent()) {
-						repairs.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(instance), FBNetworkElement.class,
-								structURI, replaceableConMap, false));
+						addToMap(repairDestinationMap, instance);
 					}
 				});
 		sourceSearch.stream().map(FBNetworkElement.class::cast).forEach(instance -> {
 			if (instance.getInterface().getOutputs().filter(output -> replaceableConMap.containsKey(output.getName()))
 					.map(IInterfaceElement::getOutputConnections).flatMap(EList::stream)
 					.anyMatch(con -> !correctConnectionMap.containsKey(con.getDestinationElement()))) {
-				repairs.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(instance), FBNetworkElement.class,
-						structURI, replaceableConMap, true));
+				addToMap(repairSourceMap, instance);
 			}
 		});
+		repairSourceMap.entrySet().forEach(entry -> {
+			compChange.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()), structURI,
+					replaceableConMap, entry.getValue(), true));
+		});
+		repairDestinationMap.entrySet().forEach(entry -> {
+			compChange.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()), structURI,
+					replaceableConMap, entry.getValue(), false));
+		});
+	}
 
-		compChange.add(repairs);
+	private static void addToMap(final Map<AutomationSystem, List<URI>> map, final FBNetworkElement element) {
+		Optional.ofNullable(map.get(element.getFbNetwork().getAutomationSystem())).orElseGet(() -> {
+			final List<URI> list = new ArrayList<URI>();
+			map.put(element.getFbNetwork().getAutomationSystem(), list);
+			return list;
+		}).add(EcoreUtil.getURI(element));
 	}
 
 	public TypeLibrary getTypeLibrary() {

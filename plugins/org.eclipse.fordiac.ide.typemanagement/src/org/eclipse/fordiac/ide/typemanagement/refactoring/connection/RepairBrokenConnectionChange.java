@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -22,77 +23,75 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.RepairBrokenConnectionCommand;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.connection.commands.RepairBrokenConnectionCommand;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class RepairBrokenConnectionChange extends AbstractCommandChange<FBNetworkElement> {
+public class RepairBrokenConnectionChange extends AbstractCommandChange<AutomationSystem> {
 	private final URI structURI;
 	private final Map<String, String> replaceableConMap;
+	private final List<URI> list;
 	private final boolean isSource;
 
-	public RepairBrokenConnectionChange(final URI elementURI, final Class<FBNetworkElement> elementClass,
-			final URI structURI, final Map<String, String> replaceableConMap, final boolean isSource) {
-		super(createName(elementURI), elementURI, elementClass);
-		this.replaceableConMap = replaceableConMap;
+	public RepairBrokenConnectionChange(final URI elementURI, final URI structURI,
+			final Map<String, String> replaceableConMap, final List<URI> list, final boolean isSource) {
+		super(elementURI.trimFileExtension().lastSegment() + Messages.RepairBrokenConnectionChange_Name, elementURI,
+				AutomationSystem.class);
 		this.structURI = structURI;
+		this.replaceableConMap = replaceableConMap;
+		this.list = list;
 		this.isSource = isSource;
-
-	}
-
-	private static String createName(final URI elementURI) {
-		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(elementURI);
-		if (entry != null && entry.getType().eResource()
-				.getEObject(elementURI.fragment()) instanceof final FBNetworkElement fbnelement) {
-			return "Repair " + fbnelement.getQualifiedName();
-		}
-		return "";
 	}
 
 	@Override
-	public void initializeValidationData(final FBNetworkElement element, final IProgressMonitor pm) {
+	public void initializeValidationData(final AutomationSystem element, final IProgressMonitor pm) {
 		// TODO
 
 	}
 
 	@Override
-	public RefactoringStatus isValid(final FBNetworkElement element, final IProgressMonitor pm)
+	public RefactoringStatus isValid(final AutomationSystem element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
 		// TODO
 		return null;
 	}
 
 	@Override
-	protected Command createCommand(final FBNetworkElement element) {
+	protected Command createCommand(final AutomationSystem element) {
 		final CompoundCommand cmd = new CompoundCommand();
-		final Stream<ErrorMarkerInterface> errormarkers = element.getInterface().getErrorMarker().stream();
-		final Stream<Connection> connections;
-		final Function<Connection, String> connectToVar;
-
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(structURI)
 				.getType() instanceof final StructuredType structType) {
-			if (isSource) {
-				connections = errormarkers.filter(err -> replaceableConMap.containsKey(err.getName()))
-						.map(ErrorMarkerInterface::getOutputConnections).flatMap(EList::stream);
-				connectToVar = t -> t.getSource().getName();
-			} else {
-				connections = errormarkers.filter(err -> replaceableConMap.containsValue(err.getName()))
-						.map(ErrorMarkerInterface::getInputConnections).flatMap(EList::stream);
-				connectToVar = t -> replaceableConMap.entrySet().stream()
-						.filter(entry -> entry.getValue().equals(t.getDestination().getName())).findAny().get()
-						.getKey();
-			}
+			list.forEach(uri -> {
+				if (element.eResource().getEObject(uri.fragment()) instanceof final FBNetworkElement fbnelem) {
+					final Stream<ErrorMarkerInterface> errormarkers = fbnelem.getInterface().getErrorMarker().stream();
+					final Stream<Connection> connections;
+					final Function<Connection, String> connectToVar;
 
-			connections.forEach(con -> cmd
-					.add(new RepairBrokenConnectionCommand(con, isSource, structType, connectToVar.apply(con))));
+					if (isSource) {
+						connections = errormarkers.filter(err -> replaceableConMap.containsKey(err.getName()))
+								.map(ErrorMarkerInterface::getOutputConnections).flatMap(EList::stream);
+						connectToVar = t -> t.getSource().getName();
+					} else {
+						connections = errormarkers.filter(err -> replaceableConMap.containsValue(err.getName()))
+								.map(ErrorMarkerInterface::getInputConnections).flatMap(EList::stream);
+						connectToVar = t -> replaceableConMap.entrySet().stream()
+								.filter(entry -> entry.getValue().equals(t.getDestination().getName())).findAny().get()
+								.getKey();
+
+					}
+					connections.forEach(con -> cmd.add(
+							new RepairBrokenConnectionCommand(con, isSource, structType, connectToVar.apply(con))));
+				}
+			});
 		}
+
 		return cmd;
 	}
 

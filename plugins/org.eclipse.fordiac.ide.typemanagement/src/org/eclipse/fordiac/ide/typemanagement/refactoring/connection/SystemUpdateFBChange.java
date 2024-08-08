@@ -30,7 +30,7 @@ public class SystemUpdateFBChange extends AbstractCommandChange<AutomationSystem
 	private final List<URI> updateURIs;
 
 	protected SystemUpdateFBChange(final URI elementURI, final List<URI> list) {
-		super(elementURI.trimFileExtension().lastSegment() + ": Update Instances", elementURI, AutomationSystem.class);
+		super(elementURI.trimFileExtension().lastSegment() + Messages.SystemUpdateFBChange_Name, elementURI, AutomationSystem.class);
 		updateURIs = list;
 	}
 

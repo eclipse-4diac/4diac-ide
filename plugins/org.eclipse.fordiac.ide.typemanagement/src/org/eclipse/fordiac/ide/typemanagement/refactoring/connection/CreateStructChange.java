@@ -44,7 +44,7 @@ public class CreateStructChange extends Change {
 
 	@Override
 	public String getName() {
-		return structURI.trimFileExtension().lastSegment() + ": Create new Structured Type";
+		return structURI.trimFileExtension().lastSegment() + Messages.CreateStructChange_Name;
 	}
 
 	@Override

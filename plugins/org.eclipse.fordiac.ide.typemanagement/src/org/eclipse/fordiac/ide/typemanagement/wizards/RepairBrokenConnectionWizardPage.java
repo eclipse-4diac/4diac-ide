@@ -36,10 +36,9 @@ public class RepairBrokenConnectionWizardPage extends WizardPage {
 	private StructuredType type;
 	private String var;
 
-	public RepairBrokenConnectionWizardPage(final String pageName, final TypeLibrary lib, final DataType errorType) {
-		super(pageName);
-		this.setTitle("Select Repair Connection");
-		this.setDescription("Select a Structured Type and a compatiple Member Variable.");
+	public RepairBrokenConnectionWizardPage(final TypeLibrary lib, final DataType errorType) {
+		super(Messages.RepairBrokenConnectionWizardPage_Title);
+		this.setDescription(Messages.RepairBrokenConnectionWizardPage_Description);
 		this.lib = lib;
 		this.errorType = errorType;
 	}
@@ -61,7 +60,7 @@ public class RepairBrokenConnectionWizardPage extends WizardPage {
 		currentType.setText("ANY_STRUCT"); //$NON-NLS-1$
 		currentType.setEditable(false);
 		final Button structButton = new Button(container, SWT.NONE);
-		structButton.setText("...");
+		structButton.setText(Messages.RepairBrokenConnectionWizardPage_Dots);
 
 		final Table varTable = new Table(container, SWT.FULL_SELECTION | SWT.SINGLE | SWT.BORDER);
 		varTable.setLinesVisible(true);
@@ -74,9 +73,9 @@ public class RepairBrokenConnectionWizardPage extends WizardPage {
 		tableData.horizontalSpan = 2;
 		varTable.setLayoutData(tableData);
 		TableColumn column = new TableColumn(varTable, SWT.NONE);
-		column.setText("Name");
+		column.setText(Messages.RepairBrokenConnectionWizardPage_Name);
 		column = new TableColumn(varTable, SWT.NONE);
-		column.setText("Type");
+		column.setText(Messages.RepairBrokenConnectionWizardPage_Type);
 
 		structButton.addListener(SWT.Selection, event -> {
 			final DataTypeSelectionTreeContentProvider instance = DataTypeSelectionTreeContentProvider.INSTANCE;

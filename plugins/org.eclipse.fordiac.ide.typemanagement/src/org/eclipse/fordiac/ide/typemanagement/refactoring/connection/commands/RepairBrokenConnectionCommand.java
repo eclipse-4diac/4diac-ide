@@ -10,7 +10,7 @@
  * Contributors:
  *   Mathias Garstenauer - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.connection.commands;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +89,7 @@ public class RepairBrokenConnectionCommand extends Command {
 
 	@Override
 	public void execute() {
-		final FBNetwork fbn = connection.getSourceElement().getFbNetwork();
+		final FBNetwork fbn = connection.getFBNetwork();
 		final List<IInterfaceElement> newConList = new ArrayList<>();
 		eventConnectionCommand = new CompoundCommand();
 

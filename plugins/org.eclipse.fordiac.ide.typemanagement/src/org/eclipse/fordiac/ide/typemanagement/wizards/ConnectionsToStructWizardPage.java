@@ -47,11 +47,10 @@ public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 
 	StructuredType structType;
 
-	protected ConnectionsToStructWizardPage(final String pageName, final IStructuredSelection selection) {
-		super(pageName);
-		this.setTitle("Convert Connections to Structured Type");
+	protected ConnectionsToStructWizardPage(final IStructuredSelection selection) {
+		super(Messages.ConnectionsToStructWizardPage_Title);
 		this.setDescription(
-				"Store new Type in Library. Select the name of the In/Output Vars. Choose how to resolve conflicts");
+				Messages.ConnectionsToStructWizardPage_Description);
 	}
 
 	@Override
@@ -72,24 +71,24 @@ public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 		container.setLayout(gridl);
 
 		newStructButton = new Button(container, SWT.RADIO);
-		newStructButton.setText("Create &new Structured Type");
+		newStructButton.setText(Messages.ConnectionsToStructWizardPage_NewType);
 		final Label structNameLabel = new Label(container, NONE);
-		structNameLabel.setText("&Name" + ":");
+		structNameLabel.setText(Messages.ConnectionsToStructWizardPage_Name + ":"); //$NON-NLS-2$
 		structNameText = new Text(container, SWT.SINGLE | SWT.BORDER);
 
 		existingStructButton = new Button(container, SWT.RADIO);
-		existingStructButton.setText("Use &existing Structured Type");
+		existingStructButton.setText(Messages.ConnectionsToStructWizardPage_ExistingStruct);
 		final Button structButton = new Button(container, SWT.NONE);
-		structButton.setText("&...");
+		structButton.setText("&..."); //$NON-NLS-1$
 		existingStructText = new Text(container, SWT.SINGLE | SWT.BORDER);
-		existingStructText.setText("ANY_STRUCT");
+		existingStructText.setText(Messages.ConnectionsToStructWizardPage_AnyStruct);
 
 		final Label sourceNameLabel = new Label(container, NONE);
-		sourceNameLabel.setText("Function Block &Output Name" + ":");
+		sourceNameLabel.setText(Messages.ConnectionsToStructWizardPage_OutName + ":"); //$NON-NLS-2$
 		sourceNameText = new Text(container, SWT.SINGLE | SWT.BORDER);
 
 		final Label destinationNameLabel = new Label(container, NONE);
-		destinationNameLabel.setText("Function Block &Input Name" + ":");
+		destinationNameLabel.setText(Messages.ConnectionsToStructWizardPage_InName + ":"); //$NON-NLS-2$
 		destinationNameText = new Text(container, SWT.BORDER);
 
 		final GridData textGridData = new GridData();
@@ -105,7 +104,7 @@ public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 		destinationNameText.setLayoutData(textGridDataSpan);
 
 		conflictButton = new Button(container, SWT.CHECK);
-		conflictButton.setText("Solve &conflicts with Multiplexer/Demultiplexer");
+		conflictButton.setText(Messages.ConnectionsToStructWizardPage_SolveConflicts);
 		conflictButton.setSelection(true);
 		final GridData checkboxGridData = new GridData();
 		checkboxGridData.horizontalSpan = 2;
@@ -154,11 +153,11 @@ public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 			structURI = structType != null ? EcoreUtil.getURI(structType) : null;
 		} else {
 			if (IdentifierVerifier.verifyIdentifier(structNameText.getText()).isPresent()) {
-				status.merge(RefactoringStatus.createFatalErrorStatus("Invalid Struct Name!"));
+				status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructWizardPage_InvalidStructName));
 			}
 			structURI = URI.createPlatformResourceURI(
 					getConnectionsToStructRefactoring().getTypeLibrary().getProject().getFullPath() + File.separator
-							+ "Type Library" + File.separator + structNameText.getText() + ".dtp",
+							+ "Type Library" + File.separator + structNameText.getText() + ".dtp", //$NON-NLS-1$ //$NON-NLS-2$
 					true);
 		}
 

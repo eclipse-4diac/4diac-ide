@@ -36,7 +36,7 @@ public class SystemConnectStructChange extends AbstractCommandChange<AutomationS
 
 	public SystemConnectStructChange(final URI elementURI, final List<URI> list,
 			final Map<String, String> replaceableConMap, final String sourceVarName, final String destinationVarName) {
-		super(elementURI.trimFileExtension().lastSegment() + ": Connect identical Patterns with Struct Connection",
+		super(elementURI.trimFileExtension().lastSegment() + Messages.SystemConnectStructChange_Name,
 				elementURI, AutomationSystem.class);
 		this.conlist = list;
 		this.replaceableConMap = replaceableConMap;

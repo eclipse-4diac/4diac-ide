@@ -10,7 +10,7 @@
  * Contributors:
  *   Mathias Garstenauer - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.connection.commands;
 
 import java.util.Objects;
 

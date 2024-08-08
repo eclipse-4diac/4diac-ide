@@ -247,11 +247,6 @@ United States, other countries, or both.\n
          version="0.0.0"/>
 
    <plugin
-
-         id="org.eclipse.fordiac.ide.fb.interpreter"
-         version="0.0.0"/>
-
-   <plugin
          id="org.eclipse.fordiac.ide.model.eval"
          version="0.0.0"/>
 

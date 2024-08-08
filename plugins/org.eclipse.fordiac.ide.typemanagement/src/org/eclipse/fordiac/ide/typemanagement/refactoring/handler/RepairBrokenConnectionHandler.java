@@ -10,12 +10,13 @@
  * Contributors:
  *   Mathias Garstenauer - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.handler;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.connection.commands.RepairBrokenConnectionCommand;
 import org.eclipse.fordiac.ide.typemanagement.wizards.RepairBrokenConnectionWizardPage;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
@@ -40,8 +41,7 @@ public class RepairBrokenConnectionHandler extends AbstractHandler {
 		if (sel instanceof final IStructuredSelection ssel && ssel.getFirstElement() instanceof final EditPart part
 				&& part.getModel() instanceof final ErrorMarkerInterface errormarker) {
 			final RepairBrokenConnectionWizardPage repairPage = new RepairBrokenConnectionWizardPage(
-					"Repair broken Connection", errormarker.getFBNetworkElement().getTypeLibrary(),
-					errormarker.getType());
+					errormarker.getFBNetworkElement().getTypeLibrary(), errormarker.getType());
 			final Wizard wiz = new Wizard() {
 
 				@Override

@@ -161,7 +161,7 @@
            </with></enabledWhen>
      </handler>
      <handler
-           class="org.eclipse.fordiac.ide.typemanagement.refactoring.connection.ConnectionsToStructHandler"
+           class="org.eclipse.fordiac.ide.typemanagement.refactoring.handler.ConnectionsToStructHandler"
            commandId="org.eclipse.fordiac.ide.typemanagement.connectionstostruct">
            <enabledWhen>
            <with
@@ -172,7 +172,7 @@
            </with></enabledWhen>
      </handler>
      <handler
-           class="org.eclipse.fordiac.ide.typemanagement.refactoring.RepairBrokenConnectionHandler"
+           class="org.eclipse.fordiac.ide.typemanagement.refactoring.handler.RepairBrokenConnectionHandler"
            commandId="org.eclipse.fordiac.ide.typemanagement.repairbrokenconnection">
      </handler>
 

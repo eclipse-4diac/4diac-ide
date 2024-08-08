@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.ReplaceVarsWithStructCommand;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.connection.commands.ReplaceVarsWithStructCommand;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
@@ -36,8 +36,8 @@ public class ReplaceVarsWithStructChange extends AbstractCommandChange<FBType> {
 
 	protected ReplaceVarsWithStructChange(final URI elementURI, final Collection<String> vars, final URI structURI,
 			final String name, final boolean isInput, final int position) {
-		super(elementURI.trimFileExtension().lastSegment() + ": Replace " + (isInput ? "Inputs" : "Outputs ") + vars
-				+ " with new Struct " + structURI.trimFileExtension().lastSegment(), elementURI, FBType.class);
+		super(elementURI.trimFileExtension().lastSegment() + Messages.ReplaceVarsWithStructChange_Replace + (isInput ? Messages.ReplaceVarsWithStructChange_Inputs : Messages.ReplaceVarsWithStructChange_Outputs) + vars
+				+ Messages.ReplaceVarsWithStructChange_Struct + structURI.trimFileExtension().lastSegment(), elementURI, FBType.class);
 		this.vars = Objects.requireNonNull(vars);
 		this.structURI = Objects.requireNonNull(structURI);
 		this.name = Objects.requireNonNull(name);
