@@ -89,8 +89,8 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 			if (structTypeEntry != null && structTypeEntry.getType() instanceof final DataType type) {
 				if (type instanceof final StructuredType structType) {
 					if (!structType.getMemberVariables().stream().allMatch(
-							structvar -> vars.stream().anyMatch(var -> var.getType().equals(structvar.getType())
-									&& var.getName().equals(structvar.getName())))) {
+							structvar -> vars.stream().anyMatch(vardec -> vardec.getType().equals(structvar.getType())
+									&& vardec.getName().equals(structvar.getName())))) {
 						status.merge(RefactoringStatus.createFatalErrorStatus(
 								Messages.ConnectionsToStructRefactoring_IncompatibleStructType));
 					}
@@ -154,14 +154,14 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceIsServiceFB));
 				}
 				if (replaceableConMap.keySet().stream()
-						.anyMatch(var -> sourceFB.getInterfaceList().getOutput(var) == null)) {
+						.anyMatch(varname -> sourceFB.getInterfaceList().getOutput(varname) == null)) {
 					status.merge(RefactoringStatus
 							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceOutputsNoMatch));
 				}
 				final List<Event> referenceWiths = ((VarDeclaration) sourceFB.getInterfaceList()
 						.getOutput(replaceableConMap.keySet().iterator().next())).getWiths().stream()
 						.map(With::eContainer).map(Event.class::cast).toList();
-				if (replaceableConMap.keySet().stream().map(var -> sourceFB.getInterfaceList().getOutput(var))
+				if (replaceableConMap.keySet().stream().map(varname -> sourceFB.getInterfaceList().getOutput(varname))
 						.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
 						.map(VarDeclaration::getWiths)
 						.map(withs -> withs.stream().map(With::eContainer).map(Event.class::cast).toList())
@@ -182,14 +182,15 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationIsServiceFB));
 				}
 				if (replaceableConMap.values().stream()
-						.anyMatch(var -> destinationFB.getInterfaceList().getInput(var) == null)) {
+						.anyMatch(varname -> destinationFB.getInterfaceList().getInput(varname) == null)) {
 					status.merge(RefactoringStatus
 							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationOutputsNoMatch));
 				}
 				final List<Event> referenceWiths = ((VarDeclaration) destinationFB.getInterfaceList()
 						.getInput(replaceableConMap.values().iterator().next())).getWiths().stream()
 						.map(With::eContainer).map(Event.class::cast).toList();
-				if (replaceableConMap.values().stream().map(var -> destinationFB.getInterfaceList().getInput(var))
+				if (replaceableConMap.values().stream()
+						.map(varname -> destinationFB.getInterfaceList().getInput(varname))
 						.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
 						.map(VarDeclaration::getWiths)
 						.map(withs -> withs.stream().map(With::eContainer).map(Event.class::cast).toList())
@@ -212,11 +213,8 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 	@Override
 	public RefactoringStatus checkFinalConditions(final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = new RefactoringStatus();
-
 		// TODO: implement conditions (basically checked by setUserConfig()
-
-		return status;
+		return new RefactoringStatus();
 	}
 
 	@Override
@@ -250,16 +248,13 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		if (!sourceURI.toString().equals(destinationURI.toString())) {
 			createUpdateChanges(destinationType, updateMap);
 		}
-		updateMap.entrySet().forEach(entry -> {
-			compChange.add(new SystemUpdateFBChange(EcoreUtil.getURI(entry.getKey()), entry.getValue()));
-		});
+		updateMap.entrySet().forEach(
+				entry -> compChange.add(new SystemUpdateFBChange(EcoreUtil.getURI(entry.getKey()), entry.getValue())));
 	}
 
 	private static void createUpdateChanges(final FBType sourceType, final Map<AutomationSystem, List<URI>> updateMap) {
 		new BlockTypeInstanceSearch(sourceType.getTypeEntry()).performSearch().stream()
-				.map(FBNetworkElement.class::cast).forEach(instance -> {
-					addToMap(updateMap, instance);
-				});
+				.map(FBNetworkElement.class::cast).forEach(instance -> addToMap(updateMap, instance));
 	}
 
 	private void connect(final FBType sourceType, final FBType destinationType) {
@@ -288,10 +283,9 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 			}
 		});
 
-		connectMap.entrySet().forEach(entry -> {
-			compChange.add(new SystemConnectStructChange(EcoreUtil.getURI(entry.getKey()), entry.getValue(),
-					replaceableConMap, sourceVarName, destinationVarName));
-		});
+		connectMap.entrySet()
+				.forEach(entry -> compChange.add(new SystemConnectStructChange(EcoreUtil.getURI(entry.getKey()),
+						entry.getValue(), replaceableConMap, sourceVarName, destinationVarName)));
 
 		if (conflictResolution) {
 			conflictResolution(sourceSearch, destinationSearch, correctConnectionMap);
@@ -318,19 +312,17 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 				addToMap(repairSourceMap, instance);
 			}
 		});
-		repairSourceMap.entrySet().forEach(entry -> {
-			compChange.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()), structURI,
-					replaceableConMap, entry.getValue(), true));
-		});
-		repairDestinationMap.entrySet().forEach(entry -> {
-			compChange.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()), structURI,
-					replaceableConMap, entry.getValue(), false));
-		});
+		repairSourceMap.entrySet()
+				.forEach(entry -> compChange.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()),
+						structURI, replaceableConMap, entry.getValue(), true)));
+		repairDestinationMap.entrySet()
+				.forEach(entry -> compChange.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()),
+						structURI, replaceableConMap, entry.getValue(), false)));
 	}
 
 	private static void addToMap(final Map<AutomationSystem, List<URI>> map, final FBNetworkElement element) {
 		Optional.ofNullable(map.get(element.getFbNetwork().getAutomationSystem())).orElseGet(() -> {
-			final List<URI> list = new ArrayList<URI>();
+			final List<URI> list = new ArrayList<>();
 			map.put(element.getFbNetwork().getAutomationSystem(), list);
 			return list;
 		}).add(EcoreUtil.getURI(element));
