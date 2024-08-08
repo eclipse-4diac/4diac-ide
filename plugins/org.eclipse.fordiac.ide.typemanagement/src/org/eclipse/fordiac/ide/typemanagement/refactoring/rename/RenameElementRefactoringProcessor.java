@@ -82,6 +82,10 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 
 	private void createChildChanges(final CompositeChange change) {
 		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(elementURI);
+		if (typeEntry == null) {
+			return;
+		}
+
 		final List<? extends EObject> result = (typeEntry instanceof final DataTypeEntry dtEntry)
 				? new DataTypeInstanceSearch(dtEntry).performSearch()
 				: new BlockTypeInstanceSearch(typeEntry).performSearch();
