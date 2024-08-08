@@ -31,11 +31,13 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -89,35 +91,42 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 					if (!structType.getMemberVariables().stream().allMatch(
 							structvar -> vars.stream().anyMatch(var -> var.getType().equals(structvar.getType())
 									&& var.getName().equals(structvar.getName())))) {
-						status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_IncompatibleStructType));
+						status.merge(RefactoringStatus.createFatalErrorStatus(
+								Messages.ConnectionsToStructRefactoring_IncompatibleStructType));
 					}
 				} else {
-					status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SelectionIsNoStruct));
+					status.merge(RefactoringStatus
+							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SelectionIsNoStruct));
 				}
 			} else if (lib.getDataTypeLibrary().getTypeIfExists(structURI.trimFileExtension().lastSegment()) != null) {
-				status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_StructExists));
+				status.merge(
+						RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_StructExists));
 			}
 		} else {
 			status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InvalidType));
 		}
 		if (IdentifierVerifier.verifyIdentifier(sourceVarName).isPresent()) {
-			status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InvalidOutName));
+			status.merge(
+					RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InvalidOutName));
 		}
 		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI).getType() instanceof final FBType sourceFB)
 				&& (sourceFB.getInterfaceList().getAllInterfaceElements().stream()
 						.anyMatch(port -> port.getName().equals(sourceVarName))
 						&& !replaceableConMap.containsKey(sourceVarName))) {
-			status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_OutNameExists));
+			status.merge(
+					RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_OutNameExists));
 		}
 		if (IdentifierVerifier.verifyIdentifier(destinationVarName).isPresent()) {
-			status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InvalidInName));
+			status.merge(
+					RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InvalidInName));
 		}
 		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(destinationURI)
 				.getType() instanceof final FBType destinationFB)
 				&& (destinationFB.getInterfaceList().getAllInterfaceElements().stream()
 						.anyMatch(port -> port.getName().equals(destinationVarName))
 						&& !replaceableConMap.containsValue(destinationVarName))) {
-			status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InNameExists));
+			status.merge(
+					RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InNameExists));
 
 		}
 		if (destinationURI.toString().equals(sourceURI.toString()) && sourceVarName.equals(destinationVarName)) {
@@ -141,27 +150,57 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 			if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI)
 					.getType() instanceof final FBType sourceFB)) {
 				if (sourceFB instanceof ServiceInterfaceFBType) {
-					status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceIsServiceFB));
+					status.merge(RefactoringStatus
+							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceIsServiceFB));
 				}
 				if (replaceableConMap.keySet().stream()
 						.anyMatch(var -> sourceFB.getInterfaceList().getOutput(var) == null)) {
-					status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceOutputsNoMatch));
+					status.merge(RefactoringStatus
+							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceOutputsNoMatch));
+				}
+				final List<Event> referenceWiths = ((VarDeclaration) sourceFB.getInterfaceList()
+						.getOutput(replaceableConMap.keySet().iterator().next())).getWiths().stream()
+						.map(With::eContainer).map(Event.class::cast).toList();
+				if (replaceableConMap.keySet().stream().map(var -> sourceFB.getInterfaceList().getOutput(var))
+						.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
+						.map(VarDeclaration::getWiths)
+						.map(withs -> withs.stream().map(With::eContainer).map(Event.class::cast).toList())
+						.anyMatch(withlist -> !withlist.containsAll(referenceWiths)
+								|| withlist.size() != referenceWiths.size())) {
+					status.merge(RefactoringStatus
+							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceEventConflict));
 				}
 			} else {
-				status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceNoFB));
+				status.merge(
+						RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceNoFB));
 			}
 
 			if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(destinationURI)
 					.getType() instanceof final FBType destinationFB)) {
 				if (destinationFB instanceof ServiceInterfaceFBType) {
-					status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationIsServiceFB));
+					status.merge(RefactoringStatus
+							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationIsServiceFB));
 				}
 				if (replaceableConMap.values().stream()
 						.anyMatch(var -> destinationFB.getInterfaceList().getInput(var) == null)) {
-					status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationOutputsNoMatch));
+					status.merge(RefactoringStatus
+							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationOutputsNoMatch));
+				}
+				final List<Event> referenceWiths = ((VarDeclaration) destinationFB.getInterfaceList()
+						.getInput(replaceableConMap.values().iterator().next())).getWiths().stream()
+						.map(With::eContainer).map(Event.class::cast).toList();
+				if (replaceableConMap.values().stream().map(var -> destinationFB.getInterfaceList().getInput(var))
+						.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
+						.map(VarDeclaration::getWiths)
+						.map(withs -> withs.stream().map(With::eContainer).map(Event.class::cast).toList())
+						.anyMatch(withlist -> !withlist.containsAll(referenceWiths)
+								|| withlist.size() != referenceWiths.size())) {
+					status.merge(RefactoringStatus
+							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationEventConflict));
 				}
 			} else {
-				status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationNoFB));
+				status.merge(RefactoringStatus
+						.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationNoFB));
 			}
 
 		} finally {
