@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.util.FBUpdater;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -32,8 +33,6 @@ public class InterfaceDataTypeChange extends Change {
 	private final TypeEntry oldTypeEntry;
 	private final List<String> inputPinNames;
 	private final List<String> outputPinNames;
-
-	private final List<String> pinNames;
 
 	public InterfaceDataTypeChange(final FBType fbType, final TypeEntry oldTypeEntry) {
 
@@ -48,7 +47,6 @@ public class InterfaceDataTypeChange extends Change {
 				.filter(output -> output.getTypeName().equals(oldTypeEntry.getTypeName()))
 				.map(IInterfaceElement::getName).toList();
 
-
 	}
 
 	@Override
@@ -62,9 +60,8 @@ public class InterfaceDataTypeChange extends Change {
 		// Unused
 	}
 
-	private Command getUpdatePinInTypeDelcarationCommand() {
-		return FBUpdater.createUpdatePinInTypeDeclarationCommand(fbType, (DataTypeEntry) this.oldTypeEntry,
-				this.oldTypeEntry.getTypeName());
+	private Command getUpdatePinInTypeDeclarationCommand() {
+		return FBUpdater.createUpdatePinInTypeDeclarationCommand(fbType, (DataTypeEntry) this.oldTypeEntry);
 
 	}
 

@@ -28,6 +28,7 @@ Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.globalconstantseditor.model,
  org.eclipse.fordiac.ide.typemanagement
 Import-Package: org.apache.log4j,
+ org.eclipse.fordiac.ide.typemanagement.refactoring,
  org.eclipse.xtext.ui.codemining;resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.structuredtextcore.ui,
