@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.util
 
+import com.google.common.cache.CacheBuilder
+import com.google.common.cache.LoadingCache
 import java.lang.reflect.Method
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -76,6 +78,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
@@ -112,6 +115,9 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 
 final class STCoreUtil {
+	static final LoadingCache<Pair<DataType, String>, DataType> TYPE_DECLARATION_CACHE = CacheBuilder.newBuilder.maximumSize(1000).
+		build[TypeDeclarationParser.parseTypeDeclaration(key, value)]
+
 	private new() {
 	}
 
@@ -341,10 +347,7 @@ final class STCoreUtil {
 			STInitializerExpression:
 				expectedType
 			STArrayInitElement:
-				if (initExpressions.empty || expression !== indexOrInitExpression)
-					expectedType
-				else
-					ElementaryTypes.INT
+				expectedType
 			STStructInitElement:
 				variable.featureType
 			STCallArgument:
@@ -356,9 +359,11 @@ final class STCoreUtil {
 
 	def static INamedElement getExpectedType(STInitializerExpression expression) {
 		switch (it : expression.eContainer) {
+			STAttribute:
+				declaration.featureType
 			STVarDeclaration:
 				featureType
-			STArrayInitElement case initExpressions.empty || initExpressions.contains(expression):
+			STArrayInitElement:
 				expectedType
 			STStructInitElement:
 				variable.featureType
@@ -496,7 +501,7 @@ final class STCoreUtil {
 		switch (feature) {
 			VarDeclaration:
 				if (feature.array)
-					TypeDeclarationParser.parseTypeDeclaration(feature.type, ArraySizeHelper.getArraySize(feature))
+					TYPE_DECLARATION_CACHE.get(feature.type -> ArraySizeHelper.getArraySize(feature))
 				else
 					feature.type
 			STVarDeclaration: {

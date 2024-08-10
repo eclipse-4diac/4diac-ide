@@ -30,6 +30,7 @@ import java.util.List;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.Shape;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -38,9 +39,11 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.ConnectionTooltipFigure;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
+import org.eclipse.fordiac.ide.application.figures.FBNetworkConnectionLabel;
 import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNConnectionEndpointPolicy;
 import org.eclipse.fordiac.ide.application.tools.ConnectionSelectEditPartTracker;
+import org.eclipse.fordiac.ide.application.widgets.OppositeSelectionDialog;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
@@ -60,18 +63,25 @@ import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
+import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.ui.PlatformUI;
 
 public class ConnectionEditPart extends AbstractConnectionEditPart implements AnnotableGraphicalEditPart {
 
@@ -320,6 +330,59 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 			addSourceAdapters();
 			addDestinationAdapters();
 		}
+	}
+
+	@Override
+	public void performRequest(final Request request) {
+		if ((request.getType() == RequestConstants.REQ_OPEN && request instanceof final SelectionRequest selReq)) {
+			if (isDecoratorTargeted(selReq.getLocation(), getFigure().getSourceDecoration())) {
+				final IInterfaceElement sourcePin = getModel().getSource();
+				if (sourcePin.getOutputConnections().size() > 1) {
+					followMultipleTargetConnections(sourcePin,
+							sourcePin.getOutputConnections().stream().map(Connection::getDestination).toList());
+				} else {
+					followConnection(getTargetEP());
+				}
+			}
+			if (isDecoratorTargeted(selReq.getLocation(), getFigure().getTargetDecoration())) {
+				final IInterfaceElement destPin = getModel().getDestination();
+				if (destPin.getInputConnections().size() > 1) {
+					followMultipleTargetConnections(destPin,
+							destPin.getInputConnections().stream().map(Connection::getSource).toList());
+				} else {
+					followConnection(getSource());
+				}
+			}
+		}
+		super.performRequest(request);
+	}
+
+	private void followMultipleTargetConnections(final IInterfaceElement originPin,
+			final List<IInterfaceElement> targetList) {
+		final GraphicalViewer viewer = (GraphicalViewer) getViewer();
+		final GraphicalEditPart firstTargetEP = (GraphicalEditPart) viewer.getEditPartRegistry()
+				.get(targetList.getFirst());
+		HandlerHelper.selectEditPart(viewer, firstTargetEP);
+		viewer.flush();
+
+		final var dialog = new OppositeSelectionDialog(targetList, originPin,
+				viewer.getControl(), firstTargetEP.getFigure(),
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor());
+		dialog.open();
+	}
+
+	private void followConnection(final EditPart targetEP) {
+		final EditPartViewer viewer = getViewer();
+		HandlerHelper.selectEditPart(viewer, targetEP);
+	}
+
+	private static boolean isDecoratorTargeted(Point location, final FBNetworkConnectionLabel decoration) {
+		if (decoration != null) {
+			location = location.getCopy();
+			decoration.translateToRelative(location);
+			return decoration.getBounds().contains(location);
+		}
+		return false;
 	}
 
 	private void addDestinationAdapters() {

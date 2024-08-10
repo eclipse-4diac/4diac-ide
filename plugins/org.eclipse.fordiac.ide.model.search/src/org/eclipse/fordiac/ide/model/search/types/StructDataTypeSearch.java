@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.search.types;
 
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -92,6 +93,13 @@ public class StructDataTypeSearch extends InstanceSearch {
 		@Override
 		public boolean apply(final INamedElement searchCandidate) {
 			if (searchCandidate instanceof final StructManipulator mux) {
+				if (mux.getDataType() == null) {
+					return false;
+				}
+
+				if (mux.getDataType() instanceof ErrorMarkerDataType) {
+					return mux.getDataType().getTypeEntry().getFullTypeName().equals(searchCandidate.getName());
+				}
 				return mux.getDataType().getName().equals(entry.getName());
 			}
 			return false;

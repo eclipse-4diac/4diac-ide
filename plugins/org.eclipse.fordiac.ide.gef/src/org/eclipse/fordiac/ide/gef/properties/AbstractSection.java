@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2022 fortiss GmbH, Johannes Kepler University Linz
+ * Copyright (c) 2015, 2024 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -48,7 +48,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public abstract class AbstractSection extends AbstractPropertySection implements CommandExecutor {
 
 	protected Object type;
-	protected CommandStack commandStack;
+	private CommandStack commandStack;
 	private ComposedAdapterFactory adapterFactory;
 	private Composite parent;
 
@@ -64,6 +64,15 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	protected abstract void setInputCode();
 
 	protected abstract void setInputInit();
+
+	/**
+	 * Subclasses shall perform all actions to refresh the data in the property
+	 * sheet.
+	 *
+	 * Implementors can assume that getType is not null and execute command has no
+	 * effect.
+	 */
+	protected abstract void performRefresh();
 
 	protected void setType(final Object input) {
 		// as the property sheet is reused for different selection first remove
@@ -92,13 +101,25 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		return part.getAdapter(CommandStack.class);
 	}
 
+	protected final void setCurrentCommandStack(final IWorkbenchPart part, final Object input) {
+		this.commandStack = getCommandStack(part, input);
+	}
+
+	protected void setCurrentCommandStack(final CommandStack commandStack) {
+		this.commandStack = commandStack;
+	}
+
+	protected CommandStack getCurrentCommandStack() {
+		return commandStack;
+	}
+
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		Object input = selection;
 		if (selection instanceof final IStructuredSelection structSel) {
 			input = structSel.getFirstElement();
 		}
-		commandStack = getCommandStack(part, input);
+		setCurrentCommandStack(part, input);
 		if (null == commandStack) { // disable all fields
 			setInputCode();
 		}
@@ -119,13 +140,23 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		}
 	};
 
-	protected void notifiyRefresh() {
+	protected final void notifiyRefresh() {
 		if (shouldRefresh()) {
 			parent.getDisplay().asyncExec(() -> {
 				if (!parent.isDisposed()) {
 					refresh();
 				}
 			});
+		}
+	}
+
+	@Override
+	public final void refresh() {
+		if (getType() != null) {
+			final CommandStack commandStackBuffer = commandStack;
+			commandStack = null;
+			performRefresh();
+			commandStack = commandStackBuffer;
 		}
 	}
 
@@ -217,4 +248,5 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	public GraphicalAnnotationModel getAnnotationModel() {
 		return annotationModel;
 	}
+
 }

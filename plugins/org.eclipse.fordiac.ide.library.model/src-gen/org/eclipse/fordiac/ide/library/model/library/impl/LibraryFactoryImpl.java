@@ -58,6 +58,7 @@ public class LibraryFactoryImpl extends EFactoryImpl implements LibraryFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case LibraryPackage.ATTRIBUTE: return createAttribute();
 			case LibraryPackage.DEPENDENCIES: return createDependencies();
 			case LibraryPackage.EXCLUDES: return createExcludes();
 			case LibraryPackage.EXPORTS: return createExports();
@@ -85,10 +86,10 @@ public class LibraryFactoryImpl extends EFactoryImpl implements LibraryFactory {
 				return createNameSpaceFilterFromString(eDataType, initialValue);
 			case LibraryPackage.SYMBOLIC_NAME:
 				return createSymbolicNameFromString(eDataType, initialValue);
-			case LibraryPackage.VERSION_TYPE:
-				return createVersionTypeFromString(eDataType, initialValue);
-			case LibraryPackage.VERSION_TYPE1:
-				return createVersionType1FromString(eDataType, initialValue);
+			case LibraryPackage.VERSION_RANGE:
+				return createVersionRangeFromString(eDataType, initialValue);
+			case LibraryPackage.VERSION_SIMPLE:
+				return createVersionSimpleFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -106,13 +107,24 @@ public class LibraryFactoryImpl extends EFactoryImpl implements LibraryFactory {
 				return convertNameSpaceFilterToString(eDataType, instanceValue);
 			case LibraryPackage.SYMBOLIC_NAME:
 				return convertSymbolicNameToString(eDataType, instanceValue);
-			case LibraryPackage.VERSION_TYPE:
-				return convertVersionTypeToString(eDataType, instanceValue);
-			case LibraryPackage.VERSION_TYPE1:
-				return convertVersionType1ToString(eDataType, instanceValue);
+			case LibraryPackage.VERSION_RANGE:
+				return convertVersionRangeToString(eDataType, instanceValue);
+			case LibraryPackage.VERSION_SIMPLE:
+				return convertVersionSimpleToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Attribute createAttribute() {
+		AttributeImpl attribute = new AttributeImpl();
+		return attribute;
 	}
 
 	/**
@@ -266,7 +278,7 @@ public class LibraryFactoryImpl extends EFactoryImpl implements LibraryFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String createVersionTypeFromString(EDataType eDataType, String initialValue) {
+	public String createVersionRangeFromString(EDataType eDataType, String initialValue) {
 		return (String)XMLTypeFactory.eINSTANCE.createFromString(XMLTypePackage.Literals.TOKEN, initialValue);
 	}
 
@@ -275,7 +287,7 @@ public class LibraryFactoryImpl extends EFactoryImpl implements LibraryFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertVersionTypeToString(EDataType eDataType, Object instanceValue) {
+	public String convertVersionRangeToString(EDataType eDataType, Object instanceValue) {
 		return XMLTypeFactory.eINSTANCE.convertToString(XMLTypePackage.Literals.TOKEN, instanceValue);
 	}
 
@@ -284,7 +296,7 @@ public class LibraryFactoryImpl extends EFactoryImpl implements LibraryFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String createVersionType1FromString(EDataType eDataType, String initialValue) {
+	public String createVersionSimpleFromString(EDataType eDataType, String initialValue) {
 		return (String)XMLTypeFactory.eINSTANCE.createFromString(XMLTypePackage.Literals.TOKEN, initialValue);
 	}
 
@@ -293,7 +305,7 @@ public class LibraryFactoryImpl extends EFactoryImpl implements LibraryFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertVersionType1ToString(EDataType eDataType, Object instanceValue) {
+	public String convertVersionSimpleToString(EDataType eDataType, Object instanceValue) {
 		return XMLTypeFactory.eINSTANCE.convertToString(XMLTypePackage.Literals.TOKEN, instanceValue);
 	}
 

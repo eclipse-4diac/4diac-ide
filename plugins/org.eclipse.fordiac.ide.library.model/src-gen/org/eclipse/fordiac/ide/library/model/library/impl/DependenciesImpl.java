@@ -81,8 +81,9 @@ public class DependenciesImpl extends EObjectImpl implements Dependencies {
 		switch (featureID) {
 			case LibraryPackage.DEPENDENCIES__REQUIRED:
 				return ((InternalEList<?>)getRequired()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -95,8 +96,9 @@ public class DependenciesImpl extends EObjectImpl implements Dependencies {
 		switch (featureID) {
 			case LibraryPackage.DEPENDENCIES__REQUIRED:
 				return getRequired();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -112,8 +114,10 @@ public class DependenciesImpl extends EObjectImpl implements Dependencies {
 				getRequired().clear();
 				getRequired().addAll((Collection<? extends Required>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -127,8 +131,10 @@ public class DependenciesImpl extends EObjectImpl implements Dependencies {
 			case LibraryPackage.DEPENDENCIES__REQUIRED:
 				getRequired().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -141,8 +147,9 @@ public class DependenciesImpl extends EObjectImpl implements Dependencies {
 		switch (featureID) {
 			case LibraryPackage.DEPENDENCIES__REQUIRED:
 				return required != null && !required.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } //DependenciesImpl

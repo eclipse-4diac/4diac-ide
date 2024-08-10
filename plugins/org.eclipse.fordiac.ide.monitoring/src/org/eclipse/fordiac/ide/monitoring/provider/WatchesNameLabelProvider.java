@@ -18,11 +18,9 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 public class WatchesNameLabelProvider extends ColumnLabelProvider {
 	@Override
 	public String getText(final Object element) {
-
-		if (element instanceof WatchValueTreeNode) {
-			return ((WatchValueTreeNode) element).getWatchedElementString();
+		if (element instanceof final WatchValueTreeNode tn) {
+			return tn.getWatchedElementString();
 		}
-
 		return super.getText(element);
 	}
 }

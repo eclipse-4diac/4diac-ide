@@ -19,10 +19,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
+import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
@@ -70,6 +74,17 @@ public class FbTypeChange extends CompositeChange {
 	}
 
 	private List<FBType> searchAffectedFBs() {
+		final DataTypeInstanceSearch nsearch = new DataTypeInstanceSearch((DataTypeEntry) oldTypeEntry);
+		final List<? extends EObject> res = nsearch.performSearch();
+		System.out.println("Performing search");
+
+		for (final var r : res) {
+			// this returns vars used in FBs?? But not all?
+			System.out.println("Found: Type " + ((VarDeclarationImpl) r).getTypeName());
+			System.out.println("Found: FQN " + ((VarDeclarationImpl) r).getFullTypeName());
+			System.out.println("Found: Name " + ((VarDeclarationImpl) r).getName());
+
+		}
 
 		// TODO refactor to new search
 

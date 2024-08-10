@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Martin Erich Jobst,
+ * Copyright (c) 2022, 2024 Martin Erich Jobst,
  *               			Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
@@ -27,13 +27,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.Method
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplate<T> {
 	final Map<Method, ILanguageSupport> methodLanguageSupport
+	final Map<Object, Object> cache = newHashMap
 
 	new(T type, String name, Path prefix, String baseClass) {
 		super(type, name, prefix, baseClass)
 		methodLanguageSupport = type.methods.toInvertedMap [
-			ILanguageSupportFactory.createLanguageSupport("forte_ng", it)
+			ILanguageSupportFactory.createLanguageSupport("forte_ng", it, #{ILanguageSupport.OPTION_CACHE -> cache})
 		]
 	}
 
@@ -52,18 +55,12 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		
 		    «generateFBInterfaceSpecDeclaration»
 		
-		    «IF !type.internalFbs.empty»
-		    	static const size_t csmAmountOfInternalFBs = «type.internalFbs.size»;
-		    	TFunctionBlockPtr *mInternalFBs = createInternalFBs(csmAmountOfInternalFBs, scmInternalFBDefinitions, getContainer());
-		    	«generateInternalFbDefinition»
-		    	
-		    «ENDIF»
 		    «generateInternalVarDeclaration(type)»
 		    «type.internalVars.generateVariableDeclarations(false)»
 		    «type.internalConstVars.generateVariableDeclarations(true)»
 		    «generateAccessorDeclaration("getVarInternal", false)»
 		
-		    «type.internalFbs.generateInternalFBAccessors»
+		    «generateInternalFBDeclarations»
 		    «generateAlgorithms»
 		    «generateMethods»
 		    «generateAdditionalDeclarations»
@@ -75,14 +72,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		
 		  public:
 		    «FBClassName»(CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer);
-		    «IF !type.internalFbs.empty»
-		    	
-		    	EMGMResponse changeFBExecutionState(EMGMCommandType paCommand) override;
-		    	
-		    	~«FBClassName»() override {
-		    	  deleteInternalFBs(csmAmountOfInternalFBs, mInternalFBs);
-		    	};
-		    «ENDIF»
+		    «generateInitializeDeclaration»
 		
 		    «generateInterfaceDeclarations»
 		};
@@ -139,4 +129,11 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 			methodLanguageSupport.values.filterNull.flatMap[getDependencies(options)] + type.internalFbs.map[getType]
 			).toSet
 	}
+	
+	def private generateInternalFBDeclarations() '''
+		«FOR fb : type.internalFbs»
+			«fb.type.generateTypeName» «fb.generateName»;
+		«ENDFOR»		
+	'''
+
 }

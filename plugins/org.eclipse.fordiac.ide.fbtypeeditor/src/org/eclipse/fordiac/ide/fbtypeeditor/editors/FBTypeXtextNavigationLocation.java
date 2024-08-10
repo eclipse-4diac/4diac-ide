@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,19 +12,33 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
+import java.util.Objects;
+
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.part.MultiPageEditorPart;
-import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.texteditor.TextSelectionNavigationLocation;
 
 public class FBTypeXtextNavigationLocation extends TextSelectionNavigationLocation {
 
-	private final String editorId;
+	private final IWorkbenchPage page;
+	private final IEditorInput multiPageEditorInput;
+	private final String multiPageEditorId;
 
-	public FBTypeXtextNavigationLocation(final ITextEditor part, final boolean initialize) {
+	public FBTypeXtextNavigationLocation(final FBTypeXtextEditor part, final boolean initialize) {
 		super(part, initialize);
-		this.editorId = part.getEditorSite().getId();
+		page = part.getSite().getPage();
+		if (part.getEditorSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
+			final MultiPageEditorPart multiPageEditor = multiPageEditorSite.getMultiPageEditor();
+			multiPageEditorInput = multiPageEditor.getEditorInput();
+			multiPageEditorId = multiPageEditor.getEditorSite().getId();
+		} else {
+			multiPageEditorInput = null;
+			multiPageEditorId = null;
+		}
 	}
 
 	@Override
@@ -35,13 +49,23 @@ public class FBTypeXtextNavigationLocation extends TextSelectionNavigationLocati
 	@Override
 	protected IEditorPart getEditorPart() {
 		final IEditorPart editorPart = super.getEditorPart();
-		if (editorPart instanceof MultiPageEditorPart) {
-			for (final IEditorPart editor : ((MultiPageEditorPart) editorPart).findEditors(getInput())) {
-				if (editorId.equals(editor.getEditorSite().getId())) {
-					return editor;
+		if (editorPart == null && getMultiPageEditorPart() instanceof final MultiPageEditorPart multiPageEditorPart) {
+			for (final IEditorPart subEditor : multiPageEditorPart.findEditors(getInput())) {
+				if (Objects.equals(subEditor.getEditorSite().getId(), getId())) {
+					return subEditor;
 				}
 			}
 		}
 		return editorPart;
+	}
+
+	protected IEditorPart getMultiPageEditorPart() {
+		final IEditorReference[] editorReferences = page.findEditors(multiPageEditorInput, multiPageEditorId,
+				(multiPageEditorInput != null ? IWorkbenchPage.MATCH_INPUT : 0)
+						| (multiPageEditorId != null ? IWorkbenchPage.MATCH_INPUT : 0));
+		if (editorReferences.length > 0) {
+			return editorReferences[0].getEditor(false);
+		}
+		return null;
 	}
 }

@@ -100,7 +100,7 @@ public enum OpenListenerManager {
 			if (listenerSupportsElement(openListener, elementToOpen)) {
 				final String value = preferences.get(openListener.getHandledClass().getName(), ""); //$NON-NLS-1$
 				openListener.selectionChanged(null, new StructuredSelection(elementToOpen));
-				if (("".equals(value))  //$NON-NLS-1$
+				if (("".equals(value)) //$NON-NLS-1$
 						|| (value.equals(openListener.getOpenListenerID()))) {
 					return openListener;
 				}
@@ -120,8 +120,9 @@ public enum OpenListenerManager {
 		if (openListener != null) {
 			openListener.run(null);
 			return openListener.getOpenedEditor();
-		} else if (element instanceof LibraryElement) {
-			return openDefaultEditorForFile((LibraryElement) element);
+		}
+		if (element instanceof final LibraryElement libEl) {
+			return openDefaultEditorForFile(libEl);
 		}
 		return null;
 	}
@@ -157,13 +158,12 @@ public enum OpenListenerManager {
 	private void loadOpenListeners() {
 		openListeners = new ArrayList<>();
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final IConfigurationElement[] elems = registry
-				.getConfigurationElementsFor(PLUGIN_ID, "openListener"); //$NON-NLS-1$
+		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(PLUGIN_ID, "openListener"); //$NON-NLS-1$
 		for (final IConfigurationElement element : elems) {
 			try {
 				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof IOpenListener) {
-					openListeners.add((IOpenListener) object);
+				if (object instanceof final IOpenListener openListener) {
+					openListeners.add(openListener);
 				}
 			} catch (final CoreException corex) {
 				FordiacLogHelper.logError(corex.getMessage(), corex);
@@ -175,6 +175,5 @@ public enum OpenListenerManager {
 	private static boolean listenerSupportsElement(final IOpenListener listener, final EObject elementtoOpen) {
 		return (null != listener.getHandledClass()) && listener.getHandledClass().isInstance(elementtoOpen);
 	}
-
 
 }

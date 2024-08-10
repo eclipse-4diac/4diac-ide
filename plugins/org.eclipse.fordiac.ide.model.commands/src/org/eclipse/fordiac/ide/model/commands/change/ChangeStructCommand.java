@@ -18,10 +18,11 @@
 
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.text.MessageFormat;
+
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -37,13 +38,19 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 
 	private final TypeEntry newStructTypeEntry;
 	private final String newVisibleChildren;
+	private boolean reloadDatatype = true;
 
 	public ChangeStructCommand(final StructManipulator mux) {
 		this(mux, mux.getDataType(), getOldVisibleChildren(mux));
 	}
 
-	public ChangeStructCommand(final StructManipulator mux, final StructuredType newStruct) {
+	public ChangeStructCommand(final StructManipulator mux, final DataType newStruct) {
 		this(mux, newStruct, getOldVisibleChildren(mux));
+	}
+
+	public ChangeStructCommand(final StructManipulator mux, final DataType newStruct, final boolean doNotReload) {
+		this(mux, newStruct, getOldVisibleChildren(mux));
+		reloadDatatype = !doNotReload;
 	}
 
 	public ChangeStructCommand(final Demultiplexer demux, final String newVisibleChildren) {
@@ -124,19 +131,20 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 		}
 
 		LibraryElement type = newStructTypeEntry.getType();
-		final DataTypeLibrary datatypeLib = entry.getTypeLibrary().getDataTypeLibrary();
-		final TypeEntry reloadedTypeEntry = datatypeLib.getDerivedTypeEntry(newStructTypeEntry.getFullTypeName());
-		if (newStructTypeEntry instanceof ErrorDataTypeEntry) {
-			if (reloadedTypeEntry != null && reloadedTypeEntry != newStructTypeEntry) {
-				// type exists now
-				type = reloadedTypeEntry.getType();
+		if (reloadDatatype) {
+			final DataTypeLibrary datatypeLib = entry.getTypeLibrary().getDataTypeLibrary();
+			final TypeEntry reloadedTypeEntry = datatypeLib.getDerivedTypeEntry(newStructTypeEntry.getFullTypeName());
+			if (newStructTypeEntry instanceof ErrorDataTypeEntry) {
+				if (reloadedTypeEntry != null && reloadedTypeEntry != newStructTypeEntry) {
+					// type exists now
+					type = reloadedTypeEntry.getType();
+				}
+			} else if (reloadedTypeEntry == null) {
+				// type was deleted, create error marker
+				type = datatypeLib.createErrorMarkerType(newStructTypeEntry.getFullTypeName(), MessageFormat
+						.format("Typeentry for StructManipulator `{0}` not available!", getOldMux().getName())); //$NON-NLS-1$
 			}
-		} else // does the type entry still exist?
-		if (reloadedTypeEntry == null) {
-			// type was deleted, create error marker
-			type = datatypeLib.getType(newStructTypeEntry.getFullTypeName());
 		}
 		return (type instanceof final DataType dt) ? dt : IecTypes.GenericTypes.ANY_STRUCT;
 	}
-
 }

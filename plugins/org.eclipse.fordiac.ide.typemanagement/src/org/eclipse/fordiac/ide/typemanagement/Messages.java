@@ -68,14 +68,12 @@ public final class Messages extends NLS {
 
 	public static String CommandUndoChange_CannotUndoCommand;
 
-	public static String Confirm;
-
 	public static String DataTypeChange_TypeDeclarationChanged;
 
 	public static String DeleteFBTypeParticipant_Name;
 	public static String DeleteFBTypeParticipant_TypeInUseWarning;
 	public static String DeleteFBTypeParticipant_Change_DeleteFBTypeInterface;
-	public static String DeleteFBTypeParticipant_Change_DeleteMemberVariable;
+	public static String DeleteFBTypeParticipant_Change_UpdateMemberVariable;
 	public static String DeleteFBTypeParticipant_Change_DeleteSubappPins;
 	public static String DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle;
 	public static String DeleteFBTypeParticipant_Change_UpdateFBType;
@@ -83,22 +81,16 @@ public final class Messages extends NLS {
 	public static String DeleteFBTypeParticipant_Change_UpdateInternalFB;
 	public static String DeleteFBTypeParticipant_Change_UpdateManipulator;
 	public static String DeleteFBTypeParticipant_Change_UpdateSubappPins;
-	public static String DirsWithArchives;
-	public static String DirsWithUnzippedTypeLibs;
-	public static String ExtractedLibraryImportWizard;
 	public static String FBTypeComposedAdapterFactory_FBTypecomposedAdapterFactoryShouldNotBeInsantiated;
 	public static String IFordiacPreviewChange_Reconnect0;
 
 	public static String ImportChange_ImportedNamespaceChanged;
 
-	public static String ImportExtractedFiles;
-	public static String ImportFailed;
-	public static String ImportFailedOnLinkCreation;
 	public static String InitialValueChange_InitialValueChanged;
 
-	public static String InstanceUpdate;
 	public static String NewFBTypeWizard_TemplateNotAvailable;
 	public static String NewFBTypeWizardPage_TypeAlreadyExists;
+	public static String NewFBTypeWizardPage_FileAlreadyExists;
 	public static String NewFBTypeWizardPage_CreateNewType;
 	public static String NewFBTypeWizardPage_CreateNewTypeFromTemplateType;
 	public static String NewFBTypeWizardPage_CouldNotFindTemplateFiles;
@@ -114,10 +106,11 @@ public final class Messages extends NLS {
 	public static String RenameElementChange_NameChanged;
 	public static String RenameElementRefactoringParticipant_Name;
 	public static String RenameElementRefactoringProcessor_Name;
+
+	public static String RenameElementRefactoringProcessor_RenamePinInType;
 	public static String RenameElementRefactoringWizardPage_Name;
 	public static String RenameType_Name;
 	public static String RenameType_TypeExists;
-	public static String OldTypeLibVersionCouldNotBeDeleted;
 	public static String OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE;
 	public static String OpenTypeHandler_NO_FILES_IN_WORKSPACE;
 	public static String OpenTypeHandler_NO_FILES_SELECTED;
@@ -129,8 +122,6 @@ public final class Messages extends NLS {
 	public static String typeManagementPreferencePageIdentificationTitle;
 	public static String typeManagementPreferencePageVersionTitle;
 	public static String typeManagementPreferencePageDescription;
-	public static String Warning;
-	public static String WillBeImported;
 
 	public static String Refactoring_RenameFromTo;
 	public static String Refactoring_AffectedFuctionBlock;
@@ -139,26 +130,18 @@ public final class Messages extends NLS {
 	public static String Refactoring_AffectedInstancesOfFB;
 	public static String Refactoring_UpdateTypeEntryChange;
 
-	public static String UpdatedInstances;
-
 	public static String PreviewChange_DeleteChoice;
 	public static String PreviewChange_ChangeToAnyStruct;
 	public static String PreviewChange_ReplaceWithMarker;
 	public static String PreviewChange_NoChange;
 
-	public static String TypeLibrary_ProjectLoadingProblem;
-	public static String TypeLibrary_LibraryLoadingProblem;
-
-	public static String LibraryPage_SelectAll;
-	public static String LibraryPage_DeselectAll;
-	public static String LibraryPage_Name;
-	public static String LibraryPage_Version;
-	public static String LibraryPage_Comment;
-	public static String LibraryPage_SymbolicName;
-
 	public static String DeleteLibraryParticipant_Name;
 	public static String DeleteLibraryParticipant_Change_Title;
 	public static String AddLibraryDependency_Change_Title;
+
+	public static String SafeStructDeletionChange_RootNodeChangeText;
+
+	public static String UpdateUntypedSubappPinChange_0;
 
 	static {
 		// initialize resource bundle

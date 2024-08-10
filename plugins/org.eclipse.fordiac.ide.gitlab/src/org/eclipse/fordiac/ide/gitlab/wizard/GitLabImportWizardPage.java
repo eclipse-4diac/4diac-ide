@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.gitlab.wizard;
 
 import org.eclipse.fordiac.ide.gitlab.Messages;
-import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloadManager;
+import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloader;
 import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
 import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.jface.wizard.WizardPage;
@@ -32,7 +32,7 @@ public class GitLabImportWizardPage extends WizardPage {
 	private Text url;
 	private Text token;
 	private Composite container;
-	private GitLabDownloadManager downloadManager;
+	private GitLabDownloader downloadManager;
 
 	public GitLabImportWizardPage(final String pageName) {
 		super(pageName);
@@ -40,14 +40,11 @@ public class GitLabImportWizardPage extends WizardPage {
 		setDescription(Messages.GitLab_Import);
 	}
 
-	public GitLabDownloadManager getDownloadManager() {
+	public GitLabDownloader getDownloadManager() {
 		return downloadManager;
 	}
 
 	public String getUrl() {
-		if (!url.getText().endsWith("/")) { //$NON-NLS-1$
-			return url.getText() + "/"; //$NON-NLS-1$
-		}
 		return url.getText();
 	}
 
@@ -64,7 +61,7 @@ public class GitLabImportWizardPage extends WizardPage {
 	}
 
 	private void connect() {
-		downloadManager = new GitLabDownloadManager(getUrl(), getToken());
+		downloadManager = new GitLabDownloader();
 		downloadManager.fetchProjectsAndPackages();
 
 	}

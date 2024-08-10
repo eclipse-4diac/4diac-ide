@@ -79,6 +79,81 @@ class Formatter2Test {
 				END_FUNCTION
 			'''
 		]
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR_TEMP
+					internal1 : extremelylongTypeName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111;
+					internal2 : DINT := extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111;
+					internal3 : ARRAY [1..extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111,1..extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111] OF DINT;
+				END_VAR
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_TEMP
+					internal1 :
+						extremelylongTypeName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111;
+					internal2 : DINT :=
+						extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111;
+					internal3 :
+						ARRAY[1..extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111,
+							1..extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111] OF DINT;
+				END_VAR
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void testPragmaAttributes() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert VAR_INPUT input1 : REAL {  Pragma1:=17,Pragma2:=4  }  ; END_VAR END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_INPUT
+					input1 : REAL {Pragma1 := 17, Pragma2 := 4};
+				END_VAR
+				END_FUNCTION
+			'''
+		]
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert VAR_INPUT input1 : REAL {
+					Pragma1:=17,
+					Pragma2:=4
+				}; END_VAR END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_INPUT
+					input1 : REAL {
+						Pragma1 := 17,
+						Pragma2 := 4
+					};
+				END_VAR
+				END_FUNCTION
+			'''
+		]
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert VAR_INPUT input1 : REAL {  PragmaAttribute1:=17,verylongPragmaAttribute2:=4,verylongPragmaAttribute2:=21,verylongPragmaAttribute2:=42  }  ; END_VAR END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_INPUT
+					input1 : REAL {
+						PragmaAttribute1 := 17,
+						verylongPragmaAttribute2 := 4,
+						verylongPragmaAttribute2 := 21,
+						verylongPragmaAttribute2 := 42
+					};
+				END_VAR
+				END_FUNCTION
+			'''
+		]
 	}
 
 	@Test
@@ -116,6 +191,18 @@ class Formatter2Test {
 				END_FUNCTION
 			'''
 		]
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert bol1:=extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111; END_FUNCTION
+			'''
+
+			expectation = '''
+				FUNCTION hubert
+				bol1 :=
+					extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111;
+				END_FUNCTION
+			'''
+		]
 	}
 
 	@Test
@@ -128,6 +215,35 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				FOR int1 := 1 TO 4 DO
+					bol7 := FALSE;
+				END_FOR;
+				END_FUNCTION
+			'''
+		]
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert FOR extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111:=1 TO 4 DO bol7 := FALSE; END_FOR; END_FUNCTION
+			'''
+
+			expectation = '''
+				FUNCTION hubert
+				FOR extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 :=
+					1 TO 4 DO
+					bol7 := FALSE;
+				END_FOR;
+				END_FUNCTION
+			'''
+		]
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert FOR extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111:=extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 TO extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 DO bol7 := FALSE; END_FOR; END_FUNCTION
+			'''
+
+			expectation = '''
+				FUNCTION hubert
+				FOR extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 :=
+					extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+					TO extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 DO
 					bol7 := FALSE;
 				END_FOR;
 				END_FUNCTION
@@ -199,6 +315,30 @@ class Formatter2Test {
 				END_FUNCTION
 			'''
 		]
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				CASE bol0 OF
+					extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111, extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 :
+						bol1 := TRUE;
+					ELSE
+						bol7 := FALSE;
+				END_CASE;
+				END_FUNCTION
+			'''
+
+			expectation = '''
+				FUNCTION hubert
+				CASE bol0 OF
+					extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111,
+						extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 :
+						bol1 := TRUE;
+					ELSE
+						bol7 := FALSE;
+				END_CASE;
+				END_FUNCTION
+			'''
+		]
 	}
 
 	@Test
@@ -227,6 +367,14 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert : INT
 				CONTINUE;
+				END_FUNCTION
+			'''
+		]
+		assertFormatted[
+			toBeFormatted = '''FUNCTION hubert:extremelylongTypeName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 END_FUNCTION'''
+			expectation = '''
+				FUNCTION hubert
+					: extremelylongTypeName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
 				END_FUNCTION
 			'''
 		]
@@ -306,6 +454,76 @@ class Formatter2Test {
 			// (different rule calls) when using expressions in array initializers
 			useSerializer = false
 		]
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					arr1:ARRAY [1 .. 5] OF INT:=[extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111,extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111,3,4,5];
+				END_VAR
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					arr1 : ARRAY[1 .. 5] OF INT :=
+						[extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111,
+							extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111,
+							3, 4, 5];
+				END_VAR
+				END_FUNCTION
+			'''
+			// workaround to fix a problem in Xtext due to differences between the node model and serialized model
+			// (different rule calls) when using expressions in array initializers
+			useSerializer = false
+		]
+	}
+
+	@Test
+	def void testStructInitializerExpression() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					struct1:testStruct:=(var1:=1,var2:=2,var3:=3);
+					struct2:testStruct:=(var1:=1+1,var2:=2+2,var3:=3+3);
+				END_VAR
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					struct1 : testStruct := (var1 := 1, var2 := 2, var3 := 3);
+					struct2 : testStruct := (var1 := 1 + 1, var2 := 2 + 2, var3 := 3 + 3);
+				END_VAR
+				END_FUNCTION
+			'''
+			// workaround to fix a problem in Xtext due to differences between the node model and serialized model
+			// (different rule calls) when using expressions in struct initializers
+			useSerializer = false
+		]
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					struct1:testStruct:=(var1:=extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111,var2:=2,extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111:=3);
+				END_VAR
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					struct1 : testStruct := (var1 :=
+						extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111,
+						var2 := 2,
+						extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 :=
+							3);
+				END_VAR
+				END_FUNCTION
+			'''
+			// workaround to fix a problem in Xtext due to differences between the node model and serialized model
+			// (different rule calls) when using expressions in struct initializers
+			useSerializer = false
+		]
 	}
 
 	@Test
@@ -327,6 +545,67 @@ class Formatter2Test {
 				END_VAR
 				arr[1] := 2;
 				arr[1, 2, 3] := 3;
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void testMemberAccess() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					struct1 : testStruct;
+				END_VAR
+				struct1  .  var1:=2;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					struct1 : testStruct;
+				END_VAR
+				struct1.var1 := 2;
+				END_FUNCTION
+			'''
+		]
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					struct1 : testStruct;
+				END_VAR
+				struct1.extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111:=2;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					struct1 : testStruct;
+				END_VAR
+				struct1.extremelylongVariableName11111111111111111111111111111111111111111111111111111111111111111111111111111111111 :=
+					2;
+				END_FUNCTION
+			'''
+		]
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					struct1 : testStruct;
+				END_VAR
+				struct1.extremelylongVariableName1111111111111111111111111111111111111111111111111111111111111111111111111111111111111:=2;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_OUTPUT
+					struct1 : testStruct;
+				END_VAR
+				struct1
+					.extremelylongVariableName1111111111111111111111111111111111111111111111111111111111111111111111111111111111111 :=
+					2;
 				END_FUNCTION
 			'''
 		]
@@ -1131,7 +1410,8 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				IF langerVariablenBezeichnerlangerVariablenBezeichnerlangerVariablenBezeichnerlangerVariablenBezeichner
-					AND langerVariablenBezeichner THEN
+					AND langerVariablenBezeichner
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -1155,8 +1435,9 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					XOR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner THEN
+				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
+					OR langerVariablenBezeichner XOR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -1180,8 +1461,8 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
-					OR a THEN
+				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR a
+				THEN
 					bol1 := TRUE;
 				END_IF;
 				
@@ -1247,8 +1528,8 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				func(langerVariablenBezeichner OR langerVariablenBezeichner,
-					langerVariablenBezeichner OR langerVariablenBezeichner
-					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner,
+					langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
+						OR langerVariablenBezeichner OR langerVariablenBezeichner,
 					langerVariablenBezeichner OR langerVariablenBezeichner);
 				
 				END_FUNCTION

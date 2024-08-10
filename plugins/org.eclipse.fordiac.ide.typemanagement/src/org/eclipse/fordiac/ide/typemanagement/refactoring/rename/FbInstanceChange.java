@@ -72,6 +72,7 @@ public class FbInstanceChange extends CompositeChange {
 	}
 
 	private List<FBNetworkElement> searchAffectedStructuredType() {
+
 		// TODO use new search
 		final InstanceSearch structMemberSearch = StructDataTypeSearch
 				.createStructMemberSearch((StructuredType) oldTypeEntry.getTypeEditable());

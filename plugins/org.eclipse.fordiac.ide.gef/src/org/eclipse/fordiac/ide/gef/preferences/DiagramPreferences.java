@@ -36,6 +36,7 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.MessageBox;
@@ -82,6 +83,9 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	public static final String CONNECTION_AUTO_LAYOUT = "ConnectionAutoLayout"; //$NON-NLS-1$
 
+	public static final String EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR = "ExpandedInterfaceOldDirectBehaviour"; //$NON-NLS-1$
+	public static final String EXPANDED_INTERFACE_EVENTS_TOP = "ExpandedInterfaceEventsTop"; //$NON-NLS-1$
+
 	private boolean changesOnLabelSize = false;
 
 	private static int maxDefaultValueLength = Activator.getDefault().getPreferenceStore()
@@ -119,6 +123,9 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 		// Create a Group to hold the block margin fields
 		createGroupBlockMargins();
+
+		// Create a Group to hold the expanded interface fields
+		createExpandedInterfaceOptionsPins();
 	}
 
 	private Group createGroup(final String title) {
@@ -154,7 +161,9 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 				|| sourcePrefName.equalsIgnoreCase(MAX_HIDDEN_CONNECTION_LABEL_SIZE)
 				|| sourcePrefName.equalsIgnoreCase(PIN_LABEL_STYLE)
 				|| sourcePrefName.equalsIgnoreCase(MAX_INTERFACE_BAR_SIZE)
-				|| sourcePrefName.equalsIgnoreCase(MIN_INTERFACE_BAR_SIZE);
+				|| sourcePrefName.equalsIgnoreCase(MIN_INTERFACE_BAR_SIZE)
+				|| sourcePrefName.equalsIgnoreCase(EXPANDED_INTERFACE_EVENTS_TOP)
+				|| sourcePrefName.equalsIgnoreCase(EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR);
 	}
 
 	@Override
@@ -295,6 +304,27 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		addField(integerFieldEditorLeftRight);
 
 		configGroup(group);
+	}
+
+	private void createExpandedInterfaceOptionsPins() {
+		final Group group = createGroup(Messages.DiagramPreferences_ExpandedInterfaceGroupText);
+		final BooleanFieldEditor direct = new BooleanFieldEditor(EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR,
+				Messages.DiagramPreferences_ExpandedInterfaceStackPins, group);
+		final BooleanFieldEditor events = new BooleanFieldEditor(EXPANDED_INTERFACE_EVENTS_TOP,
+				Messages.DiagramPreferences_ExpandedInterfaceEvents, group);
+
+		addField(direct);
+		addField(events);
+		configGroup(group);
+
+		events.setEnabled(getPreferenceStore().getBoolean(EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR), group);
+		direct.getDescriptionControl(group).addListener(SWT.Selection, event -> {
+			final var button = (Button) event.widget;
+			final boolean selection = button.getSelection();
+			final var eventsButton = (Button) events.getDescriptionControl(group);
+			events.setEnabled(selection, group);
+			eventsButton.setSelection(selection);
+		});
 	}
 
 	@Override

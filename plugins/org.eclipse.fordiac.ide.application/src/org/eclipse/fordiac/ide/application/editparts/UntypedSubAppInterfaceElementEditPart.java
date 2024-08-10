@@ -27,8 +27,6 @@ import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
@@ -66,22 +64,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	protected TargetInterfaceAdapter targetInteraceAdapter = null;
 	protected static int subappInterfaceBarMaxWidth = -1;
 
-	private final class SubappInternalConnAnchor extends FixedAnchor {
-		private SubappInternalConnAnchor(final IFigure owner, final boolean isInput) {
-			super(owner, isInput);
-		}
-
-		@Override
-		public Point getLocation(final Point reference) {
-			final Point location = super.getLocation(reference);
-			final IFigure subappFigure = ((GraphicalEditPart) getParent()).getFigure();
-			final Rectangle bounds = subappFigure.getBounds().getCopy();
-			subappFigure.translateToAbsolute(bounds);
-			location.y = Math.max(location.y, bounds.y);
-			location.y = Math.min(location.y, bounds.y + bounds.height);
-			return location;
-		}
-	}
+	private boolean isOverflow = false;
 
 	public class UntypedSubappIEAdapter extends EContentAdapter {
 		@Override
@@ -170,8 +153,42 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		return new LabelDirectEditManager(this, getNameLabel());
 	}
 
+	public int getUncollapsedFigureHeight() {
+		final var children = targetPinManager.getModelChildren(false);
+		if (children.isEmpty()) {
+			return getFigure().getBounds().height;
+		}
+		int height = -(children.size() - 1) * 2;
+		for (final TargetInterfaceElement modelObject : children) {
+			final IFigure child = ((GraphicalEditPart) createChild(modelObject)).getFigure();
+			height += child.getPreferredSize().height;
+		}
+		return height;
+	}
+
+	public int getCollapsedFigureHeight() {
+		final var children = targetPinManager.getModelChildren(true);
+		if (children.isEmpty()) {
+			return getFigure().getBounds().height;
+		}
+		int height = -(children.size() - 1) * 2;
+		for (final TargetInterfaceElement modelObject : children) {
+			final IFigure child = ((GraphicalEditPart) createChild(modelObject)).getFigure();
+			height += child.getPreferredSize().height;
+		}
+		return height;
+	}
+
 	public Label getNameLabel() {
 		return (Label) getFigure();
+	}
+
+	public boolean isOverflow() {
+		return isOverflow;
+	}
+
+	public void setOverflow(final boolean isOverflow) {
+		this.isOverflow = isOverflow;
 	}
 
 	@Override
@@ -216,7 +233,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	protected FixedAnchor createSourceConAnchor() {
 		if (isInput()) {
 			// we are unfolded and this is an internal connection
-			return new SubappInternalConnAnchor(getFigure(), !isInput());
+			return new FixedAnchor(getFigure(), !isInput());
 		}
 		return super.createTargetConAnchor();
 	}
@@ -225,7 +242,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	protected FixedAnchor createTargetConAnchor() {
 		if (!isInput()) {
 			// we are unfolded and this is an internal connection
-			return new SubappInternalConnAnchor(getFigure(), !isInput());
+			return new FixedAnchor(getFigure(), !isInput());
 		}
 		return super.createTargetConAnchor();
 	}
@@ -233,7 +250,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	@Override
 	protected List getModelChildren() {
 		if (isInExpandedSubapp()) {
-			return targetPinManager.getModelChildren();
+			return targetPinManager.getModelChildren(isOverflow);
 		}
 		return super.getModelChildren();
 	}

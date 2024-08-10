@@ -41,4 +41,8 @@ public class TestState {
 	public List<OutputPrimitive> getTestOutputs() {
 		return dataSource.getOutputPrimitive();
 	}
+
+	public ServiceTransaction getTestCase() {
+		return dataSource;
+	}
 }

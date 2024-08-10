@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 fortiss GmbH
- *                          Johannes Kepler University Linz
+ * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz,
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -20,6 +19,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.filters.AttributeFilter;
@@ -34,17 +34,18 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteAttributeCommand;
 import org.eclipse.fordiac.ide.model.data.InternalDataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
-import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
-import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.AttributeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.ImportContentProposal;
+import org.eclipse.fordiac.ide.model.ui.widgets.ImportTypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
-import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -52,7 +53,6 @@ import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
@@ -102,9 +102,16 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 				this, false);
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
 
+		final Predicate<TypeEntry> targetFilter = entry -> {
+			if (entry.getType() instanceof final AttributeDeclaration decl) {
+				return decl.isValidObject(getType());
+			}
+			return true;
+		};
 		final AttributeNameCellEditor attributeNameCellEditor = new AttributeNameCellEditor();
 		attributeNameCellEditor.enableContentProposal(new TextContentAdapter(),
-				new TypeSelectionProposalProvider(this::getTypeLibrary, AttributeSelectionContentProvider.INSTANCE),
+				new ImportTypeSelectionProposalProvider(this::getType, TypeLibrary::getAttributeTypeEntry,
+						AttributeSelectionContentProvider.INSTANCE, targetFilter),
 				KeyStroke.getInstance(SWT.CTRL, SWT.SPACE), null);
 		table.addConfiguration(new AbstractRegistryConfiguration() {
 			@Override
@@ -167,11 +174,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
+	protected void performRefresh() {
 		provider.setInput(getFilteredAttributeList());
-		commandStack = commandStackBuffer;
 		table.refresh();
 	}
 
@@ -231,13 +235,9 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		}
 
 		protected void proposalAccepted(final IContentProposal proposal) {
-			final AttributeTypeEntry packageEntry = ImportHelper.resolveImport(
-					PackageNameHelper.extractPlainTypeName(proposal.getContent()), getType(),
-					getTypeLibrary()::getAttributeTypeEntry, name -> null);
-
-			if (packageEntry == null
+			if (proposal instanceof final ImportContentProposal importProposal
 					&& EcoreUtil.getRootContainer(getType()) instanceof final LibraryElement libraryElement) {
-				commandStack.execute(new AddNewImportCommand(libraryElement, proposal.getContent()));
+				executeCommand(new AddNewImportCommand(libraryElement, importProposal.getImportedNamespace()));
 			}
 		}
 	}

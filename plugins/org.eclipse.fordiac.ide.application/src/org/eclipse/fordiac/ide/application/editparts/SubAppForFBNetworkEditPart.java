@@ -27,6 +27,7 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
@@ -35,6 +36,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
@@ -55,6 +57,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
@@ -101,9 +104,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 				// interface figures need to be manually added in order for them to be put
 				// into the right container
 				reloadInterfaceFigures();
-				if (isUnfoldedAttribute(notification.getNewValue())) {
-					Display.getDefault().asyncExec(() -> layoutExpandedInterface());
-				}
+				layoutExpandedInterface();
 			}
 			refreshToolTip();
 			backgroundColorChanged(getFigure());
@@ -133,7 +134,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 				refreshInterfaceEditParts();
 				refreshRoot();
 			}
-			Display.getDefault().asyncExec(() -> layoutExpandedInterface());
+			layoutExpandedInterface();
 		}
 
 		private void handleRemove(final Notification notification) {
@@ -147,11 +148,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 				refreshRoot();
 			}
 
-			if (!isUnfoldedAttribute(notification.getOldValue())) {
-				// do not layout when we collapse the subapp as the edit part is gone when it
-				// would be needed for the connection layout
-				Display.getDefault().asyncExec(() -> layoutExpandedInterface());
-			}
+			layoutExpandedInterface();
 		}
 
 		private void handleSet(final Notification notification) {
@@ -184,11 +181,10 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	private class SubappCommentRenameEditPolicy extends AbstractViewRenameEditPolicy {
 		@Override
 		protected Command getDirectEditCommand(final DirectEditRequest request) {
-			if (getHost().getModel() instanceof INamedElement) {
+			if (getHost().getModel() instanceof final INamedElement namedEl) {
 				final String str = (String) request.getCellEditor().getValue();
 				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
-					return new ResizeGroupOrSubappCommand(getHost(),
-							new ChangeCommentCommand((INamedElement) getHost().getModel(), str));
+					return new ResizeGroupOrSubappCommand(getHost(), new ChangeCommentCommand(namedEl, str));
 				}
 			}
 			return null;
@@ -335,9 +331,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			getFigure().getExpandedContentArea().add(contentFigure, contentGridData, -1);
 		} else if (childEditPart instanceof final InterfaceEditPart interfaceEditPart && getModel().isUnfolded()) {
 			if (interfaceEditPart.isInput()) {
-				getFigure().getExpandedInputFigure().getChildren().get(0).add(interfaceEditPart.getFigure());
+				getFigure().getExpandedInputFigure().add(interfaceEditPart.getFigure());
 			} else {
-				getFigure().getExpandedOutputFigure().getChildren().get(0).add(interfaceEditPart.getFigure());
+				getFigure().getExpandedOutputFigure().add(interfaceEditPart.getFigure());
 			}
 		} else {
 			super.addChildVisual(childEditPart, index);
@@ -352,9 +348,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			}
 		} else if (childEditPart instanceof final InterfaceEditPart interfaceEditPart && getModel().isUnfolded()) {
 			if (interfaceEditPart.isInput()) {
-				getFigure().getExpandedInputFigure().getChildren().get(0).remove(interfaceEditPart.getFigure());
+				getFigure().getExpandedInputFigure().remove(interfaceEditPart.getFigure());
 			} else {
-				getFigure().getExpandedOutputFigure().getChildren().get(0).remove(interfaceEditPart.getFigure());
+				getFigure().getExpandedOutputFigure().remove(interfaceEditPart.getFigure());
 			}
 		} else {
 			super.removeChildVisual(childEditPart);
@@ -416,19 +412,47 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 		return positionMap;
 	}
 
+	@Override
+	protected List<VarDeclaration> getRemovedVarInOutPins(final boolean isInput) {
+		if (isInput) {
+			final Stream<VarDeclaration> inputsStream = getModel().getInterface().getInOutVars().stream();
+			if (getModel().isTyped()) {
+				// if we are a typed subapp we need to check in the interface of the type.
+				final EList<VarDeclaration> typeInOutVars = getModel().getType().getInterfaceList().getInOutVars();
+				return inputsStream.filter(it -> {
+					final VarDeclaration typeVar = getVar(typeInOutVars, it.getName());
+					if (typeVar != null) {
+						return typeVar.getOutputConnections().isEmpty();
+					}
+					return false;
+				}).toList();
+			}
+			return inputsStream.filter(it -> it.getOutputConnections().isEmpty()).toList();
+		}
+		final Stream<VarDeclaration> outputsStream = getModel().getInterface().getOutMappedInOutVars().stream();
+		if (getModel().isTyped()) {
+			// if we are a typed subapp we need to check in the interface of the type.
+			final EList<VarDeclaration> typeOutMappedInOutVars = getModel().getType().getInterfaceList()
+					.getOutMappedInOutVars();
+			return outputsStream.filter(it -> {
+				final VarDeclaration typeVar = getVar(typeOutMappedInOutVars, it.getName());
+				if (typeVar != null) {
+					return typeVar.getInputConnections().isEmpty();
+				}
+				return false;
+			}).toList();
+		}
+		return outputsStream.filter(it -> it.getInputConnections().isEmpty()).toList();
+	}
+
+	private static VarDeclaration getVar(final EList<VarDeclaration> typeInOutVars, final String name) {
+		return typeInOutVars.stream().filter(it -> name.equals(it.getName())).findAny().orElse(null);
+	}
+
 	public void layoutExpandedInterface() {
-		getFigure().layoutExpandedInterface();
-		// auto layout is currently not used as it messes with other things that rely on
-		// the display thread to an extend where the actual view is not working
-		// correctly anymore
-//		final var handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
-//		final var event = new Event();
-//		event.data = this; // pass to the handler
-//		try {
-//			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.expandedSubappConnectionLayout", event); //$NON-NLS-1$
-//		} catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e) {
-//			e.printStackTrace();
-//		}
+		if (getModel().isUnfolded()) {
+			Display.getDefault().asyncExec(() -> getFigure().layoutExpandedInterface());
+		}
 	}
 
 }

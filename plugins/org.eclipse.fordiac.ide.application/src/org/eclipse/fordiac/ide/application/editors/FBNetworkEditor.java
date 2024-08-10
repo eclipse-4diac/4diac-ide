@@ -22,16 +22,18 @@
 package org.eclipse.fordiac.ide.application.editors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.application.actions.CopyEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.CutEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.DeleteFBNetworkAction;
 import org.eclipse.fordiac.ide.application.actions.FBNetworkSelectAllAction;
 import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
-import org.eclipse.fordiac.ide.application.dnd.ConnectionDragSourceListener;
-import org.eclipse.fordiac.ide.application.dnd.ConnectionDragTargetListener;
+import org.eclipse.fordiac.ide.application.dnd.CustomDragSourceListener;
+import org.eclipse.fordiac.ide.application.dnd.CustomDragTargetListener;
 import org.eclipse.fordiac.ide.application.editparts.ElementEditPartFactory;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
+import org.eclipse.fordiac.ide.application.figures.FBNetworkConnectionLayerClippingStrategy;
 import org.eclipse.fordiac.ide.application.tools.FBNetworkPanningSelectionTool;
 import org.eclipse.fordiac.ide.application.utilities.FbTypeTemplateTransferDropTargetListener;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
@@ -45,6 +47,7 @@ import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
+import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -126,8 +129,13 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		final Open4DIACElementAction openAction = (Open4DIACElementAction) registry
 				.getAction(Open4DIACElementAction.ID);
 		getGraphicalViewer().addSelectionChangedListener(openAction);
-		getGraphicalViewer().addDragSourceListener(new ConnectionDragSourceListener(getGraphicalViewer()));
-		getGraphicalViewer().addDropTargetListener(new ConnectionDragTargetListener(getGraphicalViewer()));
+		getGraphicalViewer().addDragSourceListener(new CustomDragSourceListener(getGraphicalViewer()));
+		getGraphicalViewer().addDropTargetListener(new CustomDragTargetListener(getGraphicalViewer()));
+
+		final ScalableFreeformRootEditPart rootEP = (ScalableFreeformRootEditPart) getGraphicalViewer()
+				.getRootEditPart();
+		final IFigure connectionLayer = rootEP.getLayer(LayerConstants.CONNECTION_LAYER);
+		connectionLayer.setClippingStrategy(new FBNetworkConnectionLayerClippingStrategy(getGraphicalViewer()));
 	}
 
 	@Override
@@ -249,24 +257,22 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	}
 
 	private void handleActivationChanged(final Event event) {
-		IAction copy = null;
-		IAction cut = null;
-		IAction paste = null;
-		if (event.type == SWT.Activate) {
-			copy = getActionRegistry().getAction(ActionFactory.COPY.getId());
-			cut = getActionRegistry().getAction(ActionFactory.CUT.getId());
-			paste = getActionRegistry().getAction(ActionFactory.PASTE.getId());
-		}
-		if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.COPY.getId()) != copy) {
-			getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copy);
-		}
-		if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.CUT.getId()) != cut) {
-			getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.CUT.getId(), cut);
-		}
-		if (getEditorSite().getActionBars().getGlobalActionHandler(ActionFactory.PASTE.getId()) != paste) {
-			getEditorSite().getActionBars().setGlobalActionHandler(ActionFactory.PASTE.getId(), paste);
-		}
+		final boolean activated = event.type == SWT.Activate;
+
+		setAction(ActionFactory.COPY.getId(), activated);
+		setAction(ActionFactory.CUT.getId(), activated);
+		setAction(ActionFactory.PASTE.getId(), activated);
+
 		getEditorSite().getActionBars().updateActionBars();
+	}
+
+	private void setAction(final String actionId, final boolean activated) {
+		final IAction action = getActionRegistry().getAction(actionId);
+		if (activated && getEditorSite().getActionBars().getGlobalActionHandler(actionId) != action) {
+			getEditorSite().getActionBars().setGlobalActionHandler(actionId, action);
+		} else if (!activated && getEditorSite().getActionBars().getGlobalActionHandler(actionId) == action) {
+			getEditorSite().getActionBars().setGlobalActionHandler(actionId, null);
+		}
 	}
 
 	@Override

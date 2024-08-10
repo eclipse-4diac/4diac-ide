@@ -32,10 +32,16 @@
                label="TypeInfo">
          </propertyTab>
          <propertyTab
-               afterTab="org.eclipse.fordiac.ide.attributetypeeditor.propertyDataTypeInfoTab"
+               afterTab="org.eclipse.fordiac.ide.attributetypeeditor.propertyTargetTab"
                category="AttributeType"
                id="org.eclipse.fordiac.ide.attributetypeeditor.propertyAttributeTab"
                label="Attributes">
+         </propertyTab>
+         <propertyTab
+               afterTab="org.eclipse.fordiac.ide.attributetypeeditor.propertyDataTypeInfoTab"
+               category="AttributeType"
+               id="org.eclipse.fordiac.ide.attributetypeeditor.propertyTargetTab"
+               label="Target">
          </propertyTab>
       </propertyTabs>
    </extension>
@@ -70,6 +76,20 @@
           <input
                 type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
           </input> 
+         </propertySection>
+         <propertySection
+	         	class="org.eclipse.fordiac.ide.attributetypeeditor.properties.AttributeTargetSection"
+	          	id="org.eclipse.fordiac.ide.attributetypeeditor.properties.AttributeTargetSection"
+	            tab="org.eclipse.fordiac.ide.attributetypeeditor.propertyTargetTab">
+	        <input
+	           	type="org.eclipse.fordiac.ide.model.data.StructuredType">
+	        </input>  
+        	<input
+              	type="org.eclipse.fordiac.ide.model.data.DirectlyDerivedType">
+        	</input> 
+        	<input
+                type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
+          	</input>
          </propertySection>
       </propertySections>
    </extension>

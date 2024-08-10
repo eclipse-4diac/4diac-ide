@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -25,7 +27,7 @@ public class TargetInterfaceElement implements Comparable<TargetInterfaceElement
 			final FBNetwork parentNW) {
 		if (refElement.getFBNetworkElement() == null || (refElement.getFBNetworkElement() instanceof final SubApp subapp
 				&& subapp.getSubAppNetwork() == parentNW)) {
-			return new SubapTargetInterfaceElement(host, refElement);
+			return new SubappTargetInterfaceElement(host, refElement);
 		}
 		return new TargetInterfaceElement(host, refElement);
 	}
@@ -49,6 +51,13 @@ public class TargetInterfaceElement implements Comparable<TargetInterfaceElement
 		if (fbelement != null) {
 			final FBNetworkElement parent = fbelement.getOuterFBNetworkElement();
 			if (parent != null) {
+				final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
+				if (grandParent != null && getHost().getFBNetworkElement() != null
+						&& getHost().getFBNetworkElement() != grandParent
+						&& getHost().getFBNetworkElement().getOuterFBNetworkElement() != grandParent) {
+					retVal.append(grandParent.getName());
+					retVal.append('.');
+				}
 				retVal.append(parent.getName());
 				retVal.append('.');
 			}
@@ -61,14 +70,14 @@ public class TargetInterfaceElement implements Comparable<TargetInterfaceElement
 
 	@Override
 	public int compareTo(final TargetInterfaceElement other) {
-		if (other instanceof SubapTargetInterfaceElement) {
+		if (other instanceof SubappTargetInterfaceElement) {
 			return 1;
 		}
 		return getRefPinFullName().compareTo(other.getRefPinFullName());
 	}
 
-	public static class SubapTargetInterfaceElement extends TargetInterfaceElement {
-		private SubapTargetInterfaceElement(final IInterfaceElement host, final IInterfaceElement refElement) {
+	public static class SubappTargetInterfaceElement extends TargetInterfaceElement {
+		private SubappTargetInterfaceElement(final IInterfaceElement host, final IInterfaceElement refElement) {
 			super(host, refElement);
 		}
 
@@ -79,11 +88,33 @@ public class TargetInterfaceElement implements Comparable<TargetInterfaceElement
 
 		@Override
 		public int compareTo(final TargetInterfaceElement other) {
-			if (other instanceof SubapTargetInterfaceElement) {
+			if (other instanceof SubappTargetInterfaceElement) {
 				return getRefPinFullName().compareTo(other.getRefPinFullName());
 			}
 			return -1;
 		}
+	}
+
+	public static class GroupTargetInterfaceElement extends SubappTargetInterfaceElement {
+		final SubApp subapp;
+		final List<IInterfaceElement> refElements;
+
+		public GroupTargetInterfaceElement(final IInterfaceElement host, final List<IInterfaceElement> refElements,
+				final SubApp subapp) {
+			super(host, refElements.getFirst());
+			this.subapp = subapp;
+			this.refElements = refElements;
+		}
+
+		@Override
+		public String getRefPinFullName() {
+			return subapp.getName() + ": " + refElements.size(); //$NON-NLS-1$
+		}
+
+		public List<IInterfaceElement> getRefElements() {
+			return refElements;
+		}
+
 	}
 
 }

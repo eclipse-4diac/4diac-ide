@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -45,7 +46,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
@@ -158,8 +158,8 @@ public class MapToCommand extends Command implements ScopedCommand {
 
 	protected FBNetworkElement createTargetElement() {
 		FBNetworkElement created = null;
-		if (srcElement instanceof StructManipulator) {
-			created = createTargetStructManipulator();
+		if (srcElement instanceof ConfigurableFB) {
+			created = createConfigureableFB();
 		} else if (srcElement instanceof FB) {
 			created = createTargetFB();
 		} else if (srcElement instanceof final SubApp subApp) {
@@ -183,11 +183,11 @@ public class MapToCommand extends Command implements ScopedCommand {
 		return targetCreateFB.getFB();
 	}
 
-	private FBNetworkElement createTargetStructManipulator() {
-		final StructManipulator manipulator = (StructManipulator) createTargetFB();
-		manipulator.setDataType(((StructManipulator) srcElement).getDataType());
-		manipulator.updateConfiguration();
-		return manipulator;
+	private FBNetworkElement createConfigureableFB() {
+		final ConfigurableFB configureableFB = (ConfigurableFB) createTargetFB();
+		configureableFB.setDataType(((ConfigurableFB) srcElement).getDataType());
+		configureableFB.updateConfiguration();
+		return configureableFB;
 	}
 
 	private FBNetworkElement createTargetTypedSubApp() {

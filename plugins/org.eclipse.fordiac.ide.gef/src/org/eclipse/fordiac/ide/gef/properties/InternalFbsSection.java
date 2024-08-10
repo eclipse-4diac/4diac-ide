@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Primetals Technologies Germany GmbH
- * 				 2023 Johannes Kepler University, Linz
+ * Copyright (c) 2021, 2024 Primetals Technologies Germany GmbH,
+ *                          Johannes Kepler University, Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -47,7 +47,6 @@ import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.ISelectionProviderSection;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -99,7 +98,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 
 		buttons.bindToTableViewer(table, this,
 				ref -> new CreateInternalFBCommand(getType(), getInsertionIndex(), getName(), getFBTypeEntry()),
-				ref -> new DeleteInternalFBCommand(getType(), getLastSelectedFB()),
+				ref -> new DeleteInternalFBCommand((FB) ref),
 				ref -> new ChangeInternalFBOrderCommand(getType(), (FB) ref, IndexUpDown.UP),
 				ref -> new ChangeInternalFBOrderCommand(getType(), (FB) ref, IndexUpDown.DOWN));
 
@@ -138,11 +137,8 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
+	protected void performRefresh() {
 		provider.setInput(getType() != null ? getType().getInternalFbs() : Collections.emptyList());
-		commandStack = commandStackBuffer;
 		table.refresh();
 	}
 
@@ -186,7 +182,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	@Override
 	public void removeEntry(final Object entry, final CompoundCommand cmd) {
 		if (entry instanceof final FB fb) {
-			cmd.add(new DeleteInternalFBCommand(getType(), fb));
+			cmd.add(new DeleteInternalFBCommand(fb));
 		}
 	}
 

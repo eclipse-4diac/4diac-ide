@@ -32,7 +32,7 @@ public class AdapterTypeSelectionTreeContentProvider extends TypeSelectionTreeCo
 		}
 
 		final TypeNode adapters = new TypeNode(Messages.DataTypeDropdown_Adapter_Types);
-		addPathSubtree(adapters, typeLibrary.getAdapterTypes().values());
+		addPathSubtree(adapters, typeLibrary.getAdapterTypes());
 		adapters.sortChildren();
 
 		return adapters.getChildren();

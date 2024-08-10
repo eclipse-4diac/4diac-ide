@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Andrea Zoitl
+ * Copyright (c) 2023, 2024 Andrea Zoitl, Prashantkumar Khatri
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,14 +9,21 @@
  *
  * Contributors:
  *   Andrea Zoitl - initial API and implementation and/or initial documentation
+ *   Prashantkumar Khatri - added methods for creating and deleting FB types,
+ *   						selecting property tabs, openFBTypeInEditor, deletePin,
+ *   						createConnectionWithinFBTypeWithPropertySheet,
+ *   						removeConnectionWithinFBTypeWithPropertySheet and
+ *   						selectTabFromInterfaceProperties.
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui;
 
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Map;
@@ -25,9 +32,11 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -41,9 +50,12 @@ import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotCTabItem;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.hamcrest.BaseMatcher;
@@ -56,11 +68,23 @@ import org.junit.jupiter.api.BeforeAll;
 public class Abstract4diacUITests {
 
 	protected static SWT4diacGefBot bot;
+	// alphabetical order of static variable names
+	protected static final String ADAPTER = "Adapter"; //$NON-NLS-1$
 	protected static final String APP = "App"; //$NON-NLS-1$
+	protected static final String COMMENT = "Comment:"; //$NON-NLS-1$
+	protected static final String CANCEL = "Cancel"; //$NON-NLS-1$
+	protected static final String CREATE_INPUT_EVENT = "Create Input Event"; //$NON-NLS-1$
+	protected static final String CREATE_OUTPUT_EVENT = "Create Output Event"; //$NON-NLS-1$
+	protected static final String CREATE_DATA_INPUT = "Create Data Input"; //$NON-NLS-1$
+	protected static final String CREATE_DATA_OUTPUT = "Create Data Output"; //$NON-NLS-1$
+	protected static final String DATA = "Data"; //$NON-NLS-1$
 	protected static final String DELETE = "Delete"; //$NON-NLS-1$
 	protected static final String DELETE_PROJECT_WARNING = "Delete project contents on disk (cannot be undone)"; //$NON-NLS-1$
 	protected static final String DELETE_RESOURCES = "Delete Resources"; //$NON-NLS-1$
+	protected static final String DOT_BUTTON = "..."; //$NON-NLS-1$
 	protected static final String EDIT = "Edit"; //$NON-NLS-1$
+	protected static final String ELEMENTARY_TYPE = "Elementary Types"; //$NON-NLS-1$
+	protected static final String EVENT = "Event"; //$NON-NLS-1$
 	protected static final String EVENTS_NODE = "events"; //$NON-NLS-1$
 	protected static final String E_CTUD_FB = "E_CTUD"; //$NON-NLS-1$
 	protected static final String E_CTUD_TREE_ITEM = E_CTUD_FB + " [Event-Driven Up-Down Counter]"; //$NON-NLS-1$
@@ -82,36 +106,74 @@ public class Abstract4diacUITests {
 	protected static final String E_SWITCH_TREE_ITEM = "E_SWITCH [Switching (demultiplexing) an event based on boolean input G]"; //$NON-NLS-1$
 	protected static final String E_TABLE_CTRL_FB = "E_TABLE_CTRL"; //$NON-NLS-1$
 	protected static final String E_TABLE_CTRL_TREE_ITEM = "E_TABLE_CTRL [Support function block for E_TABLE]"; //$NON-NLS-1$
+	protected static final String FBT_TEST_PROJECT1 = "FBTTestProject1"; //$NON-NLS-1$
+	protected static final String FBT_TEST_PROJECT2 = "FBTTestProject2"; //$NON-NLS-1$
+	protected static final String FBT_TEST_PROJECT3 = "FBTTestProject3"; //$NON-NLS-1$
+	protected static final String FBT_TEST_PROJECT4 = "FBTTestProject4"; //$NON-NLS-1$
 	protected static final String FILE = "File"; //$NON-NLS-1$
 	protected static final String FINISH = "Finish"; //$NON-NLS-1$
+	protected static final String FORBIDDEN_TYPE_NAME = "00_fbtype"; //$NON-NLS-1$
 	protected static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
 	protected static final String F_SUB = "F_SUB"; //$NON-NLS-1$
+	protected static final String GO_TO_CHILD = "Go To Child"; //$NON-NLS-1$
 	protected static final String GO_TO_PARENT = "Go To Parent"; //$NON-NLS-1$
 	protected static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
 	protected static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
+	protected static final String INSERT_FB = "Insert FB"; //$NON-NLS-1$
+	protected static final String INTERFACE = "Interface"; //$NON-NLS-1$
+	protected static final String NAME_LABEL = "Name:"; //$NON-NLS-1$
 	protected static final String NAVIGATE = "Navigate"; //$NON-NLS-1$
 	protected static final String NEW = "New"; //$NON-NLS-1$
 	protected static final String NEW_4DIAC_PROJECT = "New 4diacProject"; //$NON-NLS-1$
+	protected static final String NEW_SUBAPPLICATION = "New subapplication"; //$NON-NLS-1$
+	protected static final String NEW_TYPE = FordiacMessages.NewType;
 	protected static final String OK = "OK"; //$NON-NLS-1$
+	protected static final String PACKAGE_NAME1 = "pkg1"; //$NON-NLS-1$
+	protected static final String PACKAGE_NAME2 = "pkg2"; //$NON-NLS-1$
+	protected static final String PACKAGE_NAME = PACKAGE_NAME1 + "::" + PACKAGE_NAME2; //$NON-NLS-1$
+	protected static final String PACKAGE_NAME_LABEL = FordiacMessages.Package + ":"; //$NON-NLS-1$
+	protected static final String PARENT_FOLDER_NAME_LABEL = "Enter or select the parent folder:"; //$NON-NLS-1$
 	protected static final String PROJECT_NAME = "UiTestProject"; //$NON-NLS-1$
+	protected static final String PROJECT_NAME_APP = PROJECT_NAME + "App"; //$NON-NLS-1$
+	protected static final String PROJECT_NAME_TREE_ITEM = PROJECT_NAME + " []"; //$NON-NLS-1$
 	protected static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
+	protected static final String PROPERTIES_TITLE = "Properties"; //$NON-NLS-1$
 	protected static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
+	protected static final String SELECT_TYPE_LABEL = FordiacMessages.SelectType + ":"; //$NON-NLS-1$
+	protected static final String SOURCE = "Source"; //$NON-NLS-1$
+	protected static final String SUBAPP = "SubApp"; //$NON-NLS-1$
+	protected static final String STRUCT = "Struct"; //$NON-NLS-1$
 	protected static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
+	protected static final String SYSTEM_EXPLORER_LABEL = "System Explorer"; //$NON-NLS-1$
+	protected static final String TEST_PARENT_FOLDER = "TestParentProject"; //$NON-NLS-1$
+	protected static final String TOOLBAR_BUTTON_ZOOM_FIT_PAGE = "Zoom fit Page"; //$NON-NLS-1$
+	protected static final String TEST_COMMENT = "Request from ideal Socket"; //$NON-NLS-1$
+	protected static final String TYPE_LABEL = "Type:"; //$NON-NLS-1$
 	protected static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
+	protected static final String TYPE_NAME_LABEL = FordiacMessages.TypeName + ":"; //$NON-NLS-1$
+	protected static final String TYPE_PROJECT = "Type..."; //$NON-NLS-1$
+	protected static final String TYPE_SELECTION = "Type Selection"; //$NON-NLS-1$
+	protected static final String VAR_INOUT = "Var InOuts"; //$NON-NLS-1$
+	protected static final String WITH = "With"; //$NON-NLS-1$
 
 	// FB pins and values
+	protected static final String ANY = "ANY"; //$NON-NLS-1$
 	protected static final String START = "START"; //$NON-NLS-1$
 	protected static final String STOP = "STOP"; //$NON-NLS-1$
 	protected static final String D = "D"; //$NON-NLS-1$
+	protected static final String DI1 = "DI1"; //$NON-NLS-1$
+	protected static final String DO1 = "DO1"; //$NON-NLS-1$
 	protected static final String G = "G"; //$NON-NLS-1$
 	protected static final String N = "N"; //$NON-NLS-1$
 	protected static final String Q = "Q"; //$NON-NLS-1$
 	protected static final String R = "R"; //$NON-NLS-1$
+	protected static final String S = "S"; //$NON-NLS-1$
 	protected static final String CD = "CD"; //$NON-NLS-1$
 	protected static final String CV = "CV"; //$NON-NLS-1$
 	protected static final String DT = "DT"; //$NON-NLS-1$
 	protected static final String EO = "EO"; //$NON-NLS-1$
 	protected static final String EI = "EI"; //$NON-NLS-1$
+	protected static final String EI1 = "EI1"; //$NON-NLS-1$
 	protected static final String PV = "PV"; //$NON-NLS-1$
 	protected static final String QD = "QD"; //$NON-NLS-1$
 	protected static final String QU = "QU"; //$NON-NLS-1$
@@ -124,6 +186,7 @@ public class Abstract4diacUITests {
 	protected static final String REQ = "REQ"; //$NON-NLS-1$
 	protected static final String CLKO = "CLKO"; //$NON-NLS-1$
 	protected static final String INIT = "INIT"; //$NON-NLS-1$
+	protected static final String INT = "INT"; //$NON-NLS-1$
 	protected static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
 	protected static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
 
@@ -139,7 +202,7 @@ public class Abstract4diacUITests {
 	protected static void beforeAll() {
 		bot = new SWT4diacGefBot();
 		bot.viewByTitle("Welcome").close(); //$NON-NLS-1$
-		SWTBotPreferences.TIMEOUT = 10000;
+		SWTBotPreferences.TIMEOUT = 30000;
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US"; //$NON-NLS-1$
 		createProject();
 	}
@@ -168,17 +231,8 @@ public class Abstract4diacUITests {
 	 * @param point  The Position of the FB on the canvas.
 	 */
 	protected static void dragAndDropEventsFB(final String fbName, final Point point) {
-		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
-		systemExplorerView.show();
-		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
-		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
-		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
-		treeProjectItem.select();
-		treeProjectItem.expand();
-		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(TYPE_LIBRARY_NODE);
-		typeLibraryNode.select();
-		typeLibraryNode.expand();
+		final SWTBotTreeItem typeLibraryNode = expandTypeLibraryTreeItemInSystemExplorer();
+		bot.waitUntil(treeItemHasNode(typeLibraryNode, EVENTS_NODE));
 		final SWTBotTreeItem eventsNode = typeLibraryNode.getNode(EVENTS_NODE);
 		eventsNode.select();
 		eventsNode.expand();
@@ -194,6 +248,71 @@ public class Abstract4diacUITests {
 
 		assertNotNull(canvas);
 		eCycleNode.dragAndDrop(canvas, point);
+	}
+
+	/**
+	 * Checks if given element is visible in the Application of the System in the
+	 * SystemExplorer Tree.
+	 *
+	 * @param element The name of the element (function block or SubApp) searched
+	 *                for in the Application of the System in the SystemExplorer
+	 *                tree.
+	 */
+	protected static boolean isElementInApplicationOfSystemInSystemExplorer(final String element) {
+		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
+		bot.waitUntil(treeItemHasNode(appNode, element));
+		final SWTBotTreeItem elementNode = appNode.getNode(element);
+		assertNotNull(elementNode);
+		return elementNode.isVisible();
+	}
+
+	/**
+	 * Checks if given Function Block is visible in the SubApp node of the
+	 * Application the System in the SystemExplorer Tree.
+	 *
+	 * @param fbName The name of the function block searched for in the SubApp node
+	 *               of the Application in the System in the SystemExplorer tree.
+	 */
+	protected static boolean isFBInSubAppOfSystemInSystemExplorer(final String fbName) {
+		final SWTBotTreeItem subAppNode = expandSubAppTreeItemInSystemExplorer();
+		final SWTBotTreeItem fbNode = subAppNode.getNode(fbName);
+		assertNotNull(fbNode);
+		return fbNode.isVisible();
+	}
+
+	protected static boolean isSubAppNodeInSystemExplorerEmpty() {
+		final SWTBotTreeItem subAppNode = expandSubAppTreeItemInSystemExplorer();
+		final List<String> subAppChildren = subAppNode.getNodes();
+		return subAppChildren.isEmpty();
+	}
+
+	protected static void createSubappWithDragRectangle(final int fromXPosition, final int fromYPosition,
+			final int toXPosition, final int toYPosition) {
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		editor.drag(fromXPosition, fromYPosition, toXPosition, toYPosition);
+		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
+
+	}
+
+	/**
+	 * Selects a FunctionBlock with the given Name in the editor.
+	 *
+	 * The function block is searched for with the given name in the editor.
+	 * However, as this only selects the name, the parent is retrieved and selected.
+	 * Only then is the searched function block selected as a whole.
+	 *
+	 * @param editor
+	 * @param name
+	 */
+	protected static SWTBot4diacGefEditor selectFBWithFBNameInEditor(final SWTBot4diacGefEditor editor,
+			final String name) {
+		assertNotNull(editor);
+		assertNotNull(editor.getEditPart(name));
+		editor.click(name);
+		final SWTBotGefEditPart parent = editor.getEditPart(name).parent();
+		assertNotNull(parent);
+		editor.click(parent);
+		return editor;
 	}
 
 	/**
@@ -300,11 +419,26 @@ public class Abstract4diacUITests {
 	 *
 	 * @param selectedEditParts The List of selected EditParts.
 	 * @param fbName            The FB that is searched for.
-	 * @return true is fbName is in the List, otherwise false.
+	 * @return true if fbName is in the List, otherwise false.
 	 */
 	protected static boolean isFbSelected(final List<SWTBotGefEditPart> selectedEditParts, final String fbName) {
 		return selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart).map(p -> (FBEditPart) p.part())
 				.anyMatch(fb -> fb.getModel().getName().equals(fbName));
+	}
+
+	/**
+	 * Checks if Subapplication is selected by searching selectedEditParts list and
+	 * returns the corresponding boolean value.
+	 *
+	 * @param selectedEditParts The List of selected EditParts.
+	 * @param subAppName        The Subapplication that is searched for.
+	 * @return true if Subapplication is in the List, otherwise false.
+	 */
+	protected static boolean isSubappSelected(final List<SWTBotGefEditPart> selectedEditParts,
+			final String subAppName) {
+		return selectedEditParts.stream().filter(p -> p.part() instanceof SubAppForFBNetworkEditPart)
+				.map(p -> (SubAppForFBNetworkEditPart) p.part())
+				.anyMatch(fb -> subAppName.equals(fb.getModel().getName()));
 	}
 
 	/**
@@ -333,6 +467,23 @@ public class Abstract4diacUITests {
 	}
 
 	/**
+	 * Returns the bounds of the searched function block
+	 *
+	 * @param editor
+	 * @param fBname
+	 * @return The rectangle with the bounds of the function block searched for
+	 */
+	protected static Rectangle getBoundsOfFB(final SWTBot4diacGefEditor editor, final String fBname) {
+		editor.getEditPart(fBname);
+		editor.click(fBname);
+		final SWTBotGefEditPart parent = editor.getEditPart(fBname).parent();
+		final IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
+		final Rectangle fbBounds = figure.getBounds().getCopy();
+		figure.translateToAbsolute(fbBounds);
+		return fbBounds;
+	}
+
+	/**
 	 * Select a given FB on the editing area and double click it to access the
 	 * CompositeInstanceViewer. After that the SWTBotGefEditor will be returned.
 	 *
@@ -351,6 +502,184 @@ public class Abstract4diacUITests {
 		assertNotNull(parent);
 		parent.doubleClick();
 		return editor;
+	}
+
+	/**
+	 * Creates a New Type with given name.
+	 *
+	 * @param parentName Name of the parent project.
+	 * @param typeName   Name of the new type.
+	 * @param typeLabel  Name of the Type Label.
+	 */
+	protected static void createFBType(final String parentName, final String typeName, final String typeLabel) {
+		bot.menu(FILE).menu(NEW).menu(TYPE_PROJECT).click();
+		final SWTBotShell shell = bot.shell(NEW_TYPE);
+		shell.activate();
+		bot.textWithLabel(TYPE_NAME_LABEL).setText(typeName);
+		bot.textWithLabel(PARENT_FOLDER_NAME_LABEL).setText(parentName);
+		assertEquals(bot.textWithLabel(TYPE_NAME_LABEL).getText(), typeName);
+		bot.tableWithLabel(SELECT_TYPE_LABEL).getTableItem(typeLabel).select();
+		bot.button(FINISH).click();
+		bot.waitUntil(shellCloses(shell));
+	}
+
+	/**
+	 * Deletes FB Type with give name.
+	 *
+	 * @param typeName Name of the new type.
+	 */
+	protected static void deleteFBType(final String typeName) {
+		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
+		systemExplorerView.show();
+		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
+
+		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
+		final SWTBotTree tree = new SWTBotTree(swtTree);
+		final SWTBotTreeItem parentItem = tree.getTreeItem(PROJECT_NAME);
+		parentItem.expand();
+		SWTBotTreeItem projectItem = null;
+		for (final SWTBotTreeItem item : parentItem.getItems()) {
+			if (item.getText().contains(typeName)) {
+				projectItem = item;
+				break;
+			}
+		}
+		projectItem.select();
+		bot.menu(EDIT).menu(DELETE).click();
+
+		// the project deletion confirmation dialog
+		final SWTBotShell shell = bot.shell(DELETE_RESOURCES);
+		shell.activate();
+		bot.button(OK).click();
+		bot.waitUntil(shellCloses(shell));
+		final List<String> nodeList = parentItem.getNodes();
+		assertFalse(nodeList.contains(typeName));
+	}
+
+	/**
+	 * Open FB Type in editor from explorer.
+	 *
+	 * @param parentName Name of the parent Project.
+	 * @param typeName   Name of the new type.
+	 */
+	protected static void openFBTypeInEditor(final String parentName, final String typeName) {
+		final SWTBotView systemExplorerView = bot.viewByTitle(SYSTEM_EXPLORER_LABEL);
+		systemExplorerView.show();
+		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
+		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
+		final SWTBotTree tree = new SWTBotTree(swtTree);
+		final SWTBotTreeItem parentItem = tree.getTreeItem(parentName);
+		parentItem.expand();
+		SWTBotTreeItem projectItem = null;
+		for (final SWTBotTreeItem item : parentItem.getItems()) {
+			if (item.getText().contains(typeName)) {
+				projectItem = item;
+				break;
+			}
+		}
+		assertTrue(projectItem.getText().contains(typeName));
+	}
+
+	/**
+	 * Deletes the given pin on the FB opened the provided editor.
+	 *
+	 * @param editor  Selected Gef Editor
+	 * @param pinName Name of pin.
+	 */
+	protected static void deletePin(final SWTBot4diacGefEditor editor, final String pinName) {
+		final SWTBotGefEditPart pin = editor.getEditPart(pinName);
+		assertNotNull(pin);
+		pin.click();
+		editor.clickContextMenu(DELETE);
+		assertNull(editor.getEditPart(pinName));
+	}
+
+	/**
+	 * Creates connection within FB Type from Property Sheet
+	 *
+	 * @param pin1   Name of pin1.
+	 * @param pin2   Name of pin2.
+	 * @param editor Selected Gef Editor
+	 */
+	protected static void createConnectionWithinFBTypeWithPropertySheet(final String pin1, final String pin2,
+			final SWTBot4diacGefEditor editor) {
+
+		final SWTBotGefEditPart port1 = editor.getEditPart(pin1);
+		port1.click();
+
+		final SWTBotGefEditPart port2 = editor.getEditPart(pin2);
+		port2.click();
+
+		SWTBot propertiesBot = bot.viewByTitle(PROPERTIES_TITLE).bot();
+		bot.viewByTitle(PROPERTIES_TITLE).setFocus();
+
+		if (PropertySheetHelper.selectPropertyTabItem(EVENT, propertiesBot)) {
+			propertiesBot = selectTabFromInterfaceProperties(EVENT);
+		} else {
+			propertiesBot = selectTabFromInterfaceProperties(DATA);
+		}
+
+		// Find the group with the label "With"
+		final SWTBotTable table = propertiesBot.tableInGroup(WITH);
+
+		table.select(pin1);
+		table.getTableItem(pin1).toggleCheck();
+		assertTrue(table.getTableItem(pin1).isChecked());
+		checkIfConnectionCanBeFound(pin1, pin2);
+	}
+
+	/**
+	 * Remove connection within FB Type from Property Sheet
+	 *
+	 * @param pin1   Name of pin1.
+	 * @param pin2   Name of pin2.
+	 * @param editor Selected Gef Editor
+	 */
+	protected static void removeConnectionWithinFBTypeWithPropertySheet(final String pin1, final String pin2,
+			final SWTBot4diacGefEditor editor) {
+
+		final SWTBotGefEditPart port1 = editor.getEditPart(pin1);
+		editor.click(port1);
+
+		final SWTBotGefEditPart port2 = editor.getEditPart(pin2);
+		port2.click();
+
+		SWTBot propertiesBot = bot.viewByTitle(PROPERTIES_TITLE).bot();
+		bot.viewByTitle(PROPERTIES_TITLE).setFocus();
+
+		if (PropertySheetHelper.selectPropertyTabItem(EVENT, propertiesBot)) {
+			propertiesBot = selectTabFromInterfaceProperties(EVENT);
+		} else {
+			propertiesBot = selectTabFromInterfaceProperties(DATA);
+		}
+
+		// Find the group with the label "With"
+		final SWTBotTable table = propertiesBot.tableInGroup(WITH);
+
+		table.select(pin1);
+		table.getTableItem(pin1).toggleCheck();
+		assertFalse(table.getTableItem(pin1).isChecked());
+		checkIfConnectionCanBeFound(pin1, pin2);
+	}
+
+	/**
+	 * Select tab from Interface's Properties
+	 *
+	 * @param tabName Name of Tab on Property Sheet under Interface
+	 */
+	protected static SWTBot selectTabFromInterfaceProperties(final String tabName) {
+		// Interface tab
+		final SWTBotCTabItem interfaceTab = bot.cTabItem(INTERFACE);
+		interfaceTab.activate();
+		interfaceTab.setFocus();
+
+		// Properties tab access
+		final SWTBot propertiesBot = bot.viewByTitle(PROPERTIES_TITLE).bot();
+		bot.viewByTitle(PROPERTIES_TITLE).setFocus();
+
+		// Tabs access inside property sheet
+		PropertySheetHelper.selectPropertyTabItem(tabName, propertiesBot);
+		return propertiesBot;
 	}
 
 	/**
@@ -385,10 +714,18 @@ public class Abstract4diacUITests {
 
 	/**
 	 * Cleans the canvas from all objects.
+	 *
+	 * First, the application node in the System Explorer is selected to ensure that
+	 * all objects are selected and then deleted.
+	 *
+	 * @author Andrea Zoitl
 	 */
 	@SuppressWarnings("static-method")
 	@AfterEach
 	protected void cleanEditorArea() {
+		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
+		appNode.contextMenu("Open").click();
+
 		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		viewer.getCanvas().setFocus();
@@ -410,4 +747,84 @@ public class Abstract4diacUITests {
 		bot.resetWorkbench();
 	}
 
+	/**
+	 * Expands the 4diac IDE Project node (SWTBotTreeItem) in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return treeProjectItem the expanded Project node
+	 */
+	private static SWTBotTreeItem expandProjectTreeItemInSystemExplorer() {
+		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
+		systemExplorerView.show();
+		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
+		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
+		final SWTBotTree tree = new SWTBotTree(swtTree);
+		assertNotNull(tree);
+		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
+		treeProjectItem.select();
+		treeProjectItem.expand();
+		return treeProjectItem;
+	}
+
+	/**
+	 * Expands the System node (SWTBotTreeItem) in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return systemNode the expanded System node
+	 */
+	private static SWTBotTreeItem expandSystemTreeItemInSystemExplorer() {
+		final SWTBotTreeItem treeProjectItem = expandProjectTreeItemInSystemExplorer();
+		bot.waitUntil(treeItemHasNode(treeProjectItem, PROJECT_NAME_TREE_ITEM));
+		final SWTBotTreeItem systemNode = treeProjectItem.getNode(PROJECT_NAME_TREE_ITEM);
+		systemNode.select();
+		systemNode.expand();
+		return systemNode;
+	}
+
+	/**
+	 * Expands the Type Library node (SWTBotTreeItem) in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return typeLibraryNode the expanded Type Library node
+	 */
+	private static SWTBotTreeItem expandTypeLibraryTreeItemInSystemExplorer() {
+		final SWTBotTreeItem treeProjectItem = expandProjectTreeItemInSystemExplorer();
+		bot.waitUntil(treeItemHasNode(treeProjectItem, TYPE_LIBRARY_NODE));
+		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(TYPE_LIBRARY_NODE);
+		typeLibraryNode.select();
+		typeLibraryNode.expand();
+		return typeLibraryNode;
+	}
+
+	/**
+	 * Expands the Application node (SWTBotTreeItem) in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return appNode the expanded Application node
+	 */
+	private static SWTBotTreeItem expandApplicationTreeItemInSystemExplorer() {
+		final SWTBotTreeItem systemNode = expandSystemTreeItemInSystemExplorer();
+		bot.waitUntil(treeItemHasNode(systemNode, PROJECT_NAME_APP));
+		final SWTBotTreeItem appNode = systemNode.getNode(PROJECT_NAME_APP);
+		assertNotNull(appNode);
+		appNode.select();
+		appNode.expand();
+		return appNode;
+	}
+
+	/**
+	 * Expands the Subapplication node (SWTBotTreeItem) of the 1. level of an
+	 * Application in the System Explorer
+	 *
+	 * @author Andrea Zoitl
+	 * @return appNode the expanded Application node
+	 */
+	private static SWTBotTreeItem expandSubAppTreeItemInSystemExplorer() {
+		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
+		final SWTBotTreeItem subAppNode = appNode.getNode(SUBAPP);
+		assertNotNull(subAppNode);
+		subAppNode.select();
+		subAppNode.expand();
+		return subAppNode;
+	}
 }

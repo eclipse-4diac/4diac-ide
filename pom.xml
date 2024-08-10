@@ -19,16 +19,16 @@
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 		<maven.compiler.release/>
-		<tycho.version>4.0.6</tycho.version>
-		<tycho-repo.url>https://download.eclipse.org/releases/2024-03</tycho-repo.url>
+		<tycho.version>4.0.8</tycho.version>
+		<tycho-repo.url>https://download.eclipse.org/releases/2024-06</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
 		<sonar.java.source>21</sonar.java.source>
 		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/21/updates/release/latest</org.eclipse.justj.jre.repository>
-        <xtend-version>2.34.0</xtend-version>
+        <xtend-version>2.35.0</xtend-version>
         <xtend-java-version>17</xtend-java-version>
-        <eclipse.platform.version>4.31</eclipse.platform.version>
-        <equinox.executable.version>3.8.2400</equinox.executable.version>
+        <eclipse.platform.version>4.32</eclipse.platform.version>
+        <equinox.executable.version>3.8.2500</equinox.executable.version>
         <eclipse.cbi.version>1.4.3</eclipse.cbi.version>
 	</properties>
 
@@ -63,7 +63,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.3.2</version>
+				<version>3.4.0</version>
 				<configuration>
 					<filesets>
 						<fileset>
@@ -185,7 +185,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.3.1</version>
+				<version>3.4.0</version>
 				<configuration>
 					<logViolationsToConsole>true</logViolationsToConsole>
 					<consoleOutput>true</consoleOutput>

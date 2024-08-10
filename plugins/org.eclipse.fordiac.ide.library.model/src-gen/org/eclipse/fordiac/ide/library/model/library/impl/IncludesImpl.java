@@ -80,8 +80,9 @@ public class IncludesImpl extends EObjectImpl implements Includes {
 		switch (featureID) {
 			case LibraryPackage.INCLUDES__LIBRARY_ELEMENT:
 				return ((InternalEList<?>)getLibraryElement()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -94,8 +95,9 @@ public class IncludesImpl extends EObjectImpl implements Includes {
 		switch (featureID) {
 			case LibraryPackage.INCLUDES__LIBRARY_ELEMENT:
 				return getLibraryElement();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -111,8 +113,10 @@ public class IncludesImpl extends EObjectImpl implements Includes {
 				getLibraryElement().clear();
 				getLibraryElement().addAll((Collection<? extends LibraryElement>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -126,8 +130,10 @@ public class IncludesImpl extends EObjectImpl implements Includes {
 			case LibraryPackage.INCLUDES__LIBRARY_ELEMENT:
 				getLibraryElement().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -140,8 +146,9 @@ public class IncludesImpl extends EObjectImpl implements Includes {
 		switch (featureID) {
 			case LibraryPackage.INCLUDES__LIBRARY_ELEMENT:
 				return libraryElement != null && !libraryElement.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } //IncludesImpl

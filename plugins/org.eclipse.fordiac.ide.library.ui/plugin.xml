@@ -41,4 +41,86 @@
             priority="normal">
       </content-type>
    </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
+            name="Library Importer">
+      </category>
+      <wizard
+            category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
+            class="org.eclipse.fordiac.ide.library.ui.wizards.ArchivedLibraryImportWizard"
+            id="org.eclipse.fordiac.ide.library.ui.wizards.ArchivedLibraryImportWizard"
+            name="Archived Package Import">
+         <description>
+            Import a zipped package into the workspace.
+         </description>
+      </wizard>
+      <wizard
+            category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
+            class="org.eclipse.fordiac.ide.library.ui.wizards.ExtractedLibraryImportWizard"
+            id="org.eclipse.fordiac.ide.library.ui.wizards.ExtractedLibraryImportWizard"
+            name="Existing Package Import">
+         <description>
+            Import an existing file into the workspace.
+         </description>
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.activities">
+    <activity
+    	name="Library Import Wizard Hiding Activity"
+    	description="Activity for disabling the library import wizards when the selection is not correct"
+    	id="org.eclipse.fordiac.ide.ui.wizardDisabling">
+    	<enabledWhen>
+    		<and>
+    			<count value="1"/>
+      			<iterate ifEmpty="false">
+      				<or>
+      					<and>
+                        	<instanceof value="org.eclipse.core.resources.IFolder"/>
+                          	<test property="org.eclipse.core.resources.name"
+                             	value="Type Library"/>
+                        </and>
+        				<instanceof value="org.eclipse.core.resources.IProject"/>
+        			</or>
+    			</iterate>
+    		</and>
+   		</enabledWhen>
+  	</activity>
+  	<activityPatternBinding 
+  		activityId="org.eclipse.fordiac.ide.ui.wizardDisabling" 
+  		pattern=".*/org.eclipse.fordiac.ide.library.ui.wizards.ArchivedLibraryImportWizard">
+	</activityPatternBinding>
+	<activityPatternBinding 
+  		activityId="org.eclipse.fordiac.ide.ui.wizardDisabling" 
+  		pattern=".*/org.eclipse.fordiac.ide.library.ui.wizards.ExtractedLibraryImportWizard">
+	</activityPatternBinding>
+   </extension>
+   <extension point="org.eclipse.ltk.core.refactoring.deleteParticipants">
+      <deleteParticipant
+            class="org.eclipse.fordiac.ide.library.ui.refactoring.DeleteLibraryRefactoringParticipant"
+            id="org.eclipse.fordiac.ide.library.ui.deleteLibrary"
+            name="Delete Library Folder Handler">
+         <enablement>
+            <and>
+               <instanceof
+                     value="org.eclipse.core.resources.IFolder">
+               </instanceof>
+            </and>
+         </enablement>
+      </deleteParticipant>
+   </extension>
+   <extension
+         point="org.eclipse.ltk.ui.refactoring.changePreviewViewers">
+      <changePreviewViewer
+            class="org.eclipse.fordiac.ide.typemanagement.wizards.ChangeConfigurationViewer"
+            id="org.eclipse.fordiac.ide.typemanagement.wizards.DeleteLibraryChangeViewer">
+         <enablement>
+         <or>
+		 <instanceof value="org.eclipse.fordiac.ide.library.ui.refactoring.DeleteLibraryDependencyChange"/>
+         </or>
+         </enablement>
+      </changePreviewViewer>
+   </extension>
 </plugin>

@@ -66,16 +66,13 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		if (!isActive()) {
 			super.activate();
 			getRefElement().eAdapters().add(nameChangeAdapter);
-			if (!isSubappInterfaceTarget()) {
-				final FBNetworkElement parent = getRefElement().getFBNetworkElement();
-				if (parent instanceof final SubApp subapp && subapp.isUnfolded()) {
-					parent.eAdapters().add(nameChangeAdapter);
-					final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
-					if (grandParent instanceof SubApp) {
-						grandParent.eAdapters().add(nameChangeAdapter);
-					}
+			final FBNetworkElement parent = getRefElement().getFBNetworkElement();
+			if (parent != null) {
+				parent.eAdapters().add(nameChangeAdapter);
+				final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
+				if (grandParent != null) {
+					grandParent.eAdapters().add(nameChangeAdapter);
 				}
-
 			}
 		}
 	}
@@ -84,14 +81,12 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			getRefElement().eAdapters().remove(nameChangeAdapter);
-			if (!isSubappInterfaceTarget()) {
-				final FBNetworkElement parent = getRefElement().getFBNetworkElement();
-				if (parent != null && parent.eAdapters().contains(nameChangeAdapter)) {
-					parent.eAdapters().remove(nameChangeAdapter);
-					final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
-					if (grandParent != null && grandParent.eAdapters().contains(nameChangeAdapter)) {
-						grandParent.eAdapters().remove(nameChangeAdapter);
-					}
+			final FBNetworkElement parent = getRefElement().getFBNetworkElement();
+			if (parent != null && parent.eAdapters().contains(nameChangeAdapter)) {
+				parent.eAdapters().remove(nameChangeAdapter);
+				final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
+				if (grandParent != null && grandParent.eAdapters().contains(nameChangeAdapter)) {
+					grandParent.eAdapters().remove(nameChangeAdapter);
 				}
 			}
 			super.deactivate();
@@ -178,10 +173,6 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		return PreferenceGetter.getDataColor(getRefElement().getType().getName());
 	}
 
-	private boolean isSubappInterfaceTarget() {
-		return getModel() instanceof TargetInterfaceElement.SubapTargetInterfaceElement;
-	}
-
 	private static String labelTruncate(final String label) {
 		if (label.length() <= MAX_LABEL_LENGTH) {
 			return label;
@@ -192,7 +183,6 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	public static void openInBreadCrumb(final IInterfaceElement target) {
 		final IEditorPart editor = OpenListenerManager.openEditor(getTargetEditorElement(target));
 		HandlerHelper.selectElement(target, editor);
-
 	}
 
 	private static EObject getTargetEditorElement(final IInterfaceElement target) {
@@ -203,10 +193,20 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		}
 
 		FBNetworkElement parent = fbnEl.getOuterFBNetworkElement();
+
+		// we went from inside to outside and reached toplevel
+		if (parent == null) {
+			return fbnEl.getFbNetwork().getApplication();
+		}
+
 		// For unfolded subapps find the next parent that is not expanded as refElement
 		while (parent instanceof final SubApp subApp && subApp.isUnfolded()) {
+			if (subApp.getOuterFBNetworkElement() == null) {
+				return parent.getFbNetwork().getApplication();
+			}
 			parent = subApp.getOuterFBNetworkElement();
 		}
+
 		return parent;
 	}
 }

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,20 +11,22 @@
  * Contributors:
  *   Ulzii Jargalsaikhan - initial API and implementation and/or initial documentation
  *   Martin Melik Merkumians - replace commaSpacing method, fixed some formating methods
+ *   Martin Jobst - autowrap support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.formatting2
 
 import com.google.inject.Inject
-import java.util.ArrayList
+import java.util.List
 import java.util.regex.Pattern
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
@@ -39,8 +42,13 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STPragma
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
@@ -57,7 +65,6 @@ import org.eclipse.xtext.formatting2.IFormattableDocument
 import org.eclipse.xtext.formatting2.IHiddenRegionFormatting
 import org.eclipse.xtext.formatting2.ITextReplacer
 import org.eclipse.xtext.formatting2.ITextReplacerContext
-import org.eclipse.xtext.formatting2.internal.AbstractTextReplacer
 import org.eclipse.xtext.formatting2.internal.MultilineCommentReplacer
 import org.eclipse.xtext.formatting2.internal.SinglelineCodeCommentReplacer
 import org.eclipse.xtext.formatting2.internal.SinglelineDocCommentReplacer
@@ -198,14 +205,23 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	/** Formats the STVarDeclarations */
 	def dispatch void format(STVarDeclaration varDeclaration, extension IFormattableDocument document) {
-		varDeclaration.regionFor.keywords(",").forEach[prepend[noSpace] append[oneSpace]]
-		varDeclaration.regionFor.keywords(":", ":=").forEach[surround[oneSpace]]
+		varDeclaration.regionFor.keywords(",").forEach [
+			prepend[noSpace]
+			append[oneSpace]
+		]
+		varDeclaration.regionFor.keywords(":", ":=").forEach [
+			surround[oneSpace]
+			append[
+				autowrap
+				onAutowrap = new STCoreAutowrapFormatter(varDeclaration.nextHiddenRegion)
+			]
+		]
 		varDeclaration.regionFor.keyword(";").prepend[noSpace]
 
 		if (varDeclaration.type.name != "") {
 			val typeRegion = varDeclaration.regionFor.assignment(STVarDeclarationAccess.getTypeAssignment_5)
 			if (typeRegion !== null) {
-				document.addReplacer(new KeywordCaseTextReplacer(document, typeRegion, varDeclaration.type.name))
+				document.addReplacer(new QualifiedNameReplacer(typeRegion, varDeclaration.type))
 			}
 		}
 
@@ -216,25 +232,41 @@ class STCoreFormatter extends AbstractFormatter2 {
 			varDeclaration.regionFor.keyword(STVarDeclarationAccess.getRightSquareBracketKeyword_4_1_0_3).append [
 				oneSpace
 			]
+			varDeclaration.ranges.formatList(document)
 		}
 
-		varDeclaration?.defaultValue.format
+		varDeclaration.defaultValue.format
+		varDeclaration.pragma.prepend[oneSpace]
+		varDeclaration.pragma.format
 		varDeclaration.append[newLine]
+	}
+
+	/** Formats the STPragma */
+	def dispatch void format(STPragma pragma, extension IFormattableDocument document) {
+		pragma.formatBlock(pragma.attributes, pragma.regionFor.keyword("{"), pragma.regionFor.keyword("}"), document)
+	}
+
+	/** Formats the STPragma */
+	def dispatch void format(STAttribute attribute, extension IFormattableDocument document) {
+		attribute.regionFor.keyword(":=").surround[oneSpace]
+		attribute.value.format
 	}
 
 	/** Formats the STIfStatements */
 	def dispatch void format(STIfStatement ifStatement, extension IFormattableDocument document) {
 		interior(
-			ifStatement.regionFor.keyword("THEN").append[newLine],
-			ifStatement.elseifs?.isEmpty
-				? (ifStatement.^else !== null
-				? ifStatement.^else.regionFor.keyword("ELSE")
-				: ifStatement.regionFor.keyword("END_IF"))
+			ifStatement.regionFor.keyword("THEN"),
+			ifStatement.elseifs.empty
+				? (ifStatement.^else !== null ? ifStatement.^else.regionFor.keyword("ELSE") : ifStatement.regionFor.
+				keyword("END_IF"))
 				: ifStatement.elseifs.get(0).regionFor.keyword("ELSIF"),
 			[indent]
 		)
-		ifStatement.condition.format
-		ifStatement.regionFor.keyword("THEN").append[newLine]
+		ifStatement.condition.formatCondition(
+			ifStatement.regionFor.keyword("IF"),
+			ifStatement.regionFor.keyword("THEN"),
+			document
+		)
 		ifStatement.statements.forEach[format]
 		ifStatement.elseifs.forEach[format]
 		ifStatement.^else.format
@@ -244,8 +276,11 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	/** Formats the STElseIfStatements */
 	def dispatch void format(STElseIfPart elseIfStatement, extension IFormattableDocument document) {
-		elseIfStatement.condition.format
-		elseIfStatement.regionFor.keyword(STElseIfPartAccess.THENKeyword_2).append[newLine]
+		elseIfStatement.condition.formatCondition(
+			elseIfStatement.regionFor.keyword("ELSIF"),
+			elseIfStatement.regionFor.keyword("THEN"),
+			document
+		)
 		elseIfStatement.statements.forEach[surround[indent] format]
 	}
 
@@ -262,7 +297,19 @@ class STCoreFormatter extends AbstractFormatter2 {
 			forStatement.regionFor.keyword("END_FOR"),
 			[indent]
 		)
-		forStatement.regionFor.keyword(STForStatementAccess.colonEqualsSignKeyword_2).surround[oneSpace]
+		val autowrapFormatter = new STCoreAutowrapFormatter(forStatement.regionFor.keyword("DO").previousHiddenRegion)
+		forStatement.regionFor.keyword(STForStatementAccess.colonEqualsSignKeyword_2).surround[oneSpace].append [
+			autowrap
+			onAutowrap = autowrapFormatter
+		]
+		forStatement.regionFor.keyword(STForStatementAccess.TOKeyword_4).surround[oneSpace].prepend [
+			autowrap
+			onAutowrap = autowrapFormatter
+		]
+		forStatement.regionFor.keyword(STForStatementAccess.BYKeyword_6_0).surround[oneSpace].prepend [
+			autowrap
+			onAutowrap = autowrapFormatter
+		]
 		forStatement.statements.forEach[format]
 		forStatement.regionFor.keyword(";").surround[noSpace]
 		forStatement.append[setNewLines(1, 2, 2)]
@@ -271,11 +318,15 @@ class STCoreFormatter extends AbstractFormatter2 {
 	/** Formats the STWhileStatements */
 	def dispatch void format(STWhileStatement whileStatement, extension IFormattableDocument document) {
 		interior(
-			whileStatement.regionFor.keyword("DO").append[newLine],
+			whileStatement.regionFor.keyword("DO"),
 			whileStatement.regionFor.keyword("END_WHILE"),
 			[indent]
 		)
-		whileStatement.condition.format
+		whileStatement.condition.formatCondition(
+			whileStatement.regionFor.keyword("WHILE"),
+			whileStatement.regionFor.keyword("DO"),
+			document
+		)
 		whileStatement.statements.forEach[format]
 		whileStatement.regionFor.keyword(";").surround[noSpace]
 		whileStatement.append[setNewLines(1, 2, 2)]
@@ -310,7 +361,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	/** Formats the STCaseCases */
 	def dispatch format(STCaseCases stCase, extension IFormattableDocument document) {
-		stCase.conditions.forEach[format]
+		stCase.conditions.formatList(document)
 		stCase.regionFor.keyword(STCaseCasesAccess.colonKeyword_2).prepend[oneSpace].append[newLine]
 		stCase.statements.forEach[surround[indent] format]
 	}
@@ -318,7 +369,10 @@ class STCoreFormatter extends AbstractFormatter2 {
 	/** Formats the STAssignment */
 	def dispatch void format(STAssignment assignment, extension IFormattableDocument document) {
 		assignment.left.format
-		assignment.regionFor.keyword(":=").surround[oneSpace]
+		assignment.regionFor.keyword(":=").surround[oneSpace].append [
+			autowrap
+			onAutowrap = new STCoreAutowrapFormatter(assignment.nextHiddenRegion)
+		]
 		assignment.right.format
 		assignment.regionFor.keyword(";").prepend[noSpace].append[setNewLines(1, 1, 2)]
 	}
@@ -343,72 +397,60 @@ class STCoreFormatter extends AbstractFormatter2 {
 		arrayInitExpression.regionFor.keyword(STArrayInitializerExpressionAccess.rightSquareBracketKeyword_3).prepend [
 			noSpace
 		]
-		arrayInitExpression.regionFor.keywords(STArrayInitializerExpressionAccess.commaKeyword_2_0).forEach [
-			prepend[noSpace]
-			append[oneSpace]
-		]
-		arrayInitExpression.values.forEach[format]
+		arrayInitExpression.values.formatList(document)
 	}
 
-	/** Formats the STArrayInitElement */
-	def dispatch void format(STArrayInitElement element, extension IFormattableDocument document) {
-		element.indexOrInitExpression.format
+	/** Formats the STSingleArrayInitElement */
+	def dispatch void format(STSingleArrayInitElement element, extension IFormattableDocument document) {
+		element.initExpression.format
+	}
+
+	/** Formats the STRepeatArrayInitElement */
+	def dispatch void format(STRepeatArrayInitElement element, extension IFormattableDocument document) {
+		element.regionFor.keyword('(').prepend[noSpace].append[noSpace]
+		element.regionFor.keyword(',').prepend[noSpace].append[oneSpace]
+		element.regionFor.keyword(')').prepend[noSpace]
 		element.initExpressions.forEach[format]
+	}
+
+	/** Formats the STStructInitializerExpression */
+	def dispatch void format(STStructInitializerExpression structInitializerExpression,
+		extension IFormattableDocument document) {
+		structInitializerExpression.regionFor.keyword(STStructInitializerExpressionAccess.leftParenthesisKeyword_0).
+			append [
+				noSpace
+			]
+		structInitializerExpression.values.formatList(document)
+		structInitializerExpression.regionFor.keyword(STStructInitializerExpressionAccess.rightParenthesisKeyword_3).
+			prepend [
+				noSpace
+			]
+	}
+
+	/** Formats the STStructInitElement */
+	def dispatch void format(STStructInitElement element, extension IFormattableDocument document) {
+		element.regionFor.keyword(STStructInitElementAccess.colonEqualsSignKeyword_1).surround[oneSpace].append [
+			autowrap
+			onAutowrap = new STCoreAutowrapFormatter(element.nextHiddenRegion)
+		]
+		element.value.format
 	}
 
 	/** Formats the STBinaryExpression */
 	def dispatch void format(STBinaryExpression binaryExpression, extension IFormattableDocument document) {
-		val maxLineWidth = getPreference(FormatterPreferenceKeys.maxLineWidth)
-		if (!(binaryExpression.eContainer instanceof STBinaryExpression ||
-			binaryExpression.eContainer instanceof STCallArgument) ||
-			(binaryExpression.eContainer instanceof STCallArgument &&
-				binaryExpression.regionForEObject?.length > maxLineWidth)) {
-			val iter = binaryExpression.allRegionsFor.features(ST_BINARY_EXPRESSION__OP).filter [
-				val line = it.lineRegions.get(0)
-
-				var semanticLength = line.length
-				var hidden = it.nextHiddenRegion
-				while (hidden !== null && line.contains(hidden.offset)) {
-					if(hidden.containsComment) semanticLength -= hidden.length
-					hidden = hidden.nextHiddenRegion
-				}
-
-				return semanticLength > maxLineWidth
-			].iterator
-
-			var offsetAdd = 0
-			while (iter.hasNext) {
-				val current = iter.next
-				val line = current.lineRegions.get(0)
-				val nextSemantic = current.nextSemanticRegion
-				val l = (nextSemantic.offset + nextSemantic.length + nextSemantic.nextHiddenRegion.length - line.offset)
-				val toAdd = current.offset - line.offset
-				if (l - offsetAdd > maxLineWidth) {
-					current.prepend[newLine]
-					current.surround[indent]
-					offsetAdd += toAdd
-				}
-			}
-		}
-
 		val opRegion = binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP)
 		if (opRegion !== null) {
 			if (binaryExpression.op != STBinaryOperator.RANGE) {
-				if (opRegion.previousHiddenRegion.text.indexOf("\n") === -1) {
-					opRegion.surround[oneSpace]
-				}
+				opRegion.surround[oneSpace].prepend [
+					autowrap(opRegion.length + binaryExpression.right.regionForEObject.length)
+					onAutowrap = new STCoreAutowrapFormatter(binaryExpression.nextHiddenRegion)
+				]
 			}
 
 			if (binaryExpression.op == STBinaryOperator.AMPERSAND) {
-				document.addReplacer(new AbstractTextReplacer(document, opRegion) {
-					override createReplacements(ITextReplacerContext context) {
-						context.addReplacement(opRegion.replaceWith(STBinaryOperator.AND.toString))
-						return context
-					}
-
-				})
+				document.addReplacer(new KeywordTextReplacer(opRegion, STBinaryOperator.AND.toString))
 			} else if (binaryExpression.op == STBinaryOperator.AND) {
-				document.addReplacer(new KeywordCaseTextReplacer(document, opRegion))
+				document.addReplacer(new KeywordCaseTextReplacer(opRegion))
 			}
 		}
 
@@ -428,60 +470,33 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	/** Formats the STMemberAccessExpression */
 	def dispatch void format(STMemberAccessExpression mExpression, extension IFormattableDocument document) {
-		mExpression.regionFor.keyword(".").surround[noSpace]
+		mExpression.regionFor.keyword(".").surround[noSpace].prepend [
+			autowrap(mExpression.member.regionForEObject.length)
+			onAutowrap = new STCoreAutowrapFormatter(mExpression.nextHiddenRegion)
+		]
 		mExpression.member.format
 		mExpression.receiver.format
 	}
 
 	/** Formats the STFeatureExpression */
 	def dispatch void format(STFeatureExpression featureExpression, extension IFormattableDocument document) {
-		if (featureExpression.isCall) {
-			val maxLineWidth = getPreference(FormatterPreferenceKeys.maxLineWidth)
-			val commas = new ArrayList<ISemanticRegion>()
-			var iter = featureExpression.allRegionsFor.keywords(STFeatureExpressionAccess.commaKeyword_2_1_1_0).filter [
-				val line = it.lineRegions.get(0)
-				var semanticLength = line.length
-				var hidden = it.nextHiddenRegion
-				while (hidden !== null && line.contains(hidden.offset)) {
-					if(hidden.containsComment) semanticLength -= hidden.length
-					hidden = hidden.nextHiddenRegion
-				}
-
-				return semanticLength > maxLineWidth
-			]
-
-			for (ISemanticRegion commaRegion : iter) {
-				commas.add(commaRegion)
-			}
-
-			var offsetAdd = 0
-			for (var i = 0; i < commas.length; i++) {
-				val current = commas.get(i)
-				val line = current.lineRegions.get(0)
-				val nextRelevant = i < commas.length - 1
-						? commas.get(i + 1)
-						: featureExpression.regionFor.keyword(STFeatureExpressionAccess.rightParenthesisKeyword_2_2)
-				val l = (nextRelevant.offset + nextRelevant.length - line.offset)
-				if (line == nextRelevant.lineRegions.get(0)) {
-					val toAdd = current.offset - line.offset
-					if (l - offsetAdd > maxLineWidth) {
-						current.append[newLine]
-						current.nextSemanticRegion.surround[indent]
-						offsetAdd += toAdd
-					}
-				}
-			}
-		}
-		featureExpression.regionFor.keywords(STFeatureExpressionAccess.commaKeyword_2_1_1_0).forEach [
-			prepend[noSpace]
-			append[oneSpace]
-
-		]
 		featureExpression.regionFor.keyword(STFeatureExpressionAccess.callLeftParenthesisKeyword_2_0_0).surround [
 			noSpace
 		]
 		featureExpression.regionFor.keyword(STFeatureExpressionAccess.rightParenthesisKeyword_2_2).prepend[noSpace]
-		featureExpression.parameters.forEach[format]
+		featureExpression.parameters.formatList(document)
+		featureExpression.regionFor.keyword(";").prepend[noSpace].append[setNewLines(1, 1, 2)]
+	}
+
+	/** Formats the STBuiltinFeatureExpression */
+	def dispatch void format(STBuiltinFeatureExpression featureExpression, extension IFormattableDocument document) {
+		featureExpression.regionFor.keyword(STBuiltinFeatureExpressionAccess.callLeftParenthesisKeyword_2_0_0).surround [
+			noSpace
+		]
+		featureExpression.parameters.formatList(document)
+		featureExpression.regionFor.keyword(STBuiltinFeatureExpressionAccess.rightParenthesisKeyword_2_2).prepend [
+			noSpace
+		]
 		featureExpression.regionFor.keyword(";").prepend[noSpace].append[setNewLines(1, 1, 2)]
 	}
 
@@ -501,7 +516,10 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	/** Formats the STCallNamedInputArgument */
 	def dispatch void format(STCallNamedInputArgument namedInputArgument, extension IFormattableDocument document) {
-		namedInputArgument.regionFor.keyword(":=").surround[oneSpace]
+		namedInputArgument.regionFor.keyword(":=").surround[oneSpace].append [
+			autowrap
+			onAutowrap = new STCoreAutowrapFormatter(namedInputArgument.nextHiddenRegion)
+		]
 		namedInputArgument.argument.format
 	}
 
@@ -511,21 +529,99 @@ class STCoreFormatter extends AbstractFormatter2 {
 			namedOutputArgument.regionFor.keyword(STCallNamedOutputArgumentAccess.notNOTKeyword_0_0).append[oneSpace]
 		}
 		namedOutputArgument.regionFor.keyword(STCallNamedOutputArgumentAccess.equalsSignGreaterThanSignKeyword_2).
-			surround[oneSpace]
+			surround[oneSpace].append [
+				autowrap
+				onAutowrap = new STCoreAutowrapFormatter(namedOutputArgument.nextHiddenRegion)
+			]
 		namedOutputArgument.argument.format
 	}
 
 	/** Formats the STArrayAccessExpression */
 	def dispatch void format(STArrayAccessExpression arrayAccessExpression, extension IFormattableDocument document) {
+		arrayAccessExpression.receiver.format
 		arrayAccessExpression.regionFor.keyword(STAccessExpressionAccess.leftSquareBracketKeyword_1_1_1).append[noSpace]
+		arrayAccessExpression.index.formatList(document)
 		arrayAccessExpression.regionFor.keyword(STAccessExpressionAccess.rightSquareBracketKeyword_1_1_4).prepend [
 			noSpace
 		]
-		arrayAccessExpression.regionFor.keywords(STAccessExpressionAccess.commaKeyword_1_1_3_0).forEach [
-			prepend[noSpace]
-			append[oneSpace]
+	}
+
+	def protected void formatBlock(EObject blockElement, List<? extends EObject> listElements, ISemanticRegion begin,
+		ISemanticRegion end, extension IFormattableDocument document) {
+		if (blockElement.multiline) {
+			listElements.formatBlockMultiline(begin, end, document)
+		} else {
+			formatConditionally(begin.offset, end.endOffset - begin.offset, [ subDocument |
+				listElements.formatBlockSingleline(begin, end, subDocument.requireFitsInLine)
+			], [ subDocument |
+				listElements.formatBlockMultiline(begin, end, subDocument)
+			])
+		}
+	}
+
+	def protected void formatBlockSingleline(List<? extends EObject> listElements, ISemanticRegion begin,
+		ISemanticRegion end, extension IFormattableDocument document) {
+		begin.append[noSpace]
+		listElements.formatList(document)
+		end.prepend[noSpace]
+	}
+
+	def protected void formatBlockMultiline(List<? extends EObject> listElements, ISemanticRegion begin,
+		ISemanticRegion end, extension IFormattableDocument document) {
+		begin.append[newLine]
+		interior(begin, end)[indent]
+		listElements.formatListMultiline(document)
+		end.prepend[newLine]
+	}
+
+	def protected void formatList(List<? extends EObject> semanticElements, extension IFormattableDocument document) {
+		if (!semanticElements.empty) {
+			val autowrapFormatter = new STCoreAutowrapFormatter(semanticElements.lastOrNull.nextHiddenRegion)
+			semanticElements.forEach [
+				val autowrapLength = regionForEObject.length
+				immediatelyPreceding.keyword(',').prepend[noSpace].append [
+					oneSpace
+					autowrap(autowrapLength)
+					onAutowrap = autowrapFormatter
+				]
+				format
+			]
+		}
+	}
+
+	def protected void formatListMultiline(List<? extends EObject> semanticElements,
+		extension IFormattableDocument document) {
+		semanticElements.forEach [
+			immediatelyPreceding.keyword(',').prepend[noSpace].append[newLine]
+			format
 		]
-		arrayAccessExpression.receiver.format
+	}
+
+	def protected void formatCondition(EObject semanticElement, ISemanticRegion begin, ISemanticRegion end,
+		extension IFormattableDocument document) {
+		if (semanticElement.multiline) {
+			semanticElement.format
+			end.prepend[newLine]
+		} else {
+			formatConditionally(begin.offset, end.endOffset - begin.offset, [ subDocument |
+				semanticElement.formatSinglelineCondition(end, subDocument.requireFitsInLine)
+			], [ subDocument |
+				semanticElement.formatMultilineCondition(end, subDocument)
+			])
+		}
+		end.append[newLine]
+	}
+
+	def protected void formatSinglelineCondition(EObject semanticElement, ISemanticRegion end,
+		extension IFormattableDocument document) {
+		semanticElement.format
+		end.prepend[oneSpace]
+	}
+
+	def protected void formatMultilineCondition(EObject semanticElement, ISemanticRegion end,
+		extension IFormattableDocument document) {
+		semanticElement.format
+		end.prepend[newLine]
 	}
 
 	override ITextReplacer createWhitespaceReplacer(ITextSegment hiddens, IHiddenRegionFormatting formatting) {
@@ -545,8 +641,9 @@ class STCoreFormatter extends AbstractFormatter2 {
 					} else {
 						var lineCount = 0
 						if (region instanceof IHiddenRegionPart) {
-							lineCount = (region as IHiddenRegionPart).previousHiddenPart instanceof IComment ? region.
-								getLineCount() : region.getLineCount() - 1;
+							lineCount = (region as IHiddenRegionPart).previousHiddenPart instanceof IComment
+								? region.getLineCount()
+								: region.getLineCount() - 1;
 						} else
 							lineCount = region.getLineCount() - 1;
 						if (newLineMin !== null && newLineMin > lineCount)
@@ -657,8 +754,14 @@ class STCoreFormatter extends AbstractFormatter2 {
 		replacement = replacement.replaceAll(lineSeparator + "(?=" + lineSeparator + ")",
 			lineSeparator + spaceBeforeComment + " * ")
 
-		context.addReplacement(region.replaceWith(replacement))
+		if (region.text != replacement) {
+			context.addReplacement(region.replaceWith(replacement))
+		}
 
 		context
+	}
+
+	override createTextReplacerContext(IFormattableDocument document) {
+		new STCoreTextReplacerContext(document)
 	}
 }

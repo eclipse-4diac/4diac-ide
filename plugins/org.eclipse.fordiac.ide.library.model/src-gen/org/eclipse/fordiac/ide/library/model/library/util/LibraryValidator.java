@@ -97,6 +97,8 @@ public class LibraryValidator extends EObjectValidator {
 	@Override
 	protected boolean validate(int classifierID, Object value, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		switch (classifierID) {
+			case LibraryPackage.ATTRIBUTE:
+				return validateAttribute((Attribute)value, diagnostics, context);
 			case LibraryPackage.DEPENDENCIES:
 				return validateDependencies((Dependencies)value, diagnostics, context);
 			case LibraryPackage.EXCLUDES:
@@ -121,13 +123,22 @@ public class LibraryValidator extends EObjectValidator {
 				return validateNameSpaceFilter((String)value, diagnostics, context);
 			case LibraryPackage.SYMBOLIC_NAME:
 				return validateSymbolicName((String)value, diagnostics, context);
-			case LibraryPackage.VERSION_TYPE:
-				return validateVersionType((String)value, diagnostics, context);
-			case LibraryPackage.VERSION_TYPE1:
-				return validateVersionType1((String)value, diagnostics, context);
+			case LibraryPackage.VERSION_RANGE:
+				return validateVersionRange((String)value, diagnostics, context);
+			case LibraryPackage.VERSION_SIMPLE:
+				return validateVersionSimple((String)value, diagnostics, context);
 			default:
 				return true;
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateAttribute(Attribute attribute, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(attribute, diagnostics, context);
 	}
 
 	/**
@@ -291,8 +302,8 @@ public class LibraryValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateVersionType(String versionType, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		boolean result = validateVersionType_Pattern(versionType, diagnostics, context);
+	public boolean validateVersionRange(String versionRange, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		boolean result = validateVersionRange_Pattern(versionRange, diagnostics, context);
 		return result;
 	}
 
@@ -300,42 +311,9 @@ public class LibraryValidator extends EObjectValidator {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @see #validateVersionType_Pattern
+	 * @see #validateVersionRange_Pattern
 	 */
-	public static final  PatternMatcher [][] VERSION_TYPE__PATTERN__VALUES =
-		new PatternMatcher [][] {
-			new PatternMatcher [] {
-				XMLTypeUtil.createPatternMatcher("[0-9]+(\\.[0-9]+)*")
-			}
-		};
-
-	/**
-	 * Validates the Pattern constraint of '<em>Version Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateVersionType_Pattern(String versionType, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validatePattern(LibraryPackage.Literals.VERSION_TYPE, versionType, VERSION_TYPE__PATTERN__VALUES, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateVersionType1(String versionType1, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		boolean result = validateVersionType1_Pattern(versionType1, diagnostics, context);
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @see #validateVersionType1_Pattern
-	 */
-	public static final  PatternMatcher [][] VERSION_TYPE1__PATTERN__VALUES =
+	public static final  PatternMatcher [][] VERSION_RANGE__PATTERN__VALUES =
 		new PatternMatcher [][] {
 			new PatternMatcher [] {
 				XMLTypeUtil.createPatternMatcher("[0-9]+(\\.[0-9]+)*|[\\[\\(][0-9]+(\\.[0-9]+)*\\-[0-9]+(\\.[0-9]+)*[\\]\\)]")
@@ -343,13 +321,46 @@ public class LibraryValidator extends EObjectValidator {
 		};
 
 	/**
-	 * Validates the Pattern constraint of '<em>Version Type1</em>'.
+	 * Validates the Pattern constraint of '<em>Version Range</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateVersionType1_Pattern(String versionType1, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validatePattern(LibraryPackage.Literals.VERSION_TYPE1, versionType1, VERSION_TYPE1__PATTERN__VALUES, diagnostics, context);
+	public boolean validateVersionRange_Pattern(String versionRange, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validatePattern(LibraryPackage.Literals.VERSION_RANGE, versionRange, VERSION_RANGE__PATTERN__VALUES, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateVersionSimple(String versionSimple, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		boolean result = validateVersionSimple_Pattern(versionSimple, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @see #validateVersionSimple_Pattern
+	 */
+	public static final  PatternMatcher [][] VERSION_SIMPLE__PATTERN__VALUES =
+		new PatternMatcher [][] {
+			new PatternMatcher [] {
+				XMLTypeUtil.createPatternMatcher("[0-9]+(\\.[0-9]+)*")
+			}
+		};
+
+	/**
+	 * Validates the Pattern constraint of '<em>Version Simple</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateVersionSimple_Pattern(String versionSimple, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validatePattern(LibraryPackage.Literals.VERSION_SIMPLE, versionSimple, VERSION_SIMPLE__PATTERN__VALUES, diagnostics, context);
 	}
 
 	/**

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019 fortiss GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2019, 2024 fortiss GmbH
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -35,10 +35,12 @@ class ServiceInterfaceFBImplTemplate extends ForteFBTemplate<ServiceInterfaceFBT
 		
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
 		    «baseClass»(paContainer, &scmFBInterfaceSpec, paInstanceNameId)«//no newline
-			»«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer»«generateConnectionInitializer» {
+			»«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
+			»«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterInitializer»«generateConnectionInitializer» {
 		};
+		«generateInitializeDefinition»
 		
-		«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
+		«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
 		«generateExecuteEvent»
 		
 		«generateInterfaceDefinitions»

@@ -22,7 +22,6 @@ import java.util.Collections;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
@@ -37,6 +36,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -85,7 +85,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 
 	private Label titleLabel;
 
-	private final Adapter adapter = new AdapterImpl() {
+	private final Adapter adapter = new SingleRecursiveContentAdapter() {
 
 		@Override
 		public void notifyChanged(final Notification notification) {

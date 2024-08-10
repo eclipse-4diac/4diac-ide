@@ -36,7 +36,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
@@ -52,6 +51,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatArrayInitElement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSingleArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement
@@ -295,18 +296,20 @@ final package class ExpressionAnnotations {
 			expr.values.map[declaredResultType].reduce[first, second|first.commonSupertype(second)].addDimension(expr)
 	}
 
-	def package static INamedElement getResultType(STArrayInitElement expr) {
-		if (expr.initExpressions.empty)
-			expr.indexOrInitExpression.resultType
-		else
-			expr.initExpressions.map[resultType].reduce[first, second|first.commonSupertype(second)]
+	def package static INamedElement getResultType(STSingleArrayInitElement expr) {
+		expr.initExpression.resultType
 	}
 
-	def package static INamedElement getDeclaredResultType(STArrayInitElement expr) {
-		if (expr.initExpressions.empty)
-			expr.indexOrInitExpression.resultType
-		else
-			expr.initExpressions.map[declaredResultType].reduce[first, second|first.commonSupertype(second)]
+	def package static INamedElement getDeclaredResultType(STSingleArrayInitElement expr) {
+		expr.initExpression.declaredResultType
+	}
+
+	def package static INamedElement getResultType(STRepeatArrayInitElement expr) {
+		expr.initExpressions.map[resultType].reduce[first, second|first.commonSupertype(second)]
+	}
+
+	def package static INamedElement getDeclaredResultType(STRepeatArrayInitElement expr) {
+		expr.initExpressions.map[declaredResultType].reduce[first, second|first.commonSupertype(second)]
 	}
 
 	def package static INamedElement getResultType(STStructInitializerExpression expr) { getDeclaredResultType(expr) }
@@ -425,10 +428,10 @@ final package class ExpressionAnnotations {
 	def package static INamedElement addDimension(INamedElement type, STArrayInitializerExpression expr) {
 		try {
 			val size = expr.values.map [
-				if (initExpressions.empty)
-					1
-				else
-					(indexOrInitExpression as STElementaryInitializerExpression).value.asConstantInt
+				switch (it) {
+					STRepeatArrayInitElement: repetitions.intValueExact
+					default: 1
+				}
 			].fold(0)[a, b|a + b]
 			if (type instanceof ArrayType)
 				type.baseType.newArrayType(#[newSubrange(0, size - 1)] + type.subranges.map[copy])

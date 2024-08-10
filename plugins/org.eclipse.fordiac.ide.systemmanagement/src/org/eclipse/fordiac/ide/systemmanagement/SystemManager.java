@@ -192,8 +192,8 @@ public enum SystemManager {
 
 	@SuppressWarnings("static-method")
 	public synchronized List<AutomationSystem> getProjectSystems(final IProject project) {
-		return TypeLibraryManager.INSTANCE.getTypeLibrary(project).getSystems().values().stream()
-				.map(SystemEntry::getSystem).toList();
+		return TypeLibraryManager.INSTANCE.getTypeLibrary(project).getSystems().stream().map(SystemEntry::getSystem)
+				.toList();
 	}
 
 	private static String[] getNatureIDs() {

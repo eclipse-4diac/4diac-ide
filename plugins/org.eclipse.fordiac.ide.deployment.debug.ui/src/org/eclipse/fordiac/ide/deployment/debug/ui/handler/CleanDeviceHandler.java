@@ -15,10 +15,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.deployment.debug.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 /**
  * The Class SendClearAction.
@@ -27,10 +28,24 @@ public class CleanDeviceHandler extends AbstractDeviceDeploymentCommand {
 
 	@Override
 	protected void executeCommand(final IDeviceManagementInteractor executor) throws DeploymentException {
-		for (final Resource res : getDevice().getResource()) {
-			if (!res.isDeviceTypeResource()) {
-				executor.deleteResource(res.getName());
+		try {
+			final List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> resources;
+			try {
+				resources = executor.queryResources();
+			} catch (final Exception e) {
+				throw new DeploymentException("Error while querying resources: " + e.getMessage(), e); //$NON-NLS-1$
 			}
+
+			for (final org.eclipse.fordiac.ide.deployment.devResponse.Resource res : resources) {
+				try {
+					executor.deleteResource(res.getName());
+				} catch (final Exception e) {
+					throw new DeploymentException(
+							"Error while deleting resource " + res.getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+			}
+		} catch (final DeploymentException e) {
+			throw e;
 		}
 	}
 

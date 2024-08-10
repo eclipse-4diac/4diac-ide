@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.PlatformUI;
@@ -51,26 +52,26 @@ public class UntypeSubApplicationHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final SubApp subApp = getSelectedSubApp(selection);
-		setBaseEnabled((null != subApp) && (subApp.isTyped()));
+		setBaseEnabled(null != subApp && subApp.isTyped());
 	}
 
 	private static SubApp getSelectedSubApp(final Object selection) {
-		if (selection instanceof final IStructuredSelection structSel) {
-			if (!structSel.isEmpty() && (structSel.size() == 1)) {
-				return getSubApp(structSel.getFirstElement());
-			}
+		if (selection instanceof TreeSelection) {
+			return null;
+		}
+		if (selection instanceof final IStructuredSelection structSel && !structSel.isEmpty()
+				&& structSel.size() == 1) {
+			return getSubApp(structSel.getFirstElement());
 		}
 		return null;
 	}
 
 	private static SubApp getSubApp(final Object currentElement) {
-		if (currentElement instanceof SubApp) {
-			return (SubApp) currentElement;
+		if (currentElement instanceof final SubAppForFBNetworkEditPart subAppForFBNetworkEditPart) {
+			return subAppForFBNetworkEditPart.getModel();
 		}
-		if (currentElement instanceof SubAppForFBNetworkEditPart) {
-			return ((SubAppForFBNetworkEditPart) currentElement).getModel();
-		} else if (currentElement instanceof UISubAppNetworkEditPart) {
-			return (SubApp) ((UISubAppNetworkEditPart) currentElement).getModel().eContainer();
+		if (currentElement instanceof final UISubAppNetworkEditPart uiSubAppNetworkEditPart) {
+			return uiSubAppNetworkEditPart.getSubApp();
 		}
 		return null;
 	}

@@ -25,13 +25,11 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.policies.SubAppContentLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.swt.widgets.Display;
 
 public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditPart {
 
@@ -42,7 +40,7 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 			if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getConnection_RoutingData().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getFBNetwork_NetworkElements().equals(feature)) {
-				Display.getDefault().asyncExec(() -> getParent().layoutExpandedInterface());
+				getParent().layoutExpandedInterface();
 			}
 			super.notifyChanged(notification);
 		}
@@ -81,11 +79,6 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 						.createCreateCommand(value, getModel(), refPoint.x, refPoint.y));
 			}
 		});
-	}
-
-	@Override
-	public FBNetwork getModel() {
-		return super.getModel();
 	}
 
 	@Override

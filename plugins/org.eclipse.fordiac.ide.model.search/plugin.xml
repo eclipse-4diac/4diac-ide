@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
+   <extension-point id="factory" name="Search Factory" schema="schema/factory.exsd"/>
  <extension
 	id="ModelSearchResultPage"
 	point="org.eclipse.search.searchResultViewPages">
@@ -78,6 +79,7 @@
                             <test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="fbt" />
                             <test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="sub" />
                             <test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="dtd" />
+                            <test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="dtp" />
                         </or>    
                         </adapt>
                   	</iterate>

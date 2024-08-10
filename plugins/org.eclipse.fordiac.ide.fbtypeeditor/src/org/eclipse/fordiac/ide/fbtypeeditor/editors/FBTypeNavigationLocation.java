@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial implementation and/or documentation
+ *   Martin Erich Jobst - fix handling of sub-locations
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
@@ -31,7 +33,8 @@ public final class FBTypeNavigationLocation extends NavigationLocation {
 		activeEditor = editorPart.getActiveEditor();
 		subNavigationLocation = createSubNavigationLocation(activeEditor);
 		if (subNavigationLocation == null) {
-			// if we don't have a sub navigation location check if it is graphical viewer and capture this data
+			// if we don't have a sub navigation location check if it is graphical viewer
+			// and capture this data
 			graphicalViewerLocationData = createGraphicalViewerLocationData(activeEditor);
 		} else {
 			graphicalViewerLocationData = null;
@@ -102,14 +105,14 @@ public final class FBTypeNavigationLocation extends NavigationLocation {
 
 	@Override
 	public boolean mergeInto(final INavigationLocation currentLocation) {
-		if (currentLocation instanceof FBTypeNavigationLocation) {
-			final FBTypeNavigationLocation currentFBTypeLocation = ((FBTypeNavigationLocation) currentLocation);
+		if (currentLocation instanceof final FBTypeNavigationLocation currentFBTypeLocation) {
 			final FBTypeEditor typeEditor = getEditorPart();
 			if ((typeEditor != null) && (typeEditor.equals(currentFBTypeLocation.getEditorPart()))
 					&& (activeEditor.equals(currentFBTypeLocation.activeEditor))) {
 				if (subNavigationLocation != null) {
 					return subNavigationLocation.mergeInto(currentFBTypeLocation.subNavigationLocation);
-				} else if (graphicalViewerLocationData != null) {
+				}
+				if (graphicalViewerLocationData != null) {
 					return graphicalViewerLocationData.equals(currentFBTypeLocation.graphicalViewerLocationData);
 				}
 				return true;
@@ -120,7 +123,24 @@ public final class FBTypeNavigationLocation extends NavigationLocation {
 
 	@Override
 	public void update() {
-		// currently not supported
+		if (subNavigationLocation != null) {
+			subNavigationLocation.update();
+		}
 	}
 
+	@Override
+	public void releaseState() {
+		super.releaseState();
+		if (subNavigationLocation != null) {
+			subNavigationLocation.releaseState();
+		}
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (subNavigationLocation != null) {
+			subNavigationLocation.dispose();
+		}
+	}
 }

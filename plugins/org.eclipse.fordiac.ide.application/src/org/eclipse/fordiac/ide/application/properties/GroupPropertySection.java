@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -62,16 +61,13 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 	}
 
 	@Override
-	public void refresh() {
-		if ((getType() != null) && !nameText.isDisposed() && !nameText.getParent().isDisposed()) {
-			final CommandStack commandStackBuffer = commandStack;
-			commandStack = null;
+	protected void performRefresh() {
+		if (!nameText.isDisposed() && !nameText.getParent().isDisposed()) {
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			heightText.setText(Integer.toString(CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getHeight())));
 			widthText.setText(Integer.toString(CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getWidth())));
 			lockCheckbox.setSelection(getType().isLocked());
-			commandStack = commandStackBuffer;
 		}
 	}
 
@@ -179,7 +175,7 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 		commentText.addModifyListener(e -> {
 			removeContentAdapter();
 
-			if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() instanceof Group) {
+			if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() != null) {
 				final Object groupforFBNetowrkEditPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
 						.getEditPartRegistry().get(getType());
 				if (groupforFBNetowrkEditPart instanceof final GroupEditPart gep && gep.getContentEP() != null) {

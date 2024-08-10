@@ -14,26 +14,36 @@ package org.eclipse.fordiac.ide.export.forte_ng.st
 
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 
-@FinalFieldsConstructor
 class STAlgorithmSupport extends StructuredTextSupport {
 	final org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm
+	final Map<Object, Object> cache;
 
 	STAlgorithm parseResult
+	
+	new(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm, Map<?, ?> options) {
+		this.algorithm = algorithm
+		this.cache = options.cacheOption
+	}
 
-	override prepare(Map<?, ?> options) {
+	override prepare() {
 		if (parseResult === null && errors.empty) {
-			parseResult = algorithm.parse(errors, warnings, infos)
+			val container = algorithm.eContainer
+			if (container instanceof BaseFBType)
+				parseResult = cache.computeCached(container)[container.parse(errors, warnings, infos)]?.elements?.
+					filter(STAlgorithm)?.findFirst[name == algorithm.name]
+			else
+				parseResult = algorithm.parse(errors, warnings, infos)
 		}
 		return parseResult !== null
 	}
 
 	override generate(Map<?, ?> options) throws ExportException {
-		prepare(options)
+		prepare()
 		parseResult?.generateStructuredTextAlgorithm
 	}
 
@@ -44,7 +54,7 @@ class STAlgorithmSupport extends StructuredTextSupport {
 	'''
 
 	override getDependencies(Map<?, ?> options) {
-		prepare(options)
+		prepare()
 		parseResult?.containedDependencies ?: emptySet
 	}
 }

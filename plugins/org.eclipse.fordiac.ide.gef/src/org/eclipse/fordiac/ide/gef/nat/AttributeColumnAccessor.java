@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
-import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -43,7 +42,12 @@ public class AttributeColumnAccessor extends AbstractColumnAccessor<Attribute, A
 	public Object getDataValue(final Attribute rowObject, final AttributeTableColumn column) {
 		return switch (column) {
 		case NAME -> rowObject.getName();
-		case TYPE -> rowObject.getFullTypeName();
+		case TYPE -> {
+			if (rowObject.getAttributeDeclaration() != null) {
+				yield PackageNameHelper.getFullTypeName(rowObject.getAttributeDeclaration());
+			}
+			yield rowObject.getFullTypeName();
+		}
 		case VALUE -> InitialValueHelper.getInitialOrDefaultValue(rowObject);
 		case COMMENT -> CommentHelper.getInstanceComment(rowObject);
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
@@ -53,12 +57,7 @@ public class AttributeColumnAccessor extends AbstractColumnAccessor<Attribute, A
 	@Override
 	public Command createCommand(final Attribute rowObject, final AttributeTableColumn column, final Object newValue) {
 		return switch (column) {
-		case NAME -> {
-			final String newName = ImportHelper.deresolveImport((String) newValue,
-					PackageNameHelper.getContainerPackageName(rowObject.eContainer()),
-					ImportHelper.getContainerImports(rowObject.eContainer()));
-			yield ChangeNameCommand.forName(rowObject, Objects.toString(newName, NULL_DEFAULT));
-		}
+		case NAME -> ChangeNameCommand.forName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case TYPE -> ChangeAttributeTypeCommand.forTypeName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case VALUE -> new ChangeAttributeValueCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case COMMENT -> new ChangeCommentCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));

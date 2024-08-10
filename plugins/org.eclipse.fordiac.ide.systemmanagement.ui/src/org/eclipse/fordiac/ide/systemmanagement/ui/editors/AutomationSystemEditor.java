@@ -67,7 +67,7 @@ import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEdi
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemProviderAdapterFactory;
-import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider;
+import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.StyledSystemLabelProvider;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.SelectionTabbedPropertySheetPage;
@@ -202,7 +202,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		}
 
 		if (model instanceof final SubApp subApp) {
-			if (subApp.isTyped() || subApp.isContainedInTypedInstance() || subApp.isUnfolded()) {
+			if (subApp.isTyped() || subApp.isContainedInTypedInstance()) {
 				return new SubappInstanceViewer();
 			}
 			return new SubAppNetworkEditor();
@@ -230,7 +230,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return getEditorInput();
 		}
 		if (model instanceof final SubApp subApp) {
-			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance()) || subApp.isUnfolded()) {
+			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance())) {
 				return new CompositeAndSubAppInstanceViewerInput(subApp);
 			}
 			return new SubApplicationEditorInput(subApp);
@@ -275,7 +275,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 				Thread.currentThread().interrupt();
 			}
 			getCommandStack().markSaveLocation();
-			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
 
 	}
@@ -287,7 +286,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	protected AdapterFactoryLabelProvider createBreadcrumbLabelProvider() {
-		return new SystemLabelProvider();
+		return new StyledSystemLabelProvider();
 	}
 
 	@Override

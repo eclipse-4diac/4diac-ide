@@ -26,7 +26,6 @@ import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -34,7 +33,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
@@ -207,25 +209,49 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 			return false;
 		}
 
+		if (fileExists()) {
+			setErrorMessage(MessageFormat.format(Messages.NewFBTypeWizardPage_FileAlreadyExists, getFileName()));
+			return false;
+		}
+
 		return super.validatePage();
 	}
 
 	private boolean isDuplicate() {
-		final TypeLibrary lib = getTypeLibrary();
-		if (lib == null) {
+		final TypeLibrary typeLibrary = getTypeLibrary();
+		if (typeLibrary == null) {
 			return false;
 		}
 
+		final String fullTypeName = getFullTypeName();
 		final String fileExtension = IPath.fromFile(getTemplate()).getFileExtension();
-		final Map<String, ?> types;
-		if (TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING.equalsIgnoreCase(fileExtension)) {
-			types = lib.getAttributeTypes();
-		} else if (TypeLibraryTags.GLOBAL_CONST_FILE_ENDING.equalsIgnoreCase(fileExtension)) {
-			types = lib.getGlobalConstants();
-		} else {
-			types = lib.getProgramTypes();
+		return switch (fileExtension.toUpperCase()) {
+		case TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING -> typeLibrary.getAttributeTypeEntry(fullTypeName) != null;
+		case TypeLibraryTags.GLOBAL_CONST_FILE_ENDING -> typeLibrary.getGlobalConstantsEntry(fullTypeName) != null;
+		default -> typeLibrary.find(fullTypeName) != null;
+		};
+	}
+
+	private boolean fileExists() {
+		final String fileName = getFileName().toLowerCase();
+		final IPath containerPath = getContainerFullPath();
+		if (containerPath == null || containerPath.segmentCount() < 2) {
+			return false;
 		}
-		return types.containsKey(getFullTypeName());
+		final IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder(containerPath);
+		if (!folder.exists()) {
+			return false;
+		}
+		try {
+			for (final IResource member : folder.members()) {
+				if (fileName.equalsIgnoreCase(member.getName())) {
+					return true;
+				}
+			}
+		} catch (final CoreException e) {
+			return false;
+		}
+		return false;
 	}
 
 	public File getTemplate() {

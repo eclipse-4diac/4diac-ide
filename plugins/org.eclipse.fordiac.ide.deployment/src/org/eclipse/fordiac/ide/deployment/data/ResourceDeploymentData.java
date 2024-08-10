@@ -139,7 +139,7 @@ public class ResourceDeploymentData {
 			throws DeploymentException {
 		for (final VarDeclaration dataInput : subApp.getInterface().getInputVars()) {
 			final Function<VarDeclaration, String> dataInputValue = DeploymentHelper
-					.getVariableValueRetargetable(dataInput);
+					.getVariableValueRetargetable(dataInput, subApp);
 			if (dataInputValue != null) {
 				for (final ConDeploymentDest destData : getSubappInterfaceconnections(subAppHierarchy, prefix,
 						dataInput)) {

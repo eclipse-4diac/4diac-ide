@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
- * 				 2019 Johannes Kepler Unviersity
+ * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -32,7 +31,6 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
@@ -116,37 +114,34 @@ public class InterfaceElementSection extends AbstractSection {
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			setEditableFields(getType().getFBNetworkElement() instanceof SubApp);
-			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			String itype = ""; //$NON-NLS-1$
-			if (getType() instanceof final VarDeclaration varDecl) {
-				itype = varDecl.getType() != null ? varDecl.getTypeName() : ""; //$NON-NLS-1$
-				if (getType().isIsInput()) {
-					parameterText.setVisible(true);
-					valueCLabel.setVisible(true);
-					parameterText.setText((varDecl.getValue() != null) ? varDecl.getValue().getValue() : ""); //$NON-NLS-1$
-				} else {
-					valueCLabel.setVisible(false);
-					parameterText.setVisible(false);
-				}
+	protected void performRefresh() {
+		setEditableFields(getType().getFBNetworkElement() instanceof SubApp);
+		nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
+		commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+		String itype = ""; //$NON-NLS-1$
+		if (getType() instanceof final VarDeclaration varDecl) {
+			itype = varDecl.getType() != null ? varDecl.getTypeName() : ""; //$NON-NLS-1$
+			if (getType().isIsInput()) {
+				parameterText.setVisible(true);
+				valueCLabel.setVisible(true);
+				parameterText.setText((varDecl.getValue() != null) ? varDecl.getValue().getValue() : ""); //$NON-NLS-1$
 			} else {
-				itype = FordiacMessages.Event;
 				valueCLabel.setVisible(false);
 				parameterText.setVisible(false);
 			}
-			fillTypeCombo(itype);
+		} else {
+			itype = FordiacMessages.Event;
+			valueCLabel.setVisible(false);
+			parameterText.setVisible(false);
 		}
-		commandStack = commandStackBuffer;
+		fillTypeCombo(itype);
 	}
 
-	/** Set the input fields edit able or not
+	/**
+	 * Set the input fields edit able or not
 	 *
-	 * @param editAble flag indicating if the fields should be editable */
+	 * @param editAble flag indicating if the fields should be editable
+	 */
 	private void setEditableFields(final boolean editAble) {
 		nameText.setEditable(editAble);
 		nameText.setEnabled(editAble);

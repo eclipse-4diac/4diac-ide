@@ -62,10 +62,12 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
 		    «baseClass»(paContainer, &scmFBInterfaceSpec, paInstanceNameId, scmFBNData)«//no newline
-			»«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer»«generateConnectionInitializer» {
+			»«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
+			»«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterInitializer»«generateConnectionInitializer» {
 		};
+		«generateInitializeDefinition»
 		
-		«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
+		«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
 		«generateFBNetwork»
 		«generateReadInternal2InterfaceOutputDataDefinition»
 		«generateInterfaceDefinitions»
@@ -273,7 +275,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
 		for (FBNetworkElement fb : fbs) {
 			for (VarDeclaration v : fb.getInterface.getInputVars.filter[it.value !== null && !it.value.value.isEmpty]) {
-				retVal.append('''  {«fb.fbId», «v.name.FORTEStringId», "«getParamValue(v).convertToJavaString»"},
+				retVal.append('''  {«fb.fbId», «v.name.FORTEStringId», "«v.value.value.convertToJavaString»"},
 				''')
 				numCompFBParams++
 			}
@@ -283,10 +285,6 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		const SCFB_FBParameter «FBClassName»::scmParamters[] = {
 		«retVal.toString»
 		};«ENDIF»'''
-	}
-
-	def private getParamValue(VarDeclaration v) {
-		v.value.value.replace("\"", "\\\"");
 	}
 
 }

@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.ui.dialogs.SearchPattern;
@@ -33,18 +31,15 @@ public class PaletteFilter {
 	}
 
 	public List<TypeEntry> findFBAndSubappTypes(final String searchString) {
-		final Stream<Entry<String, ? extends TypeEntry>> stream = Stream
-				.concat(typeLib.getFbTypes().entrySet().stream(), typeLib.getSubAppTypes().entrySet().stream());
-		return sortResultsByBestMatch(searchString, findTypes(searchString, stream));
+		return sortResultsByBestMatch(searchString, findTypes(searchString,
+				Stream.concat(typeLib.getFbTypes().stream(), typeLib.getSubAppTypes().stream()))).toList();
 	}
 
-	public List<TypeEntry> findTypes(final String searchString,
-			final Stream<Entry<String, ? extends TypeEntry>> stream) {
+	private Stream<TypeEntry> findTypes(final String searchString, final Stream<TypeEntry> stream) {
 		setSearchPattern(searchString);
-		return stream.filter(entry -> matcher.matches(entry.getKey()))
-				.filter(entry -> (null != entry.getValue().getType())). // only forward types that can be loaded //
-				// correctly
-				map(Entry<String, ? extends TypeEntry>::getValue).collect(Collectors.toList());
+		return stream.filter(entry -> matcher.matches(entry.getFullTypeName()))
+				// only forward types that can be loaded correctly
+				.filter(entry -> (null != entry.getType()));
 	}
 
 	private void setSearchPattern(final String searchString) {
@@ -58,10 +53,9 @@ public class PaletteFilter {
 		matcher.setPattern(searchPattern);
 	}
 
-	private List<TypeEntry> sortResultsByBestMatch(final String searchString, final List<TypeEntry> results) {
+	private Stream<TypeEntry> sortResultsByBestMatch(final String searchString, final Stream<TypeEntry> results) {
 		final String searchPattern = searchString;
-		final List<TypeEntry> sortedResults = results;
-		sortedResults.sort(Comparator.comparing(TypeEntry::getTypeName));
+		final List<TypeEntry> sortedResults = results.sorted(Comparator.comparing(TypeEntry::getTypeName)).toList();
 		final List<TypeEntry> exact = new ArrayList<>();
 		final List<TypeEntry> right = new ArrayList<>();
 		final List<TypeEntry> rest = new ArrayList<>();
@@ -79,6 +73,6 @@ public class PaletteFilter {
 				}
 			}
 		}
-		return Stream.of(exact, right, rest).flatMap(Collection::stream).toList();
+		return Stream.of(exact, right, rest).flatMap(Collection::stream);
 	}
 }

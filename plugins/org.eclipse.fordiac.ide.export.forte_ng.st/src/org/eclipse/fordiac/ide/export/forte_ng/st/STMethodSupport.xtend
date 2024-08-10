@@ -23,27 +23,36 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBl
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock
-import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 
-@FinalFieldsConstructor
 class STMethodSupport extends StructuredTextSupport {
 	final org.eclipse.fordiac.ide.model.libraryElement.STMethod method
+	final Map<Object, Object> cache;
 
 	STMethod parseResult
 
-	override prepare(Map<?, ?> options) {
+	new(org.eclipse.fordiac.ide.model.libraryElement.STMethod method, Map<?, ?> options) {
+		this.method = method
+		this.cache = options.cacheOption
+	}
+
+	override prepare() {
 		if (parseResult === null && errors.empty) {
-			parseResult = method.parse(errors, warnings, infos)
+			val container = method.eContainer
+			if (container instanceof BaseFBType)
+				parseResult = cache.computeCached(container)[container.parse(errors, warnings, infos)]?.elements?.
+					filter(STMethod)?.findFirst[name == method.name]
+			else
+				parseResult = method.parse(errors, warnings, infos)
 		}
 		return parseResult !== null
 	}
 
 	override generate(Map<?, ?> options) throws ExportException {
-		prepare(options)
+		prepare()
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 			parseResult?.generateStructuredTextMethodHeader
 		else
@@ -69,7 +78,7 @@ class STMethodSupport extends StructuredTextSupport {
 
 	def private getStructuredTextMethodParameters(STMethod method) {
 		method.body.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].map[it -> false] +
-		method.body.varDeclarations.filter(STVarInOutDeclarationBlock).flatMap[varDeclarations].map[it -> true] +
+			method.body.varDeclarations.filter(STVarInOutDeclarationBlock).flatMap[varDeclarations].map[it -> true] +
 			method.body.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations].map[it -> true]
 	}
 
@@ -96,7 +105,7 @@ class STMethodSupport extends StructuredTextSupport {
 	def private getFBType() { switch (root : method.rootContainer) { BaseFBType: root } }
 
 	override getDependencies(Map<?, ?> options) {
-		prepare(options)
+		prepare()
 		if (parseResult !== null) {
 			if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 				(#[parseResult.returnType].filterNull + parseResult.body.varDeclarations.filter [

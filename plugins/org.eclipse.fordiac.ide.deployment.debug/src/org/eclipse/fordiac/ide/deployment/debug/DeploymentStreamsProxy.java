@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.deployment.debug;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.text.MessageFormat;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.OutputKeys;
@@ -41,6 +42,9 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 	private final DeploymentStreamMonitor outputStreamMonitor = new DeploymentStreamMonitor();
 	private final DeploymentStreamMonitor errorStreamMonitor = new DeploymentStreamMonitor();
 	private final Transformer transformer;
+
+	private String currentDest;
+	private int count;
 
 	public DeploymentStreamsProxy() throws DeploymentException {
 		try {
@@ -70,12 +74,32 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 
 	@Override
 	public void connectionOpened(final Device dev) {
-		outputStreamMonitor.message("<!--  Connected to device: " + dev.getName() + " -->\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		currentDest = null;
+		outputStreamMonitor.message(MessageFormat.format(Messages.DeploymentStreamsProxy_ConnectedToDevice, dev.getName()));
 	}
 
 	@Override
 	public void postCommandSent(final String info, final String destination, final String command) {
-		// do nothing
+		if ((destination != null && !destination.isEmpty()) && !destination.isBlank()) {
+			if (!destination.equals(currentDest)) {
+				if (currentDest != null && !currentDest.isBlank()) {
+					printDeployStatistics();
+				}
+				printDeployingResource(destination);
+				currentDest = destination;
+				count = 1;
+			} else {
+				count++;
+			}
+		}
+	}
+
+	private void printDeployStatistics() {
+		outputStreamMonitor.message(MessageFormat.format(Messages.DeploymentStreamsProxy_DeployedElements, currentDest, count));
+	}
+
+	private void printDeployingResource(final String destination) {
+		outputStreamMonitor.message(MessageFormat.format(Messages.DeploymentStreamsProxy_Deploying, destination));
 	}
 
 	@Override
@@ -103,7 +127,10 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 
 	@Override
 	public void connectionClosed(final Device dev) {
-		outputStreamMonitor.message("<!--  Disconnected from device: " + dev.getName() + " -->\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		if (currentDest != null && !currentDest.isBlank()) {
+			printDeployStatistics();
+		}
+		outputStreamMonitor.message(MessageFormat.format(Messages.DeploymentStreamsProxy_DisconnectedFromDevice, dev.getName()));
 	}
 
 	private String getFormattedXML(final String input) throws TransformerFactoryConfigurationError {

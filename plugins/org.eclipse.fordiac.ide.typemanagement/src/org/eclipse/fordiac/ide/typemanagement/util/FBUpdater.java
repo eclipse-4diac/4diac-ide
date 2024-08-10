@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -75,10 +74,10 @@ public final class FBUpdater {
 	}
 
 	public static Command createUpdatePinInTypeDeclarationCommand(final List<FBType> types,
-			final List<DataTypeEntry> dataTypeEntries, final String oldName) {
+			final List<DataTypeEntry> dataTypeEntries) {
 		final List<Command> commands = new ArrayList<>();
 		types.forEach(type -> commands
-				.add(createUpdatePinInTypeDeclarationCommand(type, dataTypeEntries.get(types.indexOf(type)), oldName)));
+				.add(createUpdatePinInTypeDeclarationCommand(type, dataTypeEntries.get(types.indexOf(type)))));
 		Command cmd = new CompoundCommand();
 		for (final Command subCmd : commands) {
 			cmd = cmd.chain(subCmd);
@@ -86,10 +85,9 @@ public final class FBUpdater {
 		return cmd;
 	}
 
-	public static Command createUpdatePinInTypeDeclarationCommand(final FBType type, final DataTypeEntry dataTypeEntry,
-			final String oldName) {
-		return oldName == null ? new UpdatePinInTypeDeclarationCommand(type, dataTypeEntry)
-				: new UpdatePinInTypeDeclarationCommand(type, dataTypeEntry, oldName);
+	public static Command createUpdatePinInTypeDeclarationCommand(final FBType type,
+			final DataTypeEntry dataTypeEntry) {
+		return new UpdatePinInTypeDeclarationCommand(type, dataTypeEntry);
 	}
 
 	public static Command createStructManipulatorsUpdateCommand(final List<StructManipulator> muxes,
@@ -120,8 +118,7 @@ public final class FBUpdater {
 		return cmd;
 	}
 
-	public static List<FBNetworkElement> updateAllInstances(final Set<TypeEntry> typeEntries,
-			final TypeLibrary typeLib) {
+	public static List<FBNetworkElement> updateAllInstances(final Set<TypeEntry> typeEntries) {
 		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(typeEntries);
 		final List<FBNetworkElement> elements = search.performSearch().stream()
 				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).toList();

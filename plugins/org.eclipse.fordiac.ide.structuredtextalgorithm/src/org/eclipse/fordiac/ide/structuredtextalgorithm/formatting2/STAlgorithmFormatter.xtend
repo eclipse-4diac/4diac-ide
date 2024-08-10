@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
- *               2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,7 @@
  * Contributors:
  *   Martin Melik Merkumians - initial API and implementation and/or initial documentation
  *   Martin Jobst - algorithm and method name format
+ *                - return type autowrap support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.formatting2
 
@@ -20,25 +21,23 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.formatting2.KeywordCaseTextReplacer
+import org.eclipse.fordiac.ide.structuredtextcore.formatting2.STCoreAutowrapFormatter
 import org.eclipse.fordiac.ide.structuredtextcore.formatting2.STCoreFormatter
 import org.eclipse.xtext.Keyword
 import org.eclipse.xtext.RuleCall
 import org.eclipse.xtext.formatting2.IFormattableDocument
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage
 
 class STAlgorithmFormatter extends STCoreFormatter {
 
 	@Inject extension STAlgorithmGrammarAccess
 
 	def dispatch void format(STAlgorithmSource sTAlgorithmSource, extension IFormattableDocument document) {
-		val regions = textRegionAccess.regionForRootEObject.allSemanticRegions;
-		regions.forEach [
-			it.append[autowrap]
-		]
-
 		sTAlgorithmSource.allSemanticRegions.filter [
 			switch (element : grammarElement) {
 				Keyword case element.value.matches("[_a-zA-Z]+"): true
 				RuleCall case element.rule == numericRule: true
+				RuleCall case element.rule == signedNumericRule: true
 				RuleCall case element.rule == STNumericLiteralTypeRule: true
 				RuleCall case element.rule == STDateLiteralTypeRule: true
 				RuleCall case element.rule == STTimeLiteralTypeRule: true
@@ -48,7 +47,7 @@ class STAlgorithmFormatter extends STCoreFormatter {
 				default: false
 			}
 		].forEach [
-			document.addReplacer(new KeywordCaseTextReplacer(document, it))
+			document.addReplacer(new KeywordCaseTextReplacer(it))
 		]
 		sTAlgorithmSource.allRegionsFor.keywords(STPrimaryExpressionAccess.leftParenthesisKeyword_0_0).forEach [
 			append[noSpace]
@@ -78,7 +77,11 @@ class STAlgorithmFormatter extends STCoreFormatter {
 	def dispatch void format(STMethod sTMethod, extension IFormattableDocument document) {
 		sTMethod.regionFor.keyword("METHOD").prepend[noIndentation].append[oneSpace]
 		if (sTMethod.returnType !== null) {
-			sTMethod.regionFor.keyword(STMethodAccess.colonKeyword_2_0).surround[oneSpace]
+			sTMethod.regionFor.keyword(STMethodAccess.colonKeyword_2_0).surround[oneSpace].prepend [
+				autowrap
+				onAutowrap = new STCoreAutowrapFormatter(
+					sTMethod.regionFor.feature(STAlgorithmPackage.Literals.ST_METHOD__RETURN_TYPE).nextHiddenRegion)
+			]
 			sTMethod.regionFor.assignment(STMethodAccess.returnTypeAssignment_2_1).append [
 				setNewLines(1, 1, 2)
 			]

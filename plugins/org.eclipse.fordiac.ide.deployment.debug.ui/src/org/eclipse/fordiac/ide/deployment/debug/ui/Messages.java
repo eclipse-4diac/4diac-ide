@@ -24,14 +24,11 @@ public class Messages extends NLS {
 	public static String CleanDeviceHandler_CleanDeviceError;
 	public static String DeleteResourceHandler_DeleteResourceError;
 	public static String DeleteResourceHandler_Resource;
-	public static String FullyCleanDeviceHandler_FullyCleanDeviceError;
-	public static String FullyCleanDeviceHandler_DeleteResourcesFromDevice;
-	public static String FullyCleanDeviceHandler_FullyCleanDevice;
-	public static String FullyCleanDeviceHandler_Delete;
 	public static String KillDeviceHandler_KillDeviceError;
 	public static String OnlineCreateConnectionHandler_CreateConnectionError;
 	public static String OnlineCreateFBHandler_OnlineCreateFunctionBlockError;
 	public static String OnlineStartFBHandler_OnlineStartFunctionBlockError;
+	public static String RestartDeviceHandler_RestartError;
 	public static String RuntimeLaunchConfigurationTab_DeviceTypeDialogMessage;
 	public static String RuntimeLaunchConfigurationTab_DeviceTypeDialogTitle;
 	public static String RuntimeLaunchConfigurationTab_DeviceTypeLabel;

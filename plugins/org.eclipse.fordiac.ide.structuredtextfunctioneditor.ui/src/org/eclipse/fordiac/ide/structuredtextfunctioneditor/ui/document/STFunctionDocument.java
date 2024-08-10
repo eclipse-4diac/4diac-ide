@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,13 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document;
 
-import org.eclipse.fordiac.ide.structuredtextcore.ui.document.FBTypeXtextDocument;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocument;
 import org.eclipse.xtext.ui.editor.model.DocumentTokenSource;
 import org.eclipse.xtext.ui.editor.model.edit.ITextEditComposer;
 
 import com.google.inject.Inject;
 
-public class STFunctionDocument extends FBTypeXtextDocument {
+public class STFunctionDocument extends LibraryElementXtextDocument {
 
 	@Inject
 	public STFunctionDocument(final DocumentTokenSource tokenSource, final ITextEditComposer composer) {

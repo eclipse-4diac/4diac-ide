@@ -12,23 +12,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.util;
 
-import org.eclipse.emf.common.util.EList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 
 public class STFunctionPartition extends STCorePartition {
-	public static final String LOST_AND_FOUND_NAME = "LOST_AND_FOUND"; //$NON-NLS-1$
+	private final List<STFunction> functions;
 
-	private final EList<STFunction> functions;
-
-	public STFunctionPartition(final String packageName, final EList<Import> imports, final String originalSource,
-			final EList<STFunction> functions) {
+	public STFunctionPartition(final String packageName, final List<Import> imports, final String originalSource,
+			final List<STFunction> functions) {
 		super(packageName, imports, originalSource);
-		this.functions = functions;
+		this.functions = Objects.requireNonNullElseGet(functions, Collections::emptyList);
 	}
 
-	public EList<STFunction> getFunctions() {
+	public List<STFunction> getFunctions() {
 		return functions;
 	}
 }
