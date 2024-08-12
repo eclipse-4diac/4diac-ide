@@ -32,6 +32,7 @@ public class Messages extends NLS {
 	public static String ExtractCallableRefactoring_ReturnVariableAccessMayChangeSemantics;
 	public static String ExtractCallableRefactoring_TextNotFound;
 	public static String ExtractCallableWizardPage_NameField;
+	public static String MoveElementHandler_RefactoringDialogTitle;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
