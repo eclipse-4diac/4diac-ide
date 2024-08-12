@@ -593,4 +593,17 @@
        </enablement>
     </renameParticipant>
  </extension>
+ <extension
+       point="org.eclipse.ltk.core.refactoring.moveParticipants">
+    <moveParticipant
+          class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring2.participant.XtextMoveResourceParticipant"
+          id="org.eclipse.fordiac.ide.structuredtextcore.ui.moveParticipant"
+          name="ST Move Resource Participant">
+       <enablement>
+          <adapt
+                type="org.eclipse.core.resources.IFile">
+          </adapt>
+       </enablement>
+    </moveParticipant>
+ </extension>
 </plugin>
