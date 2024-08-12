@@ -54,6 +54,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobGroup;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
@@ -89,6 +90,7 @@ public enum LibraryManager {
 	public static final String PACKAGE_DOWNLOAD_DIRECTORY = ".download"; //$NON-NLS-1$
 	public static final String EXTRACTED_LIB_DIRECTORY = ".lib"; //$NON-NLS-1$
 	public static final String MANIFEST = "MANIFEST.MF"; //$NON-NLS-1$
+	public static final String DOWNLOADER_EXTENSION = "org.eclipse.fordiac.ide.library.ArchiveDownloaderExtension"; //$NON-NLS-1$
 
 	private static final java.net.URI STANDARD_LIBRARY_URI = java.net.URI
 			.create("ECLIPSE_HOME/" + TypeLibraryTags.TYPE_LIBRARY); //$NON-NLS-1$
@@ -122,6 +124,7 @@ public enum LibraryManager {
 	private final HashMap<String, List<LibraryRecord>> libraries = new HashMap<>();
 
 	private IEventBroker eventBroker;
+	private JobGroup jobGroup;
 	private boolean uninitialised = true;
 
 	/**
@@ -140,6 +143,13 @@ public enum LibraryManager {
 		final IPathVariableManager varMan = project.getPathVariableManager();
 		standardLibraryPath = Paths.get(varMan.resolveURI(STANDARD_LIBRARY_URI));
 		initLibraryMap(stdlibraries, standardLibraryPath, STANDARD_LIBRARY_URI);
+		if (!Files.exists(LIBRARY_PATH)) {
+			try {
+				Files.createDirectory(LIBRARY_PATH);
+			} catch (final IOException e) {
+				// empty
+			}
+		}
 		initLibraryMap(libraries, LIBRARY_PATH, WORKSPACE_LIBRARY_URI);
 		try {
 			watchService = FileSystems.getDefault().newWatchService();
@@ -148,6 +158,7 @@ public enum LibraryManager {
 		} catch (final IOException e) {
 			// empty
 		}
+		jobGroup = new JobGroup("LibraryManager JobGroup", 0, 0); //$NON-NLS-1$
 		uninitialised = false;
 	}
 
@@ -401,6 +412,7 @@ public enum LibraryManager {
 				}
 			};
 			job.setRule(project);
+			job.setJobGroup(jobGroup);
 			job.setPriority(Job.LONG);
 			job.schedule();
 		}
@@ -603,6 +615,13 @@ public enum LibraryManager {
 		if (manifest == null || !ManifestHelper.isProject(manifest) || manifest.getDependencies() == null) {
 			return;
 		}
+
+		// ensure dependencies are sorted (can't use EList.sort())
+		final var dependencies = new LinkedList<>(manifest.getDependencies().getRequired());
+		manifest.getDependencies().getRequired().clear();
+		dependencies.forEach(d -> ManifestHelper.addDependency(manifest, d));
+		ManifestHelper.saveManifest(manifest);
+
 		for (final Required req : manifest.getDependencies().getRequired()) {
 			checkDependency(req, project, typeLibrary);
 		}
@@ -681,6 +700,7 @@ public enum LibraryManager {
 			}
 		};
 		job.setRule(project);
+		job.setJobGroup(jobGroup);
 		job.setPriority(Job.LONG);
 		job.schedule();
 	}
@@ -727,6 +747,7 @@ public enum LibraryManager {
 			}
 		};
 		job.setRule(project);
+		job.setJobGroup(jobGroup);
 		job.setPriority(Job.SHORT);
 		job.schedule();
 	}
@@ -748,6 +769,7 @@ public enum LibraryManager {
 			}
 		};
 		job.setRule(project);
+		job.setJobGroup(jobGroup);
 		job.setPriority(Job.LONG);
 		job.schedule();
 	}
@@ -771,11 +793,14 @@ public enum LibraryManager {
 	 */
 	private java.net.URI libraryDownload(final String symbolicName, final VersionRange versionRange,
 			final Version preferred, final IProject project, final boolean autoImport, final boolean resolve) {
-		final List<IArchiveDownloader> downloaders = TypeLibraryManager
-				.listExtensions("org.eclipse.fordiac.ide.library.ArchiveDownloaderExtension", IArchiveDownloader.class); //$NON-NLS-1$
+		final List<IArchiveDownloader> downloaders = TypeLibraryManager.listExtensions(DOWNLOADER_EXTENSION,
+				IArchiveDownloader.class);
 		Path archivePath;
 		final VersionRange range = (versionRange == null || versionRange.isEmpty()) ? ALL_RANGE : versionRange;
 		for (final var downloader : downloaders) {
+			if (!downloader.isActive()) {
+				continue;
+			}
 			try {
 				archivePath = downloader.downloadLibrary(symbolicName, range, preferred);
 				if (archivePath != null) {
@@ -807,6 +832,7 @@ public enum LibraryManager {
 			}
 		};
 		job.setRule(project);
+		job.setJobGroup(jobGroup);
 		job.setPriority(Job.LONG);
 		job.schedule();
 	}
@@ -948,6 +974,15 @@ public enum LibraryManager {
 	 */
 	void stopEventBroker() {
 		eventBroker.unsubscribe(handler);
+	}
+
+	/**
+	 * Returns the internal JobGroup used for all Jobs.
+	 *
+	 * @return JobGroup
+	 */
+	public JobGroup getJobGroup() {
+		return jobGroup;
 	}
 
 	private final EventHandler handler = event -> {
