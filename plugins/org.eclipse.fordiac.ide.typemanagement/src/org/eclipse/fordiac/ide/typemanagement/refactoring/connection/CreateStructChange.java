@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -33,13 +34,25 @@ import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange;
 
+/**
+ * A Change that represents creating a new Struct from a List of
+ * VarDeclarations. Undo is provided by
+ * {@link org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange
+ * DeleteResourceChange}
+ */
 public class CreateStructChange extends Change {
 	private final URI structURI;
 	private final Collection<VarDeclaration> vars;
 
+	/**
+	 * Creates a new Instance
+	 *
+	 * @param structURI URI where the new Struct should be located
+	 * @param vars      Variables which should be contained in the struct
+	 */
 	public CreateStructChange(final URI structURI, final Collection<VarDeclaration> vars) {
-		this.structURI = structURI;
-		this.vars = vars;
+		this.structURI = Objects.requireNonNull(structURI);
+		this.vars = Objects.requireNonNull(vars);
 	}
 
 	@Override
@@ -49,13 +62,12 @@ public class CreateStructChange extends Change {
 
 	@Override
 	public void initializeValidationData(final IProgressMonitor pm) {
-		// TODO
-
+		// nothing to validate
 	}
 
 	@Override
 	public RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		// TODO
+		// nothing to validate
 		return null;
 	}
 
@@ -75,9 +87,8 @@ public class CreateStructChange extends Change {
 	}
 
 	@Override
-	public Object getModifiedElement() {
-		// TODO
-		return null;
+	public TypeEntry getModifiedElement() {
+		return TypeLibraryManager.INSTANCE.getTypeEntryForURI(structURI);
 	}
 
 }

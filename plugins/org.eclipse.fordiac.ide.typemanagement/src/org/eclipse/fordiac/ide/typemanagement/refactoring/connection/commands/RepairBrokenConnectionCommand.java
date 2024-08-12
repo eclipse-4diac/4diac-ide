@@ -34,23 +34,40 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
+/**
+ * A Command for Repairing a broken Connection. The command searches for the
+ * first occurrence of the given Struct and reconnects the broken Connection. If
+ * not already present, a Multiplexer or Demultiplexer is placed automatically
+ * with
+ * {@link org.eclipse.fordiac.ide.typemanagement.refactoring.connection.commands.InsertStructManipulatorCommand
+ * InsertStructManipulatorCommand}.
+ */
 public class RepairBrokenConnectionCommand extends Command {
 
 	private final Connection connection;
 	final boolean isSourceReconnect;
 	private final StructuredType structType;
-	private final String var;
+	private final String varName;
 
 	InsertStructManipulatorCommand insertMuxCommand;
 	ReconnectDataConnectionCommand recon;
 	CompoundCommand eventConnectionCommand;
 
+	/**
+	 * Creates a new Instance
+	 *
+	 * @param con               The broken Connection
+	 * @param isSourceReconnect If the Source has to be reconnected (otherwise the
+	 *                          Destination will be reconnected)
+	 * @param structType        Type of the Struct to connect to
+	 * @param varName           Name of the Variable within the Struct
+	 */
 	public RepairBrokenConnectionCommand(final Connection con, final boolean isSourceReconnect,
-			final StructuredType structType, final String var) {
+			final StructuredType structType, final String varName) {
 		this.connection = Objects.requireNonNull(con);
 		this.isSourceReconnect = isSourceReconnect;
 		this.structType = Objects.requireNonNull(structType);
-		this.var = Objects.requireNonNull(var);
+		this.varName = Objects.requireNonNull(varName);
 	}
 
 	private IInterfaceElement getPort() {
@@ -85,6 +102,11 @@ public class RepairBrokenConnectionCommand extends Command {
 			insertMuxCommand.execute();
 			return insertMuxCommand.getNewElement();
 		});
+	}
+
+	@Override
+	public boolean canExecute() {
+		return getPort() != null;
 	}
 
 	@Override
@@ -136,18 +158,23 @@ public class RepairBrokenConnectionCommand extends Command {
 		});
 
 		eventConnectionCommand.add(new ReconnectDataConnectionCommand(connection, isSourceReconnect,
-				isSourceReconnect ? mux.getInterface().getOutput(var) : mux.getInterface().getInput(var), fbn));
+				isSourceReconnect ? mux.getInterface().getOutput(varName) : mux.getInterface().getInput(varName), fbn));
 		eventConnectionCommand.execute();
 
 	}
 
-	public static boolean checkDuplicate(final Connection connection, final IInterfaceElement target) {
+	private static boolean checkDuplicate(final Connection connection, final IInterfaceElement target) {
 		if (target.isIsInput()) {
-			return target.getInputConnections().stream().filter(con -> con.getSource().equals(connection.getSource()))
-					.findAny().isPresent();
+			return target.getInputConnections().stream()
+					.anyMatch(con -> con.getSource().equals(connection.getSource()));
 		}
 		return target.getOutputConnections().stream()
-				.filter(con -> con.getDestination().equals(connection.getDestination())).findAny().isPresent();
+				.anyMatch(con -> con.getDestination().equals(connection.getDestination()));
+	}
+
+	@Override
+	public boolean canUndo() {
+		return eventConnectionCommand.canUndo() && (insertMuxCommand == null || insertMuxCommand.canUndo());
 	}
 
 	@Override
@@ -156,6 +183,11 @@ public class RepairBrokenConnectionCommand extends Command {
 		if (insertMuxCommand != null) {
 			insertMuxCommand.undo();
 		}
+	}
+
+	@Override
+	public boolean canRedo() {
+		return eventConnectionCommand.canRedo() && (insertMuxCommand == null || insertMuxCommand.canRedo());
 	}
 
 	@Override

@@ -27,6 +27,13 @@ import org.eclipse.fordiac.ide.typemanagement.refactoring.connection.commands.Re
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
+/**
+ * A Change which represents replacing Vars of a FB with a structured type,
+ * using
+ * {@link org.eclipse.fordiac.ide.typemanagement.refactoring.connection.commands.ReplaceVarsWithStructCommand
+ * ReplaceVarsWithStructCommand}
+ *
+ */
 public class ReplaceVarsWithStructChange extends AbstractCommandChange<FBType> {
 	private final Collection<String> vars;
 	final URI structURI;
@@ -34,6 +41,17 @@ public class ReplaceVarsWithStructChange extends AbstractCommandChange<FBType> {
 	private final boolean isInput;
 	private final int position;
 
+	/**
+	 * Creates a new Instance
+	 *
+	 * @param elementURI URI of the FBType
+	 * @param vars       Names of the Variables
+	 * @param structURI  Struct of the new In- or Output
+	 * @param name       Name of the new In/Output
+	 * @param isInput    Whether the Variables to be deleted as well as the new
+	 *                   In/Output is an Input
+	 * @param position   Position in the respective List
+	 */
 	protected ReplaceVarsWithStructChange(final URI elementURI, final Collection<String> vars, final URI structURI,
 			final String name, final boolean isInput, final int position) {
 		super(elementURI.trimFileExtension().lastSegment() + Messages.ReplaceVarsWithStructChange_Replace
@@ -49,15 +67,21 @@ public class ReplaceVarsWithStructChange extends AbstractCommandChange<FBType> {
 
 	@Override
 	public void initializeValidationData(final FBType element, final IProgressMonitor pm) {
-		// TODO
-
+		// no additional ValidationData needed
 	}
 
 	@Override
 	public RefactoringStatus isValid(final FBType element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
-		// TODO
-		return null;
+		final RefactoringStatus status = new RefactoringStatus();
+		vars.forEach(varName -> {
+			if (isInput && element.getInterfaceList().getInput(varName) == null
+					|| !isInput && element.getInterfaceList().getOutput(varName) == null) {
+				status.merge(RefactoringStatus.createFatalErrorStatus(
+						varName + Messages.ReplaceVarsWithStructChange_NotContained + this.getElementURI()));
+			}
+		});
+		return status;
 	}
 
 	@Override

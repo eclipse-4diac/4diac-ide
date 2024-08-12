@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.eclipse.core.runtime.CoreException;
@@ -47,6 +48,9 @@ import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
+/**
+ *
+ */
 public class ConnectionsToStructRefactoring extends Refactoring {
 	private final URI sourceURI;
 	private final URI destinationURI;
@@ -63,11 +67,19 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 
 	private CompositeChange compChange;
 
+	/**
+	 * Creates a Instance
+	 *
+	 * @param sourceType       FB which represents the Source
+	 * @param destinationType  FB which represents the Destination
+	 * @param replacableConMap Mapping of the Output Variables to the Input
+	 *                         Variables
+	 */
 	public ConnectionsToStructRefactoring(final FBType sourceType, final FBType destinationType,
 			final Map<String, String> replacableConMap) {
-		this.sourceURI = EcoreUtil.getURI(sourceType);
-		this.destinationURI = EcoreUtil.getURI(destinationType);
-		this.replaceableConMap = replacableConMap;
+		this.sourceURI = EcoreUtil.getURI(Objects.requireNonNull(sourceType));
+		this.destinationURI = EcoreUtil.getURI(Objects.requireNonNull(destinationType));
+		this.replaceableConMap = Objects.requireNonNull(replacableConMap);
 
 		vars = sourceType.getInterfaceList().getOutputs().filter(port -> replacableConMap.containsKey(port.getName()))
 				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).toList();
@@ -313,10 +325,10 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 			}
 		});
 		repairSourceMap.entrySet()
-				.forEach(entry -> compChange.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()),
+				.forEach(entry -> compChange.add(new SystemRepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()),
 						structURI, replaceableConMap, entry.getValue(), true)));
 		repairDestinationMap.entrySet()
-				.forEach(entry -> compChange.add(new RepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()),
+				.forEach(entry -> compChange.add(new SystemRepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()),
 						structURI, replaceableConMap, entry.getValue(), false)));
 	}
 

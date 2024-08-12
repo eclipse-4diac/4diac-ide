@@ -22,13 +22,20 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.connection.ConnectionsToStructRefactoring;
-import org.eclipse.fordiac.ide.typemanagement.wizards.ConnectionsToStructWizard;
+import org.eclipse.fordiac.ide.typemanagement.wizards.ConnectionsToStructWizardPage;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+/**
+ * This Handler activates the
+ * {@link org.eclipse.fordiac.ide.typemanagement.refactoring.connection.ConnectionsToStructRefactoring
+ * ConnectionsToStructRefactoring} by preprocessing the selection and opening
+ * the according wizard.
+ */
 public class ConnectionsToStructHandler extends AbstractHandler {
 
 	@Override
@@ -47,7 +54,13 @@ public class ConnectionsToStructHandler extends AbstractHandler {
 
 				final ConnectionsToStructRefactoring refactoring = new ConnectionsToStructRefactoring(sourceType,
 						destinationType, replacableConMap);
-				final ConnectionsToStructWizard wizard = new ConnectionsToStructWizard(selection, refactoring);
+				final RefactoringWizard wizard = new RefactoringWizard(refactoring,
+						RefactoringWizard.DIALOG_BASED_USER_INTERFACE | RefactoringWizard.PREVIEW_EXPAND_FIRST_NODE) {
+					@Override
+					protected void addUserInputPages() {
+						addPage(new ConnectionsToStructWizardPage());
+					}
+				};
 				final RefactoringWizardOpenOperation openOperation = new RefactoringWizardOpenOperation(wizard);
 				openOperation.run(HandlerUtil.getActiveShell(event), refactoring.getName());
 			}

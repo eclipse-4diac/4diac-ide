@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -34,33 +35,57 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class RepairBrokenConnectionChange extends AbstractCommandChange<AutomationSystem> {
+/**
+ * A Change that represents Repairing a broken Connections of one System for
+ * {@link org.eclipse.fordiac.ide.typemanagement.refactoring.connection.ConnectionsToStructRefactoring
+ * ConnectionsToStructRefactoring} with
+ * {@link org.eclipse.fordiac.ide.typemanagement.refactoring.connection.commands.RepairBrokenConnectionCommand
+ * RepairBrokenConnectionCommands}. Grouping by System is needed, as creating a
+ * Change for each individually leads to longer execution times.
+ */
+public class SystemRepairBrokenConnectionChange extends AbstractCommandChange<AutomationSystem> {
 	private final URI structURI;
 	private final Map<String, String> replaceableConMap;
 	private final List<URI> list;
 	private final boolean isSource;
 
-	public RepairBrokenConnectionChange(final URI elementURI, final URI structURI,
+	/**
+	 * Creates a new Instance
+	 *
+	 * @param elementURI        URI of the Target System
+	 * @param structURI         URI of the Struct which is used to repair the FBs
+	 * @param replaceableConMap mapping of the Output Variables to the Input
+	 *                          Variables
+	 * @param list              URIs of FBs to be repaired
+	 * @param isSource          Whether the FB is the Source for the broken
+	 *                          Connection
+	 */
+	public SystemRepairBrokenConnectionChange(final URI elementURI, final URI structURI,
 			final Map<String, String> replaceableConMap, final List<URI> list, final boolean isSource) {
-		super(elementURI.trimFileExtension().lastSegment() + Messages.RepairBrokenConnectionChange_Name, elementURI,
-				AutomationSystem.class);
-		this.structURI = structURI;
-		this.replaceableConMap = replaceableConMap;
-		this.list = list;
+		super(Objects.requireNonNull(elementURI).trimFileExtension().lastSegment()
+				+ Messages.RepairBrokenConnectionChange_Name, elementURI, AutomationSystem.class);
+		this.structURI = Objects.requireNonNull(structURI);
+		this.replaceableConMap = Objects.requireNonNull(replaceableConMap);
+		this.list = Objects.requireNonNull(list);
 		this.isSource = isSource;
 	}
 
 	@Override
 	public void initializeValidationData(final AutomationSystem element, final IProgressMonitor pm) {
-		// TODO
-
+		// no additional ValidationData needed
 	}
 
 	@Override
 	public RefactoringStatus isValid(final AutomationSystem element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
-		// TODO
-		return null;
+		final RefactoringStatus status = new RefactoringStatus();
+		list.forEach(uri -> {
+			if (!uri.toPlatformString(true).equals(this.getElementURI().toPlatformString(true))) {
+				status.merge(RefactoringStatus.createFatalErrorStatus(
+						uri + Messages.ConnectionsToStructRefactoring_FBNotInSystem + this.getElementURI()));
+			}
+		});
+		return status;
 	}
 
 	@Override

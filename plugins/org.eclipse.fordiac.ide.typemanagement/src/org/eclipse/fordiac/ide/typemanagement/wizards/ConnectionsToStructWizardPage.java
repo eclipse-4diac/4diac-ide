@@ -22,7 +22,6 @@ import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.connection.ConnectionsToStructRefactoring;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.ui.refactoring.UserInputWizardPage;
@@ -35,22 +34,22 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * This WizardPage
+ */
 public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 
 	private Text structNameText;
-	private Text existingStructText;
 	private Text sourceNameText;
 	private Text destinationNameText;
-	private Button newStructButton;
 	private Button existingStructButton;
 	private Button conflictButton;
 
 	StructuredType structType;
 
-	protected ConnectionsToStructWizardPage(final IStructuredSelection selection) {
+	public ConnectionsToStructWizardPage() {
 		super(Messages.ConnectionsToStructWizardPage_Title);
-		this.setDescription(
-				Messages.ConnectionsToStructWizardPage_Description);
+		this.setDescription(Messages.ConnectionsToStructWizardPage_Description);
 	}
 
 	@Override
@@ -70,25 +69,25 @@ public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 		gridl.numColumns = 3;
 		container.setLayout(gridl);
 
-		newStructButton = new Button(container, SWT.RADIO);
+		final Button newStructButton = new Button(container, SWT.RADIO);
 		newStructButton.setText(Messages.ConnectionsToStructWizardPage_NewType);
 		final Label structNameLabel = new Label(container, NONE);
-		structNameLabel.setText(Messages.ConnectionsToStructWizardPage_Name + ":"); //$NON-NLS-2$
+		structNameLabel.setText(Messages.ConnectionsToStructWizardPage_Name + ":"); //$NON-NLS-1$
 		structNameText = new Text(container, SWT.SINGLE | SWT.BORDER);
 
 		existingStructButton = new Button(container, SWT.RADIO);
 		existingStructButton.setText(Messages.ConnectionsToStructWizardPage_ExistingStruct);
 		final Button structButton = new Button(container, SWT.NONE);
 		structButton.setText("&..."); //$NON-NLS-1$
-		existingStructText = new Text(container, SWT.SINGLE | SWT.BORDER);
+		final Text existingStructText = new Text(container, SWT.SINGLE | SWT.BORDER);
 		existingStructText.setText(Messages.ConnectionsToStructWizardPage_AnyStruct);
 
 		final Label sourceNameLabel = new Label(container, NONE);
-		sourceNameLabel.setText(Messages.ConnectionsToStructWizardPage_OutName + ":"); //$NON-NLS-2$
+		sourceNameLabel.setText(Messages.ConnectionsToStructWizardPage_OutName + ":"); //$NON-NLS-1$
 		sourceNameText = new Text(container, SWT.SINGLE | SWT.BORDER);
 
 		final Label destinationNameLabel = new Label(container, NONE);
-		destinationNameLabel.setText(Messages.ConnectionsToStructWizardPage_InName + ":"); //$NON-NLS-2$
+		destinationNameLabel.setText(Messages.ConnectionsToStructWizardPage_InName + ":"); //$NON-NLS-1$
 		destinationNameText = new Text(container, SWT.BORDER);
 
 		final GridData textGridData = new GridData();
@@ -144,7 +143,7 @@ public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 		existingStructText.setEnabled(false);
 	}
 
-	void handleInputChanged() {
+	private void handleInputChanged() {
 		final RefactoringStatus status = new RefactoringStatus();
 		final ConnectionsToStructRefactoring refactoring = getConnectionsToStructRefactoring();
 		final URI structURI;
@@ -153,7 +152,8 @@ public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 			structURI = structType != null ? EcoreUtil.getURI(structType) : null;
 		} else {
 			if (IdentifierVerifier.verifyIdentifier(structNameText.getText()).isPresent()) {
-				status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructWizardPage_InvalidStructName));
+				status.merge(RefactoringStatus
+						.createFatalErrorStatus(Messages.ConnectionsToStructWizardPage_InvalidStructName));
 			}
 			structURI = URI.createPlatformResourceURI(
 					getConnectionsToStructRefactoring().getTypeLibrary().getProject().getFullPath() + File.separator

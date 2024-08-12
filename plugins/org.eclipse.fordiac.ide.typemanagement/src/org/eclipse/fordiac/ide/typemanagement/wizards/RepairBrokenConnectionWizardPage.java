@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
+import java.util.Objects;
+
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -30,17 +32,32 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * This WizardPage provides the selection of an existing Struct and one of its
+ * Variables in order to repair an
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface
+ * ErrorMarkerInterface}.
+ */
 public class RepairBrokenConnectionWizardPage extends WizardPage {
 	private final TypeLibrary lib;
 	private final DataType errorType;
 	private StructuredType type;
-	private String var;
+	private String targetVar;
 
+	/**
+	 * Constructs a new instance
+	 *
+	 * @param lib       TypeLibrary of which the Struct can be selected from
+	 * @param errorType DataType of the
+	 *                  {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface
+	 *                  ErrorMarkerInterface}, needed for filtering the Struct
+	 *                  Variables by Type
+	 */
 	public RepairBrokenConnectionWizardPage(final TypeLibrary lib, final DataType errorType) {
 		super(Messages.RepairBrokenConnectionWizardPage_Title);
 		this.setDescription(Messages.RepairBrokenConnectionWizardPage_Description);
-		this.lib = lib;
-		this.errorType = errorType;
+		this.lib = Objects.requireNonNull(lib);
+		this.errorType = Objects.requireNonNull(errorType);
 	}
 
 	@Override
@@ -87,11 +104,11 @@ public class RepairBrokenConnectionWizardPage extends WizardPage {
 				type = structType;
 				currentType.setText(node.getFullName());
 				varTable.removeAll();
-				type.getMemberVariables().forEach(var -> {
-					if (var.getType().equals(errorType)) {
+				type.getMemberVariables().forEach(varDec -> {
+					if (varDec.getType().equals(errorType)) {
 						final TableItem item = new TableItem(varTable, SWT.NONE);
-						item.setText(0, var.getName());
-						item.setText(1, var.getTypeName());
+						item.setText(0, varDec.getName());
+						item.setText(1, varDec.getTypeName());
 					}
 					varTable.getColumn(0).pack();
 					varTable.getColumn(1).pack();
@@ -102,8 +119,11 @@ public class RepairBrokenConnectionWizardPage extends WizardPage {
 		});
 
 		varTable.addListener(SWT.Selection, event -> {
-			var = varTable.getSelection()[0].getText(0);
-			this.setPageComplete(true);
+			final TableItem[] sel = varTable.getSelection();
+			if (sel.length != 0 && sel[0] != null) {
+				targetVar = sel[0].getText(0);
+				this.setPageComplete(true);
+			}
 		});
 
 		setControl(container);
@@ -111,7 +131,7 @@ public class RepairBrokenConnectionWizardPage extends WizardPage {
 
 	@Override
 	public boolean isPageComplete() {
-		return type != null && var != null;
+		return type != null && targetVar != null;
 	}
 
 	public StructuredType getType() {
@@ -119,7 +139,7 @@ public class RepairBrokenConnectionWizardPage extends WizardPage {
 	}
 
 	public String getVar() {
-		return var;
+		return targetVar;
 	}
 
 }

@@ -46,6 +46,8 @@ public class Messages extends NLS {
 	public static String ReplaceVarsWithStructChange_Struct;
 	public static String SystemConnectStructChange_Name;
 	public static String SystemUpdateFBChange_Name;
+	public static String ConnectionsToStructRefactoring_FBNotInSystem;
+	public static String ReplaceVarsWithStructChange_NotContained;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

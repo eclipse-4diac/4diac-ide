@@ -22,10 +22,17 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
+/**
+ * A Command for replacing multiple In/-Outputs with one single StructuredType
+ * This command ignores existing DataConnections.
+ *
+ * @see org.eclipse.fordiac.ide.model.commands.create.CreateStructFromInterfaceElementsCommand
+ */
 public class ReplaceVarsWithStructCommand extends Command {
 	private final Collection<String> vars;
 	private final DataType struct;
@@ -39,6 +46,16 @@ public class ReplaceVarsWithStructCommand extends Command {
 	private CompoundCommand editFBsCommand;
 	private CompoundCommand createWithsCommand;
 
+	/**
+	 * Creates a new Instance.
+	 *
+	 * @param vars          Names of the Variables which should be removed
+	 * @param struct        Type of the Struct to be created
+	 * @param name          Name of the new port
+	 * @param interfacelist InterfaceList to be modified
+	 * @param isInput       Whether it is a Input (or Output otherwise)
+	 * @param position      Where to insert the new port.
+	 */
 	public ReplaceVarsWithStructCommand(final Collection<String> vars, final DataType struct, final String name,
 			final InterfaceList interfacelist, final boolean isInput, final int position) {
 		this.vars = Objects.requireNonNull(vars);
@@ -52,9 +69,7 @@ public class ReplaceVarsWithStructCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		// TODO: depending on fbtype
-		// return editFBsCommand.canExecute();
-		return true;
+		return !(interfacelist.eContainer() instanceof ServiceInterfaceFBType);
 	}
 
 	@Override
@@ -67,8 +82,8 @@ public class ReplaceVarsWithStructCommand extends Command {
 				.map(with -> ((Event) with.eContainer()).getName()).distinct().toList();
 
 		// Delete old Vars
-		vars.forEach(var -> editFBsCommand.add(isInput ? new DeleteInterfaceCommand(interfacelist.getInput(var))
-				: new DeleteInterfaceCommand(interfacelist.getOutput(var))));
+		vars.forEach(varName -> editFBsCommand.add(isInput ? new DeleteInterfaceCommand(interfacelist.getInput(varName))
+				: new DeleteInterfaceCommand(interfacelist.getOutput(varName))));
 		// Create Struct Vars
 		createStruct = new CreateInterfaceElementCommand(struct, name, interfacelist, isInput, position);
 		editFBsCommand.add(createStruct);

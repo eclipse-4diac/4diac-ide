@@ -31,6 +31,15 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+/**
+ * A Handler for reconnecting existing
+ * {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface
+ * ErrorMarkerInterface} via a StructuredType Connection by using the
+ * {@link org.eclipse.fordiac.ide.typemanagement.refactoring.connection.commands.RepairBrokenConnectionCommand
+ * RepairBrokenConnectionCommand} It launches as Wizard to query the necessary
+ * information from the user and executes the Command on the
+ * {@link org.eclipse.gef.commands.CommandStack CommandStack}.
+ */
 public class RepairBrokenConnectionHandler extends AbstractHandler {
 
 	@Override
@@ -57,11 +66,8 @@ public class RepairBrokenConnectionHandler extends AbstractHandler {
 			if (dialog.open() == Window.OK) {
 				final CompoundCommand repairCommands = new CompoundCommand();
 				(errormarker.isIsInput() ? errormarker.getInputConnections() : errormarker.getOutputConnections())
-						.forEach(con -> {
-							repairCommands.add(new RepairBrokenConnectionCommand(con, !errormarker.isIsInput(),
-									repairPage.getType(), repairPage.getVar()));
-
-						});
+						.forEach(con -> repairCommands.add(new RepairBrokenConnectionCommand(con,
+								!errormarker.isIsInput(), repairPage.getType(), repairPage.getVar())));
 				commandStack.execute(repairCommands);
 			}
 
