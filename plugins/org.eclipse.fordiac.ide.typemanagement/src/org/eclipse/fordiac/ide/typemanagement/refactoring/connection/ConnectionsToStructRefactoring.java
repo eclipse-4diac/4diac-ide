@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.CommandCompositeChange;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.Refactoring;
@@ -231,7 +232,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		compChange = new CompositeChange(Messages.ConnectionsToStructRefactoring_ChangeName);
+		compChange = new CommandCompositeChange(Messages.ConnectionsToStructRefactoring_ChangeName);
 		pm.beginTask(Messages.ConnectionsToStructRefactoring_ProgressText, 1);
 
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(structURI) == null) {
@@ -324,11 +325,11 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 				addToMap(repairSourceMap, instance);
 			}
 		});
-		repairSourceMap.entrySet()
-				.forEach(entry -> compChange.add(new SystemRepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()),
+		repairSourceMap.entrySet().forEach(
+				entry -> compChange.add(new SystemRepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()),
 						structURI, replaceableConMap, entry.getValue(), true)));
-		repairDestinationMap.entrySet()
-				.forEach(entry -> compChange.add(new SystemRepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()),
+		repairDestinationMap.entrySet().forEach(
+				entry -> compChange.add(new SystemRepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()),
 						structURI, replaceableConMap, entry.getValue(), false)));
 	}
 
