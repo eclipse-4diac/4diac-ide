@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.StringNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.swt.graphics.Point;
@@ -40,13 +42,13 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	@Disabled("until bug fix")
 	@Test
 	public void createEmptySubappViaMenu() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
-		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		bot.menu(StringNamesHelper.SOURCE).menu(StringNamesHelper.NEW_SUBAPPLICATION).click();
 		editor.drag(10, 10, 500, 500);
 		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
+		assertTrue(isSubappSelected(selectedEditParts, StringNamesHelper.SUBAPP));
 	}
 
 	/**
@@ -60,9 +62,9 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void createSubappViaMenu() {
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(100, 100));
-		dragAndDropEventsFB(E_SR_TREE_ITEM, new Point(300, 100));
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		dragAndDropEventsFB(StringNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(StringNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
 
 		// drag rectangle over to FB, therefore FB should be selected
 		editor.drag(50, 50, 400, 400);
@@ -70,14 +72,14 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertEquals(2, selectedEditParts.size());
-		assertTrue(isFbSelected(selectedEditParts, E_SWITCH_FB));
-		assertTrue(isFbSelected(selectedEditParts, E_SR_FB));
+		assertTrue(isFbSelected(selectedEditParts, StringNamesHelper.E_SWITCH_FB));
+		assertTrue(isFbSelected(selectedEditParts, StringNamesHelper.E_SR_FB));
 
-		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
+		bot.menu(StringNamesHelper.SOURCE).menu(StringNamesHelper.NEW_SUBAPPLICATION).click();
 		// renew list of selectedEditParts and then check if SubApp was created
 		selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
+		assertTrue(isSubappSelected(selectedEditParts, StringNamesHelper.SUBAPP));
 	}
 
 	/**
@@ -91,14 +93,14 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void createSubappViaMenuWithConnectionBetweenFBs() {
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(100, 100));
-		dragAndDropEventsFB(E_SR_TREE_ITEM, new Point(300, 100));
-		assertNotNull(createConnection(EO0, S));
-		assertNotNull(createConnection(EO1, R));
-		assertNotNull(createConnection(Q, G));
+		dragAndDropEventsFB(StringNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(StringNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
+		assertNotNull(createConnection(PinNamesHelper.EO0, PinNamesHelper.S));
+		assertNotNull(createConnection(PinNamesHelper.EO1, PinNamesHelper.R));
+		assertNotNull(createConnection(PinNamesHelper.Q, PinNamesHelper.G));
 
 		// drag rectangle over to FB, therefore FB should be selected
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
 		editor.drag(50, 50, 500, 300);
 		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
@@ -107,17 +109,17 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		// expected 5 selected EditParts (2 GefEditPart for the FBs and
 		// 3 GefConnectionEditPars for the connections
 		assertEquals(5, selectedEditParts.size());
-		assertTrue(isFbSelected(selectedEditParts, E_SWITCH_FB));
-		assertTrue(isFbSelected(selectedEditParts, E_SR_FB));
-		assertTrue(checkIfConnectionCanBeFound(EO0, S));
-		assertTrue(checkIfConnectionCanBeFound(EO1, R));
-		assertTrue(checkIfConnectionCanBeFound(Q, G));
+		assertTrue(isFbSelected(selectedEditParts, StringNamesHelper.E_SWITCH_FB));
+		assertTrue(isFbSelected(selectedEditParts, StringNamesHelper.E_SR_FB));
+		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.EO0, PinNamesHelper.S));
+		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.EO1, PinNamesHelper.R));
+		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.Q, PinNamesHelper.G));
 
-		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
+		bot.menu(StringNamesHelper.SOURCE).menu(StringNamesHelper.NEW_SUBAPPLICATION).click();
 		// renew list of selectedEditParts and then check if SubApp was created
 		selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
+		assertTrue(isSubappSelected(selectedEditParts, StringNamesHelper.SUBAPP));
 	}
 
 	/**
@@ -132,30 +134,30 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void createSubappViaMenuWithExistingConnectionOutsideSubapp() {
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(100, 100));
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(300, 100));
-		dragAndDropEventsFB(E_SR_TREE_ITEM, new Point(500, 100));
-		assertNotNull(createConnection(EO, EI));
+		dragAndDropEventsFB(StringNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(StringNamesHelper.E_SWITCH_TREE_ITEM, new Point(300, 100));
+		dragAndDropEventsFB(StringNamesHelper.E_SR_TREE_ITEM, new Point(500, 100));
+		assertNotNull(createConnection(PinNamesHelper.EO, PinNamesHelper.EI));
 
 		// drag rectangle over to FBs E_SWITCH and E_SR, therefore FBs should be
 		// selected
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
 		editor.drag(250, 50, 600, 200);
 		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertEquals(2, selectedEditParts.size());
-		assertTrue(isFbSelected(selectedEditParts, E_SWITCH_FB));
-		assertTrue(isFbSelected(selectedEditParts, E_SR_FB));
-		assertFalse(isFbSelected(selectedEditParts, E_CYCLE_TREE_ITEM));
-		assertTrue(checkIfConnectionCanBeFound(EO, EI));
+		assertTrue(isFbSelected(selectedEditParts, StringNamesHelper.E_SWITCH_FB));
+		assertTrue(isFbSelected(selectedEditParts, StringNamesHelper.E_SR_FB));
+		assertFalse(isFbSelected(selectedEditParts, StringNamesHelper.E_CYCLE_TREE_ITEM));
+		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.EO, PinNamesHelper.EI));
 
-		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
+		bot.menu(StringNamesHelper.SOURCE).menu(StringNamesHelper.NEW_SUBAPPLICATION).click();
 		// renew list of selectedEditParts and then check if SubApp was created
 		selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
-		assertTrue(checkIfConnectionCanBeFound(EO, EO));
+		assertTrue(isSubappSelected(selectedEditParts, StringNamesHelper.SUBAPP));
+		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.EO, PinNamesHelper.EO));
 	}
 
 	/**
@@ -168,27 +170,27 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void createSubappViaMenuThenCreatingConnection() {
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(100, 100));
-		dragAndDropEventsFB(E_SR_TREE_ITEM, new Point(300, 100));
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		dragAndDropEventsFB(StringNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(StringNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
 
 		editor.drag(50, 50, 400, 400);
-		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
+		bot.menu(StringNamesHelper.SOURCE).menu(StringNamesHelper.NEW_SUBAPPLICATION).click();
 
-		goToCompositeInstanceViewer(SUBAPP);
-		final SWTBotGefEditor editorSubApp = bot.gefEditor(PROJECT_NAME);
+		goToCompositeInstanceViewer(StringNamesHelper.SUBAPP);
+		final SWTBotGefEditor editorSubApp = bot.gefEditor(StringNamesHelper.PROJECT_NAME);
 		assertNotNull(editorSubApp);
 
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editorSubApp.getSWTBotGefViewer();
 		assertNotNull(viewer);
-		final SWTBotGefEditPart editPart = editorSubApp.getEditPart(E_SWITCH_FB);
+		final SWTBotGefEditPart editPart = editorSubApp.getEditPart(StringNamesHelper.E_SWITCH_FB);
 
 		// syncExec() is needed to update selection of UI and therefore it needs to run
 		// in UI thread. Without this, the connections are not created correctly
 		UIThreadRunnable.syncExec(() -> HandlerHelper.selectEditPart(viewer.getGraphicalViewer(), editPart.part()));
-		assertNotNull(createConnection(EO0, S));
-		assertNotNull(createConnection(EO1, R));
-		assertNotNull(createConnection(Q, G));
+		assertNotNull(createConnection(PinNamesHelper.EO0, PinNamesHelper.S));
+		assertNotNull(createConnection(PinNamesHelper.EO1, PinNamesHelper.R));
+		assertNotNull(createConnection(PinNamesHelper.Q, PinNamesHelper.G));
 	}
 
 }
