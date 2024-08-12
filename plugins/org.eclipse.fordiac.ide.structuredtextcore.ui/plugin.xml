@@ -409,56 +409,102 @@
 			parentId="org.eclipse.xtext.ui.XtextEditorScope">
 		</context>
 	</extension>
- <extension
-       point="org.eclipse.ui.commands">
-    <command
-          categoryId="org.eclipse.xtext.ui.category.refactoring"
-          id="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallable"
-          name="Extract Callable">
-    </command>
- </extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			categoryId="org.eclipse.xtext.ui.category.refactoring"
+			id="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallable"
+			name="Extract Callable">
+		</command>
+		<command
+			categoryId="org.eclipse.xtext.ui.category.refactoring"
+			id="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.MoveElement"
+			name="Move Element">
+		</command>
+	</extension>
 	<extension point="org.eclipse.ui.bindings">
 		<key
 			sequence="M2+M3+M"
 			commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallable"
 			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"/>
+			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope" />
 		<key
 			sequence="COMMAND+ALT+M"
 			commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallable"
 			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
 			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"
-			platform="carbon"/>
+			platform="carbon" />
 		<key
 			sequence="M2+M3+M"
 			commandId=""
 			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
 			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"
-			platform="carbon"/>
+			platform="carbon" />
 		<key
 			sequence="SHIFT+ALT+M"
 			commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallable"
 			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
 			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"
-			platform="win32"/>
+			platform="win32" />
 		<key
 			sequence="M2+M3+M"
 			commandId=""
 			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
 			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"
-			platform="win32"/>
+			platform="win32" />
 		<key
 			sequence="SHIFT+ALT+M"
 			commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallable"
 			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
 			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"
-			platform="gtk"/>
+			platform="gtk" />
 		<key
 			sequence="M2+M3+M"
 			commandId=""
 			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
 			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"
-			platform="gtk"/>
+			platform="gtk" />
+		<key
+			sequence="M2+M3+V"
+			commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.MoveElement"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope" />
+		<key
+			sequence="COMMAND+ALT+V"
+			commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.MoveElement"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"
+			platform="carbon" />
+		<key
+			sequence="M2+M3+V"
+			commandId=""
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"
+			platform="carbon" />
+		<key
+			sequence="SHIFT+ALT+V"
+			commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.MoveElement"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"
+			platform="win32" />
+		<key
+			sequence="M2+M3+V"
+			commandId=""
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"
+			platform="win32" />
+		<key
+			sequence="SHIFT+ALT+V"
+			commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.MoveElement"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"
+			platform="gtk" />
+		<key
+			sequence="M2+M3+V"
+			commandId=""
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			contextId="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"
+			platform="gtk" />
 	</extension>
 	<!-- Rename Refactoring -->
 	<extension point="org.eclipse.ui.handlers">
