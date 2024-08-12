@@ -25,7 +25,7 @@ public class CoverageCalculator {
 
 	public static float calculateCoverageOfSequence(final List<Transaction> transactions, final FBType fbType) {
 		if (fbType instanceof final BasicFBType bfb) {
-			final EccTraceHelper eccTraceHelper = new EccTraceHelper(transactions, bfb.getECC());
+			final BasicFbExecutionTrace eccTraceHelper = new BasicFbExecutionTrace(transactions, bfb.getECC());
 
 			return eccTraceHelper.getAllStatesOfSequenceUnique().size()
 					/ (float) eccTraceHelper.getAllPossibleStates().size();

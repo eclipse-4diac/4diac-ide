@@ -36,6 +36,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class ServiceSequenceUtils {
 
+	public static final String PARAMETER_SEPARATOR = ";"; //$NON-NLS-1$
+	public static final String ASSIGNMENT_OPERATOR = ":="; //$NON-NLS-1$
 	public static final String EXTERNAL_INTERFACE = "external"; //$NON-NLS-1$
 	public static final String INTERNAL_INTERFACE = "internal"; //$NON-NLS-1$
 	public static final String START_STATE = "START"; //$NON-NLS-1$
@@ -64,11 +66,11 @@ public final class ServiceSequenceUtils {
 	}
 
 	private static String removeSemicolon(final String s) {
-		return s.replace(";", " "); //$NON-NLS-1$//$NON-NLS-2$
+		return s.replace(PARAMETER_SEPARATOR, " "); //$NON-NLS-1$
 	}
 
 	public static List<String> splitList(final String parameters) {
-		return splitAndCleanList(parameters, ";"); //$NON-NLS-1$
+		return splitAndCleanList(parameters, PARAMETER_SEPARATOR);
 	}
 
 	public static String removeKeyword(final String parameters) {
@@ -80,18 +82,18 @@ public final class ServiceSequenceUtils {
 	}
 
 	public static List<String> splitParameter(final String parameter) {
-		return splitAndCleanList(parameter, ":="); //$NON-NLS-1$
+		return splitAndCleanList(parameter, ASSIGNMENT_OPERATOR);
 	}
 
 	public static String summarizeParameters(final Iterable<VarDeclaration> inputVars) {
 		final StringBuilder builder = new StringBuilder();
-		inputVars.forEach(variable -> summarize(builder, variable));
+		inputVars.forEach(variable -> summarizeParameter(builder, variable));
 		return builder.toString();
 	}
 
-	private static void summarize(final StringBuilder builder, final VarDeclaration variable) {
+	private static void summarizeParameter(final StringBuilder builder, final VarDeclaration variable) {
 		builder.append(variable.getName());
-		builder.append(":="); //$NON-NLS-1$
+		builder.append(ASSIGNMENT_OPERATOR);
 		if (variable.getValue() != null) {
 			final String value = variable.getValue().getValue();
 			if (value.contains("#")) { //$NON-NLS-1$
@@ -101,6 +103,12 @@ public final class ServiceSequenceUtils {
 			}
 		}
 		builder.append(";\n"); //$NON-NLS-1$
+	}
+
+	public static String summarizeParameter(final VarDeclaration variable) {
+		final StringBuilder builder = new StringBuilder();
+		summarizeParameter(builder, variable);
+		return builder.toString();
 	}
 
 	public static void convertTransactionToServiceModel(final ServiceSequence seq, final FBType destType,

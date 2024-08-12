@@ -26,7 +26,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
-import org.eclipse.fordiac.ide.fb.interpreter.api.EccTraceHelper;
+import org.eclipse.fordiac.ide.fb.interpreter.api.BasicFbExecutionTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
@@ -90,7 +90,7 @@ public class GetCoverageHandler extends AbstractHandler {
 	}
 
 	private void setCoverageData(final EventManager evntMngr, final ServiceSequence seq) {
-		final EccTraceHelper eccTraceHelper = new EccTraceHelper(evntMngr.getTransactions(),
+		final BasicFbExecutionTrace eccTraceHelper = new BasicFbExecutionTrace(evntMngr.getTransactions(),
 				((BasicFBType) seq.getService().getFBType()).getECC());
 		if (visitedStates.isEmpty()) {
 			eccTraceHelper.getAllPossibleStates().forEach(s -> {
