@@ -19,7 +19,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -29,14 +28,12 @@ import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.InputGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateRecordedServiceSequenceCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.widgets.RecordSequenceDialog;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -52,8 +49,8 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
-		final ServiceSequence seq = getSequence(selection);
-		final FBType type = getFbType(seq, selection);
+		final ServiceSequence seq = ServiceHandlerUtils.getFirstSelectedSequence(selection);
+		final FBType type = ServiceHandlerUtils.getSelectedFbType(seq, selection);
 
 		final List<String> events = new ArrayList<>();
 		final List<List<String>> parameters = new ArrayList<>();
@@ -89,7 +86,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		if (dialog.isRandomEventBoxChecked()) {
 			final List<Event> randomEvents = InputGenerator.getRandomEventsSequence(type, dialog.getCount());
 			eventNames.addAll(
-					randomEvents.stream().map((Function<? super Event, ? extends String>) Event::getName).toList());
+					randomEvents.stream().map(event -> event.getName()).toList());
 		}
 		// apply random data values
 		if (dialog.isRandomParameterBoxChecked() && dialog.getCount() > 0) {
@@ -111,21 +108,6 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		return ServiceSequenceUtils.splitList(parameter);
 	}
 
-	private static FBType getFbType(final ServiceSequence seq, final IStructuredSelection sel) {
-		if (seq != null && seq.getService() != null && seq.getService().getFBType() != null) {
-			return seq.getService().getFBType();
-		}
-		for (Object o : sel) {
-			if (o instanceof final EditPart ep) {
-				o = ep.getModel();
-			}
-			if (o instanceof final FBType type) {
-				return type;
-			}
-		}
-		return null;
-	}
-
 	@Override
 	public void setEnabled(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
@@ -133,17 +115,5 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		if (selection instanceof final StructuredSelection structuredSelection) {
 			setBaseEnabled(structuredSelection.size() <= 1);
 		}
-	}
-
-	private static ServiceSequence getSequence(final IStructuredSelection selection) {
-		for (final Object o : selection) {
-			if (o instanceof final ServiceSequenceEditPart selectedSSEP) {
-				return selectedSSEP.getModel();
-			}
-			if (o instanceof final ServiceSequence selectedSS) {
-				return selectedSS;
-			}
-		}
-		return null;
 	}
 }

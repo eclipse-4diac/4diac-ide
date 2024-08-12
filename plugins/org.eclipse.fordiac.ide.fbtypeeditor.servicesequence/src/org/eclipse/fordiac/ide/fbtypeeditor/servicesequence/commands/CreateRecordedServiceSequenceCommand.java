@@ -23,15 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
+import org.eclipse.fordiac.ide.fb.interpreter.api.CoverageCalculator;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.api.ExecutionTrace;
+import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -45,11 +45,17 @@ public class CreateRecordedServiceSequenceCommand extends Command {
 	private CreateServiceSequenceCommand cmd;
 	private final List<String> events;
 	private final List<List<String>> parameters;
-	final boolean forceOverwrite;
-	String startState = null;
+
+	/** if a service sequence is provided, it can be extended or overridden */
+	private final boolean forceOverwrite;
+	/** a start state may be provided via setStartState method */
+	private String startState = null;
+	/** enable tracing in interpreter so that coverage info is available */
+	private boolean traceInfo = false;
 
 	/** the newly generated sequence */
 	private ServiceSequence newSequence;
+	private EventManager eventManager;
 
 	/** create new service sequence and track recording result */
 	public CreateRecordedServiceSequenceCommand(final FBType fbType, final List<String> events,
@@ -79,6 +85,10 @@ public class CreateRecordedServiceSequenceCommand extends Command {
 		}
 	}
 
+	public void enableTraceInfo(final boolean traceInfo) {
+		this.traceInfo = traceInfo;
+	}
+
 	@Override
 	public boolean canExecute() {
 		if (oldSequence != null) {
@@ -94,13 +104,23 @@ public class CreateRecordedServiceSequenceCommand extends Command {
 		}
 		if (oldSequence != null && !forceOverwrite) {
 			newSequence = EcoreUtil.copy(oldSequence);
+			// potential improvement: calculate the end state of the old sequence first
+			startState = oldSequence.getStartState();
 		} else {
 			cmd = new CreateServiceSequenceCommand(fbType.getService());
 			cmd.execute();
 			newSequence = cmd.getCreatedElement();
 		}
 		updateSequences(oldSequence, newSequence);
-		runInterpreter(newSequence, events, parameters, fbType, startState);
+		runInterpreter();
+		final List<String> parameter = parameters.stream().map(CreateRecordedServiceSequenceCommand::sumParameter)
+				.toList();
+		ServiceSequenceUtils.convertEventManagerToServiceModel(newSequence, fbType, eventManager, parameter);
+		newSequence.setStartState(startState);
+		if (traceInfo) {
+			newSequence.setComment("Coverage: " //$NON-NLS-1$
+					+ CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions(), fbType));
+		}
 	}
 
 	private void updateSequences(final ServiceSequence toRemove, final ServiceSequence toAdd) {
@@ -122,35 +142,28 @@ public class CreateRecordedServiceSequenceCommand extends Command {
 		updateSequences(oldSequence, newSequence);
 	}
 
-	private void runInterpreter(final ServiceSequence seq, final List<String> eventNames,
-			final List<List<String>> parameters, final FBType fbType, final String startState) {
-		final List<Event> events = ServiceSequenceUtils.getEvents(fbType, eventNames);
-		final EventManager eventManager = EventManagerFactory.createFrom(events, EcoreUtil.copy(fbType));
+	private void runInterpreter() {
+		// setup
+		final List<Event> eventPins = ServiceSequenceUtils.getEvents(fbType, events);
+		eventManager = EventManagerFactory.createFrom(eventPins, EcoreUtil.copy(fbType));
 		for (int i = 0; i < parameters.size(); i++) {
 			if (i < eventManager.getTransactions().size()) {
 				setParameters((FBTransaction) eventManager.getTransactions().get(i), parameters.get(i));
 			}
 		}
-		final EObject runType = eventManager.getTransactions().get(0).getInputEventOccurrence().getFbRuntime();
-		if (runType instanceof final BasicFBTypeRuntime basic && startState != null && !startState.isEmpty()) {
-			ECState state = basic.getModel().getECC().getECState().stream().filter(st -> startState.equals(st.getName())).findFirst().orElse(null);
-			if (state!=null) {
-				basic.setActiveState(startState);
-				newSequence.setStartState(startState);
-			}
+		TransactionFactory.setStartState(eventManager.getTransactions().getFirst(), startState);
+		if (traceInfo) {
+			TransactionFactory.addTraceInfoTo(eventManager.getTransactions());
 		}
+		// execute
 		eventManager.process();
-		final List<String> parameter = parameters.stream().map(
-				list -> sumParameter(list)) //
-				.toList();
-		ServiceSequenceUtils.convertEventManagerToServiceModel(seq, fbType, eventManager, parameter);
 	}
 
 	private static String sumParameter(final List<String> list) {
 		final StringBuilder sb = new StringBuilder();
 		for (final String s : list) {
 			sb.append(s);
-			sb.append(";"); //$NON-NLS-1$
+			sb.append(ServiceSequenceUtils.PARAMETER_SEPARATOR);
 		}
 		return sb.toString();
 	}
@@ -170,4 +183,10 @@ public class CreateRecordedServiceSequenceCommand extends Command {
 		transaction.getInputVariables().addAll(paramVars);
 	}
 
+	public ExecutionTrace getTraceInfo() {
+		if (eventManager == null) {
+			runInterpreter();
+		}
+		return ExecutionTrace.of(eventManager);
+	}
 }
