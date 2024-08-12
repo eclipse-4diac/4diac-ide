@@ -70,9 +70,12 @@ public class GitLabDownloader implements IArchiveDownloader {
 	private String baseUrl;
 	private String token;
 
+	private boolean active;
+
 	public GitLabDownloader() {
 		init();
 		versionComparator = new VersionComparator();
+		active = true;
 	}
 
 	public void init() {
@@ -301,5 +304,15 @@ public class GitLabDownloader implements IArchiveDownloader {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public boolean isActive() {
+		return active;
+	}
+
+	@Override
+	public void setActive(final boolean active) {
+		this.active = active;
 	}
 }
