@@ -345,8 +345,14 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		}
 
 		final boolean isInOut = source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar();
+
+		String arraySize = null;
+		if (source instanceof final VarDeclaration sourceVar && sourceVar.getArraySize() != null) {
+			arraySize = sourceVar.getArraySize().getValue();
+		}
+
 		final CreateSubAppInterfaceElementCommand pinCmd = new CreateSubAppInterfaceElementCommand(ie.getType(),
-				source.getName(), subapp.getInterface(), isRightPath, isInOut, -1);
+				source.getName(), subapp.getInterface(), isRightPath, isInOut, arraySize, -1);
 		pinCmd.execute();
 		commands.add(pinCmd);
 		return pinCmd.getCreatedElement();
