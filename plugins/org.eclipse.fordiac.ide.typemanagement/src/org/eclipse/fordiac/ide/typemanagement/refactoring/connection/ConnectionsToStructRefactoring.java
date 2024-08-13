@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -50,7 +51,9 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 /**
- *
+ * A Refactoring Operation for replacing multiple data connections with one
+ * single Struct connection. Resulting errors due to deleted Pins can be repairs
+ * automatically by setting conflictResolution to true.
  */
 public class ConnectionsToStructRefactoring extends Refactoring {
 	private final URI sourceURI;
@@ -93,12 +96,116 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		return Messages.ConnectionsToStructRefactoring_RefactoringTitle;
 	}
 
+	/**
+	 * Set the additional values needed from the user.
+	 *
+	 * @param structURI          URI of the
+	 *                           {@link org.eclipse.fordiac.ide.model.data.StructuredType
+	 *                           StructuredType}
+	 * @param sourceVarName      Name of the output variable at the Source FBType
+	 * @param destinationVarName Name of the input variable at the Destination
+	 *                           FBType
+	 * @param conflictResolution Whether errors produced by the refactoring should
+	 *                           be resolved by placing StructManipulators
+	 * @return
+	 */
 	public RefactoringStatus setUserConfig(final URI structURI, final String sourceVarName,
 			final String destinationVarName, final boolean conflictResolution) {
+
+		this.structURI = structURI;
+		this.sourceVarName = sourceVarName;
+		this.destinationVarName = destinationVarName;
+		this.conflictResolution = conflictResolution;
+		return checkFinalConditions();
+
+	}
+
+	@Override
+	public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) {
+		final RefactoringStatus status = new RefactoringStatus();
+		try {
+			checkInitialFB(status, sourceURI, true);
+			checkInitialFB(status, destinationURI, false);
+		} finally {
+			pm.done();
+		}
+		return status;
+	}
+
+	private void checkInitialFB(final RefactoringStatus status, final URI uri, final boolean isSource) {
+		final String target = isSource ? Messages.ConnectionsToStructRefactoring_Source
+				: Messages.ConnectionsToStructRefactoring_Destination;
+		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri).getType() instanceof final FBType fbType)) {
+			final List<VarDeclaration> interfaceList;
+			final List<String> varNames;
+
+			if (isSource) {
+				interfaceList = fbType.getInterfaceList().getOutputVars();
+				varNames = new ArrayList<>(replaceableConMap.keySet());
+			} else {
+				interfaceList = fbType.getInterfaceList().getInputVars();
+				varNames = new ArrayList<>(replaceableConMap.values());
+			}
+
+			if (fbType instanceof ServiceInterfaceFBType) {
+				status.merge(RefactoringStatus.createFatalErrorStatus(
+						MessageFormat.format(Messages.ConnectionsToStructRefactoring_IsServiceFB, target)));
+			}
+			if (varNames.stream().allMatch(
+					name -> interfaceList.stream().map(VarDeclaration::getName).anyMatch(String.class::equals))) {
+				status.merge(RefactoringStatus.createFatalErrorStatus(
+						MessageFormat.format(Messages.ConnectionsToStructRefactoring_PortsNoMatch, target)));
+			}
+
+			final List<Event> referenceWiths = interfaceList.stream()
+					.filter(ielement -> ielement.getName().equals(varNames.getFirst())).map(VarDeclaration.class::cast)
+					.map(VarDeclaration::getWiths)
+					.map(withlist -> withlist.stream().map(With::eContainer).map(Event.class::cast).toList())
+					.findFirst().orElse(new ArrayList<>());
+			if (interfaceList.stream().filter(varDec -> varNames.contains(varDec.getName()))
+					.map(VarDeclaration::getWiths)
+					.map(withs -> withs.stream().map(With::eContainer).map(Event.class::cast).toList())
+					.anyMatch(withlist -> (!withlist.containsAll(referenceWiths)
+							|| withlist.size() != referenceWiths.size()))) {
+				status.merge(RefactoringStatus.createFatalErrorStatus(
+						MessageFormat.format(Messages.ConnectionsToStructRefactoring_EventConflict, target)));
+			}
+		} else {
+			status.merge(RefactoringStatus.createFatalErrorStatus(
+					MessageFormat.format(Messages.ConnectionsToStructRefactoring_NoFB, target)));
+		}
+	}
+
+	@Override
+	public RefactoringStatus checkFinalConditions(final IProgressMonitor pm)
+			throws CoreException, OperationCanceledException {
+		return checkFinalConditions();
+	}
+
+	private RefactoringStatus checkFinalConditions() {
 		final RefactoringStatus status = new RefactoringStatus();
 
+		checkStruct(status);
+
+		checkName(status, sourceVarName, true);
+		checkName(status, destinationVarName, false);
+
+		if (destinationURI.toString().equals(sourceURI.toString()) && sourceVarName.equals(destinationVarName)) {
+			status.merge(
+					RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SameFBSameName));
+		}
+		if (conflictResolution
+				&& (lib.getFBTypeEntry("STRUCT_DEMUX") == null || lib.getFBTypeEntry("STRUCT_MUX") == null)) {
+			status.merge(RefactoringStatus
+					.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_MissingStructManipulator));
+		}
+		return status;
+	}
+
+	private void checkStruct(final RefactoringStatus status) {
 		if (structURI != null) {
 			final TypeEntry structTypeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(structURI);
+
 			if (structTypeEntry != null && structTypeEntry.getType() instanceof final DataType type) {
 				if (type instanceof final StructuredType structType) {
 					if (!structType.getMemberVariables().stream().allMatch(
@@ -118,116 +225,33 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		} else {
 			status.merge(RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InvalidType));
 		}
-		if (IdentifierVerifier.verifyIdentifier(sourceVarName).isPresent()) {
-			status.merge(
-					RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InvalidOutName));
-		}
-		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI).getType() instanceof final FBType sourceFB)
-				&& (sourceFB.getInterfaceList().getAllInterfaceElements().stream()
-						.anyMatch(port -> port.getName().equals(sourceVarName))
-						&& !replaceableConMap.containsKey(sourceVarName))) {
-			status.merge(
-					RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_OutNameExists));
-		}
-		if (IdentifierVerifier.verifyIdentifier(destinationVarName).isPresent()) {
-			status.merge(
-					RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InvalidInName));
-		}
-		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(destinationURI)
-				.getType() instanceof final FBType destinationFB)
-				&& (destinationFB.getInterfaceList().getAllInterfaceElements().stream()
-						.anyMatch(port -> port.getName().equals(destinationVarName))
-						&& !replaceableConMap.containsValue(destinationVarName))) {
-			status.merge(
-					RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_InNameExists));
-
-		}
-		if (destinationURI.toString().equals(sourceURI.toString()) && sourceVarName.equals(destinationVarName)) {
-			status.merge(
-					RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SameFBSameName));
-		}
-		this.structURI = structURI;
-		this.sourceVarName = sourceVarName;
-		this.destinationVarName = destinationVarName;
-		this.conflictResolution = conflictResolution;
-		return status;
-
 	}
 
-	@Override
-	public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) {
-		final RefactoringStatus status = new RefactoringStatus();
-		try {
-			// TODO: create generic function for checks
-			pm.beginTask(Messages.ConnectionsToStructRefactoring_CheckPreconditions, 1);
-			if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI)
-					.getType() instanceof final FBType sourceFB)) {
-				if (sourceFB instanceof ServiceInterfaceFBType) {
-					status.merge(RefactoringStatus
-							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceIsServiceFB));
-				}
-				if (replaceableConMap.keySet().stream()
-						.anyMatch(varname -> sourceFB.getInterfaceList().getOutput(varname) == null)) {
-					status.merge(RefactoringStatus
-							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceOutputsNoMatch));
-				}
-				final List<Event> referenceWiths = ((VarDeclaration) sourceFB.getInterfaceList()
-						.getOutput(replaceableConMap.keySet().iterator().next())).getWiths().stream()
-						.map(With::eContainer).map(Event.class::cast).toList();
-				if (replaceableConMap.keySet().stream().map(varname -> sourceFB.getInterfaceList().getOutput(varname))
-						.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
-						.map(VarDeclaration::getWiths)
-						.map(withs -> withs.stream().map(With::eContainer).map(Event.class::cast).toList())
-						.anyMatch(withlist -> !withlist.containsAll(referenceWiths)
-								|| withlist.size() != referenceWiths.size())) {
-					status.merge(RefactoringStatus
-							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceEventConflict));
-				}
-			} else {
-				status.merge(
-						RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SourceNoFB));
-			}
-
-			if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(destinationURI)
-					.getType() instanceof final FBType destinationFB)) {
-				if (destinationFB instanceof ServiceInterfaceFBType) {
-					status.merge(RefactoringStatus
-							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationIsServiceFB));
-				}
-				if (replaceableConMap.values().stream()
-						.anyMatch(varname -> destinationFB.getInterfaceList().getInput(varname) == null)) {
-					status.merge(RefactoringStatus
-							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationOutputsNoMatch));
-				}
-				final List<Event> referenceWiths = ((VarDeclaration) destinationFB.getInterfaceList()
-						.getInput(replaceableConMap.values().iterator().next())).getWiths().stream()
-						.map(With::eContainer).map(Event.class::cast).toList();
-				if (replaceableConMap.values().stream()
-						.map(varname -> destinationFB.getInterfaceList().getInput(varname))
-						.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
-						.map(VarDeclaration::getWiths)
-						.map(withs -> withs.stream().map(With::eContainer).map(Event.class::cast).toList())
-						.anyMatch(withlist -> !withlist.containsAll(referenceWiths)
-								|| withlist.size() != referenceWiths.size())) {
-					status.merge(RefactoringStatus
-							.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationEventConflict));
-				}
-			} else {
-				status.merge(RefactoringStatus
-						.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_DestinationNoFB));
-			}
-
-		} finally {
-			pm.done();
+	private void checkName(final RefactoringStatus status, final String name, final boolean isSource) {
+		final URI fbURI;
+		final Collection<String> nameCol;
+		final String target;
+		if (isSource) {
+			fbURI = sourceURI;
+			nameCol = replaceableConMap.keySet();
+			target = Messages.ConnectionsToStructRefactoring_Output;
+		} else {
+			fbURI = destinationURI;
+			nameCol = replaceableConMap.values();
+			target = Messages.ConnectionsToStructRefactoring_Input;
 		}
-		return status;
-	}
 
-	@Override
-	public RefactoringStatus checkFinalConditions(final IProgressMonitor pm)
-			throws CoreException, OperationCanceledException {
-		// TODO: implement conditions (basically checked by setUserConfig()
-		return new RefactoringStatus();
+		if (IdentifierVerifier.verifyIdentifier(name).isPresent()) {
+			status.merge(RefactoringStatus.createFatalErrorStatus(
+					MessageFormat.format(Messages.ConnectionsToStructRefactoring_InvalidName, target)));
+		}
+		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(fbURI).getType() instanceof final FBType fbType)
+				&& (fbType.getInterfaceList().getAllInterfaceElements().stream()
+						.anyMatch(port -> port.getName().equals(name)) && !nameCol.contains(name))) {
+			status.merge(RefactoringStatus.createFatalErrorStatus(
+					MessageFormat.format(Messages.ConnectionsToStructRefactoring_NameExists, target)));
+		}
+
 	}
 
 	@Override

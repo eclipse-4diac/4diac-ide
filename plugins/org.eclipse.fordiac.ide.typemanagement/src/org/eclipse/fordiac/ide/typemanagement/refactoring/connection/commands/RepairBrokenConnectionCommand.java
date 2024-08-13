@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -106,7 +107,12 @@ public class RepairBrokenConnectionCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return getPort() != null;
+		final IInterfaceElement port = getPort();
+		if (port != null) {
+			final TypeLibrary lib = port.getFBNetworkElement().getTypeLibrary();
+			return lib.getFBTypeEntry("STRUCT_DEMUX") != null && lib.getFBTypeEntry("STRUCT_MUX") != null;
+		}
+		return false;
 	}
 
 	@Override

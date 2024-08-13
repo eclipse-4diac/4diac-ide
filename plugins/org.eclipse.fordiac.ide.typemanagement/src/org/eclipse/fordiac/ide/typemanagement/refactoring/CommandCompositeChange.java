@@ -70,7 +70,7 @@ public class CommandCompositeChange extends CompositeChange {
 	protected Change createUndoChange(final Change[] childUndos) {
 		final Map<URI, Change> map = new HashMap<>();
 		for (int i = childUndos.length - 1; i >= 0; i--) {
-			if (childUndos[i] instanceof final CommandUndoChange cmdChange) {
+			if (childUndos[i] instanceof final AbstractCommandChange cmdChange) {
 				map.put(cmdChange.getElementURI().trimFragment(), cmdChange);
 			}
 		}
