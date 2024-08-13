@@ -12,7 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -21,6 +23,7 @@ import org.eclipse.fordiac.ide.gef.filters.AttributeFilter;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.swt.SWT;
@@ -37,50 +40,58 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class InfoPropertySection extends AbstractSection {
 
 	private ConfigurableObject obj;
-	private boolean isSubApp = false;
+	private static boolean isSubApp = false;
 
 	private Composite parent;
 
 	private Label numbConVal;
 	private Label usedTypesVal;
 	private Label subAppsVal;
-	private Label skillFBVal;
 	private Label instancesVal;
+
+	private Group fbGroup;
+	private final java.util.List<Label> fbTypeLabels = new ArrayList<>();
+	private final java.util.List<Label> fbCountLabels = new ArrayList<>();
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		this.parent = parent;
 		final Color backgroundColor = new Color(255, 255, 255);
-
 		parent.setBackground(backgroundColor);
+
+		final GridLayout parentLayout = new GridLayout(2, false);
+		parent.setLayout(parentLayout);
+
+		final Group group = createGroup(parent, "System Information", backgroundColor); //$NON-NLS-1$
+
+		numbConVal = createLabelPair(group, "Number of Connections:", backgroundColor); //$NON-NLS-1$
+		usedTypesVal = createLabelPair(group, "Number of used Types:", backgroundColor); //$NON-NLS-1$
+		subAppsVal = createLabelPair(group, "Number of untyped Subapps:", backgroundColor); //$NON-NLS-1$
+		instancesVal = createLabelPair(group, "Number of all instances:", backgroundColor); //$NON-NLS-1$
+
+		fbGroup = createGroup(parent, "FB Types and Counts", backgroundColor); //$NON-NLS-1$
+		fbGroup.setVisible(false);
+	}
+
+	private static Group createGroup(final Composite parent, final String string, final Color backgroundColor) {
 		final Group group = new Group(parent, SWT.NONE);
-		group.setText("System Information"); //$NON-NLS-1$
+		group.setText(string);
 		group.setLayout(new GridLayout(2, false));
-		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		group.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 		group.setBackground(backgroundColor);
+		return group;
+	}
 
-		createLabel(group, "Number of Connections:", backgroundColor); //$NON-NLS-1$
-		numbConVal = createValueLabel(group, backgroundColor);
-
-		createLabel(group, "Number of used Types:", backgroundColor); //$NON-NLS-1$
-		usedTypesVal = createValueLabel(group, backgroundColor);
-
-		createLabel(group, "Number of untyped Subapps:", backgroundColor); //$NON-NLS-1$
-		subAppsVal = createValueLabel(group, backgroundColor);
-
-		createLabel(group, "Number of SkillFB instances:", backgroundColor); //$NON-NLS-1$
-		skillFBVal = createValueLabel(group, backgroundColor);
-
-		createLabel(group, "Number of all instances:", backgroundColor); //$NON-NLS-1$
-		instancesVal = createValueLabel(group, backgroundColor);
+	private static Label createLabelPair(final Composite parent, final String string, final Color backgroundColor) {
+		createLabel(parent, string, backgroundColor);
+		return createValueLabel(parent, backgroundColor);
 	}
 
 	private static Label createValueLabel(final Composite parent, final Color c) {
 		final Label label = new Label(parent, SWT.NONE);
 		final GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		label.setLayoutData(gridData);
-		gridData.widthHint = 1000;
 		gridData.horizontalIndent = 10;
 		label.setBackground(c);
 		return label;
@@ -136,86 +147,58 @@ public class InfoPropertySection extends AbstractSection {
 
 	private void formatPage() {
 		HashMap<String, Integer> fbs = new HashMap<>();
-		int eventConnections;
-		int dataConnections;
-		int adapterConnections;
-		int types;
-		int subapps;
-		int instanceCount;
-		final int skillFBCount;
+		final int types;
+		final int subapps;
+		final int instanceCount;
+		final int noc;
 
 		if (isSubApp) {
 			final SubApp subApp = (SubApp) obj;
-			eventConnections = subApp.getSubAppNetwork().getEventConnections().size();
-			dataConnections = subApp.getSubAppNetwork().getDataConnections().size();
-			adapterConnections = subApp.getSubAppNetwork().getAdapterConnections().size();
-
-			// skillFBCount =
-			// countSkillFBInstances(subApp.getSubAppNetwork().getNetworkElements(), 0);
-			// processFBS(subApp.getSubAppNetwork().getNetworkElements(), fbs);
-			fbs = countSkillFBInstances2(subApp.getSubAppNetwork().getNetworkElements(), fbs);
-
+			noc = calcNoc(subApp.getSubAppNetwork(), fbs);
+			fbs = countSkillFBInstances(subApp.getSubAppNetwork().getNetworkElements(), fbs);
 			subapps = processSubappElements(subApp.getSubAppNetwork().getNetworkElements(), fbs);
 
 			isSubApp = false;
 		} else {
 			final Application application = (Application) obj;
-			eventConnections = application.getFBNetwork().getEventConnections().size();
-			dataConnections = application.getFBNetwork().getDataConnections().size();
-			adapterConnections = application.getFBNetwork().getAdapterConnections().size();
-
-			// skillFBCount =
-			// countSkillFBInstances(application.getFBNetwork().getNetworkElements(), 0);
-			// processFBS(application.getFBNetwork().getNetworkElements(), fbs);
-			fbs = countSkillFBInstances2(application.getFBNetwork().getNetworkElements(), fbs);
-
+			noc = calcNoc(application.getFBNetwork(), fbs);
+			fbs = countSkillFBInstances(application.getFBNetwork().getNetworkElements(), fbs);
 			subapps = processSubappElements(application.getFBNetwork().getNetworkElements(), fbs);
 		}
-
 		instanceCount = fbs.values().stream().mapToInt(Integer::intValue).sum();
 		types = fbs.size();
-		final int noc = eventConnections + dataConnections + adapterConnections;
 
 		updateLabels(noc, types, fbs, subapps, instanceCount);
 	}
 
-	// you can use org.eclipse.fordiac.ide.model.libraryElement.FBType here
-	private static HashMap<String, Integer> countSkillFBInstances2(final Iterable<FBNetworkElement> networkElements,
+	@SuppressWarnings("boxing")
+	private static HashMap<String, Integer> countSkillFBInstances(final Iterable<FBNetworkElement> networkElements,
 			final HashMap<String, Integer> fbs) {
 		for (final FBNetworkElement fe : networkElements) {
-			if (fe.getType() != null) {
-				// fbs++;
+			if (null != fe.getType()) {
 				fbs.merge(fe.getTypeName(), 1, Integer::sum);
 			}
-			if (fe instanceof final SubApp sa) {
-				// fbs += countSkillFBInstances(sa.getSubAppNetwork().getNetworkElements(), fbs)
-				// - fbs;
-				// Temporäre Map für die rekursiven Aufrufe
-				final HashMap<String, Integer> subAppResults = countSkillFBInstances2(
+			if ((fe instanceof final SubApp sa) && (null != sa.getSubAppNetwork())) {
+				final HashMap<String, Integer> subAppResults = countSkillFBInstances(
 						sa.getSubAppNetwork().getNetworkElements(), new HashMap<>());
-
-				// Füge die Ergebnisse des rekursiven Aufrufs zur aktuellen HashMap hinzu
-				for (final Map.Entry<String, Integer> entry : subAppResults.entrySet()) {
-					fbs.merge(entry.getKey(), entry.getValue(), Integer::sum);
-				}
+				subAppResults.forEach((key, value) -> fbs.merge(key, value, Integer::sum));
 			}
 		}
 		return fbs;
 	}
 
-	// you can use org.eclipse.fordiac.ide.model.libraryElement.FBType here
-	private static int countSkillFBInstances(final Iterable<FBNetworkElement> networkElements, int count) {
-		final int temp = count;
-		for (final FBNetworkElement fe : networkElements) {
-			if (fe.getType() != null) {
-				count++;
-			}
-			if (fe instanceof final SubApp sa) {
-				count += countSkillFBInstances(sa.getSubAppNetwork().getNetworkElements(), count) - count;
-
+	private static int calcNoc(final FBNetwork fbNetwork, final HashMap<String, Integer> fbs) {
+		int con = 0;
+		if (fbNetwork != null) {
+			con += fbNetwork.getAdapterConnections().size() + fbNetwork.getDataConnections().size()
+					+ fbNetwork.getEventConnections().size();
+			for (final FBNetworkElement fe : fbNetwork.getNetworkElements()) {
+				if (fe instanceof final SubApp sa) {
+					con += calcNoc(sa.getSubAppNetwork(), fbs);
+				}
 			}
 		}
-		return count;
+		return con;
 	}
 
 	private static int processSubappElements(final Iterable<FBNetworkElement> elements,
@@ -224,18 +207,10 @@ public class InfoPropertySection extends AbstractSection {
 		for (final FBNetworkElement fe : elements) {
 			if (fe instanceof final SubApp se && isUntypedSubapp(se)) {
 				subapps++;
+				subapps += processSubappElements(se.getSubAppNetwork().getNetworkElements(), fbs);
 			}
 		}
 		return subapps;
-	}
-
-	@SuppressWarnings("boxing")
-	private static void processFBS(final Iterable<FBNetworkElement> elements, final Map<String, Integer> fbs) {
-		for (final FBNetworkElement fe : elements) {
-			if (fe.getType() != null) {
-				fbs.merge(fe.getTypeName(), 1, Integer::sum);
-			}
-		}
 	}
 
 	private void updateLabels(final int noc, final int types, final HashMap<String, Integer> fbs, final int subapps,
@@ -243,15 +218,33 @@ public class InfoPropertySection extends AbstractSection {
 		numbConVal.setText(String.valueOf(noc));
 		usedTypesVal.setText(String.valueOf(types));
 		subAppsVal.setText(String.valueOf(subapps));
-
-		final StringBuilder sb = new StringBuilder();
-		for (final Entry<String, Integer> entry : fbs.entrySet()) {
-			sb.append(entry.getKey() + ": " + entry.getValue() + "\n");
-		}
-		skillFBVal.setText(sb.toString());
 		instancesVal.setText(String.valueOf(instanceCount));
 
+		resetLabel(fbTypeLabels);
+		resetLabel(fbCountLabels);
+
+		if (!fbs.isEmpty()) {
+			fbGroup.setVisible(true);
+			for (final Entry<String, Integer> entry : fbs.entrySet()) {
+				final Label fbTypeLabel = createLabel(fbGroup, entry.getKey() + ":", parent.getBackground()); //$NON-NLS-1$
+				fbTypeLabels.add(fbTypeLabel);
+
+				final Label fbCountLabel = createValueLabel(fbGroup, parent.getBackground());
+				fbCountLabel.setText(String.valueOf(entry.getValue()));
+				fbCountLabels.add(fbCountLabel);
+			}
+		} else {
+			fbGroup.setVisible(false);
+		}
+
 		parent.layout(true, true);
+	}
+
+	private static void resetLabel(final List<Label> list) {
+		for (final Label l : list) {
+			l.dispose();
+		}
+		list.clear();
 	}
 
 	private static boolean isUntypedSubapp(final SubApp subapp) {
