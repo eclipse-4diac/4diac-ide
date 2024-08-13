@@ -35,7 +35,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.test.ui.helpers.StringNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
@@ -96,16 +96,16 @@ public class Abstract4diacUITests {
 	 * PROJECT_NAME and is called from {@link #beforeAll() method beforeAll}.
 	 */
 	protected static void createProject() {
-		bot.menu(StringNamesHelper.FILE).menu(StringNamesHelper.NEW).menu(StringNamesHelper.FORDIAC_IDE_PROJECT)
+		bot.menu(UITestNamesHelper.FILE).menu(UITestNamesHelper.NEW).menu(UITestNamesHelper.FORDIAC_IDE_PROJECT)
 				.click();
-		final SWTBotShell shell = bot.shell(StringNamesHelper.NEW_4DIAC_PROJECT);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.NEW_4DIAC_PROJECT);
 		shell.activate();
-		bot.textWithLabel(StringNamesHelper.PROJECT_NAME_LABEL).setText(StringNamesHelper.PROJECT_NAME);
-		assertEquals(bot.textWithLabel(StringNamesHelper.INITIAL_SYSTEM_NAME_LABEL).getText(),
-				StringNamesHelper.PROJECT_NAME);
-		assertEquals(bot.textWithLabel(StringNamesHelper.INITIAL_APPLICATION_NAME_LABEL).getText(),
-				StringNamesHelper.PROJECT_NAME + StringNamesHelper.APP);
-		bot.button(StringNamesHelper.FINISH).click();
+		bot.textWithLabel(UITestNamesHelper.PROJECT_NAME_LABEL).setText(UITestNamesHelper.PROJECT_NAME);
+		assertEquals(bot.textWithLabel(UITestNamesHelper.INITIAL_SYSTEM_NAME_LABEL).getText(),
+				UITestNamesHelper.PROJECT_NAME);
+		assertEquals(bot.textWithLabel(UITestNamesHelper.INITIAL_APPLICATION_NAME_LABEL).getText(),
+				UITestNamesHelper.PROJECT_NAME + UITestNamesHelper.APP);
+		bot.button(UITestNamesHelper.FINISH).click();
 		bot.waitUntil(shellCloses(shell));
 	}
 
@@ -117,8 +117,8 @@ public class Abstract4diacUITests {
 	 */
 	protected static void dragAndDropEventsFB(final String fbName, final Point point) {
 		final SWTBotTreeItem typeLibraryNode = expandTypeLibraryTreeItemInSystemExplorer();
-		bot.waitUntil(treeItemHasNode(typeLibraryNode, StringNamesHelper.EVENTS_NODE));
-		final SWTBotTreeItem eventsNode = typeLibraryNode.getNode(StringNamesHelper.EVENTS_NODE);
+		bot.waitUntil(treeItemHasNode(typeLibraryNode, UITestNamesHelper.EVENTS_NODE));
+		final SWTBotTreeItem eventsNode = typeLibraryNode.getNode(UITestNamesHelper.EVENTS_NODE);
 		eventsNode.select();
 		eventsNode.expand();
 		bot.waitUntil(treeItemHasNode(eventsNode, fbName));
@@ -127,7 +127,7 @@ public class Abstract4diacUITests {
 		eCycleNode.click();
 
 		// select application editor
-		final SWTBotGefEditor editor = bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		final SWTBotGefFigureCanvas canvas = viewer.getCanvas();
 
@@ -173,9 +173,9 @@ public class Abstract4diacUITests {
 
 	protected static void createSubappWithDragRectangle(final int fromXPosition, final int fromYPosition,
 			final int toXPosition, final int toYPosition) {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		editor.drag(fromXPosition, fromYPosition, toXPosition, toYPosition);
-		bot.menu(StringNamesHelper.SOURCE).menu(StringNamesHelper.NEW_SUBAPPLICATION).click();
+		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 
 	}
 
@@ -211,7 +211,7 @@ public class Abstract4diacUITests {
 		editor.setFocus();
 		final SWTBotGefEditPart fb = editor.getEditPart(FbInstanceName).parent();
 		fb.select().click();
-		bot.menu(StringNamesHelper.EDIT).menu(StringNamesHelper.DELETE).click();
+		bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.DELETE).click();
 	}
 
 	/**
@@ -226,7 +226,7 @@ public class Abstract4diacUITests {
 	 * @return SWTBot4diacGefViewer
 	 */
 	protected static SWTBot4diacGefViewer createConnection(final String pin1, final String pin2) {
-		final SWTBotGefEditor editor = bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		assertNotNull(viewer);
@@ -256,7 +256,7 @@ public class Abstract4diacUITests {
 	}
 
 	protected static ConnectionEditPart findConnection(final String srcPinName, final String dstPinName) {
-		final SWTBotGefEditor editor = bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		final GraphicalViewer graphicalViewer = viewer.getGraphicalViewer();
 
@@ -375,7 +375,7 @@ public class Abstract4diacUITests {
 	 * @return editor The SWTBotGefEditor is returned
 	 */
 	protected static SWTBotGefEditor goToCompositeInstanceViewer(final String fb) {
-		final SWTBotGefEditor editor = bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		assertNotNull(viewer);
@@ -397,14 +397,14 @@ public class Abstract4diacUITests {
 	 * @param typeLabel  Name of the Type Label.
 	 */
 	protected static void createFBType(final String parentName, final String typeName, final String typeLabel) {
-		bot.menu(StringNamesHelper.FILE).menu(StringNamesHelper.NEW).menu(StringNamesHelper.TYPE_PROJECT).click();
-		final SWTBotShell shell = bot.shell(StringNamesHelper.NEW_TYPE);
+		bot.menu(UITestNamesHelper.FILE).menu(UITestNamesHelper.NEW).menu(UITestNamesHelper.TYPE_PROJECT).click();
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.NEW_TYPE);
 		shell.activate();
-		bot.textWithLabel(StringNamesHelper.TYPE_NAME_LABEL).setText(typeName);
-		bot.textWithLabel(StringNamesHelper.PARENT_FOLDER_NAME_LABEL).setText(parentName);
-		assertEquals(bot.textWithLabel(StringNamesHelper.TYPE_NAME_LABEL).getText(), typeName);
-		bot.tableWithLabel(StringNamesHelper.SELECT_TYPE_LABEL).getTableItem(typeLabel).select();
-		bot.button(StringNamesHelper.FINISH).click();
+		bot.textWithLabel(UITestNamesHelper.TYPE_NAME_LABEL).setText(typeName);
+		bot.textWithLabel(UITestNamesHelper.PARENT_FOLDER_NAME_LABEL).setText(parentName);
+		assertEquals(bot.textWithLabel(UITestNamesHelper.TYPE_NAME_LABEL).getText(), typeName);
+		bot.tableWithLabel(UITestNamesHelper.SELECT_TYPE_LABEL).getTableItem(typeLabel).select();
+		bot.button(UITestNamesHelper.FINISH).click();
 		bot.waitUntil(shellCloses(shell));
 	}
 
@@ -414,13 +414,13 @@ public class Abstract4diacUITests {
 	 * @param typeName Name of the new type.
 	 */
 	protected static void deleteFBType(final String typeName) {
-		final SWTBotView systemExplorerView = bot.viewById(StringNamesHelper.SYSTEM_EXPLORER_ID);
+		final SWTBotView systemExplorerView = bot.viewById(UITestNamesHelper.SYSTEM_EXPLORER_ID);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem parentItem = tree.getTreeItem(StringNamesHelper.PROJECT_NAME);
+		final SWTBotTreeItem parentItem = tree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
 		parentItem.expand();
 		SWTBotTreeItem projectItem = null;
 		for (final SWTBotTreeItem item : parentItem.getItems()) {
@@ -430,12 +430,12 @@ public class Abstract4diacUITests {
 			}
 		}
 		projectItem.select();
-		bot.menu(StringNamesHelper.EDIT).menu(StringNamesHelper.DELETE).click();
+		bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.DELETE).click();
 
 		// the project deletion confirmation dialog
-		final SWTBotShell shell = bot.shell(StringNamesHelper.DELETE_RESOURCES);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.DELETE_RESOURCES);
 		shell.activate();
-		bot.button(StringNamesHelper.OK).click();
+		bot.button(UITestNamesHelper.OK).click();
 		bot.waitUntil(shellCloses(shell));
 		final List<String> nodeList = parentItem.getNodes();
 		assertFalse(nodeList.contains(typeName));
@@ -448,7 +448,7 @@ public class Abstract4diacUITests {
 	 * @param typeName   Name of the new type.
 	 */
 	protected static void openFBTypeInEditor(final String parentName, final String typeName) {
-		final SWTBotView systemExplorerView = bot.viewByTitle(StringNamesHelper.SYSTEM_EXPLORER_LABEL);
+		final SWTBotView systemExplorerView = bot.viewByTitle(UITestNamesHelper.SYSTEM_EXPLORER_LABEL);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
@@ -475,7 +475,7 @@ public class Abstract4diacUITests {
 		final SWTBotGefEditPart pin = editor.getEditPart(pinName);
 		assertNotNull(pin);
 		pin.click();
-		editor.clickContextMenu(StringNamesHelper.DELETE);
+		editor.clickContextMenu(UITestNamesHelper.DELETE);
 		assertNull(editor.getEditPart(pinName));
 	}
 
@@ -495,17 +495,17 @@ public class Abstract4diacUITests {
 		final SWTBotGefEditPart port2 = editor.getEditPart(pin2);
 		port2.click();
 
-		SWTBot propertiesBot = bot.viewByTitle(StringNamesHelper.PROPERTIES_TITLE).bot();
-		bot.viewByTitle(StringNamesHelper.PROPERTIES_TITLE).setFocus();
+		SWTBot propertiesBot = bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).bot();
+		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
 
-		if (PropertySheetHelper.selectPropertyTabItem(StringNamesHelper.EVENT, propertiesBot)) {
-			propertiesBot = selectTabFromInterfaceProperties(StringNamesHelper.EVENT);
+		if (PropertySheetHelper.selectPropertyTabItem(UITestNamesHelper.EVENT, propertiesBot)) {
+			propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.EVENT);
 		} else {
-			propertiesBot = selectTabFromInterfaceProperties(StringNamesHelper.DATA);
+			propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.DATA);
 		}
 
 		// Find the group with the label "With"
-		final SWTBotTable table = propertiesBot.tableInGroup(StringNamesHelper.WITH);
+		final SWTBotTable table = propertiesBot.tableInGroup(UITestNamesHelper.WITH);
 
 		table.select(pin1);
 		table.getTableItem(pin1).toggleCheck();
@@ -529,17 +529,17 @@ public class Abstract4diacUITests {
 		final SWTBotGefEditPart port2 = editor.getEditPart(pin2);
 		port2.click();
 
-		SWTBot propertiesBot = bot.viewByTitle(StringNamesHelper.PROPERTIES_TITLE).bot();
-		bot.viewByTitle(StringNamesHelper.PROPERTIES_TITLE).setFocus();
+		SWTBot propertiesBot = bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).bot();
+		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
 
-		if (PropertySheetHelper.selectPropertyTabItem(StringNamesHelper.EVENT, propertiesBot)) {
-			propertiesBot = selectTabFromInterfaceProperties(StringNamesHelper.EVENT);
+		if (PropertySheetHelper.selectPropertyTabItem(UITestNamesHelper.EVENT, propertiesBot)) {
+			propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.EVENT);
 		} else {
-			propertiesBot = selectTabFromInterfaceProperties(StringNamesHelper.DATA);
+			propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.DATA);
 		}
 
 		// Find the group with the label "With"
-		final SWTBotTable table = propertiesBot.tableInGroup(StringNamesHelper.WITH);
+		final SWTBotTable table = propertiesBot.tableInGroup(UITestNamesHelper.WITH);
 
 		table.select(pin1);
 		table.getTableItem(pin1).toggleCheck();
@@ -554,13 +554,13 @@ public class Abstract4diacUITests {
 	 */
 	protected static SWTBot selectTabFromInterfaceProperties(final String tabName) {
 		// Interface tab
-		final SWTBotCTabItem interfaceTab = bot.cTabItem(StringNamesHelper.INTERFACE);
+		final SWTBotCTabItem interfaceTab = bot.cTabItem(UITestNamesHelper.INTERFACE);
 		interfaceTab.activate();
 		interfaceTab.setFocus();
 
 		// Properties tab access
-		final SWTBot propertiesBot = bot.viewByTitle(StringNamesHelper.PROPERTIES_TITLE).bot();
-		bot.viewByTitle(StringNamesHelper.PROPERTIES_TITLE).setFocus();
+		final SWTBot propertiesBot = bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).bot();
+		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
 
 		// Tabs access inside property sheet
 		PropertySheetHelper.selectPropertyTabItem(tabName, propertiesBot);
@@ -573,7 +573,7 @@ public class Abstract4diacUITests {
 	 * @param dataTypeTableBot NatTable in which variable need to create
 	 */
 	protected static void createNewVariableInDataTypeEditor(final SWTBot4diacNatTable dataTypeTableBot) {
-		bot.editorByTitle(StringNamesHelper.FBT_TEST_PROJECT2).show();
+		bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).show();
 		final int rowCount = dataTypeTableBot.rowCount();
 		bot.button(0).click();
 		assertEquals(dataTypeTableBot.rowCount(), rowCount + 1);
@@ -611,7 +611,7 @@ public class Abstract4diacUITests {
 	 * Returns from CompositeinstanceViewer back to Editing Area
 	 */
 	protected static void returnToEditingArea() {
-		bot.menu(StringNamesHelper.NAVIGATE).menu(StringNamesHelper.GO_TO_PARENT).click();
+		bot.menu(UITestNamesHelper.NAVIGATE).menu(UITestNamesHelper.GO_TO_PARENT).click();
 	}
 
 	/**
@@ -619,21 +619,21 @@ public class Abstract4diacUITests {
 	 */
 	@AfterAll
 	protected static void deleteProject() {
-		final SWTBotView systemExplorerView = bot.viewById(StringNamesHelper.SYSTEM_EXPLORER_ID);
+		final SWTBotView systemExplorerView = bot.viewById(UITestNamesHelper.SYSTEM_EXPLORER_ID);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
 
-		final SWTBotTreeItem treeItem = tree.getTreeItem(StringNamesHelper.PROJECT_NAME);
+		final SWTBotTreeItem treeItem = tree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
 		treeItem.select();
-		bot.menu(StringNamesHelper.EDIT).menu(StringNamesHelper.DELETE).click();
+		bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.DELETE).click();
 
 		// the project deletion confirmation dialog
-		final SWTBotShell shell = bot.shell(StringNamesHelper.DELETE_RESOURCES);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.DELETE_RESOURCES);
 		shell.activate();
-		bot.checkBox(StringNamesHelper.DELETE_PROJECT_WARNING).select();
-		bot.button(StringNamesHelper.OK).click();
+		bot.checkBox(UITestNamesHelper.DELETE_PROJECT_WARNING).select();
+		bot.button(UITestNamesHelper.OK).click();
 		bot.waitUntil(shellCloses(shell));
 	}
 
@@ -651,13 +651,13 @@ public class Abstract4diacUITests {
 		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
 		appNode.contextMenu("Open").click();
 
-		final SWTBotGefEditor editor = bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		viewer.getCanvas().setFocus();
 
-		final SWTBotMenu editMenu = bot.menu(StringNamesHelper.EDIT);
-		editMenu.menu(StringNamesHelper.SELECT_ALL).click();
-		final SWTBotMenu deleteMenu = editMenu.menu(StringNamesHelper.DELETE);
+		final SWTBotMenu editMenu = bot.menu(UITestNamesHelper.EDIT);
+		editMenu.menu(UITestNamesHelper.SELECT_ALL).click();
+		final SWTBotMenu deleteMenu = editMenu.menu(UITestNamesHelper.DELETE);
 		if (deleteMenu.isEnabled()) {
 			// not all Tests have a remaining FB
 			deleteMenu.click();
@@ -679,13 +679,13 @@ public class Abstract4diacUITests {
 	 * @return treeProjectItem the expanded Project node
 	 */
 	private static SWTBotTreeItem expandProjectTreeItemInSystemExplorer() {
-		final SWTBotView systemExplorerView = bot.viewById(StringNamesHelper.SYSTEM_EXPLORER_ID);
+		final SWTBotView systemExplorerView = bot.viewById(UITestNamesHelper.SYSTEM_EXPLORER_ID);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
 		assertNotNull(tree);
-		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(StringNamesHelper.PROJECT_NAME);
+		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
 		treeProjectItem.select();
 		treeProjectItem.expand();
 		return treeProjectItem;
@@ -699,8 +699,8 @@ public class Abstract4diacUITests {
 	 */
 	private static SWTBotTreeItem expandSystemTreeItemInSystemExplorer() {
 		final SWTBotTreeItem treeProjectItem = expandProjectTreeItemInSystemExplorer();
-		bot.waitUntil(treeItemHasNode(treeProjectItem, StringNamesHelper.PROJECT_NAME_TREE_ITEM));
-		final SWTBotTreeItem systemNode = treeProjectItem.getNode(StringNamesHelper.PROJECT_NAME_TREE_ITEM);
+		bot.waitUntil(treeItemHasNode(treeProjectItem, UITestNamesHelper.PROJECT_NAME_TREE_ITEM));
+		final SWTBotTreeItem systemNode = treeProjectItem.getNode(UITestNamesHelper.PROJECT_NAME_TREE_ITEM);
 		systemNode.select();
 		systemNode.expand();
 		return systemNode;
@@ -714,8 +714,8 @@ public class Abstract4diacUITests {
 	 */
 	private static SWTBotTreeItem expandTypeLibraryTreeItemInSystemExplorer() {
 		final SWTBotTreeItem treeProjectItem = expandProjectTreeItemInSystemExplorer();
-		bot.waitUntil(treeItemHasNode(treeProjectItem, StringNamesHelper.TYPE_LIBRARY_NODE));
-		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(StringNamesHelper.TYPE_LIBRARY_NODE);
+		bot.waitUntil(treeItemHasNode(treeProjectItem, UITestNamesHelper.TYPE_LIBRARY_NODE));
+		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(UITestNamesHelper.TYPE_LIBRARY_NODE);
 		typeLibraryNode.select();
 		typeLibraryNode.expand();
 		return typeLibraryNode;
@@ -729,8 +729,8 @@ public class Abstract4diacUITests {
 	 */
 	private static SWTBotTreeItem expandApplicationTreeItemInSystemExplorer() {
 		final SWTBotTreeItem systemNode = expandSystemTreeItemInSystemExplorer();
-		bot.waitUntil(treeItemHasNode(systemNode, StringNamesHelper.PROJECT_NAME_APP));
-		final SWTBotTreeItem appNode = systemNode.getNode(StringNamesHelper.PROJECT_NAME_APP);
+		bot.waitUntil(treeItemHasNode(systemNode, UITestNamesHelper.PROJECT_NAME_APP));
+		final SWTBotTreeItem appNode = systemNode.getNode(UITestNamesHelper.PROJECT_NAME_APP);
 		assertNotNull(appNode);
 		appNode.select();
 		appNode.expand();
@@ -746,7 +746,7 @@ public class Abstract4diacUITests {
 	 */
 	private static SWTBotTreeItem expandSubAppTreeItemInSystemExplorer() {
 		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
-		final SWTBotTreeItem subAppNode = appNode.getNode(StringNamesHelper.SUBAPP);
+		final SWTBotTreeItem subAppNode = appNode.getNode(UITestNamesHelper.SUBAPP);
 		assertNotNull(subAppNode);
 		subAppNode.select();
 		subAppNode.expand();
