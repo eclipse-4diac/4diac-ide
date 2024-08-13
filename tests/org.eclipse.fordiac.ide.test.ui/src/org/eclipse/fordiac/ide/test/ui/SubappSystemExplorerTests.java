@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.test.ui.helpers.StringNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
@@ -37,19 +38,19 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void isSubappInSystemExplorerTree() {
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		dragAndDropEventsFB(StringNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
 
-		selectFBWithFBNameInEditor(editor, E_CYCLE_FB);
+		selectFBWithFBNameInEditor(editor, StringNamesHelper.E_CYCLE_FB);
 
-		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
+		bot.menu(StringNamesHelper.SOURCE).menu(StringNamesHelper.NEW_SUBAPPLICATION).click();
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
+		assertTrue(isSubappSelected(selectedEditParts, StringNamesHelper.SUBAPP));
 
 		// checks for SystemExplorer tree
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
-		assertTrue(isFBInSubAppOfSystemInSystemExplorer(E_CYCLE_FB));
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.SUBAPP));
+		assertTrue(isFBInSubAppOfSystemInSystemExplorer(StringNamesHelper.E_CYCLE_FB));
 	}
 
 	/**
@@ -67,24 +68,25 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void isFbAndSubappInSystemExplorerTree() {
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(100, 100));
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(300, 100));
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		dragAndDropEventsFB(StringNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(StringNamesHelper.E_SWITCH_TREE_ITEM, new Point(300, 100));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
 
-		selectFBWithFBNameInEditor(editor, E_CYCLE_FB);
+		selectFBWithFBNameInEditor(editor, StringNamesHelper.E_CYCLE_FB);
 
-		bot.menu(SOURCE).menu(NEW_SUBAPPLICATION).click();
+		bot.menu(StringNamesHelper.SOURCE).menu(StringNamesHelper.NEW_SUBAPPLICATION).click();
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
 
 		// checks for App node
-		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(E_SWITCH_FB));
+		assertTrue(isSubappSelected(selectedEditParts, StringNamesHelper.SUBAPP));
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.SUBAPP));
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.E_SWITCH_FB));
 
 		// checks for SubApp node
-		assertTrue(isFBInSubAppOfSystemInSystemExplorer(E_CYCLE_FB));
-		assertThrows(WidgetNotFoundException.class, () -> isFBInSubAppOfSystemInSystemExplorer(E_SWITCH_FB));
+		assertTrue(isFBInSubAppOfSystemInSystemExplorer(StringNamesHelper.E_CYCLE_FB));
+		assertThrows(WidgetNotFoundException.class,
+				() -> isFBInSubAppOfSystemInSystemExplorer(StringNamesHelper.E_SWITCH_FB));
 	}
 
 }
