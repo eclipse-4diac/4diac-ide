@@ -84,8 +84,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	private int id = 0;
 
 	String getNextId() {
-		id++;
-		return Integer.toString(id);
+		return Integer.toString(id++);
 	}
 
 	private final ResponseMapping respMapping = new ResponseMapping();
@@ -201,8 +200,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void startResource(final Resource res) throws DeploymentException {
-		final String request = MessageFormat.format(START, Integer.valueOf(id));
-		id++;
+		final String request = MessageFormat.format(START, Integer.valueOf(getNextId()));
 		try {
 			sendREQ(res.getName(), request);
 		} catch (final IOException e) {
@@ -213,8 +211,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void stopResource(final Resource res) throws DeploymentException {
-		final String request = MessageFormat.format(STOP, Integer.valueOf(id));
-		id++;
+		final String request = MessageFormat.format(STOP, Integer.valueOf(getNextId()));
 		try {
 			sendREQ(res.getName(), request);
 		} catch (final IOException e) {
@@ -225,8 +222,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void startDevice(final Device dev) throws DeploymentException {
-		final String request = MessageFormat.format(START, Integer.valueOf(id));
-		id++;
+		final String request = MessageFormat.format(START, Integer.valueOf(getNextId()));
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (final IOException e) {
@@ -239,9 +235,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	public void writeDeviceParameter(final Device device, final String parameter, final String value)
 			throws DeploymentException {
 		final String encodedValue = encodeXMLChars(value);
-		final String request = MessageFormat.format(getWriteParameterMessage(), Integer.valueOf(id), encodedValue,
-				parameter);
-		id++;
+		final String request = MessageFormat.format(getWriteParameterMessage(), Integer.valueOf(getNextId()),
+				encodedValue, parameter);
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (final IOException e) {

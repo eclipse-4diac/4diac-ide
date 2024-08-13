@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
+import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.StringNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.util.GUIHelper;
@@ -47,9 +49,9 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@BeforeEach
 	public void operationsInitialization() {
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT2, STRUCT);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT2);
-		final Composite inputComposite = (Composite) bot.editorByTitle(FBT_TEST_PROJECT2).getWidget();
+		createFBType(StringNamesHelper.PROJECT_NAME, StringNamesHelper.FBT_TEST_PROJECT2, StringNamesHelper.STRUCT);
+		openFBTypeInEditor(StringNamesHelper.PROJECT_NAME, StringNamesHelper.FBT_TEST_PROJECT2);
+		final Composite inputComposite = (Composite) bot.editorByTitle(StringNamesHelper.FBT_TEST_PROJECT2).getWidget();
 		natTable = bot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), inputComposite);
 		dataTypeTableBot = new SWTBot4diacNatTable(natTable);
 		createNewVariableInDataTypeEditor(dataTypeTableBot);
@@ -66,7 +68,7 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@AfterEach
 	public void resetEnvironment() {
-		deleteFBType(FBT_TEST_PROJECT2);
+		deleteFBType(StringNamesHelper.FBT_TEST_PROJECT2);
 	}
 
 	/**
@@ -79,7 +81,7 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void renameVariable() {
-		changeCellValueInNatTbale(dataTypeTableBot, TESTVAR, 1, 1);
+		changeCellValueInNatTbale(dataTypeTableBot, StringNamesHelper.TESTVAR, 1, 1);
 	}
 
 	/**
@@ -96,19 +98,19 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@Test
 	public void changeVariableNameWithButton() {
 		dataTypeTableBot.click(1, 1);
-		bot.toolbarButtonWithTooltip(RENAME_ELEMENT).click();
-		final SWTBotShell shell = bot.shell(REFACTORING);
+		bot.toolbarButtonWithTooltip(StringNamesHelper.RENAME_ELEMENT).click();
+		final SWTBotShell shell = bot.shell(StringNamesHelper.REFACTORING);
 		assertNotNull(shell);
 		shell.activate();
-		assertFalse(bot.button(OK).isEnabled());
+		assertFalse(bot.button(StringNamesHelper.OK).isEnabled());
 
-		bot.textWithLabel(NAME).setText(TESTVAR);
-		assertTrue(bot.button(OK).isEnabled());
+		bot.textWithLabel(StringNamesHelper.NAME).setText(StringNamesHelper.TESTVAR);
+		assertTrue(bot.button(StringNamesHelper.OK).isEnabled());
 
-		bot.button(OK).click();
+		bot.button(StringNamesHelper.OK).click();
 		bot.waitUntil(shellCloses(shell));
 
-		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 1), TESTVAR);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 1), StringNamesHelper.TESTVAR);
 
 	}
 
@@ -125,11 +127,11 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	public void tryToChangeNameOfVariableWithExistingName() {
 		createNewVariableInDataTypeEditor(dataTypeTableBot);
 		dataTypeTableBot.doubleclick(2, 1);
-		dataTypeTableBot.setCellDataValueByPosition(2, 1, VAR1);
+		dataTypeTableBot.setCellDataValueByPosition(2, 1, StringNamesHelper.VAR1);
 		dataTypeTableBot.doubleclick(2, 1);
 
 		// Name should not be changed
-		assertEquals(dataTypeTableBot.getCellDataValueByPosition(2, 1), VAR2);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(2, 1), StringNamesHelper.VAR2);
 	}
 
 	/**
@@ -143,12 +145,12 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@Test
 	public void tryToSetInValidName() {
 		dataTypeTableBot.doubleclick(1, 1);
-		dataTypeTableBot.setCellDataValueByPosition(1, 1, IF);
+		dataTypeTableBot.setCellDataValueByPosition(1, 1, StringNamesHelper.IF);
 //		assertTrue(dataTypeTableBot.contextMenu().isVisible());
 		dataTypeTableBot.doubleclick(1, 1);
 
 		// Name should not be changed
-		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 1), VAR1);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 1), StringNamesHelper.VAR1);
 	}
 
 	/**
@@ -168,17 +170,17 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 		dataTypeTableBot.click(3, 0);
 
 		// Move the selected variable up
-		bot.arrowButtonWithTooltip(MOVE_ELEMENTS_UP).click();
-		assertEquals(dataTypeTableBot.getCellDataValueByPosition(2, 1), VAR3);
+		bot.arrowButtonWithTooltip(StringNamesHelper.MOVE_ELEMENTS_UP).click();
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(2, 1), StringNamesHelper.VAR3);
 		dataTypeTableBot.click(1, 0);
 
 		// Move the selected variable down
-		bot.arrowButtonWithTooltip(MOVE_ELEMENTS_DOWN).click();
+		bot.arrowButtonWithTooltip(StringNamesHelper.MOVE_ELEMENTS_DOWN).click();
 
 		// Checks the order of the Variables
-		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 1), VAR3);
-		assertEquals(dataTypeTableBot.getCellDataValueByPosition(2, 1), VAR1);
-		assertEquals(dataTypeTableBot.getCellDataValueByPosition(3, 1), VAR2);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 1), StringNamesHelper.VAR3);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(2, 1), StringNamesHelper.VAR1);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(3, 1), StringNamesHelper.VAR2);
 	}
 
 	/**
@@ -194,11 +196,11 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 		dataTypeTableBot.doubleclick(1, 2);
 
 		// Here we have assigned the value "int"
-		dataTypeTableBot.setCellDataValueByPosition(1, 2, INT_SMALL);
+		dataTypeTableBot.setCellDataValueByPosition(1, 2, StringNamesHelper.INT_SMALL);
 		dataTypeTableBot.doubleclick(1, 2);
 
 		// It should converted to Upper Case and Valid change
-		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 2), INT);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 2), PinNamesHelper.INT);
 	}
 
 	/**
@@ -213,11 +215,11 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@Test
 	public void tryToSetInValidDataType() {
 		dataTypeTableBot.doubleclick(1, 2);
-		dataTypeTableBot.setCellDataValueByPosition(1, 2, TESTVAR);
+		dataTypeTableBot.setCellDataValueByPosition(1, 2, StringNamesHelper.TESTVAR);
 		dataTypeTableBot.doubleclick(1, 2);
 
 		// Data Type will successfully changed with error
-		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 2), TESTVAR);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 2), StringNamesHelper.TESTVAR);
 		// The cell's background color will get changed to red
 		assertNotEquals(dataTypeTableBot.click(1, 2).backgroundColor(), GUIHelper.COLOR_RED);
 	}
@@ -231,7 +233,7 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeCommentOfVariable() {
-		changeCellValueInNatTbale(dataTypeTableBot, TEST_COMMENT, 1, 3);
+		changeCellValueInNatTbale(dataTypeTableBot, StringNamesHelper.TEST_COMMENT, 1, 3);
 	}
 
 	/**
@@ -243,7 +245,7 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeInitialValueOfVariable() {
-		changeCellValueInNatTbale(dataTypeTableBot, TRUE, 1, 4);
+		changeCellValueInNatTbale(dataTypeTableBot, StringNamesHelper.TRUE, 1, 4);
 		changeCellValueInNatTbale(dataTypeTableBot, "1", 1, 4); //$NON-NLS-1$
 	}
 
@@ -259,11 +261,11 @@ public class DataTypeEditorTests extends Abstract4diacUITests {
 	@Test
 	public void tryToSetInValidInitialValue() {
 		dataTypeTableBot.doubleclick(1, 4);
-		dataTypeTableBot.setCellDataValueByPosition(1, 4, TESTVAR);
+		dataTypeTableBot.setCellDataValueByPosition(1, 4, StringNamesHelper.TESTVAR);
 		dataTypeTableBot.doubleclick(1, 4);
 
 		// Initial value will successfully changed with error
-		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 4), TESTVAR);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(1, 4), StringNamesHelper.TESTVAR);
 
 		// The cell's background color will get changed to red
 		assertNotEquals(dataTypeTableBot.click(1, 4).backgroundColor(), GUIHelper.COLOR_RED);

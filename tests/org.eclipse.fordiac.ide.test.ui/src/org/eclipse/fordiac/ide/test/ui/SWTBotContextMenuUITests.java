@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.test.ui.helpers.StringNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacFigureCanvas;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.swt.graphics.Point;
@@ -41,14 +42,14 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void createSubapplicationViaContextMenu() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
 
-		editor.clickContextMenu(NEW_SUBAPPLICATION, 100, 100);
+		editor.clickContextMenu(StringNamesHelper.NEW_SUBAPPLICATION, 100, 100);
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		assertTrue(isSubappSelected(selectedEditParts, SUBAPP));
+		assertTrue(isSubappSelected(selectedEditParts, StringNamesHelper.SUBAPP));
 		// check App node and SubApp TreeItem in SystemExplorer tree
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.SUBAPP));
 		assertTrue(isSubAppNodeInSystemExplorerEmpty());
 	}
 
@@ -63,9 +64,9 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 	@Disabled("until bug in test is found")
 	@Test
 	public void createFBViaContextMenu() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
 
-		editor.clickContextMenu(INSERT_FB, 100, 100);
+		editor.clickContextMenu(StringNamesHelper.INSERT_FB, 100, 100);
 		final SWTBot4diacFigureCanvas canvas = editor.getSWTBotGefViewer().getCanvas();
 		final List<? extends Text> controls = bot.widgets(widgetOfType(Text.class), canvas.widget);
 
@@ -74,12 +75,12 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 		// which is modified with an Enter at the end of the written text) and den the
 		// inherited method directEditType.
 		final Text textControl = controls.get(0);
-		canvas.typeText(textControl, E_CYCLE_FB);
+		canvas.typeText(textControl, StringNamesHelper.E_CYCLE_FB);
 
-		editor.directEditType(E_CYCLE_FB);
+		editor.directEditType(StringNamesHelper.E_CYCLE_FB);
 		bot.sleep(3000);
 
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(E_CYCLE_FB));
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.E_CYCLE_FB));
 	}
 
 	/**
@@ -94,20 +95,20 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void goToParentViaContextMenuEmptySubApp() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
-		editor.clickContextMenu(NEW_SUBAPPLICATION, 100, 100);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		editor.clickContextMenu(StringNamesHelper.NEW_SUBAPPLICATION, 100, 100);
 		// check System Explorer tree if SubApp is present
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.SUBAPP));
 		assertTrue(isSubAppNodeInSystemExplorerEmpty());
-		goToCompositeInstanceViewer(SUBAPP);
-		final SWTBot4diacGefEditor editorSubApp = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		goToCompositeInstanceViewer(StringNamesHelper.SUBAPP);
+		final SWTBot4diacGefEditor editorSubApp = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
 		assertNotNull(editorSubApp);
 		// check System Explorer tree again after entering subapplication
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.SUBAPP));
 		assertTrue(isSubAppNodeInSystemExplorerEmpty());
-		editorSubApp.clickContextMenu(GO_TO_PARENT, 100, 100);
+		editorSubApp.clickContextMenu(StringNamesHelper.GO_TO_PARENT, 100, 100);
 		// check System Explorer tree after returning
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.SUBAPP));
 		assertTrue(isSubAppNodeInSystemExplorerEmpty());
 	}
 
@@ -123,40 +124,40 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void goToParentViaContextMenuSubAppWithFB() {
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(StringNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
 		createSubappWithDragRectangle(50, 50, 400, 400);
 		// check System Explorer tree if SubApp is present
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
-		assertTrue(isFBInSubAppOfSystemInSystemExplorer(E_CYCLE_FB));
-		goToCompositeInstanceViewer(SUBAPP);
-		final SWTBot4diacGefEditor editorSubApp = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.SUBAPP));
+		assertTrue(isFBInSubAppOfSystemInSystemExplorer(StringNamesHelper.E_CYCLE_FB));
+		goToCompositeInstanceViewer(StringNamesHelper.SUBAPP);
+		final SWTBot4diacGefEditor editorSubApp = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
 		assertNotNull(editorSubApp);
-		bot.toolbarButton(TOOLBAR_BUTTON_ZOOM_FIT_PAGE).click();
+		bot.toolbarButton(StringNamesHelper.TOOLBAR_BUTTON_ZOOM_FIT_PAGE).click();
 		// check System Explorer tree again after entering subapplication
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
-		assertTrue(isFBInSubAppOfSystemInSystemExplorer(E_CYCLE_FB));
-		editorSubApp.clickContextMenu(GO_TO_PARENT, 100, 100);
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.SUBAPP));
+		assertTrue(isFBInSubAppOfSystemInSystemExplorer(StringNamesHelper.E_CYCLE_FB));
+		editorSubApp.clickContextMenu(StringNamesHelper.GO_TO_PARENT, 100, 100);
 		// check System Explorer tree after returning
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
-		assertTrue(isFBInSubAppOfSystemInSystemExplorer(E_CYCLE_FB));
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.SUBAPP));
+		assertTrue(isFBInSubAppOfSystemInSystemExplorer(StringNamesHelper.E_CYCLE_FB));
 	}
 
 	@SuppressWarnings("static-method")
 	@Test
 	public void goToChildViaContextMenuSubAppWithACompositeFB() {
-		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(StringNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		createSubappWithDragRectangle(50, 50, 300, 300);
-		goToCompositeInstanceViewer(SUBAPP);
-		final SWTBot4diacGefEditor editorSubApp = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		goToCompositeInstanceViewer(StringNamesHelper.SUBAPP);
+		final SWTBot4diacGefEditor editorSubApp = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
 		assertNotNull(editorSubApp);
-		bot.toolbarButton(TOOLBAR_BUTTON_ZOOM_FIT_PAGE).click();
+		bot.toolbarButton(StringNamesHelper.TOOLBAR_BUTTON_ZOOM_FIT_PAGE).click();
 
 		// check bounds of FB
-		final Rectangle fbBounds = getBoundsOfFB(editorSubApp, E_N_TABLE_FB);
-		selectFBWithFBNameInEditor(editorSubApp, E_N_TABLE_FB);
-		editorSubApp.clickContextMenu(GO_TO_CHILD, fbBounds.x, fbBounds.y);
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(SUBAPP));
-		assertTrue(isFBInSubAppOfSystemInSystemExplorer(E_N_TABLE_FB));
+		final Rectangle fbBounds = getBoundsOfFB(editorSubApp, StringNamesHelper.E_N_TABLE_FB);
+		selectFBWithFBNameInEditor(editorSubApp, StringNamesHelper.E_N_TABLE_FB);
+		editorSubApp.clickContextMenu(StringNamesHelper.GO_TO_CHILD, fbBounds.x, fbBounds.y);
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.SUBAPP));
+		assertTrue(isFBInSubAppOfSystemInSystemExplorer(StringNamesHelper.E_N_TABLE_FB));
 	}
 
 }

@@ -99,7 +99,8 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 				MessageDialog.openError(getShell(), Messages.SaveAsSubApplicationTypeAction_TemplateMissingErrorTitle,
 						Messages.SaveAsSubApplicationTypeAction_TemplateMissingErrorMessage);
 			} else {
-				final TypeFromTemplateCreator creator = new TypeFromTemplateCreator(getTargetTypeFile(), template) {
+				final TypeFromTemplateCreator creator = new TypeFromTemplateCreator(getTargetTypeFile(), template,
+						newFilePage.getPackageName()) {
 					@Override
 					protected void performTypeSpecificSetup(final LibraryElement type) {
 						performTypeSetup((SubAppType) type);
