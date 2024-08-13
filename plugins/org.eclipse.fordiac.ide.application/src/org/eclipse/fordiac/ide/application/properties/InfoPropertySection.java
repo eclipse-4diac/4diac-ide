@@ -14,18 +14,15 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.filters.AttributeFilter;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -83,8 +80,8 @@ public class InfoPropertySection extends AbstractSection {
 		final Label label = new Label(parent, SWT.NONE);
 		final GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		label.setLayoutData(gridData);
-		gridData.widthHint = 50;
-		gridData.horizontalIndent = 20;
+		gridData.widthHint = 1000;
+		gridData.horizontalIndent = 10;
 		label.setBackground(c);
 		return label;
 	}
@@ -138,14 +135,14 @@ public class InfoPropertySection extends AbstractSection {
 	}
 
 	private void formatPage() {
-		final HashMap<String, Integer> fbs = new HashMap<>();
+		HashMap<String, Integer> fbs = new HashMap<>();
 		int eventConnections;
 		int dataConnections;
 		int adapterConnections;
 		int types;
 		int subapps;
 		int instanceCount;
-		int skillFBCount;
+		final int skillFBCount;
 
 		if (isSubApp) {
 			final SubApp subApp = (SubApp) obj;
@@ -153,9 +150,11 @@ public class InfoPropertySection extends AbstractSection {
 			dataConnections = subApp.getSubAppNetwork().getDataConnections().size();
 			adapterConnections = subApp.getSubAppNetwork().getAdapterConnections().size();
 
-			skillFBCount = countSkillFBInstances(subApp.getSubAppNetwork().getNetworkElements());
+			// skillFBCount =
+			// countSkillFBInstances(subApp.getSubAppNetwork().getNetworkElements(), 0);
+			// processFBS(subApp.getSubAppNetwork().getNetworkElements(), fbs);
+			fbs = countSkillFBInstances2(subApp.getSubAppNetwork().getNetworkElements(), fbs);
 
-			processFBS(subApp.getSubAppNetwork().getNetworkElements(), fbs);
 			subapps = processSubappElements(subApp.getSubAppNetwork().getNetworkElements(), fbs);
 
 			isSubApp = false;
@@ -165,28 +164,58 @@ public class InfoPropertySection extends AbstractSection {
 			dataConnections = application.getFBNetwork().getDataConnections().size();
 			adapterConnections = application.getFBNetwork().getAdapterConnections().size();
 
-			skillFBCount = countSkillFBInstances(application.getFBNetwork().getNetworkElements());
+			// skillFBCount =
+			// countSkillFBInstances(application.getFBNetwork().getNetworkElements(), 0);
+			// processFBS(application.getFBNetwork().getNetworkElements(), fbs);
+			fbs = countSkillFBInstances2(application.getFBNetwork().getNetworkElements(), fbs);
 
-			processFBS(application.getFBNetwork().getNetworkElements(), fbs);
 			subapps = processSubappElements(application.getFBNetwork().getNetworkElements(), fbs);
 		}
 
-		instanceCount = fbs.values().stream().mapToInt(Integer::intValue).sum() + subapps;
+		instanceCount = fbs.values().stream().mapToInt(Integer::intValue).sum();
 		types = fbs.size();
 		final int noc = eventConnections + dataConnections + adapterConnections;
 
-		updateLabels(noc, types, skillFBCount, subapps, instanceCount);
+		updateLabels(noc, types, fbs, subapps, instanceCount);
 	}
 
-	private static int countSkillFBInstances(final Iterable<FBNetworkElement> networkElements) {
-		int skillFBCount = 0;
+	// you can use org.eclipse.fordiac.ide.model.libraryElement.FBType here
+	private static HashMap<String, Integer> countSkillFBInstances2(final Iterable<FBNetworkElement> networkElements,
+			final HashMap<String, Integer> fbs) {
 		for (final FBNetworkElement fe : networkElements) {
-			if (fe.getType() instanceof SimpleFBType || fe.getType() instanceof SubAppType
-					|| fe.getType() instanceof CompositeFBType || fe.getType() instanceof BasicFBType) {
-				skillFBCount++;
+			if (fe.getType() != null) {
+				// fbs++;
+				fbs.merge(fe.getTypeName(), 1, Integer::sum);
+			}
+			if (fe instanceof final SubApp sa) {
+				// fbs += countSkillFBInstances(sa.getSubAppNetwork().getNetworkElements(), fbs)
+				// - fbs;
+				// Temporäre Map für die rekursiven Aufrufe
+				final HashMap<String, Integer> subAppResults = countSkillFBInstances2(
+						sa.getSubAppNetwork().getNetworkElements(), new HashMap<>());
+
+				// Füge die Ergebnisse des rekursiven Aufrufs zur aktuellen HashMap hinzu
+				for (final Map.Entry<String, Integer> entry : subAppResults.entrySet()) {
+					fbs.merge(entry.getKey(), entry.getValue(), Integer::sum);
+				}
 			}
 		}
-		return skillFBCount;
+		return fbs;
+	}
+
+	// you can use org.eclipse.fordiac.ide.model.libraryElement.FBType here
+	private static int countSkillFBInstances(final Iterable<FBNetworkElement> networkElements, int count) {
+		final int temp = count;
+		for (final FBNetworkElement fe : networkElements) {
+			if (fe.getType() != null) {
+				count++;
+			}
+			if (fe instanceof final SubApp sa) {
+				count += countSkillFBInstances(sa.getSubAppNetwork().getNetworkElements(), count) - count;
+
+			}
+		}
+		return count;
 	}
 
 	private static int processSubappElements(final Iterable<FBNetworkElement> elements,
@@ -209,12 +238,17 @@ public class InfoPropertySection extends AbstractSection {
 		}
 	}
 
-	private void updateLabels(final int noc, final int types, final int skillfb, final int subapps,
+	private void updateLabels(final int noc, final int types, final HashMap<String, Integer> fbs, final int subapps,
 			final int instanceCount) {
 		numbConVal.setText(String.valueOf(noc));
 		usedTypesVal.setText(String.valueOf(types));
 		subAppsVal.setText(String.valueOf(subapps));
-		skillFBVal.setText(String.valueOf(skillfb));
+
+		final StringBuilder sb = new StringBuilder();
+		for (final Entry<String, Integer> entry : fbs.entrySet()) {
+			sb.append(entry.getKey() + ": " + entry.getValue() + "\n");
+		}
+		skillFBVal.setText(sb.toString());
 		instancesVal.setText(String.valueOf(instanceCount));
 
 		parent.layout(true, true);
