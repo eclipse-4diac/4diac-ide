@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.test.ui.helpers.StringNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
@@ -38,19 +38,19 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void isSubappInSystemExplorerTree() {
-		dragAndDropEventsFB(StringNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
-		selectFBWithFBNameInEditor(editor, StringNamesHelper.E_CYCLE_FB);
+		selectFBWithFBNameInEditor(editor, UITestNamesHelper.E_CYCLE_FB);
 
-		bot.menu(StringNamesHelper.SOURCE).menu(StringNamesHelper.NEW_SUBAPPLICATION).click();
+		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		assertTrue(isSubappSelected(selectedEditParts, StringNamesHelper.SUBAPP));
+		assertTrue(isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
 
 		// checks for SystemExplorer tree
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.SUBAPP));
-		assertTrue(isFBInSubAppOfSystemInSystemExplorer(StringNamesHelper.E_CYCLE_FB));
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
+		assertTrue(isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
 	}
 
 	/**
@@ -68,25 +68,25 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void isFbAndSubappInSystemExplorerTree() {
-		dragAndDropEventsFB(StringNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
-		dragAndDropEventsFB(StringNamesHelper.E_SWITCH_TREE_ITEM, new Point(300, 100));
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(300, 100));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
-		selectFBWithFBNameInEditor(editor, StringNamesHelper.E_CYCLE_FB);
+		selectFBWithFBNameInEditor(editor, UITestNamesHelper.E_CYCLE_FB);
 
-		bot.menu(StringNamesHelper.SOURCE).menu(StringNamesHelper.NEW_SUBAPPLICATION).click();
+		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
 
 		// checks for App node
-		assertTrue(isSubappSelected(selectedEditParts, StringNamesHelper.SUBAPP));
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.SUBAPP));
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(StringNamesHelper.E_SWITCH_FB));
+		assertTrue(isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
+		assertTrue(isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.E_SWITCH_FB));
 
 		// checks for SubApp node
-		assertTrue(isFBInSubAppOfSystemInSystemExplorer(StringNamesHelper.E_CYCLE_FB));
+		assertTrue(isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
 		assertThrows(WidgetNotFoundException.class,
-				() -> isFBInSubAppOfSystemInSystemExplorer(StringNamesHelper.E_SWITCH_FB));
+				() -> isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_SWITCH_FB));
 	}
 
 }

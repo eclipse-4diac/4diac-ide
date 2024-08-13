@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.InstanceNameEditPart;
 import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
 import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
-import org.eclipse.fordiac.ide.test.ui.helpers.StringNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.EditPartViewer;
@@ -64,32 +64,32 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@Test
 	public void dragAndDrop1FB() {
 		// select FB E_CYCLE
-		final SWTBotView systemExplorerView = bot.viewById(StringNamesHelper.SYSTEM_EXPLORER_ID);
+		final SWTBotView systemExplorerView = bot.viewById(UITestNamesHelper.SYSTEM_EXPLORER_ID);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
 		assertNotNull(tree);
-		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(StringNamesHelper.PROJECT_NAME);
+		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(treeProjectItem);
 		treeProjectItem.select();
 		treeProjectItem.expand();
-		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(StringNamesHelper.TYPE_LIBRARY_NODE);
+		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(UITestNamesHelper.TYPE_LIBRARY_NODE);
 		assertNotNull(typeLibraryNode);
 		typeLibraryNode.select();
 		typeLibraryNode.expand();
-		final SWTBotTreeItem eventsNode = typeLibraryNode.getNode(StringNamesHelper.EVENTS_NODE);
+		final SWTBotTreeItem eventsNode = typeLibraryNode.getNode(UITestNamesHelper.EVENTS_NODE);
 		assertNotNull(eventsNode);
 		eventsNode.select();
 		eventsNode.expand();
-		bot.waitUntil(treeItemHasNode(eventsNode, StringNamesHelper.E_CYCLE_TREE_ITEM));
-		final SWTBotTreeItem eCycleNode = eventsNode.getNode(StringNamesHelper.E_CYCLE_TREE_ITEM);
+		bot.waitUntil(treeItemHasNode(eventsNode, UITestNamesHelper.E_CYCLE_TREE_ITEM));
+		final SWTBotTreeItem eCycleNode = eventsNode.getNode(UITestNamesHelper.E_CYCLE_TREE_ITEM);
 		assertNotNull(eCycleNode);
 		eCycleNode.select();
 		eCycleNode.click();
 
 		// select application editor
-		final SWTBotGefEditor editor = bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		assertNotNull(viewer);
@@ -97,7 +97,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertNotNull(canvas);
 		final Point point = new Point(100, 100);
 		eCycleNode.dragAndDrop(canvas, point);
-		assertNotNull(editor.getEditPart(StringNamesHelper.E_CYCLE_FB));
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_CYCLE_FB));
 	}
 
 	/**
@@ -107,8 +107,8 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void isAddedFbInProjectAppNode() {
-		dragAndDropEventsFB(StringNamesHelper.E_CYCLE_TREE_ITEM, new Point(300, 100));
-		final SWTBotView systemExplorerView = bot.viewById(StringNamesHelper.SYSTEM_EXPLORER_ID);
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(300, 100));
+		final SWTBotView systemExplorerView = bot.viewById(UITestNamesHelper.SYSTEM_EXPLORER_ID);
 		assertNotNull(systemExplorerView);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
@@ -116,20 +116,20 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
 		assertNotNull(tree);
-		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(StringNamesHelper.PROJECT_NAME);
+		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(treeProjectItem);
 		treeProjectItem.select();
 		treeProjectItem.expand();
-		final SWTBotTreeItem projectNode = treeProjectItem.getNode(StringNamesHelper.PROJECT_NAME + " []"); //$NON-NLS-1$
+		final SWTBotTreeItem projectNode = treeProjectItem.getNode(UITestNamesHelper.PROJECT_NAME + " []"); //$NON-NLS-1$
 		assertNotNull(projectNode);
 		projectNode.select();
 		projectNode.expand();
-		final SWTBotTreeItem appNode = projectNode.getNode(StringNamesHelper.PROJECT_NAME + "App"); //$NON-NLS-1$
+		final SWTBotTreeItem appNode = projectNode.getNode(UITestNamesHelper.PROJECT_NAME + "App"); //$NON-NLS-1$
 		assertNotNull(appNode);
 		appNode.select();
 		appNode.expand();
 		assertNotNull(appNode.getNodes());
-		assertTrue(appNode.getNode(StringNamesHelper.E_CYCLE_FB).isVisible());
+		assertTrue(appNode.getNode(UITestNamesHelper.E_CYCLE_FB).isVisible());
 	}
 
 	/**
@@ -138,16 +138,16 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void deleteExistingFB() {
-		dragAndDropEventsFB(StringNamesHelper.E_CYCLE_TREE_ITEM, new Point(300, 100));
-		final SWTBotGefEditor editor = bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(300, 100));
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(StringNamesHelper.E_CYCLE_FB));
-		editor.click(StringNamesHelper.E_CYCLE_FB);
-		final SWTBotGefEditPart parent = editor.getEditPart(StringNamesHelper.E_CYCLE_FB).parent();
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_CYCLE_FB));
+		editor.click(UITestNamesHelper.E_CYCLE_FB);
+		final SWTBotGefEditPart parent = editor.getEditPart(UITestNamesHelper.E_CYCLE_FB).parent();
 		assertNotNull(parent);
 		parent.click();
-		bot.menu(StringNamesHelper.EDIT).menu(StringNamesHelper.DELETE).click();
-		assertNull(editor.getEditPart(StringNamesHelper.E_CYCLE_FB));
+		bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.DELETE).click();
+		assertNull(editor.getEditPart(UITestNamesHelper.E_CYCLE_FB));
 	}
 
 	/**
@@ -161,8 +161,8 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void selectFbViaMouseLeftClickRectangleOverFB() {
-		dragAndDropEventsFB(StringNamesHelper.E_D_FF_TREE_ITEM, new Point(200, 200));
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		dragAndDropEventsFB(UITestNamesHelper.E_D_FF_TREE_ITEM, new Point(200, 200));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
 		// drag rectangle next to FB, therefore FB should not be selected
 		editor.drag(40, 40, 80, 80);
@@ -171,7 +171,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertTrue(selectedEditParts.isEmpty());
 		assertFalse(
 				selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart).map(p -> (FBEditPart) p.part())
-						.anyMatch(fb -> StringNamesHelper.E_D_FF_FB.equals(fb.getModel().getName())));
+						.anyMatch(fb -> UITestNamesHelper.E_D_FF_FB.equals(fb.getModel().getName())));
 
 		// drag rectangle over to FB, therefore FB should be selected
 		editor.drag(50, 50, 350, 350);
@@ -180,7 +180,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertFalse(selectedEditParts.isEmpty());
 		assertTrue(
 				selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart).map(p -> (FBEditPart) p.part())
-						.anyMatch(fb -> StringNamesHelper.E_D_FF_FB.equals(fb.getModel().getName())));
+						.anyMatch(fb -> UITestNamesHelper.E_D_FF_FB.equals(fb.getModel().getName())));
 	}
 
 	/**
@@ -194,13 +194,13 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void selectFbViaMouseLeftClickOnFB() {
-		dragAndDropEventsFB(StringNamesHelper.E_SWITCH_TREE_ITEM, new Point(150, 250));
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(150, 250));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
 		// check bounds of FB
-		editor.getEditPart(StringNamesHelper.E_SWITCH_FB);
-		editor.click(StringNamesHelper.E_SWITCH_FB);
-		final SWTBotGefEditPart parent = editor.getEditPart(StringNamesHelper.E_SWITCH_FB).parent();
+		editor.getEditPart(UITestNamesHelper.E_SWITCH_FB);
+		editor.click(UITestNamesHelper.E_SWITCH_FB);
+		final SWTBotGefEditPart parent = editor.getEditPart(UITestNamesHelper.E_SWITCH_FB).parent();
 		final IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
 		final Rectangle fbBounds = figure.getBounds().getCopy();
 		figure.translateToAbsolute(fbBounds);
@@ -211,7 +211,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertThrows(TimeoutException.class, () -> editor.waitForSelectedFBEditPart());
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
-		assertFalse(isFbSelected(selectedEditParts, StringNamesHelper.E_SWITCH_FB));
+		assertFalse(isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
 
 		// click next to the FB
 		point = new Point(265, 350);
@@ -219,7 +219,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertThrows(TimeoutException.class, () -> editor.waitForSelectedFBEditPart());
 		selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
-		assertFalse(isFbSelected(selectedEditParts, StringNamesHelper.E_SWITCH_FB));
+		assertFalse(isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
 
 		// click exactly at the insertion point
 		point = new Point(150, 250);
@@ -228,7 +228,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
 		selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
-		assertTrue(isFbSelected(selectedEditParts, StringNamesHelper.E_SWITCH_FB));
+		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
 
 		// click within the FB bounds but not on a pin or instance name
 		point = new Point(170, 300);
@@ -237,7 +237,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
 		selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
-		assertTrue(isFbSelected(selectedEditParts, StringNamesHelper.E_SWITCH_FB));
+		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
 
 		// click within the FB bounds but not on a pin or instance name
 		point = new Point(200, 340);
@@ -246,7 +246,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
 		selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
-		assertTrue(isFbSelected(selectedEditParts, StringNamesHelper.E_SWITCH_FB));
+		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
 	}
 
 	/**
@@ -262,12 +262,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@Test
 	public void moveFB() {
 		final Point pos1 = new Point(200, 200);
-		dragAndDropEventsFB(StringNamesHelper.E_CYCLE_TREE_ITEM, pos1);
-		final SWTBotGefEditor editor = bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, pos1);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(StringNamesHelper.E_CYCLE_FB));
-		editor.click(StringNamesHelper.E_CYCLE_FB);
-		SWTBotGefEditPart parent = editor.getEditPart(StringNamesHelper.E_CYCLE_FB).parent();
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_CYCLE_FB));
+		editor.click(UITestNamesHelper.E_CYCLE_FB);
+		SWTBotGefEditPart parent = editor.getEditPart(UITestNamesHelper.E_CYCLE_FB).parent();
 		assertNotNull(parent);
 
 		IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
@@ -287,7 +287,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		editor.drag(parent, pos2.x, pos2.y);
 		final org.eclipse.draw2d.geometry.Point posToCheck2 = new org.eclipse.draw2d.geometry.Point(pos2);
 
-		parent = editor.getEditPart(StringNamesHelper.E_CYCLE_FB).parent();
+		parent = editor.getEditPart(UITestNamesHelper.E_CYCLE_FB).parent();
 		figure = ((GraphicalEditPart) parent.part()).getFigure();
 		fbBounds = figure.getBounds().getCopy();
 		figure.translateToAbsolute(fbBounds);
@@ -304,8 +304,8 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void editDTofECycle() {
-		dragAndDropEventsFB(StringNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 200));
-		final SWTBotGefEditor editor = bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 200));
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 		editor.getEditPart(PinNamesHelper.DEF_VAL);
 		editor.doubleClick(PinNamesHelper.DEF_VAL);
@@ -325,8 +325,8 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void directEditorDefaultValueTest() {
-		dragAndDropEventsFB(StringNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 100));
-		final SWTBotGefEditor editor = bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 100));
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 		editor.getEditPart(PinNamesHelper.DEF_VAL);
 		editor.doubleClick(PinNamesHelper.DEF_VAL);
@@ -345,8 +345,8 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void directEditorNewValueTest() {
-		dragAndDropEventsFB(StringNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 100));
-		final SWTBotGefEditor editor = bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 100));
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 		editor.getEditPart(PinNamesHelper.DEF_VAL);
 		editor.doubleClick(PinNamesHelper.DEF_VAL);
@@ -365,8 +365,8 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void editFBName() {
-		dragAndDropEventsFB(StringNamesHelper.E_SR_TREE_ITEM, new Point(100, 100));
-		final SWTBotGefEditor editor = bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(100, 100));
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
@@ -380,14 +380,14 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 				assertNotNull(figure);
 				final String text = figure.getText();
 
-				if (StringNamesHelper.E_SR_FB.equals(text)) {
+				if (UITestNamesHelper.E_SR_FB.equals(text)) {
 					iNFigure = figure;
 					final Rectangle bounds = figure.getBounds().getCopy();
 					assertNotNull(bounds);
 					figure.translateToAbsolute(bounds);
 					editor.setFocus();
 					editor.doubleClick(bounds.x, bounds.y);
-					bot.text(StringNamesHelper.E_SR_FB).setText(newName);
+					bot.text(UITestNamesHelper.E_SR_FB).setText(newName);
 					bot.activeShell().pressShortcut(Keystrokes.CR);
 					assertEquals(newName, figure.getText());
 					break;
@@ -412,7 +412,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void validConnectionBetweenEventInputPinAndEventOutputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 200));
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 200));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.START, PinNamesHelper.EO);
 		assertDoesNotThrow(viewer::waitForConnection);
 	}
@@ -429,7 +429,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void validConnectionBetweenEventOutputPinAndEventInputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO1, PinNamesHelper.START);
 		assertDoesNotThrow(viewer::waitForConnection);
 	}
@@ -446,7 +446,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void validConnectionBetweenUintDataInputPinAndUintDataOutputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_CTUD_TREE_ITEM, new Point(150, 150));
+		dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(150, 150));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.PV, PinNamesHelper.CV);
 		assertDoesNotThrow(viewer::waitForConnection);
 	}
@@ -463,7 +463,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void validConnectionBetweenBoolInputPinAndBoolOutputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_D_FF_TREE_ITEM, new Point(150, 150));
+		dragAndDropEventsFB(UITestNamesHelper.E_D_FF_TREE_ITEM, new Point(150, 150));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.D, PinNamesHelper.Q);
 		assertDoesNotThrow(viewer::waitForConnection);
 	}
@@ -476,11 +476,11 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	public void connectionCanBeFoundAfterMovingFB() {
 		// in progress
 		final Point pos1 = new Point(100, 150);
-		dragAndDropEventsFB(StringNamesHelper.E_TABLE_CTRL_TREE_ITEM, pos1);
+		dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, pos1);
 		createConnection(PinNamesHelper.INIT, PinNamesHelper.CLKO);
 		createConnection(PinNamesHelper.N, PinNamesHelper.CV);
 
-		final SWTBotGefEditor editor = bot.gefEditor(StringNamesHelper.PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		assertNotNull(viewer);
 		final SWTBotGefFigureCanvas canvas = viewer.getCanvas();
@@ -491,9 +491,9 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.CV, PinNamesHelper.N));
 
 		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(StringNamesHelper.E_TABLE_CTRL_FB));
-		editor.click(StringNamesHelper.E_TABLE_CTRL_FB);
-		SWTBotGefEditPart parent = editor.getEditPart(StringNamesHelper.E_TABLE_CTRL_FB).parent();
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_TABLE_CTRL_FB));
+		editor.click(UITestNamesHelper.E_TABLE_CTRL_FB);
+		SWTBotGefEditPart parent = editor.getEditPart(UITestNamesHelper.E_TABLE_CTRL_FB).parent();
 		assertNotNull(parent);
 
 		IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
@@ -513,7 +513,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		editor.drag(parent, pos2.x, pos2.y);
 		final org.eclipse.draw2d.geometry.Point posToCheck2 = new org.eclipse.draw2d.geometry.Point(pos2);
 
-		parent = editor.getEditPart(StringNamesHelper.E_TABLE_CTRL_FB).parent();
+		parent = editor.getEditPart(UITestNamesHelper.E_TABLE_CTRL_FB).parent();
 		figure = ((GraphicalEditPart) parent.part()).getFigure();
 		fbBounds = figure.getBounds().getCopy();
 		figure.translateToAbsolute(fbBounds);
@@ -537,7 +537,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenEventInputPinAndEventInputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.START, PinNamesHelper.STOP);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -555,7 +555,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenEventInputPinAndUintInputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_N_TABLE_TREE_ITEM, new Point(150, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(150, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.START, PinNamesHelper.N);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -573,7 +573,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenEventInputPinAndTimeInputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_N_TABLE_TREE_ITEM, new Point(150, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(150, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.START, PinNamesHelper.DT);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -591,7 +591,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenEventInputPinAndBoolInputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_D_FF_TREE_ITEM, new Point(150, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_D_FF_TREE_ITEM, new Point(150, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.CLK, PinNamesHelper.D);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -609,7 +609,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenEventInputPinAndUintOutputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 150));
+		dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 150));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.CD, PinNamesHelper.CV);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -627,7 +627,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenEventInputPinAndTimeOutputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.INIT, PinNamesHelper.DTO);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -645,7 +645,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenEventInputPinAndBoolOutputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 150));
+		dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 150));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.CD, PinNamesHelper.QU);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -663,7 +663,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenTimeInputPinAndTimeOutputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.DT, PinNamesHelper.DTO);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -681,7 +681,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenTimeInputPinAndUintInputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.DT, PinNamesHelper.N);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -699,7 +699,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenUintInputPinAndBoolOutputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.PV, PinNamesHelper.QU);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -717,7 +717,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenEventOutputPinAndUintInputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO0, PinNamesHelper.N);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -735,7 +735,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenEventOutputPinAndTimeInputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO1, PinNamesHelper.DT);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -753,7 +753,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenEventOutputPinAndBoolInputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_D_FF_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_D_FF_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO, PinNamesHelper.D);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -771,7 +771,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenEventOutputPinAndEventOutputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO0, PinNamesHelper.EO2);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -789,7 +789,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenEventOutputPinAndUintOutputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.CLKO, PinNamesHelper.CV);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -807,7 +807,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenEventOutputPinAndTimeOutputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.CLKO, PinNamesHelper.DTO);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -825,7 +825,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenEventOutputPinAndBoolOutputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_D_FF_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_D_FF_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO, PinNamesHelper.Q);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
@@ -843,7 +843,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void invalidConnectionBetweenBoolOutputPinAndBoolOutputPin() {
-		dragAndDropEventsFB(StringNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.QU, PinNamesHelper.QD);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}

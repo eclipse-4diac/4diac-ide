@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
-import org.eclipse.fordiac.ide.test.ui.helpers.StringNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
@@ -48,46 +48,46 @@ public class CreateFBTTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void createNewFBTypeWithoutPackage() {
-		final SWTBotMenu fileMenu = bot.menu(StringNamesHelper.FILE).menu(StringNamesHelper.NEW)
-				.menu(StringNamesHelper.TYPE_PROJECT).click();
+		final SWTBotMenu fileMenu = bot.menu(UITestNamesHelper.FILE).menu(UITestNamesHelper.NEW)
+				.menu(UITestNamesHelper.TYPE_PROJECT).click();
 		assertNotNull(fileMenu);
-		final SWTBotShell shell = bot.shell(StringNamesHelper.NEW_TYPE);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.NEW_TYPE);
 		shell.activate();
-		assertTrue(bot.button(StringNamesHelper.CANCEL).isEnabled());
-		assertFalse(bot.button(StringNamesHelper.FINISH).isEnabled());
+		assertTrue(bot.button(UITestNamesHelper.CANCEL).isEnabled());
+		assertFalse(bot.button(UITestNamesHelper.FINISH).isEnabled());
 
 		final SWTBotTree containerTree = bot.tree();
-		final SWTBotTreeItem containerItem = containerTree.getTreeItem(StringNamesHelper.PROJECT_NAME);
+		final SWTBotTreeItem containerItem = containerTree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
 		containerItem.select();
 
-		assertEquals(StringNamesHelper.PROJECT_NAME,
-				bot.textWithLabel(StringNamesHelper.PARENT_FOLDER_NAME_LABEL).getText());
+		assertEquals(UITestNamesHelper.PROJECT_NAME,
+				bot.textWithLabel(UITestNamesHelper.PARENT_FOLDER_NAME_LABEL).getText());
 
 		// Type Name:
-		bot.textWithLabel(StringNamesHelper.TYPE_NAME_LABEL).setText(StringNamesHelper.FBT_TEST_PROJECT1);
-		assertFalse(bot.button(StringNamesHelper.FINISH).isEnabled());
+		bot.textWithLabel(UITestNamesHelper.TYPE_NAME_LABEL).setText(UITestNamesHelper.FBT_TEST_PROJECT1);
+		assertFalse(bot.button(UITestNamesHelper.FINISH).isEnabled());
 
 		// Select Type:
-		bot.table().select(StringNamesHelper.ADAPTER);
+		bot.table().select(UITestNamesHelper.ADAPTER);
 
-		assertEquals(bot.textWithLabel(StringNamesHelper.TYPE_NAME_LABEL).getText(),
-				StringNamesHelper.FBT_TEST_PROJECT1);
-		assertTrue(bot.button(StringNamesHelper.CANCEL).isEnabled());
-		assertTrue(bot.button(StringNamesHelper.FINISH).isEnabled());
+		assertEquals(bot.textWithLabel(UITestNamesHelper.TYPE_NAME_LABEL).getText(),
+				UITestNamesHelper.FBT_TEST_PROJECT1);
+		assertTrue(bot.button(UITestNamesHelper.CANCEL).isEnabled());
+		assertTrue(bot.button(UITestNamesHelper.FINISH).isEnabled());
 
-		bot.button(StringNamesHelper.FINISH).click();
+		bot.button(UITestNamesHelper.FINISH).click();
 		bot.waitUntil(shellCloses(shell));
 
-		final SWTBotView systemExplorerView = bot.viewByTitle(StringNamesHelper.SYSTEM_EXPLORER_LABEL);
+		final SWTBotView systemExplorerView = bot.viewByTitle(UITestNamesHelper.SYSTEM_EXPLORER_LABEL);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem parentItem = tree.getTreeItem(StringNamesHelper.PROJECT_NAME);
+		final SWTBotTreeItem parentItem = tree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
 		parentItem.expand();
-		final SWTBotTreeItem projectItem = parentItem.getNode(StringNamesHelper.FBT_TEST_PROJECT1);
-		assertEquals(projectItem.getText(), StringNamesHelper.FBT_TEST_PROJECT1);
-		deleteFBType(StringNamesHelper.FBT_TEST_PROJECT1);
+		final SWTBotTreeItem projectItem = parentItem.getNode(UITestNamesHelper.FBT_TEST_PROJECT1);
+		assertEquals(projectItem.getText(), UITestNamesHelper.FBT_TEST_PROJECT1);
+		deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT1);
 	}
 
 	/**
@@ -105,51 +105,51 @@ public class CreateFBTTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void createNewFBTypeWithPackage() {
-		final SWTBotMenu fileMenu = bot.menu(StringNamesHelper.FILE).menu(StringNamesHelper.NEW)
-				.menu(StringNamesHelper.TYPE_PROJECT).click();
+		final SWTBotMenu fileMenu = bot.menu(UITestNamesHelper.FILE).menu(UITestNamesHelper.NEW)
+				.menu(UITestNamesHelper.TYPE_PROJECT).click();
 		assertNotNull(fileMenu);
-		final SWTBotShell shell = bot.shell(StringNamesHelper.NEW_TYPE);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.NEW_TYPE);
 		shell.activate();
-		assertTrue(bot.button(StringNamesHelper.CANCEL).isEnabled());
-		assertFalse(bot.button(StringNamesHelper.FINISH).isEnabled());
+		assertTrue(bot.button(UITestNamesHelper.CANCEL).isEnabled());
+		assertFalse(bot.button(UITestNamesHelper.FINISH).isEnabled());
 
 		// Parent folder Name:
 		final SWTBotTree containerTree = bot.tree();
-		final SWTBotTreeItem containerItem = containerTree.getTreeItem(StringNamesHelper.PROJECT_NAME);
+		final SWTBotTreeItem containerItem = containerTree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
 		containerItem.select();
 
-		assertEquals(StringNamesHelper.PROJECT_NAME,
-				bot.textWithLabel(StringNamesHelper.PARENT_FOLDER_NAME_LABEL).getText());
+		assertEquals(UITestNamesHelper.PROJECT_NAME,
+				bot.textWithLabel(UITestNamesHelper.PARENT_FOLDER_NAME_LABEL).getText());
 
 		// Type Name:
-		bot.textWithLabel(StringNamesHelper.TYPE_NAME_LABEL).setText(StringNamesHelper.FBT_TEST_PROJECT2);
-		assertFalse(bot.button(StringNamesHelper.FINISH).isEnabled());
+		bot.textWithLabel(UITestNamesHelper.TYPE_NAME_LABEL).setText(UITestNamesHelper.FBT_TEST_PROJECT2);
+		assertFalse(bot.button(UITestNamesHelper.FINISH).isEnabled());
 
 		// Package:
-		bot.textWithLabel(StringNamesHelper.PACKAGE_NAME_LABEL).setText(StringNamesHelper.PACKAGE_NAME);
-		assertFalse(bot.button(StringNamesHelper.FINISH).isEnabled());
+		bot.textWithLabel(UITestNamesHelper.PACKAGE_NAME_LABEL).setText(UITestNamesHelper.PACKAGE_NAME);
+		assertFalse(bot.button(UITestNamesHelper.FINISH).isEnabled());
 
 		// Select Type:
-		bot.table().select(StringNamesHelper.ADAPTER);
+		bot.table().select(UITestNamesHelper.ADAPTER);
 
-		assertEquals(bot.textWithLabel(StringNamesHelper.TYPE_NAME_LABEL).getText(),
-				StringNamesHelper.FBT_TEST_PROJECT2);
-		assertTrue(bot.button(StringNamesHelper.CANCEL).isEnabled());
-		assertTrue(bot.button(StringNamesHelper.FINISH).isEnabled());
+		assertEquals(bot.textWithLabel(UITestNamesHelper.TYPE_NAME_LABEL).getText(),
+				UITestNamesHelper.FBT_TEST_PROJECT2);
+		assertTrue(bot.button(UITestNamesHelper.CANCEL).isEnabled());
+		assertTrue(bot.button(UITestNamesHelper.FINISH).isEnabled());
 
-		bot.button(StringNamesHelper.FINISH).click();
+		bot.button(UITestNamesHelper.FINISH).click();
 		bot.waitUntil(shellCloses(shell));
 
-		final SWTBotView systemExplorerView = bot.viewByTitle(StringNamesHelper.SYSTEM_EXPLORER_LABEL);
+		final SWTBotView systemExplorerView = bot.viewByTitle(UITestNamesHelper.SYSTEM_EXPLORER_LABEL);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem parentItem = tree.getTreeItem(StringNamesHelper.PROJECT_NAME);
+		final SWTBotTreeItem parentItem = tree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
 		parentItem.expand();
-		final SWTBotTreeItem projectItem = parentItem.getNode(StringNamesHelper.FBT_TEST_PROJECT2);
-		assertEquals(projectItem.getText(), StringNamesHelper.FBT_TEST_PROJECT2);
-		deleteFBType(StringNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBotTreeItem projectItem = parentItem.getNode(UITestNamesHelper.FBT_TEST_PROJECT2);
+		assertEquals(projectItem.getText(), UITestNamesHelper.FBT_TEST_PROJECT2);
+		deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT2);
 	}
 
 	/**
@@ -162,34 +162,34 @@ public class CreateFBTTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToCreateFBTypeWithForbiddenName() {
-		final SWTBotMenu fileMenu = bot.menu(StringNamesHelper.FILE).menu(StringNamesHelper.NEW)
-				.menu(StringNamesHelper.TYPE_PROJECT).click();
+		final SWTBotMenu fileMenu = bot.menu(UITestNamesHelper.FILE).menu(UITestNamesHelper.NEW)
+				.menu(UITestNamesHelper.TYPE_PROJECT).click();
 		assertNotNull(fileMenu);
-		final SWTBotShell shell = bot.shell(StringNamesHelper.NEW_TYPE);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.NEW_TYPE);
 		shell.activate();
-		assertTrue(bot.button(StringNamesHelper.CANCEL).isEnabled());
-		assertFalse(bot.button(StringNamesHelper.FINISH).isEnabled());
+		assertTrue(bot.button(UITestNamesHelper.CANCEL).isEnabled());
+		assertFalse(bot.button(UITestNamesHelper.FINISH).isEnabled());
 
 		final SWTBotTree containerTree = bot.tree();
-		final SWTBotTreeItem containerItem = containerTree.getTreeItem(StringNamesHelper.PROJECT_NAME);
+		final SWTBotTreeItem containerItem = containerTree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
 		containerItem.select();
 
-		assertEquals(StringNamesHelper.PROJECT_NAME,
-				bot.textWithLabel(StringNamesHelper.PARENT_FOLDER_NAME_LABEL).getText());
+		assertEquals(UITestNamesHelper.PROJECT_NAME,
+				bot.textWithLabel(UITestNamesHelper.PARENT_FOLDER_NAME_LABEL).getText());
 
 		// Type Name:
-		bot.textWithLabel(StringNamesHelper.TYPE_NAME_LABEL).setText(StringNamesHelper.FORBIDDEN_TYPE_NAME);
-		assertFalse(bot.button(StringNamesHelper.FINISH).isEnabled());
+		bot.textWithLabel(UITestNamesHelper.TYPE_NAME_LABEL).setText(UITestNamesHelper.FORBIDDEN_TYPE_NAME);
+		assertFalse(bot.button(UITestNamesHelper.FINISH).isEnabled());
 
 		// Select Type:
-		bot.table().select(StringNamesHelper.ADAPTER);
+		bot.table().select(UITestNamesHelper.ADAPTER);
 
-		assertEquals(bot.textWithLabel(StringNamesHelper.TYPE_NAME_LABEL).getText(),
-				StringNamesHelper.FORBIDDEN_TYPE_NAME);
-		assertTrue(bot.button(StringNamesHelper.CANCEL).isEnabled());
-		assertFalse(bot.button(StringNamesHelper.FINISH).isEnabled());
+		assertEquals(bot.textWithLabel(UITestNamesHelper.TYPE_NAME_LABEL).getText(),
+				UITestNamesHelper.FORBIDDEN_TYPE_NAME);
+		assertTrue(bot.button(UITestNamesHelper.CANCEL).isEnabled());
+		assertFalse(bot.button(UITestNamesHelper.FINISH).isEnabled());
 
-		bot.button(StringNamesHelper.CANCEL).click();
+		bot.button(UITestNamesHelper.CANCEL).click();
 		bot.waitUntil(shellCloses(shell));
 	}
 
@@ -202,17 +202,17 @@ public class CreateFBTTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToCreateANewFBTypeWithExistingName() {
-		createFBType(StringNamesHelper.PROJECT_NAME, StringNamesHelper.FBT_TEST_PROJECT3, StringNamesHelper.ADAPTER);
-		bot.menu(StringNamesHelper.FILE).menu(StringNamesHelper.NEW).menu(StringNamesHelper.TYPE_PROJECT).click();
-		final SWTBotShell shell = bot.shell(StringNamesHelper.NEW_TYPE);
+		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT3, UITestNamesHelper.ADAPTER);
+		bot.menu(UITestNamesHelper.FILE).menu(UITestNamesHelper.NEW).menu(UITestNamesHelper.TYPE_PROJECT).click();
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.NEW_TYPE);
 		shell.activate();
-		bot.textWithLabel(StringNamesHelper.TYPE_NAME_LABEL).setText(StringNamesHelper.FBT_TEST_PROJECT3);
-		bot.textWithLabel(StringNamesHelper.PARENT_FOLDER_NAME_LABEL).setText(StringNamesHelper.PROJECT_NAME);
-		assertEquals(bot.textWithLabel(StringNamesHelper.TYPE_NAME_LABEL).getText(),
-				StringNamesHelper.FBT_TEST_PROJECT3);
-		bot.tableWithLabel(StringNamesHelper.SELECT_TYPE_LABEL).getTableItem(StringNamesHelper.ADAPTER).select();
-		assertFalse(bot.button(StringNamesHelper.FINISH).isEnabled());
-		bot.button(StringNamesHelper.CANCEL).click();
+		bot.textWithLabel(UITestNamesHelper.TYPE_NAME_LABEL).setText(UITestNamesHelper.FBT_TEST_PROJECT3);
+		bot.textWithLabel(UITestNamesHelper.PARENT_FOLDER_NAME_LABEL).setText(UITestNamesHelper.PROJECT_NAME);
+		assertEquals(bot.textWithLabel(UITestNamesHelper.TYPE_NAME_LABEL).getText(),
+				UITestNamesHelper.FBT_TEST_PROJECT3);
+		bot.tableWithLabel(UITestNamesHelper.SELECT_TYPE_LABEL).getTableItem(UITestNamesHelper.ADAPTER).select();
+		assertFalse(bot.button(UITestNamesHelper.FINISH).isEnabled());
+		bot.button(UITestNamesHelper.CANCEL).click();
 		bot.waitUntil(shellCloses(shell));
 	}
 
@@ -222,26 +222,26 @@ public class CreateFBTTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void deleteExistingFBType() {
-		createFBType(StringNamesHelper.PROJECT_NAME, StringNamesHelper.FBT_TEST_PROJECT4, StringNamesHelper.ADAPTER);
-		final SWTBotView systemExplorerView = bot.viewById(StringNamesHelper.SYSTEM_EXPLORER_ID);
+		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT4, UITestNamesHelper.ADAPTER);
+		final SWTBotView systemExplorerView = bot.viewById(UITestNamesHelper.SYSTEM_EXPLORER_ID);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem parentItem = tree.getTreeItem(StringNamesHelper.PROJECT_NAME);
+		final SWTBotTreeItem parentItem = tree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
 		parentItem.expand();
-		final SWTBotTreeItem projectItem = parentItem.getNode(StringNamesHelper.FBT_TEST_PROJECT4);
+		final SWTBotTreeItem projectItem = parentItem.getNode(UITestNamesHelper.FBT_TEST_PROJECT4);
 		projectItem.select();
-		bot.menu(StringNamesHelper.EDIT).menu(StringNamesHelper.DELETE).click();
+		bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.DELETE).click();
 
 		// the project deletion confirmation dialog
-		final SWTBotShell shell = bot.shell(StringNamesHelper.DELETE_RESOURCES);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.DELETE_RESOURCES);
 		shell.activate();
-		bot.button(StringNamesHelper.OK).click();
+		bot.button(UITestNamesHelper.OK).click();
 		bot.waitUntil(shellCloses(shell));
 		final List<String> nodeList = parentItem.getNodes();
-		assertFalse(nodeList.contains(StringNamesHelper.FBT_TEST_PROJECT4));
+		assertFalse(nodeList.contains(UITestNamesHelper.FBT_TEST_PROJECT4));
 	}
 
 }

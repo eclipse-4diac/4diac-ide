@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.eclipse.fordiac.ide.test.ui.helpers.StringNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -69,14 +69,14 @@ public class New4diacProjectTest {
 	@SuppressWarnings("static-method")
 	@Test
 	public void menuNew4diacProjectExists() {
-		final SWTBotMenu fileMenu = bot.menu(StringNamesHelper.FILE).menu(StringNamesHelper.NEW)
-				.menu(StringNamesHelper.FORDIAC_IDE_PROJECT).click();
+		final SWTBotMenu fileMenu = bot.menu(UITestNamesHelper.FILE).menu(UITestNamesHelper.NEW)
+				.menu(UITestNamesHelper.FORDIAC_IDE_PROJECT).click();
 		assertNotNull(fileMenu);
-		final SWTBotShell shell = bot.shell(StringNamesHelper.NEW_4DIAC_PROJECT);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.NEW_4DIAC_PROJECT);
 		shell.activate();
-		assertTrue(bot.button(StringNamesHelper.CANCEL).isEnabled());
-		assertFalse(bot.button(StringNamesHelper.FINISH).isEnabled());
-		bot.button(StringNamesHelper.CANCEL).click();
+		assertTrue(bot.button(UITestNamesHelper.CANCEL).isEnabled());
+		assertFalse(bot.button(UITestNamesHelper.FINISH).isEnabled());
+		bot.button(UITestNamesHelper.CANCEL).click();
 	}
 
 	/**
@@ -93,33 +93,33 @@ public class New4diacProjectTest {
 	@SuppressWarnings("static-method")
 	@Test
 	public void createANew4diacIDEProject() {
-		final SWTBotMenu fileMenu = bot.menu(StringNamesHelper.FILE).menu(StringNamesHelper.NEW)
-				.menu(StringNamesHelper.FORDIAC_IDE_PROJECT).click();
+		final SWTBotMenu fileMenu = bot.menu(UITestNamesHelper.FILE).menu(UITestNamesHelper.NEW)
+				.menu(UITestNamesHelper.FORDIAC_IDE_PROJECT).click();
 		assertNotNull(fileMenu);
-		final SWTBotShell shell = bot.shell(StringNamesHelper.NEW_4DIAC_PROJECT);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.NEW_4DIAC_PROJECT);
 		shell.activate();
-		assertTrue(bot.button(StringNamesHelper.CANCEL).isEnabled());
-		assertFalse(bot.button(StringNamesHelper.FINISH).isEnabled());
-		bot.textWithLabel(StringNamesHelper.PROJECT_NAME_LABEL).setText(StringNamesHelper.PROJECT_NAME1);
-		assertEquals(bot.textWithLabel(StringNamesHelper.INITIAL_SYSTEM_NAME_LABEL).getText(),
-				StringNamesHelper.PROJECT_NAME1);
-		assertEquals(bot.textWithLabel(StringNamesHelper.INITIAL_APPLICATION_NAME_LABEL).getText(),
-				StringNamesHelper.PROJECT_NAME1 + StringNamesHelper.APP);
-		assertTrue(bot.button(StringNamesHelper.CANCEL).isEnabled());
-		assertTrue(bot.button(StringNamesHelper.FINISH).isEnabled());
-		bot.button(StringNamesHelper.FINISH).click();
+		assertTrue(bot.button(UITestNamesHelper.CANCEL).isEnabled());
+		assertFalse(bot.button(UITestNamesHelper.FINISH).isEnabled());
+		bot.textWithLabel(UITestNamesHelper.PROJECT_NAME_LABEL).setText(UITestNamesHelper.PROJECT_NAME1);
+		assertEquals(bot.textWithLabel(UITestNamesHelper.INITIAL_SYSTEM_NAME_LABEL).getText(),
+				UITestNamesHelper.PROJECT_NAME1);
+		assertEquals(bot.textWithLabel(UITestNamesHelper.INITIAL_APPLICATION_NAME_LABEL).getText(),
+				UITestNamesHelper.PROJECT_NAME1 + UITestNamesHelper.APP);
+		assertTrue(bot.button(UITestNamesHelper.CANCEL).isEnabled());
+		assertTrue(bot.button(UITestNamesHelper.FINISH).isEnabled());
+		bot.button(UITestNamesHelper.FINISH).click();
 		bot.waitUntil(shellCloses(shell));
 
-		final SWTBotView systemExplorerView = bot.viewByTitle(StringNamesHelper.SYSTEM_EXPLORER_LABEL);
+		final SWTBotView systemExplorerView = bot.viewByTitle(UITestNamesHelper.SYSTEM_EXPLORER_LABEL);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem treeItem = tree.getTreeItem(StringNamesHelper.PROJECT_NAME1);
-		assertEquals(treeItem.getText(), StringNamesHelper.PROJECT_NAME1);
+		final SWTBotTreeItem treeItem = tree.getTreeItem(UITestNamesHelper.PROJECT_NAME1);
+		assertEquals(treeItem.getText(), UITestNamesHelper.PROJECT_NAME1);
 
-		deleteProject(StringNamesHelper.PROJECT_NAME1);
+		deleteProject(UITestNamesHelper.PROJECT_NAME1);
 	}
 
 	/**
@@ -131,15 +131,15 @@ public class New4diacProjectTest {
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToCreateANew4diacIDEProjectMenuWithExistingName() {
-		createProject(StringNamesHelper.PROJECT_NAME2);
-		final SWTBotMenu fileMenu = bot.menu(StringNamesHelper.FILE).menu(StringNamesHelper.NEW)
-				.menu(StringNamesHelper.FORDIAC_IDE_PROJECT).click();
+		createProject(UITestNamesHelper.PROJECT_NAME2);
+		final SWTBotMenu fileMenu = bot.menu(UITestNamesHelper.FILE).menu(UITestNamesHelper.NEW)
+				.menu(UITestNamesHelper.FORDIAC_IDE_PROJECT).click();
 		assertNotNull(fileMenu);
-		final SWTBotShell shell = bot.shell(StringNamesHelper.NEW_4DIAC_PROJECT);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.NEW_4DIAC_PROJECT);
 		shell.activate();
-		bot.textWithLabel(StringNamesHelper.PROJECT_NAME_LABEL).setText(StringNamesHelper.PROJECT_NAME2);
-		assertFalse(bot.button(StringNamesHelper.FINISH).isEnabled());
-		bot.button(StringNamesHelper.CANCEL).click();
+		bot.textWithLabel(UITestNamesHelper.PROJECT_NAME_LABEL).setText(UITestNamesHelper.PROJECT_NAME2);
+		assertFalse(bot.button(UITestNamesHelper.FINISH).isEnabled());
+		bot.button(UITestNamesHelper.CANCEL).click();
 	}
 
 	/**
@@ -148,22 +148,22 @@ public class New4diacProjectTest {
 	@SuppressWarnings("static-method")
 	@Test
 	public void deleteExisting4diacIDEProject() {
-		createProject(StringNamesHelper.PROJECT_NAME3);
-		final SWTBotView systemExplorerView = bot.viewById(StringNamesHelper.SYSTEM_EXPLORER_ID);
+		createProject(UITestNamesHelper.PROJECT_NAME3);
+		final SWTBotView systemExplorerView = bot.viewById(UITestNamesHelper.SYSTEM_EXPLORER_ID);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(StringNamesHelper.PROJECT_NAME3);
+		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(UITestNamesHelper.PROJECT_NAME3);
 		treeProjectItem.select();
-		bot.menu(StringNamesHelper.EDIT).menu(StringNamesHelper.DELETE).click();
+		bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.DELETE).click();
 
 		// the project deletion confirmation dialog
-		final SWTBotShell shell = bot.shell(StringNamesHelper.DELETE_RESOURCES);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.DELETE_RESOURCES);
 		shell.activate();
-		bot.checkBox(StringNamesHelper.DELETE_PROJECT_WARNING).select();
-		bot.button(StringNamesHelper.OK).click();
+		bot.checkBox(UITestNamesHelper.DELETE_PROJECT_WARNING).select();
+		bot.button(UITestNamesHelper.OK).click();
 		bot.waitUntil(shellCloses(shell));
 	}
 
@@ -176,18 +176,18 @@ public class New4diacProjectTest {
 	@SuppressWarnings("static-method")
 	@Test
 	public void isProjectNotInSystemExplorerAfterDeletion() {
-		createProject(StringNamesHelper.PROJECT_NAME4);
-		createProject(StringNamesHelper.PROJECT_NAME5);
-		deleteProject(StringNamesHelper.PROJECT_NAME4);
-		final SWTBotView systemExplorerView = bot.viewById(StringNamesHelper.SYSTEM_EXPLORER_ID);
+		createProject(UITestNamesHelper.PROJECT_NAME4);
+		createProject(UITestNamesHelper.PROJECT_NAME5);
+		deleteProject(UITestNamesHelper.PROJECT_NAME4);
+		final SWTBotView systemExplorerView = bot.viewById(UITestNamesHelper.SYSTEM_EXPLORER_ID);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
 		assertNotNull(tree);
 		assertEquals(1, tree.getAllItems().length);
-		assertTrue(tree.getTreeItem(StringNamesHelper.PROJECT_NAME5).isVisible());
-		deleteProject(StringNamesHelper.PROJECT_NAME5);
+		assertTrue(tree.getTreeItem(UITestNamesHelper.PROJECT_NAME5).isVisible());
+		deleteProject(UITestNamesHelper.PROJECT_NAME5);
 		assertEquals(0, tree.getAllItems().length);
 
 	}
@@ -202,15 +202,15 @@ public class New4diacProjectTest {
 	 * @param projectName Name of the new project.
 	 */
 	private static void createProject(final String projectName) {
-		bot.menu(StringNamesHelper.FILE).menu(StringNamesHelper.NEW).menu(StringNamesHelper.FORDIAC_IDE_PROJECT)
+		bot.menu(UITestNamesHelper.FILE).menu(UITestNamesHelper.NEW).menu(UITestNamesHelper.FORDIAC_IDE_PROJECT)
 				.click();
-		final SWTBotShell shell = bot.shell(StringNamesHelper.NEW_4DIAC_PROJECT);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.NEW_4DIAC_PROJECT);
 		shell.activate();
-		bot.textWithLabel(StringNamesHelper.PROJECT_NAME_LABEL).setText(projectName);
-		assertEquals(bot.textWithLabel(StringNamesHelper.INITIAL_SYSTEM_NAME_LABEL).getText(), projectName);
-		assertEquals(bot.textWithLabel(StringNamesHelper.INITIAL_APPLICATION_NAME_LABEL).getText(),
-				projectName + StringNamesHelper.APP);
-		bot.button(StringNamesHelper.FINISH).click();
+		bot.textWithLabel(UITestNamesHelper.PROJECT_NAME_LABEL).setText(projectName);
+		assertEquals(bot.textWithLabel(UITestNamesHelper.INITIAL_SYSTEM_NAME_LABEL).getText(), projectName);
+		assertEquals(bot.textWithLabel(UITestNamesHelper.INITIAL_APPLICATION_NAME_LABEL).getText(),
+				projectName + UITestNamesHelper.APP);
+		bot.button(UITestNamesHelper.FINISH).click();
 		bot.waitUntil(shellCloses(shell));
 	}
 
@@ -220,7 +220,7 @@ public class New4diacProjectTest {
 	 * @param projectName Name of the project to be deleted
 	 */
 	private static void deleteProject(final String projectName) {
-		final SWTBotView systemExplorerView = bot.viewByTitle(StringNamesHelper.SYSTEM_EXPLORER_LABEL);
+		final SWTBotView systemExplorerView = bot.viewByTitle(UITestNamesHelper.SYSTEM_EXPLORER_LABEL);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 
@@ -228,13 +228,13 @@ public class New4diacProjectTest {
 		final SWTBotTree tree = new SWTBotTree(swtTree);
 		final SWTBotTreeItem treeItem = tree.getTreeItem(projectName);
 		treeItem.select();
-		bot.menu(StringNamesHelper.EDIT).menu(StringNamesHelper.DELETE).click();
+		bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.DELETE).click();
 
 		// the project deletion confirmation dialog
-		final SWTBotShell shell = bot.shell(StringNamesHelper.DELETE_RESOURCES);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.DELETE_RESOURCES);
 		shell.activate();
-		bot.checkBox(StringNamesHelper.DELETE_PROJECT_WARNING).select();
-		bot.button(StringNamesHelper.OK).click();
+		bot.checkBox(UITestNamesHelper.DELETE_PROJECT_WARNING).select();
+		bot.button(UITestNamesHelper.OK).click();
 		bot.waitUntil(shellCloses(shell));
 	}
 

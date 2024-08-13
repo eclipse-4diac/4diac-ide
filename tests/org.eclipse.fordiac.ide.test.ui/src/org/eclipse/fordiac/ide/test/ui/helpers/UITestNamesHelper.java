@@ -18,7 +18,7 @@ package org.eclipse.fordiac.ide.test.ui.helpers;
 
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
-public final class StringNamesHelper {
+public final class UITestNamesHelper {
 
 	// alphabetical order of static variable names
 	public static final String ADAPTER = "Adapter"; //$NON-NLS-1$
@@ -51,7 +51,7 @@ public final class StringNamesHelper {
 	public static final String E_N_TABLE_TREE_ITEM = "E_N_TABLE [Generation of a finite train of sperate events]"; //$NON-NLS-1$
 	public static final String E_SELECT_FB = "E_SELECT"; //$NON-NLS-1$
 	public static final String E_SELECT_TREE_ITEM = E_SELECT_FB
-			+ " [selection between two events based on boolean input G]";
+			+ " [selection between two events based on boolean input G]"; //$NON-NLS-1$
 	public static final String E_SR_FB = "E_SR"; //$NON-NLS-1$
 	public static final String E_SR_TREE_ITEM = E_SR_FB + " [Event-driven bistable]"; //$NON-NLS-1$
 	public static final String E_SWITCH_FB = "E_SWITCH"; //$NON-NLS-1$
@@ -102,6 +102,7 @@ public final class StringNamesHelper {
 	public static final String PROPERTIES_TITLE = "Properties"; //$NON-NLS-1$
 	public static final String REFACTORING = "Refactoring"; //$NON-NLS-1$
 	public static final String RENAME_ELEMENT = "Rename Element"; //$NON-NLS-1$
+	public static final String REQUEST_FROM_IDEAL_COMMENT = "Request from ideal Socket"; //$NON-NLS-1$
 	public static final String REQUEST_FROM_IDEAL_SOCKET = "Request from ideal Socket"; //$NON-NLS-1$
 	public static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
 	public static final String SELECT_TYPE_LABEL = FordiacMessages.SelectType + ":"; //$NON-NLS-1$
@@ -111,10 +112,9 @@ public final class StringNamesHelper {
 	public static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
 	public static final String SYSTEM_EXPLORER_LABEL = "System Explorer"; //$NON-NLS-1$
 	public static final String TEST_PARENT_FOLDER = "TestParentProject"; //$NON-NLS-1$
-	public static final String TOOLBAR_BUTTON_ZOOM_FIT_PAGE = "Zoom fit Page"; //$NON-NLS-1$
-	public static final String REQUEST_FROM_IDEAL_COMMENT = "Request from ideal Socket"; //$NON-NLS-1$
-	public static final String TEST_COMMENT = "Test Comment"; //$NON-NLS-1$
 	public static final String TESTVAR = "TestVar"; //$NON-NLS-1$
+	public static final String TEST_COMMENT = "Request from ideal Socket"; //$NON-NLS-1$
+	public static final String TOOLBAR_BUTTON_ZOOM_FIT_PAGE = "Zoom fit Page"; //$NON-NLS-1$
 	public static final String TRUE = "TRUE"; //$NON-NLS-1$
 	public static final String TYPE_LABEL = "Type:"; //$NON-NLS-1$
 	public static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
