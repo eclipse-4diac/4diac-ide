@@ -60,6 +60,8 @@ public final class Messages extends NLS {
 
 	public static String CutEditPartsAction_Text;
 
+	public static String EnterPackageName_Text;
+
 	public static String ErrorMarkerFBNEditPart_ErrorMarker;
 
 	public static String ErrorMarkerFBNEditPart_OldType;

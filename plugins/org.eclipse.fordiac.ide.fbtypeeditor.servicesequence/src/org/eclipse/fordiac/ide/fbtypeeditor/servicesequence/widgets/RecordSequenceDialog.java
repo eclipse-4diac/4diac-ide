@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -45,7 +44,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class RecordSequenceDialog extends MessageDialog {
-	private static final int DEFAULT_RANDOMCOUNT = 10;
+	private static final int DEFAULT_RANDOMCOUNT = 3;
 	private Text inputEventText;
 	private Text inputParameterText;
 	private Text inputCount;
@@ -62,15 +61,15 @@ public class RecordSequenceDialog extends MessageDialog {
 	private String startState;
 	private Label labeldialog;
 
-	private final ServiceSequence serviceSequence;
+	private final FBType type;
 
 	public RecordSequenceDialog(final Shell parentShell, final List<String> events, final List<String> parameters,
-			final ServiceSequence serviceSequence) {
+			final FBType type) {
 		super(parentShell, Messages.RecordSequenceDialog_Title, null, Messages.RecordSequenceDialog_Info,
 				MessageDialog.INFORMATION, 0, Messages.RecordSequenceDialog_Button);
 		this.events = events;
 		this.parameters = parameters;
-		this.serviceSequence = serviceSequence;
+		this.type = type;
 	}
 
 	@Override
@@ -139,10 +138,9 @@ public class RecordSequenceDialog extends MessageDialog {
 		label = new Label(group, SWT.None);
 		label.setText(Messages.RecordSequenceDialog_StartState);
 
-		inputStartStateCombo = ComboBoxWidgetFactory.createCombo(group);
-		inputStartStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		final FBType fbtype = serviceSequence.getService().getFBType();
-		if (fbtype instanceof final BasicFBType bfbType) {
+		if (type instanceof final BasicFBType bfbType) {
+			inputStartStateCombo = ComboBoxWidgetFactory.createCombo(group);
+			inputStartStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 			final String[] startnames = Stream
 					.concat(bfbType.getECC().getECState().stream().map(ECState::getName), Stream.of("")) //$NON-NLS-1$
 					.toArray(String[]::new);

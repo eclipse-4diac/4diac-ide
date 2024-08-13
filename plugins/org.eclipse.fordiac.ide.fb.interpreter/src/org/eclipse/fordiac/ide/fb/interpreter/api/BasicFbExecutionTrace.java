@@ -12,6 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Martin Melik Merkumians
  *     - changed to a Stream based implementation
+ *   Bianca Wiesmayr - allow for other fb types as well
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.fb.interpreter.api;
@@ -23,22 +24,35 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 
-public class EccTraceHelper {
+public class BasicFbExecutionTrace extends ExecutionTrace {
 
-	private final List<Transaction> transactions;
-	private final ECC ecc;
+	private ECC ecc = null;
 
-	public EccTraceHelper(final List<Transaction> transactions, final ECC ecc) {
-		this.transactions = transactions;
+	public BasicFbExecutionTrace(final List<Transaction> transactions, final ECC ecc) {
+		super(transactions);
 		this.ecc = ecc;
+	}
+
+	public BasicFbExecutionTrace(final List<Transaction> transactions) {
+		super(transactions);
+		if (!transactions.isEmpty() && transactions.getFirst() != null
+				&& transactions.getFirst().getInputEventOccurrence() != null) {
+			final FBRuntimeAbstract rt = transactions.getFirst().getInputEventOccurrence().getFbRuntime();
+			if (!(rt.getModel() instanceof final BasicFBType basic)) {
+				throw new UnsupportedOperationException("no Basic FB Type available"); //$NON-NLS-1$
+			}
+			this.ecc = basic.getECC();
+		}
 	}
 
 	public List<ECState> getAllStatesOfSequence() {
@@ -51,8 +65,8 @@ public class EccTraceHelper {
 
 	private Stream<ECTransition> getECTransitionsStream() {
 		return transactions.stream().filter(FBTransaction.class::isInstance).map(FBTransaction.class::cast)
-				.map(EccTraceHelper::getEccTrace).filter(Objects::nonNull).map(eccTrace -> eccTrace.getTransitions(ecc))
-				.flatMap(List::stream);
+				.map(BasicFbExecutionTrace::getEccTrace).filter(Objects::nonNull)
+				.map(eccTrace -> eccTrace.getTransitions(ecc)).flatMap(List::stream);
 	}
 
 	public List<List<String>> getAllPathsOfSequence() {
@@ -89,8 +103,9 @@ public class EccTraceHelper {
 	}
 
 	public List<ECState> getAllPossibleStates() {
-		final var transition = transactions.stream().map(FBTransaction.class::cast).map(EccTraceHelper::getEccTrace)
-				.filter(Objects::nonNull).map(transaction -> transaction.getTransitions(ecc)).flatMap(List::stream)
+		final var transition = transactions.stream().map(FBTransaction.class::cast)
+				.map(BasicFbExecutionTrace::getEccTrace).filter(Objects::nonNull)
+				.map(transaction -> transaction.getTransitions(ecc)).flatMap(List::stream)
 				.filter(trans -> trans.getECC() != null && trans.getECC().getECState() != null).findAny();
 
 		return transition.map(trans -> Collections.unmodifiableList((trans.getECC().getECState()))).orElse(List.of());

@@ -163,6 +163,12 @@ public final class TransactionFactory {
 		return transaction;
 	}
 
+	public static void setStartState(final Transaction transaction, final String startStateName) {
+		if (transaction.getInputEventOccurrence() != null) {
+			RuntimeFactory.setStartState(transaction.getInputEventOccurrence().getFbRuntime(), startStateName);
+		}
+	}
+
 	public static Transaction addTraceInfoTo(final Transaction transaction) {
 		final BasicEList<Transaction> asList = new BasicEList<>();
 		asList.add(transaction);
