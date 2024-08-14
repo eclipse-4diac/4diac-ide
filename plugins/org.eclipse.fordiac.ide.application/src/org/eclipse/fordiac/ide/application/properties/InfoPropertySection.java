@@ -154,15 +154,15 @@ public class InfoPropertySection extends AbstractSection {
 
 		if (isSubApp) {
 			final SubApp subApp = (SubApp) obj;
-			noc = calcNoc(subApp.getSubAppNetwork(), fbs);
-			fbs = countSkillFBInstances(subApp.getSubAppNetwork().getNetworkElements(), fbs);
+			noc = numbOfCon(subApp.getSubAppNetwork(), fbs);
+			fbs = countFBInstances(subApp.getSubAppNetwork().getNetworkElements(), fbs);
 			subapps = processSubappElements(subApp.getSubAppNetwork().getNetworkElements(), fbs);
 
 			isSubApp = false;
 		} else {
 			final Application application = (Application) obj;
-			noc = calcNoc(application.getFBNetwork(), fbs);
-			fbs = countSkillFBInstances(application.getFBNetwork().getNetworkElements(), fbs);
+			noc = numbOfCon(application.getFBNetwork(), fbs);
+			fbs = countFBInstances(application.getFBNetwork().getNetworkElements(), fbs);
 			subapps = processSubappElements(application.getFBNetwork().getNetworkElements(), fbs);
 		}
 		instanceCount = fbs.values().stream().mapToInt(Integer::intValue).sum();
@@ -172,14 +172,14 @@ public class InfoPropertySection extends AbstractSection {
 	}
 
 	@SuppressWarnings("boxing")
-	private static HashMap<String, Integer> countSkillFBInstances(final Iterable<FBNetworkElement> networkElements,
+	private static HashMap<String, Integer> countFBInstances(final Iterable<FBNetworkElement> networkElements,
 			final HashMap<String, Integer> fbs) {
 		for (final FBNetworkElement fe : networkElements) {
 			if (null != fe.getType()) {
 				fbs.merge(fe.getTypeName(), 1, Integer::sum);
 			}
 			if ((fe instanceof final SubApp sa) && (null != sa.getSubAppNetwork())) {
-				final HashMap<String, Integer> subAppResults = countSkillFBInstances(
+				final HashMap<String, Integer> subAppResults = countFBInstances(
 						sa.getSubAppNetwork().getNetworkElements(), new HashMap<>());
 				subAppResults.forEach((key, value) -> fbs.merge(key, value, Integer::sum));
 			}
@@ -187,14 +187,14 @@ public class InfoPropertySection extends AbstractSection {
 		return fbs;
 	}
 
-	private static int calcNoc(final FBNetwork fbNetwork, final HashMap<String, Integer> fbs) {
+	private static int numbOfCon(final FBNetwork fbNetwork, final HashMap<String, Integer> fbs) {
 		int con = 0;
 		if (fbNetwork != null) {
 			con += fbNetwork.getAdapterConnections().size() + fbNetwork.getDataConnections().size()
 					+ fbNetwork.getEventConnections().size();
 			for (final FBNetworkElement fe : fbNetwork.getNetworkElements()) {
 				if (fe instanceof final SubApp sa) {
-					con += calcNoc(sa.getSubAppNetwork(), fbs);
+					con += numbOfCon(sa.getSubAppNetwork(), fbs);
 				}
 			}
 		}
