@@ -12,8 +12,10 @@
  *   Prashantkumar Khatri - added methods for creating and deleting FB types,
  *   						selecting property tabs, openFBTypeInEditor, deletePin,
  *   						createConnectionWithinFBTypeWithPropertySheet,
- *   						removeConnectionWithinFBTypeWithPropertySheet and
- *   						selectTabFromInterfaceProperties.
+ *   						removeConnectionWithinFBTypeWithPropertySheet,
+ *   						selectTabFromInterfaceProperties,
+ *   						createNewVariableInDataTypeEditor, deleteVariable,
+ *   						changeCellValueInNatTbale.
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui;
 
@@ -37,6 +39,7 @@ import org.eclipse.fordiac.ide.test.ui.helpers.StringNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
+import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -562,6 +565,46 @@ public class Abstract4diacUITests {
 		// Tabs access inside property sheet
 		PropertySheetHelper.selectPropertyTabItem(tabName, propertiesBot);
 		return propertiesBot;
+	}
+
+	/**
+	 * Creates New Variable In Data Type Editor
+	 *
+	 * @param dataTypeTableBot NatTable in which variable need to create
+	 */
+	protected static void createNewVariableInDataTypeEditor(final SWTBot4diacNatTable dataTypeTableBot) {
+		bot.editorByTitle(StringNamesHelper.FBT_TEST_PROJECT2).show();
+		final int rowCount = dataTypeTableBot.rowCount();
+		bot.button(0).click();
+		assertEquals(dataTypeTableBot.rowCount(), rowCount + 1);
+	}
+
+	/**
+	 * Delete Variable From Data Type Editor
+	 *
+	 * @param dataTypeTableBot NatTable from which variable have to delete
+	 */
+	protected static void deleteVariable(final SWTBot4diacNatTable dataTypeTableBot) {
+		final int rowCount = dataTypeTableBot.rowCount();
+		dataTypeTableBot.click(1, 0);
+		bot.button(1).click();
+		assertEquals(dataTypeTableBot.rowCount(), rowCount - 1);
+	}
+
+	/**
+	 * Change the value for the Cell
+	 *
+	 * @param dataTypeTableBot NatTable which contain the targeted cell
+	 * @param newValue         The new Value which is to be set
+	 * @param row              Cell's row number
+	 * @param col              Cell's column number
+	 */
+	protected static void changeCellValueInNatTbale(final SWTBot4diacNatTable dataTypeTableBot, final String newValue,
+			final int row, final int col) {
+		dataTypeTableBot.doubleclick(row, col);
+		dataTypeTableBot.setCellDataValueByPosition(row, col, newValue);
+		dataTypeTableBot.doubleclick(row, col);
+		assertEquals(dataTypeTableBot.getCellDataValueByPosition(row, col), newValue);
 	}
 
 	/**
