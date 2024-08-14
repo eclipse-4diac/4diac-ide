@@ -41,7 +41,7 @@ public final class TargetInterfaceAdapter extends AdapterImpl {
 
 	@Override
 	public void notifyChanged(final Notification notification) {
-		if (notification.getEventType() != Notification.REMOVING_ADAPTER) {
+		if (refEditPart.getParent() != null && notification.getEventType() != Notification.REMOVING_ADAPTER) {
 			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
