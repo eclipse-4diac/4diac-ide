@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -579,6 +580,15 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			«adapter.generateName».setParentFB(this, «adapters.indexOf(adapter)»);
 		«ENDFOR»
 	'''
+
+	def generateInternalFBDeclarations(List<FB> internalFbs) '''
+		«FOR fb : internalFbs»
+			forte::core::CInternalFB<«fb.type.generateTypeName»> «fb.generateName»;
+		«ENDFOR»		
+	'''
+
+	def generateInternalFBInitializer(List<FB> internalFbs) ///
+	'''«FOR fb : internalFbs BEFORE ",\n" SEPARATOR ",\n"»«fb.generateName»(«fb.name.FORTEStringId», *this)«ENDFOR»'''
 
 	override Set<INamedElement> getDependencies(Map<?, ?> options) {
 		(super.getDependencies(options) + (type.interfaceList.sockets + type.interfaceList.plugs).map[getType]
