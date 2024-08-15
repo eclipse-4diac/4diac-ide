@@ -27,8 +27,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.Method
 
-import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
-
 abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplate<T> {
 	final Map<Method, ILanguageSupport> methodLanguageSupport
 	final Map<Object, Object> cache = newHashMap
@@ -60,7 +58,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		    «type.internalConstVars.generateVariableDeclarations(true)»
 		    «generateAccessorDeclaration("getVarInternal", false)»
 		
-		    «generateInternalFBDeclarations»
+		    «type.internalFbs.generateInternalFBDeclarations»
 		    «generateAlgorithms»
 		    «generateMethods»
 		    «generateAdditionalDeclarations»
@@ -129,11 +127,4 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 			methodLanguageSupport.values.filterNull.flatMap[getDependencies(options)] + type.internalFbs.map[getType]
 			).toSet
 	}
-	
-	def private generateInternalFBDeclarations() '''
-		«FOR fb : type.internalFbs»
-			«fb.type.generateTypeName» «fb.generateName»;
-		«ENDFOR»		
-	'''
-
 }

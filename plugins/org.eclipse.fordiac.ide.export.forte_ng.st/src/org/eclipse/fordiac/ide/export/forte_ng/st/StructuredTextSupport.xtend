@@ -43,8 +43,10 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
@@ -250,8 +252,13 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateExpression(STUnaryExpression expr) //
 	'''func_«expr.op.getName»<«expr.resultType.generateTypeName»>(«expr.expression.generateExpression»)'''
 
-	def protected dispatch CharSequence generateExpression(STMemberAccessExpression expr) //
-	'''«expr.receiver.generateExpression».«expr.member.generateExpression»'''
+	def protected dispatch CharSequence generateExpression(STMemberAccessExpression expr) {
+		switch (expr.receiver.resultType) {
+			AdapterType: '''«expr.receiver.generateExpression».«expr.member.generateExpression»'''
+			FBType: '''«expr.receiver.generateExpression»->«expr.member.generateExpression»'''
+			default: '''«expr.receiver.generateExpression».«expr.member.generateExpression»'''
+		}
+	}
 
 	def protected dispatch CharSequence generateExpression(STArrayAccessExpression expr) //
 	'''«expr.receiver.generateExpression»«FOR index : expr.index»[«index.generateExpression»]«ENDFOR»'''
@@ -311,9 +318,9 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected CharSequence generateInputCallArgument(INamedElement parameter, STCallArgument argument,
 		STFeatureExpression expr) {
 		switch (expr.feature) {
-			FB case argument === null: '''«expr.feature.generateFeatureName».«parameter.generateFeatureName»'''
+			FB case argument === null: '''«expr.feature.generateFeatureName»->«parameter.generateFeatureName»'''
 			Event case argument ===
-				null: '''«(expr.eContainer as STMemberAccessExpression).receiver.generateExpression».«parameter.generateFeatureName»'''
+				null: '''«(expr.eContainer as STMemberAccessExpression).receiver.generateExpression»->«parameter.generateFeatureName»'''
 			default:
 				parameter.generateInputCallArgument(argument)
 		}
