@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright (c) 2019, 2024 fortiss GmbH, Johannes Kepler University
  * 							Primetals Technologies Austria GmbH
- *
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
@@ -17,14 +17,23 @@
 package org.eclipse.fordiac.ide.export.forte_ng.composite
 
 import java.nio.file.Path
+import java.util.List
+import java.util.Map
+import java.util.Set
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
+import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
 class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 
+	final List<FB> fbs
+
 	new(CompositeFBType type, String name, Path prefix) {
 		super(type, name, prefix, "CCompositeFB")
+		fbs = type.FBNetwork.networkElements.filter(FB).reject(AdapterFB).toList
 	}
 
 	override generate() '''
@@ -43,6 +52,8 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		    «generateFBInterfaceSpecDeclaration»
 		
 		    «generateFBNetwork»
+		
+		    «fbs.generateInternalFBDeclarations»
 		
 		    «generateReadInputDataDeclaration»
 		    «generateWriteOutputDataDeclaration»
@@ -65,7 +76,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		#include "typelib.h"
 		«super.generateHeaderIncludes»
 	'''
-	
+
 	def protected generateReadInternal2InterfaceOutputDataDeclaration() '''
 		void readInternal2InterfaceOutputData(TEventID paEOID) override;
 	'''
@@ -88,16 +99,20 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		«ENDIF»
 		static const SCFB_FBNData scmFBNData;
 	'''
-	
+
 	override generateInterfaceVariableAndConnectionDeclarations() '''
 		«super.generateInterfaceVariableAndConnectionDeclarations»
 		«type.interfaceList.outMappedInOutVars.generateDataConnectionDeclarations(false, true)»
 	'''
-	
+
 	override generateAccessorDeclarations() '''
 		«super.generateAccessorDeclarations»
 		«IF (!type.interfaceList.inOutVars.empty)»
 			«generateConnectionAccessorsDeclaration("getDIOOutConInternalUnchecked", "CInOutDataConnection *")»
 		«ENDIF»
 	'''
+
+	override Set<INamedElement> getDependencies(Map<?, ?> options) {
+		(super.getDependencies(options) + type.FBNetwork.networkElements.map[getType]).toSet
+	}
 }
