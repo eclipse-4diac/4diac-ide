@@ -17,7 +17,6 @@
 package org.eclipse.fordiac.ide.export.forte_ng.composite
 
 import java.nio.file.Path
-import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
 import org.eclipse.emf.common.util.EList
@@ -30,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection
+import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -39,7 +39,7 @@ import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
 class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
-	var fbs = new ArrayList<FBNetworkElement>
+	final List<FB> fbs
 	var numCompFBParams = 0;
 	var eConnNumber = 0
 	var fannedOutEventConns = 0
@@ -48,7 +48,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
 	new(CompositeFBType type, String name, Path prefix) {
 		super(type, name, prefix, "CCompositeFB")
-		fbs.addAll(type.FBNetwork.networkElements.filter[!(it.type instanceof AdapterType)])
+		fbs = type.FBNetwork.networkElements.filter(FB).reject(AdapterFB).toList
 	}
 
 	override generate() '''
@@ -62,8 +62,9 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
 		    «baseClass»(paContainer, &scmFBInterfaceSpec, paInstanceNameId, scmFBNData)«//no newline
-			»«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
-			»«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterInitializer»«generateConnectionInitializer» {
+		    »«fbs.generateInternalFBInitializer»«// no newline
+		    »«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
+		    »«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterInitializer»«generateConnectionInitializer» {
 		};
 		«generateInitializeDefinition»
 		
@@ -72,7 +73,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		«generateReadInternal2InterfaceOutputDataDefinition»
 		«generateInterfaceDefinitions»
 	'''
-	
+
 	override protected generateInterfaceDefinitions() '''
 		«super.generateInterfaceDefinitions»
 		«IF (!type.interfaceList.inOutVars.empty)»
@@ -237,7 +238,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		return retVal
 	}
 
-	def protected exportAdapterConns(EList<AdapterConnection> adapterConns)'''
+	def protected exportAdapterConns(EList<AdapterConnection> adapterConns) '''
 		const SCFB_FBConnectionData «FBClassName»::scmAdapterConnections[] = {
 		  «FOR aConn : adapterConns»«aConn.getConnListEntry»«ENDFOR»
 		};
@@ -251,7 +252,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		'''  {«connNum», «con.destination.generateConnectionPortID(con.destinationElement)»},
 		'''
 	}
-	
+
 	override protected generateConnectionInitializer() //
 	'''«super.generateConnectionInitializer»«// no newline
 	   »«type.interfaceList.outMappedInOutVars.generateDataConnectionInitializer(true)»'''
