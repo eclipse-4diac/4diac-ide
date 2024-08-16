@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="SPLIT_DWORD_INTO_WORDS" Comment="this Function extracts the 2 WORD from a dword">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="WORD_00"/>
+				<With Var="WORD_01"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="DWORD" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="WORD_00" Type="WORD" Comment=""/>
+			<VarDeclaration Name="WORD_01" Type="WORD" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[(* this Function extracts the 2 WORD from a dword *)
+FUNCTION SPLIT_DWORD_INTO_WORDS
+
+VAR_INPUT
+	IN : DWORD;
+END_VAR
+
+VAR_OUTPUT
+	WORD_00 : WORD;
+	WORD_01 : WORD;
+END_VAR
+
+WORD_00 := IN.%W0;
+WORD_01 := IN.%X1;
+
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+</Function>
