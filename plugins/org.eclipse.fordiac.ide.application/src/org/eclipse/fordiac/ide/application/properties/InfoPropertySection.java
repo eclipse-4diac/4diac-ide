@@ -45,8 +45,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class InfoPropertySection extends AbstractSection {
 
 	private ConfigurableObject obj;
-	private static boolean isSubApp = false;
-	private static boolean checked = false;
+	private boolean checked = false;
 
 	private final static int horizontalIndent = 10;
 
@@ -103,7 +102,7 @@ public class InfoPropertySection extends AbstractSection {
 				} else {
 					checked = false;
 				}
-				performRefresh(); // added
+				setInputInit();
 			}
 		});
 		return check;
@@ -156,7 +155,6 @@ public class InfoPropertySection extends AbstractSection {
 	protected Object getInputType(final Object input) {
 		final EObject parsedObject = (EObject) AttributeFilter.parseObject(input);
 		if (parsedObject instanceof final SubApp configurableObject) {
-			isSubApp = true;
 			obj = configurableObject;
 			return configurableObject;
 		}
@@ -174,12 +172,11 @@ public class InfoPropertySection extends AbstractSection {
 
 	@Override
 	protected void setInputInit() {
-		// formatPage();
+		formatPage();
 	}
 
 	@Override
 	protected void performRefresh() {
-		formatPage();
 		// DO NOTHING
 	}
 
@@ -190,18 +187,18 @@ public class InfoPropertySection extends AbstractSection {
 		final int instanceCount;
 		final int noc;
 
-		if (isSubApp) {
-			final SubApp subApp = (SubApp) obj;
-			noc = numbOfCon(subApp.getSubAppNetwork(), fbs);
-			fbs = countFBInstances(subApp.getSubAppNetwork().getNetworkElements(), fbs);
-			subapps = processSubappElements(subApp.getSubAppNetwork().getNetworkElements(), fbs);
-
-			isSubApp = false;
+		if (obj instanceof final SubApp subApp) {
+			final FBNetwork network = subApp.getSubAppNetwork();
+			noc = numbOfCon(network, fbs);
+			fbs = countFBInstances(network.getNetworkElements(), fbs);
+			subapps = processSubappElements(network.getNetworkElements(), fbs);
+		} else if (obj instanceof final Application application) {
+			final FBNetwork network = application.getFBNetwork();
+			noc = numbOfCon(network, fbs);
+			fbs = countFBInstances(network.getNetworkElements(), fbs);
+			subapps = processSubappElements(network.getNetworkElements(), fbs);
 		} else {
-			final Application application = (Application) obj;
-			noc = numbOfCon(application.getFBNetwork(), fbs);
-			fbs = countFBInstances(application.getFBNetwork().getNetworkElements(), fbs);
-			subapps = processSubappElements(application.getFBNetwork().getNetworkElements(), fbs);
+			throw new IllegalStateException("Unexpected object type: " + obj.getClass().getName()); //$NON-NLS-1$
 		}
 		instanceCount = fbs.values().stream().mapToInt(Integer::intValue).sum();
 		types = fbs.size();
@@ -210,26 +207,27 @@ public class InfoPropertySection extends AbstractSection {
 	}
 
 	@SuppressWarnings("boxing")
-	private static HashMap<String, Integer> countFBInstances(final Iterable<FBNetworkElement> networkElements,
+	private HashMap<String, Integer> countFBInstances(final Iterable<FBNetworkElement> networkElements,
 			final HashMap<String, Integer> fbs) {
 		for (final FBNetworkElement fe : networkElements) {
 			if (null != fe.getType()) {
 				fbs.merge(fe.getTypeName(), 1, Integer::sum);
 			}
-			if ((fe instanceof final UntypedSubApp sa) && (null != sa.getSubAppNetwork())) {
-				final HashMap<String, Integer> subAppResults = countFBInstances(
-						sa.getSubAppNetwork().getNetworkElements(), new HashMap<>());
-				subAppResults.forEach((key, value) -> fbs.merge(key, value, Integer::sum));
-			} else if ((fe instanceof final TypedSubApp sa) && (null != sa.getSubAppNetwork()) && checked) {
-				final HashMap<String, Integer> subAppResults = countFBInstances(
-						sa.getSubAppNetwork().getNetworkElements(), new HashMap<>());
-				subAppResults.forEach((key, value) -> fbs.merge(key, value, Integer::sum));
+			if (fe instanceof final UntypedSubApp sa) {
+				if (sa.getSubAppNetwork() != null) {
+					countFBInstances(sa.getSubAppNetwork().getNetworkElements(), fbs);
+				}
+			} else if (fe instanceof final TypedSubApp sb && checked) {
+				if (sb.getSubAppNetwork() == null) {
+					sb.loadSubAppNetwork();
+				}
+				countFBInstances(sb.getSubAppNetwork().getNetworkElements(), fbs);
 			}
 		}
 		return fbs;
 	}
 
-	private static int numbOfCon(final FBNetwork fbNetwork, final HashMap<String, Integer> fbs) {
+	private int numbOfCon(final FBNetwork fbNetwork, final HashMap<String, Integer> fbs) {
 		int con = 0;
 		if (fbNetwork != null) {
 			con += fbNetwork.getAdapterConnections().size() + fbNetwork.getDataConnections().size()
@@ -245,8 +243,7 @@ public class InfoPropertySection extends AbstractSection {
 		return con;
 	}
 
-	private static int processSubappElements(final Iterable<FBNetworkElement> elements,
-			final Map<String, Integer> fbs) {
+	private int processSubappElements(final Iterable<FBNetworkElement> elements, final Map<String, Integer> fbs) {
 		int subapps = 0;
 		for (final FBNetworkElement fe : elements) {
 			if (fe instanceof final UntypedSubApp se) {
@@ -267,6 +264,8 @@ public class InfoPropertySection extends AbstractSection {
 		subAppsVal.setText(String.valueOf(subapps));
 		instancesVal.setText(String.valueOf(instanceCount));
 
+		parent.setRedraw(false);
+
 		resetLabel(fbTypeLabels);
 		resetLabel(fbCountLabels);
 
@@ -284,6 +283,7 @@ public class InfoPropertySection extends AbstractSection {
 			fbGroup.setVisible(false);
 		}
 
+		parent.setRedraw(true);
 		parent.layout(true, true);
 	}
 
@@ -292,10 +292,5 @@ public class InfoPropertySection extends AbstractSection {
 			l.dispose();
 		}
 		list.clear();
-	}
-
-	// del iscontained
-	private static boolean isUntypedSubapp(final SubApp subapp) {
-		return !(subapp.isTyped() || subapp.isContainedInTypedInstance());
 	}
 }
