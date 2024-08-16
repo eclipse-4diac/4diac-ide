@@ -24,12 +24,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
-import org.eclipse.fordiac.ide.util.Utils;
 
 /**
  * Class DelayedFiles
@@ -59,22 +58,8 @@ public class DelayedFiles {
 	 * returned after all files were written
 	 */
 
-	public static final class StoredFiles {
-		private final File oldFile;
-		private final File newFile;
+	public static record StoredFiles(File oldFile, File newFile) {
 
-		public StoredFiles(final File oldFile, final File newFile) {
-			this.oldFile = oldFile;
-			this.newFile = newFile;
-		}
-
-		public File getOldFile() {
-			return oldFile;
-		}
-
-		public File getNewFile() {
-			return newFile;
-		}
 	}
 
 	private final List<FileObject> storage;
