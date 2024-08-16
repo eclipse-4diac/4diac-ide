@@ -26,12 +26,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -41,8 +46,13 @@ public class InfoPropertySection extends AbstractSection {
 
 	private ConfigurableObject obj;
 	private static boolean isSubApp = false;
+	private static boolean checked = false;
+
+	private final static int horizontalIndent = 10;
 
 	private Composite parent;
+
+	private Button checkBox;
 
 	private Label numbConVal;
 	private Label usedTypesVal;
@@ -60,7 +70,7 @@ public class InfoPropertySection extends AbstractSection {
 		final Color backgroundColor = new Color(255, 255, 255);
 		parent.setBackground(backgroundColor);
 
-		final GridLayout parentLayout = new GridLayout(2, false);
+		final GridLayout parentLayout = new GridLayout(2, true);
 		parent.setLayout(parentLayout);
 
 		final Group group = createGroup(parent, "System Information", backgroundColor); //$NON-NLS-1$
@@ -70,21 +80,46 @@ public class InfoPropertySection extends AbstractSection {
 		subAppsVal = createLabelPair(group, "Number of untyped Subapps:", backgroundColor); //$NON-NLS-1$
 		instancesVal = createLabelPair(group, "Number of all instances:", backgroundColor); //$NON-NLS-1$
 
+		final Label checkLabl = createLabel(group, "Count instances of typed Subapps/CFB Networks", backgroundColor, //$NON-NLS-1$
+				false);
+		checkBox = createCheckBox(group);
+
 		fbGroup = createGroup(parent, "FB Types and Counts", backgroundColor); //$NON-NLS-1$
 		fbGroup.setVisible(false);
+	}
+
+	private Button createCheckBox(final Group g) {
+		final Button check = new Button(g, SWT.CHECK);
+
+		final GridData checkGridData = new GridData(SWT.LEFT, SWT.TOP, false, false);
+		checkGridData.horizontalIndent = horizontalIndent;
+		check.setLayoutData(checkGridData);
+
+		check.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				if (check.getSelection()) {
+					checked = true;
+				} else {
+					checked = false;
+				}
+				performRefresh(); // added
+			}
+		});
+		return check;
 	}
 
 	private static Group createGroup(final Composite parent, final String string, final Color backgroundColor) {
 		final Group group = new Group(parent, SWT.NONE);
 		group.setText(string);
 		group.setLayout(new GridLayout(2, false));
-		group.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+		group.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, true));
 		group.setBackground(backgroundColor);
 		return group;
 	}
 
 	private static Label createLabelPair(final Composite parent, final String string, final Color backgroundColor) {
-		createLabel(parent, string, backgroundColor);
+		createLabel(parent, string, backgroundColor, true);
 		return createValueLabel(parent, backgroundColor);
 	}
 
@@ -92,20 +127,22 @@ public class InfoPropertySection extends AbstractSection {
 		final Label label = new Label(parent, SWT.NONE);
 		final GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		label.setLayoutData(gridData);
-		gridData.horizontalIndent = 10;
+		gridData.horizontalIndent = horizontalIndent;
 		label.setBackground(c);
 		return label;
 	}
 
-	private static Label createLabel(final Composite parent, final String text, final Color c) {
+	private static Label createLabel(final Composite parent, final String text, final Color c, final boolean bold) {
 		final Label label = new Label(parent, SWT.NONE);
 		label.setBackground(c);
 		label.setText(text);
-		final FontData[] fontData = label.getFont().getFontData();
-		for (final FontData fd : fontData) {
-			fd.setStyle(SWT.BOLD);
+		if (bold) {
+			final FontData[] fontData = label.getFont().getFontData();
+			for (final FontData fd : fontData) {
+				fd.setStyle(SWT.BOLD);
+			}
+			label.setFont(new Font(parent.getDisplay(), fontData));
 		}
-		label.setFont(new Font(parent.getDisplay(), fontData));
 		return label;
 	}
 
@@ -137,11 +174,12 @@ public class InfoPropertySection extends AbstractSection {
 
 	@Override
 	protected void setInputInit() {
-		formatPage();
+		// formatPage();
 	}
 
 	@Override
 	protected void performRefresh() {
+		formatPage();
 		// DO NOTHING
 	}
 
@@ -178,7 +216,11 @@ public class InfoPropertySection extends AbstractSection {
 			if (null != fe.getType()) {
 				fbs.merge(fe.getTypeName(), 1, Integer::sum);
 			}
-			if ((fe instanceof final SubApp sa) && (null != sa.getSubAppNetwork())) {
+			if ((fe instanceof final UntypedSubApp sa) && (null != sa.getSubAppNetwork())) {
+				final HashMap<String, Integer> subAppResults = countFBInstances(
+						sa.getSubAppNetwork().getNetworkElements(), new HashMap<>());
+				subAppResults.forEach((key, value) -> fbs.merge(key, value, Integer::sum));
+			} else if ((fe instanceof final TypedSubApp sa) && (null != sa.getSubAppNetwork()) && checked) {
 				final HashMap<String, Integer> subAppResults = countFBInstances(
 						sa.getSubAppNetwork().getNetworkElements(), new HashMap<>());
 				subAppResults.forEach((key, value) -> fbs.merge(key, value, Integer::sum));
@@ -193,7 +235,9 @@ public class InfoPropertySection extends AbstractSection {
 			con += fbNetwork.getAdapterConnections().size() + fbNetwork.getDataConnections().size()
 					+ fbNetwork.getEventConnections().size();
 			for (final FBNetworkElement fe : fbNetwork.getNetworkElements()) {
-				if (fe instanceof final SubApp sa) {
+				if (fe instanceof final UntypedSubApp sa) {
+					con += numbOfCon(sa.getSubAppNetwork(), fbs);
+				} else if (fe instanceof final UntypedSubApp sa && checked) {
 					con += numbOfCon(sa.getSubAppNetwork(), fbs);
 				}
 			}
@@ -205,9 +249,12 @@ public class InfoPropertySection extends AbstractSection {
 			final Map<String, Integer> fbs) {
 		int subapps = 0;
 		for (final FBNetworkElement fe : elements) {
-			if (fe instanceof final SubApp se && isUntypedSubapp(se)) {
+			if (fe instanceof final UntypedSubApp se) {
 				subapps++;
 				subapps += processSubappElements(se.getSubAppNetwork().getNetworkElements(), fbs);
+			} else if (fe instanceof final TypedSubApp se && checked) {
+				subapps++;
+				subapps += processSubappElements(se.loadSubAppNetwork().getNetworkElements(), fbs);
 			}
 		}
 		return subapps;
@@ -226,7 +273,7 @@ public class InfoPropertySection extends AbstractSection {
 		if (!fbs.isEmpty()) {
 			fbGroup.setVisible(true);
 			for (final Entry<String, Integer> entry : fbs.entrySet()) {
-				final Label fbTypeLabel = createLabel(fbGroup, entry.getKey() + ":", parent.getBackground()); //$NON-NLS-1$
+				final Label fbTypeLabel = createLabel(fbGroup, entry.getKey() + ":", parent.getBackground(), true); //$NON-NLS-1$
 				fbTypeLabels.add(fbTypeLabel);
 
 				final Label fbCountLabel = createValueLabel(fbGroup, parent.getBackground());
@@ -247,6 +294,7 @@ public class InfoPropertySection extends AbstractSection {
 		list.clear();
 	}
 
+	// del iscontained
 	private static boolean isUntypedSubapp(final SubApp subapp) {
 		return !(subapp.isTyped() || subapp.isContainedInTypedInstance());
 	}
