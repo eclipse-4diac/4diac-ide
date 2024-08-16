@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Johannes Kepler University Linz
- *                          Martin Erich Jobst
+ * Copyright (c) 2020, 2023, 2024 Johannes Kepler University Linz
+ *                                Martin Erich Jobst
+ *                                Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *     - create parent directories on demand
+ *   Ernst Blecha
+ *     - do not overwrite files that did not change
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.utils;
 
