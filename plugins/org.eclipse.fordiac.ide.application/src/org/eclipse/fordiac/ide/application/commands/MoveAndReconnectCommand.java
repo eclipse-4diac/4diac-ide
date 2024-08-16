@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,7 +38,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -60,7 +58,6 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 	private final CompoundCommand unmappingCmds = new CompoundCommand(); // stores all needed unmap commands
 	private final CompoundCommand setUniqueName = new CompoundCommand();
 	private final CompoundCommand removeFromGroup = new CompoundCommand();
-	private final Set<Connection> connsMovedToParent = new HashSet<>();
 	private CompoundCommand reconnectConnectionsCommands = null;
 
 	public MoveAndReconnectCommand(final Collection<FBNetworkElement> elements, final Point destination) {
@@ -90,7 +87,7 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 	@Override
 	public boolean canExecute() {
 		return (null != destinationNetwork) && destinationNetwork != sourceNetwork && allElementsFromSameNetwork()
-      && !destinationNetworkChildOfElements();
+				&& !destinationNetworkChildOfElements();
 	}
 
 	private boolean allElementsFromSameNetwork() {
@@ -153,7 +150,6 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 		elements.forEach(this::addElementToDestination);
 		elements.forEach(this::addGroupElements);
 		positionElements();
-		connsMovedToParent.forEach(destinationNetwork::addConnection);
 	}
 
 	private void addElementToDestination(final FBNetworkElement element) {
@@ -199,7 +195,6 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 	protected void redoAddElementsToDestination() {
 		elements.forEach(this::redoAddElementToDestination);
 		setUniqueName.redo();
-		connsMovedToParent.forEach(destinationNetwork::addConnection);
 	}
 
 	private void redoAddElementToDestination(final FBNetworkElement element) {
@@ -230,7 +225,6 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 	protected void undoAddElementsToDestination() {
 		setUniqueName.undo();
 		elements.forEach(this::undoAddElementToDestination);
-		connsMovedToParent.forEach(sourceNetwork::addConnection);
 	}
 
 	private void undoAddElementToDestination(final FBNetworkElement element) {
@@ -259,16 +253,14 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 			fbElement.getInterface().getAllInterfaceElements().forEach(ie -> {
 				if (ie.isIsInput()) {
 					ie.getInputConnections().stream()
-							// filter connections between selected fbElements
+							// filter connections between selected fbElements (handled in OutputConnections)
 							.filter(conn -> !fbElements.contains(conn.getSource().eContainer().eContainer()))
 							// add reconnection command to same Interface
 							.forEach(conn -> cmd.add(new BorderCrossingReconnectCommand(conn.getDestination(),
 									conn.getDestination(), conn, false)));
 				} else {
-					ie.getOutputConnections().stream()
-							.filter(conn -> !fbElements.contains(conn.getDestination().eContainer().eContainer()))
-							.forEach(conn -> cmd.add(new BorderCrossingReconnectCommand(conn.getSource(),
-									conn.getSource(), conn, true)));
+					ie.getOutputConnections().stream().forEach(conn -> cmd
+							.add(new BorderCrossingReconnectCommand(conn.getSource(), conn.getSource(), conn, true)));
 				}
 			});
 		}

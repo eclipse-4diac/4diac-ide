@@ -205,7 +205,7 @@ public class SystemImporter extends CommonElementImporter {
 		}
 	}
 
-	private void parseLink(final SystemConfiguration sysConf) throws XMLStreamException {
+	private void parseLink(final SystemConfiguration sysConf) throws XMLStreamException, TypeImportException {
 		final String commResource = getAttributeValue(LibraryElementTags.SEGMENT_COMM_RESOURCE);
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		final String segmentName = getAttributeValue(LibraryElementTags.SEGMENT_NAME_ELEMENT);
@@ -218,6 +218,16 @@ public class SystemImporter extends CommonElementImporter {
 			link.setComment(comment);
 			segment.getOutConnections().add(link);
 			device.getInConnections().add(link);
+
+			processChildren(LibraryElementTags.LINK_ELEMENT, name -> {
+				if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
+					parseGenericAttributeNode(link);
+					proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+					return true;
+				}
+				return false;
+			});
+
 			sysConf.getLinks().add(link);
 		}
 		// TODO implement some mechnism for the case that we can not find the device or

@@ -63,7 +63,7 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 	 * information
 	 */
 	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
-			final boolean isInput, final boolean isInOut, final int index) {
+			final boolean isInput, final boolean isInOut, final String arraySize, final int index) {
 		this.isInput = isInput;
 		this.isInOut = isInOut;
 		this.switchOpposite = false;
@@ -71,7 +71,13 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 		this.index = index;
 		this.targetInterfaceList = interfaceList;
 		this.name = ((null != name) && isValidName(name)) ? name : getNameProposal(dataType, isInput);
+		this.arraySize = arraySize;
 		this.value = ""; //$NON-NLS-1$
+	}
+
+	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
+			final boolean isInput, final boolean isInOut, final int index) {
+		this(dataType, name, interfaceList, isInput, isInOut, null, index);
 	}
 
 	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,

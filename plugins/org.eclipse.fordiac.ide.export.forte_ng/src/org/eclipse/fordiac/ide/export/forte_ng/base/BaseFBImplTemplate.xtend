@@ -154,5 +154,5 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 	'''«FOR fb : type.internalFbs BEFORE ",\n" SEPARATOR ",\n"»«fb.generateName»(«fb.name.FORTEStringId», *this)«ENDFOR»'''
 	
 	def private generateAddInternalFB() ///
-	'''«FOR fb : type.internalFbs SEPARATOR "\n"»addFB(«fb.generateName»);«ENDFOR»'''
+	'''«FOR fb : type.internalFbs SEPARATOR "\n"»addFB(&«fb.generateName»);«ENDFOR»'''
 }
