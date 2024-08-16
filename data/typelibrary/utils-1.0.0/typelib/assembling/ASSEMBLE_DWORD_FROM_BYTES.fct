@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="ASSEMBLE_DWORD_FROM_BYTES" Comment="this Function combines the 2 BYTES to a DWORD">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="BYTE_00"/>
+				<With Var="BYTE_01"/>
+				<With Var="BYTE_02"/>
+				<With Var="BYTE_03"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="BYTE_00" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_01" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_02" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_03" Type="BYTE" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="" Type="DWORD" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[(* this Function combines the 2 BYTES to a DWORD *)
+FUNCTION ASSEMBLE_DWORD_FROM_BYTES : DWORD
+
+VAR_INPUT
+	BYTE_00 : BYTE;
+	BYTE_01 : BYTE;
+	BYTE_02 : BYTE;
+	BYTE_03 : BYTE;
+END_VAR
+
+ASSEMBLE_DWORD_FROM_BYTES.%B0 := BYTE_00;
+ASSEMBLE_DWORD_FROM_BYTES.%B1 := BYTE_01;
+ASSEMBLE_DWORD_FROM_BYTES.%B2 := BYTE_02;
+ASSEMBLE_DWORD_FROM_BYTES.%B3 := BYTE_03;
+
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+</Function>
