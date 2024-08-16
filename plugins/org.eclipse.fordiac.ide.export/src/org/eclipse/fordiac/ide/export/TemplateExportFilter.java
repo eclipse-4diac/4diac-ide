@@ -190,11 +190,11 @@ public abstract class TemplateExportFilter extends ExportFilter {
 		}
 		boolean diffs = false;
 		for (final StoredFiles sf : writtenFiles) {
-			if ((null != sf.getNewFile()) && (null != sf.getOldFile())) {
-				opener.setName(sf.getNewFile().getName());
-				opener.setTitle(sf.getNewFile().getName());
-				opener.setNewFile(sf.getNewFile());
-				opener.setOriginalFile(sf.getOldFile());
+			if ((null != sf.newFile()) && (null != sf.oldFile())) {
+				opener.setName(sf.newFile().getName());
+				opener.setTitle(sf.newFile().getName());
+				opener.setNewFile(sf.newFile());
+				opener.setOriginalFile(sf.oldFile());
 				if (opener.hasDifferences()) {
 					opener.openCompareEditor();
 					diffs = true;
