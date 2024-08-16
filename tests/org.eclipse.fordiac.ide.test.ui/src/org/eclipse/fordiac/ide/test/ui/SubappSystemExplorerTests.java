@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSystemExplorer;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.swt.graphics.Point;
@@ -35,7 +36,7 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 	 * the FB is also visible as child of the App node of the System in the
 	 * SystemExplorer tree.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void isSubappInSystemExplorerTree() {
 		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
@@ -49,8 +50,9 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 		assertTrue(isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
 
 		// checks for SystemExplorer tree
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
-		assertTrue(isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
+		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
+		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
+		assertTrue(sysEx.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
 	}
 
 	/**
@@ -65,7 +67,7 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 	 * It is also checked whether E_SWITCH, which does not belong to the SubApp, is
 	 * displayed as Application node.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void isFbAndSubappInSystemExplorerTree() {
 		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
@@ -79,14 +81,15 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 		assertEquals(1, selectedEditParts.size());
 
 		// checks for App node
+		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
 		assertTrue(isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
-		assertTrue(isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.E_SWITCH_FB));
+		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
+		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.E_SWITCH_FB));
 
 		// checks for SubApp node
-		assertTrue(isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
+		assertTrue(sysEx.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
 		assertThrows(WidgetNotFoundException.class,
-				() -> isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_SWITCH_FB));
+				() -> sysEx.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_SWITCH_FB));
 	}
 
 }

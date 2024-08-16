@@ -32,6 +32,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSystemExplorer;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
@@ -113,7 +114,8 @@ public class Abstract4diacUITests {
 	 * @param point  The Position of the FB on the canvas.
 	 */
 	protected static void dragAndDropEventsFB(final String fbName, final Point point) {
-		final SWTBotTreeItem typeLibraryNode = expandTypeLibraryTreeItemInSystemExplorer();
+		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
+		final SWTBotTreeItem typeLibraryNode = sysEx.expandTypeLibraryTreeItemInSystemExplorer();
 		bot.waitUntil(treeItemHasNode(typeLibraryNode, UITestNamesHelper.EVENTS_NODE));
 		final SWTBotTreeItem eventsNode = typeLibraryNode.getNode(UITestNamesHelper.EVENTS_NODE);
 		eventsNode.select();
@@ -130,42 +132,6 @@ public class Abstract4diacUITests {
 
 		assertNotNull(canvas);
 		eCycleNode.dragAndDrop(canvas, point);
-	}
-
-	/**
-	 * Checks if given element is visible in the Application of the System in the
-	 * SystemExplorer Tree.
-	 *
-	 * @param element The name of the element (function block or SubApp) searched
-	 *                for in the Application of the System in the SystemExplorer
-	 *                tree.
-	 */
-	protected static boolean isElementInApplicationOfSystemInSystemExplorer(final String element) {
-		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
-		bot.waitUntil(treeItemHasNode(appNode, element));
-		final SWTBotTreeItem elementNode = appNode.getNode(element);
-		assertNotNull(elementNode);
-		return elementNode.isVisible();
-	}
-
-	/**
-	 * Checks if given Function Block is visible in the SubApp node of the
-	 * Application the System in the SystemExplorer Tree.
-	 *
-	 * @param fbName The name of the function block searched for in the SubApp node
-	 *               of the Application in the System in the SystemExplorer tree.
-	 */
-	protected static boolean isFBInSubAppOfSystemInSystemExplorer(final String fbName) {
-		final SWTBotTreeItem subAppNode = expandSubAppTreeItemInSystemExplorer();
-		final SWTBotTreeItem fbNode = subAppNode.getNode(fbName);
-		assertNotNull(fbNode);
-		return fbNode.isVisible();
-	}
-
-	protected static boolean isSubAppNodeInSystemExplorerEmpty() {
-		final SWTBotTreeItem subAppNode = expandSubAppTreeItemInSystemExplorer();
-		final List<String> subAppChildren = subAppNode.getNodes();
-		return subAppChildren.isEmpty();
 	}
 
 	protected static void createSubappWithDragRectangle(final int fromXPosition, final int fromYPosition,
@@ -730,7 +696,8 @@ public class Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@AfterEach
 	protected void cleanEditorArea() {
-		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
+		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
+		final SWTBotTreeItem appNode = sysEx.expandApplicationTreeItemInSystemExplorer();
 		appNode.contextMenu("Open").click();
 
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
@@ -754,84 +721,4 @@ public class Abstract4diacUITests {
 		bot.resetWorkbench();
 	}
 
-	/**
-	 * Expands the 4diac IDE Project node (SWTBotTreeItem) in the System Explorer
-	 *
-	 * @author Andrea Zoitl
-	 * @return treeProjectItem the expanded Project node
-	 */
-	private static SWTBotTreeItem expandProjectTreeItemInSystemExplorer() {
-		final SWTBotView systemExplorerView = bot.viewById(UITestNamesHelper.SYSTEM_EXPLORER_ID);
-		systemExplorerView.show();
-		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
-		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
-		final SWTBotTree tree = new SWTBotTree(swtTree);
-		assertNotNull(tree);
-		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
-		treeProjectItem.select();
-		treeProjectItem.expand();
-		return treeProjectItem;
-	}
-
-	/**
-	 * Expands the System node (SWTBotTreeItem) in the System Explorer
-	 *
-	 * @author Andrea Zoitl
-	 * @return systemNode the expanded System node
-	 */
-	private static SWTBotTreeItem expandSystemTreeItemInSystemExplorer() {
-		final SWTBotTreeItem treeProjectItem = expandProjectTreeItemInSystemExplorer();
-		bot.waitUntil(treeItemHasNode(treeProjectItem, UITestNamesHelper.PROJECT_NAME_TREE_ITEM));
-		final SWTBotTreeItem systemNode = treeProjectItem.getNode(UITestNamesHelper.PROJECT_NAME_TREE_ITEM);
-		systemNode.select();
-		systemNode.expand();
-		return systemNode;
-	}
-
-	/**
-	 * Expands the Type Library node (SWTBotTreeItem) in the System Explorer
-	 *
-	 * @author Andrea Zoitl
-	 * @return typeLibraryNode the expanded Type Library node
-	 */
-	private static SWTBotTreeItem expandTypeLibraryTreeItemInSystemExplorer() {
-		final SWTBotTreeItem treeProjectItem = expandProjectTreeItemInSystemExplorer();
-		bot.waitUntil(treeItemHasNode(treeProjectItem, UITestNamesHelper.TYPE_LIBRARY_NODE));
-		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(UITestNamesHelper.TYPE_LIBRARY_NODE);
-		typeLibraryNode.select();
-		typeLibraryNode.expand();
-		return typeLibraryNode;
-	}
-
-	/**
-	 * Expands the Application node (SWTBotTreeItem) in the System Explorer
-	 *
-	 * @author Andrea Zoitl
-	 * @return appNode the expanded Application node
-	 */
-	private static SWTBotTreeItem expandApplicationTreeItemInSystemExplorer() {
-		final SWTBotTreeItem systemNode = expandSystemTreeItemInSystemExplorer();
-		bot.waitUntil(treeItemHasNode(systemNode, UITestNamesHelper.PROJECT_NAME_APP));
-		final SWTBotTreeItem appNode = systemNode.getNode(UITestNamesHelper.PROJECT_NAME_APP);
-		assertNotNull(appNode);
-		appNode.select();
-		appNode.expand();
-		return appNode;
-	}
-
-	/**
-	 * Expands the Subapplication node (SWTBotTreeItem) of the 1. level of an
-	 * Application in the System Explorer
-	 *
-	 * @author Andrea Zoitl
-	 * @return appNode the expanded Application node
-	 */
-	private static SWTBotTreeItem expandSubAppTreeItemInSystemExplorer() {
-		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
-		final SWTBotTreeItem subAppNode = appNode.getNode(UITestNamesHelper.SUBAPP);
-		assertNotNull(subAppNode);
-		subAppNode.select();
-		subAppNode.expand();
-		return subAppNode;
-	}
 }
