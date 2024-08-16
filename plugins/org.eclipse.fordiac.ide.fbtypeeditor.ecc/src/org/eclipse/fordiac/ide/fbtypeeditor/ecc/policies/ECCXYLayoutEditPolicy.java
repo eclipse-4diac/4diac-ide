@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -49,7 +48,7 @@ public class ECCXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			final Object constraint) {
 		if ((child.getModel() instanceof final ECState state) && RequestUtil.isMoveRequest(request)) {
 			final Point moveDelta;
-			if (constraint instanceof final Rectangle rect && isAlignmentRequest(request)) {
+			if (constraint instanceof final Rectangle rect && RequestUtil.isAlignmentRequest(request)) {
 				moveDelta = getMoveDelta(rect, state);
 			} else {
 				moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
@@ -58,11 +57,6 @@ public class ECCXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			return new SetPositionCommand(state, moveDelta.x, moveDelta.y);
 		}
 		return null;
-	}
-
-	private static boolean isAlignmentRequest(final Request command) {
-		return command.getType() == RequestConstants.REQ_ALIGN
-				|| command.getType() == RequestConstants.REQ_ALIGN_CHILDREN;
 	}
 
 	private static Point getMoveDelta(final Rectangle rect, final ECState state) {
@@ -89,10 +83,10 @@ public class ECCXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
-		if (request.getNewObjectType().equals(ECState.class) && getHost().getModel() instanceof ECC) {
+		if (request.getNewObjectType().equals(ECState.class) && getHost().getModel() instanceof final ECC ecc) {
 			final Point point = request.getLocation().getCopy();
 			getHostFigure().translateToRelative(point);
-			return new CreateECStateCommand((ECState) request.getNewObject(), point, (ECC) getHost().getModel());
+			return new CreateECStateCommand((ECState) request.getNewObject(), point, ecc);
 		}
 		return null;
 	}
