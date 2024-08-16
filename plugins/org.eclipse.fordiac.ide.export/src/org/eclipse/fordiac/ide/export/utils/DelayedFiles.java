@@ -142,12 +142,7 @@ public class DelayedFiles {
 	 * @return true if any of the files already exist, false otherwise
 	 */
 	public boolean exist() {
-		for (final FileObject fo : storage) {
-			if (fo.getPath().toFile().exists()) {
-				return true;
-			}
-		}
-		return false;
+		return storage.stream().anyMatch((final FileObject fo) -> fo.path().toFile().exists());
 	}
 
 	/** remove all of the data currently prepared in memory */
