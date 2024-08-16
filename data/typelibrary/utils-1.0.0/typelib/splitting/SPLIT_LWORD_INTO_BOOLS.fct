@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="SPLIT_LWORD_INTO_BOOLS" Comment="this Function extracts the 64 BOOLS from a lword">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="BIT_00"/>
+				<With Var="BIT_01"/>
+				<With Var="BIT_02"/>
+				<With Var="BIT_03"/>
+				<With Var="BIT_04"/>
+				<With Var="BIT_05"/>
+				<With Var="BIT_06"/>
+				<With Var="BIT_07"/>
+				<With Var="BIT_08"/>
+				<With Var="BIT_09"/>
+				<With Var="BIT_10"/>
+				<With Var="BIT_11"/>
+				<With Var="BIT_12"/>
+				<With Var="BIT_13"/>
+				<With Var="BIT_14"/>
+				<With Var="BIT_15"/>
+				<With Var="BIT_16"/>
+				<With Var="BIT_17"/>
+				<With Var="BIT_18"/>
+				<With Var="BIT_19"/>
+				<With Var="BIT_20"/>
+				<With Var="BIT_21"/>
+				<With Var="BIT_22"/>
+				<With Var="BIT_23"/>
+				<With Var="BIT_24"/>
+				<With Var="BIT_25"/>
+				<With Var="BIT_26"/>
+				<With Var="BIT_27"/>
+				<With Var="BIT_28"/>
+				<With Var="BIT_29"/>
+				<With Var="BIT_30"/>
+				<With Var="BIT_31"/>
+				<With Var="BIT_32"/>
+				<With Var="BIT_33"/>
+				<With Var="BIT_34"/>
+				<With Var="BIT_35"/>
+				<With Var="BIT_36"/>
+				<With Var="BIT_37"/>
+				<With Var="BIT_38"/>
+				<With Var="BIT_39"/>
+				<With Var="BIT_40"/>
+				<With Var="BIT_41"/>
+				<With Var="BIT_42"/>
+				<With Var="BIT_43"/>
+				<With Var="BIT_44"/>
+				<With Var="BIT_45"/>
+				<With Var="BIT_46"/>
+				<With Var="BIT_47"/>
+				<With Var="BIT_48"/>
+				<With Var="BIT_49"/>
+				<With Var="BIT_50"/>
+				<With Var="BIT_51"/>
+				<With Var="BIT_52"/>
+				<With Var="BIT_53"/>
+				<With Var="BIT_54"/>
+				<With Var="BIT_55"/>
+				<With Var="BIT_56"/>
+				<With Var="BIT_57"/>
+				<With Var="BIT_58"/>
+				<With Var="BIT_59"/>
+				<With Var="BIT_60"/>
+				<With Var="BIT_61"/>
+				<With Var="BIT_62"/>
+				<With Var="BIT_63"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="LWORD" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="BIT_00" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_01" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_02" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_03" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_04" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_05" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_06" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_07" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_08" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_09" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_10" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_11" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_12" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_13" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_14" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_15" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_16" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_17" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_18" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_19" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_20" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_21" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_22" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_23" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_24" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_25" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_26" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_27" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_28" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_29" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_30" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_31" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_32" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_33" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_34" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_35" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_36" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_37" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_38" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_39" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_40" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_41" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_42" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_43" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_44" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_45" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_46" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_47" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_48" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_49" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_50" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_51" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_52" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_53" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_54" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_55" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_56" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_57" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_58" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_59" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_60" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_61" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_62" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_63" Type="BOOL" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[(* this Function extracts the 64 BOOLS from a lword *)
+FUNCTION SPLIT_LWORD_INTO_BOOLS
+
+VAR_INPUT
+	IN : LWORD;
+END_VAR
+
+VAR_OUTPUT
+	BIT_00 : BOOL;
+	BIT_01 : BOOL;
+	BIT_02 : BOOL;
+	BIT_03 : BOOL;
+	BIT_04 : BOOL;
+	BIT_05 : BOOL;
+	BIT_06 : BOOL;
+	BIT_07 : BOOL;
+	BIT_08 : BOOL;
+	BIT_09 : BOOL;
+	BIT_10 : BOOL;
+	BIT_11 : BOOL;
+	BIT_12 : BOOL;
+	BIT_13 : BOOL;
+	BIT_14 : BOOL;
+	BIT_15 : BOOL;
+	BIT_16 : BOOL;
+	BIT_17 : BOOL;
+	BIT_18 : BOOL;
+	BIT_19 : BOOL;
+	BIT_20 : BOOL;
+	BIT_21 : BOOL;
+	BIT_22 : BOOL;
+	BIT_23 : BOOL;
+	BIT_24 : BOOL;
+	BIT_25 : BOOL;
+	BIT_26 : BOOL;
+	BIT_27 : BOOL;
+	BIT_28 : BOOL;
+	BIT_29 : BOOL;
+	BIT_30 : BOOL;
+	BIT_31 : BOOL;
+	BIT_32 : BOOL;
+	BIT_33 : BOOL;
+	BIT_34 : BOOL;
+	BIT_35 : BOOL;
+	BIT_36 : BOOL;
+	BIT_37 : BOOL;
+	BIT_38 : BOOL;
+	BIT_39 : BOOL;
+	BIT_40 : BOOL;
+	BIT_41 : BOOL;
+	BIT_42 : BOOL;
+	BIT_43 : BOOL;
+	BIT_44 : BOOL;
+	BIT_45 : BOOL;
+	BIT_46 : BOOL;
+	BIT_47 : BOOL;
+	BIT_48 : BOOL;
+	BIT_49 : BOOL;
+	BIT_50 : BOOL;
+	BIT_51 : BOOL;
+	BIT_52 : BOOL;
+	BIT_53 : BOOL;
+	BIT_54 : BOOL;
+	BIT_55 : BOOL;
+	BIT_56 : BOOL;
+	BIT_57 : BOOL;
+	BIT_58 : BOOL;
+	BIT_59 : BOOL;
+	BIT_60 : BOOL;
+	BIT_61 : BOOL;
+	BIT_62 : BOOL;
+	BIT_63 : BOOL;
+END_VAR
+
+BIT_00 := IN.%X0;
+BIT_01 := IN.%X1;
+BIT_02 := IN.%X2;
+BIT_03 := IN.%X3;
+BIT_04 := IN.%X4;
+BIT_05 := IN.%X5;
+BIT_06 := IN.%X6;
+BIT_07 := IN.%X7;
+BIT_08 := IN.%X8;
+BIT_09 := IN.%X9;
+BIT_10 := IN.%X10;
+BIT_11 := IN.%X11;
+BIT_12 := IN.%X12;
+BIT_13 := IN.%X13;
+BIT_14 := IN.%X14;
+BIT_15 := IN.%X15;
+BIT_16 := IN.%X16;
+BIT_17 := IN.%X17;
+BIT_18 := IN.%X18;
+BIT_19 := IN.%X19;
+BIT_20 := IN.%X20;
+BIT_21 := IN.%X21;
+BIT_22 := IN.%X22;
+BIT_23 := IN.%X23;
+BIT_24 := IN.%X24;
+BIT_25 := IN.%X25;
+BIT_26 := IN.%X26;
+BIT_27 := IN.%X27;
+BIT_28 := IN.%X28;
+BIT_29 := IN.%X29;
+BIT_30 := IN.%X30;
+BIT_31 := IN.%X31;
+BIT_32 := IN.%X32;
+BIT_33 := IN.%X33;
+BIT_34 := IN.%X34;
+BIT_35 := IN.%X35;
+BIT_36 := IN.%X36;
+BIT_37 := IN.%X37;
+BIT_38 := IN.%X38;
+BIT_39 := IN.%X39;
+BIT_40 := IN.%X40;
+BIT_41 := IN.%X41;
+BIT_42 := IN.%X42;
+BIT_43 := IN.%X43;
+BIT_44 := IN.%X44;
+BIT_45 := IN.%X45;
+BIT_46 := IN.%X46;
+BIT_47 := IN.%X47;
+BIT_48 := IN.%X48;
+BIT_49 := IN.%X49;
+BIT_50 := IN.%X50;
+BIT_51 := IN.%X51;
+BIT_52 := IN.%X52;
+BIT_53 := IN.%X53;
+BIT_54 := IN.%X54;
+BIT_55 := IN.%X55;
+BIT_56 := IN.%X56;
+BIT_57 := IN.%X57;
+BIT_58 := IN.%X58;
+BIT_59 := IN.%X59;
+BIT_60 := IN.%X60;
+BIT_61 := IN.%X61;
+BIT_62 := IN.%X62;
+BIT_63 := IN.%X63;
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+</Function>
