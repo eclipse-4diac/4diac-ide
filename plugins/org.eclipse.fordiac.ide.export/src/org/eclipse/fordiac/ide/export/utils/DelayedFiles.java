@@ -106,7 +106,9 @@ public class DelayedFiles {
 	 * @return path to be written to to be compatible with java.nio.file.Files
 	 */
 	public Path write(final Path path, final CharSequence data) {
-		storage.add(new FileObject(path, data));
+		if (hasChangedContent(path, data)) {
+			storage.add(new FileObject(path, data));
+		}
 		return path;
 	}
 
@@ -164,6 +166,22 @@ public class DelayedFiles {
 	/** retrieve an iterable of all filenames currently ready for writing */
 	public List<String> getFilenames() {
 		return storage.stream().map(item -> item.getPath().getFileName().toString()).toList();
+	}
+
+	/**
+	 * compare if the generated data is already written to disk
+	 *
+	 * @param path  file path to be written to
+	 * @param bytes data to be written as a CharSequence
+	 *
+	 * @return data on disk does not match the generated data
+	 */
+	private static boolean hasChangedContent(final Path p, final CharSequence data) {
+		try {
+			return !Files.readString(p).equals(data);
+		} catch (final IOException e) {
+			return true;
+		}
 	}
 
 }
