@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="SPLIT_WORD_INTO_BYTES" Comment="this Function extracts the 2 BYTE from a word">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="BYTE_00"/>
+				<With Var="BYTE_01"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="WORD" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="BYTE_00" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_01" Type="BYTE" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[(* this Function extracts the 2 BYTE from a word *)
+FUNCTION SPLIT_WORD_INTO_BYTES
+
+VAR_INPUT
+	IN : WORD;
+END_VAR
+
+VAR_OUTPUT
+	BYTE_00 : BYTE;
+	BYTE_01 : BYTE;
+END_VAR
+
+BYTE_00 := IN.%B0;
+BYTE_01 := IN.%B1;
+
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+</Function>
