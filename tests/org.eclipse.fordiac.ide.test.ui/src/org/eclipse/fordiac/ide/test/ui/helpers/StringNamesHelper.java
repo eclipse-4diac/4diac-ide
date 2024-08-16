@@ -69,15 +69,10 @@ public final class StringNamesHelper {
 	public static final String F_SUB = "F_SUB"; //$NON-NLS-1$
 	public static final String GO_TO_CHILD = "Go To Child"; //$NON-NLS-1$
 	public static final String GO_TO_PARENT = "Go To Parent"; //$NON-NLS-1$
-	public static final String IF = "IF"; //$NON-NLS-1$
 	public static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
 	public static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
 	public static final String INSERT_FB = "Insert FB"; //$NON-NLS-1$
-	public static final String INT_SMALL = "int"; //$NON-NLS-1$
 	public static final String INTERFACE = "Interface"; //$NON-NLS-1$
-	public static final String MOVE_ELEMENTS_UP = "Move element(s) up"; //$NON-NLS-1$
-	public static final String MOVE_ELEMENTS_DOWN = "Move element(s) down"; //$NON-NLS-1$
-	public static final String NAME = "Name"; //$NON-NLS-1$
 	public static final String NAME_LABEL = "Name:"; //$NON-NLS-1$
 	public static final String NAVIGATE = "Navigate"; //$NON-NLS-1$
 	public static final String NEW = "New"; //$NON-NLS-1$
@@ -100,9 +95,6 @@ public final class StringNamesHelper {
 	public static final String PROJECT_NAME_TREE_ITEM = PROJECT_NAME + " []"; //$NON-NLS-1$
 	public static final String PROJECT_NAME_LABEL = "Project name:"; //$NON-NLS-1$
 	public static final String PROPERTIES_TITLE = "Properties"; //$NON-NLS-1$
-	public static final String REFACTORING = "Refactoring"; //$NON-NLS-1$
-	public static final String RENAME_ELEMENT = "Rename Element"; //$NON-NLS-1$
-	public static final String REQUEST_FROM_IDEAL_SOCKET = "Request from ideal Socket"; //$NON-NLS-1$
 	public static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
 	public static final String SELECT_TYPE_LABEL = FordiacMessages.SelectType + ":"; //$NON-NLS-1$
 	public static final String SOURCE = "Source"; //$NON-NLS-1$
@@ -112,19 +104,13 @@ public final class StringNamesHelper {
 	public static final String SYSTEM_EXPLORER_LABEL = "System Explorer"; //$NON-NLS-1$
 	public static final String TEST_PARENT_FOLDER = "TestParentProject"; //$NON-NLS-1$
 	public static final String TOOLBAR_BUTTON_ZOOM_FIT_PAGE = "Zoom fit Page"; //$NON-NLS-1$
-	public static final String REQUEST_FROM_IDEAL_COMMENT = "Request from ideal Socket"; //$NON-NLS-1$
-	public static final String TEST_COMMENT = "Test Comment"; //$NON-NLS-1$
-	public static final String TESTVAR = "TestVar"; //$NON-NLS-1$
-	public static final String TRUE = "TRUE"; //$NON-NLS-1$
+	public static final String TEST_COMMENT = "Request from ideal Socket"; //$NON-NLS-1$
 	public static final String TYPE_LABEL = "Type:"; //$NON-NLS-1$
 	public static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
 	public static final String TYPE_NAME_LABEL = FordiacMessages.TypeName + ":"; //$NON-NLS-1$
 	public static final String TYPE_PROJECT = "Type..."; //$NON-NLS-1$
 	public static final String TYPE_SELECTION = "Type Selection"; //$NON-NLS-1$
 	public static final String VAR_INOUT = "Var InOuts"; //$NON-NLS-1$
-	public static final String VAR1 = "VAR1"; //$NON-NLS-1$
-	public static final String VAR2 = "VAR2"; //$NON-NLS-1$
-	public static final String VAR3 = "VAR3"; //$NON-NLS-1$
 	public static final String WITH = "With"; //$NON-NLS-1$
 
 }

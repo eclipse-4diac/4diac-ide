@@ -158,10 +158,9 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 		pin.click();
 
 		final SWTBot propertiesBot = selectTabFromInterfaceProperties(StringNamesHelper.EVENT);
-		propertiesBot.textWithLabel(StringNamesHelper.COMMENT).setText(StringNamesHelper.REQUEST_FROM_IDEAL_COMMENT);
+		propertiesBot.textWithLabel(StringNamesHelper.COMMENT).setText(StringNamesHelper.TEST_COMMENT);
 
-		assertEquals(propertiesBot.textWithLabel(StringNamesHelper.COMMENT).getText(),
-				StringNamesHelper.REQUEST_FROM_IDEAL_COMMENT);
+		assertEquals(propertiesBot.textWithLabel(StringNamesHelper.COMMENT).getText(), StringNamesHelper.TEST_COMMENT);
 	}
 
 	/**
