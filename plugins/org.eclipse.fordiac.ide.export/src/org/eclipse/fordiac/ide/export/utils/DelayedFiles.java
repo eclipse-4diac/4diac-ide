@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.fordiac.ide.util.Utils;
 
@@ -44,22 +45,10 @@ public class DelayedFiles {
 	 *
 	 * encapsulates path and data of a file in memory (before writing)
 	 */
-	private static final class FileObject {
-		private final Path path;
-		private final Iterable<? extends CharSequence> data;
-
-		public FileObject(final Path path, final CharSequence data) {
-			this.path = path;
-			this.data = Collections.singleton(data);
-		}
-
-		public Path getPath() {
-			return path;
-		}
-
-		@SuppressWarnings("unchecked")
-		public Iterable<CharSequence> getData() {
-			return (Iterable<CharSequence>) data;
+	private static record FileObject(Path path, CharSequence data) {
+		public FileObject {
+			Objects.requireNonNull(path);
+			Objects.requireNonNull(data);
 		}
 	}
 
@@ -132,14 +121,14 @@ public class DelayedFiles {
 
 		for (final FileObject fo : storage) {
 			File o = null;
-			final File f = fo.getPath().toFile();
+			final File f = fo.path().toFile();
 			if (!forceOverwrite && f.exists()) {
 				o = Utils.createBakFile(f);
 			}
-			if (fo.getPath().getParent() != null) {
-				Files.createDirectories(fo.getPath().getParent());
+			if (fo.path().getParent() != null) {
+				Files.createDirectories(fo.path().getParent());
 			}
-			Files.write(fo.getPath(), fo.getData(), StandardCharsets.UTF_8);
+			Files.write(fo.path(), Collections.singleton(fo.data()), StandardCharsets.UTF_8);
 			ret.add(new StoredFiles(o, f));
 		}
 
@@ -168,7 +157,7 @@ public class DelayedFiles {
 
 	/** retrieve an iterable of all filenames currently ready for writing */
 	public List<String> getFilenames() {
-		return storage.stream().map(item -> item.getPath().getFileName().toString()).toList();
+		return storage.stream().map(item -> item.path().getFileName().toString()).toList();
 	}
 
 	/**
