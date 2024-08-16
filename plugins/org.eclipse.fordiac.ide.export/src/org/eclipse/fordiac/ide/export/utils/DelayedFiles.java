@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023, 2024 Johannes Kepler University Linz
+ * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ *               2020, 2023, 2024 Johannes Kepler University Linz
  *                                Martin Erich Jobst
  *                                Primetals Technologies Austria GmbH
  *
@@ -10,6 +11,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Matthias Plasch
+ *     - createBakFile (moved from Utils class)
  *   Ernst Blecha
  *     - initial API and implementation and/or initial documentation
  *   Martin Jobst
@@ -103,12 +106,11 @@ public class DelayedFiles {
 	 */
 	public Iterable<StoredFiles> write(final boolean forceOverwrite) throws IOException {
 		final ArrayList<StoredFiles> ret = new ArrayList<>(storage.size());
-
 		for (final FileObject fo : storage) {
 			File o = null;
 			final File f = fo.path().toFile();
 			if (!forceOverwrite && f.exists()) {
-				o = Utils.createBakFile(f);
+				o = createBakFile(f);
 			}
 			if (fo.path().getParent() != null) {
 				Files.createDirectories(fo.path().getParent());
@@ -154,6 +156,30 @@ public class DelayedFiles {
 		} catch (final IOException e) {
 			return true;
 		}
+	}
+
+	/**
+	 * Creats a backup file of the specified file.
+	 *
+	 * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
+	 *
+	 * @param in the file that should be backuped
+	 *
+	 * @return the backup file
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	private static File createBakFile(final File in) throws IOException {
+		final String path = in.getAbsolutePath() + ".bak"; //$NON-NLS-1$
+		File f;
+		int i = 1;
+		String temp = path;
+		while ((f = new File(temp)).exists()) {
+			temp = path + i;
+			i++;
+		}
+		Files.copy(in.toPath(), f.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		return f;
 	}
 
 }
