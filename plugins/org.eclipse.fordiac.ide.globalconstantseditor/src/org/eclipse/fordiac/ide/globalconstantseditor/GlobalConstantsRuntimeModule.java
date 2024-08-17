@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameProv
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STCoreLinkingDiagnosticMessageProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSerializer;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreResourceValidator;
@@ -38,6 +39,7 @@ import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
+import org.eclipse.xtext.serializer.ISerializer;
 import org.eclipse.xtext.validation.IResourceValidator;
 
 import com.google.inject.Binder;
@@ -109,5 +111,10 @@ public class GlobalConstantsRuntimeModule extends AbstractGlobalConstantsRuntime
 
 	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {
 		return STCoreCommentDocumentationProvider.class;
+	}
+
+	@Override
+	public Class<? extends ISerializer> bindISerializer() {
+		return STCoreSerializer.class;
 	}
 }

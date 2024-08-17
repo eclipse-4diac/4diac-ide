@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="ASSEMBLE_BYTE_FROM_BOOLS" Comment="this Function combines the 8 BOOLS to a BYTE">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="BIT_00"/>
+				<With Var="BIT_01"/>
+				<With Var="BIT_02"/>
+				<With Var="BIT_03"/>
+				<With Var="BIT_04"/>
+				<With Var="BIT_05"/>
+				<With Var="BIT_06"/>
+				<With Var="BIT_07"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="BIT_00" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_01" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_02" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_03" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_04" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_05" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_06" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_07" Type="BOOL" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="" Type="BYTE" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[(* this Function combines the 8 BOOLS to a BYTE *)
+FUNCTION ASSEMBLE_BYTE_FROM_BOOLS : BYTE
+
+VAR_INPUT
+	BIT_00 : BOOL;
+	BIT_01 : BOOL;
+	BIT_02 : BOOL;
+	BIT_03 : BOOL;
+	BIT_04 : BOOL;
+	BIT_05 : BOOL;
+	BIT_06 : BOOL;
+	BIT_07 : BOOL;
+END_VAR
+
+ASSEMBLE_BYTE_FROM_BOOLS.%X0 := BIT_00;
+ASSEMBLE_BYTE_FROM_BOOLS.%X1 := BIT_01;
+ASSEMBLE_BYTE_FROM_BOOLS.%X2 := BIT_02;
+ASSEMBLE_BYTE_FROM_BOOLS.%X3 := BIT_03;
+ASSEMBLE_BYTE_FROM_BOOLS.%X4 := BIT_04;
+ASSEMBLE_BYTE_FROM_BOOLS.%X5 := BIT_05;
+ASSEMBLE_BYTE_FROM_BOOLS.%X6 := BIT_06;
+ASSEMBLE_BYTE_FROM_BOOLS.%X7 := BIT_07;
+
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+</Function>

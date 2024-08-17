@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="ASSEMBLE_DWORD_FROM_QUARTERS" Comment="this Function combines the 16 QUARTER BYTES to a DWORD">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="QUARTER_BYTE_00"/>
+				<With Var="QUARTER_BYTE_01"/>
+				<With Var="QUARTER_BYTE_02"/>
+				<With Var="QUARTER_BYTE_03"/>
+				<With Var="QUARTER_BYTE_04"/>
+				<With Var="QUARTER_BYTE_05"/>
+				<With Var="QUARTER_BYTE_06"/>
+				<With Var="QUARTER_BYTE_07"/>
+				<With Var="QUARTER_BYTE_08"/>
+				<With Var="QUARTER_BYTE_09"/>
+				<With Var="QUARTER_BYTE_10"/>
+				<With Var="QUARTER_BYTE_11"/>
+				<With Var="QUARTER_BYTE_12"/>
+				<With Var="QUARTER_BYTE_13"/>
+				<With Var="QUARTER_BYTE_14"/>
+				<With Var="QUARTER_BYTE_15"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QUARTER_BYTE_00" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_01" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_02" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_03" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_04" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_05" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_06" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_07" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_08" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_09" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_10" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_11" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_12" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_13" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_14" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_15" Type="BYTE" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="" Type="DWORD" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[(* this Function combines the 16 QUARTER BYTES to a DWORD *)
+FUNCTION ASSEMBLE_DWORD_FROM_QUARTERS : DWORD
+
+VAR_INPUT
+	QUARTER_BYTE_00 : BYTE;
+	QUARTER_BYTE_01 : BYTE;
+	QUARTER_BYTE_02 : BYTE;
+	QUARTER_BYTE_03 : BYTE;
+	QUARTER_BYTE_04 : BYTE;
+	QUARTER_BYTE_05 : BYTE;
+	QUARTER_BYTE_06 : BYTE;
+	QUARTER_BYTE_07 : BYTE;
+	QUARTER_BYTE_08 : BYTE;
+	QUARTER_BYTE_09 : BYTE;
+	QUARTER_BYTE_10 : BYTE;
+	QUARTER_BYTE_11 : BYTE;
+	QUARTER_BYTE_12 : BYTE;
+	QUARTER_BYTE_13 : BYTE;
+	QUARTER_BYTE_14 : BYTE;
+	QUARTER_BYTE_15 : BYTE;
+END_VAR
+
+ASSEMBLE_DWORD_FROM_QUARTERS := SHL(BYTE_TO_DWORD(QUARTER_BYTE_15), SHIFT_QUARTER_15) 
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_14), SHIFT_QUARTER_14) 
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_13), SHIFT_QUARTER_13) 
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_12), SHIFT_QUARTER_12)
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_11), SHIFT_QUARTER_11) 
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_10), SHIFT_QUARTER_10) 
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_09), SHIFT_QUARTER_09)
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_08), SHIFT_QUARTER_08)
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_07), SHIFT_QUARTER_07) 
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_06), SHIFT_QUARTER_06) 
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_05), SHIFT_QUARTER_05) 
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_04), SHIFT_QUARTER_04)
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_03), SHIFT_QUARTER_03) 
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_02), SHIFT_QUARTER_02) 
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_01), SHIFT_QUARTER_01)
+	OR SHL(BYTE_TO_DWORD(QUARTER_BYTE_00), SHIFT_QUARTER_00);
+
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+</Function>

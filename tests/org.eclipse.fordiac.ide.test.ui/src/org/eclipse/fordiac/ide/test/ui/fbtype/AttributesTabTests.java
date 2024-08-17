@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.test.ui.fbtype;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.test.ui.PropertySheetHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
@@ -34,16 +35,17 @@ public class AttributesTabTests extends NatTableWithoutEditorBehaviorTests {
 	@Override
 	@BeforeEach
 	public void operationsInitialization() {
-		TESTVAR1 = ATTRIBUTE1;
-		TESTVAR2 = ATTRIBUTE2;
-		TESTVAR3 = ATTRIBUTE3;
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT2, TEMPLATEBASIC);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT2);
-		final SWTBot propertiesBot = selectTabFromInterfaceProperties(ATTRIBUTES);
+		TESTVAR1 = UITestNamesHelper.ATTRIBUTE1;
+		TESTVAR2 = UITestNamesHelper.ATTRIBUTE2;
+		TESTVAR3 = UITestNamesHelper.ATTRIBUTE3;
+		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
+				UITestNamesHelper.TEMPLATEBASIC);
+		openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBot propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.ATTRIBUTES);
 		assertNotNull(propertiesBot);
-		bot.viewByTitle(PROPERTIES_TITLE).setFocus();
-		bot.editorByTitle(FBT_TEST_PROJECT2).show();
-		PropertySheetHelper.selectPropertyTabItem(ATTRIBUTES, propertiesBot);
+		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
+		bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).show();
+		PropertySheetHelper.selectPropertyTabItem(UITestNamesHelper.ATTRIBUTES, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
 		natTableBot = new SWTBot4diacNatTable(natTable);
 		NatTableHelper.createNewVariableInDataTypeEditor(natTableBot);
@@ -52,6 +54,18 @@ public class AttributesTabTests extends NatTableWithoutEditorBehaviorTests {
 	@Override
 	public void changeVariableNameWithButton() {
 		// Empty method to prevent parent logic from running
+	}
+
+	@Override
+	public void tryToSetInValidName() {
+		// Here Name column has same behavior as Data Type column or Invalid value
+		NatTableHelper.setInvalidDataType(natTableBot, 1, 1, UITestNamesHelper.IF);
+	}
+
+	@Override
+	public void tryToChangeNameOfVariableWithExistingName() {
+		// Here Name column has same behavior as Data Type column or Invalid value
+		NatTableHelper.setInvalidDataType(natTableBot, 1, 1, UITestNamesHelper.IF);
 	}
 
 }

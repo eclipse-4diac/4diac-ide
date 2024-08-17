@@ -220,4 +220,14 @@
             name="Debug">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable"
+            class="org.eclipse.fordiac.ide.debug.ui.EvaluatorWatchExpressionFactory">
+         <adapter
+               type="org.eclipse.debug.ui.actions.IWatchExpressionFactoryAdapter">
+         </adapter>
+      </factory>
+   </extension>
 </plugin>

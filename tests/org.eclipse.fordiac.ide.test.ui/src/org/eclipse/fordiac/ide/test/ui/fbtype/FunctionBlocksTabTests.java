@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.test.ui.PropertySheetHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
@@ -30,16 +31,17 @@ public class FunctionBlocksTabTests extends NatTableWithoutEditorBehaviorTests {
 	@Override
 	@BeforeEach
 	public void operationsInitialization() {
-		TESTVAR1 = INTERNALFB1;
-		TESTVAR2 = INTERNALFB1;
-		TESTVAR3 = INTERNALFB1;
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT2, TEMPLATEBASIC);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT2);
-		final SWTBot propertiesBot = selectTabFromInterfaceProperties(FUNCTIONAL__BLOCKS);
+		TESTVAR1 = UITestNamesHelper.INTERNALFB1;
+		TESTVAR2 = UITestNamesHelper.INTERNALFB2;
+		TESTVAR3 = UITestNamesHelper.INTERNALFB3;
+		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
+				UITestNamesHelper.TEMPLATEBASIC);
+		openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBot propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.FUNCTIONAL__BLOCKS);
 		assertNotNull(propertiesBot);
-		bot.viewByTitle(PROPERTIES_TITLE).setFocus();
-		bot.editorByTitle(FBT_TEST_PROJECT2).show();
-		PropertySheetHelper.selectPropertyTabItem(FUNCTIONAL__BLOCKS, propertiesBot);
+		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
+		bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).show();
+		PropertySheetHelper.selectPropertyTabItem(UITestNamesHelper.FUNCTIONAL__BLOCKS, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
 		natTableBot = new SWTBot4diacNatTable(natTable);
 		NatTableHelper.createNewVariableInDataTypeEditor(natTableBot);
@@ -57,26 +59,26 @@ public class FunctionBlocksTabTests extends NatTableWithoutEditorBehaviorTests {
 
 	@Override
 	public void changeDataTypeOfVariable() {
-		NatTableHelper.changeDataType(natTableBot, 1, INT_SMALL);
+		NatTableHelper.changeDataType(natTableBot, 1, UITestNamesHelper.INT_SMALL);
 		natTableBot.doubleclick(1, 2);
 
-		bot.button(DOT_BUTTON).click();
+		bot.button(UITestNamesHelper.DOT_BUTTON).click();
 
-		final SWTBotShell shell = bot.shell(FB_TYPES);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.FB_TYPES);
 		shell.activate();
 
 		final SWTBotTree containerTree = bot.tree();
-		final SWTBotTreeItem containerItem = containerTree.getTreeItem(TYPE_LIBRARY_NODE);
-		containerItem.getNode(CONVERT).getNode(BOOL2BOOL).select();
+		final SWTBotTreeItem containerItem = containerTree.getTreeItem(UITestNamesHelper.TYPE_LIBRARY_NODE);
+		containerItem.getNode(UITestNamesHelper.CONVERT).getNode(UITestNamesHelper.BOOL2BOOL).select();
 
-		bot.button(OK).click();
+		bot.button(UITestNamesHelper.OK).click();
 
-		assertEquals(natTableBot.getCellDataValueByPosition(1, 2), BOOL2BOOL);
+		assertEquals(natTableBot.getCellDataValueByPosition(1, 2), UITestNamesHelper.BOOL2BOOL);
 	}
 
 	@Override
 	public void tryToSetInValidDataType() {
-		NatTableHelper.setInvalidDataType(natTableBot, 1, 2, TESTVAR);
+		NatTableHelper.setInvalidDataType(natTableBot, 1, 2, UITestNamesHelper.TESTVAR);
 	}
 
 }

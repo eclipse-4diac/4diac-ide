@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,11 +12,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug;
 
+import java.util.Spliterator;
+import java.util.function.Consumer;
+import java.util.stream.StreamSupport;
+
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.fordiac.ide.debug.value.EvaluatorDebugValue;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
@@ -24,14 +30,30 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class EvaluatorDebugVariable extends EvaluatorDebugElement
 		implements IVariable, Comparable<EvaluatorDebugVariable> {
+
 	private final Variable<?> variable;
+	private final EvaluatorDebugVariable parent;
+	private final String expression;
 	private EvaluatorDebugValue cachedValue;
 	private long updateCount;
 
-	public EvaluatorDebugVariable(final Variable<?> variable, final EvaluatorDebugTarget debugTarget) {
+	public EvaluatorDebugVariable(final Variable<?> variable, final String expression,
+			final EvaluatorDebugTarget debugTarget) {
+		this(variable, expression, null, debugTarget);
+	}
+
+	public EvaluatorDebugVariable(final Variable<?> variable, final String expression,
+			final EvaluatorDebugVariable parent) {
+		this(variable, expression, parent, parent.getDebugTarget());
+	}
+
+	private EvaluatorDebugVariable(final Variable<?> variable, final String expression,
+			final EvaluatorDebugVariable parent, final EvaluatorDebugTarget debugTarget) {
 		super(debugTarget);
 		this.variable = variable;
-		cachedValue = new EvaluatorDebugValue(variable.getValue(), getDebugTarget());
+		this.parent = parent;
+		this.expression = expression;
+		cachedValue = EvaluatorDebugValue.forValue(variable.getValue(), this);
 		updateCount = debugTarget.getVariableUpdateCount();
 	}
 
@@ -42,7 +64,7 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 		} catch (final Exception e) {
 			throw new DebugException(Status.error(e.getMessage(), e));
 		}
-		fireChangeEvent(DebugEvent.CONTENT);
+		fireContentChanged();
 	}
 
 	@Override
@@ -50,10 +72,15 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 		if (value instanceof final EvaluatorDebugValue evaluatorValue) {
 			variable.setValue(evaluatorValue.getInternalValue());
 			cachedValue = evaluatorValue;
-			fireChangeEvent(DebugEvent.CONTENT);
+			fireContentChanged();
 		} else {
 			this.setValue(value.getValueString());
 		}
+	}
+
+	protected void fireContentChanged() {
+		DebugPlugin.getDefault().fireDebugEventSet(StreamSupport.stream(new ParentSpliterator(this), false)
+				.map(v -> new DebugEvent(v, DebugEvent.CHANGE, DebugEvent.CONTENT)).toArray(DebugEvent[]::new));
 	}
 
 	@Override
@@ -88,7 +115,7 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 			if (!value.equals(cachedValue.getInternalValue())) {
 				updateCount = debugTarget.getVariableUpdateCount();
 			}
-			cachedValue = new EvaluatorDebugValue(value, debugTarget);
+			cachedValue = EvaluatorDebugValue.forValue(value, this);
 		}
 		return cachedValue;
 	}
@@ -96,6 +123,10 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 	@Override
 	public String getName() {
 		return variable.getName();
+	}
+
+	public String getExpression() {
+		return expression;
 	}
 
 	@Override
@@ -111,6 +142,10 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 	@Override
 	public EvaluatorDebugTarget getDebugTarget() {
 		return (EvaluatorDebugTarget) super.getDebugTarget();
+	}
+
+	public final EvaluatorDebugVariable getParent() {
+		return parent;
 	}
 
 	@Override
@@ -135,5 +170,38 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 	@Override
 	public int hashCode() {
 		return variable.hashCode();
+	}
+
+	private static final class ParentSpliterator implements Spliterator<EvaluatorDebugVariable> {
+		private EvaluatorDebugVariable current;
+
+		private ParentSpliterator(final EvaluatorDebugVariable current) {
+			this.current = current;
+		}
+
+		@Override
+		public boolean tryAdvance(final Consumer<? super EvaluatorDebugVariable> action) {
+			if (current != null) {
+				action.accept(current);
+				current = current.getParent();
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public Spliterator<EvaluatorDebugVariable> trySplit() {
+			return null;
+		}
+
+		@Override
+		public long estimateSize() {
+			return Long.MAX_VALUE;
+		}
+
+		@Override
+		public int characteristics() {
+			return Spliterator.DISTINCT | Spliterator.IMMUTABLE | Spliterator.NONNULL | Spliterator.ORDERED;
+		}
 	}
 }

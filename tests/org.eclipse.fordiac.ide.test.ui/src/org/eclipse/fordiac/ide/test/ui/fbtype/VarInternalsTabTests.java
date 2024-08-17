@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
 import org.eclipse.fordiac.ide.test.ui.PropertySheetHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
@@ -28,16 +29,17 @@ public class VarInternalsTabTests extends NatTableWithoutEditorBehaviorTests {
 	@Override
 	@BeforeEach
 	public void operationsInitialization() {
-		TESTVAR1 = INTERNALVAR1;
-		TESTVAR2 = INTERNALVAR2;
-		TESTVAR3 = INTERNALVAR3;
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT2, TEMPLATEBASIC);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT2);
-		final SWTBot propertiesBot = selectTabFromInterfaceProperties(VAR_INTERNALS);
+		TESTVAR1 = UITestNamesHelper.INTERNALVAR1;
+		TESTVAR2 = UITestNamesHelper.INTERNALVAR2;
+		TESTVAR3 = UITestNamesHelper.INTERNALVAR3;
+		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
+				UITestNamesHelper.TEMPLATEBASIC);
+		openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBot propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.VAR_INTERNALS);
 		assertNotNull(propertiesBot);
-		bot.viewByTitle(PROPERTIES_TITLE).setFocus();
-		bot.editorByTitle(FBT_TEST_PROJECT2).show();
-		PropertySheetHelper.selectPropertyTabItem(VAR_INTERNALS, propertiesBot);
+		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
+		bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).show();
+		PropertySheetHelper.selectPropertyTabItem(UITestNamesHelper.VAR_INTERNALS, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
 		natTableBot = new SWTBot4diacNatTable(natTable);
 		NatTableHelper.createNewVariableInDataTypeEditor(natTableBot);

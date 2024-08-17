@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.util.GUIHelper;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -77,16 +78,16 @@ public class NatTableHelper extends Abstract4diacUITests {
 	protected static void changeVariableNameWithButtonTool(final SWTBot4diacNatTable natTableBot, final int srNo,
 			final String newName) {
 		natTableBot.click(srNo, 1);
-		bot.toolbarButtonWithTooltip(RENAME_ELEMENT).click();
-		final SWTBotShell shell = bot.shell(REFACTORING);
+		bot.toolbarButtonWithTooltip(UITestNamesHelper.RENAME_ELEMENT).click();
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.REFACTORING);
 		assertNotNull(shell);
 		shell.activate();
-		assertFalse(bot.button(OK).isEnabled());
+		assertFalse(bot.button(UITestNamesHelper.OK).isEnabled());
 
-		bot.textWithLabel(NAME).setText(newName);
-		assertTrue(bot.button(OK).isEnabled());
+		bot.textWithLabel(UITestNamesHelper.NAME).setText(newName);
+		assertTrue(bot.button(UITestNamesHelper.OK).isEnabled());
 
-		bot.button(OK).click();
+		bot.button(UITestNamesHelper.OK).click();
 		bot.waitUntil(shellCloses(shell));
 
 		assertEquals(natTableBot.getCellDataValueByPosition(srNo, 1), newName);
@@ -198,7 +199,7 @@ public class NatTableHelper extends Abstract4diacUITests {
 		natTableBot.click(srNo, 0);
 
 		// Move the selected variable up
-		bot.arrowButtonWithTooltip(MOVE_ELEMENTS_UP).click();
+		bot.arrowButtonWithTooltip(UITestNamesHelper.MOVE_ELEMENTS_UP).click();
 		assertEquals(natTableBot.getCellDataValueByPosition(srNo - 1, 1), currentRowName);
 		assertEquals(natTableBot.getCellDataValueByPosition(srNo, 1), upperRowName);
 	}
@@ -215,7 +216,7 @@ public class NatTableHelper extends Abstract4diacUITests {
 		natTableBot.click(srNo, 0);
 
 		// Move the selected variable down
-		bot.arrowButtonWithTooltip(MOVE_ELEMENTS_DOWN).click();
+		bot.arrowButtonWithTooltip(UITestNamesHelper.MOVE_ELEMENTS_DOWN).click();
 		assertEquals(natTableBot.getCellDataValueByPosition(srNo + 1, 1), currentRowName);
 		assertEquals(natTableBot.getCellDataValueByPosition(srNo, 1), lowerRowName);
 	}

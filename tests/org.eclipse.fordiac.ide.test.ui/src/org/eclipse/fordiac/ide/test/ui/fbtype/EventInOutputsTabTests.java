@@ -16,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.test.ui.PropertySheetHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -29,19 +31,19 @@ public class EventInOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	@Override
 	@BeforeEach
 	public void operationsInitialization() {
-		TESTVAR1 = EI1;
-		TESTVAR2 = EI2;
-		TESTVAR3 = EI3;
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT2, ADAPTER);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT2);
-		final SWTBot propertiesBot = selectTabFromInterfaceProperties(EVENT_IN_AND_OUTPUTS);
+		TESTVAR1 = PinNamesHelper.EI1;
+		TESTVAR2 = PinNamesHelper.EI2;
+		TESTVAR3 = PinNamesHelper.EI3;
+		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2, UITestNamesHelper.ADAPTER);
+		openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBot propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.EVENT_IN_AND_OUTPUTS);
 		assertNotNull(propertiesBot);
-		bot.viewByTitle(PROPERTIES_TITLE).setFocus();
-		bot.editorByTitle(FBT_TEST_PROJECT2).show();
-		PropertySheetHelper.selectPropertyTabItem(EVENT_IN_AND_OUTPUTS, propertiesBot);
+		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
+		bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).show();
+		PropertySheetHelper.selectPropertyTabItem(UITestNamesHelper.EVENT_IN_AND_OUTPUTS, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
 		natTableBot = new SWTBot4diacNatTable(natTable);
-		editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
+		editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertNotNull(editor);
 		NatTableHelper.createNewVariableInDataTypeEditor(natTableBot);
 	}
@@ -50,11 +52,11 @@ public class EventInOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	@Test
 	public void changeDataTypeOfVariable() {
 		natTableBot.doubleclick(1, 2);
-		natTableBot.setCellDataValueByPosition(1, 2, TESTVAR);
+		natTableBot.setCellDataValueByPosition(1, 2, UITestNamesHelper.TESTVAR);
 		natTableBot.doubleclick(1, 2);
 
 		// Initial value will successfully changed with error
-		assertEquals(natTableBot.getCellDataValueByPosition(1, 2), EVENT);
+		assertEquals(natTableBot.getCellDataValueByPosition(1, 2), UITestNamesHelper.EVENT);
 	}
 
 	@Override

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="SPLIT_BYTE_INTO_BOOLS" Comment="this Function extracts the 8 BOOLS from a byte">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="BIT_00"/>
+				<With Var="BIT_01"/>
+				<With Var="BIT_02"/>
+				<With Var="BIT_03"/>
+				<With Var="BIT_04"/>
+				<With Var="BIT_05"/>
+				<With Var="BIT_06"/>
+				<With Var="BIT_07"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="BYTE" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="BIT_00" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_01" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_02" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_03" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_04" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_05" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_06" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_07" Type="BOOL" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[(* this Function extracts the 8 BOOLS from a byte *)
+FUNCTION SPLIT_BYTE_INTO_BOOLS
+
+VAR_INPUT
+	IN : BYTE;
+END_VAR
+
+VAR_OUTPUT
+	BIT_00 : BOOL;
+	BIT_01 : BOOL;
+	BIT_02 : BOOL;
+	BIT_03 : BOOL;
+	BIT_04 : BOOL;
+	BIT_05 : BOOL;
+	BIT_06 : BOOL;
+	BIT_07 : BOOL;
+END_VAR
+
+BIT_00 := IN.%X0;
+BIT_01 := IN.%X1;
+BIT_02 := IN.%X2;
+BIT_03 := IN.%X3;
+BIT_04 := IN.%X4;
+BIT_05 := IN.%X5;
+BIT_06 := IN.%X6;
+BIT_07 := IN.%X7;
+
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+</Function>

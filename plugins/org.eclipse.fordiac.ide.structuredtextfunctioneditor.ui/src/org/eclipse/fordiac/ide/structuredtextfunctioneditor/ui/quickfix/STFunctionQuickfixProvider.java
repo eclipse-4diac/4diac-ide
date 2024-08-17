@@ -17,10 +17,9 @@
  *   Martin Jobst
  *       - add quick fixes for function FB types
  *       - refactor adding missing variables
+ *       - refactor quickfixes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.quickfix;
-
-import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -30,8 +29,6 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.Messages;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.validation.STFunctionValidator;
 import org.eclipse.xtext.diagnostics.Diagnostic;
-import org.eclipse.xtext.ui.editor.model.IXtextDocument;
-import org.eclipse.xtext.ui.editor.model.edit.IModification;
 import org.eclipse.xtext.ui.editor.quickfix.Fix;
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor;
 import org.eclipse.xtext.validation.Issue;
@@ -41,22 +38,22 @@ public class STFunctionQuickfixProvider extends STCoreQuickfixProvider {
 
 	@Fix(STFunctionValidator.FUNCTION_NAME_MISMATCH)
 	public void fixFunctionNameMatchesTypeName(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue,
-				MessageFormat.format(Messages.STFunctionQuickfixProvider_RenameFunction, (Object[]) issue.getData()),
-				MessageFormat.format(Messages.STFunctionQuickfixProvider_RenameFunction, (Object[]) issue.getData()),
-				null, (IModification) context -> {
-					final IXtextDocument xtextDocument = context.getXtextDocument();
-					if (xtextDocument != null) {
-						xtextDocument.replace(issue.getOffset().intValue(), issue.getLength().intValue(),
-								issue.getData()[1]);
-					}
+		// multi resolutions need to have identical label, description, and image
+		acceptor.acceptMulti(issue, Messages.STFunctionQuickfixProvider_RenameFunction,
+				Messages.STFunctionQuickfixProvider_RenameFunction, null, (element, context) -> {
+					context.setUpdateCrossReferences(true);
+					context.setUpdateRelatedFiles(true);
+					context.addModification(element,
+							(final STFunction function) -> function.setName(issue.getData()[1]));
 				});
 	}
 
 	@Override
 	@Fix(Diagnostic.LINKING_DIAGNOSTIC)
 	public void createMissingVariable(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		super.createMissingVariable(issue, acceptor);
+		if (!hasSyntaxErrors(issue)) {
+			super.createMissingVariable(issue, acceptor);
+		}
 	}
 
 	@Override

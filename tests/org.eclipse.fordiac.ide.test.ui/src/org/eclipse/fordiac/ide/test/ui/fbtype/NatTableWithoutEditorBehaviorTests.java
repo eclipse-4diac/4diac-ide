@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.test.ui.fbtype;
 
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.swt.widgets.Composite;
@@ -40,9 +41,9 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@BeforeEach
 	public void operationsInitialization() {
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT2, STRUCT);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT2);
-		final Composite inputComposite = (Composite) bot.editorByTitle(FBT_TEST_PROJECT2).getWidget();
+		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2, UITestNamesHelper.STRUCT);
+		openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
+		final Composite inputComposite = (Composite) bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).getWidget();
 		natTable = bot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), inputComposite);
 		natTableBot = new SWTBot4diacNatTable(natTable);
 		NatTableHelper.createNewVariableInDataTypeEditor(natTableBot);
@@ -59,7 +60,7 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@AfterEach
 	public void resetEnvironment() {
-		deleteFBType(FBT_TEST_PROJECT2);
+		deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT2);
 	}
 
 	/**
@@ -72,7 +73,7 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void renameVariable() {
-		NatTableHelper.changeCellValueInNatTbale(natTableBot, TESTVAR, 1, 1);
+		NatTableHelper.changeCellValueInNatTbale(natTableBot, UITestNamesHelper.TESTVAR, 1, 1);
 	}
 
 	/**
@@ -88,7 +89,7 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeVariableNameWithButton() {
-		NatTableHelper.changeVariableNameWithButtonTool(natTableBot, 1, TESTVAR);
+		NatTableHelper.changeVariableNameWithButtonTool(natTableBot, 1, UITestNamesHelper.TESTVAR);
 	}
 
 	/**
@@ -115,7 +116,7 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToSetInValidName() {
-		NatTableHelper.setInvalidName(natTableBot, 1, IF, TESTVAR1);
+		NatTableHelper.setInvalidName(natTableBot, 1, UITestNamesHelper.IF, TESTVAR1);
 	}
 
 	/**
@@ -146,7 +147,7 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeDataTypeOfVariable() {
-		NatTableHelper.changeDataType(natTableBot, 1, INT_SMALL);
+		NatTableHelper.changeDataType(natTableBot, 1, UITestNamesHelper.INT_SMALL);
 	}
 
 	/**
@@ -160,7 +161,7 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToSetInValidDataType() {
-		NatTableHelper.setInvalidDataType(natTableBot, 1, 2, TESTVAR);
+		NatTableHelper.setInvalidDataType(natTableBot, 1, 2, UITestNamesHelper.TESTVAR);
 	}
 
 	/**
@@ -172,7 +173,7 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeCommentOfVariable() {
-		NatTableHelper.changeCellValueInNatTbale(natTableBot, TEST_COMMENT, 1, 3);
+		NatTableHelper.changeCellValueInNatTbale(natTableBot, UITestNamesHelper.TEST_COMMENT, 1, 3);
 	}
 
 	/**
@@ -184,7 +185,7 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeInitialValueOfVariable() {
-		NatTableHelper.changeCellValueInNatTbale(natTableBot, TRUE, 1, 4);
+		NatTableHelper.changeCellValueInNatTbale(natTableBot, UITestNamesHelper.TRUE, 1, 4);
 		NatTableHelper.changeCellValueInNatTbale(natTableBot, "1", 1, 4); //$NON-NLS-1$
 	}
 
@@ -199,6 +200,6 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToSetInValidInitialValue() {
-		NatTableHelper.setInvalidDataType(natTableBot, 1, 4, TESTVAR);
+		NatTableHelper.setInvalidDataType(natTableBot, 1, 4, UITestNamesHelper.TESTVAR);
 	}
 }

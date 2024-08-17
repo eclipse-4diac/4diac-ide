@@ -17,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
 import org.eclipse.fordiac.ide.test.ui.PropertySheetHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -30,19 +32,19 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	@Override
 	@BeforeEach
 	public void operationsInitialization() {
-		TESTVAR1 = DI1;
-		TESTVAR2 = DI2;
-		TESTVAR3 = DI3;
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT2, ADAPTER);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT2);
-		final SWTBot propertiesBot = selectTabFromInterfaceProperties(VAR_IN_AND_OUTPUTS);
+		TESTVAR1 = PinNamesHelper.DI1;
+		TESTVAR2 = PinNamesHelper.DI2;
+		TESTVAR3 = PinNamesHelper.DI3;
+		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2, UITestNamesHelper.ADAPTER);
+		openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBot propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.VAR_IN_AND_OUTPUTS);
 		assertNotNull(propertiesBot);
-		bot.viewByTitle(PROPERTIES_TITLE).setFocus();
-		bot.editorByTitle(FBT_TEST_PROJECT2).show();
-		PropertySheetHelper.selectPropertyTabItem(VAR_IN_AND_OUTPUTS, propertiesBot);
+		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
+		bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).show();
+		PropertySheetHelper.selectPropertyTabItem(UITestNamesHelper.VAR_IN_AND_OUTPUTS, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
 		natTableBot = new SWTBot4diacNatTable(natTable);
-		editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
+		editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertNotNull(editor);
 		NatTableHelper.createNewVariableInDataTypeEditor(natTableBot);
 	}
@@ -56,7 +58,7 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeInitialValueOfVariable() {
-		NatTableHelper.changeCellValueInNatTbale(natTableBot, TRUE, 1, 4);
+		NatTableHelper.changeCellValueInNatTbale(natTableBot, UITestNamesHelper.TRUE, 1, 4);
 		NatTableHelper.changeCellValueInNatTbale(natTableBot, "1", 1, 4); //$NON-NLS-1$
 	}
 
@@ -70,7 +72,7 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToSetInValidInitialValue() {
-		NatTableHelper.setInvalidDataType(natTableBot, 1, 4, TESTVAR);
+		NatTableHelper.setInvalidDataType(natTableBot, 1, 4, UITestNamesHelper.TESTVAR);
 	}
 
 	/**
@@ -82,9 +84,9 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void toggleVarConfiguration() {
-		assertEquals(natTableBot.getCellDataValueByPosition(2, 6), "false");
+		assertEquals(natTableBot.getCellDataValueByPosition(2, 6), UITestNamesHelper.FALSE_SMALL);
 		natTableBot.click(2, 6);
-		assertEquals(natTableBot.getCellDataValueByPosition(2, 6), "true");
+		assertEquals(natTableBot.getCellDataValueByPosition(2, 6), UITestNamesHelper.TRUE_SMALL);
 	}
 
 	/**
@@ -96,9 +98,9 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void toggleVarVisibility() {
-		assertEquals(natTableBot.getCellDataValueByPosition(2, 5), "true");
+		assertEquals(natTableBot.getCellDataValueByPosition(2, 5), UITestNamesHelper.TRUE_SMALL);
 		natTableBot.click(2, 5);
-		assertEquals(natTableBot.getCellDataValueByPosition(2, 5), "false");
+		assertEquals(natTableBot.getCellDataValueByPosition(2, 5), UITestNamesHelper.FALSE_SMALL);
 	}
 
 	/**

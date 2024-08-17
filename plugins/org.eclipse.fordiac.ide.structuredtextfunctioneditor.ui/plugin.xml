@@ -407,6 +407,15 @@
         </reference>
      </activeWhen>
   </handler>
+  <handler
+        class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.MoveElementHandler"
+        commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.MoveElement">
+     <activeWhen>
+        <reference
+              definitionId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.Editor.opened">
+        </reference>
+     </activeWhen>
+  </handler>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
   <menuContribution
@@ -416,6 +425,18 @@
            label="Refactor">
         <command
               commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
+              label="Rename ..."
+              style="push">
+           <visibleWhen
+                 checkEnabled="false">
+              <reference
+                    definitionId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.Editor.opened">
+              </reference>
+           </visibleWhen>
+        </command>
+        <command
+              commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.MoveElement"
+              label="Move ..."
               style="push">
            <visibleWhen
                  checkEnabled="false">
@@ -576,7 +597,7 @@
  <extension
        point="org.eclipse.xtext.ui.resourceRelocationStrategy">
     <strategy
-          class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionResourceRelocationStrategy">
+          class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionResourceRelocationStrategy">
     </strategy>
  </extension>
  <extension

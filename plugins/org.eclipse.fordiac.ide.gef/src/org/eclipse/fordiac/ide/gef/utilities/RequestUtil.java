@@ -28,6 +28,10 @@ public final class RequestUtil {
 		return RequestConstants.REQ_RESIZE.equals(type) || RequestConstants.REQ_RESIZE_CHILDREN.equals(type);
 	}
 
+	public static boolean isAlignmentRequest(final Request request) {
+		return request.getType() == RequestConstants.REQ_ALIGN_CHILDREN;
+	}
+
 	private RequestUtil() {
 		throw new UnsupportedOperationException("Helper class should not be instantiated!"); //$NON-NLS-1$
 	}

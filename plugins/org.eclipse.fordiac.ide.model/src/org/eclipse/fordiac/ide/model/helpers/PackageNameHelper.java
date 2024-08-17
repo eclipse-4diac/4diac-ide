@@ -12,11 +12,22 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public final class PackageNameHelper {
 
@@ -84,6 +95,21 @@ public final class PackageNameHelper {
 			return fullTypeName.substring(0, lastIndex);
 		}
 		return ""; //$NON-NLS-1$
+	}
+
+	public static String getPackageNameFromURI(final URI uri) {
+		if (uri.isPlatformResource()) {
+			return getPackageNameFromFile(
+					ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true))));
+		}
+		return uri.trimSegments(1).segmentsList().stream().collect(Collectors.joining(PACKAGE_NAME_DELIMITER));
+	}
+
+	public static String getPackageNameFromFile(final IFile file) {
+		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
+		final IPath relativePath = BuildpathUtil.findRelativePath(typeLibrary.getBuildpath(), file.getParent())
+				.orElse(file.getParent().getFullPath());
+		return Stream.of(relativePath.segments()).collect(Collectors.joining(PACKAGE_NAME_DELIMITER));
 	}
 
 	private PackageNameHelper() {
