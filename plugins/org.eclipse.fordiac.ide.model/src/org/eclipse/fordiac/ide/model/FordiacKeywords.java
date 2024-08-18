@@ -522,7 +522,7 @@ public final class FordiacKeywords {
 	public static final String ADAPTER_PLUG = "PLUG1"; //$NON-NLS-1$
 
 	@ModelString
-	public static final String VARINOUT = "VARINOUT"; //$NON-NLS-1$
+	public static final String VARINOUT = "VARINOUT1"; //$NON-NLS-1$
 
 	@ModelString
 	public static final String INTERFACE_Y_POSITION = "YPOSITION"; //$NON-NLS-1$
@@ -551,7 +551,7 @@ public final class FordiacKeywords {
 
 	private static String getName(final Field f) {
 		try {
-			return (String) f.get(null);  // Static field, so get with null
+			return (String) f.get(null); // Static field, so get with null
 		} catch (final IllegalArgumentException | IllegalAccessException e) {
 			FordiacLogHelper.logError("Exception in keyword access", e); //$NON-NLS-1$
 			throw new IllegalStateException(e);
