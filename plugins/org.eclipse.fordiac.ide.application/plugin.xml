@@ -38,6 +38,8 @@
       </propertyCategory>
       <propertyCategory category="Application">
       </propertyCategory>
+      <propertyCategory category="Info">
+      </propertyCategory>
     </propertyContributor>
   </extension>
   
@@ -144,6 +146,12 @@
                    id="org.eclipse.fordiac.ide.application.propertyVarConfigTab"
                    indented="false"
                    label="Var Config">
+      </propertyTab>
+	  <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyAttributeTab"
+      			   category="Application"
+                   id="org.eclipse.fordiac.ide.application.propertyInfoTab"
+                   indented="false"
+                   label="Info">
       </propertyTab>
       <propertyTab category="Interface"
                    id="org.eclipse.fordiac.ide.application.propertyStructInterfaceElementTab"
@@ -308,6 +316,12 @@
               filter="org.eclipse.fordiac.ide.application.properties.ConfigurableMoveFBFilter"
               id="org.eclipse.fordiac.ide.application.properties.ConfigurableFBSection"
               tab="org.eclipse.fordiac.ide.application.propertyConfigurableFBTab">
+        </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.InfoPropertySection"
+              filter="org.eclipse.fordiac.ide.application.properties.InfoSectionFilter"
+              id="org.eclipse.fordiac.ide.application.properties.InfoSection"
+              tab="org.eclipse.fordiac.ide.application.propertyInfoTab">
         </propertySection>
      </propertySections>
   </extension>
