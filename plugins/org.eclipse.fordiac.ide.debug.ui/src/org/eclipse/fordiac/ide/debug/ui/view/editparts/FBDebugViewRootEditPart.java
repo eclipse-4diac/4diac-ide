@@ -190,7 +190,7 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 	}
 
 	private void updateValues(final Collection<? extends Variable<?>> variables) {
-		final Map<Object, Object> editPartRegistry = getViewer().getEditPartRegistry();
+		final Map<Object, EditPart> editPartRegistry = getViewer().getEditPartRegistry();
 		if (shouldUpdate()) {
 			Display.getDefault().asyncExec(() -> {
 				variables
@@ -210,13 +210,13 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 		return false;
 	}
 
-	private void updateVariable(final Map<Object, Object> editPartRegistry, final String variableName,
+	private void updateVariable(final Map<Object, EditPart> editPartRegistry, final String variableName,
 			final Value value) {
 		final InterfaceValueEntity interfaceValueEntity = interfaceValues.get(variableName);
 		if (interfaceValueEntity != null) {
 			final Object ep = editPartRegistry.get(interfaceValueEntity);
-			if (ep instanceof InterfaceValueEditPart) {
-				((InterfaceValueEditPart) ep).setValue(value);
+			if (ep instanceof final InterfaceValueEditPart ivEP) {
+				ivEP.setValue(value);
 				refreshVisuals();
 			}
 		}
@@ -232,13 +232,10 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 				}
 				break;
 			case DebugEvent.CHANGE:
-				if (ev.getSource() instanceof EvaluatorDebugVariable) {
-					final Map<Object, Object> editPartRegistry = getViewer().getEditPartRegistry();
-					Display.getDefault().asyncExec(() -> {
-						final EvaluatorDebugVariable evaluatorDebugVariable = (EvaluatorDebugVariable) ev.getSource();
-						updateVariable(editPartRegistry, evaluatorDebugVariable.getName(),
-								((EvaluatorDebugVariable) ev.getSource()).getValue().getInternalValue());
-					});
+				if (ev.getSource() instanceof final EvaluatorDebugVariable edVar) {
+					final Map<Object, EditPart> editPartRegistry = getViewer().getEditPartRegistry();
+					Display.getDefault().asyncExec(() -> updateVariable(editPartRegistry, edVar.getName(),
+							edVar.getValue().getInternalValue()));
 				}
 				break;
 			default:
@@ -248,7 +245,7 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 	}
 
 	private void updateAllValues() {
-		final Map<Object, Object> editPartRegistry = getViewer().getEditPartRegistry();
+		final Map<Object, EditPart> editPartRegistry = getViewer().getEditPartRegistry();
 		Display.getDefault().asyncExec(() -> {
 			interfaceValues.entrySet().forEach(entry -> updateVariable(editPartRegistry, entry.getKey(),
 					entry.getValue().getVariable().getValue()));
@@ -256,17 +253,13 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 		});
 	}
 
-	private void updateAllEvents(final Map<Object, Object> editPartRegistry) {
-		eventValues.entrySet().forEach(entry -> {
-			final Object ep = editPartRegistry.get(entry.getValue());
-			if (ep instanceof EventValueEditPart) {
-				((EventValueEditPart) ep).update();
-			}
-		});
+	private void updateAllEvents(final Map<Object, EditPart> editPartRegistry) {
+		eventValues.entrySet().stream().map(entry -> editPartRegistry.get(entry.getValue())). //
+				filter(EventValueEditPart.class::isInstance).map(EventValueEditPart.class::cast). //
+				forEach(EventValueEditPart::update);
 	}
 
 	private boolean isCorrectSource(final Object source) {
-		return ((source instanceof EvaluatorDebugThread)
-				&& ((EvaluatorDebugThread) source).getDebugTarget().getProcess() == getModel());
+		return ((source instanceof final EvaluatorDebugThread eDT) && eDT.getDebugTarget().getProcess() == getModel());
 	}
 }
