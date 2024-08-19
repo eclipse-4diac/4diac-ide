@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.test.library;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.URL;
@@ -32,9 +31,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.library.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.LibraryManager;
-import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
-import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -46,7 +43,19 @@ import org.junit.jupiter.api.Test;
 import org.osgi.framework.Bundle;
 
 class LibraryImportTest {
-	private static String PROJECT = "testproject"; //$NON-NLS-1$
+	private static final String TEST01 = "test01"; //$NON-NLS-1$
+	private static final String TEST02 = "test02"; //$NON-NLS-1$
+	private static final String TEST03 = "test03"; //$NON-NLS-1$
+	private static final String TEST04 = "test04"; //$NON-NLS-1$
+	private static final String TEST05 = "test05"; //$NON-NLS-1$
+	private static final String TEST06 = "test06"; //$NON-NLS-1$
+	private static final String TEST07 = "test07"; //$NON-NLS-1$
+	private static final String V1_0_0 = "1.0.0"; //$NON-NLS-1$
+	private static final String V1_1_0 = "1.1.0"; //$NON-NLS-1$
+	private static final String V1_5_0 = "1.5.0"; //$NON-NLS-1$
+	private static final String V2_0_0 = "2.0.0"; //$NON-NLS-1$
+	private static final String LIB_LOC = "WORKSPACE_LOC/.lib/"; //$NON-NLS-1$
+	private static final String PROJECT = "testproject"; //$NON-NLS-1$
 	private IProject project;
 	@SuppressWarnings("nls")
 	public static final List<String> archives = List.of("data/test01-1.0.0.zip", "data/test01-1.1.0.zip",
@@ -102,131 +111,131 @@ class LibraryImportTest {
 
 	@Test
 	void testSimpleImport() {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create("WORKSPACE_LOC/.lib/test01-1.0.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST01 + "-" + V1_0_0), //$NON-NLS-1$
 				true, false);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		dependencyAssert(manifest, "test01", "1.0.0", 0); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_0_0, 0);
 	}
 
 	@Test
 	void testImportUpdateNoOverwrite() {
 		var manifest = ManifestHelper.getContainerManifest(project);
-		ManifestHelper.addDependency(manifest, ManifestHelper.createRequired("test01", "[1.0.0-2.0.0)")); //$NON-NLS-1$ //$NON-NLS-2$
+		ManifestHelper.addDependency(manifest, ManifestHelper.createRequired(TEST01, "[1.0.0-2.0.0)")); //$NON-NLS-1$
 		ManifestHelper.saveManifest(manifest);
 
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create("WORKSPACE_LOC/.lib/test01-1.1.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST01 + "-" + V1_1_0), //$NON-NLS-1$
 				true, false);
 
 		manifest = ManifestHelper.getContainerManifest(project);
-		dependencyAssert(manifest, "test01", "1.1.0", 0); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_1_0, 0);
 		assertEquals("[1.0.0-2.0.0)", manifest.getDependencies().getRequired().get(0).getVersion()); //$NON-NLS-1$
 	}
 
 	@Test
 	void testImportUpdateOverwrite() {
 		var manifest = ManifestHelper.getContainerManifest(project);
-		ManifestHelper.addDependency(manifest, ManifestHelper.createRequired("test01", "[1.0.0-2.0.0)")); //$NON-NLS-1$ //$NON-NLS-2$
+		ManifestHelper.addDependency(manifest, ManifestHelper.createRequired(TEST01, "[1.0.0-2.0.0)")); //$NON-NLS-1$
 		ManifestHelper.saveManifest(manifest);
 
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create("WORKSPACE_LOC/.lib/test01-2.0.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST01 + "-2.0.0"), //$NON-NLS-1$
 				true, false);
 
 		manifest = ManifestHelper.getContainerManifest(project);
-		dependencyAssert(manifest, "test01", "2.0.0", 0); //$NON-NLS-1$//$NON-NLS-2$
-		assertEquals("2.0.0", manifest.getDependencies().getRequired().get(0).getVersion()); //$NON-NLS-1$
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V2_0_0, 0);
+		assertEquals(V2_0_0, manifest.getDependencies().getRequired().get(0).getVersion());
 	}
 
 	@Test
 	void testCheckManifest() throws Exception {
 		var manifest = ManifestHelper.getContainerManifest(project);
-		ManifestHelper.addDependency(manifest, ManifestHelper.createRequired("test01", "[1.0.0-2.0.0)")); //$NON-NLS-1$ //$NON-NLS-2$
+		ManifestHelper.addDependency(manifest, ManifestHelper.createRequired(TEST01, "[1.0.0-2.0.0)")); //$NON-NLS-1$
 		ManifestHelper.saveManifest(manifest);
 
 		LibraryManager.INSTANCE.checkManifestFile(project, TypeLibraryManager.INSTANCE.getTypeLibrary(project));
 		LibraryManager.INSTANCE.getJobGroup().join(5000, null);
 
 		manifest = ManifestHelper.getContainerManifest(project);
-		dependencyAssert(manifest, "test01", "1.5.0", 0); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_5_0, 0);
 	}
 
 	@Test
 	void testImportWithoutResolve() {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create("WORKSPACE_LOC/.lib/test02-1.0.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST02 + "-" + V1_0_0), //$NON-NLS-1$
 				true, false);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		dependencyAssert(manifest, "test02", "1.0.0", 0); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST02, V1_0_0, 0);
 	}
 
 	@Test
 	void testImportWithResolve() {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create("WORKSPACE_LOC/.lib/test02-1.0.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST02 + "-" + V1_0_0), //$NON-NLS-1$
 				true, false);
 		LibraryManager.INSTANCE.resolveDependencies(project, TypeLibraryManager.INSTANCE.getTypeLibrary(project));
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		dependencyAssert(manifest, "test02", "1.0.0", 0); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST02, V1_0_0, 0);
 		assertEquals(1, manifest.getDependencies().getRequired().size());
-		libraryAssert("test01", "1.0.0"); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertLibraryLinked(project, TEST01, V1_0_0);
 	}
 
 	@Test
 	void testImportWithRangeResolve() throws Exception {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create("WORKSPACE_LOC/.lib/test02-1.1.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST02 + "-" + V1_1_0), //$NON-NLS-1$
 				true, true);
 		LibraryManager.INSTANCE.getJobGroup().join(5000, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		dependencyAssert(manifest, "test02", "1.1.0", 0); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST02, V1_1_0, 0);
 		assertEquals(1, manifest.getDependencies().getRequired().size());
-		libraryAssert("test01", "1.5.0"); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertLibraryLinked(project, TEST01, V1_5_0);
 	}
 
 	@Test
 	void testRangeOverlap() throws Exception {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create("WORKSPACE_LOC/.lib/test03-1.0.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST03 + "-" + V1_0_0), //$NON-NLS-1$
 				true, false);
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create("WORKSPACE_LOC/.lib/test04-1.0.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST04 + "-" + V1_0_0), //$NON-NLS-1$
 				true, true);
 		LibraryManager.INSTANCE.getJobGroup().join(5000, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		dependencyAssert(manifest, "test03", "1.0.0", 0); //$NON-NLS-1$//$NON-NLS-2$
-		dependencyAssert(manifest, "test04", "1.0.0", 1); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_0_0, 0);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST04, V1_0_0, 1);
 		assertEquals(2, manifest.getDependencies().getRequired().size());
-		libraryAssert("test01", "1.1.0"); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertLibraryLinked(project, TEST01, V1_1_0);
 	}
 
 	@Test
 	void testRangeOverlap2() throws Exception {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create("WORKSPACE_LOC/.lib/test03-1.1.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST03 + "-" + V1_1_0), //$NON-NLS-1$
 				true, false);
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create("WORKSPACE_LOC/.lib/test04-1.0.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST04 + "-" + V1_0_0), //$NON-NLS-1$
 				true, true);
 		LibraryManager.INSTANCE.getJobGroup().join(5000, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		dependencyAssert(manifest, "test03", "1.1.0", 0); //$NON-NLS-1$//$NON-NLS-2$
-		dependencyAssert(manifest, "test04", "1.0.0", 1); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_1_0, 0);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST04, V1_0_0, 1);
 		assertEquals(2, manifest.getDependencies().getRequired().size());
-		libraryAssert("test01", "1.5.0"); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertLibraryLinked(project, TEST01, V1_5_0);
 	}
 
 	@Test
 	void testRangeOverlapError() throws Exception {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create("WORKSPACE_LOC/.lib/test03-1.1.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST03 + "-" + V1_1_0), //$NON-NLS-1$
 				true, false);
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create("WORKSPACE_LOC/.lib/test04-1.1.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST04 + "-" + V1_1_0), //$NON-NLS-1$
 				true, true);
 		LibraryManager.INSTANCE.getJobGroup().join(5000, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		dependencyAssert(manifest, "test03", "1.1.0", 0); //$NON-NLS-1$//$NON-NLS-2$
-		dependencyAssert(manifest, "test04", "1.1.0", 1); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_1_0, 0);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST04, V1_1_0, 1);
 		assertEquals(2, manifest.getDependencies().getRequired().size());
 
-		assertFalse(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder("test01").exists()); //$NON-NLS-1$
+		assertFalse(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder(TEST01).exists());
 
 		LibraryManager.INSTANCE.getJobGroup().join(1000, null);
 		FordiacMarkerHelper.JOB_GROUP.join(1000, null);
@@ -236,32 +245,31 @@ class LibraryImportTest {
 				IResource.DEPTH_INFINITE);
 
 		assertTrue(markers.length > 0);
-		// markers[2].getAttribute(IMarker.MESSAGE);
 	}
 
 	@Test
 	void testDependencyChain() throws Exception {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create("WORKSPACE_LOC/.lib/test06-1.0.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST06 + "-" + V1_0_0), //$NON-NLS-1$
 				true, true);
 		LibraryManager.INSTANCE.getJobGroup().join(5000, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		dependencyAssert(manifest, "test06", "1.0.0", 0); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST06, V1_0_0, 0);
 		assertEquals(1, manifest.getDependencies().getRequired().size());
 
-		libraryAssert("test05", "1.0.0"); //$NON-NLS-1$//$NON-NLS-2$
-		libraryAssert("test02", "1.0.0"); //$NON-NLS-1$//$NON-NLS-2$
-		libraryAssert("test01", "1.0.0"); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertLibraryLinked(project, TEST05, V1_0_0);
+		LibraryAssert.assertLibraryLinked(project, TEST02, V1_0_0);
+		LibraryAssert.assertLibraryLinked(project, TEST01, V1_0_0);
 	}
 
 	@Test
 	void testMissingStandardLibrary() throws Exception {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create("WORKSPACE_LOC/.lib/test07-1.0.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST07 + "-" + V1_0_0), //$NON-NLS-1$
 				true, true);
 		LibraryManager.INSTANCE.getJobGroup().join(5000, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		dependencyAssert(manifest, "test07", "1.0.0", 0); //$NON-NLS-1$//$NON-NLS-2$
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST07, V1_0_0, 0);
 		assertEquals(1, manifest.getDependencies().getRequired().size());
 
 		assertFalse(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder("math").exists()); //$NON-NLS-1$
@@ -274,25 +282,6 @@ class LibraryImportTest {
 				IResource.DEPTH_INFINITE);
 
 		assertTrue(markers.length > 0);
-	}
-
-	private void dependencyAssert(final Manifest manifest, final String symbolicName, final String version,
-			final int index) {
-		libraryAssert(symbolicName, version);
-		assertNotNull(manifest.getDependencies());
-		assertNotNull(manifest.getDependencies().getRequired().get(index));
-		assertNotNull(symbolicName, manifest.getDependencies().getRequired().get(index).getSymbolicName());
-		assertTrue(
-				VersionComparator.contains(manifest.getDependencies().getRequired().get(index).getVersion(), version));
-	}
-
-	private void libraryAssert(final String symbolicName, final String version) {
-		assertTrue(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder(symbolicName).exists());
-		assertNotNull(TypeLibraryManager.INSTANCE.getTypeLibrary(project).find(symbolicName + "::Block")); //$NON-NLS-1$
-		final var libManifest = ManifestHelper
-				.getContainerManifest(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder(symbolicName));
-		assertNotNull(libManifest);
-		assertEquals(version, libManifest.getProduct().getVersionInfo().getVersion());
 	}
 
 }
