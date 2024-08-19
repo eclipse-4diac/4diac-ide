@@ -19,10 +19,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
-import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
+import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
@@ -72,23 +72,11 @@ public class StructTypeChange extends CompositeChange {
 	}
 
 	private List<StructuredType> searchAffectedStructuredType() {
-		// TODO refactor to new search
-		final InstanceSearch structMemberSearch = StructDataTypeSearch
-				.createStructMemberSearch((StructuredType) oldTypeEntry.getTypeEditable());
+		final DataTypeInstanceSearch nsearch = new DataTypeInstanceSearch((DataTypeEntry) oldTypeEntry);
+		final List<? extends EObject> res = nsearch.performSearch();
 
-		final Set<INamedElement> search = InstanceSearch.performProjectSearch(this.file.getProject(),
-				StructDataTypeSearch.createStructMemberSearch((StructuredType) oldTypeEntry.getTypeEditable()),
-				StructDataTypeSearch.createStructInterfaceSearch((StructuredType) oldTypeEntry.getTypeEditable()));
-
-		search.addAll(StructDataTypeSearch.createStructMemberSearch((StructuredType) oldTypeEntry.getTypeEditable())
-				.searchStructuredTypes(oldTypeEntry.getTypeLibrary()));
-
-		// TODO new search does not yet work
-		// final IEC61499ElementSearch search2 = new
-		// DataTypeInstanceSearch((DataTypeEntry) oldTypeEntry.getTypeEditable());
-		/// final List<? extends EObject> searchResults = search2.performSearch();
-
-		return search.stream().filter(StructuredType.class::isInstance).map(StructuredType.class::cast).toList();
+		return res.stream().filter(r -> StructuredType.class.isInstance(r.eContainer()))
+				.map(r -> StructuredType.class.cast(r.eContainer())).distinct().toList();
 	}
 
 	private String buildLabel(final String fbFileName, final String projectName) {
