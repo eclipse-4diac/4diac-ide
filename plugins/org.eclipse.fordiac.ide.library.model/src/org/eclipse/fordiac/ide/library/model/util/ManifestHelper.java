@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -454,6 +455,20 @@ public final class ManifestHelper {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Sorts dependencies and saves the {@link Manifest}
+	 *
+	 * @param manifest specified manifest
+	 * @return {@code true} if it was saved successfully, else {@code false}
+	 */
+	public static boolean sortAndSaveManifest(final Manifest manifest) {
+		// ensure dependencies are sorted (can't use EList.sort())
+		final var dependencies = new LinkedList<>(manifest.getDependencies().getRequired());
+		manifest.getDependencies().getRequired().clear();
+		dependencies.forEach(d -> ManifestHelper.addDependency(manifest, d));
+		return saveManifest(manifest);
 	}
 
 	/**

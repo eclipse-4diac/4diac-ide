@@ -616,11 +616,7 @@ public enum LibraryManager {
 			return;
 		}
 
-		// ensure dependencies are sorted (can't use EList.sort())
-		final var dependencies = new LinkedList<>(manifest.getDependencies().getRequired());
-		manifest.getDependencies().getRequired().clear();
-		dependencies.forEach(d -> ManifestHelper.addDependency(manifest, d));
-		ManifestHelper.saveManifest(manifest);
+		ManifestHelper.sortAndSaveManifest(manifest);
 
 		for (final Required req : manifest.getDependencies().getRequired()) {
 			checkDependency(req, project, typeLibrary);
