@@ -5,16 +5,7 @@
 		point="org.eclipse.debug.ui.launchConfigurationTabs">
 		<tab
 			class="org.eclipse.fordiac.ide.deployment.debug.ui.runtime.RuntimeLaunchConfigurationTab"
-			group="org.eclipse.fordiac.ide.debug.ui.simpleFBLaunchConfigurationTabGroup"
-			id="org.eclipse.fordiac.ide.deployment.debug.ui.runtimeTab"
-			name="Runtime">
-			<placement
-				after="org.eclipse.fordiac.ide.debug.ui.mainTab">
-			</placement>
-		</tab>
-		<tab
-			class="org.eclipse.fordiac.ide.deployment.debug.ui.runtime.RuntimeLaunchConfigurationTab"
-			group="org.eclipse.fordiac.ide.debug.ui.basicFBLaunchConfigurationTabGroup"
+			group="org.eclipse.fordiac.ide.debug.ui.fbLaunchConfigurationTabGroup"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.runtimeTab"
 			name="Runtime">
 			<placement
