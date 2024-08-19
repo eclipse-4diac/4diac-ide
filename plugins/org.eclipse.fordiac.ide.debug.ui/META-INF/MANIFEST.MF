@@ -28,8 +28,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model.ui,
  org.eclipse.fordiac.ide.ui.errormessages
 Export-Package: org.eclipse.fordiac.ide.debug.ui,
- org.eclipse.fordiac.ide.debug.ui.basic,
  org.eclipse.fordiac.ide.debug.ui.breakpoint,
- org.eclipse.fordiac.ide.debug.ui.fb,
- org.eclipse.fordiac.ide.debug.ui.function,
- org.eclipse.fordiac.ide.debug.ui.simple
+ org.eclipse.fordiac.ide.debug.ui.fb

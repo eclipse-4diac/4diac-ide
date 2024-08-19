@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -32,9 +32,12 @@ import org.eclipse.fordiac.ide.debug.ui.Messages;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -51,7 +54,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTab {
+public class FBLaunchConfigurationTab extends MainLaunchConfigurationTab {
 
 	private ComboViewer eventCombo;
 	private Button repeatEventCheckbox;
@@ -289,7 +292,10 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		return true;
 	}
 
-	protected abstract boolean filterTargetFBType(FBType fbType) throws CoreException;
+	@SuppressWarnings("static-method") // subclasses may override
+	protected boolean filterTargetFBType(final FBType fbType) {
+		return fbType instanceof BasicFBType || fbType instanceof FunctionFBType || fbType instanceof SimpleFBType;
+	}
 
 	protected FBType getFBType() {
 		final IResource resource = getResource();
