@@ -27,6 +27,7 @@ public final class PinNamesHelper {
 	public static final String R = "R"; //$NON-NLS-1$
 	public static final String S = "S"; //$NON-NLS-1$
 
+	public static final String AB = "AB"; //$NON-NLS-1$
 	public static final String CD = "CD"; //$NON-NLS-1$
 	public static final String CV = "CV"; //$NON-NLS-1$
 	public static final String DT = "DT"; //$NON-NLS-1$
@@ -34,6 +35,8 @@ public final class PinNamesHelper {
 	public static final String EI = "EI"; //$NON-NLS-1$
 	public static final String PV = "PV"; //$NON-NLS-1$
 	public static final String QD = "QD"; //$NON-NLS-1$
+	public static final String QI = "QI"; //$NON-NLS-1$
+	public static final String QO = "QO"; //$NON-NLS-1$
 	public static final String QU = "QU"; //$NON-NLS-1$
 
 	public static final String ANY = "ANY"; //$NON-NLS-1$
