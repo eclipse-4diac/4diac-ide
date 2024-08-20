@@ -32,7 +32,7 @@ public class LibraryAssert {
 		assertLibraryLinked(project, symbolicName, version);
 		assertNotNull(manifest.getDependencies());
 		assertNotNull(manifest.getDependencies().getRequired().get(index));
-		assertNotNull(symbolicName, manifest.getDependencies().getRequired().get(index).getSymbolicName());
+		assertEquals(symbolicName, manifest.getDependencies().getRequired().get(index).getSymbolicName());
 		assertTrue(
 				VersionComparator.contains(manifest.getDependencies().getRequired().get(index).getVersion(), version));
 	}
