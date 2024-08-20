@@ -66,9 +66,7 @@ class FunctionFBHeaderTemplate extends ForteFBTemplate<FunctionFBType> {
 
 	override protected generateHeaderIncludes() '''
 		#include "funcbloc.h"
-		«getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE}).generateDependencyIncludes»
-		
-		«type.compilerInfo?.header»
+		«super.generateHeaderIncludes»
 	'''
 
 	def protected generateBody() {
