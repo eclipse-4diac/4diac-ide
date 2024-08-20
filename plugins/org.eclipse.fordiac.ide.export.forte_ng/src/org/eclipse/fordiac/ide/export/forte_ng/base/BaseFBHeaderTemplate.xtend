@@ -83,13 +83,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 
 	override protected generateHeaderIncludes() '''
 		«generateClassInclude»
-		«IF !type.internalFbs.isEmpty»
-			#include "typelib.h"
-		«ENDIF»
-		«getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE}).generateDependencyIncludes»
-		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
-		
-		«type.compilerInfo?.header»
+		«super.generateHeaderIncludes»
 	'''
 
 	def abstract CharSequence generateClassInclude()

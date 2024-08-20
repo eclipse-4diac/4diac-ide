@@ -65,9 +65,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateHeaderIncludes() '''
-		«(type.interfaceList.inputVars + type.interfaceList.outputVars).map[type].generateTypeIncludes»
-		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
-		
+		«getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE}).generateDependencyIncludes»
 		«type.compilerInfo?.header»
 	'''
 
