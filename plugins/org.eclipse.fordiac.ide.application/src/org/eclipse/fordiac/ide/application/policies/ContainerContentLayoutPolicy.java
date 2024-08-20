@@ -94,7 +94,7 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 	}
 
 	private void addValueBounds(final FBNetworkElement model, final Rectangle selectionExtend) {
-		final Map<Object, Object> editPartRegistry = getHost().getViewer().getEditPartRegistry();
+		final Map<Object, EditPart> editPartRegistry = getHost().getViewer().getEditPartRegistry();
 		model.getInterface().getInputVars().stream().filter(Objects::nonNull)
 				.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
 				.forEach(ep -> selectionExtend.union(((GraphicalEditPart) ep).getFigure().getBounds()));
