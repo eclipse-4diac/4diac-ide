@@ -280,7 +280,11 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 			void «FBClassName»::setFBNetworkInitialValues() {
 			  «FOR fb : fbs»
 			  	«FOR variable : fb.interface.inputVars.filter[!value?.value.nullOrEmpty]»
-			  		«fb.generateName»->«variable.generateName» = «variable.generateFBNetworkInitialValue»;
+			  		«IF fb.type.genericType»
+			  			if (auto v = «fb.generateName»->getDataInput(«variable.name.FORTEStringId»)) { v->setValue(«variable.generateFBNetworkInitialValue»); }
+			  		«ELSE»
+			  			«fb.generateName»->«variable.generateName» = «variable.generateFBNetworkInitialValue»;
+			  		«ENDIF»
 			  	«ENDFOR»
 			  «ENDFOR»
 			}
