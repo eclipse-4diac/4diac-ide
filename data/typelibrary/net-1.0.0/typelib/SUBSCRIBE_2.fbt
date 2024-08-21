@@ -39,4 +39,5 @@
 	</InterfaceList>
 	<Attribute Name="Documentation" Type="CDATA"><![CDATA[<p>Subscribe to a PUBLISH_0 BlockSubscribe to a PUBLISH_0 Block</p>
 ]]></Attribute>
+	<Attribute Name="GenericClassName" Value="'GEN_SUBSCRIBE'"/>
 </FBType>

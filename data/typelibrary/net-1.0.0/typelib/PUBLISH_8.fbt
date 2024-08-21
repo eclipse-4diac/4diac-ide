@@ -49,4 +49,5 @@
 			<VarDeclaration Name="STATUS" Type="WSTRING" Comment=""/>
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="GenericClassName" Value="'GEN_PUBLISH'"/>
 </FBType>

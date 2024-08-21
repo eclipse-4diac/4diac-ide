@@ -37,4 +37,5 @@
 			<VarDeclaration Name="RD_1" Type="ANY" Comment=""/>
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="GenericClassName" Value="'GEN_SERVER'"/>
 </FBType>
