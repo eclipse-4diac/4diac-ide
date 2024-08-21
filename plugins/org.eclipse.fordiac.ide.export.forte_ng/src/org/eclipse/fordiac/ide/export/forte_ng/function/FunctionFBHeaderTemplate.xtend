@@ -13,21 +13,15 @@
 package org.eclipse.fordiac.ide.export.forte_ng.function
 
 import java.nio.file.Path
-import java.util.Map
-import java.util.Set
-import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
-import org.eclipse.fordiac.ide.export.language.ILanguageSupport
-import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
-class FunctionFBHeaderTemplate extends ForteFBTemplate<FunctionFBType> {
-	final ILanguageSupport bodyLanguageSupport
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
+class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 
 	new(FunctionFBType type, String name, Path prefix) {
 		super(type, name, prefix, "CFunctionBlock")
-		bodyLanguageSupport = ILanguageSupportFactory.createLanguageSupport("forte_ng", type.body)
 	}
 
 	override generate() '''
@@ -70,22 +64,9 @@ class FunctionFBHeaderTemplate extends ForteFBTemplate<FunctionFBType> {
 	'''
 
 	def protected generateBody() {
-		bodyLanguageSupport.generate(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})
-	}
-
-	override getErrors() {
-		(super.getErrors + bodyLanguageSupport.errors).toList
-	}
-
-	override getWarnings() {
-		(super.getErrors + bodyLanguageSupport.warnings).toList
-	}
-
-	override getInfos() {
-		(super.getErrors + bodyLanguageSupport.infos).toList
-	}
-
-	override Set<INamedElement> getDependencies(Map<?, ?> options) {
-		(super.getDependencies(options) + bodyLanguageSupport.getDependencies(options)).toSet
+		if (bodyLanguageSupport !== null)
+			bodyLanguageSupport.generate(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})
+		else
+			'''«generateFunctionSignature»;'''
 	}
 }

@@ -16,6 +16,7 @@ Require-Bundle: com.google.guava,
  org.eclipse.xtext,
  org.eclipse.fordiac.ide.export,
  org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.ui
 Export-Package: org.eclipse.fordiac.ide.export.forte_ng,
  org.eclipse.fordiac.ide.export.forte_ng.util
