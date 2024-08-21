@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.export.utils.CompareEditorOpenerUtil;
 import org.eclipse.fordiac.ide.export.utils.DelayedFiles;
 import org.eclipse.fordiac.ide.export.utils.DelayedFiles.StoredFiles;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IDialogLabelKeys;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -99,6 +100,11 @@ public abstract class TemplateExportFilter extends ExportFilter {
 	@Override
 	public void export(final IFile typeFile, final String destination, final boolean forceOverwrite, EObject source)
 			throws ExportException {
+		if (source == null && typeFile != null && TypeLibraryManager.INSTANCE.getTypeEntryForFile(typeFile) == null) {
+			getWarnings().add(MessageFormat.format(Messages.TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME,
+					typeFile.getFullPath(), Messages.TemplateExportFilter_FILE_IGNORED));
+			return; // Do not export files passed to the export that are not in the TypeLibrary
+		}
 		try {
 			if (source == null && typeFile != null) {
 				final ResourceSet resourceSet = new ResourceSetImpl();
