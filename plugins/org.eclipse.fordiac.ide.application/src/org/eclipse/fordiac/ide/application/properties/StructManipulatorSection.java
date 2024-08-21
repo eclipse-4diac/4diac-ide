@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.application.editparts.StructInterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.TypeSelectionWidget;
 import org.eclipse.fordiac.ide.model.AbstractStructTreeNode;
-import org.eclipse.fordiac.ide.model.CheckableStructTree;
 import org.eclipse.fordiac.ide.model.StructTreeContentProvider;
 import org.eclipse.fordiac.ide.model.StructTreeLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
@@ -52,9 +51,14 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
@@ -76,11 +80,11 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class StructManipulatorSection extends AbstractSection implements CommandStackEventListener {
-	protected TypeSelectionWidget typeSelectionWidget;
+public abstract class StructManipulatorSection extends AbstractSection implements CommandStackEventListener {
+	private TypeSelectionWidget typeSelectionWidget;
 
-	protected CLabel muxLabel;
-	protected TreeViewer memberVarViewer;
+	private CLabel muxLabel;
+	private CheckboxTreeViewer memberVarViewer;
 	protected boolean initTree = true;
 
 	@Override
@@ -172,21 +176,40 @@ public class StructManipulatorSection extends AbstractSection implements Command
 		createMemberVariableViewer(memberVarGroup);
 		memberVarGroup.setLayout(new GridLayout(1, true));
 		memberVarGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		if (getCheckStateProvider() != null) {
+			getViewer().setCheckStateProvider(getCheckStateProvider());
+		}
+		if (getCheckStateListener() != null) {
+			getViewer().addCheckStateListener(getCheckStateListener());
+		}
 	}
+
+	protected abstract ICheckStateProvider getCheckStateProvider();
+
+	protected abstract ICheckStateListener getCheckStateListener();
 
 	private void createMemberVariableViewer(final Composite parent) {
 		memberVarViewer = createTreeViewer(parent);
 		configureTreeLayout(memberVarViewer);
-		memberVarViewer.setContentProvider(new StructTreeContentProvider());
-		memberVarViewer.setLabelProvider(new StructTreeLabelProvider());
+		memberVarViewer.setContentProvider(getContentProvider());
+		memberVarViewer.setLabelProvider(getLabelProvider());
 		GridLayoutFactory.fillDefaults().generateLayout(parent);
 
 		createContextMenu(memberVarViewer.getControl());
 	}
 
-	@SuppressWarnings("static-method") // allow subclasses to provide different treeviewers
-	protected TreeViewer createTreeViewer(final Composite parent) {
-		return new TreeViewer(parent);
+	protected LabelProvider getLabelProvider() {
+		return new StructTreeLabelProvider();
+	}
+
+	protected ITreeContentProvider getContentProvider() {
+		return new StructTreeContentProvider();
+	}
+
+	private CheckboxTreeViewer createTreeViewer(final Composite parent) {
+		final CheckboxTreeViewer viewer = new CheckboxTreeViewer(parent);
+		viewer.setUseHashlookup(true);
+		return viewer;
 	}
 
 	private void createContextMenu(final Control ctrl) {
@@ -285,19 +308,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 		}
 	}
 
-	public void initTree(final StructManipulator manipulator, final TreeViewer viewer) {
-		final StructuredType struct = manipulator.getTypeEntry().getTypeLibrary().getDataTypeLibrary()
-				.getStructuredType(PackageNameHelper.getFullTypeName(manipulator.getDataType()));
-
-		final CheckableStructTree tree;
-		if (viewer != null) {
-			tree = new CheckableStructTree(manipulator, struct, viewer);
-		} else {
-			tree = new CheckableStructTree(manipulator, struct);
-		}
-
-		((StructTreeContentProvider) memberVarViewer.getContentProvider()).setRoot(tree.getRoot());
-	}
+	protected abstract void initTree(StructManipulator type, TreeViewer memberVarViewer2);
 
 	@Override
 	public void dispose() {
@@ -330,5 +341,9 @@ public class StructManipulatorSection extends AbstractSection implements Command
 	@Override
 	protected void setInputInit() {
 		// Currently nothing needs to be done here
+	}
+
+	protected CheckboxTreeViewer getViewer() {
+		return memberVarViewer;
 	}
 }

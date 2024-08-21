@@ -13,53 +13,28 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import org.eclipse.fordiac.ide.model.CheckableStructTree;
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
+import org.eclipse.fordiac.ide.model.StructTreeContentProvider;
 import org.eclipse.fordiac.ide.model.commands.create.AddDemuxPortCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteDemuxPortCommand;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class DemultiplexerSection extends StructManipulatorSection {
 
 	@Override
-	protected TreeViewer createTreeViewer(final Composite parent) {
-		final CheckboxTreeViewer viewer = new CheckboxTreeViewer(parent);
-		viewer.setUseHashlookup(true);
-		return viewer;
-	}
-
-	@Override
-	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);
-
-		getViewer().setCheckStateProvider(new ICheckStateProvider() {
-			@Override
-			public boolean isChecked(final Object element) {
-				if (null != element) {
-					final CheckableStructTreeNode node = (CheckableStructTreeNode) element;
-					return node.isChecked() || node.isGrey();
-				}
-				return false;
-			}
-
-			@Override
-			public boolean isGrayed(final Object element) {
-				final CheckableStructTreeNode node = (CheckableStructTreeNode) element;
-				return node.isGrey();
-			}
-
-		});
-
-		getViewer().addCheckStateListener(new ICheckStateListener() {
+	protected ICheckStateListener getCheckStateListener() {
+		return new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(final CheckStateChangedEvent event) {
 				final CheckableStructTreeNode node = (CheckableStructTreeNode) event.getElement();
@@ -80,9 +55,42 @@ public class DemultiplexerSection extends StructManipulatorSection {
 
 				return new DeleteDemuxPortCommand(getType(), node);
 			}
+		};
+	}
 
-		});
+	@Override
+	protected void initTree(final StructManipulator manipulator, final TreeViewer viewer) {
+		final StructuredType struct = manipulator.getTypeEntry().getTypeLibrary().getDataTypeLibrary()
+				.getStructuredType(PackageNameHelper.getFullTypeName(manipulator.getDataType()));
 
+		final CheckableStructTree tree;
+		if (viewer != null) {
+			tree = new CheckableStructTree(manipulator, struct, viewer);
+		} else {
+			tree = new CheckableStructTree(manipulator, struct);
+		}
+
+		((StructTreeContentProvider) getViewer().getContentProvider()).setRoot(tree.getRoot());
+	}
+
+	@Override
+	protected ICheckStateProvider getCheckStateProvider() {
+		return new ICheckStateProvider() {
+			@Override
+			public boolean isChecked(final Object element) {
+				if (null != element) {
+					final CheckableStructTreeNode node = (CheckableStructTreeNode) element;
+					return node.isChecked() || node.isGrey();
+				}
+				return false;
+			}
+
+			@Override
+			public boolean isGrayed(final Object element) {
+				final CheckableStructTreeNode node = (CheckableStructTreeNode) element;
+				return node.isGrey();
+			}
+		};
 	}
 
 	private void selectStructManipulator(final Command cmd) {
@@ -106,10 +114,6 @@ public class DemultiplexerSection extends StructManipulatorSection {
 		this.initTree = initTree;
 	}
 
-	private CheckboxTreeViewer getViewer() {
-		return (CheckboxTreeViewer) memberVarViewer;
-	}
-
 	@Override
 	protected Demultiplexer getType() {
 		return (Demultiplexer) super.getType();
@@ -125,4 +129,5 @@ public class DemultiplexerSection extends StructManipulatorSection {
 			super.stackChanged(event);
 		}
 	}
+
 }
