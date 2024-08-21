@@ -41,7 +41,6 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorCountingEventQueue;
-import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -57,7 +56,7 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 	private static final long MIN_UPDATE_INTERVAL = 100; // the minimal update interval between two full refresh of
 	// the shown values
 
-	private final Map<String, InterfaceValueEntity> interfaceValues = new HashMap<>();
+	private final Map<Variable<?>, InterfaceValueEntity> interfaceValues = new HashMap<>();
 	private final Map<Event, EventValueEntity> eventValues = new HashMap<>();
 	private long lastUpdate;
 
@@ -150,7 +149,7 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 			final IInterfaceElement interfaceElement = getFBType().getInterfaceList()
 					.getInterfaceElement(entry.getKey());
 			if (interfaceElement != null) {
-				interfaceValues.put(entry.getKey(),
+				interfaceValues.put(entry.getValue(),
 						new InterfaceValueEntity(interfaceElement, entry.getValue(), debugTarget));
 			}
 		});
@@ -193,8 +192,7 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 		final Map<Object, EditPart> editPartRegistry = getViewer().getEditPartRegistry();
 		if (shouldUpdate()) {
 			Display.getDefault().asyncExec(() -> {
-				variables
-						.forEach(variable -> updateVariable(editPartRegistry, variable.getName(), variable.getValue()));
+				variables.forEach(variable -> updateVariable(editPartRegistry, variable));
 				updateAllEvents(editPartRegistry);
 			});
 		}
@@ -210,13 +208,12 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 		return false;
 	}
 
-	private void updateVariable(final Map<Object, EditPart> editPartRegistry, final String variableName,
-			final Value value) {
-		final InterfaceValueEntity interfaceValueEntity = interfaceValues.get(variableName);
+	private void updateVariable(final Map<Object, EditPart> editPartRegistry, final Variable<?> variable) {
+		final InterfaceValueEntity interfaceValueEntity = interfaceValues.get(variable);
 		if (interfaceValueEntity != null) {
 			final Object ep = editPartRegistry.get(interfaceValueEntity);
 			if (ep instanceof final InterfaceValueEditPart ivEP) {
-				ivEP.setValue(value);
+				ivEP.updateValue();
 				refreshVisuals();
 			}
 		}
@@ -234,8 +231,7 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 			case DebugEvent.CHANGE:
 				if (ev.getSource() instanceof final EvaluatorDebugVariable edVar) {
 					final Map<Object, EditPart> editPartRegistry = getViewer().getEditPartRegistry();
-					Display.getDefault().asyncExec(() -> updateVariable(editPartRegistry, edVar.getName(),
-							edVar.getValue().getInternalValue()));
+					Display.getDefault().asyncExec(() -> updateVariable(editPartRegistry, edVar.getInternalVariable()));
 				}
 				break;
 			default:
@@ -247,8 +243,7 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 	private void updateAllValues() {
 		final Map<Object, EditPart> editPartRegistry = getViewer().getEditPartRegistry();
 		Display.getDefault().asyncExec(() -> {
-			interfaceValues.entrySet().forEach(entry -> updateVariable(editPartRegistry, entry.getKey(),
-					entry.getValue().getVariable().getValue()));
+			interfaceValues.entrySet().forEach(entry -> updateVariable(editPartRegistry, entry.getKey()));
 			updateAllEvents(editPartRegistry);
 		});
 	}

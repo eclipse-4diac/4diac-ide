@@ -120,6 +120,10 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 		return cachedValue;
 	}
 
+	public Variable<?> getInternalVariable() {
+		return variable;
+	}
+
 	@Override
 	public String getName() {
 		return variable.getName();
