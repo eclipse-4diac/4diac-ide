@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c)  2012 - 2022 Profactor GmbH, fortiss GmbH,
- * 							  Primetals Technologies Austria GmbH
+ * Copyright (c)  2012, 2024 Profactor GmbH, fortiss GmbH,
+ * 							 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -64,13 +64,13 @@ public class InterfaceValueEditPart extends AbstractDebugInterfaceValueEditPart 
 	}
 
 	private void performDirectEdit() {
-		final var labelDirectEditManager = new LabelDirectEditManager(this, getFigure());
+		final var labelDirectEditManager = new LabelDirectEditManager(this, getLabelFigure());
 		labelDirectEditManager.show();
 	}
 
 	public void setValue(final Value value) {
 		if (isActive() && getFigure() != null) {
-			getFigure().setText(value.toString());
+			getLabelFigure().setText(value.toString());
 			refreshVisuals();
 		}
 	}
