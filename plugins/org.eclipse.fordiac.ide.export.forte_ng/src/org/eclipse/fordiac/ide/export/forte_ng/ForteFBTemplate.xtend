@@ -510,7 +510,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected CharSequence generateNameAsConnectionVariable(INamedElement element) '''var_conn_«element.name»'''
 
-
 	def protected generateEventAccessorDefinitions() '''
 		«FOR event : type.interfaceList.eventInputs BEFORE '\n'»
 			«event.generateEventAccessorDefinition»
@@ -553,7 +552,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected getFBClassName() { className }
 
-
 	def protected generateInitializeDeclaration() '''
 		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
 			bool initialize() override;
@@ -586,8 +584,15 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«ENDFOR»		
 	'''
 
-	def generateInternalFBInitializer(List<FB> internalFbs) ///
-	'''«FOR fb : internalFbs BEFORE ",\n" SEPARATOR ",\n"»«fb.generateName»(«fb.name.FORTEStringId», *this)«ENDFOR»'''
+	def generateInternalFBInitializer(List<FB> internalFbs) // /
+	'''«FOR fb : internalFbs BEFORE ",\n" SEPARATOR ",\n"»«fb.generateInternalFBInitializer»«ENDFOR»'''
+
+	def generateInternalFBInitializer(FB fb) {
+		if (fb.type.genericType)
+			'''«fb.generateName»(«fb.name.FORTEStringId», "«fb.type.generateTypeNamePlain»", *this)'''
+		else
+			'''«fb.generateName»(«fb.name.FORTEStringId», *this)'''
+	}
 
 	override Set<INamedElement> getDependencies(Map<?, ?> options) {
 		(super.getDependencies(options) + (type.interfaceList.sockets + type.interfaceList.plugs).map[getType]
