@@ -82,11 +82,11 @@ public abstract class AbstractStructManipulatorEditPart extends AbstractFBNEleme
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				if (notification.getEventType() == Notification.ADD
-						|| notification.getEventType() == Notification.ADD_MANY
-						|| notification.getEventType() == Notification.MOVE
-						|| notification.getEventType() == Notification.REMOVE) {
+				if (!notification.isTouch()) {
 					refresh();
+					// this ensure that parameters are correctly updated when pins are added or
+					// removed (e.g., errormarkerpins are deleted)
+					getParent().refresh();
 				}
 			}
 		};

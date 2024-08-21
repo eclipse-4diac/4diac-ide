@@ -201,9 +201,17 @@ public class TypeSelectionWidget {
 		table.setLayout(new TableLayout());
 		table.setLayoutData(new GridData(SWT.FILL, 0, false, false));
 
-		new TableColumn(table, SWT.NONE)
-				.setWidth(table.getItemCount() > 0 ? table.getItem(0).getBounds().width + 30 : 150);
+		final TableColumn tableColumn = new TableColumn(table, SWT.NONE);
+		tableColumn.setWidth(getMinWidth(table));
 		table.requestLayout();
+	}
+
+	private static int getMinWidth(final Table table) {
+		final int width = table.getItemCount() > 0 ? table.getItem(0).getBounds().width + 30 : 150;
+		if (width < 150) {
+			return 150;
+		}
+		return width;
 	}
 
 	private void disableOpenEditorForAnyType() {
