@@ -23,6 +23,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSubapp;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
@@ -38,7 +39,7 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	 * Checks if a subapplication can be created via menu by selecting the
 	 * Application editor breadcrumb.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void createEmptySubappViaMenu() {
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
@@ -46,7 +47,8 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		editor.drag(50, 50, 500, 500);
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		assertTrue(isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
+		assertTrue(subapp.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
 	}
 
 	/**
@@ -57,15 +59,15 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	 * is drawn over the FBs. Then a subapplication is created via menu entry
 	 * "Source" -> "New subapplication"
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void createSubappViaMenu() {
 		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
 		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
-		// drag rectangle over to FB, therefore FB should be selected
-		editor.drag(50, 50, 400, 400);
+		// drag rectangle over the FBs, therefore FBs should be selected
+		editor.drag(80, 80, 400, 400);
 		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
@@ -77,7 +79,8 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		// renew list of selectedEditParts and then check if SubApp was created
 		selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		assertTrue(isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
+		assertTrue(subapp.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
 	}
 
 	/**
@@ -118,7 +121,8 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		// renew list of selectedEditParts and then check if SubApp was created
 		selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		assertTrue(isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
+		assertTrue(subapp.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
 	}
 
 	/**
@@ -156,7 +160,8 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		// renew list of selectedEditParts and then check if SubApp was created
 		selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		assertTrue(isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
+		assertTrue(subapp.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
 		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.EO, PinNamesHelper.EO));
 	}
 

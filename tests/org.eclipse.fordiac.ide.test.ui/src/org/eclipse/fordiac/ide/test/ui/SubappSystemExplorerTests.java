@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSubapp;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSystemExplorer;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
@@ -47,7 +48,8 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		assertTrue(isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
+		assertTrue(subapp.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
 
 		// checks for SystemExplorer tree
 		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
@@ -82,7 +84,8 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 
 		// checks for App node
 		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
-		assertTrue(isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
+		assertTrue(subapp.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
 		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
 		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.E_SWITCH_FB));
 

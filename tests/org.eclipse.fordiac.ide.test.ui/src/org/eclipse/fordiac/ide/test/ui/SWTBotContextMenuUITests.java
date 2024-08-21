@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSubapp;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSystemExplorer;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacFigureCanvas;
@@ -47,7 +48,8 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 		editor.clickContextMenu(UITestNamesHelper.NEW_SUBAPPLICATION, 100, 100);
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		assertTrue(isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
+		assertTrue(subapp.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
 		// check App node and SubApp TreeItem in SystemExplorer tree
 		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
 		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
@@ -129,7 +131,8 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 	@Test
 	public void goToParentViaContextMenuSubAppWithFB() {
 		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
-		createSubappWithDragRectangle(50, 50, 400, 400);
+		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
+		subapp.createSubappWithDragRectangle(50, 50, 400, 400);
 		// check System Explorer tree if SubApp is present
 		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
 		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
@@ -151,7 +154,8 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 	@Test
 	public void goToChildViaContextMenuSubAppWithACompositeFB() {
 		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
-		createSubappWithDragRectangle(50, 50, 300, 300);
+		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
+		subapp.createSubappWithDragRectangle(50, 50, 300, 300);
 		goToCompositeInstanceViewer(UITestNamesHelper.SUBAPP);
 		final SWTBot4diacGefEditor editorSubApp = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editorSubApp);

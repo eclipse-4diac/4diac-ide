@@ -29,7 +29,6 @@ import java.util.List;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSystemExplorer;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
@@ -128,14 +127,6 @@ public class Abstract4diacUITests {
 		eCycleNode.dragAndDrop(canvas, point);
 	}
 
-	protected static void createSubappWithDragRectangle(final int fromXPosition, final int fromYPosition,
-			final int toXPosition, final int toYPosition) {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
-		editor.drag(fromXPosition, fromYPosition, toXPosition, toYPosition);
-		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
-
-	}
-
 	/**
 	 * Selects a FunctionBlock with the given Name in the editor.
 	 *
@@ -193,21 +184,6 @@ public class Abstract4diacUITests {
 	protected static boolean isFbSelected(final List<SWTBotGefEditPart> selectedEditParts, final String fbName) {
 		return selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart).map(p -> (FBEditPart) p.part())
 				.anyMatch(fb -> fb.getModel().getName().equals(fbName));
-	}
-
-	/**
-	 * Checks if Subapplication is selected by searching selectedEditParts list and
-	 * returns the corresponding boolean value.
-	 *
-	 * @param selectedEditParts The List of selected EditParts.
-	 * @param subAppName        The Subapplication that is searched for.
-	 * @return true if Subapplication is in the List, otherwise false.
-	 */
-	protected static boolean isSubappSelected(final List<SWTBotGefEditPart> selectedEditParts,
-			final String subAppName) {
-		return selectedEditParts.stream().filter(p -> p.part() instanceof SubAppForFBNetworkEditPart)
-				.map(p -> (SubAppForFBNetworkEditPart) p.part())
-				.anyMatch(fb -> subAppName.equals(fb.getModel().getName()));
 	}
 
 	/**
