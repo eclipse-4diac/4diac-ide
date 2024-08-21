@@ -21,7 +21,6 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -34,7 +33,6 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
@@ -162,38 +160,6 @@ public class AttributeDeclarationItemProvider extends ItemProviderAdapter implem
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.LIBRARY_ELEMENT__VERSION_INFO);
-			childrenFeatures.add(LibraryElementPackage.Literals.LIBRARY_ELEMENT__IDENTIFICATION);
-			childrenFeatures.add(LibraryElementPackage.Literals.LIBRARY_ELEMENT__COMPILER_INFO);
-		}
-		return childrenFeatures;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
-	}
-
-	/**
 	 * This returns AttributeDeclaration.gif.
 	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -232,13 +198,11 @@ public class AttributeDeclarationItemProvider extends ItemProviderAdapter implem
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__NAME:
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__COMMENT:
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__ATTRIBUTES:
-			case LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE_ENTRY:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__VERSION_INFO:
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__IDENTIFICATION:
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__COMPILER_INFO:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+			case LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE_ENTRY:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			default:
 				super.notifyChanged(notification);
@@ -256,21 +220,6 @@ public class AttributeDeclarationItemProvider extends ItemProviderAdapter implem
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.LIBRARY_ELEMENT__VERSION_INFO,
-				 LibraryElementFactory.eINSTANCE.createVersionInfo()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.LIBRARY_ELEMENT__IDENTIFICATION,
-				 LibraryElementFactory.eINSTANCE.createIdentification()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.LIBRARY_ELEMENT__COMPILER_INFO,
-				 LibraryElementFactory.eINSTANCE.createCompilerInfo()));
 	}
 
 	/**
