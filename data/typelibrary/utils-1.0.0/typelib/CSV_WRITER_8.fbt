@@ -1,51 +1,53 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
-<FBType Comment="Service Interface Function Block Type" Name="CSV_WRITER_8">
-  <Identification Description="Copyright (c) 2012 ACIN&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
-  <VersionInfo Author="Alois Zoitl" Date="2012-06-16" Organization="ACIN" Version="1.0"/>
-  <InterfaceList>
-    <EventInputs>
-      <Event Comment="Service Initialization" Name="INIT" Type="Event">
-        <With Var="QI"/>
-        <With Var="FILE_NAME"/>
-      </Event>
-      <Event Comment="Service Request" Name="REQ" Type="Event">
-        <With Var="QI"/>
-        <With Var="SD_1"/>
-        <With Var="SD_2"/>
-        <With Var="SD_3"/>
-        <With Var="SD_4"/>
-        <With Var="SD_5"/>
-        <With Var="SD_6"/>
-        <With Var="SD_7"/>
-        <With Var="SD_8"/>
-      </Event>
-    </EventInputs>
-    <EventOutputs>
-      <Event Comment="Initialization Confirm" Name="INITO" Type="Event">
-        <With Var="QO"/>
-        <With Var="STATUS"/>
-      </Event>
-      <Event Comment="Confirmation of Requested Service" Name="CNF" Type="Event">
-        <With Var="QO"/>
-        <With Var="STATUS"/>
-      </Event>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Comment="Event Input Qualifier" Name="QI" Type="BOOL"/>
-      <VarDeclaration Comment="Service Parameters" Name="FILE_NAME" Type="STRING"/>
-      <VarDeclaration Comment="Output data to resource" Name="SD_1" Type="ANY"/>
-      <VarDeclaration Name="SD_2" Type="ANY"/>
-      <VarDeclaration Name="SD_3" Type="ANY"/>
-      <VarDeclaration Name="SD_4" Type="ANY"/>
-      <VarDeclaration Name="SD_5" Type="ANY"/>
-      <VarDeclaration Name="SD_6" Type="ANY"/>
-      <VarDeclaration Name="SD_7" Type="ANY"/>
-      <VarDeclaration Name="SD_8" Type="ANY"/>
-    </InputVars>
-    <OutputVars>
-      <VarDeclaration Comment="Event Output Qualifier" Name="QO" Type="BOOL"/>
-      <VarDeclaration Comment="File access status" Name="STATUS" Type="STRING"/>
-    </OutputVars>
-  </InterfaceList>
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="CSV_WRITER_8" Comment="Service Interface Function Block Type">
+	<Identification Description="Copyright (c) 2012 ACIN&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="ACIN" Version="1.0" Author="Alois Zoitl" Date="2012-06-16">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Service Initialization">
+				<With Var="QI"/>
+				<With Var="FILE_NAME"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Service Request">
+				<With Var="QI"/>
+				<With Var="SD_1"/>
+				<With Var="SD_2"/>
+				<With Var="SD_3"/>
+				<With Var="SD_4"/>
+				<With Var="SD_5"/>
+				<With Var="SD_6"/>
+				<With Var="SD_7"/>
+				<With Var="SD_8"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+			<VarDeclaration Name="FILE_NAME" Type="STRING" Comment="Service Parameters"/>
+			<VarDeclaration Name="SD_1" Type="ANY" Comment="Output data to resource"/>
+			<VarDeclaration Name="SD_2" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_3" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_4" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_5" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_6" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_7" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_8" Type="ANY" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="STRING" Comment="File access status"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="GenericClassName" Value="'GEN_CSV_WRITER'"/>
 </FBType>
