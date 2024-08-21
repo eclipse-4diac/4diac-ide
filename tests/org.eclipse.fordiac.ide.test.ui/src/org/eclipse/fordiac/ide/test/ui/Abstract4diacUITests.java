@@ -25,10 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
@@ -38,13 +36,10 @@ import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
-import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
@@ -56,7 +51,6 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCTabItem;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.hamcrest.BaseMatcher;
@@ -175,79 +169,6 @@ public class Abstract4diacUITests {
 		final SWTBotGefEditPart fb = editor.getEditPart(FbInstanceName).parent();
 		fb.select().click();
 		bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.DELETE).click();
-	}
-
-	/**
-	 * Creates a connection between two pins.
-	 *
-	 * The method creates a connection between the two given pins, the order of the
-	 * pins is not important and returns a SWTBot4diacGefViewer. Whether a
-	 * connection could actually be created is not checked here.
-	 *
-	 * @param pin1 One of the two pins between a connection is (tried to) create.
-	 * @param pin2 One of the two pins between a connection is (tried to) create.
-	 * @return SWTBot4diacGefViewer
-	 */
-	protected static SWTBot4diacGefViewer createConnection(final String pin1, final String pin2) {
-		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
-		assertNotNull(editor);
-		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
-		assertNotNull(viewer);
-		// select input pin
-		editor.click(pin1);
-		final SWTBotGefEditPart ei = editor.getEditPart(pin1);
-		assertNotNull(ei);
-		final IFigure figure = ((GraphicalEditPart) ei.part()).getFigure();
-		assertNotNull(figure);
-		final Rectangle inputPinBounds1 = figure.getBounds().getCopy();
-		assertNotNull(inputPinBounds1);
-		figure.translateToAbsolute(inputPinBounds1);
-		// select output pin
-		editor.click(pin2);
-		final SWTBotGefEditPart eo = editor.getEditPart(pin2);
-		assertNotNull(eo);
-		final Rectangle inputPinBounds2 = ((GraphicalEditPart) eo.part()).getFigure().getBounds().getCopy();
-		assertNotNull(inputPinBounds2);
-		figure.translateToAbsolute(inputPinBounds2);
-		viewer.drag(pin2, inputPinBounds1.getCenter().x, inputPinBounds1.getCenter().y);
-		checkIfConnectionCanBeFound(pin1, pin2);
-		return viewer;
-	}
-
-	protected static boolean checkIfConnectionCanBeFound(final String srcPinName, final String dstPinName) {
-		return findConnection(srcPinName, dstPinName) != null;
-	}
-
-	protected static ConnectionEditPart findConnection(final String srcPinName, final String dstPinName) {
-		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
-		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
-		final GraphicalViewer graphicalViewer = viewer.getGraphicalViewer();
-
-		return Display.getDefault().syncCall(() -> {
-			graphicalViewer.flush();
-			final Map<?, ?> editPartRegistry = graphicalViewer.getEditPartRegistry();
-			for (final Object obj : editPartRegistry.values()) {
-				if (obj instanceof final ConnectionEditPart cEP) {
-					// search for connection between the 2 pins
-					final EditPart source = cEP.getSource();
-					final EditPart target = cEP.getTarget();
-
-					final IFigure srcFigure = ((GraphicalEditPart) source).getFigure();
-					final Label srcLabel = (Label) srcFigure;
-					final String srcText = srcLabel.getText();
-
-					final IFigure dstFigure = ((GraphicalEditPart) target).getFigure();
-					final Label dstLabel = (Label) dstFigure;
-					final String dstText = dstLabel.getText();
-
-					if (srcPinName.equals(srcText) && dstPinName.equals(dstText)) {
-						return cEP;
-					}
-
-				}
-			}
-			return null;
-		});
 	}
 
 	protected static Rectangle getAbsolutePosition(final SWTBotGefEditor editor, final String fb) {
@@ -443,79 +364,11 @@ public class Abstract4diacUITests {
 	}
 
 	/**
-	 * Creates connection within FB Type from Property Sheet
-	 *
-	 * @param pin1   Name of pin1.
-	 * @param pin2   Name of pin2.
-	 * @param editor Selected Gef Editor
-	 */
-	protected static void createConnectionWithinFBTypeWithPropertySheet(final String pin1, final String pin2,
-			final SWTBot4diacGefEditor editor) {
-
-		final SWTBotGefEditPart port1 = editor.getEditPart(pin1);
-		port1.click();
-
-		final SWTBotGefEditPart port2 = editor.getEditPart(pin2);
-		port2.click();
-
-		SWTBot propertiesBot = bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).bot();
-		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
-
-		if (PropertySheetHelper.selectPropertyTabItem(UITestNamesHelper.EVENT, propertiesBot)) {
-			propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.EVENT);
-		} else {
-			propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.DATA);
-		}
-
-		// Find the group with the label "With"
-		final SWTBotTable table = propertiesBot.tableInGroup(UITestNamesHelper.WITH);
-
-		table.select(pin1);
-		table.getTableItem(pin1).toggleCheck();
-		assertTrue(table.getTableItem(pin1).isChecked());
-		checkIfConnectionCanBeFound(pin1, pin2);
-	}
-
-	/**
-	 * Remove connection within FB Type from Property Sheet
-	 *
-	 * @param pin1   Name of pin1.
-	 * @param pin2   Name of pin2.
-	 * @param editor Selected Gef Editor
-	 */
-	protected static void removeConnectionWithinFBTypeWithPropertySheet(final String pin1, final String pin2,
-			final SWTBot4diacGefEditor editor) {
-
-		final SWTBotGefEditPart port1 = editor.getEditPart(pin1);
-		editor.click(port1);
-
-		final SWTBotGefEditPart port2 = editor.getEditPart(pin2);
-		port2.click();
-
-		SWTBot propertiesBot = bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).bot();
-		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
-
-		if (PropertySheetHelper.selectPropertyTabItem(UITestNamesHelper.EVENT, propertiesBot)) {
-			propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.EVENT);
-		} else {
-			propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.DATA);
-		}
-
-		// Find the group with the label "With"
-		final SWTBotTable table = propertiesBot.tableInGroup(UITestNamesHelper.WITH);
-
-		table.select(pin1);
-		table.getTableItem(pin1).toggleCheck();
-		assertFalse(table.getTableItem(pin1).isChecked());
-		checkIfConnectionCanBeFound(pin1, pin2);
-	}
-
-	/**
 	 * Select tab from Interface's Properties
 	 *
 	 * @param tabName Name of Tab on Property Sheet under Interface
 	 */
-	protected static SWTBot selectTabFromInterfaceProperties(final String tabName) {
+	public static SWTBot selectTabFromInterfaceProperties(final String tabName) {
 		// Interface tab
 		final SWTBotCTabItem interfaceTab = bot.cTabItem(UITestNamesHelper.INTERFACE);
 		interfaceTab.activate();

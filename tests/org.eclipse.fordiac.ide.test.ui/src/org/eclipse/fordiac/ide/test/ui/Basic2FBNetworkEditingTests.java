@@ -26,6 +26,7 @@ import java.util.List;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
@@ -324,14 +325,15 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	 * Then the E_CYCLE is moved and it is checked whether the start point of the
 	 * connection has also moved and whether the end point has remained unchanged.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void checkIfConnectionRemainsAfterMoving1FB() {
 		final Point pos1 = new Point(100, 50);
 		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, pos1);
 		dragAndDropEventsFB(UITestNamesHelper.E_DEMUX_TREE_ITEM, new Point(300, 50));
-		createConnection(PinNamesHelper.EO, PinNamesHelper.EI);
-		final ConnectionEditPart connection = findConnection(PinNamesHelper.EO, PinNamesHelper.EI);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		connect.createConnection(PinNamesHelper.EO, PinNamesHelper.EI);
+		final ConnectionEditPart connection = connect.findConnection(PinNamesHelper.EO, PinNamesHelper.EI);
 		assertNotNull(connection);
 
 		// select E_CYCLE
@@ -382,15 +384,16 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	 * Afterwards, the E_SWITCH is also moved and checked whether the start point
 	 * and end point of the connection match the new positions of the FBs.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void checkIfConnectionRemainsAfterMovingBothFBsOneAfterAnother() {
 		final Point pos1 = new Point(375, 75);
 		dragAndDropEventsFB(UITestNamesHelper.E_SELECT_TREE_ITEM, pos1);
 		final Point pos2 = new Point(175, 125);
 		dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, pos2);
-		createConnection(PinNamesHelper.QU, PinNamesHelper.G);
-		final ConnectionEditPart connection = findConnection(PinNamesHelper.QU, PinNamesHelper.G);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		connect.createConnection(PinNamesHelper.QU, PinNamesHelper.G);
+		final ConnectionEditPart connection = connect.findConnection(PinNamesHelper.QU, PinNamesHelper.G);
 		assertNotNull(connection);
 
 		// select E_SELECT
@@ -459,15 +462,16 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	 * FB and moved to a new position. The translation is calculated and compared
 	 * with the new values of the connection start and end point.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void checkIfConnectionRemainsAfterMovingBothFBsTogether() {
 		final Point pos1 = new Point(200, 100);
 		dragAndDropEventsFB(UITestNamesHelper.E_DEMUX_TREE_ITEM, pos1);
 		final Point pos2 = new Point(100, 275);
 		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, pos2);
-		createConnection(PinNamesHelper.EO1, PinNamesHelper.R);
-		ConnectionEditPart connection = findConnection(PinNamesHelper.EO1, PinNamesHelper.R);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		connect.createConnection(PinNamesHelper.EO1, PinNamesHelper.R);
+		ConnectionEditPart connection = connect.findConnection(PinNamesHelper.EO1, PinNamesHelper.R);
 		assertNotNull(connection);
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
@@ -500,7 +504,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		final int translationY = pointTo.y - pointFrom.y;
 
 		// check if connection has been moved
-		connection = findConnection(PinNamesHelper.EO1, PinNamesHelper.R);
+		connection = connect.findConnection(PinNamesHelper.EO1, PinNamesHelper.R);
 		assertNotNull(connection);
 		final org.eclipse.draw2d.geometry.Point newStartPointConnection = polyLineConnection.getPoints()
 				.getFirstPoint();

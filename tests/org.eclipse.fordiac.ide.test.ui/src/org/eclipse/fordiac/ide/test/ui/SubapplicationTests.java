@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
@@ -29,7 +30,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class SubapplicationTests extends Abstract4diacUITests {
@@ -39,13 +39,11 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	 * Application editor breadcrumb.
 	 */
 	@SuppressWarnings("static-method")
-	@Disabled("until bug fix")
 	@Test
 	public void createEmptySubappViaMenu() {
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
-		editor.drag(10, 10, 500, 500);
-		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		editor.drag(50, 50, 500, 500);
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
 		assertTrue(isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
@@ -90,14 +88,15 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	 * are created and then a rectangle is drawn over the FBs. Then a subapplication
 	 * is created via menu entry "Source" -> "New subapplication"
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void createSubappViaMenuWithConnectionBetweenFBs() {
 		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
 		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
-		assertNotNull(createConnection(PinNamesHelper.EO0, PinNamesHelper.S));
-		assertNotNull(createConnection(PinNamesHelper.EO1, PinNamesHelper.R));
-		assertNotNull(createConnection(PinNamesHelper.Q, PinNamesHelper.G));
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		assertNotNull(connect.createConnection(PinNamesHelper.EO0, PinNamesHelper.S));
+		assertNotNull(connect.createConnection(PinNamesHelper.EO1, PinNamesHelper.R));
+		assertNotNull(connect.createConnection(PinNamesHelper.Q, PinNamesHelper.G));
 
 		// drag rectangle over to FB, therefore FB should be selected
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
@@ -111,9 +110,9 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		assertEquals(5, selectedEditParts.size());
 		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
 		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
-		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.EO0, PinNamesHelper.S));
-		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.EO1, PinNamesHelper.R));
-		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.Q, PinNamesHelper.G));
+		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.EO0, PinNamesHelper.S));
+		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.EO1, PinNamesHelper.R));
+		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.Q, PinNamesHelper.G));
 
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 		// renew list of selectedEditParts and then check if SubApp was created
@@ -131,13 +130,14 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	 * a FB outside of the selection. Then a subapplication is created via menu
 	 * entry "Source" -> "New subapplication"
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void createSubappViaMenuWithExistingConnectionOutsideSubapp() {
 		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
 		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(300, 100));
 		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(500, 100));
-		assertNotNull(createConnection(PinNamesHelper.EO, PinNamesHelper.EI));
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		assertNotNull(connect.createConnection(PinNamesHelper.EO, PinNamesHelper.EI));
 
 		// drag rectangle over to FBs E_SWITCH and E_SR, therefore FBs should be
 		// selected
@@ -150,14 +150,14 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
 		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
 		assertFalse(isFbSelected(selectedEditParts, UITestNamesHelper.E_CYCLE_TREE_ITEM));
-		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.EO, PinNamesHelper.EI));
+		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.EO, PinNamesHelper.EI));
 
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 		// renew list of selectedEditParts and then check if SubApp was created
 		selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
 		assertTrue(isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
-		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.EO, PinNamesHelper.EO));
+		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.EO, PinNamesHelper.EO));
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	 * subapplication is created with them. afterwards it is checked if connection
 	 * can be created in the subapplication.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void createSubappViaMenuThenCreatingConnection() {
 		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
@@ -188,9 +188,10 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		// syncExec() is needed to update selection of UI and therefore it needs to run
 		// in UI thread. Without this, the connections are not created correctly
 		UIThreadRunnable.syncExec(() -> HandlerHelper.selectEditPart(viewer.getGraphicalViewer(), editPart.part()));
-		assertNotNull(createConnection(PinNamesHelper.EO0, PinNamesHelper.S));
-		assertNotNull(createConnection(PinNamesHelper.EO1, PinNamesHelper.R));
-		assertNotNull(createConnection(PinNamesHelper.Q, PinNamesHelper.G));
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		assertNotNull(connect.createConnection(PinNamesHelper.EO0, PinNamesHelper.S));
+		assertNotNull(connect.createConnection(PinNamesHelper.EO1, PinNamesHelper.R));
+		assertNotNull(connect.createConnection(PinNamesHelper.Q, PinNamesHelper.G));
 	}
 
 }

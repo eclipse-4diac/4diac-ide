@@ -27,6 +27,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.ConnectionEditPart;
@@ -180,18 +181,19 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	 * The method checks if it is possible to add connections between FB pins in
 	 * CompositeInstanceViewer. It is expected that this is not possible.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void compositeInstanceViewerConnectionCanBeAdded() {
 		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 200));
 		goToCompositeInstanceViewer(UITestNamesHelper.E_N_TABLE_FB);
-		SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO, PinNamesHelper.EI);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.EO, PinNamesHelper.EI);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = createConnection(PinNamesHelper.N, PinNamesHelper.CV);
+		viewer = connect.createConnection(PinNamesHelper.N, PinNamesHelper.CV);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = createConnection(PinNamesHelper.START, PinNamesHelper.STOP);
+		viewer = connect.createConnection(PinNamesHelper.START, PinNamesHelper.STOP);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = createConnection(PinNamesHelper.START, PinNamesHelper.EO0);
+		viewer = connect.createConnection(PinNamesHelper.START, PinNamesHelper.EO0);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 		returnToEditingArea();
 	}
@@ -199,7 +201,7 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	/**
 	 * Checks if it is possible to delete a connection in CompositeInstanceViewer
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void compositeInstanceViewerDeleteConnection() {
 		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
@@ -207,7 +209,8 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
-		final ConnectionEditPart connection = findConnection(PinNamesHelper.EO, PinNamesHelper.REQ);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final ConnectionEditPart connection = connect.findConnection(PinNamesHelper.EO, PinNamesHelper.REQ);
 		final PolylineConnection figure = (PolylineConnection) connection.getFigure();
 		final PointList points = figure.getPoints();
 		final org.eclipse.draw2d.geometry.Point firstPoint = points.getFirstPoint();

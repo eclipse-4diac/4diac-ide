@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Andrea Zoitl
+ * Copyright (c) 2023, 2024 Andrea Zoitl
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.application.editparts.InstanceNameEditPart;
 import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
 import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
@@ -409,11 +410,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 * {@link org.eclipse.gef.EditPartViewer#getEditPartRegistry() Map of the
 	 * registered EditParts}.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void validConnectionBetweenEventInputPinAndEventOutputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 200));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.START, PinNamesHelper.EO);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.START, PinNamesHelper.EO);
 		assertDoesNotThrow(viewer::waitForConnection);
 	}
 
@@ -426,11 +428,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 * {@link org.eclipse.gef.EditPartViewer#getEditPartRegistry() Map of the
 	 * registered EditParts}.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void validConnectionBetweenEventOutputPinAndEventInputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO1, PinNamesHelper.START);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.EO1, PinNamesHelper.START);
 		assertDoesNotThrow(viewer::waitForConnection);
 	}
 
@@ -443,11 +446,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 * {@link org.eclipse.gef.EditPartViewer#getEditPartRegistry() Map of the
 	 * registered EditParts}.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void validConnectionBetweenUintDataInputPinAndUintDataOutputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(150, 150));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.PV, PinNamesHelper.CV);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.PV, PinNamesHelper.CV);
 		assertDoesNotThrow(viewer::waitForConnection);
 	}
 
@@ -460,25 +464,27 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 * {@link org.eclipse.gef.EditPartViewer#getEditPartRegistry() Map of the
 	 * registered EditParts}.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void validConnectionBetweenBoolInputPinAndBoolOutputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_D_FF_TREE_ITEM, new Point(150, 150));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.D, PinNamesHelper.Q);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.D, PinNamesHelper.Q);
 		assertDoesNotThrow(viewer::waitForConnection);
 	}
 
 	/**
 	 * Checks if the connection is still there after moving the FB
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void connectionCanBeFoundAfterMovingFB() {
 		// in progress
 		final Point pos1 = new Point(100, 150);
 		dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, pos1);
-		createConnection(PinNamesHelper.INIT, PinNamesHelper.CLKO);
-		createConnection(PinNamesHelper.N, PinNamesHelper.CV);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		connect.createConnection(PinNamesHelper.INIT, PinNamesHelper.CLKO);
+		connect.createConnection(PinNamesHelper.N, PinNamesHelper.CV);
 
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
@@ -487,8 +493,8 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertNotNull(canvas);
 		canvas.setFocus();
 
-		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.CLKO, PinNamesHelper.INIT));
-		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.CV, PinNamesHelper.N));
+		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.CLKO, PinNamesHelper.INIT));
+		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.CV, PinNamesHelper.N));
 
 		assertNotNull(editor);
 		assertNotNull(editor.getEditPart(UITestNamesHelper.E_TABLE_CTRL_FB));
@@ -520,8 +526,8 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertEquals(posToCheck2.x, fbBounds.x);
 		assertEquals(posToCheck2.y, fbBounds.y);
 
-		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.CLKO, PinNamesHelper.INIT));
-		assertTrue(checkIfConnectionCanBeFound(PinNamesHelper.CV, PinNamesHelper.N));
+		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.CLKO, PinNamesHelper.INIT));
+		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.CV, PinNamesHelper.N));
 	}
 
 	/**
@@ -534,11 +540,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenEventInputPinAndEventInputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.START, PinNamesHelper.STOP);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.START, PinNamesHelper.STOP);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -552,11 +559,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenEventInputPinAndUintInputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(150, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.START, PinNamesHelper.N);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.START, PinNamesHelper.N);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -570,11 +578,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenEventInputPinAndTimeInputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(150, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.START, PinNamesHelper.DT);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.START, PinNamesHelper.DT);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -588,11 +597,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenEventInputPinAndBoolInputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_D_FF_TREE_ITEM, new Point(150, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.CLK, PinNamesHelper.D);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.CLK, PinNamesHelper.D);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -606,11 +616,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenEventInputPinAndUintOutputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 150));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.CD, PinNamesHelper.CV);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.CD, PinNamesHelper.CV);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -624,11 +635,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenEventInputPinAndTimeOutputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.INIT, PinNamesHelper.DTO);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.INIT, PinNamesHelper.DTO);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -642,11 +654,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenEventInputPinAndBoolOutputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 150));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.CD, PinNamesHelper.QU);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.CD, PinNamesHelper.QU);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -660,11 +673,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenTimeInputPinAndTimeOutputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.DT, PinNamesHelper.DTO);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.DT, PinNamesHelper.DTO);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -678,11 +692,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenTimeInputPinAndUintInputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.DT, PinNamesHelper.N);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.DT, PinNamesHelper.N);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -696,11 +711,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenUintInputPinAndBoolOutputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.PV, PinNamesHelper.QU);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.PV, PinNamesHelper.QU);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -714,11 +730,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenEventOutputPinAndUintInputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO0, PinNamesHelper.N);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.EO0, PinNamesHelper.N);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -732,11 +749,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenEventOutputPinAndTimeInputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO1, PinNamesHelper.DT);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.EO1, PinNamesHelper.DT);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -750,11 +768,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenEventOutputPinAndBoolInputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_D_FF_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO, PinNamesHelper.D);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.EO, PinNamesHelper.D);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -768,11 +787,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenEventOutputPinAndEventOutputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO0, PinNamesHelper.EO2);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.EO0, PinNamesHelper.EO2);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -786,11 +806,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenEventOutputPinAndUintOutputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.CLKO, PinNamesHelper.CV);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.CLKO, PinNamesHelper.CV);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -804,11 +825,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenEventOutputPinAndTimeOutputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.CLKO, PinNamesHelper.DTO);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.CLKO, PinNamesHelper.DTO);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -822,11 +844,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenEventOutputPinAndBoolOutputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_D_FF_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO, PinNamesHelper.Q);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.EO, PinNamesHelper.Q);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -840,11 +863,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	 *                          map of the {@link EditPartViewer#getEditPartRegistry
 	 *                          EditPartRegistry} as expected.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void invalidConnectionBetweenBoolOutputPinAndBoolOutputPin() {
 		dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 100));
-		final SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.QU, PinNamesHelper.QD);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		final SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.QU, PinNamesHelper.QD);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
