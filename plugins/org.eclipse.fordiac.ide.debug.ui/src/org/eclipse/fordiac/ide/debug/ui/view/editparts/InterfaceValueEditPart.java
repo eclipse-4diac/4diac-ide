@@ -19,7 +19,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.fordiac.ide.debug.ui.view.policies.InterfaceValueDirectEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
-import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -68,9 +67,9 @@ public class InterfaceValueEditPart extends AbstractDebugInterfaceValueEditPart 
 		labelDirectEditManager.show();
 	}
 
-	public void setValue(final Value value) {
+	public void updateValue() {
 		if (isActive() && getFigure() != null) {
-			getLabelFigure().setText(value.toString());
+			getLabelFigure().setText(getModel().getVariable().toString());
 			refreshVisuals();
 		}
 	}
