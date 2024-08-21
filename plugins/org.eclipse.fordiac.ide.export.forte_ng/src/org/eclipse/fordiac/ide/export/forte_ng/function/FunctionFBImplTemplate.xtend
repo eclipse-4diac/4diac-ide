@@ -86,11 +86,6 @@ class FunctionFBImplTemplate extends ForteFBTemplate<FunctionFBType> {
 		'''sendOutputEvent(scmEvent«event.name»ID, paECET);'''
 	}
 
-	override protected generateImplIncludes() '''
-		«super.generateImplIncludes»
-		«getDependencies(emptyMap).generateDependencyIncludes»
-	'''
-
 	override getErrors() {
 		(super.getErrors + bodyLanguageSupport.errors).toList
 	}
