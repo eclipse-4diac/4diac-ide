@@ -77,12 +77,12 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 				if (selected instanceof FB || selected instanceof Group) {
 					refObject = selected;
 					selected = fbnElement.eContainer().eContainer();
-				} else if (selected instanceof final SubApp subapp && subapp.isUnfolded()) {
+				} else if (isExpandedSubapp(selected)) {
 					refObject = selected;
 				}
 				// For unfolded subapps find the next parent that is not expanded as refElement
-				while (selected instanceof final SubApp subApp && subApp.isUnfolded()) {
-					selected = subApp.eContainer().eContainer();
+				while (isExpandedSubapp(selected)) {
+					selected = ((SubApp) selected).eContainer().eContainer();
 				}
 			}
 
@@ -95,7 +95,15 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 		}
 
 		final IEditorPart editor = OpenListenerManager.openEditor((EObject) selected);
-		HandlerHelper.selectElement(refObject, editor);
+		if (isExpandedSubapp(refObject) && editor != null) {
+			HandlerHelper.showExpandedSubapp((SubApp) refObject, editor);
+		} else {
+			HandlerHelper.selectElement(refObject, editor);
+		}
+	}
+
+	private static boolean isExpandedSubapp(final Object selected) {
+		return selected instanceof final SubApp subapp && subapp.isUnfolded();
 	}
 
 	private static boolean isTypedSubAppOrCFBInstance(final Object obj) {
