@@ -59,6 +59,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		    «generateWriteOutputDataDeclaration»
 		    «generateReadInternal2InterfaceOutputDataDeclaration»
 		    «(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
+		    «generateSetFBNetworkInitialValuesDeclaration»
 		
 		  public:
 		    «FBClassName»(CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer);
@@ -69,6 +70,12 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		«generateIncludeGuardEnd»
 		
+	'''
+	
+	def generateSetFBNetworkInitialValuesDeclaration() '''
+		«IF fbs.flatMap[interface.inputVars].exists[!value?.value.nullOrEmpty]»
+			void setFBNetworkInitialValues() override;
+		«ENDIF»
 	'''
 
 	override protected CharSequence generateHeaderIncludes() '''
@@ -85,7 +92,6 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterType)]»
 			static const SCFB_FBInstanceData scmInternalFBs[];
 		«ENDIF»
-		static const SCFB_FBParameter scmParamters[];
 		«IF !type.FBNetwork.eventConnections.empty»
 			static const SCFB_FBConnectionData scmEventConnections[];
 			static const SCFB_FBFannedOutConnectionData scmFannedOutEventConnections[];
