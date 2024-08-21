@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor.NullEvaluatorMonitor;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorCountingEventQueue;
@@ -50,8 +51,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.swt.widgets.Display;
 
-public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
-		implements EvaluatorMonitor, IDebugEventSetListener {
+public class FBDebugViewRootEditPart extends AbstractDiagramEditPart {
 
 	private static final long MIN_UPDATE_INTERVAL = 100; // the minimal update interval between two full refresh of
 	// the shown values
@@ -59,6 +59,62 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 	private final Map<Variable<?>, InterfaceValueEntity> interfaceValues = new HashMap<>();
 	private final Map<Event, EventValueEntity> eventValues = new HashMap<>();
 	private long lastUpdate;
+
+	private final EvaluatorMonitor evalMonitor = new NullEvaluatorMonitor() {
+
+		@Override
+		public void update(final Collection<? extends Variable<?>> variables, final Evaluator evaluator) {
+			if (evaluator == getFBEvaluator()) {
+				// our evaluator sent an update
+				updateValues(variables);
+			}
+		}
+
+		@Override
+		public void terminated(final EvaluatorThreadPoolExecutor executor) {
+			updateAllValues();
+		}
+
+		private void updateValues(final Collection<? extends Variable<?>> variables) {
+			final Map<Object, EditPart> editPartRegistry = getViewer().getEditPartRegistry();
+			if (shouldUpdate()) {
+				Display.getDefault().asyncExec(() -> {
+					variables.forEach(variable -> updateVariable(editPartRegistry, variable));
+					updateAllEvents(editPartRegistry);
+				});
+			}
+		}
+
+		private boolean shouldUpdate() {
+			final long currentTime = System.currentTimeMillis();
+			final long delta = currentTime - lastUpdate;
+			if (delta > MIN_UPDATE_INTERVAL) {
+				lastUpdate = currentTime;
+				return true;
+			}
+			return false;
+		}
+	};
+
+	private final IDebugEventSetListener debugEventListener = events -> {
+		for (final DebugEvent ev : events) {
+			switch (ev.getKind()) {
+			case DebugEvent.SUSPEND:
+				if (isCorrectSource(ev.getSource())) {
+					updateAllValues();
+				}
+				break;
+			case DebugEvent.CHANGE:
+				if (ev.getSource() instanceof final EvaluatorDebugVariable edVar) {
+					final Map<Object, EditPart> editPartRegistry = getViewer().getEditPartRegistry();
+					Display.getDefault().asyncExec(() -> updateVariable(editPartRegistry, edVar.getInternalVariable()));
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	};
 
 	@Override
 	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
@@ -88,16 +144,16 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 	@Override
 	public void activate() {
 		super.activate();
-		getModel().getExecutor().addMonitor(this);
-		DebugPlugin.getDefault().addDebugEventListener(this);
+		getModel().getExecutor().addMonitor(evalMonitor);
+		DebugPlugin.getDefault().addDebugEventListener(debugEventListener);
 		lastUpdate = System.currentTimeMillis();
 	}
 
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		getModel().getExecutor().removeMonitor(this);
-		DebugPlugin.getDefault().removeDebugEventListener(this);
+		getModel().getExecutor().removeMonitor(evalMonitor);
+		DebugPlugin.getDefault().removeDebugEventListener(debugEventListener);
 	}
 
 	public FBEvaluator<?> getFBEvaluator() {
@@ -155,59 +211,6 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 		});
 	}
 
-	@Override
-	public void info(final String message) {
-		// Nothing to do here
-	}
-
-	@Override
-	public void warn(final String message) {
-		// Nothing to do here
-	}
-
-	@Override
-	public void error(final String message) {
-		// Nothing to do here
-	}
-
-	@Override
-	public void error(final String message, final Throwable t) {
-		// Nothing to do here
-	}
-
-	@Override
-	public void update(final Collection<? extends Variable<?>> variables, final Evaluator evaluator) {
-		if (evaluator == getFBEvaluator()) {
-			// our evaluator sent an update
-			updateValues(variables);
-		}
-	}
-
-	@Override
-	public void terminated(final EvaluatorThreadPoolExecutor executor) {
-		updateAllValues();
-	}
-
-	private void updateValues(final Collection<? extends Variable<?>> variables) {
-		final Map<Object, EditPart> editPartRegistry = getViewer().getEditPartRegistry();
-		if (shouldUpdate()) {
-			Display.getDefault().asyncExec(() -> {
-				variables.forEach(variable -> updateVariable(editPartRegistry, variable));
-				updateAllEvents(editPartRegistry);
-			});
-		}
-	}
-
-	private boolean shouldUpdate() {
-		final long currentTime = System.currentTimeMillis();
-		final long delta = currentTime - lastUpdate;
-		if (delta > MIN_UPDATE_INTERVAL) {
-			lastUpdate = currentTime;
-			return true;
-		}
-		return false;
-	}
-
 	private void updateVariable(final Map<Object, EditPart> editPartRegistry, final Variable<?> variable) {
 		final InterfaceValueEntity interfaceValueEntity = interfaceValues.get(variable);
 		if (interfaceValueEntity != null) {
@@ -215,27 +218,6 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 			if (ep instanceof final InterfaceValueEditPart ivEP) {
 				ivEP.updateValue();
 				refreshVisuals();
-			}
-		}
-	}
-
-	@Override
-	public void handleDebugEvents(final DebugEvent[] events) {
-		for (final DebugEvent ev : events) {
-			switch (ev.getKind()) {
-			case DebugEvent.SUSPEND:
-				if (isCorrectSource(ev.getSource())) {
-					updateAllValues();
-				}
-				break;
-			case DebugEvent.CHANGE:
-				if (ev.getSource() instanceof final EvaluatorDebugVariable edVar) {
-					final Map<Object, EditPart> editPartRegistry = getViewer().getEditPartRegistry();
-					Display.getDefault().asyncExec(() -> updateVariable(editPartRegistry, edVar.getInternalVariable()));
-				}
-				break;
-			default:
-				break;
 			}
 		}
 	}
