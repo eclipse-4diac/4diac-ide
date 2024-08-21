@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c)  2012 - 2022 Profactor GmbH, fortiss GmbH,
- * 							  Primetals Technologies Austria GmbH
+ * Copyright (c)  2012, 2024 Profactor GmbH, fortiss GmbH,
+ * 							 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -33,15 +33,14 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 	private InterfaceEditPart referencedInterface;
 
 	protected AbstractDebugInterfaceValueEditPart() {
-		super();
 	}
 
 	@Override
 	public void activate() {
 		super.activate();
 		final Object part = getViewer().getEditPartRegistry().get(getInterfaceElement());
-		if (part instanceof InterfaceEditPart) {
-			referencedInterface = (InterfaceEditPart) part;
+		if (part instanceof final InterfaceEditPart iep) {
+			referencedInterface = iep;
 			referencedInterface.getFigure().addAncestorListener(new AncestorListener() {
 
 				@Override
@@ -86,8 +85,7 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 		return l;
 	}
 
-	@Override
-	public Label getFigure() {
+	public Label getLabelFigure() {
 		return (Label) super.getFigure();
 	}
 

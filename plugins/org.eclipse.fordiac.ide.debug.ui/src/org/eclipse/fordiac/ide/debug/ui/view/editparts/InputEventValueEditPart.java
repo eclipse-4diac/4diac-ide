@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,41 +15,34 @@ package org.eclipse.fordiac.ide.debug.ui.view.editparts;
 import org.eclipse.draw2d.Button;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorEventQueue;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorExternalEventQueue;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.RootEditPart;
 
-public class DebugInputEventEditPart extends InterfaceEditPart {
+public class InputEventValueEditPart extends EventValueEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		final Button bt = new Button(getINamedElement().getName());
+		final Button bt = new Button(""); //$NON-NLS-1$
+		bt.setSize(50, -1);
+		bt.setOpaque(true);
+		bt.setBackgroundColor(org.eclipse.draw2d.ColorConstants.yellow);
+		bt.setPreferredSize(50, 20);
+
 		bt.addActionListener(e -> triggerEvent());
 		return bt;
 	}
 
 	@Override
-	public Button getFigure() {
-		return (Button) super.getFigure();
-	}
-
-	@Override
-	public Label getNameLabel() {
+	public Label getLabelFigure() {
 		return (Label) getFigure().getChildren().get(0);
-	}
-
-	@Override
-	public Event getModel() {
-		return (Event) super.getModel();
 	}
 
 	private void triggerEvent() {
 		final FBEvaluatorExternalEventQueue eventQueue = getEventQueue();
 		if (eventQueue != null) {
-			eventQueue.triggerInputEvent(getModel());
+			eventQueue.triggerInputEvent(getInterfaceElement());
 		}
 	}
 
@@ -75,5 +68,4 @@ public class DebugInputEventEditPart extends InterfaceEditPart {
 		}
 		return null;
 	}
-
 }
