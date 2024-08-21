@@ -77,6 +77,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		
 		#include "criticalregion.h"
 		#include "resource.h"
+		«getDependencies(emptyMap).generateDependencyIncludes»
 		«type.compilerInfo?.header»
 	'''
 
