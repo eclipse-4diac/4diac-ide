@@ -300,7 +300,7 @@ public class LibrarySelectionPage extends WizardPage {
 		}
 
 		public LibDisplay(final LibraryRecord libRecord) {
-			this(false, libRecord.Name(), libRecord.symbolicName(), libRecord.version().toString(), libRecord.Comment(),
+			this(false, libRecord.name(), libRecord.symbolicName(), libRecord.version().toString(), libRecord.comment(),
 					libRecord.uri());
 		}
 
