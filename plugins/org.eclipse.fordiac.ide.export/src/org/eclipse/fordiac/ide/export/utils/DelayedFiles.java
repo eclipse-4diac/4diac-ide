@@ -78,7 +78,8 @@ public class DelayedFiles {
 	}
 
 	/**
-	 * store file data in memory for writing to disk later
+	 * store file data in memory for writing to disk later, verify if data to be
+	 * written is different to file content
 	 *
 	 * @param path  file path to be written to
 	 * @param bytes data to be written as a CharSequence
@@ -93,7 +94,7 @@ public class DelayedFiles {
 	}
 
 	/**
-	 * store file data in memory for writing to disk later
+	 * write file data stored in memory to disk
 	 *
 	 * if any of the files to write is already present on disk a backup file of the
 	 * existing file will be created.
