@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_STOPWATCH" Comment="FB for stopping time between events">
+	<Identification Standard="61499-2" Description="Copyright (c) 2018 fortiss GmbH&#10;&#9;&#9;&#9;   2020 Johannes Kepler University Linz &#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Ben Schneider" Date="2018-08-29" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<VersionInfo Organization="Johannes Kepler University Linz" Version="1.1" Author="alois Zoitl" Date="2020-05-24" Remarks="Changed to a full basic FB implementation utilizing the new NOW_MONOTONIC function">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="START" Type="Event" Comment="Start the stopwatch">
+			</Event>
+			<Event Name="STOP" Type="Event" Comment="Stop the stopwatch">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Event Output">
+				<With Var="TD"/>
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="TD" Type="TIME" Comment="The measured time difference in milliseconds"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<InternalVars>
+			<VarDeclaration Name="startTime" Type="TIME" Comment="Holds the time value when the start event occured."/>
+		</InternalVars>
+		<ECC>
+			<ECState Name="START" Comment="" x="375.0" y="750.0">
+			</ECState>
+			<ECState Name="Measure" Comment="" x="1643.75" y="593.75">
+				<ECAction Algorithm="captureStartTime"/>
+			</ECState>
+			<ECState Name="STOP" Comment="" x="1375.0" y="1731.25">
+				<ECAction Algorithm="calcDiff" Output="EO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="Measure" Condition="START" Comment="" x="1162.5" y="750.0"/>
+			<ECTransition Source="Measure" Destination="STOP" Condition="STOP" Comment="" x="1725.0" y="1225.0"/>
+			<ECTransition Source="STOP" Destination="START" Condition="1" Comment="" x="1012.5" y="1337.5"/>
+		</ECC>
+		<Algorithm Name="captureStartTime" Comment="New Algorithm">
+			<ST><![CDATA[startTime := NOW_MONOTONIC();]]></ST>
+		</Algorithm>
+		<Algorithm Name="calcDiff" Comment="New Algorithm">
+			<ST><![CDATA[TD := NOW_MONOTONIC() - startTime;]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<FBType Name="RT_E_CYCLE" Comment="Delayed propagation of an event-Cancellable" >
+  <Identification Description="Copyright (c) 2008 ACIN&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
+  <VersionInfo Author="Alois Zoitl" Date="2008-07-10" Organization="ACIN" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="START" Comment="Begin Delay" >
+        <With Var="DT" />
+        <With Var="Deadline" />
+        <With Var="WCET" />
+      </Event>
+      <Event Name="STOP" Comment="Cancel Delay" >
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="EO" Comment="Delayed Event" >
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="DT" Type="TIME" Comment="Delay Time" />
+      <VarDeclaration Name="Deadline" Type="TIME" />
+      <VarDeclaration Name="WCET" Type="TIME" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>

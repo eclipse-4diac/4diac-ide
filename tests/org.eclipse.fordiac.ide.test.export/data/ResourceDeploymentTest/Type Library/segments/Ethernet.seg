@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DeviceType SYSTEM "http://www.holobloc.com/xml/Segment.dtd" >
+<SegmentType Name="Ethernet" Comment="Ethernet Segment" >
+  <Identification Standard="61499 ITA" Description="Copyright (c) 2008 Profactor GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"  />
+  <VersionInfo Organization="Profactor GmbH" Version="0.1" Author="Gerhard Ebenhofer" Date="2008-06-02" Remarks="Initial version"/>
+  <CompilerInfo/>
+</SegmentType>

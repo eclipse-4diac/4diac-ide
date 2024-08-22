@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="FB_CTUD_ULINT" Comment="Up Down counter">
+	<Identification Standard="61499-1" Description="Copyright (c) 2023 Martin Erich Jobst&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="Martin Jobst" Date="2023-04-28">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="CU"/>
+				<With Var="CD"/>
+				<With Var="R"/>
+				<With Var="LD"/>
+				<With Var="PV"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="QU"/>
+				<With Var="QD"/>
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="CU" Type="BOOL" Comment="Count up"/>
+			<VarDeclaration Name="CD" Type="BOOL" Comment="Count down"/>
+			<VarDeclaration Name="R" Type="BOOL" Comment="Reset"/>
+			<VarDeclaration Name="LD" Type="BOOL" Comment="Load"/>
+			<VarDeclaration Name="PV" Type="ULINT" Comment="Preset value"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QU" Type="BOOL" Comment="Output up"/>
+			<VarDeclaration Name="QD" Type="BOOL" Comment="Output down"/>
+			<VarDeclaration Name="CV" Type="ULINT" Comment="Count value"/>
+		</OutputVars>
+	</InterfaceList>
+	<SimpleFB>
+		<Algorithm Name="REQ" Comment="">
+			<ST><![CDATA[ALGORITHM REQ
+IF R THEN
+  CV := 0;
+ELSE
+  IF LD THEN
+    CV := PV;
+  ELSE
+    IF NOT(CU AND CD) THEN
+      IF CU AND CV < 18446744073709551615 THEN
+        CV := CV + 1;
+      ELSIF CD AND CV > 0 THEN
+        CV := CV - 1;
+      END_IF;
+    END_IF;
+  END_IF;
+END_IF;
+QU := CV >= PV;
+QD := CV <= 0;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</SimpleFB>
+</FBType>

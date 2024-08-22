@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Service Interface Function Block Type" Name="Wago1506">
+  <Identification Description="Copyright (c) 2018 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2018-12-05" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Map Pins" Name="MAP" Type="Event">
+        <With Var="DigitalInput_1"/>
+        <With Var="DigitalInput_2"/>
+        <With Var="DigitalInput_5"/>
+        <With Var="DigitalInput_3"/>
+        <With Var="DigitalInput_4"/>
+        <With Var="DigitalInput_6"/>
+        <With Var="DigitalInput_7"/>
+        <With Var="DigitalInput_8"/>
+        <With Var="DigitalOutput_1"/>
+        <With Var="DigitalOutput_2"/>
+        <With Var="DigitalOutput_3"/>
+        <With Var="DigitalOutput_4"/>
+        <With Var="DigitalOutput_5"/>
+        <With Var="DigitalOutput_6"/>
+        <With Var="DigitalOutput_7"/>
+        <With Var="DigitalOutput_8"/>
+        <With Var="QI"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Confirm Pin Mapping" Name="MAPO" Type="Event">
+        <With Var="QO"/>
+      </Event>
+      <Event Comment="Indication from Resource" Name="IND" Type="Event">
+        <With Var="QO"/>
+        <With Var="STATUS"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Event Input Qualifier" Name="QI" Type="BOOL"/>
+      <VarDeclaration Comment="" Name="DigitalInput_1" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalInput_2" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalInput_3" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalInput_4" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalInput_5" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalInput_6" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalInput_7" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalInput_8" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalOutput_1" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalOutput_2" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalOutput_3" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalOutput_4" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalOutput_5" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalOutput_6" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalOutput_7" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="DigitalOutput_8" Type="WSTRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Event Output Qualifier" Name="QO" Type="BOOL"/>
+      <VarDeclaration Comment="Service Status" Name="STATUS" Type="WSTRING"/>
+    </OutputVars>
+    <Plugs>
+      <AdapterDeclaration Comment="" Name="BusAdapterOut" Type="WagoBusAdapter"/>
+    </Plugs>
+    <Sockets>
+      <AdapterDeclaration Comment="" Name="BusAdapterIn" Type="WagoBusAdapter"/>
+    </Sockets>
+  </InterfaceList>
+</FBType>

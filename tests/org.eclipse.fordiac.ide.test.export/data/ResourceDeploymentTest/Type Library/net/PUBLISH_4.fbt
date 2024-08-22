@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="" Name="PUBLISH_4">
+  <Identification Description="Copyright (c) 2017 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Alois Zoitl" Date="2017-10-25" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="" Name="INIT" Type="Event">
+        <With Var="QI"/>
+        <With Var="ID"/>
+      </Event>
+      <Event Comment="" Name="REQ" Type="Event">
+        <With Var="QI"/>
+        <With Var="SD_1"/>
+        <With Var="SD_2"/>
+        <With Var="SD_3"/>
+        <With Var="SD_4"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="" Name="INITO" Type="Event">
+        <With Var="QO"/>
+        <With Var="STATUS"/>
+      </Event>
+      <Event Comment="" Name="CNF" Type="Event">
+        <With Var="QO"/>
+        <With Var="STATUS"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="" Name="QI" Type="BOOL"/>
+      <VarDeclaration Comment="" Name="ID" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="SD_1" Type="ANY"/>
+      <VarDeclaration Comment="" Name="SD_2" Type="ANY"/>
+      <VarDeclaration Comment="" Name="SD_3" Type="ANY"/>
+      <VarDeclaration Comment="" Name="SD_4" Type="ANY"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="" Name="QO" Type="BOOL"/>
+      <VarDeclaration Comment="" Name="STATUS" Type="WSTRING"/>
+    </OutputVars>
+  </InterfaceList>
+</FBType>
