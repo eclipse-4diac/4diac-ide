@@ -276,5 +276,8 @@
     <persistent
           value="false">
     </persistent>
+    <attribute
+          name="LIB">
+    </attribute>
  </extension>
 </plugin>

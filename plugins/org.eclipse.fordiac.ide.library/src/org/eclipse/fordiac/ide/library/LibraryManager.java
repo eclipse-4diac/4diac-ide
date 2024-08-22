@@ -33,12 +33,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.eclipse.core.internal.resources.ProjectPathVariableManager;
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IPathVariableManager;
@@ -58,7 +59,6 @@ import org.eclipse.core.runtime.jobs.JobGroup;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
-import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
@@ -91,6 +91,7 @@ public enum LibraryManager {
 	public static final String EXTRACTED_LIB_DIRECTORY = ".lib"; //$NON-NLS-1$
 	public static final String MANIFEST = "MANIFEST.MF"; //$NON-NLS-1$
 	public static final String DOWNLOADER_EXTENSION = "org.eclipse.fordiac.ide.library.ArchiveDownloaderExtension"; //$NON-NLS-1$
+	public static final String MARKER_ATTRIBUTE = "LIB"; //$NON-NLS-1$
 
 	private static final java.net.URI STANDARD_LIBRARY_URI = java.net.URI
 			.create("ECLIPSE_HOME/" + TypeLibraryTags.TYPE_LIBRARY); //$NON-NLS-1$
@@ -115,8 +116,7 @@ public enum LibraryManager {
 			|| entry.getFileName().toString().endsWith(ZIP_SUFFIX));
 	private static final Path[] EMPTY_PATH_ARRAY = new Path[0];
 
-	private final VersionComparator versionComparator = new VersionComparator();
-	private static final VersionRange ALL_RANGE = new VersionRange(VersionRange.LEFT_CLOSED, Version.emptyVersion, null,
+	public static final VersionRange ALL_RANGE = new VersionRange(VersionRange.LEFT_CLOSED, Version.emptyVersion, null,
 			VersionRange.RIGHT_CLOSED);
 
 	private WatchService watchService;
@@ -618,134 +618,12 @@ public enum LibraryManager {
 
 		ManifestHelper.sortAndSaveManifest(manifest);
 
-		for (final Required req : manifest.getDependencies().getRequired()) {
-			checkDependency(req, project, typeLibrary);
-		}
+		/*
+		 * for (final Required req : manifest.getDependencies().getRequired()) {
+		 * checkDependency(req, project, typeLibrary); }
+		 */
 		startLocalResolveJob(project, typeLibrary);
 
-	}
-
-	/**
-	 * Check if library dependency is present in the {@link IProject} and
-	 * download/import as needed if not
-	 *
-	 * @param req         library dependency
-	 * @param project     selected project
-	 * @param typeLibrary {@link TypeLibrary} to use
-	 */
-	private void checkDependency(final Required req, final IProject project, final TypeLibrary typeLibrary) {
-		checkLibChanges();
-		String preferred = null;
-
-		// check already linked lib
-		final IFolder libFolder = project.getFolder(TYPE_LIB_FOLDER_NAME).getFolder(req.getSymbolicName());
-		if (libFolder.exists()) {
-			final Manifest libManifest = ManifestHelper.getContainerManifest(libFolder);
-			if (libManifest != null) {
-				if (VersionComparator.contains(req.getVersion(),
-						libManifest.getProduct().getVersionInfo().getVersion())) {
-					return;
-				}
-			} else {
-				final IPath path = libFolder.getLocation();
-				final String segment = (path.segmentCount() >= 2) ? path.segment(path.segmentCount() - 2) : ""; //$NON-NLS-1$
-				final int index = segment.lastIndexOf('-');
-				if (index > 0) {
-					preferred = segment.substring(index + 1);
-					if (!VersionComparator.contains(req.getVersion(), preferred)) {
-						preferred = null;
-					}
-				}
-			}
-		}
-
-		if (preferred != null) {
-			final Required prefReq = ManifestHelper.createRequired(req.getSymbolicName(), preferred);
-			// check standard libs
-			if (checkLibraries(prefReq, project, typeLibrary, stdlibraries)) {
-				return;
-			}
-
-			// check local libs
-			if (checkLibraries(prefReq, project, typeLibrary, libraries)) {
-				return;
-			}
-		} else {
-			// check standard libs
-			if (checkLibraries(req, project, typeLibrary, stdlibraries)) {
-				return;
-			}
-
-			// check local libs
-			if (checkLibraries(req, project, typeLibrary, libraries)) {
-				return;
-			}
-		}
-
-		final Version pref = (preferred != null) ? new Version(preferred) : null;
-
-		// download if checks were unsuccessful
-		final WorkspaceJob job = new WorkspaceJob(
-				"Download Library package: " + req.getSymbolicName() + " - " + req.getVersion()) { //$NON-NLS-1$//$NON-NLS-2$
-
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-				libraryDownload(req.getSymbolicName(), VersionComparator.parseVersionRange(req.getVersion()), pref,
-						project, true, false);
-				return Status.OK_STATUS;
-			}
-		};
-		job.setRule(project);
-		job.setJobGroup(jobGroup);
-		job.setPriority(Job.LONG);
-		job.schedule();
-	}
-
-	/**
-	 * Import the library dependency into the {@link IProject} if it is contained in
-	 * the given library map
-	 *
-	 * @param req         library dependency
-	 * @param project     selected project
-	 * @param typeLibrary {@link TypeLibrary} to use
-	 * @param libs        library map
-	 * @return {@code true} if the dependency was found in the library map, else
-	 *         {@code false}
-	 */
-	private boolean checkLibraries(final Required req, final IProject project, final TypeLibrary typeLibrary,
-			final Map<String, List<LibraryRecord>> libs) {
-		if (libs.containsKey(req.getSymbolicName()) && libs.get(req.getSymbolicName()).stream()
-				.anyMatch(l -> VersionComparator.parseVersionRange(req.getVersion()).includes(l.version()))) {
-			startLocalLinkJob(req, project, libs, typeLibrary);
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Start background job that links library into {@link IProject}
-	 *
-	 * @param lib         library dependency
-	 * @param project     selected project
-	 * @param libs        map of available libraries
-	 * @param typeLibrary {@link TypeLibrary} to use
-	 */
-	private void startLocalLinkJob(final Required lib, final IProject project,
-			final Map<String, List<LibraryRecord>> libs, final TypeLibrary typeLibrary) {
-		final WorkspaceJob job = new WorkspaceJob("Link library: " + lib.getSymbolicName() + " - " + lib.getVersion()) { //$NON-NLS-1$//$NON-NLS-2$
-
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-				importLibrary(project, typeLibrary, libs.get(lib.getSymbolicName()).stream()
-						.filter(l -> VersionComparator.parseVersionRange(lib.getVersion()).includes(l.version()))
-						.sorted((o1, o2) -> o2.version().compareTo(o1.version())).findFirst().get().uri(), true, true);
-				return Status.OK_STATUS;
-			}
-		};
-		job.setRule(project);
-		job.setJobGroup(jobGroup);
-		job.setPriority(Job.SHORT);
-		job.schedule();
 	}
 
 	/**
@@ -834,125 +712,300 @@ public enum LibraryManager {
 	}
 
 	/**
-	 * Resolves transitive library dependencies of an {@link IProject}
+	 * Resolves transitive library dependencies of a {@link IProject project}
+	 *
+	 * <p>
+	 * This method will remove already linked libraries if they cause conflicts or
+	 * are no longer needed
 	 *
 	 * @param project     selected project
 	 * @param typeLibrary {@link TypeLibrary} to use
 	 */
 	public void resolveDependencies(final IProject project, final TypeLibrary typeLibrary) {
-		final Map<String, VersionRange> requirements = new HashMap<>();
-		final Map<String, List<String>> causes = new HashMap<>();
-		final Set<String> resolved = new HashSet<>();
+		final Map<String, DependencyNode> deps = new HashMap<>();
+		final Map<String, ResolveNode> res = new HashMap<>();
+		final Map<String, Version> preferred = new HashMap<>();
+		final Set<String> linked = new HashSet<>();
 
-		final Manifest projectManifest = ManifestHelper.getOrCreateProjectManifest(project);
-		if (projectManifest.getDependencies() == null) {
+		final Queue<String> queue = new LinkedList<>(); // symbolicNames
+
+		final Manifest projectManifest = ManifestHelper.getContainerManifest(project);
+
+		if (projectManifest == null || projectManifest.getDependencies() == null) {
 			return;
+		}
+
+		checkLibChanges();
+
+		findPreferred(project, preferred, linked);
+
+		projectManifest.getDependencies().getRequired().forEach(req -> {
+			deps.put(req.getSymbolicName(), new DependencyNode(req.getSymbolicName(), "Project", //$NON-NLS-1$
+					VersionComparator.parseVersionRange(req.getVersion())));
+			queue.add(req.getSymbolicName());
+		});
+
+		while (!queue.isEmpty()) {
+			final String symbolicName = queue.poll();
+
+			final var dnode = deps.get(symbolicName);
+
+			if (!dnode.isChanged()) {
+				continue;
+			}
+
+			if (!dnode.isValid()) {
+				final var rnode = res.get(symbolicName);
+				if (rnode != null) {
+					rnode.getDependencies().keySet().forEach(symb -> {
+						final var dn = deps.get(symb);
+						if (dn != null) {
+							dn.removeCause(symbolicName);
+							if (dn.isChanged()) {
+								queue.add(symb);
+							}
+						}
+					});
+				}
+				continue;
+			}
+
+			// resolve dependency
+			final var rnode = resolveDependency(symbolicName, dnode.getRange(), preferred.get(symbolicName));
+
+			if (res.containsKey(symbolicName)) {
+				final var oldRNode = res.get(symbolicName);
+				oldRNode.getDependencies().keySet().forEach(old -> {
+					if (!rnode.getDependencies().containsKey(old)) {
+						deps.get(old).removeCause(symbolicName);
+					}
+				});
+			}
+
+			res.put(symbolicName, rnode);
+
+			// updated dependencies
+			rnode.getDependencies().forEach((symb, val) -> {
+				final var dn = deps.computeIfAbsent(symb, s -> new DependencyNode(symb));
+				dn.putCause(symbolicName, val);
+				if (dn.isChanged()) {
+					queue.add(symb);
+				}
+			});
 		}
 
 		final List<ErrorMarkerBuilder> markerList = new LinkedList<>();
 
-		projectManifest.getDependencies().getRequired().forEach(req -> {
-			requirements.put(req.getSymbolicName(), VersionComparator.parseVersionRange(req.getVersion()));
-			causes.computeIfAbsent(req.getSymbolicName(), r -> new LinkedList<>()).add("Project"); //$NON-NLS-1$
-		});
-		resolved.addAll(requirements.keySet());
+		// import valid nodes
+		for (final var dnode : deps.values()) {
+			if (dnode.isValid()) {
+				final var rnode = res.get(dnode.getSymbolicName());
 
-		final IFolder typelib = project.getFolder(TYPE_LIB_FOLDER_NAME);
-		try {
-			for (final var member : typelib.members()) {
-				if (member instanceof final IContainer container) {
-					final Manifest libManifest = ManifestHelper.getContainerManifest(container);
-					if (libManifest != null && resolved.contains(libManifest.getProduct().getSymbolicName())
-							&& libManifest.getDependencies() != null) {
-						libManifest.getDependencies().getRequired().forEach(req -> handleRequired(requirements, causes,
-								projectManifest, markerList, req, libManifest));
+				if (rnode.isValid()) {
+					// no need to import the same version again
+					if (!linked.contains(rnode.getSymbolicName())
+							|| !preferred.get(rnode.getSymbolicName()).equals(rnode.getVersion())) {
+						importLibrary(project, typeLibrary, rnode.getUri(), false, false);
+
 					}
-				}
-			}
-		} catch (final CoreException e) {
-			// empty
-		}
-		final List<String> queue = new LinkedList<>();
-		requirements.keySet().stream().filter(k -> !resolved.contains(k)).forEach(queue::add);
+					linked.remove(rnode.getSymbolicName());
+				} else {
+					markerList.add(createDependencyMarker(projectManifest, rnode, dnode));
 
-		while (!queue.isEmpty()) {
-			final String symb = queue.removeFirst();
-			final VersionRange range = requirements.get(symb);
-			LibraryRecord libRec = null;
-			java.net.URI uri = null;
-			if (stdlibraries.containsKey(symb)) {
-				libRec = stdlibraries.get(symb).stream().filter(lr -> range.includes(lr.version()))
-						.sorted((o1, o2) -> o2.version().compareTo(o1.version())).findFirst().orElse(null);
-				if (libRec == null) {
-					markerList.add(ErrorMarkerBuilder
-							.createErrorMarkerBuilder(MessageFormat.format(Messages.ErrorMarkerStandardLibNotAvailable,
-									symb, VersionComparator.formatVersionRange(range), String.join(", ", //$NON-NLS-1$
-											causes.getOrDefault(symb, Collections.emptyList()))))
-							.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(projectManifest.getDependencies()));
-					continue;
 				}
-			}
-			if (libraries.containsKey(symb)) {
-				libRec = libraries.get(symb).stream().filter(lr -> range.includes(lr.version()))
-						.sorted((o1, o2) -> o2.version().compareTo(o1.version())).findFirst().orElse(null);
-			}
-			if (libRec == null) {
-				uri = libraryDownload(symb, range, null, project, false, false);
-			} else {
-				uri = libRec.uri();
-			}
-			if (uri != null) {
-				importLibrary(project, typeLibrary, uri, false, false);
-				resolved.add(symb);
-				final Manifest libManifest = ManifestHelper
-						.getContainerManifest(project.getFolder(TYPE_LIB_FOLDER_NAME).getFolder(symb));
-				if (libManifest != null && libManifest.getDependencies() != null) {
-					libManifest.getDependencies().getRequired().forEach(req -> {
-						handleRequired(requirements, causes, projectManifest, markerList, req, libManifest);
-						if (!resolved.contains(req.getSymbolicName())) {
-							queue.add(req.getSymbolicName());
-						}
-					});
-				}
-			} else {
-				markerList.add(ErrorMarkerBuilder
-						.createErrorMarkerBuilder(MessageFormat.format(Messages.ErrorMarkerLibNotAvailable, symb,
-								VersionComparator.formatVersionRange(range),
-								String.join(", ", causes.getOrDefault(symb, Collections.emptyList())))) //$NON-NLS-1$
-						.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(projectManifest.getDependencies()));
+			} else if (dnode.isRangeEmpty()) {
+				markerList.add(createDependencyMarker(projectManifest, dnode));
 			}
 		}
+
+		linked.forEach(l -> {
+			try {
+				project.getFolder(TYPE_LIB_FOLDER_NAME).getFolder(l).delete(true, null);
+			} catch (final CoreException e) {
+				// empty
+			}
+		}); // remove still linked libraries
+
 		FordiacMarkerHelper.updateMarkers(project.getFile(MANIFEST), FordiacErrorMarker.LIBRARY_MARKER, markerList,
 				true);
 	}
 
 	/**
-	 * Checks {@link Required} and merges it with already known dependencies
+	 * Find linked/preferred versions of libraries
 	 *
-	 * @param requirements    already known dependencies
-	 * @param projectManifest project {@link Manifest}
-	 * @param markerList      list to add error markers to
-	 * @param req             library dependency to check
+	 * @param project   selected project
+	 * @param preferred map to fill with preferred version
+	 * @param linked    set to fill with symbolic names of linked libraries
 	 */
-	private static void handleRequired(final Map<String, VersionRange> requirements,
-			final Map<String, List<String>> causes, final Manifest projectManifest,
-			final List<ErrorMarkerBuilder> markerList, final Required req, final Manifest libManifest) {
-		final VersionRange oldRange = requirements.get(req.getSymbolicName());
-		final VersionRange newRange = VersionComparator.parseVersionRange(req.getVersion());
-
-		requirements.merge(req.getSymbolicName(), newRange, VersionRange::intersection);
-		causes.computeIfAbsent(req.getSymbolicName(), r -> new LinkedList<>())
-				.add(libManifest.getProduct().getSymbolicName() + "-" //$NON-NLS-1$
-						+ libManifest.getProduct().getVersionInfo().getVersion());
-
-		if (oldRange != null && requirements.get(req.getSymbolicName()).isEmpty()) {
-			markerList.add(ErrorMarkerBuilder
-					.createErrorMarkerBuilder(MessageFormat.format(Messages.ErrorMarkerVersionRangeEmpty,
-							req.getSymbolicName(), VersionComparator.formatVersionRange(oldRange),
-							VersionComparator.formatVersionRange(newRange), String.join(", ", //$NON-NLS-1$
-									causes.getOrDefault(req.getSymbolicName(), Collections.emptyList()))))
-					.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(projectManifest.getDependencies()));
+	private static void findPreferred(final IProject project, final Map<String, Version> preferred,
+			final Set<String> linked) {
+		final IFolder typeLibFolder = project.getFolder(TYPE_LIB_FOLDER_NAME);
+		if (!typeLibFolder.exists()) {
+			return;
 		}
+		try {
+			typeLibFolder.accept(res -> {
+				if (res instanceof final IFolder libFolder) {
+					if (typeLibFolder.equals(libFolder)) {
+						return true;
+					}
+					if (!libFolder.exists() || !libFolder.isLinked()) {
+						return false;
+					}
+					final Manifest libManifest = ManifestHelper.getContainerManifest(libFolder);
+					if (libManifest != null) {
+						linked.add(libFolder.getName());
+						preferred.put(libFolder.getName(),
+								new Version(libManifest.getProduct().getVersionInfo().getVersion()));
+					} else {
+						final IPath path = libFolder.getLocation();
+						final String segment = (path.segmentCount() >= 2) ? path.segment(path.segmentCount() - 2) : ""; //$NON-NLS-1$
+						final int index = segment.lastIndexOf('-');
+						if (index > 0) {
+							preferred.put(libFolder.getName(), new Version(segment.substring(index + 1)));
+						}
+					}
+				}
+				return false;
+			});
+		} catch (final CoreException e) {
+			// empty
+		}
+	}
+
+	/**
+	 * Resolves the given dependency. Will download libraries as needed.
+	 *
+	 * @param symbolicName name of the library
+	 * @param range        version range of the dependency
+	 * @param prefVersion  preferred version, can be {@code null}
+	 * @return
+	 */
+	private ResolveNode resolveDependency(final String symbolicName, final VersionRange range,
+			final Version prefVersion) {
+		final boolean usePref = prefVersion != null && range.includes(prefVersion);
+		LibraryRecord rec;
+
+		if (stdlibraries.containsKey(symbolicName)) {
+			if (usePref) {
+				rec = getLibraryRecord(stdlibraries, symbolicName, prefVersion);
+				if (rec != null) {
+					return new ResolveNode(rec);
+				}
+			}
+			rec = getLibraryRecord(stdlibraries, symbolicName, range);
+			if (rec != null) {
+				return new ResolveNode(rec);
+			}
+			return new ResolveNode(symbolicName, Messages.ErrorMarkerStandardLibNotAvailable);
+		}
+		if (usePref) {
+			rec = getLibraryRecord(libraries, symbolicName, prefVersion);
+			if (rec != null) {
+				return new ResolveNode(rec);
+			}
+		} else {
+			rec = getLibraryRecord(libraries, symbolicName, range);
+			if (rec != null) {
+				return new ResolveNode(rec);
+			}
+		}
+
+		final java.net.URI uri = libraryDownload(symbolicName, range, prefVersion, null, false, false);
+
+		if (uri != null) {
+			rec = getLibraryRecord(libraries, symbolicName, uri);
+			if (rec != null) {
+				return new ResolveNode(rec);
+			}
+		}
+
+		if (usePref) {
+			rec = getLibraryRecord(libraries, symbolicName, range);
+			if (rec != null) {
+				return new ResolveNode(rec);
+			}
+		}
+
+		return new ResolveNode(symbolicName, Messages.ErrorMarkerLibNotAvailable);
+	}
+
+	/**
+	 * Search for existing library based on symbolic name and version
+	 *
+	 * @param libs         library map to search
+	 * @param symbolicName symbolic name
+	 * @param version      specific version
+	 * @return library record if found, otherwise {@code null}
+	 */
+	private static LibraryRecord getLibraryRecord(final Map<String, List<LibraryRecord>> libs,
+			final String symbolicName, final Version version) {
+		return libs.get(symbolicName).stream().filter(l -> l.version().equals(version)).findFirst().orElse(null);
+	}
+
+	/**
+	 * Search for existing library based on symbolic name and version range
+	 *
+	 * @param libs         library map to search
+	 * @param symbolicName symbolic name
+	 * @param range        version range
+	 * @return library record if found, otherwise {@code null}
+	 */
+	private static LibraryRecord getLibraryRecord(final Map<String, List<LibraryRecord>> libs,
+			final String symbolicName, final VersionRange range) {
+		return libs.get(symbolicName).stream().filter(l -> range.includes(l.version()))
+				.sorted((o1, o2) -> o2.version().compareTo(o1.version())).findFirst().orElse(null);
+	}
+
+	/**
+	 * Search for existing library based on symbolic name and folder URI
+	 *
+	 * @param libs         library map to search
+	 * @param symbolicName symbolic name
+	 * @param uri          URI of the library folder
+	 * @return library record if found, otherwise {@code null}
+	 */
+	private static LibraryRecord getLibraryRecord(final Map<String, List<LibraryRecord>> libs,
+			final String symbolicName, final java.net.URI uri) {
+		return libs.get(symbolicName).stream().filter(l -> l.uri().equals(uri))
+				.sorted((o1, o2) -> o2.version().compareTo(o1.version())).findFirst().orElse(null);
+	}
+
+	/**
+	 * Creates error marker based on dependency and resolved node
+	 *
+	 * @param manifest manifest to attach marker
+	 * @param rnode    resolved node
+	 * @param dnode    dependency node
+	 * @return {@link ErrorMarkerBuilder} for error
+	 */
+	private static ErrorMarkerBuilder createDependencyMarker(final Manifest manifest, final ResolveNode rnode,
+			final DependencyNode dnode) {
+		return ErrorMarkerBuilder
+				.createErrorMarkerBuilder(MessageFormat.format(rnode.getError(), rnode.getSymbolicName(),
+						VersionComparator.formatVersionRange(dnode.getRange()),
+						String.join(", ", dnode.getCauses().keySet()))) //$NON-NLS-1$
+				.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(manifest.getDependencies())
+				.addAdditionalAttributes(Map.of(MARKER_ATTRIBUTE, rnode.getSymbolicName()));
+	}
+
+	/**
+	 * Creates version range error marker based on dependency node
+	 *
+	 * @param manifest manifest to attach marker
+	 * @param dnode    dependency node
+	 * @return {@link ErrorMarkerBuilder} for error
+	 */
+	private static ErrorMarkerBuilder createDependencyMarker(final Manifest manifest, final DependencyNode dnode) {
+		final String causedBy = dnode.getCauses().entrySet().stream()
+				.map(entry -> entry.getKey() + ": " + VersionComparator.formatVersionRange(entry.getValue())) //$NON-NLS-1$
+				.collect(Collectors.joining(", ")); //$NON-NLS-1$
+
+		return ErrorMarkerBuilder
+				.createErrorMarkerBuilder(
+						MessageFormat.format(Messages.ErrorMarkerVersionRangeEmpty, dnode.getSymbolicName(), causedBy))
+				.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(manifest.getDependencies())
+				.addAdditionalAttributes(Map.of(MARKER_ATTRIBUTE, dnode.getSymbolicName()));
 	}
 
 	/**
@@ -987,4 +1040,5 @@ public enum LibraryManager {
 			checkManifestFile(typeLibrary.getProject(), typeLibrary);
 		}
 	};
+
 }
