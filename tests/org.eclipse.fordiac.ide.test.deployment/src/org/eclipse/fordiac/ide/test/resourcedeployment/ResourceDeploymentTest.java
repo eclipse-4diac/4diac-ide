@@ -75,10 +75,10 @@ class ResourceDeploymentTest {
 		final HashSet<String> set = new HashSet<>();
 		for (final ParameterData param : parameters) {
 			if (!set.add(getParameterDestination(param))) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	private static String getParameterDestination(final ParameterData param) {
