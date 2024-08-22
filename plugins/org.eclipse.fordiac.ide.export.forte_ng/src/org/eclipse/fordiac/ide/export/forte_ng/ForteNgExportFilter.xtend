@@ -70,7 +70,8 @@ class ForteNgExportFilter extends TemplateExportFilter {
 				}
 			FunctionFBType:
 				#{
-					new FunctionFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
+					new FunctionFBHeaderTemplate(source, source.generateTypeInclude,
+						Paths.get(source.generateTypePath)),
 					new FunctionFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
 				}
 			SubAppType: // SubAppType is derived from CompositeFBType and needs to be handled first
@@ -80,7 +81,8 @@ class ForteNgExportFilter extends TemplateExportFilter {
 			}
 			CompositeFBType:
 				#{
-					new CompositeFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
+					new CompositeFBHeaderTemplate(source, source.generateTypeInclude,
+						Paths.get(source.generateTypePath)),
 					new CompositeFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
 				}
 			AdapterType:
@@ -90,13 +92,17 @@ class ForteNgExportFilter extends TemplateExportFilter {
 				}
 			ServiceInterfaceFBType:
 				#{
-					new ServiceInterfaceFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
-					new ServiceInterfaceFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
+					new ServiceInterfaceFBHeaderTemplate(source, source.generateTypeInclude,
+						Paths.get(source.generateTypePath)),
+					new ServiceInterfaceFBImplTemplate(source, source.generateTypeSource,
+						Paths.get(source.generateTypePath))
 				}
 			StructuredType:
 				#{
-					new StructuredTypeHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
-					new StructuredTypeImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
+					new StructuredTypeHeaderTemplate(source, source.generateTypeInclude,
+						Paths.get(source.generateTypePath)),
+					new StructuredTypeImplTemplate(source, source.generateTypeSource,
+						Paths.get(source.generateTypePath))
 				}
 			CMakeListsMarker:
 				#{
@@ -106,8 +112,10 @@ class ForteNgExportFilter extends TemplateExportFilter {
 				val languageSupport = ILanguageSupportFactory.createLanguageSupport("forte_ng", source)
 				if (languageSupport !== null) {
 					#{
-						new LanguageHeaderTemplate(languageSupport, source.generateTypeInclude, Paths.get(source.generateTypePath)),
-						new LanguageImplTemplate(languageSupport, source.generateTypeSource, Paths.get(source.generateTypePath))
+						new LanguageHeaderTemplate(languageSupport, source.generateTypeInclude,
+							Paths.get(source.generateTypePath)),
+						new LanguageImplTemplate(languageSupport, source.generateTypeSource,
+							Paths.get(source.generateTypePath))
 					}
 				} else {
 					errors.add('''Unknown source type «source.eClass.name»''')
