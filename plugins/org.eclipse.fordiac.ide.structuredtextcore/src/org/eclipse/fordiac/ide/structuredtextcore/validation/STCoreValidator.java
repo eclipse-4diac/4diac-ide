@@ -187,6 +187,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String DUPLICATE_ATTRIBUTE = ISSUE_CODE_PREFIX + "duplicateAttribute"; //$NON-NLS-1$
 
 	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
+	private static final Pattern IDENTIFIER_CONSECUTIVE_UNDERSCORES_PATTERN = Pattern.compile("_{2,}[^_]"); //$NON-NLS-1$
 
 	private void checkRangeOnValidity(final STExpression expression) {
 		if (expression instanceof final STBinaryExpression subRangeExpression) {
@@ -344,7 +345,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Check
 	public void checkConsecutiveUnderscoresInIdentifier(final INamedElement iNamedElement) {
-		if (iNamedElement.getName().indexOf("__") != -1) { //$NON-NLS-1$
+		if (IDENTIFIER_CONSECUTIVE_UNDERSCORES_PATTERN.matcher(iNamedElement.getName()).find()) {
 			error(Messages.STCoreValidator_Consecutive_Underscores_In_Identifier, iNamedElement,
 					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, CONSECUTIVE_UNDERSCORE_IN_IDENTIFIER_ERROR,
 					iNamedElement.getName());

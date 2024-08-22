@@ -17,6 +17,7 @@
  *       - add unnecessary conversion quickfixes
  *       - add unused import and organize imports quickfixes
  *       - refactor adding missing variables
+ *       - refactor quickfixes
  *   Ulzii Jargalsaikhan
  *   	 - add quick fixes for missing variables
  */
@@ -54,7 +55,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionScop
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
@@ -68,6 +68,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageColl
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.xtext.EcoreUtil2;
+import org.eclipse.xtext.formatting2.regionaccess.IEObjectRegion;
+import org.eclipse.xtext.formatting2.regionaccess.ISemanticRegion;
+import org.eclipse.xtext.formatting2.regionaccess.ITextRegionDiffBuilder;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
@@ -116,43 +119,47 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
 	@Fix(STCoreValidator.EXIT_NOT_IN_LOOP)
 	public static void fixExitNotInLoop(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveInvalidExitStatementLabel,
-				Messages.STCoreQuickfixProvider_RemoveInvalidExitStatementDescription, null,
-				(element, context) -> EcoreUtil.delete(element));
+		// multi resolutions need to have identical label, description, and image
+		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_RemoveInvalidExitStatementLabel,
+				Messages.STCoreQuickfixProvider_RemoveInvalidExitStatementDescription, null, (element, context) -> {
+					context.setUpdateCrossReferences(false);
+					context.setUpdateRelatedFiles(false);
+					context.addModification(element, EcoreUtil::remove);
+				});
 	}
 
 	@Fix(STCoreValidator.CONTINUE_NOT_IN_LOOP)
 	public static void fixContinueNotInLoop(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveInvalidContinueStatementLabel,
-				Messages.STCoreQuickfixProvider_RemoveInvalidContinueStatementDescription, null,
-				(element, context) -> EcoreUtil.delete(element));
+		// multi resolutions need to have identical label, description, and image
+		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_RemoveInvalidContinueStatementLabel,
+				Messages.STCoreQuickfixProvider_RemoveInvalidContinueStatementDescription, null, (element, context) -> {
+					context.setUpdateCrossReferences(false);
+					context.setUpdateRelatedFiles(false);
+					context.addModification(element, EcoreUtil::remove);
+				});
 	}
 
 	@Fix(STCoreValidator.TRAILING_UNDERSCORE_IN_IDENTIFIER_ERROR)
 	public static void fixTrailingUnderscore(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveTrailingUnderscoreLabel,
-				MessageFormat.format(Messages.STCoreQuickfixProvider_RemoveTrailingUnderscoreDescription,
-						(Object[]) issue.getData()),
-				null, (IModification) context -> {
-					final IXtextDocument xtextDocument = context.getXtextDocument();
-					if (xtextDocument != null) {
-						xtextDocument.replace(issue.getOffset().intValue(), issue.getLength().intValue(),
-								issue.getData()[0].substring(0, issue.getData()[0].length() - 1));
-					}
+		// multi resolutions need to have identical label, description, and image
+		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_RemoveTrailingUnderscoreLabel,
+				Messages.STCoreQuickfixProvider_RemoveTrailingUnderscoreDescription, null, (element, context) -> {
+					context.setUpdateCrossReferences(true);
+					context.setUpdateRelatedFiles(true);
+					context.addModification(element, (final INamedElement namedElement) -> namedElement
+							.setName(namedElement.getName().replaceAll("_+$", ""))); //$NON-NLS-1$ //$NON-NLS-2$
 				});
 	}
 
 	@Fix(STCoreValidator.CONSECUTIVE_UNDERSCORE_IN_IDENTIFIER_ERROR)
 	public static void fixConsecutiveUnderscore(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveConsecutiveUnderscoresLabel,
-				MessageFormat.format(Messages.STCoreQuickfixProvider_RemoveConsecutiveUnderscoresDescription,
-						(Object[]) issue.getData()),
-				null, (IModification) context -> {
-					final IXtextDocument xtextDocument = context.getXtextDocument();
-					if (xtextDocument != null) {
-						xtextDocument.replace(issue.getOffset().intValue(), issue.getLength().intValue(),
-								issue.getData()[0].replaceAll("_(_)+", "_")); //$NON-NLS-1$ //$NON-NLS-2$
-					}
+		// multi resolutions need to have identical label, description, and image
+		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_RemoveConsecutiveUnderscoresLabel,
+				Messages.STCoreQuickfixProvider_RemoveConsecutiveUnderscoresDescription, null, (element, context) -> {
+					context.setUpdateCrossReferences(true);
+					context.setUpdateRelatedFiles(true);
+					context.addModification(element, (final INamedElement namedElement) -> namedElement
+							.setName(namedElement.getName().replaceAll("_{2,}", "_"))); //$NON-NLS-1$ //$NON-NLS-2$
 				});
 	}
 
@@ -180,49 +187,84 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
 	@Fix(STCoreValidator.WRONG_NAME_CASE)
 	public static void fixVariableNameCasing(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue, Messages.STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredLabel,
-				MessageFormat.format(Messages.STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredDescription,
-						(Object[]) issue.getData()),
-				null, (IModification) context -> {
-					final IXtextDocument xtextDocument = context.getXtextDocument();
-					if (xtextDocument != null) {
-						xtextDocument.replace(issue.getOffset().intValue(), issue.getLength().intValue(),
-								issue.getData()[1]);
-					}
+		// multi resolutions need to have identical label, description, and image
+		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredLabel,
+				Messages.STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredDescription, null, (element, context) -> {
+					context.setUpdateCrossReferences(false);
+					context.setUpdateRelatedFiles(false);
+					context.addModification(element, (final STFeatureExpression expression) -> {
+						final ITextRegionDiffBuilder textRegionDiffBuilder = context
+								.getModifiableDocument((XtextResource) expression.eResource());
+						if (textRegionDiffBuilder != null) {
+							final IEObjectRegion expressionRegion = textRegionDiffBuilder.getOriginalTextRegionAccess()
+									.regionForEObject(expression);
+							if (expressionRegion != null) {
+								final ISemanticRegion featureRegion = expressionRegion.getRegionFor()
+										.feature(STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE);
+								if (featureRegion != null) {
+									textRegionDiffBuilder.replace(featureRegion, issue.getData()[1]);
+								}
+							}
+						}
+					});
 				});
 	}
 
 	@Fix(STCoreValidator.UNNECESSARY_CONVERSION)
 	public static void fixUnnecessaryConversion(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveUnnecessaryConversionLabel,
-				MessageFormat.format(Messages.STCoreQuickfixProvider_RemoveUnnecessaryConversionDescription,
-						(Object[]) issue.getData()),
-				null, (final EObject element, final IModificationContext context) -> {
-					if (element instanceof final STFeatureExpression featureExpression
-							&& featureExpression.eContainer() != null && featureExpression.eContainingFeature() != null
-							&& featureExpression.getParameters().size() == 1) {
-						final STExpression argument = featureExpression.getParameters().get(0).getArgument();
-						featureExpression.eContainer().eSet(featureExpression.eContainingFeature(), argument);
-					}
+		// multi resolutions need to have identical label, description, and image
+		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_RemoveUnnecessaryConversionLabel,
+				Messages.STCoreQuickfixProvider_RemoveUnnecessaryConversionDescription, null, (element, context) -> {
+					context.setUpdateCrossReferences(false);
+					context.setUpdateRelatedFiles(false);
+					context.addModification(element, (final STFeatureExpression expression) -> {
+						final ITextRegionDiffBuilder textRegionDiffBuilder = context
+								.getModifiableDocument((XtextResource) expression.eResource());
+						if (textRegionDiffBuilder != null) {
+							final IEObjectRegion expressionRegion = textRegionDiffBuilder.getOriginalTextRegionAccess()
+									.regionForEObject(expression);
+							if (expressionRegion != null) {
+								final ISemanticRegion parametersRegionBegin = expressionRegion.getRegionFor()
+										.keyword("("); //$NON-NLS-1$
+								final ISemanticRegion parametersRegionEnd = expressionRegion.getRegionFor()
+										.keyword(")"); //$NON-NLS-1$
+								if (parametersRegionBegin != null && parametersRegionEnd != null) {
+									textRegionDiffBuilder.replace(expressionRegion.getPreviousHiddenRegion(),
+											expressionRegion.getNextHiddenRegion(),
+											parametersRegionBegin.getNextHiddenRegion(),
+											parametersRegionEnd.getPreviousHiddenRegion());
+								}
+							}
+						}
+					});
 				});
 	}
 
 	@Fix(STCoreValidator.UNNECESSARY_NARROW_CONVERSION)
 	@Fix(STCoreValidator.UNNECESSARY_WIDE_CONVERSION)
-	public void fixUnnecessaryNarrowOrWideConversion(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		final String castName = issue.getData()[1] + "_TO_" + issue.getData()[2]; //$NON-NLS-1$
-		final boolean castPossible = StreamSupport.stream(standardFunctionProvider.get().spliterator(), true)
-				.anyMatch(func -> func.getName().equals(castName));
-		if (castPossible) {
-			acceptor.accept(issue, Messages.STCoreQuickfixProvider_ChangeConversionLabel,
-					MessageFormat.format(Messages.STCoreQuickfixProvider_ChangeConversionDescription, castName), null,
-					(IModification) context -> {
-						final IXtextDocument xtextDocument = context.getXtextDocument();
-						if (xtextDocument != null) {
-							xtextDocument.replace(issue.getOffset().intValue(), issue.getLength().intValue(), castName);
+	public static void fixUnnecessaryNarrowOrWideConversion(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		// multi resolutions need to have identical label, description, and image
+		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_ChangeConversionLabel,
+				Messages.STCoreQuickfixProvider_ChangeConversionDescription, null, (element, context) -> {
+					context.setUpdateCrossReferences(false);
+					context.setUpdateRelatedFiles(false);
+					context.addModification(element, (final STFeatureExpression expression) -> {
+						final ITextRegionDiffBuilder textRegionDiffBuilder = context
+								.getModifiableDocument((XtextResource) expression.eResource());
+						if (textRegionDiffBuilder != null) {
+							final IEObjectRegion expressionRegion = textRegionDiffBuilder.getOriginalTextRegionAccess()
+									.regionForEObject(expression);
+							if (expressionRegion != null) {
+								final ISemanticRegion featureRegion = expressionRegion.getRegionFor()
+										.feature(STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE);
+								if (featureRegion != null) {
+									textRegionDiffBuilder.replace(featureRegion,
+											issue.getData()[1] + "_TO_" + issue.getData()[2]); //$NON-NLS-1$
+								}
+							}
 						}
 					});
-		}
+				});
 	}
 
 	@Fix(STCoreValidator.UNNECESSARY_LITERAL_CONVERSION)
@@ -241,19 +283,41 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		}
 	}
 
-	@Fix(STCoreValidator.UNUSED_IMPORT)
-	public static void fixUnusedImport(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveUnusedImportLabel,
-				MessageFormat.format(Messages.STCoreQuickfixProvider_RemoveUnusedImportDescription, issue.getData()[0]),
-				null, (element, context) -> EcoreUtil.delete(element));
+	@Fix(STCoreValidator.INVALID_IMPORT)
+	public static void fixRemoveImport(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		// multi resolutions need to have identical label, description, and image
+		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_RemoveImportLabel,
+				Messages.STCoreQuickfixProvider_RemoveImportDescription, null, (element, context) -> {
+					context.setUpdateCrossReferences(false);
+					context.setUpdateRelatedFiles(false);
+					context.addModification(element, (final STImport imp) -> {
+						final ITextRegionDiffBuilder textRegionDiffBuilder = context
+								.getModifiableDocument((XtextResource) imp.eResource());
+						if (textRegionDiffBuilder != null) {
+							final IEObjectRegion importRegion = textRegionDiffBuilder.getOriginalTextRegionAccess()
+									.regionForEObject(imp);
+							if (importRegion != null) {
+								textRegionDiffBuilder.remove(importRegion.getPreviousHiddenRegion(),
+										importRegion.getNextHiddenRegion());
+							}
+						}
+					});
+				});
 	}
 
 	@Fix(STCoreValidator.UNUSED_IMPORT)
 	@Fix(STCoreValidator.WILDCARD_IMPORT)
 	public void organizeImports(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue, Messages.STCoreQuickfixProvider_OrganizeImports,
-				Messages.STCoreQuickfixProvider_OrganizeImports, null,
-				(element, context) -> organizeImports(EcoreUtil2.getContainerOfType(element, STSource.class)));
+		if (!hasSyntaxErrors(issue)) {
+			// multi resolutions need to have identical label, description, and image
+			acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_OrganizeImports,
+					Messages.STCoreQuickfixProvider_OrganizeImports, null, (element, context) -> {
+						context.setUpdateCrossReferences(false);
+						context.setUpdateRelatedFiles(false);
+						context.addModification(element, (final STImport imp) -> organizeImports(
+								EcoreUtil2.getContainerOfType(imp, STSource.class)));
+					});
+		}
 	}
 
 	protected void organizeImports(final STSource source) {
@@ -504,5 +568,15 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 			}
 		}
 		return ElementaryTypes.SINT;
+	}
+
+	protected boolean hasSyntaxErrors(final Issue issue) {
+		final IModificationContext modificationContext = getModificationContextFactory()
+				.createModificationContext(issue);
+		final IXtextDocument xtextDocument = modificationContext.getXtextDocument();
+		return xtextDocument == null || xtextDocument
+				.tryReadOnly(resource -> Boolean
+						.valueOf(resource.getParseResult() == null || resource.getParseResult().hasSyntaxErrors()))
+				.booleanValue();
 	}
 }

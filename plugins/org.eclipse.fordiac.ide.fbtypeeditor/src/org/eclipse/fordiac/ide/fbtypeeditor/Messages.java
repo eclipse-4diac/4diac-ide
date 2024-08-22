@@ -22,6 +22,8 @@ public final class Messages extends NLS {
 	public static String CreateFromNewAdapterAction_NewAdapter;
 	public static String CreateInputEventAction_CreateInputEvent;
 	public static String CreateOutputEventAction_CreateOutputEvent;
+
+	public static String FBInterfacePaletteFactory_AdapterTypes;
 	public static String FBInterfacePaletteFactory_DataTypes;
 	public static String FBInterfacePaletteFactory_EventTypes;
 	public static String FBInterfacePaletteFactory_RootGroup;

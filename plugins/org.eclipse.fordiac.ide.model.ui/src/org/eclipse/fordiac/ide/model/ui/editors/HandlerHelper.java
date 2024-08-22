@@ -16,9 +16,12 @@ package org.eclipse.fordiac.ide.model.ui.editors;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.draw2d.FreeformViewport;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
@@ -26,6 +29,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
@@ -60,7 +64,7 @@ public final class HandlerHelper {
 
 	public static boolean selectElement(final Object element, final GraphicalViewer viewer) {
 		if (viewer != null) {
-			final EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(element);
+			final EditPart editPart = viewer.getEditPartRegistry().get(element);
 			if (null != editPart) {
 				selectEditPart(viewer, editPart);
 				return true;
@@ -111,5 +115,19 @@ public final class HandlerHelper {
 					.map(FBNetworkElement.class::cast).toList();
 		}
 		return Collections.emptyList();
+	}
+
+	public static void showExpandedSubapp(final SubApp subapp, final IEditorPart editor) {
+		// move canvas to show the top-left corner of an expanded subapp
+		final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
+		if (null != viewer) {
+			final EditPart root = viewer.getEditPartRegistry().get(subapp).getRoot();
+			if (root instanceof final ScalableFreeformRootEditPart gep
+					&& gep.getFigure() instanceof final FreeformViewport viewp) {
+				final Point pos = ((PositionableElement) subapp).getPosition().toScreenPoint();
+				viewp.setHorizontalLocation((int) (pos.x * gep.getZoomManager().getZoom()));
+				viewp.setVerticalLocation((int) (pos.y * gep.getZoomManager().getZoom()));
+			}
+		}
 	}
 }

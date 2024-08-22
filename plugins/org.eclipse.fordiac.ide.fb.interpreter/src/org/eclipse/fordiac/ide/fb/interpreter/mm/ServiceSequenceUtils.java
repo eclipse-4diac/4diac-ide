@@ -18,11 +18,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.api.ServiceFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
@@ -33,6 +36,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class ServiceSequenceUtils {
 
+	public static final String PARAMETER_SEPARATOR = ";"; //$NON-NLS-1$
+	public static final String ASSIGNMENT_OPERATOR = ":="; //$NON-NLS-1$
 	public static final String EXTERNAL_INTERFACE = "external"; //$NON-NLS-1$
 	public static final String INTERNAL_INTERFACE = "internal"; //$NON-NLS-1$
 	public static final String START_STATE = "START"; //$NON-NLS-1$
@@ -40,14 +45,6 @@ public final class ServiceSequenceUtils {
 	public static ServiceSequence addServiceSequence(final org.eclipse.fordiac.ide.model.libraryElement.Service s) {
 		return ServiceFactory.addServiceSequenceTo(s, "Test" + s.getServiceSequence().size(), //$NON-NLS-1$
 				Collections.emptyList());
-	}
-
-	public static void setVariable(final FBType fb, final String name, final String value) {
-		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name);
-		if (!(el instanceof VarDeclaration)) {
-			throw new IllegalArgumentException("variable does not exist in FB"); //$NON-NLS-1$
-		}
-		VariableUtils.setVariable((VarDeclaration) el, value);
 	}
 
 	public static List<List<String>> getParametersFromString(final String parameters) {
@@ -69,11 +66,11 @@ public final class ServiceSequenceUtils {
 	}
 
 	private static String removeSemicolon(final String s) {
-		return s.replace(";", " "); //$NON-NLS-1$//$NON-NLS-2$
+		return s.replace(PARAMETER_SEPARATOR, " "); //$NON-NLS-1$
 	}
 
 	public static List<String> splitList(final String parameters) {
-		return splitAndCleanList(parameters, ";"); //$NON-NLS-1$
+		return splitAndCleanList(parameters, PARAMETER_SEPARATOR);
 	}
 
 	public static String removeKeyword(final String parameters) {
@@ -85,18 +82,18 @@ public final class ServiceSequenceUtils {
 	}
 
 	public static List<String> splitParameter(final String parameter) {
-		return splitAndCleanList(parameter, ":="); //$NON-NLS-1$
+		return splitAndCleanList(parameter, ASSIGNMENT_OPERATOR);
 	}
 
 	public static String summarizeParameters(final Iterable<VarDeclaration> inputVars) {
 		final StringBuilder builder = new StringBuilder();
-		inputVars.forEach(variable -> summarize(builder, variable));
+		inputVars.forEach(variable -> summarizeParameter(builder, variable));
 		return builder.toString();
 	}
 
-	private static void summarize(final StringBuilder builder, final VarDeclaration variable) {
+	private static void summarizeParameter(final StringBuilder builder, final VarDeclaration variable) {
 		builder.append(variable.getName());
-		builder.append(":="); //$NON-NLS-1$
+		builder.append(ASSIGNMENT_OPERATOR);
 		if (variable.getValue() != null) {
 			final String value = variable.getValue().getValue();
 			if (value.contains("#")) { //$NON-NLS-1$
@@ -106,6 +103,12 @@ public final class ServiceSequenceUtils {
 			}
 		}
 		builder.append(";\n"); //$NON-NLS-1$
+	}
+
+	public static String summarizeParameter(final VarDeclaration variable) {
+		final StringBuilder builder = new StringBuilder();
+		summarizeParameter(builder, variable);
+		return builder.toString();
 	}
 
 	public static void convertTransactionToServiceModel(final ServiceSequence seq, final FBType destType,
@@ -125,12 +128,33 @@ public final class ServiceSequenceUtils {
 		seq.getServiceTransaction().add(serviceTransaction);
 	}
 
+	public static void convertEventManagerToServiceModel(final ServiceSequence seq, final FBType destType,
+			final EventManager manager, final List<String> parameter) {
+		manager.getTransactions().forEach(tr -> convertTransactionToServiceModel(seq, destType, (FBTransaction) tr));
+		for (int i = 0; i < parameter.size(); i++) {
+			seq.getServiceTransaction().get(i).getInputPrimitive().setParameters(parameter.get(i));
+		}
+	}
+
 	private static FBType getFbTypeFromRuntime(final EventOccurrence eo) {
 		final EObject type = eo.getFbRuntime().getModel();
 		if (type instanceof final FBType fbtype) {
 			return fbtype;
 		}
 		return null;
+	}
+
+	public static List<Event> getEvents(final FBType type, final List<String> eventNames) {
+		return eventNames.stream().map(name -> findEvent(type, name)).map(Event.class::cast).filter(Objects::nonNull)
+				.toList();
+	}
+
+	private static Event findEvent(final FBType fbType, final String eventName) {
+		final IInterfaceElement event = fbType.getInterfaceList().getInterfaceElement(eventName);
+		if (!(event instanceof final Event ev) || !event.isIsInput()) {
+			throw new IllegalArgumentException("input primitive: event " + eventName + " does not exist"); //$NON-NLS-1$//$NON-NLS-2$
+		}
+		return ev;
 	}
 
 	private ServiceSequenceUtils() {

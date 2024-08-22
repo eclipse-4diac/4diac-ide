@@ -247,7 +247,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						#include "forte_array_fixed.h"
 						#include "forte_array_variable.h"
 						
-						
 						class «EXPORTED_FUNCTIONBLOCK_NAME» final : public CBasicFB {
 						  DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
 						
@@ -322,7 +321,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						};
 						
 						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
-						    CBasicFB(paContainer, &scmFBInterfaceSpec, paInstanceNameId, nullptr) {
+						    CBasicFB(paContainer, scmFBInterfaceSpec, paInstanceNameId, nullptr) {
 						}
 						
 						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {

@@ -25,7 +25,7 @@ public class FBTypePropertiesFilter implements IFilter {
 	@Override
 	public boolean select(final Object toTest) {
 		final Object retval = getFBTypeFromSelectedElement(toTest);
-		return ((retval != null));
+		return (retval != null);
 	}
 
 	protected static FBType getFBTypeFromSelectedElement(final Object element) {
@@ -39,11 +39,11 @@ public class FBTypePropertiesFilter implements IFilter {
 			retval = ep.getModel();
 		}
 
-		if ((retval instanceof final FBNetwork fbnetwork) && ((fbnetwork.eContainer() instanceof FBType))) {
+		if ((retval instanceof final FBNetwork fbnetwork) && (fbnetwork.eContainer() instanceof FBType)) {
 			retval = fbnetwork.eContainer();
 		}
 
-		return (retval instanceof FBType) ? (FBType) retval : null;
+		return (retval instanceof final FBType fbType) ? fbType : null;
 	}
 
 	private static Object getTypeFromActiveEditor() {

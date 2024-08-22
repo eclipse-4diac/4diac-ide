@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c)  2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.view.editparts;
 
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 
 public class EventValueEditPart extends AbstractDebugInterfaceValueEditPart {
 
@@ -22,13 +22,13 @@ public class EventValueEditPart extends AbstractDebugInterfaceValueEditPart {
 	}
 
 	@Override
-	protected IInterfaceElement getInterfaceElement() {
+	protected Event getInterfaceElement() {
 		return getModel().getEvent();
 	}
 
 	public void update() {
 		if (isActive() && getFigure() != null) {
-			getFigure().setText(getModel().getCount().toString());
+			getLabelFigure().setText(getModel().getCount().toString());
 			refreshVisuals();
 		}
 	}

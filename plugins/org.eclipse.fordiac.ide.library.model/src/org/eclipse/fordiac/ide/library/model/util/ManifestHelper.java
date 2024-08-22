@@ -20,8 +20,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -263,12 +263,21 @@ public final class ManifestHelper {
 			manifest.setDependencies(factory.createDependencies());
 		}
 		final EList<Required> reqList = manifest.getDependencies().getRequired();
-		final Optional<Required> result = reqList.stream()
-				.filter(r -> r.getSymbolicName().equals(dependency.getSymbolicName())).findAny();
-		if (result.isPresent()) {
-			reqList.remove(result.get());
+		int index = 0;
+		while (index < reqList.size()) {
+			final int comp = reqList.get(index).getSymbolicName().compareTo(dependency.getSymbolicName());
+			if (comp == 0) {
+				reqList.set(index, dependency);
+				return true;
+			}
+			if (comp > 0) {
+				reqList.add(index, dependency);
+				return true;
+			}
+			index++;
 		}
-		return reqList.add(dependency);
+		reqList.add(index, dependency);
+		return true;
 	}
 
 	/**
@@ -300,17 +309,23 @@ public final class ManifestHelper {
 			manifest.setDependencies(factory.createDependencies());
 		}
 		final EList<Required> reqList = manifest.getDependencies().getRequired();
-		final Optional<Required> result = reqList.stream()
-				.filter(r -> r.getSymbolicName().equals(dependency.getSymbolicName())).findAny();
-		if (result.isPresent()) {
-			final VersionComparator comp = new VersionComparator();
-			if (!comp.contains(result.get().getVersion(), dependency.getVersion())) { // replace dependency
-				reqList.remove(result.get());
-				reqList.add(dependency);
+		int index = 0;
+		while (index < reqList.size()) {
+			final int comp = reqList.get(index).getSymbolicName().compareTo(dependency.getSymbolicName());
+			if (comp == 0) {
+				// replace dependency
+				if (!VersionComparator.contains(reqList.get(index).getVersion(), dependency.getVersion())) {
+					reqList.set(index, dependency);
+				}
+				return;
 			}
-		} else {
-			reqList.add(dependency);
+			if (comp > 0) {
+				reqList.add(index, dependency);
+				return;
+			}
+			index++;
 		}
+		reqList.add(index, dependency);
 	}
 
 	/**
@@ -440,6 +455,20 @@ public final class ManifestHelper {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Sorts dependencies and saves the {@link Manifest}
+	 *
+	 * @param manifest specified manifest
+	 * @return {@code true} if it was saved successfully, else {@code false}
+	 */
+	public static boolean sortAndSaveManifest(final Manifest manifest) {
+		// ensure dependencies are sorted (can't use EList.sort())
+		final var dependencies = new LinkedList<>(manifest.getDependencies().getRequired());
+		manifest.getDependencies().getRequired().clear();
+		dependencies.forEach(d -> ManifestHelper.addDependency(manifest, d));
+		return saveManifest(manifest);
 	}
 
 	/**

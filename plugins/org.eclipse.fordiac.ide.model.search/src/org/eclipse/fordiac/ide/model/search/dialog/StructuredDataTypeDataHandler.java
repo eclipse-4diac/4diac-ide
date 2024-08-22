@@ -13,8 +13,9 @@
 package org.eclipse.fordiac.ide.model.search.dialog;
 
 import java.util.HashMap;
-import java.util.Set;
+import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -23,8 +24,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
-import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
-import org.eclipse.fordiac.ide.model.search.types.StructManipulatorSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 
 public class StructuredDataTypeDataHandler extends AbstractTypeEntryDataHandler<DataTypeEntry> {
@@ -78,8 +77,8 @@ public class StructuredDataTypeDataHandler extends AbstractTypeEntryDataHandler<
 		});
 	}
 
-	public Set<INamedElement> performStructSearch() {
-		final InstanceSearch structSearch = new StructManipulatorSearch(typeEntry);
-		return structSearch.performCompleteSearch();
+	public List<? extends EObject> performStructSearch() {
+		final DataTypeInstanceSearch structSearch = new DataTypeInstanceSearch(typeEntry);
+		return structSearch.performSearch();
 	}
 }

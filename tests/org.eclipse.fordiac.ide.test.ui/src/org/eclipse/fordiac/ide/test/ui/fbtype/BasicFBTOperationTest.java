@@ -19,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
+import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.swt.finder.SWTBot;
@@ -44,8 +46,8 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@BeforeEach
 	public void operationsInitialization() {
-		createFBType(PROJECT_NAME, FBT_TEST_PROJECT2);
-		openFBTypeInEditor(PROJECT_NAME, FBT_TEST_PROJECT2);
+		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2, UITestNamesHelper.ADAPTER);
+		openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
 	}
 
 	/**
@@ -59,7 +61,7 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@AfterEach
 	public void resetEnvironment() {
-		deleteFBType(FBT_TEST_PROJECT2);
+		deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT2);
 	}
 
 	/**
@@ -72,9 +74,9 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void createNewEventInput() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
-		editor.clickContextMenu(CREATE_INPUT_EVENT);
-		assertNotNull(editor.getEditPart(EI1));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
+		editor.clickContextMenu(UITestNamesHelper.CREATE_INPUT_EVENT);
+		assertNotNull(editor.getEditPart(PinNamesHelper.EI1));
 	}
 
 	/**
@@ -87,9 +89,9 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void createNewEventOutput() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
-		editor.clickContextMenu(CREATE_OUTPUT_EVENT);
-		assertNotNull(editor.getEditPart(EI1));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
+		editor.clickContextMenu(UITestNamesHelper.CREATE_OUTPUT_EVENT);
+		assertNotNull(editor.getEditPart(PinNamesHelper.EI1));
 	}
 
 	/**
@@ -103,12 +105,12 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	 */
 	@SuppressWarnings("static-method")
 	@ParameterizedTest
-	@ValueSource(strings = { INT })
+	@ValueSource(strings = { PinNamesHelper.INT })
 	public void createNewDataInput(final String dataType) {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertNotNull(editor);
-		editor.clickContextMenu(CREATE_DATA_INPUT).clickContextMenu(dataType);
-		assertNotNull(editor.getEditPart(DI1));
+		editor.clickContextMenu(UITestNamesHelper.CREATE_DATA_INPUT).clickContextMenu(dataType);
+		assertNotNull(editor.getEditPart(PinNamesHelper.DI1));
 	}
 
 	/**
@@ -122,20 +124,20 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void renamePin() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertNotNull(editor);
-		editor.clickContextMenu(CREATE_INPUT_EVENT);
+		editor.clickContextMenu(UITestNamesHelper.CREATE_INPUT_EVENT);
 
-		assertNotNull(editor.getEditPart(EI1));
+		assertNotNull(editor.getEditPart(PinNamesHelper.EI1));
 
-		final SWTBotGefEditPart pin = editor.getEditPart(EI1);
+		final SWTBotGefEditPart pin = editor.getEditPart(PinNamesHelper.EI1);
 		pin.click();
 
-		final SWTBot propertiesBot = selectTabFromInterfaceProperties(EVENT);
-		propertiesBot.textWithLabel(NAME_LABEL).setText(EVENT);
+		final SWTBot propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.EVENT);
+		propertiesBot.textWithLabel(UITestNamesHelper.NAME_LABEL).setText(UITestNamesHelper.EVENT);
 
-		assertNull(editor.getEditPart(EI1));
-		assertNotNull(editor.getEditPart(EVENT));
+		assertNull(editor.getEditPart(PinNamesHelper.EI1));
+		assertNotNull(editor.getEditPart(UITestNamesHelper.EVENT));
 	}
 
 	/**
@@ -148,17 +150,18 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeEventPinComment() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertNotNull(editor);
-		editor.clickContextMenu(CREATE_INPUT_EVENT);
+		editor.clickContextMenu(UITestNamesHelper.CREATE_INPUT_EVENT);
 
-		final SWTBotGefEditPart pin = editor.getEditPart(EI1);
+		final SWTBotGefEditPart pin = editor.getEditPart(PinNamesHelper.EI1);
 		pin.click();
 
-		final SWTBot propertiesBot = selectTabFromInterfaceProperties(EVENT);
-		propertiesBot.textWithLabel(COMMENT).setText(TEST_COMMENT);
+		final SWTBot propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.EVENT);
+		propertiesBot.textWithLabel(UITestNamesHelper.COMMENT).setText(UITestNamesHelper.TEST_COMMENT);
 
-		assertEquals(propertiesBot.textWithLabel(COMMENT).getText(), TEST_COMMENT);
+		assertEquals(propertiesBot.textWithLabel(UITestNamesHelper.COMMENT).getText(),
+				UITestNamesHelper.REQUEST_FROM_IDEAL_COMMENT);
 	}
 
 	/**
@@ -171,17 +174,17 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeDataPinComment() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertNotNull(editor);
-		editor.clickContextMenu(CREATE_INPUT_EVENT);
+		editor.clickContextMenu(UITestNamesHelper.CREATE_INPUT_EVENT);
 
-		final SWTBotGefEditPart pin = editor.getEditPart(EI1);
+		final SWTBotGefEditPart pin = editor.getEditPart(PinNamesHelper.EI1);
 		pin.click();
 
-		final SWTBot propertiesBot = selectTabFromInterfaceProperties(DATA);
-		propertiesBot.textWithLabel(COMMENT).setText(TEST_COMMENT);
+		final SWTBot propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.DATA);
+		propertiesBot.textWithLabel(UITestNamesHelper.COMMENT).setText(UITestNamesHelper.TEST_COMMENT);
 
-		assertEquals(propertiesBot.textWithLabel(COMMENT).getText(), TEST_COMMENT);
+		assertEquals(propertiesBot.textWithLabel(UITestNamesHelper.COMMENT).getText(), UITestNamesHelper.TEST_COMMENT);
 	}
 
 	/**
@@ -195,19 +198,19 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void addConnection() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
-		editor.clickContextMenu(CREATE_INPUT_EVENT);
-		editor.clickContextMenu(CREATE_DATA_INPUT).clickContextMenu(INT);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
+		editor.clickContextMenu(UITestNamesHelper.CREATE_INPUT_EVENT);
+		editor.clickContextMenu(UITestNamesHelper.CREATE_DATA_INPUT).clickContextMenu(PinNamesHelper.INT);
 
-		assertNotNull(editor.getEditPart(DI1));
+		assertNotNull(editor.getEditPart(PinNamesHelper.DI1));
 
-		final SWTBotGefEditPart inputPin = editor.getEditPart(EI1);
+		final SWTBotGefEditPart inputPin = editor.getEditPart(PinNamesHelper.EI1);
 		inputPin.click();
 
-		final SWTBotGefEditPart outputPin = editor.getEditPart(DI1);
+		final SWTBotGefEditPart outputPin = editor.getEditPart(PinNamesHelper.DI1);
 		outputPin.click();
 
-		createConnectionWithinFBTypeWithPropertySheet(DI1, EI1, editor);
+		createConnectionWithinFBTypeWithPropertySheet(PinNamesHelper.DI1, PinNamesHelper.EI1, editor);
 	}
 
 	/**
@@ -221,21 +224,21 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void removeConnection() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
-		editor.clickContextMenu(CREATE_INPUT_EVENT);
-		editor.clickContextMenu(CREATE_DATA_INPUT).clickContextMenu(INT);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
+		editor.clickContextMenu(UITestNamesHelper.CREATE_INPUT_EVENT);
+		editor.clickContextMenu(UITestNamesHelper.CREATE_DATA_INPUT).clickContextMenu(PinNamesHelper.INT);
 
-		assertNotNull(editor.getEditPart(DI1));
+		assertNotNull(editor.getEditPart(PinNamesHelper.DI1));
 
-		final SWTBotGefEditPart inputPin = editor.getEditPart(EI1);
+		final SWTBotGefEditPart inputPin = editor.getEditPart(PinNamesHelper.EI1);
 		inputPin.click();
 
-		final SWTBotGefEditPart outputPin = editor.getEditPart(DI1);
+		final SWTBotGefEditPart outputPin = editor.getEditPart(PinNamesHelper.DI1);
 		outputPin.click();
 
-		createConnectionWithinFBTypeWithPropertySheet(DI1, EI1, editor);
+		createConnectionWithinFBTypeWithPropertySheet(PinNamesHelper.DI1, PinNamesHelper.EI1, editor);
 
-		removeConnectionWithinFBTypeWithPropertySheet(DI1, EI1, editor);
+		removeConnectionWithinFBTypeWithPropertySheet(PinNamesHelper.DI1, PinNamesHelper.EI1, editor);
 	}
 
 	/**
@@ -250,29 +253,29 @@ public class BasicFBTOperationTest extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changePinDataType() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(FBT_TEST_PROJECT2);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertNotNull(editor);
-		editor.clickContextMenu(CREATE_DATA_INPUT).clickContextMenu(INT);
+		editor.clickContextMenu(UITestNamesHelper.CREATE_DATA_INPUT).clickContextMenu(PinNamesHelper.INT);
 
-		final SWTBotGefEditPart port = editor.getEditPart(DI1);
+		final SWTBotGefEditPart port = editor.getEditPart(PinNamesHelper.DI1);
 		port.click();
 
-		SWTBot propertiesBot = selectTabFromInterfaceProperties(DATA);
-		propertiesBot.table().select(INT);
-		propertiesBot.button(DOT_BUTTON).click();
+		SWTBot propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.DATA);
+		propertiesBot.table().select(PinNamesHelper.INT);
+		propertiesBot.button(UITestNamesHelper.DOT_BUTTON).click();
 
-		final SWTBotShell shell = bot.shell(TYPE_SELECTION);
+		final SWTBotShell shell = bot.shell(UITestNamesHelper.TYPE_SELECTION);
 		shell.activate();
 
 		final SWTBotTree containerTree = bot.tree();
-		final SWTBotTreeItem containerItem = containerTree.getTreeItem(ELEMENTARY_TYPE);
-		containerItem.expand().select(ANY);
+		final SWTBotTreeItem containerItem = containerTree.getTreeItem(UITestNamesHelper.ELEMENTARY_TYPE);
+		containerItem.expand().select(PinNamesHelper.ANY);
 
-		bot.button(OK).click();
+		bot.button(UITestNamesHelper.OK).click();
 
-		propertiesBot = selectTabFromInterfaceProperties(DATA);
+		propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.DATA);
 
-		assertTrue(propertiesBot.tableWithLabel(TYPE_LABEL).containsText(ANY));
+		assertTrue(propertiesBot.tableWithLabel(UITestNamesHelper.TYPE_LABEL).containsText(PinNamesHelper.ANY));
 	}
 
 }

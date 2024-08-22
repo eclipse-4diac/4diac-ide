@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.fordiac.ide.model.search.factory">
+      <factory
+            class="org.eclipse.fordiac.ide.model.search.st.StructuredTextSearchFactory">
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.ECTransition">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.STMethod">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.Attribute">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.data.DirectlyDerivedType">
+         </source>
+      </factory>
+   </extension>
+
+</plugin>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Fabio Gandolfi
+ * Copyright (c) 2023 Fabio Gandolfi, Bianca Wiesmayr
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,36 +10,31 @@
  * Contributors:
  *   Fabio Gandolfi
  *     - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr - cleanup, use command
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
-import org.eclipse.fordiac.ide.fb.interpreter.api.CoverageCalculator;
-import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
-import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.Permutations;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.ServiceSequenceSaveAndLoadHelper;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateRecordedServiceSequenceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
-import org.eclipse.gef.EditPart;
+import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class CreateAllServiceSequencesHandler extends AbstractHandler {
@@ -47,85 +42,60 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
-
-		final BasicFBType fbtype = ((BasicFBType) ((EditPart) selection.getFirstElement()).getModel());
-
-		if ((selection.getFirstElement() instanceof SequenceRootEditPart) && (selection.toList().size() == 1)) {
-
-			final List<List<Object>> allCombinationsSimple = getAllCombinationsOfEvents(
-					((FBType) ((EditPart) selection.getFirstElement()).getModel()).getInterfaceList().getEventInputs()
-							.stream().toArray());
-
-			final EList<ECState> states = fbtype.getECC().getECState();
-
-			final List<InputObject> combinations = getAllCombinationsWithStartStates(allCombinationsSimple, states);
-
-			RecordServiceSequenceHandler.setParameters(fbtype, new ArrayList<>());
-
-			final List<EventManager> eventManagers = createEventManagers(fbtype, combinations);
-			final ArrayList<ServiceSequence> serviceSequences = new ArrayList<>();
-
-			for (final EventManager eventManager : eventManagers) {
-				TransactionFactory.addTraceInfoTo(eventManager.getTransactions());
-				EventManagerUtils.process(eventManager);
-
-				final CreateServiceSequenceCommand cmd = new CreateServiceSequenceCommand(
-						((FBType) ((EditPart) selection.getFirstElement()).getModel()).getService());
-				if (cmd.canExecute()) {
-					cmd.execute();
-				}
-				final ServiceSequence seq = (ServiceSequence) cmd.getCreatedElement();
-				seq.setStartState(combinations.get(eventManagers.indexOf(eventManager)).getStartState().getName());
-
-				seq.setComment(
-						"Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions(), //$NON-NLS-1$
-								fbtype));
-				seq.setEventManager(eventManager);
-				serviceSequences.add(seq);
-
-				for (final Transaction transaction : eventManager.getTransactions()) {
-					ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbtype, (FBTransaction) transaction);
-				}
-			}
-			ServiceSequenceSaveAndLoadHelper.saveServiceSequences(fbtype, serviceSequences);
+		final FBType fbtype = ServiceHandlerUtils.getSelectedFbType(null, selection);
+		final CompoundCommand createSequences = createAllSequences(fbtype);
+		if (createSequences.canExecute()) {
+			final CommandStack cmdstack = HandlerUtil.getActiveEditor(event).getAdapter(CommandStack.class);
+			cmdstack.execute(createSequences);
 		}
-		return null;
+		return Status.OK_STATUS;
 	}
 
-	private static List<List<Object>> getAllCombinationsOfEvents(final Object[] events) {
+	static CompoundCommand createAllSequences(final FBType fbtype) {
+		final Event[] events = fbtype.getInterfaceList().getEventInputs().toArray(new Event[0]);
 
-		// TODO call permutations also recursively to get even more combinations
-
-		return Permutations.permute(events);
+		final List<List<Event>> allCombinationsSimple = Permutations.permute(events);
+		final CompoundCommand createSequences = new CompoundCommand();
+		if (fbtype instanceof final BasicFBType basic) {
+			final List<InputObject> combinations = getAllCombinationsWithStartStates(allCombinationsSimple,
+					basic.getECC().getECState());
+			for (final InputObject obj : combinations) {
+				final CreateRecordedServiceSequenceCommand cmd = new CreateRecordedServiceSequenceCommand(fbtype,
+						obj.getEventNames(), Collections.emptyList());
+				cmd.setStartState(obj.getStartState().getName());
+				createSequences.add(cmd);
+			}
+		} else {
+			allCombinationsSimple.forEach(eventList -> {
+				final CreateRecordedServiceSequenceCommand cmd = new CreateRecordedServiceSequenceCommand(fbtype,
+						eventList.stream().map(Event::getName).toList(), Collections.emptyList());
+				createSequences.add(cmd);
+			});
+		}
+		return createSequences;
 	}
 
-	private static List<InputObject> getAllCombinationsWithStartStates(final List<List<Object>> allCombinationsSimple,
+	@Override
+	public void setEnabled(final Object evaluationContext) {
+		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
+				ISources.ACTIVE_CURRENT_SELECTION_NAME);
+		if (selection instanceof final StructuredSelection structuredSelection) {
+			setBaseEnabled(ServiceHandlerUtils.getSelectedFbType(null, structuredSelection) != null);
+		}
+	}
+
+	private static List<InputObject> getAllCombinationsWithStartStates(final List<List<Event>> allCombinationsSimple,
 			final EList<ECState> states) {
-
 		final List<InputObject> combinations = new ArrayList<>();
-
-		for (final List<Object> events : allCombinationsSimple) {
+		for (final List<Event> events : allCombinationsSimple) {
 			for (final ECState state : states) {
 				combinations.add(new InputObject(events.stream().map(Event.class::cast).toList(), state));
 			}
 		}
-
 		return combinations;
-
 	}
 
-	private static List<EventManager> createEventManagers(final FBType fbtype, final List<InputObject> combinations) {
-		final List<EventManager> eventmanagers = new ArrayList<>();
-		for (final InputObject comb : combinations) {
-			final FBType typeCopy = EcoreUtil.copy(fbtype);
-			eventmanagers.add(
-					EventManagerFactory.createEventManager(typeCopy, comb.events, true, comb.startState.getName()));
-		}
-
-		return eventmanagers;
-	}
-
-	public static class InputObject {
+	static class InputObject {
 		private final List<Event> events;
 		private final ECState startState;
 
@@ -140,6 +110,10 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 
 		public ECState getStartState() {
 			return startState;
+		}
+
+		public List<String> getEventNames() {
+			return events.stream().map(Event::getName).toList();
 		}
 	}
 }

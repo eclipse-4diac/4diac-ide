@@ -93,9 +93,9 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 				// easier access when creating connections
 				addBlockToAccordingList(addedBlock, i, j);
 
-				// add timeOut block to matchFb
-				if (j == 2) {
-					addTimeOutFB(net, x, y);
+				// add timeOut block to testsignalgenFb and matchFb
+				if (j == 0 || j == 2) {
+					addTimeOutFB(net, addedBlock, x, y);
 				}
 			}
 		}
@@ -115,10 +115,9 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 		}
 	}
 
-	private void addTimeOutFB(final FBNetwork net, final int x, final int y) {
+	private void addTimeOutFB(final FBNetwork net, final FB fb, final int x, final int y) {
 		final FBNetworkElement compEl = LibraryElementFactory.eINSTANCE.createCFBInstance();
-
-		final TypeEntry compType = sourceType.getTypeLibrary().getFBTypeEntry("E_TimeOut"); //$NON-NLS-1$
+		final TypeEntry compType = sourceType.getTypeLibrary().getFBTypeEntry(TestGenBlockNames.TIMEOUT_COMPOSITE_NAME);
 		compEl.setTypeEntry(compType);
 		addPosition(compEl, x + (double) 200, y + (double) 150);
 
@@ -129,7 +128,7 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 		compEl.setName(name);
 
 		// connection between matchFB and timeOut
-		final AdapterConnection a = createAdapterConnection(matchFBs.getLast().getInterface().getPlugs().get(0),
+		final AdapterConnection a = createAdapterConnection(fb.getInterface().getPlugs().get(0),
 				compositeFB.getFBNetwork().getFBNamed(name).getInterface().getSockets().get(0));
 		compositeFB.getFBNetwork().getAdapterConnections().add(a);
 	}
@@ -259,7 +258,7 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 
 		// data connections from the testsignal generator block
 		for (int i = 0; i < toTestFBs.get(index).getInterface().getInputVars().size(); i++) {
-			getDataConns().add(createDataConn(testFBs.get(index).getInterface().getOutputVars().get(i),
+			getDataConns().add(createDataConn(testFBs.get(index).getInterface().getOutputVars().get(i + 1),
 					toTestFBs.get(index).getInterface().getInputVars().get(i)));
 		}
 	}

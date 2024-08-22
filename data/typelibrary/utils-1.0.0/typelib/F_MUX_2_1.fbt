@@ -1,33 +1,36 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
-<FBType Comment="Service Interface Function Block Type" Name="F_MUX_2_1">
-  <Identification Description="Copyright (c) 2012 Profactor GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
-  <VersionInfo Author="Matthias Plasch" Date="2012-05-09" Organization="Profactor GmbH" Version="1.0"/>
-  <InterfaceList>
-    <EventInputs>
-      <Event Comment="event input 1" Name="EI1" Type="Event">
-        <With Var="IN_1_1"/>
-      </Event>
-      <Event Comment="event input 2" Name="EI2" Type="Event">
-        <With Var="IN_2_1"/>
-      </Event>
-    </EventInputs>
-    <EventOutputs>
-      <Event Comment="merge event output" Name="EO" Type="Event">
-        <With Var="QO"/>
-        <With Var="STATUS"/>
-        <With Var="OUT_1"/>
-      </Event>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Name="IN_1_1" Type="ANY"/>
-      <VarDeclaration Name="IN_2_1" Type="ANY"/>
-    </InputVars>
-    <OutputVars>
-      <VarDeclaration Comment="Event Output Qualifier" Name="QO" Type="BOOL"/>
-      <VarDeclaration Comment="Service Status" Name="STATUS" Type="WSTRING"/>
-      <VarDeclaration Comment="meged data output" Name="OUT_1" Type="ANY"/>
-    </OutputVars>
-  </InterfaceList>
-  <Service Comment="Service Interface Function Block Type" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="F_MUX_2_1" Comment="Service Interface Function Block Type">
+	<Identification Description="Copyright (c) 2012 Profactor GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="Profactor GmbH" Version="1.0" Author="Matthias Plasch" Date="2012-05-09">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI1" Type="Event" Comment="event input 1">
+				<With Var="IN_1_1"/>
+			</Event>
+			<Event Name="EI2" Type="Event" Comment="event input 2">
+				<With Var="IN_2_1"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="merge event output">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+				<With Var="OUT_1"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN_1_1" Type="ANY" Comment=""/>
+			<VarDeclaration Name="IN_2_1" Type="ANY" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status"/>
+			<VarDeclaration Name="OUT_1" Type="ANY" Comment="meged data output"/>
+		</OutputVars>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
+	</Service>
+	<Attribute Name="GenericClassName" Value="'GEN_F_MUX'"/>
 </FBType>

@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Library Tests
+Bundle-SymbolicName: org.eclipse.fordiac.ide.test.library;singleton:=true
+Bundle-Version: 3.0.0.qualifier
+Automatic-Module-Name: org.eclipse.fordiac.ide.test.library
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-Vendor: Eclipse 4diac
+Import-Package: org.junit.jupiter.api,
+ org.junit.jupiter.api.function,
+ org.junit.jupiter.params,
+ org.junit.jupiter.params.provider,
+ org.opentest4j
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.fordiac.ide.library,
+ org.eclipse.fordiac.ide.library.model,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.systemmanagement,
+ org.eclipse.fordiac.ide.test.model

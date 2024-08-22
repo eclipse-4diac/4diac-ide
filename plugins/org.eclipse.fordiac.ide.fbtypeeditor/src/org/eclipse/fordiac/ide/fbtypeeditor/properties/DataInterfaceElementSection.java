@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.Arrays;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventLabelProvider;
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
@@ -114,7 +115,10 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	@Override
 	protected void performRefresh() {
 		super.performRefresh();
-		if (getType().eContainer().eContainer() instanceof FBType) {
+		// container can be null when refactoring operations are performed while
+		// section is open
+		final EObject container = getType().eContainer();
+		if (container != null && container.eContainer() instanceof FBType) {
 			eventComposite.setVisible(true);
 			withEventsViewer.setInput(getType());
 			withEventsViewer.getTable().setEnabled(isEditable());

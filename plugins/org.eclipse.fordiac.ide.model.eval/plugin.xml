@@ -16,5 +16,21 @@
                type="org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType">
          </source>
       </factory>
+      <factory
+            class="org.eclipse.fordiac.ide.model.eval.fb.SamplingFBEvaluatorFactory"
+            variant="sampling">
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.BasicFBType">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType">
+         </source>
+      </factory>
    </extension>
 </plugin>

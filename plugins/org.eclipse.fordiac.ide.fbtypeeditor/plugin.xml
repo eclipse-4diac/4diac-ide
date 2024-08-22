@@ -134,7 +134,7 @@
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceAdapterSection"
-               filter="org.eclipse.fordiac.ide.fbtypeeditor.properties.FBTypePropertiesFilter"
+               filter="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceAdapterSectionFilter"
                id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditAdapters"
                tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditAdapters">
          </propertySection>

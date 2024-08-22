@@ -26,6 +26,8 @@ import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
+import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -50,14 +52,14 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void compositeInstanceViewerAppearsAfterDoubleClickOnFB() {
-		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(200, 100));
-		final SWTBotGefEditor editor = goToCompositeInstanceViewer(E_N_TABLE_FB);
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 100));
+		final SWTBotGefEditor editor = goToCompositeInstanceViewer(UITestNamesHelper.E_N_TABLE_FB);
 
 		UIThreadRunnable.syncExec(() -> {
 			final IEditorPart editorPart = editor.getReference().getEditor(false);
 			if (editorPart instanceof final AbstractBreadCrumbEditor breadCrumbEditor) {
 				final String title = breadCrumbEditor.getBreadcrumb().getActiveItem().getText();
-				assertEquals(E_N_TABLE_FB, title);
+				assertEquals(UITestNamesHelper.E_N_TABLE_FB, title);
 				assertTrue(breadCrumbEditor.getActiveEditor() instanceof CompositeInstanceViewer);
 			}
 		});
@@ -79,14 +81,14 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void compositeInstanceViewerMoveFB() {
-		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(200, 200));
-		goToCompositeInstanceViewer(E_N_TABLE_FB);
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 200));
+		goToCompositeInstanceViewer(UITestNamesHelper.E_N_TABLE_FB);
 
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(F_SUB));
-		editor.click(F_SUB);
-		SWTBotGefEditPart parent = editor.getEditPart(F_SUB).parent();
+		assertNotNull(editor.getEditPart(UITestNamesHelper.F_SUB));
+		editor.click(UITestNamesHelper.F_SUB);
+		SWTBotGefEditPart parent = editor.getEditPart(UITestNamesHelper.F_SUB).parent();
 		assertNotNull(parent);
 
 		IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
@@ -104,7 +106,7 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 		editor.drag(parent, pos2.x, pos2.y);
 		final org.eclipse.draw2d.geometry.Point posToCheck2 = new org.eclipse.draw2d.geometry.Point(pos2);
 
-		parent = editor.getEditPart(F_SUB).parent();
+		parent = editor.getEditPart(UITestNamesHelper.F_SUB).parent();
 		figure = ((GraphicalEditPart) parent.part()).getFigure();
 		fbBounds = figure.getBounds().getCopy();
 		figure.translateToAbsolute(fbBounds);
@@ -124,25 +126,25 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void compositeInstanceViewerDeleteFB() {
-		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(200, 200));
-		goToCompositeInstanceViewer(E_N_TABLE_FB);
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 200));
+		goToCompositeInstanceViewer(UITestNamesHelper.E_N_TABLE_FB);
 
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(E_DEMUX_FB));
-		editor.click(E_DEMUX_FB);
-		final SWTBotGefEditPart parent = editor.getEditPart(E_DEMUX_FB).parent();
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_DEMUX_FB));
+		editor.click(UITestNamesHelper.E_DEMUX_FB);
+		final SWTBotGefEditPart parent = editor.getEditPart(UITestNamesHelper.E_DEMUX_FB).parent();
 		assertNotNull(parent);
 		parent.click();
 
-		assertTrue(bot.menu(EDIT).isVisible());
-		bot.menu(EDIT).click();
-		assertTrue(bot.menu(DELETE).isVisible());
-		assertFalse(bot.menu(DELETE).isEnabled());
+		assertTrue(bot.menu(UITestNamesHelper.EDIT).isVisible());
+		bot.menu(UITestNamesHelper.EDIT).click();
+		assertTrue(bot.menu(UITestNamesHelper.DELETE).isVisible());
+		assertFalse(bot.menu(UITestNamesHelper.DELETE).isEnabled());
 
-		bot.menu(EDIT).menu(SELECT_ALL).click();
-		assertTrue(bot.menu(DELETE).isVisible());
-		assertFalse(bot.menu(DELETE).isEnabled());
+		bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.SELECT_ALL).click();
+		assertTrue(bot.menu(UITestNamesHelper.DELETE).isVisible());
+		assertFalse(bot.menu(UITestNamesHelper.DELETE).isEnabled());
 
 		returnToEditingArea();
 	}
@@ -153,13 +155,13 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void compositeInstanceViewerAddAnotherFB() {
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(200, 200));
-		goToCompositeInstanceViewer(E_CYCLE_FB);
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(100, 100));
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 200));
+		goToCompositeInstanceViewer(UITestNamesHelper.E_CYCLE_FB);
+		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(E_DELAY_FB));
-		assertNull(editor.getEditPart(E_SWITCH_FB));
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_DELAY_FB));
+		assertNull(editor.getEditPart(UITestNamesHelper.E_SWITCH_FB));
 		returnToEditingArea();
 	}
 
@@ -181,15 +183,15 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void compositeInstanceViewerConnectionCanBeAdded() {
-		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(200, 200));
-		goToCompositeInstanceViewer(E_N_TABLE_FB);
-		SWTBot4diacGefViewer viewer = createConnection(EO, EI);
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 200));
+		goToCompositeInstanceViewer(UITestNamesHelper.E_N_TABLE_FB);
+		SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO, PinNamesHelper.EI);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = createConnection(N, CV);
+		viewer = createConnection(PinNamesHelper.N, PinNamesHelper.CV);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = createConnection(START, STOP);
+		viewer = createConnection(PinNamesHelper.START, PinNamesHelper.STOP);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = createConnection(START, EO0);
+		viewer = createConnection(PinNamesHelper.START, PinNamesHelper.EO0);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 		returnToEditingArea();
 	}
@@ -200,12 +202,12 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void compositeInstanceViewerDeleteConnection() {
-		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
-		goToCompositeInstanceViewer(E_N_TABLE_FB);
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		goToCompositeInstanceViewer(UITestNamesHelper.E_N_TABLE_FB);
 
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
-		final ConnectionEditPart connection = findConnection(EO, REQ);
+		final ConnectionEditPart connection = findConnection(PinNamesHelper.EO, PinNamesHelper.REQ);
 		final PolylineConnection figure = (PolylineConnection) connection.getFigure();
 		final PointList points = figure.getPoints();
 		final org.eclipse.draw2d.geometry.Point firstPoint = points.getFirstPoint();
@@ -218,15 +220,15 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 			final IEditorPart editorPart = editor.getReference().getEditor(false);
 			if (editorPart instanceof final AbstractBreadCrumbEditor breadCrumbEditor) {
 				final String title = breadCrumbEditor.getBreadcrumb().getActiveItem().getText();
-				assertEquals(E_N_TABLE_FB, title);
+				assertEquals(UITestNamesHelper.E_N_TABLE_FB, title);
 				assertTrue(breadCrumbEditor.getActiveEditor() instanceof CompositeInstanceViewer);
 			}
 		});
 
-		assertFalse(bot.menu(EDIT).menu(DELETE).isEnabled());
-		assertTrue(bot.menu(EDIT).menu(SELECT_ALL).isEnabled());
-		bot.menu(EDIT).menu(SELECT_ALL).click();
-		assertFalse(bot.menu(EDIT).menu(DELETE).isEnabled());
+		assertFalse(bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.DELETE).isEnabled());
+		assertTrue(bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.SELECT_ALL).isEnabled());
+		bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.SELECT_ALL).click();
+		assertFalse(bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.DELETE).isEnabled());
 		returnToEditingArea();
 	}
 

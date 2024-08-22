@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.MinSpaceFreeformFigure;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -100,7 +101,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	@Override
 	protected PaletteRoot getPaletteRoot() {
 		if (null == paletteRoot) {
-			paletteRoot = FBInterfacePaletteFactory.createPalette(typeLib);
+			paletteRoot = FBInterfacePaletteFactory.createPalette(typeLib, !(fbType instanceof AdapterType));
 		}
 		return paletteRoot;
 	}

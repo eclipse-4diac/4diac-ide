@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="PUBLISH_10" Comment="">
-	<Identification Standard="61499-2" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+<FBType Name="PUBLISH_10" Comment="Publish to one or many SUBSCRIBE_10 Blocks">
+	<Identification Standard="61499-2" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-10-25" Remarks="initial API and implementation and/or initial documentation">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="INIT" Type="Event" Comment="">
+			<Event Name="INIT" Type="Event" Comment="Initialization">
 				<With Var="QI"/>
 				<With Var="ID"/>
 			</Event>
-			<Event Name="REQ" Type="Event" Comment="">
+			<Event Name="REQ" Type="Event" Comment="Send Data, unconfirmed">
 				<With Var="QI"/>
 				<With Var="SD_1"/>
 				<With Var="SD_2"/>
@@ -25,11 +25,11 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="INITO" Type="Event" Comment="">
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
-			<Event Name="CNF" Type="Event" Comment="">
+			<Event Name="CNF" Type="Event" Comment="Data was sent">
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
@@ -53,4 +53,5 @@
 			<VarDeclaration Name="STATUS" Type="WSTRING" Comment=""/>
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="GenericClassName" Value="'GEN_PUBLISH'"/>
 </FBType>

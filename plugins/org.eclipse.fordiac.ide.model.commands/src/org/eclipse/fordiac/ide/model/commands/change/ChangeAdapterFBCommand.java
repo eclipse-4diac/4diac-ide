@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler University Linz
  *                          Martin Erich Jobst
  *
@@ -26,7 +26,6 @@ public final class ChangeAdapterFBCommand extends UpdateFBTypeCommand {
 
 	public ChangeAdapterFBCommand(final AdapterDeclaration adpDecl) {
 		super(adpDecl.getAdapterNetworkFB(), null);
-		setEntry(adpDecl.getType().getTypeEntry());
 	}
 
 	@Override
@@ -43,6 +42,8 @@ public final class ChangeAdapterFBCommand extends UpdateFBTypeCommand {
 
 	@Override
 	public void execute() {
+		// use the type of the adapterDecl for changing the adapterfbs type
+		setEntry(getOldElement().getAdapterDecl().getType().getTypeEntry());
 		super.execute();
 		setAdapterNetworkFB((AdapterFB) newElement);
 	}
@@ -61,5 +62,10 @@ public final class ChangeAdapterFBCommand extends UpdateFBTypeCommand {
 
 	private static void setAdapterNetworkFB(final AdapterFB fb) {
 		fb.getAdapterDecl().setAdapterNetworkFB(fb);
+	}
+
+	@Override
+	public AdapterFB getOldElement() {
+		return (AdapterFB) super.getOldElement();
 	}
 }

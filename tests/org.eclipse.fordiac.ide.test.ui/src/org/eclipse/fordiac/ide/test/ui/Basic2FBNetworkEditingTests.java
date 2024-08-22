@@ -25,6 +25,8 @@ import java.util.List;
 
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.ConnectionEditPart;
@@ -56,31 +58,31 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	@Test
 	public void dragAndDrop2FB() {
 		// select FB E_CYCLE
-		final SWTBotView systemExplorerView = bot.viewById(SYSTEM_EXPLORER_ID);
+		final SWTBotView systemExplorerView = bot.viewById(UITestNamesHelper.SYSTEM_EXPLORER_ID);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
 		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
 		final SWTBotTree tree = new SWTBotTree(swtTree);
 		assertNotNull(tree);
-		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(PROJECT_NAME);
+		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(treeProjectItem);
 		treeProjectItem.select();
 		treeProjectItem.expand();
-		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(TYPE_LIBRARY_NODE);
+		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(UITestNamesHelper.TYPE_LIBRARY_NODE);
 		assertNotNull(typeLibraryNode);
 		typeLibraryNode.select();
 		typeLibraryNode.expand();
-		final SWTBotTreeItem eventsNode = typeLibraryNode.getNode(EVENTS_NODE);
+		final SWTBotTreeItem eventsNode = typeLibraryNode.getNode(UITestNamesHelper.EVENTS_NODE);
 		assertNotNull(eventsNode);
 		eventsNode.select();
 		eventsNode.expand();
-		bot.waitUntil(treeItemHasNode(eventsNode, E_CYCLE_TREE_ITEM));
-		final SWTBotTreeItem eCycleNode = eventsNode.getNode(E_CYCLE_TREE_ITEM);
+		bot.waitUntil(treeItemHasNode(eventsNode, UITestNamesHelper.E_CYCLE_TREE_ITEM));
+		final SWTBotTreeItem eCycleNode = eventsNode.getNode(UITestNamesHelper.E_CYCLE_TREE_ITEM);
 		assertNotNull(eCycleNode);
 		eCycleNode.select();
 		eCycleNode.click();
 		// select application editor
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		assertNotNull(viewer);
@@ -88,20 +90,20 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		assertNotNull(canvas);
 		final Point point1 = new Point(100, 100);
 		eCycleNode.dragAndDrop(canvas, point1);
-		assertNotNull(editor.getEditPart(E_CYCLE_FB));
-		final Rectangle absPos1 = getAbsolutePosition(editor, E_CYCLE_FB);
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_CYCLE_FB));
+		final Rectangle absPos1 = getAbsolutePosition(editor, UITestNamesHelper.E_CYCLE_FB);
 		assertEquals(point1.x, absPos1.x);
 		assertEquals(point1.y, absPos1.y);
 
 		// select FB E_SWITCH
-		final SWTBotTreeItem eSwitchNode = eventsNode.getNode(E_SWITCH_TREE_ITEM);
+		final SWTBotTreeItem eSwitchNode = eventsNode.getNode(UITestNamesHelper.E_SWITCH_TREE_ITEM);
 		assertNotNull(eSwitchNode);
 		eSwitchNode.select();
 		eSwitchNode.click();
 		final Point point2 = new Point(300, 150);
 		eSwitchNode.dragAndDrop(canvas, point2);
-		assertNotNull(editor.getEditPart(E_SWITCH_FB));
-		final Rectangle absPos2 = getAbsolutePosition(editor, E_SWITCH_FB);
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_SWITCH_FB));
+		final Rectangle absPos2 = getAbsolutePosition(editor, UITestNamesHelper.E_SWITCH_FB);
 		assertEquals(point2.x, absPos2.x);
 		assertEquals(point2.y, absPos2.y);
 	}
@@ -114,19 +116,19 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void delete1FB() {
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(300, 100));
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(100, 100));
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(300, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(E_CYCLE_FB));
-		assertNotNull(editor.getEditPart(E_SWITCH_FB));
-		editor.click(E_CYCLE_FB);
-		final SWTBotGefEditPart parent = editor.getEditPart(E_CYCLE_FB).parent();
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_CYCLE_FB));
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_SWITCH_FB));
+		editor.click(UITestNamesHelper.E_CYCLE_FB);
+		final SWTBotGefEditPart parent = editor.getEditPart(UITestNamesHelper.E_CYCLE_FB).parent();
 		assertNotNull(parent);
 		parent.click();
-		bot.menu(EDIT).menu(DELETE).click();
-		assertNull(editor.getEditPart(E_CYCLE_FB));
-		assertNotNull(editor.getEditPart(E_SWITCH_FB));
+		bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.DELETE).click();
+		assertNull(editor.getEditPart(UITestNamesHelper.E_CYCLE_FB));
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_SWITCH_FB));
 		assertTrue(editor.selectedEditParts().isEmpty());
 	}
 
@@ -142,25 +144,25 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void select2FBsViaMouseLeftClickOnFB() {
-		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, new Point(100, 100));
-		dragAndDropEventsFB(E_CTUD_TREE_ITEM, new Point(300, 100));
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(300, 100));
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
 		// drag rectangle next to FBs, therefore FBs should not be selected
 		editor.drag(40, 40, 200, 200);
 		assertThrows(TimeoutException.class, editor::waitForSelectedFBEditPart);
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertTrue(selectedEditParts.isEmpty());
-		assertFalse(isFbSelected(selectedEditParts, E_N_TABLE_FB));
-		assertFalse(isFbSelected(selectedEditParts, E_CTUD_FB));
+		assertFalse(isFbSelected(selectedEditParts, UITestNamesHelper.E_N_TABLE_FB));
+		assertFalse(isFbSelected(selectedEditParts, UITestNamesHelper.E_CTUD_FB));
 
 		// drag rectangle over FBs, therefore FBs should be selected
 		editor.drag(50, 50, 500, 300);
 		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
-		assertTrue(isFbSelected(selectedEditParts, E_N_TABLE_FB));
-		assertTrue(isFbSelected(selectedEditParts, E_CTUD_FB));
+		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_N_TABLE_FB));
+		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_CTUD_FB));
 	}
 
 	/**
@@ -177,28 +179,28 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	@Test
 	public void move1FB() {
 		final Point pos1 = new Point(100, 100);
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, pos1);
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, pos1);
 		final Point pos2 = new Point(350, 100);
-		dragAndDropEventsFB(E_N_TABLE_TREE_ITEM, pos2);
+		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, pos2);
 
 		// select E_CYCLE and check position of E_CYCLE
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(E_CYCLE_FB));
-		editor.click(E_CYCLE_FB);
-		final SWTBotGefEditPart fb1 = editor.getEditPart(E_CYCLE_FB).parent();
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_CYCLE_FB));
+		editor.click(UITestNamesHelper.E_CYCLE_FB);
+		final SWTBotGefEditPart fb1 = editor.getEditPart(UITestNamesHelper.E_CYCLE_FB).parent();
 		assertNotNull(fb1);
-		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, E_CYCLE_FB);
+		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, UITestNamesHelper.E_CYCLE_FB);
 		assertTrue(fb1Bounds1.contains(pos1.x, pos1.y));
 
 		// check position of E_N_TABLE
-		final Rectangle fb2Bounds1 = getAbsolutePosition(editor, E_N_TABLE_FB);
+		final Rectangle fb2Bounds1 = getAbsolutePosition(editor, UITestNamesHelper.E_N_TABLE_FB);
 		assertTrue(fb2Bounds1.contains(pos2.x, pos2.y));
 
 		// move E_CYCLE and check new position
 		final Point pos3 = new Point(125, 185);
 		editor.drag(fb1, pos3.x, pos3.y);
-		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, E_CYCLE_FB);
+		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, UITestNamesHelper.E_CYCLE_FB);
 		assertTrue(fb1Bounds2.contains(pos3.x, pos3.y));
 
 		// check if E_N_TABLE is still on same position
@@ -218,33 +220,33 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	@Test
 	public void moveBothFBOneAfterAnother() {
 		final Point pos1 = new Point(200, 200);
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, pos1);
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, pos1);
 		final Point pos2 = new Point(400, 200);
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, pos2);
+		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, pos2);
 
 		// select and move E_CYCLE
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(E_CYCLE_FB));
-		editor.click(E_CYCLE_FB);
-		final SWTBotGefEditPart fb1 = editor.getEditPart(E_CYCLE_FB).parent();
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_CYCLE_FB));
+		editor.click(UITestNamesHelper.E_CYCLE_FB);
+		final SWTBotGefEditPart fb1 = editor.getEditPart(UITestNamesHelper.E_CYCLE_FB).parent();
 		assertNotNull(fb1);
-		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, E_CYCLE_FB);
+		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, UITestNamesHelper.E_CYCLE_FB);
 		assertTrue(fb1Bounds1.contains(pos1.x, pos1.y));
 		final Point pos3 = new Point(85, 85);
 		editor.drag(fb1, pos3.x, pos3.y);
-		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, E_CYCLE_FB);
+		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, UITestNamesHelper.E_CYCLE_FB);
 		assertTrue(fb1Bounds2.contains(pos3.x, pos3.y));
 
 		// select and move E_SWITCH
-		editor.click(E_SWITCH_FB);
-		final SWTBotGefEditPart fb2 = editor.getEditPart(E_SWITCH_FB).parent();
+		editor.click(UITestNamesHelper.E_SWITCH_FB);
+		final SWTBotGefEditPart fb2 = editor.getEditPart(UITestNamesHelper.E_SWITCH_FB).parent();
 		assertNotNull(fb2);
-		final Rectangle fb2Bounds1 = getAbsolutePosition(editor, E_SWITCH_FB);
+		final Rectangle fb2Bounds1 = getAbsolutePosition(editor, UITestNamesHelper.E_SWITCH_FB);
 		assertTrue(fb2Bounds1.contains(pos2.x, pos2.y));
 		final Point pos4 = new Point(285, 85);
 		editor.drag(fb2, pos4.x, pos4.y);
-		final Rectangle fb2Bounds2 = getAbsolutePosition(editor, E_SWITCH_FB);
+		final Rectangle fb2Bounds2 = getAbsolutePosition(editor, UITestNamesHelper.E_SWITCH_FB);
 		assertTrue(fb2Bounds2.contains(pos4.x, pos4.y));
 	}
 
@@ -260,14 +262,14 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	@Test
 	public void moveBothFBTogether() {
 		final Point absPos1Fb1 = new Point(100, 100);
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, absPos1Fb1);
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, absPos1Fb1);
 		final Point absPos1Fb2 = new Point(100, 220);
-		dragAndDropEventsFB(E_SR_TREE_ITEM, absPos1Fb2);
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, absPos1Fb2);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
-		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, E_CYCLE_FB);
+		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, UITestNamesHelper.E_CYCLE_FB);
 		assertTrue(fb1Bounds1.contains(absPos1Fb1.x, absPos1Fb1.y));
-		final Rectangle fb2Bounds1 = getAbsolutePosition(editor, E_SR_FB);
+		final Rectangle fb2Bounds1 = getAbsolutePosition(editor, UITestNamesHelper.E_SR_FB);
 		assertTrue(fb2Bounds1.contains(absPos1Fb2.x, absPos1Fb2.y));
 
 		// drag rectangle over FBs, therefore FBs should be selected
@@ -275,8 +277,8 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
-		assertTrue(isFbSelected(selectedEditParts, E_CYCLE_FB));
-		assertTrue(isFbSelected(selectedEditParts, E_SR_FB));
+		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_CYCLE_FB));
+		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
 
 		// move selection by clicking on point within selection (120, 120) and drag to
 		// new Point (285, 85)
@@ -287,8 +289,8 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
-		assertTrue(isFbSelected(selectedEditParts, E_CYCLE_FB));
-		assertTrue(isFbSelected(selectedEditParts, E_SR_FB));
+		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_CYCLE_FB));
+		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
 
 		// Calculation of translation
 		final int translationX = pointTo.x - pointFrom.x;
@@ -297,7 +299,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		// Calculation of new Position of E_CYCLEs
 		final int absPos2Fb1X = absPos1Fb1.x + translationX;
 		final int absPos2Fb1Y = absPos1Fb1.y + translationY;
-		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, E_CYCLE_FB);
+		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, UITestNamesHelper.E_CYCLE_FB);
 		assertEquals(absPos2Fb1X, fb1Bounds2.x);
 		assertEquals(absPos2Fb1Y, fb1Bounds2.y);
 		assertTrue(fb1Bounds2.contains(absPos2Fb1X, absPos2Fb1Y));
@@ -305,7 +307,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		// Calculation of new Position of E_SR
 		final int absPos2Fb2X = absPos1Fb2.x + translationX;
 		final int absPos2Fb2Y = absPos1Fb2.y + translationY;
-		final Rectangle fb2Bounds2 = getAbsolutePosition(editor, E_SR_FB);
+		final Rectangle fb2Bounds2 = getAbsolutePosition(editor, UITestNamesHelper.E_SR_FB);
 		assertEquals(absPos2Fb2X, fb2Bounds2.x);
 		assertEquals(absPos2Fb2Y, fb2Bounds2.y);
 		assertTrue(fb2Bounds2.contains(absPos2Fb2X, absPos2Fb2Y));
@@ -326,20 +328,20 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	@Test
 	public void checkIfConnectionRemainsAfterMoving1FB() {
 		final Point pos1 = new Point(100, 50);
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, pos1);
-		dragAndDropEventsFB(E_DEMUX_TREE_ITEM, new Point(300, 50));
-		createConnection(EO, EI);
-		final ConnectionEditPart connection = findConnection(EO, EI);
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, pos1);
+		dragAndDropEventsFB(UITestNamesHelper.E_DEMUX_TREE_ITEM, new Point(300, 50));
+		createConnection(PinNamesHelper.EO, PinNamesHelper.EI);
+		final ConnectionEditPart connection = findConnection(PinNamesHelper.EO, PinNamesHelper.EI);
 		assertNotNull(connection);
 
 		// select E_CYCLE
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(E_CYCLE_FB));
-		editor.click(E_CYCLE_FB);
-		final SWTBotGefEditPart fb1 = editor.getEditPart(E_CYCLE_FB).parent();
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_CYCLE_FB));
+		editor.click(UITestNamesHelper.E_CYCLE_FB);
+		final SWTBotGefEditPart fb1 = editor.getEditPart(UITestNamesHelper.E_CYCLE_FB).parent();
 		assertNotNull(fb1);
-		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, E_CYCLE_FB);
+		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, UITestNamesHelper.E_CYCLE_FB);
 		assertTrue(fb1Bounds1.contains(pos1.x, pos1.y));
 
 		// get connection start and end point
@@ -354,7 +356,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 
 		// move E_CYCLE
 		editor.drag(fb1, pos2.x, pos2.y);
-		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, E_CYCLE_FB);
+		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, UITestNamesHelper.E_CYCLE_FB);
 		assertTrue(fb1Bounds2.contains(pos2.x, pos2.y));
 		assertNotNull(connection);
 		final org.eclipse.draw2d.geometry.Point newStartPointConnection = polyLineConnection.getPoints()
@@ -384,22 +386,22 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	@Test
 	public void checkIfConnectionRemainsAfterMovingBothFBsOneAfterAnother() {
 		final Point pos1 = new Point(375, 75);
-		dragAndDropEventsFB(E_SELECT_TREE_ITEM, pos1);
+		dragAndDropEventsFB(UITestNamesHelper.E_SELECT_TREE_ITEM, pos1);
 		final Point pos2 = new Point(175, 125);
-		dragAndDropEventsFB(E_CTUD_TREE_ITEM, pos2);
-		createConnection(QU, G);
-		final ConnectionEditPart connection = findConnection(QU, G);
+		dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, pos2);
+		createConnection(PinNamesHelper.QU, PinNamesHelper.G);
+		final ConnectionEditPart connection = findConnection(PinNamesHelper.QU, PinNamesHelper.G);
 		assertNotNull(connection);
 
 		// select E_SELECT
-		final SWTBotGefEditor editor = bot.gefEditor(PROJECT_NAME);
+		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(E_CTUD_FB));
-		assertNotNull(editor.getEditPart(E_SELECT_FB));
-		editor.click(E_SELECT_FB);
-		final SWTBotGefEditPart fb1 = editor.getEditPart(E_SELECT_FB).parent();
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_CTUD_FB));
+		assertNotNull(editor.getEditPart(UITestNamesHelper.E_SELECT_FB));
+		editor.click(UITestNamesHelper.E_SELECT_FB);
+		final SWTBotGefEditPart fb1 = editor.getEditPart(UITestNamesHelper.E_SELECT_FB).parent();
 		assertNotNull(fb1);
-		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, E_SELECT_FB);
+		final Rectangle fb1Bounds1 = getAbsolutePosition(editor, UITestNamesHelper.E_SELECT_FB);
 		assertTrue(fb1Bounds1.contains(pos1.x, pos1.y));
 
 		// get connection start and end point
@@ -418,7 +420,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 
 		// move E_SELECT
 		editor.drag(fb1, pos3.x, pos3.y);
-		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, E_SELECT_FB);
+		final Rectangle fb1Bounds2 = getAbsolutePosition(editor, UITestNamesHelper.E_SELECT_FB);
 		assertTrue(fb1Bounds2.contains(pos3.x, pos3.y));
 		assertNotNull(connection);
 		org.eclipse.draw2d.geometry.Point newStartPointConnection = polyLineConnection.getPoints().getFirstPoint();
@@ -429,14 +431,14 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		assertEquals(endPointConnection.y + (long) fb1DeltaY, newEndPointConnection.y);
 
 		// select E_CTUD
-		editor.click(E_CTUD_FB);
-		final SWTBotGefEditPart fb2 = editor.getEditPart(E_CTUD_FB).parent();
+		editor.click(UITestNamesHelper.E_CTUD_FB);
+		final SWTBotGefEditPart fb2 = editor.getEditPart(UITestNamesHelper.E_CTUD_FB).parent();
 		assertNotNull(fb2);
-		final Rectangle fb2Bounds1 = getAbsolutePosition(editor, E_CTUD_FB);
+		final Rectangle fb2Bounds1 = getAbsolutePosition(editor, UITestNamesHelper.E_CTUD_FB);
 		assertTrue(fb2Bounds1.contains(pos2.x, pos2.y));
 		// move E_CTUD
 		editor.drag(fb2, pos4.x, pos4.y);
-		final Rectangle fb2Bounds2 = getAbsolutePosition(editor, E_CTUD_FB);
+		final Rectangle fb2Bounds2 = getAbsolutePosition(editor, UITestNamesHelper.E_CTUD_FB);
 		assertTrue(fb2Bounds2.contains(pos4.x, pos4.y));
 		assertNotNull(connection);
 		newStartPointConnection = polyLineConnection.getPoints().getFirstPoint();
@@ -461,13 +463,13 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	@Test
 	public void checkIfConnectionRemainsAfterMovingBothFBsTogether() {
 		final Point pos1 = new Point(200, 100);
-		dragAndDropEventsFB(E_DEMUX_TREE_ITEM, pos1);
+		dragAndDropEventsFB(UITestNamesHelper.E_DEMUX_TREE_ITEM, pos1);
 		final Point pos2 = new Point(100, 275);
-		dragAndDropEventsFB(E_SR_TREE_ITEM, pos2);
-		createConnection(EO1, R);
-		ConnectionEditPart connection = findConnection(EO1, R);
+		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, pos2);
+		createConnection(PinNamesHelper.EO1, PinNamesHelper.R);
+		ConnectionEditPart connection = findConnection(PinNamesHelper.EO1, PinNamesHelper.R);
 		assertNotNull(connection);
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
 		// get connection start and end point
 		final PolylineConnection polyLineConnection = (PolylineConnection) connection.getFigure();
@@ -479,8 +481,8 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
-		assertTrue(isFbSelected(selectedEditParts, E_DEMUX_FB));
-		assertTrue(isFbSelected(selectedEditParts, E_SR_FB));
+		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_DEMUX_FB));
+		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
 
 		// move selection by clicking on one FB but not on instance name or a pin
 		final Point pointFrom = new Point(125, 300);
@@ -490,15 +492,15 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
-		assertTrue(isFbSelected(selectedEditParts, E_DEMUX_FB));
-		assertTrue(isFbSelected(selectedEditParts, E_SR_FB));
+		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_DEMUX_FB));
+		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
 
 		// calculation of translation
 		final int translationX = pointTo.x - pointFrom.x;
 		final int translationY = pointTo.y - pointFrom.y;
 
 		// check if connection has been moved
-		connection = findConnection(EO1, R);
+		connection = findConnection(PinNamesHelper.EO1, PinNamesHelper.R);
 		assertNotNull(connection);
 		final org.eclipse.draw2d.geometry.Point newStartPointConnection = polyLineConnection.getPoints()
 				.getFirstPoint();

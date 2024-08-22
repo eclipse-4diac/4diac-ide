@@ -54,7 +54,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -227,16 +226,12 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	private Command createMoveCommand(final PositionableElement model, final ChangeBoundsRequest request,
 			final Object constraint) {
-		final Point moveDelta = (isAlignRequest(request)) ? getAlignmentDelta(model, constraint)
+		final Point moveDelta = (RequestUtil.isAlignmentRequest(request)) ? getAlignmentDelta(model, constraint)
 				: getScaledMoveDelta(request);
 		if (model instanceof final FBNetworkElement fbnEl) {
 			return new FBNetworkElementSetPositionCommand(fbnEl, moveDelta.x, moveDelta.y);
 		}
 		return new SetPositionCommand(model, moveDelta.x, moveDelta.y);
-	}
-
-	private static boolean isAlignRequest(final ChangeBoundsRequest request) {
-		return RequestConstants.REQ_ALIGN_CHILDREN.equals(request.getType());
 	}
 
 	private static Point getAlignmentDelta(final PositionableElement model, final Object constraint) {
