@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
@@ -72,6 +73,11 @@ class ForteNgExportFilter extends TemplateExportFilter {
 					new FunctionFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
 					new FunctionFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
 				}
+			SubAppType: // SubAppType is derived from CompositeFBType and needs to be handled first
+			{
+				warnings.add('''«name»: Typed Subapplications do not have any export.''')
+				emptySet
+			}
 			CompositeFBType:
 				#{
 					new CompositeFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
