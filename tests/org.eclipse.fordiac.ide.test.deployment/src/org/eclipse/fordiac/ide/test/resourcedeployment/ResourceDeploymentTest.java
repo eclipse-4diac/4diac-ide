@@ -15,9 +15,12 @@ package org.eclipse.fordiac.ide.test.resourcedeployment;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.core.runtime.CoreException;
@@ -25,6 +28,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData;
+import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData.ParameterData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.test.model.FordiacProjectLoader;
@@ -55,6 +59,30 @@ class ResourceDeploymentTest {
 		// use the same network for this test
 		final ResourceDeploymentData data = generateDeploymentData("TestParamsIdentity"); //$NON-NLS-1$
 		assertEquals(4, data.getParams().size());
+	}
+
+	/*
+	 * Parameters should only be written once inside a bootfile
+	 */
+	@SuppressWarnings("static-method")
+	@Test
+	void testParamsIndentity() throws DeploymentException {
+		final ResourceDeploymentData data = generateDeploymentData("TestParamsIdentity"); //$NON-NLS-1$
+		assertFalse(hasDuplicateEntry(data.getParams()));
+	}
+
+	private static boolean hasDuplicateEntry(final List<ParameterData> parameters) {
+		final HashSet<String> set = new HashSet<>();
+		for (final ParameterData param : parameters) {
+			if (!set.add(getParameterDestination(param))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static String getParameterDestination(final ParameterData param) {
+		return param.getPrefix() + param.getVar().getQualifiedName();
 	}
 
 	private static EList<Resource> loadResources() throws CoreException, IOException {
