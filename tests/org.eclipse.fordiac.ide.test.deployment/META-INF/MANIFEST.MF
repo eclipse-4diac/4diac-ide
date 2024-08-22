@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Deployment Test
+Bundle-SymbolicName: org.eclipse.fordiac.ide.test.deployment
+Bundle-Version: 3.0.0.qualifier
+Fragment-Host: org.eclipse.fordiac.ide.deployment
+Automatic-Module-Name: org.eclipse.fordiac.ide.test.deployment
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-Vendor: Eclipse 4diac
+Import-Package:  org.junit;version="4.13.2",
+ org.junit.jupiter.api,
+ org.junit.jupiter.params,
+ org.junit.jupiter.params.provider,
+ org.opentest4j
+Require-Bundle: org.eclipse.fordiac.ide.test.model
+
+
