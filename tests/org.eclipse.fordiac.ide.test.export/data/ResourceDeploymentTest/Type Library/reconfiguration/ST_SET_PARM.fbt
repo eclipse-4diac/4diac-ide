@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Sets the parameter to a data input of a FB, Resource or Device instance" Name="ST_SET_PARM">
+  <Identification Classification="Reconfiguration" Function="Sets Parameter" Standard="61499-1" Type="Structural Service" 
+    Description="Copyright (c) 2012 Profactor GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
+  <VersionInfo Author="Gerhard Ebenhofer" Date="2012-05-31" Organization="Profactor GmbH" Version="1.0"/>
+  <CompilerInfo>
+    <Compiler Language="Cpp" Product="GCC" Vendor="GNU" Version="&gt;3.0"/>
+  </CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Event to require setting a parameter" Name="REQ" Type="Event">
+        <With Var="ELEM_NAME"/>
+        <With Var="ELEM_DATA_IN"/>
+        <With Var="PARM_VAL"/>
+        <With Var="DST"/>
+        <With Var="QI"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Event to confirm that the parameter has been set" Name="CNF" Type="Event">
+        <With Var="STATUS"/>
+        <With Var="QO"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Event Input Qualifier" Name="QI" Type="BOOL"/>
+      <VarDeclaration Comment="Reference to element instance" Name="ELEM_NAME" Type="WSTRING"/>
+      <VarDeclaration Comment="Reference to data input" Name="ELEM_DATA_IN" Type="WSTRING"/>
+      <VarDeclaration Comment="Parameter value" Name="PARM_VAL" Type="WSTRING"/>
+      <VarDeclaration Comment="Destination where the parameter has to be set (Syntax: ResourceName)" Name="DST" Type="WSTRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Event Output Qualifier" Name="QO" Type="BOOL"/>
+      <VarDeclaration Comment="Service Status: RDY, NO_SUCH_OBJECT, INVALID_STATE" Name="STATUS" Type="WSTRING"/>
+    </OutputVars>
+  </InterfaceList>
+</FBType>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_TABLE_CTRL" Comment="Support function block for E_TABLE">
+	<Identification Standard="61499-1 Annex A" Description="&lt;p&gt;Copyright (c) 2017 fortiss GmbH This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0&lt;/p&gt;&#10;" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="">
+				<With Var="DT"/>
+				<With Var="N"/>
+			</Event>
+			<Event Name="CLK" Type="Event" Comment="">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CLKO" Type="Event" Comment="">
+				<With Var="DTO"/>
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DT" Type="TIME" Comment="" ArraySize="4"/>
+			<VarDeclaration Name="N" Type="UINT" Comment="Actual number of time steps"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="DTO" Type="TIME" Comment="Current delay interval"/>
+			<VarDeclaration Name="CV" Type="UINT" Comment="Current event index, 0..N-1"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="400.0" y="700.0">
+			</ECState>
+			<ECState Name="INIT" Comment="" x="736.8421052631579" y="84.21052631578948">
+				<ECAction Algorithm="INIT"/>
+			</ECState>
+			<ECState Name="INIT1" Comment="" x="1284.2105263157894" y="457.89473684210526">
+				<ECAction Output="CLKO"/>
+			</ECState>
+			<ECState Name="NEXT_STEP" Comment="" x="1000.0" y="1273.6842105263158">
+				<ECAction Algorithm="NEXT_STEP" Output="CLKO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="INIT" Condition="INIT" Comment="" x="684.2105263157895" y="431.57894736842104"/>
+			<ECTransition Source="INIT" Destination="START" Condition="[N = 0]" Comment="" x="400.0" y="342.10526315789474"/>
+			<ECTransition Source="INIT" Destination="INIT1" Condition="[N &gt; 0]" Comment="" x="1078.9473684210527" y="310.5263157894737"/>
+			<ECTransition Source="INIT1" Destination="START" Condition="1" Comment="" x="952.6315789473684" y="647.3684210526316"/>
+			<ECTransition Source="START" Destination="NEXT_STEP" Condition="CLK[CV &lt; MIN(3, N-1)]" Comment="" x="1078.9473684210527" y="936.8421052631579"/>
+			<ECTransition Source="NEXT_STEP" Destination="START" Condition="1" Comment="" x="473.6842105263158" y="1310.5263157894738"/>
+		</ECC>
+		<Algorithm Name="INIT" Comment="">
+			<ST><![CDATA[ALGORITHM INIT
+CV := 0;
+DTO := DT[0];
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="NEXT_STEP" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM NEXT_STEP
+CV := CV +1;
+DTO := DT[CV];
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>

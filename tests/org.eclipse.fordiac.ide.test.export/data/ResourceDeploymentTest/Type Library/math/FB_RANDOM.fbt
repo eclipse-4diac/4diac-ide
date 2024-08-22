@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Generate a REAL Randomly" Name="FB_RANDOM">
+  <Identification Classification="Mathematic" Function="RANDOM" Standard="61499-1" Type="Mathematical function"
+  		Description="Copyright (c) 2012 Profactor GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
+  <VersionInfo Author="Gerhard Ebenhofer" Date="2012-05-31" Organization="Profactor GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Initializes the random with the specified seed, if not called the generated values will always be identical" Name="INIT" Type="Event">
+        <With Var="SEED"/>
+      </Event>
+      <Event Comment="Calculates a new random number between 0 and 1" Name="REQ" Type="Event"/>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INITO" Type="Event"/>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="VAL"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="the seed to initialize the random, a seed of 0 (zero) uses the current systemtime as seed" InitialValue="0" Name="SEED" Type="UINT"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Function output" Name="VAL" Type="REAL"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="855.0" y="285.0"/>
+      <ECState Comment="Normal execution" Name="REQ" x="215.0" y="755.0">
+        <ECAction Algorithm="REQ" Output="CNF"/>
+      </ECState>
+      <ECState Comment="" Name="State" x="2015.0" y="430.0">
+        <ECAction Algorithm="INIT" Output="INITO"/>
+      </ECState>
+      <ECTransition Comment="" Condition="REQ" Destination="REQ" Source="START" x="555.0" y="600.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="REQ" x="215.0" y="425.0"/>
+      <ECTransition Comment="" Condition="INIT" Destination="State" Source="START" x="1705.0" y="320.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="State" x="1585.0" y="680.0"/>
+    </ECC>
+    <Algorithm Comment="ALG" Name="INIT">
+      <Other Language="AnyText" Text="// WARNING - Don't forget to add #include &lt;time.h&gt;&#13;&#10;&#13;&#10;if (SEED() == 0) {&#13;&#10;  srand( (unsigned int) time(NULL) );&#13;&#10;} else {&#13;&#10;  srand( SEED() );&#13;&#10;}"/>
+    </Algorithm>
+    <Algorithm Comment="Normally executed algorithm" Name="REQ">
+      <Other Language="AnyText" Text="VAL() = (TForteFloat) ((rand() % 32767) / 100000.0); // RAND_MAX is a constant defined in &lt;cstdlib&gt;. Its default value may vary between implementations but it is granted to be at least 32767.&#10;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>
