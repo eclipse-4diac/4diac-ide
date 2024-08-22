@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Merge (OR) of two input events" Name="E_MERGE">
+  <Identification Description="Copyright (c) 2017 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Function="Output EO is triggered when either EI1 or EI2 is received" Standard="61499-1 Annex A"/>
+  <VersionInfo Author="Alois Zoitl" Date="2017" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="First input event" Name="EI1" Type="Event"/>
+      <Event Comment="Second input event" Name="EI2" Type="Event"/>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Output Event" Name="EO" Type="Event"/>
+    </EventOutputs>
+    <InputVars/>
+    <OutputVars/>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
+      <ECState Comment="Issue EO Event" Name="EO" x="610.0" y="1025.0">
+        <ECAction Output="EO"/>
+      </ECState>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="EO" x="690.0" y="805.0"/>
+      <ECTransition Comment="" Condition="EI1" Destination="EO" Source="START" x="405.0" y="765.0"/>
+      <ECTransition Comment="" Condition="EI2" Destination="EO" Source="START" x="910.0" y="785.0"/>
+    </ECC>
+  </BasicFB>
+</FBType>

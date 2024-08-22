@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Service Interface Function Block Type" Name="Wago459">
+  <Identification Description="Copyright (c) 2018 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2018-12-05" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Map Pins" Name="MAP" Type="Event">
+        <With Var="AnalogInput_1"/>
+        <With Var="AnalogInput_2"/>
+        <With Var="AnalogInput_3"/>
+        <With Var="AnalogInput_4"/>
+        <With Var="QI"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Confirm Pin Mapping" Name="MAPO" Type="Event">
+        <With Var="QO"/>
+      </Event>
+      <Event Comment="Indication from Resource" Name="IND" Type="Event">
+        <With Var="QO"/>
+        <With Var="STATUS"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Event Input Qualifier" Name="QI" Type="BOOL"/>
+      <VarDeclaration Comment="" Name="AnalogInput_1" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="AnalogInput_2" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="AnalogInput_3" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="AnalogInput_4" Type="WSTRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Event Output Qualifier" Name="QO" Type="BOOL"/>
+      <VarDeclaration Comment="Service Status" Name="STATUS" Type="WSTRING"/>
+    </OutputVars>
+    <Plugs>
+      <AdapterDeclaration Comment="" Name="BusAdapterOut" Type="WagoBusAdapter"/>
+    </Plugs>
+    <Sockets>
+      <AdapterDeclaration Comment="" Name="BusAdapterIn" Type="WagoBusAdapter"/>
+    </Sockets>
+  </InterfaceList>
+</FBType>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Event demultiplexor" Name="E_DEMUX">
+  <Identification Description="Copyright (c) 2017 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-1 Annex A"/>
+  <VersionInfo Author="Alois Zoitl" Date="2017-09-22" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Event to demultiplex" Name="EI" Type="Event">
+        <With Var="K"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="" Name="EO0" Type="Event"/>
+      <Event Comment="" Name="EO1" Type="Event"/>
+      <Event Comment="" Name="EO2" Type="Event"/>
+      <Event Comment="" Name="EO3" Type="Event"/>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Event index" Name="K" Type="UINT"/>
+    </InputVars>
+    <OutputVars/>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="1100.0" y="200.0"/>
+      <ECState Comment="" Name="State" x="1200.0" y="1000.0"/>
+      <ECState Comment="" Name="State_1" x="-55.0" y="600.0">
+        <ECAction Output="EO0"/>
+      </ECState>
+      <ECState Comment="" Name="State_2" x="600.0" y="600.0">
+        <ECAction Output="EO1"/>
+      </ECState>
+      <ECState Comment="" Name="State_3" x="1565.0" y="600.0">
+        <ECAction Output="EO2"/>
+      </ECState>
+      <ECState Comment="" Name="State_4" x="2200.0" y="600.0">
+        <ECAction Output="EO3"/>
+      </ECState>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="State_1" x="705.0" y="495.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="State_2" x="1065.0" y="500.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="State_3" x="1470.0" y="510.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="State_4" x="1755.0" y="485.0"/>
+      <ECTransition Comment="" Condition="EI" Destination="State" Source="START" x="1440.0" y="690.0"/>
+      <ECTransition Comment="" Condition="[K = 0]" Destination="State_1" Source="State" x="565.0" y="1070.0"/>
+      <ECTransition Comment="" Condition="[K = 1]" Destination="State_2" Source="State" x="1020.0" y="870.0"/>
+      <ECTransition Comment="" Condition="[K = 2]" Destination="State_3" Source="State" x="1450.0" y="865.0"/>
+      <ECTransition Comment="" Condition="[K = 3]" Destination="State_4" Source="State" x="1785.0" y="870.0"/>
+      <ECTransition Comment="" Condition="[K &gt; 3]" Destination="START" Source="State" x="1210.0" y="645.0"/>
+    </ECC>
+  </BasicFB>
+</FBType>

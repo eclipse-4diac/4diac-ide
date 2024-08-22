@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="PUBLISH_10" Comment="">
+	<Identification Standard="61499-2" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-10-25" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="">
+				<With Var="QI"/>
+				<With Var="ID"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="QI"/>
+				<With Var="SD_1"/>
+				<With Var="SD_2"/>
+				<With Var="SD_3"/>
+				<With Var="SD_4"/>
+				<With Var="SD_5"/>
+				<With Var="SD_7"/>
+				<With Var="SD_6"/>
+				<With Var="SD_8"/>
+				<With Var="SD_9"/>
+				<With Var="SD_10"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="ID" Type="WSTRING" Comment=""/>
+			<VarDeclaration Name="SD_1" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_2" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_3" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_4" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_5" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_6" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_7" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_8" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_9" Type="ANY" Comment=""/>
+			<VarDeclaration Name="SD_10" Type="ANY" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="STATUS" Type="WSTRING" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

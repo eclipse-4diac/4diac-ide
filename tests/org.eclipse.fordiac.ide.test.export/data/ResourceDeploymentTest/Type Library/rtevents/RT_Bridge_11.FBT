@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="RT_Bridge_11" Comment="Data connection decoupling bridge for data connection between real-time event chains">
+	<Identification Standard="61499-2" Description="Copyright (c) 2023 Johannes Kepler University Linz&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="Johannes Kepler University Linz" Version="1.0" Author="Alois Zoitl" Date="2023-11-02">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="RD" Type="Event" Comment="Read data from data bridge">
+			</Event>
+			<Event Name="WR" Type="Event" Comment="Write data to data bridge">
+				<With Var="SD_1"/>
+				<With Var="SD_2"/>
+				<With Var="SD_3"/>
+				<With Var="SD_4"/>
+				<With Var="SD_5"/>
+				<With Var="SD_6"/>
+				<With Var="SD_7"/>
+				<With Var="SD_8"/>
+				<With Var="SD_9"/>
+				<With Var="SD_10"/>
+				<With Var="SD_11"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="RDO" Type="Event" Comment="Read data notifcation">
+				<With Var="RD_1"/>
+				<With Var="RD_2"/>
+				<With Var="RD_3"/>
+				<With Var="RD_4"/>
+				<With Var="RD_5"/>
+				<With Var="RD_6"/>
+				<With Var="RD_7"/>
+				<With Var="RD_8"/>
+				<With Var="RD_9"/>
+				<With Var="RD_10"/>
+				<With Var="RD_11"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="SD_1" Type="ANY" Comment="Data to be put into the data bridge"/>
+			<VarDeclaration Name="SD_2" Type="ANY" Comment="Data to be put into the data bridge"/>
+			<VarDeclaration Name="SD_3" Type="ANY" Comment="Data to be put into the data bridge"/>
+			<VarDeclaration Name="SD_4" Type="ANY" Comment="Data to be put into the data bridge"/>
+			<VarDeclaration Name="SD_5" Type="ANY" Comment="Data to be put into the data bridge"/>
+			<VarDeclaration Name="SD_6" Type="ANY" Comment="Data to be put into the data bridge"/>
+			<VarDeclaration Name="SD_7" Type="ANY" Comment="Data to be put into the data bridge"/>
+			<VarDeclaration Name="SD_8" Type="ANY" Comment="Data to be put into the data bridge"/>
+			<VarDeclaration Name="SD_9" Type="ANY" Comment="Data to be put into the data bridge"/>
+			<VarDeclaration Name="SD_10" Type="ANY" Comment="Data to be put into the data bridge"/>
+			<VarDeclaration Name="SD_11" Type="ANY" Comment="Data to be put into the data bridge"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="RD_1" Type="ANY" Comment="Data from data bridge"/>
+			<VarDeclaration Name="RD_2" Type="ANY" Comment="Data from data bridge"/>
+			<VarDeclaration Name="RD_3" Type="ANY" Comment="Data from data bridge"/>
+			<VarDeclaration Name="RD_4" Type="ANY" Comment="Data from data bridge"/>
+			<VarDeclaration Name="RD_5" Type="ANY" Comment="Data from data bridge"/>
+			<VarDeclaration Name="RD_6" Type="ANY" Comment="Data from data bridge"/>
+			<VarDeclaration Name="RD_7" Type="ANY" Comment="Data from data bridge"/>
+			<VarDeclaration Name="RD_8" Type="ANY" Comment="Data from data bridge"/>
+			<VarDeclaration Name="RD_9" Type="ANY" Comment="Data from data bridge"/>
+			<VarDeclaration Name="RD_10" Type="ANY" Comment="Data from data bridge"/>
+			<VarDeclaration Name="RD_11" Type="ANY" Comment="Data from data bridge"/>
+		</OutputVars>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Data connection decoupling bridge for data connection between real-time event chains">		
+	</Service>
+</FBType>

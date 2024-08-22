@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Access IOs of the PLC01A1 module" Name="PLC01A1">
+  <Identification Description="Copyright (c) 2019 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+  <VersionInfo Author="Jose Cabral" Date="2019-10-01" Organization="fortiss GmbH" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Service Initialization" Name="INIT" Type="Event">
+        <With Var="QI"/>
+        <With Var="UpdateInterval"/>
+        <With Var="IN1"/>
+        <With Var="IN2"/>
+        <With Var="IN3"/>
+        <With Var="IN4"/>
+        <With Var="IN5"/>
+        <With Var="IN6"/>
+        <With Var="IN7"/>
+        <With Var="IN8"/>
+        <With Var="OUT1"/>
+        <With Var="OUT2"/>
+        <With Var="OUT3"/>
+        <With Var="OUT4"/>
+        <With Var="OUT5"/>
+        <With Var="OUT6"/>
+        <With Var="OUT7"/>
+        <With Var="OUT8"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Initialization Confirm" Name="INITO" Type="Event">
+        <With Var="QO"/>
+        <With Var="STATUS"/>
+      </Event>
+      <Event Comment="Indication from Resource" Name="IND" Type="Event">
+        <With Var="QO"/>
+        <With Var="STATUS"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Event Input Qualifier" Name="QI" Type="BOOL"/>
+      <VarDeclaration Comment="" Name="IN1" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="IN2" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="IN3" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="IN4" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="IN5" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="IN6" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="IN7" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="IN8" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="OUT1" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="OUT2" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="OUT3" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="OUT4" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="OUT5" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="OUT6" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="OUT7" Type="WSTRING"/>
+      <VarDeclaration Comment="" Name="OUT8" Type="WSTRING"/>
+      <VarDeclaration Comment="Update interval in Hz" InitialValue="25" Name="UpdateInterval" Type="UINT"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="Event Output Qualifier" Name="QO" Type="BOOL"/>
+      <VarDeclaration Comment="Service Status" Name="STATUS" Type="WSTRING"/>
+    </OutputVars>
+  </InterfaceList>
+  <Service Comment="Access IOs of the PLC01A1 module" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+</FBType>
