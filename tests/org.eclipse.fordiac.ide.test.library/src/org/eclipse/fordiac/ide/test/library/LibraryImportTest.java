@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.test.library;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.URI;
 import java.nio.file.Paths;
@@ -50,6 +49,7 @@ class LibraryImportTest {
 	private static final String TEST05 = "test05"; //$NON-NLS-1$
 	private static final String TEST06 = "test06"; //$NON-NLS-1$
 	private static final String TEST07 = "test07"; //$NON-NLS-1$
+	private static final String MATH = "math"; //$NON-NLS-1$
 	private static final String V1_0_0 = "1.0.0"; //$NON-NLS-1$
 	private static final String V1_1_0 = "1.1.0"; //$NON-NLS-1$
 	private static final String V1_5_0 = "1.5.0"; //$NON-NLS-1$
@@ -245,7 +245,8 @@ class LibraryImportTest {
 		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
 				IResource.DEPTH_INFINITE);
 
-		assertTrue(markers.length > 0);
+		assertEquals(1, markers.length);
+		assertEquals(TEST01, markers[0].getAttribute(LibraryManager.MARKER_ATTRIBUTE, null));
 	}
 
 	@Test
@@ -273,7 +274,7 @@ class LibraryImportTest {
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST07, V1_0_0, 0);
 		assertEquals(1, manifest.getDependencies().getRequired().size());
 
-		assertFalse(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder("math").exists()); //$NON-NLS-1$
+		assertFalse(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder(MATH).exists());
 
 		LibraryManager.INSTANCE.getJobGroup().join(1000, null);
 		FordiacMarkerHelper.JOB_GROUP.join(1000, null);
@@ -282,7 +283,8 @@ class LibraryImportTest {
 		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
 				IResource.DEPTH_INFINITE);
 
-		assertTrue(markers.length > 0);
+		assertEquals(1, markers.length);
+		assertEquals(MATH, markers[0].getAttribute(LibraryManager.MARKER_ATTRIBUTE, null));
 	}
 
 }

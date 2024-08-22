@@ -17,7 +17,7 @@ import java.nio.file.Path;
 
 import org.osgi.framework.Version;
 
-public record LibraryRecord(String symbolicName, String Name, Version version, String Comment, Path path, URI uri) {
+public record LibraryRecord(String symbolicName, String name, Version version, String comment, Path path, URI uri) {
 	public LibraryRecord(final String symbolicName, final String Name, final String version, final String Comment,
 			final Path path, final URI uri) {
 		this(symbolicName, Name, new Version(version), Comment, path, uri);
