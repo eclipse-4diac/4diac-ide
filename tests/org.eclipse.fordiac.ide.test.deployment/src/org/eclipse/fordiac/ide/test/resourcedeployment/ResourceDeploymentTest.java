@@ -85,7 +85,7 @@ class ResourceDeploymentTest {
 	}
 
 	private static EList<Resource> loadResources() throws CoreException, IOException {
-		final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.export"); //$NON-NLS-1$
+		final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.deployment"); //$NON-NLS-1$
 		final Path projectPath = new Path("data/ResourceDeploymentTest"); //$NON-NLS-1$
 		final FordiacProjectLoader loader = new FordiacProjectLoader(bundle, projectPath);
 		return loader.getAutomationSystem("ResourceDeploymentTest").getDeviceNamed(Messages.DeviceName).getResource(); //$NON-NLS-1$
