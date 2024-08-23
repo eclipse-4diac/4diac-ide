@@ -49,15 +49,14 @@ class ResourceDeploymentTest {
 	@SuppressWarnings("static-method")
 	@Test
 	void testNumberOfSubappParams() throws DeploymentException {
-		final ResourceDeploymentData data = generateDeploymentData("TestNumberOfParams"); //$NON-NLS-1$
+		final ResourceDeploymentData data = generateDeploymentData(Messages.TestNetwork_NumberOfParams);
 		assertTrue(data.getParams().isEmpty());
 	}
 
 	@SuppressWarnings("static-method")
 	@Test
 	void testNumberOfParamsInStackedSubApp() throws DeploymentException {
-		// use the same network for this test
-		final ResourceDeploymentData data = generateDeploymentData("TestParamsIdentity"); //$NON-NLS-1$
+		final ResourceDeploymentData data = generateDeploymentData(Messages.TestNetwork_UniqueParameterDestination);
 		assertEquals(4, data.getParams().size());
 	}
 
@@ -66,8 +65,8 @@ class ResourceDeploymentTest {
 	 */
 	@SuppressWarnings("static-method")
 	@Test
-	void testParamsIndentity() throws DeploymentException {
-		final ResourceDeploymentData data = generateDeploymentData("TestParamsIdentity"); //$NON-NLS-1$
+	void testUniqueParameterDestinations() throws DeploymentException {
+		final ResourceDeploymentData data = generateDeploymentData(Messages.TestNetwork_UniqueParameterDestination);
 		assertFalse(hasDuplicateEntry(data.getParams()));
 	}
 
@@ -89,7 +88,7 @@ class ResourceDeploymentTest {
 		final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.export"); //$NON-NLS-1$
 		final Path projectPath = new Path("data/ResourceDeploymentTest"); //$NON-NLS-1$
 		final FordiacProjectLoader loader = new FordiacProjectLoader(bundle, projectPath);
-		return loader.getAutomationSystem("ResourceDeploymentTest").getDeviceNamed("FORTE_PC").getResource(); //$NON-NLS-1$
+		return loader.getAutomationSystem("ResourceDeploymentTest").getDeviceNamed(Messages.DeviceName).getResource(); //$NON-NLS-1$
 	}
 
 	private static ResourceDeploymentData generateDeploymentData(final String testName) throws DeploymentException {
