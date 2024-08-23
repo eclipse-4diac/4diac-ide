@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -75,7 +76,8 @@ class LibraryImportTest {
 		final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.library"); //$NON-NLS-1$
 		for (final var archive : archives) {
 			final URL url = FileLocator.toFileURL(FileLocator.find(bundle, new Path(archive)));
-			LibraryManager.INSTANCE.extractLibrary(Paths.get(url.toURI()), null, false, false);
+			final var uri = new URI(url.toString().replace(" ", "%20")); //$NON-NLS-1$//$NON-NLS-2$
+			LibraryManager.INSTANCE.extractLibrary(Paths.get(uri), null, false, false);
 		}
 
 		// deactivate other downloaders
