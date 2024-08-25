@@ -32,7 +32,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.jupiter.api.Test;
 
-public class CreateFBTTest extends Abstract4diacUITests {
+public class CreateFBTTests extends Abstract4diacUITests {
 
 	/**
 	 * Checks if a New Type can be created and is visible in the System Explorer

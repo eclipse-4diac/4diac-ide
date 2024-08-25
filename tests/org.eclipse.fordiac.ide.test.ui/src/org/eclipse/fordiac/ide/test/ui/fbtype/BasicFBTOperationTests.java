@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class BasicFBTOperationTest extends Abstract4diacUITests {
+public class BasicFBTOperationTests extends Abstract4diacUITests {
 
 	/**
 	 * Performs necessary tasks to make environment for testing the operations on
