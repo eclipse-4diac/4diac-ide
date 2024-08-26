@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDo
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentUpdaterChangeAdapterFilter;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorActions;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.hyperlinking.STAlgorithmHyperlinkHelper;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.outline.FilterHeadingsContribution;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.refactoring.ExtractMethodRefactoring;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreCleanupEditorCallback;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferences;
@@ -97,6 +98,7 @@ import org.eclipse.xtext.ui.editor.model.IResourceForEditorInputFactory;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider;
 import org.eclipse.xtext.ui.editor.occurrences.IOccurrenceComputer;
+import org.eclipse.xtext.ui.editor.outline.actions.IOutlineContribution;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer;
 import org.eclipse.xtext.ui.editor.quickfix.ISimilarityMatcher;
 import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor;
@@ -340,5 +342,10 @@ public class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 	@Override
 	public Class<? extends IWhitespaceInformationProvider> bindIWhitespaceInformationProvider() {
 		return STCoreWhitespaceInformationProvider.class;
+	}
+
+	public void configureFilterHeadingsContribution(final Binder binder) {
+		binder.bind(IOutlineContribution.class).annotatedWith(Names.named("FilterHeadingsContribution")) //$NON-NLS-1$
+				.to(FilterHeadingsContribution.class);
 	}
 }

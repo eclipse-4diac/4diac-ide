@@ -19,9 +19,17 @@ public final class Messages extends NLS {
 
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextalgorithm.ui.messages"; //$NON-NLS-1$
 
+	public static String FilterHeadingsContribution_Description;
+
+	public static String FilterHeadingsContribution_Text;
+
+	public static String FilterHeadingsContribution_ToolTipText;
+
 	public static String STAlgorithmLabelProvider_AlgorithmText;
 
 	public static String STAlgorithmLabelProvider_MethodText;
+
+	public static String STAlgorithmOutlineTreeProvider_MissingHeading;
 
 	public static String STAlgorithmQuickfixProvider_Add_missing_algorithm;
 	public static String STAlgorithmQuickfixProvider_Add_missing_algorithm_for_input_event;
