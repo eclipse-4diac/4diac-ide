@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
- *                          Johannes Kepler University,
+ * Copyright (c) 2008, 2024 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -519,11 +519,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	public ValueEditPart getReferencedValueEditPart() {
 		final Value value = getValue();
-		if (value != null) {
-			final Object temp = getViewer().getEditPartRegistry().get(value);
-			if (temp instanceof final ValueEditPart vep) {
-				return vep;
-			}
+		if ((value != null) && (getViewer().getEditPartForModel(value) instanceof final ValueEditPart vep)) {
+			return vep;
 		}
 		return null;
 	}

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021, 2023 Johannes Kepler University Linz,
- * 				                  Primetals Technologies Germany GmbH
+ * Copyright (c) 2019, 2024 Johannes Kepler University Linz,
+ * 				            Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -82,8 +82,8 @@ public class MoveToParentHandler extends AbstractHandler {
 		final FBNetwork subappNetwork = getParentOfParent(fbelements.get(0));
 		final GraphicalViewer viewer = getViewer(subappNetwork, editor);
 		viewer.flush();
-		final GraphicalEditPart ep = (GraphicalEditPart) viewer.getEditPartRegistry()
-				.get(fbelements.get(0).getFbNetwork().eContainer());
+		final GraphicalEditPart ep = (GraphicalEditPart) viewer
+				.getEditPartForModel(fbelements.get(0).getFbNetwork().eContainer());
 		return ep.getFigure().getBounds();
 	}
 

@@ -100,7 +100,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			final GraphicalViewer viewer) {
 		final List<IInterfaceElement> resolvedOpposites = new ArrayList<>();
 		for (final IInterfaceElement element : opposites) {
-			final EditPart ep = (EditPart) (viewer.getEditPartRegistry().get(element));
+			final EditPart ep = viewer.getEditPartForModel(element);
 			if ((ep instanceof final InterfaceEditPart iep) && isExpandedSubappPin(element)) {
 				if (useTargetPins(iep)) {
 					resolvedOpposites.addAll(getTargetPins(iep));

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,7 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.network;
 
-import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -114,20 +114,13 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 		return (selectedElement instanceof FBNetwork);
 	}
 
-	EditPart getEditPartForSelection(Object selectedElement) {
-		final Map<?, ?> map = getGraphicalViewer().getEditPartRegistry();
+	EditPart getEditPartForSelection(final Object selectedElement) {
 
-		for (final Object key : map.keySet()) {
-			if (((key instanceof FB) && (((FB) key) == selectedElement)) || //
-					((key instanceof Connection) && (((Connection) key) == selectedElement))) {
-				selectedElement = key;
-				break;
+		for (final Entry<Object, EditPart> entry : getGraphicalViewer().getEditPartRegistry().entrySet()) {
+			if (((entry.getKey() instanceof final FB fb) && (fb == selectedElement)) || //
+					((entry.getKey() instanceof final Connection con) && (con == selectedElement))) {
+				return entry.getValue();
 			}
-		}
-
-		final Object obj = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
-		if (obj instanceof EditPart) {
-			return (EditPart) obj;
 		}
 		return null;
 	}
@@ -144,13 +137,12 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected void setModel(final IEditorInput input) {
-		if (input instanceof final FBTypeEditorInput untypedInput) {
-			if (untypedInput.getContent() instanceof CompositeFBType) {
-				fbType = (CompositeFBType) untypedInput.getContent();
-				setModel(fbType.getFBNetwork());
-				getModel().eAdapters().add(adapter);
-				configurePalette(untypedInput);
-			}
+		if ((input instanceof final FBTypeEditorInput untypedInput)
+				&& (untypedInput.getContent() instanceof final CompositeFBType cfbTye)) {
+			fbType = cfbTye;
+			setModel(fbType.getFBNetwork());
+			getModel().eAdapters().add(adapter);
+			configurePalette(untypedInput);
 		}
 
 		setTitleImage(FordiacImage.ICON_FB_NETWORK.getImage());
@@ -220,9 +212,9 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	public void reloadType(final FBType type) {
-		if (type instanceof CompositeFBType) {
+		if (type instanceof final CompositeFBType cfbTye) {
 			getModel().eAdapters().remove(adapter);
-			fbType = ((CompositeFBType) type);
+			fbType = cfbTye;
 			setModel(fbType.getFBNetwork());
 			if (getModel() != null) {
 				getModel().eAdapters().add(adapter);

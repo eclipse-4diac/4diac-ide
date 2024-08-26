@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Profactor GmbH, fortiss GmbH,
- *                          Primetals Technologies Austria GmbH
- *               2022 		Primetals Technologies Austria GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2012, 2024 Profactor GmbH, fortiss GmbH,
+ *                          Primetals Technologies Austria GmbH,
+ *                		    Primetals Technologies Austria GmbH,
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -133,13 +133,9 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 	private void showPinValues(final boolean show) {
 		if (getModel().getCurrentValue() != null && !"".equals(getModel().getCurrentValue())) { //$NON-NLS-1$
 			final IInterfaceElement ie = getInterfaceElement();
-			if (ie instanceof final VarDeclaration varDec) {
-				if (null != getViewer()) {
-					final Object obj = getViewer().getEditPartRegistry().get(varDec.getValue());
-					if (obj instanceof final ValueEditPart valueEP) {
-						valueEP.setVisible(show);
-					}
-				}
+			if ((ie instanceof final VarDeclaration varDec) && (null != getViewer())
+					&& getViewer().getEditPartForModel(varDec.getValue()) instanceof final ValueEditPart valueEP) {
+				valueEP.setVisible(show);
 			}
 		}
 	}
@@ -242,11 +238,11 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 	@Override
 	public DirectEditManager createDirectEditManager() {
 		final IInterfaceElement interfaceElement = getInterfaceElement();
-		if (interfaceElement instanceof VarDeclaration) {
+		if (interfaceElement instanceof final VarDeclaration varDecl) {
 			return new MonitoringValueDirectEditManager(this,
 					isStruct() ? new StructFigureCellEditorLocator(getFigure())
 							: new FigureCellEditorLocator(getFigure()),
-					(VarDeclaration) interfaceElement, getModel());
+					varDecl, getModel());
 		}
 		return super.createDirectEditManager();
 	}

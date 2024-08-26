@@ -37,8 +37,7 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 	@Override
 	public void activate() {
 		super.activate();
-		final Object part = getViewer().getEditPartRegistry().get(getInterfaceElement());
-		if (part instanceof final InterfaceEditPart iep) {
+		if (getViewer().getEditPartForModel(getInterfaceElement()) instanceof final InterfaceEditPart iep) {
 			referencedInterface = iep;
 			referencedInterface.getFigure().addAncestorListener(new AncestorListener() {
 

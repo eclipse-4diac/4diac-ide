@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
+ * Copyright (c) 2017, 2024 fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,8 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
@@ -20,6 +19,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 
 public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementCommand {
@@ -77,9 +77,8 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 					.getAdapter(GraphicalViewer.class);
 
 			if (graphicalViewer != null && getInterfaceList().eContainer() instanceof SubApp) {
-				final Object subAppforFBNetowrkEditPart = graphicalViewer.getEditPartRegistry()
-						.get((getInterfaceList().eContainer()));
-				if (subAppforFBNetowrkEditPart instanceof final SubAppForFBNetworkEditPart subAppEP
+				final EditPart registeredEP = graphicalViewer.getEditPartForModel((getInterfaceList().eContainer()));
+				if (registeredEP instanceof final SubAppForFBNetworkEditPart subAppEP
 						&& subAppEP.getContentEP() != null) {
 					resizeCmd = new ResizeGroupOrSubappCommand(subAppEP.getContentEP());
 					resizeCmd.execute();

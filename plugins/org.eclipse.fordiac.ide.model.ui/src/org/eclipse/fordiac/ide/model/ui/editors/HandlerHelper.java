@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -65,8 +65,8 @@ public final class HandlerHelper {
 
 	public static boolean selectElement(final Object element, final GraphicalViewer viewer) {
 		if (viewer != null) {
-			final EditPart editPart = viewer.getEditPartRegistry().get(element);
-			if (null != editPart) {
+			final EditPart editPart = viewer.getEditPartForModel(element);
+			if (editPart != null) {
 				selectEditPart(viewer, editPart);
 				return true;
 			}
@@ -123,15 +123,12 @@ public final class HandlerHelper {
 			// move canvas to show the top-left corner of an expanded subapp
 			final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
 			if (null != viewer) {
-				final EditPart subappEP = viewer.getEditPartRegistry().get(subapp);
-				if (subappEP != null) {
-					final EditPart root = subappEP.getRoot();
-					if (root instanceof final ScalableFreeformRootEditPart gep
-							&& gep.getFigure() instanceof final FreeformViewport viewp) {
-						final Point pos = ((PositionableElement) subapp).getPosition().toScreenPoint();
-						viewp.setHorizontalLocation((int) (pos.x * gep.getZoomManager().getZoom()));
-						viewp.setVerticalLocation((int) (pos.y * gep.getZoomManager().getZoom()));
-					}
+				final EditPart subappEP = viewer.getEditPartForModel(subapp);
+				if ((subappEP != null) && (subappEP.getRoot() instanceof final ScalableFreeformRootEditPart gep
+						&& gep.getFigure() instanceof final FreeformViewport viewp)) {
+					final Point pos = ((PositionableElement) subapp).getPosition().toScreenPoint();
+					viewp.setHorizontalLocation((int) (pos.x * gep.getZoomManager().getZoom()));
+					viewp.setVerticalLocation((int) (pos.y * gep.getZoomManager().getZoom()));
 				}
 			}
 		});
