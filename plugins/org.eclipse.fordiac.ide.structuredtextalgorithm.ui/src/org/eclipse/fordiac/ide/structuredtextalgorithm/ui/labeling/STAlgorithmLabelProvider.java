@@ -12,21 +12,31 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.labeling;
 
+import java.text.MessageFormat;
+
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.Messages;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.labeling.STCoreLabelProvider;
 
 import com.google.inject.Inject;
 
-/**
- * Provides labels for EObjects.
- *
- * See
- * https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#label-provider
- */
-public class STAlgorithmLabelProvider extends DefaultEObjectLabelProvider {
+@SuppressWarnings("static-method")
+public class STAlgorithmLabelProvider extends STCoreLabelProvider {
 
 	@Inject
 	public STAlgorithmLabelProvider(final AdapterFactoryLabelProvider delegate) {
 		super(delegate);
+	}
+
+	public String text(final STAlgorithm element) {
+		return MessageFormat.format(Messages.STAlgorithmLabelProvider_AlgorithmText, element.getName());
+	}
+
+	public String text(final STMethod element) {
+		return MessageFormat.format(Messages.STAlgorithmLabelProvider_MethodText,
+				STCoreResourceDescriptionStrategy.getCallableDisplayString(element));
 	}
 }
