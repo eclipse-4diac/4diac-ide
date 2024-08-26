@@ -49,6 +49,7 @@ public final class Messages extends NLS {
 	public static String STCoreContentAssistPreferencePage_ContentAssist;
 	public static String STCoreContentAssistPreferencePage_AutoActivationTriggers;
 	public static String STCoreContentAssistPreferencePage_ChangedSettingsEffect;
+	public static String STCoreLabelProvider_VarDeclarationText;
 	public static String STCoreRenameElementRefactoringParticpant_Name;
 	public static String STCoreSaveActionsPreferencePage_EnableFormat;
 	public static String STCoreSaveActionsPreferencePage_EnableSaveActions;
