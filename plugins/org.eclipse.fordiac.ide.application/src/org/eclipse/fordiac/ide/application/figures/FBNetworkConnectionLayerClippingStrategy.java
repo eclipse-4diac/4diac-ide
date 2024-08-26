@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application.figures;
 import org.eclipse.draw2d.IClippingStrategy;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 
@@ -36,7 +37,7 @@ public class FBNetworkConnectionLayerClippingStrategy implements IClippingStrate
 	}
 
 	private Rectangle getgetFBNConnectionClippingRect(final FBNetworkConnection fbnConn) {
-		final Object ep = viewer.getEditPartRegistry().get(fbnConn.getModel().getFBNetwork());
+		final EditPart ep = viewer.getEditPartForModel(fbnConn.getModel().getFBNetwork());
 		if (ep instanceof final GraphicalEditPart fbnEP) {
 			final IFigure fbnFigure = fbnEP.getFigure();
 			final Rectangle fbnBounds = fbnFigure.getBounds().getCopy();

@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2022,2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
- * 							 	  Johannes Kepler University Linz,
- * 							 	  Primetals Technologies Germany GmbH,
- *                           	  Primetals Technologies Austria GmbH
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
+ * 							Johannes Kepler University Linz,
+ * 							Primetals Technologies Germany GmbH,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -360,13 +360,12 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 	private void followMultipleTargetConnections(final IInterfaceElement originPin,
 			final List<IInterfaceElement> targetList) {
 		final GraphicalViewer viewer = (GraphicalViewer) getViewer();
-		final GraphicalEditPart firstTargetEP = (GraphicalEditPart) viewer.getEditPartRegistry()
-				.get(targetList.getFirst());
+		final GraphicalEditPart firstTargetEP = (GraphicalEditPart) viewer.getEditPartForModel(targetList.getFirst());
 		HandlerHelper.selectEditPart(viewer, firstTargetEP);
 		viewer.flush();
 
-		final var dialog = new OppositeSelectionDialog(targetList, originPin,
-				viewer.getControl(), firstTargetEP.getFigure(),
+		final var dialog = new OppositeSelectionDialog(targetList, originPin, viewer.getControl(),
+				firstTargetEP.getFigure(),
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor());
 		dialog.open();
 	}

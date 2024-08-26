@@ -1,8 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2016 Profactor GmbH, fortiss GmbH
- * 						2017 fortiss GmbH
- * 						2019 Johannes Kepler University
- * 				 		2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz,
+ * 				 			Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -97,14 +96,13 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 	private void updatePos() {
 		if (getParent() instanceof FBNetworkContainerEditPart) {
 			final IInterfaceElement element = getIInterfaceElement();
-			final Object o = getViewer().getEditPartRegistry().get(element);
-			if (o instanceof InterfaceEditPartForResourceFBs) {
-				updatePos((InterfaceEditPartForResourceFBs) o);
+			if (getViewer().getEditPartForModel(element) instanceof final InterfaceEditPartForResourceFBs ieEP) {
+				updatePos(ieEP);
 			}
 		}
 	}
 
-	void updatePos(InterfaceEditPartForFBNetwork referencedEditPart) {
+	void updatePos(final InterfaceEditPartForFBNetwork referencedEditPart) {
 		final String label = ((Label) getFigure()).getText();
 
 		final Rectangle bounds = referencedEditPart.getFigure().getBounds();
@@ -155,7 +153,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 	 * .gef.Request)
 	 */
 	@Override
-	public boolean understandsRequest(Request request) {
+	public boolean understandsRequest(final Request request) {
 		if (request.getType() == RequestConstants.REQ_MOVE) {
 			return false;
 		}
@@ -167,7 +165,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 	}
 
 	@Override
-	public void performRequest(Request request) {
+	public void performRequest(final Request request) {
 		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 				|| (request.getType() == RequestConstants.REQ_OPEN)) {
 			return;
@@ -184,7 +182,6 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 		 * Instantiates a new virtual input output figure.
 		 */
 		public VirtualInputOutputFigure() {
-			super();
 			setOpaque(false);
 			if (!isInput()) {
 				setIcon(FordiacImage.ICON_LINK_OUTPUT.getImage());
@@ -217,20 +214,20 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 				return;
 			}
 
-			for (Connection conn : connections) {
+			for (final Connection conn : connections) {
 				FBNetworkElement oppositefbNetElement;
-				TextFlow connectionTo = new TextFlow();
-				FlowPage fp = new FlowPage();
-				Figure line = new VerticalLineCompartmentFigure();
-				IInterfaceElement oppositeIE = ConnectionsHelper.getOppositeInterfaceElement(getIInterfaceElement(),
-						conn);
+				final TextFlow connectionTo = new TextFlow();
+				final FlowPage fp = new FlowPage();
+				final Figure line = new VerticalLineCompartmentFigure();
+				final IInterfaceElement oppositeIE = ConnectionsHelper
+						.getOppositeInterfaceElement(getIInterfaceElement(), conn);
 
 				if ((oppositeIE != null) && (oppositeIE.getFBNetworkElement() != null)
 						&& (oppositeIE.getFBNetworkElement().getResource() != null)
 						&& (oppositeIE.getFBNetworkElement().getResource().getDevice() != null)) {
 					oppositefbNetElement = oppositeIE.getFBNetworkElement();
-					Resource res = oppositefbNetElement.getResource();
-					Device dev = res.getDevice();
+					final Resource res = oppositefbNetElement.getResource();
+					final Device dev = res.getDevice();
 
 					if (drawLine) {
 						add(line);
@@ -300,6 +297,6 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 
 	@Override
 	protected void refreshName() {
-		// we don't have a name to refresh and therfore nothing todo here
+		// we don't have a name to refresh and therefore nothing to be done here
 	}
 }

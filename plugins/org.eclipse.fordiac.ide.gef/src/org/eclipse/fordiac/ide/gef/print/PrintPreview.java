@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Profactor GbmH, Johannes Kepler University
+ * Copyright (c) 2019, 2024 Profactor GbmH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -97,7 +97,7 @@ public class PrintPreview extends Dialog {
 	public PrintPreview(final Shell shell, final GraphicalViewer viewer, final String printName) {
 		super(shell);
 		this.printName = printName;
-		final LayerManager lm = (LayerManager) viewer.getEditPartRegistry().get(LayerManager.ID);
+		final LayerManager lm = (LayerManager) viewer.getEditPartForModel(LayerManager.ID);
 		figure = lm.getLayer(LayerConstants.PRINTABLE_LAYERS);
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -29,16 +29,16 @@ final class ColLocatedConnectionFinder {
 			final EditPartViewer viewer, final Point loc) {
 		final Set<Connection> conns = getAllRelatedConnections(connEP);
 		final Point location = getRelativeLocation(connEP.getFigure(), loc);
-		return conns.stream().map(con -> (ConnectionEditPart) viewer.getEditPartRegistry().get(con))
-				.filter(Objects::nonNull).filter(ep -> ep.getFigure().findFigureAt(location) != null).toList();
+		return conns.stream().map(con -> (ConnectionEditPart) viewer.getEditPartForModel(con)).filter(Objects::nonNull)
+				.filter(ep -> ep.getFigure().findFigureAt(location) != null).toList();
 	}
 
 	public static List<ConnectionEditPart> getLeftCoLocatedConnections(final ConnectionEditPart connEP,
 			final EditPartViewer viewer, final Point loc) {
 		final Set<Connection> conns = getAllRelatedConnections(connEP);
 		final Point location = getRelativeLocation(connEP.getFigure(), loc);
-		return conns.stream().map(con -> (ConnectionEditPart) viewer.getEditPartRegistry().get(con))
-				.filter(Objects::nonNull).filter(ep -> ep.getFigure().findFigureAt(location) == null).toList();
+		return conns.stream().map(con -> (ConnectionEditPart) viewer.getEditPartForModel(con)).filter(Objects::nonNull)
+				.filter(ep -> ep.getFigure().findFigureAt(location) == null).toList();
 	}
 
 	private static Set<Connection> getAllRelatedConnections(final ConnectionEditPart connEP) {

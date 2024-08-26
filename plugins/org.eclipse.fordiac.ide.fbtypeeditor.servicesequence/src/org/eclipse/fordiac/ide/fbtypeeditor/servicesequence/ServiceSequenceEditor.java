@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH.
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,10 +12,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr, Melanie Winter
  *     - change canvas, fix problem with size calculation when dragging elements
- *   Felix Roithmayr
- *     - added support for new commands and context menu items
- *   Fabio Gandolfi
- *     - added Listener to load Service Sequences on tabswitch
+ *   Felix Roithmayr - added support for new commands and context menu items
+ *   Fabio Gandolfi  - added Listener to load Service Sequences on tabswitch
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
 
@@ -160,7 +158,7 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 	@Override
 	public boolean outlineSelectionChanged(final Object selectedElement) {
 		if (null != selectedElement) {
-			final Object editpart = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
+			final Object editpart = getGraphicalViewer().getEditPartForModel(selectedElement);
 			getGraphicalViewer().flush();
 			if (editpart instanceof final EditPart ep && ep.isSelectable()) {
 				getGraphicalViewer().select(ep);

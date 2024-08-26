@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
- *                          Johannes Kepler University,
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -233,7 +233,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	}
 
 	public void selectElement(final Object element) {
-		final EditPart editPart = (EditPart) getGraphicalViewer().getEditPartRegistry().get(element);
+		final EditPart editPart = getGraphicalViewer().getEditPartForModel(element);
 		if (null != editPart) {
 			getGraphicalViewer().flush();
 			getGraphicalViewer().selectAndRevealEditPart(editPart);

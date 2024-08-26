@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University
+ * Copyright (c) 2011, 2024 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,9 +10,10 @@
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *               - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Moved position calculation to the comment type edit part
- *   Virendra Ashiwal - Regulate Space at both side of FB (between FB and its interfaces) based on number of WITH connections
+ *   Virendra Ashiwal - Regulate Space at both side of FB (between FB and its
+ *                      interfaces) based on number of WITH connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
@@ -78,8 +79,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements Annotable
 	}
 
 	public void setupReferencedEP() {
-		final Object part = getViewer().getEditPartRegistry().get(getInterfaceElement());
-		if (part instanceof final InterfaceEditPart iep) {
+		if (getViewer().getEditPartForModel(getInterfaceElement()) instanceof final InterfaceEditPart iep) {
 			referencedInterface = iep;
 			referencedInterface.getFigure().addAncestorListener(new AncestorListener() {
 

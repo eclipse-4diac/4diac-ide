@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,7 +22,6 @@ import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoun
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -45,15 +44,15 @@ public final class ResizingSubappInterfaceCreationCommand extends CreationComman
 				return new WrapedResizeGroupOrSubappCommand(groupEP, cmd);
 
 			}
-		} else if (parent.getOuterFBNetworkElement() instanceof SubApp
-				&& ((SubApp) parent.getOuterFBNetworkElement()).isUnfolded()) {
+		} else if (parent.getOuterFBNetworkElement() instanceof final SubApp subApp && subApp.isUnfolded()) {
 			final GraphicalEditPart ep = findEditPart(parent.getOuterFBNetworkElement());
 			if (ep != null) {
 				return new WrapedResizeGroupOrSubappCommand(ep, cmd);
 
 			}
 		}
-		// we couldn't or shouldn't create a resizing command return the given one as fallback
+		// we couldn't or shouldn't create a resizing command return the given one as
+		// fallback
 		return cmd;
 	}
 
@@ -110,11 +109,8 @@ public final class ResizingSubappInterfaceCreationCommand extends CreationComman
 				.getActiveEditor();
 		if (editor != null) {
 			final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
-			if (viewer != null) {
-				final Object ep = viewer.getEditPartRegistry().get(obj);
-				if (ep instanceof EditPart) {
-					return (GraphicalEditPart) ep;
-				}
+			if ((viewer != null) && (viewer.getEditPartForModel(obj) instanceof final GraphicalEditPart gep)) {
+				return gep;
 			}
 		}
 		return null;
@@ -122,8 +118,8 @@ public final class ResizingSubappInterfaceCreationCommand extends CreationComman
 
 	private static SubAppForFBNetworkEditPart findSubappEP(final SubApp parent) {
 		final Object ep = findEditPart(parent);
-		if (ep instanceof SubAppForFBNetworkEditPart) {
-			return (SubAppForFBNetworkEditPart) ep;
+		if (ep instanceof final SubAppForFBNetworkEditPart subAppEP) {
+			return subAppEP;
 		}
 		return null;
 	}
@@ -134,8 +130,7 @@ public final class ResizingSubappInterfaceCreationCommand extends CreationComman
 		if (containerBounds.height < expandedIOHeight) {
 			final int heightDelta = expandedIOHeight - containerBounds.height;
 			changeSubappHeightCmd = FBNetworkXYLayoutEditPolicy.createChangeBoundsCommand(subAppEP.getModel(),
-					new Dimension(0, heightDelta),
-					new Point());
+					new Dimension(0, heightDelta), new Point());
 			changeSubappHeightCmd.execute();
 		}
 	}

@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -176,8 +177,8 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 			removeContentAdapter();
 
 			if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() != null) {
-				final Object groupforFBNetowrkEditPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
-						.getEditPartRegistry().get(getType());
+				final EditPart groupforFBNetowrkEditPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
+						.getEditPartForModel(getType());
 				if (groupforFBNetowrkEditPart instanceof final GroupEditPart gep && gep.getContentEP() != null) {
 					executeCommand(new ResizeGroupOrSubappCommand(gep.getContentEP(),
 							new ChangeCommentCommand(getType(), commentText.getText())));

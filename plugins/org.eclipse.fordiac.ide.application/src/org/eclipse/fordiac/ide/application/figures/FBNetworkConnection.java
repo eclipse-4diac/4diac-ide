@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Profactor GbmH, fortiss GmbH,
- *               2023       Johannes Kepler University Linz
+ * Copyright (c) 2014, 2024 Profactor GbmH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -183,8 +183,8 @@ public class FBNetworkConnection extends HideableConnection {
 	}
 
 	private IFigure getGroupFigure(final FBNetworkElement sourceElement) {
-		final GraphicalEditPart groupEP = (GraphicalEditPart) connEP.getViewer().getEditPartRegistry()
-				.get(sourceElement.getGroup());
+		final GraphicalEditPart groupEP = (GraphicalEditPart) connEP.getViewer()
+				.getEditPartForModel(sourceElement.getGroup());
 		return (groupEP != null) ? groupEP.getFigure() : null;
 	}
 

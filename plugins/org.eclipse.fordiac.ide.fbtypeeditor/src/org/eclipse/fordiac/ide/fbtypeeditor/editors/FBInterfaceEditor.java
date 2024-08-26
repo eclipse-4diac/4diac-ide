@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * Copyright (c) 2011 - 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 				             Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -132,9 +132,9 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	public boolean outlineSelectionChanged(final Object selectedElement) {
-		final Object editpart = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
+		final EditPart ep = getGraphicalViewer().getEditPartForModel(selectedElement);
 		getGraphicalViewer().flush();
-		if (editpart instanceof final EditPart ep && ep.isSelectable()) {
+		if (ep != null && ep.isSelectable()) {
 			getGraphicalViewer().select(ep);
 			return true;
 		}
@@ -259,7 +259,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 		if (getGraphicalViewer() == null) {
 			return null;
 		}
-		return getGraphicalViewer().getEditPartRegistry().get(fbType);
+		return getGraphicalViewer().getEditPartForModel(fbType);
 	}
 
 }

@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler
- * 							 University
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2012, 2024 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -69,15 +69,13 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 		final AbstractMonitoringBaseEditPart host;
 
 		public DeleteInterfaceAdapter(final AbstractMonitoringBaseEditPart host) {
-			super();
 			this.host = host;
 		}
 
 		@Override
 		public void notifyChanged(final Notification notification) {
 			switch (notification.getEventType()) {
-			case Notification.REMOVE:
-			case Notification.REMOVE_MANY:
+			case Notification.REMOVE, Notification.REMOVE_MANY:
 				if (isElementOrParentDeleted(notification.getOldValue())) {
 					deleteMonitoringElement();
 				}
@@ -103,7 +101,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 			}
 
 			if (deletedElement.equals(host.getInterfaceElement())) {
-				//our interface element was deleted
+				// our interface element was deleted
 				return true;
 			}
 
@@ -112,12 +110,12 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 					return true;
 				}
 
-				if (deletedElement instanceof SubApp) {
-					return host.getFBNetworks().contains(((SubApp) deletedElement).getSubAppNetwork());
+				if (deletedElement instanceof final SubApp subApp) {
+					return host.getFBNetworks().contains(subApp.getSubAppNetwork());
 				}
 
-				if (deletedElement instanceof Group) {
-					return isParentGroupDeleted((Group) deletedElement);
+				if (deletedElement instanceof final Group group) {
+					return isParentGroupDeleted(group);
 				}
 			}
 			return false;
@@ -129,13 +127,12 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 				if (element.equals(parent)) {
 					return true;
 				}
-				if (element instanceof SubApp) {
-					return host.getFBNetworks().contains(((SubApp) element).getSubAppNetwork());
+				if (element instanceof final SubApp subApp) {
+					return host.getFBNetworks().contains(subApp.getSubAppNetwork());
 				}
 			}
 			return false;
 		}
-
 
 	}
 
@@ -160,12 +157,11 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 	public void activate() {
 		super.activate();
 		for (final Object object : getViewer().getEditPartRegistry().keySet()) {
-			if (object instanceof IInterfaceElement) {
-				final IInterfaceElement interfaceElement = (IInterfaceElement) object;
+			if (object instanceof final IInterfaceElement interfaceElement) {
 				if (interfaceElement.equals(getInterfaceElement())) {
-					final EditPart part = (EditPart) getViewer().getEditPartRegistry().get(object);
-					if (part instanceof InterfaceEditPart) {
-						parentPart = (InterfaceEditPart) part;
+					final EditPart part = getViewer().getEditPartForModel(object);
+					if (part instanceof final InterfaceEditPart iep) {
+						parentPart = iep;
 						final IFigure f = parentPart.getFigure();
 						f.addAncestorListener(new AncestorListener() {
 
@@ -185,10 +181,9 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 							}
 						});
 					}
-				} else if (interfaceElement instanceof AdapterDeclaration) {
+				} else if (interfaceElement instanceof final AdapterDeclaration adp) {
 					IInterfaceElement subInterfaceElement = null;
-					final InterfaceList interfaceList = ((AdapterDeclaration) interfaceElement).getType()
-							.getInterfaceList();
+					final InterfaceList interfaceList = adp.getType().getInterfaceList();
 					final List<IInterfaceElement> list = new ArrayList<>();
 					list.addAll(interfaceList.getEventInputs());
 					list.addAll(interfaceList.getEventOutputs());
@@ -205,27 +200,24 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 					if (subInterfaceElement != null) {
 						Object subObject = null;
 						for (final Object obj : getViewer().getEditPartRegistry().values()) {
-							if (obj instanceof MonitoringAdapterEditPart) {
-								final MonitoringAdapterEditPart part = (MonitoringAdapterEditPart) obj;
-								if (part.getModel().getPort().getInterfaceElement() == interfaceElement) {
-									for (final Object subView : part.getModelChildren()) {
-										if (((IInterfaceElement) subView).getName()
-												.equals(subInterfaceElement.getName())) {
-											subObject = subView;
-											break;
-										}
-									}
-									if (subObject != null) {
+							if ((obj instanceof final MonitoringAdapterEditPart part)
+									&& (part.getModel().getPort().getInterfaceElement() == interfaceElement)) {
+								for (final Object subView : part.getModelChildren()) {
+									if (((IInterfaceElement) subView).getName().equals(subInterfaceElement.getName())) {
+										subObject = subView;
 										break;
 									}
+								}
+								if (subObject != null) {
+									break;
 								}
 							}
 						}
 
 						if (subObject != null) {
-							final EditPart part = (EditPart) getViewer().getEditPartRegistry().get(subObject);
-							if (part instanceof InterfaceEditPart) {
-								parentPart = (InterfaceEditPart) part;
+							final EditPart part = getViewer().getEditPartRegistry().get(subObject);
+							if (part instanceof final InterfaceEditPart iep) {
+								parentPart = iep;
 								final IFigure f = parentPart.getFigure();
 								f.addAncestorListener(new AncestorListener() {
 
@@ -326,7 +318,8 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 	@Override
 	public void removeNotify() {
 		if (isGrandParentDeletion()) {
-			// if a grandparent is removed or a subapp collapsed our figure is not removed as it is in a specific layer.
+			// if a grandparent is removed or a subapp collapsed our figure is not removed
+			// as it is in a specific layer.
 			// Therefore we have to do it here separatly.
 			final IFigure layerFig = getLayer(getSpecificLayer());
 			if (layerFig != null && layerFig.equals(getFigure().getParent())) {
@@ -338,7 +331,8 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 	}
 
 	private boolean isGrandParentDeletion() {
-		// if the interface element has a fbnetworkelement and this fbnetworkelement a network a grandparent was deleted
+		// if the interface element has a fbnetworkelement and this fbnetworkelement a
+		// network a grandparent was deleted
 		// or an expanded subapp folded
 		return (getInterfaceElement().getFBNetworkElement() != null
 				&& getInterfaceElement().getFBNetworkElement().getFbNetwork() != null);
@@ -382,7 +376,6 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 	private int getHeight() {
 		return FigureUtilities.getFontMetrics(JFaceResources.getFontRegistry().get(DIAGRAM_FONT)).getHeight();
 	}
-
 
 	protected void setBackgroundColor(final IFigure l) {
 		l.setBackgroundColor(PreferenceGetter.getColor(Activator.getDefault().getPreferenceStore(),
