@@ -36,7 +36,8 @@ public final class TypedConfigureableObjectAnnotations {
 						MessageFormat.format(Messages.TypedElementAnnotations_TypeNotFound,
 								element.getTypeEntry().getFullTypeName()),
 						FordiacMarkerHelper.getDiagnosticData(element,
-								LibraryElementPackage.Literals.TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY)));
+								LibraryElementPackage.Literals.TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY,
+								element.getTypeEntry().getFullTypeName())));
 			}
 			return false;
 		}

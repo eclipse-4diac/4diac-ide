@@ -50,7 +50,7 @@ public class ConnectionAnnotations {
 						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_SOURCE,
 						MessageFormat.format(Messages.ConnectionAnnotations_SourceElementMissing, element.getName()),
 						FordiacMarkerHelper.getDiagnosticData(connection,
-								LibraryElementPackage.Literals.CONNECTION__SOURCE)));
+								LibraryElementPackage.Literals.CONNECTION__SOURCE, element.getQualifiedName())));
 			}
 			return false;
 		}
@@ -65,7 +65,7 @@ public class ConnectionAnnotations {
 						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_SOURCE_ENDPOINT,
 						MessageFormat.format(Messages.ConnectionAnnotations_SourceEndpointMissing, endpoint.getName()),
 						FordiacMarkerHelper.getDiagnosticData(connection,
-								LibraryElementPackage.Literals.CONNECTION__SOURCE)));
+								LibraryElementPackage.Literals.CONNECTION__SOURCE, endpoint.getQualifiedName())));
 			}
 			return false;
 		}
@@ -81,7 +81,7 @@ public class ConnectionAnnotations {
 						MessageFormat.format(Messages.ConnectionAnnotations_DestinationElementMissing,
 								element.getName()),
 						FordiacMarkerHelper.getDiagnosticData(connection,
-								LibraryElementPackage.Literals.CONNECTION__DESTINATION)));
+								LibraryElementPackage.Literals.CONNECTION__DESTINATION, element.getQualifiedName())));
 			}
 			return false;
 		}
@@ -97,7 +97,7 @@ public class ConnectionAnnotations {
 						MessageFormat.format(Messages.ConnectionAnnotations_DestinationEndpointMissing,
 								endpoint.getName()),
 						FordiacMarkerHelper.getDiagnosticData(connection,
-								LibraryElementPackage.Literals.CONNECTION__DESTINATION)));
+								LibraryElementPackage.Literals.CONNECTION__DESTINATION, endpoint.getQualifiedName())));
 			}
 			return false;
 		}

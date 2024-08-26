@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Point;
@@ -276,12 +275,8 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 
 	@Override
 	public void gotoMarker(final IMarker marker) {
-		try {
-			final EObject target = FordiacErrorMarker.getTargetEditable(marker);
-			gotoElement(target);
-		} catch (IllegalArgumentException | CoreException e) {
-			FordiacLogHelper.logWarning("Couldn't goto marker " + marker.toString(), e); //$NON-NLS-1$
-		}
+		final EObject target = FordiacErrorMarker.getTargetEditable(marker);
+		gotoElement(target);
 	}
 
 	private void gotoElement(final EObject element) {
