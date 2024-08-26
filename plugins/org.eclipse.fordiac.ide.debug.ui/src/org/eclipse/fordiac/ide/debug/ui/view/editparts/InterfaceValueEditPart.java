@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c)  2012 - 2022 Profactor GmbH, fortiss GmbH,
- * 							  Primetals Technologies Austria GmbH
+ * Copyright (c)  2012, 2024 Profactor GmbH, fortiss GmbH,
+ * 							 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,7 +19,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.fordiac.ide.debug.ui.view.policies.InterfaceValueDirectEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
-import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -64,13 +63,13 @@ public class InterfaceValueEditPart extends AbstractDebugInterfaceValueEditPart 
 	}
 
 	private void performDirectEdit() {
-		final var labelDirectEditManager = new LabelDirectEditManager(this, getFigure());
+		final var labelDirectEditManager = new LabelDirectEditManager(this, getLabelFigure());
 		labelDirectEditManager.show();
 	}
 
-	public void setValue(final Value value) {
+	public void updateValue() {
 		if (isActive() && getFigure() != null) {
-			getFigure().setText(value.toString());
+			getLabelFigure().setText(getModel().getVariable().toString());
 			refreshVisuals();
 		}
 	}

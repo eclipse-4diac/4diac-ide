@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
@@ -222,12 +223,11 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 	}
 
 	private Rectangle getFBBounds(final List<FBNetworkElement> children) {
-		final Map<Object, Object> editPartRegistry = getViewer().getEditPartRegistry();
+		final Map<Object, EditPart> editPartRegistry = getViewer().getEditPartRegistry();
 		Rectangle fbBounds = null;
 
 		for (final FBNetworkElement fbe : children) {
-			final Object object = editPartRegistry.get(fbe);
-			if (object instanceof final GraphicalEditPart graphicalEP) {
+			if (editPartRegistry.get(fbe) instanceof final GraphicalEditPart graphicalEP) {
 				final IFigure fbFigure = graphicalEP.getFigure();
 				if (fbFigure != null) {
 					if (fbBounds == null) {
@@ -243,7 +243,7 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 	}
 
 	private static void addValueBounds(final Rectangle fbBounds, final FBNetworkElement fbe,
-			final Map<Object, Object> editPartRegistry) {
+			final Map<Object, EditPart> editPartRegistry) {
 		fbe.getInterface().getInputVars().stream().filter(Objects::nonNull)
 				.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
 				.forEach(ep -> {

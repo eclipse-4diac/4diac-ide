@@ -28,7 +28,8 @@ import org.eclipse.ui.NavigationLocation;
 
 public class BreadcrumbNavigationLocation extends NavigationLocation {
 
-	// we need to explicitly store the breadcrumb editor as getEditorPart my provide the wrong editor when we are inside
+	// we need to explicitly store the breadcrumb editor as getEditorPart my provide
+	// the wrong editor when we are inside
 	// a type editor
 	private final AbstractBreadCrumbEditor breadCrumbEditor;
 	private final Object model;
@@ -96,14 +97,11 @@ public class BreadcrumbNavigationLocation extends NavigationLocation {
 
 	@Override
 	public boolean mergeInto(final INavigationLocation currentLocation) {
-		if (currentLocation instanceof BreadcrumbNavigationLocation) {
-			final BreadcrumbNavigationLocation currentBreadCrumbLocation = ((BreadcrumbNavigationLocation) currentLocation);
-			if (this.model == currentBreadCrumbLocation.getModel()) {
-				if (viewerData != null) {
-					return viewerData.equals(currentBreadCrumbLocation.viewerData);
-				}
-				return true;
+		if ((currentLocation instanceof final BreadcrumbNavigationLocation loc) && (this.model == loc.getModel())) {
+			if (viewerData != null) {
+				return viewerData.equals(loc.viewerData);
 			}
+			return true;
 		}
 		return false;
 	}

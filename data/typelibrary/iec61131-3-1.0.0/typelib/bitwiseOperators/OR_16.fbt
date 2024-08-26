@@ -54,4 +54,5 @@
 			<VarDeclaration Name="OUT" Type="ANY_BIT" Comment="OR result"/>
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="GenericClassName" Value="'GEN_OR'"/>
 </FBType>

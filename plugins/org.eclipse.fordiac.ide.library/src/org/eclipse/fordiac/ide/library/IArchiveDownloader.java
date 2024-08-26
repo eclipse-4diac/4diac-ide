@@ -51,4 +51,18 @@ public interface IArchiveDownloader {
 	 *         archive couldn't be downloaded
 	 */
 	Path downloadLibrary(String symbolicName, VersionRange range, Version preferredVersion) throws IOException;
+
+	/**
+	 * Returns if downloader is active (standard value is {@code true})
+	 *
+	 * @return {@code true} if active, else {@code false}
+	 */
+	boolean isActive();
+
+	/**
+	 * Set active state
+	 *
+	 * @param active active state
+	 */
+	void setActive(boolean active);
 }

@@ -26,6 +26,7 @@
 			<VarDeclaration Name="RD_1" Type="ANY" Comment="Data from data bridge"/>
 		</OutputVars>
 	</InterfaceList>
-	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Data connection decoupling bridge for data connection between real-time event chains">		
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Data connection decoupling bridge for data connection between real-time event chains">
 	</Service>
+	<Attribute Name="GenericClassName" Value="'GEN_RT_Bridge'"/>
 </FBType>
