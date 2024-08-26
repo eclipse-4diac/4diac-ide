@@ -78,7 +78,7 @@ Workflow {
 			fragment = ui.labeling.LabelProviderFragment2 {}
 			fragment = ui.outline.QuickOutlineFragment2 {}
 			fragment = ui.outline.OutlineTreeProviderFragment2 {
-				generateStub = false
+				generateStub = true
 			}
 			fragment = ui.quickfix.QuickfixProviderFragment2 {
 				generateStub = true
