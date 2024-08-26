@@ -72,7 +72,7 @@ public final class NamedElementAnnotations {
 							MessageFormat.format(Messages.IdentifierVerifier_NameConsecutiveUnderscore,
 									element.getName()),
 							FordiacMarkerHelper.getDiagnosticData(element,
-									LibraryElementPackage.Literals.INAMED_ELEMENT__NAME)));
+									LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, element.getName())));
 				}
 			} else if (element.getName().endsWith("_")) { //$NON-NLS-1$
 				if (diagnostics != null) {
@@ -129,7 +129,8 @@ public final class NamedElementAnnotations {
 		return new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 				LibraryElementValidator.INAMED_ELEMENT__VALIDATE_NAME,
 				MessageFormat.format(Messages.InterfaceElementAnnotations_DuplicateName, element.getName()),
-				FordiacMarkerHelper.getDiagnosticData(element, LibraryElementPackage.Literals.INAMED_ELEMENT__NAME));
+				FordiacMarkerHelper.getDiagnosticData(element, LibraryElementPackage.Literals.INAMED_ELEMENT__NAME,
+						element.getQualifiedName()));
 	}
 
 	private static <K, V> V putConditional(final Map<K, V> map, final K key, final V valueIfAbsent,

@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.network;
 import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -41,7 +40,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -146,8 +144,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected void setModel(final IEditorInput input) {
-		if (input instanceof FBTypeEditorInput) {
-			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
+		if (input instanceof final FBTypeEditorInput untypedInput) {
 			if (untypedInput.getContent() instanceof CompositeFBType) {
 				fbType = (CompositeFBType) untypedInput.getContent();
 				setModel(fbType.getFBNetwork());
@@ -204,26 +201,17 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	public void gotoMarker(final IMarker marker) {
-		try {
-			final EObject target = FordiacErrorMarker.getTargetEditable(marker);
-			if (target != null) {
-				selectElement(target);
-			}
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Could not get marker attributes", e); //$NON-NLS-1$
+		final EObject target = FordiacErrorMarker.getTargetEditable(marker);
+		if (target != null) {
+			selectElement(target);
 		}
 	}
 
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
 		if (FordiacErrorMarker.markerTargetsValue(marker)) {
-			try {
-				final EObject target = FordiacErrorMarker.getTargetEditable(marker);
-				return EcoreUtil.isAncestor(getModel(), target);
-			} catch (final CoreException e) {
-				FordiacLogHelper.logWarning("Could not get marker attributes", e); //$NON-NLS-1$
-			}
-			return false;
+			final EObject target = FordiacErrorMarker.getTargetEditable(marker);
+			return EcoreUtil.isAncestor(getModel(), target);
 		}
 		return FordiacErrorMarker.markerTargetsFBNetworkElement(marker)
 				|| FordiacErrorMarker.markerTargetsErrorMarkerInterface(marker)
