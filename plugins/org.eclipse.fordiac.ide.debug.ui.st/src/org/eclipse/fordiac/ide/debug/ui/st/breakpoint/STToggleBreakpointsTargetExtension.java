@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,17 +18,14 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.fordiac.ide.debug.st.breakpoint.STLineBreakpoint;
 import org.eclipse.fordiac.ide.debug.ui.breakpoint.CommonToggleBreakpointsTargetExtension;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 
 public class STToggleBreakpointsTargetExtension extends CommonToggleBreakpointsTargetExtension {
@@ -36,6 +33,13 @@ public class STToggleBreakpointsTargetExtension extends CommonToggleBreakpointsT
 	private static final Set<String> APPLICABLE_LANGUAGES = Set.of(
 			"org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm", //$NON-NLS-1$
 			"org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"); //$NON-NLS-1$
+
+	private static final Set<EReference> ADDITIONAL_VALID_REFERENCES = Set.of(
+			STCorePackage.Literals.ST_IF_STATEMENT__CONDITION, STCorePackage.Literals.ST_ELSE_IF_PART__CONDITION,
+			STCorePackage.Literals.ST_CASE_STATEMENT__SELECTOR, STCorePackage.Literals.ST_CASE_CASES__CONDITIONS,
+			STCorePackage.Literals.ST_FOR_STATEMENT__FROM, STCorePackage.Literals.ST_FOR_STATEMENT__BY,
+			STCorePackage.Literals.ST_WHILE_STATEMENT__CONDITION,
+			STCorePackage.Literals.ST_REPEAT_STATEMENT__CONDITION);
 
 	@Override
 	protected STLineBreakpoint createBreakpoint(final IResource res, final int line) throws CoreException {
@@ -45,18 +49,12 @@ public class STToggleBreakpointsTargetExtension extends CommonToggleBreakpointsT
 	@Override
 	protected boolean isValidSematicElementForBreakpoint(final EObject element) {
 		if (element instanceof STExpression) {
-			final EObject container = element.eContainer();
-			if (container instanceof final STAssignment assignment) {
-				return assignment.getRight() == element;
-			}
-			if (container instanceof final STForStatement forStatement) {
-				return forStatement.getFrom() == element || forStatement.getBy() == element;
-			}
-			return container instanceof STStatement || container instanceof STElseIfPart
-					|| container instanceof STCaseCases || container instanceof STContinue
-					|| container instanceof STReturn || container instanceof STExit;
+			final EReference containment = element.eContainmentFeature();
+			// statement lists OR additional valid references
+			return (containment.isMany() && containment.getEReferenceType() == STCorePackage.Literals.ST_STATEMENT)
+					|| ADDITIONAL_VALID_REFERENCES.contains(containment);
 		}
-		return false;
+		return element instanceof STContinue || element instanceof STReturn || element instanceof STExit;
 	}
 
 	@Override
