@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.debug.ui.view;
 
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
+import org.eclipse.fordiac.ide.debug.ui.view.editparts.DebugViewWithEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.EmptyDebugViewRootEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.EventValueEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.EventValueEntity;
@@ -30,6 +31,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editparts.SocketContainer;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.VariableInputContainer;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.VariableOutputContainer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.gef.EditPart;
 
 public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
@@ -70,6 +72,11 @@ public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 				}
 			};
 		}
+
+		if (modelElement instanceof With) {
+			return new DebugViewWithEditPart();
+		}
+
 		return super.getPartForElement(context, modelElement);
 	}
 }

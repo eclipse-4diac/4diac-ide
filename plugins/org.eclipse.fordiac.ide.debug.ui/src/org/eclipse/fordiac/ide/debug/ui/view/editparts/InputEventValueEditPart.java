@@ -28,8 +28,6 @@ public class InputEventValueEditPart extends EventValueEditPart {
 		bt.setSize(50, -1);
 		bt.setOpaque(true);
 		bt.setBackgroundColor(org.eclipse.draw2d.ColorConstants.yellow);
-		bt.setPreferredSize(50, 20);
-
 		bt.addActionListener(e -> triggerEvent());
 		return bt;
 	}

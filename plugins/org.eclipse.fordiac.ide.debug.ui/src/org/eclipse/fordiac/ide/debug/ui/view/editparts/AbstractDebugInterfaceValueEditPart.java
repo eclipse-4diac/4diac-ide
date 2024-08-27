@@ -23,7 +23,6 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.graphics.Font;
@@ -64,7 +63,7 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 
 	protected abstract IInterfaceElement getInterfaceElement();
 
-	private boolean isInput() {
+	public boolean isInput() {
 		return getInterfaceElement().isIsInput();
 	}
 
@@ -105,8 +104,7 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 			final Rectangle bounds = referencedInterface.getFigure().getBounds();
 
 			final int width = getFigureWidth();
-			final int x = calcXPos(bounds, width);
-			final Rectangle newBounds = new Rectangle(x, bounds.y, width, -1);
+			final Rectangle newBounds = new Rectangle(0, bounds.y - bounds.height / 2, width, -1);
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), newBounds);
 		}
 	}
@@ -119,24 +117,6 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 			width = Math.max(width, 50);
 		}
 		return width;
-	}
-
-	private int calcXPos(final Rectangle bounds, final int width) {
-		int x = 0;
-		if (isInput()) {
-			x = bounds.x - 10 - width - 15 * getNumEventInputs();
-		} else {
-			x = bounds.x + bounds.width + 10 + 15 * getNumEventOutputs();
-		}
-		return x;
-	}
-
-	private int getNumEventInputs() {
-		return ((InterfaceList) getInterfaceElement().eContainer()).getEventInputs().size();
-	}
-
-	private int getNumEventOutputs() {
-		return ((InterfaceList) getInterfaceElement().eContainer()).getEventOutputs().size();
 	}
 
 }
