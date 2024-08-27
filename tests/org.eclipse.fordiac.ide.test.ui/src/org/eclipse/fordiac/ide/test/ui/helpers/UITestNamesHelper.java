@@ -22,6 +22,8 @@ public final class UITestNamesHelper {
 
 	// alphabetical order of static variable names
 	public static final String ADAPTER = "Adapter"; //$NON-NLS-1$
+	public static final String ADD_ACTION = "Add Action"; //$NON-NLS-1$
+	public static final String ADD_STATE = "Add State"; //$NON-NLS-1$
 	public static final String APP = "App"; //$NON-NLS-1$
 	public static final String ATTRIBUTE1 = "Attribute1"; //$NON-NLS-1$
 	public static final String ATTRIBUTE2 = "Attribute2"; //$NON-NLS-1$
@@ -29,7 +31,9 @@ public final class UITestNamesHelper {
 	public static final String ATTRIBUTES = "Attributes"; //$NON-NLS-1$
 	public static final String BOOL2BOOL = "BOOL2BOOL"; //$NON-NLS-1$
 	public static final String CANCEL = "Cancel"; //$NON-NLS-1$
+	public static final String CNF = "CNF"; //$NON-NLS-1$
 	public static final String COMMENT = "Comment:"; //$NON-NLS-1$
+	public static final String CONDITION_LABEL = "Condition:"; //$NON-NLS-1$
 	public static final String CONSTANTS = "Constants"; //$NON-NLS-1$
 	public static final String CONVERT = "convert"; //$NON-NLS-1$
 	public static final String CREATE_INPUT_EVENT = "Create Input Event"; //$NON-NLS-1$
@@ -40,7 +44,10 @@ public final class UITestNamesHelper {
 	public static final String DELETE = "Delete"; //$NON-NLS-1$
 	public static final String DELETE_PROJECT_WARNING = "Delete project contents on disk (cannot be undone)"; //$NON-NLS-1$
 	public static final String DELETE_RESOURCES = "Delete Resources"; //$NON-NLS-1$
+	public static final String DEINIT = "DeInit"; //$NON-NLS-1$
+	public static final String DEINITIALIZE = "deInitialize"; //$NON-NLS-1$
 	public static final String DOT_BUTTON = "..."; //$NON-NLS-1$
+	public static final String ECC = "ECC"; //$NON-NLS-1$
 	public static final String EDIT = "Edit"; //$NON-NLS-1$
 	public static final String ELEMENTARY_TYPE = "Elementary Types"; //$NON-NLS-1$
 	public static final String EVENT = "Event"; //$NON-NLS-1$
@@ -83,8 +90,11 @@ public final class UITestNamesHelper {
 	public static final String IF = "IF"; //$NON-NLS-1$
 	public static final String INITIAL_APPLICATION_NAME_LABEL = "Initial application name"; //$NON-NLS-1$
 	public static final String INITIAL_SYSTEM_NAME_LABEL = "Initial system name"; //$NON-NLS-1$
+	public static final String INITIALIZE = "initialize"; //$NON-NLS-1$
 	public static final String INSERT_FB = "Insert FB"; //$NON-NLS-1$
 	public static final String INT_SMALL = "int"; //$NON-NLS-1$
+	public static final String INIT = "INIT"; //$NON-NLS-1$
+	public static final String INIT_SMALL = "Init"; //$NON-NLS-1$
 	public static final String INTERFACE = "Interface"; //$NON-NLS-1$
 	public static final String INTERNALCONSTVAR1 = "INTERNALCONSTVAR1"; //$NON-NLS-1$
 	public static final String INTERNALCONSTVAR2 = "INTERNALCONSTVAR2"; //$NON-NLS-1$
@@ -122,19 +132,24 @@ public final class UITestNamesHelper {
 	public static final String PROPERTIES_TITLE = "Properties"; //$NON-NLS-1$
 	public static final String REFACTORING = "Refactoring"; //$NON-NLS-1$
 	public static final String RENAME_ELEMENT = "Rename Element"; //$NON-NLS-1$
+	public static final String REQ = "REQ"; //$NON-NLS-1$
 	public static final String REQUEST_FROM_IDEAL_SOCKET = "Request from ideal Socket"; //$NON-NLS-1$
 	public static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
 	public static final String SELECT_TYPE_LABEL = FordiacMessages.SelectType + ":"; //$NON-NLS-1$
 	public static final String SOURCE = "Source"; //$NON-NLS-1$
 	public static final String SUBAPP = "SubApp"; //$NON-NLS-1$
+	public static final String START = "START"; //$NON-NLS-1$
+	public static final String STATE = "State"; //$NON-NLS-1$
 	public static final String STRUCT = "Struct"; //$NON-NLS-1$
 	public static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
 	public static final String SYSTEM_EXPLORER_LABEL = "System Explorer"; //$NON-NLS-1$
 	public static final String TEMPLATEBASIC = "TemplateBasic"; //$NON-NLS-1$
 	public static final String TEST_PARENT_FOLDER = "TestParentProject"; //$NON-NLS-1$
+	public static final String TESTSTATE = "TestState"; //$NON-NLS-1$
 	public static final String TEST_COMMENT = "Test Comment"; //$NON-NLS-1$
 	public static final String TESTVAR = "TestVar"; //$NON-NLS-1$
 	public static final String TOOLBAR_BUTTON_ZOOM_FIT_PAGE = "Zoom fit Page"; //$NON-NLS-1$
+	public static final String TRANSITION = "Transition"; //$NON-NLS-1$
 	public static final String TRUE = "TRUE"; //$NON-NLS-1$
 	public static final String TRUE_SMALL = "true"; //$NON-NLS-1$
 	public static final String TYPE_LABEL = "Type:"; //$NON-NLS-1$
