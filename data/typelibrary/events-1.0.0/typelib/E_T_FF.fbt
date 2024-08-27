@@ -1,33 +1,35 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
-<FBType Comment="Toggle flip flop" Name="E_T_FF">
-  <Identification Description="Copyright (c) 2017 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-1 Annex A"/>
-  <VersionInfo Author="Alois Zoitl" Date="2017-09-22" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
-  <InterfaceList>
-    <EventInputs>
-      <Event Comment="Clock for triggering a output toggle" Name="CLK" Type="Event"/>
-    </EventInputs>
-    <EventOutputs>
-      <Event Comment="inform of toggled output" Name="EO" Type="Event">
-        <With Var="Q"/>
-      </Event>
-    </EventOutputs>
-    <InputVars/>
-    <OutputVars>
-      <VarDeclaration Comment="value of flip flop" Name="Q" Type="BOOL"/>
-    </OutputVars>
-  </InterfaceList>
-  <BasicFB>
-    <ECC>
-      <ECState Comment="Initial State" Name="START" x="400.0" y="700.0"/>
-      <ECState Comment="Initialization" Name="SET" x="1235.0" y="665.0">
-        <ECAction Algorithm="TOGGLE" Output="EO"/>
-      </ECState>
-      <ECTransition Comment="" Condition="CLK" Destination="SET" Source="START" x="860.0" y="590.0"/>
-      <ECTransition Comment="" Condition="1" Destination="START" Source="SET" x="940.0" y="985.0"/>
-    </ECC>
-    <Algorithm Comment="new algorithm" Name="TOGGLE">
-      <ST Text="Q := NOT Q;"/>
-    </Algorithm>
-  </BasicFB>
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_T_FF" Comment="Toggle flip flop">
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="CLK" Type="Event" Comment="Clock for triggering a output toggle">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Output Q has changed">
+				<With Var="Q"/>
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="value of flip flop"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="400" y="700">
+			</ECState>
+			<ECState Name="SET" Comment="Initialization" x="1235" y="665">
+				<ECAction Algorithm="TOGGLE" Output="EO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="SET" Condition="CLK" Comment="" x="860" y="590"/>
+			<ECTransition Source="SET" Destination="START" Condition="1" Comment="" x="940" y="985"/>
+		</ECC>
+		<Algorithm Name="TOGGLE" Comment="TOGGLE algorithm">
+			<ST><![CDATA[Q := NOT Q;]]></ST>
+		</Algorithm>
+	</BasicFB>
 </FBType>

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="E_T_FF_SR" Comment="Event-driven bistable / Toggle flip flop">
-	<Identification Standard="61499-2" Classification="Flip-Flops" Description="Copyright (c) 2024 HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0">
+<FBType Name="E_T_FF_SR" Comment="Event-driven bistable and Toggle">
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017, 2024 fortiss GmbH, HR Agrartechnik GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
-	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Hoepfinger" Date="2024-07-29">
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Höpfinger" Date="2024-08-27" Remarks="Copy E_SR and make this FB">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
@@ -22,22 +24,28 @@
 			<VarDeclaration Name="Q" Type="BOOL" Comment="value of flip flop"/>
 		</OutputVars>
 	</InterfaceList>
-	<FBNetwork>
-		<FB Name="E_SWITCH" Type="E_SWITCH" Comment="" x="1333.34" y="1333.33">
-		</FB>
-		<FB Name="E_SR" Type="E_SR" Comment="" x="2633.34" y="1333.33">
-		</FB>
-		<EventConnections>
-			<Connection Source="E_SWITCH.EO0" Destination="E_SR.S" Comment=""/>
-			<Connection Source="E_SWITCH.EO1" Destination="E_SR.R" Comment=""/>
-			<Connection Source="E_SR.EO" Destination="EO" Comment="" dx1="2213.33"/>
-			<Connection Source="CLK" Destination="E_SWITCH.EI" Comment="" dx1="4653.33"/>
-			<Connection Source="R" Destination="E_SR.R" Comment="" dx1="5773.33"/>
-			<Connection Source="S" Destination="E_SR.S" Comment="" dx1="5953.33"/>
-		</EventConnections>
-		<DataConnections>
-			<Connection Source="E_SR.Q" Destination="E_SWITCH.G" Comment="" dx1="80" dx2="80" dy="160"/>
-			<Connection Source="E_SR.Q" Destination="Q" Comment="" dx1="2786.67"/>
-		</DataConnections>
-	</FBNetwork>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="500" y="385">
+			</ECState>
+			<ECState Name="SET" Comment="" x="1200" y="400">
+				<ECAction Algorithm="SET" Output="EO"/>
+			</ECState>
+			<ECState Name="RESET" Comment="" x="1165" y="845">
+				<ECAction Algorithm="RESET" Output="EO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="SET" Condition="S" Comment="" x="995" y="455"/>
+			<ECTransition Source="SET" Destination="RESET" Condition="R" Comment="" x="1205" y="685"/>
+			<ECTransition Source="RESET" Destination="SET" Condition="S" Comment="" x="1460" y="675"/>
+			<ECTransition Source="SET" Destination="RESET" Condition="CLK" Comment="" x="1673.33" y="666.67"/>
+			<ECTransition Source="RESET" Destination="SET" Condition="CLK" Comment="" x="886.67" y="693.33"/>
+			<ECTransition Source="START" Destination="SET" Condition="CLK" Comment="" x="966.67" y="200"/>
+		</ECC>
+		<Algorithm Name="SET" Comment="SET algorithm">
+			<ST><![CDATA[Q := TRUE;]]></ST>
+		</Algorithm>
+		<Algorithm Name="RESET" Comment="RESET algorithm">
+			<ST><![CDATA[Q := FALSE;]]></ST>
+		</Algorithm>
+	</BasicFB>
 </FBType>
