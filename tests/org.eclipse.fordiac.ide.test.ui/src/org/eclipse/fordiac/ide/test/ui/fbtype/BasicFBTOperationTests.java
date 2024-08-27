@@ -158,10 +158,10 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 		pin.click();
 
 		final SWTBot propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.EVENT);
-		propertiesBot.textWithLabel(UITestNamesHelper.COMMENT).setText(UITestNamesHelper.TEST_COMMENT);
+		propertiesBot.textWithLabel(UITestNamesHelper.COMMENT).setText(UITestNamesHelper.REQUEST_FROM_IDEAL_SOCKET);
 
 		assertEquals(propertiesBot.textWithLabel(UITestNamesHelper.COMMENT).getText(),
-				UITestNamesHelper.REQUEST_FROM_IDEAL_COMMENT);
+				UITestNamesHelper.REQUEST_FROM_IDEAL_SOCKET);
 	}
 
 	/**
@@ -182,9 +182,10 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 		pin.click();
 
 		final SWTBot propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.DATA);
-		propertiesBot.textWithLabel(UITestNamesHelper.COMMENT).setText(UITestNamesHelper.TEST_COMMENT);
+		propertiesBot.textWithLabel(UITestNamesHelper.COMMENT).setText(UITestNamesHelper.REQUEST_FROM_IDEAL_SOCKET);
 
-		assertEquals(propertiesBot.textWithLabel(UITestNamesHelper.COMMENT).getText(), UITestNamesHelper.TEST_COMMENT);
+		assertEquals(propertiesBot.textWithLabel(UITestNamesHelper.COMMENT).getText(),
+				UITestNamesHelper.REQUEST_FROM_IDEAL_SOCKET);
 	}
 
 	/**
