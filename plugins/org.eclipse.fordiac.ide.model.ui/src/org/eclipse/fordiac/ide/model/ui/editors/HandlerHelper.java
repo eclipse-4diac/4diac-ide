@@ -32,6 +32,7 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 
 public final class HandlerHelper {
@@ -118,19 +119,21 @@ public final class HandlerHelper {
 	}
 
 	public static void showExpandedSubapp(final SubApp subapp, final IEditorPart editor) {
-		// move canvas to show the top-left corner of an expanded subapp
-		final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
-		if (null != viewer) {
-			final EditPart subappEP = viewer.getEditPartRegistry().get(subapp);
-			if (subappEP != null) {
-				final EditPart root = subappEP.getRoot();
-				if (root instanceof final ScalableFreeformRootEditPart gep
-						&& gep.getFigure() instanceof final FreeformViewport viewp) {
-					final Point pos = ((PositionableElement) subapp).getPosition().toScreenPoint();
-					viewp.setHorizontalLocation((int) (pos.x * gep.getZoomManager().getZoom()));
-					viewp.setVerticalLocation((int) (pos.y * gep.getZoomManager().getZoom()));
+		Display.getCurrent().asyncExec(() -> {
+			// move canvas to show the top-left corner of an expanded subapp
+			final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
+			if (null != viewer) {
+				final EditPart subappEP = viewer.getEditPartRegistry().get(subapp);
+				if (subappEP != null) {
+					final EditPart root = subappEP.getRoot();
+					if (root instanceof final ScalableFreeformRootEditPart gep
+							&& gep.getFigure() instanceof final FreeformViewport viewp) {
+						final Point pos = ((PositionableElement) subapp).getPosition().toScreenPoint();
+						viewp.setHorizontalLocation((int) (pos.x * gep.getZoomManager().getZoom()));
+						viewp.setVerticalLocation((int) (pos.y * gep.getZoomManager().getZoom()));
+					}
 				}
 			}
-		}
+		});
 	}
 }

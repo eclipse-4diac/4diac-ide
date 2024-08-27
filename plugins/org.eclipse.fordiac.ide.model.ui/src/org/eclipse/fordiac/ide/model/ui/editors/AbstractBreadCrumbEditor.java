@@ -156,7 +156,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		final EObject container = getFBNetworkContainer(subapp);
 		breadcrumb.setInput(container);
 		openEditor(container);
-		Display.getCurrent().asyncExec(() -> HandlerHelper.showExpandedSubapp(subapp, getActiveEditor()));
+		HandlerHelper.showExpandedSubapp(subapp, this);
 	}
 
 	private void openEditor(final Object element) {
