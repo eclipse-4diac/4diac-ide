@@ -23,8 +23,15 @@ public final class UITestNamesHelper {
 	// alphabetical order of static variable names
 	public static final String ADAPTER = "Adapter"; //$NON-NLS-1$
 	public static final String APP = "App"; //$NON-NLS-1$
-	public static final String COMMENT = "Comment:"; //$NON-NLS-1$
+	public static final String ATTRIBUTE1 = "Attribute1"; //$NON-NLS-1$
+	public static final String ATTRIBUTE2 = "Attribute2"; //$NON-NLS-1$
+	public static final String ATTRIBUTE3 = "Attribute3"; //$NON-NLS-1$
+	public static final String ATTRIBUTES = "Attributes"; //$NON-NLS-1$
+	public static final String BOOL2BOOL = "BOOL2BOOL"; //$NON-NLS-1$
 	public static final String CANCEL = "Cancel"; //$NON-NLS-1$
+	public static final String COMMENT = "Comment:"; //$NON-NLS-1$
+	public static final String CONSTANTS = "Constants"; //$NON-NLS-1$
+	public static final String CONVERT = "convert"; //$NON-NLS-1$
 	public static final String CREATE_INPUT_EVENT = "Create Input Event"; //$NON-NLS-1$
 	public static final String CREATE_OUTPUT_EVENT = "Create Output Event"; //$NON-NLS-1$
 	public static final String CREATE_DATA_INPUT = "Create Data Input"; //$NON-NLS-1$
@@ -38,6 +45,7 @@ public final class UITestNamesHelper {
 	public static final String ELEMENTARY_TYPE = "Elementary Types"; //$NON-NLS-1$
 	public static final String EVENT = "Event"; //$NON-NLS-1$
 	public static final String EVENTS_NODE = "events"; //$NON-NLS-1$
+	public static final String EVENT_IN_AND_OUTPUTS = "Event In- & Outputs"; //$NON-NLS-1$
 	public static final String E_CTUD_FB = "E_CTUD"; //$NON-NLS-1$
 	public static final String E_CTUD_TREE_ITEM = E_CTUD_FB + " [Event-Driven Up-Down Counter]"; //$NON-NLS-1$
 	public static final String E_CYCLE_FB = "E_CYCLE"; //$NON-NLS-1$
@@ -58,14 +66,17 @@ public final class UITestNamesHelper {
 	public static final String E_SWITCH_TREE_ITEM = "E_SWITCH [Switching (demultiplexing) an event based on boolean input G]"; //$NON-NLS-1$
 	public static final String E_TABLE_CTRL_FB = "E_TABLE_CTRL"; //$NON-NLS-1$
 	public static final String E_TABLE_CTRL_TREE_ITEM = "E_TABLE_CTRL [Support function block for E_TABLE]"; //$NON-NLS-1$
+	public static final String FALSE_SMALL = "false"; //$NON-NLS-1$
 	public static final String FBT_TEST_PROJECT1 = "FBTTestProject1"; //$NON-NLS-1$
 	public static final String FBT_TEST_PROJECT2 = "FBTTestProject2"; //$NON-NLS-1$
 	public static final String FBT_TEST_PROJECT3 = "FBTTestProject3"; //$NON-NLS-1$
 	public static final String FBT_TEST_PROJECT4 = "FBTTestProject4"; //$NON-NLS-1$
+	public static final String FB_TYPES = "FB Types"; //$NON-NLS-1$
 	public static final String FILE = "File"; //$NON-NLS-1$
 	public static final String FINISH = "Finish"; //$NON-NLS-1$
 	public static final String FORBIDDEN_TYPE_NAME = "00_fbtype"; //$NON-NLS-1$
 	public static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
+	public static final String FUNCTIONAL__BLOCKS = "Function Blocks"; //$NON-NLS-1$
 	public static final String F_SUB = "F_SUB"; //$NON-NLS-1$
 	public static final String GO_TO_CHILD = "Go To Child"; //$NON-NLS-1$
 	public static final String GO_TO_PARENT = "Go To Parent"; //$NON-NLS-1$
@@ -75,6 +86,15 @@ public final class UITestNamesHelper {
 	public static final String INSERT_FB = "Insert FB"; //$NON-NLS-1$
 	public static final String INT_SMALL = "int"; //$NON-NLS-1$
 	public static final String INTERFACE = "Interface"; //$NON-NLS-1$
+	public static final String INTERNALCONSTVAR1 = "INTERNALCONSTVAR1"; //$NON-NLS-1$
+	public static final String INTERNALCONSTVAR2 = "INTERNALCONSTVAR2"; //$NON-NLS-1$
+	public static final String INTERNALCONSTVAR3 = "INTERNALCONSTVAR3"; //$NON-NLS-1$
+	public static final String INTERNALFB1 = "InternalFB1"; //$NON-NLS-1$
+	public static final String INTERNALFB2 = "InternalFB2"; //$NON-NLS-1$
+	public static final String INTERNALFB3 = "InternalFB3"; //$NON-NLS-1$
+	public static final String INTERNALVAR1 = "INTERNALVAR1"; //$NON-NLS-1$
+	public static final String INTERNALVAR2 = "INTERNALVAR2"; //$NON-NLS-1$
+	public static final String INTERNALVAR3 = "INTERNALVAR3"; //$NON-NLS-1$
 	public static final String MOVE_ELEMENTS_UP = "Move element(s) up"; //$NON-NLS-1$
 	public static final String MOVE_ELEMENTS_DOWN = "Move element(s) down"; //$NON-NLS-1$
 	public static final String NAME = "Name"; //$NON-NLS-1$
@@ -102,7 +122,6 @@ public final class UITestNamesHelper {
 	public static final String PROPERTIES_TITLE = "Properties"; //$NON-NLS-1$
 	public static final String REFACTORING = "Refactoring"; //$NON-NLS-1$
 	public static final String RENAME_ELEMENT = "Rename Element"; //$NON-NLS-1$
-	public static final String REQUEST_FROM_IDEAL_COMMENT = "Request from ideal Socket"; //$NON-NLS-1$
 	public static final String REQUEST_FROM_IDEAL_SOCKET = "Request from ideal Socket"; //$NON-NLS-1$
 	public static final String SELECT_ALL = "Select All"; //$NON-NLS-1$
 	public static final String SELECT_TYPE_LABEL = FordiacMessages.SelectType + ":"; //$NON-NLS-1$
@@ -111,20 +130,24 @@ public final class UITestNamesHelper {
 	public static final String STRUCT = "Struct"; //$NON-NLS-1$
 	public static final String SYSTEM_EXPLORER_ID = "org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"; //$NON-NLS-1$
 	public static final String SYSTEM_EXPLORER_LABEL = "System Explorer"; //$NON-NLS-1$
+	public static final String TEMPLATEBASIC = "TemplateBasic"; //$NON-NLS-1$
 	public static final String TEST_PARENT_FOLDER = "TestParentProject"; //$NON-NLS-1$
+	public static final String TEST_COMMENT = "Test Comment"; //$NON-NLS-1$
 	public static final String TESTVAR = "TestVar"; //$NON-NLS-1$
-	public static final String TEST_COMMENT = "Request from ideal Socket"; //$NON-NLS-1$
 	public static final String TOOLBAR_BUTTON_ZOOM_FIT_PAGE = "Zoom fit Page"; //$NON-NLS-1$
 	public static final String TRUE = "TRUE"; //$NON-NLS-1$
+	public static final String TRUE_SMALL = "true"; //$NON-NLS-1$
 	public static final String TYPE_LABEL = "Type:"; //$NON-NLS-1$
 	public static final String TYPE_LIBRARY_NODE = "Type Library"; //$NON-NLS-1$
 	public static final String TYPE_NAME_LABEL = FordiacMessages.TypeName + ":"; //$NON-NLS-1$
 	public static final String TYPE_PROJECT = "Type..."; //$NON-NLS-1$
 	public static final String TYPE_SELECTION = "Type Selection"; //$NON-NLS-1$
-	public static final String VAR_INOUT = "Var InOuts"; //$NON-NLS-1$
 	public static final String VAR1 = "VAR1"; //$NON-NLS-1$
 	public static final String VAR2 = "VAR2"; //$NON-NLS-1$
 	public static final String VAR3 = "VAR3"; //$NON-NLS-1$
+	public static final String VAR_INOUT = "Var InOuts"; //$NON-NLS-1$
+	public static final String VAR_INTERNALS = "Var Internals"; //$NON-NLS-1$
+	public static final String VAR_IN_AND_OUTPUTS = "Var In- & Outputs"; //$NON-NLS-1$
 	public static final String WITH = "With"; //$NON-NLS-1$
 
 }
