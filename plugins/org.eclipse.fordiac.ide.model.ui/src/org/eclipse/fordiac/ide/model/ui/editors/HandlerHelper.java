@@ -121,12 +121,15 @@ public final class HandlerHelper {
 		// move canvas to show the top-left corner of an expanded subapp
 		final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
 		if (null != viewer) {
-			final EditPart root = viewer.getEditPartRegistry().get(subapp).getRoot();
-			if (root instanceof final ScalableFreeformRootEditPart gep
-					&& gep.getFigure() instanceof final FreeformViewport viewp) {
-				final Point pos = ((PositionableElement) subapp).getPosition().toScreenPoint();
-				viewp.setHorizontalLocation((int) (pos.x * gep.getZoomManager().getZoom()));
-				viewp.setVerticalLocation((int) (pos.y * gep.getZoomManager().getZoom()));
+			final EditPart subappEP = viewer.getEditPartRegistry().get(subapp);
+			if (subappEP != null) {
+				final EditPart root = subappEP.getRoot();
+				if (root instanceof final ScalableFreeformRootEditPart gep
+						&& gep.getFigure() instanceof final FreeformViewport viewp) {
+					final Point pos = ((PositionableElement) subapp).getPosition().toScreenPoint();
+					viewp.setHorizontalLocation((int) (pos.x * gep.getZoomManager().getZoom()));
+					viewp.setVerticalLocation((int) (pos.y * gep.getZoomManager().getZoom()));
+				}
 			}
 		}
 	}

@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
+import org.eclipse.fordiac.ide.model.ui.widgets.GoIntoSubappSelectionEvent;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
 import org.eclipse.gef.GraphicalViewer;
@@ -52,6 +53,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -113,8 +115,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		}
 		memento = null;
 		// only add the selection change listener when our editor is full up
-		breadcrumb.addSelectionChangedListener(
-				event -> handleBreadCrumbSelection(((StructuredSelection) event.getSelection()).getFirstElement()));
+		breadcrumb.addSelectionChangedListener(this::handleBreadCrumbSelection);
 	}
 
 	private void initializeBreadcrumb() {
@@ -141,16 +142,28 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		return pageContainer;
 	}
 
-	protected void handleBreadCrumbSelection(final Object element) {
-		if (element instanceof final SubApp subapp && subapp.isUnfolded()) {
-			breadcrumb.setInput(getFBNetworkContainer(subapp));
-			HandlerHelper.showExpandedSubapp(subapp, getActiveEditor());
+	protected void handleBreadCrumbSelection(final SelectionChangedEvent event) {
+		final Object element = ((StructuredSelection) event.getSelection()).getFirstElement();
+		if (element instanceof final SubApp subapp && subapp.isUnfolded()
+				&& !(event instanceof GoIntoSubappSelectionEvent)) {
+			showAndSelectExpandedSubapp(subapp);
 		} else {
-			final int pagenum = modelToEditorNum.computeIfAbsent(element, this::createEditor).intValue();
-			if (-1 != pagenum) {
-				setActivePage(pagenum);
-				getSite().getPage().getNavigationHistory().markLocation(getNavigationLocationProvider());
-			}
+			openEditor(element);
+		}
+	}
+
+	private void showAndSelectExpandedSubapp(final SubApp subapp) {
+		final EObject container = getFBNetworkContainer(subapp);
+		breadcrumb.setInput(container);
+		openEditor(container);
+		Display.getCurrent().asyncExec(() -> HandlerHelper.showExpandedSubapp(subapp, getActiveEditor()));
+	}
+
+	private void openEditor(final Object element) {
+		final int pagenum = modelToEditorNum.computeIfAbsent(element, this::createEditor).intValue();
+		if (-1 != pagenum) {
+			setActivePage(pagenum);
+			getSite().getPage().getNavigationHistory().markLocation(getNavigationLocationProvider());
 		}
 	}
 
