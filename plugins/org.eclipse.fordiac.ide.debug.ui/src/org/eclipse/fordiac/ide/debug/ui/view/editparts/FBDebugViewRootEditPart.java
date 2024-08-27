@@ -24,15 +24,16 @@ import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.model.IDebugTarget;
-import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.ShortestPathConnectionRouter;
+import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugThread;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
-import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
+import org.eclipse.fordiac.ide.debug.ui.view.figure.FBDebugViewFigure;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
@@ -48,10 +49,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.swt.widgets.Display;
 
-public class FBDebugViewRootEditPart extends AbstractDiagramEditPart {
+public class FBDebugViewRootEditPart extends AbstractGraphicalEditPart {
 
 	private static final long MIN_UPDATE_INTERVAL = 100; // the minimal update interval between two full refresh of
 	// the shown values
@@ -117,8 +120,16 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart {
 	};
 
 	@Override
-	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
-		return new ShortestPathConnectionRouter(figure);
+	public FBDebugViewFigure getFigure() {
+		return (FBDebugViewFigure) super.getFigure();
+	}
+
+	@Override
+	protected IFigure createFigure() {
+		final IFigure newFigure = new FBDebugViewFigure(getNumWithedEventInputs(), getNumWithedEventOutputs());
+		newFigure.setBorder(new MarginBorder(10));
+		newFigure.setOpaque(false);
+		return newFigure;
 	}
 
 	@Override
@@ -144,6 +155,7 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart {
 	@Override
 	public void activate() {
 		super.activate();
+		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), new Rectangle(0, 0, -1, -1));
 		getModel().getExecutor().addMonitor(evalMonitor);
 		DebugPlugin.getDefault().addDebugEventListener(debugEventListener);
 		lastUpdate = System.currentTimeMillis();
@@ -238,5 +250,44 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart {
 
 	private boolean isCorrectSource(final Object source) {
 		return ((source instanceof final EvaluatorDebugThread eDT) && eDT.getDebugTarget().getProcess() == getModel());
+	}
+
+	@Override
+	protected void addChildVisual(final EditPart childEditPart, final int index) {
+		final IFigure targetFigure = getTargetFigure(childEditPart);
+		if (targetFigure != null) {
+			targetFigure.add(((GraphicalEditPart) childEditPart).getFigure());
+		} else {
+			super.addChildVisual(childEditPart, index);
+		}
+	}
+
+	@Override
+	protected void removeChildVisual(final EditPart childEditPart) {
+		final IFigure targetFigure = getTargetFigure(childEditPart);
+		if (targetFigure != null) {
+			targetFigure.remove(((GraphicalEditPart) childEditPart).getFigure());
+		} else {
+			super.removeChildVisual(childEditPart);
+		}
+	}
+
+	private IFigure getTargetFigure(final EditPart childEditPart) {
+		return switch (childEditPart) {
+		case final FBTypeEditPart fbtEP -> getFigure().getFBFigureContainer();
+		case final AbstractDebugInterfaceValueEditPart ivEP ->
+			(ivEP.isInput()) ? getFigure().getOuterInputValues() : getFigure().getOuterOutputValues();
+		default -> null;
+		};
+	}
+
+	private int getNumWithedEventInputs() {
+		return (int) getFBType().getInterfaceList().getEventInputs().stream().filter(ev -> !ev.getWith().isEmpty())
+				.count();
+	}
+
+	private int getNumWithedEventOutputs() {
+		return (int) getFBType().getInterfaceList().getEventOutputs().stream().filter(ev -> !ev.getWith().isEmpty())
+				.count();
 	}
 }

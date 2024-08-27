@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2020		 Johannes Kepler University
+ * Copyright (c) 2011, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 				 			Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -42,7 +42,7 @@ public class WithEditPart extends AbstractConnectionEditPart {
 		return (With) getModel();
 	}
 
-	private boolean isInput() {
+	protected boolean isInput() {
 		final With with = getCastedModel();
 		if (null != with) {
 			final Event event = (Event) with.eContainer();
