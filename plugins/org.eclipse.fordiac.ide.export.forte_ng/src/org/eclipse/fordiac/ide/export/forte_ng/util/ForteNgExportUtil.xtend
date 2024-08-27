@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage
+import org.eclipse.fordiac.ide.model.value.StringValueConverter
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 
@@ -52,9 +53,8 @@ final class ForteNgExportUtil {
 	def static CharSequence generateName(IInterfaceElement element) {
 		switch (element) {
 			Event: '''«EVENT_EXPORT_PREFIX»«element.name»'''
-			case element.eContainmentFeature ==
-				LibraryElementPackage.Literals.
-					BASE_FB_TYPE__INTERNAL_CONST_VARS: '''«VARIABLE_EXPORT_PREFIX»const_«element.name»'''
+			case element.eContainmentFeature == LibraryElementPackage.Literals.
+				BASE_FB_TYPE__INTERNAL_CONST_VARS: '''«VARIABLE_EXPORT_PREFIX»const_«element.name»'''
 			case element.rootContainer instanceof AdapterType: '''«VARIABLE_EXPORT_PREFIX»«element.name»()'''
 			default: '''«VARIABLE_EXPORT_PREFIX»«element.name»'''
 		}
@@ -74,6 +74,8 @@ final class ForteNgExportUtil {
 				].toString
 			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
 			DataType: '''CIEC_«type.generateTypeNamePlain»«IF GenericTypes.isAnyType(type)»_VARIANT«ENDIF»'''
+			FBType case type.genericType:
+				type.genericClassName
 			FBType: '''FORTE_«type.generateTypeNamePlain»'''
 			default:
 				type.generateTypeNamePlain
@@ -89,6 +91,8 @@ final class ForteNgExportUtil {
 				].toString
 			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
 			DataType: '''CIEC_«type.generateTypeNamePlain»'''
+			FBType case type.genericType:
+				type.genericClassName
 			FBType: '''FORTE_«type.generateTypeNamePlain»'''
 			default:
 				type.generateTypeNamePlain
@@ -168,8 +172,12 @@ final class ForteNgExportUtil {
 				type.name + "_dtp"
 			DataType case GenericTypes.isAnyType(type): '''forte_«type.generateTypeNamePlain.toLowerCase»_variant'''
 			DataType: '''forte_«type.name.toLowerCase»'''
+			FunctionFBType case type.genericType:
+				type.genericClassName + "_fct"
 			FunctionFBType:
 				type.name + "_fct"
+			FBType case type.genericType:
+				type.genericClassName + "_fbt"
 			FBType:
 				type.name + "_fbt"
 			GlobalConstants:
@@ -236,6 +244,16 @@ final class ForteNgExportUtil {
 
 	def static CharSequence escapeMultilineCommentString(CharSequence string) {
 		END_COMMENT_PATTERN.matcher(string).replaceAll("* /")
+	}
+
+	static final String GENERIC_CLASS_NAME_ATTRIBUTE = "GenericClassName"
+
+	def static boolean isGenericType(FBType type) {
+		type.attributes.exists[name == GENERIC_CLASS_NAME_ATTRIBUTE]
+	}
+
+	def static String getGenericClassName(FBType type) {
+		StringValueConverter.INSTANCE.toValue(type.attributes.findFirst[name == GENERIC_CLASS_NAME_ATTRIBUTE].value)
 	}
 
 	private new() {

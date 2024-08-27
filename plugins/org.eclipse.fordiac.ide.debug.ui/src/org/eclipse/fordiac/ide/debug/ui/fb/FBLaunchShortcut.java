@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,20 +12,29 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.fb;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.fordiac.ide.debug.fb.FBLaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.debug.ui.LaunchShortcut;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public abstract class FBLaunchShortcut extends LaunchShortcut {
+public class FBLaunchShortcut extends LaunchShortcut {
 
 	@Override
 	public void launch(final IResource resource, final ILaunchConfiguration configuration, final String mode) {
-		final FBType type = (FBType) TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) resource).getType();
-		launch(type, configuration, mode);
+		try {
+			configuration.launch(mode, new NullProgressMonitor());
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError(
+					String.format("Could not launch resource %s with mode %s", resource.getFullPath().toString(), mode), //$NON-NLS-1$
+					e);
+		}
 	}
 
-	public abstract void launch(FBType type, ILaunchConfiguration configuration, String mode);
+	@Override
+	public String getLaunchConfigurationId() {
+		return FBLaunchConfigurationAttributes.ID;
+	}
 }

@@ -9,14 +9,10 @@
  *
  * Contributors:
  *   Andrea Zoitl - initial API and implementation and/or initial documentation
- *   Prashantkumar Khatri - added methods for creating and deleting FB types,
- *   						selecting property tabs, openFBTypeInEditor, deletePin,
- *   						createConnectionWithinFBTypeWithPropertySheet,
- *   						removeConnectionWithinFBTypeWithPropertySheet,
- *   						selectTabFromInterfaceProperties, selectTabFromECCProperties,
- *   						createNewVariableInDataTypeEditor, deleteVariable,
- *   						changeCellValueInNatTbale, changeAlgorithmAndEventValue,
- *   						getPoint, getChildrenPart.
+ *   Prashantkumar Khatri - Added various utility methods for testing the Type
+ *   						editor and it's related UI components including FB type
+ *   						creation, DataType Editor, Property Sheet and it's
+ *   						tabs, and ECC edtior's flows.
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui;
 
@@ -671,24 +667,20 @@ public class Abstract4diacUITests {
 	 * @return The SWTBotGefEditPart corresponding to the specified child.
 	 */
 	protected static SWTBotGefEditPart getChildrenPart(final SWTBotGefEditPart parentPart, final int index) {
+		final List<SWTBotGefEditPart> childParts = parentPart.children();
+		assertNotNull(childParts);
 		return switch (index) {
 		case 0 -> {
-			final List<SWTBotGefEditPart> childParts = parentPart.children();
-			assertNotNull(childParts);
 			final SWTBotGefEditPart childPart = childParts.getFirst();
 			assertNotNull(childPart);
 			yield childPart;
 		}
 		case -1 -> {
-			final List<SWTBotGefEditPart> childParts = parentPart.children();
-			assertNotNull(childParts);
 			final SWTBotGefEditPart childPart = childParts.getLast();
 			assertNotNull(childPart);
 			yield childPart;
 		}
 		default -> {
-			final List<SWTBotGefEditPart> childParts = parentPart.children();
-			assertNotNull(childParts);
 			final SWTBotGefEditPart childPart = childParts.get(index);
 			assertNotNull(childPart);
 			yield childPart;

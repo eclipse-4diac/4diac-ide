@@ -142,10 +142,15 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	}
 
 	protected void handleBreadCrumbSelection(final Object element) {
-		final int pagenum = modelToEditorNum.computeIfAbsent(element, this::createEditor).intValue();
-		if (-1 != pagenum) {
-			setActivePage(pagenum);
-			getSite().getPage().getNavigationHistory().markLocation(getNavigationLocationProvider());
+		if (element instanceof final SubApp subapp && subapp.isUnfolded()) {
+			breadcrumb.setInput(getFBNetworkContainer(subapp));
+			HandlerHelper.showExpandedSubapp(subapp, getActiveEditor());
+		} else {
+			final int pagenum = modelToEditorNum.computeIfAbsent(element, this::createEditor).intValue();
+			if (-1 != pagenum) {
+				setActivePage(pagenum);
+				getSite().getPage().getNavigationHistory().markLocation(getNavigationLocationProvider());
+			}
 		}
 	}
 

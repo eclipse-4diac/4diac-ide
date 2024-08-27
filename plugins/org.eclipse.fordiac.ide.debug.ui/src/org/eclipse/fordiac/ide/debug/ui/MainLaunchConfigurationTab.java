@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 - 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -160,12 +160,12 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 	}
 
 	private void handleResourceButtonSelected() {
-		IResource resource = getResource();
 		final ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(),
 				new WorkbenchLabelProvider(), new WorkbenchContentProvider());
 		dialog.setInput(ResourcesPlugin.getWorkspace().getRoot());
-		if (resource != null) {
-			dialog.setInitialSelection(resource);
+		final IResource initialResource = getResource();
+		if (initialResource != null) {
+			dialog.setInitialSelection(initialResource);
 		}
 		dialog.setAllowMultiple(false);
 		dialog.addFilter(new ViewerFilter() {
@@ -182,8 +182,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		});
 		dialog.open();
 		final Object[] result = dialog.getResult();
-		if (result != null && result.length > 0 && result[0] instanceof IResource) {
-			resource = (IResource) result[0];
+		if (result != null && result.length > 0 && result[0] instanceof final IResource resource) {
 			final String resourceString = resource.getFullPath().toString();
 			resourceText.setText(resourceString);
 			handleResourceUpdated();
@@ -224,8 +223,8 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		final String resourceString = resourceText.getText();
 		configuration.setAttribute(LaunchConfigurationAttributes.RESOURCE, resourceString);
 		if (arguments != null) {
-			configuration.setAttribute(LaunchConfigurationAttributes.ARGUMENTS, arguments.stream()
-					.collect(Collectors.toMap(Variable::getName, variable -> variable.getValue().toString())));
+			configuration.setAttribute(LaunchConfigurationAttributes.ARGUMENTS,
+					arguments.stream().collect(Collectors.toMap(Variable::getName, Variable::toString)));
 		} else {
 			configuration.removeAttribute(LaunchConfigurationAttributes.ARGUMENTS);
 		}
@@ -266,8 +265,8 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		if (resource instanceof IFile) {
 			return false;
 		}
-		if (resource instanceof IContainer) {
-			for (final IResource child : ((IContainer) resource).members()) {
+		if (resource instanceof final IContainer container) {
+			for (final IResource child : container.members()) {
 				if (filterTargetResource(child)) {
 					return true;
 				}
@@ -304,16 +303,12 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		@Override
 		public Object[] getChildren(final Object parentElement) {
-			if (parentElement instanceof ArrayVariable) {
-				return ((ArrayVariable) parentElement).getElements().toArray();
-			}
-			if (parentElement instanceof StructVariable) {
-				return ((StructVariable) parentElement).getMembers().values().toArray();
-			}
-			if (parentElement instanceof FBVariable) {
-				return ((FBVariable) parentElement).getMembers().values().toArray();
-			}
-			return new Object[0];
+			return switch (parentElement) {
+			case final ArrayVariable arrayVariable -> arrayVariable.getElements().toArray();
+			case final StructVariable structVariable -> structVariable.getMembers().values().toArray();
+			case final FBVariable fbVariable -> fbVariable.getMembers().values().toArray();
+			default -> new Object[0];
+			};
 		}
 
 		@Override
@@ -345,7 +340,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		@Override
 		public StyledString getStyledText(final Object element) {
 			if (element instanceof final Variable<?> variable) {
-				return new StyledString(variable.getValue().toString());
+				return new StyledString(variable.toString());
 			}
 			return null;
 		}
@@ -372,8 +367,8 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		@Override
 		protected Object getValue(final Object element) {
-			if (element instanceof Variable<?>) {
-				return ((Variable<?>) element).getValue().toString();
+			if (element instanceof final Variable<?> variable) {
+				return variable.toString();
 			}
 			return null;
 		}
@@ -393,22 +388,21 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 				// update element itself
 				getViewer().update(element, null);
 				// update child elements
-				if (variable instanceof ArrayVariable) {
-					((ArrayVariable) variable).getElements().forEach(child -> getViewer().update(child, null));
-				} else if (variable instanceof StructVariable) {
-					((StructVariable) variable).getMembers().values().forEach(child -> getViewer().update(child, null));
-				} else if (variable instanceof FBVariable) {
-					((FBVariable) variable).getMembers().values().forEach(child -> getViewer().update(child, null));
+				if (variable instanceof final ArrayVariable arrayVariable) {
+					arrayVariable.getElements().forEach(child -> getViewer().update(child, null));
+				} else if (variable instanceof final StructVariable structVariable) {
+					structVariable.getMembers().values().forEach(child -> getViewer().update(child, null));
+				} else if (variable instanceof final FBVariable fbVariable) {
+					fbVariable.getMembers().values().forEach(child -> getViewer().update(child, null));
 				}
 				// update parent element (if exists)
-				MainLaunchConfigurationTab.this.arguments.stream().filter(
-						arg -> (arg instanceof ArrayVariable && ((ArrayVariable) arg).getElements().contains(element))
-								|| (arg instanceof StructVariable
-										&& ((StructVariable) arg).getMembers().values().contains(element))
-								|| (arg instanceof FBVariable
-										&& ((FBVariable) arg).getMembers().values().contains(element)))
-						.forEach(container -> getViewer().update(container, null));
-				MainLaunchConfigurationTab.this.updateLaunchConfigurationDialog();
+				arguments.stream().filter(arg -> switch (arg) {
+				case final ArrayVariable arrayVariable -> arrayVariable.getElements().contains(element);
+				case final StructVariable structVariable -> structVariable.getMembers().containsValue(element);
+				case final FBVariable fbVariable -> fbVariable.getMembers().containsValue(element);
+				default -> false;
+				}).forEach(container -> getViewer().update(container, null));
+				updateLaunchConfigurationDialog();
 			}
 		}
 	}

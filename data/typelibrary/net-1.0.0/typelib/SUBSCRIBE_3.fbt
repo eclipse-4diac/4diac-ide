@@ -39,4 +39,5 @@
 			<VarDeclaration Name="RD_3" Type="ANY" Comment=""/>
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="GenericClassName" Value="'GEN_SUBSCRIBE'"/>
 </FBType>

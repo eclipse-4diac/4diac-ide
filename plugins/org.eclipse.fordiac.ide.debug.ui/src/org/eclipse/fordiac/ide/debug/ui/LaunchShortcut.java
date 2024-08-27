@@ -51,7 +51,8 @@ public abstract class LaunchShortcut implements ILaunchShortcut2 {
 			if (configurations.length == 0) {
 				final ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
 				final ILaunchConfigurationType type = manager.getLaunchConfigurationType(getLaunchConfigurationId());
-				final ILaunchConfigurationWorkingCopy configuration = type.newInstance(null, resource.getName());
+				final ILaunchConfigurationWorkingCopy configuration = type.newInstance(null,
+						manager.generateLaunchConfigurationName(resource.getName()));
 				initializeDefaultLaunchConfiguration(configuration, resource, mode);
 				configuration.doSave();
 				launch(resource, configuration, mode);

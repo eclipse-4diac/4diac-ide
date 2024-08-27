@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022-2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,6 +25,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.fordiac.ide.debug.CommonLaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.debug.Messages;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
@@ -32,7 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
-public abstract class FBLaunchConfigurationDelegate extends CommonLaunchConfigurationDelegate {
+public class FBLaunchConfigurationDelegate extends CommonLaunchConfigurationDelegate {
 
 	@Override
 	public void launch(final ILaunchConfiguration configuration, final String mode, final ILaunch launch,
@@ -56,8 +57,11 @@ public abstract class FBLaunchConfigurationDelegate extends CommonLaunchConfigur
 		}
 	}
 
-	public abstract FBEvaluator<? extends FBType> createEvaluator(FBType type, List<Variable<?>> variables)
-			throws CoreException;
+	@SuppressWarnings("static-method") // allow subclasses to override
+	protected FBEvaluator<?> createEvaluator(final FBType type, final List<Variable<?>> variables) {
+		return (FBEvaluator<?>) EvaluatorFactory.createEvaluator(type,
+				type.eClass().getInstanceClass().asSubclass(FBType.class), null, variables, null);
+	}
 
 	public static List<Variable<?>> getDefaultArguments(final FBType type) throws CoreException {
 		try {
@@ -76,5 +80,4 @@ public abstract class FBLaunchConfigurationDelegate extends CommonLaunchConfigur
 		}
 		return null;
 	}
-
 }

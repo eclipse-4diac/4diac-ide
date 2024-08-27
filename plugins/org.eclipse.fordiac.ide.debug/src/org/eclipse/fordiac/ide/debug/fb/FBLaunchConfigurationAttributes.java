@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttributes {
+	String ID = "org.eclipse.fordiac.ide.debug.fbLaunch"; //$NON-NLS-1$
 	String EVENT = "org.eclipse.fordiac.ide.debug.event"; //$NON-NLS-1$
 	String REPEAT_EVENT = "org.eclipse.fordiac.ide.debug.repeatEvent"; //$NON-NLS-1$
 	String KEEP_RUNNING_WHEN_IDLE = "org.eclipse.fordiac.ide.debug.keepRunningWhenIdle"; //$NON-NLS-1$

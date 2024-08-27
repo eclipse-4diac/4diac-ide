@@ -26,7 +26,8 @@ Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.model.ui,
  org.eclipse.core.expressions,
  org.eclipse.fordiac.ide.ui.errormessages,
- org.eclipse.fordiac.ide.model.search
+ org.eclipse.fordiac.ide.model.search,
+ org.eclipse.jface
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.0.0.qualifier

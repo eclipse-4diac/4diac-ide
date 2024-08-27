@@ -42,14 +42,19 @@ public final class PinNamesHelper {
 	public static final String ANY = "ANY"; //$NON-NLS-1$
 	public static final String CLK = "CLK"; //$NON-NLS-1$
 	public static final String DI1 = "DI1"; //$NON-NLS-1$
+	public static final String DI2 = "DI2"; //$NON-NLS-1$
+	public static final String DI3 = "DI3"; //$NON-NLS-1$
 	public static final String DO1 = "DO1"; //$NON-NLS-1$
 	public static final String DTO = "DTO"; //$NON-NLS-1$
 	public static final String EO0 = "EO0"; //$NON-NLS-1$
 	public static final String EI1 = "EI1"; //$NON-NLS-1$
+	public static final String EI2 = "EI2"; //$NON-NLS-1$
+	public static final String EI3 = "EI3"; //$NON-NLS-1$
 	public static final String EO1 = "EO1"; //$NON-NLS-1$
 	public static final String EO2 = "EO2"; //$NON-NLS-1$
 	public static final String IN1 = "IN1"; //$NON-NLS-1$
 	public static final String INT = "INT"; //$NON-NLS-1$
+	public static final String INT_SMALL = "int"; //$NON-NLS-1$
 	public static final String REQ = "REQ"; //$NON-NLS-1$
 
 	public static final String CLKO = "CLKO"; //$NON-NLS-1$
@@ -60,5 +65,9 @@ public final class PinNamesHelper {
 
 	public static final String DEF_VAL = "T#0s"; //$NON-NLS-1$
 	public static final String NEW_VAL = "T#1s"; //$NON-NLS-1$
+	public static final String VAR1 = "VAR1"; //$NON-NLS-1$
+	public static final String VAR2 = "VAR2"; //$NON-NLS-1$
+	public static final String VAR3 = "VAR3"; //$NON-NLS-1$
+	public static final String TRUE = "TRUE"; //$NON-NLS-1$
 
 }
