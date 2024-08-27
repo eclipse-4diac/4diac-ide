@@ -60,6 +60,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
 
@@ -108,6 +109,9 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	public <T> T getAdapter(final Class<T> type) {
+		if (type == IContentOutlinePage.class) {
+			return null; // use outline page from FBTypeEditor
+		}
 		if (type == InterfaceList.class) {
 			return type.cast(getModel().getInterfaceList());
 		}

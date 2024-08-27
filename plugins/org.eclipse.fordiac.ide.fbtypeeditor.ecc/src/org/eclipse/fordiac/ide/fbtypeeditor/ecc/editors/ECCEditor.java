@@ -75,6 +75,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 /**
  * The Class ECCEditor.
@@ -304,6 +305,9 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == IContentOutlinePage.class) {
+			return null; // use outline page from FBTypeEditor
+		}
 		if (adapter == ECC.class) {
 			return adapter.cast(getModel());
 		}
