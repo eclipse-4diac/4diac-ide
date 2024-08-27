@@ -71,6 +71,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
 
@@ -265,6 +266,9 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == IContentOutlinePage.class) {
+			return null; // use outline page from FBTypeEditor
+		}
 		if (adapter == CommandStack.class) {
 			return adapter.cast(commandStack);
 		}

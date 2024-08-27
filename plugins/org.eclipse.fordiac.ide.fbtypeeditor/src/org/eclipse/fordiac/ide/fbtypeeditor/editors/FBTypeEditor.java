@@ -44,7 +44,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
-import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
@@ -75,6 +74,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.contentoutline.MultiPageEditorContentOutlinePage;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.SelectionTabbedPropertySheetPage;
@@ -486,9 +486,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 
 	protected IContentOutlinePage getOutlinePage() {
 		if (null == contentOutline) {
-			contentOutline = (fbType instanceof CompositeFBType)
-					? new DiagramOutlinePage(getActiveEditor().getAdapter(GraphicalViewer.class))
-					: new FBTypeContentOutline(fbType, this);
+			contentOutline = new MultiPageEditorContentOutlinePage(this, new FBTypeContentOutline(fbType, this));
 		}
 		return contentOutline;
 	}
@@ -582,14 +580,6 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	protected void pageChange(final int newPageIndex) {
 		super.pageChange(newPageIndex);
 		getSite().getPage().getNavigationHistory().markLocation(this);
-		updateOutline(newPageIndex);
-	}
-
-	protected void updateOutline(final int newPageIndex) {
-		if ((newPageIndex != -1) && (contentOutline instanceof final DiagramOutlinePage diagOutline)) {
-			final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
-			diagOutline.viewerChanged(viewer);
-		}
 	}
 
 	@Override
