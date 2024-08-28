@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -27,13 +27,13 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 
 	def protected generateDependencyIncludes(Iterable<? extends INamedElement> dependencies) '''
 		«dependencies.filter(DataType).generateTypeIncludes»
-		«FOR include : dependencies.reject(DataType).map[generateDefiningInclude].toSet»
+		«FOR include : dependencies.reject(DataType).map[generateDefiningInclude].toSet.sort»
 			#include "«include»"
 		«ENDFOR»
 	'''
 
 	def protected generateTypeIncludes(Iterable<DataType> types) '''
-		«FOR include : types.map[generateDefiningInclude].toSet»
+		«FOR include : types.map[generateDefiningInclude].toSet.sort»
 			#include "«include»"
 		«ENDFOR»
 		#include "iec61131_functions.h"
