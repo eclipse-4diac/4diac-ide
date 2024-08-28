@@ -1,48 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="E_TABLE" Comment="Composite Function Block Type">
-	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
-	</Identification>
-	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
-	</VersionInfo>
-	<InterfaceList>
-		<EventInputs>
-			<Event Name="START" Type="Event" Comment="Start table driven event generation">
-				<With Var="DT"/>
-				<With Var="N"/>
-			</Event>
-			<Event Name="STOP" Type="Event" Comment="Stop table driven event generation">
-			</Event>
-		</EventInputs>
-		<EventOutputs>
-			<Event Name="EO" Type="Event" Comment="Generated events: N events at periods DT, starting at DT[0] after START">
-				<With Var="CV"/>
-			</Event>
-		</EventOutputs>
-		<InputVars>
-			<VarDeclaration Name="DT" Type="TIME" Comment="Periods between events" ArraySize="4"/>
-			<VarDeclaration Name="N" Type="UINT" Comment="Number of events to generate"/>
-		</InputVars>
-		<OutputVars>
-			<VarDeclaration Name="CV" Type="UINT" Comment="Current event index, 0..N-1"/>
-		</OutputVars>
-	</InterfaceList>
-	<FBNetwork>
-		<FB Name="E_TABLE_CTRL" Type="E_TABLE_CTRL" Comment="" x="-780.0" y="633.3333333333334">
-		</FB>
-		<FB Name="E_DELAY" Type="E_DELAY" Comment="" x="606.6666666666667" y="633.3333333333334">
-		</FB>
-		<EventConnections>
-			<Connection Source="E_TABLE_CTRL.CLKO" Destination="E_DELAY.START" Comment=""/>
-			<Connection Source="E_DELAY.EO" Destination="EO" Comment="" dx1="1380.0"/>
-			<Connection Source="START" Destination="E_TABLE_CTRL.INIT" Comment="" dx1="473.33333333333337"/>
-			<Connection Source="E_DELAY.EO" Destination="E_TABLE_CTRL.CLK" Comment="" dx1="73.33333333333334" dx2="133.33333333333334" dy="-240.0"/>
-			<Connection Source="STOP" Destination="E_DELAY.STOP" Comment="" dx1="1460.0"/>
-		</EventConnections>
-		<DataConnections>
-			<Connection Source="E_TABLE_CTRL.DTO" Destination="E_DELAY.DT" Comment="" dx1="73.33333333333334"/>
-			<Connection Source="E_TABLE_CTRL.CV" Destination="CV" Comment="" dx1="1960.0"/>
-			<Connection Source="DT" Destination="E_TABLE_CTRL.DT" Comment="" dx1="280.0"/>
-			<Connection Source="N" Destination="E_TABLE_CTRL.N" Comment="" dx1="280.0"/>
-		</DataConnections>
-	</FBNetwork>
-</FBType>
