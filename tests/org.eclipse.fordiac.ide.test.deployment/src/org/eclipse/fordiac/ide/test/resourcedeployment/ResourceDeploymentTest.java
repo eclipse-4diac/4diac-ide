@@ -38,6 +38,10 @@ import org.osgi.framework.Bundle;
 
 class ResourceDeploymentTest {
 
+	private static String DeviceName = "FORTE_PC"; //$NON-NLS-1$
+	private static String TestNetwork_NumberOfParams = "TestNumberOfParams"; //$NON-NLS-1$
+	private static String TestNetwork_UniqueParameterDestination = "TestParamsIdentity"; //$NON-NLS-1$
+
 	private static EList<Resource> resources = null;
 
 	@BeforeAll
@@ -49,14 +53,14 @@ class ResourceDeploymentTest {
 	@SuppressWarnings("static-method")
 	@Test
 	void testNumberOfSubappParams() throws DeploymentException {
-		final ResourceDeploymentData data = generateDeploymentData(Messages.TestNetwork_NumberOfParams);
+		final ResourceDeploymentData data = generateDeploymentData(TestNetwork_NumberOfParams);
 		assertTrue(data.getParams().isEmpty());
 	}
 
 	@SuppressWarnings("static-method")
 	@Test
 	void testNumberOfParamsInStackedSubApp() throws DeploymentException {
-		final ResourceDeploymentData data = generateDeploymentData(Messages.TestNetwork_UniqueParameterDestination);
+		final ResourceDeploymentData data = generateDeploymentData(TestNetwork_UniqueParameterDestination);
 		assertEquals(4, data.getParams().size());
 	}
 
@@ -66,7 +70,7 @@ class ResourceDeploymentTest {
 	@SuppressWarnings("static-method")
 	@Test
 	void testUniqueParameterDestinations() throws DeploymentException {
-		final ResourceDeploymentData data = generateDeploymentData(Messages.TestNetwork_UniqueParameterDestination);
+		final ResourceDeploymentData data = generateDeploymentData(TestNetwork_UniqueParameterDestination);
 		assertFalse(hasDuplicateEntry(data.getParams()));
 	}
 
@@ -88,7 +92,7 @@ class ResourceDeploymentTest {
 		final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.deployment"); //$NON-NLS-1$
 		final Path projectPath = new Path("data/ResourceDeploymentTest"); //$NON-NLS-1$
 		final FordiacProjectLoader loader = new FordiacProjectLoader(bundle, projectPath);
-		return loader.getAutomationSystem("ResourceDeploymentTest").getDeviceNamed(Messages.DeviceName).getResource(); //$NON-NLS-1$
+		return loader.getAutomationSystem("ResourceDeploymentTest").getDeviceNamed(DeviceName).getResource(); //$NON-NLS-1$
 	}
 
 	private static ResourceDeploymentData generateDeploymentData(final String testName) throws DeploymentException {
