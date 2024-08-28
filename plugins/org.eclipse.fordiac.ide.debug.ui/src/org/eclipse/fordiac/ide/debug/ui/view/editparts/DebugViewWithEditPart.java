@@ -12,8 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.view.editparts;
 
+import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.debug.ui.view.figure.FBDebugViewFigure;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.WithAnchor;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.WithEditPart;
 
 public class DebugViewWithEditPart extends WithEditPart {
@@ -41,6 +45,11 @@ public class DebugViewWithEditPart extends WithEditPart {
 
 	}
 
+	@Override
+	protected void createEditPolicies() {
+		// we don't want any edit policies for the debug view withs
+	}
+
 	private IFigure getTargetFigure() {
 		final FBDebugViewFigure debugViewFigure = getDebugViewFigure();
 		if (debugViewFigure != null) {
@@ -54,6 +63,61 @@ public class DebugViewWithEditPart extends WithEditPart {
 			return debugViewEP.getFigure();
 		}
 		return null;
+	}
+
+	@Override
+	protected ConnectionAnchor getSourceConnectionAnchor() {
+		final ConnectionAnchor sourceConnectionAnchor = super.getSourceConnectionAnchor();
+		if (sourceConnectionAnchor instanceof final WithAnchor withAnchor) {
+			if (isInput()) {
+				return createInputAnchor(withAnchor);
+			}
+			return createOutputAnchor(withAnchor);
+		}
+		return sourceConnectionAnchor;
+	}
+
+	@Override
+	protected ConnectionAnchor getTargetConnectionAnchor() {
+		final ConnectionAnchor targetConnectionAnchor = super.getTargetConnectionAnchor();
+		if (targetConnectionAnchor instanceof final WithAnchor withAnchor) {
+			if (isInput()) {
+				return createInputAnchor(withAnchor);
+			}
+			return createOutputAnchor(withAnchor);
+		}
+		return targetConnectionAnchor;
+	}
+
+	private ConnectionAnchor createInputAnchor(final WithAnchor anchor) {
+		return new WithAnchor(anchor.getOwner(), anchor.getPos(), this) {
+			@Override
+			public Point getLocation(final Point reference) {
+				final Rectangle r = Rectangle.SINGLETON;
+				r.setBounds(getBox());
+				r.translate(0, -1);
+				r.resize(1, 1);
+				final int leftX = getFigure().getParent().getBounds().getRight().x - (int) (WITH_DISTANCE * getPos());
+				final int centerY = r.y + r.height / 2;
+				return new Point(leftX, centerY);
+			}
+		};
+	}
+
+	private ConnectionAnchor createOutputAnchor(final WithAnchor anchor) {
+		return new WithAnchor(anchor.getOwner(), anchor.getPos(), this) {
+			@Override
+			public Point getLocation(final Point reference) {
+				final Rectangle r = Rectangle.SINGLETON;
+				r.setBounds(getBox());
+				r.translate(-1, -1);
+				r.resize(1, 1);
+				getOwner().translateToAbsolute(r);
+				final int leftX = getFigure().getParent().getBounds().x + (int) (WITH_DISTANCE * getPos());
+				final int centerY = r.y + r.height / 2;
+				return new Point(leftX, centerY);
+			}
+		};
 	}
 
 }
