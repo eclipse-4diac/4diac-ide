@@ -27,9 +27,9 @@ import org.junit.jupiter.params.provider.Arguments;
 
 public class GroupCreateCommandTest extends FBNetworkTestBase {
 
-	private static final String NAME_GROUP1 = "__Group01";  //$NON-NLS-1$
-	private static final String NAME_GROUP2 = "__Group02";  //$NON-NLS-1$
-	private static final String NAME_GROUP3 = "__Group03";  //$NON-NLS-1$
+	private static final String NAME_GROUP1 = "Group01"; //$NON-NLS-1$
+	private static final String NAME_GROUP2 = "Group02"; //$NON-NLS-1$
+	private static final String NAME_GROUP3 = "Group03"; //$NON-NLS-1$
 
 	public static State createOneGroup(final State state) {
 		state.setCommand(new CreateGroupCommand(state.getFbNetwork(), Collections.emptyList(), new Rectangle()));
@@ -63,7 +63,7 @@ public class GroupCreateCommandTest extends FBNetworkTestBase {
 	public static void verifyCreatetwoGroups(final State state, final State oldState, final TestFunction t) {
 		t.test(!state.getFbNetwork().isSubApplicationNetwork());
 		t.test(!state.getFbNetwork().getNetworkElements().isEmpty());
-		t.test(state.getFbNetwork().getNetworkElements().size() == 3);  // the state is not purged and the first group
+		t.test(state.getFbNetwork().getNetworkElements().size() == 3); // the state is not purged and the first group
 		// is still in
 		t.test(state.getFbNetwork().getElementNamed(NAME_GROUP1));
 		t.test(state.getFbNetwork().getElementNamed(NAME_GROUP2));
@@ -86,12 +86,12 @@ public class GroupCreateCommandTest extends FBNetworkTestBase {
 				new ExecutionDescription<>("Create one group", //$NON-NLS-1$
 						GroupCreateCommandTest::createOneGroup, //
 						GroupCreateCommandTest::verifyCreateOneGroup //
-						), //
+				), //
 				new ExecutionDescription<>("Create two groups", //$NON-NLS-1$
 						GroupCreateCommandTest::createTwoGroups, //
 						GroupCreateCommandTest::verifyCreatetwoGroups //
-						) //
-				);
+				) //
+		);
 
 		return createCommands(executionDescriptions);
 	}

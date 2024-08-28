@@ -27,7 +27,7 @@ public class CreateGroupCommand extends AbstractCreateFBNetworkElementCommand {
 
 	private static final int GROUP_TOP_BORDER = 20;
 	private static final int GROUP_BORDER = 2;
-	private static final String INITIAL_GROUP_NAME = "__Group01"; //$NON-NLS-1$
+	private static final String INITIAL_GROUP_NAME = "Group01"; //$NON-NLS-1$
 
 	private final AddElementsToGroup addElements;
 	private final Rectangle posSizeRef;
