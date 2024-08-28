@@ -60,7 +60,7 @@ public class FBLaunchConfigurationDelegate extends CommonLaunchConfigurationDele
 	@SuppressWarnings("static-method") // allow subclasses to override
 	protected FBEvaluator<?> createEvaluator(final FBType type, final List<Variable<?>> variables) {
 		return (FBEvaluator<?>) EvaluatorFactory.createEvaluator(type,
-				type.eClass().getInstanceClass().asSubclass(FBType.class), null, variables, null);
+				type.eClass().getInstanceClass().asSubclass(FBType.class), "sampling", null, variables, null); //$NON-NLS-1$
 	}
 
 	public static List<Variable<?>> getDefaultArguments(final FBType type) throws CoreException {

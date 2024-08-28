@@ -26,7 +26,9 @@ public class FBDebugViewFigure extends Container {
 
 	final Figure outerInputValues;
 	final Figure inputWiths;
+	final Figure innerInputValues;
 	final Figure fbFigurecontainer;
+	final Figure innerOutputValues;
 	final Figure outputWiths;
 	final Figure outerOutputValues;
 
@@ -38,8 +40,14 @@ public class FBDebugViewFigure extends Container {
 		inputWiths = createWithContainer(numEi);
 		add(inputWiths, createContainerGridData());
 
+		innerInputValues = createContainer();
+		add(innerInputValues, createContainerGridData());
+
 		fbFigurecontainer = createContainer();
 		add(fbFigurecontainer, createContainerGridData());
+
+		innerOutputValues = createContainer();
+		add(innerOutputValues, createContainerGridData());
 
 		outputWiths = createWithContainer(numEo);
 		add(outputWiths, createContainerGridData());
@@ -52,15 +60,23 @@ public class FBDebugViewFigure extends Container {
 		return outerInputValues;
 	}
 
-	public Figure getInputWiths() {
+	public IFigure getInputWiths() {
 		return inputWiths;
+	}
+
+	public IFigure getInnerInputValues() {
+		return innerInputValues;
 	}
 
 	public IFigure getFBFigureContainer() {
 		return fbFigurecontainer;
 	}
 
-	public Figure getOutputWiths() {
+	public IFigure getInnerOutputValues() {
+		return innerOutputValues;
+	}
+
+	public IFigure getOutputWiths() {
 		return outputWiths;
 	}
 
@@ -69,7 +85,7 @@ public class FBDebugViewFigure extends Container {
 	}
 
 	private static GridLayout createRootLayout() {
-		final GridLayout topLayout = new GridLayout(5, false);
+		final GridLayout topLayout = new GridLayout(7, false);
 		topLayout.marginHeight = 0;
 		topLayout.marginWidth = 0;
 		topLayout.verticalSpacing = 0;
@@ -91,7 +107,7 @@ public class FBDebugViewFigure extends Container {
 				// as the connection figures do not correctly give us their size we have to
 				// ensure a minum width
 				prefSize.union(new Dimension(
-						(int) (numEvents * WithAnchor.WITH_DISTANCE + 0.5 * WithAnchor.WITH_DISTANCE), 0));
+						(int) (numEvents * WithAnchor.WITH_DISTANCE + WithAnchor.WITH_DISTANCE), 0));
 				return prefSize;
 			}
 		};

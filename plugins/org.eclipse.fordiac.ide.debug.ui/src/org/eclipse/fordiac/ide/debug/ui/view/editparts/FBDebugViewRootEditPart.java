@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor.NullEvaluatorMonitor;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorCountingEventQueue;
+import org.eclipse.fordiac.ide.model.eval.fb.SamplingFBEvaluator;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -221,6 +222,16 @@ public class FBDebugViewRootEditPart extends AbstractGraphicalEditPart {
 						new InterfaceValueEntity(interfaceElement, entry.getValue(), debugTarget));
 			}
 		});
+		if (getFBEvaluator() instanceof final SamplingFBEvaluator samplingEvaluator) {
+			samplingEvaluator.getDelegate().getContext().getMembers().entrySet().forEach(entry -> {
+				final IInterfaceElement interfaceElement = getFBType().getInterfaceList()
+						.getInterfaceElement(entry.getKey());
+				if (interfaceElement != null) {
+					interfaceValues.put(entry.getValue(),
+							new InnerValueEntity(interfaceElement, entry.getValue(), debugTarget));
+				}
+			});
+		}
 	}
 
 	private void updateVariable(final Map<Object, EditPart> editPartRegistry, final Variable<?> variable) {
@@ -275,6 +286,8 @@ public class FBDebugViewRootEditPart extends AbstractGraphicalEditPart {
 	private IFigure getTargetFigure(final EditPart childEditPart) {
 		return switch (childEditPart) {
 		case final FBTypeEditPart fbtEP -> getFigure().getFBFigureContainer();
+		case final InnerValueEditPart innerEP ->
+			(innerEP.isInput()) ? getFigure().getInnerInputValues() : getFigure().getInnerOutputValues();
 		case final AbstractDebugInterfaceValueEditPart ivEP ->
 			(ivEP.isInput()) ? getFigure().getOuterInputValues() : getFigure().getOuterOutputValues();
 		default -> null;
