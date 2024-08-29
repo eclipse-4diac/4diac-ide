@@ -142,13 +142,11 @@ public class TransitionSection extends AbstractSection {
 			@Override
 			public void documentChanged(final DocumentEvent event) {
 				removeContentAdapter();
-				// someone deleted or modified this or the condition editor update led to this
-				// change
+				// updating the condition editor or modification lead to this change
 				if (conditionEditorModelAccess.getEditablePart().contentEquals("")) { //$NON-NLS-1$
-					if ((getType().getConditionEvent() == null && getType().getConditionExpression() != null
-							&& !getType().getConditionExpression().equals(ECCContentAndLabelProvider.ONE_CONDITION))
+					if (!ECCContentAndLabelProvider.isOneConditionExpression(getType())
 							|| getType().getConditionEvent() != null) {
-						executeCommand(new ChangeConditionExpressionCommand(getType(), "")); //$NON-NLS-1$
+						executeCommand(new ChangeConditionExpressionCommand(getType(), ""));//$NON-NLS-1$
 					}
 				} else {
 					executeCommand(new ChangeConditionExpressionCommand(getType(),
@@ -166,8 +164,7 @@ public class TransitionSection extends AbstractSection {
 	}
 
 	protected void updateConditionEditor() {
-		if ((getType().getConditionExpression() != null)
-				&& getType().getConditionExpression().equals(ECCContentAndLabelProvider.ONE_CONDITION)) {
+		if (ECCContentAndLabelProvider.isOneConditionExpression(getType())) {
 			conditionEditorModelAccess.updateModel(""); //$NON-NLS-1$
 			conditionEditor.getViewer().setEditable(false);
 		} else {
@@ -195,8 +192,7 @@ public class TransitionSection extends AbstractSection {
 		if (null != getBasicFBType()) {
 			fillEventConditionDropdown();
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			if ((getType().getConditionExpression() != null)
-					&& getType().getConditionExpression().equals(ECCContentAndLabelProvider.ONE_CONDITION)) {
+			if (ECCContentAndLabelProvider.isOneConditionExpression(getType())) {
 				eventCombo.select(eventCombo.indexOf(ECCContentAndLabelProvider.ONE_CONDITION));
 			} else {
 				final Event conditionEvent = getType().getConditionEvent();
