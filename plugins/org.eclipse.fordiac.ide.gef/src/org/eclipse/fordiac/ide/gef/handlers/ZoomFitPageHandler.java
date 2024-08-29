@@ -66,8 +66,7 @@ public class ZoomFitPageHandler extends AbstractHandler {
 			Display.getDefault().syncExec(() -> {
 				zoomManager.setZoom(newZoom);
 				// for correctly setting the position we need to get bounds after zooming again
-				final Point newPos = zoomManager.getViewport().getViewLocation()
-						.getTranslated(getZoomBoundsFromSelection(currentSelection).getTopLeft());
+				final Point newPos = getScrollLocation(currentSelection, zoomManager);
 				zoomManager.setViewLocation(newPos);
 			});
 		}
@@ -100,6 +99,16 @@ public class ZoomFitPageHandler extends AbstractHandler {
 				zoomManager.getMaxZoom());
 		return Math.min(scaleX, scaleY);
 
+	}
+
+	private static Point getScrollLocation(final ISelection currentSelection, final ZoomManager zoomManager) {
+		final Rectangle zoomBounds = getZoomBoundsFromSelection(currentSelection);
+		if (zoomBounds != null) {
+			final Dimension size = zoomManager.getViewport().getClientArea().getSize();
+			return zoomBounds.getCenter().translate(-size.width / 2, -size.height / 2)
+					.translate(zoomManager.getViewport().getViewLocation());
+		}
+		return zoomManager.getViewport().getViewLocation();
 	}
 
 }
