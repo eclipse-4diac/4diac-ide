@@ -142,8 +142,18 @@ public class TransitionSection extends AbstractSection {
 			@Override
 			public void documentChanged(final DocumentEvent event) {
 				removeContentAdapter();
-				executeCommand(
-						new ChangeConditionExpressionCommand(getType(), conditionEditorModelAccess.getEditablePart()));
+				// someone deleted or modified this or the condition editor update led to this
+				// change
+				if (conditionEditorModelAccess.getEditablePart().contentEquals("")) { //$NON-NLS-1$
+					if ((getType().getConditionEvent() == null && getType().getConditionExpression() != null
+							&& !getType().getConditionExpression().equals(ECCContentAndLabelProvider.ONE_CONDITION))
+							|| getType().getConditionEvent() != null) {
+						executeCommand(new ChangeConditionExpressionCommand(getType(), "")); //$NON-NLS-1$
+					}
+				} else {
+					executeCommand(new ChangeConditionExpressionCommand(getType(),
+							conditionEditorModelAccess.getEditablePart()));
+				}
 				addContentAdapter();
 			}
 
