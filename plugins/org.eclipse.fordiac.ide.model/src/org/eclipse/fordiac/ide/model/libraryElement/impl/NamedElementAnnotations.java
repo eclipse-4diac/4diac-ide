@@ -65,15 +65,34 @@ public final class NamedElementAnnotations {
 	public static boolean validateName(final INamedElement element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
 		if (element.getName() != null && !element.getName().isEmpty()) {
-			final Optional<String> errorMessage = IdentifierVerifier.verifyIdentifier(element.getName(), element);
-			if (errorMessage.isPresent()) {
+			if (element.getName().contains("__")) { //$NON-NLS-1$
 				if (diagnostics != null) {
-					diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-							LibraryElementValidator.INAMED_ELEMENT__VALIDATE_NAME, errorMessage.get(),
+					diagnostics.add(new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+							LibraryElementValidator.INAMED_ELEMENT__VALIDATE_NAME,
+							MessageFormat.format(Messages.IdentifierVerifier_NameConsecutiveUnderscore,
+									element.getName()),
 							FordiacMarkerHelper.getDiagnosticData(element,
 									LibraryElementPackage.Literals.INAMED_ELEMENT__NAME)));
 				}
-				return false;
+			} else if (element.getName().endsWith("_")) { //$NON-NLS-1$
+				if (diagnostics != null) {
+					diagnostics.add(new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+							LibraryElementValidator.INAMED_ELEMENT__VALIDATE_NAME,
+							MessageFormat.format(Messages.IdentifierVerifier_NameTrailingUnderscore, element.getName()),
+							FordiacMarkerHelper.getDiagnosticData(element,
+									LibraryElementPackage.Literals.INAMED_ELEMENT__NAME)));
+				}
+			} else {
+				final Optional<String> errorMessage = IdentifierVerifier.verifyIdentifier(element.getName(), element);
+				if (errorMessage.isPresent()) {
+					if (diagnostics != null) {
+						diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+								LibraryElementValidator.INAMED_ELEMENT__VALIDATE_NAME, errorMessage.get(),
+								FordiacMarkerHelper.getDiagnosticData(element,
+										LibraryElementPackage.Literals.INAMED_ELEMENT__NAME)));
+					}
+					return false;
+				}
 			}
 		}
 		return true;
