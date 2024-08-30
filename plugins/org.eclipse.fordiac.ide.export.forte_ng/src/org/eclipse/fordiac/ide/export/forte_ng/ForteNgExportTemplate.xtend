@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Path
 import org.eclipse.fordiac.ide.export.ExportTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportOptions
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
@@ -43,7 +44,12 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 		«generateDependencyInclude("forte_array_variable.h")»
 	'''
 
-	def protected generateDependencyInclude(String path) '''#include "«path»"'''
+	def protected generateDependencyInclude(String path) {
+		if (ForteNgExportOptions.useSystemIncludes)
+			'''#include <«path»>'''
+		else
+			'''#include "«path»"'''
+	}
 
 	def getFileBasename() { name.replaceAll("\\.[^.]+$", "") }
 }
