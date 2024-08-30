@@ -158,7 +158,7 @@ public class ResourceDeploymentData {
 			final VarDeclaration varDec) {
 		final IInterfaceElement ie = subApp.getInterfaceElement(varDec.getName());
 		if (!hasInputConnections(ie)) {
-			return DeploymentHelper.hasTypeOrInstanceInitialValue(subApp, varDec);
+			return true;
 		}
 		IInterfaceElement source = getSourcePin(ie);
 		while (hasInputConnections(source)) {
