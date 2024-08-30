@@ -76,7 +76,13 @@ public class BreadcrumbWidget implements ISelectionProvider {
 			createBreadcrumbItems(input);
 			toolbar.pack();
 		}
-		fireSelectionChanged(event);
+
+		// when calling setInput with null, no editor input will be provided
+		// sometimes needed when changing the content of the breadcrumb without needing
+		// an editor update
+		if (event != null) {
+			fireSelectionChanged(event);
+		}
 	}
 
 	private void createBreadcrumbItems(final Object input) {
