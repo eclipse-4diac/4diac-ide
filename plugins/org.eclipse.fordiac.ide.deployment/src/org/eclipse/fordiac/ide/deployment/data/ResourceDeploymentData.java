@@ -141,17 +141,14 @@ public class ResourceDeploymentData {
 			throws DeploymentException {
 		// follow the connection through the subapp hierachy until there is a loose one
 		for (final VarDeclaration dataInput : subApp.getInterface().getInputVars()) {
-
-			if (useSubAppInitialValue(subAppHierarchy, subApp, dataInput)) {
-				final Function<VarDeclaration, String> dataInputValue = DeploymentHelper
-						.getVariableValueRetargetable(dataInput, subApp);
-				if (dataInputValue != null) {
-					for (final ConDeploymentDest destData : getSubappInterfaceconnections(subAppHierarchy, prefix,
-							dataInput)) {
-						final VarDeclaration destVar = (VarDeclaration) destData.destination;
-						final String destDataValue = dataInputValue.apply(destVar);
-						params.add(new ParameterData(destDataValue, destData.prefix, destVar));
-					}
+			final Function<VarDeclaration, String> dataInputValue = DeploymentHelper
+					.getVariableValueRetargetable(dataInput, subApp);
+			if (dataInputValue != null && useSubAppInitialValue(subAppHierarchy, subApp, dataInput)) {
+				for (final ConDeploymentDest destData : getSubappInterfaceconnections(subAppHierarchy, prefix,
+						dataInput)) {
+					final VarDeclaration destVar = (VarDeclaration) destData.destination;
+					final String destDataValue = dataInputValue.apply(destVar);
+					params.add(new ParameterData(destDataValue, destData.prefix, destVar));
 				}
 			}
 		}

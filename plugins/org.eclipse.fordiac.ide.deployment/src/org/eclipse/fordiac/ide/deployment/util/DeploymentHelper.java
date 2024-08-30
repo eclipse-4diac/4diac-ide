@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.deployment.util;
 
 import java.text.MessageFormat;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.Platform;
@@ -63,8 +64,17 @@ public interface DeploymentHelper {
 		return null;
 	}
 
+	static boolean hasTypeInitialValue(final SubApp subApp, final VarDeclaration varDec) {
+		final Optional<VarDeclaration> dec = subApp.getType().getInterfaceList().getInputVars().stream()
+				.filter(v -> v.getName().contentEquals(varDec.getName())).findAny();
+		if (dec.isPresent()) {
+			return DeploymentHelper.hasInitalValue(dec.get());
+		}
+		return false;
+	}
+
 	static boolean hasTypeOrInstanceInitialValue(final SubApp subApp, final VarDeclaration varDec) {
-		return DeploymentHelper.hasInitalValue(varDec) || (subApp.isTyped());
+		return hasInitalValue(varDec) || hasTypeInitialValue(subApp, varDec);
 	}
 
 	private static boolean hasInitalValue(final VarDeclaration varDecl) {
