@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,8 @@
 package org.eclipse.fordiac.ide.model.value;
 
 import java.text.MessageFormat;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 import org.eclipse.fordiac.ide.model.Messages;
 
@@ -28,6 +30,17 @@ public final class StringValueConverter extends AbstractStringValueConverter {
 			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_IllegalStringLiteral, string));
 		}
 		return super.toValue(string);
+	}
+
+	@Override
+	public String toValue(final Scanner scanner)
+			throws IllegalArgumentException, NoSuchElementException, IllegalStateException {
+		if (scanner.findWithinHorizon(SCANNER_STRING_QUOTE_PATTERN, 0) == null) {
+			throw new IllegalArgumentException(
+					MessageFormat.format(Messages.VALIDATOR_IllegalStringLiteral, "<scanner>")); //$NON-NLS-1$
+		}
+		return toValue(scanner, SCANNER_STRING_QUOTE_PATTERN, SCANNER_STRING_ESCAPE_PATTERN,
+				SCANNER_STRING_NON_ESCAPE_PATTERN);
 	}
 
 	@Override
