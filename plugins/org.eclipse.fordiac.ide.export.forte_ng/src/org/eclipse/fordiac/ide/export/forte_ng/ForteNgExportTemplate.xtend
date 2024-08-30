@@ -28,20 +28,22 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 	def protected generateDependencyIncludes(Iterable<? extends INamedElement> dependencies) '''
 		«dependencies.filter(DataType).generateTypeIncludes»
 		«FOR include : dependencies.reject(DataType).map[generateDefiningInclude].toSet.sort»
-			#include "«include»"
+			«include.generateDependencyInclude»
 		«ENDFOR»
 	'''
 
 	def protected generateTypeIncludes(Iterable<DataType> types) '''
 		«FOR include : types.map[generateDefiningInclude].toSet.sort»
-			#include "«include»"
+			«include.generateDependencyInclude»
 		«ENDFOR»
-		#include "iec61131_functions.h"
-		#include "forte_array_common.h"
-		#include "forte_array.h"
-		#include "forte_array_fixed.h"
-		#include "forte_array_variable.h"
+		«generateDependencyInclude("iec61131_functions.h")»
+		«generateDependencyInclude("forte_array_common.h")»
+		«generateDependencyInclude("forte_array.h")»
+		«generateDependencyInclude("forte_array_fixed.h")»
+		«generateDependencyInclude("forte_array_variable.h")»
 	'''
+
+	def protected generateDependencyInclude(String path) '''#include "«path»"'''
 
 	def getFileBasename() { name.replaceAll("\\.[^.]+$", "") }
 }

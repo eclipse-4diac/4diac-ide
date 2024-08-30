@@ -80,18 +80,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«type.compilerInfo?.header»
 	'''
 
-	def protected generateImplTypeIncludes(Iterable<DataType> vars) '''
-		«IF !vars.empty»
-			«vars.generateTypeIncludes»
-		«ENDIF»
-	'''
-
-	def protected generateAdapterIncludes(Iterable<AdapterDeclaration> vars) '''
-		«FOR include : vars.map[type.generateDefiningInclude].toSet»
-			#include "«include»"
-		«ENDFOR»
-	'''
-
 	def protected generateFBDeclaration() '''
 		DECLARE_FIRMWARE_FB(«FBClassName»)
 	'''
