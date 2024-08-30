@@ -72,11 +72,11 @@ public final class Messages extends NLS {
 	public static String FordiacTypeResource_TypeImportError;
 	public static String FordiacTypeResource_UnsupportedFileType;
 	public static String FordiacTypeResource_XMLError;
-	public static String IdentifierVerifier_ERROR_IdentifierLengthZero;
-	public static String IdentifierVerifier_ERROR_InvalidStartSymbol;
-	public static String IdentifierVerifier_ERROR_InvalidSymbolUsedInIdentifer;
-	public static String IdentifierVerifier_PackageNameNotAValidIdentifier;
-	public static String IdentifierVerifier_PackageNameReservedKeyword;
+	public static String IdentifierVerifier_NameConsecutiveUnderscore;
+	public static String IdentifierVerifier_NameNotAValidIdentifier;
+	public static String IdentifierVerifier_NameReservedKeyWord;
+	public static String IdentifierVerifier_NameTrailingUnderscore;
+	public static String IdentifierVerifier_PackageNameMessage;
 	public static String Import_ERROR_InputVariableTypeNotDefined;
 	public static String Import_ERROR_NameNotDefined;
 	public static String ImportUtils_ERROR_ParameterNotSet;
@@ -91,8 +91,6 @@ public final class Messages extends NLS {
 	public static String LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed;
 	public static String LinkConstraints_STATUSMessage_NotCompatible;
 	public static String NameRepository_NameAlreadyExists;
-	public static String NameRepository_NameNotAValidIdentifier;
-	public static String NameRepository_NameReservedKeyWord;
 	public static String TypedElementAnnotations_TypeNotFound;
 	public static String TypedElementAnnotations_TypeNotSet;
 	public static String TypeLibrary_TypeExists;

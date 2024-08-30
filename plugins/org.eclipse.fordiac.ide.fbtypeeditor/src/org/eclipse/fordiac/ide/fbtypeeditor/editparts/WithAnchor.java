@@ -33,13 +33,13 @@ public class WithAnchor extends ChopboxAnchor {
 
 	protected double getZoomFactor() {
 		double zoom = 1.0;
-		if (editPart.getRoot() instanceof ScalableFreeformRootEditPart) {
-			zoom = ((ScalableFreeformRootEditPart) editPart.getRoot()).getZoomManager().getZoom();
+		if (editPart.getRoot() instanceof final ScalableFreeformRootEditPart scaleableREP) {
+			zoom = scaleableREP.getZoomManager().getZoom();
 		}
 		return zoom;
 	}
 
-	protected int getPos() {
+	public int getPos() {
 		return pos;
 	}
 }

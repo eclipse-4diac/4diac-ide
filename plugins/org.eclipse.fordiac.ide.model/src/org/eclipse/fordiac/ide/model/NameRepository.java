@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.model;
 
 import java.text.MessageFormat;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -148,14 +149,10 @@ public final class NameRepository {
 			// comment has no name therefore all are valid.
 			return true;
 		}
-		if (IdentifierVerifier.verifyIdentifier(nameProposal).isPresent()) {
-			ErrorMessenger.popUpErrorMessage(
-					MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, nameProposal));
-			return false;
-		}
-		if (element instanceof IInterfaceElement && FordiacKeywords.isReservedKeyword(nameProposal)) {
-			ErrorMessenger
-					.popUpErrorMessage(MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, nameProposal));
+
+		final Optional<String> verifyIdentifier = IdentifierVerifier.verifyIdentifier(nameProposal);
+		if (verifyIdentifier.isPresent()) {
+			ErrorMessenger.popUpErrorMessage(verifyIdentifier.get());
 			return false;
 		}
 

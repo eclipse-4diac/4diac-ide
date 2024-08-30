@@ -28,7 +28,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -115,7 +114,7 @@ public class DelayedFiles {
 			if (fo.path().getParent() != null) {
 				Files.createDirectories(fo.path().getParent());
 			}
-			Files.write(fo.path(), Collections.singleton(fo.data()), StandardCharsets.UTF_8);
+			Files.writeString(fo.path(), fo.data(), StandardCharsets.UTF_8);
 			ret.add(new StoredFiles(o, f));
 		}
 

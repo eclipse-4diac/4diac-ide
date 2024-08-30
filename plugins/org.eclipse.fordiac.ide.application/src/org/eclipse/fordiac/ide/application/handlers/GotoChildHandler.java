@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,6 +19,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
+import org.eclipse.fordiac.ide.model.ui.widgets.GoIntoSubappSelectionEvent;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -37,7 +39,15 @@ public class GotoChildHandler extends AbstractHandler {
 
 		final EditPart editPart = getValidEditPart(selection);
 		if (editPart != null) {
-			editPart.performRequest(new Request(RequestConstants.REQ_OPEN));
+			if (editPart.getModel() instanceof final SubApp subapp && subapp.isUnfolded()) {
+				// with go to child we now want to open the subapp
+				if (HandlerUtil.getActiveEditor(event) instanceof final AbstractBreadCrumbEditor breadcrumbEditor) {
+					breadcrumbEditor.getBreadcrumb().setInput(editPart.getModel(),
+							new GoIntoSubappSelectionEvent(breadcrumbEditor.getBreadcrumb(), subapp));
+				}
+			} else {
+				editPart.performRequest(new Request(RequestConstants.REQ_OPEN));
+			}
 			return Status.OK_STATUS;
 		}
 		return Status.CANCEL_STATUS;
@@ -54,18 +64,15 @@ public class GotoChildHandler extends AbstractHandler {
 	}
 
 	public static EditPart getValidEditPart(final ISelection selection) {
-		if (selection instanceof IStructuredSelection && !selection.isEmpty()) {
-			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			if (structuredSelection.size() == 1
-					&& structuredSelection.getFirstElement() instanceof EditPart
-					&& ((EditPart) structuredSelection.getFirstElement()).getAdapter(EditPart.class) != null) {
-				final EditPart editPart = ((EditPart) structuredSelection.getFirstElement()).getAdapter(EditPart.class);
+		if (selection instanceof final IStructuredSelection structuredSelection && !selection.isEmpty()) {
+			if (structuredSelection.size() == 1 && structuredSelection.getFirstElement() instanceof final EditPart ep
+					&& ep.getAdapter(EditPart.class) != null) {
+				final EditPart editPart = ep.getAdapter(EditPart.class);
 				final Object model = editPart.getModel();
 				if (isSubAppOrCFBInstance(model)) {
 					return editPart;
 				}
-				if (model instanceof IInterfaceElement
-						&& isSubAppOrCFBInstance(((IInterfaceElement) model).getFBNetworkElement())) {
+				if (model instanceof final IInterfaceElement iel && isSubAppOrCFBInstance(iel.getFBNetworkElement())) {
 					return editPart;
 				}
 			}

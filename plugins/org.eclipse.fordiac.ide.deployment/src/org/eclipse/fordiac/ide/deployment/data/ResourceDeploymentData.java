@@ -15,9 +15,11 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -137,10 +139,11 @@ public class ResourceDeploymentData {
 
 	private void addSubAppParams(final SubApp subApp, final Deque<SubApp> subAppHierarchy, final String prefix)
 			throws DeploymentException {
+		// follow the connection through the subapp hierachy until there is a loose one
 		for (final VarDeclaration dataInput : subApp.getInterface().getInputVars()) {
 			final Function<VarDeclaration, String> dataInputValue = DeploymentHelper
 					.getVariableValueRetargetable(dataInput, subApp);
-			if (dataInputValue != null) {
+			if (dataInputValue != null && useSubAppInitialValue(subAppHierarchy, subApp, dataInput)) {
 				for (final ConDeploymentDest destData : getSubappInterfaceconnections(subAppHierarchy, prefix,
 						dataInput)) {
 					final VarDeclaration destVar = (VarDeclaration) destData.destination;
@@ -149,6 +152,56 @@ public class ResourceDeploymentData {
 				}
 			}
 		}
+	}
+
+	private static boolean useSubAppInitialValue(final Deque<SubApp> subAppHierachy, final SubApp subApp,
+			final VarDeclaration varDec) {
+		final IInterfaceElement ie = subApp.getInterfaceElement(varDec.getName());
+		if (!hasInputConnections(ie)) {
+			return true;
+		}
+		IInterfaceElement source = getSourcePin(ie);
+		while (hasInputConnections(source)) {
+			if (!source.isIsInput()) {
+				return false;
+			}
+			final Optional<SubApp> sA = getSubAppFromInterfacePin(subAppHierachy, source);
+			if (sA.isPresent()) {
+				if (source.getInputConnections().isEmpty() && (source instanceof final VarDeclaration varDecl)) {
+					return !DeploymentHelper.hasTypeOrInstanceInitialValue(sA.get(), varDecl);
+				}
+
+				// toplevel subapp and already checked for connections
+				if (isToplevelSubapp(sA.get())) {
+					break;
+				}
+			}
+			source = getSourcePin(source);
+		}
+		return false;
+
+	}
+
+	private static Optional<SubApp> getSubAppFromInterfacePin(final Deque<SubApp> subappHierachy,
+			final IInterfaceElement ie) {
+		return subappHierachy.stream().filter(sub -> sub.getInterface().getInput(ie.getName()) != null).findFirst();
+	}
+
+	private static IInterfaceElement getSourcePin(final IInterfaceElement pin) {
+		final EList<Connection> conList = pin.getInputConnections();
+		if (conList.isEmpty()) {
+			return null;
+		}
+		return conList.getFirst().getSource();
+	}
+
+	private static boolean isToplevelSubapp(final SubApp subApp) {
+		return subApp.eContainer() != null && subApp.eContainer().eContainer() != null
+				&& subApp.eContainer().eContainer() instanceof Resource;
+	}
+
+	private static boolean hasInputConnections(final IInterfaceElement pin) {
+		return pin != null && pin.isIsInput() && !pin.getInputConnections().isEmpty();
 	}
 
 	private static FBNetwork getFBNetworkForSubApp(final SubApp subApp) {

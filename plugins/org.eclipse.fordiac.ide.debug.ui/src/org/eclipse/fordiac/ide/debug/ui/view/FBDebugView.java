@@ -22,6 +22,7 @@ import org.eclipse.debug.ui.contexts.IDebugContextListener;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.FreeformLayeredPane;
+import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.FreeformViewport;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
@@ -191,6 +192,9 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 			@Override
 			protected IFigure createFigure() {
 				final FreeformViewport viewPort = (FreeformViewport) super.createFigure();
+
+				getLayer(PRIMARY_LAYER).setLayoutManager(new FreeformLayout());
+
 				final GridLayer grid = (GridLayer) getLayer(GRID_LAYER);
 				if (grid != null) {
 					// it does not make sense to have a grid in the interface layer so hide it
