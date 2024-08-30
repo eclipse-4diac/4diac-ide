@@ -71,7 +71,7 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 	'''
 
 	def protected generateHeaderIncludes() '''
-		#include "forte_struct.h"
+		«generateDependencyInclude("forte_struct.h")»
 		
 		«getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE}).generateDependencyIncludes»
 		
