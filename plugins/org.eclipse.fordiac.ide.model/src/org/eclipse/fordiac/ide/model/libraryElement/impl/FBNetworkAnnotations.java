@@ -82,7 +82,7 @@ final class FBNetworkAnnotations {
 		final int marginTopBottom = (int) (getIntPreference(context, PreferenceConstants.MARGIN_TOP_BOTTOM)
 				* lineHeight);
 		final int cellSize = (int) (CELL_SIZE * lineHeight);
-		final int gridSize = Math.min(Math.max(networkElements.size(), GRID_SIZE_MIN), GRID_SIZE_MAX);
+		final int gridSize = Math.clamp(networkElements.size(), GRID_SIZE_MIN, GRID_SIZE_MAX);
 		final SpatialHash<FBNetworkElement> spatialHash = new SpatialHash<>(cellSize, gridSize);
 		for (final FBNetworkElement element : networkElements) {
 			if (element instanceof ErrorMarkerFBNElement || !filter.test(element)) {

@@ -93,20 +93,17 @@ public class GetCoverageHandler extends AbstractHandler {
 		final BasicFbExecutionTrace eccTraceHelper = new BasicFbExecutionTrace(evntMngr.getTransactions(),
 				((BasicFBType) seq.getService().getFBType()).getECC());
 		if (visitedStates.isEmpty()) {
-			eccTraceHelper.getAllPossibleStates().forEach(s -> {
-				visitedStates.put(s.getName(), 0);
-			});
+			eccTraceHelper.getAllPossibleStates().forEach(s -> visitedStates.put(s.getName(), Integer.valueOf(0)));
 		}
 		if (visitedPaths.isEmpty()) {
-			eccTraceHelper.getAllPossiblePaths().forEach(p -> {
-				visitedPaths.put(p, 0);
-			});
+			eccTraceHelper.getAllPossiblePaths().forEach(p -> visitedPaths.put(p, Integer.valueOf(0)));
 		}
-		eccTraceHelper.getAllStatesOfSequence().forEach(s -> visitedStates.merge(s.getName(), 1, Integer::sum));
-		eccTraceHelper.getAllPathsOfSequence().forEach(p -> visitedPaths.merge(p, 1, Integer::sum));
+		eccTraceHelper.getAllStatesOfSequence()
+				.forEach(s -> visitedStates.merge(s.getName(), Integer.valueOf(1), Integer::sum));
+		eccTraceHelper.getAllPathsOfSequence().forEach(p -> visitedPaths.merge(p, Integer.valueOf(1), Integer::sum));
 	}
 
-	private Optional<String> checkForExistingEventManager(final ServiceSequence seq, final FBType fbType) {
+	private static Optional<String> checkForExistingEventManager(final ServiceSequence seq, final FBType fbType) {
 		if (seq.getEventManager() == null) {
 			seq.setEventManager(ServiceSequenceSaveAndLoadHelper.loadEventManagerFromServiceSequenceFile(fbType, seq));
 		}

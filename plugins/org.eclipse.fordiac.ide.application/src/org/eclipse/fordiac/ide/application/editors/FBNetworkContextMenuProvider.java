@@ -78,9 +78,8 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		this.typeLib = typeLib;
 		this.editor = editor;
 
-		editor.getViewer().getControl().addMenuDetectListener(e -> {
-			invocationLocation = getViewer().getControl().toControl(e.x, e.y);
-		});
+		editor.getViewer().getControl()
+				.addMenuDetectListener(e -> invocationLocation = getViewer().getControl().toControl(e.x, e.y));
 
 	}
 
@@ -133,8 +132,8 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
 		action = getRegistry().getAction(ActionFactory.PASTE.getId());
-		if (action instanceof PasteEditPartsAction) {
-			((PasteEditPartsAction) action).setPastRefPosition(getTranslatedAndZoomedPoint());
+		if (action instanceof final PasteEditPartsAction pasteAction) {
+			pasteAction.setPastRefPosition(getTranslatedAndZoomedPoint());
 		}
 		menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
@@ -153,10 +152,10 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 	private void fillMenuForFolder(final IMenuManager submenu, final IContainer container) {
 		try {
 			for (final IResource res : container.members()) {
-				if (res instanceof IFolder) {
-					createSubMenu(submenu, (IFolder) res);
-				} else if (res instanceof IFile) {
-					createFBMenuEntry(submenu, (IFile) res);
+				if (res instanceof final IFolder folder) {
+					createSubMenu(submenu, folder);
+				} else if (res instanceof final IFile file) {
+					createFBMenuEntry(submenu, file);
 				}
 			}
 		} catch (final CoreException e) {

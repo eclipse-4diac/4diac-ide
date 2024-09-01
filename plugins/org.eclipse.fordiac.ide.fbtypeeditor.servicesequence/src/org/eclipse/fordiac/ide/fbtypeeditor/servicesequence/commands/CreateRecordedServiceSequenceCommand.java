@@ -171,14 +171,14 @@ public class CreateRecordedServiceSequenceCommand extends Command {
 	private static void setParameters(final FBTransaction transaction, final List<String> parameters) {
 		final List<VarDeclaration> paramVars = new ArrayList<>();
 		for (final String s : parameters) {
-			final VarDeclaration var = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			final VarDeclaration varDecl = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			final List<String> param = ServiceSequenceUtils.splitParameter(s);
 			if (param.size() == 2) {
-				var.setName(param.get(0));
-				var.setValue(LibraryElementFactory.eINSTANCE.createValue());
-				var.getValue().setValue(param.get(1));
+				varDecl.setName(param.get(0));
+				varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
+				varDecl.getValue().setValue(param.get(1));
 			}
-			paramVars.add(var);
+			paramVars.add(varDecl);
 		}
 		transaction.getInputVariables().addAll(paramVars);
 	}

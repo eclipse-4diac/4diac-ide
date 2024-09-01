@@ -1526,8 +1526,8 @@ class StandardFunctionsTest {
 			assertEquals(wrapValue(Integer.valueOf(17), type), Functions.invoke(StandardFunctions.class,
 					functionStringAsTypeName, toStringValue(wrapValue(Integer.valueOf(17), type).toString())));
 			// *_AS_WSTRING
-			assertEquals(toWStringValue(defaultValue(type).toString()), Functions.invoke(StandardFunctions.class,
-					functionTypeAsWStringName.toString(), defaultValue(type)));
+			assertEquals(toWStringValue(defaultValue(type).toString()),
+					Functions.invoke(StandardFunctions.class, functionTypeAsWStringName, defaultValue(type)));
 			assertEquals(toWStringValue(WStringValue.toWStringValue(wrapValue(Integer.valueOf(17), type).toString())),
 					Functions.invoke(StandardFunctions.class, functionTypeAsWStringName,
 							wrapValue(Integer.valueOf(17), type)));
@@ -1595,10 +1595,10 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, functionName, defaultValue(intType)));
 		assertEquals(wrapValue(Integer.valueOf(0x17), bitType),
 				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(17), intType)));
-		assertEquals(wrapValue(Integer.valueOf(0x42), bitType), Functions.invoke(StandardFunctions.class,
-				functionName.toString(), wrapValue(Integer.valueOf(42), intType)));
-		assertEquals(wrapValue(Integer.valueOf(0x84), bitType), Functions.invoke(StandardFunctions.class,
-				functionName.toString(), wrapValue(Integer.valueOf(84), intType)));
+		assertEquals(wrapValue(Integer.valueOf(0x42), bitType),
+				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(42), intType)));
+		assertEquals(wrapValue(Integer.valueOf(0x84), bitType),
+				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(84), intType)));
 		assertEquals(castValue(wrapValue(Long.valueOf(0x8442211784422117L), intType), bitType), Functions
 				.invoke(StandardFunctions.class, functionName, toDigitsValue(8442211784422117L, bitType, intType)));
 	}
@@ -1634,8 +1634,8 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(0x17), bitType)));
 		assertEquals(wrapValue(Integer.valueOf(42), intType),
 				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(0x42), bitType)));
-		assertEquals(wrapValue(Integer.valueOf(84), intType), Functions.invoke(StandardFunctions.class,
-				functionName.toString(), wrapValue(Integer.valueOf(0x84), bitType)));
+		assertEquals(wrapValue(Integer.valueOf(84), intType),
+				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(0x84), bitType)));
 		assertEquals(toDigitsValue(8442211784422117L, bitType, intType), Functions.invoke(StandardFunctions.class,
 				functionName, castValue(wrapValue(Long.valueOf(0x8442211784422117L), intType), bitType)));
 
@@ -1655,8 +1655,8 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(0x17), bitType)));
 		assertEquals(wrapValue(Integer.valueOf(42), intType),
 				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(0x42), bitType)));
-		assertEquals(wrapValue(Integer.valueOf(84), intType), Functions.invoke(StandardFunctions.class,
-				functionName.toString(), wrapValue(Integer.valueOf(0x84), bitType)));
+		assertEquals(wrapValue(Integer.valueOf(84), intType),
+				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(0x84), bitType)));
 		assertEquals(toDigitsValue(8442211784422117L, bitType, intType), Functions.invoke(StandardFunctions.class,
 				functionName, castValue(wrapValue(Long.valueOf(0x8442211784422117L), intType), bitType)));
 

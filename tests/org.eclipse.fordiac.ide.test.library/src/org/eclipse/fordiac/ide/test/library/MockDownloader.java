@@ -38,7 +38,7 @@ public class MockDownloader implements IArchiveDownloader {
 			Map.entry("test02", List.of("1.0.0", "1.1.0")), Map.entry("test03", List.of("1.0.0", "1.1.0")),
 			Map.entry("test04", List.of("1.0.0", "1.1.0")), Map.entry("test05", List.of("1.0.0")),
 			Map.entry("test06", List.of("1.0.0")), Map.entry("test07", List.of("1.0.0")));
-	private final String formatString = "data/%s-%s.zip"; //$NON-NLS-1$
+	private final static String FORMAT_STRING = "data/%s-%s.zip"; //$NON-NLS-1$
 
 	@Override
 	public List<String> availableLibraries() throws IOException {
@@ -79,7 +79,7 @@ public class MockDownloader implements IArchiveDownloader {
 		try {
 			return Paths.get(FileLocator
 					.toFileURL(FileLocator.find(bundle,
-							new org.eclipse.core.runtime.Path(String.format(formatString, symbolicName, version))))
+							new org.eclipse.core.runtime.Path(String.format(FORMAT_STRING, symbolicName, version))))
 					.toURI());
 		} catch (URISyntaxException | IOException e) {
 			// empty

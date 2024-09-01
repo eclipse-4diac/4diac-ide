@@ -81,9 +81,8 @@ class LibraryImportTest {
 		}
 
 		// deactivate other downloaders
-		TypeLibraryManager.useExtensions(LibraryManager.DOWNLOADER_EXTENSION, IArchiveDownloader.class, downloader -> {
-			downloader.setActive(downloader instanceof MockDownloader);
-		});
+		TypeLibraryManager.useExtensions(LibraryManager.DOWNLOADER_EXTENSION, IArchiveDownloader.class,
+				downloader -> downloader.setActive(downloader instanceof MockDownloader));
 	}
 
 	@BeforeEach

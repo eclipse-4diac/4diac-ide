@@ -126,7 +126,6 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	private final CommandStack commandStack = new CommandStack();
 	private GraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
-	private FBTypeUpdateDialog<TypeEntry> fbSaveDialog;
 	private static final int DEFAULT_BUTTON_INDEX = 0; // Save Button
 	private static final int CANCEL_BUTTON_INDEX = 1;
 	private int interfaceChanges = 0; // number of interface changes happend since the last save
@@ -149,7 +148,8 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 		final String[] labels = { Messages.FBTypeEditor_AlteringButton_SaveAndUpdate, // Messages.StructAlteringButton_SaveAs,
 				SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
-		fbSaveDialog = new FBTypeUpdateDialog<>(null, Messages.FBTypeEditor_ViewingComposite_Headline, null, "", //$NON-NLS-1$
+		final FBTypeUpdateDialog<TypeEntry> fbSaveDialog = new FBTypeUpdateDialog<>(null,
+				Messages.FBTypeEditor_ViewingComposite_Headline, null, "", //$NON-NLS-1$
 				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, new FBTypeEntryDataHandler(typeEntry));
 
 		// Depending on the button clicked:

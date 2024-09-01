@@ -28,7 +28,7 @@ public class AdapterConnectionItemProviderEmfCompare extends AdapterConnectionIt
 
 	@Override
 	public Collection<?> getChildren(final Object object) {
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 
 	@Override
