@@ -21,12 +21,12 @@ import org.eclipse.ui.forms.editor.FormEditor;
 
 public class ManifestEditor extends FormEditor {
 	private TextEditor textEditor;
-	private ManifestUpdateFormPage updatePage;
 
 	@Override
 	protected void addPages() {
 		textEditor = new TextEditor();
-		updatePage = new ManifestUpdateFormPage(this, "updateFormPage", "Update Dependencies"); //$NON-NLS-1$ //$NON-NLS-2$
+		final ManifestUpdateFormPage updatePage = new ManifestUpdateFormPage(this, "updateFormPage", //$NON-NLS-1$
+				"Update Dependencies"); //$NON-NLS-1$
 
 		try {
 			final int index = addPage(textEditor, getEditorInput());

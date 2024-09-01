@@ -205,9 +205,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 				), //
 				new ExecutionDescription<>("Add Compiler Info to Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeAddCommand, //
-						(final State s, final State o, final TestFunction t) -> {
-							verifyDefaultState(s, t, 0, 1);
-						}), //
+						(final State s, final State o, final TestFunction t) -> verifyDefaultState(s, t, 0, 1)), //
 				new ExecutionDescription<>("Add second Compiler Info to Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeAddCommand, //
 						(final State s, final State o, final TestFunction t) -> {
@@ -244,9 +242,7 @@ public class ChangeCompilerCommandTest extends FBNetworkTestBase {
 				), //
 				new ExecutionDescription<>("Delete first Compiler Info from Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeDeleteCommand, //
-						(final State s, final State o, final TestFunction t) -> {
-							verifyDefaultState(s, t, 0, 1); //
-						}), //
+						(final State s, final State o, final TestFunction t) -> verifyDefaultState(s, t, 0, 1)), //
 				new ExecutionDescription<>("Change Compiler Vendor to NULL on Functionblock", //$NON-NLS-1$
 						ChangeCompilerCommandTest::executeChangeVendorToNullCommand, //
 						(final State s, final State o, final TestFunction t) -> verifyChangedVendorToNullState(s, t, 0,

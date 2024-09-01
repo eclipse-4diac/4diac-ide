@@ -181,7 +181,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			t.test(Arrays.asList(attribute.getValue().split(",")) //$NON-NLS-1$
 					.contains(name));
 		}
-		t.test(state.getDemultiplexer().getMemberVars().stream().anyMatch(var -> var.getName().equals(name)));
+		t.test(state.getDemultiplexer().getMemberVars().stream().anyMatch(memVar -> memVar.getName().equals(name)));
 	}
 
 	private static Attribute getVisibleChildrenAttribute(final Demultiplexer demux) {
@@ -199,7 +199,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			t.test(!Arrays.asList(attribute.getValue().split(",")) //$NON-NLS-1$
 					.contains(name));
 		}
-		t.test(state.getDemultiplexer().getMemberVars().stream().noneMatch(var -> var.getName().equals(name)));
+		t.test(state.getDemultiplexer().getMemberVars().stream().noneMatch(memVar -> memVar.getName().equals(name)));
 	}
 
 	private static State executeDeleteCommand(final State state, final String name) {

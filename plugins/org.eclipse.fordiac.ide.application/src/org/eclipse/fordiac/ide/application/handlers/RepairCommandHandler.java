@@ -237,8 +237,7 @@ public class RepairCommandHandler extends AbstractHandler {
 			return getEObjectFromEditor(varDecl);
 		}
 
-		if (model instanceof final VarDeclaration varDecl
-				&& varDecl.getType() instanceof final ErrorMarkerDataType errorType) {
+		if (model instanceof final VarDeclaration varDecl && varDecl.getType() instanceof ErrorMarkerDataType) {
 			return varDecl;
 		}
 

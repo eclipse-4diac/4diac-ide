@@ -20,7 +20,6 @@ public class FBSubappTypePropertiesFilter extends FBTypePropertiesFilter {
 
 	@Override
 	public boolean select(final Object toTest) {
-		final Object retval = getFBTypeFromSelectedElement(toTest);
-		return retval != null && (retval instanceof SubAppType);
+		return (getFBTypeFromSelectedElement(toTest) instanceof SubAppType);
 	}
 }

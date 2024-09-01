@@ -49,8 +49,6 @@ public class LibrarySelectionPage extends WizardPage {
 	private List<LibDisplay> libraries;
 	private Map<String, List<LibDisplay>> libGroupings;
 	private CheckboxTableViewer tableViewer;
-	private Button selectAllButton;
-	private Button deselectButton;
 	private boolean showStandard;
 	private boolean showWorkspace;
 	private final boolean selectAll;
@@ -150,10 +148,9 @@ public class LibrarySelectionPage extends WizardPage {
 	private void selectAll() {
 		deselectAll();
 		final VersionComparator comparator = new VersionComparator();
-		libGroupings.forEach((symb, list) -> {
-			list.stream().max((l1, l2) -> comparator.compare(l1.getVersion(), l2.getVersion()))
-					.ifPresent(lib -> lib.setSelected(true));
-		});
+		libGroupings.forEach(
+				(symb, list) -> list.stream().max((l1, l2) -> comparator.compare(l1.getVersion(), l2.getVersion()))
+						.ifPresent(lib -> lib.setSelected(true)));
 	}
 
 	private void deselectAll() {
@@ -257,12 +254,12 @@ public class LibrarySelectionPage extends WizardPage {
 
 	private void createButtons(final Composite buttonComposite) {
 
-		selectAllButton = new Button(buttonComposite, SWT.PUSH);
+		final Button selectAllButton = new Button(buttonComposite, SWT.PUSH);
 		selectAllButton.setFont(buttonComposite.getFont());
 		selectAllButton.setText(Messages.LibraryPage_SelectAll);
 		setButtonLayoutData(selectAllButton);
 
-		deselectButton = new Button(buttonComposite, SWT.PUSH);
+		final Button deselectButton = new Button(buttonComposite, SWT.PUSH);
 		deselectButton.setFont(buttonComposite.getFont());
 		deselectButton.setText(Messages.LibraryPage_DeselectAll);
 		setButtonLayoutData(deselectButton);

@@ -78,13 +78,8 @@ public class ExportProjectLibrary extends AbstractExportFBs {
 		excludePatterns = new ArrayList<>();
 		typelib = TypeLibraryManager.INSTANCE.getTypeLibrary(getFordiacProject());
 
-		library.getIncludes().getLibraryElement().forEach(elem -> {
-			includePatterns.add(createPattern(elem.getValue()));
-		});
-
-		library.getExcludes().getLibraryElement().forEach(elem -> {
-			excludePatterns.add(createPattern(elem.getValue()));
-		});
+		library.getIncludes().getLibraryElement().forEach(elem -> includePatterns.add(createPattern(elem.getValue())));
+		library.getExcludes().getLibraryElement().forEach(elem -> excludePatterns.add(createPattern(elem.getValue())));
 	}
 
 	@Override
