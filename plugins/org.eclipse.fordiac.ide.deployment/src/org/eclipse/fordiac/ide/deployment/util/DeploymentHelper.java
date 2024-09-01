@@ -65,10 +65,12 @@ public interface DeploymentHelper {
 	}
 
 	static boolean hasTypeInitialValue(final SubApp subApp, final VarDeclaration varDec) {
-		final Optional<VarDeclaration> dec = subApp.getType().getInterfaceList().getInputVars().stream()
-				.filter(v -> v.getName().contentEquals(varDec.getName())).findAny();
-		if (dec.isPresent()) {
-			return DeploymentHelper.hasInitalValue(dec.get());
+		if (subApp.isTyped()) {
+			final Optional<VarDeclaration> dec = subApp.getType().getInterfaceList().getInputVars().stream()
+					.filter(v -> v.getName().contentEquals(varDec.getName())).findAny();
+			if (dec.isPresent()) {
+				return DeploymentHelper.hasInitalValue(dec.get());
+			}
 		}
 		return false;
 	}
