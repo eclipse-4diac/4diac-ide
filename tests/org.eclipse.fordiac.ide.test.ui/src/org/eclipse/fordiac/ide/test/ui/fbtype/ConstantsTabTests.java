@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.test.ui.fbtype;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.test.ui.helpers.PropertySheetHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -30,9 +31,10 @@ public class ConstantsTabTests extends NatTableWithoutEditorBehaviorTests {
 		TESTVAR1 = UITestNamesHelper.INTERNALCONSTVAR1;
 		TESTVAR2 = UITestNamesHelper.INTERNALCONSTVAR2;
 		TESTVAR3 = UITestNamesHelper.INTERNALCONSTVAR3;
-		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
+		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
+		fbTypeBot.createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
 				UITestNamesHelper.TEMPLATEBASIC);
-		openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
+		fbTypeBot.openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
 		final SWTBot propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.CONSTANTS);
 		assertNotNull(propertiesBot);
 		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();

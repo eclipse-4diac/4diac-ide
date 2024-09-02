@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
 import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
@@ -45,9 +46,10 @@ public class ECCEditorTests extends Abstract4diacUITests {
 	 */
 	@BeforeAll
 	public static void initialization() {
-		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
+		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
+		fbTypeBot.createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
 				UITestNamesHelper.TEMPLATEBASIC);
-		openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
+		fbTypeBot.openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
 		final SWTBotCTabItem eccTab = bot.cTabItem(UITestNamesHelper.ECC);
 		eccTab.activate();
 		eccTab.setFocus();

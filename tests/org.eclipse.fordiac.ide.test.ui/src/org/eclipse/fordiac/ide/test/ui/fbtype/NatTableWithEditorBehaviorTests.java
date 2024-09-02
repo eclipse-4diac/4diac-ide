@@ -16,6 +16,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
@@ -46,8 +47,10 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 	@SuppressWarnings("static-method")
 	@BeforeEach
 	public void operationsInitialization() {
-		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2, UITestNamesHelper.STRUCT);
-		openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
+		fbTypeBot.createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
+				UITestNamesHelper.STRUCT);
+		fbTypeBot.openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
 		final Composite tableComposite = (Composite) bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).getWidget();
 		natTable = bot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), tableComposite);
 		natTableBot = new SWTBot4diacNatTable(natTable);
@@ -64,7 +67,7 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 	@SuppressWarnings("static-method")
 	@AfterEach
 	public void resetEnvironment() {
-		deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT2);
+		new SWTBotFBType(bot).deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT2);
 	}
 
 	/**

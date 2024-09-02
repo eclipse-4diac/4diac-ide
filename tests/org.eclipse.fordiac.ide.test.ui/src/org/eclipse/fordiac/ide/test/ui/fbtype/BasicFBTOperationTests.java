@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
 import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
@@ -47,8 +48,10 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@BeforeEach
 	public void operationsInitialization() {
-		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2, UITestNamesHelper.ADAPTER);
-		openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
+		fbTypeBot.createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
+				UITestNamesHelper.ADAPTER);
+		fbTypeBot.openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
 	}
 
 	/**
@@ -62,7 +65,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@AfterEach
 	public void resetEnvironment() {
-		deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT2);
+		new SWTBotFBType(bot).deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT2);
 	}
 
 	/**

@@ -17,11 +17,8 @@
 package org.eclipse.fordiac.ide.test.ui;
 
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -115,96 +112,6 @@ public class Abstract4diacUITests {
 		assertNotNull(parent);
 		parent.doubleClick();
 		return editor;
-	}
-
-	/**
-	 * Creates a New Type with given name.
-	 *
-	 * @param parentName Name of the parent project.
-	 * @param typeName   Name of the new type.
-	 * @param typeLabel  Name of the Type Label.
-	 */
-	protected static void createFBType(final String parentName, final String typeName, final String typeLabel) {
-		bot.menu(UITestNamesHelper.FILE).menu(UITestNamesHelper.NEW).menu(UITestNamesHelper.TYPE_PROJECT).click();
-		final SWTBotShell shell = bot.shell(UITestNamesHelper.NEW_TYPE);
-		shell.activate();
-		bot.textWithLabel(UITestNamesHelper.TYPE_NAME_LABEL).setText(typeName);
-		bot.textWithLabel(UITestNamesHelper.PARENT_FOLDER_NAME_LABEL).setText(parentName);
-		assertEquals(bot.textWithLabel(UITestNamesHelper.TYPE_NAME_LABEL).getText(), typeName);
-		bot.tableWithLabel(UITestNamesHelper.SELECT_TYPE_LABEL).getTableItem(typeLabel).select();
-		bot.button(UITestNamesHelper.FINISH).click();
-		bot.waitUntil(shellCloses(shell));
-	}
-
-	/**
-	 * Deletes FB Type with give name.
-	 *
-	 * @param typeName Name of the new type.
-	 */
-	protected static void deleteFBType(final String typeName) {
-		final SWTBotView systemExplorerView = bot.viewById(UITestNamesHelper.SYSTEM_EXPLORER_ID);
-		systemExplorerView.show();
-		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
-
-		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
-		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem parentItem = tree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
-		parentItem.expand();
-		SWTBotTreeItem projectItem = null;
-		for (final SWTBotTreeItem item : parentItem.getItems()) {
-			if (item.getText().contains(typeName)) {
-				projectItem = item;
-				break;
-			}
-		}
-		projectItem.select();
-		bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.DELETE).click();
-
-		// the project deletion confirmation dialog
-		final SWTBotShell shell = bot.shell(UITestNamesHelper.DELETE_RESOURCES);
-		shell.activate();
-		bot.button(UITestNamesHelper.OK).click();
-		bot.waitUntil(shellCloses(shell));
-		final List<String> nodeList = parentItem.getNodes();
-		assertFalse(nodeList.contains(typeName));
-	}
-
-	/**
-	 * Open FB Type in editor from explorer.
-	 *
-	 * @param parentName Name of the parent Project.
-	 * @param typeName   Name of the new type.
-	 */
-	protected static void openFBTypeInEditor(final String parentName, final String typeName) {
-		final SWTBotView systemExplorerView = bot.viewByTitle(UITestNamesHelper.SYSTEM_EXPLORER_LABEL);
-		systemExplorerView.show();
-		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();
-		final Tree swtTree = bot.widget(WidgetMatcherFactory.widgetOfType(Tree.class), systemExplorerComposite);
-		final SWTBotTree tree = new SWTBotTree(swtTree);
-		final SWTBotTreeItem parentItem = tree.getTreeItem(parentName);
-		parentItem.expand();
-		SWTBotTreeItem projectItem = null;
-		for (final SWTBotTreeItem item : parentItem.getItems()) {
-			if (item.getText().contains(typeName)) {
-				projectItem = item;
-				break;
-			}
-		}
-		assertTrue(projectItem.getText().contains(typeName));
-	}
-
-	/**
-	 * Deletes the given pin on the FB opened the provided editor.
-	 *
-	 * @param editor  Selected Gef Editor
-	 * @param pinName Name of pin.
-	 */
-	protected static void deletePin(final SWTBot4diacGefEditor editor, final String pinName) {
-		final SWTBotGefEditPart pin = editor.getEditPart(pinName);
-		assertNotNull(pin);
-		pin.click();
-		editor.clickContextMenu(UITestNamesHelper.DELETE);
-		assertNull(editor.getEditPart(pinName));
 	}
 
 	/**
