@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFB;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.swt.graphics.Point;
@@ -50,28 +51,29 @@ public class BasicMultipleFBNetworkEditingTests extends Abstract4diacUITests {
 	 * First multiple E_CYCLE and E_SR are dragged in mixed order onto the editing
 	 * area. After that it is checked if the names were assigned correctly.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void checkIfNewFbGetsNextFreeRunningNumber() {
-		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
-		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
-		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(500, 100));
-		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 250));
-		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 250));
-		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(500, 250));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(500, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 250));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 250));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(500, 250));
 
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_CYCLE));
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_CYCLE_1));
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_CYCLE_2));
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_CYCLE_3));
-		assertFalse(isFBNamePresendOnEditingArea(editor, E_CYCLE_0));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_CYCLE));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_CYCLE_1));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_CYCLE_2));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_CYCLE_3));
+		assertFalse(fbBot.isFBNamePresendOnEditingArea(editor, E_CYCLE_0));
 
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_SR));
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_SR_1));
-		assertFalse(isFBNamePresendOnEditingArea(editor, E_SR_2));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_SR));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_SR_1));
+		assertFalse(fbBot.isFBNamePresendOnEditingArea(editor, E_SR_2));
 
 	}
 
@@ -85,42 +87,43 @@ public class BasicMultipleFBNetworkEditingTests extends Abstract4diacUITests {
 	 * 2 FBs are deleted and 4 FBs are added and it is checked whether the name
 	 * allocation is correct here as well.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void checkIfNewFbGetsSmallestNextFreeRunningNumber() {
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(50, 100));
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(250, 100));
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(450, 100));
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(50, 250));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(50, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(250, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(450, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(50, 250));
 
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_SWITCH));
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_SWITCH_1));
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_SWITCH_2));
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_SWITCH_3));
-		assertFalse(isFBNamePresendOnEditingArea(editor, E_SWITCH_0));
-		assertFalse(isFBNamePresendOnEditingArea(editor, E_SWITCH_4));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH_1));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH_2));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH_3));
+		assertFalse(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH_0));
+		assertFalse(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH_4));
 
-		deleteFB(editor, E_SWITCH_2);
-		assertFalse(isFBNamePresendOnEditingArea(editor, E_SWITCH_2));
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(450, 250));
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_SWITCH_2));
+		fbBot.deleteFB(editor, E_SWITCH_2);
+		assertFalse(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH_2));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(450, 250));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH_2));
 
-		deleteFB(editor, E_SWITCH);
-		deleteFB(editor, E_SWITCH_1);
-		assertFalse(isFBNamePresendOnEditingArea(editor, E_SWITCH));
-		assertFalse(isFBNamePresendOnEditingArea(editor, E_SWITCH_1));
+		fbBot.deleteFB(editor, E_SWITCH);
+		fbBot.deleteFB(editor, E_SWITCH_1);
+		assertFalse(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH));
+		assertFalse(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH_1));
 
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(450, 100));
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(250, 100));
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(250, 250));
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(50, 100));
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_SWITCH));
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_SWITCH_1));
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_SWITCH_4));
-		assertTrue(isFBNamePresendOnEditingArea(editor, E_SWITCH_5));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(450, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(250, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(250, 250));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(50, 100));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH_1));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH_4));
+		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH_5));
 	}
 
 	/**

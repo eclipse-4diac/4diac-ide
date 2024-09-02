@@ -17,7 +17,6 @@
 package org.eclipse.fordiac.ide.test.ui;
 
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
-import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -28,14 +27,12 @@ import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSystemExplorer;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -52,8 +49,6 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.junit.AfterClass;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -98,134 +93,6 @@ public class Abstract4diacUITests {
 				UITestNamesHelper.PROJECT_NAME + UITestNamesHelper.APP);
 		bot.button(UITestNamesHelper.FINISH).click();
 		bot.waitUntil(shellCloses(shell));
-	}
-
-	/**
-	 * Drags and drops a FB onto the canvas with given name and position.
-	 *
-	 * @param fbName The name of the Function Block.
-	 * @param point  The Position of the FB on the canvas.
-	 */
-	protected static void dragAndDropEventsFB(final String fbName, final Point point) {
-		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
-		final SWTBotTreeItem typeLibraryNode = sysEx.expandTypeLibraryTreeItemInSystemExplorer();
-		bot.waitUntil(treeItemHasNode(typeLibraryNode, UITestNamesHelper.EVENTS_NODE));
-		final SWTBotTreeItem eventsNode = typeLibraryNode.getNode(UITestNamesHelper.EVENTS_NODE);
-		eventsNode.select();
-		eventsNode.expand();
-		bot.waitUntil(treeItemHasNode(eventsNode, fbName));
-		final SWTBotTreeItem eCycleNode = eventsNode.getNode(fbName);
-		eCycleNode.select();
-		eCycleNode.click();
-
-		// select application editor
-		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
-		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
-		final SWTBotGefFigureCanvas canvas = viewer.getCanvas();
-
-		assertNotNull(canvas);
-		eCycleNode.dragAndDrop(canvas, point);
-	}
-
-	/**
-	 * Selects a FunctionBlock with the given Name in the editor.
-	 *
-	 * The function block is searched for with the given name in the editor.
-	 * However, as this only selects the name, the parent is retrieved and selected.
-	 * Only then is the searched function block selected as a whole.
-	 *
-	 * @param editor
-	 * @param name
-	 */
-	protected static SWTBot4diacGefEditor selectFBWithFBNameInEditor(final SWTBot4diacGefEditor editor,
-			final String name) {
-		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(name));
-		editor.click(name);
-		final SWTBotGefEditPart parent = editor.getEditPart(name).parent();
-		assertNotNull(parent);
-		editor.click(parent);
-		return editor;
-	}
-
-	/**
-	 * Deletes a FB from the editing area.
-	 *
-	 * @param editor         The SWTBot4diacGefEditor from which a FB with given
-	 *                       instance name should be deleted.
-	 * @param FbInstanceName The instance name of the FB
-	 */
-	protected static void deleteFB(final SWTBot4diacGefEditor editor, final String FbInstanceName) {
-		editor.setFocus();
-		final SWTBotGefEditPart fb = editor.getEditPart(FbInstanceName).parent();
-		fb.select().click();
-		bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.DELETE).click();
-	}
-
-	protected static Rectangle getAbsolutePosition(final SWTBotGefEditor editor, final String fb) {
-		final SWTBotGefEditPart parent = editor.getEditPart(fb).parent();
-		assertNotNull(parent);
-		final IFigure figurePos = ((GraphicalEditPart) parent.part()).getFigure();
-		assertNotNull(figurePos);
-		final Rectangle fbBounds = figurePos.getBounds().getCopy();
-		assertNotNull(fbBounds);
-		figurePos.translateToAbsolute(fbBounds);
-		return fbBounds;
-	}
-
-	/**
-	 * Checks if FB is selected by searching selectedEditParts list and returns the
-	 * corresponding boolean value.
-	 *
-	 * @param selectedEditParts The List of selected EditParts.
-	 * @param fbName            The FB that is searched for.
-	 * @return true if fbName is in the List, otherwise false.
-	 */
-	protected static boolean isFbSelected(final List<SWTBotGefEditPart> selectedEditParts, final String fbName) {
-		return selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart).map(p -> (FBEditPart) p.part())
-				.anyMatch(fb -> fb.getModel().getName().equals(fbName));
-	}
-
-	/**
-	 * Checks if given FB instance name can be found on the editing area.
-	 *
-	 * @param editor The SWTBot4diacGefEditor in which the FB instance name is
-	 *               searched
-	 * @param fbName The String of the FB instance name searched for
-	 * @return true if FB is onto editing area, false if not
-	 */
-	protected static boolean isFBNamePresendOnEditingArea(final SWTBot4diacGefEditor editor, final String fbName) {
-		final List<SWTBotGefEditPart> editParts = editor.editParts(new BaseMatcher<EditPart>() {
-			@Override
-			public boolean matches(final Object item) {
-				return item instanceof FBEditPart;
-			}
-
-			@Override
-			public void describeTo(final Description description) {
-				// method must be implemented but empty since not needed
-			}
-		});
-		assertFalse(editParts.isEmpty());
-		return editParts.stream().filter(p -> p.part() instanceof FBEditPart).map(p -> (FBEditPart) p.part())
-				.anyMatch(fb -> fb.getModel().getName().equals(fbName));
-	}
-
-	/**
-	 * Returns the bounds of the searched function block
-	 *
-	 * @param editor
-	 * @param fBname
-	 * @return The rectangle with the bounds of the function block searched for
-	 */
-	protected static Rectangle getBoundsOfFB(final SWTBot4diacGefEditor editor, final String fBname) {
-		editor.getEditPart(fBname);
-		editor.click(fBname);
-		final SWTBotGefEditPart parent = editor.getEditPart(fBname).parent();
-		final IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
-		final Rectangle fbBounds = figure.getBounds().getCopy();
-		figure.translateToAbsolute(fbBounds);
-		return fbBounds;
 	}
 
 	/**

@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFB;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSubapp;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSystemExplorer;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
@@ -40,10 +41,11 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void isSubappInSystemExplorerTree() {
-		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
-		selectFBWithFBNameInEditor(editor, UITestNamesHelper.E_CYCLE_FB);
+		fbBot.selectFBWithFBNameInEditor(editor, UITestNamesHelper.E_CYCLE_FB);
 
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
@@ -72,11 +74,12 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void isFbAndSubappInSystemExplorerTree() {
-		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(300, 100));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(300, 100));
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
-		selectFBWithFBNameInEditor(editor, UITestNamesHelper.E_CYCLE_FB);
+		fbBot.selectFBWithFBNameInEditor(editor, UITestNamesHelper.E_CYCLE_FB);
 
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();

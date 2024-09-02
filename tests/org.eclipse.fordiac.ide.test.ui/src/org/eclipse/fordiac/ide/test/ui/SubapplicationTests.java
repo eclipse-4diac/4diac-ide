@@ -23,6 +23,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFB;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSubapp;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
@@ -62,8 +63,9 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void createSubappViaMenu() {
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
-		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
 		// drag rectangle over the FBs, therefore FBs should be selected
@@ -72,8 +74,8 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertEquals(2, selectedEditParts.size());
-		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
-		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
+		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
+		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
 
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 		// renew list of selectedEditParts and then check if SubApp was created
@@ -94,8 +96,9 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void createSubappViaMenuWithConnectionBetweenFBs() {
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
-		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
 		final SWTBotConnection connect = new SWTBotConnection(bot);
 		assertNotNull(connect.createConnection(PinNamesHelper.EO0, PinNamesHelper.S));
 		assertNotNull(connect.createConnection(PinNamesHelper.EO1, PinNamesHelper.R));
@@ -111,8 +114,8 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		// expected 5 selected EditParts (2 GefEditPart for the FBs and
 		// 3 GefConnectionEditPars for the connections
 		assertEquals(5, selectedEditParts.size());
-		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
-		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
+		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
+		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
 		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.EO0, PinNamesHelper.S));
 		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.EO1, PinNamesHelper.R));
 		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.Q, PinNamesHelper.G));
@@ -137,9 +140,10 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void createSubappViaMenuWithExistingConnectionOutsideSubapp() {
-		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(300, 100));
-		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(500, 100));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(300, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(500, 100));
 		final SWTBotConnection connect = new SWTBotConnection(bot);
 		assertNotNull(connect.createConnection(PinNamesHelper.EO, PinNamesHelper.EI));
 
@@ -151,9 +155,9 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertEquals(2, selectedEditParts.size());
-		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
-		assertTrue(isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
-		assertFalse(isFbSelected(selectedEditParts, UITestNamesHelper.E_CYCLE_TREE_ITEM));
+		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
+		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
+		assertFalse(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_CYCLE_TREE_ITEM));
 		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.EO, PinNamesHelper.EI));
 
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
@@ -175,8 +179,9 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void createSubappViaMenuThenCreatingConnection() {
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
-		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
 		editor.drag(50, 50, 400, 400);

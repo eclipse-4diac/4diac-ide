@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFB;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSubapp;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSystemExplorer;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
@@ -130,7 +131,8 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void goToParentViaContextMenuSubAppWithFB() {
-		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
 		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
 		subapp.createSubappWithDragRectangle(50, 50, 400, 400);
 		// check System Explorer tree if SubApp is present
@@ -153,7 +155,8 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void goToChildViaContextMenuSubAppWithACompositeFB() {
-		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
 		subapp.createSubappWithDragRectangle(50, 50, 300, 300);
 		goToCompositeInstanceViewer(UITestNamesHelper.SUBAPP);
@@ -162,8 +165,8 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 		bot.toolbarButton(UITestNamesHelper.TOOLBAR_BUTTON_ZOOM_FIT_PAGE).click();
 
 		// check bounds of FB
-		final Rectangle fbBounds = getBoundsOfFB(editorSubApp, UITestNamesHelper.E_N_TABLE_FB);
-		selectFBWithFBNameInEditor(editorSubApp, UITestNamesHelper.E_N_TABLE_FB);
+		final Rectangle fbBounds = fbBot.getBoundsOfFB(editorSubApp, UITestNamesHelper.E_N_TABLE_FB);
+		fbBot.selectFBWithFBNameInEditor(editorSubApp, UITestNamesHelper.E_N_TABLE_FB);
 		editorSubApp.clickContextMenu(UITestNamesHelper.GO_TO_CHILD, fbBounds.x, fbBounds.y);
 		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
 		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
