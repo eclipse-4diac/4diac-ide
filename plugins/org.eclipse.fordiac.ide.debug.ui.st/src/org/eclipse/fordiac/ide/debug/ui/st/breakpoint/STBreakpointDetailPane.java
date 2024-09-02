@@ -48,7 +48,9 @@ public class STBreakpointDetailPane implements IDetailPane3 {
 
 		editor = new STBreakpointConditionEditor();
 		editor.addPropertyListener((source, propId) -> {
-			editor.doSave();
+			if (propId == STBreakpointConditionEditor.PROP_CONDITION_ENABLED) {
+				editor.doSave(); // autosave only for condition enabled changes
+			}
 			firePropertyChange(IWorkbenchPartConstants.PROP_DIRTY);
 		});
 		editor.createControl(comp);
@@ -58,8 +60,9 @@ public class STBreakpointDetailPane implements IDetailPane3 {
 
 	@Override
 	public void display(final IStructuredSelection selection) {
-		if (selection != null && selection.size() == 1 && selection.getFirstElement() instanceof STLineBreakpoint) {
-			editor.setInput((STLineBreakpoint) selection.getFirstElement());
+		if (selection != null && selection.size() == 1
+				&& selection.getFirstElement() instanceof final STLineBreakpoint lineBreakpoint) {
+			editor.setInput(lineBreakpoint);
 		} else {
 			editor.setInput(null);
 		}
