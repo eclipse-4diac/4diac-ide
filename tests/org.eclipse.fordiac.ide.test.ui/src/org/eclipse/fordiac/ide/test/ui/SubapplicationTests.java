@@ -48,8 +48,8 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		editor.drag(50, 50, 500, 500);
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
-		assertTrue(subapp.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		final SWTBotSubapp subappBot = new SWTBotSubapp(bot);
+		assertTrue(subappBot.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
 	}
 
 	/**
@@ -81,8 +81,8 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		// renew list of selectedEditParts and then check if SubApp was created
 		selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
-		assertTrue(subapp.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		final SWTBotSubapp subappBot = new SWTBotSubapp(bot);
+		assertTrue(subappBot.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
 	}
 
 	/**
@@ -99,10 +99,10 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
-		final SWTBotConnection connect = new SWTBotConnection(bot);
-		assertNotNull(connect.createConnection(PinNamesHelper.EO0, PinNamesHelper.S));
-		assertNotNull(connect.createConnection(PinNamesHelper.EO1, PinNamesHelper.R));
-		assertNotNull(connect.createConnection(PinNamesHelper.Q, PinNamesHelper.G));
+		final SWTBotConnection connectBot = new SWTBotConnection(bot);
+		assertNotNull(connectBot.createConnection(PinNamesHelper.EO0, PinNamesHelper.S));
+		assertNotNull(connectBot.createConnection(PinNamesHelper.EO1, PinNamesHelper.R));
+		assertNotNull(connectBot.createConnection(PinNamesHelper.Q, PinNamesHelper.G));
 
 		// drag rectangle over to FB, therefore FB should be selected
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
@@ -116,16 +116,16 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		assertEquals(5, selectedEditParts.size());
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
-		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.EO0, PinNamesHelper.S));
-		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.EO1, PinNamesHelper.R));
-		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.Q, PinNamesHelper.G));
+		assertTrue(connectBot.checkIfConnectionCanBeFound(PinNamesHelper.EO0, PinNamesHelper.S));
+		assertTrue(connectBot.checkIfConnectionCanBeFound(PinNamesHelper.EO1, PinNamesHelper.R));
+		assertTrue(connectBot.checkIfConnectionCanBeFound(PinNamesHelper.Q, PinNamesHelper.G));
 
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 		// renew list of selectedEditParts and then check if SubApp was created
 		selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
-		assertTrue(subapp.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		final SWTBotSubapp subappBot = new SWTBotSubapp(bot);
+		assertTrue(subappBot.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
 	}
 
 	/**
@@ -144,8 +144,8 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(300, 100));
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(500, 100));
-		final SWTBotConnection connect = new SWTBotConnection(bot);
-		assertNotNull(connect.createConnection(PinNamesHelper.EO, PinNamesHelper.EI));
+		final SWTBotConnection connectBot = new SWTBotConnection(bot);
+		assertNotNull(connectBot.createConnection(PinNamesHelper.EO, PinNamesHelper.EI));
 
 		// drag rectangle over to FBs E_SWITCH and E_SR, therefore FBs should be
 		// selected
@@ -158,15 +158,15 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
 		assertFalse(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_CYCLE_TREE_ITEM));
-		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.EO, PinNamesHelper.EI));
+		assertTrue(connectBot.checkIfConnectionCanBeFound(PinNamesHelper.EO, PinNamesHelper.EI));
 
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 		// renew list of selectedEditParts and then check if SubApp was created
 		selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
-		assertTrue(subapp.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
-		assertTrue(connect.checkIfConnectionCanBeFound(PinNamesHelper.EO, PinNamesHelper.EO));
+		final SWTBotSubapp subappBot = new SWTBotSubapp(bot);
+		assertTrue(subappBot.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		assertTrue(connectBot.checkIfConnectionCanBeFound(PinNamesHelper.EO, PinNamesHelper.EO));
 	}
 
 	/**
@@ -198,10 +198,10 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		// syncExec() is needed to update selection of UI and therefore it needs to run
 		// in UI thread. Without this, the connections are not created correctly
 		UIThreadRunnable.syncExec(() -> HandlerHelper.selectEditPart(viewer.getGraphicalViewer(), editPart.part()));
-		final SWTBotConnection connect = new SWTBotConnection(bot);
-		assertNotNull(connect.createConnection(PinNamesHelper.EO0, PinNamesHelper.S));
-		assertNotNull(connect.createConnection(PinNamesHelper.EO1, PinNamesHelper.R));
-		assertNotNull(connect.createConnection(PinNamesHelper.Q, PinNamesHelper.G));
+		final SWTBotConnection connectBot = new SWTBotConnection(bot);
+		assertNotNull(connectBot.createConnection(PinNamesHelper.EO0, PinNamesHelper.S));
+		assertNotNull(connectBot.createConnection(PinNamesHelper.EO1, PinNamesHelper.R));
+		assertNotNull(connectBot.createConnection(PinNamesHelper.Q, PinNamesHelper.G));
 	}
 
 }

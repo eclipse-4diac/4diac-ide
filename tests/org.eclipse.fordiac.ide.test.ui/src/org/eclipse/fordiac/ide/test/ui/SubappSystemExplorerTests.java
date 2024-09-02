@@ -50,13 +50,13 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
-		assertTrue(subapp.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		final SWTBotSubapp subappBot = new SWTBotSubapp(bot);
+		assertTrue(subappBot.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
 
 		// checks for SystemExplorer tree
-		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
-		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
-		assertTrue(sysEx.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
+		final SWTBotSystemExplorer sysExBot = new SWTBotSystemExplorer(bot);
+		assertTrue(sysExBot.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
+		assertTrue(sysExBot.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
 	}
 
 	/**
@@ -86,16 +86,16 @@ public class SubappSystemExplorerTests extends Abstract4diacUITests {
 		assertEquals(1, selectedEditParts.size());
 
 		// checks for App node
-		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
-		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
-		assertTrue(subapp.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
-		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
-		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.E_SWITCH_FB));
+		final SWTBotSystemExplorer sysExBot = new SWTBotSystemExplorer(bot);
+		final SWTBotSubapp subappBot = new SWTBotSubapp(bot);
+		assertTrue(subappBot.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		assertTrue(sysExBot.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
+		assertTrue(sysExBot.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.E_SWITCH_FB));
 
 		// checks for SubApp node
-		assertTrue(sysEx.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
+		assertTrue(sysExBot.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
 		assertThrows(WidgetNotFoundException.class,
-				() -> sysEx.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_SWITCH_FB));
+				() -> sysExBot.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_SWITCH_FB));
 	}
 
 }

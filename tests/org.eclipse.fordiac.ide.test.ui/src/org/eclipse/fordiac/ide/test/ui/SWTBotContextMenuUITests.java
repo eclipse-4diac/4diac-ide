@@ -49,12 +49,12 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 		editor.clickContextMenu(UITestNamesHelper.NEW_SUBAPPLICATION, 100, 100);
 		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertEquals(1, selectedEditParts.size());
-		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
-		assertTrue(subapp.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
+		final SWTBotSubapp subappBot = new SWTBotSubapp(bot);
+		assertTrue(subappBot.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
 		// check App node and SubApp TreeItem in SystemExplorer tree
-		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
-		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
-		assertTrue(sysEx.isSubAppNodeInSystemExplorerEmpty());
+		final SWTBotSystemExplorer sysExBot = new SWTBotSystemExplorer(bot);
+		assertTrue(sysExBot.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
+		assertTrue(sysExBot.isSubAppNodeInSystemExplorerEmpty());
 	}
 
 	/**
@@ -84,8 +84,8 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 		editor.directEditType(UITestNamesHelper.E_CYCLE_FB);
 		bot.sleep(3000);
 
-		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
-		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
+		final SWTBotSystemExplorer sysExBot = new SWTBotSystemExplorer(bot);
+		assertTrue(sysExBot.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
 	}
 
 	/**
@@ -104,19 +104,19 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 		editor.clickContextMenu(UITestNamesHelper.NEW_SUBAPPLICATION, 100, 100);
 		// check System Explorer tree if SubApp is present
 
-		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
-		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
-		assertTrue(sysEx.isSubAppNodeInSystemExplorerEmpty());
+		final SWTBotSystemExplorer sysExBot = new SWTBotSystemExplorer(bot);
+		assertTrue(sysExBot.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
+		assertTrue(sysExBot.isSubAppNodeInSystemExplorerEmpty());
 		goToCompositeInstanceViewer(UITestNamesHelper.SUBAPP);
 		final SWTBot4diacGefEditor editorSubApp = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editorSubApp);
 		// check System Explorer tree again after entering subapplication
-		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
-		assertTrue(sysEx.isSubAppNodeInSystemExplorerEmpty());
+		assertTrue(sysExBot.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
+		assertTrue(sysExBot.isSubAppNodeInSystemExplorerEmpty());
 		editorSubApp.clickContextMenu(UITestNamesHelper.GO_TO_PARENT, 100, 100);
 		// check System Explorer tree after returning
-		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
-		assertTrue(sysEx.isSubAppNodeInSystemExplorerEmpty());
+		assertTrue(sysExBot.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
+		assertTrue(sysExBot.isSubAppNodeInSystemExplorerEmpty());
 	}
 
 	/**
@@ -133,23 +133,23 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 	public void goToParentViaContextMenuSubAppWithFB() {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
-		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
-		subapp.createSubappWithDragRectangle(50, 50, 400, 400);
+		final SWTBotSubapp subappBot = new SWTBotSubapp(bot);
+		subappBot.createSubappWithDragRectangle(50, 50, 400, 400);
 		// check System Explorer tree if SubApp is present
-		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
-		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
-		assertTrue(sysEx.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
+		final SWTBotSystemExplorer sysExBot = new SWTBotSystemExplorer(bot);
+		assertTrue(sysExBot.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
+		assertTrue(sysExBot.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
 		goToCompositeInstanceViewer(UITestNamesHelper.SUBAPP);
 		final SWTBot4diacGefEditor editorSubApp = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editorSubApp);
 		bot.toolbarButton(UITestNamesHelper.TOOLBAR_BUTTON_ZOOM_FIT_PAGE).click();
 		// check System Explorer tree again after entering subapplication
-		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
-		assertTrue(sysEx.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
+		assertTrue(sysExBot.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
+		assertTrue(sysExBot.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
 		editorSubApp.clickContextMenu(UITestNamesHelper.GO_TO_PARENT, 100, 100);
 		// check System Explorer tree after returning
-		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
-		assertTrue(sysEx.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
+		assertTrue(sysExBot.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
+		assertTrue(sysExBot.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_CYCLE_FB));
 	}
 
 	@SuppressWarnings({ "static-method", "static-access" })
@@ -157,8 +157,8 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 	public void goToChildViaContextMenuSubAppWithACompositeFB() {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
-		final SWTBotSubapp subapp = new SWTBotSubapp(bot);
-		subapp.createSubappWithDragRectangle(50, 50, 300, 300);
+		final SWTBotSubapp subappBot = new SWTBotSubapp(bot);
+		subappBot.createSubappWithDragRectangle(50, 50, 300, 300);
 		goToCompositeInstanceViewer(UITestNamesHelper.SUBAPP);
 		final SWTBot4diacGefEditor editorSubApp = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editorSubApp);
@@ -168,9 +168,9 @@ public class SWTBotContextMenuUITests extends Abstract4diacUITests {
 		final Rectangle fbBounds = fbBot.getBoundsOfFB(editorSubApp, UITestNamesHelper.E_N_TABLE_FB);
 		fbBot.selectFBWithFBNameInEditor(editorSubApp, UITestNamesHelper.E_N_TABLE_FB);
 		editorSubApp.clickContextMenu(UITestNamesHelper.GO_TO_CHILD, fbBounds.x, fbBounds.y);
-		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
-		assertTrue(sysEx.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
-		assertTrue(sysEx.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_N_TABLE_FB));
+		final SWTBotSystemExplorer sysExBot = new SWTBotSystemExplorer(bot);
+		assertTrue(sysExBot.isElementInApplicationOfSystemInSystemExplorer(UITestNamesHelper.SUBAPP));
+		assertTrue(sysExBot.isFBInSubAppOfSystemInSystemExplorer(UITestNamesHelper.E_N_TABLE_FB));
 	}
 
 }

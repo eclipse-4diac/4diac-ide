@@ -192,14 +192,14 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 200));
 		goToCompositeInstanceViewer(UITestNamesHelper.E_N_TABLE_FB);
-		final SWTBotConnection connect = new SWTBotConnection(bot);
-		SWTBot4diacGefViewer viewer = connect.createConnection(PinNamesHelper.EO, PinNamesHelper.EI);
+		final SWTBotConnection connectBot = new SWTBotConnection(bot);
+		SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.EO, PinNamesHelper.EI);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = connect.createConnection(PinNamesHelper.N, PinNamesHelper.CV);
+		viewer = connectBot.createConnection(PinNamesHelper.N, PinNamesHelper.CV);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = connect.createConnection(PinNamesHelper.START, PinNamesHelper.STOP);
+		viewer = connectBot.createConnection(PinNamesHelper.START, PinNamesHelper.STOP);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = connect.createConnection(PinNamesHelper.START, PinNamesHelper.EO0);
+		viewer = connectBot.createConnection(PinNamesHelper.START, PinNamesHelper.EO0);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 		returnToEditingArea();
 	}
@@ -216,8 +216,8 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
-		final SWTBotConnection connect = new SWTBotConnection(bot);
-		final ConnectionEditPart connection = connect.findConnection(PinNamesHelper.EO, PinNamesHelper.REQ);
+		final SWTBotConnection connectBot = new SWTBotConnection(bot);
+		final ConnectionEditPart connection = connectBot.findConnection(PinNamesHelper.EO, PinNamesHelper.REQ);
 		final PolylineConnection figure = (PolylineConnection) connection.getFigure();
 		final PointList points = figure.getPoints();
 		final org.eclipse.draw2d.geometry.Point firstPoint = points.getFirstPoint();

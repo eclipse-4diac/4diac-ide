@@ -392,8 +392,8 @@ public class Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@AfterEach
 	protected void cleanEditorArea() {
-		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
-		final SWTBotTreeItem appNode = sysEx.expandApplicationTreeItemInSystemExplorer();
+		final SWTBotSystemExplorer sysExBot = new SWTBotSystemExplorer(bot);
+		final SWTBotTreeItem appNode = sysExBot.expandApplicationTreeItemInSystemExplorer();
 		appNode.contextMenu("Open").click();
 
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
