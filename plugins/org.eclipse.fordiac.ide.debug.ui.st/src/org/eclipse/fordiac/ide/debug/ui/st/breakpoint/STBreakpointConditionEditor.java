@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IPropertyListener;
+import org.eclipse.ui.IWorkbenchPartConstants;
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditor;
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorModelAccess;
 import org.eclipse.xtext.ui.editor.embedded.IEditedResourceProvider;
@@ -52,6 +53,7 @@ public class STBreakpointConditionEditor {
 	private EmbeddedEditorModelAccess conditionEditorModelAccess;
 
 	private boolean dirty;
+	private boolean suppressPropertyChanges;
 
 	public Control createControl(final Composite parent) {
 		final Composite comp = new Composite(parent, SWT.NONE);
@@ -86,8 +88,8 @@ public class STBreakpointConditionEditor {
 		conditionEditor.getDocument().addDocumentListener(new IDocumentListener() {
 			@Override
 			public void documentChanged(final DocumentEvent event) {
-				dirty = true;
 				firePropertyChange(PROP_CONDITION);
+				setDirty(true);
 			}
 
 			@Override
@@ -117,12 +119,17 @@ public class STBreakpointConditionEditor {
 	}
 
 	public void setInput(final STLineBreakpoint input) {
-		this.input = input;
-		conditional.setEnabled(input != null);
-		conditional.setSelection(input != null && input.isConditionEnabled());
-		conditionEditor.getViewer().setEditable(input != null && input.isConditionEnabled());
-		updateConditionEditor();
-		setDirty(false);
+		try {
+			suppressPropertyChanges = true;
+			this.input = input;
+			conditional.setEnabled(input != null);
+			conditional.setSelection(input != null && input.isConditionEnabled());
+			conditionEditor.getViewer().setEditable(input != null && input.isConditionEnabled());
+			updateConditionEditor();
+			setDirty(false);
+		} finally {
+			suppressPropertyChanges = false;
+		}
 	}
 
 	public void doSave() {
@@ -142,7 +149,10 @@ public class STBreakpointConditionEditor {
 	}
 
 	public void setDirty(final boolean dirty) {
-		this.dirty = dirty;
+		if (dirty != this.dirty) {
+			this.dirty = dirty;
+			firePropertyChange(IWorkbenchPartConstants.PROP_DIRTY);
+		}
 	}
 
 	public boolean setFocus() {
@@ -162,8 +172,10 @@ public class STBreakpointConditionEditor {
 	}
 
 	protected void firePropertyChange(final int property) {
-		for (final IPropertyListener listener : listeners) {
-			listener.propertyChanged(this, property);
+		if (!suppressPropertyChanges) {
+			for (final IPropertyListener listener : listeners) {
+				listener.propertyChanged(this, property);
+			}
 		}
 	}
 }
