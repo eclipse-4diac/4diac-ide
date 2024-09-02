@@ -13,7 +13,7 @@
  *      						createEvent from
  *      						"org.eclipse.sirius.tests.swtbot.support.api.editor.SWTBotSiriusHelper"
  */
-package org.eclipse.fordiac.ide.test.ui;
+package org.eclipse.fordiac.ide.test.ui.helpers;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;

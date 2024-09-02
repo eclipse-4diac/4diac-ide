@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.test.ui.helpers.PropertySheetHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSystemExplorer;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;

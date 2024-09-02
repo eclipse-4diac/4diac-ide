@@ -10,12 +10,13 @@
  * Contributors:
  *   Andrea Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.test.ui;
+package org.eclipse.fordiac.ide.test.ui.networkediting.basicfb;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFB;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;

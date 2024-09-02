@@ -10,7 +10,7 @@
  * Contributors:
  *   Andrea Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.test.ui;
+package org.eclipse.fordiac.ide.test.ui.networkediting.basicfb;
 
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -28,6 +28,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.InstanceNameEditPart;
 import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
+import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
 import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFB;

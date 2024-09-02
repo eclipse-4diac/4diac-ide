@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.test.ui.fbtype;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.eclipse.fordiac.ide.test.ui.PropertySheetHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.PropertySheetHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;

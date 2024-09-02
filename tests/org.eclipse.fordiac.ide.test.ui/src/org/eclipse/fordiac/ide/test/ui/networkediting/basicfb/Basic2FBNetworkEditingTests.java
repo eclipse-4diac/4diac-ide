@@ -10,7 +10,7 @@
  * Contributors:
  *   Andrea Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.test.ui;
+package org.eclipse.fordiac.ide.test.ui.networkediting.basicfb;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
 import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFB;

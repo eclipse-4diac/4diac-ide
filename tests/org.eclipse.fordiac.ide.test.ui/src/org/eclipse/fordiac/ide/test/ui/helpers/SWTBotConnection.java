@@ -27,7 +27,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
-import org.eclipse.fordiac.ide.test.ui.PropertySheetHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;

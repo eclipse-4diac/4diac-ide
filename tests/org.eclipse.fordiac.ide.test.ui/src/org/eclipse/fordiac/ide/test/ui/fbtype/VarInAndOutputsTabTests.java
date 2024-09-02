@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
-import org.eclipse.fordiac.ide.test.ui.PropertySheetHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.PropertySheetHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
