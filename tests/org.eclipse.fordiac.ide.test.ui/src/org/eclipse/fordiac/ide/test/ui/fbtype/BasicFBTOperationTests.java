@@ -95,7 +95,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	public void createNewEventOutput() {
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		editor.clickContextMenu(UITestNamesHelper.CREATE_OUTPUT_EVENT);
-		assertNotNull(editor.getEditPart(PinNamesHelper.EI1));
+		assertNotNull(editor.getEditPart(PinNamesHelper.EO1));
 	}
 
 	/**
