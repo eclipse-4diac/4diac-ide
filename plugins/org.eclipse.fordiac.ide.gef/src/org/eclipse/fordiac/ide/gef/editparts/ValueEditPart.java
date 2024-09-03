@@ -71,7 +71,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	private static int maxWidth = -1;
 
-	private static int getMaxWidth() {
+	public static int getMaxWidth() {
 		if (-1 == maxWidth) {
 			final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
 			final int maxLabelSize = pf.getInt(DiagramPreferences.MAX_VALUE_LABEL_SIZE);

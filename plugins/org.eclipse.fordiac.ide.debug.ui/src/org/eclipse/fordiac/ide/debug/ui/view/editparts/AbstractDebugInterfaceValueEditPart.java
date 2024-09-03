@@ -22,6 +22,7 @@ import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -29,6 +30,7 @@ import org.eclipse.swt.graphics.Font;
 
 public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphicalEditPart {
 
+	private static final int DEBUG_VALUE_MIN_WIDTH = 50;
 	private InterfaceEditPart referencedInterface;
 
 	protected AbstractDebugInterfaceValueEditPart() {
@@ -69,7 +71,12 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 
 	@Override
 	protected IFigure createFigure() {
-		final Label l = new Label();
+		final Label l = new Label() {
+			@Override
+			protected String getTruncationString() {
+				return "\u2026"; //$NON-NLS-1$
+			}
+		};
 		l.setSize(100, -1);
 		l.setOpaque(true);
 		l.setBackgroundColor(org.eclipse.draw2d.ColorConstants.yellow);
@@ -111,10 +118,10 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 
 	private int getFigureWidth() {
 		final Font font = getFigure().getFont();
-		int width = 50;
+		int width = DEBUG_VALUE_MIN_WIDTH;
 		if (font != null) {
 			width = getFigure().getPreferredSize().width;
-			width = Math.max(width, 50);
+			width = Math.clamp(width, DEBUG_VALUE_MIN_WIDTH, ValueEditPart.getMaxWidth());
 		}
 		return width;
 	}
