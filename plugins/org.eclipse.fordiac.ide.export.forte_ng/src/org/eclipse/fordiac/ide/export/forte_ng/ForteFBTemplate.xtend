@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
@@ -589,9 +590,16 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def generateInternalFBInitializer(FB fb) {
 		if (fb.type.genericType)
-			'''«fb.generateName»(«fb.name.FORTEStringId», "«fb.type.generateTypeNamePlain»", *this)'''
+			'''«fb.generateName»(«fb.name.FORTEStringId», "«fb.generateInternalFBConfigString»", *this)'''
 		else
 			'''«fb.generateName»(«fb.name.FORTEStringId», *this)'''
+	}
+	
+	def generateInternalFBConfigString(FB fb) {
+		switch(fb) {
+			ConfigurableFB: '''«fb.type.generateTypeNamePlain»_1«fb.dataType.generateTypeNamePlain»'''
+			default: fb.type.generateTypeNamePlain
+		}
 	}
 
 	override Set<INamedElement> getDependencies(Map<?, ?> options) {
