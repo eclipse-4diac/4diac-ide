@@ -49,6 +49,8 @@ import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
 import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.search.dialog.AttributeTypeEntryDataHandler;
+import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -172,11 +174,41 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 		updateActions(propertyActions);
 	}
 
+	private static final int DEFAULT_BUTTON_INDEX = 0; // This would be the "Save" button
+	private static final int SAVE_AS_BUTTON_INDEX = 1;
+	private static final int CANCEL_BUTTON_INDEX = 2;
+
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		removeListenerFromAttributeDeclaration();
 		loadAllOpenEditors();
-		doSaveInternal(monitor);
+		createSaveDialog(monitor);
+	}
+
+	private void createSaveDialog(final IProgressMonitor monitor) {
+		final String[] labels = { Messages.StructAlteringButton_SaveAndUpdate, Messages.StructAlteringButton_SaveAs,
+				SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
+
+		final FBTypeUpdateDialog<AttributeTypeEntry> structSaveDialog = new FBTypeUpdateDialog<>(null,
+				Messages.StructViewingComposite_Headline, null, "", //$NON-NLS-1$
+				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX,
+				new AttributeTypeEntryDataHandler(attributeTypeEntry));
+
+		// Depending on the button clicked:
+		switch (structSaveDialog.open()) {
+		case DEFAULT_BUTTON_INDEX:
+			doSaveInternal(monitor);
+			break;
+		case SAVE_AS_BUTTON_INDEX:
+			doSaveAs();
+			break;
+		case CANCEL_BUTTON_INDEX:
+			MessageDialog.openInformation(null, Messages.StructViewingComposite_Headline,
+					Messages.WarningDialog_StructNotSaved);
+			break;
+		default:
+			break;
+		}
 	}
 
 	private void doSaveInternal(final IProgressMonitor monitor) {
