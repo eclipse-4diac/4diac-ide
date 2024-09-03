@@ -41,7 +41,7 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	 * Checks if a subapplication can be created via menu by selecting the
 	 * Application editor breadcrumb.
 	 */
-	@SuppressWarnings({ "static-method", "static-access" })
+	@SuppressWarnings("static-method")
 	@Test
 	public void createEmptySubappViaMenu() {
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
@@ -61,7 +61,7 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	 * is drawn over the FBs. Then a subapplication is created via menu entry
 	 * "Source" -> "New subapplication"
 	 */
-	@SuppressWarnings({ "static-method", "static-access" })
+	@SuppressWarnings("static-method")
 	@Test
 	public void createSubappViaMenu() {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
@@ -138,7 +138,7 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	 * a FB outside of the selection. Then a subapplication is created via menu
 	 * entry "Source" -> "New subapplication"
 	 */
-	@SuppressWarnings({ "static-method", "static-access" })
+	@SuppressWarnings("static-method")
 	@Test
 	public void createSubappViaMenuWithExistingConnectionOutsideSubapp() {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
@@ -177,7 +177,7 @@ public class SubapplicationTests extends Abstract4diacUITests {
 	 * subapplication is created with them. afterwards it is checked if connection
 	 * can be created in the subapplication.
 	 */
-	@SuppressWarnings({ "static-method", "static-access" })
+	@SuppressWarnings("static-method")
 	@Test
 	public void createSubappViaMenuThenCreatingConnection() {
 		final SWTBotFB fbBot = new SWTBotFB(bot);

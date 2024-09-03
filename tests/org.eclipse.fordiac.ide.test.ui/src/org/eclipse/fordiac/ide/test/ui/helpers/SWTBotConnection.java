@@ -42,7 +42,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
 
 public class SWTBotConnection {
 
-	private static SWT4diacGefBot bot;
+	private final SWT4diacGefBot bot;
 
 	@SuppressWarnings("static-access")
 	public SWTBotConnection(final SWT4diacGefBot bot) {
@@ -60,7 +60,7 @@ public class SWTBotConnection {
 	 * @param pin2 One of the two pins between a connection is (tried to) create.
 	 * @return SWTBot4diacGefViewer
 	 */
-	public static SWTBot4diacGefViewer createConnection(final String pin1, final String pin2) {
+	public SWTBot4diacGefViewer createConnection(final String pin1, final String pin2) {
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
@@ -86,11 +86,11 @@ public class SWTBotConnection {
 		return viewer;
 	}
 
-	public static boolean checkIfConnectionCanBeFound(final String srcPinName, final String dstPinName) {
+	public boolean checkIfConnectionCanBeFound(final String srcPinName, final String dstPinName) {
 		return findConnection(srcPinName, dstPinName) != null;
 	}
 
-	public static ConnectionEditPart findConnection(final String srcPinName, final String dstPinName) {
+	public ConnectionEditPart findConnection(final String srcPinName, final String dstPinName) {
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		final GraphicalViewer graphicalViewer = viewer.getGraphicalViewer();
@@ -129,7 +129,7 @@ public class SWTBotConnection {
 	 * @param pin2   Name of pin2.
 	 * @param editor Selected Gef Editor
 	 */
-	public static void createConnectionWithinFBTypeWithPropertySheet(final String pin1, final String pin2,
+	public void createConnectionWithinFBTypeWithPropertySheet(final String pin1, final String pin2,
 			final SWTBot4diacGefEditor editor) {
 
 		final SWTBotGefEditPart port1 = editor.getEditPart(pin1);
@@ -163,7 +163,7 @@ public class SWTBotConnection {
 	 * @param pin2   Name of pin2.
 	 * @param editor Selected Gef Editor
 	 */
-	public static void removeConnectionWithinFBTypeWithPropertySheet(final String pin1, final String pin2,
+	public void removeConnectionWithinFBTypeWithPropertySheet(final String pin1, final String pin2,
 			final SWTBot4diacGefEditor editor) {
 
 		final SWTBotGefEditPart port1 = editor.getEditPart(pin1);

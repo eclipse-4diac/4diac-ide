@@ -25,9 +25,8 @@ import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 
 public class SWTBotSubapp {
 
-	private static SWT4diacGefBot bot;
+	private final SWT4diacGefBot bot;
 
-	@SuppressWarnings("static-access")
 	public SWTBotSubapp(final SWT4diacGefBot bot) {
 		this.bot = bot;
 	}
@@ -40,13 +39,13 @@ public class SWTBotSubapp {
 	 * @param fromYPosition the y value of the starting point
 	 * @param toXPosition   the x value of the target point
 	 * @param toYPosition   the y value of the target point
+	 * @return
 	 */
-	public static void createSubappWithDragRectangle(final int fromXPosition, final int fromYPosition,
-			final int toXPosition, final int toYPosition) {
+	public void createSubappWithDragRectangle(final int fromXPosition, final int fromYPosition, final int toXPosition,
+			final int toYPosition) {
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		editor.drag(fromXPosition, fromYPosition, toXPosition, toYPosition);
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
-
 	}
 
 	/**
@@ -57,7 +56,8 @@ public class SWTBotSubapp {
 	 * @param subAppName        The Subapplication that is searched for.
 	 * @return true if Subapplication is in the List, otherwise false.
 	 */
-	public static boolean isSubappSelected(final List<SWTBotGefEditPart> selectedEditParts, final String subAppName) {
+	@SuppressWarnings("static-method")
+	public boolean isSubappSelected(final List<SWTBotGefEditPart> selectedEditParts, final String subAppName) {
 		return selectedEditParts.stream().filter(p -> p.part() instanceof SubAppForFBNetworkEditPart)
 				.map(p -> (SubAppForFBNetworkEditPart) p.part())
 				.anyMatch(fb -> subAppName.equals(fb.getModel().getName()));

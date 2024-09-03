@@ -31,9 +31,9 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 public class SWTBotSystemExplorer {
 
-	private static SWT4diacGefBot bot;
+	private final SWT4diacGefBot bot;
 	private final SWTBotView systemExplorerView;
-	private static SWTBotTree tree;
+	private final SWTBotTree tree;
 
 	/**
 	 * Creates an instance of {@code SWTBotSystemExplorer} for interacting with the
@@ -48,7 +48,6 @@ public class SWTBotSystemExplorer {
 	 * @throws AssertionError if the tree widget within the System Explorer view
 	 *                        cannot be found
 	 */
-	@SuppressWarnings("static-access")
 	public SWTBotSystemExplorer(final SWT4diacGefBot bot) {
 		this.bot = bot;
 		this.systemExplorerView = bot.viewById(UITestNamesHelper.SYSTEM_EXPLORER_ID);
@@ -69,7 +68,7 @@ public class SWTBotSystemExplorer {
 	 *                tree.
 	 * @return {@code true} if node is visible in tree; {@code false} otherwise
 	 */
-	public static boolean isElementInApplicationOfSystemInSystemExplorer(final String element) {
+	public boolean isElementInApplicationOfSystemInSystemExplorer(final String element) {
 		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
 		bot.waitUntil(treeItemHasNode(appNode, element));
 		final SWTBotTreeItem elementNode = appNode.getNode(element);
@@ -86,7 +85,7 @@ public class SWTBotSystemExplorer {
 	 *               of the Application in the System in the SystemExplorer tree.,
 	 * @return {@code true} if FB is visible in tree; {@code false} otherwise
 	 */
-	public static boolean isFBInSubAppOfSystemInSystemExplorer(final String fbName) {
+	public boolean isFBInSubAppOfSystemInSystemExplorer(final String fbName) {
 		final SWTBotTreeItem subAppNode = expandSubAppTreeItemInSystemExplorer();
 		final SWTBotTreeItem fbNode = subAppNode.getNode(fbName);
 		assertNotNull(fbNode);
@@ -102,7 +101,7 @@ public class SWTBotSystemExplorer {
 	 * @author Andrea Zoitl
 	 * @return {@code true} if node has no children; {@code false} otherwise
 	 */
-	public static boolean isSubAppNodeInSystemExplorerEmpty() {
+	public boolean isSubAppNodeInSystemExplorerEmpty() {
 		final SWTBotTreeItem subAppNode = expandSubAppTreeItemInSystemExplorer();
 		final List<String> subAppChildren = subAppNode.getNodes();
 		return subAppChildren.isEmpty();
@@ -114,7 +113,7 @@ public class SWTBotSystemExplorer {
 	 * @author Andrea Zoitl
 	 * @return treeProjectItem The expanded Project node
 	 */
-	private static SWTBotTreeItem expandProjectTreeItemInSystemExplorer() {
+	private SWTBotTreeItem expandProjectTreeItemInSystemExplorer() {
 		final SWTBotTreeItem treeProjectItem = tree.getTreeItem(UITestNamesHelper.PROJECT_NAME);
 		return treeProjectItem.select().expand();
 
@@ -127,7 +126,7 @@ public class SWTBotSystemExplorer {
 	 * @return The expanded {@code SWTBotTreeItem} representing the system node in
 	 *         the System Explorer
 	 */
-	private static SWTBotTreeItem expandSystemTreeItemInSystemExplorer() {
+	private SWTBotTreeItem expandSystemTreeItemInSystemExplorer() {
 		final SWTBotTreeItem treeProjectItem = expandProjectTreeItemInSystemExplorer();
 		bot.waitUntil(treeItemHasNode(treeProjectItem, UITestNamesHelper.PROJECT_NAME_TREE_ITEM));
 		final SWTBotTreeItem systemNode = treeProjectItem.getNode(UITestNamesHelper.PROJECT_NAME_TREE_ITEM);
@@ -141,7 +140,7 @@ public class SWTBotSystemExplorer {
 	 * @return The expanded {@code SWTBotTreeItem} representing the Type Library
 	 *         node in the System Explorer
 	 */
-	public static SWTBotTreeItem expandTypeLibraryTreeItemInSystemExplorer() {
+	public SWTBotTreeItem expandTypeLibraryTreeItemInSystemExplorer() {
 		final SWTBotTreeItem treeProjectItem = expandProjectTreeItemInSystemExplorer();
 		bot.waitUntil(treeItemHasNode(treeProjectItem, UITestNamesHelper.TYPE_LIBRARY_NODE));
 		final SWTBotTreeItem typeLibraryNode = treeProjectItem.getNode(UITestNamesHelper.TYPE_LIBRARY_NODE);
@@ -155,7 +154,7 @@ public class SWTBotSystemExplorer {
 	 * @return The expanded {@code SWTBotTreeItem} representing the Application node
 	 *         in the System Explorer
 	 */
-	public static SWTBotTreeItem expandApplicationTreeItemInSystemExplorer() {
+	public SWTBotTreeItem expandApplicationTreeItemInSystemExplorer() {
 		final SWTBotTreeItem systemNode = expandSystemTreeItemInSystemExplorer();
 		bot.waitUntil(treeItemHasNode(systemNode, UITestNamesHelper.PROJECT_NAME_APP));
 		final SWTBotTreeItem appNode = systemNode.getNode(UITestNamesHelper.PROJECT_NAME_APP);
@@ -171,7 +170,7 @@ public class SWTBotSystemExplorer {
 	 * @return The expanded {@code SWTBotTreeItem} representing the Subapplication
 	 *         (SubApp) node in the System Explorer
 	 */
-	private static SWTBotTreeItem expandSubAppTreeItemInSystemExplorer() {
+	private SWTBotTreeItem expandSubAppTreeItemInSystemExplorer() {
 		final SWTBotTreeItem appNode = expandApplicationTreeItemInSystemExplorer();
 		final SWTBotTreeItem subAppNode = appNode.getNode(UITestNamesHelper.SUBAPP);
 		assertNotNull(subAppNode);

@@ -68,7 +68,7 @@ public class Abstract4diacUITests {
 	protected static void beforeAll() {
 		bot = new SWT4diacGefBot();
 		bot.viewByTitle("Welcome").close(); //$NON-NLS-1$
-		SWTBotPreferences.TIMEOUT = 30000;
+		SWTBotPreferences.TIMEOUT = 8000;
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US"; //$NON-NLS-1$
 		createProject();
 	}

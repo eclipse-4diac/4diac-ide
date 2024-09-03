@@ -40,7 +40,7 @@ import org.hamcrest.Description;
 
 public class SWTBotFB {
 
-	private static SWT4diacGefBot bot;
+	private final SWT4diacGefBot bot;
 
 	@SuppressWarnings("static-access")
 	public SWTBotFB(final SWT4diacGefBot bot) {
@@ -54,7 +54,7 @@ public class SWTBotFB {
 	 * @param point  The Position of the FB on the canvas.
 	 */
 	@SuppressWarnings("static-access")
-	public static void dragAndDropEventsFB(final String fbName, final Point point) {
+	public void dragAndDropEventsFB(final String fbName, final Point point) {
 		final SWTBotSystemExplorer sysEx = new SWTBotSystemExplorer(bot);
 		final SWTBotTreeItem typeLibraryNode = sysEx.expandTypeLibraryTreeItemInSystemExplorer();
 		bot.waitUntil(treeItemHasNode(typeLibraryNode, UITestNamesHelper.EVENTS_NODE));
@@ -85,8 +85,8 @@ public class SWTBotFB {
 	 * @param editor
 	 * @param name
 	 */
-	public static SWTBot4diacGefEditor selectFBWithFBNameInEditor(final SWTBot4diacGefEditor editor,
-			final String name) {
+	@SuppressWarnings("static-method")
+	public SWTBot4diacGefEditor selectFBWithFBNameInEditor(final SWTBot4diacGefEditor editor, final String name) {
 		assertNotNull(editor);
 		assertNotNull(editor.getEditPart(name));
 		editor.click(name);
@@ -103,7 +103,7 @@ public class SWTBotFB {
 	 *                       instance name should be deleted.
 	 * @param FbInstanceName The instance name of the FB
 	 */
-	public static void deleteFB(final SWTBot4diacGefEditor editor, final String FbInstanceName) {
+	public void deleteFB(final SWTBot4diacGefEditor editor, final String FbInstanceName) {
 		editor.setFocus();
 		final SWTBotGefEditPart fb = editor.getEditPart(FbInstanceName).parent();
 		fb.select().click();
@@ -118,7 +118,8 @@ public class SWTBotFB {
 	 * @param fbName            The FB that is searched for.
 	 * @return true if fbName is in the List, otherwise false.
 	 */
-	public static boolean isFbSelected(final List<SWTBotGefEditPart> selectedEditParts, final String fbName) {
+	@SuppressWarnings("static-method")
+	public boolean isFbSelected(final List<SWTBotGefEditPart> selectedEditParts, final String fbName) {
 		return selectedEditParts.stream().filter(p -> p.part() instanceof FBEditPart).map(p -> (FBEditPart) p.part())
 				.anyMatch(fb -> fb.getModel().getName().equals(fbName));
 	}
@@ -131,7 +132,8 @@ public class SWTBotFB {
 	 * @param fbName The String of the FB instance name searched for
 	 * @return true if FB is onto editing area, false if not
 	 */
-	public static boolean isFBNamePresendOnEditingArea(final SWTBot4diacGefEditor editor, final String fbName) {
+	@SuppressWarnings("static-method")
+	public boolean isFBNamePresendOnEditingArea(final SWTBot4diacGefEditor editor, final String fbName) {
 		final List<SWTBotGefEditPart> editParts = editor.editParts(new BaseMatcher<EditPart>() {
 			@Override
 			public boolean matches(final Object item) {
@@ -148,18 +150,6 @@ public class SWTBotFB {
 				.anyMatch(fb -> fb.getModel().getName().equals(fbName));
 	}
 
-//	// TODO duplicate method - check also getBoundsOfFB!!!
-//	protected static Rectangle getAbsolutePosition(final SWTBotGefEditor editor, final String fb) {
-//		final SWTBotGefEditPart parent = editor.getEditPart(fb).parent();
-//		assertNotNull(parent);
-//		final IFigure figurePos = ((GraphicalEditPart) parent.part()).getFigure();
-//		assertNotNull(figurePos);
-//		final Rectangle fbBounds = figurePos.getBounds().getCopy();
-//		assertNotNull(fbBounds);
-//		figurePos.translateToAbsolute(fbBounds);
-//		return fbBounds;
-//	}
-
 	/**
 	 * Returns the bounds of the searched function block
 	 *
@@ -167,8 +157,8 @@ public class SWTBotFB {
 	 * @param fBname
 	 * @return The rectangle with the bounds of the function block searched for
 	 */
-	// TODO duplicate method - check also getAbsolutePosition!!!
-	public static Rectangle getBoundsOfFB(final SWTBotGefEditor editor, final String fBname) {
+	@SuppressWarnings("static-method")
+	public Rectangle getBoundsOfFB(final SWTBotGefEditor editor, final String fBname) {
 		editor.getEditPart(fBname);
 		editor.click(fBname);
 		final SWTBotGefEditPart parent = editor.getEditPart(fBname).parent();
