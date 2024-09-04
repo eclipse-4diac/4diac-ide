@@ -21,14 +21,15 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeDeclarationCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
-import org.eclipse.fordiac.ide.model.commands.change.UpdateAttributeDeclarationCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -146,18 +147,16 @@ public class TypeEntryAdapter extends AdapterImpl {
 
 	private static void handleAttributeTypeEntryUpdate(final LibraryElement editedElement,
 			final AttributeTypeEntry atEntry) {
-		final AttributeTypeInstanceSearch search = new AttributeTypeInstanceSearch(atEntry);
+		final AttributeTypeInstanceSearch search = new AttributeTypeInstanceSearch(editedElement, atEntry);
 		final List<? extends EObject> result = search.performSearch();
 
 		result.forEach(at -> {
 			// update attribute here
 			if (at instanceof final ConfigurableObject co) {
-				final UpdateAttributeDeclarationCommand cmd = new UpdateAttributeDeclarationCommand(co, atEntry);
-				cmd.execute();
+				final Attribute attribute = co.getAttribute(atEntry.getTypeName());
+				ChangeAttributeDeclarationCommand.forEntry(attribute, atEntry).execute();
 			}
-
 		});
-
 	}
 
 	private static void handleBlockTypeDependencyUpdate(final LibraryElement editedElement, final TypeEntry typeEntry) {
