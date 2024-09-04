@@ -146,6 +146,14 @@
       </antTask>
    </extension>
    <extension
+         point="org.eclipse.ant.core.antTasks">
+      <antTask
+            class="org.eclipse.fordiac.ide.ant.ant.CheckUnusedDependencies"
+            library="ant_tasks/ant-ant.jar"
+            name="fordiac.checkUnusedDependencies">
+      </antTask>
+   </extension>
+   <extension
          point="org.eclipse.ant.core.extraClasspathEntries">
       <extraClasspathEntry
             library="ant_tasks/ant-ant.jar">
