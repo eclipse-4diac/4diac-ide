@@ -63,7 +63,11 @@ public class ChangeAttributeDeclarationCommand extends AbstractChangeAttributeCo
 
 		final AttributeTypeEntry entry = ImportHelper.resolveImport(newName, attribute.eContainer(),
 				typeLibrary::getAttributeTypeEntry, name -> null);
+		return forEntry(attribute, entry);
+	}
 
+	public static ChangeAttributeDeclarationCommand forEntry(final Attribute attribute,
+			final AttributeTypeEntry entry) {
 		if (entry != null && entry.getType() != null) {
 			return new ChangeAttributeDeclarationCommand(attribute, entry.getType(), entry.getType().getType());
 		}
