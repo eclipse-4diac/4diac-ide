@@ -916,45 +916,65 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	public class STStructInitializerExpressionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STStructInitializerExpression");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cLeftParenthesisKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Assignment cValuesAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cValuesSTStructInitElementParserRuleCall_1_0 = (RuleCall)cValuesAssignment_1.eContents().get(0);
-		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
-		private final Keyword cCommaKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
-		private final Assignment cValuesAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
-		private final RuleCall cValuesSTStructInitElementParserRuleCall_2_1_0 = (RuleCall)cValuesAssignment_2_1.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		private final Group cGroup_0 = (Group)cGroup.eContents().get(0);
+		private final Assignment cTypeAssignment_0_0 = (Assignment)cGroup_0.eContents().get(0);
+		private final CrossReference cTypeStructuredTypeCrossReference_0_0_0 = (CrossReference)cTypeAssignment_0_0.eContents().get(0);
+		private final RuleCall cTypeStructuredTypeQualifiedNameParserRuleCall_0_0_0_1 = (RuleCall)cTypeStructuredTypeCrossReference_0_0_0.eContents().get(1);
+		private final Keyword cNumberSignKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
+		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cValuesAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cValuesSTStructInitElementParserRuleCall_2_0 = (RuleCall)cValuesAssignment_2.eContents().get(0);
+		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
+		private final Keyword cCommaKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
+		private final Assignment cValuesAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
+		private final RuleCall cValuesSTStructInitElementParserRuleCall_3_1_0 = (RuleCall)cValuesAssignment_3_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
 		//STStructInitializerExpression:
-		//    '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
+		//    (type=[datatype::StructuredType|QualifiedName] '#' )? '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'(' values+=STStructInitElement (',' values+=STStructInitElement)* ')'
+		//(type=[datatype::StructuredType|QualifiedName] '#' )? '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')'
 		public Group getGroup() { return cGroup; }
 		
+		//(type=[datatype::StructuredType|QualifiedName] '#' )?
+		public Group getGroup_0() { return cGroup_0; }
+		
+		//type=[datatype::StructuredType|QualifiedName]
+		public Assignment getTypeAssignment_0_0() { return cTypeAssignment_0_0; }
+		
+		//[datatype::StructuredType|QualifiedName]
+		public CrossReference getTypeStructuredTypeCrossReference_0_0_0() { return cTypeStructuredTypeCrossReference_0_0_0; }
+		
+		//QualifiedName
+		public RuleCall getTypeStructuredTypeQualifiedNameParserRuleCall_0_0_0_1() { return cTypeStructuredTypeQualifiedNameParserRuleCall_0_0_0_1; }
+		
+		//'#'
+		public Keyword getNumberSignKeyword_0_1() { return cNumberSignKeyword_0_1; }
+		
 		//'('
-		public Keyword getLeftParenthesisKeyword_0() { return cLeftParenthesisKeyword_0; }
+		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 		
 		//values+=STStructInitElement
-		public Assignment getValuesAssignment_1() { return cValuesAssignment_1; }
+		public Assignment getValuesAssignment_2() { return cValuesAssignment_2; }
 		
 		//STStructInitElement
-		public RuleCall getValuesSTStructInitElementParserRuleCall_1_0() { return cValuesSTStructInitElementParserRuleCall_1_0; }
+		public RuleCall getValuesSTStructInitElementParserRuleCall_2_0() { return cValuesSTStructInitElementParserRuleCall_2_0; }
 		
 		//(',' values+=STStructInitElement)*
-		public Group getGroup_2() { return cGroup_2; }
+		public Group getGroup_3() { return cGroup_3; }
 		
 		//','
-		public Keyword getCommaKeyword_2_0() { return cCommaKeyword_2_0; }
+		public Keyword getCommaKeyword_3_0() { return cCommaKeyword_3_0; }
 		
 		//values+=STStructInitElement
-		public Assignment getValuesAssignment_2_1() { return cValuesAssignment_2_1; }
+		public Assignment getValuesAssignment_3_1() { return cValuesAssignment_3_1; }
 		
 		//STStructInitElement
-		public RuleCall getValuesSTStructInitElementParserRuleCall_2_1_0() { return cValuesSTStructInitElementParserRuleCall_2_1_0; }
+		public RuleCall getValuesSTStructInitElementParserRuleCall_3_1_0() { return cValuesSTStructInitElementParserRuleCall_3_1_0; }
 		
 		//')'
-		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
+		public Keyword getRightParenthesisKeyword_4() { return cRightParenthesisKeyword_4; }
 	}
 	public class STStructInitElementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STStructInitElement");
@@ -4720,7 +4740,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STStructInitializerExpression:
-	//    '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
+	//    (type=[datatype::StructuredType|QualifiedName] '#' )? '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
 	public STStructInitializerExpressionElements getSTStructInitializerExpressionAccess() {
 		return pSTStructInitializerExpression;
 	}
