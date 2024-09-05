@@ -12,7 +12,7 @@
  */
 package org.eclipse.fordiac.ide.model.eval;
 
-public class EvaluatorException extends Exception {
+public class EvaluatorException extends RuntimeException {
 	@java.io.Serial
 	private static final long serialVersionUID = -293618872722930949L;
 
