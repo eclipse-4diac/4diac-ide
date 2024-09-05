@@ -44,16 +44,6 @@ public final class ElementaryVariable<T extends AnyElementaryValue> extends Abst
 	}
 
 	@Override
-	public void setValue(final String value) {
-		setValue(VariableOperations.evaluateValue(getType(), value));
-	}
-
-	@Override
-	public boolean validateValue(final String value) {
-		return VariableOperations.validateValue(getType(), value).isEmpty();
-	}
-
-	@Override
 	public AnyType getType() {
 		return (AnyType) super.getType();
 	}
