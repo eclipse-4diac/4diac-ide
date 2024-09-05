@@ -63,6 +63,7 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFuncti
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocumentPartitioner;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocumentUpdaterChangeAdapterFilter;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionLinkedPositionGroupCalculator;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionPartialSerializer;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionRenameStrategy;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -73,6 +74,7 @@ import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculat
 import org.eclipse.xtext.ide.refactoring.IRenameNameValidator;
 import org.eclipse.xtext.ide.refactoring.IRenameStrategy2;
 import org.eclipse.xtext.ide.serializer.IChangeSerializer;
+import org.eclipse.xtext.ide.serializer.impl.PartialSerializer;
 import org.eclipse.xtext.ide.serializer.impl.RecordingXtextResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.ReferenceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.RelatedEmfResourceUpdater;
@@ -316,6 +318,10 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	public Class<? extends ResourceLifecycleManager> bindResourceLifecycleManager() {
 		return STCoreResourceLifecycleManager.class;
+	}
+
+	public Class<? extends PartialSerializer> bindPartialSerializer() {
+		return STFunctionPartialSerializer.class;
 	}
 
 	@Override

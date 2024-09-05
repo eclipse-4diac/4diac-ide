@@ -78,7 +78,11 @@ public class STCoreResourceRelocationStrategy implements IResourceRelocationStra
 		if (resource.getParseResult().getRootASTElement() instanceof final STSource source) {
 			final EAttribute nameAttribute = SimpleAttributeResolver.NAME_RESOLVER.getAttribute(source);
 			if (nameAttribute != null) {
-				source.eSet(nameAttribute, newPackageName);
+				if (newPackageName == null || newPackageName.isEmpty()) {
+					source.eUnset(nameAttribute);
+				} else {
+					source.eSet(nameAttribute, newPackageName);
+				}
 			}
 		}
 		PackageNameHelper.setPackageName(resource.getInternalLibraryElement(), newPackageName);
