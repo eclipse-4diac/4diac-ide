@@ -165,7 +165,7 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 		} else if (reference == STCorePackage.Literals.ST_ATTRIBUTE__DECLARATION) {
 			return super.getScope(context, reference);
 		}
-		return IScope.NULLSCOPE;
+		return super.getScope(context, reference);
 	}
 
 	protected static IScope scopeFor(final Iterable<? extends EObject> elements) {
