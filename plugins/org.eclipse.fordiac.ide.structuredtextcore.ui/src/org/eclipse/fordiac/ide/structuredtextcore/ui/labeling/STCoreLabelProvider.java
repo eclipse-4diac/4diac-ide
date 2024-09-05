@@ -23,6 +23,11 @@ import java.text.MessageFormat;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.Messages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -45,5 +50,51 @@ public class STCoreLabelProvider extends DefaultEObjectLabelProvider {
 	public String text(final STVarDeclaration element) {
 		return MessageFormat.format(Messages.STCoreLabelProvider_VarDeclarationText, element.getName(),
 				element.getType() != null ? element.getType().getName() : null);
+	}
+
+	public String text(final STVarPlainDeclarationBlock element) {
+		if (element.isConstant()) {
+			return Messages.STCoreLabelProvider_VarPlainDeclarationBlockConstantText;
+		}
+		return Messages.STCoreLabelProvider_VarPlainDeclarationBlockText;
+	}
+
+	public ImageDescriptor image(final STVarPlainDeclarationBlock element) {
+		return FordiacImage.ICON_DATA.getImageDescriptor();
+	}
+
+	public String text(final STVarTempDeclarationBlock element) {
+		if (element.isConstant()) {
+			return Messages.STCoreLabelProvider_VarTempDeclarationBlockConstantText;
+		}
+		return Messages.STCoreLabelProvider_VarTempDeclarationBlockText;
+	}
+
+	public ImageDescriptor image(final STVarTempDeclarationBlock element) {
+		return FordiacImage.ICON_DATA.getImageDescriptor();
+	}
+
+	public String text(final STVarInputDeclarationBlock element) {
+		return Messages.STCoreLabelProvider_VarInputDeclarationBlockText;
+	}
+
+	public ImageDescriptor image(final STVarInputDeclarationBlock element) {
+		return FordiacImage.ICON_DATA_INPUT.getImageDescriptor();
+	}
+
+	public String text(final STVarInOutDeclarationBlock element) {
+		return Messages.STCoreLabelProvider_VarInOutDeclarationBlockText;
+	}
+
+	public ImageDescriptor image(final STVarInOutDeclarationBlock element) {
+		return FordiacImage.ICON_DATA_INPUT.getImageDescriptor();
+	}
+
+	public String text(final STVarOutputDeclarationBlock element) {
+		return Messages.STCoreLabelProvider_VarOutputDeclarationBlockText;
+	}
+
+	public ImageDescriptor image(final STVarOutputDeclarationBlock element) {
+		return FordiacImage.ICON_DATA_OUTPUT.getImageDescriptor();
 	}
 }

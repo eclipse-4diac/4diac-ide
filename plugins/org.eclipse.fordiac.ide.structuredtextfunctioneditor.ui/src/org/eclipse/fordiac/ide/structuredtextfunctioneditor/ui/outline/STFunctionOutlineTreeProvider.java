@@ -24,10 +24,11 @@ import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
 public class STFunctionOutlineTreeProvider extends STCoreOutlineTreeProvider {
 
 	protected boolean _isLeaf(final STFunction modelElement) {
-		return !hasHeadings(modelElement);
+		return modelElement.getVarDeclarations().isEmpty() && !hasHeadings(modelElement);
 	}
 
 	protected void _createChildren(final IOutlineNode parentNode, final STFunction modelElement) {
+		modelElement.getVarDeclarations().forEach(block -> createNode(parentNode, block));
 		createHeadingNodes(parentNode, modelElement);
 	}
 }
