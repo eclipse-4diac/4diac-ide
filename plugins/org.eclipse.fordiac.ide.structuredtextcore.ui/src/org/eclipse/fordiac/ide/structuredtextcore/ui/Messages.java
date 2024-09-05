@@ -17,6 +17,9 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextcore.ui.messages"; //$NON-NLS-1$
+	public static String FilterHeadingsContribution_Description;
+	public static String FilterHeadingsContribution_Text;
+	public static String FilterHeadingsContribution_ToolTipText;
 	public static String STCoreQuickfixProvider_AddExplicitTypecastDescription;
 	public static String STCoreQuickfixProvider_AddExplicitTypecastLabel;
 	public static String STCoreQuickfixProvider_ChangeConversionDescription;
@@ -50,6 +53,7 @@ public final class Messages extends NLS {
 	public static String STCoreContentAssistPreferencePage_AutoActivationTriggers;
 	public static String STCoreContentAssistPreferencePage_ChangedSettingsEffect;
 	public static String STCoreLabelProvider_VarDeclarationText;
+	public static String STCoreOutlineTreeProvider_MissingHeadingText;
 	public static String STCoreRenameElementRefactoringParticpant_Name;
 	public static String STCoreSaveActionsPreferencePage_EnableFormat;
 	public static String STCoreSaveActionsPreferencePage_EnableSaveActions;

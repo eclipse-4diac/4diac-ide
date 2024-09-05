@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.outline;
+package org.eclipse.fordiac.ide.structuredtextcore.ui.outline;
 
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
@@ -20,7 +20,7 @@ public class OutlineHeadingNode extends AbstractOutlineNode {
 
 	private final int level;
 
-	protected OutlineHeadingNode(final IOutlineNode parent, final int level, final String text) {
+	public OutlineHeadingNode(final IOutlineNode parent, final int level, final String text) {
 		super(parent, FordiacImage.ICON_DOCUMENTATION_EDITOR.getImageDescriptor(), text, true);
 		this.level = level;
 	}
