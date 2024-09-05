@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotPropertySheet;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotNatTable;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -44,7 +45,7 @@ public class VarInternalsTabTests extends NatTableWithoutEditorBehaviorTests {
 		SWTBotPropertySheet.selectPropertyTabItem(UITestNamesHelper.VAR_INTERNALS, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
 		natTableBot = new SWTBot4diacNatTable(natTable);
-		NatTableHelper.createNewVariableInDataTypeEditor(natTableBot);
+		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
 	}
 
 	/**
@@ -57,7 +58,7 @@ public class VarInternalsTabTests extends NatTableWithoutEditorBehaviorTests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeRetainTag() {
-		NatTableHelper.setRetainValue(natTableBot, 1, 5, RetainTag.RETAIN);
+		SWTBotNatTable.setRetainValue(natTableBot, 1, 5, RetainTag.RETAIN);
 	}
 
 }

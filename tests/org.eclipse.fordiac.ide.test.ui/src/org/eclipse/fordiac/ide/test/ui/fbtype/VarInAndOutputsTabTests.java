@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestPinHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotPropertySheet;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotNatTable;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
@@ -49,7 +50,7 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 		natTableBot = new SWTBot4diacNatTable(natTable);
 		editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertNotNull(editor);
-		NatTableHelper.createNewVariableInDataTypeEditor(natTableBot);
+		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
 	}
 
 	/**
@@ -61,8 +62,8 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeInitialValueOfVariable() {
-		NatTableHelper.changeCellValueInNatTbale(natTableBot, UITestNamesHelper.TRUE, 1, 4);
-		NatTableHelper.changeCellValueInNatTbale(natTableBot, "1", 1, 4); //$NON-NLS-1$
+		SWTBotNatTable.changeCellValueInNatTbale(natTableBot, UITestNamesHelper.TRUE, 1, 4);
+		SWTBotNatTable.changeCellValueInNatTbale(natTableBot, "1", 1, 4); //$NON-NLS-1$
 	}
 
 	/**
@@ -75,7 +76,7 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToSetInValidInitialValue() {
-		NatTableHelper.setInvalidDataType(natTableBot, 1, 4, UITestNamesHelper.TESTVAR);
+		SWTBotNatTable.setInvalidDataType(natTableBot, 1, 4, UITestNamesHelper.TESTVAR);
 	}
 
 	/**
@@ -116,6 +117,6 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeRetainTag() {
-		NatTableHelper.setRetainValue(natTableBot, 1, 7, RetainTag.RETAIN);
+		SWTBotNatTable.setRetainValue(natTableBot, 1, 7, RetainTag.RETAIN);
 	}
 }

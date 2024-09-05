@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.test.ui.fbtype;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotNatTable;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotPropertySheet;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
@@ -50,7 +51,7 @@ public class AttributesTabTests extends NatTableWithoutEditorBehaviorTests {
 		SWTBotPropertySheet.selectPropertyTabItem(UITestNamesHelper.ATTRIBUTES, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
 		natTableBot = new SWTBot4diacNatTable(natTable);
-		NatTableHelper.createNewVariableInDataTypeEditor(natTableBot);
+		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
 	}
 
 	@Override
@@ -61,13 +62,13 @@ public class AttributesTabTests extends NatTableWithoutEditorBehaviorTests {
 	@Override
 	public void tryToSetInValidName() {
 		// Here Name column has same behavior as Data Type column or Invalid value
-		NatTableHelper.setInvalidDataType(natTableBot, 1, 1, UITestNamesHelper.IF);
+		SWTBotNatTable.setInvalidDataType(natTableBot, 1, 1, UITestNamesHelper.IF);
 	}
 
 	@Override
 	public void tryToChangeNameOfVariableWithExistingName() {
 		// Here Name column has same behavior as Data Type column or Invalid value
-		NatTableHelper.setInvalidDataType(natTableBot, 1, 1, UITestNamesHelper.IF);
+		SWTBotNatTable.setInvalidDataType(natTableBot, 1, 1, UITestNamesHelper.IF);
 	}
 
 }

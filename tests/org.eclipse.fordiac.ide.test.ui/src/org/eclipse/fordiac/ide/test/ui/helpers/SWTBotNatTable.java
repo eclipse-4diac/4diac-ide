@@ -10,7 +10,7 @@
  * Contributors:
  *   Prashantkumar Khatri - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.test.ui.fbtype;
+package org.eclipse.fordiac.ide.test.ui.helpers;
 
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellCloses;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,19 +21,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
-import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.util.GUIHelper;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 
-public class NatTableHelper extends Abstract4diacUITests {
+public class SWTBotNatTable extends Abstract4diacUITests {
 
 	/**
 	 * Creates a new variable in the Data Type Editor.
 	 *
 	 * @param natTableBot NatTable in which the variable needs to be created.
 	 */
-	protected static void createNewVariableInDataTypeEditor(final SWTBot4diacNatTable natTableBot) {
+	public static void createNewVariableInDataTypeEditor(final SWTBot4diacNatTable natTableBot) {
 		final int rowCount = natTableBot.rowCount();
 		bot.button(0).click();
 		assertEquals(natTableBot.rowCount(), rowCount + 1);
@@ -47,7 +46,7 @@ public class NatTableHelper extends Abstract4diacUITests {
 	 * @param row              The row number of the cell.
 	 * @param col              The column number of the cell.
 	 */
-	protected static void changeCellValueInNatTbale(final SWTBot4diacNatTable dataTypeTableBot, final String newValue,
+	public static void changeCellValueInNatTbale(final SWTBot4diacNatTable dataTypeTableBot, final String newValue,
 			final int row, final int col) {
 		dataTypeTableBot.doubleclick(row, col);
 		dataTypeTableBot.setCellDataValueByPosition(row, col, newValue);
@@ -61,7 +60,7 @@ public class NatTableHelper extends Abstract4diacUITests {
 	 * @param natTableBot NatTable from which the variable has to be deleted.
 	 * @param srNo        The serial number of the variable to be deleted.
 	 */
-	protected static void deleteVariable(final SWTBot4diacNatTable natTableBot, final int srNo) {
+	public static void deleteVariable(final SWTBot4diacNatTable natTableBot, final int srNo) {
 		final int rowCount = natTableBot.rowCount();
 		natTableBot.click(srNo, 0);
 		bot.button(1).click();
@@ -75,7 +74,7 @@ public class NatTableHelper extends Abstract4diacUITests {
 	 * @param srNo        The serial number of the variable.
 	 * @param newName     The new name for the variable.
 	 */
-	protected static void changeVariableNameWithButtonTool(final SWTBot4diacNatTable natTableBot, final int srNo,
+	public static void changeVariableNameWithButtonTool(final SWTBot4diacNatTable natTableBot, final int srNo,
 			final String newName) {
 		natTableBot.click(srNo, 1);
 		bot.toolbarButtonWithTooltip(UITestNamesHelper.RENAME_ELEMENT).click();
@@ -104,7 +103,7 @@ public class NatTableHelper extends Abstract4diacUITests {
 	 * @param curentName   The current name of the variable, expected to remain
 	 *                     unchanged.
 	 */
-	protected static void changeNameWithExistingName(final SWTBot4diacNatTable natTableBot, final int srNo,
+	public static void changeNameWithExistingName(final SWTBot4diacNatTable natTableBot, final int srNo,
 			final String existingName, final String curentName) {
 		createNewVariableInDataTypeEditor(natTableBot);
 		natTableBot.doubleclick(srNo, 1);
@@ -124,8 +123,8 @@ public class NatTableHelper extends Abstract4diacUITests {
 	 * @param curentName  The current name of the variable, expected to remain
 	 *                    unchanged.
 	 */
-	protected static void setInvalidName(final SWTBot4diacNatTable natTableBot, final int srNo,
-			final String invalidName, final String curentName) {
+	public static void setInvalidName(final SWTBot4diacNatTable natTableBot, final int srNo, final String invalidName,
+			final String curentName) {
 		natTableBot.doubleclick(srNo, 1);
 		natTableBot.setCellDataValueByPosition(srNo, 1, invalidName);
 		natTableBot.doubleclick(srNo, 1);
@@ -141,7 +140,7 @@ public class NatTableHelper extends Abstract4diacUITests {
 	 * @param srNo        The serial number of the variable.
 	 * @param dataType    The new data type to set for the variable.
 	 */
-	protected static void changeDataType(final SWTBot4diacNatTable natTableBot, final int srNo, final String dataType) {
+	public static void changeDataType(final SWTBot4diacNatTable natTableBot, final int srNo, final String dataType) {
 		natTableBot.doubleclick(1, 2);
 
 		// Assign the value, e.g., "int"
@@ -162,7 +161,7 @@ public class NatTableHelper extends Abstract4diacUITests {
 	 * @param dataTypeColumnNo The column number of the data type.
 	 * @param invalidDataType  The invalid data type to set.
 	 */
-	protected static void setInvalidDataType(final SWTBot4diacNatTable natTableBot, final int srNo,
+	public static void setInvalidDataType(final SWTBot4diacNatTable natTableBot, final int srNo,
 			final int dataTypeColumnNo, final String invalidDataType) {
 		natTableBot.doubleclick(srNo, dataTypeColumnNo);
 		natTableBot.setCellDataValueByPosition(srNo, dataTypeColumnNo, invalidDataType);
@@ -182,7 +181,7 @@ public class NatTableHelper extends Abstract4diacUITests {
 	 * @param initialValueColumnNo The column number of the initial value.
 	 * @param invalidInitialValue  The invalid initial value to set.
 	 */
-	protected static void setInvalidInitialValue(final SWTBot4diacNatTable natTableBot, final int srNo,
+	public static void setInvalidInitialValue(final SWTBot4diacNatTable natTableBot, final int srNo,
 			final int initialValueColumnNo, final String invalidInitialValue) {
 		setInvalidDataType(natTableBot, srNo, initialValueColumnNo, invalidInitialValue);
 	}
@@ -193,7 +192,7 @@ public class NatTableHelper extends Abstract4diacUITests {
 	 * @param natTableBot NatTable containing the variable.
 	 * @param srNo        The serial number of the variable.
 	 */
-	protected static void moveElementUp(final SWTBot4diacNatTable natTableBot, final int srNo) {
+	public static void moveElementUp(final SWTBot4diacNatTable natTableBot, final int srNo) {
 		final String upperRowName = natTableBot.getCellDataValueByPosition(srNo - 1, 1);
 		final String currentRowName = natTableBot.getCellDataValueByPosition(srNo, 1);
 		natTableBot.click(srNo, 0);
@@ -210,7 +209,7 @@ public class NatTableHelper extends Abstract4diacUITests {
 	 * @param natTableBot NatTable containing the variable.
 	 * @param srNo        The serial number of the variable.
 	 */
-	protected static void moveElementDown(final SWTBot4diacNatTable natTableBot, final int srNo) {
+	public static void moveElementDown(final SWTBot4diacNatTable natTableBot, final int srNo) {
 		final String lowerRowName = natTableBot.getCellDataValueByPosition(srNo + 1, 1);
 		final String currentRowName = natTableBot.getCellDataValueByPosition(srNo, 1);
 		natTableBot.click(srNo, 0);
@@ -232,7 +231,7 @@ public class NatTableHelper extends Abstract4diacUITests {
 	 * @param retainValue The RetainTag value (RETAIN, NO_RETAIN, NOTHING) to be set
 	 *                    for the variable.
 	 */
-	protected static void setRetainValue(final SWTBot4diacNatTable natTableBot, final int srNo, final int retainCol,
+	public static void setRetainValue(final SWTBot4diacNatTable natTableBot, final int srNo, final int retainCol,
 			final RetainTag retainValue) {
 		natTableBot.doubleclick(srNo, retainCol);
 		bot.table().select(retainValue.toString());

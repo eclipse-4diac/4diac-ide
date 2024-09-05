@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotPropertySheet;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotNatTable;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -46,7 +47,7 @@ public class FunctionBlocksTabTests extends NatTableWithoutEditorBehaviorTests {
 		SWTBotPropertySheet.selectPropertyTabItem(UITestNamesHelper.FUNCTIONAL__BLOCKS, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
 		natTableBot = new SWTBot4diacNatTable(natTable);
-		NatTableHelper.createNewVariableInDataTypeEditor(natTableBot);
+		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
 	}
 
 	@Override
@@ -61,7 +62,7 @@ public class FunctionBlocksTabTests extends NatTableWithoutEditorBehaviorTests {
 
 	@Override
 	public void changeDataTypeOfVariable() {
-		NatTableHelper.changeDataType(natTableBot, 1, UITestNamesHelper.INT_SMALL);
+		SWTBotNatTable.changeDataType(natTableBot, 1, UITestNamesHelper.INT_SMALL);
 		natTableBot.doubleclick(1, 2);
 
 		bot.button(UITestNamesHelper.DOT_BUTTON).click();
@@ -80,7 +81,7 @@ public class FunctionBlocksTabTests extends NatTableWithoutEditorBehaviorTests {
 
 	@Override
 	public void tryToSetInValidDataType() {
-		NatTableHelper.setInvalidDataType(natTableBot, 1, 2, UITestNamesHelper.TESTVAR);
+		SWTBotNatTable.setInvalidDataType(natTableBot, 1, 2, UITestNamesHelper.TESTVAR);
 	}
 
 }
