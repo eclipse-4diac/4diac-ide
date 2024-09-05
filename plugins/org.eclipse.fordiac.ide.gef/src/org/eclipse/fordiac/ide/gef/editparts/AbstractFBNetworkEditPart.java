@@ -23,13 +23,10 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -120,29 +117,11 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 			element.getInterface().getVisibleInputVars().stream().filter(di -> (di.getValue() != null))
 					.forEach(di -> valueElements.add(di.getValue()));
 			element.getInterface().getInOutVars().stream().filter(di -> (di.getValue() != null))
-					.filter(this::varInOutFilter).forEach(di -> valueElements.add(di.getValue()));
+					.forEach(di -> valueElements.add(di.getValue()));
 			element.getInterface().getErrorMarker().stream().filter(er -> (er.getValue() != null))
 					.forEach(er -> valueElements.add(er.getValue()));
 		}
 		return valueElements;
-	}
-
-	protected boolean varInOutFilter(final VarDeclaration it) {
-		if (it.getFBNetworkElement() instanceof final SubApp subApp) {
-			VarDeclaration varToUse = it;
-			if (subApp.isTyped()) {
-				final EList<VarDeclaration> varList = (it.isIsInput())
-						? subApp.getType().getInterfaceList().getInOutVars()
-						: subApp.getType().getInterfaceList().getOutMappedInOutVars();
-				varToUse = varList.stream().filter(typeVar -> it.getName().equals(typeVar.getName())).findAny()
-						.orElse(null);
-			}
-			if (varToUse != null) {
-				return varToUse.isIsInput() ? !varToUse.getOutputConnections().isEmpty()
-						: !varToUse.getInputConnections().isEmpty();
-			}
-		}
-		return true;
 	}
 
 	private List<IChildrenProvider> getChildrenProviders() {
