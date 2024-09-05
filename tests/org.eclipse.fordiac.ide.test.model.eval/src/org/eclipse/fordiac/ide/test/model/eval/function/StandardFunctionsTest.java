@@ -40,7 +40,7 @@ import static org.eclipse.fordiac.ide.model.eval.value.ULIntValue.toULIntValue;
 import static org.eclipse.fordiac.ide.model.eval.value.USIntValue.toUSIntValue;
 import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.castValue;
 import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.defaultValue;
-import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.operator_minus;
+import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.negate;
 import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.wrapValue;
 import static org.eclipse.fordiac.ide.model.eval.value.WCharValue.toWCharValue;
 import static org.eclipse.fordiac.ide.model.eval.value.WStringValue.toWStringValue;
@@ -124,7 +124,7 @@ class StandardFunctionsTest {
 	void testAbs() throws Throwable {
 		assertEquals(toIntValue((short) 17), Functions.invoke(StandardFunctions.class, "ABS", toIntValue((short) 17)));
 		assertEquals(toIntValue((short) 4),
-				Functions.invoke(StandardFunctions.class, "ABS", operator_minus(toIntValue((short) 4))));
+				Functions.invoke(StandardFunctions.class, "ABS", negate(toIntValue((short) 4))));
 		assertEquals(toLIntValue(0), Functions.invoke(StandardFunctions.class, "ABS", toLIntValue(0)));
 	}
 

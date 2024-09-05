@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.value.StringValue
 import org.eclipse.fordiac.ide.model.eval.value.StructValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
+import org.eclipse.fordiac.ide.model.eval.value.ValueOperations
 import org.eclipse.fordiac.ide.model.eval.value.WStringValue
 import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable
@@ -260,9 +261,10 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	def protected boolean evaluateCaseCondition(STExpression expr, Value value) {
 		switch (expr) {
 			STBinaryExpression case expr.op.range:
-				value >= expr.left.evaluateExpression && value <= expr.right.evaluateExpression
+				ValueOperations.compareTo(value, expr.left.evaluateExpression) >= 0 &&
+					ValueOperations.compareTo(value, expr.right.evaluateExpression) <= 0
 			default:
-				value == expr.evaluateExpression
+				ValueOperations.equals(value, expr.evaluateExpression)
 		}
 	}
 
@@ -275,30 +277,30 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		// by
 		val by = stmt.by?.evaluateExpression ?: 1.wrapValue(variable.type)
 		// direction?
-		if (by >= variable.type.defaultValue) {
+		if (ValueOperations.compareTo(by, variable.type.defaultValue) >= 0) {
 			try {
-				while (variable.value <= to) {
+				while (ValueOperations.compareTo(variable.value, to) <= 0) {
 					try {
 						stmt.statements.evaluateStatementList
 					} catch (ContinueException e) {
 						// continue
 					}
 					(stmt.by ?: stmt.from).trap
-					variable.value = variable.value + by
+					variable.value = ValueOperations.add(variable.value, by)
 				}
 			} catch (ExitException e) {
 				// break
 			}
 		} else {
 			try {
-				while (variable.value >= to) {
+				while (ValueOperations.compareTo(variable.value, to) >= 0) {
 					try {
 						stmt.statements.evaluateStatementList
 					} catch (ContinueException e) {
 						// continue
 					}
 					stmt.by.trap
-					variable.value = variable.value + by
+					variable.value = ValueOperations.add(variable.value, by)
 				}
 			} catch (ExitException e) {
 				// break
@@ -356,42 +358,44 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	def protected dispatch Value evaluateExpression(STBinaryExpression expr) {
 		switch (expr.op) {
 			case ADD:
-				expr.left.evaluateExpression + expr.right.evaluateExpression
+				ValueOperations.add(expr.left.evaluateExpression, expr.right.evaluateExpression)
 			case SUB:
-				expr.left.evaluateExpression - expr.right.evaluateExpression
+				ValueOperations.subtract(expr.left.evaluateExpression, expr.right.evaluateExpression)
 			case MUL:
-				expr.left.evaluateExpression * expr.right.evaluateExpression
+				ValueOperations.multiply(expr.left.evaluateExpression, expr.right.evaluateExpression)
 			case DIV:
-				expr.left.evaluateExpression / expr.right.evaluateExpression
+				ValueOperations.divideBy(expr.left.evaluateExpression, expr.right.evaluateExpression)
 			case MOD:
-				expr.left.evaluateExpression % expr.right.evaluateExpression
+				ValueOperations.remainderBy(expr.left.evaluateExpression, expr.right.evaluateExpression)
 			case POWER:
-				expr.left.evaluateExpression ** expr.right.evaluateExpression
+				ValueOperations.power(expr.left.evaluateExpression, expr.right.evaluateExpression)
 			case AND,
 			case AMPERSAND:
-				switch(expr.resultType) {
-					BoolType: BoolValue.toBoolValue(expr.left.evaluateExpression.asBoolean && expr.right.evaluateExpression.asBoolean)
-					default: expr.left.evaluateExpression.bitwiseAnd(expr.right.evaluateExpression)
+				switch (expr.resultType) {
+					BoolType: BoolValue.toBoolValue(expr.left.evaluateExpression.asBoolean &&
+						expr.right.evaluateExpression.asBoolean)
+					default: ValueOperations.bitwiseAnd(expr.left.evaluateExpression, expr.right.evaluateExpression)
 				}
 			case OR:
-				switch(expr.resultType) {
-					BoolType: BoolValue.toBoolValue(expr.left.evaluateExpression.asBoolean || expr.right.evaluateExpression.asBoolean)
-					default: expr.left.evaluateExpression.bitwiseOr(expr.right.evaluateExpression)
+				switch (expr.resultType) {
+					BoolType: BoolValue.toBoolValue(expr.left.evaluateExpression.asBoolean ||
+						expr.right.evaluateExpression.asBoolean)
+					default: ValueOperations.bitwiseOr(expr.left.evaluateExpression, expr.right.evaluateExpression)
 				}
 			case XOR:
-				expr.left.evaluateExpression.bitwiseXor(expr.right.evaluateExpression)
+				ValueOperations.bitwiseXor(expr.left.evaluateExpression, expr.right.evaluateExpression)
 			case EQ:
-				BoolValue.toBoolValue(expr.left.evaluateExpression == expr.right.evaluateExpression)
+				BoolValue.toBoolValue(ValueOperations.equals(expr.left.evaluateExpression, expr.right.evaluateExpression))
 			case NE:
-				BoolValue.toBoolValue(expr.left.evaluateExpression != expr.right.evaluateExpression)
+				BoolValue.toBoolValue(!ValueOperations.equals(expr.left.evaluateExpression, expr.right.evaluateExpression))
 			case LT:
-				BoolValue.toBoolValue(expr.left.evaluateExpression < expr.right.evaluateExpression)
+				BoolValue.toBoolValue(ValueOperations.compareTo(expr.left.evaluateExpression, expr.right.evaluateExpression) < 0)
 			case LE:
-				BoolValue.toBoolValue(expr.left.evaluateExpression <= expr.right.evaluateExpression)
+				BoolValue.toBoolValue(ValueOperations.compareTo(expr.left.evaluateExpression, expr.right.evaluateExpression) <= 0)
 			case GT:
-				BoolValue.toBoolValue(expr.left.evaluateExpression > expr.right.evaluateExpression)
+				BoolValue.toBoolValue(ValueOperations.compareTo(expr.left.evaluateExpression, expr.right.evaluateExpression) > 0)
 			case GE:
-				BoolValue.toBoolValue(expr.left.evaluateExpression >= expr.right.evaluateExpression)
+				BoolValue.toBoolValue(ValueOperations.compareTo(expr.left.evaluateExpression, expr.right.evaluateExpression) >= 0)
 			default: {
 				error('''The operator «expr.op» is not supported''')
 				throw new UnsupportedOperationException('''The operator «expr.op» is not supported''')
@@ -402,11 +406,11 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	def protected dispatch Value evaluateExpression(STUnaryExpression expr) {
 		switch (expr.op) {
 			case PLUS:
-				+expr.expression.evaluateExpression
+				ValueOperations.abs(expr.expression.evaluateExpression)
 			case MINUS:
-				-expr.expression.evaluateExpression
+				ValueOperations.negate(expr.expression.evaluateExpression)
 			case NOT:
-				expr.expression.evaluateExpression.bitwiseNot
+				ValueOperations.bitwiseNot(expr.expression.evaluateExpression)
 			default: {
 				error('''The operator «expr.op» is not supported''')
 				throw new UnsupportedOperationException('''The operator «expr.op» is not supported''')
