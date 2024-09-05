@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuick
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDocumentReconcileStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.OutlineTreeContribution;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
@@ -83,6 +84,7 @@ import org.eclipse.xtext.ui.editor.model.IResourceForEditorInputFactory;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider;
 import org.eclipse.xtext.ui.editor.occurrences.IOccurrenceComputer;
+import org.eclipse.xtext.ui.editor.outline.actions.IOutlineContribution;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer;
 import org.eclipse.xtext.ui.editor.quickfix.ISimilarityMatcher;
 import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor;
@@ -303,5 +305,10 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 	@Override
 	public Class<? extends IContentOutlinePage> bindIContentOutlinePage() {
 		return GlobalConstantsOutlinePage.class;
+	}
+
+	public void configureOutlineTreeContribution(final Binder binder) {
+		binder.bind(IOutlineContribution.class).annotatedWith(Names.named("OutlineTreeContribution")) //$NON-NLS-1$
+				.to(OutlineTreeContribution.class);
 	}
 }

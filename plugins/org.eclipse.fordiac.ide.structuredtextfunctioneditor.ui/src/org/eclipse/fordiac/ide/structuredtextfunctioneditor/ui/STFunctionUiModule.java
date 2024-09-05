@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDoc
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.FilterHeadingsContribution;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.OutlineTreeContribution;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.STCoreOutlinePage;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
@@ -330,5 +331,10 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 	public void configureFilterHeadingsContribution(final Binder binder) {
 		binder.bind(IOutlineContribution.class).annotatedWith(Names.named("FilterHeadingsContribution")) //$NON-NLS-1$
 				.to(FilterHeadingsContribution.class);
+	}
+
+	public void configureOutlineTreeContribution(final Binder binder) {
+		binder.bind(IOutlineContribution.class).annotatedWith(Names.named("OutlineTreeContribution")) //$NON-NLS-1$
+				.to(OutlineTreeContribution.class);
 	}
 }
