@@ -13,24 +13,18 @@
 package org.eclipse.fordiac.ide.model.eval.variable;
 
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.eval.value.StructValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 
 public class StructVariable extends AbstractVariable<StructValue> implements Iterable<Variable<?>> {
-	private final Map<String, Variable<?>> members;
 	private final StructValue value;
 
 	public StructVariable(final String name, final StructuredType type) {
 		super(name, type);
-		members = type.getMemberVariables().stream().map(VariableOperations::newVariable)
-				.collect(Collectors.toMap(Variable::getName, Function.identity(), (a, b) -> a, LinkedHashMap::new));
-		value = new StructValue(type, members);
+		value = new StructValue(type);
 	}
 
 	public StructVariable(final String name, final StructuredType type, final String value) {
@@ -48,7 +42,7 @@ public class StructVariable extends AbstractVariable<StructValue> implements Ite
 		if (!(value instanceof final StructValue structValue) || !getType().isAssignableFrom(structValue.getType())) {
 			throw createCastException(value);
 		}
-		structValue.getMembers().forEach((name, variable) -> members.get(name).setValue(variable.getValue()));
+		structValue.getMembers().forEach((name, variable) -> this.value.get(name).setValue(variable.getValue()));
 	}
 
 	@Override
@@ -68,11 +62,11 @@ public class StructVariable extends AbstractVariable<StructValue> implements Ite
 
 	@Override
 	public Iterator<Variable<?>> iterator() {
-		return members.values().iterator();
+		return value.getMembers().values().iterator();
 	}
 
 	public Map<String, Variable<?>> getMembers() {
-		return members;
+		return value.getMembers();
 	}
 
 	@Override
