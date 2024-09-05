@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2022, 2023 Martin Erich Jobst
+/*******************************************************************************
+ * Copyright (c) 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,30 +9,29 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
- */
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.variable;
 
 import java.util.Objects;
 
-import org.eclipse.fordiac.ide.model.data.AnyElementaryType;
 import org.eclipse.fordiac.ide.model.data.AnyType;
-import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue;
+import org.eclipse.fordiac.ide.model.eval.value.AnyValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 
-public final class ElementaryVariable<T extends AnyElementaryValue> extends AbstractVariable<T> {
-	private T value;
+public class GenericVariable extends AbstractVariable<AnyValue> {
+	private Variable<AnyValue> variable;
 
-	public ElementaryVariable(final String name, final AnyElementaryType type) {
+	public GenericVariable(final String name, final AnyType type) {
 		this(name, type, ValueOperations.defaultValue(type));
 	}
 
-	public ElementaryVariable(final String name, final AnyElementaryType type, final String value) {
+	public GenericVariable(final String name, final AnyType type, final String value) {
 		super(name, type);
 		setValue(value);
 	}
 
-	public ElementaryVariable(final String name, final AnyElementaryType type, final Value value) {
+	public GenericVariable(final String name, final AnyType type, final Value value) {
 		super(name, type);
 		setValue(value);
 	}
@@ -41,7 +40,8 @@ public final class ElementaryVariable<T extends AnyElementaryValue> extends Abst
 	@SuppressWarnings("unchecked")
 	public void setValue(final Value value) {
 		Objects.requireNonNull(value);
-		this.value = (T) ValueOperations.castValue(value, getType());
+		this.variable = (Variable<AnyValue>) VariableOperations.newVariable(getName(),
+				ValueOperations.castValue(value, getType()));
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public final class ElementaryVariable<T extends AnyElementaryValue> extends Abst
 	}
 
 	@Override
-	public T getValue() {
-		return value;
+	public AnyValue getValue() {
+		return variable.getValue();
 	}
 }

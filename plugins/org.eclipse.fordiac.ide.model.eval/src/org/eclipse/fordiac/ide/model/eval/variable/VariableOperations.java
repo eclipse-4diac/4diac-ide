@@ -24,12 +24,14 @@ import java.util.stream.StreamSupport;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
+import org.eclipse.fordiac.ide.model.data.AnyElementaryType;
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorCache;
@@ -52,10 +54,11 @@ import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 public final class VariableOperations {
 	public static Variable<?> newVariable(final String name, final INamedElement type) {
 		return switch (type) {
+		case final AnyType anyType when GenericTypes.isAnyType(anyType) -> new GenericVariable(name, anyType);
 		case final ArrayType arrayType -> new ArrayVariable(name, arrayType);
 		case final StructuredType structuredType -> new StructVariable(name, structuredType);
 		case final DirectlyDerivedType directlyDerivedType -> new DirectlyDerivedVariable(name, directlyDerivedType);
-		case final AnyType anyType -> new ElementaryVariable<>(name, anyType);
+		case final AnyElementaryType anyElementaryType -> new ElementaryVariable<>(name, anyElementaryType);
 		case final FBType fbType -> new FBVariable(name, fbType);
 		case null -> throw new NullPointerException(Messages.VariableOperations_TypeMustNotBeNull);
 		default -> throw new UnsupportedOperationException(
@@ -65,11 +68,12 @@ public final class VariableOperations {
 
 	public static Variable<?> newVariable(final String name, final INamedElement type, final String value) {
 		return switch (type) {
+		case final AnyType anyType when GenericTypes.isAnyType(anyType) -> new GenericVariable(name, anyType, value);
 		case final ArrayType arrayType -> new ArrayVariable(name, arrayType, value);
 		case final StructuredType structuredType -> new StructVariable(name, structuredType, value);
 		case final DirectlyDerivedType directlyDerivedType ->
 			new DirectlyDerivedVariable(name, directlyDerivedType, value);
-		case final AnyType anyType -> new ElementaryVariable<>(name, anyType, value);
+		case final AnyElementaryType anyElementaryType -> new ElementaryVariable<>(name, anyElementaryType, value);
 		case final FBType fbType -> new FBVariable(name, fbType, value);
 		case null -> throw new NullPointerException(Messages.VariableOperations_TypeMustNotBeNull);
 		default -> throw new UnsupportedOperationException(
@@ -79,11 +83,12 @@ public final class VariableOperations {
 
 	public static Variable<?> newVariable(final String name, final INamedElement type, final Value value) {
 		return switch (type) {
+		case final AnyType anyType when GenericTypes.isAnyType(anyType) -> new GenericVariable(name, anyType, value);
 		case final ArrayType arrayType -> new ArrayVariable(name, arrayType, value);
 		case final StructuredType structuredType -> new StructVariable(name, structuredType, value);
 		case final DirectlyDerivedType directlyDerivedType ->
 			new DirectlyDerivedVariable(name, directlyDerivedType, value);
-		case final AnyType anyType -> new ElementaryVariable<>(name, anyType, value);
+		case final AnyElementaryType anyElementaryType -> new ElementaryVariable<>(name, anyElementaryType, value);
 		case final FBType fbType -> new FBVariable(name, fbType, value);
 		case null -> throw new NullPointerException(Messages.VariableOperations_TypeMustNotBeNull);
 		default -> throw new UnsupportedOperationException(
