@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
-import org.eclipse.xtext.xbase.lib.StringExtensions;
 
 public class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Variable<?>> {
 	private final DataType elementType;
@@ -81,7 +80,7 @@ public class ArrayVariable extends AbstractVariable<ArrayValue> implements Itera
 
 	@Override
 	public boolean validateValue(final String value) {
-		return StringExtensions.isNullOrEmpty(VariableOperations.validateValue(getType(), value));
+		return VariableOperations.validateValue(getType(), value).isEmpty();
 	}
 
 	@Override

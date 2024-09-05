@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
-import org.eclipse.xtext.xbase.lib.Pure;
 
 public final class ElementaryVariable<T extends AnyElementaryValue> extends AbstractVariable<T> {
 	private T value;
@@ -59,7 +58,6 @@ public final class ElementaryVariable<T extends AnyElementaryValue> extends Abst
 		return (AnyType) super.getType();
 	}
 
-	@Pure
 	@Override
 	public T getValue() {
 		return value;
