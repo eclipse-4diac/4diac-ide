@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui.labeling;
 import java.text.MessageFormat;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock;
@@ -41,6 +42,14 @@ public class STCoreLabelProvider extends DefaultEObjectLabelProvider {
 	@Inject
 	public STCoreLabelProvider(final AdapterFactoryLabelProvider delegate) {
 		super(delegate);
+	}
+
+	public String text(final STSource element) {
+		if (element.eResource() instanceof final LibraryElementXtextResource libResource
+				&& libResource.getInternalLibraryElement() != null) {
+			return libResource.getInternalLibraryElement().getName();
+		}
+		return null;
 	}
 
 	public ImageDescriptor image(final STSource element) {
