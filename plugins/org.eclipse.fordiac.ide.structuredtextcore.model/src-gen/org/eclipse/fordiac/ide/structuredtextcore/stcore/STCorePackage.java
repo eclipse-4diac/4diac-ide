@@ -2117,13 +2117,22 @@ public interface STCorePackage extends EPackage {
 	int ST_STRUCT_INITIALIZER_EXPRESSION = 53;
 
 	/**
+	 * The feature id for the '<em><b>Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_STRUCT_INITIALIZER_EXPRESSION__TYPE = ST_INITIALIZER_EXPRESSION_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Values</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_STRUCT_INITIALIZER_EXPRESSION__VALUES = ST_INITIALIZER_EXPRESSION_FEATURE_COUNT + 0;
+	int ST_STRUCT_INITIALIZER_EXPRESSION__VALUES = ST_INITIALIZER_EXPRESSION_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>ST Struct Initializer Expression</em>' class.
@@ -2132,7 +2141,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_STRUCT_INITIALIZER_EXPRESSION_FEATURE_COUNT = ST_INITIALIZER_EXPRESSION_FEATURE_COUNT + 1;
+	int ST_STRUCT_INITIALIZER_EXPRESSION_FEATURE_COUNT = ST_INITIALIZER_EXPRESSION_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStructInitElementImpl <em>ST Struct Init Element</em>}' class.
@@ -3951,6 +3960,17 @@ public interface STCorePackage extends EPackage {
 	EClass getSTStructInitializerExpression();
 
 	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Type</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression#getType()
+	 * @see #getSTStructInitializerExpression()
+	 * @generated
+	 */
+	EReference getSTStructInitializerExpression_Type();
+
+	/**
 	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression#getValues <em>Values</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5482,6 +5502,14 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass ST_STRUCT_INITIALIZER_EXPRESSION = eINSTANCE.getSTStructInitializerExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_STRUCT_INITIALIZER_EXPRESSION__TYPE = eINSTANCE.getSTStructInitializerExpression_Type();
 
 		/**
 		 * The meta object literal for the '<em><b>Values</b></em>' containment reference list feature.

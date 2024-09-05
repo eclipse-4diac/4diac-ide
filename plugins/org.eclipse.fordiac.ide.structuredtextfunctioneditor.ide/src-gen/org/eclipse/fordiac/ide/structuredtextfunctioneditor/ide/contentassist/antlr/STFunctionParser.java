@@ -119,7 +119,8 @@ public class STFunctionParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTRepeatArrayInitElementAccess().getGroup(), "rule__STRepeatArrayInitElement__Group__0");
 			builder.put(grammarAccess.getSTRepeatArrayInitElementAccess().getGroup_3(), "rule__STRepeatArrayInitElement__Group_3__0");
 			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getGroup(), "rule__STStructInitializerExpression__Group__0");
-			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getGroup_2(), "rule__STStructInitializerExpression__Group_2__0");
+			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getGroup_0(), "rule__STStructInitializerExpression__Group_0__0");
+			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getGroup_3(), "rule__STStructInitializerExpression__Group_3__0");
 			builder.put(grammarAccess.getSTStructInitElementAccess().getGroup(), "rule__STStructInitElement__Group__0");
 			builder.put(grammarAccess.getSTPragmaAccess().getGroup(), "rule__STPragma__Group__0");
 			builder.put(grammarAccess.getSTPragmaAccess().getGroup_3(), "rule__STPragma__Group_3__0");
@@ -254,8 +255,9 @@ public class STFunctionParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTRepeatArrayInitElementAccess().getRepetitionsAssignment_0(), "rule__STRepeatArrayInitElement__RepetitionsAssignment_0");
 			builder.put(grammarAccess.getSTRepeatArrayInitElementAccess().getInitExpressionsAssignment_2(), "rule__STRepeatArrayInitElement__InitExpressionsAssignment_2");
 			builder.put(grammarAccess.getSTRepeatArrayInitElementAccess().getInitExpressionsAssignment_3_1(), "rule__STRepeatArrayInitElement__InitExpressionsAssignment_3_1");
-			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getValuesAssignment_1(), "rule__STStructInitializerExpression__ValuesAssignment_1");
-			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getValuesAssignment_2_1(), "rule__STStructInitializerExpression__ValuesAssignment_2_1");
+			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getTypeAssignment_0_0(), "rule__STStructInitializerExpression__TypeAssignment_0_0");
+			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getValuesAssignment_2(), "rule__STStructInitializerExpression__ValuesAssignment_2");
+			builder.put(grammarAccess.getSTStructInitializerExpressionAccess().getValuesAssignment_3_1(), "rule__STStructInitializerExpression__ValuesAssignment_3_1");
 			builder.put(grammarAccess.getSTStructInitElementAccess().getVariableAssignment_0(), "rule__STStructInitElement__VariableAssignment_0");
 			builder.put(grammarAccess.getSTStructInitElementAccess().getValueAssignment_2(), "rule__STStructInitElement__ValueAssignment_2");
 			builder.put(grammarAccess.getSTPragmaAccess().getAttributesAssignment_2(), "rule__STPragma__AttributesAssignment_2");
