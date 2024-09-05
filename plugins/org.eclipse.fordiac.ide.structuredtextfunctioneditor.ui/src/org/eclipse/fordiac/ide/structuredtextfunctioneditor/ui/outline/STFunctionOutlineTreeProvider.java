@@ -13,15 +13,25 @@
  *       - initial API and implementation and/or initial documentation
  *   Martin Erich Jobst
  *       - add headings support
+ *       - add outline structure
  */
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.outline;
 
 import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.STCoreOutlineTreeProvider;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
 
 @SuppressWarnings({ "static-method", "java:S100" })
 public class STFunctionOutlineTreeProvider extends STCoreOutlineTreeProvider {
+
+	protected boolean _isLeaf(final STFunctionSource modelElement) {
+		return modelElement.getFunctions().isEmpty();
+	}
+
+	protected void _createChildren(final IOutlineNode parentNode, final STFunctionSource modelElement) {
+		modelElement.getFunctions().forEach(function -> createNode(parentNode, function));
+	}
 
 	protected boolean _isLeaf(final STFunction modelElement) {
 		return modelElement.getVarDeclarations().isEmpty() && !hasHeadings(modelElement);
