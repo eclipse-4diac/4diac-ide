@@ -41,6 +41,11 @@ public class Messages extends NLS {
 	public static String ValueOperations_UnsupportedType;
 	public static String ValueOperations_UnsupportedUnaryOperation;
 	public static String ValueOperations_Xor;
+	public static String VariableOperations_NoEvaluatorForAttribute;
+	public static String VariableOperations_NoEvaluatorForDirectlyDerivedType;
+	public static String VariableOperations_NoEvaluatorForVarDeclaration;
+	public static String VariableOperations_TypeMustNotBeNull;
+	public static String VariableOperations_UnsupportedType;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
