@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.globalconstantseditor.ui;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocument;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocumentPartitioner;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.outline.GlobalConstantsOutlinePage;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreCleanupEditorCallback;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
@@ -56,6 +57,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreMarkerCrea
 import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreMarkerTypeProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreResourceUIValidatorExtension;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.formatting.IWhitespaceInformationProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
@@ -296,5 +298,10 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 	@Override
 	public Class<? extends IWhitespaceInformationProvider> bindIWhitespaceInformationProvider() {
 		return STCoreWhitespaceInformationProvider.class;
+	}
+
+	@Override
+	public Class<? extends IContentOutlinePage> bindIContentOutlinePage() {
+		return GlobalConstantsOutlinePage.class;
 	}
 }
