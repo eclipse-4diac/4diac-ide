@@ -42,6 +42,12 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 		super(dataType, name, interfaceList, isInput, isInOut, index);
 	}
 
+	public CreateSubAppInterfaceElementCommand(final DataType dataType, final String name,
+			final InterfaceList interfaceList, final boolean isInput, final boolean isInOut, final String arraySize,
+			final int index) {
+		super(dataType, name, interfaceList, isInput, isInOut, arraySize, index);
+	}
+
 	public CreateSubAppInterfaceElementCommand(final DataType dataType, final InterfaceList interfaceList,
 			final boolean isInput, final int index) {
 		super(dataType, interfaceList, isInput, index);

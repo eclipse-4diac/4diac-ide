@@ -23,11 +23,13 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Data;
 import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.eval.DeploymentEvaluatorSharedState;
+import org.eclipse.fordiac.ide.deployment.eval.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
+import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorCountingEventQueue;
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -70,6 +72,8 @@ public class DeploymentFBEvaluator<T extends FBType> extends FBEvaluator<T> {
 				for (final MonitoringBaseElement element : monitoringElements.values()) {
 					sharedState.getDeviceManagementInteractor().addWatch(element);
 				}
+				writeVariables(getType().getInterfaceList().getInputVars());
+				writeVariables(getType().getInterfaceList().getInOutVars());
 				updateWatches(sharedState.readWatches());
 				outputEvent = false; // make sure output event is set to false after update
 			} catch (final DeploymentException e) {
@@ -123,6 +127,7 @@ public class DeploymentFBEvaluator<T extends FBType> extends FBEvaluator<T> {
 			sharedState.writeDeviceParameter(FAKE_TIME_DEV_PARAM_NAME, StandardFunctions.NOW_MONOTONIC().toString());
 			sharedState.triggerEvent(monitoringElements.get(event.getName()));
 			pollWatches();
+			update(getVariables().values());
 		} catch (final DeploymentException e) {
 			throw new EvaluatorException(e.getMessage(), e, this);
 		}
@@ -154,19 +159,43 @@ public class DeploymentFBEvaluator<T extends FBType> extends FBEvaluator<T> {
 	protected void updateWatch(final Port port) {
 		final MonitoringElement monitoringElement = monitoringElements.get(port.getName());
 		if (monitoringElement != null) {
-			final IInterfaceElement interfaceElement = monitoringElement.getPort().getInterfaceElement();
-			if (interfaceElement instanceof final VarDeclaration varDeclaration) {
-				final Variable<?> variable = getVariables().get(varDeclaration.getName());
-				if (variable != null) {
-					port.getDataValues().stream().map(Data::getValue).forEachOrdered(variable::setValue);
-				}
-			} else if (interfaceElement instanceof final Event event) {
-				final String oldValue = monitoringElement.getCurrentValue();
-				port.getDataValues().stream().map(Data::getValue).forEachOrdered(monitoringElement::setCurrentValue);
-				if (!event.isIsInput() && !oldValue.equals(monitoringElement.getCurrentValue())) {
-					outputEvent = true;
+			// update monitoring element
+			final String oldValue = monitoringElement.getCurrentValue();
+			port.getDataValues().stream().map(Data::getValue).forEachOrdered(monitoringElement::setCurrentValue);
+			final String newValue = monitoringElement.getCurrentValue();
+			// update interface element
+			switch (monitoringElement.getPort().getInterfaceElement()) {
+			case final VarDeclaration varDeclaration -> updateDataWatch(varDeclaration, newValue);
+			case final Event event when !oldValue.equals(newValue) -> updateEventWatch(event, newValue);
+			case null, default -> {
+				// do nothing
+			}
+			}
+		}
+	}
+
+	protected void updateDataWatch(final VarDeclaration varDeclaration, final String newValue)
+			throws IllegalArgumentException {
+		final Variable<?> variable = getVariables().get(varDeclaration.getName());
+		if (variable != null) {
+			variable.setValue(newValue);
+		}
+	}
+
+	protected void updateEventWatch(final Event event, final String newValue) {
+		if (getEventQueue() instanceof final FBEvaluatorCountingEventQueue countingEventQueue) {
+			final Event typeEvent = getType().getInterfaceList().getEvent(event.getName());
+			if (typeEvent != null) {
+				try {
+					final int eventCount = Integer.parseInt(newValue);
+					countingEventQueue.getCount(typeEvent).set(eventCount);
+				} catch (final NumberFormatException e) {
+					error(Messages.DeploymentFBEvaluator_InvalidEventCounter, e);
 				}
 			}
+		}
+		if (!event.isIsInput()) {
+			outputEvent = true;
 		}
 	}
 

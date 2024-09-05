@@ -22,6 +22,7 @@ import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.getViewer;
 import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.selectElement;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -166,8 +167,9 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 	protected Rectangle getEmptyContainerPosSizeRef(final ExecutionEvent event, final EditPartViewer viewer,
 			final FBNetwork network) {
 		Rectangle selectionExtend;
-		final org.eclipse.swt.graphics.Point point = ((FBNetworkContextMenuProvider) viewer.getContextMenu())
-				.getPoint();
+		final org.eclipse.swt.graphics.Point point = Optional
+				.ofNullable(((FBNetworkContextMenuProvider) viewer.getContextMenu()).getPoint())
+				.orElse(new org.eclipse.swt.graphics.Point(0, 0));
 		selectionExtend = new Rectangle(point.x, point.y, 200, 100);
 		final IFigure targetFigure = getTargetFigure(event, viewer, network);
 		targetFigure.translateToRelative(selectionExtend);

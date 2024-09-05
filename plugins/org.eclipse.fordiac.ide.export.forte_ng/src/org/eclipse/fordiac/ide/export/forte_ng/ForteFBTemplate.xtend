@@ -34,7 +34,9 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB
 import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -64,9 +66,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateHeaderIncludes() '''
-		«(type.interfaceList.inputVars + type.interfaceList.outputVars).map[type].generateTypeIncludes»
-		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
-		
+		«getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE}).generateDependencyIncludes»
 		«type.compilerInfo?.header»
 	'''
 
@@ -76,21 +76,8 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		#include "«type.generateTypeGenIncludePath»"
 		#endif
 		
-		#include "criticalregion.h"
-		#include "resource.h"
+		«getDependencies(emptyMap).generateDependencyIncludes»
 		«type.compilerInfo?.header»
-	'''
-
-	def protected generateImplTypeIncludes(Iterable<DataType> vars) '''
-		«IF !vars.empty»
-			«vars.generateTypeIncludes»
-		«ENDIF»
-	'''
-
-	def protected generateAdapterIncludes(Iterable<AdapterDeclaration> vars) '''
-		«FOR include : vars.map[type.generateDefiningInclude].toSet»
-			#include "«include»"
-		«ENDFOR»
 	'''
 
 	def protected generateFBDeclaration() '''
@@ -510,7 +497,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected CharSequence generateNameAsConnectionVariable(INamedElement element) '''var_conn_«element.name»'''
 
-
 	def protected generateEventAccessorDefinitions() '''
 		«FOR event : type.interfaceList.eventInputs BEFORE '\n'»
 			«event.generateEventAccessorDefinition»
@@ -553,7 +539,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected getFBClassName() { className }
 
-
 	def protected generateInitializeDeclaration() '''
 		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
 			bool initialize() override;
@@ -579,6 +564,31 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			«adapter.generateName».setParentFB(this, «adapters.indexOf(adapter)»);
 		«ENDFOR»
 	'''
+
+	def generateInternalFBDeclarations(List<FB> internalFbs) '''
+		«FOR fb : internalFbs»
+			forte::core::CInternalFB<«fb.type.generateTypeName»> «fb.generateName»;
+		«ENDFOR»		
+	'''
+
+	def generateInternalFBInitializer(List<FB> internalFbs) // /
+	'''«FOR fb : internalFbs BEFORE ",\n" SEPARATOR ",\n"»«fb.generateInternalFBInitializer»«ENDFOR»'''
+
+	def generateInternalFBInitializer(FB fb) {
+		if (fb.type.genericType)
+			'''«fb.generateName»(«fb.name.FORTEStringId», "«fb.generateInternalFBConfigString»", *this)'''
+		else
+			'''«fb.generateName»(«fb.name.FORTEStringId», *this)'''
+	}
+
+	def generateInternalFBConfigString(FB fb) {
+		switch (fb) {
+			ConfigurableFB case fb.dataType !== null: //
+			'''«fb.type.generateTypeNamePlain»_1«fb.dataType.generateTypeNamePlain»'''
+			default:
+				fb.type.generateTypeNamePlain
+		}
+	}
 
 	override Set<INamedElement> getDependencies(Map<?, ?> options) {
 		(super.getDependencies(options) + (type.interfaceList.sockets + type.interfaceList.plugs).map[getType]

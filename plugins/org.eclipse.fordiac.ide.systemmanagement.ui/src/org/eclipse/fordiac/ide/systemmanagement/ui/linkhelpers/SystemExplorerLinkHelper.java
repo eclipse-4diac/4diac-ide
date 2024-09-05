@@ -125,7 +125,11 @@ public class SystemExplorerLinkHelper implements ILinkHelper {
 				final EObject breadCrumbRef = getBreadCrumbRefElement(elementToOpen);
 				breadCrumbEditor.getBreadcrumb().setInput(breadCrumbRef);
 				if (breadCrumbRef != elementToOpen || elementToOpen instanceof Device) {
-					HandlerHelper.selectElement(elementToOpen, editor);
+					if (elementToOpen instanceof final SubApp subapp && subapp.isUnfolded()) {
+						HandlerHelper.showExpandedSubapp(subapp, editor);
+					} else {
+						HandlerHelper.selectElement(elementToOpen, editor);
+					}
 				}
 			}
 		}

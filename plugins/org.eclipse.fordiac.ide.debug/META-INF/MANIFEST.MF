@@ -14,9 +14,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.debug.core,
  org.eclipse.xtext
 Export-Package: org.eclipse.fordiac.ide.debug,
- org.eclipse.fordiac.ide.debug.basic,
  org.eclipse.fordiac.ide.debug.breakpoint,
  org.eclipse.fordiac.ide.debug.fb,
- org.eclipse.fordiac.ide.debug.function,
  org.eclipse.fordiac.ide.debug.preferences,
- org.eclipse.fordiac.ide.debug.simple
+ org.eclipse.fordiac.ide.debug.value

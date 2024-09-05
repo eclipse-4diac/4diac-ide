@@ -5,16 +5,7 @@
 		point="org.eclipse.debug.ui.launchConfigurationTabs">
 		<tab
 			class="org.eclipse.fordiac.ide.deployment.debug.ui.runtime.RuntimeLaunchConfigurationTab"
-			group="org.eclipse.fordiac.ide.debug.ui.simpleFBLaunchConfigurationTabGroup"
-			id="org.eclipse.fordiac.ide.deployment.debug.ui.runtimeTab"
-			name="Runtime">
-			<placement
-				after="org.eclipse.fordiac.ide.debug.ui.mainTab">
-			</placement>
-		</tab>
-		<tab
-			class="org.eclipse.fordiac.ide.deployment.debug.ui.runtime.RuntimeLaunchConfigurationTab"
-			group="org.eclipse.fordiac.ide.debug.ui.basicFBLaunchConfigurationTabGroup"
+			group="org.eclipse.fordiac.ide.debug.ui.fbLaunchConfigurationTabGroup"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.runtimeTab"
 			name="Runtime">
 			<placement
@@ -32,6 +23,18 @@
 				mode="run">
 			</launchMode>
 		</launchConfigurationTabGroup>
+  <launchConfigurationTabGroup
+        class="org.eclipse.fordiac.ide.deployment.debug.ui.fb.DeploymentFBLaunchConfigurationTabGroup"
+        id="org.eclipse.fordiac.ide.deployment.debug.ui.deployFBLaunchConfigurationTabGroup"
+        type="org.eclipse.fordiac.ide.deployment.debug.deployFBLaunch">
+     <launchMode
+           mode="run">
+     </launchMode>
+     <launchMode
+           mode="debug"
+           perspective="org.eclipse.debug.ui.DebugPerspective">
+     </launchMode>
+  </launchConfigurationTabGroup>
 	</extension>
 	<extension
 		point="org.eclipse.debug.ui.launchShortcuts">
@@ -76,6 +79,54 @@
 				</enablement>
 			</contextualLaunch>
 		</shortcut>
+  <shortcut
+        class="org.eclipse.fordiac.ide.deployment.debug.ui.fb.DeploymentFBLaunchShortcut"
+        icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_type_run.png"
+        id="org.eclipse.fordiac.ide.deployment.debug.ui.deployFBLaunchShortcut"
+        label="Remote Evaluate FB Type"
+        modes="run, debug">
+     <contextualLaunch>
+        <contextLabel
+              label="Run FB Type on Device"
+              mode="run">
+        </contextLabel>
+        <contextLabel
+              label="Debug FB Type on Device"
+              mode="debug">
+        </contextLabel>
+        <enablement>
+           <with
+                 variable="selection">
+              <count
+                    value="1">
+              </count>
+              <iterate>
+                 <adapt
+                       type="org.eclipse.core.resources.IResource">
+                    <or>
+                       <test
+                             property="org.eclipse.fordiac.ide.typemanagement.fbType"
+                             value="SimpleFBType">
+                       </test>
+                       <test
+                             property="org.eclipse.fordiac.ide.typemanagement.fbType"
+                             value="BasicFBType">
+                       </test>
+                       <test
+                             property="org.eclipse.fordiac.ide.typemanagement.fbType"
+                             value="FunctionFBType">
+                       </test>
+                       <test
+                             property="org.eclipse.fordiac.ide.typemanagement.fbType"
+                             value="ServiceInterfaceFBType">
+                       </test>
+                    </or>
+                 </adapt>
+              </iterate>
+           </with>
+        </enablement>
+     </contextualLaunch>
+  </shortcut>
 	</extension>
 	<extension
 		point="org.eclipse.debug.ui.launchConfigurationTypeImages">
@@ -84,6 +135,11 @@
 			icon="platform:/plugin/org.eclipse.debug.ui/icons/full/etool16/run_exc.png"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.deploymentLaunchConfigurationTypeImage">
 		</launchConfigurationTypeImage>
+  <launchConfigurationTypeImage
+        configTypeID="org.eclipse.fordiac.ide.deployment.debug.deployFBLaunch"
+        icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_type_run.png"
+        id="org.eclipse.fordiac.ide.deployment.debug.ui.launchConfigurationTypeImageDeployFB">
+  </launchConfigurationTypeImage>
 	</extension>
 	<extension
 		point="org.eclipse.core.runtime.adapters">

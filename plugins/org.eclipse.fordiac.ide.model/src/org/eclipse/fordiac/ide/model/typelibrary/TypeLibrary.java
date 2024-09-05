@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,7 +48,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
 import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
@@ -235,12 +236,12 @@ public final class TypeLibrary {
 			return null;
 		}
 		final TypeEntry entry = fileMap.computeIfAbsent(file, TypeEntryFactory.INSTANCE::createTypeEntry);
-		if (null != entry) {
-			if (!FordiacKeywords.isReservedKeyword(entry.getTypeName())) {
+		if (entry != null) {
+			final Optional<String> message = IdentifierVerifier.verifyIdentifier(entry.getTypeName());
+			if (message.isEmpty()) {
 				addTypeEntry(entry);
 			} else {
-				createTypeLibraryMarker(file,
-						MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, entry.getTypeName()));
+				createTypeLibraryMarker(file, message.get());
 			}
 		}
 		return entry;

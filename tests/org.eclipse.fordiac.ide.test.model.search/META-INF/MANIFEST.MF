@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Search Tests
+Bundle-SymbolicName: org.eclipse.fordiac.ide.test.model.search
+Bundle-Version: 3.0.0.qualifier
+Fragment-Host: org.eclipse.fordiac.ide.model.search
+Automatic-Module-Name: org.eclipse.fordiac.ide.test.model.search
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-Vendor: Eclipse 4diac
+Import-Package: org.junit.jupiter.api,
+ org.junit.jupiter.api.function,
+ org.junit.jupiter.params,
+ org.junit.jupiter.params.provider,
+ org.opentest4j
+Require-Bundle: org.eclipse.fordiac.ide.model.search.st,
+ org.eclipse.fordiac.ide.structuredtextalgorithm,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor,
+ org.eclipse.fordiac.ide.globalconstantseditor,
+ org.eclipse.fordiac.ide.test.model

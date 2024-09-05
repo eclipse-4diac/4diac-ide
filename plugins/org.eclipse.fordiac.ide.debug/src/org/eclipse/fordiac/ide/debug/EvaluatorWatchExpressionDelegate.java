@@ -19,6 +19,7 @@ import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IWatchExpressionDelegate;
 import org.eclipse.debug.core.model.IWatchExpressionListener;
 import org.eclipse.debug.core.model.IWatchExpressionResult;
+import org.eclipse.fordiac.ide.debug.value.EvaluatorDebugValue;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
@@ -38,7 +39,7 @@ public class EvaluatorWatchExpressionDelegate implements IWatchExpressionDelegat
 			try {
 				final Value result = expressionEvaluator.evaluate();
 				watchResult = new WatchExpressionResult(expression,
-						new EvaluatorDebugValue(result, context.getDebugTarget()));
+						EvaluatorDebugValue.forValue(result, expression, edsf.getDebugTarget()));
 			} catch (final EvaluatorException e) {
 				watchResult = new WatchExpressionResult(expression,
 						new DebugException(Status.error(e.getMessage(), e)));

@@ -598,9 +598,9 @@
       <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//IVarElement/varDeclarations"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//LibraryElement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/versionInfo"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/identification"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/compilerInfo"/>
+      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/versionInfo"/>
+      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/identification"/>
+      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/compilerInfo"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LibraryElement/typeEntry"/>
       <genOperations ecoreOperation="lib.ecore#//LibraryElement/getTypeLibrary" body="if (null != getTypeEntry()) {&#xA;&#x9;return getTypeEntry().getTypeLibrary();&#xA;}&#xA;return null;"/>
     </genClasses>

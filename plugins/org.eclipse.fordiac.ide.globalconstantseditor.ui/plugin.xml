@@ -382,18 +382,45 @@
 				</reference>
 			</activeWhen>
 		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.MoveElementHandler"
+			commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.MoveElement">
+			<activeWhen>
+				<reference
+					definitionId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
 		<menuContribution
-			locationURI="popup:#TextEditorContext?after=group.edit">
-			<command commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
-				style="push">
-				<visibleWhen checkEnabled="false">
-					<reference
-						definitionId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.Editor.opened">
-					</reference>
-				</visibleWhen>
-			</command>
+			locationURI="popup:#TextEditorContext?after=xtext.ui.SourceMenu">
+			<menu
+				id="org.eclipse.fordiac.ide.globalconstantseditor.ui.RefactoringMenu"
+				label="Refactor">
+				<command
+					commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
+					label="Rename ..."
+					style="push">
+					<visibleWhen
+						checkEnabled="false">
+						<reference
+							definitionId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.Editor.opened">
+						</reference>
+					</visibleWhen>
+				</command>
+				<command
+					commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.MoveElement"
+					label="Move ..."
+					style="push">
+					<visibleWhen
+						checkEnabled="false">
+						<reference
+							definitionId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.Editor.opened">
+						</reference>
+					</visibleWhen>
+				</command>
+			</menu>
 		</menuContribution>
 	</extension>
 	<extension point="org.eclipse.ui.preferencePages">
@@ -509,5 +536,11 @@
           </input>
        </propertySection>
     </propertySections>
+ </extension>
+ <extension
+       point="org.eclipse.xtext.ui.resourceRelocationStrategy">
+    <strategy
+          class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreResourceRelocationStrategy">
+    </strategy>
  </extension>
 </plugin>

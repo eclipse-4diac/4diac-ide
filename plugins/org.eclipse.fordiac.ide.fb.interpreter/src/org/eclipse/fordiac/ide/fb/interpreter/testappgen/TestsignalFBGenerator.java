@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.AbstractBasicF
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestCase;
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestState;
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -66,11 +67,24 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 
 	@Override
 	protected void generateECC() {
+		createTimeOutPlug();
+		final Algorithm timeoutAlg = createTimeOutAlg(destinationFB, 250);
+
 		final TestEccGenerator eccGen = new TestEccGenerator(destinationFB.getECC(), 0);
 		for (final TestCase testCase : testSuite.getTestCases()) {
-			int stateCnt = 1;
-			for (final TestState testState : testCase.getTestStates()) {
-				eccGen.createState(testCase.getName() + "_S" + stateCnt, stateCnt); //$NON-NLS-1$
+			// int stateCnt = 1;
+
+			eccGen.createState(testCase.getName() + "_S" + 0, 0); //$NON-NLS-1$
+			eccGen.createTransitionFromTo(eccGen.getEcc().getECState().get(0), eccGen.getLastState(),
+					destinationFB.getInterfaceList().getEventInputs().get(eccGen.getCaseCount()));
+			final ECAction actToMatch = TestEccGenerator.createAction();
+			actToMatch.setOutput(getOutputEventForTestCase(testCase));
+			actToMatch.setAlgorithm(timeoutAlg);
+			eccGen.getLastState().getECAction().add(actToMatch);
+
+			for (int i = 0; i < testCase.getTestStates().size(); i++) {
+				final TestState testState = testCase.getTestStates().get(i);
+				eccGen.createState(testCase.getName() + "_S" + i + 1, i + 1); //$NON-NLS-1$
 
 				final Event ev = destinationFB.getInterfaceList().getEvent(testState.getTestTrigger().getEvent());
 				final ECAction actToTest = TestEccGenerator.createAction();
@@ -78,20 +92,19 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 				final Algorithm alg = createValueSettingAlgorithm(destinationFB, testState);
 				actToTest.setAlgorithm(alg);
 				eccGen.getLastState().getECAction().add(actToTest);
-
-				if (stateCnt <= 1) {
-					eccGen.createTransitionFromTo(eccGen.getEcc().getECState().get(0), eccGen.getLastState(),
-							destinationFB.getInterfaceList().getEventInputs().get(eccGen.getCaseCount()));
-					final ECAction actToMatch = TestEccGenerator.createAction();
-					actToMatch.setOutput(getOutputEventForTestCase(testCase));
-					eccGen.getLastState().getECAction().add(actToMatch);
-
+				if (i == 0) {
+					eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(), null);
+				} else if (i >= 1 && testCase.getTestStates().get(i - 1).getTestOutputs().isEmpty()) {
+					// timeoutaction
+					final ECAction a = TestEccGenerator.createAction(getStartTimeoutEvent());
+					eccGen.getNTimesLast(1).getECAction().add(a);
+					eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
+							getTransitionTimeOutEvent());
 				} else {
 					eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
 							destinationFB.getInterfaceList().getEventInputs().getLast());
 				}
 
-				stateCnt++;
 			}
 			eccGen.createTransitionFromTo(eccGen.getLastState(), eccGen.getEcc().getECState().get(0), null);
 
@@ -116,33 +129,23 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 	}
 
 	public static Algorithm createValueSettingAlgorithm(final BasicFBType fb, final TestState testState) {
-		boolean containsParameters = false;
-		int nameCnt = 0;
-		if (!fb.getAlgorithm().isEmpty()) {
-			nameCnt = Integer.parseInt(fb.getAlgorithm().getLast().getName().substring(1));
-			nameCnt++;
-		}
-
 		final StringBuilder algText = new StringBuilder();
+		algText.append(GeneratedNameConstants.TESTSIGNALGEN_CASECOUNT_PINNAME + " := " //$NON-NLS-1$
+				+ testState.getTestCase().getServiceSequence().getServiceTransaction().size() + "; \n"); //$NON-NLS-1$
 
 		if (testState.getTestTrigger().getParameters() != null
 				&& !testState.getTestTrigger().getParameters().equals("")) { //$NON-NLS-1$
-			containsParameters = true;
 			algText.append(testState.getTestTrigger().getParameters().replace(";", ";\n")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		for (final OutputPrimitive outP : testState.getTestOutputs()) {
 			if (outP.getParameters() != null && !outP.getParameters().equals("")) { //$NON-NLS-1$
-				containsParameters = true;
 				String s = outP.getParameters().replace(";", ";\n");//$NON-NLS-1$ //$NON-NLS-2$
 				s = createDataPinName(s);
 				algText.append(s);
 			}
 		}
-
-		if (!containsParameters) {
-			return null;
-		}
+		final int nameCnt = fb.getAlgorithm().size();
 		return TestEccGenerator.createAlgorithm(fb, "A" + nameCnt, algText.toString()); //$NON-NLS-1$
 	}
 
@@ -180,6 +183,8 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 	@Override
 	protected List<VarDeclaration> createOutputDataList() {
 		final List<VarDeclaration> list = new ArrayList<>();
+		list.add(createOutputVarDecl(sourceType.getTypeLibrary().getDataTypeLibrary().getType(FordiacKeywords.INT),
+				GeneratedNameConstants.TESTSIGNALGEN_CASECOUNT_PINNAME));
 		list.addAll(sourceType.getInterfaceList().getInputVars().stream()
 				.map(n -> createOutputVarDecl(n.getType(), n.getName())).toList());
 		list.addAll(sourceType.getInterfaceList().getOutputVars().stream()

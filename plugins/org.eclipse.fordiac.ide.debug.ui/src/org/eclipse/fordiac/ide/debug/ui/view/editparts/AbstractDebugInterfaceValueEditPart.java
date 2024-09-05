@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c)  2012 - 2022 Profactor GmbH, fortiss GmbH,
- * 							  Primetals Technologies Austria GmbH
+ * Copyright (c)  2012, 2024 Profactor GmbH, fortiss GmbH,
+ * 							 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,26 +22,26 @@ import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.graphics.Font;
 
 public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphicalEditPart {
 
+	private static final int DEBUG_VALUE_MIN_WIDTH = 50;
 	private InterfaceEditPart referencedInterface;
 
 	protected AbstractDebugInterfaceValueEditPart() {
-		super();
 	}
 
 	@Override
 	public void activate() {
 		super.activate();
 		final Object part = getViewer().getEditPartRegistry().get(getInterfaceElement());
-		if (part instanceof InterfaceEditPart) {
-			referencedInterface = (InterfaceEditPart) part;
+		if (part instanceof final InterfaceEditPart iep) {
+			referencedInterface = iep;
 			referencedInterface.getFigure().addAncestorListener(new AncestorListener() {
 
 				@Override
@@ -65,13 +65,18 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 
 	protected abstract IInterfaceElement getInterfaceElement();
 
-	private boolean isInput() {
+	public boolean isInput() {
 		return getInterfaceElement().isIsInput();
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		final Label l = new Label();
+		final Label l = new Label() {
+			@Override
+			protected String getTruncationString() {
+				return "\u2026"; //$NON-NLS-1$
+			}
+		};
 		l.setSize(100, -1);
 		l.setOpaque(true);
 		l.setBackgroundColor(org.eclipse.draw2d.ColorConstants.yellow);
@@ -86,8 +91,7 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 		return l;
 	}
 
-	@Override
-	public Label getFigure() {
+	public Label getLabelFigure() {
 		return (Label) super.getFigure();
 	}
 
@@ -107,38 +111,19 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 			final Rectangle bounds = referencedInterface.getFigure().getBounds();
 
 			final int width = getFigureWidth();
-			final int x = calcXPos(bounds, width);
-			final Rectangle newBounds = new Rectangle(x, bounds.y, width, -1);
+			final Rectangle newBounds = new Rectangle(0, bounds.y - bounds.height / 2, width, -1);
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), newBounds);
 		}
 	}
 
 	private int getFigureWidth() {
 		final Font font = getFigure().getFont();
-		int width = 50;
+		int width = DEBUG_VALUE_MIN_WIDTH;
 		if (font != null) {
 			width = getFigure().getPreferredSize().width;
-			width = Math.max(width, 50);
+			width = Math.clamp(width, DEBUG_VALUE_MIN_WIDTH, ValueEditPart.getMaxWidth());
 		}
 		return width;
-	}
-
-	private int calcXPos(final Rectangle bounds, final int width) {
-		int x = 0;
-		if (isInput()) {
-			x = bounds.x - 10 - width - 15 * getNumEventInputs();
-		} else {
-			x = bounds.x + bounds.width + 10 + 15 * getNumEventOutputs();
-		}
-		return x;
-	}
-
-	private int getNumEventInputs() {
-		return ((InterfaceList) getInterfaceElement().eContainer()).getEventInputs().size();
-	}
-
-	private int getNumEventOutputs() {
-		return ((InterfaceList) getInterfaceElement().eContainer()).getEventOutputs().size();
 	}
 
 }

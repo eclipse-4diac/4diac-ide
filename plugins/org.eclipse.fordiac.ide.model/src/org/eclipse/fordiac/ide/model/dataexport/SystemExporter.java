@@ -75,6 +75,7 @@ public class SystemExporter extends AbstractTypeExporter {
 			getWriter().writeAttribute(LibraryElementTags.SEGMENT_NAME_ELEMENT, link.getSegment().getName());
 			getWriter().writeAttribute(LibraryElementTags.SEGMENT_COMM_RESOURCE, link.getDevice().getName());
 			getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, link.getComment());
+			addAttributes(link.getAttributes());
 			addEndElement();
 		}
 	}

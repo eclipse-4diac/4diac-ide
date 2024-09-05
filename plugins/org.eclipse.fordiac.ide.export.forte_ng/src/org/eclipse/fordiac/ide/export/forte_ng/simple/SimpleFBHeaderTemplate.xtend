@@ -27,7 +27,7 @@ class SimpleFBHeaderTemplate extends BaseFBHeaderTemplate<SimpleFBType> {
 		super(type, name, prefix, "CSimpleFB")
 	}
 
-	override generateClassInclude() '''#include "simplefb.h"'''
+	override generateClassInclude() '''«generateDependencyInclude("simplefb.h")»'''
 
 	override generateAdditionalDeclarations() { "" }
 }

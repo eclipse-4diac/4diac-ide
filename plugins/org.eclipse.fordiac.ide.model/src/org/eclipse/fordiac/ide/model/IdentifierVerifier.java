@@ -22,7 +22,6 @@ package org.eclipse.fordiac.ide.model;
 
 import java.text.MessageFormat;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -34,14 +33,8 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
  */
 public final class IdentifierVerifier {
 
-	private static final String IDENTIFIER_REGEX = "[_A-Za-z][_A-Za-z\\d]*"; //$NON-NLS-1$
-	private static final Pattern IDENTIFIER_PATTERN = Pattern.compile(IDENTIFIER_REGEX, Pattern.MULTILINE);
-	private static final String INVALID_IDENTIFIER_REGEX = "[^_A-Za-z\\d]"; //$NON-NLS-1$
-	private static final Pattern INVALID_IDENTIFIER_PATTERN = Pattern.compile(INVALID_IDENTIFIER_REGEX,
-			Pattern.MULTILINE);
-
-	private static final String PACKAGE_NAME_REGEX = IDENTIFIER_REGEX + "(?:::" + IDENTIFIER_REGEX + ")*"; //$NON-NLS-1$ //$NON-NLS-2$
-	private static final Pattern PACKAGE_NAME_PATTERN = Pattern.compile(PACKAGE_NAME_REGEX, Pattern.MULTILINE);
+	private static final String IDENTIFIER_REGEX = "[_A-Za-z][_A-Za-z0-9]*+"; //$NON-NLS-1$
+	private static final Pattern IDENTIFIER_PATTERN = Pattern.compile(IDENTIFIER_REGEX);
 
 	private IdentifierVerifier() {
 		throw new UnsupportedOperationException();
@@ -70,25 +63,17 @@ public final class IdentifierVerifier {
 	 *         message is contained in the Optional
 	 */
 	public static Optional<String> verifyIdentifier(final String identifier, final Object context) {
-		if (identifier == null) {
-			return Optional.of(MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, identifier));
+		if (identifier == null || !IDENTIFIER_PATTERN.matcher(identifier).matches()) {
+			return Optional.of(MessageFormat.format(Messages.IdentifierVerifier_NameNotAValidIdentifier, identifier));
 		}
-		if (identifier.length() < 1) {
-			return Optional.of(Messages.IdentifierVerifier_ERROR_IdentifierLengthZero);
+		if (identifier.contains("__")) { //$NON-NLS-1$
+			return Optional.of(MessageFormat.format(Messages.IdentifierVerifier_NameConsecutiveUnderscore, identifier));
 		}
-		if (!IDENTIFIER_PATTERN.matcher(identifier).matches()) {
-			return Optional.of(MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, identifier));
-		}
-		if (!IDENTIFIER_PATTERN.matcher(identifier.substring(0, 1)).matches()) {
-			return Optional.of(Messages.IdentifierVerifier_ERROR_InvalidStartSymbol);
-		}
-		final Matcher invalidExpressionSymbolsMatcher = INVALID_IDENTIFIER_PATTERN.matcher(identifier);
-		if (invalidExpressionSymbolsMatcher.find()) {
-			return Optional.of(MessageFormat.format(Messages.IdentifierVerifier_ERROR_InvalidSymbolUsedInIdentifer,
-					invalidExpressionSymbolsMatcher.group(0)));
+		if (identifier.endsWith("_")) { //$NON-NLS-1$
+			return Optional.of(MessageFormat.format(Messages.IdentifierVerifier_NameTrailingUnderscore, identifier));
 		}
 		if (FordiacKeywords.isReservedKeyword(identifier, context)) {
-			return Optional.of(MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, identifier));
+			return Optional.of(MessageFormat.format(Messages.IdentifierVerifier_NameReservedKeyWord, identifier));
 		}
 		return Optional.empty();
 	}
@@ -97,13 +82,9 @@ public final class IdentifierVerifier {
 		if (packageName == null || packageName.isEmpty()) {
 			return Optional.empty(); // allow empty package names
 		}
-		if (!PACKAGE_NAME_PATTERN.matcher(packageName).matches()) {
-			return Optional
-					.of(MessageFormat.format(Messages.IdentifierVerifier_PackageNameNotAValidIdentifier, packageName));
-		}
-		return Stream.of(packageName.split(PackageNameHelper.PACKAGE_NAME_DELIMITER))
-				.filter(FordiacKeywords::isReservedKeyword).map(identifier -> MessageFormat
-						.format(Messages.IdentifierVerifier_PackageNameReservedKeyword, packageName, identifier))
+		return Stream.of(packageName.split(PackageNameHelper.PACKAGE_NAME_DELIMITER, -1))
+				.map(IdentifierVerifier::verifyIdentifier).flatMap(Optional::stream).map(message -> MessageFormat
+						.format(Messages.IdentifierVerifier_PackageNameMessage, message, packageName))
 				.findFirst();
 	}
 }

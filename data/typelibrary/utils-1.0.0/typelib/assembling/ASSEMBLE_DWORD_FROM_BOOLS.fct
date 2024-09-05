@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="ASSEMBLE_DWORD_FROM_BOOLS" Comment="this Function combines the 32 BOOLS to a DWORD">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="BIT_00"/>
+				<With Var="BIT_01"/>
+				<With Var="BIT_02"/>
+				<With Var="BIT_03"/>
+				<With Var="BIT_04"/>
+				<With Var="BIT_05"/>
+				<With Var="BIT_06"/>
+				<With Var="BIT_07"/>
+				<With Var="BIT_08"/>
+				<With Var="BIT_09"/>
+				<With Var="BIT_10"/>
+				<With Var="BIT_11"/>
+				<With Var="BIT_12"/>
+				<With Var="BIT_13"/>
+				<With Var="BIT_14"/>
+				<With Var="BIT_15"/>
+				<With Var="BIT_16"/>
+				<With Var="BIT_17"/>
+				<With Var="BIT_18"/>
+				<With Var="BIT_19"/>
+				<With Var="BIT_20"/>
+				<With Var="BIT_21"/>
+				<With Var="BIT_22"/>
+				<With Var="BIT_23"/>
+				<With Var="BIT_24"/>
+				<With Var="BIT_25"/>
+				<With Var="BIT_26"/>
+				<With Var="BIT_27"/>
+				<With Var="BIT_28"/>
+				<With Var="BIT_29"/>
+				<With Var="BIT_30"/>
+				<With Var="BIT_31"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="BIT_00" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_01" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_02" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_03" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_04" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_05" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_06" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_07" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_08" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_09" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_10" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_11" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_12" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_13" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_14" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_15" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_16" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_17" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_18" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_19" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_20" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_21" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_22" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_23" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_24" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_25" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_26" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_27" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_28" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_29" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_30" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_31" Type="BOOL" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="" Type="DWORD" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[(* this Function combines the 32 BOOLS to a DWORD *)
+FUNCTION ASSEMBLE_DWORD_FROM_BOOLS : DWORD
+
+VAR_INPUT
+	BIT_00 : BOOL;
+	BIT_01 : BOOL;
+	BIT_02 : BOOL;
+	BIT_03 : BOOL;
+	BIT_04 : BOOL;
+	BIT_05 : BOOL;
+	BIT_06 : BOOL;
+	BIT_07 : BOOL;
+	BIT_08 : BOOL;
+	BIT_09 : BOOL;
+	BIT_10 : BOOL;
+	BIT_11 : BOOL;
+	BIT_12 : BOOL;
+	BIT_13 : BOOL;
+	BIT_14 : BOOL;
+	BIT_15 : BOOL;
+	BIT_16 : BOOL;
+	BIT_17 : BOOL;
+	BIT_18 : BOOL;
+	BIT_19 : BOOL;
+	BIT_20 : BOOL;
+	BIT_21 : BOOL;
+	BIT_22 : BOOL;
+	BIT_23 : BOOL;
+	BIT_24 : BOOL;
+	BIT_25 : BOOL;
+	BIT_26 : BOOL;
+	BIT_27 : BOOL;
+	BIT_28 : BOOL;
+	BIT_29 : BOOL;
+	BIT_30 : BOOL;
+	BIT_31 : BOOL;
+END_VAR
+
+ASSEMBLE_DWORD_FROM_BOOLS.%X0 := BIT_00;
+ASSEMBLE_DWORD_FROM_BOOLS.%X1 := BIT_01;
+ASSEMBLE_DWORD_FROM_BOOLS.%X2 := BIT_02;
+ASSEMBLE_DWORD_FROM_BOOLS.%X3 := BIT_03;
+ASSEMBLE_DWORD_FROM_BOOLS.%X4 := BIT_04;
+ASSEMBLE_DWORD_FROM_BOOLS.%X5 := BIT_05;
+ASSEMBLE_DWORD_FROM_BOOLS.%X6 := BIT_06;
+ASSEMBLE_DWORD_FROM_BOOLS.%X7 := BIT_07;
+ASSEMBLE_DWORD_FROM_BOOLS.%X8 := BIT_08;
+ASSEMBLE_DWORD_FROM_BOOLS.%X9 := BIT_09;
+ASSEMBLE_DWORD_FROM_BOOLS.%X10 := BIT_10;
+ASSEMBLE_DWORD_FROM_BOOLS.%X11 := BIT_11;
+ASSEMBLE_DWORD_FROM_BOOLS.%X12 := BIT_12;
+ASSEMBLE_DWORD_FROM_BOOLS.%X13 := BIT_13;
+ASSEMBLE_DWORD_FROM_BOOLS.%X14 := BIT_14;
+ASSEMBLE_DWORD_FROM_BOOLS.%X15 := BIT_15;
+ASSEMBLE_DWORD_FROM_BOOLS.%X16 := BIT_16;
+ASSEMBLE_DWORD_FROM_BOOLS.%X17 := BIT_17;
+ASSEMBLE_DWORD_FROM_BOOLS.%X18 := BIT_18;
+ASSEMBLE_DWORD_FROM_BOOLS.%X19 := BIT_19;
+ASSEMBLE_DWORD_FROM_BOOLS.%X20 := BIT_20;
+ASSEMBLE_DWORD_FROM_BOOLS.%X21 := BIT_21;
+ASSEMBLE_DWORD_FROM_BOOLS.%X22 := BIT_22;
+ASSEMBLE_DWORD_FROM_BOOLS.%X23 := BIT_23;
+ASSEMBLE_DWORD_FROM_BOOLS.%X24 := BIT_24;
+ASSEMBLE_DWORD_FROM_BOOLS.%X25 := BIT_25;
+ASSEMBLE_DWORD_FROM_BOOLS.%X26 := BIT_26;
+ASSEMBLE_DWORD_FROM_BOOLS.%X27 := BIT_27;
+ASSEMBLE_DWORD_FROM_BOOLS.%X28 := BIT_28;
+ASSEMBLE_DWORD_FROM_BOOLS.%X29 := BIT_29;
+ASSEMBLE_DWORD_FROM_BOOLS.%X30 := BIT_30;
+ASSEMBLE_DWORD_FROM_BOOLS.%X31 := BIT_31;
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+</Function>

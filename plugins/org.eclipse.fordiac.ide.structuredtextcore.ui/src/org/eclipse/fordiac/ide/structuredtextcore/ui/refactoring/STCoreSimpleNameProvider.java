@@ -14,11 +14,20 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.xtext.ui.refactoring2.rename.ISimpleNameProvider.DefaultImpl;
 import org.eclipse.xtext.util.SimpleAttributeResolver;
 
 @SuppressWarnings("restriction")
 public class STCoreSimpleNameProvider extends DefaultImpl {
+
+	@Override
+	public boolean canRename(final EObject target) {
+		if (target instanceof STSource) {
+			return false; // cannot rename source (i.e., package declaration)
+		}
+		return super.canRename(target);
+	}
 
 	@Override
 	protected EAttribute getNameEAttribute(final EObject target) {

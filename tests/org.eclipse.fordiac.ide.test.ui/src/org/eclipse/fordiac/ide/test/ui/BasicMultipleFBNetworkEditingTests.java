@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.swt.graphics.Point;
 import org.junit.jupiter.api.Disabled;
@@ -52,14 +53,14 @@ public class BasicMultipleFBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void checkIfNewFbGetsNextFreeRunningNumber() {
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(100, 100));
-		dragAndDropEventsFB(E_SR_TREE_ITEM, new Point(300, 100));
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(500, 100));
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(100, 250));
-		dragAndDropEventsFB(E_SR_TREE_ITEM, new Point(300, 250));
-		dragAndDropEventsFB(E_CYCLE_TREE_ITEM, new Point(500, 250));
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(500, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 250));
+		dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 250));
+		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(500, 250));
 
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 
 		assertTrue(isFBNamePresendOnEditingArea(editor, E_CYCLE));
@@ -87,12 +88,12 @@ public class BasicMultipleFBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void checkIfNewFbGetsSmallestNextFreeRunningNumber() {
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(50, 100));
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(250, 100));
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(450, 100));
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(50, 250));
+		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(50, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(250, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(450, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(50, 250));
 
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 
 		assertTrue(isFBNamePresendOnEditingArea(editor, E_SWITCH));
@@ -104,7 +105,7 @@ public class BasicMultipleFBNetworkEditingTests extends Abstract4diacUITests {
 
 		deleteFB(editor, E_SWITCH_2);
 		assertFalse(isFBNamePresendOnEditingArea(editor, E_SWITCH_2));
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(450, 250));
+		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(450, 250));
 		assertTrue(isFBNamePresendOnEditingArea(editor, E_SWITCH_2));
 
 		deleteFB(editor, E_SWITCH);
@@ -112,10 +113,10 @@ public class BasicMultipleFBNetworkEditingTests extends Abstract4diacUITests {
 		assertFalse(isFBNamePresendOnEditingArea(editor, E_SWITCH));
 		assertFalse(isFBNamePresendOnEditingArea(editor, E_SWITCH_1));
 
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(450, 100));
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(250, 100));
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(250, 250));
-		dragAndDropEventsFB(E_SWITCH_TREE_ITEM, new Point(50, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(450, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(250, 100));
+		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(250, 250));
+		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(50, 100));
 		assertTrue(isFBNamePresendOnEditingArea(editor, E_SWITCH));
 		assertTrue(isFBNamePresendOnEditingArea(editor, E_SWITCH_1));
 		assertTrue(isFBNamePresendOnEditingArea(editor, E_SWITCH_4));

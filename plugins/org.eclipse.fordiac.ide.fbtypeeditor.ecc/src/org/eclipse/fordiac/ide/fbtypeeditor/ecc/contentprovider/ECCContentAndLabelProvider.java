@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
@@ -53,6 +54,10 @@ public final class ECCContentAndLabelProvider {
 		}
 
 		return events;
+	}
+
+	public static boolean isOneConditionExpression(final ECTransition transition) {
+		return transition.getConditionExpression() != null && transition.getConditionExpression().equals(ONE_CONDITION);
 	}
 
 	public static List<String> getOutputEventNames(final BasicFBType type) {

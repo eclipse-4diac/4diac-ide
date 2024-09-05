@@ -328,7 +328,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 	 * @return The debug variable (demand created if none exists)
 	 */
 	public EvaluatorDebugVariable getVariable(final Variable<?> variable) {
-		return variables.computeIfAbsent(variable, key -> new EvaluatorDebugVariable(key, debugTarget));
+		return variables.computeIfAbsent(variable, key -> new EvaluatorDebugVariable(key, key.getName(), debugTarget));
 	}
 
 	@Override

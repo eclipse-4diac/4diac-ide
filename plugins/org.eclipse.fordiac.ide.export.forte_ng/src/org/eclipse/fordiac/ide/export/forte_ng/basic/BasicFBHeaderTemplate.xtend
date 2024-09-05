@@ -36,7 +36,7 @@ class BasicFBHeaderTemplate extends BaseFBHeaderTemplate<BasicFBType> {
 		«generateStates»
 	'''
 	
-	override generateClassInclude() '''#include "basicfb.h"'''
+	override generateClassInclude() '''«generateDependencyInclude("basicfb.h")»'''
 
 	def protected generateStates() '''
 		«FOR state : type.ECC.ECState AFTER '\n'»

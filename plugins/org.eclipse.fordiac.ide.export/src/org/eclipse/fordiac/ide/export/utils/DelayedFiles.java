@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Johannes Kepler University Linz
- *                          Martin Erich Jobst
+ * Copyright (c) 2008, 2024 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University Linz, Martin Erich Jobst,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,10 +10,14 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Matthias Plasch
+ *     - createBakFile (moved from Utils class)
  *   Ernst Blecha
  *     - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *     - create parent directories on demand
+ *   Ernst Blecha
+ *     - do not overwrite files that did not change
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.utils;
 
@@ -21,11 +26,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import org.eclipse.fordiac.ide.util.Utils;
+import java.util.Objects;
 
 /**
  * Class DelayedFiles
@@ -41,22 +45,10 @@ public class DelayedFiles {
 	 *
 	 * encapsulates path and data of a file in memory (before writing)
 	 */
-	private static final class FileObject {
-		private final Path path;
-		private final Iterable<? extends CharSequence> data;
-
-		public FileObject(final Path path, final CharSequence data) {
-			this.path = path;
-			this.data = Collections.singleton(data);
-		}
-
-		public Path getPath() {
-			return path;
-		}
-
-		@SuppressWarnings("unchecked")
-		public Iterable<CharSequence> getData() {
-			return (Iterable<CharSequence>) data;
+	private static record FileObject(Path path, CharSequence data) {
+		public FileObject {
+			Objects.requireNonNull(path);
+			Objects.requireNonNull(data);
 		}
 	}
 
@@ -67,22 +59,8 @@ public class DelayedFiles {
 	 * returned after all files were written
 	 */
 
-	public static final class StoredFiles {
-		private final File oldFile;
-		private final File newFile;
+	public static record StoredFiles(File oldFile, File newFile) {
 
-		public StoredFiles(final File oldFile, final File newFile) {
-			this.oldFile = oldFile;
-			this.newFile = newFile;
-		}
-
-		public File getOldFile() {
-			return oldFile;
-		}
-
-		public File getNewFile() {
-			return newFile;
-		}
 	}
 
 	private final List<FileObject> storage;
@@ -98,7 +76,8 @@ public class DelayedFiles {
 	}
 
 	/**
-	 * store file data in memory for writing to disk later
+	 * store file data in memory for writing to disk later, verify if data to be
+	 * written is different to file content
 	 *
 	 * @param path  file path to be written to
 	 * @param bytes data to be written as a CharSequence
@@ -106,12 +85,14 @@ public class DelayedFiles {
 	 * @return path to be written to to be compatible with java.nio.file.Files
 	 */
 	public Path write(final Path path, final CharSequence data) {
-		storage.add(new FileObject(path, data));
+		if (hasChangedContent(path, data)) {
+			storage.add(new FileObject(path, data));
+		}
 		return path;
 	}
 
 	/**
-	 * store file data in memory for writing to disk later
+	 * write file data stored in memory to disk
 	 *
 	 * if any of the files to write is already present on disk a backup file of the
 	 * existing file will be created.
@@ -124,17 +105,16 @@ public class DelayedFiles {
 	 */
 	public Iterable<StoredFiles> write(final boolean forceOverwrite) throws IOException {
 		final ArrayList<StoredFiles> ret = new ArrayList<>(storage.size());
-
 		for (final FileObject fo : storage) {
 			File o = null;
-			final File f = fo.getPath().toFile();
+			final File f = fo.path().toFile();
 			if (!forceOverwrite && f.exists()) {
-				o = Utils.createBakFile(f);
+				o = createBakFile(f);
 			}
-			if (fo.getPath().getParent() != null) {
-				Files.createDirectories(fo.getPath().getParent());
+			if (fo.path().getParent() != null) {
+				Files.createDirectories(fo.path().getParent());
 			}
-			Files.write(fo.getPath(), fo.getData(), StandardCharsets.UTF_8);
+			Files.writeString(fo.path(), fo.data(), StandardCharsets.UTF_8);
 			ret.add(new StoredFiles(o, f));
 		}
 
@@ -148,12 +128,7 @@ public class DelayedFiles {
 	 * @return true if any of the files already exist, false otherwise
 	 */
 	public boolean exist() {
-		for (final FileObject fo : storage) {
-			if (fo.getPath().toFile().exists()) {
-				return true;
-			}
-		}
-		return false;
+		return storage.stream().anyMatch((final FileObject fo) -> fo.path().toFile().exists());
 	}
 
 	/** remove all of the data currently prepared in memory */
@@ -163,7 +138,47 @@ public class DelayedFiles {
 
 	/** retrieve an iterable of all filenames currently ready for writing */
 	public List<String> getFilenames() {
-		return storage.stream().map(item -> item.getPath().getFileName().toString()).toList();
+		return storage.stream().map(item -> item.path().getFileName().toString()).toList();
+	}
+
+	/**
+	 * compare if the generated data is already written to disk
+	 *
+	 * @param path  file path to be written to
+	 * @param bytes data to be written as a CharSequence
+	 *
+	 * @return data on disk does not match the generated data
+	 */
+	private static boolean hasChangedContent(final Path p, final CharSequence data) {
+		try {
+			return !Files.readString(p).equals(data);
+		} catch (final IOException e) {
+			return true;
+		}
+	}
+
+	/**
+	 * Creats a backup file of the specified file.
+	 *
+	 * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
+	 *
+	 * @param in the file that should be backuped
+	 *
+	 * @return the backup file
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	private static File createBakFile(final File in) throws IOException {
+		final String path = in.getAbsolutePath() + ".bak"; //$NON-NLS-1$
+		File f;
+		int i = 1;
+		String temp = path;
+		while ((f = new File(temp)).exists()) {
+			temp = path + i;
+			i++;
+		}
+		Files.copy(in.toPath(), f.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		return f;
 	}
 
 }

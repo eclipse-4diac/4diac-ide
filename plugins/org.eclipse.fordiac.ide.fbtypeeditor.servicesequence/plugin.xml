@@ -179,7 +179,7 @@
       </command>
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.exportServiceSequencesAsTest"
-            name="export Service Sequences as C++ Boost Test">
+            name="Export Service Sequences as C++ Boost Test">
       </command>       
    </extension>
    <extension
@@ -306,23 +306,6 @@
 	<menuContribution
        allPopups="false"
        locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
-       <command
-            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
-            label="Run Service Sequence"
-            style="push">
-            <visibleWhen checkEnabled="true">
-					<with variable="selection">
-            			<iterate>
-            				<or>
-            					<instanceof
-                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
-            					<instanceof
-                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
-            				</or>
-            			</iterate>
-            		</with>
-            </visibleWhen>
-       </command>
 	       <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence"
             label="Record Service Sequence"
@@ -343,8 +326,8 @@
             </visibleWhen>
        </command>
 	   <command
-            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createAllSequences"
-            label="create all Service Sequences"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.getCoverage"
+            label="Get Test Coverage"
             style="push">
             <visibleWhen checkEnabled="true">
             	<with variable="selection">
@@ -352,24 +335,28 @@
             			<or>
             				<instanceof
                        			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+                       		<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
             			</or>
             		</iterate>
             	</with>
             </visibleWhen>
        </command>
        <command
-            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createMaxCoverageSequences"
-            label="create max Coverage Sequences"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
+            label="Run Service Sequence"
             style="push">
             <visibleWhen checkEnabled="true">
-            	<with variable="selection">
-            		<iterate>
-            			<or>
-            				<instanceof
-                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
-            			</or>
-            		</iterate>
-            	</with>
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+            		</with>
             </visibleWhen>
        </command>
        <command
@@ -388,8 +375,8 @@
             </visibleWhen>
        </command>
 	   <command
-            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.getCoverage"
-            label="get Coverage"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createAllSequences"
+            label="Create all Service Sequences"
             style="push">
             <visibleWhen checkEnabled="true">
             	<with variable="selection">
@@ -397,8 +384,21 @@
             			<or>
             				<instanceof
                        			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
-                       		<instanceof
-                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+       </command>
+       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createMaxCoverageSequences"
+            label="Create max Coverage Sequences"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
             			</or>
             		</iterate>
             	</with>
@@ -406,7 +406,7 @@
        </command>
        <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.exportServiceSequencesAsTest"
-            label="export Service Sequences as C++ Boost Test"
+            label="Export Service Sequences as C++ Boost Test"
             style="push">
             <visibleWhen checkEnabled="true">
             	<with variable="selection">
@@ -458,29 +458,35 @@
             </visibleWhen>
        </menu>
 	</menuContribution>
- <menuContribution
+   	<menuContribution
        allPopups="false"
        locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
     <command
           commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.newServiceSequence"
           label="New Service Sequence"
           style="push">
+       <visibleWhen
+             checkEnabled="true">
+          <with
+                variable="selection">
+             <iterate>
+                <or>
+                   <instanceof
+                         value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart">
+                   </instanceof>
+                   <instanceof
+                         value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart">
+                   </instanceof>
+                   <instanceof
+                         value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence">
+                   </instanceof>
+                </or>
+             </iterate>
+          </with>
+       </visibleWhen>
     </command>
-    <visibleWhen checkEnabled="true">
-            	<with variable="selection">
-            		<iterate>
-            			<or>
-            				<instanceof
-                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
-                       		<instanceof
-                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
-            				<instanceof
-                       				value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
-            			</or>
-            		</iterate>
-            	</with>
-            </visibleWhen>
- </menuContribution> 
+ </menuContribution>
+ 
    </extension>
    <extension
          point="org.eclipse.ui.views">

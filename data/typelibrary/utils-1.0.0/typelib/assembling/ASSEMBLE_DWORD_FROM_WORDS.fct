@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="ASSEMBLE_DWORD_FROM_WORDS" Comment="this Function combines the 2 WORDS to a dword">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="WORD_00"/>
+				<With Var="WORD_01"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="WORD_00" Type="WORD" Comment=""/>
+			<VarDeclaration Name="WORD_01" Type="WORD" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="" Type="DWORD" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[(* this Function combines the 2 WORDS to a dword *)
+FUNCTION ASSEMBLE_DWORD_FROM_WORDS : DWORD
+
+VAR_INPUT
+	WORD_00 : WORD;
+	WORD_01 : WORD;
+END_VAR
+
+ASSEMBLE_DWORD_FROM_WORDS.%W0 := WORD_00;
+ASSEMBLE_DWORD_FROM_WORDS.%W1 := WORD_01;
+
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+</Function>

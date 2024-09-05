@@ -10,5 +10,13 @@
             modes="run"
             name="Deploy">
       </launchConfigurationType>
+      <launchConfigurationType
+            delegate="org.eclipse.fordiac.ide.deployment.debug.fb.DeploymentFBLaunchConfigurationDelegate"
+            delegateName="Remote Evaluate FB"
+            id="org.eclipse.fordiac.ide.deployment.debug.deployFBLaunch"
+            modes="run, debug"
+            name="Remote Evaluate FB"
+            sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
+      </launchConfigurationType>
    </extension>
 </plugin>

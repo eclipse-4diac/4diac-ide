@@ -4,27 +4,11 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            delegate="org.eclipse.fordiac.ide.debug.simple.SimpleFBLaunchConfigurationDelegate"
-            delegateName="Evaluate Simple FB"
-            id="org.eclipse.fordiac.ide.debug.simpleFBLaunch"
+            delegate="org.eclipse.fordiac.ide.debug.fb.FBLaunchConfigurationDelegate"
+            delegateName="Evaluate FB"
+            id="org.eclipse.fordiac.ide.debug.fbLaunch"
             modes="run, debug"
-            name="Evaluate Simple FB"
-            sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
-      </launchConfigurationType>
-      <launchConfigurationType
-            delegate="org.eclipse.fordiac.ide.debug.basic.BasicFBLaunchConfigurationDelegate"
-            delegateName="Evaluate Basic FB"
-            id="org.eclipse.fordiac.ide.debug.basicFBLaunch"
-            modes="run, debug"
-            name="Evaluate Basic FB"
-            sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
-      </launchConfigurationType>
-      <launchConfigurationType
-            delegate="org.eclipse.fordiac.ide.debug.function.FunctionFBLaunchConfigurationDelegate"
-            delegateName="Evaluate Function FB"
-            id="org.eclipse.fordiac.ide.debug.functionFBLaunch"
-            modes="run, debug"
-            name="Evaluate Function FB"
+            name="Evaluate FB"
             sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
       </launchConfigurationType>
    </extension>
