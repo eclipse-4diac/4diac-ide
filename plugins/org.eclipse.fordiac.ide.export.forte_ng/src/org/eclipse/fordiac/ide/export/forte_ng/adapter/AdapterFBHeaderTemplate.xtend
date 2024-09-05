@@ -69,8 +69,8 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterType> {
 	'''
 
 	override protected generateHeaderIncludes() '''
-		#include "adapter.h"
-		#include "typelib.h"
+		«generateDependencyInclude("adapter.h")»
+		«generateDependencyInclude("typelib.h")»
 		«super.generateHeaderIncludes»
 	'''
 

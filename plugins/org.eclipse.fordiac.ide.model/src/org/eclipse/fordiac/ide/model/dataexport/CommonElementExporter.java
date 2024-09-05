@@ -387,6 +387,9 @@ public class CommonElementExporter {
 
 	protected void addAttributes(final EList<Attribute> attributes) throws XMLStreamException {
 		for (final Attribute attribute : attributes) {
+			if (attribute.getAttributeDeclaration() != null) {
+				addDependency(attribute.getAttributeDeclaration());
+			}
 			addAttributeElement(attribute.getName(), attribute.getType(), attribute.getValue(), attribute.getComment());
 		}
 	}

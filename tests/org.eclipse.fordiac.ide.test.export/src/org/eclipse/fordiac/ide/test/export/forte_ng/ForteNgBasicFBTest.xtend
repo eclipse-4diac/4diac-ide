@@ -116,8 +116,6 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt_gen.cpp"
 						#endif
 						
-						#include "criticalregion.h"
-						#include "resource.h"
 						#include "forte_dword.h"
 						#include "forte_sint.h"
 						#include "iec61131_functions.h"

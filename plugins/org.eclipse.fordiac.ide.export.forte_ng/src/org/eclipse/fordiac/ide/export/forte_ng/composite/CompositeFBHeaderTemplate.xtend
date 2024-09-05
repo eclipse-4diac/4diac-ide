@@ -79,8 +79,8 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 	'''
 
 	override protected CharSequence generateHeaderIncludes() '''
-		#include "cfb.h"
-		#include "typelib.h"
+		«generateDependencyInclude("cfb.h")»
+		«generateDependencyInclude("typelib.h")»
 		«super.generateHeaderIncludes»
 	'''
 

@@ -13,12 +13,15 @@
 package org.eclipse.fordiac.ide.model.edit;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeDeclarationCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
@@ -26,14 +29,18 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.search.types.AttributeTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
@@ -131,8 +138,25 @@ public class TypeEntryAdapter extends AdapterImpl {
 				if (typeEntry instanceof final DataTypeEntry dtEntry) {
 					handleDataTypeEntryUpdate(editedElement, dtEntry);
 				}
+				if (typeEntry instanceof final AttributeTypeEntry atEntry) {
+					handleAttributeTypeEntryUpdate(editedElement, atEntry);
+				}
 			});
 		}
+	}
+
+	private static void handleAttributeTypeEntryUpdate(final LibraryElement editedElement,
+			final AttributeTypeEntry atEntry) {
+		final AttributeTypeInstanceSearch search = new AttributeTypeInstanceSearch(editedElement, atEntry);
+		final List<? extends EObject> result = search.performSearch();
+
+		result.forEach(at -> {
+			// update attribute here
+			if (at instanceof final ConfigurableObject co) {
+				final Attribute attribute = co.getAttribute(atEntry.getTypeName());
+				ChangeAttributeDeclarationCommand.forEntry(attribute, atEntry).execute();
+			}
+		});
 	}
 
 	private static void handleBlockTypeDependencyUpdate(final LibraryElement editedElement, final TypeEntry typeEntry) {
@@ -145,7 +169,6 @@ public class TypeEntryAdapter extends AdapterImpl {
 					}
 					return new UpdateFBTypeCommand(fbnEl, typeEntry);
 				}).forEach(Command::execute);
-
 	}
 
 	private static void handleDataTypeEntryUpdate(final LibraryElement editedElement, final DataTypeEntry dtEntry) {

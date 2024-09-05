@@ -76,22 +76,8 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		#include "«type.generateTypeGenIncludePath»"
 		#endif
 		
-		#include "criticalregion.h"
-		#include "resource.h"
 		«getDependencies(emptyMap).generateDependencyIncludes»
 		«type.compilerInfo?.header»
-	'''
-
-	def protected generateImplTypeIncludes(Iterable<DataType> vars) '''
-		«IF !vars.empty»
-			«vars.generateTypeIncludes»
-		«ENDIF»
-	'''
-
-	def protected generateAdapterIncludes(Iterable<AdapterDeclaration> vars) '''
-		«FOR include : vars.map[type.generateDefiningInclude].toSet»
-			#include "«include»"
-		«ENDFOR»
 	'''
 
 	def protected generateFBDeclaration() '''
@@ -594,11 +580,13 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		else
 			'''«fb.generateName»(«fb.name.FORTEStringId», *this)'''
 	}
-	
+
 	def generateInternalFBConfigString(FB fb) {
-		switch(fb) {
-			ConfigurableFB: '''«fb.type.generateTypeNamePlain»_1«fb.dataType.generateTypeNamePlain»'''
-			default: fb.type.generateTypeNamePlain
+		switch (fb) {
+			ConfigurableFB case fb.dataType !== null: //
+			'''«fb.type.generateTypeNamePlain»_1«fb.dataType.generateTypeNamePlain»'''
+			default:
+				fb.type.generateTypeNamePlain
 		}
 	}
 

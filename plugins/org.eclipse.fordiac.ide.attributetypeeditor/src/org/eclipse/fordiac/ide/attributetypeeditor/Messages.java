@@ -24,6 +24,12 @@ public final class Messages extends NLS {
 	public static String MessageDialogContent_OutsideWorkspaceError;
 	public static String Editor_ComboBox_StructEditingComposite;
 	public static String Editor_ComboBox_DirectlyDerivedTypeComposite;
+	public static String MessageDialogTitle_SaveError;
+	public static String MessageDialogContent_SaveError;
+	public static String StructAlteringButton_SaveAndUpdate;
+	public static String StructAlteringButton_SaveAs;
+	public static String StructAlteringDescription;
+	public static String WarningDialog_StructNotSaved;
 
 	static {
 		// initialize resource bundle

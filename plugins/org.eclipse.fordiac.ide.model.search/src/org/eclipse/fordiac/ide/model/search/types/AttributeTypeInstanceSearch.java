@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
@@ -38,6 +39,11 @@ public class AttributeTypeInstanceSearch extends IEC61499ElementSearch {
 
 	public AttributeTypeInstanceSearch(final AttributeTypeEntry attEntry) {
 		super(new LiveSearchContext(attEntry.getTypeLibrary()), createSearchFilter(attEntry),
+				new AttributeTypeInstanceSearchChildrenProvider());
+	}
+
+	public AttributeTypeInstanceSearch(final LibraryElement typeEditable, final AttributeTypeEntry attEntry) {
+		super(new LibraryElementSearchContext(typeEditable), createSearchFilter(attEntry),
 				new AttributeTypeInstanceSearchChildrenProvider());
 	}
 
@@ -99,8 +105,7 @@ public class AttributeTypeInstanceSearch extends IEC61499ElementSearch {
 			case final FBNetworkElement fbnElement ->
 				SearchChildrenProviderHelper.getInterfaceListChildren(fbnElement.getInterface());
 			case final StructuredType structType -> SearchChildrenProviderHelper.getStructChildren(structType);
-			case final AttributeDeclaration attrdecl ->
-				SearchChildrenProviderHelper.getAttributeDeclChildren(attrdecl);
+			case final AttributeDeclaration attrdecl -> SearchChildrenProviderHelper.getAttributeDeclChildren(attrdecl);
 			case final DeviceType deviceType -> deviceType.getVarDeclaration().stream();
 			case final ResourceType resourceType -> resourceType.getVarDeclaration().stream();
 			case final SegmentType segmentType -> segmentType.getVarDeclaration().stream();
