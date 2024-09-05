@@ -30,9 +30,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
+import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.BoolType;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
@@ -50,6 +52,7 @@ import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.eval.value.WStringValue;
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable;
+import org.eclipse.fordiac.ide.model.eval.variable.GenericVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.PartialVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.StringCharacterVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable;
@@ -259,6 +262,9 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 
 	protected Variable<?> evaluateInitializerExpression(final Variable<?> variable,
 			final STArrayInitializerExpression expression) throws EvaluatorException, InterruptedException {
+		if (variable instanceof GenericVariable) {
+			variable.setValue(new ArrayValue((ArrayType) expression.getResultType()));
+		}
 		final ArrayValue value = (ArrayValue) variable.getValue();
 		int index = 0;
 		for (final STArrayInitElement elem : expression.getValues()) {
@@ -280,6 +286,9 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 
 	protected Variable<?> evaluateInitializerExpression(final Variable<?> variable,
 			final STStructInitializerExpression expression) throws EvaluatorException, InterruptedException {
+		if (variable instanceof GenericVariable) {
+			variable.setValue(new StructValue((StructuredType) expression.getResultType()));
+		}
 		final StructValue value = (StructValue) variable.getValue();
 		for (final STStructInitElement elem : expression.getValues()) {
 			evaluateInitializerExpression(value.get(elem.getVariable().getName()), elem.getValue());
