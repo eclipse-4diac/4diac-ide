@@ -16,6 +16,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.eval.messages"; //$NON-NLS-1$
+	public static String EvaluatorInitializerException_DefaultMessage;
 	public static String ValueOperations_Absolute;
 	public static String ValueOperations_Add;
 	public static String ValueOperations_And;

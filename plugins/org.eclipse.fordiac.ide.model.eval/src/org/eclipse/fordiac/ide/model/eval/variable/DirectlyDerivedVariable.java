@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.eval.variable;
 
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorInitializerException;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 
 public class DirectlyDerivedVariable extends AbstractVariable<Value> {
@@ -21,7 +22,11 @@ public class DirectlyDerivedVariable extends AbstractVariable<Value> {
 
 	protected DirectlyDerivedVariable(final String name, final DirectlyDerivedType type) {
 		super(name, type);
-		delegate = VariableOperations.newVariable(type);
+		try {
+			delegate = VariableOperations.newVariable(type);
+		} catch (final Exception e) {
+			throw new EvaluatorInitializerException(type, e);
+		}
 	}
 
 	protected DirectlyDerivedVariable(final String name, final DirectlyDerivedType type, final String value) {
