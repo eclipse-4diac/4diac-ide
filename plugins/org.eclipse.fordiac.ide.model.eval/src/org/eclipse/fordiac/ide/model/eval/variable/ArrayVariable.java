@@ -56,16 +56,6 @@ public class ArrayVariable extends AbstractVariable<ArrayValue> implements Itera
 	}
 
 	@Override
-	public void setValue(final String value) {
-		setValue(VariableOperations.evaluateValue(getType(), value));
-	}
-
-	@Override
-	public boolean validateValue(final String value) {
-		return VariableOperations.validateValue(getType(), value).isEmpty();
-	}
-
-	@Override
 	public ArrayType getType() {
 		return (ArrayType) super.getType();
 	}

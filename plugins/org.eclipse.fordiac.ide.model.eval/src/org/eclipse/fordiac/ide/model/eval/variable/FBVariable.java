@@ -14,17 +14,12 @@ package org.eclipse.fordiac.ide.model.eval.variable;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.eval.value.FBValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 public class FBVariable extends AbstractVariable<FBValue> {
-	private static final Pattern MAP_PATTERN = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); //$NON-NLS-1$
-	private static final Pattern MAP_KV_PATTERN = Pattern.compile(":=(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); //$NON-NLS-1$
-
 	private final FBValue value;
 
 	public FBVariable(final String name, final FBType type) {
@@ -52,43 +47,6 @@ public class FBVariable extends AbstractVariable<FBValue> {
 			throw createCastException(value);
 		}
 		fbValue.getMembers().forEach((name, variable) -> this.value.get(name).setValue(variable.getValue()));
-	}
-
-	@Override
-	public void setValue(final String value) {
-		final String trimmed = value.trim();
-		if (!trimmed.startsWith("(") || !trimmed.endsWith(")")) { //$NON-NLS-1$ //$NON-NLS-2$
-			throw createInvalidValueException();
-		}
-		final String inner = trimmed.substring(1, trimmed.length() - 1);
-		for (final String elem : FBVariable.MAP_PATTERN.split(inner)) {
-			final String[] split = FBVariable.MAP_KV_PATTERN.split(elem);
-			if (split.length != 2) {
-				throw createInvalidValueException();
-			}
-			final Variable<?> variable = this.value.get(split[0].trim());
-			if (variable == null) {
-				throw createInvalidValueException();
-			}
-			variable.setValue(split[1].trim());
-		}
-	}
-
-	@Override
-	public boolean validateValue(final String value) {
-		final String trimmed = value.trim();
-		if (!trimmed.startsWith("(") || !trimmed.endsWith(")")) { //$NON-NLS-1$ //$NON-NLS-2$
-			return false;
-		}
-		final String inner = trimmed.substring(1, trimmed.length() - 1);
-		return Stream.of(FBVariable.MAP_PATTERN.split(inner)).allMatch(elem -> {
-			final String[] split = FBVariable.MAP_KV_PATTERN.split(elem);
-			if (split.length != 2) {
-				return false;
-			}
-			final Variable<?> variable = this.value.get(split[0].trim());
-			return variable != null && variable.validateValue(split[1].trim());
-		});
 	}
 
 	public Map<String, Variable<?>> getMembers() {
