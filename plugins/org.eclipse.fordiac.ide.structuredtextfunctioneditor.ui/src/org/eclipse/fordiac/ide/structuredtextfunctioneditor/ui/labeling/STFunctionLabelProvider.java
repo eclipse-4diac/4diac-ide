@@ -22,11 +22,14 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.labeling.STCoreLabelProvider;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.Messages;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.google.inject.Inject;
 
-@SuppressWarnings({ "static-method", "java:S2177" })
+@SuppressWarnings({ "static-method", "java:S2177", "java:S1172" })
 public class STFunctionLabelProvider extends STCoreLabelProvider {
 
 	@Inject
@@ -34,8 +37,16 @@ public class STFunctionLabelProvider extends STCoreLabelProvider {
 		super(delegate);
 	}
 
+	public ImageDescriptor image(final STFunctionSource element) {
+		return FordiacImage.ICON_FUNCTION.getImageDescriptor();
+	}
+
 	public String text(final STFunction element) {
 		return MessageFormat.format(Messages.STFunctionLabelProvider_FunctionText,
 				STCoreResourceDescriptionStrategy.getCallableDisplayString(element));
+	}
+
+	public ImageDescriptor image(final STFunction element) {
+		return FordiacImage.ICON_FUNCTION.getImageDescriptor();
 	}
 }
