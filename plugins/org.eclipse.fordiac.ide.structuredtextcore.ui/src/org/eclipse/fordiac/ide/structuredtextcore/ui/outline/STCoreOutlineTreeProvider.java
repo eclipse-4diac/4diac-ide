@@ -20,6 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.Messages;
 import org.eclipse.xtext.AbstractRule;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
@@ -33,6 +34,14 @@ import org.eclipse.xtext.util.ITextRegion;
 public class STCoreOutlineTreeProvider extends DefaultOutlineTreeProvider {
 
 	private static final Pattern HEADING_PATTERN = Pattern.compile("//\\s*\\$h(\\d+)\\s+(.+)\\R"); //$NON-NLS-1$
+
+	protected boolean _isLeaf(final STVarDeclaration modelElement) {
+		return true;
+	}
+
+	protected void _createChildren(final IOutlineNode parentNode, final STVarDeclaration modelElement) {
+		// empty
+	}
 
 	protected static boolean hasHeadings(final EObject modelElement) {
 		final ICompositeNode node = NodeModelUtils.findActualNodeFor(modelElement);

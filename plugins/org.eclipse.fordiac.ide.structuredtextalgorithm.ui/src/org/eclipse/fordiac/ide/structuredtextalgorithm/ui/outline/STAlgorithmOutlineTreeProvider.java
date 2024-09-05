@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.outline;
 
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSourceElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.STCoreOutlineTreeProvider;
@@ -19,6 +20,14 @@ import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
 
 @SuppressWarnings({ "static-method", "java:S100" })
 public class STAlgorithmOutlineTreeProvider extends STCoreOutlineTreeProvider {
+
+	protected boolean _isLeaf(final STAlgorithmSource modelElement) {
+		return modelElement.getElements().isEmpty();
+	}
+
+	protected void _createChildren(final IOutlineNode parentNode, final STAlgorithmSource modelElement) {
+		modelElement.getElements().forEach(function -> createNode(parentNode, function));
+	}
 
 	protected boolean _isLeaf(final STAlgorithmSourceElement modelElement) {
 		return !hasHeadings(modelElement);
