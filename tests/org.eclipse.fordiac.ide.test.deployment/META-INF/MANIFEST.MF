@@ -12,6 +12,17 @@ Import-Package:  org.junit;version="4.13.2",
  org.junit.jupiter.params,
  org.junit.jupiter.params.provider,
  org.opentest4j
-Require-Bundle: org.eclipse.fordiac.ide.test.model
+Require-Bundle: org.eclipse.fordiac.ide.test.model,
+ org.eclipse.fordiac.ide.deployment.eval;bundle-version="3.0.0",
+ org.eclipse.fordiac.ide.model.eval.st;bundle-version="3.0.0",
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.fordiac.ide.model.eval,
+ org.eclipse.fordiac.ide.systemmanagement,
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.fordiac.ide.gef,
+ org.eclipse.fordiac.ide.structuredtextalgorithm;bundle-version="3.0.0",
+ org.eclipse.xtext;bundle-version="2.35.0"
 
 
