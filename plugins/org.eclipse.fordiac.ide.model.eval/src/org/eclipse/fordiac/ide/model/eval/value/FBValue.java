@@ -62,6 +62,16 @@ public final class FBValue implements Value, Iterable<Value> {
 		}
 	}
 
+	public FBValue(final FBType type, final Map<String, ?> values) {
+		this(type);
+		values.forEach((name, value) -> {
+			final Variable<?> member = members.get(name);
+			if (member != null) {
+				member.setValue(ValueOperations.wrapValue(value, member.getType()));
+			}
+		});
+	}
+
 	protected void initializeMember(final VarDeclaration variable) {
 		members.computeIfAbsent(variable.getName(), unused -> {
 			try {

@@ -23,6 +23,7 @@ public class Messages extends NLS {
 	public static String ValueOperations_Compare;
 	public static String ValueOperations_Divide;
 	public static String ValueOperations_DivisionByZero;
+	public static String ValueOperations_MemberMapCastMessage;
 	public static String ValueOperations_Multiply;
 	public static String ValueOperations_Negate;
 	public static String ValueOperations_Not;

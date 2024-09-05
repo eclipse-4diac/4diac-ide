@@ -36,6 +36,16 @@ public final class StructValue implements AnyDerivedValue, Iterable<Value> {
 				.collect(Collectors.toMap(Variable::getName, Function.identity(), (a, b) -> a, LinkedHashMap::new));
 	}
 
+	public StructValue(final StructuredType type, final Map<String, ?> values) {
+		this(type);
+		values.forEach((name, value) -> {
+			final Variable<?> member = members.get(name);
+			if (member != null) {
+				member.setValue(ValueOperations.wrapValue(value, member.getType()));
+			}
+		});
+	}
+
 	protected static Variable<?> initializeMember(final VarDeclaration variable) {
 		try {
 			return VariableOperations.newVariable(variable);
