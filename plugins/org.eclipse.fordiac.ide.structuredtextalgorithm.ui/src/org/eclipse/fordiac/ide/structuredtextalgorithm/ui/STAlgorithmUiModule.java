@@ -22,7 +22,6 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDo
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentUpdaterChangeAdapterFilter;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorActions;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.hyperlinking.STAlgorithmHyperlinkHelper;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.outline.FilterHeadingsContribution;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.refactoring.ExtractMethodRefactoring;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreCleanupEditorCallback;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferences;
@@ -41,6 +40,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuick
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDocumentReconcileStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.FilterHeadingsContribution;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallableRefactoring;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;

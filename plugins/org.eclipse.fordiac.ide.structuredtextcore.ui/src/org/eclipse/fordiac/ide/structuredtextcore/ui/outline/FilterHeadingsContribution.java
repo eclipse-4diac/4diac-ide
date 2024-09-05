@@ -10,9 +10,9 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.outline;
+package org.eclipse.fordiac.ide.structuredtextcore.ui.outline;
 
-import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.Messages;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.Messages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
