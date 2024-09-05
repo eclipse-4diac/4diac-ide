@@ -312,9 +312,11 @@ final package class ExpressionAnnotations {
 		expr.initExpressions.map[declaredResultType].reduce[first, second|first.commonSupertype(second)]
 	}
 
-	def package static INamedElement getResultType(STStructInitializerExpression expr) { getDeclaredResultType(expr) }
+	def package static INamedElement getResultType(STStructInitializerExpression expr) {
+		getDeclaredResultType(expr) ?: expr.expectedType
+	}
 
-	def package static INamedElement getDeclaredResultType(STStructInitializerExpression expr) { expr.expectedType }
+	def package static INamedElement getDeclaredResultType(STStructInitializerExpression expr) { expr.type }
 
 	def package static INamedElement getResultType(STStructInitElement expr) { getDeclaredResultType(expr) }
 

@@ -257,8 +257,9 @@ class STCoreFormatter extends AbstractFormatter2 {
 		interior(
 			ifStatement.regionFor.keyword("THEN"),
 			ifStatement.elseifs.empty
-				? (ifStatement.^else !== null ? ifStatement.^else.regionFor.keyword("ELSE") : ifStatement.regionFor.
-				keyword("END_IF"))
+				? (ifStatement.^else !== null
+				? ifStatement.^else.regionFor.keyword("ELSE")
+				: ifStatement.regionFor.keyword("END_IF"))
 				: ifStatement.elseifs.get(0).regionFor.keyword("ELSIF"),
 			[indent]
 		)
@@ -416,12 +417,14 @@ class STCoreFormatter extends AbstractFormatter2 {
 	/** Formats the STStructInitializerExpression */
 	def dispatch void format(STStructInitializerExpression structInitializerExpression,
 		extension IFormattableDocument document) {
-		structInitializerExpression.regionFor.keyword(STStructInitializerExpressionAccess.leftParenthesisKeyword_0).
+		structInitializerExpression.regionFor.keyword(STStructInitializerExpressionAccess.numberSignKeyword_0_1).
+			surround[noSpace]
+		structInitializerExpression.regionFor.keyword(STStructInitializerExpressionAccess.leftParenthesisKeyword_1).
 			append [
 				noSpace
 			]
 		structInitializerExpression.values.formatList(document)
-		structInitializerExpression.regionFor.keyword(STStructInitializerExpressionAccess.rightParenthesisKeyword_3).
+		structInitializerExpression.regionFor.keyword(STStructInitializerExpressionAccess.rightParenthesisKeyword_4).
 			prepend [
 				noSpace
 			]
@@ -641,9 +644,8 @@ class STCoreFormatter extends AbstractFormatter2 {
 					} else {
 						var lineCount = 0
 						if (region instanceof IHiddenRegionPart) {
-							lineCount = (region as IHiddenRegionPart).previousHiddenPart instanceof IComment
-								? region.getLineCount()
-								: region.getLineCount() - 1;
+							lineCount = (region as IHiddenRegionPart).previousHiddenPart instanceof IComment ? region.
+								getLineCount() : region.getLineCount() - 1;
 						} else
 							lineCount = region.getLineCount() - 1;
 						if (newLineMin !== null && newLineMin > lineCount)
