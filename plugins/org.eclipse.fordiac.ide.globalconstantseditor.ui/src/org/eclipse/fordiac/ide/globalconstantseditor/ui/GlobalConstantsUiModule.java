@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.globalconstantseditor.ui;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocument;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocumentPartitioner;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.outline.GlobalConstantsOutlinePage;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.refactoring.GlobalConstantsPartialSerializer;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreCleanupEditorCallback;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
@@ -65,6 +66,7 @@ import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculat
 import org.eclipse.xtext.ide.refactoring.IRenameNameValidator;
 import org.eclipse.xtext.ide.refactoring.IRenameStrategy2;
 import org.eclipse.xtext.ide.serializer.IChangeSerializer;
+import org.eclipse.xtext.ide.serializer.impl.PartialSerializer;
 import org.eclipse.xtext.ide.serializer.impl.RecordingXtextResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.ReferenceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.RelatedEmfResourceUpdater;
@@ -295,6 +297,10 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 
 	public Class<? extends ResourceLifecycleManager> bindResourceLifecycleManager() {
 		return STCoreResourceLifecycleManager.class;
+	}
+
+	public Class<? extends PartialSerializer> bindPartialSerializer() {
+		return GlobalConstantsPartialSerializer.class;
 	}
 
 	@Override
