@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDoc
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.FilterHeadingsContribution;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.STCoreOutlinePage;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
@@ -64,6 +65,7 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFun
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionRenameStrategy;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.formatting.IWhitespaceInformationProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
@@ -318,6 +320,11 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 	@Override
 	public Class<? extends IWhitespaceInformationProvider> bindIWhitespaceInformationProvider() {
 		return STCoreWhitespaceInformationProvider.class;
+	}
+
+	@Override
+	public Class<? extends IContentOutlinePage> bindIContentOutlinePage() {
+		return STCoreOutlinePage.class;
 	}
 
 	public void configureFilterHeadingsContribution(final Binder binder) {
