@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
-import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestPinHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.PropertySheetHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
@@ -33,9 +33,9 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	@Override
 	@BeforeEach
 	public void operationsInitialization() {
-		TESTVAR1 = PinNamesHelper.DI1;
-		TESTVAR2 = PinNamesHelper.DI2;
-		TESTVAR3 = PinNamesHelper.DI3;
+		TESTVAR1 = UITestPinHelper.DI1;
+		TESTVAR2 = UITestPinHelper.DI2;
+		TESTVAR3 = UITestPinHelper.DI3;
 		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
 		fbTypeBot.createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
 				UITestNamesHelper.ADAPTER);

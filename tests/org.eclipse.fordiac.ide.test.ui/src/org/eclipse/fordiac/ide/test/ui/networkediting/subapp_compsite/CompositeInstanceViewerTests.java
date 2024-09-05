@@ -27,7 +27,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
-import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestPinHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFB;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
@@ -194,13 +194,13 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 200));
 		goToCompositeInstanceViewer(UITestNamesHelper.E_N_TABLE_FB);
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.EO, PinNamesHelper.EI);
+		SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.EO, UITestPinHelper.EI);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = connectBot.createConnection(PinNamesHelper.N, PinNamesHelper.CV);
+		viewer = connectBot.createConnection(UITestPinHelper.N, UITestPinHelper.CV);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = connectBot.createConnection(PinNamesHelper.START, PinNamesHelper.STOP);
+		viewer = connectBot.createConnection(UITestPinHelper.START, UITestPinHelper.STOP);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = connectBot.createConnection(PinNamesHelper.START, PinNamesHelper.EO0);
+		viewer = connectBot.createConnection(UITestPinHelper.START, UITestPinHelper.EO0);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 		returnToEditingArea();
 	}
@@ -218,7 +218,7 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final ConnectionEditPart connection = connectBot.findConnection(PinNamesHelper.EO, PinNamesHelper.REQ);
+		final ConnectionEditPart connection = connectBot.findConnection(UITestPinHelper.EO, UITestPinHelper.REQ);
 		final PolylineConnection figure = (PolylineConnection) connection.getFigure();
 		final PointList points = figure.getPoints();
 		final org.eclipse.draw2d.geometry.Point firstPoint = points.getFirstPoint();
