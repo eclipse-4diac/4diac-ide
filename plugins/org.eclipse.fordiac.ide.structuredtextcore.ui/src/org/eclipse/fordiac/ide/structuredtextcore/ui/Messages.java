@@ -53,6 +53,13 @@ public final class Messages extends NLS {
 	public static String STCoreContentAssistPreferencePage_AutoActivationTriggers;
 	public static String STCoreContentAssistPreferencePage_ChangedSettingsEffect;
 	public static String STCoreLabelProvider_VarDeclarationText;
+	public static String STCoreLabelProvider_VarInOutDeclarationBlockText;
+	public static String STCoreLabelProvider_VarInputDeclarationBlockText;
+	public static String STCoreLabelProvider_VarOutputDeclarationBlockText;
+	public static String STCoreLabelProvider_VarPlainDeclarationBlockConstantText;
+	public static String STCoreLabelProvider_VarPlainDeclarationBlockText;
+	public static String STCoreLabelProvider_VarTempDeclarationBlockConstantText;
+	public static String STCoreLabelProvider_VarTempDeclarationBlockText;
 	public static String STCoreOutlineTreeProvider_MissingHeadingText;
 	public static String STCoreRenameElementRefactoringParticpant_Name;
 	public static String STCoreSaveActionsPreferencePage_EnableFormat;
