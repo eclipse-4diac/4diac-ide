@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.test.ui.helpers.PropertySheetHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotPropertySheet;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSystemExplorer;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
@@ -130,7 +130,7 @@ public class Abstract4diacUITests {
 		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
 
 		// Tabs access inside property sheet
-		PropertySheetHelper.selectPropertyTabItem(tabName, propertiesBot);
+		SWTBotPropertySheet.selectPropertyTabItem(tabName, propertiesBot);
 		return propertiesBot;
 	}
 
@@ -150,7 +150,7 @@ public class Abstract4diacUITests {
 		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
 
 		// Tabs access inside property sheet
-		PropertySheetHelper.selectPropertyTabItem(tabName, propertiesBot);
+		SWTBotPropertySheet.selectPropertyTabItem(tabName, propertiesBot);
 		return propertiesBot;
 	}
 

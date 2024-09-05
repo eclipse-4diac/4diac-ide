@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestPinHelper;
-import org.eclipse.fordiac.ide.test.ui.helpers.PropertySheetHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotPropertySheet;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
@@ -44,7 +44,7 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 		assertNotNull(propertiesBot);
 		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
 		bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).show();
-		PropertySheetHelper.selectPropertyTabItem(UITestNamesHelper.VAR_IN_AND_OUTPUTS, propertiesBot);
+		SWTBotPropertySheet.selectPropertyTabItem(UITestNamesHelper.VAR_IN_AND_OUTPUTS, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
 		natTableBot = new SWTBot4diacNatTable(natTable);
 		editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
