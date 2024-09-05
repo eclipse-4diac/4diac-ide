@@ -47,7 +47,10 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyCharType;
@@ -100,6 +103,7 @@ import org.eclipse.fordiac.ide.model.eval.Messages;
 import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
@@ -876,7 +880,10 @@ public final class ValueOperations {
 		case final AnyNumType unused -> DIntValue.DEFAULT;
 		case final AnyMagnitudeType unused -> DIntValue.DEFAULT;
 		case final AnyElementaryType unused -> DIntValue.DEFAULT;
+		case final ArrayType arrayType -> new ArrayValue(arrayType);
+		case final StructuredType structType -> new StructValue(structType);
 		case final AnyType unused -> DIntValue.DEFAULT;
+		case final FBType fbType -> new FBValue(fbType);
 		default -> throw createUnsupportedTypeException(type);
 		};
 	}
@@ -1175,6 +1182,8 @@ public final class ValueOperations {
 		// AnyNumType
 		// AnyMagnitudeType
 		// AnyElementaryType
+		case final ArrayType arrayType -> new ArrayValue(arrayType, (List<?>) value);
+		case final StructuredType structType -> new StructValue(structType, castMemberMap((Map<?, ?>) value));
 		case final AnyType unused -> switch (value) {
 		case final Byte byteValue -> toSIntValue(byteValue);
 		case final Short shortValue -> toIntValue(shortValue);
@@ -1187,6 +1196,7 @@ public final class ValueOperations {
 		case final Number number -> toDIntValue(number);
 		default -> toDIntValue(value.toString());
 		};
+		case final FBType fbType -> new FBValue(fbType, castMemberMap((Map<?, ?>) value));
 		default -> throw createUnsupportedTypeException(type);
 		};
 	}
@@ -1377,6 +1387,15 @@ public final class ValueOperations {
 		case final LibraryElement libraryElement -> PackageNameHelper.getFullTypeName(libraryElement);
 		default -> type.getName();
 		};
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Map<String, ?> castMemberMap(final Map<?, ?> map) {
+		map.keySet().stream().filter(Predicate.not(String.class::isInstance)).findAny().ifPresent(key -> {
+			throw new ClassCastException(MessageFormat.format(Messages.ValueOperations_MemberMapCastMessage, key,
+					key.getClass(), String.class));
+		});
+		return (Map<String, ?>) map;
 	}
 
 	private ValueOperations() {

@@ -54,6 +54,12 @@ public final class ArrayValue implements AnyDerivedValue, Iterable<Value> {
 				.toList();
 	}
 
+	public ArrayValue(final ArrayType type, final List<?> values) {
+		this(type);
+		IntStream.range(0, values.size()).forEach(
+				index -> elements.get(index).setValue(ValueOperations.wrapValue(values.get(index), elementType)));
+	}
+
 	public Variable<?> get(final int index) {
 		return elements.get(index - start);
 	}

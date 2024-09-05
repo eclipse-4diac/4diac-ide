@@ -39,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -60,6 +61,7 @@ import org.eclipse.fordiac.ide.model.data.LdateType;
 import org.eclipse.fordiac.ide.model.data.LdtType;
 import org.eclipse.fordiac.ide.model.data.LtimeType;
 import org.eclipse.fordiac.ide.model.data.LtodType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType;
 import org.eclipse.fordiac.ide.model.data.TimeType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
@@ -416,6 +418,8 @@ class ValueOperationsTest {
 			assertEquals(defaultValue, wrapValue("\u0000", type));
 		} else if (type instanceof AnyCharsType) {
 			assertEquals(defaultValue, wrapValue("", type));
+		} else if (type instanceof StructuredType) {
+			assertEquals(defaultValue, wrapValue(Map.of(), type));
 		} else {
 			assertEquals(defaultValue, wrapValue(Integer.valueOf(0), type));
 		}
