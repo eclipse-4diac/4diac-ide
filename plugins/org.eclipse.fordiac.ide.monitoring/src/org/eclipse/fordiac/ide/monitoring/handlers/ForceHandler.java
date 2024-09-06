@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 fortiss GmbH, Johannes Kepler University,
+ * Copyright (c) 2015, 2024 fortiss GmbH, Johannes Kepler University Linz,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,6 @@
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -39,12 +38,8 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class ForceHandler extends AbstractMonitoringHandler {
 
 	@Override
-	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		super.execute(event);
-		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-		final VarDeclaration variable = getVariable(selection.getFirstElement());
-		showDialogAndProcess(variable);
-		return null;
+	protected void doExecute(final ExecutionEvent event, final StructuredSelection structSel) {
+		showDialogAndProcess(getVariable(structSel.getFirstElement()));
 	}
 
 	public static void showDialogAndProcess(final VarDeclaration variable, final IInterfaceElement interfaceElement) {
@@ -54,30 +49,28 @@ public class ForceHandler extends AbstractMonitoringHandler {
 		}
 		final MonitoringManager manager = MonitoringManager.getInstance();
 		final MonitoringBaseElement element = manager.getMonitoringElement(variable);
-		if (element instanceof MonitoringElement) {
-			final MonitoringElement monitoringElement = (MonitoringElement) element;
-			String oldValue = "";
+		if (element instanceof final MonitoringElement monitoringElement) {
+			String oldValue = ""; //$NON-NLS-1$
 			if (monitoringElement.isForce() && monitoringElement.getForceValue() != null) {
 				oldValue = monitoringElement.getForceValue().substring(
 						monitoringElement.getForceValue().toLowerCase().indexOf(
 								interfaceElement.getName().toLowerCase()) + interfaceElement.getName().length() + 2,
 						monitoringElement.getForceValue().toLowerCase().indexOf(',',
 								monitoringElement.getForceValue().toLowerCase()
-								.indexOf(interfaceElement.getName().toLowerCase())) == -1
-								? monitoringElement.getForceValue().toLowerCase().indexOf(')',
-										monitoringElement.getForceValue().toLowerCase()
-										.indexOf(interfaceElement.getName().toLowerCase()))
-										: monitoringElement.getForceValue().toLowerCase().indexOf(',',
-												monitoringElement.getForceValue().toLowerCase()
-												.indexOf(interfaceElement.getName().toLowerCase())));
+										.indexOf(interfaceElement.getName().toLowerCase())) == -1
+												? monitoringElement.getForceValue().toLowerCase().indexOf(')',
+														monitoringElement.getForceValue().toLowerCase()
+																.indexOf(interfaceElement.getName().toLowerCase()))
+												: monitoringElement.getForceValue().toLowerCase().indexOf(',',
+														monitoringElement.getForceValue().toLowerCase()
+																.indexOf(interfaceElement.getName().toLowerCase())));
 
 			}
 			final InputDialog input = new InputDialog(Display.getDefault().getActiveShell(),
-					Messages.MonitoringWatchesView_ForceValue, Messages.MonitoringWatchesView_Value,
-					oldValue,
+					Messages.MonitoringWatchesView_ForceValue, Messages.MonitoringWatchesView_Value, oldValue,
 					(newValue -> {
-						if (interfaceElement instanceof VarDeclaration) {
-							return ForceHandler.validateForceInput((VarDeclaration) interfaceElement, newValue);
+						if (interfaceElement instanceof final VarDeclaration varDecl) {
+							return ForceHandler.validateForceInput(varDecl, newValue);
 						}
 						return null;
 					}));
@@ -95,13 +88,12 @@ public class ForceHandler extends AbstractMonitoringHandler {
 		if (null != variable) {
 			final MonitoringManager manager = MonitoringManager.getInstance();
 			final MonitoringBaseElement element = manager.getMonitoringElement(variable);
-			if (element instanceof MonitoringElement) {
-				final MonitoringElement monitoringElement = (MonitoringElement) element;
+			if (element instanceof final MonitoringElement monitoringElement) {
 				final IInterfaceElement interfaceElement = monitoringElement.getPort().getInterfaceElement();
 
 				String input;
-				if (variable.getType() instanceof StructuredType) {
-					input = showStructForceDialog((StructuredType) variable.getType(), monitoringElement);
+				if (variable.getType() instanceof final StructuredType structType) {
+					input = showStructForceDialog(structType, monitoringElement);
 
 					if (variable.isArray() && input != null) {
 						input = StructParser.removeArrayIndexes(input);
@@ -124,17 +116,17 @@ public class ForceHandler extends AbstractMonitoringHandler {
 		return ret == org.eclipse.jface.window.Window.OK ? dialog.getValue() : null;
 	}
 
-	private static String showForceDialog(final MonitoringElement monitoringElement, final IInterfaceElement interfaceElement) {
+	private static String showForceDialog(final MonitoringElement monitoringElement,
+			final IInterfaceElement interfaceElement) {
 		final InputDialog input = new InputDialog(Display.getDefault().getActiveShell(),
-				Messages.MonitoringWatchesView_ForceValue,
-				Messages.MonitoringWatchesView_Value,
+				Messages.MonitoringWatchesView_ForceValue, Messages.MonitoringWatchesView_Value,
 				monitoringElement.isForce() ? monitoringElement.getForceValue() : "", //$NON-NLS-1$
-						(newValue -> {
-							if (interfaceElement instanceof VarDeclaration) {
-								return ForceHandler.validateForceInput((VarDeclaration) interfaceElement, newValue);
-							}
-							return null;
-						}));
+				(newValue -> {
+					if (interfaceElement instanceof final VarDeclaration varDecl) {
+						return ForceHandler.validateForceInput(varDecl, newValue);
+					}
+					return null;
+				}));
 		final int ret = input.open();
 		return ret == org.eclipse.jface.window.Window.OK ? input.getValue() : null;
 	}
@@ -154,8 +146,7 @@ public class ForceHandler extends AbstractMonitoringHandler {
 		boolean needToAdd = false;
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 
-		if (selection instanceof StructuredSelection) {
-			final StructuredSelection sel = (StructuredSelection) selection;
+		if (selection instanceof final StructuredSelection sel) {
 			final MonitoringManager manager = MonitoringManager.getInstance();
 
 			if (1 == sel.size()) {
@@ -171,13 +162,13 @@ public class ForceHandler extends AbstractMonitoringHandler {
 
 	static VarDeclaration getVariable(final Object object) {
 		IInterfaceElement ie = null;
-		if (object instanceof InterfaceEditPart) {
-			ie = ((InterfaceEditPart) object).getModel();
-		} else if (object instanceof MonitoringEditPart) {
-			ie = ((MonitoringEditPart) object).getModel().getPort().getInterfaceElement();
+		if (object instanceof final InterfaceEditPart iep) {
+			ie = iep.getModel();
+		} else if (object instanceof final MonitoringEditPart me) {
+			ie = me.getModel().getPort().getInterfaceElement();
 		}
-		if (ie instanceof VarDeclaration) {
-			return (VarDeclaration) ie;
+		if (ie instanceof final VarDeclaration varDecl) {
+			return varDecl;
 		}
 		return null;
 	}

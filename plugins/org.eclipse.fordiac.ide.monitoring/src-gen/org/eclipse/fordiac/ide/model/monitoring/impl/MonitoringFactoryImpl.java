@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement;
+import org.eclipse.fordiac.ide.model.monitoring.InternalVarInstance;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
@@ -78,6 +79,7 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION: return createAdapterMonitoringVarDeclaration();
 			case MonitoringPackage.SUB_APP_PORT_ELEMENT: return createSubAppPortElement();
 			case MonitoringPackage.SUBAPP_MONITORING_ELEMENT: return createSubappMonitoringElement();
+			case MonitoringPackage.INTERNAL_VAR_INSTANCE: return createInternalVarInstance();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -153,6 +155,17 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	public SubappMonitoringElement createSubappMonitoringElement() {
 		SubappMonitoringElementImpl subappMonitoringElement = new SubappMonitoringElementImpl();
 		return subappMonitoringElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public InternalVarInstance createInternalVarInstance() {
+		InternalVarInstanceImpl internalVarInstance = new InternalVarInstanceImpl();
+		return internalVarInstance;
 	}
 
 	/**
