@@ -19,4 +19,5 @@ Require-Bundle: com.google.guava,
  org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.ui
 Export-Package: org.eclipse.fordiac.ide.export.forte_ng,
+ org.eclipse.fordiac.ide.export.forte_ng.algorithm,
  org.eclipse.fordiac.ide.export.forte_ng.util

@@ -30,18 +30,34 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData.ParameterData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.export.forte_ng.algorithm.OtherAlgorithmSupportFactory;
+import org.eclipse.fordiac.ide.export.forte_ng.st.StructuredTextSupportFactory;
+import org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsStandaloneSetup;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup;
 import org.eclipse.fordiac.ide.test.model.FordiacProjectLoader;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.osgi.framework.Bundle;
 
 class ResourceDeploymentTest {
+
+	private static final String DeviceName = "FORTE_PC"; //$NON-NLS-1$
+	private static final String TestNetwork_NumberOfParams = "TestNumberOfParams"; //$NON-NLS-1$
+	private static final String TestNetwork_UniqueParameterDestination = "TestParamsIdentity"; //$NON-NLS-1$
+	private static final String TestNetwork_UntypedSubApp = "TestUntypedSubApp"; //$NON-NLS-1$
+	private static final String[] resNames = { TestNetwork_NumberOfParams, TestNetwork_UniqueParameterDestination,
+			TestNetwork_UntypedSubApp };
 
 	private static EList<Resource> resources = null;
 
 	@BeforeAll
 	static void setupResourcesToTest() throws CoreException, IOException {
+		setup();
 		resources = loadResources();
 		assertNotNull(resources);
 	}
@@ -64,11 +80,24 @@ class ResourceDeploymentTest {
 	/*
 	 * Parameters should only be written once inside a bootfile
 	 */
+
+	@SuppressWarnings("static-method")
+	@ParameterizedTest
+	@ValueSource(strings = { TestNetwork_NumberOfParams, TestNetwork_UniqueParameterDestination,
+			TestNetwork_UntypedSubApp })
+	void testUniqueParameterDestinations(final String networkName) throws DeploymentException {
+		final ResourceDeploymentData data = generateDeploymentData(networkName);
+		assertFalse(hasDuplicateEntry(data.getParams()));
+	}
+
 	@SuppressWarnings("static-method")
 	@Test
 	void testParamsIndentity() throws DeploymentException {
 		final ResourceDeploymentData data = generateDeploymentData("TestParamsIdentity"); //$NON-NLS-1$
 		assertFalse(hasDuplicateEntry(data.getParams()));
+	void testNumberOfParamsInUntypedSubApp() throws DeploymentException {
+		final ResourceDeploymentData data = generateDeploymentData(TestNetwork_UntypedSubApp);
+		assertEquals(2, data.getParams().size());
 	}
 
 	private static boolean hasDuplicateEntry(final List<ParameterData> parameters) {
@@ -100,4 +129,15 @@ class ResourceDeploymentTest {
 	private static Optional<Resource> getResource(final String testName) {
 		return resources.stream().filter(res -> res.getName().equalsIgnoreCase(testName)).findAny();
 	}
+
+	@SuppressWarnings("unused")
+	public static void setup() {
+		new DataTypeLibrary();
+		GlobalConstantsStandaloneSetup.doSetup();
+		STFunctionStandaloneSetup.doSetup();
+		STAlgorithmStandaloneSetup.doSetup();
+		OtherAlgorithmSupportFactory.register();
+		StructuredTextSupportFactory.register();
+	}
+
 }
