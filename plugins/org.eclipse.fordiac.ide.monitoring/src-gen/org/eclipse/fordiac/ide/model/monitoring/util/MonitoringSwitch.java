@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement;
+import org.eclipse.fordiac.ide.model.monitoring.InternalVarInstance;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
@@ -93,73 +94,163 @@ public class MonitoringSwitch<T> extends Switch<T> {
 			case MonitoringPackage.MONITORING_ELEMENT: {
 				MonitoringElement monitoringElement = (MonitoringElement)theEObject;
 				T result = caseMonitoringElement(monitoringElement);
-				if (result == null) result = caseMonitoringBaseElement(monitoringElement);
-				if (result == null) result = caseMonitoringBase_IEditPartCreator(monitoringElement);
-				if (result == null) result = defaultCase(theEObject);
+				if (result == null) {
+					result = caseMonitoringBaseElement(monitoringElement);
+				}
+				if (result == null) {
+					result = caseMonitoringBase_IEditPartCreator(monitoringElement);
+				}
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
 				return result;
 			}
 			case MonitoringPackage.MONITORING_ADAPTER_ELEMENT: {
 				MonitoringAdapterElement monitoringAdapterElement = (MonitoringAdapterElement)theEObject;
 				T result = caseMonitoringAdapterElement(monitoringAdapterElement);
-				if (result == null) result = caseMonitoringBaseElement(monitoringAdapterElement);
-				if (result == null) result = caseMonitoringBase_IEditPartCreator(monitoringAdapterElement);
-				if (result == null) result = defaultCase(theEObject);
+				if (result == null) {
+					result = caseMonitoringBaseElement(monitoringAdapterElement);
+				}
+				if (result == null) {
+					result = caseMonitoringBase_IEditPartCreator(monitoringAdapterElement);
+				}
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
 				return result;
 			}
 			case MonitoringPackage.ADAPTER_PORT_ELEMENT: {
 				AdapterPortElement adapterPortElement = (AdapterPortElement)theEObject;
 				T result = caseAdapterPortElement(adapterPortElement);
-				if (result == null) result = casePortElement(adapterPortElement);
-				if (result == null) result = defaultCase(theEObject);
+				if (result == null) {
+					result = casePortElement(adapterPortElement);
+				}
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
 				return result;
 			}
 			case MonitoringPackage.ADAPTER_MONITORING_EVENT: {
 				AdapterMonitoringEvent adapterMonitoringEvent = (AdapterMonitoringEvent)theEObject;
 				T result = caseAdapterMonitoringEvent(adapterMonitoringEvent);
-				if (result == null) result = caseIEditPartCreator(adapterMonitoringEvent);
-				if (result == null) result = caseEvent(adapterMonitoringEvent);
-				if (result == null) result = caseIInterfaceElement(adapterMonitoringEvent);
-				if (result == null) result = caseICallable(adapterMonitoringEvent);
-				if (result == null) result = caseITypedElement(adapterMonitoringEvent);
-				if (result == null) result = caseHiddenElement(adapterMonitoringEvent);
-				if (result == null) result = caseINamedElement(adapterMonitoringEvent);
-				if (result == null) result = caseConfigurableObject(adapterMonitoringEvent);
-				if (result == null) result = defaultCase(theEObject);
+				if (result == null) {
+					result = caseIEditPartCreator(adapterMonitoringEvent);
+				}
+				if (result == null) {
+					result = caseEvent(adapterMonitoringEvent);
+				}
+				if (result == null) {
+					result = caseIInterfaceElement(adapterMonitoringEvent);
+				}
+				if (result == null) {
+					result = caseICallable(adapterMonitoringEvent);
+				}
+				if (result == null) {
+					result = caseITypedElement(adapterMonitoringEvent);
+				}
+				if (result == null) {
+					result = caseHiddenElement(adapterMonitoringEvent);
+				}
+				if (result == null) {
+					result = caseINamedElement(adapterMonitoringEvent);
+				}
+				if (result == null) {
+					result = caseConfigurableObject(adapterMonitoringEvent);
+				}
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
 				return result;
 			}
 			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION: {
 				AdapterMonitoringVarDeclaration adapterMonitoringVarDeclaration = (AdapterMonitoringVarDeclaration)theEObject;
 				T result = caseAdapterMonitoringVarDeclaration(adapterMonitoringVarDeclaration);
-				if (result == null) result = caseIEditPartCreator(adapterMonitoringVarDeclaration);
-				if (result == null) result = caseVarDeclaration(adapterMonitoringVarDeclaration);
-				if (result == null) result = caseIInterfaceElement(adapterMonitoringVarDeclaration);
-				if (result == null) result = caseITypedElement(adapterMonitoringVarDeclaration);
-				if (result == null) result = caseHiddenElement(adapterMonitoringVarDeclaration);
-				if (result == null) result = caseINamedElement(adapterMonitoringVarDeclaration);
-				if (result == null) result = caseConfigurableObject(adapterMonitoringVarDeclaration);
-				if (result == null) result = defaultCase(theEObject);
+				if (result == null) {
+					result = caseIEditPartCreator(adapterMonitoringVarDeclaration);
+				}
+				if (result == null) {
+					result = caseVarDeclaration(adapterMonitoringVarDeclaration);
+				}
+				if (result == null) {
+					result = caseIInterfaceElement(adapterMonitoringVarDeclaration);
+				}
+				if (result == null) {
+					result = caseITypedElement(adapterMonitoringVarDeclaration);
+				}
+				if (result == null) {
+					result = caseHiddenElement(adapterMonitoringVarDeclaration);
+				}
+				if (result == null) {
+					result = caseINamedElement(adapterMonitoringVarDeclaration);
+				}
+				if (result == null) {
+					result = caseConfigurableObject(adapterMonitoringVarDeclaration);
+				}
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
 				return result;
 			}
 			case MonitoringPackage.IEDIT_PART_CREATOR: {
 				IEditPartCreator iEditPartCreator = (IEditPartCreator)theEObject;
 				T result = caseIEditPartCreator(iEditPartCreator);
-				if (result == null) result = defaultCase(theEObject);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
 				return result;
 			}
 			case MonitoringPackage.SUB_APP_PORT_ELEMENT: {
 				SubAppPortElement subAppPortElement = (SubAppPortElement)theEObject;
 				T result = caseSubAppPortElement(subAppPortElement);
-				if (result == null) result = casePortElement(subAppPortElement);
-				if (result == null) result = defaultCase(theEObject);
+				if (result == null) {
+					result = casePortElement(subAppPortElement);
+				}
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
 				return result;
 			}
 			case MonitoringPackage.SUBAPP_MONITORING_ELEMENT: {
 				SubappMonitoringElement subappMonitoringElement = (SubappMonitoringElement)theEObject;
 				T result = caseSubappMonitoringElement(subappMonitoringElement);
-				if (result == null) result = caseMonitoringElement(subappMonitoringElement);
-				if (result == null) result = caseMonitoringBaseElement(subappMonitoringElement);
-				if (result == null) result = caseMonitoringBase_IEditPartCreator(subappMonitoringElement);
-				if (result == null) result = defaultCase(theEObject);
+				if (result == null) {
+					result = caseMonitoringElement(subappMonitoringElement);
+				}
+				if (result == null) {
+					result = caseMonitoringBaseElement(subappMonitoringElement);
+				}
+				if (result == null) {
+					result = caseMonitoringBase_IEditPartCreator(subappMonitoringElement);
+				}
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
+			}
+			case MonitoringPackage.INTERNAL_VAR_INSTANCE: {
+				InternalVarInstance internalVarInstance = (InternalVarInstance)theEObject;
+				T result = caseInternalVarInstance(internalVarInstance);
+				if (result == null) {
+					result = caseVarDeclaration(internalVarInstance);
+				}
+				if (result == null) {
+					result = caseIInterfaceElement(internalVarInstance);
+				}
+				if (result == null) {
+					result = caseITypedElement(internalVarInstance);
+				}
+				if (result == null) {
+					result = caseHiddenElement(internalVarInstance);
+				}
+				if (result == null) {
+					result = caseINamedElement(internalVarInstance);
+				}
+				if (result == null) {
+					result = caseConfigurableObject(internalVarInstance);
+				}
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
 				return result;
 			}
 			default: return defaultCase(theEObject);
@@ -232,6 +323,21 @@ public class MonitoringSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSubappMonitoringElement(SubappMonitoringElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Internal Var Instance</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Internal Var Instance</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseInternalVarInstance(InternalVarInstance object) {
 		return null;
 	}
 

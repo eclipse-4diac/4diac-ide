@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016, 2018 fortiss GmbH, Johannes Kepler University
+ * Copyright (c) 2015, 2024 fortiss GmbH, Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +14,6 @@
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
@@ -25,20 +25,16 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class ClearForceHandler extends AbstractMonitoringHandler {
 
 	@Override
-	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		super.execute(event);
-		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-		final VarDeclaration variable = ForceHandler.getVariable(selection.getFirstElement());
-		processHandler(variable);
-		return null;
+	protected void doExecute(final ExecutionEvent event, final StructuredSelection structSel) {
+		processHandler(ForceHandler.getVariable(structSel.getFirstElement()));
 	}
 
 	public static void processHandler(final VarDeclaration variable) {
 		if (null != variable) {
 			final MonitoringManager manager = MonitoringManager.getInstance();
 			final MonitoringBaseElement element = manager.getMonitoringElement(variable);
-			if (element instanceof MonitoringElement) {
-				manager.forceValue((MonitoringElement) element, ""); //$NON-NLS-1$
+			if (element instanceof final MonitoringElement me) {
+				manager.forceValue(me, ""); //$NON-NLS-1$
 			}
 		}
 	}
@@ -48,8 +44,7 @@ public class ClearForceHandler extends AbstractMonitoringHandler {
 		boolean needToAdd = false;
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 
-		if (selection instanceof StructuredSelection) {
-			final StructuredSelection sel = (StructuredSelection) selection;
+		if (selection instanceof final StructuredSelection sel) {
 			final MonitoringManager manager = MonitoringManager.getInstance();
 
 			if (1 == sel.size()) {
@@ -57,7 +52,7 @@ public class ClearForceHandler extends AbstractMonitoringHandler {
 				final VarDeclaration variable = ForceHandler.getVariable(sel.getFirstElement());
 				if (null != variable) {
 					final MonitoringBaseElement element = manager.getMonitoringElement(variable);
-					needToAdd = (element instanceof MonitoringElement && ((MonitoringElement) element).isForce());
+					needToAdd = (element instanceof final MonitoringElement me && me.isForce());
 				}
 			}
 		}

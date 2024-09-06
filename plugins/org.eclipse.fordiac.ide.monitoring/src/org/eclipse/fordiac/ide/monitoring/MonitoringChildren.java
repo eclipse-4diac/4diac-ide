@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- * 							 Johannes Kepler University,
+ * Copyright (c) 2012, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 							 Johannes Kepler University Linz,
  * 							 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.gef.editparts.IChildrenProvider;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.monitoring.InternalVarInstance;
 
 public class MonitoringChildren implements IMonitoringListener, IChildrenProvider {
 
@@ -48,7 +49,11 @@ public class MonitoringChildren implements IMonitoringListener, IChildrenProvide
 	}
 
 	private static boolean shouldBeAdded(final MonitoringBaseElement element, final FBNetwork fbNetwork) {
-		if (element != null && element.getPort().getFb().getFbNetwork() != null) {
+		if (element == null || element.getPort().getInterfaceElement() instanceof InternalVarInstance) {
+			return false;
+		}
+
+		if (element.getPort().getFb().getFbNetwork() != null) {
 			if (element.getPort().getFb().getGroup() != null) {
 				return checkGroup(element, fbNetwork);
 			}

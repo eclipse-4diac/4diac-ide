@@ -155,6 +155,11 @@
             id="org.eclipse.fordiac.ide.monitoring.commands.addWatch"
             name="Watch">
       </command>
+       <command
+            categoryId="org.eclipse.fordiac.ide.monitoring"
+            id="org.eclipse.fordiac.ide.monitoring.commands.watchInternals"
+            name="Watch internal variables">
+      </command>
       <command
             categoryId="org.eclipse.fordiac.ide.monitoring"
             id="org.eclipse.fordiac.ide.monitoring.commands.triggerEvent"
@@ -211,6 +216,12 @@
                tooltip="%contributions.menus.debug.watchToolTip">
          </command>
          <command
+               commandId="org.eclipse.fordiac.ide.monitoring.commands.watchInternals"
+               icon="fordiacimage://ICON_WATCH_INTERFACE_ELEMENTS"
+               label="%contributions.menus.debug.watchInternals"
+               tooltip="%contributions.menus.debug.watchInernalsToolTip">
+         </command>
+         <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.removeAllWatches"
                icon="fordiacimage://ICON_REMOVE_WATCH"
                label="%contributions.menus.debug.removeAllWatches"
@@ -264,6 +275,15 @@
             </visibleWhen>
          </command>
          <command
+               commandId="org.eclipse.fordiac.ide.monitoring.commands.watchInternals"
+               icon="fordiacimage://ICON_WATCH_INTERFACE_ELEMENTS"
+               label="%contributions.menus.debug.watchInternals"
+               tooltip="%contributions.menus.debug.watchInernalsToolTip">
+            <visibleWhen checkEnabled="false">
+            	<reference definitionId="org.eclipse.fordiac.ide.monitoring.MonitoringCapableEditor" />
+            </visibleWhen>
+         </command>
+         <command
                commandId="org.eclipse.fordiac.ide.monitoring.commands.removeAllWatches"
                icon="fordiacimage://ICON_REMOVE_WATCH"
                label="%contributions.menus.debug.removeAllWatches"
@@ -275,6 +295,7 @@
 						<or>
 							<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Application" />
 							<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem" />
+							<instanceof value="org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNode" />
 						</or>
 					</iterate>
 				</or>
@@ -324,6 +345,10 @@
       <handler
             class="org.eclipse.fordiac.ide.monitoring.handlers.AddWatchHandler"
             commandId="org.eclipse.fordiac.ide.monitoring.commands.addWatch">
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.monitoring.handlers.WatchInternalVarsHandler"
+            commandId="org.eclipse.fordiac.ide.monitoring.commands.watchInternals">
       </handler>
       <handler
             class="org.eclipse.fordiac.ide.monitoring.handlers.TriggerEventHandler"

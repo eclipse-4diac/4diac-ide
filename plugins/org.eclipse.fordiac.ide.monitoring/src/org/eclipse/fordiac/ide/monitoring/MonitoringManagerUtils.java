@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2023 Profactor GmbH, AIT, fortiss GmbH,
- * 							Johannes Kepler University,
+ * Copyright (c) 2012, 2024 Profactor GmbH, AIT, fortiss GmbH,
+ * 							Johannes Kepler University Linz,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -45,12 +45,11 @@ public final class MonitoringManagerUtils {
 		if (fbNetworkElement instanceof final SubApp subApp) {
 			checkSubAppNetwork(subApp);
 			final IInterfaceElement anchor = SubAppPortHelper.findAnchorInterfaceElement(ie);
-			if (anchor == null) {
-				if (showError) {
-					ErrorMessenger.popUpErrorMessage(Messages.MonitoringManagerUtils_NoSubappAnchor);
-				}
-			} else {
-				canBeMonitored(anchor, false);
+			if (anchor != null) {
+				return canBeMonitored(anchor, false);
+			}
+			if (showError) {
+				ErrorMessenger.popUpErrorMessage(Messages.MonitoringManagerUtils_NoSubappAnchor);
 			}
 		}
 
@@ -62,6 +61,10 @@ public final class MonitoringManagerUtils {
 			// the contained network has not been loaded yet, load it now.
 			subApp.loadSubAppNetwork();
 		}
+	}
+
+	public static boolean canBeMonitored(final FB fb) {
+		return fb != null && fb.getResource() != null;
 	}
 
 	public static boolean canBeMonitored(final FBNetworkElement obj) {
