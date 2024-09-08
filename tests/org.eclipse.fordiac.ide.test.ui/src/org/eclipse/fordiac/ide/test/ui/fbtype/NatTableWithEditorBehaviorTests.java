@@ -29,13 +29,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITests {
-	protected static SWTBot4diacNatTable natTableBot;
-	protected static NatTable natTable;
-	protected static SWTBot4diacGefEditor editor;
+	protected SWTBot4diacNatTable swt4diacNatTable;
+	protected NatTable natTable;
+	protected SWTBot4diacGefEditor editor;
 
-	protected static String TESTVAR1 = "TESTVAR1"; //$NON-NLS-1$
-	protected static String TESTVAR2 = "TESTVAR2"; //$NON-NLS-1$
-	protected static String TESTVAR3 = "TESTVAR3"; //$NON-NLS-1$
+	protected String testvar1 = "TESTVAR1"; //$NON-NLS-1$
+	protected String testvar2 = "TESTVAR2"; //$NON-NLS-1$
+	protected String testvar3 = "TESTVAR3"; //$NON-NLS-1$
 
 	/**
 	 * Initializes the environment for testing operations on the DataType Editor
@@ -45,7 +45,6 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 	 * its visibility in the system explorer, opens the project in the editor, and
 	 * prepares the NatTable for testing by creating a new variable in the table.
 	 */
-	@SuppressWarnings("static-method")
 	@BeforeEach
 	public void operationsInitialization() {
 		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
@@ -54,8 +53,8 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 		fbTypeBot.openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
 		final Composite tableComposite = (Composite) bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).getWidget();
 		natTable = bot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), tableComposite);
-		natTableBot = new SWTBot4diacNatTable(natTable);
-		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
+		swt4diacNatTable = new SWTBot4diacNatTable(natTable);
+		new SWTBotNatTable(bot, swt4diacNatTable).createNewVariableInDataTypeEditor();
 	}
 
 	/**
@@ -77,11 +76,10 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 	 * This method verifies that a new event can be created successfully by checking
 	 * the presence of the new variable in the editor.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void createEvent() {
-		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
-		assertNotNull(editor.getEditPart(TESTVAR1));
+		new SWTBotNatTable(bot, swt4diacNatTable).createNewVariableInDataTypeEditor();
+		assertNotNull(editor.getEditPart(testvar1));
 	}
 
 	/**
@@ -90,11 +88,10 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 	 * This method verifies that an event can be removed successfully by checking
 	 * the absence of the variable in the editor after deletion.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void removeEvent() {
-		SWTBotNatTable.deleteVariable(natTableBot, 3);
-		assertNull(editor.getEditPart(TESTVAR1));
+		new SWTBotNatTable(bot, swt4diacNatTable).deleteVariable(3);
+		assertNull(editor.getEditPart(testvar1));
 	}
 
 	/**
@@ -104,12 +101,11 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 	 * checks that the old name is no longer present in the editor, while the new
 	 * name is.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void changeEventName() {
-		assertNotNull(editor.getEditPart(TESTVAR1));
-		SWTBotNatTable.changeCellValueInNatTbale(natTableBot, UITestNamesHelper.TESTVAR, 3, 1);
-		assertNull(editor.getEditPart(TESTVAR1));
+		assertNotNull(editor.getEditPart(testvar1));
+		new SWTBotNatTable(bot, swt4diacNatTable).changeCellValueInNatTbale(UITestNamesHelper.TESTVAR, 3, 1);
+		assertNull(editor.getEditPart(testvar1));
 		assertNotNull(editor.getEditPart(UITestNamesHelper.TESTVAR));
 	}
 
@@ -119,12 +115,11 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 	 * This method verifies that the event name can be changed using the rename
 	 * button tool and checks the presence of the new name in the editor.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void changeEventNameFromRenameButtom() {
-		assertNotNull(editor.getEditPart(TESTVAR1));
-		SWTBotNatTable.changeVariableNameWithButtonTool(natTableBot, 3, UITestNamesHelper.TESTVAR);
-		assertNull(editor.getEditPart(TESTVAR1));
+		assertNotNull(editor.getEditPart(testvar1));
+		new SWTBotNatTable(bot, swt4diacNatTable).changeVariableNameWithButtonTool(3, UITestNamesHelper.TESTVAR);
+		assertNull(editor.getEditPart(testvar1));
 		assertNotNull(editor.getEditPart(UITestNamesHelper.TESTVAR));
 	}
 
@@ -137,7 +132,7 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeDataTypeOfVariable() {
-		SWTBotNatTable.changeDataType(natTableBot, 1, UITestNamesHelper.INT_SMALL);
+		new SWTBotNatTable(bot, swt4diacNatTable).changeDataType(1, UITestNamesHelper.INT_SMALL);
 	}
 
 	/**
@@ -149,7 +144,7 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToSetInValidDataType() {
-		SWTBotNatTable.setInvalidDataType(natTableBot, 1, 2, UITestNamesHelper.TESTVAR);
+		new SWTBotNatTable(bot, swt4diacNatTable).setInvalidDataType(1, 2, UITestNamesHelper.TESTVAR);
 	}
 
 	/**
@@ -158,12 +153,11 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 	 * This method verifies the ability to change the comment associated with an
 	 * event and checks for the expected changes in the editor.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void changeEventComment() {
-		assertNotNull(editor.getEditPart(TESTVAR1));
+		assertNotNull(editor.getEditPart(testvar1));
 		assertNull(editor.getEditPart(UITestNamesHelper.TESTVAR));
-		SWTBotNatTable.changeCellValueInNatTbale(natTableBot, UITestNamesHelper.TEST_COMMENT, 3, 3);
+		new SWTBotNatTable(bot, swt4diacNatTable).changeCellValueInNatTbale(UITestNamesHelper.TEST_COMMENT, 3, 3);
 	}
 
 	/**
@@ -175,10 +169,11 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 	@SuppressWarnings("static-method")
 	@Test
 	public void moveEventUpDown() {
-		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
-		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
-		SWTBotNatTable.moveElementUp(natTableBot, 5);
-		SWTBotNatTable.moveElementDown(natTableBot, 3);
+		final SWTBotNatTable swtBotNatTable = new SWTBotNatTable(bot, swt4diacNatTable);
+		swtBotNatTable.createNewVariableInDataTypeEditor();
+		swtBotNatTable.createNewVariableInDataTypeEditor();
+		swtBotNatTable.moveElementUp(5);
+		swtBotNatTable.moveElementDown(3);
 	}
 
 	/**
@@ -187,15 +182,15 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 	 * This method checks whether the editor prevents changing an event name to a
 	 * name that already exists in the DataType Editor Table.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void tryToChangeEventNameWithExistingName() {
-		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
-		assertNotNull(editor.getEditPart(TESTVAR1));
-		assertNotNull(editor.getEditPart(TESTVAR2));
-		SWTBotNatTable.changeNameWithExistingName(natTableBot, 4, TESTVAR1, TESTVAR2);
-		assertNotNull(editor.getEditPart(TESTVAR1));
-		assertNotNull(editor.getEditPart(TESTVAR2));
+		final SWTBotNatTable swtBotNatTable = new SWTBotNatTable(bot, swt4diacNatTable);
+		swtBotNatTable.createNewVariableInDataTypeEditor();
+		assertNotNull(editor.getEditPart(testvar1));
+		assertNotNull(editor.getEditPart(testvar2));
+		swtBotNatTable.changeNameWithExistingName(4, testvar1, testvar2);
+		assertNotNull(editor.getEditPart(testvar1));
+		assertNotNull(editor.getEditPart(testvar2));
 	}
 
 	/**
@@ -204,14 +199,14 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 	 * This method verifies the editor's response when an invalid name is assigned
 	 * to an event, ensuring that invalid names are not accepted.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void tryToSetInvalidName() {
-		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
-		assertNotNull(editor.getEditPart(TESTVAR1));
-		SWTBotNatTable.setInvalidName(natTableBot, 3, UITestNamesHelper.IF, TESTVAR1);
+		final SWTBotNatTable swtBotNatTable = new SWTBotNatTable(bot, swt4diacNatTable);
+		swtBotNatTable.createNewVariableInDataTypeEditor();
+		assertNotNull(editor.getEditPart(testvar1));
+		swtBotNatTable.setInvalidName(3, UITestNamesHelper.IF, testvar1);
 		assertNull(editor.getEditPart(UITestNamesHelper.IF));
-		assertNotNull(editor.getEditPart(TESTVAR2));
+		assertNotNull(editor.getEditPart(testvar2));
 	}
 
 }

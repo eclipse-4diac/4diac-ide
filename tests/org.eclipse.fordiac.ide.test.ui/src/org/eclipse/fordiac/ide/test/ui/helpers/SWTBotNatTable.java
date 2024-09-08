@@ -31,7 +31,6 @@ public class SWTBotNatTable {
 	private final SWT4diacGefBot bot;
 	private final SWTBot4diacNatTable natTable;
 
-	@SuppressWarnings("static-access")
 	public SWTBotNatTable(final SWT4diacGefBot bot, final SWTBot4diacNatTable natTableBot) {
 		this.bot = bot;
 		this.natTable = natTableBot;
