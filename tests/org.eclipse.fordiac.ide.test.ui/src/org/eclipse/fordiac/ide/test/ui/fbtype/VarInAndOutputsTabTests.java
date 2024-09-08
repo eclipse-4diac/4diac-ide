@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Prashantkumar Khatri
+ * Copyright (c) 2024 Prashantkumar Khatri, Andrea Zoitl
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Prashantkumar Khatri - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl - Creation of a fluid API design for UI SWTBot testing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui.fbtype;
 
@@ -31,12 +32,13 @@ import org.junit.jupiter.api.Test;
 
 public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 
+	public VarInAndOutputsTabTests() {
+		super(UITestPinHelper.DI1, UITestPinHelper.DI2, UITestPinHelper.DI3);
+	}
+
 	@Override
 	@BeforeEach
 	public void operationsInitialization() {
-		testvar1 = UITestPinHelper.DI1;
-		testvar2 = UITestPinHelper.DI2;
-		testvar3 = UITestPinHelper.DI3;
 		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
 		fbTypeBot.createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
 				UITestNamesHelper.ADAPTER);
