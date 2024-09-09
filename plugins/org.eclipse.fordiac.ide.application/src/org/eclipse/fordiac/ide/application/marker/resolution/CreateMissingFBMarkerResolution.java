@@ -13,7 +13,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.marker.resolution;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
@@ -32,7 +36,7 @@ import org.eclipse.ui.PlatformUI;
 public class CreateMissingFBMarkerResolution extends AbstractErrorMarkerResolution {
 
 	private TypeEntry newEntry;
-	private boolean canceled = false;
+	List<EObject> targets = new ArrayList<>();
 
 	public CreateMissingFBMarkerResolution(final IMarker marker) {
 		super(FordiacMessages.Repair_Dialog_New_FB, marker);
@@ -40,27 +44,42 @@ public class CreateMissingFBMarkerResolution extends AbstractErrorMarkerResoluti
 
 	@Override
 	public void run(final IMarker marker) {
-		if (canceled) {
+		final EObject target = FordiacErrorMarker.getTarget(marker);
+		updateTarget(target);
+	}
+
+	private void updateTarget(final EObject target) {
+		if (target instanceof final ErrorMarkerFBNElement err) {
+			AbstractLiveSearchContext.executeAndSave(new UpdateFBTypeCommand(err, newEntry), err,
+					new NullProgressMonitor());
+		}
+
+		if (target instanceof final FB fb && fb.getTypeEntry() instanceof ErrorFBTypeEntryImpl
+				&& fb.eContainer() instanceof final BaseFBType base && base.getInternalFbs().contains(fb)) {
+			AbstractLiveSearchContext.executeAndSave(new UpdateInternalFBCommand(fb, newEntry), fb,
+					new NullProgressMonitor());
+		}
+	}
+
+	@Override
+	public void run(final IMarker[] markers, final IProgressMonitor monitor) {
+		// save Error-Objects for new Type has same name
+		for (final IMarker marker : markers) {
+			targets.add(FordiacErrorMarker.getTarget(marker));
+		}
+
+		final String errorName = FordiacErrorMarker.getData(this.marker)[0];
+		createNewEntry(errorName);
+
+		if (newEntry == null) {
 			return;
 		}
 
-		if (newEntry == null) {
-			// TODO fix, if same name as old -> markers get invalid
-			createNewEntry(FordiacErrorMarker.getData(this.marker)[0]);
-		}
-
-		if (newEntry != null) {
-			final EObject target = FordiacErrorMarker.getTarget(marker);
-			if (target instanceof final ErrorMarkerFBNElement err) {
-				AbstractLiveSearchContext.executeAndSave(new UpdateFBTypeCommand(err, newEntry), err,
-						new NullProgressMonitor());
-			}
-
-			if (target instanceof final FB fb && fb.getTypeEntry() instanceof ErrorFBTypeEntryImpl
-					&& fb.eContainer() instanceof final BaseFBType base && base.getInternalFbs().contains(fb)) {
-				AbstractLiveSearchContext.executeAndSave(new UpdateInternalFBCommand(fb, newEntry), fb,
-						new NullProgressMonitor());
-			}
+		if (markers[0].exists() && !errorName.equals(newEntry.getTypeName())) {
+			super.run(markers, monitor);
+		} else {
+			// markers got invalid
+			targets.forEach(this::updateTarget);
 		}
 	}
 
@@ -68,8 +87,5 @@ public class CreateMissingFBMarkerResolution extends AbstractErrorMarkerResoluti
 		newEntry = RestrictedNewTypeWizard.showRestrictedNewTypeWizard(
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), defaultName, ".fbt", //$NON-NLS-1$
 				marker.getResource().getProject().getName());
-		if (newEntry == null) {
-			canceled = true;
-		}
 	}
 }
