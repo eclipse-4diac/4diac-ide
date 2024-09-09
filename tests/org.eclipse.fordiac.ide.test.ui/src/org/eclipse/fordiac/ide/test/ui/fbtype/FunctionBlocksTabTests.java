@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Prashantkumar Khatri
+ * Copyright (c) 2024 Prashantkumar Khatri, Andrea Zoitl
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,15 +9,16 @@
  *
  * Contributors:
  *   Prashantkumar Khatri - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl - Creation of a fluid API design for UI SWTBot testing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui.fbtype;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotPropertySheet;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotNatTable;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotPropertySheet;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -46,8 +47,8 @@ public class FunctionBlocksTabTests extends NatTableWithoutEditorBehaviorTests {
 		bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).show();
 		SWTBotPropertySheet.selectPropertyTabItem(UITestNamesHelper.FUNCTIONAL__BLOCKS, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
-		natTableBot = new SWTBot4diacNatTable(natTable);
-		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
+		swt4diacNatTable = new SWTBot4diacNatTable(natTable);
+		new SWTBotNatTable(bot, swt4diacNatTable).createNewVariableInDataTypeEditor();
 	}
 
 	@Override
@@ -62,8 +63,8 @@ public class FunctionBlocksTabTests extends NatTableWithoutEditorBehaviorTests {
 
 	@Override
 	public void changeDataTypeOfVariable() {
-		SWTBotNatTable.changeDataType(natTableBot, 1, UITestNamesHelper.INT_SMALL);
-		natTableBot.doubleclick(1, 2);
+		new SWTBotNatTable(bot, swt4diacNatTable).changeDataType(1, UITestNamesHelper.INT_SMALL);
+		swt4diacNatTable.doubleclick(1, 2);
 
 		bot.button(UITestNamesHelper.DOT_BUTTON).click();
 
@@ -76,12 +77,12 @@ public class FunctionBlocksTabTests extends NatTableWithoutEditorBehaviorTests {
 
 		bot.button(UITestNamesHelper.OK).click();
 
-		assertEquals(natTableBot.getCellDataValueByPosition(1, 2), UITestNamesHelper.BOOL2BOOL);
+		assertEquals(swt4diacNatTable.getCellDataValueByPosition(1, 2), UITestNamesHelper.BOOL2BOOL);
 	}
 
 	@Override
 	public void tryToSetInValidDataType() {
-		SWTBotNatTable.setInvalidDataType(natTableBot, 1, 2, UITestNamesHelper.TESTVAR);
+		new SWTBotNatTable(bot, swt4diacNatTable).setInvalidDataType(1, 2, UITestNamesHelper.TESTVAR);
 	}
 
 }

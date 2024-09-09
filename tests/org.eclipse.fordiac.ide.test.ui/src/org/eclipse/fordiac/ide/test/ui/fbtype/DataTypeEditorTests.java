@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Prashantkumar Khatri
+ * Copyright (c) 2024 Prashantkumar Khatri, Andrea Zoitl
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * Contributors:
  *
  *   Prashantkumar Khatri - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl - Creation of a fluid API design for UI SWTBot testing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui.fbtype;
 
@@ -38,7 +39,7 @@ public class DataTypeEditorTests extends NatTableWithoutEditorBehaviorTests {
 
 		final Composite tableComposite = (Composite) bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).getWidget();
 		natTable = bot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), tableComposite);
-		natTableBot = new SWTBot4diacNatTable(natTable);
-		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
+		swt4diacNatTable = new SWTBot4diacNatTable(natTable);
+		new SWTBotNatTable(bot, swt4diacNatTable).createNewVariableInDataTypeEditor();
 	}
 }

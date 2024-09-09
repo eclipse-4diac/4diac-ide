@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Prashantkumar Khatri
+ * Copyright (c) 2024 Prashantkumar Khatri, Andrea Zoitl
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Prashantkumar Khatri - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl - Creation of a fluid API design for UI SWTBot testing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui.fbtype;
 
@@ -25,12 +26,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
-	protected static SWTBot4diacNatTable natTableBot;
-	protected static NatTable natTable;
+	protected SWTBot4diacNatTable swt4diacNatTable;
+	protected NatTable natTable;
 
-	protected static String TESTVAR1 = "TESTVAR1"; //$NON-NLS-1$
-	protected static String TESTVAR2 = "TESTVAR2"; //$NON-NLS-1$
-	protected static String TESTVAR3 = "TESTVAR3"; //$NON-NLS-1$
+	protected String TESTVAR1 = "TESTVAR1"; //$NON-NLS-1$
+	protected String TESTVAR2 = "TESTVAR2"; //$NON-NLS-1$
+	protected String TESTVAR3 = "TESTVAR3"; //$NON-NLS-1$
 
 	/**
 	 * Performs necessary tasks to make environment for testing the operations on
@@ -40,7 +41,6 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 * and will confirm the visibility of the newly created type in system explorer
 	 * and open the project in editor then will create a new variable in a Table.
 	 */
-	@SuppressWarnings("static-method")
 	@BeforeEach
 	public void operationsInitialization() {
 		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
@@ -49,8 +49,8 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 		fbTypeBot.openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
 		final Composite inputComposite = (Composite) bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).getWidget();
 		natTable = bot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), inputComposite);
-		natTableBot = new SWTBot4diacNatTable(natTable);
-		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
+		swt4diacNatTable = new SWTBot4diacNatTable(natTable);
+		new SWTBotNatTable(bot, swt4diacNatTable).createNewVariableInDataTypeEditor();
 	}
 
 	/**
@@ -61,11 +61,9 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 * operation from another test method, basically this will prevent the
 	 * redundancy.
 	 */
-	@SuppressWarnings("static-method")
 	@AfterEach
 	public void resetEnvironment() {
-		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
-		fbTypeBot.deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT2);
+		new SWTBotFBType(bot).deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT2);
 	}
 
 	/**
@@ -75,10 +73,9 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 * already exist in the Table. It then checks the new name is assigned properly
 	 * or not.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void renameVariable() {
-		SWTBotNatTable.changeCellValueInNatTbale(natTableBot, UITestNamesHelper.TESTVAR, 1, 1);
+		new SWTBotNatTable(bot, swt4diacNatTable).changeCellValueInNatTbale(UITestNamesHelper.TESTVAR, 1, 1);
 	}
 
 	/**
@@ -91,10 +88,9 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 * whether OK button is enabled or not, it then click on OK button and assure
 	 * the shell close. Then it checks for new name is assigned properly or not.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void changeVariableNameWithButton() {
-		SWTBotNatTable.changeVariableNameWithButtonTool(natTableBot, 1, UITestNamesHelper.TESTVAR);
+		new SWTBotNatTable(bot, swt4diacNatTable).changeVariableNameWithButtonTool(1, UITestNamesHelper.TESTVAR);
 	}
 
 	/**
@@ -105,10 +101,9 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 * 2nd variable to same name as 1st variable has. Then check if the name is
 	 * successfully changed or not.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void tryToChangeNameOfVariableWithExistingName() {
-		SWTBotNatTable.changeNameWithExistingName(natTableBot, 2, TESTVAR1, TESTVAR2);
+		new SWTBotNatTable(bot, swt4diacNatTable).changeNameWithExistingName(2, TESTVAR1, TESTVAR2);
 	}
 
 	/**
@@ -118,10 +113,9 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 * will try to change the name of the variable with assigning invalid name. Then
 	 * check if the name is successfully changed or not.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void tryToSetInValidName() {
-		SWTBotNatTable.setInvalidName(natTableBot, 1, UITestNamesHelper.IF, TESTVAR1);
+		new SWTBotNatTable(bot, swt4diacNatTable).setInvalidName(1, UITestNamesHelper.IF, TESTVAR1);
 	}
 
 	/**
@@ -133,13 +127,13 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 * variable by bringing it down. Then check if the order of variables is as
 	 * expected or not.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void reorderVariable() {
-		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
-		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
-		SWTBotNatTable.moveElementUp(natTableBot, 3);
-		SWTBotNatTable.moveElementDown(natTableBot, 1);
+		final SWTBotNatTable swtBotNatTable = new SWTBotNatTable(bot, swt4diacNatTable);
+		swtBotNatTable.createNewVariableInDataTypeEditor();
+		swtBotNatTable.createNewVariableInDataTypeEditor();
+		swtBotNatTable.moveElementUp(3);
+		swtBotNatTable.moveElementDown(1);
 	}
 
 	/**
@@ -149,10 +143,9 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 * not. It will first select the variable and then assigns data type to the
 	 * selected variable. Then checks it's successfully changed or not.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void changeDataTypeOfVariable() {
-		SWTBotNatTable.changeDataType(natTableBot, 1, UITestNamesHelper.INT_SMALL);
+		new SWTBotNatTable(bot, swt4diacNatTable).changeDataType(1, UITestNamesHelper.INT_SMALL);
 	}
 
 	/**
@@ -163,10 +156,9 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 * to the selected variable. Then checks it's successfully changed or not or
 	 * what changes is happened in the editor.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void tryToSetInValidDataType() {
-		SWTBotNatTable.setInvalidDataType(natTableBot, 1, 2, UITestNamesHelper.TESTVAR);
+		new SWTBotNatTable(bot, swt4diacNatTable).setInvalidDataType(1, 2, UITestNamesHelper.TESTVAR);
 	}
 
 	/**
@@ -175,10 +167,9 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 * The method will check if you can change the comment of the variable or not.
 	 * It then checks the new comment is assigned properly or not.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void changeCommentOfVariable() {
-		SWTBotNatTable.changeCellValueInNatTbale(natTableBot, UITestNamesHelper.TEST_COMMENT, 1, 3);
+		new SWTBotNatTable(bot, swt4diacNatTable).changeCellValueInNatTbale(UITestNamesHelper.TEST_COMMENT, 1, 3);
 	}
 
 	/**
@@ -187,11 +178,11 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 * The method will check if you can change the initial value of the variable or
 	 * not. It then checks the new value is assigned properly or not.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void changeInitialValueOfVariable() {
-		SWTBotNatTable.changeCellValueInNatTbale(natTableBot, UITestNamesHelper.TRUE, 1, 4);
-		SWTBotNatTable.changeCellValueInNatTbale(natTableBot, "1", 1, 4); //$NON-NLS-1$
+		final SWTBotNatTable swtBotNatTable = new SWTBotNatTable(bot, swt4diacNatTable);
+		swtBotNatTable.changeCellValueInNatTbale(UITestNamesHelper.TRUE, 1, 4);
+		swtBotNatTable.changeCellValueInNatTbale("1", 1, 4); //$NON-NLS-1$
 	}
 
 	/**
@@ -202,9 +193,8 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 * initial value to the selected variable. Then checks it's successfully changed
 	 * or not or what changes is happened in the editor.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void tryToSetInValidInitialValue() {
-		SWTBotNatTable.setInvalidDataType(natTableBot, 1, 4, UITestNamesHelper.TESTVAR);
+		new SWTBotNatTable(bot, swt4diacNatTable).setInvalidDataType(1, 4, UITestNamesHelper.TESTVAR);
 	}
 }

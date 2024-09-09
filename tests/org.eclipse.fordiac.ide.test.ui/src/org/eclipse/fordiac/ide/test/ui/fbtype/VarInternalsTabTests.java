@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Prashantkumar Khatri
+ * Copyright (c) 2024 Prashantkumar Khatri, Andrea Zoitl
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,15 +9,16 @@
  *
  * Contributors:
  *   Prashantkumar Khatri - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl - Creation of a fluid API design for UI SWTBot testing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui.fbtype;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
-import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotPropertySheet;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotNatTable;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotPropertySheet;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -44,8 +45,8 @@ public class VarInternalsTabTests extends NatTableWithoutEditorBehaviorTests {
 		bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).show();
 		SWTBotPropertySheet.selectPropertyTabItem(UITestNamesHelper.VAR_INTERNALS, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
-		natTableBot = new SWTBot4diacNatTable(natTable);
-		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
+		swt4diacNatTable = new SWTBot4diacNatTable(natTable);
+		new SWTBotNatTable(bot, swt4diacNatTable).createNewVariableInDataTypeEditor();
 	}
 
 	/**
@@ -55,10 +56,9 @@ public class VarInternalsTabTests extends NatTableWithoutEditorBehaviorTests {
 	 * successfully. It changes the retain tag of the specified variable and
 	 * verifies the operation.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void changeRetainTag() {
-		SWTBotNatTable.setRetainValue(natTableBot, 1, 5, RetainTag.RETAIN);
+		new SWTBotNatTable(bot, swt4diacNatTable).setRetainValue(1, 5, RetainTag.RETAIN);
 	}
 
 }

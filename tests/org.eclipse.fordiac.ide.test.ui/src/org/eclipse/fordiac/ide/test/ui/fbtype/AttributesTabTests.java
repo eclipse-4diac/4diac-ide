@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Prashantkumar Khatri
+ * Copyright (c) 2024 Prashantkumar Khatri, Andrea Zoitl
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Prashantkumar Khatri - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl - Creation of a fluid API design for UI SWTBot testing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui.fbtype;
 
@@ -50,8 +51,8 @@ public class AttributesTabTests extends NatTableWithoutEditorBehaviorTests {
 		bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).show();
 		SWTBotPropertySheet.selectPropertyTabItem(UITestNamesHelper.ATTRIBUTES, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
-		natTableBot = new SWTBot4diacNatTable(natTable);
-		SWTBotNatTable.createNewVariableInDataTypeEditor(natTableBot);
+		swt4diacNatTable = new SWTBot4diacNatTable(natTable);
+		new SWTBotNatTable(bot, swt4diacNatTable).createNewVariableInDataTypeEditor();
 	}
 
 	@Override
@@ -62,13 +63,13 @@ public class AttributesTabTests extends NatTableWithoutEditorBehaviorTests {
 	@Override
 	public void tryToSetInValidName() {
 		// Here Name column has same behavior as Data Type column or Invalid value
-		SWTBotNatTable.setInvalidDataType(natTableBot, 1, 1, UITestNamesHelper.IF);
+		new SWTBotNatTable(bot, swt4diacNatTable).setInvalidDataType(1, 1, UITestNamesHelper.IF);
 	}
 
 	@Override
 	public void tryToChangeNameOfVariableWithExistingName() {
 		// Here Name column has same behavior as Data Type column or Invalid value
-		SWTBotNatTable.setInvalidDataType(natTableBot, 1, 1, UITestNamesHelper.IF);
+		new SWTBotNatTable(bot, swt4diacNatTable).setInvalidDataType(1, 1, UITestNamesHelper.IF);
 	}
 
 }
