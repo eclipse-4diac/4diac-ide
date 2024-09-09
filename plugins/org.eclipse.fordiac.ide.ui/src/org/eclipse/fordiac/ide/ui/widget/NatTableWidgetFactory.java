@@ -34,6 +34,7 @@ import org.eclipse.nebula.widgets.nattable.grid.GridRegion;
 import org.eclipse.nebula.widgets.nattable.grid.data.DefaultCornerDataProvider;
 import org.eclipse.nebula.widgets.nattable.grid.layer.ColumnHeaderLayer;
 import org.eclipse.nebula.widgets.nattable.grid.layer.CornerLayer;
+import org.eclipse.nebula.widgets.nattable.grid.layer.DefaultColumnHeaderDataLayer;
 import org.eclipse.nebula.widgets.nattable.grid.layer.GridLayer;
 import org.eclipse.nebula.widgets.nattable.grid.layer.RowHeaderLayer;
 import org.eclipse.nebula.widgets.nattable.grid.layer.config.DefaultGridLayerConfiguration;
@@ -59,6 +60,11 @@ import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.nebula.widgets.nattable.style.HorizontalAlignmentEnum;
 import org.eclipse.nebula.widgets.nattable.style.SelectionStyleLabels;
 import org.eclipse.nebula.widgets.nattable.style.Style;
+import org.eclipse.nebula.widgets.nattable.tree.ITreeData;
+import org.eclipse.nebula.widgets.nattable.tree.ITreeRowModel;
+import org.eclipse.nebula.widgets.nattable.tree.TreeLayer;
+import org.eclipse.nebula.widgets.nattable.tree.TreeRowModel;
+import org.eclipse.nebula.widgets.nattable.tree.config.TreeLayerExpandCollapseKeyBindings;
 import org.eclipse.nebula.widgets.nattable.ui.binding.UiBindingRegistry;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.CellEditorMouseEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.CellPainterMouseEventMatcher;
@@ -225,6 +231,38 @@ public final class NatTableWidgetFactory {
 
 		return table;
 
+	}
+
+	public static <T> NatTable createTreeNatTable(final Composite parent, final DataLayer bodyDataLayer,
+			final ITreeData<T> treeData, final IDataProvider columnHeaderDataProvider) {
+
+		setColumnWidths(bodyDataLayer);
+
+		final SelectionLayer selectionLayer = new SelectionLayer(bodyDataLayer);
+
+		final ITreeRowModel<T> treeRowModel = new TreeRowModel<>(treeData);
+
+		final TreeLayer treeLayer = new TreeLayer(selectionLayer, treeRowModel);
+
+		final ViewportLayer viewportLayer = new ViewportLayer(treeLayer);
+
+		final DataLayer columnHeaderDataLayer = new DefaultColumnHeaderDataLayer(columnHeaderDataProvider);
+		final ILayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, viewportLayer, selectionLayer);
+
+		final CompositeLayer compositeLayer = new CompositeLayer(1, 2);
+		compositeLayer.setChildLayer(GridRegion.COLUMN_HEADER, columnHeaderLayer, 0, 0);
+		compositeLayer.setChildLayer(GridRegion.BODY, viewportLayer, 0, 1);
+
+		compositeLayer.addConfiguration(new DefaultEditConfiguration());
+		compositeLayer.addConfiguration(new DefaultUiBindingConfiguration());
+
+		final NatTable natTable = new NatTable(parent, compositeLayer, false);
+		natTable.addConfiguration(new TreeLayerExpandCollapseKeyBindings(treeLayer, selectionLayer));
+
+		setNatTableStyle(natTable);
+
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(natTable);
+		return natTable;
 	}
 
 	public static DataLayer getDataLayer(final NatTable table) {
