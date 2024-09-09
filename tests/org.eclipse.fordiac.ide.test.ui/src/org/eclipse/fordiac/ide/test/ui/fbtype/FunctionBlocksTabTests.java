@@ -31,12 +31,13 @@ import org.junit.jupiter.api.BeforeEach;
 
 public class FunctionBlocksTabTests extends NatTableWithoutEditorBehaviorTests {
 
+	public FunctionBlocksTabTests() {
+		super(UITestNamesHelper.INTERNALFB1, UITestNamesHelper.INTERNALFB2, UITestNamesHelper.INTERNALFB3);
+	}
+
 	@Override
 	@BeforeEach
 	public void operationsInitialization() {
-		TESTVAR1 = UITestNamesHelper.INTERNALFB1;
-		TESTVAR2 = UITestNamesHelper.INTERNALFB2;
-		TESTVAR3 = UITestNamesHelper.INTERNALFB3;
 		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
 		fbTypeBot.createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
 				UITestNamesHelper.TEMPLATEBASIC);

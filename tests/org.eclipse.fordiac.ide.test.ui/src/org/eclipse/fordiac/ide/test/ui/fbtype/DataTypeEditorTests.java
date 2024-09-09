@@ -25,12 +25,13 @@ import org.junit.jupiter.api.BeforeEach;
 
 public class DataTypeEditorTests extends NatTableWithoutEditorBehaviorTests {
 
+	public DataTypeEditorTests() {
+		super(UITestNamesHelper.VAR1, UITestNamesHelper.VAR2, UITestNamesHelper.VAR3);
+	}
+
 	@Override
 	@BeforeEach
 	public void operationsInitialization() {
-		TESTVAR1 = UITestNamesHelper.VAR1;
-		TESTVAR2 = UITestNamesHelper.VAR2;
-		TESTVAR3 = UITestNamesHelper.VAR3;
 
 		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
 		fbTypeBot.createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,

@@ -27,6 +27,11 @@ import org.junit.jupiter.api.BeforeEach;
 
 // Have to look into the table as this has so much different behavior
 public class AttributesTabTests extends NatTableWithoutEditorBehaviorTests {
+
+	public AttributesTabTests() {
+		super(UITestNamesHelper.ATTRIBUTE1, UITestNamesHelper.ATTRIBUTE2, UITestNamesHelper.ATTRIBUTE3);
+	}
+
 	/**
 	 * Performs necessary tasks to make environment for testing the operations on
 	 * DataType Editor Table.
@@ -38,9 +43,6 @@ public class AttributesTabTests extends NatTableWithoutEditorBehaviorTests {
 	@Override
 	@BeforeEach
 	public void operationsInitialization() {
-		TESTVAR1 = UITestNamesHelper.ATTRIBUTE1;
-		TESTVAR2 = UITestNamesHelper.ATTRIBUTE2;
-		TESTVAR3 = UITestNamesHelper.ATTRIBUTE3;
 		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
 		fbTypeBot.createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
 				UITestNamesHelper.TEMPLATEBASIC);

@@ -29,9 +29,19 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	protected SWTBot4diacNatTable swt4diacNatTable;
 	protected NatTable natTable;
 
-	protected String TESTVAR1 = "TESTVAR1"; //$NON-NLS-1$
-	protected String TESTVAR2 = "TESTVAR2"; //$NON-NLS-1$
-	protected String TESTVAR3 = "TESTVAR3"; //$NON-NLS-1$
+	private final String testVar1;
+	private final String testVar2;
+	private final String testVar3;
+
+	protected NatTableWithoutEditorBehaviorTests() {
+		this("TESTVAR1", "TESTVAR2", "TESTVAR3"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	}
+
+	protected NatTableWithoutEditorBehaviorTests(final String testVar1, final String testVar2, final String testVar3) {
+		this.testVar1 = testVar1;
+		this.testVar2 = testVar2;
+		this.testVar3 = testVar3;
+	}
 
 	/**
 	 * Performs necessary tasks to make environment for testing the operations on
@@ -103,7 +113,7 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 */
 	@Test
 	public void tryToChangeNameOfVariableWithExistingName() {
-		new SWTBotNatTable(bot, swt4diacNatTable).changeNameWithExistingName(2, TESTVAR1, TESTVAR2);
+		new SWTBotNatTable(bot, swt4diacNatTable).changeNameWithExistingName(2, testVar1, testVar2);
 	}
 
 	/**
@@ -115,7 +125,7 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 */
 	@Test
 	public void tryToSetInValidName() {
-		new SWTBotNatTable(bot, swt4diacNatTable).setInvalidName(1, UITestNamesHelper.IF, TESTVAR1);
+		new SWTBotNatTable(bot, swt4diacNatTable).setInvalidName(1, UITestNamesHelper.IF, testVar1);
 	}
 
 	/**
