@@ -91,8 +91,8 @@ public class UpdateUntypedSubappPinChange extends AbstractCommandChange<VarDecla
 	public RefactoringStatus isValid(final VarDeclaration element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
-		if (!(element.eContainer() instanceof UntypedSubApp)) {
-			status.addFatalError(Messages.UpdateUntypedSubappPinChange_0);
+		if (!(element.eContainer() != null && element.eContainer().eContainer() instanceof UntypedSubApp)) {
+			status.addFatalError(element.getQualifiedName() + Messages.UpdateUntypedSubappPinChange_0);
 		}
 		return status;
 	}
