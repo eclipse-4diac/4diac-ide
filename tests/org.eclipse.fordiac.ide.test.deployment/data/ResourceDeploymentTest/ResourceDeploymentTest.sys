@@ -10,25 +10,18 @@
 		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
 		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
 		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
-		<Resource Name="TestNumberOfParams" Type="EMB_RES" Comment="" x="0" y="0">
+		<Resource Name="TestNetwork_Empty" Type="EMB_RES" Comment="" x="0" y="0">
 			<FBNetwork>
-				<FB Name="E_CYCLE" Type="E_CYCLE" Comment="" x="1666.67" y="111.11">
-					<Parameter Name="DT" Value="T#10s" Comment=""/>
-				</FB>
-				<EventConnections>
-					<Connection Source="START.COLD" Destination="E_CYCLE.START" Comment="" dx1="466.67"/>
-					<Connection Source="START.WARM" Destination="E_CYCLE.STOP" Comment="" dx1="466.67"/>
-				</EventConnections>
 			</FBNetwork>
 		</Resource>
-		<Resource Name="TestParamsIdentity" Type="EMB_RES" Comment="" x="0" y="0">
+		<Resource Name="TestNetwork_StackedTypedSubapp" Type="EMB_RES" Comment="" x="0" y="0">
 			<FBNetwork>
 				<SubApp Name="OuterSubApp" Type="OuterSubApp" Comment="" x="2000" y="0">
 					<Parameter Name="DI1" Value="TRUE" Comment=""/>
 				</SubApp>
 			</FBNetwork>
 		</Resource>
-		<Resource Name="TestUntypedSubApp" Type="EMB_RES" Comment="" x="0" y="0">
+		<Resource Name="TestNetwork_StackedUntypedSubapp" Type="EMB_RES" Comment="" x="0" y="0">
 			<FBNetwork>
 				<SubApp Name="SubApp" Comment="" x="2111.11" y="111.11">
 					<SubAppInterfaceList>
