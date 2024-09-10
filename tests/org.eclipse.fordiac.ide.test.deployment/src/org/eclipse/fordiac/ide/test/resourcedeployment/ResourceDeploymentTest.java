@@ -16,12 +16,14 @@ package org.eclipse.fordiac.ide.test.resourcedeployment;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
@@ -39,19 +41,23 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetu
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup;
 import org.eclipse.fordiac.ide.test.model.FordiacProjectLoader;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 import org.osgi.framework.Bundle;
 
 class ResourceDeploymentTest {
 
-	private static final String DeviceName = "FORTE_PC"; //$NON-NLS-1$
-	private static final String TestNetwork_NumberOfParams = "TestNumberOfParams"; //$NON-NLS-1$
-	private static final String TestNetwork_UniqueParameterDestination = "TestParamsIdentity"; //$NON-NLS-1$
-	private static final String TestNetwork_UntypedSubApp = "TestUntypedSubApp"; //$NON-NLS-1$
-	private static final String[] resNames = { TestNetwork_NumberOfParams, TestNetwork_UniqueParameterDestination,
-			TestNetwork_UntypedSubApp };
+	record TestNetwork(String name, int expectedNumParameters, int expectedNumConnections) {
+	}
+
+	private static final String DEVICE_NAME = "FORTE_PC"; //$NON-NLS-1$
+
+	//@formatter:off
+	private final List<TestNetwork> networks = List.of(
+			new TestNetwork("TestNetwork_Empty", 0, 0), //$NON-NLS-1$
+			new TestNetwork("TestNetwork_StackedTypedSubapp", 4, 1), //$NON-NLS-1$
+			new TestNetwork("TestNetwork_StackedUntypedSubapp", 2, 0)); //$NON-NLS-1$
+	//@formatter:on
 
 	private static EList<Resource> resources = null;
 
@@ -62,38 +68,29 @@ class ResourceDeploymentTest {
 		assertNotNull(resources);
 	}
 
-	@SuppressWarnings("static-method")
-	@Test
-	void testNumberOfSubappParams() throws DeploymentException {
-		final ResourceDeploymentData data = generateDeploymentData(TestNetwork_NumberOfParams);
-		assertTrue(data.getParams().isEmpty());
+	@TestFactory
+	Stream<DynamicTest> dynamicUniqueParamTest() {
+		return generateDynamicTests("Test unique Destinations in: ", //$NON-NLS-1$
+				(nw, dep) -> assertFalse(hasDuplicateEntry(dep.getParams())));
 	}
 
-	@SuppressWarnings("static-method")
-	@Test
-	void testNumberOfParamsInStackedSubApp() throws DeploymentException {
-		final ResourceDeploymentData data = generateDeploymentData(TestNetwork_UniqueParameterDestination);
-		assertEquals(4, data.getParams().size());
+	@TestFactory
+	Stream<DynamicTest> dynamicNumberOfParametersTest() {
+		return generateDynamicTests("Test Number of Params in: ", //$NON-NLS-1$
+				(nw, dep) -> assertEquals(nw.expectedNumParameters(), dep.getParams().size()));
 	}
 
-	/*
-	 * Parameters should only be written once inside a bootfile
-	 */
-
-	@SuppressWarnings("static-method")
-	@ParameterizedTest
-	@ValueSource(strings = { TestNetwork_NumberOfParams, TestNetwork_UniqueParameterDestination,
-			TestNetwork_UntypedSubApp })
-	void testUniqueParameterDestinations(final String networkName) throws DeploymentException {
-		final ResourceDeploymentData data = generateDeploymentData(networkName);
-		assertFalse(hasDuplicateEntry(data.getParams()));
+	@TestFactory
+	Stream<DynamicTest> dynamicNumberOfConnectionsTest() {
+		return generateDynamicTests("Test Connection Count in: ", //$NON-NLS-1$
+				(nw, dep) -> assertEquals(nw.expectedNumConnections(), dep.getConnections().size()));
 	}
 
-	@SuppressWarnings("static-method")
-	@Test
-	void testNumberOfParamsInUntypedSubApp() throws DeploymentException {
-		final ResourceDeploymentData data = generateDeploymentData(TestNetwork_UntypedSubApp);
-		assertEquals(2, data.getParams().size());
+	private Stream<DynamicTest> generateDynamicTests(final String testNamePrefix,
+			final BiConsumer<TestNetwork, ResourceDeploymentData> assertion) {
+		return networks.stream().map(netw -> dynamicTest(testNamePrefix + netw.name(), () -> {
+			assertion.accept(netw, generateDeploymentData(netw.name()));
+		}));
 	}
 
 	private static boolean hasDuplicateEntry(final List<ParameterData> parameters) {
@@ -114,7 +111,7 @@ class ResourceDeploymentTest {
 		final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.deployment"); //$NON-NLS-1$
 		final Path projectPath = new Path("data/ResourceDeploymentTest"); //$NON-NLS-1$
 		final FordiacProjectLoader loader = new FordiacProjectLoader(bundle, projectPath);
-		return loader.getAutomationSystem("ResourceDeploymentTest").getDeviceNamed(DeviceName).getResource(); //$NON-NLS-1$
+		return loader.getAutomationSystem("ResourceDeploymentTest").getDeviceNamed(DEVICE_NAME).getResource(); //$NON-NLS-1$
 	}
 
 	private static ResourceDeploymentData generateDeploymentData(final String testName) throws DeploymentException {
@@ -127,7 +124,7 @@ class ResourceDeploymentTest {
 	}
 
 	@SuppressWarnings("unused")
-	public static void setup() {
+	private static void setup() {
 		new DataTypeLibrary();
 		GlobalConstantsStandaloneSetup.doSetup();
 		STFunctionStandaloneSetup.doSetup();
