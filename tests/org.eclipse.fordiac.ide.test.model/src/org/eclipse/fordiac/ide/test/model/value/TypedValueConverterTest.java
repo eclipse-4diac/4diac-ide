@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.test.model.value;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
@@ -59,54 +60,54 @@ class TypedValueConverterTest {
 
 	static Stream<Arguments> toValueTest() {
 		return Stream.of(//
-				arguments(ElementaryTypes.BOOL, Boolean.TRUE, "TRUE"), //
-				arguments(ElementaryTypes.BOOL, Boolean.FALSE, "FALSE"), //
-				arguments(ElementaryTypes.INT, BigInteger.valueOf(17), "17"), //
-				arguments(ElementaryTypes.INT, BigInteger.valueOf(17), "16#11"), //
-				arguments(ElementaryTypes.LREAL, BigDecimal.valueOf(3.1415), "3.1415"), //
-				arguments(ElementaryTypes.STRING, NAME, "'4diac IDE'"), //
-				arguments(ElementaryTypes.WSTRING, NAME, "\"4diac IDE\""), //
-				arguments(ElementaryTypes.BOOL, Boolean.TRUE, "BOOL#TRUE"), //
-				arguments(ElementaryTypes.BOOL, Boolean.FALSE, "BOOL#FALSE"), //
-				arguments(ElementaryTypes.INT, BigInteger.valueOf(17), TEST_INT), //
-				arguments(ElementaryTypes.INT, BigInteger.valueOf(17), "INT#16#11"), //
-				arguments(ElementaryTypes.LREAL, BigDecimal.valueOf(3.1415), "LREAL#3.1415"), //
-				arguments(ElementaryTypes.STRING, NAME, "STRING#'4diac IDE'"), //
-				arguments(ElementaryTypes.WSTRING, NAME, "WSTRING#\"4diac IDE\""), //
-				arguments(ElementaryTypes.BOOL, IllegalArgumentException.class, TEST_INT), //
-				arguments(ElementaryTypes.TIME, Duration.ofSeconds(17), "T#17s"), //
-				arguments(ElementaryTypes.LTIME, Duration.ofSeconds(17), "LT#17s"), //
-				arguments(ElementaryTypes.DATE, LocalDate.of(2017, 04, 21), "D#2017-04-21"), //
-				arguments(ElementaryTypes.LDATE, LocalDate.of(2017, 04, 21), "LD#2017-04-21"), //
-				arguments(ElementaryTypes.TIME_OF_DAY, LocalTime.of(21, 04, 17), "TOD#21:04:17"), //
-				arguments(ElementaryTypes.LTIME_OF_DAY, LocalTime.of(21, 04, 17), "LTOD#21:04:17"), //
-				arguments(ElementaryTypes.DATE_AND_TIME, LocalDateTime.of(2017, 04, 21, 21, 04, 17),
-						"DT#2017-04-21-21:04:17"), //
-				arguments(ElementaryTypes.LDATE_AND_TIME, LocalDateTime.of(2017, 04, 21, 21, 04, 17),
-						"LDT#2017-04-21-21:04:17"), //
-				arguments(ElementaryTypes.TIME, Duration.ofSeconds(17), "TIME#17s"), //
-				arguments(ElementaryTypes.LTIME, Duration.ofSeconds(17), "LTIME#17s"), //
-				arguments(ElementaryTypes.DATE, LocalDate.of(2017, 04, 21), "DATE#2017-04-21"), //
-				arguments(ElementaryTypes.LDATE, LocalDate.of(2017, 04, 21), "LDATE#2017-04-21"), //
-				arguments(ElementaryTypes.TIME_OF_DAY, LocalTime.of(21, 04, 17), "TIME_OF_DAY#21:04:17"), //
-				arguments(ElementaryTypes.LTIME_OF_DAY, LocalTime.of(21, 04, 17), "LTIME_OF_DAY#21:04:17"), //
-				arguments(ElementaryTypes.DATE_AND_TIME, LocalDateTime.of(2017, 04, 21, 21, 04, 17),
+				arguments("BOOL", Boolean.TRUE, "TRUE"), //
+				arguments("BOOL", Boolean.FALSE, "FALSE"), //
+				arguments("INT", BigInteger.valueOf(17), "17"), //
+				arguments("INT", BigInteger.valueOf(17), "16#11"), //
+				arguments("LREAL", BigDecimal.valueOf(3.1415), "3.1415"), //
+				arguments("STRING", NAME, "'4diac IDE'"), //
+				arguments("WSTRING", NAME, "\"4diac IDE\""), //
+				arguments("BOOL", Boolean.TRUE, "BOOL#TRUE"), //
+				arguments("BOOL", Boolean.FALSE, "BOOL#FALSE"), //
+				arguments("INT", BigInteger.valueOf(17), TEST_INT), //
+				arguments("INT", BigInteger.valueOf(17), "INT#16#11"), //
+				arguments("LREAL", BigDecimal.valueOf(3.1415), "LREAL#3.1415"), //
+				arguments("STRING", NAME, "STRING#'4diac IDE'"), //
+				arguments("WSTRING", NAME, "WSTRING#\"4diac IDE\""), //
+				arguments("BOOL", IllegalArgumentException.class, TEST_INT), //
+				arguments("TIME", Duration.ofSeconds(17), "T#17s"), //
+				arguments("LTIME", Duration.ofSeconds(17), "LT#17s"), //
+				arguments("DATE", LocalDate.of(2017, 04, 21), "D#2017-04-21"), //
+				arguments("LDATE", LocalDate.of(2017, 04, 21), "LD#2017-04-21"), //
+				arguments("TIME_OF_DAY", LocalTime.of(21, 04, 17), "TOD#21:04:17"), //
+				arguments("LTIME_OF_DAY", LocalTime.of(21, 04, 17), "LTOD#21:04:17"), //
+				arguments("DATE_AND_TIME", LocalDateTime.of(2017, 04, 21, 21, 04, 17), "DT#2017-04-21-21:04:17"), //
+				arguments("LDATE_AND_TIME", LocalDateTime.of(2017, 04, 21, 21, 04, 17), "LDT#2017-04-21-21:04:17"), //
+				arguments("TIME", Duration.ofSeconds(17), "TIME#17s"), //
+				arguments("LTIME", Duration.ofSeconds(17), "LTIME#17s"), //
+				arguments("DATE", LocalDate.of(2017, 04, 21), "DATE#2017-04-21"), //
+				arguments("LDATE", LocalDate.of(2017, 04, 21), "LDATE#2017-04-21"), //
+				arguments("TIME_OF_DAY", LocalTime.of(21, 04, 17), "TIME_OF_DAY#21:04:17"), //
+				arguments("LTIME_OF_DAY", LocalTime.of(21, 04, 17), "LTIME_OF_DAY#21:04:17"), //
+				arguments("DATE_AND_TIME", LocalDateTime.of(2017, 04, 21, 21, 04, 17),
 						"DATE_AND_TIME#2017-04-21-21:04:17"), //
-				arguments(ElementaryTypes.LDATE_AND_TIME, LocalDateTime.of(2017, 04, 21, 21, 04, 17),
+				arguments("LDATE_AND_TIME", LocalDateTime.of(2017, 04, 21, 21, 04, 17),
 						"LDATE_AND_TIME#2017-04-21-21:04:17"), //
-				arguments(ElementaryTypes.TIME, IllegalArgumentException.class, "LTIME#17s"), //
-				arguments(ElementaryTypes.TIME, IllegalArgumentException.class, "17s"), //
-				arguments(GenericTypes.ANY_INT, BigInteger.valueOf(17), TEST_INT), //
-				arguments(GenericTypes.ANY_DURATION, Duration.ofSeconds(17), "TIME#17s"), //
-				arguments(GenericTypes.ANY_STRING, "abc", "STRING#'abc'"), //
-				arguments(GenericTypes.ANY_INT, IllegalArgumentException.class, "REAL#3.1415"), //
-				arguments(GenericTypes.ANY_INT, IllegalArgumentException.class, "17") //
+				arguments("TIME", IllegalArgumentException.class, "LTIME#17s"), //
+				arguments("TIME", IllegalArgumentException.class, "17s"), //
+				arguments("ANY_INT", BigInteger.valueOf(17), TEST_INT), //
+				arguments("ANY_DURATION", Duration.ofSeconds(17), "TIME#17s"), //
+				arguments("ANY_STRING", "abc", "STRING#'abc'"), //
+				arguments("ANY_INT", IllegalArgumentException.class, "REAL#3.1415"), //
+				arguments("ANY_INT", IllegalArgumentException.class, "17") //
 		);
 	}
 
 	@ParameterizedTest
 	@MethodSource
-	void toValueTest(final DataType type, final Object expected, final String string) {
+	void toValueTest(final String typeName, final Object expected, final String string) {
+		final DataType type = typeLibrary.getDataTypeLibrary().getTypeIfExists(typeName);
+		assertNotNull(type, "type not found");
 		final TypedValueConverter converter = new TypedValueConverter(type);
 		if (expected instanceof final Class<?> expectedClass && Throwable.class.isAssignableFrom(expectedClass)) {
 			assertThrowsExactly(expectedClass.asSubclass(Throwable.class), () -> converter.toValue(string));

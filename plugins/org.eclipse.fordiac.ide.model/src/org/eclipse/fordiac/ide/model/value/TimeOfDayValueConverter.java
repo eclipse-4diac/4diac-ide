@@ -66,4 +66,9 @@ public final class TimeOfDayValueConverter implements ValueConverter<LocalTime> 
 			throws IllegalArgumentException, NoSuchElementException, IllegalStateException {
 		return toValue(scanner.findWithinHorizon(SCANNER_PATTERN, 0));
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
+	}
 }

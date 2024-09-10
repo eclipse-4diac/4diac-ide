@@ -112,4 +112,9 @@ public final class TimeValueConverter implements ValueConverter<Duration> {
 			throws IllegalArgumentException, NoSuchElementException, IllegalStateException {
 		return toValue(scanner.findWithinHorizon(SCANNER_PATTERN, 0));
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
+	}
 }

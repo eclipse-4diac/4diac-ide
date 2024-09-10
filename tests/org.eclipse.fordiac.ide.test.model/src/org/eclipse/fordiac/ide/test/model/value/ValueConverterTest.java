@@ -20,6 +20,7 @@ package org.eclipse.fordiac.ide.test.model.value;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Named.named;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.math.BigDecimal;
@@ -113,11 +114,18 @@ class ValueConverterTest {
 						"[17,,]"), //
 				arguments(new ArrayValueConverter<>(NumericValueConverter.INSTANCE), IllegalArgumentException.class,
 						"[4"), //
-				arguments(new StructValueConverter(unused -> NumericValueConverter.INSTANCE),
+				arguments(
+						named("StructValueConverter [NumericValueConverter]",
+								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
 						Map.of("a", BigInteger.valueOf(17), "b", BigInteger.valueOf(4)), "(a:=17,b:=4)"), //
-				arguments(new StructValueConverter(unused -> StringValueConverter.INSTANCE),
+				arguments(
+						named("StructValueConverter [StringValueConverter]",
+								new StructValueConverter(unused -> StringValueConverter.INSTANCE)),
 						Map.of("a", "ab,xy", "b", "ab,',xy"), "(a:='ab,xy',b:='ab,$',xy')"), //
-				arguments(new StructValueConverter(unused -> new ArrayValueConverter<>(StringValueConverter.INSTANCE)),
+				arguments(
+						named("StructValueConverter [ArrayValueConverter [StringValueConverter]]",
+								new StructValueConverter(
+										unused -> new ArrayValueConverter<>(StringValueConverter.INSTANCE))),
 						Map.of("a", List.of("abc", "ab,xy", "ab,',xy"), "b", List.of("test", "value")),
 						"(a:=['abc','ab,xy','ab,$',xy'],b:=['test','value'])")//
 		);
@@ -171,11 +179,18 @@ class ValueConverterTest {
 				arguments(new ArrayValueConverter<>(NumericValueConverter.INSTANCE), "[TRUE, 4, 21, 3.14159]",
 						List.of(Boolean.TRUE, BigInteger.valueOf(4), BigInteger.valueOf(21),
 								BigDecimal.valueOf(3.14159))), //
-				arguments(new StructValueConverter(unused -> NumericValueConverter.INSTANCE), "(a := 17, b := 4)",
-						Map.of("a", BigInteger.valueOf(17), "b", BigInteger.valueOf(4))), //
-				arguments(new StructValueConverter(unused -> StringValueConverter.INSTANCE),
+				arguments(
+						named("StructValueConverter [NumericValueConverter]",
+								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
+						"(a := 17, b := 4)", Map.of("a", BigInteger.valueOf(17), "b", BigInteger.valueOf(4))), //
+				arguments(
+						named("StructValueConverter [StringValueConverter]",
+								new StructValueConverter(unused -> StringValueConverter.INSTANCE)),
 						"(a := 'ab,xy', b := 'ab,$',xy')", Map.of("a", "ab,xy", "b", "ab,',xy")), //
-				arguments(new StructValueConverter(unused -> new ArrayValueConverter<>(StringValueConverter.INSTANCE)),
+				arguments(
+						named("StructValueConverter [ArrayValueConverter [StringValueConverter]]",
+								new StructValueConverter(
+										unused -> new ArrayValueConverter<>(StringValueConverter.INSTANCE))),
 						"(a := ['abc', 'ab,xy', 'ab,$',xy'], b := ['test', 'value'])",
 						Map.of("a", List.of("abc", "ab,xy", "ab,',xy"), "b", List.of("test", "value")))//
 		);

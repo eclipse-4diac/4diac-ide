@@ -78,4 +78,9 @@ public class ArrayValueConverter<T> implements ValueConverter<List<T>> {
 		}
 		return IntStream.range(0, count).mapToObj(unused -> result).flatMap(List::stream).toList();
 	}
+
+	@Override
+	public String toString() {
+		return String.format("%s [%s]", getClass().getSimpleName(), elementValueConverter); //$NON-NLS-1$
+	}
 }

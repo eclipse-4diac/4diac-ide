@@ -88,4 +88,12 @@ public final class NumericValueConverter implements ValueConverter<Object> {
 		}
 		return ValueConverter.super.toString(value);
 	}
+
+	@Override
+	public String toString() {
+		if (format != null) {
+			return String.format("%s [format=%s]", getClass().getSimpleName(), format); //$NON-NLS-1$
+		}
+		return getClass().getSimpleName();
+	}
 }

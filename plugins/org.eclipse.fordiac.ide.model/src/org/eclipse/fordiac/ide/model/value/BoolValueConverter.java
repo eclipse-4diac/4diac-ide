@@ -44,4 +44,9 @@ public final class BoolValueConverter implements ValueConverter<Boolean> {
 	public Boolean toValue(final Scanner scanner) throws IllegalArgumentException {
 		return toValue(scanner.findWithinHorizon(SCANNER_PATTERN, 0));
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
+	}
 }

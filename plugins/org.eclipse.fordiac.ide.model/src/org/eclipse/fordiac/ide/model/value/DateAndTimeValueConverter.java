@@ -61,4 +61,9 @@ public final class DateAndTimeValueConverter implements ValueConverter<LocalDate
 			throws IllegalArgumentException, NoSuchElementException, IllegalStateException {
 		return toValue(scanner.findWithinHorizon(SCANNER_PATTERN, 0));
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
+	}
 }

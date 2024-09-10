@@ -296,4 +296,12 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 	private static boolean checkRangeUnsigned(final BigInteger value, final BigInteger upper) {
 		return value.signum() >= 0 && value.compareTo(upper) <= 0;
 	}
+
+	@Override
+	public String toString() {
+		if (strict) {
+			return String.format("%s [type=%s, strict]", getClass().getSimpleName(), type.getName()); //$NON-NLS-1$
+		}
+		return String.format("%s [type=%s]", getClass().getSimpleName(), type.getName()); //$NON-NLS-1$
+	}
 }
