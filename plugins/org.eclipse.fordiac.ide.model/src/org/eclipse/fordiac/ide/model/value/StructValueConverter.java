@@ -71,4 +71,9 @@ public class StructValueConverter implements ValueConverter<Map<String, Object>>
 	private String toString(final String name, final Object value) {
 		return name + " := " + ((ValueConverter<Object>) memberValueConverter.apply(name)).toString(value); //$NON-NLS-1$
 	}
+
+	@Override
+	public String toString() {
+		return String.format("%s [%s]", getClass().getSimpleName(), memberValueConverter); //$NON-NLS-1$
+	}
 }

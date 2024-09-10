@@ -187,4 +187,9 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 			}
 		}
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
+	}
 }
