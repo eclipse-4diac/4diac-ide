@@ -142,18 +142,19 @@ public abstract class AbstractFBTask extends Task {
 	@SuppressWarnings("static-method")
 	protected boolean isFilteredFiletype(final File file) {
 		final var allowedFiletypes = Stream.of(//
-				TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT,//
-				TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT,//
-				TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT,//
-				TypeLibraryTags.GLOBAL_CONST_FILE_ENDING_WITH_DOT);
+				TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT, //
+				TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT, //
+				TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT, //
+				TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING_WITH_DOT, //
+				TypeLibraryTags.GLOBAL_CONST_FILE_ENDING_WITH_DOT, //
+				TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING_WITH_DOT);
 		return matchesFileExtension(file, allowedFiletypes);
 	}
 
 	// recursively call directories and save fbt Files
 	protected List<File> getFBsFiles(final List<File> files, final File dir, final String singleFBName,
 			final List<String> excludeSubfolder) {
-		if (!dir.isDirectory()
-				&& isFilteredFiletype(dir)
+		if (!dir.isDirectory() && isFilteredFiletype(dir)
 				&& (singleFBName == null || singleFBName.equals(dir.getName()))) {
 			files.add(dir);
 			return files;
