@@ -99,6 +99,7 @@ class LibraryImportTest {
 		}
 		FordiacMarkerHelper.updateMarkers(project.getFile(LibraryManager.MANIFEST), FordiacErrorMarker.LIBRARY_MARKER,
 				Collections.emptyList(), true);
+		FordiacMarkerHelper.JOB_GROUP.join(1000, null);
 		project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).accept(resource -> {
 			if (resource instanceof final IFolder folder) {
 				if (folder.getName().equals(LibraryManager.TYPE_LIB_FOLDER_NAME)) {
