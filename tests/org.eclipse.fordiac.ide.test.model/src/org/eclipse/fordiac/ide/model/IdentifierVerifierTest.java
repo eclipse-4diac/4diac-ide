@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-@SuppressWarnings("static-method")
+@SuppressWarnings({ "static-method", "nls" })
 class IdentifierVerifierTest {
 
 	@Test
@@ -34,9 +34,9 @@ class IdentifierVerifierTest {
 
 	@ParameterizedTest
 	@ValueSource(strings = { "", "TEST$", "Test\u00c4", "4test", "__test", "test__name", "test_", "test name",
-			"test\nname", "ANY" })
+			"test\\nname", "ANY" })
 	void testVerifyInvalidIdentifier(final String identifier) {
-		assertTrue(IdentifierVerifier.verifyIdentifier(identifier).isPresent());
+		assertTrue(IdentifierVerifier.verifyIdentifier(identifier.replaceAll("\\\\n", "\n")).isPresent());
 	}
 
 	@Test
@@ -54,14 +54,14 @@ class IdentifierVerifierTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = { "TEST$", "Test\u00c4", "4test", "__test", "test__name", "test_", "test name", "test\nname",
-			"ANY", //
+	@ValueSource(strings = { "TEST$", "Test\u00c4", "4test", "__test", "test__name", "test_", "test name",
+			"test\\nname", "ANY", //
 			"pkg::TEST$", "pkg::Test\u00c4", "pkg::4test", "pkg::__test", "pkg::test__name", "pkg::test_",
-			"pkg::test name", "pkg::test\nname", "pkg::ANY", //
+			"pkg::test name", "pkg::test\\nname", "pkg::ANY", //
 			"TEST$::pkg", "Test\u00c4::pkg", "4test::pkg", "__test::pkg", "test__name::pkg", "test_::pkg",
-			"test name::pkg", "test\nname::pkg", "ANY::pkg", //
+			"test name::pkg", "test\\nname::pkg", "ANY::pkg", //
 			"pkg::test::TEST$", "pkg:test", "pkg:::test", "pkg::::test", "pkg::" })
 	void testVerifyInvalidPackageName(final String identifier) {
-		assertTrue(IdentifierVerifier.verifyPackageName(identifier).isPresent());
+		assertTrue(IdentifierVerifier.verifyPackageName(identifier.replaceAll("\\\\n", "\n")).isPresent());
 	}
 }
