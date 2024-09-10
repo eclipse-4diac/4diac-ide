@@ -1,31 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="F_SEL_E_2" Comment="selection (event-based selection)">
-	<Identification Standard="61131-3" Classification="standard selection function" Description="Copyright (c) 2012, 2023 TU Wien ACIN, HR Agrartechnik GmbH&#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
-	</Identification>
-	<VersionInfo Organization="TU Wien ACIN" Version="1.0" Author="Monika Wenger" Date="2012-03-25">
-	</VersionInfo>
-	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Höpfinger" Date="2022-08-04">
-	</VersionInfo>
-	<InterfaceList>
-		<EventInputs>
-			<Event Name="REQ0" Type="Event" Comment="">
-				<With Var="IN0"/>
-			</Event>
-			<Event Name="REQ1" Type="Event" Comment="">
-				<With Var="IN1"/>
-			</Event>
-		</EventInputs>
-		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
-				<With Var="OUT"/>
-			</Event>
-		</EventOutputs>
-		<InputVars>
-			<VarDeclaration Name="IN0" Type="ANY" Comment="Selectable input variable"/>
-			<VarDeclaration Name="IN1" Type="ANY" Comment="Selectable input variable"/>
-		</InputVars>
-		<OutputVars>
-			<VarDeclaration Name="OUT" Type="ANY" Comment="Selected input"/>
-		</OutputVars>
-	</InterfaceList>
-</FBType>
