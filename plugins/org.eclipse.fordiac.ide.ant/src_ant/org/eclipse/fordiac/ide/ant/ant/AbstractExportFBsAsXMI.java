@@ -37,9 +37,8 @@ public abstract class AbstractExportFBsAsXMI extends AbstractFBTask {
 	@Override
 	protected boolean isFilteredFiletype(final File file) {
 		final var additionalFileTypes = Stream.of(//
-				TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT,//
-				TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING_WITH_DOT,//
-				TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING_WITH_DOT);
+				TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT, //
+				TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING_WITH_DOT);
 		return super.isFilteredFiletype(file) || matchesFileExtension(file, additionalFileTypes);
 	}
 }
