@@ -121,7 +121,8 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		super(context, parent);
 		this.name = name;
 		this.variables = Stream.concat(StreamSupport.stream(variables.spliterator(), false), Stream.of(context))
-				.filter(Objects::nonNull).collect(Collectors.toMap(Variable::getName, Function.identity()));
+				.filter(Objects::nonNull)
+				.collect(Collectors.toMap(Variable::getName, Function.identity(), (oldValue, newValue) -> newValue));
 	}
 
 	@Override
