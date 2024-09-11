@@ -234,7 +234,8 @@ public final class NatTableWidgetFactory {
 	}
 
 	public static <T> NatTable createTreeNatTable(final Composite parent, final DataLayer bodyDataLayer,
-			final ITreeData<T> treeData, final IDataProvider columnHeaderDataProvider) {
+			final ITreeData<T> treeData, final IDataProvider columnHeaderDataProvider,
+			final IEditableRule editableRule) {
 
 		setColumnWidths(bodyDataLayer);
 
@@ -255,6 +256,9 @@ public final class NatTableWidgetFactory {
 
 		compositeLayer.addConfiguration(new DefaultEditConfiguration());
 		compositeLayer.addConfiguration(new DefaultUiBindingConfiguration());
+		compositeLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, null));
+
+		addEditDisabledLabel(bodyDataLayer, editableRule, false);
 
 		final NatTable natTable = new NatTable(parent, compositeLayer, false);
 		natTable.addConfiguration(new TreeLayerExpandCollapseKeyBindings(treeLayer, selectionLayer));
