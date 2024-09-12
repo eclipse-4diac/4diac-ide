@@ -357,11 +357,6 @@
              id="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor"
              name="Focus On Predecessor">
     </command>
-     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-     		defaultHandler="org.eclipse.fordiac.ide.application.handlers.RepairCommandHandler"
-             id="org.eclipse.fordiac.ide.application.commands.repair"
-             name="Repair Error Marker">
-    </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              id="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
              name="Clear Focus-On">
@@ -905,6 +900,9 @@
     </handler>
     <handler class="org.eclipse.fordiac.ide.application.handlers.MoveThroughHierarchyHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.moveThroughHierarchy" />
+	<handler class="org.eclipse.fordiac.ide.application.handlers.FordiacQuickFixHandler"
+             commandId="org.eclipse.jdt.ui.edit.text.java.correction.assist.proposals">
+	</handler>
   </extension>
   
   <extension point="org.eclipse.ui.bindings">
@@ -1088,9 +1086,8 @@
           <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
         </visibleWhen>
       </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.repair"
-               label="Repair Errormarker"
-               tooltip="Attempt to repair error marker">
+      <command commandId="org.eclipse.jdt.ui.edit.text.java.correction.assist.proposals"
+               label="Quick Fix">
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
                label="Group"
@@ -1165,18 +1162,6 @@
         </command>
       </toolbar>
     </menuContribution>
-    <menuContribution
-            locationURI="popup:org.eclipse.ui.ide.MarkersView">
-            <command commandId="org.eclipse.fordiac.ide.application.commands.repair"
-               label="Repair Errormarker"
-               tooltip="Attempt to repair Errormarker">
-         <visibleWhen checkEnabled="false">
-          <and>
-           <test property="org.eclipse.fordiac.ide.application.properties.repairSupported"/>
-          </and>
-        </visibleWhen>     
-      </command> 
-     </menuContribution>
     <menuContribution locationURI="toolbar:org.eclipse.ui.workbench.navigate">
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotochild"/>
@@ -1277,9 +1262,8 @@
           </with>
         </visibleWhen>
       </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.repair"
-               label="Repair Errormarker"
-               tooltip="Attempt to repair Errormarker">
+      <command commandId="org.eclipse.jdt.ui.edit.text.java.correction.assist.proposals"
+               label="Quick Fix">
         <visibleWhen checkEnabled="false">
           <and>
             <with variable="activeEditor">
