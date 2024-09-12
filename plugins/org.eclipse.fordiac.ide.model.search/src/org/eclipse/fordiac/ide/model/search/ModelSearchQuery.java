@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022-2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,8 @@
  * Contributors:
  *   Dunja Životin, Bianca Wiesmayr
  *    - initial API and implementation and/or initial documentation
+ *   Ernst Blecha
+ *    - add cancelation of search
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search;
 
@@ -69,7 +71,11 @@ public class ModelSearchQuery implements ISearchQuery {
 	public IStatus run(final IProgressMonitor monitor) throws OperationCanceledException {
 		getSearchResult().clear();
 		final List<ISearchContext> searchRootSystems = getSearchContexts();
-		performSearch(searchRootSystems);
+		try {
+			performSearch(searchRootSystems, monitor);
+		} catch (final SearchCanceledException e) {
+			return Status.CANCEL_STATUS;
+		}
 
 		Display.getDefault()
 				.asyncExec(() -> ((SearchView) NewSearchUI.getSearchResultView()).showSearchResult(getSearchResult()));
@@ -87,24 +93,24 @@ public class ModelSearchQuery implements ISearchQuery {
 				.map(ISearchContext.class::cast).toList();
 	}
 
-	private void performSearch(final List<ISearchContext> searchContexts) {
+	private void performSearch(final List<ISearchContext> searchContexts, final IProgressMonitor monitor) {
 		for (final ISearchContext context : searchContexts) {
 			context.getTypes().forEach(libraryElementURI -> {
 				final LibraryElement libraryElement = context.getLibraryElement(libraryElementURI);
 				if (libraryElement instanceof final AutomationSystem sys) {
-					searchSystem(sys);
-				} else if (matchTypeEntry(libraryElement)) {
+					searchSystem(sys, monitor);
+				} else if (matchTypeEntry(libraryElement, monitor)) {
 					searchResult.addResult(libraryElement);
 				}
 			});
 		}
 	}
 
-	private void searchSystem(final AutomationSystem sys) {
+	private void searchSystem(final AutomationSystem sys, final IProgressMonitor monitor) {
 		for (final Application app : sys.getApplication()) {
-			searchApplication(app);
+			searchApplication(app, monitor);
 		}
-		searchResources(sys);
+		searchResources(sys, monitor);
 	}
 
 	/**
@@ -113,16 +119,17 @@ public class ModelSearchQuery implements ISearchQuery {
 	 *
 	 * @param app
 	 */
-	public void searchApplication(final Application app) {
-		if (matchEObject(app)) {
+	public void searchApplication(final Application app, final IProgressMonitor monitor) {
+		if (matchEObject(app, monitor)) {
 			searchResult.addResult(app);
 		}
-		searchFBNetwork(app.getFBNetwork(), new ArrayList<>());
+		searchFBNetwork(app.getFBNetwork(), new ArrayList<>(), monitor);
 	}
 
-	private void searchFBNetwork(final FBNetwork network, final List<FBNetworkElement> path) {
+	private void searchFBNetwork(final FBNetwork network, final List<FBNetworkElement> path,
+			final IProgressMonitor monitor) {
 		for (final FBNetworkElement fbnetworkElement : network.getNetworkElements()) {
-			if (matchEObject(fbnetworkElement)) {
+			if (matchEObject(fbnetworkElement, monitor)) {
 				if (!path.isEmpty()) {
 					searchResult.getDictionary().addEntry(fbnetworkElement, path);
 				}
@@ -130,19 +137,19 @@ public class ModelSearchQuery implements ISearchQuery {
 			}
 			if (fbnetworkElement.getType() instanceof final BaseFBType type) {
 				for (final FB fb : type.getInternalFbs()) {
-					if (matchEObject(fb)) {
+					if (matchEObject(fb, monitor)) {
 						// add the containing fb to the path in order to print the instance name
 						searchResult.getDictionary().addEntry(fb, allocatePathList(path, fbnetworkElement));
 						searchResult.addResult(fb);
 					}
 				}
 			}
-			if (fbnetworkElement instanceof final ConfigurableFB conf && matchEObject(conf.getDataType())) {
+			if (fbnetworkElement instanceof final ConfigurableFB conf && matchEObject(conf.getDataType(), monitor)) {
 				searchResult.addResult(conf);
 			}
 			if (fbnetworkElement instanceof final SubApp subApp && !subApp.isTyped()
 					&& subApp.getSubAppNetwork() != null) {
-				searchFBNetwork(subApp.getSubAppNetwork(), path);
+				searchFBNetwork(subApp.getSubAppNetwork(), path, monitor);
 			}
 			if (fbnetworkElement.getInterface() != null) {
 				if (modelQuerySpec.isCheckedPinName()) {
@@ -157,7 +164,7 @@ public class ModelSearchQuery implements ISearchQuery {
 					}
 				}
 				if (modelQuerySpec.isCheckedType()) {
-					searchInterface(fbnetworkElement.getInterface());
+					searchInterface(fbnetworkElement.getInterface(), monitor);
 				}
 			}
 		}
@@ -170,55 +177,55 @@ public class ModelSearchQuery implements ISearchQuery {
 		return list;
 	}
 
-	private void searchResources(final AutomationSystem sys) {
+	private void searchResources(final AutomationSystem sys, final IProgressMonitor monitor) {
 		for (final Device dev : sys.getSystemConfiguration().getDevices()) {
-			if (matchEObject(dev)) {
+			if (matchEObject(dev, monitor)) {
 				searchResult.addResult(dev);
 			}
 			for (final Resource res : dev.getResource()) {
-				if (matchEObject(res)) {
+				if (matchEObject(res, monitor)) {
 					searchResult.addResult(res);
 				}
 			}
 		}
 	}
 
-	private boolean matchTypeEntry(final LibraryElement elem) {
+	private boolean matchTypeEntry(final LibraryElement elem, final IProgressMonitor monitor) {
 		switch (elem) {
-		case final CompositeFBType comp -> searchFBNetwork(comp.getFBNetwork(), new ArrayList<>());
+		case final CompositeFBType comp -> searchFBNetwork(comp.getFBNetwork(), new ArrayList<>(), monitor);
 		case final BaseFBType type -> {
 			for (final FB fb : type.getInternalFbs()) {
-				if (matchEObject(fb)) {
+				if (matchEObject(fb, monitor)) {
 					searchResult.addResult(fb);
 				}
 			}
 			for (final VarDeclaration varDecl : type.getInternalVars()) {
-				if (matchEObject(varDecl)) {
+				if (matchEObject(varDecl, monitor)) {
 					searchResult.addResult(varDecl);
 				}
 			}
 			for (final Algorithm algo : type.getAlgorithm()) {
-				if (matchEObject(algo)) {
+				if (matchEObject(algo, monitor)) {
 					searchResult.addResult(algo);
 				}
 			}
 			for (final Method meth : type.getMethods()) {
-				if (matchEObject(meth)) {
+				if (matchEObject(meth, monitor)) {
 					searchResult.addResult(meth);
 				}
 			}
 		}
 		case final ArrayType array -> {
 			final DataType base = array.getBaseType();
-			if (matchEObject(base)) {
+			if (matchEObject(base, monitor)) {
 				searchResult.addResult(base);
 			}
 		}
-		case final StructuredType struct -> matchStruct(struct);
+		case final StructuredType struct -> matchStruct(struct, monitor);
 		case final AttributeDeclaration attDecl -> {
 			if (attDecl.getType() instanceof final StructuredType struct) {
-				matchStruct(struct);
-			} else if (matchEObject(attDecl.getType())) {
+				matchStruct(struct, monitor);
+			} else if (matchEObject(attDecl.getType(), monitor)) {
 				searchResult.addResult(attDecl.getType());
 			}
 		}
@@ -228,30 +235,32 @@ public class ModelSearchQuery implements ISearchQuery {
 		}
 
 		if (elem instanceof final FBType type && type.getInterfaceList() != null) {
-			searchInterface(type.getInterfaceList());
+			searchInterface(type.getInterfaceList(), monitor);
 		}
-		return matchEObject(elem);
+		return matchEObject(elem, monitor);
 	}
 
-	private void matchStruct(final StructuredType struct) {
+	private void matchStruct(final StructuredType struct, final IProgressMonitor monitor) {
 		for (final VarDeclaration varDecl : struct.getMemberVariables()) {
 			if (varDecl.isArray()) {
-				if (matchEObject(varDecl.getType())) {
+				if (matchEObject(varDecl.getType(), monitor)) {
 					searchResult.addResult(varDecl);
 				}
-			} else if (matchEObject(varDecl)) {
+			} else if (matchEObject(varDecl, monitor)) {
 				searchResult.addResult(varDecl);
 			}
 		}
 	}
 
-	private void searchInterface(final InterfaceList interfaceList) {
+	private void searchInterface(final InterfaceList interfaceList, final IProgressMonitor monitor) {
 		Stream.concat(Stream.concat(interfaceList.getInputs(), interfaceList.getOutputVars().stream()),
 				Stream.concat(interfaceList.getEventOutputs().stream(), interfaceList.getPlugs().stream()))
-				.filter(this::matchEObject).forEach(searchResult::addResult);
+				.filter((final INamedElement modelElement) -> this.matchEObject(modelElement, monitor))
+				.forEach(searchResult::addResult);
 	}
 
-	private boolean matchEObject(final INamedElement modelElement) {
+	private boolean matchEObject(final INamedElement modelElement, final IProgressMonitor monitor) {
+		SearchCanceledException.throwIfCanceled(monitor);
 		if (modelQuerySpec.isCheckedInstanceName()) {
 			final String name = modelElement.getName();
 			final boolean matchInstanceName = name != null && compareStrings(name);
@@ -335,6 +344,17 @@ public class ModelSearchQuery implements ISearchQuery {
 
 	protected ModelSearchResult createModelSearchResult() {
 		return new ModelSearchResult(this);
+	}
+
+	private static class SearchCanceledException extends RuntimeException {
+		// This is a RuntimeException - otherwise this cannot be used within lambdas
+		private static final long serialVersionUID = 1L;
+
+		public static void throwIfCanceled(final IProgressMonitor monitor) {
+			if (monitor.isCanceled()) {
+				throw new SearchCanceledException();
+			}
+		}
 	}
 
 }
