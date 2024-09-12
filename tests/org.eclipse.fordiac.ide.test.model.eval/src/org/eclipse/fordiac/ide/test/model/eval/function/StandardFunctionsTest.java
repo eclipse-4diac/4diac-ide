@@ -50,6 +50,8 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -62,6 +64,7 @@ import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyCharType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
 import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType;
+import org.eclipse.fordiac.ide.model.data.AnyRealType;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType;
 import org.eclipse.fordiac.ide.model.data.BoolType;
@@ -1505,6 +1508,34 @@ class StandardFunctionsTest {
 		assertEquals(expected, Functions.invoke(StandardFunctions.class, functionName, defaultValue(type)));
 	}
 
+	@ParameterizedTest(name = "{index}: {0} as {1}")
+	@MethodSource("typeAnyRealAndAnyIntArgumentsCartesianProvider")
+	void testRealConversions(final String typeName, final String castTypeName) throws Throwable {
+		final DataType type = IecTypes.ElementaryTypes.getTypeByName(typeName);
+		final DataType castType = IecTypes.ElementaryTypes.getTypeByName(castTypeName);
+		for (final String functionName : List.of(typeName + "_TO_" + castTypeName, "TO_" + castTypeName)) {
+			assertEquals(wrapValue(BigInteger.valueOf(2), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(1.6), type)));
+			assertEquals(wrapValue(BigInteger.valueOf(-2), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(-1.6), type)));
+
+			assertEquals(wrapValue(BigInteger.valueOf(2), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(1.5), type)));
+			assertEquals(wrapValue(BigInteger.valueOf(-2), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(-1.5), type)));
+
+			assertEquals(wrapValue(BigInteger.valueOf(1), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(1.4), type)));
+			assertEquals(wrapValue(BigInteger.valueOf(-1), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(-1.4), type)));
+
+			assertEquals(wrapValue(BigInteger.valueOf(2), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(2.5), type)));
+			assertEquals(wrapValue(BigInteger.valueOf(-2), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(-2.5), type)));
+		}
+	}
+
 	@ParameterizedTest(name = "{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
 	void testStringConversions(final String typeName) throws Throwable {
@@ -1711,6 +1742,11 @@ class StandardFunctionsTest {
 				.map(DataType::getName);
 	}
 
+	static Stream<String> typeAnyRealArgumentsProvider() {
+		return DataTypeLibrary.getNonUserDefinedDataTypes().stream().filter(AnyRealType.class::isInstance)
+				.map(DataType::getName);
+	}
+
 	static Stream<String> typeAnyBitExceptBoolArgumentsProvider() {
 		return DataTypeLibrary.getNonUserDefinedDataTypes().stream()
 				.filter(Predicates.and(AnyBitType.class::isInstance, Predicates.not(BoolType.class::isInstance)))
@@ -1725,6 +1761,11 @@ class StandardFunctionsTest {
 	static Stream<Arguments> typeAnyUnsignedAndAnyBitExceptBoolArgumentsCartesianProvider() {
 		return typeAnyUnsignedArgumentsProvider().flatMap(
 				first -> typeAnyBitExceptBoolArgumentsProvider().map(second -> Arguments.arguments(first, second)));
+	}
+
+	static Stream<Arguments> typeAnyRealAndAnyIntArgumentsCartesianProvider() {
+		return typeAnyRealArgumentsProvider()
+				.flatMap(first -> typeAnyIntArgumentsProvider().map(second -> Arguments.arguments(first, second)));
 	}
 
 	@SuppressWarnings("unchecked")
