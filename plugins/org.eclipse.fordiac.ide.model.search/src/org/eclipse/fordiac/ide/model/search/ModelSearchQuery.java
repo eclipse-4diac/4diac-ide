@@ -119,7 +119,11 @@ public class ModelSearchQuery implements ISearchQuery {
 	 *
 	 * @param app
 	 */
-	public void searchApplication(final Application app, final IProgressMonitor monitor) {
+	public void searchApplication(final Application app) {
+		this.searchApplication(app, null);
+	}
+
+	private void searchApplication(final Application app, final IProgressMonitor monitor) {
 		if (matchEObject(app, monitor)) {
 			searchResult.addResult(app);
 		}
@@ -351,7 +355,7 @@ public class ModelSearchQuery implements ISearchQuery {
 		private static final long serialVersionUID = 1L;
 
 		public static void throwIfCanceled(final IProgressMonitor monitor) {
-			if (monitor.isCanceled()) {
+			if (monitor != null && monitor.isCanceled()) {
 				throw new SearchCanceledException();
 			}
 		}
