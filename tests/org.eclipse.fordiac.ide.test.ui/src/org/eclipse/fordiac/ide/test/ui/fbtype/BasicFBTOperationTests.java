@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
 import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
@@ -46,8 +48,10 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@BeforeEach
 	public void operationsInitialization() {
-		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2, UITestNamesHelper.ADAPTER);
-		openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
+		fbTypeBot.createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
+				UITestNamesHelper.ADAPTER);
+		fbTypeBot.openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
 	}
 
 	/**
@@ -61,7 +65,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@AfterEach
 	public void resetEnvironment() {
-		deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT2);
+		new SWTBotFBType(bot).deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT2);
 	}
 
 	/**
@@ -91,7 +95,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	public void createNewEventOutput() {
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		editor.clickContextMenu(UITestNamesHelper.CREATE_OUTPUT_EVENT);
-		assertNotNull(editor.getEditPart(PinNamesHelper.EI1));
+		assertNotNull(editor.getEditPart(PinNamesHelper.EO1));
 	}
 
 	/**
@@ -196,7 +200,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	 * select the property sheet's tabs properly, then click on checkbox to create
 	 * with connection.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void addConnection() {
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
@@ -211,7 +215,8 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 		final SWTBotGefEditPart outputPin = editor.getEditPart(PinNamesHelper.DI1);
 		outputPin.click();
 
-		createConnectionWithinFBTypeWithPropertySheet(PinNamesHelper.DI1, PinNamesHelper.EI1, editor);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		connect.createConnectionWithinFBTypeWithPropertySheet(PinNamesHelper.DI1, PinNamesHelper.EI1, editor);
 	}
 
 	/**
@@ -222,7 +227,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	 * select the property sheet's tabs properly, then click on checkbox to remove
 	 * with connection.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void removeConnection() {
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
@@ -237,9 +242,9 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 		final SWTBotGefEditPart outputPin = editor.getEditPart(PinNamesHelper.DI1);
 		outputPin.click();
 
-		createConnectionWithinFBTypeWithPropertySheet(PinNamesHelper.DI1, PinNamesHelper.EI1, editor);
-
-		removeConnectionWithinFBTypeWithPropertySheet(PinNamesHelper.DI1, PinNamesHelper.EI1, editor);
+		final SWTBotConnection connect = new SWTBotConnection(bot);
+		connect.createConnectionWithinFBTypeWithPropertySheet(PinNamesHelper.DI1, PinNamesHelper.EI1, editor);
+		connect.removeConnectionWithinFBTypeWithPropertySheet(PinNamesHelper.DI1, PinNamesHelper.EI1, editor);
 	}
 
 	/**

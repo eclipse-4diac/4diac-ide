@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
@@ -87,7 +88,7 @@ public class CreateFBTTests extends Abstract4diacUITests {
 		parentItem.expand();
 		final SWTBotTreeItem projectItem = parentItem.getNode(UITestNamesHelper.FBT_TEST_PROJECT1);
 		assertEquals(projectItem.getText(), UITestNamesHelper.FBT_TEST_PROJECT1);
-		deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT1);
+		new SWTBotFBType(bot).deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT1);
 	}
 
 	/**
@@ -149,7 +150,7 @@ public class CreateFBTTests extends Abstract4diacUITests {
 		parentItem.expand();
 		final SWTBotTreeItem projectItem = parentItem.getNode(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertEquals(projectItem.getText(), UITestNamesHelper.FBT_TEST_PROJECT2);
-		deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT2);
+		new SWTBotFBType(bot).deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT2);
 	}
 
 	/**
@@ -202,7 +203,8 @@ public class CreateFBTTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void tryToCreateANewFBTypeWithExistingName() {
-		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT3, UITestNamesHelper.ADAPTER);
+		new SWTBotFBType(bot).createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT3,
+				UITestNamesHelper.ADAPTER);
 		bot.menu(UITestNamesHelper.FILE).menu(UITestNamesHelper.NEW).menu(UITestNamesHelper.TYPE_PROJECT).click();
 		final SWTBotShell shell = bot.shell(UITestNamesHelper.NEW_TYPE);
 		shell.activate();
@@ -222,7 +224,8 @@ public class CreateFBTTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void deleteExistingFBType() {
-		createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT4, UITestNamesHelper.ADAPTER);
+		new SWTBotFBType(bot).createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT4,
+				UITestNamesHelper.ADAPTER);
 		final SWTBotView systemExplorerView = bot.viewById(UITestNamesHelper.SYSTEM_EXPLORER_ID);
 		systemExplorerView.show();
 		final Composite systemExplorerComposite = (Composite) systemExplorerView.getWidget();

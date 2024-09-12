@@ -10,8 +10,9 @@
  * Contributors:
  *   Andrea Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.test.ui;
+package org.eclipse.fordiac.ide.test.ui.networkediting.errormarker;
 
+import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

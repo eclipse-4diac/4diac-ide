@@ -10,7 +10,7 @@
  * Contributors:
  *   Andrea Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.test.ui;
+package org.eclipse.fordiac.ide.test.ui.networkediting.subapp_compsite;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -26,7 +26,10 @@ import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
+import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
 import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFB;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
 import org.eclipse.gef.ConnectionEditPart;
@@ -49,10 +52,11 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	 * clicks on it. It is expected that a new breadcrumb tab with the name of the
 	 * FB appears and the editor is an instance of CompositeInstanceViewer.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void compositeInstanceViewerAppearsAfterDoubleClickOnFB() {
-		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 100));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 100));
 		final SWTBotGefEditor editor = goToCompositeInstanceViewer(UITestNamesHelper.E_N_TABLE_FB);
 
 		UIThreadRunnable.syncExec(() -> {
@@ -78,10 +82,11 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	 * create a new draw2d.geometry Point, because draw2d.geometry Points are not
 	 * compatible with the former.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void compositeInstanceViewerMoveFB() {
-		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 200));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 200));
 		goToCompositeInstanceViewer(UITestNamesHelper.E_N_TABLE_FB);
 
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
@@ -123,10 +128,11 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	/**
 	 * Checks if it is possible to delete FB in CompositeInstanceViewer
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void compositeInstanceViewerDeleteFB() {
-		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 200));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 200));
 		goToCompositeInstanceViewer(UITestNamesHelper.E_N_TABLE_FB);
 
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
@@ -152,12 +158,13 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	/**
 	 * Checks if it is possible to add another FB in CompositeInstanceViewer
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void compositeInstanceViewerAddAnotherFB() {
-		dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 200));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 200));
 		goToCompositeInstanceViewer(UITestNamesHelper.E_CYCLE_FB);
-		dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 		assertNotNull(editor.getEditPart(UITestNamesHelper.E_DELAY_FB));
@@ -180,18 +187,20 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	 * The method checks if it is possible to add connections between FB pins in
 	 * CompositeInstanceViewer. It is expected that this is not possible.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void compositeInstanceViewerConnectionCanBeAdded() {
-		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 200));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(200, 200));
 		goToCompositeInstanceViewer(UITestNamesHelper.E_N_TABLE_FB);
-		SWTBot4diacGefViewer viewer = createConnection(PinNamesHelper.EO, PinNamesHelper.EI);
+		final SWTBotConnection connectBot = new SWTBotConnection(bot);
+		SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.EO, PinNamesHelper.EI);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = createConnection(PinNamesHelper.N, PinNamesHelper.CV);
+		viewer = connectBot.createConnection(PinNamesHelper.N, PinNamesHelper.CV);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = createConnection(PinNamesHelper.START, PinNamesHelper.STOP);
+		viewer = connectBot.createConnection(PinNamesHelper.START, PinNamesHelper.STOP);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
-		viewer = createConnection(PinNamesHelper.START, PinNamesHelper.EO0);
+		viewer = connectBot.createConnection(PinNamesHelper.START, PinNamesHelper.EO0);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 		returnToEditingArea();
 	}
@@ -199,15 +208,17 @@ public class CompositeInstanceViewerTests extends Abstract4diacUITests {
 	/**
 	 * Checks if it is possible to delete a connection in CompositeInstanceViewer
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void compositeInstanceViewerDeleteConnection() {
-		dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		goToCompositeInstanceViewer(UITestNamesHelper.E_N_TABLE_FB);
 
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
-		final ConnectionEditPart connection = findConnection(PinNamesHelper.EO, PinNamesHelper.REQ);
+		final SWTBotConnection connectBot = new SWTBotConnection(bot);
+		final ConnectionEditPart connection = connectBot.findConnection(PinNamesHelper.EO, PinNamesHelper.REQ);
 		final PolylineConnection figure = (PolylineConnection) connection.getFigure();
 		final PointList points = figure.getPoints();
 		final org.eclipse.draw2d.geometry.Point firstPoint = points.getFirstPoint();
