@@ -54,7 +54,7 @@ public class UpdateFBTypeInterfaceChange extends CompositeChange implements IFor
 		final List<VarDeclaration> varDeclaration = type.getInterfaceList().getAllInterfaceElements().stream()
 				.filter(VarDeclaration.class::isInstance)
 				.map(VarDeclaration.class::cast)
-				.filter(decl -> decl.getType().getName().equals(struct.getName())).toList();
+				.filter(decl -> decl.getType().getName().equals(struct.getName())).toList(); // TODO: FQN
 		// @formatter:on
 
 		for (final VarDeclaration varDec : varDeclaration) {

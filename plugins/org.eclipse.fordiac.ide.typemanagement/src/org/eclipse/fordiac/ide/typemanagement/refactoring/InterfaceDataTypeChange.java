@@ -47,7 +47,7 @@ public class InterfaceDataTypeChange extends Change {
 
 	@Override
 	public void initializeValidationData(final IProgressMonitor pm) {
-
+		// empty
 	}
 
 	private Command getUpdatePinInTypeDeclarationCommand() {
@@ -65,7 +65,7 @@ public class InterfaceDataTypeChange extends Change {
 		// type is open
 		final Command cmd = getUpdatePinInTypeDeclarationCommand();
 		AbstractLiveSearchContext.executeAndSave(cmd, fbType, pm);
-		return null;
+		return new InterfaceDataTypeChange(fbType, typeEntry);
 	}
 
 	@Override

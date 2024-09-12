@@ -44,9 +44,12 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 	private DataType oldDataType;
 	private final CompoundCommand additionalCommands = new CompoundCommand();
 
+	private boolean ignoreConnections;
+
 	private ChangeDataTypeCommand(final IInterfaceElement interfaceElement, final DataType dataType) {
 		super(interfaceElement);
 		this.dataType = dataType;
+		ignoreConnections = false;
 	}
 
 	public static ChangeDataTypeCommand forTypeName(final IInterfaceElement interfaceElement, final String typeName) {
@@ -102,7 +105,7 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 
 	@Override
 	public boolean canExecute() {
-		return super.canExecute() && !isSubAppPinAndConnected();
+		return super.canExecute() && (ignoreConnections || !isSubAppPinAndConnected());
 	}
 
 	@Override
@@ -130,5 +133,13 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 
 	public CompoundCommand getAdditionalCommands() {
 		return additionalCommands;
+	}
+
+	public boolean isIgnoreConnections() {
+		return ignoreConnections;
+	}
+
+	public void setIgnoreConnections(final boolean ignoreConnections) {
+		this.ignoreConnections = ignoreConnections;
 	}
 }

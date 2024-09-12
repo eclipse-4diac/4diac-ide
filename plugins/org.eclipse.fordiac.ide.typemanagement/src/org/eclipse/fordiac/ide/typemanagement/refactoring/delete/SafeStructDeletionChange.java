@@ -14,6 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.delete;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 	final Map<EObject, RootNodeChange> rootChanges = new HashMap<>();
 
 	public SafeStructDeletionChange(final StructuredType struct) {
-		super(Messages.DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle);
+		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle, struct.getName()));
 		deletedStruct = (DataTypeEntry) struct.getTypeEntry();
 		createChanges(deletedStruct);
 	}
