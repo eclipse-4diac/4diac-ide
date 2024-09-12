@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.fordiac.ide.model.commands.change.AbstractUpdateFBNElementCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
@@ -85,8 +86,12 @@ public class UpdateFBInstanceChange extends Change {
 
 	@Override
 	public Change perform(final IProgressMonitor pm) throws CoreException {
-		AbstractLiveSearchContext.executeAndSave(getCommand(instance), instance, pm);
-		return null;
+		final var cmd = getCommand(instance);
+		AbstractLiveSearchContext.executeAndSave(cmd, instance, pm);
+		if (cmd instanceof final AbstractUpdateFBNElementCommand ab) {
+			return new UpdateFBInstanceChange(ab.getNewElement(), typeEntry);
+		}
+		return new UpdateFBInstanceChange(instance, typeEntry);
 	}
 
 	@Override

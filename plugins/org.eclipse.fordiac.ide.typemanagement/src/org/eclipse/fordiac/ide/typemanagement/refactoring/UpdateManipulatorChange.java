@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
@@ -41,12 +40,12 @@ public class UpdateManipulatorChange extends Change {
 
 	@Override
 	public Change perform(final IProgressMonitor pm) throws CoreException {
-		final Command cmd = getCommand();
+		final ChangeStructCommand cmd = getCommand();
 		AbstractLiveSearchContext.executeAndSave(cmd, manipulator, pm);
-		return new UpdateManipulatorChange(manipulator, !structWasDeleted);
+		return new UpdateManipulatorChange(cmd.getNewMux(), !structWasDeleted);
 	}
 
-	private Command getCommand() {
+	private ChangeStructCommand getCommand() {
 		if (structWasDeleted) {
 			return new ChangeStructCommand(manipulator, getErrorMarkerEntry(manipulator.getDataType()), true);
 		}
