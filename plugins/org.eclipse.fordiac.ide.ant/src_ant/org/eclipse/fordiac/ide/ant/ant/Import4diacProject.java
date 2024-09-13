@@ -144,7 +144,8 @@ public class Import4diacProject extends Task {
 
 	public static void waitBuilderJobsComplete() {
 		waitJobsComplete(job -> !(job.getName().startsWith("Compacting") //$NON-NLS-1$
-				|| job.getName().startsWith("Periodic workspace save."))); //$NON-NLS-1$
+				|| job.getName().startsWith("Periodic workspace save.") //$NON-NLS-1$
+				|| job.getName().startsWith("Download Library package: "))); //$NON-NLS-1$
 	}
 
 	public static void runFullBuild(final IProject project) {
