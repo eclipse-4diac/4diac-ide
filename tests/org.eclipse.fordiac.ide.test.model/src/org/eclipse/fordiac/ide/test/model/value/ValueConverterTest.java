@@ -43,8 +43,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 @SuppressWarnings({ "static-method", "nls" })
 class ValueConverterTest {
 
-	private static final String NAME_BACKSLASH_FRT = "4diac\f\r\tIDE";
-	private static final String NAME_BACKSLASHN = "4diac\nIDE";
+	private static final String NAME_BACKSLASH_FRT = "4diac\\f\\r\\tIDE";
+	private static final String NAME_BACKSLASHN = "4diac\\nIDE";
 	private static final String NAME_DOLLAR = "4diac$IDE";
 	private static final String NAME_TWO_DOLLAR = "'4diac$$IDE'";
 	private static final String NAME_BACKSLASH = "4diac\"IDE";
@@ -141,6 +141,9 @@ class ValueConverterTest {
 		} else if (expected instanceof final Iterable<?> expectedIterable) {
 			assertIterableEquals(expectedIterable, (Iterable<?>) converter.toValue(string));
 			assertIterableEquals(expectedIterable, (Iterable<?>) converter.toValue(new Scanner(string)));
+		} else if (expected instanceof final String expectedString) {
+			assertEquals(expectedString.translateEscapes(), converter.toValue(string));
+			assertEquals(expectedString.translateEscapes(), converter.toValue(new Scanner(string)));
 		} else {
 			assertEquals(expected, converter.toValue(string));
 			assertEquals(expected, converter.toValue(new Scanner(string)));
@@ -198,7 +201,12 @@ class ValueConverterTest {
 
 	@ParameterizedTest
 	@MethodSource
+	@SuppressWarnings("unchecked")
 	<T> void toStringTest(final ValueConverter<? super T> converter, final String expected, final T value) {
-		assertEquals(expected, converter.toString(value));
+		if (value instanceof final String stringValue) {
+			assertEquals(expected, converter.toString((T) stringValue.translateEscapes()));
+		} else {
+			assertEquals(expected, converter.toString(value));
+		}
 	}
 }
