@@ -147,7 +147,12 @@ public class VarConfigurationSection extends AbstractSection {
 
 	@Override
 	protected void performRefresh() {
-		// currently nothing to do
+		inputTable.refresh();
+	}
+
+	@Override
+	protected void performRefreshAnnotations() {
+		inputTable.refresh(false);
 	}
 
 	private List<VarDeclaration> collectVarConfigs() {

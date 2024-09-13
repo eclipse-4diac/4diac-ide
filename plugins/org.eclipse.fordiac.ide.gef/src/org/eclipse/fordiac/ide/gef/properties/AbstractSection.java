@@ -74,6 +74,10 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	 */
 	protected abstract void performRefresh();
 
+	protected void performRefreshAnnotations() {
+		// empty default
+	}
+
 	protected void setType(final Object input) {
 		// as the property sheet is reused for different selection first remove
 		// listening to the old element
@@ -150,12 +154,31 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		}
 	}
 
+	protected final void notifiyRefreshAnnotations() {
+		if (shouldRefresh()) {
+			parent.getDisplay().asyncExec(() -> {
+				if (!parent.isDisposed()) {
+					refreshAnnotations();
+				}
+			});
+		}
+	}
+
 	@Override
 	public final void refresh() {
 		if (getType() != null) {
 			final CommandStack commandStackBuffer = commandStack;
 			commandStack = null;
 			performRefresh();
+			commandStack = commandStackBuffer;
+		}
+	}
+
+	public final void refreshAnnotations() {
+		if (getType() != null) {
+			final CommandStack commandStackBuffer = commandStack;
+			commandStack = null;
+			performRefreshAnnotations();
 			commandStack = commandStackBuffer;
 		}
 	}
@@ -183,7 +206,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		}
 	}
 
-	private final GraphicalAnnotationModelListener annotationModelListener = event -> notifiyRefresh();
+	private final GraphicalAnnotationModelListener annotationModelListener = event -> notifiyRefreshAnnotations();
 
 	protected void removeAnnotationModelListener() {
 		if (annotationModel != null) {

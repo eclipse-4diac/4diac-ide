@@ -180,6 +180,11 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	}
 
 	@Override
+	protected void performRefreshAnnotations() {
+		table.refresh(false);
+	}
+
+	@Override
 	public void executeCommand(final Command cmd) {
 		super.executeCommand(cmd);
 		provider.setInput(getFilteredAttributeList());

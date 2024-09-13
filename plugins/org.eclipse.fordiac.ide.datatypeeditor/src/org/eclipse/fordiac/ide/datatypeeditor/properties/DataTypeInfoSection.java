@@ -19,7 +19,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.PackageInfoWidget;
-import org.eclipse.fordiac.ide.gef.widgets.TypeInfoWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -32,7 +31,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class DataTypeInfoSection extends AbstractSection {
 
-	private TypeInfoWidget typeInfoWidget;
+	private PackageInfoWidget typeInfoWidget;
 	private Text commentText;
 
 	@Override
@@ -97,6 +96,11 @@ public class DataTypeInfoSection extends AbstractSection {
 	protected void performRefresh() {
 		commentText.setText((null != getType().getComment()) ? getType().getComment() : ""); //$NON-NLS-1$
 		typeInfoWidget.refresh();
+	}
+
+	@Override
+	protected void performRefreshAnnotations() {
+		typeInfoWidget.refreshAnnotations();
 	}
 
 	@Override
