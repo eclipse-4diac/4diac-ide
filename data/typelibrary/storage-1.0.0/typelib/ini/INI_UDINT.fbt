@@ -2,7 +2,7 @@
 <FBType Name="INI_UDINT" Comment="Load and Store UDINT Data from settings.ini by Section and Key">
 	<Identification Standard="61499-2" Description="Copyright (c) 2022, 2024 HR Agrartechnik GmbH   &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
-	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger"  Date="2022-09-23">
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2022-09-23">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
@@ -11,6 +11,7 @@
 				<With Var="SECTION"/>
 				<With Var="KEY"/>
 				<With Var="VALUE"/>
+				<With Var="DEFAULT_VALUE"/>
 			</Event>
 			<Event Name="SET" Type="Event" Comment="set value for given key">
 				<With Var="VALUE"/>
@@ -41,6 +42,7 @@
 			<VarDeclaration Name="SECTION" Type="STRING" Comment=""/>
 			<VarDeclaration Name="KEY" Type="STRING" Comment="Key name."/>
 			<VarDeclaration Name="VALUE" Type="UDINT" Comment="The value to set."/>
+			<VarDeclaration Name="DEFAULT_VALUE" Type="UDINT" Comment="The value to read if there is noting in the settings.ini"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
