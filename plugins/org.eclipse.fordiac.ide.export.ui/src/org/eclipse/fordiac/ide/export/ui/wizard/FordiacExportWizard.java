@@ -93,7 +93,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		final Exporter exporter = new Exporter(page.getSelectedExportFilter(), exportees, page.getDirectory(),
 				page.overwriteWithoutWarning(), page.enableCMakeLists());
 		try {
-			new ProgressMonitorDialog(getShell()).run(false, false, exporter);
+			new ProgressMonitorDialog(getShell()).run(true, false, exporter);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt(); // mark interruption
 			showExceptionErrorDialog(e);
@@ -148,7 +148,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 					exportElement(monitor, filter, null, new CMakeListsMarker());
 				}
 				monitor.worked(1);
-				showErrorWarningSummary(filter);
+				Display.getDefault().asyncExec(() -> showErrorWarningSummary(filter));
 			}
 			monitor.done();
 		}
