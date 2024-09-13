@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="NVS_UDINT" Comment="Load and Store UDINT Data from NVS by Key">
-	<Identification Standard="61499-2">
+	<Identification Standard="61499-2" Description="Copyright (c) 2022, 2024 HR Agrartechnik GmbH   &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
-	<VersionInfo Version="1.0" Author="franz" Date="2022-09-23">
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger"  Date="2022-09-23">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
