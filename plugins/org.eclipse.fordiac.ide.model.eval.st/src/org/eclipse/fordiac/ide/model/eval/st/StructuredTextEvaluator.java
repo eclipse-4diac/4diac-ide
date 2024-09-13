@@ -27,6 +27,7 @@ import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
@@ -59,6 +60,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.StructVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.eval.variable.WStringCharacterVariable;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -163,8 +165,9 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 
 	protected Variable<?> findVariable(final STVarDeclaration variable)
 			throws EvaluatorException, InterruptedException {
-		if (variable.eContainer() instanceof STVarGlobalDeclarationBlock) {
-			final Variable<?> cachedGlobalConstant = cachedGlobalConstants.get(variable.getName());
+		final String globalConstantName = getGlobalConstantName(variable);
+		if (globalConstantName != null) {
+			final Variable<?> cachedGlobalConstant = cachedGlobalConstants.get(globalConstantName);
 			if (cachedGlobalConstant != null) {
 				return cachedGlobalConstant;
 			}
@@ -194,7 +197,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 
 	protected Variable<?> evaluateGlobalConstantInitialization(final STVarDeclaration decl)
 			throws EvaluatorException, InterruptedException {
-		final Variable<?> variable = VariableOperations.newVariable(decl.getName(), evaluateType(decl));
+		final Variable<?> variable = VariableOperations.newVariable(getGlobalConstantName(decl), evaluateType(decl));
 		cachedGlobalConstants.put(variable.getName(), variable);
 		return evaluateInitializerExpression(variable, decl.getDefaultValue());
 	}
@@ -878,6 +881,17 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				receiver.getType().eClass().getInstanceClass(), receiver, receiver.getMembers().values(), this));
 		result.prepare(); // make sure evaluator is prepared
 		return result;
+	}
+
+	protected static String getGlobalConstantName(final STVarDeclaration decl) {
+		if (decl.eContainer() instanceof final STVarGlobalDeclarationBlock block) {
+			if (block.eContainer() instanceof final STGlobalConstsSource source && source.getName() != null
+					&& !source.getName().isEmpty()) {
+				return source.getName() + PackageNameHelper.PACKAGE_NAME_DELIMITER + decl.getName();
+			}
+			return decl.getName();
+		}
+		return null;
 	}
 
 	protected static UnsupportedOperationException createUnsupportedOperationException(final Object element) {
