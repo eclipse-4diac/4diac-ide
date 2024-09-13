@@ -117,16 +117,19 @@ class ValueConverterTest {
 				arguments(
 						named("StructValueConverter [NumericValueConverter]",
 								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
-						Map.of("a", BigInteger.valueOf(17), "b", BigInteger.valueOf(4)), "(a:=17,b:=4)"), //
+						named("{a=17, b=4}", Map.of("a", BigInteger.valueOf(17), "b", BigInteger.valueOf(4))),
+						"(a:=17,b:=4)"), //
 				arguments(
 						named("StructValueConverter [StringValueConverter]",
 								new StructValueConverter(unused -> StringValueConverter.INSTANCE)),
-						Map.of("a", "ab,xy", "b", "ab,',xy"), "(a:='ab,xy',b:='ab,$',xy')"), //
+						named("{a=ab,xy, b=ab,',xy}", Map.of("a", "ab,xy", "b", "ab,',xy")),
+						"(a:='ab,xy',b:='ab,$',xy')"), //
 				arguments(
 						named("StructValueConverter [ArrayValueConverter [StringValueConverter]]",
 								new StructValueConverter(
 										unused -> new ArrayValueConverter<>(StringValueConverter.INSTANCE))),
-						Map.of("a", List.of("abc", "ab,xy", "ab,',xy"), "b", List.of("test", "value")),
+						named("{a=[abc, ab,xy, ab,',xy], b=[test, value]}",
+								Map.of("a", List.of("abc", "ab,xy", "ab,',xy"), "b", List.of("test", "value"))),
 						"(a:=['abc','ab,xy','ab,$',xy'],b:=['test','value'])")//
 		);
 	}
@@ -185,17 +188,20 @@ class ValueConverterTest {
 				arguments(
 						named("StructValueConverter [NumericValueConverter]",
 								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
-						"(a := 17, b := 4)", Map.of("a", BigInteger.valueOf(17), "b", BigInteger.valueOf(4))), //
+						"(a := 17, b := 4)",
+						named("{a=17, b=4}", Map.of("a", BigInteger.valueOf(17), "b", BigInteger.valueOf(4)))), //
 				arguments(
 						named("StructValueConverter [StringValueConverter]",
 								new StructValueConverter(unused -> StringValueConverter.INSTANCE)),
-						"(a := 'ab,xy', b := 'ab,$',xy')", Map.of("a", "ab,xy", "b", "ab,',xy")), //
+						"(a := 'ab,xy', b := 'ab,$',xy')",
+						named("{a=ab,xy, b=ab,',xy}", Map.of("a", "ab,xy", "b", "ab,',xy"))), //
 				arguments(
 						named("StructValueConverter [ArrayValueConverter [StringValueConverter]]",
 								new StructValueConverter(
 										unused -> new ArrayValueConverter<>(StringValueConverter.INSTANCE))),
 						"(a := ['abc', 'ab,xy', 'ab,$',xy'], b := ['test', 'value'])",
-						Map.of("a", List.of("abc", "ab,xy", "ab,',xy"), "b", List.of("test", "value")))//
+						named("{a=[abc, ab,xy, ab,',xy], b=[test, value]}",
+								Map.of("a", List.of("abc", "ab,xy", "ab,',xy"), "b", List.of("test", "value"))))//
 		);
 	}
 
