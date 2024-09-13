@@ -90,6 +90,11 @@ public abstract class TypeInfoSection extends AbstractDoubleColumnSection {
 	}
 
 	@Override
+	protected void performRefreshAnnotations() {
+		typeInfo.refreshAnnotations();
+	}
+
+	@Override
 	protected void addContentAdapter() {
 		super.addContentAdapter();
 		if (getType() != null) {

@@ -126,6 +126,12 @@ public class InstancePropertySection extends AbstractSection {
 		}
 	}
 
+	@Override
+	protected void performRefreshAnnotations() {
+		inputTable.refresh(false);
+		outputTable.refresh(false);
+	}
+
 	protected void createTableSection(final Composite parent) {
 		final Composite tableSectionComposite = getWidgetFactory().createComposite(parent);
 		GridLayoutFactory.fillDefaults().numColumns(TWO_COLUMNS).applyTo(tableSectionComposite);
