@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.filters.AttributeFilter;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -61,9 +62,13 @@ public class InfoPropertySection extends AbstractSection {
 	private Label subAppsVal;
 	private Label instancesVal;
 
+	private static final int SORT_BY_KEY = 1;
+	private static final int SORT_BY_VALUE_ASC = 2;
+	private static final int SORT_BY_VALUE_DESC = 3;
+
 	private Group fbGroup;
-	private final java.util.List<Label> fbTypeLabels = new ArrayList<>();
-	private final java.util.List<Label> fbCountLabels = new ArrayList<>();
+	private final List<Label> fbTypeLabels = new ArrayList<>();
+	private final List<Label> fbCountLabels = new ArrayList<>();
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -75,21 +80,24 @@ public class InfoPropertySection extends AbstractSection {
 		final GridLayout parentLayout = new GridLayout(2, true);
 		parent.setLayout(parentLayout);
 
-		final Group group = createGroup(parent, "System Information", backgroundColor); //$NON-NLS-1$
+		final Group group = createGroup(parent, Messages.InfoPropertySection_SystemInfo, backgroundColor);
 
-		numbConVal = createLabelPair(group, "Number of Connections:", backgroundColor); //$NON-NLS-1$
-		usedTypesVal = createLabelPair(group, "Number of used Types:", backgroundColor); //$NON-NLS-1$
-		subAppsVal = createLabelPair(group, "Number of untyped Subapps:", backgroundColor); //$NON-NLS-1$
-		instancesVal = createLabelPair(group, "Number of all instances:", backgroundColor); //$NON-NLS-1$
+		numbConVal = createLabelPair(group, Messages.InfoPropertySection_Number_Of_Connections_Label, backgroundColor);
+		usedTypesVal = createLabelPair(group, Messages.InfoPropertySection_Number_Of_Used_Types_Label, backgroundColor);
+		subAppsVal = createLabelPair(group, Messages.InfoPropertySection_Number_Of_Untyped_SubApps_Label,
+				backgroundColor);
+		instancesVal = createLabelPair(group, Messages.InfoPropertySection_Number_Of_All_Instances_Label,
+				backgroundColor);
 
-		final Label checkLabl = createLabel(group, "Count instances of typed Subapps/CFB Networks", backgroundColor, //$NON-NLS-1$
-				false);
+		final Label checkLabl = createLabel(group, Messages.InfoPropertySection_CheckBox_Label, backgroundColor, false);
 		checkBox = createCheckBox(group);
 
-		fbGroup = createGroup(parent, "FB Types and Counts", backgroundColor); //$NON-NLS-1$
+		fbGroup = createGroup(parent, Messages.InfoPropertySection_All_Types_And_Counts_Label, backgroundColor);
 		fbGroup.setVisible(false);
 
-		sortCombo = createCombo(fbGroup, "Sort by: ", "Name", "Count ASC", "Count DESC"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		sortCombo = createCombo(fbGroup, Messages.InfoPropertySection_Combo_Text_SortBy,
+				Messages.InfoPropertySection_Combo_Text_Name, Messages.InfoPropertySection_Combo_Text_CountASC,
+				Messages.InfoPropertySection_Combo_Text_CountDESC);
 	}
 
 	private Combo createCombo(final Composite parent, final String... content) {
@@ -120,11 +128,7 @@ public class InfoPropertySection extends AbstractSection {
 		check.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				if (check.getSelection()) {
-					checked = true;
-				} else {
-					checked = false;
-				}
+				checked = check.getSelection();
 				setInputInit();
 			}
 		});
@@ -296,13 +300,13 @@ public class InfoPropertySection extends AbstractSection {
 			final List<Entry<String, Integer>> sortedEntries = new ArrayList<>(fbs.entrySet());
 			final int sortSel = sortCombo.getSelectionIndex();
 			switch (sortSel) {
-			case 1:
+			case SORT_BY_KEY:
 				sortedEntries.sort(Map.Entry.comparingByKey());
 				break;
-			case 2:
+			case SORT_BY_VALUE_ASC:
 				sortedEntries.sort(Map.Entry.comparingByValue());
 				break;
-			case 3:
+			case SORT_BY_VALUE_DESC:
 				sortedEntries.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
 				break;
 			default:
