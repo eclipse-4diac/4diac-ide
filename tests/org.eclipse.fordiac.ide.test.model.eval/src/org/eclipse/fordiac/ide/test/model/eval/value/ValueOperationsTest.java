@@ -22,6 +22,10 @@ import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.castValue
 import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.compareTo;
 import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.defaultValue;
 import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.divideBy;
+import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.greaterEquals;
+import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.greaterThan;
+import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.lessEquals;
+import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.lessThan;
 import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.multiply;
 import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.negate;
 import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.parseValue;
@@ -33,6 +37,7 @@ import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.reverseBy
 import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.subtract;
 import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.wrapValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -93,6 +98,10 @@ class ValueOperationsTest {
 		assertThrows(UnsupportedOperationException.class, () -> bitwiseOr(null, null));
 		assertThrows(UnsupportedOperationException.class, () -> bitwiseXor(null, null));
 		assertEquals(Boolean.valueOf(true), Boolean.valueOf(ValueOperations.equals(null, null)));
+		assertThrows(UnsupportedOperationException.class, () -> lessThan(null, null));
+		assertThrows(UnsupportedOperationException.class, () -> lessEquals(null, null));
+		assertThrows(UnsupportedOperationException.class, () -> greaterThan(null, null));
+		assertThrows(UnsupportedOperationException.class, () -> greaterEquals(null, null));
 		assertThrows(UnsupportedOperationException.class, () -> compareTo(null, null));
 		assertNull(defaultValue(null));
 		assertNull(wrapValue(null, null));
@@ -299,6 +308,38 @@ class ValueOperationsTest {
 		final DataType type = ValueOperationsTest.getTypeByName(typeName);
 		final Value defaultValue = defaultValue(type);
 		assertEquals(Boolean.valueOf(true), Boolean.valueOf(ValueOperations.equals(defaultValue, defaultValue)));
+	}
+
+	@ParameterizedTest(name = "{index}: {0}")
+	@MethodSource("typeArgumentsProvider")
+	void testLessThan(final String typeName) {
+		final DataType type = ValueOperationsTest.getTypeByName(typeName);
+		final Value defaultValue = defaultValue(type);
+		assertFalse(lessThan(defaultValue, defaultValue));
+	}
+
+	@ParameterizedTest(name = "{index}: {0}")
+	@MethodSource("typeArgumentsProvider")
+	void testLessEquals(final String typeName) {
+		final DataType type = ValueOperationsTest.getTypeByName(typeName);
+		final Value defaultValue = defaultValue(type);
+		assertTrue(lessEquals(defaultValue, defaultValue));
+	}
+
+	@ParameterizedTest(name = "{index}: {0}")
+	@MethodSource("typeArgumentsProvider")
+	void testGreaterThan(final String typeName) {
+		final DataType type = ValueOperationsTest.getTypeByName(typeName);
+		final Value defaultValue = defaultValue(type);
+		assertFalse(greaterThan(defaultValue, defaultValue));
+	}
+
+	@ParameterizedTest(name = "{index}: {0}")
+	@MethodSource("typeArgumentsProvider")
+	void testGreaterEquals(final String typeName) {
+		final DataType type = ValueOperationsTest.getTypeByName(typeName);
+		final Value defaultValue = defaultValue(type);
+		assertTrue(greaterEquals(defaultValue, defaultValue));
 	}
 
 	@ParameterizedTest(name = "{index}: {0}")

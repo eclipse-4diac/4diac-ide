@@ -526,6 +526,10 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, "GT", toIntValue((short) 4), toIntValue((short) 17)));
 		assertEquals(toBoolValue(false),
 				Functions.invoke(StandardFunctions.class, "GT", toIntValue((short) 4), toIntValue((short) 4)));
+		assertEquals(toBoolValue(false),
+				Functions.invoke(StandardFunctions.class, "GT", toRealValue(0.0f), toRealValue(-0.0f)));
+		assertEquals(toBoolValue(false),
+				Functions.invoke(StandardFunctions.class, "GT", toRealValue(-0.0f), toRealValue(0.0f)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "GT", toIntValue((short) 17),
 				toIntValue((short) 4), toIntValue((short) 21)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "GT", toIntValue((short) 4),
@@ -548,6 +552,10 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, "GE", toIntValue((short) 4), toIntValue((short) 17)));
 		assertEquals(toBoolValue(true),
 				Functions.invoke(StandardFunctions.class, "GE", toIntValue((short) 4), toIntValue((short) 4)));
+		assertEquals(toBoolValue(true),
+				Functions.invoke(StandardFunctions.class, "GE", toRealValue(0.0f), toRealValue(-0.0f)));
+		assertEquals(toBoolValue(true),
+				Functions.invoke(StandardFunctions.class, "GE", toRealValue(-0.0f), toRealValue(0.0f)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "GE", toIntValue((short) 17),
 				toIntValue((short) 4), toIntValue((short) 21)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "GE", toIntValue((short) 4),
@@ -570,6 +578,10 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, "EQ", toIntValue((short) 4), toIntValue((short) 17)));
 		assertEquals(toBoolValue(true),
 				Functions.invoke(StandardFunctions.class, "EQ", toIntValue((short) 4), toIntValue((short) 4)));
+		assertEquals(toBoolValue(true),
+				Functions.invoke(StandardFunctions.class, "EQ", toRealValue(0.0f), toRealValue(-0.0f)));
+		assertEquals(toBoolValue(true),
+				Functions.invoke(StandardFunctions.class, "EQ", toRealValue(-0.0f), toRealValue(0.0f)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "EQ", toIntValue((short) 17),
 				toIntValue((short) 4), toIntValue((short) 21)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "EQ", toIntValue((short) 4),
@@ -592,6 +604,10 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, "LT", toIntValue((short) 4), toIntValue((short) 17)));
 		assertEquals(toBoolValue(false),
 				Functions.invoke(StandardFunctions.class, "LT", toIntValue((short) 4), toIntValue((short) 4)));
+		assertEquals(toBoolValue(false),
+				Functions.invoke(StandardFunctions.class, "LT", toRealValue(0.0f), toRealValue(-0.0f)));
+		assertEquals(toBoolValue(false),
+				Functions.invoke(StandardFunctions.class, "LT", toRealValue(-0.0f), toRealValue(0.0f)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "LT", toIntValue((short) 17),
 				toIntValue((short) 4), toIntValue((short) 21)));
 		assertEquals(toBoolValue(true), Functions.invoke(StandardFunctions.class, "LT", toIntValue((short) 4),
@@ -614,6 +630,10 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, "LE", toIntValue((short) 4), toIntValue((short) 17)));
 		assertEquals(toBoolValue(true),
 				Functions.invoke(StandardFunctions.class, "LE", toIntValue((short) 4), toIntValue((short) 4)));
+		assertEquals(toBoolValue(true),
+				Functions.invoke(StandardFunctions.class, "LE", toRealValue(0.0f), toRealValue(-0.0f)));
+		assertEquals(toBoolValue(true),
+				Functions.invoke(StandardFunctions.class, "LE", toRealValue(-0.0f), toRealValue(0.0f)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "LE", toIntValue((short) 17),
 				toIntValue((short) 4), toIntValue((short) 21)));
 		assertEquals(toBoolValue(true), Functions.invoke(StandardFunctions.class, "LE", toIntValue((short) 4),
@@ -636,6 +656,10 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, "NE", toIntValue((short) 4), toIntValue((short) 17)));
 		assertEquals(toBoolValue(false),
 				Functions.invoke(StandardFunctions.class, "NE", toIntValue((short) 4), toIntValue((short) 4)));
+		assertEquals(toBoolValue(false),
+				Functions.invoke(StandardFunctions.class, "NE", toRealValue(0.0f), toRealValue(-0.0f)));
+		assertEquals(toBoolValue(false),
+				Functions.invoke(StandardFunctions.class, "NE", toRealValue(-0.0f), toRealValue(0.0f)));
 	}
 
 	@Test

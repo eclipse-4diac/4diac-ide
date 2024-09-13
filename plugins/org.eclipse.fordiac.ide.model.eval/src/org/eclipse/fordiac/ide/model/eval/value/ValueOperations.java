@@ -664,6 +664,162 @@ public final class ValueOperations {
 		return first.toNanos() == second.toNanos();
 	}
 
+	public static boolean lessThan(final Value first, final Value second) {
+		if (first instanceof final AnyMagnitudeValue firstAnyMagnitudeValue
+				&& second instanceof final AnyMagnitudeValue secondAnyMagnitudeValue) {
+			return lessThan(firstAnyMagnitudeValue, secondAnyMagnitudeValue);
+		}
+		if (first instanceof final AnyBitValue firstAnyBitValue
+				&& second instanceof final AnyBitValue secondAnyBitValue) {
+			return compareTo(firstAnyBitValue, secondAnyBitValue) < 0;
+		}
+		if (first instanceof final AnyCharsValue firstAnyCharsValue
+				&& second instanceof final AnyCharsValue secondAnyCharsValue) {
+			return compareTo(firstAnyCharsValue, secondAnyCharsValue) < 0;
+		}
+		if (first instanceof final AnyDateValue firstAnyDateValue
+				&& second instanceof final AnyDateValue secondAnyDateValue) {
+			return compareTo(firstAnyDateValue, secondAnyDateValue) < 0;
+		}
+		throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Compare, first, second);
+	}
+
+	private static boolean lessThan(final AnyMagnitudeValue first, final AnyMagnitudeValue second) {
+		return switch (resultType(first.getType(), second.getType())) {
+		case final LrealType unused -> first.doubleValue() < second.doubleValue();
+		case final RealType unused -> first.floatValue() < second.floatValue();
+		case final LintType unused -> first.longValue() < second.longValue();
+		case final DintType unused -> first.intValue() < second.intValue();
+		case final IntType unused -> first.shortValue() < second.shortValue();
+		case final SintType unused -> first.byteValue() < second.byteValue();
+		case final UlintType unused -> Long.compareUnsigned(first.longValue(), second.longValue()) < 0;
+		case final UdintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) < 0;
+		case final UintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) < 0;
+		case final UsintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) < 0;
+		case final LtimeType unused -> first.longValue() < second.longValue();
+		case final TimeType unused -> first.longValue() < second.longValue();
+		case null, default ->
+			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Compare, first, second);
+		};
+	}
+
+	public static boolean lessEquals(final Value first, final Value second) {
+		if (first instanceof final AnyMagnitudeValue firstAnyMagnitudeValue
+				&& second instanceof final AnyMagnitudeValue secondAnyMagnitudeValue) {
+			return lessEquals(firstAnyMagnitudeValue, secondAnyMagnitudeValue);
+		}
+		if (first instanceof final AnyBitValue firstAnyBitValue
+				&& second instanceof final AnyBitValue secondAnyBitValue) {
+			return compareTo(firstAnyBitValue, secondAnyBitValue) <= 0;
+		}
+		if (first instanceof final AnyCharsValue firstAnyCharsValue
+				&& second instanceof final AnyCharsValue secondAnyCharsValue) {
+			return compareTo(firstAnyCharsValue, secondAnyCharsValue) <= 0;
+		}
+		if (first instanceof final AnyDateValue firstAnyDateValue
+				&& second instanceof final AnyDateValue secondAnyDateValue) {
+			return compareTo(firstAnyDateValue, secondAnyDateValue) <= 0;
+		}
+		throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Compare, first, second);
+	}
+
+	private static boolean lessEquals(final AnyMagnitudeValue first, final AnyMagnitudeValue second) {
+		return switch (resultType(first.getType(), second.getType())) {
+		case final LrealType unused -> first.doubleValue() <= second.doubleValue();
+		case final RealType unused -> first.floatValue() <= second.floatValue();
+		case final LintType unused -> first.longValue() <= second.longValue();
+		case final DintType unused -> first.intValue() <= second.intValue();
+		case final IntType unused -> first.shortValue() <= second.shortValue();
+		case final SintType unused -> first.byteValue() <= second.byteValue();
+		case final UlintType unused -> Long.compareUnsigned(first.longValue(), second.longValue()) <= 0;
+		case final UdintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) <= 0;
+		case final UintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) <= 0;
+		case final UsintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) <= 0;
+		case final LtimeType unused -> first.longValue() <= second.longValue();
+		case final TimeType unused -> first.longValue() <= second.longValue();
+		case null, default ->
+			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Compare, first, second);
+		};
+	}
+
+	public static boolean greaterThan(final Value first, final Value second) {
+		if (first instanceof final AnyMagnitudeValue firstAnyMagnitudeValue
+				&& second instanceof final AnyMagnitudeValue secondAnyMagnitudeValue) {
+			return greaterThan(firstAnyMagnitudeValue, secondAnyMagnitudeValue);
+		}
+		if (first instanceof final AnyBitValue firstAnyBitValue
+				&& second instanceof final AnyBitValue secondAnyBitValue) {
+			return compareTo(firstAnyBitValue, secondAnyBitValue) > 0;
+		}
+		if (first instanceof final AnyCharsValue firstAnyCharsValue
+				&& second instanceof final AnyCharsValue secondAnyCharsValue) {
+			return compareTo(firstAnyCharsValue, secondAnyCharsValue) > 0;
+		}
+		if (first instanceof final AnyDateValue firstAnyDateValue
+				&& second instanceof final AnyDateValue secondAnyDateValue) {
+			return compareTo(firstAnyDateValue, secondAnyDateValue) > 0;
+		}
+		throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Compare, first, second);
+	}
+
+	private static boolean greaterThan(final AnyMagnitudeValue first, final AnyMagnitudeValue second) {
+		return switch (resultType(first.getType(), second.getType())) {
+		case final LrealType unused -> first.doubleValue() > second.doubleValue();
+		case final RealType unused -> first.floatValue() > second.floatValue();
+		case final LintType unused -> first.longValue() > second.longValue();
+		case final DintType unused -> first.intValue() > second.intValue();
+		case final IntType unused -> first.shortValue() > second.shortValue();
+		case final SintType unused -> first.byteValue() > second.byteValue();
+		case final UlintType unused -> Long.compareUnsigned(first.longValue(), second.longValue()) > 0;
+		case final UdintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) > 0;
+		case final UintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) > 0;
+		case final UsintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) > 0;
+		case final LtimeType unused -> first.longValue() > second.longValue();
+		case final TimeType unused -> first.longValue() > second.longValue();
+		case null, default ->
+			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Compare, first, second);
+		};
+	}
+
+	public static boolean greaterEquals(final Value first, final Value second) {
+		if (first instanceof final AnyMagnitudeValue firstAnyMagnitudeValue
+				&& second instanceof final AnyMagnitudeValue secondAnyMagnitudeValue) {
+			return greaterEquals(firstAnyMagnitudeValue, secondAnyMagnitudeValue);
+		}
+		if (first instanceof final AnyBitValue firstAnyBitValue
+				&& second instanceof final AnyBitValue secondAnyBitValue) {
+			return compareTo(firstAnyBitValue, secondAnyBitValue) >= 0;
+		}
+		if (first instanceof final AnyCharsValue firstAnyCharsValue
+				&& second instanceof final AnyCharsValue secondAnyCharsValue) {
+			return compareTo(firstAnyCharsValue, secondAnyCharsValue) >= 0;
+		}
+		if (first instanceof final AnyDateValue firstAnyDateValue
+				&& second instanceof final AnyDateValue secondAnyDateValue) {
+			return compareTo(firstAnyDateValue, secondAnyDateValue) >= 0;
+		}
+		throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Compare, first, second);
+	}
+
+	private static boolean greaterEquals(final AnyMagnitudeValue first, final AnyMagnitudeValue second) {
+		return switch (resultType(first.getType(), second.getType())) {
+		case final LrealType unused -> first.doubleValue() >= second.doubleValue();
+		case final RealType unused -> first.floatValue() >= second.floatValue();
+		case final LintType unused -> first.longValue() >= second.longValue();
+		case final DintType unused -> first.intValue() >= second.intValue();
+		case final IntType unused -> first.shortValue() >= second.shortValue();
+		case final SintType unused -> first.byteValue() >= second.byteValue();
+		case final UlintType unused -> Long.compareUnsigned(first.longValue(), second.longValue()) >= 0;
+		case final UdintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) >= 0;
+		case final UintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) >= 0;
+		case final UsintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) >= 0;
+		case final LtimeType unused -> first.longValue() >= second.longValue();
+		case final TimeType unused -> first.longValue() >= second.longValue();
+		case null, default ->
+			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Compare, first, second);
+		};
+	}
+
 	public static int compareTo(final Value first, final Value second) {
 		if (first instanceof final AnyBitValue firstAnyBitValue
 				&& second instanceof final AnyBitValue secondAnyBitValue) {

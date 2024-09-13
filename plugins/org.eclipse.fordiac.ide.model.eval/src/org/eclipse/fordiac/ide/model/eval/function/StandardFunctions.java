@@ -270,10 +270,10 @@ public interface StandardFunctions extends Functions {
 	@Comment("Returns a value clamped to a minimum and maximum range.")
 	static <T extends AnyElementaryValue> T LIMIT(@Comment("The lowest possible value.") final T min,
 			@Comment("The input value.") final T value, @Comment("The highest possible value.") final T max) {
-		if (ValueOperations.compareTo(value, max) > 0) {
+		if (ValueOperations.greaterThan(value, max)) {
 			return max;
 		}
-		if (ValueOperations.compareTo(value, min) < 0) {
+		if (ValueOperations.lessThan(value, min)) {
 			return min;
 		}
 		return value;
@@ -293,7 +293,7 @@ public interface StandardFunctions extends Functions {
 	static <T extends AnyElementaryValue> BoolValue GT(final T... values) {
 		T last = null;
 		for (final T element : values) {
-			if (last != null && ValueOperations.compareTo(last, element) <= 0) {
+			if (last != null && !ValueOperations.greaterThan(last, element)) {
 				return BoolValue.FALSE;
 			}
 			last = element;
@@ -306,7 +306,7 @@ public interface StandardFunctions extends Functions {
 	static <T extends AnyElementaryValue> BoolValue GE(final T... values) {
 		T last = null;
 		for (final T element : values) {
-			if (last != null && ValueOperations.compareTo(last, element) < 0) {
+			if (last != null && !ValueOperations.greaterEquals(last, element)) {
 				return BoolValue.FALSE;
 			}
 			last = element;
@@ -332,7 +332,7 @@ public interface StandardFunctions extends Functions {
 	static <T extends AnyElementaryValue> BoolValue LE(final T... values) {
 		T last = null;
 		for (final T element : values) {
-			if (last != null && ValueOperations.compareTo(last, element) > 0) {
+			if (last != null && !ValueOperations.lessEquals(last, element)) {
 				return BoolValue.FALSE;
 			}
 			last = element;
@@ -345,7 +345,7 @@ public interface StandardFunctions extends Functions {
 	static <T extends AnyElementaryValue> BoolValue LT(final T... values) {
 		T last = null;
 		for (final T element : values) {
-			if (last != null && ValueOperations.compareTo(last, element) >= 0) {
+			if (last != null && !ValueOperations.lessThan(last, element)) {
 				return BoolValue.FALSE;
 			}
 			last = element;
