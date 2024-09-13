@@ -224,6 +224,28 @@ public final class Messages extends NLS {
 
 	public static String VarConfigurationSection_VarConfigs;
 
+	public static String InfoPropertySection_SystemInfo;
+
+	public static String InfoPropertySection_Number_Of_Connections_Label;
+
+	public static String InfoPropertySection_Number_Of_Used_Types_Label;
+
+	public static String InfoPropertySection_Number_Of_Untyped_SubApps_Label;
+
+	public static String InfoPropertySection_Number_Of_All_Instances_Label;
+
+	public static String InfoPropertySection_CheckBox_Label;
+
+	public static String InfoPropertySection_All_Types_And_Counts_Label;
+
+	public static String InfoPropertySection_Combo_Text_SortBy;
+
+	public static String InfoPropertySection_Combo_Text_Name;
+
+	public static String InfoPropertySection_Combo_Text_CountASC;
+
+	public static String InfoPropertySection_Combo_Text_CountDESC;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
