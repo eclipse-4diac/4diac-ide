@@ -155,6 +155,8 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 
 		createPartListener();
 
+		getSite().setSelectionProvider(filteredTree.getViewer());
+
 		addWatchesAdapters();
 	}
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2012, 2014 - 2017 Profactor GbmH, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2024 Profactor GbmH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -93,8 +93,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		getModel().eAdapters().add(contentAdapter);
 		// also add the adapter to parent to refresh the init value after type change
 		getModel().getParentIE().eAdapters().add(contentAdapter);
-		final Object part = getViewer().getEditPartRegistry().get(getModel().getParentIE());
-		if (part instanceof final InterfaceEditPart iep) {
+		if (getViewer().getEditPartForModel(getModel().getParentIE()) instanceof final InterfaceEditPart iep) {
 			parentPart = iep;
 			final IFigure parentFigure = parentPart.getFigure();
 			parentFigure.addAncestorListener(new AncestorListener() {

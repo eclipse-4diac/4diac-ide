@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,16 +12,21 @@
  */
 package org.eclipse.fordiac.ide.model.value;
 
-import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import org.eclipse.fordiac.ide.model.Messages;
 
 public class ArrayValueConverter<T> implements ValueConverter<List<T>> {
-	static final Pattern ARRAY_PATTERN = Pattern.compile(",(?=(?:[^\"']*(?:(?:\"[^\"]*\")|(?:\'[^\']*\')))*[^\"']*$)"); //$NON-NLS-1$
+	static final Pattern ARRAY_BEGIN_PATTERN = Pattern.compile("\\G\\[\\s*+"); //$NON-NLS-1$
+	static final Pattern ARRAY_END_PATTERN = Pattern.compile("\\G\\s*+\\]"); //$NON-NLS-1$
+	static final Pattern ARRAY_SEPARATOR_PATTERN = Pattern.compile("\\G\\s*+,\\s*+"); //$NON-NLS-1$
+	static final Pattern ARRAY_REPEAT_BEGIN_PATTERN = Pattern.compile("\\G(\\d++)\\s*+\\("); //$NON-NLS-1$
+	static final Pattern ARRAY_REPEAT_END_PATTERN = Pattern.compile("\\G\\)"); //$NON-NLS-1$
 
 	private final ValueConverter<T> elementValueConverter;
 
@@ -31,16 +36,51 @@ public class ArrayValueConverter<T> implements ValueConverter<List<T>> {
 
 	@Override
 	public String toString(final List<T> value) {
-		return "[" + value.stream().map(elementValueConverter::toString).collect(Collectors.joining(", ")) + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return value.stream().map(elementValueConverter::toString).collect(Collectors.joining(", ", "[", "]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override
 	public List<T> toValue(final String string) throws IllegalArgumentException {
-		final var trimmed = string.trim();
-		if (!trimmed.startsWith("[") || !trimmed.endsWith("]")) { //$NON-NLS-1$ //$NON-NLS-2$
-			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_ARRAY_MISSES_BRACKETS, string));
+		return toValue(new Scanner(string));
+	}
+
+	@Override
+	public List<T> toValue(final Scanner scanner) throws IllegalArgumentException {
+		final List<T> result = new ArrayList<>();
+		if (scanner.findWithinHorizon(ARRAY_BEGIN_PATTERN, 0) == null) {
+			throw new IllegalArgumentException(Messages.VALIDATOR_ARRAY_MISSES_BRACKETS);
 		}
-		final var inner = trimmed.substring(1, trimmed.length() - 1);
-		return Stream.of(ARRAY_PATTERN.split(inner)).map(String::trim).map(elementValueConverter::toValue).toList();
+		do {
+			if (scanner.findWithinHorizon(ARRAY_REPEAT_BEGIN_PATTERN, 0) != null) {
+				result.addAll(parseRepeatSyntax(scanner));
+			} else {
+				result.add(elementValueConverter.toValue(scanner));
+			}
+		} while (scanner.findWithinHorizon(ARRAY_SEPARATOR_PATTERN, 0) != null);
+		if (scanner.findWithinHorizon(ARRAY_END_PATTERN, 0) == null) {
+			throw new IllegalArgumentException(Messages.VALIDATOR_ARRAY_MISSES_BRACKETS);
+		}
+		return result;
+	}
+
+	private List<T> parseRepeatSyntax(final Scanner scanner) throws NumberFormatException, IllegalArgumentException {
+		final int count = Integer.parseInt(scanner.match().group(1));
+		final List<T> result = new ArrayList<>();
+		do {
+			if (scanner.findWithinHorizon(ARRAY_REPEAT_BEGIN_PATTERN, 0) != null) {
+				parseRepeatSyntax(scanner);
+			} else {
+				result.add(elementValueConverter.toValue(scanner));
+			}
+		} while (scanner.findWithinHorizon(ARRAY_SEPARATOR_PATTERN, 0) != null);
+		if (scanner.findWithinHorizon(ARRAY_REPEAT_END_PATTERN, 0) == null) {
+			throw new IllegalArgumentException(Messages.ArrayValueConverter_InvalidRepeatSyntax);
+		}
+		return IntStream.range(0, count).mapToObj(unused -> result).flatMap(List::stream).toList();
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s [%s]", getClass().getSimpleName(), elementValueConverter); //$NON-NLS-1$
 	}
 }

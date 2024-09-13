@@ -42,7 +42,7 @@ import org.eclipse.gef.GraphicalEditPart;
 
 public class ExpandedInterfacePositionMap {
 
-	private final static String PREFERENCE_STORE = "org.eclipse.fordiac.ide.gef"; //$NON-NLS-1$
+	private static final String PREFERENCE_STORE = "org.eclipse.fordiac.ide.gef"; //$NON-NLS-1$
 
 	private final SubAppForFBNetworkEditPart ep;
 	private Rectangle clientArea = null;
@@ -390,7 +390,7 @@ public class ExpandedInterfacePositionMap {
 				.flatMap(Collection::stream)
 				.map(ConnectionEditPart.class::cast)
 				.filter(ExpandedInterfacePositionMap::isSkipConnection)
-				.collect(Collectors.toList());
+				.toList();
 		// @formatter:on
 
 		final var inputMap = new HashMap<IFigure, Integer>();

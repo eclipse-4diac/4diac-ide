@@ -185,9 +185,7 @@ public class ModelSearchQuery implements ISearchQuery {
 
 	private boolean matchTypeEntry(final LibraryElement elem) {
 		switch (elem) {
-		case final CompositeFBType comp -> {
-			searchFBNetwork(comp.getFBNetwork(), new ArrayList<>());
-		}
+		case final CompositeFBType comp -> searchFBNetwork(comp.getFBNetwork(), new ArrayList<>());
 		case final BaseFBType type -> {
 			for (final FB fb : type.getInternalFbs()) {
 				if (matchEObject(fb)) {
@@ -216,9 +214,7 @@ public class ModelSearchQuery implements ISearchQuery {
 				searchResult.addResult(base);
 			}
 		}
-		case final StructuredType struct -> {
-			matchStruct(struct);
-		}
+		case final StructuredType struct -> matchStruct(struct);
 		case final AttributeDeclaration attDecl -> {
 			if (attDecl.getType() instanceof final StructuredType struct) {
 				matchStruct(struct);

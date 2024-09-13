@@ -96,13 +96,8 @@ public final class OutMappedInOutVarAdapter extends EContentAdapter {
 	}
 
 	private void handleArraySizeNotifications(final Notification notification, final ArraySize arraySize) {
-		switch (notification.getFeatureID(ArraySize.class)) {
-		case LibraryElementPackage.ARRAY_SIZE__VALUE:
+		if (notification.getFeatureID(ArraySize.class) == LibraryElementPackage.ARRAY_SIZE__VALUE) {
 			outMappedInOutVar.getArraySize().setValue(arraySize.getValue());
-			break;
-		default:
-			// we don't want to copy anything for the other features
-			break;
 		}
 	}
 

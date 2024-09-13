@@ -17,10 +17,8 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
-import org.eclipse.xtend.lib.annotations.Accessors;
 
 public class EvaluatorFactoryRegistryImpl implements EvaluatorFactory.Registry {
-	@Accessors
 	private final Map<String, Map<Class<?>, EvaluatorFactory>> variantClassToFactoryMap = new ConcurrentHashMap<>();
 
 	@Override

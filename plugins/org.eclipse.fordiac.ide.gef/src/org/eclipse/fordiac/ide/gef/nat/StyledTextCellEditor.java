@@ -45,131 +45,200 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
-/** {@link ICellEditor} implementation that wraps a SWT {@link StyledText} control to support text editing. */
+/**
+ * {@link ICellEditor} implementation that wraps a SWT {@link StyledText}
+ * control to support text editing.
+ */
 public class StyledTextCellEditor extends AbstractCellEditor {
 
-	/** The StyledText control which is the editor wrapped by this StyledTextCellEditor. */
+	/**
+	 * The StyledText control which is the editor wrapped by this
+	 * StyledTextCellEditor.
+	 */
 	private StyledText text = null;
 
 	/** Flag to configure if the wrapped text editor control is editable or not. */
 	private boolean editable = true;
 
-	/** Flag to configure whether the editor should commit and move the selection in the corresponding way if the up or
-	 * down key is pressed. */
+	/**
+	 * Flag to configure whether the editor should commit and move the selection in
+	 * the corresponding way if the up or down key is pressed.
+	 */
 	private final boolean commitOnUpDown;
 
-	/** Flag to configure whether the editor should commit and move the selection in the corresponding way if the left
-	 * or right key is pressed on the according content edge. */
+	/**
+	 * Flag to configure whether the editor should commit and move the selection in
+	 * the corresponding way if the left or right key is pressed on the according
+	 * content edge.
+	 */
 	private final boolean commitOnLeftRight;
 
-	/** Flag to configure whether the selection should move after a value was committed after pressing enter. */
+	/**
+	 * Flag to configure whether the selection should move after a value was
+	 * committed after pressing enter.
+	 */
 	private final boolean moveSelectionOnEnter;
 
-	/** The selection mode that should be used on activating the wrapped text control. By default the behaviour is to
-	 * set the selection at the end of the containing text if the text editor control is activated with an initial
-	 * value. If it is activated only specifying the original canonical value, the default behaviour is to select the
-	 * whole text contained in the text editor control.
+	/**
+	 * The selection mode that should be used on activating the wrapped text
+	 * control. By default the behaviour is to set the selection at the end of the
+	 * containing text if the text editor control is activated with an initial
+	 * value. If it is activated only specifying the original canonical value, the
+	 * default behaviour is to select the whole text contained in the text editor
+	 * control.
 	 *
 	 * <p>
-	 * You can override this default behaviour by setting an {@link EditorSelectionEnum} explicitly. With this you are
-	 * able e.g. to set the selection at the beginning of the contained text, so writing in the text control will result
-	 * in prefixing.
+	 * You can override this default behaviour by setting an
+	 * {@link EditorSelectionEnum} explicitly. With this you are able e.g. to set
+	 * the selection at the beginning of the contained text, so writing in the text
+	 * control will result in prefixing.
 	 *
 	 * <p>
-	 * Note that on overriding the behaviour, you override both activation cases. */
+	 * Note that on overriding the behaviour, you override both activation cases.
+	 */
 	private EditorSelectionEnum selectionMode;
 
-	/** The {@link ControlDecorationProvider} responsible for adding a {@link ControlDecoration} to the wrapped editor
-	 * control. Can be configured via convenience methods of this StyledTextCellEditor. */
+	/**
+	 * The {@link ControlDecorationProvider} responsible for adding a
+	 * {@link ControlDecoration} to the wrapped editor control. Can be configured
+	 * via convenience methods of this StyledTextCellEditor.
+	 */
 	protected final ControlDecorationProvider decorationProvider = new ControlDecorationProvider();
 
-	/** The {@link IEditErrorHandler} that is used for showing conversion errors on typing into this editor. By default
-	 * this is the {@link RenderErrorHandling} which will render the content in the editor red to indicate a conversion
-	 * error. */
+	/**
+	 * The {@link IEditErrorHandler} that is used for showing conversion errors on
+	 * typing into this editor. By default this is the {@link RenderErrorHandling}
+	 * which will render the content in the editor red to indicate a conversion
+	 * error.
+	 */
 	private IEditErrorHandler inputConversionErrorHandler = new RenderErrorHandling(this.decorationProvider);
 
-	/** The {@link IEditErrorHandler} that is used for showing validation errors on typing into this editor. By default
-	 * this is the {@link RenderErrorHandling} which will render the content in the editor red to indicate a validation
-	 * error. */
+	/**
+	 * The {@link IEditErrorHandler} that is used for showing validation errors on
+	 * typing into this editor. By default this is the {@link RenderErrorHandling}
+	 * which will render the content in the editor red to indicate a validation
+	 * error.
+	 */
 	private IEditErrorHandler inputValidationErrorHandler = new RenderErrorHandling(this.decorationProvider);
 
-	/** Flag to determine whether this editor should try to commit and close on pressing the ENTER key. The default is
-	 * <code>true</code>. For a multi line text editor, the ENTER key might be used to insert a new line instead of
-	 * committing the value when opened in a dialog. In that case the value should not be committed, as applying the
-	 * dialog will trigger the commit. For inline editors setting {@link #commitWithCtrlKey} to <code>true</code> might
-	 * be interesting in combination with setting this value to <code>true</code>, which means that the commit operation
-	 * is only performed if CTRL + ENTER is pressed. */
+	/**
+	 * Flag to determine whether this editor should try to commit and close on
+	 * pressing the ENTER key. The default is <code>true</code>. For a multi line
+	 * text editor, the ENTER key might be used to insert a new line instead of
+	 * committing the value when opened in a dialog. In that case the value should
+	 * not be committed, as applying the dialog will trigger the commit. For inline
+	 * editors setting {@link #commitWithCtrlKey} to <code>true</code> might be
+	 * interesting in combination with setting this value to <code>true</code>,
+	 * which means that the commit operation is only performed if CTRL + ENTER is
+	 * pressed.
+	 */
 	protected boolean commitOnEnter = true;
 
-	/** Flag to determine whether this editor should try to commit and close on pressing the enter key in combination
-	 * with the CTRL key. It is only interpreted with {@link #commitOnEnter} set to <code>true</code>, and it is needed
-	 * for a multi line text editor where a simple enter press should add a new line and a combination with CTRL should
-	 * commit the value.
+	/**
+	 * Flag to determine whether this editor should try to commit and close on
+	 * pressing the enter key in combination with the CTRL key. It is only
+	 * interpreted with {@link #commitOnEnter} set to <code>true</code>, and it is
+	 * needed for a multi line text editor where a simple enter press should add a
+	 * new line and a combination with CTRL should commit the value.
 	 *
-	 * @since 1.6 */
+	 * @since 1.6
+	 */
 	private boolean commitWithCtrlKey = false;
 
-	/** @see ContentProposalAdapter#ContentProposalAdapter(Control, IControlContentAdapter, IContentProposalProvider,
-	 *      KeyStroke, char[])
-	 * @since 1.4 */
+	/**
+	 * @see ContentProposalAdapter#ContentProposalAdapter(Control,
+	 *      IControlContentAdapter, IContentProposalProvider, KeyStroke, char[])
+	 * @since 1.4
+	 */
 	protected IControlContentAdapter controlContentAdapter;
-	/** @see ContentProposalAdapter#ContentProposalAdapter(Control, IControlContentAdapter, IContentProposalProvider,
-	 *      KeyStroke, char[])
-	 * @since 1.4 */
+	/**
+	 * @see ContentProposalAdapter#ContentProposalAdapter(Control,
+	 *      IControlContentAdapter, IContentProposalProvider, KeyStroke, char[])
+	 * @since 1.4
+	 */
 	protected IContentProposalProvider proposalProvider;
-	/** @see ContentProposalAdapter#ContentProposalAdapter(Control, IControlContentAdapter, IContentProposalProvider,
-	 *      KeyStroke, char[])
-	 * @since 1.4 */
+	/**
+	 * @see ContentProposalAdapter#ContentProposalAdapter(Control,
+	 *      IControlContentAdapter, IContentProposalProvider, KeyStroke, char[])
+	 * @since 1.4
+	 */
 	protected KeyStroke keyStroke;
-	/** @see ContentProposalAdapter#ContentProposalAdapter(Control, IControlContentAdapter, IContentProposalProvider,
-	 *      KeyStroke, char[])
-	 * @since 1.4 */
+	/**
+	 * @see ContentProposalAdapter#ContentProposalAdapter(Control,
+	 *      IControlContentAdapter, IContentProposalProvider, KeyStroke, char[])
+	 * @since 1.4
+	 */
 	protected char[] autoActivationCharacters;
-	/** @see ContentProposalAdapter#setProposalAcceptanceStyle(int)
-	 * @since 2.0 */
+	/**
+	 * @see ContentProposalAdapter#setProposalAcceptanceStyle(int)
+	 * @since 2.0
+	 */
 	protected int proposalAcceptanceStyle = ContentProposalAdapter.PROPOSAL_REPLACE;
-	/** @see ContentProposalAdapter#setAutoActivationDelay(int)
-	 * @since 2.0 */
+	/**
+	 * @see ContentProposalAdapter#setAutoActivationDelay(int)
+	 * @since 2.0
+	 */
 	protected int autoActivationDelay = 0;
-	/** The active {@link ContentProposalAdapter} if supported.
+	/**
+	 * The active {@link ContentProposalAdapter} if supported.
 	 *
-	 * @since 2.0 */
+	 * @since 2.0
+	 */
 	protected ContentProposalAdapter contentProposalAdapter;
 
-	/** Creates the default StyledTextCellEditor that does not commit on pressing the up/down arrow keys and will not
-	 * move the selection on committing a value by pressing enter. */
+	/**
+	 * Creates the default StyledTextCellEditor that does not commit on pressing the
+	 * up/down arrow keys and will not move the selection on committing a value by
+	 * pressing enter.
+	 */
 	public StyledTextCellEditor() {
 		this(false);
 	}
 
-	/** Creates a StyledTextCellEditor that will not move the selection on committing a value by pressing enter.
+	/**
+	 * Creates a StyledTextCellEditor that will not move the selection on committing
+	 * a value by pressing enter.
 	 *
-	 * @param commitOnUpDown Flag to configure whether the editor should commit and move the selection in the
-	 *                       corresponding way if the up or down key is pressed. */
+	 * @param commitOnUpDown Flag to configure whether the editor should commit and
+	 *                       move the selection in the corresponding way if the up
+	 *                       or down key is pressed.
+	 */
 	public StyledTextCellEditor(final boolean commitOnUpDown) {
 		this(commitOnUpDown, false);
 	}
 
-	/** Creates a StyledTextCellEditor that will not move the selection on pressing the left or right arrow keys on the
-	 * according edges.
+	/**
+	 * Creates a StyledTextCellEditor that will not move the selection on pressing
+	 * the left or right arrow keys on the according edges.
 	 *
-	 * @param commitOnUpDown       Flag to configure whether the editor should commit and move the selection in the
-	 *                             corresponding way if the up or down key is pressed.
-	 * @param moveSelectionOnEnter Flag to configure whether the selection should move after a value was committed after
-	 *                             pressing enter. */
+	 * @param commitOnUpDown       Flag to configure whether the editor should
+	 *                             commit and move the selection in the
+	 *                             corresponding way if the up or down key is
+	 *                             pressed.
+	 * @param moveSelectionOnEnter Flag to configure whether the selection should
+	 *                             move after a value was committed after pressing
+	 *                             enter.
+	 */
 	public StyledTextCellEditor(final boolean commitOnUpDown, final boolean moveSelectionOnEnter) {
 		this(commitOnUpDown, moveSelectionOnEnter, false);
 	}
 
-	/** Creates a StyledTextCellEditor.
+	/**
+	 * Creates a StyledTextCellEditor.
 	 *
-	 * @param commitOnUpDown       Flag to configure whether the editor should commit and move the selection in the
-	 *                             corresponding way if the up or down key is pressed.
-	 * @param moveSelectionOnEnter Flag to configure whether the selection should move after a value was committed after
-	 *                             pressing enter.
-	 * @param commitOnLeftRight    Flag to configure whether the editor should commit and move the selection in the
-	 *                             corresponding way if the left or right key is pressed on the according content edge.
-	 * @since 1.4 */
+	 * @param commitOnUpDown       Flag to configure whether the editor should
+	 *                             commit and move the selection in the
+	 *                             corresponding way if the up or down key is
+	 *                             pressed.
+	 * @param moveSelectionOnEnter Flag to configure whether the selection should
+	 *                             move after a value was committed after pressing
+	 *                             enter.
+	 * @param commitOnLeftRight    Flag to configure whether the editor should
+	 *                             commit and move the selection in the
+	 *                             corresponding way if the left or right key is
+	 *                             pressed on the according content edge.
+	 * @since 1.4
+	 */
 	public StyledTextCellEditor(final boolean commitOnUpDown, final boolean moveSelectionOnEnter,
 			final boolean commitOnLeftRight) {
 		this.commitOnUpDown = commitOnUpDown;
@@ -207,18 +276,16 @@ public class StyledTextCellEditor extends AbstractCellEditor {
 		// Note: this is currently only implemented in here, as the
 		// StyledTextCellEditor is the only editor that supports just in time
 		// conversion/validation
-		if (this.inputConversionErrorHandler instanceof RenderErrorHandling) {
+		if (this.inputConversionErrorHandler instanceof final RenderErrorHandling renderErrorHandling) {
 			final IStyle conversionErrorStyle = this.configRegistry
 					.getConfigAttribute(EditConfigAttributes.CONVERSION_ERROR_STYLE, DisplayMode.EDIT, this.labelStack);
-
-			((RenderErrorHandling) this.inputConversionErrorHandler).setErrorStyle(conversionErrorStyle);
+			renderErrorHandling.setErrorStyle(conversionErrorStyle);
 		}
 
-		if (this.inputValidationErrorHandler instanceof RenderErrorHandling) {
+		if (this.inputValidationErrorHandler instanceof final RenderErrorHandling renderErrorHandling) {
 			final IStyle validationErrorStyle = this.configRegistry
 					.getConfigAttribute(EditConfigAttributes.VALIDATION_ERROR_STYLE, DisplayMode.EDIT, this.labelStack);
-
-			((RenderErrorHandling) this.inputValidationErrorHandler).setErrorStyle(validationErrorStyle);
+			renderErrorHandling.setErrorStyle(validationErrorStyle);
 		}
 
 		// if a IControlContentAdapter is registered, create and register a
@@ -257,12 +324,15 @@ public class StyledTextCellEditor extends AbstractCellEditor {
 		return createEditorControl(parent, style);
 	}
 
-	/** Creates the editor control that is wrapped by this ICellEditor. Will use the style configurations in
-	 * ConfigRegistry for styling the control.
+	/**
+	 * Creates the editor control that is wrapped by this ICellEditor. Will use the
+	 * style configurations in ConfigRegistry for styling the control.
 	 *
-	 * @param parent The Composite that will be the parent of the new editor control. Can not be <code>null</code>
+	 * @param parent The Composite that will be the parent of the new editor
+	 *               control. Can not be <code>null</code>
 	 * @param style  The SWT style of the text control to create.
-	 * @return The created editor control that is wrapped by this ICellEditor. */
+	 * @return The created editor control that is wrapped by this ICellEditor.
+	 */
 	protected StyledText createEditorControl(final Composite parent, final int style) {
 		// create the Text control based on the specified style
 		final StyledText textControl = createStyledText(parent, style);
@@ -362,11 +432,13 @@ public class StyledTextCellEditor extends AbstractCellEditor {
 		return textControl;
 	}
 
-	/** Creates the styled text control.
+	/**
+	 * Creates the styled text control.
 	 *
 	 * @param parent The parent control
 	 * @param style  The style
-	 * @return The text control */
+	 * @return The text control
+	 */
 	@SuppressWarnings("static-method")
 	protected StyledText createStyledText(final Composite parent, final int style) {
 		return new StyledText(parent, style);
@@ -391,44 +463,62 @@ public class StyledTextCellEditor extends AbstractCellEditor {
 		this.decorationProvider.dispose();
 	}
 
-	/** @return <code>true</code> if the wrapped Text control is editable, <code>false</code> if not. */
+	/**
+	 * @return <code>true</code> if the wrapped Text control is editable,
+	 *         <code>false</code> if not.
+	 */
 	public boolean isEditable() {
 		return this.editable;
 	}
 
-	/** @param editable <code>true</code> if the wrapped Text control should be editable, <code>false</code> if not. */
+	/**
+	 * @param editable <code>true</code> if the wrapped Text control should be
+	 *                 editable, <code>false</code> if not.
+	 */
 	public void setEditable(final boolean editable) {
 		this.editable = editable;
 	}
 
-	/** Returns the current configured selection mode that is used on activating the wrapped text editor control. By
-	 * default this is <code>null</code> which causes the following default behaviour. If the text editor control is
-	 * activated with an initial value then the selection is set at the end of the containing text. If it is activated
-	 * only specifying the original canonical value, the default behaviour is to select the whole text contained in the
+	/**
+	 * Returns the current configured selection mode that is used on activating the
+	 * wrapped text editor control. By default this is <code>null</code> which
+	 * causes the following default behaviour. If the text editor control is
+	 * activated with an initial value then the selection is set at the end of the
+	 * containing text. If it is activated only specifying the original canonical
+	 * value, the default behaviour is to select the whole text contained in the
 	 * text editor control.
 	 *
-	 * @return The current configured selection mode, <code>null</code> for default behaviour. */
+	 * @return The current configured selection mode, <code>null</code> for default
+	 *         behaviour.
+	 */
 	public final EditorSelectionEnum getSelectionMode() {
 		return this.selectionMode;
 	}
 
-	/** Set the selection mode that should be used on the content of the wrapped text editor control when it gets
-	 * activated. By setting a value explicitly you configure the selection mode for both cases, activating the wrapped
-	 * text editor control with and without an initial value. Setting this value to <code>null</code> will reactivate
-	 * the default behaviour like described here {@link StyledTextCellEditor#getSelectionMode()}.
+	/**
+	 * Set the selection mode that should be used on the content of the wrapped text
+	 * editor control when it gets activated. By setting a value explicitly you
+	 * configure the selection mode for both cases, activating the wrapped text
+	 * editor control with and without an initial value. Setting this value to
+	 * <code>null</code> will reactivate the default behaviour like described here
+	 * {@link StyledTextCellEditor#getSelectionMode()}.
 	 *
-	 * @param selectionMode The selection mode that should be used on the content of the wrapped text editor control
-	 *                      when it gets activated. */
+	 * @param selectionMode The selection mode that should be used on the content of
+	 *                      the wrapped text editor control when it gets activated.
+	 */
 	public final void setSelectionMode(final EditorSelectionEnum selectionMode) {
 		this.selectionMode = selectionMode;
 	}
 
-	/** Will set the selection to the wrapped text control regarding the configured {@link EditorSelectionEnum}.
+	/**
+	 * Will set the selection to the wrapped text control regarding the configured
+	 * {@link EditorSelectionEnum}.
 	 *
 	 * <p>
 	 * This method is called
 	 *
-	 * @see Text#setSelection(int, int) */
+	 * @see Text#setSelection(int, int)
+	 */
 	private void selectText(final EditorSelectionEnum selectionMode) {
 		final int textLength = this.text.getText().length();
 		if (textLength > 0) {
@@ -442,97 +532,138 @@ public class StyledTextCellEditor extends AbstractCellEditor {
 		}
 	}
 
-	/** @return The {@link ControlDecorationProvider} responsible for adding a {@link ControlDecoration} to the wrapped
-	 *         editor control. */
+	/**
+	 * @return The {@link ControlDecorationProvider} responsible for adding a
+	 *         {@link ControlDecoration} to the wrapped editor control.
+	 */
 	public ControlDecorationProvider getDecorationProvider() {
 		return this.decorationProvider;
 	}
 
-	/** Enables/disables the error decoration for the wrapped text control.
+	/**
+	 * Enables/disables the error decoration for the wrapped text control.
 	 *
-	 * @param enabled <code>true</code> if an error decoration should be added to the wrapped text control,
-	 *                <code>false</code> if not. */
+	 * @param enabled <code>true</code> if an error decoration should be added to
+	 *                the wrapped text control, <code>false</code> if not.
+	 */
 	public void setErrorDecorationEnabled(final boolean enabled) {
 		this.decorationProvider.setErrorDecorationEnabled(enabled);
 	}
 
-	/** Force the error decoration hover to show immediately.
+	/**
+	 * Force the error decoration hover to show immediately.
 	 *
 	 * @param customErrorText The text to show in the hover popup.
 	 *
 	 * @see ControlDecoration#show()
-	 * @see ControlDecoration#showHoverText(String) */
+	 * @see ControlDecoration#showHoverText(String)
+	 */
 	public void showErrorDecorationHover(final String customErrorText) {
 		this.decorationProvider.showErrorDecorationHover(customErrorText);
 	}
 
-	/** Set the id of the {@link FieldDecoration} to be used by the local {@link ControlDecorationProvider}.
+	/**
+	 * Set the id of the {@link FieldDecoration} to be used by the local
+	 * {@link ControlDecorationProvider}.
 	 *
-	 * @param fieldDecorationId The String to determine the {@link FieldDecoration} to use by the
-	 *                          {@link ControlDecoration} that is provided by this {@link ControlDecorationProvider}.
+	 * @param fieldDecorationId The String to determine the {@link FieldDecoration}
+	 *                          to use by the {@link ControlDecoration} that is
+	 *                          provided by this {@link ControlDecorationProvider}.
 	 *
-	 * @see org.eclipse.jface.fieldassist.FieldDecorationRegistry#getFieldDecoration(String) */
+	 * @see org.eclipse.jface.fieldassist.FieldDecorationRegistry#getFieldDecoration(String)
+	 */
 	public void setFieldDecorationId(final String fieldDecorationId) {
 		this.decorationProvider.setFieldDecorationId(fieldDecorationId);
 	}
 
-	/** Set the position of the control decoration relative to the control. It should include style bits describing both
-	 * the vertical and horizontal orientation.
+	/**
+	 * Set the position of the control decoration relative to the control. It should
+	 * include style bits describing both the vertical and horizontal orientation.
 	 *
-	 * @param decorationPositionOverride bit-wise or of position constants (<code>SWT.TOP</code>,
-	 *                                   <code>SWT.BOTTOM</code>, <code>SWT.LEFT</code>, <code>SWT.RIGHT</code>, and
+	 * @param decorationPositionOverride bit-wise or of position constants
+	 *                                   (<code>SWT.TOP</code>,
+	 *                                   <code>SWT.BOTTOM</code>,
+	 *                                   <code>SWT.LEFT</code>,
+	 *                                   <code>SWT.RIGHT</code>, and
 	 *                                   <code>SWT.CENTER</code>).
 	 *
-	 * @see ControlDecoration#ControlDecoration(Control, int) */
+	 * @see ControlDecoration#ControlDecoration(Control, int)
+	 */
 	public void setDecorationPositionOverride(final int decorationPositionOverride) {
 		this.decorationProvider.setDecorationPositionOverride(decorationPositionOverride);
 	}
 
-	/** @return The {@link IEditErrorHandler} that is used for showing conversion errors on typing into this editor. By
-	 *         default this is the {@link RenderErrorHandling} which will render the content in the editor red to
-	 *         indicate a conversion error. */
+	/**
+	 * @return The {@link IEditErrorHandler} that is used for showing conversion
+	 *         errors on typing into this editor. By default this is the
+	 *         {@link RenderErrorHandling} which will render the content in the
+	 *         editor red to indicate a conversion error.
+	 */
 	public IEditErrorHandler getInputConversionErrorHandler() {
 		return this.inputConversionErrorHandler;
 	}
 
-	/** @param inputConversionErrorHandler The {@link IEditErrorHandler} that is should be used for showing conversion
-	 *                                    errors on typing into this editor. */
+	/**
+	 * @param inputConversionErrorHandler The {@link IEditErrorHandler} that is
+	 *                                    should be used for showing conversion
+	 *                                    errors on typing into this editor.
+	 */
 	public void setInputConversionErrorHandler(final IEditErrorHandler inputConversionErrorHandler) {
 		this.inputConversionErrorHandler = inputConversionErrorHandler;
 	}
 
-	/** @return The {@link IEditErrorHandler} that is used for showing validation errors on typing into this editor. By
-	 *         default this is the {@link RenderErrorHandling} which will render the content in the editor red to
-	 *         indicate a validation error. */
+	/**
+	 * @return The {@link IEditErrorHandler} that is used for showing validation
+	 *         errors on typing into this editor. By default this is the
+	 *         {@link RenderErrorHandling} which will render the content in the
+	 *         editor red to indicate a validation error.
+	 */
 	public IEditErrorHandler getInputValidationErrorHandler() {
 		return this.inputValidationErrorHandler;
 	}
 
-	/** @param inputValidationErrorHandler The {@link IEditErrorHandler} that is should used for showing validation
-	 *                                    errors on typing into this editor. */
+	/**
+	 * @param inputValidationErrorHandler The {@link IEditErrorHandler} that is
+	 *                                    should used for showing validation errors
+	 *                                    on typing into this editor.
+	 */
 	public void setInputValidationErrorHandler(final IEditErrorHandler inputValidationErrorHandler) {
 		this.inputValidationErrorHandler = inputValidationErrorHandler;
 	}
 
-	/** Configure the parameters necessary to create the content proposal adapter on opening an editor.
+	/**
+	 * Configure the parameters necessary to create the content proposal adapter on
+	 * opening an editor.
 	 *
-	 * @param controlContentAdapter    the <code>IControlContentAdapter</code> used to obtain and update the control's
-	 *                                 contents as proposals are accepted. May not be <code>null</code>.
-	 * @param proposalProvider         the <code>IContentProposalProvider</code> used to obtain content proposals for
-	 *                                 this control, or <code>null</code> if no content proposal is available.
-	 * @param keyStroke                the keystroke that will invoke the content proposal popup. If this value is
-	 *                                 <code>null</code>, then proposals will be activated automatically when any of the
-	 *                                 auto activation characters are typed.
-	 * @param autoActivationCharacters An array of characters that trigger auto-activation of content proposal. If
-	 *                                 specified, these characters will trigger auto-activation of the proposal popup,
-	 *                                 regardless of whether an explicit invocation keyStroke was specified. If this
-	 *                                 parameter is <code>null</code>, then only a specified keyStroke will invoke
-	 *                                 content proposal. If this parameter is <code>null</code> and the keyStroke
-	 *                                 parameter is <code>null</code>, then all alphanumeric characters will
+	 * @param controlContentAdapter    the <code>IControlContentAdapter</code> used
+	 *                                 to obtain and update the control's contents
+	 *                                 as proposals are accepted. May not be
+	 *                                 <code>null</code>.
+	 * @param proposalProvider         the <code>IContentProposalProvider</code>
+	 *                                 used to obtain content proposals for this
+	 *                                 control, or <code>null</code> if no content
+	 *                                 proposal is available.
+	 * @param keyStroke                the keystroke that will invoke the content
+	 *                                 proposal popup. If this value is
+	 *                                 <code>null</code>, then proposals will be
+	 *                                 activated automatically when any of the auto
+	 *                                 activation characters are typed.
+	 * @param autoActivationCharacters An array of characters that trigger
+	 *                                 auto-activation of content proposal. If
+	 *                                 specified, these characters will trigger
+	 *                                 auto-activation of the proposal popup,
+	 *                                 regardless of whether an explicit invocation
+	 *                                 keyStroke was specified. If this parameter is
+	 *                                 <code>null</code>, then only a specified
+	 *                                 keyStroke will invoke content proposal. If
+	 *                                 this parameter is <code>null</code> and the
+	 *                                 keyStroke parameter is <code>null</code>,
+	 *                                 then all alphanumeric characters will
 	 *                                 auto-activate content proposal.
 	 *
 	 * @see ContentProposalAdapter
-	 * @since 1.4 */
+	 * @since 1.4
+	 */
 	public void enableContentProposal(final IControlContentAdapter controlContentAdapter,
 			final IContentProposalProvider proposalProvider, final KeyStroke keyStroke,
 			final char[] autoActivationCharacters) {
@@ -541,29 +672,47 @@ public class StyledTextCellEditor extends AbstractCellEditor {
 				ContentProposalAdapter.PROPOSAL_REPLACE, 0);
 	}
 
-	/** Configure the parameters necessary to create the content proposal adapter on opening an editor.
+	/**
+	 * Configure the parameters necessary to create the content proposal adapter on
+	 * opening an editor.
 	 *
-	 * @param controlContentAdapter    the <code>IControlContentAdapter</code> used to obtain and update the control's
-	 *                                 contents as proposals are accepted. May not be <code>null</code>.
-	 * @param proposalProvider         the <code>IContentProposalProvider</code> used to obtain content proposals for
-	 *                                 this control, or <code>null</code> if no content proposal is available.
-	 * @param keyStroke                the keystroke that will invoke the content proposal popup. If this value is
-	 *                                 <code>null</code>, then proposals will be activated automatically when any of the
-	 *                                 auto activation characters are typed.
-	 * @param autoActivationCharacters An array of characters that trigger auto-activation of content proposal. If
-	 *                                 specified, these characters will trigger auto-activation of the proposal popup,
-	 *                                 regardless of whether an explicit invocation keyStroke was specified. If this
-	 *                                 parameter is <code>null</code>, then only a specified keyStroke will invoke
-	 *                                 content proposal. If this parameter is <code>null</code> and the keyStroke
-	 *                                 parameter is <code>null</code>, then all alphanumeric characters will
+	 * @param controlContentAdapter    the <code>IControlContentAdapter</code> used
+	 *                                 to obtain and update the control's contents
+	 *                                 as proposals are accepted. May not be
+	 *                                 <code>null</code>.
+	 * @param proposalProvider         the <code>IContentProposalProvider</code>
+	 *                                 used to obtain content proposals for this
+	 *                                 control, or <code>null</code> if no content
+	 *                                 proposal is available.
+	 * @param keyStroke                the keystroke that will invoke the content
+	 *                                 proposal popup. If this value is
+	 *                                 <code>null</code>, then proposals will be
+	 *                                 activated automatically when any of the auto
+	 *                                 activation characters are typed.
+	 * @param autoActivationCharacters An array of characters that trigger
+	 *                                 auto-activation of content proposal. If
+	 *                                 specified, these characters will trigger
+	 *                                 auto-activation of the proposal popup,
+	 *                                 regardless of whether an explicit invocation
+	 *                                 keyStroke was specified. If this parameter is
+	 *                                 <code>null</code>, then only a specified
+	 *                                 keyStroke will invoke content proposal. If
+	 *                                 this parameter is <code>null</code> and the
+	 *                                 keyStroke parameter is <code>null</code>,
+	 *                                 then all alphanumeric characters will
 	 *                                 auto-activate content proposal.
-	 * @param proposalAcceptanceStyle  a constant indicating how an accepted proposal should affect the control's
-	 *                                 content. Should be one of <code>PROPOSAL_INSERT</code>,
-	 *                                 <code>PROPOSAL_REPLACE</code>, or <code>PROPOSAL_IGNORE</code>
-	 * @param autoActivationDelay      the time in milliseconds that will pass before a popup is automatically opened
+	 * @param proposalAcceptanceStyle  a constant indicating how an accepted
+	 *                                 proposal should affect the control's content.
+	 *                                 Should be one of
+	 *                                 <code>PROPOSAL_INSERT</code>,
+	 *                                 <code>PROPOSAL_REPLACE</code>, or
+	 *                                 <code>PROPOSAL_IGNORE</code>
+	 * @param autoActivationDelay      the time in milliseconds that will pass
+	 *                                 before a popup is automatically opened
 	 *
 	 * @see ContentProposalAdapter
-	 * @since 2.0 */
+	 * @since 2.0
+	 */
 	public void enableContentProposal(final IControlContentAdapter controlContentAdapter,
 			final IContentProposalProvider proposalProvider, final KeyStroke keyStroke,
 			final char[] autoActivationCharacters, final int proposalAcceptanceStyle, final int autoActivationDelay) {
@@ -586,12 +735,15 @@ public class StyledTextCellEditor extends AbstractCellEditor {
 		};
 	}
 
-	/** Adds the listeners necessary for interaction between the control of this StyledTextCellEditor and the
-	 * ContentProposalAdapter.
+	/**
+	 * Adds the listeners necessary for interaction between the control of this
+	 * StyledTextCellEditor and the ContentProposalAdapter.
 	 *
-	 * @param contentProposalAdapter The {@link ContentProposalAdapter} that should be used to add content proposal
-	 *                               abilities to this {@link StyledTextCellEditor}.
-	 * @since 1.4 */
+	 * @param contentProposalAdapter The {@link ContentProposalAdapter} that should
+	 *                               be used to add content proposal abilities to
+	 *                               this {@link StyledTextCellEditor}.
+	 * @since 1.4
+	 */
 	protected void configureContentProposalAdapter(final ContentProposalAdapter contentProposalAdapter) {
 		this.contentProposalAdapter = contentProposalAdapter;
 
@@ -608,15 +760,15 @@ public class StyledTextCellEditor extends AbstractCellEditor {
 
 			@Override
 			public void proposalPopupClosed(final ContentProposalAdapter adapter) {
-				if (StyledTextCellEditor.this.focusListener instanceof InlineFocusListener) {
-					((InlineFocusListener) StyledTextCellEditor.this.focusListener).handleFocusChanges = true;
+				if (StyledTextCellEditor.this.focusListener instanceof final InlineFocusListener inlineFL) {
+					inlineFL.handleFocusChanges = true;
 				}
 			}
 
 			@Override
 			public void proposalPopupOpened(final ContentProposalAdapter adapter) {
-				if (StyledTextCellEditor.this.focusListener instanceof InlineFocusListener) {
-					((InlineFocusListener) StyledTextCellEditor.this.focusListener).handleFocusChanges = false;
+				if (StyledTextCellEditor.this.focusListener instanceof final InlineFocusListener inlineFL) {
+					inlineFL.handleFocusChanges = false;
 				}
 			}
 		});
@@ -625,65 +777,88 @@ public class StyledTextCellEditor extends AbstractCellEditor {
 		contentProposalAdapter.setAutoActivationDelay(this.autoActivationDelay);
 	}
 
-	/** Return whether this editor should try to commit and close on pressing the ENTER key. The default is
-	 * <code>true</code>. For a multi line text editor, the ENTER key might be used to insert a new line instead of
-	 * committing the value when opened in a dialog. In that case the value should not be committed, as applying the
-	 * dialog will trigger the commit. For inline editors setting {@link #commitWithCtrlKey} to <code>true</code> might
-	 * be interesting in combination with setting this value to <code>true</code>, which means that the commit operation
-	 * is only performed if CTRL + ENTER is pressed.
+	/**
+	 * Return whether this editor should try to commit and close on pressing the
+	 * ENTER key. The default is <code>true</code>. For a multi line text editor,
+	 * the ENTER key might be used to insert a new line instead of committing the
+	 * value when opened in a dialog. In that case the value should not be
+	 * committed, as applying the dialog will trigger the commit. For inline editors
+	 * setting {@link #commitWithCtrlKey} to <code>true</code> might be interesting
+	 * in combination with setting this value to <code>true</code>, which means that
+	 * the commit operation is only performed if CTRL + ENTER is pressed.
 	 *
-	 * @return <code>true</code> if commit and close is performed on pressing the ENTER key, <code>false</code> if
-	 *         pressing ENTER does not perform a commit operation.
+	 * @return <code>true</code> if commit and close is performed on pressing the
+	 *         ENTER key, <code>false</code> if pressing ENTER does not perform a
+	 *         commit operation.
 	 *
-	 * @since 1.6 */
+	 * @since 1.6
+	 */
 	public boolean isCommitOnEnter() {
 		return this.commitOnEnter;
 	}
 
-	/** Configure whether this editor should try to commit and close on pressing the ENTER key. The default is
-	 * <code>true</code>. For a multi line text editor, the ENTER key might be used to insert a new line instead of
-	 * committing the value when opened in a dialog. In that case the value should not be committed, as applying the
-	 * dialog will trigger the commit. For inline editors setting {@link #commitWithCtrlKey} to <code>true</code> might
-	 * be interesting in combination with setting this value to <code>true</code>, which means that the commit operation
-	 * is only performed if CTRL + ENTER is pressed.
+	/**
+	 * Configure whether this editor should try to commit and close on pressing the
+	 * ENTER key. The default is <code>true</code>. For a multi line text editor,
+	 * the ENTER key might be used to insert a new line instead of committing the
+	 * value when opened in a dialog. In that case the value should not be
+	 * committed, as applying the dialog will trigger the commit. For inline editors
+	 * setting {@link #commitWithCtrlKey} to <code>true</code> might be interesting
+	 * in combination with setting this value to <code>true</code>, which means that
+	 * the commit operation is only performed if CTRL + ENTER is pressed.
 	 *
-	 * @param commitOnEnter <code>true</code> to perform commit and close on pressing the ENTER key, <code>false</code>
-	 *                      if pressing ENTER should not perform a commit operation.
+	 * @param commitOnEnter <code>true</code> to perform commit and close on
+	 *                      pressing the ENTER key, <code>false</code> if pressing
+	 *                      ENTER should not perform a commit operation.
 	 *
-	 * @since 1.6 */
+	 * @since 1.6
+	 */
 	public void setCommitOnEnter(final boolean commitOnEnter) {
 		this.commitOnEnter = commitOnEnter;
 	}
 
-	/** Return whether this editor should try to commit and close on pressing the ENTER key in combination with the CTRL
-	 * state mask key, or if pressing ENTER solely should work. It is only interpreted with {@link #commitOnEnter} set
-	 * to <code>true</code>, and it is needed for a multi line text editor where a simple enter press should add a new
-	 * line and a combination with CTRL should commit the value.
+	/**
+	 * Return whether this editor should try to commit and close on pressing the
+	 * ENTER key in combination with the CTRL state mask key, or if pressing ENTER
+	 * solely should work. It is only interpreted with {@link #commitOnEnter} set to
+	 * <code>true</code>, and it is needed for a multi line text editor where a
+	 * simple enter press should add a new line and a combination with CTRL should
+	 * commit the value.
 	 *
-	 * @return <code>true</code> if committing via pressing the ENTER key is only working with the CTRL state mask key
-	 *         pressed. <code>false</code> if pressing the ENTER key solely is performing the commit.
+	 * @return <code>true</code> if committing via pressing the ENTER key is only
+	 *         working with the CTRL state mask key pressed. <code>false</code> if
+	 *         pressing the ENTER key solely is performing the commit.
 	 *
-	 * @since 1.6 */
+	 * @since 1.6
+	 */
 	public boolean isCommitWithCtrlKey() {
 		return this.commitWithCtrlKey;
 	}
 
-	/** Configure whether this editor should try to commit and close on pressing the ENTER key in combination with the
-	 * CTRL state mask key, or if pressing ENTER solely should work. It is only interpreted with {@link #commitOnEnter}
-	 * set to <code>true</code>, and it is needed for a multi line text editor where a simple enter press should add a
-	 * new line and a combination with CTRL should commit the value.
+	/**
+	 * Configure whether this editor should try to commit and close on pressing the
+	 * ENTER key in combination with the CTRL state mask key, or if pressing ENTER
+	 * solely should work. It is only interpreted with {@link #commitOnEnter} set to
+	 * <code>true</code>, and it is needed for a multi line text editor where a
+	 * simple enter press should add a new line and a combination with CTRL should
+	 * commit the value.
 	 *
-	 * @param commitWithCtrlKey <code>true</code> if committing via pressing the ENTER key should only work with the
-	 *                          CTRL state mask key pressed. <code>false</code> if pressing the ENTER key solely should
-	 *                          perform the commit.
+	 * @param commitWithCtrlKey <code>true</code> if committing via pressing the
+	 *                          ENTER key should only work with the CTRL state mask
+	 *                          key pressed. <code>false</code> if pressing the
+	 *                          ENTER key solely should perform the commit.
 	 *
-	 * @since 1.6 */
+	 * @since 1.6
+	 */
 	public void setCommitWithCtrlKey(final boolean commitWithCtrlKey) {
 		this.commitWithCtrlKey = commitWithCtrlKey;
 	}
 
-	/** @return <code>true</code> if a {@link ContentProposalAdapter} is active and the proposal popup is open.
-	 * @since 2.0 */
+	/**
+	 * @return <code>true</code> if a {@link ContentProposalAdapter} is active and
+	 *         the proposal popup is open.
+	 * @since 2.0
+	 */
 	protected boolean isProposalPopupOpen() {
 		return this.contentProposalAdapter != null && this.contentProposalAdapter.isProposalPopupOpen();
 	}

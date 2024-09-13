@@ -143,6 +143,11 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	}
 
 	@Override
+	protected void performRefreshAnnotations() {
+		table.refresh(false);
+	}
+
+	@Override
 	public void executeCompoundCommand(final CompoundCommand cmd) {
 		executeCommand(cmd);
 		table.refresh();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -27,9 +27,9 @@ import org.eclipse.ui.IEditorPart;
 public final class GetEditPartFromGraficalViewerHelper {
 
 	public static AbstractContainerContentEditPart findAbstractContainerContentEditPartAtPosition(
-	        final IEditorPart editor, final Point pos, final FBNetwork fbNetwork) {
+			final IEditorPart editor, final Point pos, final FBNetwork fbNetwork) {
 		final GraphicalViewer graphicalViewer = editor.getAdapter(GraphicalViewer.class);
-		if (graphicalViewer.getEditPartRegistry().get(fbNetwork) instanceof final GraphicalEditPart graphicalEditPart) {
+		if (graphicalViewer.getEditPartForModel(fbNetwork) instanceof final GraphicalEditPart graphicalEditPart) {
 			final IFigure figure = graphicalEditPart.getFigure().findFigureAt(pos.x, pos.y);
 			if (figure != null) {
 				final Object targetObject = graphicalViewer.getVisualPartMap().get(figure);
@@ -42,21 +42,13 @@ public final class GetEditPartFromGraficalViewerHelper {
 	}
 
 	public static AbstractContainerContentEditPart findAbstractContainerContentEditFromInterfaceElement(
-	        final IInterfaceElement ie) {
-		final UntypedSubappIEAdapter adapter = ie.eAdapters()
-		        .stream()
-		        .filter(UntypedSubappIEAdapter.class::isInstance)
-		        .map(UntypedSubappIEAdapter.class::cast)
-		        .findFirst()
-		        .orElse(null);
+			final IInterfaceElement ie) {
+		final UntypedSubappIEAdapter adapter = ie.eAdapters().stream().filter(UntypedSubappIEAdapter.class::isInstance)
+				.map(UntypedSubappIEAdapter.class::cast).findFirst().orElse(null);
 		if (adapter != null && adapter.getUntypedSubAppInterfaceElementEditPart()
-		        .getParent() instanceof final SubAppForFBNetworkEditPart subappEP) {
-			return subappEP.getChildren()
-			        .stream()
-			        .filter(UnfoldedSubappContentEditPart.class::isInstance)
-			        .map(UnfoldedSubappContentEditPart.class::cast)
-			        .findFirst()
-			        .orElse(null);
+				.getParent() instanceof final SubAppForFBNetworkEditPart subappEP) {
+			return subappEP.getChildren().stream().filter(UnfoldedSubappContentEditPart.class::isInstance)
+					.map(UnfoldedSubappContentEditPart.class::cast).findFirst().orElse(null);
 		}
 		return null;
 	}

@@ -15,7 +15,8 @@ package org.eclipse.fordiac.ide;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -63,11 +64,12 @@ public class FordiacLogListener implements ILogListener {
 
 	@Override
 	public void logging(final IStatus status, final String plugin) {
-		if ((status.getSeverity() == IStatus.ERROR) && (null != status.getException())
-				&& !singleWindow.getAndSet(true)) {
+		if ((status.getSeverity() == IStatus.ERROR) && (null != status.getException()) && !singleWindow.getAndSet(true)
+				&& (status.getPlugin().startsWith(Activator.PLUGIN_ID)
+						|| status.getPlugin().equals(PlatformUI.PLUGIN_ID))) {
 			// inform the user that an error has happened
-			// we currently only treat errors with exception and from a 4diac IDE plug-in as
-			// noteworthy
+			// we currently only treat errors with exception and from a 4diac IDE or the
+			// Platform UI plug-in as noteworthy
 			// if a error dialog is already showing we will not show another one.
 			try {
 				showErrorDialog(createStatusWithStackTrace(status));
@@ -105,11 +107,10 @@ public class FordiacLogListener implements ILogListener {
 		try {
 			final IWorkbench wb = PlatformUI.getWorkbench();
 			final IWebBrowser browser = wb.getBrowserSupport().createBrowser(Activator.PLUGIN_ID);
-			browser.openURL(new URL(FORDIAC_IDE_ISSUE_URL));
-		} catch (PartInitException | MalformedURLException e) {
+			browser.openURL(new URI(FORDIAC_IDE_ISSUE_URL).toURL());
+		} catch (PartInitException | MalformedURLException | URISyntaxException e) {
 			FordiacLogHelper.logError("Error in opening the 4diac bugzilla web-page!", e); //$NON-NLS-1$
 		}
-
 	}
 
 }

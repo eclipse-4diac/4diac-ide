@@ -616,6 +616,7 @@
         <eTypeArguments eClassifier="#//STInitializerExpression"/>
       </eGenericType>
     </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/data.ecore#//StructuredType"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
         eType="#//STStructInitElement" containment="true"/>
   </eClassifiers>

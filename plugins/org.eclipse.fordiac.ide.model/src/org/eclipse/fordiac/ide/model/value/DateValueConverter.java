@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,11 +14,15 @@ package org.eclipse.fordiac.ide.model.value;
 
 import java.text.MessageFormat;
 import java.time.LocalDate;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import org.eclipse.fordiac.ide.model.Messages;
 
 public final class DateValueConverter implements ValueConverter<LocalDate> {
 	public static final DateValueConverter INSTANCE = new DateValueConverter();
+
+	private static final Pattern SCANNER_PATTERN = Pattern.compile("\\G\\d[_\\d]++-\\d[_\\d]++-\\d[_\\d]++"); //$NON-NLS-1$
 
 	private DateValueConverter() {
 	}
@@ -34,5 +38,15 @@ public final class DateValueConverter implements ValueConverter<LocalDate> {
 		} catch (final Exception e) {
 			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_INVALID_DATE_FORMAT, string), e);
 		}
+	}
+
+	@Override
+	public LocalDate toValue(final Scanner scanner) throws IllegalArgumentException {
+		return toValue(scanner.findWithinHorizon(SCANNER_PATTERN, 0));
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
 	}
 }

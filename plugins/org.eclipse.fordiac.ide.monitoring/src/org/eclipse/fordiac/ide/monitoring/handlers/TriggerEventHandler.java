@@ -12,7 +12,6 @@
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -25,29 +24,24 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class TriggerEventHandler extends AbstractMonitoringHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		super.execute(event);
-		StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-
-		Event ev = getEvent(selection.getFirstElement());
+	protected void doExecute(final ExecutionEvent event, final StructuredSelection structSel) {
+		final Event ev = getEvent(structSel.getFirstElement());
 		if (null != ev) {
 			MonitoringManager.getInstance().triggerEvent(ev);
 		}
-		return null;
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		boolean needToAdd = false;
-		Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
+		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 
-		if (selection instanceof StructuredSelection) {
-			StructuredSelection sel = (StructuredSelection) selection;
-			MonitoringManager manager = MonitoringManager.getInstance();
+		if (selection instanceof final StructuredSelection sel) {
+			final MonitoringManager manager = MonitoringManager.getInstance();
 
 			if (1 == sel.size()) {
 				// only allow trigger event if only one element is selected
-				Event ev = getEvent(sel.getFirstElement());
+				final Event ev = getEvent(sel.getFirstElement());
 				if ((null != ev) && manager.containsPort(ev)) {
 					needToAdd = true;
 				}
@@ -56,15 +50,15 @@ public class TriggerEventHandler extends AbstractMonitoringHandler {
 		setBaseEnabled(needToAdd);
 	}
 
-	private static Event getEvent(Object object) {
+	private static Event getEvent(final Object object) {
 		IInterfaceElement ie = null;
-		if (object instanceof InterfaceEditPart) {
-			ie = ((InterfaceEditPart) object).getModel();
-		} else if (object instanceof MonitoringEditPart) {
-			ie = ((MonitoringEditPart) object).getModel().getPort().getInterfaceElement();
+		if (object instanceof final InterfaceEditPart iep) {
+			ie = iep.getModel();
+		} else if (object instanceof final MonitoringEditPart mep) {
+			ie = mep.getModel().getPort().getInterfaceElement();
 		}
-		if (ie instanceof Event) {
-			return (Event) ie;
+		if (ie instanceof final Event ev) {
+			return ev;
 		}
 		return null;
 	}

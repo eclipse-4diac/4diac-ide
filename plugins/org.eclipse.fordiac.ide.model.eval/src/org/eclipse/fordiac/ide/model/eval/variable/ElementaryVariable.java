@@ -14,25 +14,25 @@ package org.eclipse.fordiac.ide.model.eval.variable;
 
 import java.util.Objects;
 
+import org.eclipse.fordiac.ide.model.data.AnyElementaryType;
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
-import org.eclipse.xtext.xbase.lib.Pure;
 
 public final class ElementaryVariable<T extends AnyElementaryValue> extends AbstractVariable<T> {
 	private T value;
 
-	public ElementaryVariable(final String name, final AnyType type) {
+	public ElementaryVariable(final String name, final AnyElementaryType type) {
 		this(name, type, ValueOperations.defaultValue(type));
 	}
 
-	public ElementaryVariable(final String name, final AnyType type, final String value) {
+	public ElementaryVariable(final String name, final AnyElementaryType type, final String value) {
 		super(name, type);
 		setValue(value);
 	}
 
-	public ElementaryVariable(final String name, final AnyType type, final Value value) {
+	public ElementaryVariable(final String name, final AnyElementaryType type, final Value value) {
 		super(name, type);
 		setValue(value);
 	}
@@ -45,21 +45,10 @@ public final class ElementaryVariable<T extends AnyElementaryValue> extends Abst
 	}
 
 	@Override
-	public void setValue(final String value) {
-		setValue(VariableOperations.evaluateValue(getType(), value));
-	}
-
-	@Override
-	public boolean validateValue(final String value) {
-		return VariableOperations.validateValue(getType(), value).isEmpty();
-	}
-
-	@Override
 	public AnyType getType() {
 		return (AnyType) super.getType();
 	}
 
-	@Pure
 	@Override
 	public T getValue() {
 		return value;

@@ -34,7 +34,7 @@ import com.google.inject.Inject;
 
 @ExtendWith(InjectionExtension.class)
 @InjectWith(STFunctionInjectorProvider.class)
-@SuppressWarnings("nls")
+@SuppressWarnings({ "nls", "squid:S2479" })
 class STFunctionCommentAssociaterTest {
 
 	private static final Pattern SL_COMMENT_PATTERN = Pattern.compile("// (\\w+) (.*)\\R"); //$NON-NLS-1$

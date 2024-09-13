@@ -14,20 +14,44 @@ package org.eclipse.fordiac.ide.model.eval.value;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorInitializerException;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class StructValue implements AnyDerivedValue, Iterable<Value> {
 	private final StructuredType type;
 	private final Map<String, Variable<?>> members;
 
-	public StructValue(final StructuredType type, final Map<String, Variable<?>> members) {
+	public StructValue(final StructuredType type) {
 		this.type = type;
-		this.members = members;
+		members = type.getMemberVariables().stream().map(StructValue::initializeMember)
+				.collect(Collectors.toMap(Variable::getName, Function.identity(), (a, b) -> a, LinkedHashMap::new));
+	}
+
+	public StructValue(final StructuredType type, final Map<String, ?> values) {
+		this(type);
+		values.forEach((name, value) -> {
+			final Variable<?> member = members.get(name);
+			if (member != null) {
+				member.setValue(ValueOperations.wrapValue(value, member.getType()));
+			}
+		});
+	}
+
+	protected static Variable<?> initializeMember(final VarDeclaration variable) {
+		try {
+			return VariableOperations.newVariable(variable);
+		} catch (final Exception e) {
+			throw new EvaluatorInitializerException(variable, e);
+		}
 	}
 
 	public Variable<?> get(final String key) {

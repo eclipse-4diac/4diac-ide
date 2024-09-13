@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.application.policies;
 
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.gef.EditPart;
@@ -37,7 +36,7 @@ public class StructuredManipulatorLayoutEditPolicy extends LayoutEditPolicy {
 			final Object childClass = request.getNewObjectType();
 			if ((getHost().getModel() instanceof final StructManipulator structManipulator)
 					&& (childClass instanceof final DataTypeEntry dataTypeEntry)) {
-				return new ChangeStructCommand(structManipulator, (StructuredType) dataTypeEntry.getType());
+				return new ChangeStructCommand(structManipulator, dataTypeEntry.getType());
 			}
 		}
 		return null;
@@ -45,7 +44,7 @@ public class StructuredManipulatorLayoutEditPolicy extends LayoutEditPolicy {
 
 	@Override
 	protected Command getMoveChildrenCommand(final Request request) {
-		// TODO Auto-generated method stub
+		// children should not be moveable
 		return null;
 	}
 

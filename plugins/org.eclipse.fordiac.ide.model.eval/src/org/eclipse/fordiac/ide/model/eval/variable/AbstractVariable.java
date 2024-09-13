@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.data.AnyDurationType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
+import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public abstract class AbstractVariable<T extends Value> implements Variable<T> {
@@ -50,6 +51,21 @@ public abstract class AbstractVariable<T extends Value> implements Variable<T> {
 	@Override
 	public INamedElement getType() {
 		return type;
+	}
+
+	@Override
+	public void setValue(final String value) {
+		setValue(ValueOperations.parseValue(value, getType()));
+	}
+
+	@Override
+	public boolean validateValue(final String value) {
+		try {
+			ValueOperations.parseValue(value, getType());
+		} catch (final Exception e) {
+			return false;
+		}
+		return true;
 	}
 
 	protected RuntimeException createCastException(final Value value) {

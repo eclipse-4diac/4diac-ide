@@ -101,7 +101,7 @@ public final class FBShapeHelper {
 		final int pinLabelSize = element.getInterface().getAllInterfaceElements().stream()
 				.filter(IInterfaceElement::isVisible).filter(filter).map(IInterfaceElement::getName)
 				.mapToInt(String::length).max().orElse(0);
-		return Math.min(Math.max(pinLabelSize, minPinLabelSize), maxPinLabelSize + 1);
+		return Math.clamp(pinLabelSize, minPinLabelSize, maxPinLabelSize + 1);
 	}
 
 	private static int getTypeNameCharacters(final FBNetworkElement element) {

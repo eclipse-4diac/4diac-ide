@@ -164,6 +164,12 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 		outputTable.refresh();
 	}
 
+	@Override
+	protected void performRefreshAnnotations() {
+		inputTable.refresh(false);
+		outputTable.refresh(false);
+	}
+
 	protected void setTableInput() {
 		setTableInput(getInterface());
 		if (isShowTableEditButtons()) {

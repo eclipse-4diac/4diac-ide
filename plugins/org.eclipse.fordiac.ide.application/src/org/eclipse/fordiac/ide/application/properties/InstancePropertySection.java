@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -123,6 +124,12 @@ public class InstancePropertySection extends AbstractSection {
 			outputTable.refresh();
 			inputTable.refresh();
 		}
+	}
+
+	@Override
+	protected void performRefreshAnnotations() {
+		inputTable.refresh(false);
+		outputTable.refresh(false);
 	}
 
 	protected void createTableSection(final Composite parent) {
@@ -212,8 +219,8 @@ public class InstancePropertySection extends AbstractSection {
 	protected Command createChangeCommentCommand() {
 		Command cmd = new ChangeCommentCommand(getType(), commentText.getText());
 		if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() instanceof SubApp) {
-			final Object editPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor().getEditPartRegistry()
-					.get(getType());
+			final EditPart editPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
+					.getEditPartForModel(getType());
 			if (editPart instanceof final SubAppForFBNetworkEditPart subAppforFBNetworkEditPart
 					&& subAppforFBNetworkEditPart.getContentEP() != null) {
 				cmd = new ResizeGroupOrSubappCommand(subAppforFBNetworkEditPart.getContentEP(), cmd);

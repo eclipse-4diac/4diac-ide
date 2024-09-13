@@ -100,8 +100,7 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 		final GraphicalViewer viewer = activeEditor.getAdapter(GraphicalViewer.class);
 		if (null != viewer) {
 			viewer.flush();
-			EditorUtils.refreshPropertySheetWithSelection(activeEditor, viewer,
-					viewer.getEditPartRegistry().get(newFb));
+			EditorUtils.refreshPropertySheetWithSelection(activeEditor, viewer, viewer.getEditPartForModel(newFb));
 		}
 	}
 

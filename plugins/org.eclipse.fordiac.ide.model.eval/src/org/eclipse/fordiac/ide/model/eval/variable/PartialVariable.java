@@ -43,16 +43,6 @@ public class PartialVariable<T extends Value> extends AbstractVariable<T> {
 	}
 
 	@Override
-	public void setValue(final String value) {
-		setValue(VariableOperations.evaluateValue(getType(), value));
-	}
-
-	@Override
-	public boolean validateValue(final String value) {
-		return VariableOperations.validateValue(getType(), value).isEmpty();
-	}
-
-	@Override
 	public AnyBitType getType() {
 		return (AnyBitType) super.getType();
 	}

@@ -62,7 +62,7 @@ public class HiddenPinIndicatorEditPart extends AbstractGraphicalEditPart {
 			super.validate();
 			final Rectangle r = new Rectangle();
 			r.setBounds(getBounds());
-			r.crop(getInsets());
+			r.shrink(getInsets());
 			r.resize(-1, -1);
 			int size = Math.min(r.height, r.width);
 			size = Math.max(size, 1); // Size cannot be negative

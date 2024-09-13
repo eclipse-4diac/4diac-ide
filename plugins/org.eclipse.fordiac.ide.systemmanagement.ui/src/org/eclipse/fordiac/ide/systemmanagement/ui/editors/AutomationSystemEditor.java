@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Primetals Technologies Germany GmbH,
+ * Copyright (c) 2020, 2024 Primetals Technologies Germany GmbH,
  *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Austria GmbH
  *
@@ -477,7 +477,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		Object selection = null;
 		final IEditorPart activeEditor = getActiveEditor();
 		if (activeEditor instanceof final DiagramEditorWithFlyoutPalette diagramEditor) {
-			selection = viewer.getEditPartRegistry().get(diagramEditor.getModel());
+			selection = viewer.getEditPartForModel(diagramEditor.getModel());
 		}
 		if (selection == null) {
 			selection = viewer.getRootEditPart();

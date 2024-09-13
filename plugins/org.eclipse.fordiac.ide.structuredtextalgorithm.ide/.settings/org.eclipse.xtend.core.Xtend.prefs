@@ -21,3 +21,4 @@ outlet.DEFAULT_OUTPUT.sourceFolder.xtend-gen.ignore=
 outlet.DEFAULT_OUTPUT.userOutputPerSourceFolder=
 targetJavaVersion=JAVA21
 useJavaCompilerCompliance=false
+useXbaseGenerated=false

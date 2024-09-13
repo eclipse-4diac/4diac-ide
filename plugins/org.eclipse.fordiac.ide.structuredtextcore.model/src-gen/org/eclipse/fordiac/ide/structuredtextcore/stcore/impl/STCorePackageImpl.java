@@ -2156,8 +2156,18 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getSTStructInitializerExpression_Values() {
+	public EReference getSTStructInitializerExpression_Type() {
 		return (EReference)stStructInitializerExpressionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTStructInitializerExpression_Values() {
+		return (EReference)stStructInitializerExpressionEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -2581,6 +2591,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		createEAttribute(stCommentEClass, ST_COMMENT__POSITION);
 
 		stStructInitializerExpressionEClass = createEClass(ST_STRUCT_INITIALIZER_EXPRESSION);
+		createEReference(stStructInitializerExpressionEClass, ST_STRUCT_INITIALIZER_EXPRESSION__TYPE);
 		createEReference(stStructInitializerExpressionEClass, ST_STRUCT_INITIALIZER_EXPRESSION__VALUES);
 
 		stStructInitElementEClass = createEClass(ST_STRUCT_INIT_ELEMENT);
@@ -3033,6 +3044,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		initEAttribute(getSTComment_Position(), this.getSTCommentPosition(), "position", null, 0, 1, STComment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stStructInitializerExpressionEClass, STStructInitializerExpression.class, "STStructInitializerExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSTStructInitializerExpression_Type(), theDataPackage.getStructuredType(), null, "type", null, 0, 1, STStructInitializerExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTStructInitializerExpression_Values(), this.getSTStructInitElement(), null, "values", null, 0, -1, STStructInitializerExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(stStructInitializerExpressionEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,14 +14,22 @@ package org.eclipse.fordiac.ide.model.value;
 
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.util.Scanner;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 import org.eclipse.fordiac.ide.model.Messages;
 
 public abstract class AbstractStringValueConverter implements ValueConverter<String> {
-	static final Pattern STRING_ESCAPE_PATTERN = Pattern.compile("\\$([\\$'\\\"lLnNpPrRtT]|\\p{XDigit}{2})?"); //$NON-NLS-1$
-	static final Pattern WSTRING_ESCAPE_PATTERN = Pattern.compile("\\$([\\$'\\\"lLnNpPrRtT]|\\p{XDigit}{4})?"); //$NON-NLS-1$
+	static final Pattern STRING_ESCAPE_PATTERN = Pattern.compile("\\$([\\$'\"lLnNpPrRtT]|\\p{XDigit}{2})?"); //$NON-NLS-1$
+	static final Pattern WSTRING_ESCAPE_PATTERN = Pattern.compile("\\$([\\$'\"lLnNpPrRtT]|\\p{XDigit}{4})?"); //$NON-NLS-1$
+
+	static final Pattern SCANNER_STRING_QUOTE_PATTERN = Pattern.compile("\\G'"); //$NON-NLS-1$
+	static final Pattern SCANNER_WSTRING_QUOTE_PATTERN = Pattern.compile("\\G\""); //$NON-NLS-1$
+	static final Pattern SCANNER_STRING_ESCAPE_PATTERN = Pattern.compile("\\G" + STRING_ESCAPE_PATTERN); //$NON-NLS-1$
+	static final Pattern SCANNER_WSTRING_ESCAPE_PATTERN = Pattern.compile("\\G" + WSTRING_ESCAPE_PATTERN); //$NON-NLS-1$
+	static final Pattern SCANNER_STRING_NON_ESCAPE_PATTERN = Pattern.compile("[^$']++"); //$NON-NLS-1$
+	static final Pattern SCANNER_WSTRING_NON_ESCAPE_PATTERN = Pattern.compile("[^$\"]++"); //$NON-NLS-1$
 
 	@Override
 	public String toValue(final String string) throws IllegalArgumentException {
@@ -41,19 +49,45 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 		final boolean wide = quote == '"';
 		final String unquoted = string.substring(1, string.length() - 1);
 		// process escapes
-		Pattern pattern;
-		if (wide) {
-			pattern = WSTRING_ESCAPE_PATTERN;
-		} else {
-			pattern = STRING_ESCAPE_PATTERN;
+		final Pattern pattern = wide ? WSTRING_ESCAPE_PATTERN : STRING_ESCAPE_PATTERN;
+		return pattern.matcher(unquoted).replaceAll(StringValueConverter::unescapeReplace);
+	}
+
+	@Override
+	public String toValue(final Scanner scanner) throws IllegalArgumentException {
+		if (scanner.findWithinHorizon(SCANNER_STRING_QUOTE_PATTERN, 0) != null) {
+			return toValue(scanner, SCANNER_STRING_QUOTE_PATTERN, SCANNER_STRING_ESCAPE_PATTERN,
+					SCANNER_STRING_NON_ESCAPE_PATTERN);
 		}
-		String result;
-		try {
-			result = pattern.matcher(unquoted).replaceAll(StringValueConverter::unescape);
-		} catch (final Exception e) {
-			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_IllegalStringLiteral, string));
+		if (scanner.findWithinHorizon(SCANNER_WSTRING_QUOTE_PATTERN, 0) != null) {
+			return toValue(scanner, SCANNER_WSTRING_QUOTE_PATTERN, SCANNER_WSTRING_ESCAPE_PATTERN,
+					SCANNER_WSTRING_NON_ESCAPE_PATTERN);
 		}
-		return result;
+		throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_IllegalStringLiteral, "<scanner>")); //$NON-NLS-1$
+	}
+
+	protected static String toValue(final Scanner scanner, final Pattern quotePattern, final Pattern escapePattern,
+			final Pattern nonEscapePattern) throws IllegalArgumentException {
+		final StringBuilder result = new StringBuilder();
+		while (scanner.findWithinHorizon(quotePattern, 0) == null) {
+			if (scanner.findWithinHorizon(escapePattern, 0) != null) {
+				result.append(unescape(scanner.match()));
+			} else if (scanner.findWithinHorizon(nonEscapePattern, 0) != null) {
+				result.append(scanner.match().group());
+			} else {
+				throw new IllegalArgumentException(
+						MessageFormat.format(Messages.VALIDATOR_IllegalStringLiteral, "<scanner>")); //$NON-NLS-1$
+			}
+		}
+		return result.toString();
+	}
+
+	protected static String unescapeReplace(final MatchResult result) {
+		final String replacement = unescape(result);
+		if ("$".equals(replacement)) { //$NON-NLS-1$
+			return "\\$"; //$NON-NLS-1$
+		}
+		return replacement;
 	}
 
 	protected static String unescape(final MatchResult result) {
@@ -64,7 +98,7 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 		}
 		switch (escape.charAt(0)) {
 		case '$':
-			return "\\$"; //$NON-NLS-1$
+			return "$"; //$NON-NLS-1$
 		case '\'':
 			return "'"; //$NON-NLS-1$
 		case 'l', 'L', 'n', 'N':
@@ -87,8 +121,7 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 		}
 	}
 
-	@SuppressWarnings("static-method")
-	public String toString(final String value, final boolean wide) {
+	public static String toString(final String value, final boolean wide) {
 		final int length = value.length();
 		final var result = new StringBuilder(length + 2);
 		// append quote
@@ -153,5 +186,10 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 				}
 			}
 		}
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
 	}
 }

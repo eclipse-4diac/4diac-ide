@@ -37,6 +37,7 @@ public class SamplingFBEvaluator extends FBEvaluator<FBType> {
 		super(type, context, variables, parent);
 		delegate = (FBEvaluator<?>) EvaluatorFactory.createEvaluator(type,
 				type.eClass().getInstanceClass().asSubclass(FBType.class), getContext(), Collections.emptySet(), this);
+		delegate.getContext().setValue(getContext().getValue()); // assign initial values
 		delegate.setEventQueue(new SamplingEventQueue());
 	}
 

@@ -71,23 +71,21 @@ public class ExportServiceSequenceToCppTest {
 			addTesterGen(writer);
 			addDataStruct(writer);
 			addTestSuite(writer);
-
-			writer.close();
 		} catch (final IOException ex) {
 			FordiacLogHelper.logError(ex.getMessage(), ex);
 		}
 	}
 
 	private void addTestSuite(final BufferedWriter writer) throws IOException {
-		writer.append(MessageFormat.format(CppBoostTestConstants.testSuiteName, fb.getName()));
+		writer.append(MessageFormat.format(CppBoostTestConstants.TEST_SUITE_NAME, fb.getName()));
 		writer.newLine();
 		for (final ServiceSequence sequence : serviceSeq) {
-			writer.append(MessageFormat.format(CppBoostTestConstants.testCase, sequence.getName()));
+			writer.append(MessageFormat.format(CppBoostTestConstants.TEST_CASE, sequence.getName()));
 			writer.newLine();
 			final int stateID = fb.getECC().getECState().indexOf(fb.getECC().getECState().stream()
 					.filter(state -> state.getName().equals(sequence.getStartState())).findFirst().orElse(null));
 			if (stateID > 0) {
-				writer.append(MessageFormat.format(CppBoostTestConstants.setECCState, stateID));
+				writer.append(MessageFormat.format(CppBoostTestConstants.SET_ECC_STATE, Integer.toString(stateID)));
 				writer.newLine();
 			}
 			for (final ServiceTransaction transaction : sequence.getServiceTransaction()) {
@@ -97,14 +95,14 @@ public class ExportServiceSequenceToCppTest {
 						.indexOf(fb.getInterfaceList().getEventInputs().stream()
 								.filter(event -> event.getName().equals(transaction.getInputPrimitive().getEvent()))
 								.findFirst().orElse(null));
-				writer.append(MessageFormat.format(CppBoostTestConstants.triggerEvent, eventID));
+				writer.append(MessageFormat.format(CppBoostTestConstants.TRIGGER_EVENT, Integer.toString(eventID)));
 				writer.newLine();
 				parseAndAddOutputAsserts(writer, transaction.getOutputPrimitive());
 			}
 			writer.append("}");
 			writer.newLine();
 		}
-		writer.append(CppBoostTestConstants.testSuiteEND);
+		writer.append(CppBoostTestConstants.TEST_SUITE_END);
 
 	}
 
@@ -119,7 +117,7 @@ public class ExportServiceSequenceToCppTest {
 					param = param.replace(param.subSequence(param.indexOf("=") + 1, param.indexOf("(")),
 							getForteDataTypeFromString(
 									param.subSequence(param.indexOf("=") + 1, param.indexOf("(")).toString()));
-					writer.append(MessageFormat.format(CppBoostTestConstants.boostAssertEQUAL,
+					writer.append(MessageFormat.format(CppBoostTestConstants.BOOS_ASSERT_EQUAL,
 							param.subSequence(0, param.indexOf(":")),
 							param.subSequence(param.indexOf("=") + 1, param.length()).toString().replace("'", "\"")));
 					writer.newLine();
@@ -145,11 +143,11 @@ public class ExportServiceSequenceToCppTest {
 	}
 
 	private static void addImports(final BufferedWriter writer) throws IOException {
-		writer.write(CppBoostTestConstants.testIncludeString);
+		writer.write(CppBoostTestConstants.TEST_INCLUDE_STRING);
 	}
 
 	private void addTesterGen(final BufferedWriter writer) throws IOException {
-		writer.write(MessageFormat.format(CppBoostTestConstants.tester_genString, fb.getName()));
+		writer.write(MessageFormat.format(CppBoostTestConstants.TESTER_GEN_STRING, fb.getName()));
 		writer.newLine();
 	}
 
@@ -157,23 +155,23 @@ public class ExportServiceSequenceToCppTest {
 		final var outputData = fb.getOutputParameters();
 		final var inputData = fb.getInputParameters();
 
-		writer.append(MessageFormat.format(CppBoostTestConstants.testFixtureStruct, fb.getName()));
+		writer.append(MessageFormat.format(CppBoostTestConstants.TEST_FIXTURE_STRUCT, fb.getName()));
 		writer.newLine();
-		writer.append(MessageFormat.format(CppBoostTestConstants.testFixtureBase, fb.getName()));
+		writer.append(MessageFormat.format(CppBoostTestConstants.TEST_FICTURE_BASE, fb.getName()));
 		writer.newLine();
-		writer.append(CppBoostTestConstants.setInputDataSTART);
+		writer.append(CppBoostTestConstants.SET_INPUT_DATA_START);
 		if (!inputData.isEmpty()) {
 			writer.append(inputData.stream().map(INamedElement::getName).collect(Collectors.joining(",&", "&", "")));
 		}
-		writer.append(CppBoostTestConstants.setInputDataEND);
+		writer.append(CppBoostTestConstants.SET_INPUT_DATA_END);
 		writer.newLine();
-		writer.append(CppBoostTestConstants.setOutputDataSTART);
+		writer.append(CppBoostTestConstants.SET_OUTPUT_DATA_START);
 		if (!outputData.isEmpty()) {
 			writer.append(outputData.stream().map(INamedElement::getName).collect(Collectors.joining(",&", "&", "")));
 		}
-		writer.append(CppBoostTestConstants.setOutputDataEND);
+		writer.append(CppBoostTestConstants.SET_OUTPUT_DATA_END);
 		writer.newLine();
-		writer.append(CppBoostTestConstants.testFixtureSetup);
+		writer.append(CppBoostTestConstants.TEST_FICTURE_SETUP);
 		writer.newLine();
 
 		for (final INamedElement varDec : inputData) {

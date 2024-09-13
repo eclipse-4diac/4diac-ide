@@ -158,7 +158,7 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 		if (getCastedModel() instanceof Event && null != sourceConnections) {
-			for (final Object con : sourceConnections) {
+			for (final ConnectionEditPart con : sourceConnections) {
 				final WithEditPart with = (WithEditPart) con;
 				with.updateWithPos();
 			}
@@ -206,14 +206,12 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 	}
 
 	public void setInOutConnectionsWith(final int with) {
-		for (final Object element : getSourceConnections()) {
-			final ConnectionEditPart cep = (ConnectionEditPart) element;
+		for (final ConnectionEditPart cep : getSourceConnections()) {
 			if (cep.getFigure() instanceof final PolylineConnection plc) {
 				plc.setLineWidth(with);
 			}
 		}
-		for (final Object element : getTargetConnections()) {
-			final ConnectionEditPart cep = (ConnectionEditPart) element;
+		for (final ConnectionEditPart cep : getTargetConnections()) {
 			if (cep.getFigure() instanceof final PolylineConnection plc) {
 				plc.setLineWidth(with);
 			}

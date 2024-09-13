@@ -256,8 +256,8 @@ public final class FBNetworkHelper {
 				.getActivePart();
 		final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {
-			final List<EditPart> eps = elements.stream().map(el -> viewer.getEditPartRegistry().get(el))
-					.filter(Objects::nonNull).toList();
+			final List<EditPart> eps = elements.stream().map(viewer::getEditPartForModel).filter(Objects::nonNull)
+					.toList();
 			if (eps != null) {
 				viewer.setSelection(new StructuredSelection(eps));
 			}

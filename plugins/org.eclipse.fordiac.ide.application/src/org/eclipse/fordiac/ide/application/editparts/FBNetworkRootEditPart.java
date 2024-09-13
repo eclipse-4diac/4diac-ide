@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
- * 				 2018 - 2020 Johannes Kepler University
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ * 				            Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
@@ -110,8 +109,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 			final AbstractCreateFBNetworkElementCommand cmd = getDirectEditCommand(directEditRequest);
 			if (null != cmd && cmd.canExecute()) {
 				getViewer().getEditDomain().getCommandStack().execute(cmd);
-				final EditPart part = (EditPart) getViewer().getEditPartRegistry().get(cmd.getElement());
-				getViewer().select(part);
+				getViewer().select(getViewer().getEditPartForModel(cmd.getElement()));
 			}
 			return null;
 		}

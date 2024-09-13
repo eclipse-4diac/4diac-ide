@@ -490,7 +490,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STStructInitializerExpression:
-	//    '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
+	//    (type=[datatype::StructuredType|QualifiedName] '#' )? '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
 	public STCoreGrammarAccess.STStructInitializerExpressionElements getSTStructInitializerExpressionAccess() {
 		return gaSTCore.getSTStructInitializerExpressionAccess();
 	}
