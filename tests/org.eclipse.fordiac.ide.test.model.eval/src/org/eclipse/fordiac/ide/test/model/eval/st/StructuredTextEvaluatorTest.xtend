@@ -547,6 +547,27 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testBinaryExpressionRealComparison() {
+		false.toBoolValue.assertEquals("-REAL#0.0 < REAL#0.0".evaluateExpression)
+		false.toBoolValue.assertEquals("REAL#0.0 < -REAL#0.0".evaluateExpression)
+		true.toBoolValue.assertEquals("-REAL#0.0 <= REAL#0.0".evaluateExpression)
+		true.toBoolValue.assertEquals("REAL#0.0 <= -REAL#0.0".evaluateExpression)
+		false.toBoolValue.assertEquals("-REAL#0.0 > REAL#0.0".evaluateExpression)
+		false.toBoolValue.assertEquals("REAL#0.0 > -REAL#0.0".evaluateExpression)
+		true.toBoolValue.assertEquals("-REAL#0.0 >= REAL#0.0".evaluateExpression)
+		true.toBoolValue.assertEquals("REAL#0.0 >= -REAL#0.0".evaluateExpression)
+
+		false.toBoolValue.assertEquals("-LREAL#0.0 < LREAL#0.0".evaluateExpression)
+		false.toBoolValue.assertEquals("LREAL#0.0 < -LREAL#0.0".evaluateExpression)
+		true.toBoolValue.assertEquals("-LREAL#0.0 <= LREAL#0.0".evaluateExpression)
+		true.toBoolValue.assertEquals("LREAL#0.0 <= -LREAL#0.0".evaluateExpression)
+		false.toBoolValue.assertEquals("-LREAL#0.0 > LREAL#0.0".evaluateExpression)
+		false.toBoolValue.assertEquals("LREAL#0.0 > -LREAL#0.0".evaluateExpression)
+		true.toBoolValue.assertEquals("-LREAL#0.0 >= LREAL#0.0".evaluateExpression)
+		true.toBoolValue.assertEquals("LREAL#0.0 >= -LREAL#0.0".evaluateExpression)
+	}
+
+	@Test
 	def void testStandardFunctions() {
 		21.toSIntValue.assertEquals("ADD(17, 4)".evaluateExpression)
 		42.toSIntValue.assertEquals("ADD(17, 4, 21)".evaluateExpression)

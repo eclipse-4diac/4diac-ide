@@ -361,8 +361,8 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			throws EvaluatorException, InterruptedException {
 		return switch (expr) {
 		case final STBinaryExpression binaryExpression when binaryExpression.getOp() == STBinaryOperator.RANGE ->
-			ValueOperations.compareTo(value, evaluateExpression(binaryExpression.getLeft())) >= 0
-					&& ValueOperations.compareTo(value, evaluateExpression(binaryExpression.getRight())) <= 0;
+			ValueOperations.greaterEquals(value, evaluateExpression(binaryExpression.getLeft()))
+					&& ValueOperations.lessEquals(value, evaluateExpression(binaryExpression.getRight()));
 		default -> ValueOperations.equals(value, evaluateExpression(expr));
 		};
 	}
@@ -381,9 +381,9 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			trapExpression = stmt.getFrom();
 		}
 		final EList<STStatement> statements = stmt.getStatements();
-		if (ValueOperations.compareTo(by, ValueOperations.defaultValue(variable.getType())) >= 0) {
+		if (ValueOperations.greaterEquals(by, ValueOperations.defaultValue(variable.getType()))) {
 			try {
-				while (ValueOperations.compareTo(variable.getValue(), to) <= 0) {
+				while (ValueOperations.lessEquals(variable.getValue(), to)) {
 					evaluateForIteration(variable, by, trapExpression, statements);
 				}
 			} catch (final ExitException e) {
@@ -391,7 +391,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			}
 		} else {
 			try {
-				while (ValueOperations.compareTo(variable.getValue(), to) >= 0) {
+				while (ValueOperations.greaterEquals(variable.getValue(), to)) {
 					evaluateForIteration(variable, by, trapExpression, statements);
 				}
 			} catch (final ExitException e) {
@@ -502,10 +502,10 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		case XOR -> ValueOperations.bitwiseXor(left, right);
 		case EQ -> BoolValue.toBoolValue(ValueOperations.equals(left, right));
 		case NE -> BoolValue.toBoolValue(!ValueOperations.equals(left, right));
-		case LT -> BoolValue.toBoolValue(ValueOperations.compareTo(left, right) < 0);
-		case LE -> BoolValue.toBoolValue(ValueOperations.compareTo(left, right) <= 0);
-		case GT -> BoolValue.toBoolValue(ValueOperations.compareTo(left, right) > 0);
-		case GE -> BoolValue.toBoolValue(ValueOperations.compareTo(left, right) >= 0);
+		case LT -> BoolValue.toBoolValue(ValueOperations.lessThan(left, right));
+		case LE -> BoolValue.toBoolValue(ValueOperations.lessEquals(left, right));
+		case GT -> BoolValue.toBoolValue(ValueOperations.greaterThan(left, right));
+		case GE -> BoolValue.toBoolValue(ValueOperations.greaterEquals(left, right));
 		case RANGE -> throw new UnsupportedOperationException(Messages.StructuredTextEvaluator_RangeNotSupported);
 		};
 	}
