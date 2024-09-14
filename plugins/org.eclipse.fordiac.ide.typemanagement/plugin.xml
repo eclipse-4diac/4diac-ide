@@ -703,7 +703,7 @@
    <extension
          point="org.eclipse.ltk.ui.refactoring.changePreviewViewers">
       <changePreviewViewer
-            class="org.eclipse.fordiac.ide.typemanagement.wizards.ChangeConfigurationViewer"
+            class="org.eclipse.fordiac.ide.typemanagement.previews.ChangeConfigurationViewer"
             id="org.eclipse.fordiac.ide.typemanagement.wizards.DeleteStructChangeViewer">
          <enablement>
          <or>
@@ -714,6 +714,36 @@
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinChange"/>
          </or>
          </enablement>
+      </changePreviewViewer>
+      <changePreviewViewer
+            class="org.eclipse.fordiac.ide.typemanagement.previews.StructChangePreviewViewer"
+            id="org.eclipse.fordiac.ide.typemanagement.changePreviewViewer2">
+         <enablement>
+            <or>
+               <instanceof
+                     value="org.eclipse.fordiac.ide.typemanagement.refactoring.rename.StructuredTypeMemberChange">
+               </instanceof>
+            </or></enablement>
+      </changePreviewViewer>
+      <changePreviewViewer
+            class="org.eclipse.fordiac.ide.typemanagement.previews.InterfaceDataTypeChangePreviewViewer"
+            id="org.eclipse.fordiac.ide.typemanagement.previews.InterfaceDataTypeChangePreviewViewer">
+         <enablement>
+            <or>
+               <instanceof
+                     value="org.eclipse.fordiac.ide.typemanagement.refactoring.InterfaceDataTypeChange">
+               </instanceof>
+            </or></enablement>
+      </changePreviewViewer>
+      <changePreviewViewer
+            class="org.eclipse.fordiac.ide.typemanagement.previews.UpdateInstancesChangePreviewViewer"
+            id="org.eclipse.fordiac.ide.typemanagement.previews.UpdateInstancesChangePreviewViewer">
+         <enablement>
+            <or>
+               <instanceof
+                     value="org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateInstancesChange">
+               </instanceof>
+            </or></enablement>
       </changePreviewViewer>
    </extension>
    <extension

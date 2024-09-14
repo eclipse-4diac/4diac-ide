@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.ui.actions.SelectAllAction;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
@@ -48,7 +49,7 @@ public class FBNetworkSelectAllAction extends SelectAllAction {
 
 		for (final Object child : children) {
 			if ((child instanceof AbstractFBNElementEditPart) || (child instanceof GroupEditPart)) {
-				final GraphicalEditPart childPart = (GraphicalEditPart) child;
+				final EditPart childPart = (EditPart) child;
 				if (childPart.isSelectable()) {
 					selectableChildren.add(childPart);
 					addConnectionsTo(selectableChildren, childPart);
@@ -58,14 +59,19 @@ public class FBNetworkSelectAllAction extends SelectAllAction {
 		return Collections.unmodifiableList(selectableChildren);
 	}
 
-	private static void addConnectionsTo(final List<EditPart> selectableChildren, final GraphicalEditPart child) {
+	private static void addConnectionsTo(final List<EditPart> selectableChildren, final EditPart child) {
 		// the editparts are in charge of managing the connections if we take all source
 		// connections
 		// from one edit part we should get all connections in the end.
 
-		for (final GraphicalEditPart elementChild : child.getChildren()) {
-			elementChild.getSourceConnections().stream().filter(EditPart::isSelectable)
-					.forEach(selectableChildren::add);
+		final List<?> elementChildren = child.getChildren();
+		for (final Object elementChild : elementChildren) {
+			if (elementChild instanceof AbstractGraphicalEditPart) {
+				final List<? extends GraphicalEditPart> connections = ((AbstractGraphicalEditPart) elementChild)
+						.getSourceConnections();
+				connections.stream().filter(EditPart::isSelectable).forEach(selectableChildren::add);
+			}
+
 		}
 	}
 

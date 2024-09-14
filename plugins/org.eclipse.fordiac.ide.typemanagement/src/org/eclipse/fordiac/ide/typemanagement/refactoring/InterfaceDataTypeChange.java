@@ -12,13 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.util.FBUpdater;
@@ -29,29 +29,43 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 public class InterfaceDataTypeChange extends Change {
 
 	private final FBType fbType;
-	private final DataTypeEntry typeEntry;
+	private final TypeEntry oldTypeEntry;
+	private final List<String> inputPinNames;
+	private final List<String> outputPinNames;
+
 	private final List<String> pinNames;
 
-	public InterfaceDataTypeChange(final FBType fbType, final DataTypeEntry oldTypeEntry) {
+	public InterfaceDataTypeChange(final FBType fbType, final TypeEntry oldTypeEntry) {
+
 		this.fbType = fbType;
-		this.typeEntry = oldTypeEntry;
-		this.pinNames = new ArrayList<>();
+
+		this.oldTypeEntry = oldTypeEntry;
+		this.inputPinNames = fbType.getInterfaceList().getInputs()
+				.filter(input -> input.getTypeName().equals(oldTypeEntry.getTypeName())).map(IInterfaceElement::getName)
+				.toList();
+
+		this.outputPinNames = fbType.getInterfaceList().getOutputs()
+				.filter(output -> output.getTypeName().equals(oldTypeEntry.getTypeName()))
+				.map(IInterfaceElement::getName).toList();
+
+
 	}
 
 	@Override
 	public String getName() {
-		return "Update InterfacePins: - " + fbType.getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
-				+ fbType.getTypeEntry().getFile().getFileExtension() + " - " //$NON-NLS-1$
-				+ fbType.getTypeEntry().getFile().getProject().getName() + ": " + pinNames.toString(); //$NON-NLS-1$
+		return "Update Interface Pins - Inputs: " + this.inputPinNames.toString() + " / Outputs: " //$NON-NLS-1$//$NON-NLS-2$
+				+ this.outputPinNames.toString();
 	}
 
 	@Override
 	public void initializeValidationData(final IProgressMonitor pm) {
-
+		// Unused
 	}
 
-	private Command getUpdatePinInTypeDeclarationCommand() {
-		return FBUpdater.createUpdatePinInTypeDeclarationCommand(fbType, typeEntry);
+	private Command getUpdatePinInTypeDelcarationCommand() {
+		return FBUpdater.createUpdatePinInTypeDeclarationCommand(fbType, (DataTypeEntry) this.oldTypeEntry,
+				this.oldTypeEntry.getTypeName());
+
 	}
 
 	@Override
@@ -71,6 +85,10 @@ public class InterfaceDataTypeChange extends Change {
 	@Override
 	public Object getModifiedElement() {
 		return fbType;
+	}
+
+	public TypeEntry getOldTypeEntry() {
+		return oldTypeEntry;
 	}
 
 }
