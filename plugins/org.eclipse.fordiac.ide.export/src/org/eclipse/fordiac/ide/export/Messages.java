@@ -19,7 +19,7 @@ import org.eclipse.osgi.util.NLS;
 /**
  * The Class Messages.
  */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.export.messages"; //$NON-NLS-1$
@@ -43,10 +43,6 @@ public final class Messages extends NLS {
 	public static String TemplateExportFilter_MERGE_EDITOR_FAILED;
 
 	public static String TemplateExportFilter_MERGE_LABEL_STRING;
-
-	public static String TemplateExportFilter_NO_DIFFERENCES_MESSAGE;
-
-	public static String TemplateExportFilter_NO_DIFFERENCES_TITLE;
 
 	public static String TemplateExportFilter_OVERWRITE_LABEL_STRING;
 
