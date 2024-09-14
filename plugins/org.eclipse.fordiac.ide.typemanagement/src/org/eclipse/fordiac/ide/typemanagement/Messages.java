@@ -16,6 +16,8 @@
  *     - Externalized all translatable strings
  *   Martin Jobst
  *     - add strings for Build Path property page
+ *   Martin Schwarz
+ *     - add/modify strings for rename refactoring
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.typemanagement;

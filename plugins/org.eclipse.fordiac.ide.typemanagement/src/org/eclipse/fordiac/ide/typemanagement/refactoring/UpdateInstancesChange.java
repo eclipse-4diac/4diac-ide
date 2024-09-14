@@ -11,6 +11,7 @@
  * Contributors:
  *   Dario Romano - initial API and implementation and/or initial documentation
  *   Fabio Gandolfi - added FB type update
+ *   Martin Schwarz - moved file and refactored for new preview grouping
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 

@@ -12,6 +12,7 @@
  *   Filip Adren, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Fabio Gandolfi - added doubleclickevent for pin jumps
+ *   Martin Schwarz - Build fixes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.utilities;
 

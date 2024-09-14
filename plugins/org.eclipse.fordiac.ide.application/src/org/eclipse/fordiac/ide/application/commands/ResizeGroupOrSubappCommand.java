@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Fabio Gandolfi - initial implementation and/or documentation
+ *   Martin Schwarz - Build fixes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 

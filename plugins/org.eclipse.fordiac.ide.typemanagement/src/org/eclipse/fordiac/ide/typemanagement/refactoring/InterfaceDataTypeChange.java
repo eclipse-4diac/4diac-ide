@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *   Martin Schwarz - added additional information to refactoring preview
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 

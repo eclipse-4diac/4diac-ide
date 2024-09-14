@@ -12,6 +12,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Dario Romano
  *     - add correct preservation of selection and ui initialization from change state
+ *   Martin Schwarz
+ *     - moved file
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.previews;
 
@@ -23,6 +25,8 @@ import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.
 import org.eclipse.ltk.ui.refactoring.ChangePreviewViewerInput;
 import org.eclipse.ltk.ui.refactoring.IChangePreviewViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -45,21 +49,25 @@ public class ChangeConfigurationViewer implements IChangePreviewViewer {
 
 		table.setSize(100, 100);
 
-		// TODO inspect this
-		/*
-		 * // Add a SelectionListener to the table to listen for checkbox changes
-		 * table.addSelectionListener(new SelectionAdapter() {
-		 * 
-		 * @Override public void widgetSelected(final SelectionEvent e) { if (e.detail
-		 * == SWT.CHECK) { final TableItem item = (TableItem) e.item; final ChangeState
-		 * cs = choices.get(item); // do not allow de-selection of currently selected
-		 * choice. if (change.getState().contains(cs)) { item.setChecked(true); return;
-		 * } change.addState(cs); change.getState().removeIf(state ->
-		 * !state.equals(cs)); choices.keySet().stream().filter(anyItem ->
-		 * !anyItem.equals(item)) .forEach(otherItem -> otherItem.setChecked(false)); }
-		 * } });
-		 */
-
+		// Add a SelectionListener to the table to listen for checkbox changes
+		table.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				if (e.detail == SWT.CHECK) {
+					final TableItem item = (TableItem) e.item;
+					final ChangeState cs = choices.get(item);
+					// do not allow de-selection of currently selected choice.
+					if (change.getState().contains(cs)) {
+						item.setChecked(true);
+						return;
+					}
+					change.addState(cs);
+					change.getState().removeIf(state -> !state.equals(cs));
+					choices.keySet().stream().filter(anyItem -> !anyItem.equals(item))
+							.forEach(otherItem -> otherItem.setChecked(false));
+				}
+			}
+		});
 	}
 
 	@Override

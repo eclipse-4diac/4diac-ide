@@ -10,6 +10,8 @@
  * Contributors:
  *   Alois Zoitl, Filip Andren
  *     - initial API and implementation and/or initial documentation
+ *   Martin Schwarz
+ *     - Build fixes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 

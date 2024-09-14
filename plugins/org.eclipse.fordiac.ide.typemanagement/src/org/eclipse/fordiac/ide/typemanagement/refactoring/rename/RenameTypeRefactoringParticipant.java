@@ -10,6 +10,7 @@
  * Contributors:
  *   Fabio Gandolfi, Michael Oberlehner -
  *   	initial API and implementation and/or initial documentation
+ *   Martin Schwarz - refactored for proper change grouping
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
