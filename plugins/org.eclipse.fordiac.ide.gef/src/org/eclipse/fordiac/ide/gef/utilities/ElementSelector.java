@@ -41,7 +41,8 @@ public final class ElementSelector {
 	 * @param viewObjects list with objects to select
 	 */
 	public static void selectViewObjects(final Collection<? extends Object> viewObjects) {
-		final IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+		final IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActivePart();
 		final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {
 			viewer.flush();
@@ -58,9 +59,10 @@ public final class ElementSelector {
 
 	}
 
-	private static List<EditPart> getSelectableEditParts(final GraphicalViewer viewer, final Collection<?> viewObjects) {
+	private static List<EditPart> getSelectableEditParts(final GraphicalViewer viewer,
+			final Collection<?> viewObjects) {
 		final List<EditPart> selectableChildren = new ArrayList<>();
-		final Map<Object, Object> editPartRegistry = viewer.getEditPartRegistry();
+		final Map<Object, EditPart> editPartRegistry = viewer.getEditPartRegistry();
 		for (final Object view : viewObjects) {
 			final Object child = editPartRegistry.get(view);
 			if ((child instanceof EditPart) && ((EditPart) child).getModel().equals(view)) {

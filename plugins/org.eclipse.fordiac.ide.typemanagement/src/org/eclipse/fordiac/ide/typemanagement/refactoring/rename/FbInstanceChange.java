@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,12 +20,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.search.types.FBInstanceSearch;
-import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
-import org.eclipse.fordiac.ide.model.search.types.StructDataTypeSearch;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.FBImpl;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl;
+import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -71,20 +72,28 @@ public class FbInstanceChange extends CompositeChange {
 		}).toList();
 	}
 
-	private List<FBNetworkElement> searchAffectedStructuredType() {
+	private List<FBImpl> searchAffectedStructuredType() {
+		final List<FBImpl> affectedFbInstances = new ArrayList<>();
 
-		// TODO use new search
-		final InstanceSearch structMemberSearch = StructDataTypeSearch
-				.createStructMemberSearch((StructuredType) oldTypeEntry.getTypeEditable());
+		final DataTypeInstanceSearch affectedFbSearch = new DataTypeInstanceSearch((DataTypeEntry) oldTypeEntry);
+		final List<? extends EObject> results = affectedFbSearch.performSearch();
 
-		final Set<INamedElement> search = InstanceSearch.performProjectSearch(this.file.getProject(),
-				StructDataTypeSearch.createStructMemberSearch((StructuredType) oldTypeEntry.getTypeEditable()),
-				StructDataTypeSearch.createStructInterfaceSearch((StructuredType) oldTypeEntry.getTypeEditable()),
-				new FBInstanceSearch((DataTypeEntry) oldTypeEntry));
+		final List<BasicFBTypeImpl> affectedFbs = results.stream()
+				.filter(r -> InterfaceListImpl.class.isInstance(r.eContainer()))
+				.filter(r -> BasicFBTypeImpl.class.isInstance(r.eContainer().eContainer()))
+				.map(r -> BasicFBTypeImpl.class.cast(r.eContainer().eContainer())).distinct().toList();
 
-		search.addAll(StructDataTypeSearch.createStructMemberSearch((StructuredType) oldTypeEntry.getTypeEditable())
-				.searchStructuredTypes(oldTypeEntry.getTypeLibrary()));
-		return search.stream().filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).toList();
+		for (final BasicFBTypeImpl fbType : affectedFbs) {
+			final BlockTypeInstanceSearch affectedFbInstanceSearch = new BlockTypeInstanceSearch(fbType.getTypeEntry());
+			final List<? extends EObject> affectedFbInstanceSearchResults = affectedFbInstanceSearch.performSearch();
+
+			for (final EObject object : affectedFbInstanceSearchResults) {
+				affectedFbInstances.add((FBImpl) object);
+			}
+
+		}
+
+		return affectedFbInstances;
 	}
 
 }

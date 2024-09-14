@@ -190,7 +190,7 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 	}
 
 	private void updateValues(final Collection<? extends Variable<?>> variables) {
-		final Map<Object, Object> editPartRegistry = getViewer().getEditPartRegistry();
+		final Map<Object, EditPart> editPartRegistry = getViewer().getEditPartRegistry();
 		if (shouldUpdate()) {
 			Display.getDefault().asyncExec(() -> {
 				variables
@@ -210,7 +210,7 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 		return false;
 	}
 
-	private void updateVariable(final Map<Object, Object> editPartRegistry, final String variableName,
+	private void updateVariable(final Map<Object, EditPart> editPartRegistry, final String variableName,
 			final Value value) {
 		final InterfaceValueEntity interfaceValueEntity = interfaceValues.get(variableName);
 		if (interfaceValueEntity != null) {
@@ -233,7 +233,7 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 				break;
 			case DebugEvent.CHANGE:
 				if (ev.getSource() instanceof EvaluatorDebugVariable) {
-					final Map<Object, Object> editPartRegistry = getViewer().getEditPartRegistry();
+					final Map<Object, EditPart> editPartRegistry = getViewer().getEditPartRegistry();
 					Display.getDefault().asyncExec(() -> {
 						final EvaluatorDebugVariable evaluatorDebugVariable = (EvaluatorDebugVariable) ev.getSource();
 						updateVariable(editPartRegistry, evaluatorDebugVariable.getName(),
@@ -248,7 +248,7 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 	}
 
 	private void updateAllValues() {
-		final Map<Object, Object> editPartRegistry = getViewer().getEditPartRegistry();
+		final Map<Object, EditPart> editPartRegistry = getViewer().getEditPartRegistry();
 		Display.getDefault().asyncExec(() -> {
 			interfaceValues.entrySet().forEach(entry -> updateVariable(editPartRegistry, entry.getKey(),
 					entry.getValue().getVariable().getValue()));
@@ -256,7 +256,7 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 		});
 	}
 
-	private void updateAllEvents(final Map<Object, Object> editPartRegistry) {
+	private void updateAllEvents(final Map<Object, EditPart> editPartRegistry) {
 		eventValues.entrySet().forEach(entry -> {
 			final Object ep = editPartRegistry.get(entry.getValue());
 			if (ep instanceof EventValueEditPart) {
