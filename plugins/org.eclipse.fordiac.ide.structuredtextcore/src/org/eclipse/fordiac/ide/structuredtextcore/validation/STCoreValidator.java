@@ -289,8 +289,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					final Subrange subrange = receiverType.getSubranges().get(index);
 					if (isArrayIndexOutOfBounds(indexValue, subrange)) {
 						error(MessageFormat.format(Messages.STCoreValidator_ArrayIndexOutOfBounds,
-								Integer.valueOf(indexValue), Integer.valueOf(subrange.getLowerLimit()),
-								Integer.valueOf(subrange.getUpperLimit())),
+								Integer.toString(indexValue), Integer.toString(subrange.getLowerLimit()),
+								Integer.toString(subrange.getUpperLimit())),
 								STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, index,
 								ARRAY_INDEX_OUT_OF_BOUNDS);
 					}
@@ -299,8 +299,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				}
 			} else {
 				error(MessageFormat.format(Messages.STCoreValidator_TooManyIndicesGiven,
-						Integer.valueOf(accessExpression.getIndex().size()),
-						Integer.valueOf(receiverType.getSubranges().size()), receiverType.getName()),
+						Integer.toString(accessExpression.getIndex().size()),
+						Integer.toString(receiverType.getSubranges().size()), receiverType.getName()),
 						STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, index, TOO_MANY_INDICES_GIVEN);
 			}
 		});
@@ -323,7 +323,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					final int indexValue = STCoreUtil.asConstantInt(indexExpression);
 					if (isStringIndexOutOfBounds(indexValue, receiverType)) {
 						warning(MessageFormat.format(Messages.STCoreValidator_StringIndexOutOfBounds,
-								Integer.valueOf(indexValue), receiverType.getName()),
+								Integer.toString(indexValue), receiverType.getName()),
 								STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, index,
 								STRING_INDEX_OUT_OF_BOUNDS);
 					}
@@ -332,7 +332,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				}
 			} else {
 				error(MessageFormat.format(Messages.STCoreValidator_TooManyIndicesGiven,
-						Integer.valueOf(accessExpression.getIndex().size()), Integer.valueOf(1),
+						Integer.toString(accessExpression.getIndex().size()), Integer.toString(1),
 						receiverType.getName()), STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, index,
 						TOO_MANY_INDICES_GIVEN);
 			}
