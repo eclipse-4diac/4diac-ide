@@ -75,7 +75,7 @@ public class WatchInternalVarsHandler extends AbstractAddWatchesHandler {
 		}
 	}
 
-	private static InternalVarInstance createInternalVarInstance(final FB fb, final VarDeclaration internalVar) {
+	public static InternalVarInstance createInternalVarInstance(final FB fb, final VarDeclaration internalVar) {
 		final InternalVarInstance intVar = MonitoringFactory.eINSTANCE.createInternalVarInstance();
 		intVar.setArraySize(EcoreUtil.copy(internalVar.getArraySize()));
 		intVar.setFb(fb);
