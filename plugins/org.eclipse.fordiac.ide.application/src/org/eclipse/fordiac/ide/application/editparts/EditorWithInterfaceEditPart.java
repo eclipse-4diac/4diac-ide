@@ -479,11 +479,14 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		final IFigure container = getChildVisualContainer(childEditPart);
 		if (child.getParent() == container) {
 			container.remove(child);
-		} else if (childEditPart.getModel() instanceof VarDeclaration
-				&& child.getParent() == getLeftVarInOutInterfaceContainer()) {
+		} else if (childEditPart.getModel() instanceof VarDeclaration) {
 			// we lose information on var in out status with this check we know that we
 			// need to remove the figure from the var in out container
-			getLeftVarInOutInterfaceContainer().remove(child);
+			if (child.getParent() == getLeftVarInOutInterfaceContainer()) {
+				getLeftVarInOutInterfaceContainer().remove(child);
+			} else {
+				getRightVarInOutInterfaceContainer().remove(child);
+			}
 		} else {
 			getContentPane().remove(child);
 		}
