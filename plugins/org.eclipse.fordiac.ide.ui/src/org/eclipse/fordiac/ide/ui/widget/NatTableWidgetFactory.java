@@ -16,12 +16,14 @@ package org.eclipse.fordiac.ide.ui.widget;
 import org.eclipse.fordiac.ide.ui.providers.RowHeaderDataProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.config.AbstractLayerConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.AbstractUiBindingConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.CellConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.config.DefaultNatTableStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.copy.action.PasteDataAction;
 import org.eclipse.nebula.widgets.nattable.copy.command.CopyDataCommandHandler;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
@@ -42,6 +44,7 @@ import org.eclipse.nebula.widgets.nattable.grid.layer.config.DefaultRowStyleConf
 import org.eclipse.nebula.widgets.nattable.layer.CompositeLayer;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.ILayer;
+import org.eclipse.nebula.widgets.nattable.layer.IUniqueIndexLayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.nebula.widgets.nattable.layer.config.DefaultColumnHeaderStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.layer.config.DefaultRowHeaderLayerConfiguration;
@@ -54,6 +57,7 @@ import org.eclipse.nebula.widgets.nattable.painter.cell.decorator.PaddingDecorat
 import org.eclipse.nebula.widgets.nattable.painter.layer.NatGridLayerPainter;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionBindings;
+import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionLayerConfiguration;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
@@ -239,13 +243,14 @@ public final class NatTableWidgetFactory {
 
 		setColumnWidths(bodyDataLayer);
 
-		final SelectionLayer selectionLayer = new SelectionLayer(bodyDataLayer);
-
 		final ITreeRowModel<T> treeRowModel = new TreeRowModel<>(treeData);
 
-		final TreeLayer treeLayer = new TreeLayer(selectionLayer, treeRowModel);
+		final TreeLayer treeLayer = new TreeLayer(bodyDataLayer, treeRowModel);
 
-		final ViewportLayer viewportLayer = new ViewportLayer(treeLayer);
+		final SelectionLayer selectionLayer = new SelectionLayer(treeLayer, false);
+		selectionLayer.addConfiguration(new DefaultTreeSelectionLayerConfiguration(selectionLayer, selectionLayer));
+
+		final ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
 
 		final DataLayer columnHeaderDataLayer = new DefaultColumnHeaderDataLayer(columnHeaderDataProvider);
 		final ILayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, viewportLayer, selectionLayer);
@@ -463,6 +468,54 @@ public final class NatTableWidgetFactory {
 					MouseEventMatcher.LEFT_BUTTON, CheckBoxPainter.class), new MouseEditAction());
 			uiBindingRegistry.registerDoubleClickBinding(new CellEditorMouseEventMatcher(GridRegion.BODY),
 					new MouseEditAction());
+		}
+	}
+
+	private static class DefaultTreeSelectionLayerConfiguration extends DefaultSelectionLayerConfiguration {
+
+		private final SelectionLayer selectionLayer;
+		private final IUniqueIndexLayer pasteLayer;
+
+		public DefaultTreeSelectionLayerConfiguration(final SelectionLayer selectionLayer,
+				final IUniqueIndexLayer pasteLayer) {
+			this.selectionLayer = selectionLayer;
+			this.pasteLayer = pasteLayer;
+			addPasteLayerConfiguration();
+		}
+
+		@Override
+		protected void addSelectionUIBindings() {
+			addConfiguration(new DefaultTreeSelectionBindings());
+		}
+
+		protected void addPasteLayerConfiguration() {
+			addConfiguration(new DefaultTreePasteLayerConfiguration(selectionLayer, pasteLayer));
+		}
+	}
+
+	private static class DefaultTreeSelectionBindings extends DefaultSelectionBindings {
+
+		@Override
+		public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
+			super.configureUiBindings(uiBindingRegistry);
+			uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'v'), new PasteDataAction());
+		}
+	}
+
+	private static class DefaultTreePasteLayerConfiguration extends AbstractLayerConfiguration<SelectionLayer> {
+
+		private final SelectionLayer selectionLayer;
+		private final IUniqueIndexLayer pasteLayer;
+
+		public DefaultTreePasteLayerConfiguration(final SelectionLayer selectionLayer,
+				final IUniqueIndexLayer pasteLayer) {
+			this.selectionLayer = selectionLayer;
+			this.pasteLayer = pasteLayer;
+		}
+
+		@Override
+		public void configureTypedLayer(final SelectionLayer layer) {
+			layer.registerCommandHandler(new PasteFromClipboardDataCommandHandler(selectionLayer, pasteLayer));
 		}
 	}
 
