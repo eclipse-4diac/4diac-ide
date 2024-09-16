@@ -17,7 +17,7 @@ import java.io.File;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -26,14 +26,18 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.util.TypeFromTemplateCreator;
+import org.eclipse.fordiac.ide.typemanagement.wizards.NewTypeWizard;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
 public class CreateDataTypeMarkerResolution extends AbstractErrorMarkerResolution {
@@ -54,29 +58,35 @@ public class CreateDataTypeMarkerResolution extends AbstractErrorMarkerResolutio
 
 		if (newEntry != null) {
 			final EObject errorType = FordiacErrorMarker.getTarget(marker);
-			if (errorType instanceof final VarDeclaration target) {
+			if (errorType instanceof final IInterfaceElement target) {
 				AbstractLiveSearchContext.executeAndSave(ChangeDataTypeCommand.forDataType(target, newEntry.getType()),
 						target, new NullProgressMonitor());
-			} else if (errorType instanceof final StructManipulator fb && newEntry instanceof final DataType d) {
-				AbstractLiveSearchContext.executeAndSave(new ChangeStructCommand(fb, d), fb, new NullProgressMonitor());
-			} else if (errorType instanceof final ConfigurableFB fb && newEntry instanceof final DataType d) {
-				AbstractLiveSearchContext.executeAndSave(new ConfigureFBCommand(fb, d), fb, new NullProgressMonitor());
+			} else if (errorType instanceof final StructManipulator fb
+					&& newEntry.getType() instanceof final StructuredType struct) {
+				AbstractLiveSearchContext.executeAndSave(new ChangeStructCommand(fb, struct), fb,
+						new NullProgressMonitor());
+			} else if (errorType instanceof final ConfigurableFB fb) {
+				AbstractLiveSearchContext.executeAndSave(new ConfigureFBCommand(fb, newEntry.getType()), fb,
+						new NullProgressMonitor());
 			}
 		}
 	}
 
 	private void createNewEntry() {
 		final File template = new File(TEMPLATE_PATH);
-		final IFile targetFile = getTargetFile(FordiacErrorMarker.getData(this.marker)[0],
-				marker.getResource().getProject().getFullPath());
-		final TypeFromTemplateCreator creator = new TypeFromTemplateCreator(targetFile, template, ""); //$NON-NLS-1$
+		final String typeName = FordiacErrorMarker.getData(this.marker)[0];
+		final IFile targetFile = getTargetFile(typeName, marker.getResource().getProject());
+		final TypeFromTemplateCreator creator = new TypeFromTemplateCreator(targetFile, template,
+				PackageNameHelper.extractPackageName(typeName));
 		creator.createTypeFromTemplate(new NullProgressMonitor());
+		NewTypeWizard.openTypeEditor(targetFile);
 
 		newEntry = (DataTypeEntry) creator.getTypeEntry();
 	}
 
-	private static IFile getTargetFile(final String typeName, final IPath path) {
-		return ResourcesPlugin.getWorkspace().getRoot()
-				.getFile(new Path(path + File.separator + "Type Library" + File.separator + typeName + ".dtp")); //$NON-NLS-1$ //$NON-NLS-2$
+	private static IFile getTargetFile(final String typeName, final IProject project) {
+		return project.getFile(Path.fromOSString(SystemManager.TYPE_LIB_FOLDER_NAME)
+				.append(typeName.replace(PackageNameHelper.PACKAGE_NAME_DELIMITER, String.valueOf(IPath.SEPARATOR)))
+				.addFileExtension(TypeLibraryTags.DATA_TYPE_FILE_ENDING));
 	}
 }

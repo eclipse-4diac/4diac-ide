@@ -44,8 +44,10 @@ public class CreateMissingFBMarkerResolution extends AbstractErrorMarkerResoluti
 
 	@Override
 	public void run(final IMarker marker) {
-		final EObject target = FordiacErrorMarker.getTarget(marker);
-		updateTarget(target);
+		if (!marker.exists()) {
+			return;
+		}
+		run(new IMarker[] { marker }, new NullProgressMonitor());
 	}
 
 	private void updateTarget(final EObject target) {
@@ -75,12 +77,7 @@ public class CreateMissingFBMarkerResolution extends AbstractErrorMarkerResoluti
 			return;
 		}
 
-		if (markers[0].exists() && !errorName.equals(newEntry.getTypeName())) {
-			super.run(markers, monitor);
-		} else {
-			// markers got invalid
-			targets.forEach(this::updateTarget);
-		}
+		targets.forEach(this::updateTarget);
 	}
 
 	private void createNewEntry(final String defaultName) {

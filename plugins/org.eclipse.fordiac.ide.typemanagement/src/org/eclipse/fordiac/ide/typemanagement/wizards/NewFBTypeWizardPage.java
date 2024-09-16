@@ -481,6 +481,10 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		return null;
 	}
 
+	public void setPackageName(final String packageName) {
+		packageNameText.setText(packageName);
+	}
+
 	public String getPackageName() {
 		return packageNameText.getText();
 	}
