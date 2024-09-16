@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
@@ -98,6 +99,29 @@ public final class VariableOperations {
 
 	public static Variable<?> newVariable(final String name, final Value value) {
 		return newVariable(name, value.getType(), value);
+	}
+
+	public static Variable<?> newVariable(final ITypedElement element) throws EvaluatorException {
+		return switch (element) {
+		case final VarDeclaration varDeclaration -> newVariable(varDeclaration);
+		case final Attribute attribute -> newVariable(attribute);
+		case final DirectlyDerivedType directlyDerivedType -> newVariable(directlyDerivedType);
+		case final FB fb -> newVariable(fb);
+		default ->
+			throw new UnsupportedOperationException(MessageFormat.format(Messages.VariableOperations_UnsupportedType,
+					element.getName(), element.getType() != null ? element.getType().getName() : null));
+		};
+	}
+
+	public static Variable<?> newVariable(final ITypedElement element, final String value) throws EvaluatorException {
+		return switch (element) {
+		case final VarDeclaration varDeclaration -> newVariable(varDeclaration, value);
+		case final Attribute attribute -> newVariable(attribute, value);
+		case final DirectlyDerivedType directlyDerivedType -> newVariable(directlyDerivedType, value);
+		default ->
+			throw new UnsupportedOperationException(MessageFormat.format(Messages.VariableOperations_UnsupportedType,
+					element.getName(), element.getType() != null ? element.getType().getName() : null));
+		};
 	}
 
 	public static Variable<?> newVariable(final VarDeclaration varDeclaration) throws EvaluatorException {
@@ -160,6 +184,11 @@ public final class VariableOperations {
 		return newVariable(attribute.getName(), attribute.getType());
 	}
 
+	public static Variable<?> newVariable(final Attribute attribute, final String initialValue)
+			throws EvaluatorException {
+		return newVariable(withValue(attribute, initialValue));
+	}
+
 	public static Variable<?> newVariable(final DirectlyDerivedType type) throws EvaluatorException {
 		if (hasInitialValue(type)) {
 			try {
@@ -174,6 +203,11 @@ public final class VariableOperations {
 			}
 		}
 		return newVariable(type.getName(), type.getBaseType());
+	}
+
+	public static Variable<?> newVariable(final DirectlyDerivedType type, final String initialValue)
+			throws EvaluatorException {
+		return newVariable(withValue(type, initialValue));
 	}
 
 	public static INamedElement evaluateResultType(final VarDeclaration decl) throws EvaluatorException {
@@ -428,6 +462,18 @@ public final class VariableOperations {
 		copy.setValue(value);
 		if (varDeclaration.eResource() != null) {
 			new ResourceImpl(varDeclaration.eResource().getURI()).getContents().add(copy);
+		}
+		return copy;
+	}
+
+	private static Attribute withValue(final Attribute attribute, final String valueString) {
+		final Attribute copy = LibraryElementFactory.eINSTANCE.createAttribute();
+		copy.setName(attribute.getName());
+		copy.setType(attribute.getType());
+		copy.setAttributeDeclaration(attribute.getAttributeDeclaration());
+		copy.setValue(valueString);
+		if (attribute.eResource() != null) {
+			new ResourceImpl(attribute.eResource().getURI()).getContents().add(copy);
 		}
 		return copy;
 	}
