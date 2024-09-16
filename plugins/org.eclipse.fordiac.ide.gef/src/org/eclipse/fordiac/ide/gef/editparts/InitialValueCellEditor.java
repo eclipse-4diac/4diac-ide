@@ -36,4 +36,8 @@ public class InitialValueCellEditor extends XtextStyledTextCellEditor {
 	protected IEditedResourceProvider createEditedResourceProvider() {
 		return new STAlgorithmInitialValueEditedResourceProvider(varDeclaration);
 	}
+
+	public VarDeclaration getVarDeclaration() {
+		return varDeclaration;
+	}
 }

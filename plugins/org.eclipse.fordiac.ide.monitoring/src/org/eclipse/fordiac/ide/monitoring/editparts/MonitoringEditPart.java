@@ -25,7 +25,6 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -41,7 +40,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
-import org.eclipse.fordiac.ide.monitoring.model.StructMonitoringHelper;
 import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesValueEditingSupport;
 import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNodeUtils;
@@ -53,11 +51,8 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
-import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
 public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
@@ -65,8 +60,7 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 	private static class MonitoringDirectEditPolicy extends DirectEditPolicy {
 		@Override
 		protected Command getDirectEditCommand(final DirectEditRequest request) {
-			String value = (String) request.getCellEditor().getValue();
-			value = StructMonitoringHelper.removeFormatting(value);
+			final String value = (String) request.getCellEditor().getValue();
 			applyNewValue(value);
 			return null;
 		}
@@ -90,28 +84,6 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 				editPart.getNameLabel().setText(value);
 			}
 		}
-	}
-
-	private static class StructFigureCellEditorLocator implements CellEditorLocator {
-
-		private static final int EDITOR_SIZE = 300;
-
-		private final IFigure figure;
-
-		public StructFigureCellEditorLocator(final IFigure figure) {
-			this.figure = figure;
-		}
-
-		@Override
-		public void relocate(final CellEditor celleditor) {
-			if (null != celleditor) {
-				final Control control = celleditor.getControl();
-				final Rectangle rect = figure.getClientArea();
-				figure.translateToAbsolute(rect);
-				control.setBounds(rect.x, rect.y, EDITOR_SIZE, EDITOR_SIZE);
-			}
-		}
-
 	}
 
 	/** The property change listener. */
@@ -239,10 +211,8 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 	public DirectEditManager createDirectEditManager() {
 		final IInterfaceElement interfaceElement = getInterfaceElement();
 		if (interfaceElement instanceof final VarDeclaration varDecl) {
-			return new MonitoringValueDirectEditManager(this,
-					isStruct() ? new StructFigureCellEditorLocator(getFigure())
-							: new FigureCellEditorLocator(getFigure()),
-					varDecl, getModel());
+			return new MonitoringValueDirectEditManager(this, new FigureCellEditorLocator(getFigure()), varDecl,
+					getModel());
 		}
 		return super.createDirectEditManager();
 	}

@@ -13,16 +13,14 @@
 package org.eclipse.fordiac.ide.monitoring.editparts;
 
 import org.eclipse.fordiac.ide.gef.editparts.InitialValueCellEditor;
+import org.eclipse.fordiac.ide.gef.editparts.InitialValueStructuredCellEditor;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
-import org.eclipse.fordiac.ide.monitoring.model.StructMonitoringHelper;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Composite;
 
 public class MonitoringValueDirectEditManager extends TextDirectEditManager {
@@ -38,8 +36,8 @@ public class MonitoringValueDirectEditManager extends TextDirectEditManager {
 
 	@Override
 	protected CellEditor createCellEditorOn(final Composite composite) {
-		if (varDeclaration.getType() instanceof StructuredType) {
-			return new InitialValueCellEditor(composite, varDeclaration, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		if (varDeclaration.getType() instanceof StructuredType || varDeclaration.isArray()) {
+			return new InitialValueStructuredCellEditor(composite, varDeclaration);
 		}
 		return new InitialValueCellEditor(composite, varDeclaration);
 	}
@@ -47,20 +45,9 @@ public class MonitoringValueDirectEditManager extends TextDirectEditManager {
 	@Override
 	protected void initCellEditor() {
 		super.initCellEditor();
-		String currentValue = monitoringElement.getCurrentValue();
-		if (varDeclaration.getType() instanceof StructuredType) {
-			currentValue = StructMonitoringHelper.format(currentValue);
-		}
+		final String currentValue = monitoringElement.getCurrentValue();
 		if (currentValue != null) {
 			getCellEditor().setValue(currentValue);
-		}
-	}
-
-	@Override
-	public void show() {
-		super.show();
-		if (varDeclaration.getType() instanceof StructuredType) {
-			((StyledText) getCellEditor().getControl()).setSelection(0);
 		}
 	}
 }
