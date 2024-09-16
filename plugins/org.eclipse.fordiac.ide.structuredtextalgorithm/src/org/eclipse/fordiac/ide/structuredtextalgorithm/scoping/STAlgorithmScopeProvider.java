@@ -18,7 +18,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
@@ -43,7 +42,7 @@ public class STAlgorithmScopeProvider extends AbstractSTAlgorithmScopeProvider {
 	public IScope getScope(final EObject context, final EReference reference) {
 		if (reference == STAlgorithmPackage.Literals.ST_METHOD__RETURN_TYPE) {
 			final IScope globalScope = this.delegateGetScope(context, reference);
-			return STCoreScopeProvider.scopeFor(DataTypeLibrary.getNonUserDefinedDataTypes(), globalScope);
+			return scopeForNonUserDefinedDataTypes(globalScope);
 		}
 		if (reference == STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE) {
 			final STExpression receiver = STCoreScopeProvider.getReceiver(context);
@@ -52,9 +51,8 @@ public class STAlgorithmScopeProvider extends AbstractSTAlgorithmScopeProvider {
 				if (feature == STBuiltinFeature.THIS) {
 					final STAlgorithmSource source = EcoreUtil2.getContainerOfType(context, STAlgorithmSource.class);
 					if (source != null) {
-						return STCoreScopeProvider.scopeFor(
-								source.getElements().stream().filter(STMethod.class::isInstance).toList(),
-								super.getScope(context, reference));
+						return qualifiedScope(source.getElements().stream().filter(STMethod.class::isInstance).toList(),
+								reference, super.getScope(context, reference));
 					}
 				}
 			}
