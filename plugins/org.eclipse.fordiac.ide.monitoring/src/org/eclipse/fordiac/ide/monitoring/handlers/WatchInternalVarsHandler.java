@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -25,6 +26,7 @@ import org.eclipse.fordiac.ide.model.monitoring.InternalVarInstance;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManagerUtils;
+import org.eclipse.fordiac.ide.monitoring.SystemMonitoringData;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISources;
@@ -73,6 +75,12 @@ public class WatchInternalVarsHandler extends AbstractAddWatchesHandler {
 				}
 			}
 		}
+	}
+
+	@Override
+	protected boolean isPortMonitored(final MonitoringManager manager, final PortElement port) {
+		final SystemMonitoringData monitoringData = manager.getSystemMonitoringData(port.getSystem());
+		return monitoringData.getMonitoringElementByPortString(port.getPortString()) != null;
 	}
 
 	public static InternalVarInstance createInternalVarInstance(final FB fb, final VarDeclaration internalVar) {

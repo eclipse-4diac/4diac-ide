@@ -97,7 +97,7 @@ public abstract class AbstractAddWatchesHandler extends AbstractMonitoringHandle
 
 		element.setPort(port);
 
-		if (!manager.containsPort(port.getInterfaceElement())) {
+		if (!isPortMonitored(manager, port)) {
 			manager.addMonitoringElement(element);
 		}
 		if (port instanceof AdapterPortElement) {
@@ -105,6 +105,11 @@ public abstract class AbstractAddWatchesHandler extends AbstractMonitoringHandle
 			createMonitoringElementsForAdapterInterface(manager, adpaterElement);
 		}
 		return element;
+	}
+
+	@SuppressWarnings("static-method") // allow subclasses to override
+	protected boolean isPortMonitored(final MonitoringManager manager, final PortElement port) {
+		return manager.containsPort(port.getInterfaceElement());
 	}
 
 	private static void createMonitoredAdpaterFBView(final MonitoringAdapterElement adpaterElement) {
