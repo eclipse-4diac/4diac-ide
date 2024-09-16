@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -38,15 +39,16 @@ public class RestrictedNewTypeWizard extends NewTypeWizard {
 		return new NewFBTypeWizardPage(new StructuredSelection());
 	}
 
-	public static TypeEntry showRestrictedNewTypeWizard(final Shell shell, final String name, final String fileEnding,
-			final String projectName) {
+	public static TypeEntry showRestrictedNewTypeWizard(final Shell shell, final String fullName,
+			final String fileEnding, final String projectName) {
 		final RestrictedNewTypeWizard wizard = new RestrictedNewTypeWizard();
 		final WizardDialog dialog = new WizardDialog(shell, wizard);
 		dialog.create();
 
 		final NewFBTypeWizardPage page = (NewFBTypeWizardPage) dialog.getCurrentPage();
 		page.setTemplateFileFilter(pathname -> pathname.getName().toUpperCase().endsWith(fileEnding.toUpperCase()));
-		page.setFileName(name);
+		page.setFileName(PackageNameHelper.extractPlainTypeName(fullName));
+		page.setPackageName(PackageNameHelper.extractPackageName(fullName));
 
 		final TableViewer tv = page.getTemplateViewer();
 		final Object selection = tv.getElementAt(0);

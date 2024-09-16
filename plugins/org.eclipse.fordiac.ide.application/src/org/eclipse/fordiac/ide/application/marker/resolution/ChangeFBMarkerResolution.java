@@ -20,8 +20,8 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
@@ -33,7 +33,7 @@ import org.eclipse.ui.PlatformUI;
 
 public class ChangeFBMarkerResolution extends AbstractErrorMarkerResolution {
 
-	private TypeEntry newEntry;
+	private TypeEntry selectedEntry;
 	private boolean canceled = false;
 
 	public ChangeFBMarkerResolution(final IMarker marker) {
@@ -46,32 +46,31 @@ public class ChangeFBMarkerResolution extends AbstractErrorMarkerResolution {
 			return;
 		}
 
-		if (newEntry == null) {
-			createNewEntry();
+		if (selectedEntry == null) {
+			selectTypeEntry();
 		}
 
-		if (newEntry != null) {
+		if (selectedEntry != null) {
 			final EObject target = FordiacErrorMarker.getTarget(marker);
-			if (target instanceof final ErrorMarkerFBNElement err) {
-				AbstractLiveSearchContext.executeAndSave(new UpdateFBTypeCommand(err, newEntry), err,
-						new NullProgressMonitor());
-			}
 			if (target instanceof final FB fb && fb.eContainer() instanceof final BaseFBType base
 					&& base.getInternalFbs().contains(fb)) {
-				AbstractLiveSearchContext.executeAndSave(new UpdateInternalFBCommand(fb, newEntry), fb,
+				AbstractLiveSearchContext.executeAndSave(new UpdateInternalFBCommand(fb, selectedEntry), fb,
+						new NullProgressMonitor());
+			} else if (target instanceof final FBNetworkElement fbne) {
+				AbstractLiveSearchContext.executeAndSave(new UpdateFBTypeCommand(fbne, selectedEntry), fbne,
 						new NullProgressMonitor());
 			}
 		}
 	}
 
-	private void createNewEntry() {
+	private void selectTypeEntry() {
 		final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 				FBTypeSelectionTreeContentProvider.INSTANCE);
 		dialog.setInput(getTypeLibrary());
 		if (dialog.open() == Window.OK && dialog.getFirstResult() instanceof final TypeNode node
 				&& !node.isDirectory()) {
-			newEntry = node.getType().getTypeEntry();
+			selectedEntry = node.getTypeEntry();
 		} else {
 			canceled = true;
 		}
