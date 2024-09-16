@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
-import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestPinHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
@@ -189,7 +189,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 	@Order(9)
 	public void changeECTransitionConditionExpression() {
 		final SWTBotGefEditPart part = editor
-				.getEditPart(UITestNamesHelper.INIT + "[" + UITestNamesHelper.TRUE + " = " + PinNamesHelper.QI + "]");
+				.getEditPart(UITestNamesHelper.INIT + "[" + UITestNamesHelper.TRUE + " = " + UITestPinHelper.QI + "]");
 		editor.select(part);
 		final SWTBot propertiesBot = selectTabFromECCProperties(UITestNamesHelper.TRANSITION);
 		assertNotNull(propertiesBot);
@@ -197,13 +197,13 @@ public class ECCEditorTests extends Abstract4diacUITests {
 		propertiesBot.ccomboBoxWithLabel(UITestNamesHelper.CONDITION_LABEL).setSelection(UITestNamesHelper.REQ);
 
 		propertiesBot.styledTextWithLabel(UITestNamesHelper.CONDITION_LABEL)
-				.setText(UITestNamesHelper.TRUE + " = " + PinNamesHelper.QO);
+				.setText(UITestNamesHelper.TRUE + " = " + UITestPinHelper.QO);
 		assertEquals(propertiesBot.styledTextWithLabel(UITestNamesHelper.CONDITION_LABEL).getText(),
-				UITestNamesHelper.TRUE + " = " + PinNamesHelper.QO);
+				UITestNamesHelper.TRUE + " = " + UITestPinHelper.QO);
 		assertNull(editor
-				.getEditPart(UITestNamesHelper.INIT + "[" + UITestNamesHelper.TRUE + " = " + PinNamesHelper.QI + "]"));
+				.getEditPart(UITestNamesHelper.INIT + "[" + UITestNamesHelper.TRUE + " = " + UITestPinHelper.QI + "]"));
 		assertNotNull(editor
-				.getEditPart(UITestNamesHelper.REQ + "[" + UITestNamesHelper.TRUE + " = " + PinNamesHelper.QO + "]"));
+				.getEditPart(UITestNamesHelper.REQ + "[" + UITestNamesHelper.TRUE + " = " + UITestPinHelper.QO + "]"));
 
 	}
 
@@ -216,7 +216,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 	@Order(10)
 	public void changeECTransitionComment() {
 		final SWTBotGefEditPart part = editor
-				.getEditPart(UITestNamesHelper.REQ + "[" + UITestNamesHelper.TRUE + " = " + PinNamesHelper.QO + "]");
+				.getEditPart(UITestNamesHelper.REQ + "[" + UITestNamesHelper.TRUE + " = " + UITestPinHelper.QO + "]");
 		editor.select(part);
 		final SWTBot propertiesBot = selectTabFromECCProperties(UITestNamesHelper.TRANSITION);
 		assertNotNull(propertiesBot);
@@ -280,7 +280,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 	public void tryToInvalidECTransitionConditionExpression() {
 		// Select the EC transition part
 		final SWTBotGefEditPart part = editor
-				.getEditPart(UITestNamesHelper.REQ + "[" + UITestNamesHelper.TRUE + " = " + PinNamesHelper.QO + "]");
+				.getEditPart(UITestNamesHelper.REQ + "[" + UITestNamesHelper.TRUE + " = " + UITestPinHelper.QO + "]");
 		editor.select(part);
 
 		// Access the Transition tab and set an invalid condition
@@ -288,17 +288,17 @@ public class ECCEditorTests extends Abstract4diacUITests {
 		assertNotNull(propertiesBot);
 		propertiesBot.ccomboBoxWithLabel(UITestNamesHelper.CONDITION_LABEL).setSelection(UITestNamesHelper.INIT);
 		propertiesBot.styledTextWithLabel(UITestNamesHelper.CONDITION_LABEL)
-				.setText(UITestNamesHelper.TRUE + " = " + PinNamesHelper.AB);
+				.setText(UITestNamesHelper.TRUE + " = " + UITestPinHelper.AB);
 
 		// Validate the new condition expression
 		assertEquals(propertiesBot.styledTextWithLabel(UITestNamesHelper.CONDITION_LABEL).getText(),
-				UITestNamesHelper.TRUE + " = " + PinNamesHelper.AB);
+				UITestNamesHelper.TRUE + " = " + UITestPinHelper.AB);
 
 		// Verify that the transition part is correctly updated
 		assertNull(editor
-				.getEditPart(UITestNamesHelper.REQ + "[" + UITestNamesHelper.TRUE + " = " + PinNamesHelper.QO + "]"));
+				.getEditPart(UITestNamesHelper.REQ + "[" + UITestNamesHelper.TRUE + " = " + UITestPinHelper.QO + "]"));
 		assertNotNull(editor
-				.getEditPart(UITestNamesHelper.INIT + "[" + UITestNamesHelper.TRUE + " = " + PinNamesHelper.AB + "]"));
+				.getEditPart(UITestNamesHelper.INIT + "[" + UITestNamesHelper.TRUE + " = " + UITestPinHelper.AB + "]"));
 	}
 
 	/**
@@ -378,7 +378,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 	public void deleteTransition() {
 		// Select the transition part and focus on it
 		final SWTBotGefEditPart part = editor
-				.getEditPart(UITestNamesHelper.INIT + "[" + UITestNamesHelper.TRUE + " = " + PinNamesHelper.AB + "]");
+				.getEditPart(UITestNamesHelper.INIT + "[" + UITestNamesHelper.TRUE + " = " + UITestPinHelper.AB + "]");
 		editor.select(part);
 		assertNotNull(part);
 
@@ -389,7 +389,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 
 		// Verify that the transition part is successfully deleted
 		assertNull(editor
-				.getEditPart(UITestNamesHelper.INIT + "[" + UITestNamesHelper.TRUE + " = " + PinNamesHelper.AB + "]"));
+				.getEditPart(UITestNamesHelper.INIT + "[" + UITestNamesHelper.TRUE + " = " + UITestPinHelper.AB + "]"));
 	}
 
 	/**

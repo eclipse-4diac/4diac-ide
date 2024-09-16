@@ -29,7 +29,7 @@ import org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyList;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
-public class PropertySheetHelper {
+public class SWTBotPropertySheet {
 
 	/**
 	 * SWTWorkbenchBot
