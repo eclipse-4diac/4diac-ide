@@ -23,6 +23,8 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.swt.SWT;
@@ -40,6 +42,12 @@ public final class InitialValueHelper {
 			if (hasInitalValue(element)) {
 				return varDec.getValue().getValue();
 			}
+
+			final String typeInitialValue = getTypeInitialValue(varDec);
+			if (!typeInitialValue.isBlank()) {
+				return typeInitialValue;
+			}
+
 			if (hasDataTypeInitialValue(varDec)) {
 				return getMemberVarValue(varDec);
 			}
@@ -55,6 +63,18 @@ public final class InitialValueHelper {
 			return getDefaultValue(element);
 		}
 		// no default value for error markers
+		return ""; //$NON-NLS-1$
+	}
+
+	private static String getTypeInitialValue(final VarDeclaration varDec) {
+		final FBNetworkElement fbnEl = varDec.getFBNetworkElement();
+		if (fbnEl != null && fbnEl.getType() != null) {
+			// we have a typed parent
+			final IInterfaceElement typeVar = fbnEl.getType().getInterfaceList().getInterfaceElement(varDec.getName());
+			if (typeVar instanceof final VarDeclaration typeVarDecl && typeVarDecl.getValue() != null) {
+				return typeVarDecl.getValue().getValue();
+			}
+		}
 		return ""; //$NON-NLS-1$
 	}
 
