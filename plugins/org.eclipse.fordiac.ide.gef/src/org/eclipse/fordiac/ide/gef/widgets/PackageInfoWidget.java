@@ -172,6 +172,8 @@ public class PackageInfoWidget extends TypeInfoWidget {
 	}
 
 	public void refreshAnnotations() {
+		final Consumer<Command> commandExecutorBuffer = getCommandExecutor();
+		setCommandExecutor(null);
 		final GraphicalAnnotationModel annotationModel = annotationModelSupplier.get();
 		final CompilerInfo compilerInfo = getType().getCompilerInfo();
 		final StyledString nameStyledString = new StyledString(PackageNameHelper.getPackageName(getType()),
@@ -186,6 +188,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		nameText.setSelection(nameTextSelection);
 		nameText.setCaretOffset(caretOffset);
 		packageViewer.refresh();
+		setCommandExecutor(commandExecutorBuffer);
 	}
 
 	@Override
