@@ -18,8 +18,11 @@ package org.eclipse.fordiac.ide.debug.ui.view.editparts;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.fordiac.ide.debug.ui.view.policies.InterfaceValueDirectEditPolicy;
+import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
+import org.eclipse.fordiac.ide.gef.editparts.InitialValueDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -63,8 +66,12 @@ public class InterfaceValueEditPart extends AbstractDebugInterfaceValueEditPart 
 	}
 
 	private void performDirectEdit() {
-		final var labelDirectEditManager = new LabelDirectEditManager(this, getLabelFigure());
-		labelDirectEditManager.show();
+		if (getModel().getInterfaceElement() instanceof final VarDeclaration varDecl) {
+			new InitialValueDirectEditManager(this, new FigureCellEditorLocator(getLabelFigure()), varDecl,
+					getLabelFigure().getText()).show();
+		} else {
+			new LabelDirectEditManager(this, getLabelFigure()).show();
+		}
 	}
 
 	public void updateValue() {
