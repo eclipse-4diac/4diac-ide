@@ -41,13 +41,13 @@
 			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
 			<VarDeclaration Name="SECTION" Type="STRING" Comment=""/>
 			<VarDeclaration Name="KEY" Type="STRING" Comment="Key name."/>
-			<VarDeclaration Name="VALUE" Type="ANY" Comment="The value to set."/>
-			<VarDeclaration Name="DEFAULT_VALUE" Type="ANY" Comment="The value to read if there is noting in the settings.ini"/>
+			<VarDeclaration Name="VALUE" Type="ANY_ELEMENTARY" Comment="The value to set."/>
+			<VarDeclaration Name="DEFAULT_VALUE" Type="ANY_ELEMENTARY" Comment="The value to read if there is noting in the settings.ini"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
 			<VarDeclaration Name="STATUS" Type="STRING" Comment="Service Status"/>
-			<VarDeclaration Name="VALUEO" Type="ANY" Comment="The output value"/>
+			<VarDeclaration Name="VALUEO" Type="ANY_ELEMENTARY" Comment="The output value"/>
 		</OutputVars>
 	</InterfaceList>
 </FBType>
