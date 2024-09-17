@@ -32,6 +32,7 @@ Export-Package: org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.typemanagement.navigator,
  org.eclipse.fordiac.ide.typemanagement.preferences,
  org.eclipse.fordiac.ide.typemanagement.refactoring,
+ org.eclipse.fordiac.ide.typemanagement.refactoring.copy,
  org.eclipse.fordiac.ide.typemanagement.refactoring.rename,
  org.eclipse.fordiac.ide.typemanagement.util,
  org.eclipse.fordiac.ide.typemanagement.wizards

@@ -769,7 +769,65 @@
          </command>
       </menuContribution>
    </extension>
-       <extension
+<!--	<extension point="org.eclipse.ltk.core.refactoring.copyParticipants">
+    <copyParticipant
+          class="org.eclipse.fordiac.ide.typemanagement.refactoring.copy.CopyStructRefactoringParticipant"
+          id="org.eclipse.fordiac.ide.typemanagement.copyStruct"
+          name="Rename Structs handler">
+    	<enablement>
+            <and>
+				<instanceof 
+					value="org.eclipse.core.resources.IFile">
+                </instanceof>
+                <test
+					forcePluginActivation="true"
+                    property="org.eclipse.core.resources.extension"
+                    value="dtp">
+				</test>
+			</and>
+		</enablement>
+	</copyParticipant>
+	</extension>-->
+ <extension
+       point="org.eclipse.ltk.core.refactoring.copyParticipants">
+    <copyParticipant
+          class="org.eclipse.fordiac.ide.typemanagement.refactoring.copy.CopyStructRefactoringParticipant"
+          id="org.eclipse.fordiac.ide.typemanagement.copyStruct"
+          name="Copy Structs (.dtp) handler">
+       <enablement>
+          <and>
+             <instanceof
+                   value="org.eclipse.core.resources.IFile">
+             </instanceof>
+             <test
+                   forcePluginActivation="true"
+                   property="org.eclipse.core.resources.extension"
+                   value="dtp">
+             </test>
+          </and>
+       </enablement>
+    </copyParticipant>
+ </extension>
+ <extension
+       point="org.eclipse.ltk.core.refactoring.deleteParticipants">
+    <deleteParticipant
+          class="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.TestDeleteParticipant"
+          id="org.eclipse.fordiac.ide.typemanagement.testDeleteX"
+          name="This a TeSt">
+       <enablement>
+          <and>
+             <instanceof
+                   value="org.eclipse.core.resources.IFile">
+             </instanceof>
+             <test
+                   forcePluginActivation="true"
+                   property="org.eclipse.core.resources.extension"
+                   value="dtp">
+             </test>
+          </and></enablement>
+    </deleteParticipant>
+ </extension>
+        <extension
              point="org.eclipse.ltk.core.refactoring.refactoringContributions">
-       </extension>   
+       </extension>>
 </plugin>

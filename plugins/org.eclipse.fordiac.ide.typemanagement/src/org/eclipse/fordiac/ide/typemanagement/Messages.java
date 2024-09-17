@@ -172,6 +172,8 @@ public final class Messages extends NLS {
 
 	public static String UpdateUntypedSubappPinChange_0;
 
+	public static String CopyStruct_Change_Name;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
