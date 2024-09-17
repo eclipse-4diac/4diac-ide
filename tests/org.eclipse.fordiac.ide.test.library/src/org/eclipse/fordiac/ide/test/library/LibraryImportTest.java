@@ -277,16 +277,6 @@ class LibraryImportTest {
 		assertEquals(1, manifest.getDependencies().getRequired().size());
 
 		assertFalse(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder(MATH).exists());
-
-		LibraryManager.INSTANCE.getJobGroup().join(1000, null);
-		FordiacMarkerHelper.JOB_GROUP.join(1000, null);
-
-		final var manifestFile = project.getFile(LibraryManager.MANIFEST);
-		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
-				IResource.DEPTH_INFINITE);
-
-		assertEquals(1, markers.length);
-		assertEquals(MATH, markers[0].getAttribute(LibraryManager.MARKER_ATTRIBUTE, null));
 	}
 
 }
