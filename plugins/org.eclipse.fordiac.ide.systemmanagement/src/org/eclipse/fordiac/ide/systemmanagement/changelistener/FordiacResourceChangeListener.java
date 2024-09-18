@@ -56,7 +56,10 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -260,11 +263,44 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(file.getProject())) {
 			return;
 		}
+
 		if (file.getProject().isOpen() && delta.getFlags() != IResourceDelta.MARKERS) {
 			final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
 			final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+
 			if (typeEntryForFile == null) {
 				final TypeEntry entry = typeLib.createTypeEntry(file);
+
+				if (fileExists(file, delta) && file.getName().endsWith(".dtp")) { //$NON-NLS-1$
+					Display.getDefault().asyncExec(() -> {
+						final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+						final InputDialog renameDialog = new InputDialog(shell,
+								Messages.FordiacResourceChangeListener_CopyConflictTitle,
+								Messages.FordiacResourceChangeListener_CopyConflictBody + file.getName() + "'", //$NON-NLS-1$
+								file.getName(), null);
+
+						if (renameDialog.open() == Window.OK && !renameDialog.getValue().equals(file.getName())) {
+							final String newFileName = renameDialog.getValue();
+							final IFile newFile = file.getParent().getFile(new Path(newFileName));
+
+							try {
+								file.move(newFile.getFullPath(), true, new NullProgressMonitor());
+								updateTypeEntryByRename(newFile, entry);
+								filesToRename.add(new FileToRenameEntry(newFile, entry));
+							} catch (final CoreException e) {
+								FordiacLogHelper.logError(e.getMessage(), e);
+							}
+						} else {
+							try {
+								file.delete(true, new NullProgressMonitor());
+							} catch (final CoreException e) {
+								e.printStackTrace();
+							}
+						}
+					});
+					return;
+				}
+
 				if (null != entry && containedTypeNameIsDifferent(file)) {
 					// we only need to update the type entry if the file content is different from
 					// the file name
@@ -272,6 +308,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					// opened or imported
 					updateTypeEntry(file, entry);
 				}
+
 			} else if (!file.equals(typeEntryForFile.getFile())) {
 				// After a file has been copied and the copied file is not the same as the
 				// founded type entry
@@ -280,6 +317,20 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				filesToRename.add(new FileToRenameEntry(file, typeEntryForFile));
 			}
 		}
+	}
+
+	private boolean fileExists(final IFile file, final IResourceDelta delta) {
+		if (delta.getResource().getName().equals(file.getName())) {
+			return true;
+		}
+
+		final IResourceDelta[] affectedChildren = delta.getAffectedChildren();
+		for (final IResourceDelta childDelta : affectedChildren) {
+			if (fileExists(file, childDelta)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static void autoRenameExistingType(final FileToRenameEntry entry) {
