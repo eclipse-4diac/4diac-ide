@@ -241,6 +241,20 @@ class VariableOperationTest extends AbstractEvaluatorTest {
 	}
 
 	@Test
+	void testNewVariableForAttributeWithValue() {
+		assertVariableEquals("TestStructAttribute",
+				new StructValue((StructuredType) attributeDeclaration1.getType(),
+						Map.of("a", toDIntValue(1), "b", toDIntValue(2))),
+				VariableOperations.newVariable(attribute1, "(a:=1,b:=2)"));
+		assertVariableEquals("TestStructAttribute",
+				new StructValue((StructuredType) attributeDeclaration1.getType(),
+						Map.of("a", toDIntValue(1), "b", toDIntValue(2))),
+				VariableOperations.newVariable(attribute2, "(a:=1,b:=2)"));
+		assertVariableEquals("TestDerivedAttribute", toDIntValue(1), VariableOperations.newVariable(attribute3, "1"));
+		assertVariableEquals("TestDerivedAttribute", toDIntValue(2), VariableOperations.newVariable(attribute4, "2"));
+	}
+
+	@Test
 	void testNewVariableForDirectlyDerivedType() {
 		assertVariableEquals("TestDerivedType1", toDIntValue(0), VariableOperations.newVariable(directlyDerivedType1));
 		assertVariableEquals("TestDerivedType2", toDIntValue(17), VariableOperations.newVariable(directlyDerivedType2));
@@ -248,6 +262,14 @@ class VariableOperationTest extends AbstractEvaluatorTest {
 		assertEquals("The variable error is undefined",
 				assertThrows(IllegalArgumentException.class, () -> VariableOperations.newVariable(directlyDerivedType4))
 						.getMessage());
+	}
+
+	@Test
+	void testNewVariableForDirectlyDerivedTypeWithValue() {
+		assertVariableEquals("TestDerivedType1", toDIntValue(1),
+				VariableOperations.newVariable(directlyDerivedType1, "1"));
+		assertEquals("The variable error is undefined", assertThrows(IllegalArgumentException.class,
+				() -> VariableOperations.newVariable(directlyDerivedType1, "error")).getMessage());
 	}
 
 	@Test
