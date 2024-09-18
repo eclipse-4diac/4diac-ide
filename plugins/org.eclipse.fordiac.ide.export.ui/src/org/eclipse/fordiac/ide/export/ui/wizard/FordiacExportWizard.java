@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -93,7 +92,8 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		final Exporter exporter = new Exporter(page.getSelectedExportFilter(), exportees, page.getDirectory(),
 				page.overwriteWithoutWarning(), page.enableCMakeLists());
 		try {
-			new ProgressMonitorDialog(getShell()).run(true, false, exporter);
+			setNeedsProgressMonitor(true);
+			getContainer().run(true, true, exporter);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt(); // mark interruption
 			showExceptionErrorDialog(e);
@@ -141,13 +141,19 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 			final IExportFilter filter = createExportFilter();
 			if (null != filter) {
 				for (final IFile file : exportees) {
+					if (monitor.isCanceled()) {
+						break;
+					}
 					exportElement(monitor, filter, file, null);
 					monitor.worked(1);
 				}
-				if (enableCMakeLists) {
+				if (enableCMakeLists && !monitor.isCanceled()) {
 					exportElement(monitor, filter, null, new CMakeListsMarker());
 				}
 				monitor.worked(1);
+				if (monitor.isCanceled()) {
+					filter.getErrors().add(Messages.FordiacExportWizard_EXPORT_CANCELED);
+				}
 				Display.getDefault().asyncExec(() -> showErrorWarningSummary(filter));
 			}
 			monitor.done();

@@ -78,11 +78,15 @@ public class UpdateUntypedSubappPinChange extends AbstractCommandChange<VarDecla
 
 		}
 		if (state.contains(ChangeState.CHANGE_TO_ANY)) {
-			return ChangeDataTypeCommand.forDataType(varDecl, IecTypes.GenericTypes.ANY_STRUCT);
+			final var cmd = ChangeDataTypeCommand.forDataType(varDecl, IecTypes.GenericTypes.ANY_STRUCT);
+			cmd.setIgnoreConnections(true);
+			return cmd;
 		}
 
 		if (state.contains(ChangeState.NO_CHANGE)) {
-			return ChangeDataTypeCommand.forDataType(varDecl, varDecl.getType());
+			final var cmd = ChangeDataTypeCommand.forDataType(varDecl, varDecl.getType());
+			cmd.setIgnoreConnections(true);
+			return cmd;
 		}
 		return null;
 	}
@@ -91,8 +95,8 @@ public class UpdateUntypedSubappPinChange extends AbstractCommandChange<VarDecla
 	public RefactoringStatus isValid(final VarDeclaration element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
-		if (!(element.eContainer() instanceof UntypedSubApp)) {
-			status.addFatalError(Messages.UpdateUntypedSubappPinChange_0);
+		if (!(element.eContainer() != null && element.eContainer().eContainer() instanceof UntypedSubApp)) {
+			status.addFatalError(element.getQualifiedName() + Messages.UpdateUntypedSubappPinChange_0);
 		}
 		return status;
 	}

@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
@@ -152,8 +153,10 @@ public class TypeSelectionWidget {
 					PackageNameHelper.getContainerPackageName(type), ImportHelper.getContainerImports(type));
 			tableViewer.setInput(new String[] { newName });
 			resizeTextField();
-		} else if (type instanceof IInterfaceElement) {
-			tableViewer.setInput(new String[] { ((IInterfaceElement) configurableObject).getType().getName() });
+		} else if (type instanceof final VarDeclaration varDecl) {
+			tableViewer.setInput(new String[] { InterfaceElementAnnotations.getFullTypeName(varDecl) });
+		} else if (type instanceof final IInterfaceElement interfaceElement) {
+			tableViewer.setInput(new String[] { interfaceElement.getType().getName() });
 		} else if (type instanceof final ConfigurableMoveFB moveFb) {
 			if (moveFb.getDataType() == null) {
 				tableViewer.setInput(new String[] { IecTypes.GenericTypes.ANY.getName() });
@@ -169,7 +172,9 @@ public class TypeSelectionWidget {
 	}
 
 	public void refresh() {
-		if (configurableObject instanceof final IInterfaceElement iel) {
+		if (configurableObject instanceof final VarDeclaration varDecl) {
+			tableViewer.setInput(new String[] { InterfaceElementAnnotations.getFullTypeName(varDecl) });
+		} else if (configurableObject instanceof final IInterfaceElement iel) {
 			tableViewer.setInput(new String[] { iel.getType().getName() });
 		}
 		disableOpenEditorForAnyType();

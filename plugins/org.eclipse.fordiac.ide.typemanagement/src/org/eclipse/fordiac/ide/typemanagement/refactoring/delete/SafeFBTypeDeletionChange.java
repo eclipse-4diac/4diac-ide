@@ -39,7 +39,7 @@ import org.eclipse.ltk.core.refactoring.CompositeChange;
 public class SafeFBTypeDeletionChange extends CompositeChange {
 
 	public SafeFBTypeDeletionChange(final FBType type) {
-		super(Messages.DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle);
+		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle, type.getName()));
 		addUpdateChanges(this, type, true);
 	}
 

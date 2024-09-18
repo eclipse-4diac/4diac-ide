@@ -133,11 +133,14 @@ public abstract class TemplateExportFilter extends ExportFilter {
 				// create a message dialog to ask about merging if forceOverwrite is not set
 				final String msg = MessageFormat.format(Messages.TemplateExportFilter_OVERWRITE_REQUEST,
 						stringsToTextualList(files.getFilenames()));
-				final MessageDialog msgDiag = new MessageDialog(Display.getDefault().getActiveShell(),
-						Messages.TemplateExportFilter_FILE_EXISTS, null, msg, MessageDialog.QUESTION_WITH_CANCEL,
-						BUTTON_LABELS, 0);
 
-				res = msgDiag.open();
+				res = Display.getDefault().syncCall(() -> {
+					final MessageDialog msgDiag = new MessageDialog(Display.getDefault().getActiveShell(),
+							Messages.TemplateExportFilter_FILE_EXISTS, null, msg, MessageDialog.QUESTION_WITH_CANCEL,
+							BUTTON_LABELS, 0);
+					return Integer.valueOf(msgDiag.open());
+				}).intValue();
+
 			}
 
 			// from here on forceOverwrite and the BUTTON_OVERWRITE can be handled the same
@@ -188,7 +191,7 @@ public abstract class TemplateExportFilter extends ExportFilter {
 		if (null == opener) {
 			throw new ExportException(Messages.TemplateExportFilter_MERGE_EDITOR_FAILED);
 		}
-		boolean diffs = false;
+
 		for (final StoredFiles sf : writtenFiles) {
 			if ((null != sf.newFile()) && (null != sf.oldFile())) {
 				opener.setName(sf.newFile().getName());
@@ -196,17 +199,9 @@ public abstract class TemplateExportFilter extends ExportFilter {
 				opener.setNewFile(sf.newFile());
 				opener.setOriginalFile(sf.oldFile());
 				if (opener.hasDifferences()) {
-					opener.openCompareEditor();
-					diffs = true;
+					Display.getDefault().asyncExec(opener::openCompareEditor);
 				}
 			}
-		}
-
-		if (!diffs) {
-			// there were no differences - inform the user
-			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-					Messages.TemplateExportFilter_NO_DIFFERENCES_TITLE,
-					Messages.TemplateExportFilter_NO_DIFFERENCES_MESSAGE);
 		}
 	}
 

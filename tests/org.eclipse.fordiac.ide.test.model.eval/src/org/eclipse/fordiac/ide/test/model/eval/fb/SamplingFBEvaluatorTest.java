@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 import java.util.List;
 
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.fb.SamplingFBEvaluator;
@@ -28,7 +27,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-import org.eclipse.fordiac.ide.test.model.typelibrary.FBTypeEntryMock;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings({ "static-method", "squid:S5960", "nls" })
@@ -147,13 +145,12 @@ class SamplingFBEvaluatorTest extends AbstractFBEvaluatorTest {
 	}
 
 	SimpleFBType newTestSimpleFBType() {
-		final SimpleFBType simpleType = LibraryElementFactory.eINSTANCE.createSimpleFBType();
-		simpleType.setName("TestSimple");
-		simpleType.setInterfaceList(newInterfaceList(List.of(newEvent("REQ", true), newEvent("CNF", false)),
+		final SimpleFBType simpleType = newSimpleFBType("TestSimple",
+				List.of(newEvent("REQ", true), newEvent("CNF", false)),
 				List.of(newVarDeclaration("DI1", ElementaryTypes.DINT, true, "17"),
 						newVarDeclaration("DI2", ElementaryTypes.DINT, true, "4"),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false),
-						newVarDeclaration("DO2", ElementaryTypes.DINT, false))));
+						newVarDeclaration("DO2", ElementaryTypes.DINT, false)));
 		createWith(simpleType, "REQ", "DI1");
 		// no with for REQ and DI2
 		createWith(simpleType, "CNF", "DO1");
@@ -162,10 +159,6 @@ class SamplingFBEvaluatorTest extends AbstractFBEvaluatorTest {
 				DO1 := DI1 + DI2;
 				DO2 := DO1 * 2;
 				""", "REQ"));
-		final FBTypeEntryMock typeEntry = new FBTypeEntryMock(simpleType, typeLib, null);
-		simpleType.setTypeEntry(typeEntry);
-		typeLib.addTypeEntry(typeEntry);
-		new ResourceImpl().getContents().add(simpleType);
 		return simpleType;
 	}
 

@@ -126,9 +126,14 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	 * connections.
 	 */
 	public void layoutExpandedInterface() {
-		interfacePositions.calculate();
-		expandedInputFigure.getLayoutManager().layout(expandedInputFigure);
-		expandedOutputFigure.getLayoutManager().layout(expandedOutputFigure);
+		// During updates, especially from expanded to collapsed subapps, or saving as
+		// type, we my called here in intermediate states. If we don't have a parent we
+		// must not layout.
+		if (getParent() != null) {
+			interfacePositions.calculate();
+			expandedInputFigure.getLayoutManager().layout(expandedInputFigure);
+			expandedOutputFigure.getLayoutManager().layout(expandedOutputFigure);
+		}
 	}
 
 	public final void updateExpandedFigure() {

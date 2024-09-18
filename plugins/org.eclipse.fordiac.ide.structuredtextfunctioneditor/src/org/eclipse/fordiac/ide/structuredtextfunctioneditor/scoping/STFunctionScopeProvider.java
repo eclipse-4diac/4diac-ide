@@ -19,20 +19,23 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.scoping;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage;
 import org.eclipse.xtext.scoping.IScope;
 
-/** This class contains custom scoping description.
+/**
+ * This class contains custom scoping description.
  *
- * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#scoping on how and when to use it. */
+ * See
+ * https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#scoping
+ * on how and when to use it.
+ */
 public class STFunctionScopeProvider extends AbstractSTFunctionScopeProvider {
 	@Override
 	public IScope getScope(final EObject context, final EReference reference) {
 		if (reference == STFunctionPackage.Literals.ST_FUNCTION__RETURN_TYPE) {
 			final IScope globalScope = delegateGetScope(context, reference);
-			return scopeFor(DataTypeLibrary.getNonUserDefinedDataTypes(), globalScope);
+			return scopeForNonUserDefinedDataTypes(globalScope);
 		}
 		return super.getScope(context, reference);
 	}
@@ -40,7 +43,8 @@ public class STFunctionScopeProvider extends AbstractSTFunctionScopeProvider {
 	protected STFunction getFunction(final EObject context) {
 		if (context instanceof STFunction) {
 			return (STFunction) context;
-		} else if (context != null) {
+		}
+		if (context != null) {
 			return getFunction(context.eContainer());
 		}
 		return null;
