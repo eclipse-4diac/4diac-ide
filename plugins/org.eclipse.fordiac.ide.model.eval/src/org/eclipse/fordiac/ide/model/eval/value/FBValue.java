@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class FBValue implements Value, Iterable<Value> {
@@ -41,17 +42,27 @@ public final class FBValue implements Value, Iterable<Value> {
 	}
 
 	public FBValue(final FBType type, final Iterable<Variable<?>> variables) {
+		this(type, type.getInterfaceList(), variables);
+	}
+
+	public FBValue(final FB fb) {
+		this(fb, Collections.emptyList());
+	}
+
+	public FBValue(final FB fb, final Iterable<Variable<?>> variables) {
+		this(fb.getType(), fb.getInterface(), variables);
+	}
+
+	private FBValue(final FBType type, final InterfaceList interfaceList, final Iterable<Variable<?>> variables) {
 		this.type = type;
 		if (variables != null) {
 			variables.forEach(variable -> members.put(variable.getName(), variable));
 		}
-		type.getInterfaceList().getInputVars().forEach(this::initializeMember);
-		type.getInterfaceList().getInOutVars().forEach(this::initializeMember);
-		type.getInterfaceList().getOutputVars().forEach(this::initializeMember);
-		type.getInterfaceList().getSockets().stream().map(AdapterDeclaration::getAdapterFB)
-				.forEach(this::initializeMember);
-		type.getInterfaceList().getPlugs().stream().map(AdapterDeclaration::getAdapterFB)
-				.forEach(this::initializeMember);
+		interfaceList.getInputVars().forEach(this::initializeMember);
+		interfaceList.getInOutVars().forEach(this::initializeMember);
+		interfaceList.getOutputVars().forEach(this::initializeMember);
+		interfaceList.getSockets().stream().map(AdapterDeclaration::getAdapterFB).forEach(this::initializeMember);
+		interfaceList.getPlugs().stream().map(AdapterDeclaration::getAdapterFB).forEach(this::initializeMember);
 		if (type instanceof final BaseFBType baseFBType) {
 			baseFBType.getInternalConstVars().forEach(this::initializeMember);
 			baseFBType.getInternalVars().forEach(this::initializeMember);

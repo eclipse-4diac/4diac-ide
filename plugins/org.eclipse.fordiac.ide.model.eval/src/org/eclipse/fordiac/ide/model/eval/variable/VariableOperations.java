@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorCache;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.Messages;
+import org.eclipse.fordiac.ide.model.eval.value.FBValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
@@ -140,8 +141,8 @@ public final class VariableOperations {
 		return newVariable(varDeclaration.getName(), evaluateResultType(varDeclaration), value);
 	}
 
-	public static Variable<?> newVariable(final FB fb) {
-		return newVariable(fb.getName(), fb.getType());
+	public static FBVariable newVariable(final FB fb) {
+		return new FBVariable(fb.getName(), fb.getType(), new FBValue(fb));
 	}
 
 	public static Variable<?> newVariable(final Attribute attribute) throws EvaluatorException {
@@ -371,12 +372,9 @@ public final class VariableOperations {
 	}
 
 	public static boolean hasInheritedInitialValue(final VarDeclaration varDeclaration) {
-		final FBNetworkElement networkElement = varDeclaration.getFBNetworkElement();
-		if (networkElement != null) {
-			final VarDeclaration typeVariable = networkElement.getInterface().getVariable(varDeclaration.getName());
-			if (typeVariable != null) {
-				return hasDeclaredInitialValue(typeVariable);
-			}
+		final VarDeclaration typeVariable = getTypeVariable(varDeclaration);
+		if (typeVariable != null) {
+			return hasDeclaredInitialValue(typeVariable);
 		}
 		return false;
 	}
@@ -397,12 +395,9 @@ public final class VariableOperations {
 	}
 
 	public static String getInheritedInitialValue(final VarDeclaration varDeclaration) {
-		final FBNetworkElement networkElement = varDeclaration.getFBNetworkElement();
-		if (networkElement != null) {
-			final VarDeclaration typeVariable = networkElement.getInterface().getVariable(varDeclaration.getName());
-			if (typeVariable != null && hasDeclaredInitialValue(typeVariable)) {
-				return typeVariable.getValue().getValue();
-			}
+		final VarDeclaration typeVariable = getTypeVariable(varDeclaration);
+		if (typeVariable != null && hasDeclaredInitialValue(typeVariable)) {
+			return typeVariable.getValue().getValue();
 		}
 		return null;
 	}
@@ -410,12 +405,15 @@ public final class VariableOperations {
 	private static VarDeclaration getTypeVariable(final VarDeclaration varDeclaration) {
 		final FBNetworkElement networkElement = varDeclaration.getFBNetworkElement();
 		if (networkElement != null) {
-			final VarDeclaration typeVariable = networkElement.getInterface().getVariable(varDeclaration.getName());
-			if (typeVariable != null) {
-				return typeVariable;
+			final FBType type = networkElement.getType();
+			if (type != null) {
+				final VarDeclaration typeVariable = type.getInterfaceList().getVariable(varDeclaration.getName());
+				if (typeVariable != null) {
+					return typeVariable;
+				}
 			}
 		}
-		return varDeclaration;
+		return null;
 	}
 
 	private static VarDeclaration withValue(final VarDeclaration varDeclaration, final String valueString) {
