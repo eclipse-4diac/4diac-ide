@@ -50,7 +50,7 @@ public class CustomDragSourceListener extends AbstractTransferDragSourceListener
 	public void dragStart(final DragSourceEvent event) {
 		final Request req = createRequest(new Point(event.x, event.y));
 
-		if (!isAltKeyPressed() || req == null) {
+		if (req == null) {
 			event.doit = false;
 			lastReq = null;
 			return;
@@ -69,13 +69,6 @@ public class CustomDragSourceListener extends AbstractTransferDragSourceListener
 		super.dragFinished(event);
 		CustomSourceTransfer.getInstance().setObject(null);
 		lastReq = null;
-	}
-
-	private boolean isAltKeyPressed() {
-		final AdvancedGraphicalViewerKeyHandler keyHandler = (AdvancedGraphicalViewerKeyHandler) getViewer()
-				.getKeyHandler();
-
-		return (keyHandler.getCurrentStateMask() & SWT.ALT) != 0;
 	}
 
 	private boolean isCtrlKeyPressed() {
