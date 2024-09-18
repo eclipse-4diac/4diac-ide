@@ -686,7 +686,7 @@ public enum LibraryManager {
 
 		// download if checks were unsuccessful
 		final WorkspaceJob job = new WorkspaceJob(
-				"Download Library package: " + req.getSymbolicName() + " - " + req.getVersion()) { //$NON-NLS-1$//$NON-NLS-2$
+				MessageFormat.format(Messages.LibraryManager_DownloadJobName, req.getSymbolicName(), req.getVersion())) {
 
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
