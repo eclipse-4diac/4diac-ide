@@ -319,16 +319,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private boolean fileExists(final IFile file, final IResourceDelta delta) {
+	private static boolean fileExists(final IFile file, final IResourceDelta delta) {
 		if (delta.getResource().getName().equals(file.getName())) {
 			return true;
-		}
-
-		final IResourceDelta[] affectedChildren = delta.getAffectedChildren();
-		for (final IResourceDelta childDelta : affectedChildren) {
-			if (fileExists(file, childDelta)) {
-				return true;
-			}
 		}
 		return false;
 	}
