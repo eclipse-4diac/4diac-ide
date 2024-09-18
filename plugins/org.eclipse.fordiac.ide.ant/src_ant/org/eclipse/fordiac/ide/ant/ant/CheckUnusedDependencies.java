@@ -81,7 +81,8 @@ public class CheckUnusedDependencies extends Task {
 			}
 
 			typeEntry.getDependencies().forEach(dep -> {
-				final var found = unused.stream().filter(u -> uriContained(u, dep.getURI())).toList();
+				final var found = unused.stream().filter(u -> !uriContained(u, typeEntry.getURI()))
+						.filter(u -> uriContained(u, dep.getURI())).toList();
 				if (!found.isEmpty()) {
 					unused.removeAll(found);
 				}
