@@ -27,6 +27,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.fordiac.ide.application.wizards.QuickFixWizardDialog;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalMarkerAnnotation;
@@ -70,7 +71,7 @@ public class FordiacQuickFixHandler extends AbstractHandler {
 			MessageDialog.openInformation(shell, "Quick Fix", //$NON-NLS-1$
 					"The selected problems do not have a common applicable quick fix."); //$NON-NLS-1$
 		} else {
-			// TODO: create Quick Fix Dialog
+			QuickFixWizardDialog.openDialog(shell, selectedMarkers, resolutions, resolutionsMap);
 		}
 
 		return null;
