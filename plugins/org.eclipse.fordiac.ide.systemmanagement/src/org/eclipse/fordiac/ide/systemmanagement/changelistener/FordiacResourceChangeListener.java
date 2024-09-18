@@ -271,7 +271,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			if (typeEntryForFile == null) {
 				final TypeEntry entry = typeLib.createTypeEntry(file);
 
-				if (fileExists(file, delta) && file.getName().endsWith(".dtp")) { //$NON-NLS-1$
+				if (file.getName().endsWith(".dtp") && file.exists()) { //$NON-NLS-1$
 					Display.getDefault().asyncExec(() -> {
 						final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 						final InputDialog renameDialog = new InputDialog(shell,
@@ -317,13 +317,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				filesToRename.add(new FileToRenameEntry(file, typeEntryForFile));
 			}
 		}
-	}
-
-	private static boolean fileExists(final IFile file, final IResourceDelta delta) {
-		if (delta.getResource().getName().equals(file.getName())) {
-			return true;
-		}
-		return false;
 	}
 
 	private static void autoRenameExistingType(final FileToRenameEntry entry) {
