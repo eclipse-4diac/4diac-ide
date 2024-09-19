@@ -246,6 +246,26 @@ public final class Messages extends NLS {
 
 	public static String InfoPropertySection_Combo_Text_CountDESC;
 
+	public static String QuickFixDialog_Title;
+
+	public static String QuickFixDialog_NoResolutionsFound;
+
+	public static String QuickFixDialog_NoResolutionsFoundForMultiSelection;
+
+	public static String QuickFixDialog_Message;
+
+	public static String QuickFixDialog_SelectAll;
+
+	public static String QuickFixDialog_DeselectAll;
+
+	public static String QuickFixDialog_Resolutions_List_Title;
+
+	public static String QuickFixDialog_Problems_List_Title;
+
+	public static String QuickFixDialog_Problems_List_Location;
+
+	public static String QuickFixDialog_Problems_List_Resource;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

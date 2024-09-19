@@ -15,11 +15,13 @@
 package org.eclipse.fordiac.ide.application.wizards;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -55,8 +57,6 @@ import org.eclipse.ui.views.markers.WorkbenchMarkerResolution;
 
 public class QuickFixWizardDialog {
 
-	private static final String TITLE = "Quick Fix"; //$NON-NLS-1$
-
 	private QuickFixWizardDialog() {
 	}
 
@@ -64,7 +64,7 @@ public class QuickFixWizardDialog {
 			final IMarkerResolution[] resolutions, final Map<IMarkerResolution, Collection<IMarker>> resolutionMap) {
 		final QuickFixWizardPage wizardPage = new QuickFixWizardPage(selectedMarkers, resolutions, resolutionMap);
 		final QuickFixWizard wizard = new QuickFixWizard(wizardPage);
-		wizard.setWindowTitle(TITLE);
+		wizard.setWindowTitle(Messages.QuickFixDialog_Title);
 
 		final WizardDialog dialog = new WizardDialog(parentShell, wizard);
 		return dialog.open();
@@ -75,7 +75,7 @@ public class QuickFixWizardDialog {
 
 		public QuickFixWizard(final QuickFixWizardPage wizardPage) {
 			setDefaultPageImageDescriptor(
-					ImageDescriptor.createFromFile(IDE.class, "/icons/full/wizban/quick_fix.png")); //$NON-NLS-1$ );
+					ImageDescriptor.createFromFile(IDE.class, "/icons/full/wizban/quick_fix.png")); //$NON-NLS-1$
 			this.wizardPage = wizardPage;
 			addPage(wizardPage);
 		}
@@ -101,13 +101,6 @@ public class QuickFixWizardDialog {
 	}
 
 	private static class QuickFixWizardPage extends WizardPage {
-		private static final String RESOURCE_COLUMN_TEXT = "Resource"; //$NON-NLS-1$
-		private static final String LOCATION_COLUMN_TEXT = "Location"; //$NON-NLS-1$
-		private static final String SELECT_ALL_BUTTON_TEXT = "Select All"; //$NON-NLS-1$
-		private static final String DESELECT_ALL_BUTTON_TEXT = "Deselect All"; //$NON-NLS-1$
-		private static final String RESOLUTION_LABEL_TEXT = "Select a fix:"; //$NON-NLS-1$
-		private static final String MARKERS_LABEL_TEXT = "Problems:"; //$NON-NLS-1$
-
 		private static final Image ERROR_IMG = ImageDescriptor
 				.createFromFile(IDE.class, "/icons/full/obj16/error_tsk.png").createImage(); //$NON-NLS-1$
 
@@ -120,13 +113,14 @@ public class QuickFixWizardDialog {
 
 		protected QuickFixWizardPage(final IMarker[] initialMarkers, final IMarkerResolution[] resolutions,
 				final Map<IMarkerResolution, Collection<IMarker>> resolutionsMap) {
-			super(TITLE);
+			super(Messages.QuickFixDialog_Title);
 			this.initialMarkers = initialMarkers;
 			this.resolutions = resolutions;
 			this.resolutionMap = resolutionsMap;
 
-			setTitle(TITLE);
-			setMessage(String.format("Select the fix for '%s'", initialMarkers[0].getAttribute(IMarker.MESSAGE, ""))); //$NON-NLS-1$ //$NON-NLS-2$
+			setTitle(Messages.QuickFixDialog_Title);
+			setMessage(MessageFormat.format(Messages.QuickFixDialog_Message,
+					initialMarkers[0].getAttribute(IMarker.MESSAGE, ""))); //$NON-NLS-1$
 		}
 
 		@Override
@@ -142,14 +136,14 @@ public class QuickFixWizardDialog {
 			selectResolutionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			selectResolutionComposite.setLayout(new GridLayout());
 			Label label = new Label(selectResolutionComposite, SWT.NONE);
-			label.setText(RESOLUTION_LABEL_TEXT);
+			label.setText(Messages.QuickFixDialog_Resolutions_List_Title);
 			createResolutionList(selectResolutionComposite);
 
 			final Composite selectMarkerComposite = new Composite(pageComposite, SWT.NONE);
 			selectMarkerComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 			selectMarkerComposite.setLayout(new GridLayout(2, false));
 			label = new Label(selectMarkerComposite, SWT.NONE);
-			label.setText(MARKERS_LABEL_TEXT);
+			label.setText(Messages.QuickFixDialog_Problems_List_Title);
 			new Label(selectMarkerComposite, SWT.NONE);
 			createMarkerList(selectMarkerComposite);
 
@@ -228,7 +222,7 @@ public class QuickFixWizardDialog {
 
 			layout.addColumnData(new ColumnWeightData(70, true));
 			TableColumn tableColumn = new TableColumn(table, SWT.NONE, 0);
-			tableColumn.setText(LOCATION_COLUMN_TEXT);
+			tableColumn.setText(Messages.QuickFixDialog_Problems_List_Location);
 			TableViewerColumn tableViewerColumn = new TableViewerColumn(markersTable, tableColumn);
 			tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 				@Override
@@ -239,7 +233,7 @@ public class QuickFixWizardDialog {
 
 			layout.addColumnData(new ColumnWeightData(30, true));
 			tableColumn = new TableColumn(table, SWT.NONE, 0);
-			tableColumn.setText(RESOURCE_COLUMN_TEXT);
+			tableColumn.setText(Messages.QuickFixDialog_Problems_List_Resource);
 			tableViewerColumn = new TableViewerColumn(markersTable, tableColumn);
 			tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 				@Override
@@ -265,7 +259,7 @@ public class QuickFixWizardDialog {
 
 			final Button selectAll = new Button(buttonComposite, SWT.PUSH);
 			selectAll.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-			selectAll.setText(SELECT_ALL_BUTTON_TEXT);
+			selectAll.setText(Messages.QuickFixDialog_SelectAll);
 			selectAll.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent event) {
@@ -276,7 +270,7 @@ public class QuickFixWizardDialog {
 
 			final Button deselectAll = new Button(buttonComposite, SWT.PUSH);
 			deselectAll.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-			deselectAll.setText(DESELECT_ALL_BUTTON_TEXT);
+			deselectAll.setText(Messages.QuickFixDialog_DeselectAll);
 			deselectAll.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent event) {
