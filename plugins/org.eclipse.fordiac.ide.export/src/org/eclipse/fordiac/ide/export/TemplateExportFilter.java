@@ -163,13 +163,14 @@ public abstract class TemplateExportFilter extends ExportFilter {
 				if (!overwrite) {
 					openMergeEditor(writtenFiles);
 				}
-			}
-
-			if (res == BUTTON_OVERWRITE_ALL) {
+			} else if (res == BUTTON_OVERWRITE_ALL) {
 				throw (new ExportException.OverwriteAll());
-			}
-			if (res == BUTTON_CANCEL_ALL) {
+			} else if (res == BUTTON_CANCEL_ALL) {
 				throw (new ExportException.CancelAll());
+			} else { // the cancel button was selected / ESC pressed
+				getWarnings().add(MessageFormat.format(Messages.TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME,
+						typeFile != null ? typeFile.getFullPath() : name,
+						Messages.TemplateExportFilter_EXPORT_CANCELED));
 			}
 
 		} catch (final ExportException.UserInteraction e) {
