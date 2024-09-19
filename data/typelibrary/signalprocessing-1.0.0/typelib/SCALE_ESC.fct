@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="SCALE_ESC" Comment="Scaling Function Block with escape">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH   &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;" >
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2024-09-19">
+	</VersionInfo>
+	<CompilerInfo packageName="signalprocessing">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="IN"/>
+				<With Var="MAX1"/>
+				<With Var="MIN1"/>
+				<With Var="MAX1_ESC"/>
+				<With Var="MIN1_ESC"/>
+				<With Var="MAX2"/>
+				<With Var="MIN2"/>
+				<With Var="MAX2_ESC"/>
+				<With Var="MIN2_ESC"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="REAL" Comment=""/>
+			<VarDeclaration Name="MAX1" Type="REAL" Comment="Maximum Input"/>
+			<VarDeclaration Name="MIN1" Type="REAL" Comment="Minimum Input"/>
+			<VarDeclaration Name="MAX1_ESC" Type="REAL" Comment="Maximum Input Escape, if IN is bigger, Output is MAX2_ESC"/>
+			<VarDeclaration Name="MIN1_ESC" Type="REAL" Comment="Minimum Input Escape, if IN is smaller, Output is MIN2_ESC"/>
+			<VarDeclaration Name="MAX2" Type="REAL" Comment="Maximum Ouput"/>
+			<VarDeclaration Name="MIN2" Type="REAL" Comment="Minimum Output"/>
+			<VarDeclaration Name="MAX2_ESC" Type="REAL" Comment="Maximum Ouput Escape"/>
+			<VarDeclaration Name="MIN2_ESC" Type="REAL" Comment="Minimum Output Escape"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="" Type="REAL" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[PACKAGE signalprocessing;
+
+(* Scaling Function Block with escape *)
+FUNCTION SCALE_ESC : REAL
+VAR_INPUT
+	IN : REAL;
+	MAX1 : REAL;    // Maximum Input
+	MIN1 : REAL;    // Minimum Input
+	MAX1_ESC : REAL;    // Maximum Input Escape, if IN is bigger, Output is MAX2_ESC
+	MIN1_ESC : REAL;    // Minimum Input Escape, if IN is smaller, Output is MIN2_ESC
+	MAX2 : REAL;    // Maximum Ouput
+	MIN2 : REAL;    // Minimum Output
+	MAX2_ESC : REAL;    // Maximum Ouput Escape
+	MIN2_ESC : REAL;    // Minimum Output Escape
+END_VAR
+
+IF (IN < MIN1_ESC) THEN
+	SCALE_ESC := MIN2_ESC;
+ELSIF (IN > MAX1_ESC) THEN
+	SCALE_ESC := MAX2_ESC;
+ELSE
+	SCALE_ESC := (IN - MIN1) * (MAX2 - MIN2) / (MAX1 - MIN1) + MIN2;
+END_IF;
+
+END_FUNCTION
+
+]]></ST>
+	</FunctionBody>
+</Function>
