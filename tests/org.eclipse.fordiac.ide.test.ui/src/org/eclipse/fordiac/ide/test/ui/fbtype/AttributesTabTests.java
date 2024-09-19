@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Prashantkumar Khatri
+ * Copyright (c) 2024 Prashantkumar Khatri, Andrea Zoitl
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,12 +9,14 @@
  *
  * Contributors:
  *   Prashantkumar Khatri - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl - Creation of a fluid API design for UI SWTBot testing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui.fbtype;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotNatTable;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotPropertySheet;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
@@ -25,6 +27,11 @@ import org.junit.jupiter.api.BeforeEach;
 
 // Have to look into the table as this has so much different behavior
 public class AttributesTabTests extends NatTableWithoutEditorBehaviorTests {
+
+	public AttributesTabTests() {
+		super(UITestNamesHelper.ATTRIBUTE1, UITestNamesHelper.ATTRIBUTE2, UITestNamesHelper.ATTRIBUTE3);
+	}
+
 	/**
 	 * Performs necessary tasks to make environment for testing the operations on
 	 * DataType Editor Table.
@@ -36,9 +43,6 @@ public class AttributesTabTests extends NatTableWithoutEditorBehaviorTests {
 	@Override
 	@BeforeEach
 	public void operationsInitialization() {
-		TESTVAR1 = UITestNamesHelper.ATTRIBUTE1;
-		TESTVAR2 = UITestNamesHelper.ATTRIBUTE2;
-		TESTVAR3 = UITestNamesHelper.ATTRIBUTE3;
 		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
 		fbTypeBot.createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
 				UITestNamesHelper.TEMPLATEBASIC);
@@ -49,8 +53,8 @@ public class AttributesTabTests extends NatTableWithoutEditorBehaviorTests {
 		bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).show();
 		SWTBotPropertySheet.selectPropertyTabItem(UITestNamesHelper.ATTRIBUTES, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
-		natTableBot = new SWTBot4diacNatTable(natTable);
-		NatTableHelper.createNewVariableInDataTypeEditor(natTableBot);
+		swt4diacNatTable = new SWTBot4diacNatTable(natTable);
+		new SWTBotNatTable(bot, swt4diacNatTable).createNewVariableInDataTypeEditor();
 	}
 
 	@Override
@@ -61,13 +65,13 @@ public class AttributesTabTests extends NatTableWithoutEditorBehaviorTests {
 	@Override
 	public void tryToSetInValidName() {
 		// Here Name column has same behavior as Data Type column or Invalid value
-		NatTableHelper.setInvalidDataType(natTableBot, 1, 1, UITestNamesHelper.IF);
+		new SWTBotNatTable(bot, swt4diacNatTable).setInvalidDataType(1, 1, UITestNamesHelper.IF);
 	}
 
 	@Override
 	public void tryToChangeNameOfVariableWithExistingName() {
 		// Here Name column has same behavior as Data Type column or Invalid value
-		NatTableHelper.setInvalidDataType(natTableBot, 1, 1, UITestNamesHelper.IF);
+		new SWTBotNatTable(bot, swt4diacNatTable).setInvalidDataType(1, 1, UITestNamesHelper.IF);
 	}
 
 }
