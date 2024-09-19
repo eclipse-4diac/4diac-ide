@@ -84,6 +84,7 @@ public class VarDeclarationConfigLabelAccumulator extends AbstractAnnotatedConfi
 			break;
 		case RETAIN:
 			configLabels.addLabelOnTop(NatTableWidgetFactory.RETAIN_CONFIG_CELL);
+			break;
 		default:
 			break;
 		}

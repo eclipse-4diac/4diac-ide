@@ -33,7 +33,7 @@ public class STStringValueConverter extends AbstractLexerBasedConverter<STString
 
 	@Override
 	protected String toEscapedString(final STString value) {
-		return STInternalStringValueConverter.INSTANCE.toString(value.toString(), value.isWide());
+		return AbstractStringValueConverter.toString(value.toString(), value.isWide());
 	}
 
 	private static class STInternalStringValueConverter extends AbstractStringValueConverter {

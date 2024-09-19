@@ -28,8 +28,10 @@ public interface Evaluator {
 	/**
 	 * Prepare the evaluator for execution. This executes preparatory steps that may
 	 * run ahead of time, such as parsing the code.
+	 *
+	 * @throws EvaluatorException if an exception occurred during preparation
 	 */
-	void prepare();
+	void prepare() throws EvaluatorException;
 
 	/**
 	 * Evaluate a result

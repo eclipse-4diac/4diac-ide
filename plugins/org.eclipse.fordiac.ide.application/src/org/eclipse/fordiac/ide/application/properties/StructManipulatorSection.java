@@ -161,8 +161,7 @@ public abstract class StructManipulatorSection extends AbstractSection implement
 			final GraphicalViewer viewer = activeEditor.getAdapter(GraphicalViewer.class);
 			if (null != viewer) {
 				viewer.flush();
-				EditorUtils.refreshPropertySheetWithSelection(activeEditor, viewer,
-						viewer.getEditPartRegistry().get(newMux));
+				EditorUtils.refreshPropertySheetWithSelection(activeEditor, viewer, viewer.getEditPartForModel(newMux));
 			}
 		});
 	}
@@ -198,15 +197,17 @@ public abstract class StructManipulatorSection extends AbstractSection implement
 		createContextMenu(memberVarViewer.getControl());
 	}
 
+	@SuppressWarnings("static-method") // allow subclasses to override
 	protected LabelProvider getLabelProvider() {
 		return new StructTreeLabelProvider();
 	}
 
+	@SuppressWarnings("static-method") // allow subclasses to override
 	protected ITreeContentProvider getContentProvider() {
 		return new StructTreeContentProvider();
 	}
 
-	private CheckboxTreeViewer createTreeViewer(final Composite parent) {
+	private static CheckboxTreeViewer createTreeViewer(final Composite parent) {
 		final CheckboxTreeViewer viewer = new CheckboxTreeViewer(parent);
 		viewer.setUseHashlookup(true);
 		return viewer;

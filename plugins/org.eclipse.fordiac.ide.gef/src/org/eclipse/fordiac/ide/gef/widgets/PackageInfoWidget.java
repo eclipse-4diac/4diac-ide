@@ -155,7 +155,6 @@ public class PackageInfoWidget extends TypeInfoWidget {
 	public void refresh() {
 		super.refresh();
 		if (packageViewer != null && !packageViewer.getControl().isDisposed()) {
-			final GraphicalAnnotationModel annotationModel = annotationModelSupplier.get();
 			final Consumer<Command> commandExecutorBuffer = getCommandExecutor();
 			setCommandExecutor(null);
 			if ((getType() != null)) {
@@ -165,22 +164,31 @@ public class PackageInfoWidget extends TypeInfoWidget {
 				buttons.setEnabled(!isReadonly());
 				organizeImportsButton.setEnabled(!isReadonly());
 				packageViewer.getTable().setEnabled(!isReadonly());
-
-				final CompilerInfo compilerInfo = getType().getCompilerInfo();
-				final StyledString nameStyledString = new StyledString(PackageNameHelper.getPackageName(getType()),
-						annotationModel != null && compilerInfo != null
-								? GraphicalAnnotationStyles
-										.getAnnotationStyle(annotationModel.getAnnotations(compilerInfo))
-								: null);
-
-				final Point nameTextSelection = nameText.getSelection();
-				nameText.setText(nameStyledString.toString());
-				nameText.setStyleRanges(nameStyledString.getStyleRanges());
-				nameText.setSelection(nameTextSelection);
 				packageViewer.setInput(getType());
+				refreshAnnotations();
 			}
 			setCommandExecutor(commandExecutorBuffer);
 		}
+	}
+
+	public void refreshAnnotations() {
+		final Consumer<Command> commandExecutorBuffer = getCommandExecutor();
+		setCommandExecutor(null);
+		final GraphicalAnnotationModel annotationModel = annotationModelSupplier.get();
+		final CompilerInfo compilerInfo = getType().getCompilerInfo();
+		final StyledString nameStyledString = new StyledString(PackageNameHelper.getPackageName(getType()),
+				annotationModel != null && compilerInfo != null
+						? GraphicalAnnotationStyles.getAnnotationStyle(annotationModel.getAnnotations(compilerInfo))
+						: null);
+
+		final int caretOffset = nameText.getCaretOffset();
+		final Point nameTextSelection = nameText.getSelection();
+		nameText.setText(nameStyledString.toString());
+		nameText.setStyleRanges(nameStyledString.getStyleRanges());
+		nameText.setSelection(nameTextSelection);
+		nameText.setCaretOffset(caretOffset);
+		packageViewer.refresh();
+		setCommandExecutor(commandExecutorBuffer);
 	}
 
 	@Override

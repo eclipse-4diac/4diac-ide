@@ -35,6 +35,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuick
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDocumentReconcileStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.FilterHeadingsContribution;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.OutlineTreeContribution;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.STCoreOutlinePage;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
@@ -60,15 +63,18 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFuncti
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocumentPartitioner;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocumentUpdaterChangeAdapterFilter;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionLinkedPositionGroupCalculator;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionPartialSerializer;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionRenameStrategy;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.formatting.IWhitespaceInformationProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 import org.eclipse.xtext.ide.refactoring.IRenameNameValidator;
 import org.eclipse.xtext.ide.refactoring.IRenameStrategy2;
 import org.eclipse.xtext.ide.serializer.IChangeSerializer;
+import org.eclipse.xtext.ide.serializer.impl.PartialSerializer;
 import org.eclipse.xtext.ide.serializer.impl.RecordingXtextResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.ReferenceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.RelatedEmfResourceUpdater;
@@ -90,6 +96,7 @@ import org.eclipse.xtext.ui.editor.model.IResourceForEditorInputFactory;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider;
 import org.eclipse.xtext.ui.editor.occurrences.IOccurrenceComputer;
+import org.eclipse.xtext.ui.editor.outline.actions.IOutlineContribution;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer;
 import org.eclipse.xtext.ui.editor.quickfix.ISimilarityMatcher;
 import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor;
@@ -313,8 +320,27 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 		return STCoreResourceLifecycleManager.class;
 	}
 
+	public Class<? extends PartialSerializer> bindPartialSerializer() {
+		return STFunctionPartialSerializer.class;
+	}
+
 	@Override
 	public Class<? extends IWhitespaceInformationProvider> bindIWhitespaceInformationProvider() {
 		return STCoreWhitespaceInformationProvider.class;
+	}
+
+	@Override
+	public Class<? extends IContentOutlinePage> bindIContentOutlinePage() {
+		return STCoreOutlinePage.class;
+	}
+
+	public void configureFilterHeadingsContribution(final Binder binder) {
+		binder.bind(IOutlineContribution.class).annotatedWith(Names.named("FilterHeadingsContribution")) //$NON-NLS-1$
+				.to(FilterHeadingsContribution.class);
+	}
+
+	public void configureOutlineTreeContribution(final Binder binder) {
+		binder.bind(IOutlineContribution.class).annotatedWith(Names.named("OutlineTreeContribution")) //$NON-NLS-1$
+				.to(OutlineTreeContribution.class);
 	}
 }

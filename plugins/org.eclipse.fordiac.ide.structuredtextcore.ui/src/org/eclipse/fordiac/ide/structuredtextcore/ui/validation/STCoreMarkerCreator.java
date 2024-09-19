@@ -27,6 +27,8 @@ public class STCoreMarkerCreator extends MarkerCreator {
 		if (FordiacErrorMarker.isModelMarkerType(markerType)) {
 			ErrorMarkerBuilder.createErrorMarkerBuilder(issue.getMessage()).setType(markerType)
 					.setSeverity(ValidationUtil.getMarkerSeverity(issue))
+					.setCode(ValidationUtil.getModelMarkerCode(issue))
+					.setSource(ValidationUtil.getModelMarkerSource(issue))
 					.addAdditionalAttributes(ValidationUtil.getModelMarkerAttributes(issue)).createMarker(resource);
 		} else {
 			super.createMarker(issue, resource, markerType);

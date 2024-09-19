@@ -65,6 +65,7 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 
 		text = new StyledText(parent, SWT.MULTI | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(text);
+		text.setEditable(false);
 
 		printMessages();
 

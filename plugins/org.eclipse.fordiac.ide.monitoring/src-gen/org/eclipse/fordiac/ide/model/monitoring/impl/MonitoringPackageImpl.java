@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringVarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterPortElement;
+import org.eclipse.fordiac.ide.model.monitoring.InternalVarInstance;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringAdapterElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringFactory;
@@ -102,6 +103,13 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	private EClass subappMonitoringElementEClass = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass internalVarInstanceEClass = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -140,7 +148,9 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	 * @generated
 	 */
 	public static MonitoringPackage init() {
-		if (isInited) return (MonitoringPackage)EPackage.Registry.INSTANCE.getEPackage(MonitoringPackage.eNS_URI);
+		if (isInited) {
+			return (MonitoringPackage)EPackage.Registry.INSTANCE.getEPackage(MonitoringPackage.eNS_URI);
+		}
 
 		// Obtain or create and register package
 		Object registeredMonitoringPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
@@ -355,6 +365,26 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	 * @generated
 	 */
 	@Override
+	public EClass getInternalVarInstance() {
+		return internalVarInstanceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getInternalVarInstance_Fb() {
+		return (EReference)internalVarInstanceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public MonitoringFactory getMonitoringFactory() {
 		return (MonitoringFactory)getEFactoryInstance();
 	}
@@ -374,7 +404,9 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	 * @generated
 	 */
 	public void createPackageContents() {
-		if (isCreated) return;
+		if (isCreated) {
+			return;
+		}
 		isCreated = true;
 
 		// Create classes and their features
@@ -403,6 +435,9 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 
 		subappMonitoringElementEClass = createEClass(SUBAPP_MONITORING_ELEMENT);
 		createEReference(subappMonitoringElementEClass, SUBAPP_MONITORING_ELEMENT__ANCHOR);
+
+		internalVarInstanceEClass = createEClass(INTERNAL_VAR_INSTANCE);
+		createEReference(internalVarInstanceEClass, INTERNAL_VAR_INSTANCE__FB);
 	}
 
 	/**
@@ -420,7 +455,9 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	 * @generated
 	 */
 	public void initializePackageContents() {
-		if (isInitialized) return;
+		if (isInitialized) {
+			return;
+		}
 		isInitialized = true;
 
 		// Initialize package
@@ -448,6 +485,7 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		adapterMonitoringVarDeclarationEClass.getESuperTypes().add(theLibraryElementPackage.getVarDeclaration());
 		subAppPortElementEClass.getESuperTypes().add(theMonitoringBasePackage.getPortElement());
 		subappMonitoringElementEClass.getESuperTypes().add(this.getMonitoringElement());
+		internalVarInstanceEClass.getESuperTypes().add(theLibraryElementPackage.getVarDeclaration());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(monitoringElementEClass, MonitoringElement.class, "MonitoringElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -488,6 +526,11 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		initEReference(getSubappMonitoringElement_Anchor(), theMonitoringBasePackage.getMonitoringBaseElement(), null, "anchor", null, 0, 1, SubappMonitoringElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(subappMonitoringElementEClass, theXMLTypePackage.getString(), "getQualifiedString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(internalVarInstanceEClass, InternalVarInstance.class, "InternalVarInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getInternalVarInstance_Fb(), theLibraryElementPackage.getFB(), null, "fb", null, 0, 1, InternalVarInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(internalVarInstanceEClass, theLibraryElementPackage.getFBNetworkElement(), "getFBNetworkElement", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

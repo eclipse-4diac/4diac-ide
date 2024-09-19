@@ -362,6 +362,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STComment/position"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STStructInitializerExpression">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STStructInitializerExpression/type"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStructInitializerExpression/values"/>
       <genOperations ecoreOperation="STCore.ecore#//STStructInitializerExpression/getResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>

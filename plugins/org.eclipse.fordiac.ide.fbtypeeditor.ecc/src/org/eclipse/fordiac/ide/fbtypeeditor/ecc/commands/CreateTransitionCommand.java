@@ -168,9 +168,9 @@ public class CreateTransitionCommand extends CreationCommand {
 			transition.setConditionExpression("1"); //$NON-NLS-1$
 		}
 		if (null != viewer) {
-			final Object obj = viewer.getEditPartRegistry().get(transition);
-			if (null != obj) {
-				viewer.select((EditPart) obj);
+			final EditPart ep = viewer.getEditPartForModel(transition);
+			if (ep != null) {
+				viewer.select(ep);
 			}
 		}
 	}

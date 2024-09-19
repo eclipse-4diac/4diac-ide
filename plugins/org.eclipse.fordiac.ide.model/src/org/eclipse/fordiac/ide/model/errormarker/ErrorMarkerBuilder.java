@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,7 @@
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
  *   Martin Jobst - refactor marker handling
+ *                - add code and source attributes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.errormarker;
 
@@ -32,6 +33,8 @@ public final class ErrorMarkerBuilder {
 	private int lineNumber = -1;
 	private String message;
 	private String location;
+	private int code;
+	private String source;
 	private EObject target;
 	private EStructuralFeature feature;
 	private Map<String, Object> additionalAttributes;
@@ -69,6 +72,12 @@ public final class ErrorMarkerBuilder {
 			attributes.put(IMarker.LOCATION, location);
 		} else if (target != null) {
 			attributes.put(IMarker.LOCATION, FordiacMarkerHelper.getLocation(target, feature));
+		}
+		if (code != FordiacErrorMarker.DEFAULT_CODE) {
+			attributes.put(FordiacErrorMarker.CODE, Integer.valueOf(code));
+		}
+		if (source != null) {
+			attributes.put(FordiacErrorMarker.SOURCE, source);
 		}
 		if (target != null) {
 			attributes.put(FordiacErrorMarker.TARGET_URI,
@@ -144,6 +153,24 @@ public final class ErrorMarkerBuilder {
 
 	public EObject getTarget() {
 		return target;
+	}
+
+	public int getCode() {
+		return code;
+	}
+
+	public ErrorMarkerBuilder setCode(final int code) {
+		this.code = code;
+		return this;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public ErrorMarkerBuilder setSource(final String source) {
+		this.source = source;
+		return this;
 	}
 
 	public ErrorMarkerBuilder setTarget(final EObject target) {

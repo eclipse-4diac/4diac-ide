@@ -68,8 +68,6 @@ public enum SystemManager {
 
 	INSTANCE;
 
-	private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.systemmanagement"; //$NON-NLS-1$
-
 	public static final String FORDIAC_PROJECT_NATURE_ID = "org.eclipse.fordiac.ide.systemmanagement.FordiacNature"; //$NON-NLS-1$
 	public static final String ROBOT_PROJECT_NATURE_ID = "org.robotframework.ide.eclipse.main.plugin.robotNature"; //$NON-NLS-1$
 	public static final String OLD_DISTRIBUTED_PROJECT_NATURE_ID = "org.fordiac.systemManagement.DistributedNature"; //$NON-NLS-1$
@@ -113,9 +111,7 @@ public enum SystemManager {
 		final IProjectDescription description = ResourcesPlugin.getWorkspace().newProjectDescription(project.getName());
 
 		final Map<String, URI> includes = new HashMap<>();
-		includedLibraries.forEach((key, value) -> {
-			includes.put(key.getSymbolicName(), value);
-		});
+		includedLibraries.forEach((key, value) -> includes.put(key.getSymbolicName(), value));
 
 		if (!Platform.getLocation().equals(location)) {
 			description.setLocation(location);

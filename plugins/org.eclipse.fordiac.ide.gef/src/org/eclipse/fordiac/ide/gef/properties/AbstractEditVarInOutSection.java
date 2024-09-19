@@ -133,6 +133,11 @@ public abstract class AbstractEditVarInOutSection extends AbstractSection
 		inputTable.refresh();
 	}
 
+	@Override
+	protected void performRefreshAnnotations() {
+		inputTable.refresh(false);
+	}
+
 	protected abstract void setTableInput();
 
 	@Override

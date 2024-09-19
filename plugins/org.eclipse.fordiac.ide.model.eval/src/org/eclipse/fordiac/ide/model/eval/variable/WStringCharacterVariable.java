@@ -48,16 +48,6 @@ public class WStringCharacterVariable extends AbstractVariable<WCharValue> {
 	}
 
 	@Override
-	public void setValue(final String value) {
-		setValue(VariableOperations.evaluateValue(getType(), value));
-	}
-
-	@Override
-	public boolean validateValue(final String value) {
-		return VariableOperations.validateValue(getType(), value).isEmpty();
-	}
-
-	@Override
 	public WcharType getType() {
 		return (WcharType) super.getType();
 	}

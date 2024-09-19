@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,25 +12,62 @@
  */
 package org.eclipse.fordiac.ide.model.eval;
 
-public class EvaluatorException extends Exception {
+/**
+ * An exception while evaluating a model element
+ */
+public class EvaluatorException extends RuntimeException {
 	@java.io.Serial
 	private static final long serialVersionUID = -293618872722930949L;
 
 	private final transient Evaluator evaluator;
 
-	public EvaluatorException(final Evaluator evaluator) {
-		this(null, null, evaluator);
+	/**
+	 * Create a new evaluator exception with the given message
+	 *
+	 * @param message The message
+	 */
+	public EvaluatorException(final String message) {
+		this(message, (Evaluator) null);
 	}
 
+	/**
+	 * Create a new evaluator exception with the given message and cause
+	 *
+	 * @param message The message
+	 * @param cause   The cause
+	 */
+	public EvaluatorException(final String message, final Throwable cause) {
+		this(message, cause, null);
+	}
+
+	/**
+	 * Create a new evaluator exception with the given message and evaluator
+	 *
+	 * @param message   The message
+	 * @param evaluator The evaluator
+	 */
 	public EvaluatorException(final String message, final Evaluator evaluator) {
-		this(message, null, evaluator);
+		super(message);
+		this.evaluator = evaluator;
 	}
 
+	/**
+	 * Create a new evaluator exception with the given message, cause, and evaluator
+	 *
+	 * @param message   The message
+	 * @param cause     The cause
+	 * @param evaluator The evaluator
+	 */
 	public EvaluatorException(final String message, final Throwable cause, final Evaluator evaluator) {
 		super(message, cause);
 		this.evaluator = evaluator;
 	}
 
+	/**
+	 * Get the originating evaluator
+	 *
+	 * @return The evaluator or null if unknown
+	 */
 	public Evaluator getEvaluator() {
 		return evaluator;
 	}

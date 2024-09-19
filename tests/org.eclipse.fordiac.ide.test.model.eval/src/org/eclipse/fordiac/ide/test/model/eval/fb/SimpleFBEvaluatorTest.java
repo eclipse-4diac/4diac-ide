@@ -21,10 +21,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.ECollections;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
@@ -36,8 +33,6 @@ import org.eclipse.fordiac.ide.model.eval.variable.StructVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -45,9 +40,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.test.model.typelibrary.AttributeTypeEntryMock;
-import org.eclipse.fordiac.ide.test.model.typelibrary.DataTypeEntryMock;
-import org.eclipse.fordiac.ide.test.model.typelibrary.FBTypeEntryMock;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -651,13 +643,9 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 
 	@Test
 	void testSimpleWithStruct() throws EvaluatorException, InterruptedException {
-		final StructuredType structType = DataFactory.eINSTANCE.createStructuredType();
-		structType.setName("TestStruct");
-		structType.getMemberVariables().add(newVarDeclaration("a", ElementaryTypes.DINT, false));
-		structType.getMemberVariables().add(newVarDeclaration("b", ElementaryTypes.DINT, false));
-		typeLib.addTypeEntry(new DataTypeEntryMock(structType, typeLib, null));
-		final ResourceImpl structResource = new ResourceImpl();
-		structResource.getContents().add(structType);
+		final StructuredType structType = newStructuredType("TestStruct",
+				List.of(newVarDeclaration("a", ElementaryTypes.DINT, false),
+						newVarDeclaration("b", ElementaryTypes.DINT, false)));
 		final VarDeclaration inputVarDecl = newVarDeclaration("DI1", structType, true);
 		final StructVariable inputVar = ((StructVariable) VariableOperations.newVariable(inputVarDecl));
 		inputVar.getMembers().get("a").setValue(toDIntValue(17));
@@ -668,44 +656,6 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						DO1.a := DI1.a + DI1.b;
 						DO1.b := 42;
 						""", "REQ")), "REQ", List.of(inputVar), outputVarDecl).getVariables().get("DO1").getValue()));
-	}
-
-	@Test
-	void testStructAttribute() {
-		final StructuredType structType = DataFactory.eINSTANCE.createStructuredType();
-		structType.setName("TestStruct");
-		structType.getMemberVariables().add(newVarDeclaration("a", ElementaryTypes.DINT, false, "17"));
-		structType.getMemberVariables().add(newVarDeclaration("b", ElementaryTypes.DINT, false, "4"));
-		final AttributeDeclaration attributeDeclaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
-		attributeDeclaration.setName(structType.getName());
-		attributeDeclaration.setType(structType);
-		typeLib.addTypeEntry(new AttributeTypeEntryMock(attributeDeclaration, typeLib, null));
-		final ResourceImpl attributeDeclarationResource = new ResourceImpl();
-		attributeDeclarationResource.getContents().add(attributeDeclaration);
-		final Attribute attr1 = newAttribute(attributeDeclaration);
-		assertIterableEquals(List.of(toDIntValue(17), toDIntValue(4)),
-				((StructValue) VariableOperations.newVariable(attr1).getValue()));
-		final Attribute attr2 = newAttribute(attributeDeclaration, "(a:=21, b:=42)");
-		assertIterableEquals(List.of(toDIntValue(21), toDIntValue(42)),
-				((StructValue) VariableOperations.newVariable(attr2).getValue()));
-	}
-
-	@Test
-	void testDirectlyDerivedAttribute() {
-		final DirectlyDerivedType derivedType = DataFactory.eINSTANCE.createDirectlyDerivedType();
-		derivedType.setName("TestDerivedAttribute");
-		derivedType.setBaseType(ElementaryTypes.DINT);
-		derivedType.setInitialValue("17");
-		final AttributeDeclaration attributeDeclaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
-		attributeDeclaration.setName(derivedType.getName());
-		attributeDeclaration.setType(derivedType);
-		typeLib.addTypeEntry(new AttributeTypeEntryMock(attributeDeclaration, typeLib, null));
-		final ResourceImpl attributeDeclarationResource = new ResourceImpl();
-		attributeDeclarationResource.getContents().add(attributeDeclaration);
-		final Attribute attr1 = newAttribute(attributeDeclaration);
-		assertEquals(toDIntValue(17), VariableOperations.newVariable(attr1).getValue());
-		final Attribute attr2 = newAttribute(attributeDeclaration, "4");
-		assertEquals(toDIntValue(4), VariableOperations.newVariable(attr2).getValue());
 	}
 
 	@Test
@@ -726,16 +676,10 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 	FBType newTestSimpleFBType() {
 		final Event inputEvent = newEvent("REQ", true);
 		final Event outputEvent = newEvent("CNF", false);
-		final SimpleFBType simpleType = LibraryElementFactory.eINSTANCE.createSimpleFBType();
-		simpleType.setName("TestSimple");
-		simpleType.setInterfaceList(newInterfaceList(List.of(inputEvent, outputEvent),
+		final SimpleFBType simpleType = newSimpleFBType("TestSimple", List.of(inputEvent, outputEvent),
 				List.of(newVarDeclaration("DI1", ElementaryTypes.DINT, true),
-						newVarDeclaration("DO1", ElementaryTypes.DINT, false))));
+						newVarDeclaration("DO1", ElementaryTypes.DINT, false)));
 		simpleType.getCallables().add(newSTAlgorithm("DO1 := DO1 + DI1;", "REQ"));
-		final FBTypeEntryMock typeEntry = new FBTypeEntryMock(simpleType, typeLib, null);
-		simpleType.setTypeEntry(typeEntry);
-		typeLib.addTypeEntry(typeEntry);
-		new ResourceImpl().getContents().add(simpleType);
 		return simpleType;
 	}
 

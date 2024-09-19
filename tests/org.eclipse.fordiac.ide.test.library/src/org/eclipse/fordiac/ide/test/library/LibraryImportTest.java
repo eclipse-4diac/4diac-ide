@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.test.library;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.URI;
 import java.nio.file.Paths;
@@ -50,6 +49,7 @@ class LibraryImportTest {
 	private static final String TEST05 = "test05"; //$NON-NLS-1$
 	private static final String TEST06 = "test06"; //$NON-NLS-1$
 	private static final String TEST07 = "test07"; //$NON-NLS-1$
+	private static final String MATH = "math"; //$NON-NLS-1$
 	private static final String V1_0_0 = "1.0.0"; //$NON-NLS-1$
 	private static final String V1_1_0 = "1.1.0"; //$NON-NLS-1$
 	private static final String V1_5_0 = "1.5.0"; //$NON-NLS-1$
@@ -81,9 +81,8 @@ class LibraryImportTest {
 		}
 
 		// deactivate other downloaders
-		TypeLibraryManager.useExtensions(LibraryManager.DOWNLOADER_EXTENSION, IArchiveDownloader.class, downloader -> {
-			downloader.setActive(downloader instanceof MockDownloader);
-		});
+		TypeLibraryManager.useExtensions(LibraryManager.DOWNLOADER_EXTENSION, IArchiveDownloader.class,
+				downloader -> downloader.setActive(downloader instanceof MockDownloader));
 	}
 
 	@BeforeEach
@@ -100,6 +99,7 @@ class LibraryImportTest {
 		}
 		FordiacMarkerHelper.updateMarkers(project.getFile(LibraryManager.MANIFEST), FordiacErrorMarker.LIBRARY_MARKER,
 				Collections.emptyList(), true);
+		FordiacMarkerHelper.JOB_GROUP.join(1000, null);
 		project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).accept(resource -> {
 			if (resource instanceof final IFolder folder) {
 				if (folder.getName().equals(LibraryManager.TYPE_LIB_FOLDER_NAME)) {
@@ -246,7 +246,8 @@ class LibraryImportTest {
 		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
 				IResource.DEPTH_INFINITE);
 
-		assertTrue(markers.length > 0);
+		assertEquals(1, markers.length);
+		assertEquals(TEST01, markers[0].getAttribute(LibraryManager.MARKER_ATTRIBUTE, null));
 	}
 
 	@Test
@@ -274,16 +275,7 @@ class LibraryImportTest {
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST07, V1_0_0, 0);
 		assertEquals(1, manifest.getDependencies().getRequired().size());
 
-		assertFalse(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder("math").exists()); //$NON-NLS-1$
-
-		LibraryManager.INSTANCE.getJobGroup().join(1000, null);
-		FordiacMarkerHelper.JOB_GROUP.join(1000, null);
-
-		final var manifestFile = project.getFile(LibraryManager.MANIFEST);
-		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
-				IResource.DEPTH_INFINITE);
-
-		assertTrue(markers.length > 0);
+		assertFalse(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder(MATH).exists());
 	}
 
 }

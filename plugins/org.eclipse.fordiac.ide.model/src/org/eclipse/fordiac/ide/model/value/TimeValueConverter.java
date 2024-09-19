@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import org.eclipse.fordiac.ide.model.Messages;
@@ -23,7 +25,8 @@ import org.eclipse.fordiac.ide.model.Messages;
 public final class TimeValueConverter implements ValueConverter<Duration> {
 	public static final TimeValueConverter INSTANCE = new TimeValueConverter();
 
-	static final Pattern VALUE_PATTERN = Pattern.compile("([\\+\\-\\.0-9]+)\\s*([a-zA-Z]+)"); //$NON-NLS-1$
+	static final Pattern VALUE_PATTERN = Pattern.compile("([+-]?\\d++(?:\\.\\d++)?)\\s*([a-zA-Z]++)"); //$NON-NLS-1$
+	static final Pattern SCANNER_PATTERN = Pattern.compile("\\G[+-]?(?:\\d[_\\d]*+(?:\\.\\d[_\\d]*+)?\\s*\\w++)++"); //$NON-NLS-1$
 
 	private TimeValueConverter() {
 	}
@@ -84,23 +87,34 @@ public final class TimeValueConverter implements ValueConverter<Duration> {
 	}
 
 	private static ChronoUnit parseUnit(final String string) {
-		switch (string.toUpperCase()) {
+		return switch (string.toUpperCase()) {
 		case "D": //$NON-NLS-1$
-			return ChronoUnit.DAYS;
+			yield ChronoUnit.DAYS;
 		case "H": //$NON-NLS-1$
-			return ChronoUnit.HOURS;
+			yield ChronoUnit.HOURS;
 		case "M": //$NON-NLS-1$
-			return ChronoUnit.MINUTES;
+			yield ChronoUnit.MINUTES;
 		case "S": //$NON-NLS-1$
-			return ChronoUnit.SECONDS;
+			yield ChronoUnit.SECONDS;
 		case "MS": //$NON-NLS-1$
-			return ChronoUnit.MILLIS;
+			yield ChronoUnit.MILLIS;
 		case "US": //$NON-NLS-1$
-			return ChronoUnit.MICROS;
+			yield ChronoUnit.MICROS;
 		case "NS": //$NON-NLS-1$
-			return ChronoUnit.NANOS;
+			yield ChronoUnit.NANOS;
 		default:
 			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_InvalidTimeUnit, string));
-		}
+		};
+	}
+
+	@Override
+	public Duration toValue(final Scanner scanner)
+			throws IllegalArgumentException, NoSuchElementException, IllegalStateException {
+		return toValue(scanner.findWithinHorizon(SCANNER_PATTERN, 0));
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
 	}
 }

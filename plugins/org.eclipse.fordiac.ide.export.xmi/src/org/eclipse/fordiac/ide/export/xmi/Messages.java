@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.export.xmi;
 
 import org.eclipse.osgi.util.NLS;
 
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
 	public static String XMIExportFilter_AttributeValueError;

@@ -33,7 +33,8 @@ public final class CompilerInfoAnnotations {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.COMPILER_INFO__VALIDATE_PACKAGE_NAME, errorMessage.get(),
 						FordiacMarkerHelper.getDiagnosticData(compilerInfo,
-								LibraryElementPackage.Literals.COMPILER_INFO__PACKAGE_NAME)));
+								LibraryElementPackage.Literals.COMPILER_INFO__PACKAGE_NAME,
+								compilerInfo.getPackageName())));
 			}
 			return false;
 		}

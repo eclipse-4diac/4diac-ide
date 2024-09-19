@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -51,7 +51,7 @@ public class ConvertToSubappHandler extends AbstractHandler {
 				refreshSelection(conversion.getCreatedElement());
 				final GraphicalViewer v = editor.getAdapter(GraphicalViewer.class);
 				v.flush();
-				final EditPart newSubappEP = (EditPart) v.getEditPartRegistry().get(conversion.getCreatedElement());
+				final EditPart newSubappEP = v.getEditPartForModel(conversion.getCreatedElement());
 				adjustMinBounds(commandStack, newSubappEP);
 			}
 		}
@@ -83,22 +83,21 @@ public class ConvertToSubappHandler extends AbstractHandler {
 	}
 
 	private static Group getSelectedGroup(final Object selection) {
-		if (selection instanceof final IStructuredSelection structSel) {
-			if (!structSel.isEmpty() && (structSel.size() == 1)) {
-				return getGroup(structSel.getFirstElement());
-			}
+		if ((selection instanceof final IStructuredSelection structSel)
+				&& (!structSel.isEmpty() && (structSel.size() == 1))) {
+			return getGroup(structSel.getFirstElement());
 		}
 		return null;
 	}
 
 	private static Group getGroup(final Object currentElement) {
 		Object elementToCheck = currentElement;
-		if (elementToCheck instanceof EditPart) {
-			elementToCheck = ((EditPart) elementToCheck).getModel();
+		if (elementToCheck instanceof final EditPart ep) {
+			elementToCheck = ep.getModel();
 		}
 
-		if (elementToCheck instanceof Group) {
-			return (Group) elementToCheck;
+		if (elementToCheck instanceof final Group group) {
+			return group;
 		}
 		return null;
 	}

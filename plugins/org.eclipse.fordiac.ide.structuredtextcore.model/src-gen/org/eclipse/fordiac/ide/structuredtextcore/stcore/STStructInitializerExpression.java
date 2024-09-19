@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 import java.util.Map;
 import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 /**
@@ -30,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression#getValues <em>Values</em>}</li>
  * </ul>
  *
@@ -38,6 +40,28 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * @generated
  */
 public interface STStructInitializerExpression extends STInitializerExpression {
+	/**
+	 * Returns the value of the '<em><b>Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Type</em>' reference.
+	 * @see #setType(StructuredType)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTStructInitializerExpression_Type()
+	 * @model
+	 * @generated
+	 */
+	StructuredType getType();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression#getType <em>Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Type</em>' reference.
+	 * @see #getType()
+	 * @generated
+	 */
+	void setType(StructuredType value);
+
 	/**
 	 * Returns the value of the '<em><b>Values</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement}.

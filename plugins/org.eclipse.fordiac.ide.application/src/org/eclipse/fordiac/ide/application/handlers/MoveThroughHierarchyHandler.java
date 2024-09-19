@@ -114,7 +114,7 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 			obj = obj.eContainer();
 		}
 
-		final GraphicalEditPart ep = (GraphicalEditPart) viewer.getEditPartRegistry().get(obj);
+		final GraphicalEditPart ep = (GraphicalEditPart) viewer.getEditPartForModel(obj);
 
 		final Rectangle bounds;
 		if (ep != null) {

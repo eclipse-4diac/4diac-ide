@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
@@ -40,7 +39,7 @@ import org.eclipse.ltk.core.refactoring.CompositeChange;
 public class SafeFBTypeDeletionChange extends CompositeChange {
 
 	public SafeFBTypeDeletionChange(final FBType type) {
-		super(Messages.DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle);
+		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle, type.getName()));
 		addUpdateChanges(this, type, true);
 	}
 

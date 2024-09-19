@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
  * <!-- begin-user-doc --> The <b>Package</b> for the model. It contains
@@ -627,6 +628,124 @@ public interface MonitoringPackage extends EPackage {
 	int SUBAPP_MONITORING_ELEMENT_FEATURE_COUNT = MONITORING_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.InternalVarInstanceImpl <em>Internal Var Instance</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.InternalVarInstanceImpl
+	 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getInternalVarInstance()
+	 * @generated
+	 */
+	int INTERNAL_VAR_INSTANCE = 8;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_VAR_INSTANCE__NAME = LibraryElementPackage.VAR_DECLARATION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_VAR_INSTANCE__COMMENT = LibraryElementPackage.VAR_DECLARATION__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_VAR_INSTANCE__ATTRIBUTES = LibraryElementPackage.VAR_DECLARATION__ATTRIBUTES;
+
+	/**
+	 * The feature id for the '<em><b>Is Input</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_VAR_INSTANCE__IS_INPUT = LibraryElementPackage.VAR_DECLARATION__IS_INPUT;
+
+	/**
+	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_VAR_INSTANCE__INPUT_CONNECTIONS = LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_VAR_INSTANCE__OUTPUT_CONNECTIONS = LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_VAR_INSTANCE__TYPE = LibraryElementPackage.VAR_DECLARATION__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Array Size</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_VAR_INSTANCE__ARRAY_SIZE = LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Withs</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_VAR_INSTANCE__WITHS = LibraryElementPackage.VAR_DECLARATION__WITHS;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_VAR_INSTANCE__VALUE = LibraryElementPackage.VAR_DECLARATION__VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Fb</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_VAR_INSTANCE__FB = LibraryElementPackage.VAR_DECLARATION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Internal Var Instance</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERNAL_VAR_INSTANCE_FEATURE_COUNT = LibraryElementPackage.VAR_DECLARATION_FEATURE_COUNT + 1;
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.monitoring.MonitoringElement <em>Element</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Element</em>'.
@@ -768,6 +887,27 @@ public interface MonitoringPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSubappMonitoringElement_Anchor();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.monitoring.InternalVarInstance <em>Internal Var Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Internal Var Instance</em>'.
+	 * @see org.eclipse.fordiac.ide.model.monitoring.InternalVarInstance
+	 * @generated
+	 */
+	EClass getInternalVarInstance();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.monitoring.InternalVarInstance#getFb <em>Fb</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Fb</em>'.
+	 * @see org.eclipse.fordiac.ide.model.monitoring.InternalVarInstance#getFb()
+	 * @see #getInternalVarInstance()
+	 * @generated
+	 */
+	EReference getInternalVarInstance_Fb();
 
 	/**
 	 * Returns the meta object for class
@@ -947,6 +1087,24 @@ public interface MonitoringPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SUBAPP_MONITORING_ELEMENT__ANCHOR = eINSTANCE.getSubappMonitoringElement_Anchor();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.InternalVarInstanceImpl <em>Internal Var Instance</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.InternalVarInstanceImpl
+		 * @see org.eclipse.fordiac.ide.model.monitoring.impl.MonitoringPackageImpl#getInternalVarInstance()
+		 * @generated
+		 */
+		EClass INTERNAL_VAR_INSTANCE = eINSTANCE.getInternalVarInstance();
+
+		/**
+		 * The meta object literal for the '<em><b>Fb</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INTERNAL_VAR_INSTANCE__FB = eINSTANCE.getInternalVarInstance_Fb();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.monitoring.impl.AdapterPortElementImpl <em>Adapter Port Element</em>}' class.

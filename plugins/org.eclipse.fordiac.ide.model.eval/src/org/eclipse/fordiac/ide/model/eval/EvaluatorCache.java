@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.model.eval;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -40,14 +39,14 @@ public final class EvaluatorCache implements AutoCloseable {
 	}
 
 	@Override
-	public void close() throws Exception {
+	public void close() {
 		if (stackDepth.decrementAndGet() == 0) {
 			threadCaches.remove();
 		}
 	}
 
 	public <K extends ITypedElement> Value computeInitialValueIfAbsent(final K key,
-			final Function<? super K, ? extends Value> comp) {
+			final CacheFunction<? super K, ? extends Value> comp) throws EvaluatorException, InterruptedException {
 		// cannot use computeIfAbsent due to recursive update
 		// use optimistic computation and putIfAbsent instead
 		final Value value = cachedInitialValues.get(key);
@@ -65,7 +64,8 @@ public final class EvaluatorCache implements AutoCloseable {
 	}
 
 	public <K extends ITypedElement> INamedElement computeResultTypeIfAbsent(final K key,
-			final Function<? super K, ? extends INamedElement> comp) {
+			final CacheFunction<? super K, ? extends INamedElement> comp)
+			throws EvaluatorException, InterruptedException {
 		// cannot use computeIfAbsent due to recursive update
 		// use optimistic computation and putIfAbsent instead
 		final INamedElement type = cachedResultType.get(key);
@@ -80,5 +80,17 @@ public final class EvaluatorCache implements AutoCloseable {
 			}
 		}
 		return type;
+	}
+
+	@FunctionalInterface
+	public interface CacheFunction<T, R> {
+
+		/**
+		 * Applies this function to the given argument.
+		 *
+		 * @param t the function argument
+		 * @return the function result
+		 */
+		R apply(T t) throws EvaluatorException, InterruptedException;
 	}
 }

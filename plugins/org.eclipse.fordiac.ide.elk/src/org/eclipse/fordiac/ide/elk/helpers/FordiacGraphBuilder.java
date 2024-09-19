@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz
- * 				 2020 Primetals Technologies Germany GmbH
- * 				 2021, 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2024 Johannes Kepler University Linz,
+ * 							Primetals Technologies Germany GmbH,
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -94,8 +94,7 @@ public final class FordiacGraphBuilder {
 	}
 
 	private static void processValue(final FordiacLayoutMapping mapping, final ValueEditPart valueEditPart) {
-		final Object iePart = valueEditPart.getViewer().getEditPartRegistry()
-				.get(valueEditPart.getModel().getParentIE());
+		final EditPart iePart = valueEditPart.getViewer().getEditPartForModel(valueEditPart.getModel().getParentIE());
 		final Point point = ((InterfaceEditPart) iePart).getFigure().getBounds().getTopLeft();
 		final ElkPort port = getPort(point, (InterfaceEditPart) iePart, mapping);
 		final ElkLabel label = ElkGraphUtil.createLabel(valueEditPart.getModel().getValue(), port);

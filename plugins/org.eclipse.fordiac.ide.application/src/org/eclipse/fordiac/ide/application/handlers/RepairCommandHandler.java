@@ -21,9 +21,7 @@ import java.util.List;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -239,8 +237,7 @@ public class RepairCommandHandler extends AbstractHandler {
 			return getEObjectFromEditor(varDecl);
 		}
 
-		if (model instanceof final VarDeclaration varDecl
-				&& varDecl.getType() instanceof final ErrorMarkerDataType errorType) {
+		if (model instanceof final VarDeclaration varDecl && varDecl.getType() instanceof ErrorMarkerDataType) {
 			return varDecl;
 		}
 
@@ -280,17 +277,7 @@ public class RepairCommandHandler extends AbstractHandler {
 	}
 
 	public static EObject getEObjectFromMarkerItem(final MarkerItem item) {
-		final IMarker marker = item.getMarker();
-		try {
-			final EObject target = FordiacErrorMarker.getTarget(marker);
-			if (target != null) {
-				return target;
-			}
-
-		} catch (IllegalArgumentException | CoreException e) {
-			return null;
-		}
-		return null;
+		return FordiacErrorMarker.getTarget(item.getMarker());
 	}
 
 	private void showRestrictedNewTypeWizard(final String name, final String fileEnding, final String projectName) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +16,9 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import org.eclipse.fordiac.ide.model.Messages;
 
@@ -27,6 +30,9 @@ public final class DateAndTimeValueConverter implements ValueConverter<LocalDate
 			.appendLiteral('-') // -
 			.append(TimeOfDayValueConverter.TIME_OF_DAY_FORMATTER) // HH:mm:ss(.SSSSSSSSS)
 			.toFormatter();
+
+	private static final Pattern SCANNER_PATTERN = Pattern
+			.compile("\\G\\d[_\\d]++-\\d[_\\d]++-\\d[_\\d]++-\\d[_\\d]++:\\d[_\\d]++:\\d[_\\d]++(?:\\.\\d[_\\d]++)?"); //$NON-NLS-1$
 
 	private DateAndTimeValueConverter() {
 	}
@@ -48,5 +54,16 @@ public final class DateAndTimeValueConverter implements ValueConverter<LocalDate
 			throw new IllegalArgumentException(
 					MessageFormat.format(Messages.VALIDATOR_INVALID_DATE_AND_TIME_FORMAT, string), e);
 		}
+	}
+
+	@Override
+	public LocalDateTime toValue(final Scanner scanner)
+			throws IllegalArgumentException, NoSuchElementException, IllegalStateException {
+		return toValue(scanner.findWithinHorizon(SCANNER_PATTERN, 0));
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
 	}
 }

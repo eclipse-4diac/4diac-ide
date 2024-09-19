@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
- * 				 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2017, 2024 fortiss GmbH, Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,14 +10,13 @@
  * Contributors:
  *   Alois Zoitl - initial implementation and/or documentation
  *   Alexander Lumplecker
- *     - extraced getOppositeInterfaceelement and getConnectionOpposite
+ *     - extracted getOppositeInterfaceelement and getConnectionOpposite
  *       to ConnectionsHelper
  *     - added getOppositeMappedIE
  *******************************************************************************/
 package org.eclipse.fordiac.ide.resourceediting.handlers;
 
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -44,13 +42,11 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if (selection instanceof IStructuredSelection) {
-			final Object first = ((IStructuredSelection) selection).getFirstElement();
-			if (first instanceof VirtualInOutputEditPart) {
-				final IInterfaceElement oppositeMappedIE = getOppositeMappedIE((VirtualInOutputEditPart) first);
-				if (null != oppositeMappedIE) {
-					openResource(oppositeMappedIE);
-				}
+		if ((selection instanceof final IStructuredSelection structSel)
+				&& (structSel.getFirstElement() instanceof final VirtualInOutputEditPart virtIOEP)) {
+			final IInterfaceElement oppositeMappedIE = getOppositeMappedIE(virtIOEP);
+			if (null != oppositeMappedIE) {
+				openResource(oppositeMappedIE);
 			}
 		}
 		return null;
@@ -67,8 +63,8 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 				obj = list.get(0);
 			}
 		}
-		if (obj instanceof VirtualInOutputEditPart) {
-			setBaseEnabled(null != getOppositeMappedIE((VirtualInOutputEditPart) obj));
+		if (obj instanceof final VirtualInOutputEditPart virtIOEP) {
+			setBaseEnabled(getOppositeMappedIE(virtIOEP) != null);
 		} else {
 			setBaseEnabled(false);
 		}
@@ -88,13 +84,12 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 
 		if (null != res) {
 			final IEditorPart editor = OpenListenerManager.openEditor(res);
-			if (editor instanceof ResourceDiagramEditor) {
-				final AdvancedScrollingGraphicalViewer viewer = ((ResourceDiagramEditor) editor).getViewer();
+			if (editor instanceof final ResourceDiagramEditor resEditor) {
+				final AdvancedScrollingGraphicalViewer viewer = resEditor.getViewer();
 				if (viewer != null) {
-					final Map<?, ?> map = viewer.getEditPartRegistry();
-					final Object ieToSelect = map.get(oppositeMappedIE);
-					if (ieToSelect instanceof EditPart) {
-						viewer.selectAndRevealEditPart((EditPart) ieToSelect);
+					final EditPart ieToSelect = viewer.getEditPartForModel(oppositeMappedIE);
+					if (ieToSelect != null) {
+						viewer.selectAndRevealEditPart(ieToSelect);
 					}
 				}
 			}

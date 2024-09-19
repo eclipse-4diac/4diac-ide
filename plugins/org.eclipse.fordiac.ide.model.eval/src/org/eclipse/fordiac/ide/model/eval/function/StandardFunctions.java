@@ -18,6 +18,7 @@
 package org.eclipse.fordiac.ide.model.eval.function;
 
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -269,10 +270,10 @@ public interface StandardFunctions extends Functions {
 	@Comment("Returns a value clamped to a minimum and maximum range.")
 	static <T extends AnyElementaryValue> T LIMIT(@Comment("The lowest possible value.") final T min,
 			@Comment("The input value.") final T value, @Comment("The highest possible value.") final T max) {
-		if (ValueOperations.operator_greaterThan(value, max)) {
+		if (ValueOperations.greaterThan(value, max)) {
 			return max;
 		}
-		if (ValueOperations.operator_lessThan(value, min)) {
+		if (ValueOperations.lessThan(value, min)) {
 			return min;
 		}
 		return value;
@@ -292,7 +293,7 @@ public interface StandardFunctions extends Functions {
 	static <T extends AnyElementaryValue> BoolValue GT(final T... values) {
 		T last = null;
 		for (final T element : values) {
-			if (last != null && !ValueOperations.operator_greaterThan(last, element)) {
+			if (last != null && !ValueOperations.greaterThan(last, element)) {
 				return BoolValue.FALSE;
 			}
 			last = element;
@@ -305,7 +306,7 @@ public interface StandardFunctions extends Functions {
 	static <T extends AnyElementaryValue> BoolValue GE(final T... values) {
 		T last = null;
 		for (final T element : values) {
-			if (last != null && !ValueOperations.operator_greaterEqualsThan(last, element)) {
+			if (last != null && !ValueOperations.greaterEquals(last, element)) {
 				return BoolValue.FALSE;
 			}
 			last = element;
@@ -331,7 +332,7 @@ public interface StandardFunctions extends Functions {
 	static <T extends AnyElementaryValue> BoolValue LE(final T... values) {
 		T last = null;
 		for (final T element : values) {
-			if (last != null && !ValueOperations.operator_lessEqualsThan(last, element)) {
+			if (last != null && !ValueOperations.lessEquals(last, element)) {
 				return BoolValue.FALSE;
 			}
 			last = element;
@@ -344,7 +345,7 @@ public interface StandardFunctions extends Functions {
 	static <T extends AnyElementaryValue> BoolValue LT(final T... values) {
 		T last = null;
 		for (final T element : values) {
-			if (last != null && !ValueOperations.operator_lessThan(last, element)) {
+			if (last != null && !ValueOperations.lessThan(last, element)) {
 				return BoolValue.FALSE;
 			}
 			last = element;
@@ -882,42 +883,42 @@ public interface StandardFunctions extends Functions {
 
 	@Comment("Converts LREAL value to LINT value.")
 	static LIntValue LREAL_TO_LINT(final LRealValue value) {
-		return LIntValue.toLIntValue(value);
+		return LIntValue.toLIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).longValue());
 	}
 
 	@Comment("Converts LREAL value to DINT value.")
 	static DIntValue LREAL_TO_DINT(final LRealValue value) {
-		return DIntValue.toDIntValue(value);
+		return DIntValue.toDIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).intValue());
 	}
 
 	@Comment("Converts LREAL value to INT value.")
 	static IntValue LREAL_TO_INT(final LRealValue value) {
-		return IntValue.toIntValue(value);
+		return IntValue.toIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).shortValue());
 	}
 
 	@Comment("Converts LREAL value to SINT value.")
 	static SIntValue LREAL_TO_SINT(final LRealValue value) {
-		return SIntValue.toSIntValue(value);
+		return SIntValue.toSIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).byteValue());
 	}
 
 	@Comment("Converts LREAL value to LINT value.")
 	static ULIntValue LREAL_TO_ULINT(final LRealValue value) {
-		return ULIntValue.toULIntValue(value);
+		return ULIntValue.toULIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).longValue());
 	}
 
 	@Comment("Converts LREAL value to UDINT value.")
 	static UDIntValue LREAL_TO_UDINT(final LRealValue value) {
-		return UDIntValue.toUDIntValue(value);
+		return UDIntValue.toUDIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).intValue());
 	}
 
 	@Comment("Converts LREAL value to UINT value.")
 	static UIntValue LREAL_TO_UINT(final LRealValue value) {
-		return UIntValue.toUIntValue(value);
+		return UIntValue.toUIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).shortValue());
 	}
 
 	@Comment("Converts LREAL value to USINT value.")
 	static USIntValue LREAL_TO_USINT(final LRealValue value) {
-		return USIntValue.toUSIntValue(value);
+		return USIntValue.toUSIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).byteValue());
 	}
 
 	@Comment("Converts LREAL value to LWORD value.")
@@ -933,42 +934,42 @@ public interface StandardFunctions extends Functions {
 
 	@Comment("Converts REAL value to LINT value.")
 	static LIntValue REAL_TO_LINT(final RealValue value) {
-		return LIntValue.toLIntValue(value);
+		return LIntValue.toLIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).longValue());
 	}
 
 	@Comment("Converts REAL value to DINT value.")
 	static DIntValue REAL_TO_DINT(final RealValue value) {
-		return DIntValue.toDIntValue(value);
+		return DIntValue.toDIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).intValue());
 	}
 
 	@Comment("Converts REAL value to INT value.")
 	static IntValue REAL_TO_INT(final RealValue value) {
-		return IntValue.toIntValue(value);
+		return IntValue.toIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).shortValue());
 	}
 
 	@Comment("Converts REAL value to SINT value.")
 	static SIntValue REAL_TO_SINT(final RealValue value) {
-		return SIntValue.toSIntValue(value);
+		return SIntValue.toSIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).byteValue());
 	}
 
 	@Comment("Converts REAL value to ULINT value.")
 	static ULIntValue REAL_TO_ULINT(final RealValue value) {
-		return ULIntValue.toULIntValue(value);
+		return ULIntValue.toULIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).longValue());
 	}
 
 	@Comment("Converts REAL value to UDINT value.")
 	static UDIntValue REAL_TO_UDINT(final RealValue value) {
-		return UDIntValue.toUDIntValue(value);
+		return UDIntValue.toUDIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).intValue());
 	}
 
 	@Comment("Converts REAL value to UINT value.")
 	static UIntValue REAL_TO_UINT(final RealValue value) {
-		return UIntValue.toUIntValue(value);
+		return UIntValue.toUIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).shortValue());
 	}
 
 	@Comment("Converts REAL value to USINT value.")
 	static USIntValue REAL_TO_USINT(final RealValue value) {
-		return USIntValue.toUSIntValue(value);
+		return USIntValue.toUSIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).byteValue());
 	}
 
 	@Comment("Converts REAL value to DWORD value.")
@@ -2844,8 +2845,13 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an LINT")
-	static <T extends AnyNumValue> LIntValue TO_LINT(final T value) {
+	static <T extends AnyIntValue> LIntValue TO_LINT(final T value) {
 		return LIntValue.toLIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an LINT")
+	static <T extends AnyRealValue> LIntValue TO_LINT(final T value) {
+		return LIntValue.toLIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).longValue());
 	}
 
 	@Comment("Converts the supplied value to an LINT")
@@ -2854,8 +2860,13 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an DINT")
-	static <T extends AnyNumValue> DIntValue TO_DINT(final T value) {
+	static <T extends AnyIntValue> DIntValue TO_DINT(final T value) {
 		return DIntValue.toDIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an DINT")
+	static <T extends AnyRealValue> DIntValue TO_DINT(final T value) {
+		return DIntValue.toDIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).intValue());
 	}
 
 	@Comment("Converts the supplied value to an DINT")
@@ -2864,8 +2875,13 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an INT")
-	static <T extends AnyNumValue> IntValue TO_INT(final T value) {
+	static <T extends AnyIntValue> IntValue TO_INT(final T value) {
 		return IntValue.toIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an INT")
+	static <T extends AnyRealValue> IntValue TO_INT(final T value) {
+		return IntValue.toIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).shortValue());
 	}
 
 	@Comment("Converts the supplied value to an INT")
@@ -2874,8 +2890,13 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an SINT")
-	static <T extends AnyNumValue> SIntValue TO_SINT(final T value) {
+	static <T extends AnyIntValue> SIntValue TO_SINT(final T value) {
 		return SIntValue.toSIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an SINT")
+	static <T extends AnyRealValue> SIntValue TO_SINT(final T value) {
+		return SIntValue.toSIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).byteValue());
 	}
 
 	@Comment("Converts the supplied value to an SINT")
@@ -2884,8 +2905,13 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an ULINT")
-	static <T extends AnyNumValue> ULIntValue TO_ULINT(final T value) {
+	static <T extends AnyIntValue> ULIntValue TO_ULINT(final T value) {
 		return ULIntValue.toULIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an ULINT")
+	static <T extends AnyRealValue> ULIntValue TO_ULINT(final T value) {
+		return ULIntValue.toULIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).longValue());
 	}
 
 	@Comment("Converts the supplied value to an ULINT")
@@ -2894,8 +2920,13 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an UDINT")
-	static <T extends AnyNumValue> UDIntValue TO_UDINT(final T value) {
-		return UDIntValue.toUDIntValue(value.intValue());
+	static <T extends AnyIntValue> UDIntValue TO_UDINT(final T value) {
+		return UDIntValue.toUDIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an UDINT")
+	static <T extends AnyRealValue> UDIntValue TO_UDINT(final T value) {
+		return UDIntValue.toUDIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).intValue());
 	}
 
 	@Comment("Converts the supplied value to an UDINT")
@@ -2904,8 +2935,13 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an UINT")
-	static <T extends AnyNumValue> UIntValue TO_UINT(final T value) {
+	static <T extends AnyIntValue> UIntValue TO_UINT(final T value) {
 		return UIntValue.toUIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an UINT")
+	static <T extends AnyRealValue> UIntValue TO_UINT(final T value) {
+		return UIntValue.toUIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).shortValue());
 	}
 
 	@Comment("Converts the supplied value to an UINT")
@@ -2914,8 +2950,13 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Converts the supplied value to an USINT")
-	static <T extends AnyNumValue> USIntValue TO_USINT(final T value) {
+	static <T extends AnyIntValue> USIntValue TO_USINT(final T value) {
 		return USIntValue.toUSIntValue(value);
+	}
+
+	@Comment("Converts the supplied value to an USINT")
+	static <T extends AnyRealValue> USIntValue TO_USINT(final T value) {
+		return USIntValue.toUSIntValue(value.bigDecimalValue().setScale(0, RoundingMode.HALF_EVEN).byteValue());
 	}
 
 	@Comment("Converts the supplied value to an USINT")

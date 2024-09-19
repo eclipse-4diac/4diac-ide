@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.connection.commands.ReplaceVarsWithStructCommand;
 import org.eclipse.gef.commands.Command;

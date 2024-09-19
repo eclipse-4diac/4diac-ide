@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * Copyright (c) 2011 - 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 				             Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -60,6 +60,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
 
@@ -108,6 +109,9 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	public <T> T getAdapter(final Class<T> type) {
+		if (type == IContentOutlinePage.class) {
+			return null; // use outline page from FBTypeEditor
+		}
 		if (type == InterfaceList.class) {
 			return type.cast(getModel().getInterfaceList());
 		}
@@ -128,9 +132,9 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	public boolean outlineSelectionChanged(final Object selectedElement) {
-		final Object editpart = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
+		final EditPart ep = getGraphicalViewer().getEditPartForModel(selectedElement);
 		getGraphicalViewer().flush();
-		if (editpart instanceof final EditPart ep && ep.isSelectable()) {
+		if (ep != null && ep.isSelectable()) {
 			getGraphicalViewer().select(ep);
 			return true;
 		}
@@ -255,7 +259,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 		if (getGraphicalViewer() == null) {
 			return null;
 		}
-		return getGraphicalViewer().getEditPartRegistry().get(fbType);
+		return getGraphicalViewer().getEditPartForModel(fbType);
 	}
 
 }

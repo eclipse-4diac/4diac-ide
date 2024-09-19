@@ -19,27 +19,45 @@ import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 
 public final class ArrayValue implements AnyDerivedValue, Iterable<Value> {
 	private static final int COLLAPSE_ELEMENTS_SIZE = 100;
 
 	private final ArrayType type;
-	private final List<Variable<?>> elements;
+	private final DataType elementType;
 	private final int start;
 	private final int end;
+	private final List<Variable<?>> elements;
 
-	public ArrayValue(final ArrayType type, final List<Variable<?>> elements) {
+	public ArrayValue(final ArrayType type) {
 		if (type.getSubranges().isEmpty() || type.getSubranges().stream()
 				.anyMatch(subrange -> !subrange.isSetLowerLimit() || !subrange.isSetUpperLimit())) {
 			throw new IllegalArgumentException("Cannot instantiate array value with unknown bounds"); //$NON-NLS-1$
 		}
 		this.type = type;
-		this.elements = elements;
+		if (type.getSubranges().size() > 1) {
+			elementType = ArrayVariable.newArrayType(type.getBaseType(),
+					type.getSubranges().stream().skip(1).map(EcoreUtil::copy).toList());
+		} else {
+			elementType = type.getBaseType();
+		}
 		start = type.getSubranges().get(0).getLowerLimit();
 		end = type.getSubranges().get(0).getUpperLimit();
+		elements = IntStream.rangeClosed(start, end)
+				.<Variable<?>>mapToObj(index -> VariableOperations.newVariable(Integer.toString(index), elementType))
+				.toList();
+	}
+
+	public ArrayValue(final ArrayType type, final List<?> values) {
+		this(type);
+		IntStream.range(0, values.size()).forEach(
+				index -> elements.get(index).setValue(ValueOperations.wrapValue(values.get(index), elementType)));
 	}
 
 	public Variable<?> get(final int index) {
@@ -143,6 +161,10 @@ public final class ArrayValue implements AnyDerivedValue, Iterable<Value> {
 	@Override
 	public ArrayType getType() {
 		return type;
+	}
+
+	public DataType getElementType() {
+		return elementType;
 	}
 
 	public List<Variable<?>> getElements() {

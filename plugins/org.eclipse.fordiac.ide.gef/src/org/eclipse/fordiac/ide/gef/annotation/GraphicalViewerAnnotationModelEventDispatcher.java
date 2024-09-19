@@ -46,11 +46,9 @@ public class GraphicalViewerAnnotationModelEventDispatcher implements GraphicalA
 	}
 
 	protected AnnotableGraphicalEditPart findEditPart(final Object target) {
-		if (target != null) {
-			final Object object = viewer.getEditPartRegistry().get(target);
-			if (object instanceof final AnnotableGraphicalEditPart editPart) {
-				return editPart;
-			}
+		if ((target != null)
+				&& (viewer.getEditPartForModel(target) instanceof final AnnotableGraphicalEditPart editPart)) {
+			return editPart;
 		}
 		return null;
 	}

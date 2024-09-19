@@ -193,6 +193,11 @@ public abstract class AbstractInternalVarsSection extends AbstractSection
 	}
 
 	@Override
+	protected void performRefreshAnnotations() {
+		table.refresh(false);
+	}
+
+	@Override
 	public void executeCompoundCommand(final CompoundCommand cmd) {
 		executeCommand(cmd);
 		table.refresh();

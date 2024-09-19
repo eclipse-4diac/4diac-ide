@@ -19,7 +19,11 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008")
 public class Messages extends NLS {
 
-	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.globalconstantseditor.ui.messages"; //$NON-NLS-1$
+
+	public static String GlobalConstantsOutlineTreeProvider_VarGlobalDeclarationBlockConstantText;
+
+	public static String GlobalConstantsOutlineTreeProvider_VarGlobalDeclarationBlockText;
 
 	public static String GlobalConstQuickFix_AddConstantKeyword;
 

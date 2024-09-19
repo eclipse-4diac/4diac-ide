@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -53,7 +54,14 @@ public final class TypedElementAnnotations {
 	private static Diagnostic createTypeValidationDiagnostic(final String message, final ITypedElement element) {
 		return new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 				LibraryElementValidator.ITYPED_ELEMENT__VALIDATE_TYPE, message,
-				FordiacMarkerHelper.getDiagnosticData(element, getTypeFeature(element)));
+				FordiacMarkerHelper.getDiagnosticData(element, getTypeFeature(element), getFullTypeName(element)));
+	}
+
+	private static String getFullTypeName(final ITypedElement element) {
+		if (element.getType() instanceof final LibraryElement libraryElement) {
+			return PackageNameHelper.getFullTypeName(libraryElement);
+		}
+		return element.getTypeName();
 	}
 
 	private static EStructuralFeature getTypeFeature(final ITypedElement element) {

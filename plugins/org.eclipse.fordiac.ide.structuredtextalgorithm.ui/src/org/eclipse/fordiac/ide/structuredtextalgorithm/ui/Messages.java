@@ -17,8 +17,9 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 
-	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
-
+	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextalgorithm.ui.messages"; //$NON-NLS-1$
+	public static String STAlgorithmLabelProvider_AlgorithmText;
+	public static String STAlgorithmLabelProvider_MethodText;
 	public static String STAlgorithmQuickfixProvider_Add_missing_algorithm;
 	public static String STAlgorithmQuickfixProvider_Add_missing_algorithm_for_input_event;
 	public static String STAlgorithmQuickfixProvider_CreateMissingInternalVariable;

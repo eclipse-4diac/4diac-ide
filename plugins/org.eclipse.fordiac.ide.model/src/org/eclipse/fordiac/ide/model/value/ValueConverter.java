@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.value;
 
 import java.util.Objects;
+import java.util.Scanner;
 
 public interface ValueConverter<T> {
 	default String toString(final T value) {
@@ -20,4 +21,6 @@ public interface ValueConverter<T> {
 	}
 
 	T toValue(String string) throws IllegalArgumentException;
+
+	T toValue(Scanner scanner) throws IllegalArgumentException;
 }

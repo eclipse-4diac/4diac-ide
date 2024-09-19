@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -57,12 +58,12 @@ public class GetCoverageDialog extends MessageDialog {
 
 		visitedStates.entrySet().forEach(entry -> {
 			final Label label = new Label(vistedStatesGroup, SWT.None);
-			label.setText(entry.getKey() + "   :    " + entry.getValue() + " \n");
+			label.setText(entry.getKey() + "   :    " + entry.getValue() + " \n"); //$NON-NLS-1$ //$NON-NLS-2$
 		});
 
 		Label label = new Label(vistedStatesGroup, SWT.None);
-		label.setText(Messages.Coverage_NODECOVERAGE + ": "
-				+ CoverageCalculator.calculateNodeCoverageOfSuiteBy(visitedStates) * 100 + "% \n");
+		label.setText(MessageFormat.format(Messages.Coverage_NODECOVERAGE,
+				Float.toString(CoverageCalculator.calculateNodeCoverageOfSuiteBy(visitedStates) * 100)));
 
 		final Group vistedPathsGroup = new Group(dialogArea, SWT.NONE);
 		vistedPathsGroup.setText(Messages.Coverage_VISITED_PATHS);
@@ -71,18 +72,25 @@ public class GetCoverageDialog extends MessageDialog {
 
 		visitedPaths.entrySet().forEach(entry -> {
 			final Label label2 = new Label(vistedPathsGroup, SWT.None);
-			String pathString = "";
+			final StringBuilder pathString = new StringBuilder();
 
 			for (final String state : entry.getKey()) {
-				pathString += state + " -> ";
+				pathString.append(state);
+				pathString.append(" -> "); //$NON-NLS-1$
 			}
-			pathString = pathString.substring(0, pathString.length() - 4);
-			label2.setText(pathString + "   :    " + entry.getValue() + " \n");
+			if (!entry.getKey().isEmpty()) {
+				pathString.setLength(pathString.length() - 4);
+			}
+			pathString.append("   :    "); //$NON-NLS-1$
+			pathString.append(entry.getValue());
+			pathString.append(" \n"); //$NON-NLS-1$
+
+			label2.setText(pathString.toString());
 		});
 
 		label = new Label(vistedPathsGroup, SWT.None);
-		label.setText(Messages.Coverage_PATHCOVERAGE + ": "
-				+ CoverageCalculator.calculatePathCoverageOfSuiteBy(visitedPaths) * 100 + "% \n");
+		label.setText(MessageFormat.format(Messages.Coverage_PATHCOVERAGE,
+				Float.toString(CoverageCalculator.calculatePathCoverageOfSuiteBy(visitedPaths) * 100)));
 
 		return dialogArea;
 	}

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +17,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import org.eclipse.fordiac.ide.model.Messages;
 
@@ -32,6 +35,9 @@ public final class TimeOfDayValueConverter implements ValueConverter<LocalTime> 
 			.optionalStart() // optional fraction
 			.appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true) // .SSSSSSSSS
 			.toFormatter();
+
+	private static final Pattern SCANNER_PATTERN = Pattern
+			.compile("\\G\\d[_\\d]++:\\d[_\\d]++:\\d[_\\d]++(?:\\.\\d[_\\d]++)?"); //$NON-NLS-1$
 
 	private TimeOfDayValueConverter() {
 	}
@@ -53,5 +59,16 @@ public final class TimeOfDayValueConverter implements ValueConverter<LocalTime> 
 			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_InvalidTimeOfDayLiteral, string),
 					e);
 		}
+	}
+
+	@Override
+	public LocalTime toValue(final Scanner scanner)
+			throws IllegalArgumentException, NoSuchElementException, IllegalStateException {
+		return toValue(scanner.findWithinHorizon(SCANNER_PATTERN, 0));
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
 	}
 }

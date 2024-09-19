@@ -153,7 +153,7 @@ public class PinInfoBasicWidget implements CommandExecutor {
 
 	private void handleTypeSelectionChanged(final String newTypeName) {
 		if (isTypeChangeable()) {
-			executeCommand(ChangeDataTypeCommand.forTypeName(getType(), newTypeName));
+			executeCommand(ChangeDataTypeCommand.forTypeDeclaration(getType(), newTypeName));
 			// ensure that the new value is shown
 			final Consumer<Command> commandExecutorBuffer = commandExecutor;
 			commandExecutor = null;

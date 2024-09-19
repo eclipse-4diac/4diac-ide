@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.Spliterators;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -99,7 +100,8 @@ public class ValidationJob extends UIJob {
 				.stream(Spliterators.spliteratorUnknownSize(EcoreUtil.getAllContents(
 						diagnostics.stream().map(FordiacMarkerHelper::getDiagnosticTarget).toList(), true), 0), false)
 				.map(annotationModel::getAnnotations).flatMap(Collection::stream)
-				.filter(ValidationJob::isValidationAnnotation).collect(Collectors.toSet());
+				.filter(ValidationJob::isValidationAnnotation).filter(Predicate.not(add::contains))
+				.collect(Collectors.toSet());
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException();
 		}

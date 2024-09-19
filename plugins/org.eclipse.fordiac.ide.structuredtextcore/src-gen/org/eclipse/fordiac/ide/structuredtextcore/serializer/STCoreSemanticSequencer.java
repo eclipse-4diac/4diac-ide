@@ -1170,7 +1170,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STStructInitializerExpression returns STStructInitializerExpression
 	 *
 	 * Constraint:
-	 *     (values+=STStructInitElement values+=STStructInitElement*)
+	 *     (type=[StructuredType|QualifiedName]? values+=STStructInitElement values+=STStructInitElement*)
 	 * </pre>
 	 */
 	protected void sequence_STStructInitializerExpression(ISerializationContext context, STStructInitializerExpression semanticObject) {

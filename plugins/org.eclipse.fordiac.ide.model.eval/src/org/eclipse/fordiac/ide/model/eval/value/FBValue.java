@@ -12,23 +12,95 @@
  */
 package org.eclipse.fordiac.ide.model.eval.value;
 
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.model.eval.EvaluatorInitializerException;
+import org.eclipse.fordiac.ide.model.eval.variable.ECStateVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class FBValue implements Value, Iterable<Value> {
+
 	private final FBType type;
+	private final Map<String, Variable<?>> members = new HashMap<>();
 
-	private final Map<String, Variable<?>> members;
+	public FBValue(final FBType type) {
+		this(type, Collections.emptyList());
+	}
 
-	public FBValue(final FBType type, final Map<String, Variable<?>> members) {
+	public FBValue(final FBType type, final Iterable<Variable<?>> variables) {
+		this(type, type.getInterfaceList(), variables);
+	}
+
+	public FBValue(final FB fb) {
+		this(fb, Collections.emptyList());
+	}
+
+	public FBValue(final FB fb, final Iterable<Variable<?>> variables) {
+		this(fb.getType(), fb.getInterface(), variables);
+	}
+
+	private FBValue(final FBType type, final InterfaceList interfaceList, final Iterable<Variable<?>> variables) {
 		this.type = type;
-		this.members = members;
+		if (variables != null) {
+			variables.forEach(variable -> members.put(variable.getName(), variable));
+		}
+		interfaceList.getInputVars().forEach(this::initializeMember);
+		interfaceList.getInOutVars().forEach(this::initializeMember);
+		interfaceList.getOutputVars().forEach(this::initializeMember);
+		interfaceList.getSockets().stream().map(AdapterDeclaration::getAdapterFB).forEach(this::initializeMember);
+		interfaceList.getPlugs().stream().map(AdapterDeclaration::getAdapterFB).forEach(this::initializeMember);
+		if (type instanceof final BaseFBType baseFBType) {
+			baseFBType.getInternalConstVars().forEach(this::initializeMember);
+			baseFBType.getInternalVars().forEach(this::initializeMember);
+			baseFBType.getInternalFbs().forEach(this::initializeMember);
+		}
+		if (type instanceof final BasicFBType basicFBType) {
+			members.computeIfAbsent(ECStateVariable.NAME, unused -> new ECStateVariable(basicFBType));
+		}
+	}
+
+	public FBValue(final FBType type, final Map<String, ?> values) {
+		this(type);
+		values.forEach((name, value) -> {
+			final Variable<?> member = members.get(name);
+			if (member != null) {
+				member.setValue(ValueOperations.wrapValue(value, member.getType()));
+			}
+		});
+	}
+
+	protected void initializeMember(final VarDeclaration variable) {
+		members.computeIfAbsent(variable.getName(), unused -> {
+			try {
+				return VariableOperations.newVariable(variable);
+			} catch (final Exception e) {
+				throw new EvaluatorInitializerException(variable, e);
+			}
+		});
+	}
+
+	protected void initializeMember(final FB fb) {
+		members.computeIfAbsent(fb.getName(), unused -> {
+			try {
+				return VariableOperations.newVariable(fb);
+			} catch (final Exception e) {
+				throw new EvaluatorInitializerException(fb, e);
+			}
+		});
 	}
 
 	public Variable<?> get(final String key) {

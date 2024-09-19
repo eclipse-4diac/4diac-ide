@@ -34,10 +34,9 @@ public class UpdatePinInTypeDeclarationCommand extends Command {
 
 	@Override
 	public void execute() {
-		fbType.getInterfaceList().getAllInterfaceElements().stream().filter(VarDeclaration.class::isInstance)
-				.map(VarDeclaration.class::cast).filter(i -> i.getType().getTypeEntry() == dataTypeEntry)
-				.forEach(el -> {
-					el.setType(dataTypeEntry.getTypeEditable());
-				});
+		fbType.getInterfaceList().getAllInterfaceElements().stream() //
+				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast) //
+				.filter(i -> i.getType().getTypeEntry() == dataTypeEntry) //
+				.forEach(el -> el.setType(dataTypeEntry.getTypeEditable()));
 	}
 }

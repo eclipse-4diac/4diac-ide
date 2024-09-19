@@ -65,7 +65,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
@@ -344,19 +343,6 @@ public class FBTImporter extends TypeImporter {
 		parsePrimitive(type, inputPrimitive);
 		proceedToEndElementNamed(LibraryElementTags.INPUT_PRIMITIVE_ELEMENT);
 		serviceTransaction.setInputPrimitive(inputPrimitive);
-	}
-
-	/**
-	 * This method converts a FBType to a ServiceInterfaceFBType.
-	 *
-	 * @param type - The FBType that is being converted to ServiceInterfaceFBType
-	 *
-	 * @return - A FBType that is converted
-	 */
-	private static FBType convertToServiceInterfaceType(final FBType type) {
-		final ServiceInterfaceFBType serviceType = LibraryElementFactory.eINSTANCE.createServiceInterfaceFBType();
-		copyGeneralTypeInformation(serviceType, type);
-		return serviceType;
 	}
 
 	private static void copyGeneralTypeInformation(final FBType dstType, final FBType srcType) {

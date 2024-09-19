@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.monitoring.InternalVarInstance;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.handlers.RemoveAllWatchesHandler;
@@ -88,6 +89,10 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		if (sys != null) {
 			final SystemMonitoringData data = systemMonitoringData.get(sys);
 			if (data != null) {
+				if (port instanceof final InternalVarInstance intVar) {
+					final PortElement portEl = MonitoringManagerUtils.createPortElement(intVar);
+					return (portEl != null) ? data.getMonitoringElementByPortString(portEl.getPortString()) : null;
+				}
 				return data.getMonitoredElement(port);
 			}
 		}
@@ -98,8 +103,8 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		if (port != null) {
 			final FBNetworkElement fbNetworkElement = port.getFBNetworkElement();
 			if (fbNetworkElement != null) {
-				if (fbNetworkElement instanceof AdapterFB) {
-					return getAutomationSystem(((AdapterFB) fbNetworkElement).getAdapterDecl());
+				if (fbNetworkElement instanceof final AdapterFB adpFB) {
+					return getAutomationSystem(adpFB.getAdapterDecl());
 				}
 				if (fbNetworkElement.getFbNetwork() != null) {
 					return fbNetworkElement.getFbNetwork().getAutomationSystem();
@@ -113,10 +118,11 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (notification.getEventType() == Notification.REMOVE && notification.getOldValue() instanceof Mapping) {
-				final FBNetworkElement fb = ((Mapping) notification.getOldValue()).getFrom();
-				if (fb instanceof SubApp) {
-					removeMonitoringElementsFromSubApp((SubApp) fb);
+			if (notification.getEventType() == Notification.REMOVE
+					&& notification.getOldValue() instanceof final Mapping mapping) {
+				final FBNetworkElement fb = mapping.getFrom();
+				if (fb instanceof final SubApp subApp) {
+					removeMonitoringElementsFromSubApp(subApp);
 				} else {
 					removeMonitoringElementsFromFB(fb);
 				}
@@ -177,8 +183,8 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		removeMonitoringElementsFromFB(element);
 
 		for (final FBNetworkElement nestedFB : element.getSubAppNetwork().getNetworkElements()) {
-			if (nestedFB instanceof SubApp) {
-				removeMonitoringElementsFromSubApp((SubApp) nestedFB);
+			if (nestedFB instanceof final SubApp subApp) {
+				removeMonitoringElementsFromSubApp(subApp);
 			} else {
 				removeMonitoringElementsFromFB(nestedFB);
 			}
@@ -340,9 +346,9 @@ public class MonitoringManager extends AbstractMonitoringManager {
 			return;
 		}
 		final IInterfaceElement interfaceElement = element.getPort().getInterfaceElement();
-		if (interfaceElement instanceof VarDeclaration) {
+		if (interfaceElement instanceof final VarDeclaration varDecl) {
 			try {
-				value = VariableOperations.newVariable((VarDeclaration) interfaceElement, value).toString(false);
+				value = VariableOperations.newVariable(varDecl, value).toString(false);
 			} catch (final Exception e) {
 				showInvalidValueErrorMsg(element, value);
 				return;

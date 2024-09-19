@@ -16,6 +16,8 @@ package org.eclipse.fordiac.ide.globalconstantseditor.ui;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocument;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocumentPartitioner;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.outline.GlobalConstantsOutlinePage;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.refactoring.GlobalConstantsPartialSerializer;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreCleanupEditorCallback;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
@@ -32,6 +34,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuick
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDocumentReconcileStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.OutlineTreeContribution;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
@@ -56,12 +59,14 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreMarkerCrea
 import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreMarkerTypeProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreResourceUIValidatorExtension;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.formatting.IWhitespaceInformationProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 import org.eclipse.xtext.ide.refactoring.IRenameNameValidator;
 import org.eclipse.xtext.ide.refactoring.IRenameStrategy2;
 import org.eclipse.xtext.ide.serializer.IChangeSerializer;
+import org.eclipse.xtext.ide.serializer.impl.PartialSerializer;
 import org.eclipse.xtext.ide.serializer.impl.RecordingXtextResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.ReferenceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.RelatedEmfResourceUpdater;
@@ -81,6 +86,7 @@ import org.eclipse.xtext.ui.editor.model.IResourceForEditorInputFactory;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider;
 import org.eclipse.xtext.ui.editor.occurrences.IOccurrenceComputer;
+import org.eclipse.xtext.ui.editor.outline.actions.IOutlineContribution;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer;
 import org.eclipse.xtext.ui.editor.quickfix.ISimilarityMatcher;
 import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor;
@@ -293,8 +299,22 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 		return STCoreResourceLifecycleManager.class;
 	}
 
+	public Class<? extends PartialSerializer> bindPartialSerializer() {
+		return GlobalConstantsPartialSerializer.class;
+	}
+
 	@Override
 	public Class<? extends IWhitespaceInformationProvider> bindIWhitespaceInformationProvider() {
 		return STCoreWhitespaceInformationProvider.class;
+	}
+
+	@Override
+	public Class<? extends IContentOutlinePage> bindIContentOutlinePage() {
+		return GlobalConstantsOutlinePage.class;
+	}
+
+	public void configureOutlineTreeContribution(final Binder binder) {
+		binder.bind(IOutlineContribution.class).annotatedWith(Names.named("OutlineTreeContribution")) //$NON-NLS-1$
+				.to(OutlineTreeContribution.class);
 	}
 }

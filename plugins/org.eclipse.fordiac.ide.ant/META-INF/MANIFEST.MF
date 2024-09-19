@@ -17,6 +17,7 @@ Require-Bundle: org.eclipse.core.resources,
  org.eclipse.fordiac.ide.export.xmi,
  org.eclipse.fordiac.ide.library.model,
  org.eclipse.fordiac.ide.hierarchymanager.model,
- org.eclipse.fordiac.ide.hierarchymanager.ui
+ org.eclipse.fordiac.ide.hierarchymanager.ui,
+ org.eclipse.fordiac.ide.library
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy

@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.ant.ant;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.stream.Stream;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -32,7 +31,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.tools.ant.BuildException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.export.ExportFilter;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -57,15 +55,6 @@ public abstract class AbstractExportLibElements extends AbstractFBTask {
 	@Override
 	protected ExportFilter getExportFilter() {
 		return null; // This class does not use an ExportFilter
-	}
-
-	@Override
-	protected boolean isFilteredFiletype(final File file) {
-		final var allowedFiletypes = Stream.of(//
-				TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT,//
-				TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT,//
-				TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT);
-		return matchesFileExtension(file, allowedFiletypes);
 	}
 
 	@Override

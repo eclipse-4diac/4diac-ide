@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_T_FF_SR" Comment="Event-driven bistable and Toggle">
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017, 2024 fortiss GmbH, HR Agrartechnik GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Höpfinger" Date="2024-08-27" Remarks="Copy E_SR and make this FB">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="S" Type="Event" Comment="Set output Q">
+			</Event>
+			<Event Name="R" Type="Event" Comment="Reset output Q">
+			</Event>
+			<Event Name="CLK" Type="Event" Comment="Clock for triggering a output toggle">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Output Q has changed">
+				<With Var="Q"/>
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="value of flip flop"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="500" y="385">
+			</ECState>
+			<ECState Name="SET" Comment="" x="1200" y="400">
+				<ECAction Algorithm="SET" Output="EO"/>
+			</ECState>
+			<ECState Name="RESET" Comment="" x="1165" y="845">
+				<ECAction Algorithm="RESET" Output="EO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="SET" Condition="S" Comment="" x="995" y="455"/>
+			<ECTransition Source="SET" Destination="RESET" Condition="R" Comment="" x="1205" y="685"/>
+			<ECTransition Source="RESET" Destination="SET" Condition="S" Comment="" x="1460" y="675"/>
+			<ECTransition Source="SET" Destination="RESET" Condition="CLK" Comment="" x="1673.33" y="666.67"/>
+			<ECTransition Source="RESET" Destination="SET" Condition="CLK" Comment="" x="886.67" y="693.33"/>
+			<ECTransition Source="START" Destination="SET" Condition="CLK" Comment="" x="966.67" y="200"/>
+		</ECC>
+		<Algorithm Name="SET" Comment="SET algorithm">
+			<ST><![CDATA[Q := TRUE;]]></ST>
+		</Algorithm>
+		<Algorithm Name="RESET" Comment="RESET algorithm">
+			<ST><![CDATA[Q := FALSE;]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>

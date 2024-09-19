@@ -40,7 +40,7 @@ import static org.eclipse.fordiac.ide.model.eval.value.ULIntValue.toULIntValue;
 import static org.eclipse.fordiac.ide.model.eval.value.USIntValue.toUSIntValue;
 import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.castValue;
 import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.defaultValue;
-import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.operator_minus;
+import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.negate;
 import static org.eclipse.fordiac.ide.model.eval.value.ValueOperations.wrapValue;
 import static org.eclipse.fordiac.ide.model.eval.value.WCharValue.toWCharValue;
 import static org.eclipse.fordiac.ide.model.eval.value.WStringValue.toWStringValue;
@@ -50,6 +50,8 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -62,6 +64,7 @@ import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyCharType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
 import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType;
+import org.eclipse.fordiac.ide.model.data.AnyRealType;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType;
 import org.eclipse.fordiac.ide.model.data.BoolType;
@@ -124,7 +127,7 @@ class StandardFunctionsTest {
 	void testAbs() throws Throwable {
 		assertEquals(toIntValue((short) 17), Functions.invoke(StandardFunctions.class, "ABS", toIntValue((short) 17)));
 		assertEquals(toIntValue((short) 4),
-				Functions.invoke(StandardFunctions.class, "ABS", operator_minus(toIntValue((short) 4))));
+				Functions.invoke(StandardFunctions.class, "ABS", negate(toIntValue((short) 4))));
 		assertEquals(toLIntValue(0), Functions.invoke(StandardFunctions.class, "ABS", toLIntValue(0)));
 	}
 
@@ -523,6 +526,10 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, "GT", toIntValue((short) 4), toIntValue((short) 17)));
 		assertEquals(toBoolValue(false),
 				Functions.invoke(StandardFunctions.class, "GT", toIntValue((short) 4), toIntValue((short) 4)));
+		assertEquals(toBoolValue(false),
+				Functions.invoke(StandardFunctions.class, "GT", toRealValue(0.0f), toRealValue(-0.0f)));
+		assertEquals(toBoolValue(false),
+				Functions.invoke(StandardFunctions.class, "GT", toRealValue(-0.0f), toRealValue(0.0f)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "GT", toIntValue((short) 17),
 				toIntValue((short) 4), toIntValue((short) 21)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "GT", toIntValue((short) 4),
@@ -545,6 +552,10 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, "GE", toIntValue((short) 4), toIntValue((short) 17)));
 		assertEquals(toBoolValue(true),
 				Functions.invoke(StandardFunctions.class, "GE", toIntValue((short) 4), toIntValue((short) 4)));
+		assertEquals(toBoolValue(true),
+				Functions.invoke(StandardFunctions.class, "GE", toRealValue(0.0f), toRealValue(-0.0f)));
+		assertEquals(toBoolValue(true),
+				Functions.invoke(StandardFunctions.class, "GE", toRealValue(-0.0f), toRealValue(0.0f)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "GE", toIntValue((short) 17),
 				toIntValue((short) 4), toIntValue((short) 21)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "GE", toIntValue((short) 4),
@@ -567,6 +578,10 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, "EQ", toIntValue((short) 4), toIntValue((short) 17)));
 		assertEquals(toBoolValue(true),
 				Functions.invoke(StandardFunctions.class, "EQ", toIntValue((short) 4), toIntValue((short) 4)));
+		assertEquals(toBoolValue(true),
+				Functions.invoke(StandardFunctions.class, "EQ", toRealValue(0.0f), toRealValue(-0.0f)));
+		assertEquals(toBoolValue(true),
+				Functions.invoke(StandardFunctions.class, "EQ", toRealValue(-0.0f), toRealValue(0.0f)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "EQ", toIntValue((short) 17),
 				toIntValue((short) 4), toIntValue((short) 21)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "EQ", toIntValue((short) 4),
@@ -589,6 +604,10 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, "LT", toIntValue((short) 4), toIntValue((short) 17)));
 		assertEquals(toBoolValue(false),
 				Functions.invoke(StandardFunctions.class, "LT", toIntValue((short) 4), toIntValue((short) 4)));
+		assertEquals(toBoolValue(false),
+				Functions.invoke(StandardFunctions.class, "LT", toRealValue(0.0f), toRealValue(-0.0f)));
+		assertEquals(toBoolValue(false),
+				Functions.invoke(StandardFunctions.class, "LT", toRealValue(-0.0f), toRealValue(0.0f)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "LT", toIntValue((short) 17),
 				toIntValue((short) 4), toIntValue((short) 21)));
 		assertEquals(toBoolValue(true), Functions.invoke(StandardFunctions.class, "LT", toIntValue((short) 4),
@@ -611,6 +630,10 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, "LE", toIntValue((short) 4), toIntValue((short) 17)));
 		assertEquals(toBoolValue(true),
 				Functions.invoke(StandardFunctions.class, "LE", toIntValue((short) 4), toIntValue((short) 4)));
+		assertEquals(toBoolValue(true),
+				Functions.invoke(StandardFunctions.class, "LE", toRealValue(0.0f), toRealValue(-0.0f)));
+		assertEquals(toBoolValue(true),
+				Functions.invoke(StandardFunctions.class, "LE", toRealValue(-0.0f), toRealValue(0.0f)));
 		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, "LE", toIntValue((short) 17),
 				toIntValue((short) 4), toIntValue((short) 21)));
 		assertEquals(toBoolValue(true), Functions.invoke(StandardFunctions.class, "LE", toIntValue((short) 4),
@@ -633,6 +656,10 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, "NE", toIntValue((short) 4), toIntValue((short) 17)));
 		assertEquals(toBoolValue(false),
 				Functions.invoke(StandardFunctions.class, "NE", toIntValue((short) 4), toIntValue((short) 4)));
+		assertEquals(toBoolValue(false),
+				Functions.invoke(StandardFunctions.class, "NE", toRealValue(0.0f), toRealValue(-0.0f)));
+		assertEquals(toBoolValue(false),
+				Functions.invoke(StandardFunctions.class, "NE", toRealValue(-0.0f), toRealValue(0.0f)));
 	}
 
 	@Test
@@ -1505,6 +1532,34 @@ class StandardFunctionsTest {
 		assertEquals(expected, Functions.invoke(StandardFunctions.class, functionName, defaultValue(type)));
 	}
 
+	@ParameterizedTest(name = "{index}: {0} as {1}")
+	@MethodSource("typeAnyRealAndAnyIntArgumentsCartesianProvider")
+	void testRealConversions(final String typeName, final String castTypeName) throws Throwable {
+		final DataType type = IecTypes.ElementaryTypes.getTypeByName(typeName);
+		final DataType castType = IecTypes.ElementaryTypes.getTypeByName(castTypeName);
+		for (final String functionName : List.of(typeName + "_TO_" + castTypeName, "TO_" + castTypeName)) {
+			assertEquals(wrapValue(BigInteger.valueOf(2), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(1.6), type)));
+			assertEquals(wrapValue(BigInteger.valueOf(-2), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(-1.6), type)));
+
+			assertEquals(wrapValue(BigInteger.valueOf(2), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(1.5), type)));
+			assertEquals(wrapValue(BigInteger.valueOf(-2), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(-1.5), type)));
+
+			assertEquals(wrapValue(BigInteger.valueOf(1), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(1.4), type)));
+			assertEquals(wrapValue(BigInteger.valueOf(-1), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(-1.4), type)));
+
+			assertEquals(wrapValue(BigInteger.valueOf(2), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(2.5), type)));
+			assertEquals(wrapValue(BigInteger.valueOf(-2), castType),
+					Functions.invoke(StandardFunctions.class, functionName, wrapValue(BigDecimal.valueOf(-2.5), type)));
+		}
+	}
+
 	@ParameterizedTest(name = "{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
 	void testStringConversions(final String typeName) throws Throwable {
@@ -1526,8 +1581,8 @@ class StandardFunctionsTest {
 			assertEquals(wrapValue(Integer.valueOf(17), type), Functions.invoke(StandardFunctions.class,
 					functionStringAsTypeName, toStringValue(wrapValue(Integer.valueOf(17), type).toString())));
 			// *_AS_WSTRING
-			assertEquals(toWStringValue(defaultValue(type).toString()), Functions.invoke(StandardFunctions.class,
-					functionTypeAsWStringName.toString(), defaultValue(type)));
+			assertEquals(toWStringValue(defaultValue(type).toString()),
+					Functions.invoke(StandardFunctions.class, functionTypeAsWStringName, defaultValue(type)));
 			assertEquals(toWStringValue(WStringValue.toWStringValue(wrapValue(Integer.valueOf(17), type).toString())),
 					Functions.invoke(StandardFunctions.class, functionTypeAsWStringName,
 							wrapValue(Integer.valueOf(17), type)));
@@ -1595,10 +1650,10 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, functionName, defaultValue(intType)));
 		assertEquals(wrapValue(Integer.valueOf(0x17), bitType),
 				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(17), intType)));
-		assertEquals(wrapValue(Integer.valueOf(0x42), bitType), Functions.invoke(StandardFunctions.class,
-				functionName.toString(), wrapValue(Integer.valueOf(42), intType)));
-		assertEquals(wrapValue(Integer.valueOf(0x84), bitType), Functions.invoke(StandardFunctions.class,
-				functionName.toString(), wrapValue(Integer.valueOf(84), intType)));
+		assertEquals(wrapValue(Integer.valueOf(0x42), bitType),
+				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(42), intType)));
+		assertEquals(wrapValue(Integer.valueOf(0x84), bitType),
+				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(84), intType)));
 		assertEquals(castValue(wrapValue(Long.valueOf(0x8442211784422117L), intType), bitType), Functions
 				.invoke(StandardFunctions.class, functionName, toDigitsValue(8442211784422117L, bitType, intType)));
 	}
@@ -1634,8 +1689,8 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(0x17), bitType)));
 		assertEquals(wrapValue(Integer.valueOf(42), intType),
 				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(0x42), bitType)));
-		assertEquals(wrapValue(Integer.valueOf(84), intType), Functions.invoke(StandardFunctions.class,
-				functionName.toString(), wrapValue(Integer.valueOf(0x84), bitType)));
+		assertEquals(wrapValue(Integer.valueOf(84), intType),
+				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(0x84), bitType)));
 		assertEquals(toDigitsValue(8442211784422117L, bitType, intType), Functions.invoke(StandardFunctions.class,
 				functionName, castValue(wrapValue(Long.valueOf(0x8442211784422117L), intType), bitType)));
 
@@ -1655,8 +1710,8 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(0x17), bitType)));
 		assertEquals(wrapValue(Integer.valueOf(42), intType),
 				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(0x42), bitType)));
-		assertEquals(wrapValue(Integer.valueOf(84), intType), Functions.invoke(StandardFunctions.class,
-				functionName.toString(), wrapValue(Integer.valueOf(0x84), bitType)));
+		assertEquals(wrapValue(Integer.valueOf(84), intType),
+				Functions.invoke(StandardFunctions.class, functionName, wrapValue(Integer.valueOf(0x84), bitType)));
 		assertEquals(toDigitsValue(8442211784422117L, bitType, intType), Functions.invoke(StandardFunctions.class,
 				functionName, castValue(wrapValue(Long.valueOf(0x8442211784422117L), intType), bitType)));
 
@@ -1711,6 +1766,11 @@ class StandardFunctionsTest {
 				.map(DataType::getName);
 	}
 
+	static Stream<String> typeAnyRealArgumentsProvider() {
+		return DataTypeLibrary.getNonUserDefinedDataTypes().stream().filter(AnyRealType.class::isInstance)
+				.map(DataType::getName);
+	}
+
 	static Stream<String> typeAnyBitExceptBoolArgumentsProvider() {
 		return DataTypeLibrary.getNonUserDefinedDataTypes().stream()
 				.filter(Predicates.and(AnyBitType.class::isInstance, Predicates.not(BoolType.class::isInstance)))
@@ -1725,6 +1785,11 @@ class StandardFunctionsTest {
 	static Stream<Arguments> typeAnyUnsignedAndAnyBitExceptBoolArgumentsCartesianProvider() {
 		return typeAnyUnsignedArgumentsProvider().flatMap(
 				first -> typeAnyBitExceptBoolArgumentsProvider().map(second -> Arguments.arguments(first, second)));
+	}
+
+	static Stream<Arguments> typeAnyRealAndAnyIntArgumentsCartesianProvider() {
+		return typeAnyRealArgumentsProvider()
+				.flatMap(first -> typeAnyIntArgumentsProvider().map(second -> Arguments.arguments(first, second)));
 	}
 
 	@SuppressWarnings("unchecked")

@@ -109,7 +109,7 @@ STRepeatArrayInitElement:
 	initExpressions+=STInitializerExpression)* ')';
 
 STStructInitializerExpression:
-	'(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
+	(type=[datatype::StructuredType|QualifiedName] '#' )? '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
 
 STStructInitElement:
 	variable=[libraryElement::INamedElement|STFeatureName] ':=' value=STInitializerExpression;

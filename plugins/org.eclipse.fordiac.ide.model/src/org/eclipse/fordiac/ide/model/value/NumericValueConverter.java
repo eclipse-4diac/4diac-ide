@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.value;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.MessageFormat;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,7 +30,11 @@ public final class NumericValueConverter implements ValueConverter<Object> {
 
 	private static final String TRUE = "TRUE"; //$NON-NLS-1$
 	private static final String FALSE = "FALSE"; //$NON-NLS-1$
-	private static final Pattern NON_DECIMAL = Pattern.compile("(\\d+)#(\\p{XDigit}[_\\p{XDigit}]*)"); //$NON-NLS-1$
+	private static final Pattern DECIMAL = Pattern
+			.compile("[+-]?\\d[_\\d]*+(?:\\.\\d[_\\d]*+(?:[eE][+-]?\\d[_\\d]*+)?)?"); //$NON-NLS-1$
+	private static final Pattern NON_DECIMAL = Pattern.compile("(\\d++)#(\\p{XDigit}[_\\p{XDigit}]*+)"); //$NON-NLS-1$
+	private static final Pattern SCANNER_PATTERN = Pattern
+			.compile("\\G(?:TRUE|FALSE|" + NON_DECIMAL + "|" + DECIMAL + ")", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	private final String format;
 
@@ -51,14 +56,17 @@ public final class NumericValueConverter implements ValueConverter<Object> {
 			final Matcher matcher = NON_DECIMAL.matcher(string);
 			if (TRUE.equalsIgnoreCase(string)) {
 				return Boolean.TRUE;
-			} else if (FALSE.equalsIgnoreCase(string)) {
+			}
+			if (FALSE.equalsIgnoreCase(string)) {
 				return Boolean.FALSE;
-			} else if (matcher.matches()) {
+			}
+			if (matcher.matches()) {
 				final var radixString = matcher.group(1);
 				final var numberString = matcher.group(2).replace("_", ""); //$NON-NLS-1$ //$NON-NLS-2$
 				final var radix = Integer.parseInt(radixString);
 				return new BigInteger(numberString, radix);
-			} else if (string.contains(".")) { //$NON-NLS-1$
+			}
+			if (string.contains(".")) { //$NON-NLS-1$
 				return new BigDecimal(string.replace("_", "")); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			return new BigInteger(string.replace("_", "")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -69,10 +77,23 @@ public final class NumericValueConverter implements ValueConverter<Object> {
 	}
 
 	@Override
+	public Object toValue(final Scanner scanner) throws IllegalArgumentException {
+		return toValue(scanner.findWithinHorizon(SCANNER_PATTERN, 0));
+	}
+
+	@Override
 	public String toString(final Object value) {
 		if (format != null) {
 			return String.format(format, value);
 		}
 		return ValueConverter.super.toString(value);
+	}
+
+	@Override
+	public String toString() {
+		if (format != null) {
+			return String.format("%s [format=%s]", getClass().getSimpleName(), format); //$NON-NLS-1$
+		}
+		return getClass().getSimpleName();
 	}
 }

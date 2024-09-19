@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.eval.value.AnyValue
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.IntValue
 import org.eclipse.fordiac.ide.model.eval.value.StructValue
+import org.eclipse.fordiac.ide.model.eval.value.ValueOperations
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
@@ -425,12 +426,12 @@ class FunctionsTest {
 		def static <T extends AnyMagnitudeValue> T GENERIC_RETURN(T a) { a }
 
 		def static <T extends AnyMagnitudeValue, U extends AnyMagnitudeValue> IntValue MULTI_GENERIC_PARAM(T a, U b) {
-			((a + b) as AnyMagnitudeValue).toIntValue
+			(ValueOperations.add(a, b) as AnyMagnitudeValue).toIntValue
 		}
 
-		def static IntValue VARARGS(IntValue... a) { a.reduce[p1, p2|(p1 + p2) as IntValue] }
+		def static IntValue VARARGS(IntValue... a) { a.reduce[p1, p2|ValueOperations.add(p1, p2)  as IntValue] }
 
-		def static <T extends AnyMagnitudeValue> T VARARGS_GENERIC(T... a) { a.reduce[p1, p2|(p1 + p2) as T] }
+		def static <T extends AnyMagnitudeValue> T VARARGS_GENERIC(T... a) { a.reduce[p1, p2|ValueOperations.add(p1, p2) as T] }
 
 		def static void SIMPLE_OUTPUT(Variable<IntValue> a) { a.value = 21.wrapValue(a.type) }
 

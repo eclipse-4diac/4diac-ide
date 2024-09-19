@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.codemining.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.contentassist.STAlgorithmProposalProvider;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.labeling.STAlgorithmDescriptionLabelProvider;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.labeling.STAlgorithmLabelProvider;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.outline.STAlgorithmOutlineTreeProvider;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.quickfix.STAlgorithmQuickfixProvider;
 import org.eclipse.jface.text.codemining.ICodeMiningProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -67,6 +68,8 @@ import org.eclipse.xtext.ui.editor.contentassist.antlr.AntlrProposalConflictHelp
 import org.eclipse.xtext.ui.editor.contentassist.antlr.DelegatingContentAssistContextFactory;
 import org.eclipse.xtext.ui.editor.formatting.IContentFormatterFactory;
 import org.eclipse.xtext.ui.editor.formatting2.ContentFormatterFactory;
+import org.eclipse.xtext.ui.editor.outline.IOutlineTreeProvider;
+import org.eclipse.xtext.ui.editor.outline.impl.IOutlineTreeStructureProvider;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer;
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionProvider;
 import org.eclipse.xtext.ui.editor.reconciler.IReconcileStrategyFactory;
@@ -184,6 +187,16 @@ public abstract class AbstractSTAlgorithmUiModule extends DefaultUiModule {
 	// contributed by org.eclipse.xtext.xtext.generator.ui.labeling.LabelProviderFragment2
 	public void configureResourceUIServiceLabelProvider(Binder binder) {
 		binder.bind(ILabelProvider.class).annotatedWith(ResourceServiceDescriptionLabelProvider.class).to(STAlgorithmDescriptionLabelProvider.class);
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.ui.outline.OutlineTreeProviderFragment2
+	public Class<? extends IOutlineTreeProvider> bindIOutlineTreeProvider() {
+		return STAlgorithmOutlineTreeProvider.class;
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.ui.outline.OutlineTreeProviderFragment2
+	public Class<? extends IOutlineTreeStructureProvider> bindIOutlineTreeStructureProvider() {
+		return STAlgorithmOutlineTreeProvider.class;
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.ui.quickfix.QuickfixProviderFragment2

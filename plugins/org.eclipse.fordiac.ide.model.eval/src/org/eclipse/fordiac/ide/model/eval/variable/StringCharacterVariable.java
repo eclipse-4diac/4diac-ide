@@ -48,16 +48,6 @@ public class StringCharacterVariable extends AbstractVariable<CharValue> {
 	}
 
 	@Override
-	public void setValue(final String value) {
-		setValue(VariableOperations.evaluateValue(getType(), value));
-	}
-
-	@Override
-	public boolean validateValue(final String value) {
-		return VariableOperations.validateValue(getType(), value).isEmpty();
-	}
-
-	@Override
 	public CharType getType() {
 		return (CharType) super.getType();
 	}

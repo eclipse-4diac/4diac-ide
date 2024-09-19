@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,6 +52,7 @@ import org.eclipse.fordiac.ide.model.data.UsintType;
 import org.eclipse.fordiac.ide.model.data.WordType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 
 public final class TypedValueConverter implements ValueConverter<Object> {
 	public static final TypedValueConverter INSTANCE_TIME = new TypedValueConverter(ElementaryTypes.TIME);
@@ -65,7 +68,7 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 			ElementaryTypes.LDATE_AND_TIME);
 
 	private static final String TYPE_PREFIX_FORMAT = "%s#%s"; //$NON-NLS-1$
-	private static final Pattern TYPE_PREFIX_PATTERN = Pattern.compile("(?:([a-zA-Z_]+)#)?(.+)"); //$NON-NLS-1$
+	private static final Pattern TYPE_PREFIX_PATTERN = Pattern.compile("\\G([_a-zA-Z]\\w*+)#"); //$NON-NLS-1$
 
 	private static final String TIME_SHORT_FORM = "T"; //$NON-NLS-1$
 	private static final String LTIME_SHORT_FORM = "LT"; //$NON-NLS-1$
@@ -88,14 +91,24 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 	);
 
 	private final DataType type;
+	private final DataTypeLibrary typeLibrary;
 	private final boolean strict;
 
 	public TypedValueConverter(final DataType type) {
-		this(type, false);
+		this(type, null, false);
 	}
 
 	public TypedValueConverter(final DataType type, final boolean strict) {
+		this(type, null, strict);
+	}
+
+	public TypedValueConverter(final DataType type, final DataTypeLibrary typeLibrary) {
+		this(type, typeLibrary, false);
+	}
+
+	public TypedValueConverter(final DataType type, final DataTypeLibrary typeLibrary, final boolean strict) {
 		this.type = type;
+		this.typeLibrary = typeLibrary;
 		this.strict = strict;
 	}
 
@@ -104,20 +117,39 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 		String value = string;
 		DataType valueType = type;
 		final Matcher matcher = TYPE_PREFIX_PATTERN.matcher(string);
-		if (matcher.find() && matcher.group(1) != null) {
+		if (matcher.lookingAt()) {
 			valueType = getTypeFromPrefix(matcher.group(1));
 			if (!type.isAssignableFrom(valueType)) {
 				throw new IllegalArgumentException(
 						MessageFormat.format(Messages.VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE,
 								valueType.getName(), type.getName()));
 			}
-			value = matcher.group(2);
+			value = string.substring(matcher.end());
 		} else if (isTypePrefixRequired(type)) {
 			throw new IllegalArgumentException(
 					MessageFormat.format(Messages.VALIDATOR_DatatypeRequiresTypeSpecifier, type.getName()));
 		}
 		final ValueConverter<?> delegate = getValueConverter(valueType);
 		return checkValue(valueType, string, delegate.toValue(value), strict);
+	}
+
+	@Override
+	public Object toValue(final Scanner scanner)
+			throws IllegalArgumentException, NoSuchElementException, IllegalStateException {
+		DataType valueType = type;
+		if (scanner.findWithinHorizon(TYPE_PREFIX_PATTERN, 0) != null) {
+			valueType = getTypeFromPrefix(scanner.match().group(1));
+			if (!type.isAssignableFrom(valueType)) {
+				throw new IllegalArgumentException(
+						MessageFormat.format(Messages.VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE,
+								valueType.getName(), type.getName()));
+			}
+		} else if (isTypePrefixRequired(type)) {
+			throw new IllegalArgumentException(
+					MessageFormat.format(Messages.VALIDATOR_DatatypeRequiresTypeSpecifier, type.getName()));
+		}
+		final ValueConverter<?> delegate = getValueConverter(valueType);
+		return checkValue(valueType, "<scanner>", delegate.toValue(scanner), strict); //$NON-NLS-1$
 	}
 
 	@SuppressWarnings("unchecked")
@@ -132,10 +164,13 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 		return result;
 	}
 
-	private static DataType getTypeFromPrefix(final String prefix) throws IllegalArgumentException {
+	private DataType getTypeFromPrefix(final String prefix) throws IllegalArgumentException {
 		DataType result = SHORT_FORM_TRANSLATIONS.get(prefix);
 		if (result == null) {
 			result = ElementaryTypes.getTypeByName(prefix);
+		}
+		if (result == null && typeLibrary != null) {
+			result = typeLibrary.getTypeIfExists(prefix);
 		}
 		if (result == null) {
 			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_UNKNOWN_LITERAL_TYPE, prefix));
@@ -260,5 +295,13 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 
 	private static boolean checkRangeUnsigned(final BigInteger value, final BigInteger upper) {
 		return value.signum() >= 0 && value.compareTo(upper) <= 0;
+	}
+
+	@Override
+	public String toString() {
+		if (strict) {
+			return String.format("%s [type=%s, strict]", getClass().getSimpleName(), type.getName()); //$NON-NLS-1$
+		}
+		return String.format("%s [type=%s]", getClass().getSimpleName(), type.getName()); //$NON-NLS-1$
 	}
 }

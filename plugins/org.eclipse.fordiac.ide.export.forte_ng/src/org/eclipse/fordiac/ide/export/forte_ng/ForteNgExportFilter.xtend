@@ -48,6 +48,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration
+import org.eclipse.fordiac.ide.export.Messages
+import java.text.MessageFormat
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem
 
 class ForteNgExportFilter extends TemplateExportFilter {
 
@@ -74,9 +78,10 @@ class ForteNgExportFilter extends TemplateExportFilter {
 						Paths.get(source.generateTypePath)),
 					new FunctionFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
 				}
-			SubAppType: // SubAppType is derived from CompositeFBType and needs to be handled first
+			SubAppType, AttributeDeclaration, AutomationSystem: // SubAppType is derived from CompositeFBType and needs to be handled first
 			{
-				warnings.add('''«name»: Typed Subapplications do not have any export.''')
+				warnings.add(MessageFormat.format(Messages.TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME,
+					source.typeEntry.file.fullPath.toString, Messages.TemplateExportFilter_FILE_IGNORED))
 				emptySet
 			}
 			CompositeFBType:

@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui.validation;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -85,7 +87,29 @@ public final class ValidationUtil {
 		return createModelIssue(issue.getSeverity(), issue.getMessage(), target, feature);
 	}
 
-	protected static Map<String, Object> getModelMarkerAttributes(final Issue issue) {
+	public static int getModelMarkerCode(final Issue issue) {
+		final String issueCode = issue.getCode();
+		final int index = issueCode.lastIndexOf('.');
+		if (index >= 0) {
+			try {
+				return Integer.parseInt(issueCode.substring(index + 1));
+			} catch (final NumberFormatException e) {
+				// fall through
+			}
+		}
+		return 0;
+	}
+
+	public static String getModelMarkerSource(final Issue issue) {
+		final String issueCode = issue.getCode();
+		final int index = issueCode.lastIndexOf('.');
+		if (index >= 0) {
+			return issueCode.substring(0, index);
+		}
+		return issueCode;
+	}
+
+	public static Map<String, Object> getModelMarkerAttributes(final Issue issue) {
 		final URI canonicalURI = LibraryElementXtextResource.toExternalURI(issue.getUriToProblem());
 		if (canonicalURI != null) {
 			if (isModelValidationIssue(issue)) {
@@ -93,11 +117,13 @@ public final class ValidationUtil {
 				if (data != null) {
 					if (data.length >= 4 && data[3] != null) {
 						return Map.of(IMarker.LOCATION, data[0], FordiacErrorMarker.TARGET_URI, canonicalURI.toString(),
-								FordiacErrorMarker.TARGET_TYPE, data[2], FordiacErrorMarker.TARGET_FEATURE, data[3]);
+								FordiacErrorMarker.TARGET_TYPE, data[2], FordiacErrorMarker.TARGET_FEATURE, data[3],
+								FordiacErrorMarker.DATA, Stream.of(data).skip(4).collect(Collectors.joining("\u0000"))); //$NON-NLS-1$
 					}
 					if (data.length >= 3) {
 						return Map.of(IMarker.LOCATION, data[0], FordiacErrorMarker.TARGET_URI, canonicalURI.toString(),
-								FordiacErrorMarker.TARGET_TYPE, data[2]);
+								FordiacErrorMarker.TARGET_TYPE, data[2], FordiacErrorMarker.DATA,
+								Stream.of(data).skip(3).collect(Collectors.joining("\u0000"))); //$NON-NLS-1$
 					}
 				}
 			}
@@ -106,7 +132,7 @@ public final class ValidationUtil {
 		return Collections.emptyMap();
 	}
 
-	protected static int getMarkerSeverity(final Issue issue) {
+	public static int getMarkerSeverity(final Issue issue) {
 		return switch (issue.getSeverity()) {
 		case ERROR -> IMarker.SEVERITY_ERROR;
 		case WARNING -> IMarker.SEVERITY_WARNING;

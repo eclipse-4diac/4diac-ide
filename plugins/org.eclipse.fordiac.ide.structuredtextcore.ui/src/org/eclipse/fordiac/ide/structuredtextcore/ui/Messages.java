@@ -17,6 +17,15 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextcore.ui.messages"; //$NON-NLS-1$
+	public static String ExpandAllContribution_CollapseAllDescription;
+	public static String ExpandAllContribution_CollapseAllLabel;
+	public static String ExpandAllContribution_CollapseAllToolTip;
+	public static String ExpandAllContribution_ExpandAllDescription;
+	public static String ExpandAllContribution_ExpandAllLabel;
+	public static String ExpandAllContribution_ExpandAllToolTip;
+	public static String FilterHeadingsContribution_Description;
+	public static String FilterHeadingsContribution_Text;
+	public static String FilterHeadingsContribution_ToolTipText;
 	public static String STCoreQuickfixProvider_AddExplicitTypecastDescription;
 	public static String STCoreQuickfixProvider_AddExplicitTypecastLabel;
 	public static String STCoreQuickfixProvider_ChangeConversionDescription;
@@ -49,6 +58,15 @@ public final class Messages extends NLS {
 	public static String STCoreContentAssistPreferencePage_ContentAssist;
 	public static String STCoreContentAssistPreferencePage_AutoActivationTriggers;
 	public static String STCoreContentAssistPreferencePage_ChangedSettingsEffect;
+	public static String STCoreLabelProvider_VarDeclarationText;
+	public static String STCoreLabelProvider_VarInOutDeclarationBlockText;
+	public static String STCoreLabelProvider_VarInputDeclarationBlockText;
+	public static String STCoreLabelProvider_VarOutputDeclarationBlockText;
+	public static String STCoreLabelProvider_VarPlainDeclarationBlockConstantText;
+	public static String STCoreLabelProvider_VarPlainDeclarationBlockText;
+	public static String STCoreLabelProvider_VarTempDeclarationBlockConstantText;
+	public static String STCoreLabelProvider_VarTempDeclarationBlockText;
+	public static String STCoreOutlineTreeProvider_MissingHeadingText;
 	public static String STCoreRenameElementRefactoringParticpant_Name;
 	public static String STCoreSaveActionsPreferencePage_EnableFormat;
 	public static String STCoreSaveActionsPreferencePage_EnableSaveActions;

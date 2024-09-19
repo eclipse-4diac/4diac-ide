@@ -47,5 +47,10 @@
       <genOperations ecoreOperation="monitoring.ecore#//SubappMonitoringElement/getQualifiedString"
           body="&#x9;&#x9;return anchor.getQualifiedString();"/>
     </genClasses>
+    <genClasses ecoreClass="monitoring.ecore#//InternalVarInstance">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference monitoring.ecore#//InternalVarInstance/fb"/>
+      <genOperations ecoreOperation="monitoring.ecore#//InternalVarInstance/getFBNetworkElement"
+          body="return getFb();"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- * 				 2018 - 2019 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 				            Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -75,6 +75,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 /**
  * The Class ECCEditor.
@@ -228,8 +229,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	public boolean outlineSelectionChanged(final Object selectedElement) {
-		final Object obj = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
-		if (obj instanceof final EditPart ep) {
+		if (getGraphicalViewer().getEditPartForModel(selectedElement) instanceof final EditPart ep) {
 			getGraphicalViewer().select(ep);
 			return true;
 		}
@@ -245,11 +245,11 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	}
 
 	private void handleActionOutlineSelection(final ECAction action) {
-		Object obj = getGraphicalViewer().getEditPartRegistry().get(action.getECState());
+		Object obj = getGraphicalViewer().getEditPartForModel(action.getECState());
 		if (null != obj) {
 			for (final Object element : ((ECStateEditPart) obj).getCurrentChildren()) {
 				if ((element instanceof final ECActionAlgorithm ecAlg) && (action.equals(ecAlg.getAction()))) {
-					obj = getGraphicalViewer().getEditPartRegistry().get(element);
+					obj = getGraphicalViewer().getEditPartForModel(element);
 					if (null != obj) {
 						getGraphicalViewer().select((EditPart) obj);
 						break;
@@ -304,6 +304,9 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == IContentOutlinePage.class) {
+			return null; // use outline page from FBTypeEditor
+		}
 		if (adapter == ECC.class) {
 			return adapter.cast(getModel());
 		}
@@ -319,14 +322,14 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	public void gotoMarker(final IMarker marker) {
-		final Map<?, ?> map = getGraphicalViewer().getEditPartRegistry();
+		final Map<Object, EditPart> map = getGraphicalViewer().getEditPartRegistry();
 		final String lineNumber = marker.getAttribute(IMarker.LINE_NUMBER, UNKNOWN_LINE);
 		if (!UNKNOWN_LINE.equals(lineNumber)) {
 			final int hashCode = Integer.parseInt(lineNumber);
 			for (final Object key : map.keySet()) {
 				if (key.hashCode() == hashCode) {
-					final Object obj = getGraphicalViewer().getEditPartRegistry().get(key);
-					if (obj instanceof final EditPart ep) {
+					final EditPart ep = getGraphicalViewer().getEditPartForModel(key);
+					if (ep != null) {
 						getGraphicalViewer().select(ep);
 						break;
 					}
@@ -356,7 +359,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		if (getGraphicalViewer() == null) {
 			return null;
 		}
-		return getGraphicalViewer().getEditPartRegistry().get(getModel());
+		return getGraphicalViewer().getEditPartForModel(getModel());
 	}
 
 }
