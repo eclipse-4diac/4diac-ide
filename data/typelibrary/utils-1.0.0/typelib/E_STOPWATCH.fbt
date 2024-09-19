@@ -18,12 +18,10 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="STARTO" Type="Event" Comment="Start the stopwatch confirm">
-			</Event>
-			<Event Name="ETO" Type="Event" Comment="Trigger the Time output  confirm">
+			<Event Name="EO" Type="Event" Comment="Event Output">
 				<With Var="TD"/>
 			</Event>
-			<Event Name="STOPO" Type="Event" Comment="Stop the stopwatch  confirm">
+			<Event Name="ETO" Type="Event" Comment="Trigger the Time output  confirm">
 				<With Var="TD"/>
 			</Event>
 			<Event Name="RESETO" Type="Event" Comment="Reset the stopwatch to 0  confirm">
@@ -42,10 +40,10 @@
 			<ECState Name="START" Comment="" x="373.33" y="746.67">
 			</ECState>
 			<ECState Name="Measure" Comment="" x="1640" y="593.33">
-				<ECAction Algorithm="captureStartTime" Output="STARTO"/>
+				<ECAction Algorithm="captureStartTime"/>
 			</ECState>
 			<ECState Name="STOP" Comment="" x="2533.33" y="2400">
-				<ECAction Algorithm="calcDiff" Output="STOPO"/>
+				<ECAction Algorithm="calcDiff" Output="EO"/>
 			</ECState>
 			<ECState Name="Trig" Comment="" x="3066.67" y="1333.33">
 				<ECAction Algorithm="calcDiff" Output="ETO"/>
