@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Function Name="FIELDBUS_WORD_TO_PERCENT" Comment="">
-	<Identification Standard="SAE J1939; ISO 11783" Description="Copyright (c) 2023 HR Agrartechnik GmbH  
-&#10;  
-&#10;This program and the accompanying materials are made   
-&#10;available under the terms of the Eclipse Public License 2.0   
-&#10;which is available at https://www.eclipse.org/legal/epl-2.0/   
-&#10;   
-&#10;SPDX-License-Identifier: EPL-2.0" >
+<Function Name="FIELDBUS_WORD_TO_PERCENT" Comment="Convert a REAL in the Range 0.0 to 100.0 to a WORD Value Range 0-FAFF">
+	<Identification Standard="SAE J1939; ISO 11783" Description="Copyright (c) 2023 HR Agrartechnik GmbH   &#10;   &#10;This program and the accompanying materials are made    &#10;available under the terms of the Eclipse Public License 2.0    &#10;which is available at https://www.eclipse.org/legal/epl-2.0/    &#10;    &#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Version="1.0" Author="franz" Date="2023-10-21">
 	</VersionInfo>
@@ -39,6 +33,7 @@
 	<FunctionBody>
 		<ST><![CDATA[PACKAGE signalprocessing;
 
+(* Convert a REAL in the Range 0.0 to 100.0 to a WORD Value Range 0-FAFF *)
 FUNCTION FIELDBUS_WORD_TO_PERCENT
 VAR_INPUT
 	QI : BOOL;
