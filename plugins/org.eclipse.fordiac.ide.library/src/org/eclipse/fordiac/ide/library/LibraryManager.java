@@ -953,8 +953,9 @@ public enum LibraryManager {
 	 */
 	private static LibraryRecord getLibraryRecord(final Map<String, List<LibraryRecord>> libs,
 			final String symbolicName, final VersionRange range) {
-		return libs.get(symbolicName).stream().filter(l -> range.includes(l.version()))
-				.sorted((o1, o2) -> o2.version().compareTo(o1.version())).findFirst().orElse(null);
+		return libs.getOrDefault(symbolicName, Collections.emptyList()).stream()
+				.filter(l -> range.includes(l.version())).sorted((o1, o2) -> o2.version().compareTo(o1.version()))
+				.findFirst().orElse(null);
 	}
 
 	/**
@@ -967,7 +968,7 @@ public enum LibraryManager {
 	 */
 	private static LibraryRecord getLibraryRecord(final Map<String, List<LibraryRecord>> libs,
 			final String symbolicName, final java.net.URI uri) {
-		return libs.get(symbolicName).stream().filter(l -> l.uri().equals(uri))
+		return libs.getOrDefault(symbolicName, Collections.emptyList()).stream().filter(l -> l.uri().equals(uri))
 				.sorted((o1, o2) -> o2.version().compareTo(o1.version())).findFirst().orElse(null);
 	}
 
