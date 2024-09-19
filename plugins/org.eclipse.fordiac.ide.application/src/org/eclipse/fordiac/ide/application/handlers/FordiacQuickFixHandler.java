@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.wizards.QuickFixWizardDialog;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
@@ -68,8 +70,15 @@ public class FordiacQuickFixHandler extends AbstractHandler {
 		}
 
 		if (resolutionsMap.isEmpty()) {
-			MessageDialog.openInformation(shell, "Quick Fix", //$NON-NLS-1$
-					"The selected problems do not have a common applicable quick fix."); //$NON-NLS-1$
+			if (selectedMarkers.length == 1) {
+				MessageDialog.openInformation(shell, Messages.QuickFixDialog_Title,
+						MessageFormat.format(Messages.QuickFixDialog_NoResolutionsFound,
+								selectedMarkers[0].getAttribute(IMarker.MESSAGE, ""))); //$NON-NLS-1$
+
+			} else {
+				MessageDialog.openInformation(shell, Messages.QuickFixDialog_Title,
+						Messages.QuickFixDialog_NoResolutionsFoundForMultiSelection);
+			}
 		} else {
 			QuickFixWizardDialog.openDialog(shell, selectedMarkers, resolutions, resolutionsMap);
 		}
