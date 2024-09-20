@@ -25,6 +25,7 @@ public class CommentTypeField {
 	private final TypeField typeField;
 
 	static class CommentTypeSeparator {
+		@SuppressWarnings("static-method")
 		String getLabel() {
 			return "    -    "; //$NON-NLS-1$
 		}

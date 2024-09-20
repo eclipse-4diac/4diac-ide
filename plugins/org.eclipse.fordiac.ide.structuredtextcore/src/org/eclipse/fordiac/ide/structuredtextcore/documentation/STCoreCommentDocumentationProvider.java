@@ -39,7 +39,7 @@ public class STCoreCommentDocumentationProvider extends MultiLineCommentDocument
 		return null;
 	}
 
-	private List<INode> getSingleLineDocumentationForSTVarDeclarationNodes(final EObject object) {
+	private static List<INode> getSingleLineDocumentationForSTVarDeclarationNodes(final EObject object) {
 		if (object instanceof STVarDeclaration) {
 			INode node = NodeModelUtils.getNode(object);
 			while (node != null && node.hasNextSibling()) {

@@ -51,7 +51,7 @@ public class NewServiceSequenceHandler extends AbstractHandler {
 		return Status.OK_STATUS;
 	}
 
-	private Command getCommand(Object selected) {
+	private static Command getCommand(Object selected) {
 		if (selected instanceof FBType) {
 			selected = ((FBType) selected).getService();
 		}

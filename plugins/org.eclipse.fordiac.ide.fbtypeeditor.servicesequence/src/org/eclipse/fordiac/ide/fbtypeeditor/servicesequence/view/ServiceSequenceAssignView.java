@@ -328,7 +328,7 @@ public class ServiceSequenceAssignView extends ViewPart {
 		};
 	}
 
-	private EditPartFactory getEditpartFactory() {
+	private static EditPartFactory getEditpartFactory() {
 		return new ServiceSequenceEditPartFactory(null);
 	}
 

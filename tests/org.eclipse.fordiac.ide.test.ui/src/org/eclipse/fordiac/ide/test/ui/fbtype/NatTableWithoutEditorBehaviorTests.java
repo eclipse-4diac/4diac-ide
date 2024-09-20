@@ -71,6 +71,7 @@ public class NatTableWithoutEditorBehaviorTests extends Abstract4diacUITests {
 	 * operation from another test method, basically this will prevent the
 	 * redundancy.
 	 */
+	@SuppressWarnings("static-method")
 	@AfterEach
 	public void resetEnvironment() {
 		new SWTBotFBType(bot).deleteFBType(UITestNamesHelper.FBT_TEST_PROJECT2);

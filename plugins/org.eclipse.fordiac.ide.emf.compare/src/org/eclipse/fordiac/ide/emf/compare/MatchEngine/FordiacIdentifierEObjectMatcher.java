@@ -209,7 +209,7 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 	 * @param eObject The {@link EObject} for which the parent object is to determine.
 	 * @return The parent of the given {@code eObject}.
 	 * @since 3.2 */
-	protected EObject getParentEObject(final EObject eObject) {
+	protected static EObject getParentEObject(final EObject eObject) {
 		final EObject parent;
 		if (eObject != null) {
 			parent = eObject.eContainer();

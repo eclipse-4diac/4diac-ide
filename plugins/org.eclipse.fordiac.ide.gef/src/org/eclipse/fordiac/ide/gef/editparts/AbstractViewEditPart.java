@@ -80,6 +80,7 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 		return null;
 	}
 
+	@SuppressWarnings("static-method")
 	protected void setColor(final IFigure figure, final Color fordiacColor) {
 		org.eclipse.swt.graphics.Color newColor;
 		if (fordiacColor != null) {

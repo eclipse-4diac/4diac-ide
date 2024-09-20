@@ -185,7 +185,7 @@ public class TypeSelectionWidget {
 				new DataTypeDropdown(this::getTypeLibrary, contentProvider, treeContentProvider, tableViewer) };
 	}
 
-	private TableViewer createTableViewer(final Composite parent) {
+	private static TableViewer createTableViewer(final Composite parent) {
 		final TableViewer viewer = new TableViewer(parent, SWT.NO_SCROLL | SWT.BORDER);
 
 		final Table table = viewer.getTable();
