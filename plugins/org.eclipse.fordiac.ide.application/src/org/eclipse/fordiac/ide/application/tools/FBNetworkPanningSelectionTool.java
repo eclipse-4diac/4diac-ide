@@ -29,6 +29,8 @@ package org.eclipse.fordiac.ide.application.tools;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
@@ -37,11 +39,16 @@ import org.eclipse.fordiac.ide.gef.tools.InlineConnectionCreationTool;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.PlatformUI;
 
 public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool {
 
@@ -67,13 +74,15 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 
 	@Override
 	public void mouseUp(final MouseEvent me, final EditPartViewer viewer) {
+		final EditPartViewer actualViewer = findViewer(new Point(me.x, me.y), viewer);
+		final MouseEvent convertedEvent = convertMouseEventCoordinates(me, viewer, actualViewer);
 		if (checkConnCreationState(me.stateMask)) {
-			connectionCreationTool.mouseUp(me, viewer);
+			connectionCreationTool.mouseUp(convertedEvent, actualViewer);
 		} else {
 			if (LEFT_MOUSE == me.button) {
 				lastLeftClick = getLocation();
 			}
-			super.mouseUp(me, viewer);
+			super.mouseUp(convertedEvent, actualViewer);
 		}
 	}
 
@@ -100,9 +109,23 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 	public void mouseMove(final MouseEvent me, final EditPartViewer viewer) {
 		// the super call has to be first so that the target editpart is updated
 		// accordingly
-		super.mouseMove(me, viewer);
+		final EditPartViewer actualViewer = findViewer(new Point(me.x, me.y), viewer);
+		final MouseEvent convertedEvent = convertMouseEventCoordinates(me, viewer, actualViewer);
+		super.mouseMove(convertedEvent, actualViewer);
 		if (checkConnCreationState(me.stateMask)) {
-			connectionCreationTool.mouseDrag(me, viewer);
+			connectionCreationTool.mouseMove(convertedEvent, actualViewer);
+		}
+	}
+
+	@Override
+	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
+		// the super call has to be first so that the target editpart is updated
+		// accordingly
+		final EditPartViewer actualViewer = findViewer(new Point(me.x, me.y), viewer);
+		final MouseEvent convertedEvent = convertMouseEventCoordinates(me, viewer, actualViewer);
+		super.mouseDrag(convertedEvent, actualViewer);
+		if (checkConnCreationState(me.stateMask)) {
+			connectionCreationTool.mouseDrag(convertedEvent, actualViewer);
 		}
 	}
 
@@ -174,4 +197,42 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 		return (targetEditPart != null) && (targetEditPart.getModel() instanceof IInterfaceElement);
 	}
 
+	private static EditPartViewer findViewer(final Point point, final EditPartViewer viewer) {
+		if (viewer.getControl().getBounds().contains(point)) {
+			return viewer;
+		}
+		final Point absolute = viewer.getControl().toDisplay(point);
+		return Stream.of(PlatformUI.getWorkbench().getWorkbenchWindows())
+				.flatMap(window -> Stream.of(window.getPages())).flatMap(page -> Stream.of(page.getEditorReferences()))
+				.map(ref -> ref.getEditor(false)).filter(Objects::nonNull)
+				.<EditPartViewer>map(editor -> editor.getAdapter(GraphicalViewer.class)).filter(Objects::nonNull)
+				.filter(candidate -> containsAbsolutePoint(candidate, absolute)).findAny().orElse(viewer);
+	}
+
+	private static boolean containsAbsolutePoint(final EditPartViewer viewer, final Point point) {
+		final Control control = viewer.getControl();
+		if (control.getParent() != null) {
+			return control.getBounds().contains(control.getParent().toControl(point));
+		}
+		return control.getBounds().contains(point);
+	}
+
+	private static MouseEvent convertMouseEventCoordinates(final MouseEvent event, final EditPartViewer from,
+			final EditPartViewer to) {
+		if (from == to) {
+			return event;
+		}
+		final Point converted = to.getControl().toControl(from.getControl().toDisplay(event.x, event.y));
+		final Event swtEvent = new Event();
+		swtEvent.display = event.display;
+		swtEvent.widget = event.widget;
+		swtEvent.time = event.time;
+		swtEvent.data = event.data;
+		swtEvent.x = converted.x;
+		swtEvent.y = converted.y;
+		swtEvent.button = event.button;
+		swtEvent.stateMask = event.stateMask;
+		swtEvent.count = event.count;
+		return new MouseEvent(swtEvent);
+	}
 }
