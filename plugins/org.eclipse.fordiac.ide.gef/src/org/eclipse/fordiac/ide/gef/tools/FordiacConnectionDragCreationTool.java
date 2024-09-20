@@ -15,13 +15,11 @@
 package org.eclipse.fordiac.ide.gef.tools;
 
 import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
-import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.tools.ConnectionDragCreationTool;
@@ -51,13 +49,26 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 	@Override
 	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
 		if (isActive() && viewer instanceof final AdvancedScrollingGraphicalViewer advViewer) {
-			advViewer.checkScrollPositionDuringDragBounded(me,
-					new Point(MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN
-							+ HideableConnection.BEND_POINT_BEVEL_SIZE + ConnectionPreferenceValues.HANDLE_SIZE,
-							ConnectionPreferenceValues.HANDLE_SIZE));
-			CanvasHelper.bindToContentPane(me, advViewer, NEW_CONNECTION_CANVAS_BORDER);
+//			advViewer.checkScrollPositionDuringDragBounded(me,
+//					new Point(MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN
+//							+ HideableConnection.BEND_POINT_BEVEL_SIZE + ConnectionPreferenceValues.HANDLE_SIZE,
+//							ConnectionPreferenceValues.HANDLE_SIZE));
+//			CanvasHelper.bindToContentPane(me, advViewer, NEW_CONNECTION_CANVAS_BORDER);
 		}
 		super.mouseDrag(me, viewer);
+	}
+
+	@Override
+	protected boolean handleMove() {
+		// overwritten to disable viewer check
+		if (isInState(STATE_CONNECTION_STARTED | STATE_INITIAL | STATE_ACCESSIBLE_DRAG_IN_PROGRESS)) {
+			updateTargetRequest();
+			updateTargetUnderMouse();
+			showSourceFeedback();
+			showTargetFeedback();
+			setCurrentCommand(getCommand());
+		}
+		return true;
 	}
 
 	@Override
