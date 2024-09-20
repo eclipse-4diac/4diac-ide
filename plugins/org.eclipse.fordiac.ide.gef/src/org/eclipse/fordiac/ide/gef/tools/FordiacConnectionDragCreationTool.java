@@ -14,20 +14,26 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.tools;
 
+import java.util.Objects;
+import java.util.stream.Stream;
+
 import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
-import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 
 public class FordiacConnectionDragCreationTool extends ConnectionDragCreationTool {
 
@@ -51,11 +57,11 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 	@Override
 	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
 		if (isActive() && viewer instanceof final AdvancedScrollingGraphicalViewer advViewer) {
-			advViewer.checkScrollPositionDuringDragBounded(me,
-					new Point(MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN
-							+ HideableConnection.BEND_POINT_BEVEL_SIZE + ConnectionPreferenceValues.HANDLE_SIZE,
-							ConnectionPreferenceValues.HANDLE_SIZE));
-			CanvasHelper.bindToContentPane(me, advViewer, NEW_CONNECTION_CANVAS_BORDER);
+//			advViewer.checkScrollPositionDuringDragBounded(me,
+//					new Point(MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN
+//							+ HideableConnection.BEND_POINT_BEVEL_SIZE + ConnectionPreferenceValues.HANDLE_SIZE,
+//							ConnectionPreferenceValues.HANDLE_SIZE));
+//			CanvasHelper.bindToContentPane(me, advViewer, NEW_CONNECTION_CANVAS_BORDER);
 		}
 		super.mouseDrag(me, viewer);
 	}
@@ -99,4 +105,55 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 		UIPlugin.getDefault().getEMH().setHover(false);
 	}
 
+	@Override
+	protected boolean updateTargetUnderMouse() {
+		if (isTargetLocked()) {
+			return false;
+		}
+		final EditPartViewer currentViewer = getCurrentViewer();
+		final EditPartViewer actualViewer = findViewer(getLocation().getSWTPoint(), currentViewer);
+		if (actualViewer != currentViewer) {
+			final Point actualLocation = convertCoordinates(getLocation().getSWTPoint(), currentViewer, actualViewer);
+			EditPart editPart = actualViewer.findObjectAtExcluding(
+					new org.eclipse.draw2d.geometry.Point(actualLocation), getExclusionSet(),
+					getTargetingConditional());
+			if (editPart != null) {
+				editPart = editPart.getTargetEditPart(getTargetRequest());
+			}
+			final boolean changed = getTargetEditPart() != editPart;
+			setTargetEditPart(editPart);
+			return changed;
+		}
+		return super.updateTargetUnderMouse();
+	}
+
+	private static EditPartViewer findViewer(final Point point, final EditPartViewer viewer) {
+		if (viewer == null) {
+			return null;
+		}
+		if (viewer.getControl().getBounds().contains(point)) {
+			return viewer;
+		}
+		final Point absolute = viewer.getControl().toDisplay(point);
+		return Stream.of(PlatformUI.getWorkbench().getWorkbenchWindows())
+				.flatMap(window -> Stream.of(window.getPages())).flatMap(page -> Stream.of(page.getEditorReferences()))
+				.map(ref -> ref.getEditor(false)).filter(Objects::nonNull)
+				.<EditPartViewer>map(editor -> editor.getAdapter(GraphicalViewer.class)).filter(Objects::nonNull)
+				.filter(candidate -> containsAbsolutePoint(candidate, absolute)).findAny().orElse(viewer);
+	}
+
+	private static boolean containsAbsolutePoint(final EditPartViewer viewer, final Point point) {
+		final Control control = viewer.getControl();
+		if (control.getParent() != null) {
+			return control.getBounds().contains(control.getParent().toControl(point));
+		}
+		return control.getBounds().contains(point);
+	}
+
+	private static Point convertCoordinates(final Point point, final EditPartViewer from, final EditPartViewer to) {
+		if (from == to) {
+			return point;
+		}
+		return to.getControl().toControl(from.getControl().toDisplay(point.x, point.y));
+	}
 }
