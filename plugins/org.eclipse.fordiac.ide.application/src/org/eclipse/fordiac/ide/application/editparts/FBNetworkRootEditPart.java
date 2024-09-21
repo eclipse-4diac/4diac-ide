@@ -23,8 +23,10 @@ import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedMarqueeDragTracker;
+import org.eclipse.fordiac.ide.gef.tools.FordiacViewportAutoexposeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.gef.AutoexposeHelper;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
@@ -64,6 +66,9 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == AutoexposeHelper.class) {
+			return adapter.cast(new FordiacViewportAutoexposeHelper(this));
+		}
 		if (adapter == FBNetwork.class) {
 			return adapter.cast(fbNetwork);
 		}
