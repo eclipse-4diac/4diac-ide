@@ -28,8 +28,7 @@ import org.junit.jupiter.api.BeforeEach;
 public class ConstantsTabTests extends NatTableWithoutEditorBehaviorTests {
 
 	public ConstantsTabTests() {
-		super(UITestNamesHelper.INTERNALCONSTVAR1, UITestNamesHelper.INTERNALCONSTVAR2,
-				UITestNamesHelper.INTERNALCONSTVAR3);
+		super(UITestNamesHelper.INTERNALCONSTVAR1, UITestNamesHelper.INTERNALCONSTVAR2);
 	}
 
 	@Override

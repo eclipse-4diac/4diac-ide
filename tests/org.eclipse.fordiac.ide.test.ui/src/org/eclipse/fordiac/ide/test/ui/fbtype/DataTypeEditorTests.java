@@ -26,7 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 public class DataTypeEditorTests extends NatTableWithoutEditorBehaviorTests {
 
 	public DataTypeEditorTests() {
-		super(UITestNamesHelper.VAR1, UITestNamesHelper.VAR2, UITestNamesHelper.VAR3);
+		super(UITestNamesHelper.VAR1, UITestNamesHelper.VAR2);
 	}
 
 	@Override
