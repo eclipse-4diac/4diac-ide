@@ -408,7 +408,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				} else {
 					fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
 				}
-				if (fbcmd != null && fbcmd.canExecute()) {
+				if (fbcmd.canExecute()) {
 					fbcmd.execute();
 					if (fbresult.getName().contains(".")) {
 						fbcmd.getFB().setName(fbresult.getName().substring(fbresult.getName().lastIndexOf(".") + 1,
