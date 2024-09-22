@@ -71,8 +71,7 @@ public class TransitionEditingComposite {
 
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof ECTransition) {
-				final ECTransition ecTransition = (ECTransition) element;
+			if (element instanceof final ECTransition ecTransition) {
 				switch (columnIndex) {
 				case TRANSITION_COLUMN_PRIORITY:
 					return Integer.toString(ecTransition.getPriority());
