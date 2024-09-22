@@ -36,7 +36,7 @@ public final class PreferenceConstants {
 
 	public static final String P_MONITORING_STARTMONITORINGWITHOUTASKING = "dontAskAgain"; //$NON-NLS-1$
 
-	public static final Boolean P_MONITORING_STARTMONITORINGWITHOUTASKING_VALUE = false;
+	public static final boolean P_MONITORING_STARTMONITORINGWITHOUTASKING_VALUE = false;
 
 	public static final String P_MONITORING_WRITEBACKONLINEVALUES = "writeBackOnlineValue"; //$NON-NLS-1$
 

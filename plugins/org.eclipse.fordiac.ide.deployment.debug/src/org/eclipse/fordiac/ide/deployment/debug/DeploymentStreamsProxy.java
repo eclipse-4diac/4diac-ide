@@ -95,7 +95,8 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 	}
 
 	private void printDeployStatistics() {
-		outputStreamMonitor.message(MessageFormat.format(Messages.DeploymentStreamsProxy_DeployedElements, currentDest, count));
+		outputStreamMonitor.message(MessageFormat.format(Messages.DeploymentStreamsProxy_DeployedElements, currentDest,
+				Integer.valueOf(count)));
 	}
 
 	private void printDeployingResource(final String destination) {

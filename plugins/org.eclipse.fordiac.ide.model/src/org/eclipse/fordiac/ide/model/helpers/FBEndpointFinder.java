@@ -199,8 +199,8 @@ public class FBEndpointFinder {
 
 		// count connections between blocks
 		final Map<FBNetworkElement, Integer> result = new HashMap<>();
-		connectedIfs.stream().map(IInterfaceElement::getFBNetworkElement)
-				.forEach(destFB -> result.put(destFB, result.containsKey(destFB) ? result.get(destFB) + 1 : 1));
+		connectedIfs.stream().map(IInterfaceElement::getFBNetworkElement).forEach(destFB -> result.put(destFB,
+				result.containsKey(destFB) ? Integer.valueOf(result.get(destFB).intValue() + 1) : Integer.valueOf(1)));
 
 		// if parent should not be traversed
 		// remove connected elements that share a parent with the outer parents of this

@@ -298,8 +298,8 @@ public class FBNetworkConnection extends HideableConnection {
 		final InterfaceEditPart source = (InterfaceEditPart) connEP.getSource();
 		return ((List<ConnectionEditPart>) source.getSourceConnections()).stream()
 				.filter(conn -> !conn.getModel().isVisible())
-				.map(ep -> ep.getFigure().getSourceDecoration().getLabel().getBounds().width).max(Integer::compare)
-				.orElse(0);
+				.map(ep -> Integer.valueOf(ep.getFigure().getSourceDecoration().getLabel().getBounds().width))
+				.max(Integer::compare).orElse(Integer.valueOf(0)).intValue();
 	}
 
 	private static class ConLabelToolTip extends Figure {
