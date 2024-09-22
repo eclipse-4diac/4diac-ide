@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.actions.Open4DIACElementAction;
 import org.eclipse.gef.ContextMenuProvider;
+import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.LayerConstants;
@@ -119,6 +120,11 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 
 	protected TypeLibrary getTypeLibrary() {
 		return getSystem().getTypeLibrary();
+	}
+
+	@Override
+	protected DefaultEditDomain createEditDomain() {
+		return new FBNetworkEditDomain(this);
 	}
 
 	@Override
