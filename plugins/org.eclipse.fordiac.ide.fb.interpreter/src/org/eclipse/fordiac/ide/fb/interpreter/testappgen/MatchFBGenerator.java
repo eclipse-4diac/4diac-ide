@@ -61,8 +61,6 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 				destinationFB.getInterfaceList().getEventInputs().size()
 						- sourceType.getInterfaceList().getEventOutputs().size());
 
-		final int testCaseCount = 0;
-
 		// loop over the expected events, create for each one a different testing route
 		for (final Event event : evExpected) {
 			// split the comment from the expected event, because information about the
@@ -123,10 +121,6 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 						.mapToInt(Integer::valueOf).toArray();
 				final List<String> ev = Arrays.stream(splitName).filter(x -> !isInteger(x)).toList();
 
-				// to check later if all testStates have been triggered, if not further nextCase
-				// events will be sent
-				final int testStateCount = 0;
-
 				// evCnt keeps track of which expected event was already handled
 				int evCnt = 0;
 				// create for each expected event a state
@@ -150,8 +144,6 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 
 						comFrom = eccGen.getLastState();
 					} else {
-						final List<String> sublist = ev.subList(evCnt, evCnt + number);
-
 						// error transitions from the wait state
 						createErrorTransitions(eccGen.getLastState(), errState, true,
 								ev.subList(evCnt, evCnt + number));

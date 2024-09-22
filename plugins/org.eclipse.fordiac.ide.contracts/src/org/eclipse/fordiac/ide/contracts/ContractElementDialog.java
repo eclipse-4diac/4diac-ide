@@ -45,7 +45,6 @@ public class ContractElementDialog extends MessageDialog {
 	@Override
 	protected void buttonPressed(final int buttonId) {
 		inputTime = inputTimeText.getText();
-		final String[] s = DefineContractUtils.getTimeIntervalFromString(inputTimeText.getText());
 		if (!isTextCompliant(inputTime)) {
 			MessageDialog.openError(this.getShell(), "Wrong Format", "Text is not in the right format.");
 		} else {

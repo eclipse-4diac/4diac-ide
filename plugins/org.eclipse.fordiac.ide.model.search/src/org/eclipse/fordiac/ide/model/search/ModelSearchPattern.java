@@ -21,12 +21,10 @@ public class ModelSearchPattern { // extends SearchPattern
 	private final String toTest;
 	private Pattern searchPattern;
 	private final String searchString;
-	private final ModelQuerySpec modelQuerySpec;
 
 	public ModelSearchPattern(final String toTest, final ModelQuerySpec modelQuerySpec) {
 		this.toTest = toTest;
 		this.searchString = modelQuerySpec.getSearchString();
-		this.modelQuerySpec = modelQuerySpec;
 	}
 
 	private String convertSearchStringToPattern() {

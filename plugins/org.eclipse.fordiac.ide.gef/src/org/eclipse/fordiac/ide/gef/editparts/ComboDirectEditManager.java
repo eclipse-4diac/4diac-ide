@@ -55,7 +55,6 @@ public class ComboDirectEditManager extends DirectEditManager {
 	 * @param locator    the locator
 	 * @param label      the label
 	 */
-	@SuppressWarnings("rawtypes")
 	public ComboDirectEditManager(final GraphicalEditPart source, final Class editorType,
 			final CellEditorLocator locator, final Label label) {
 		super(source, editorType, locator);

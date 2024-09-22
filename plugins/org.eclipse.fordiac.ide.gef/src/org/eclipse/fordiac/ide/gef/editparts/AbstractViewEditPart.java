@@ -72,12 +72,7 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	};
 
 	protected void backgroundColorChanged(final IFigure figure) {
-		final Color fordiacColor = getBackgroundColor();
-		setColor(figure, fordiacColor);
-	}
-
-	protected Color getBackgroundColor() {
-		return null;
+		setColor(figure, null);
 	}
 
 	@SuppressWarnings("static-method")
