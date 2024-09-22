@@ -227,15 +227,11 @@ public class TransitionEditingComposite {
 	}
 
 	private void configureTransitionTableLayout(final Table table) {
-		new TableColumn(table, SWT.LEFT); // creates a table column without headline for the order numbering
-		new TableColumn(table, SWT.LEFT)
-		.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Destination);
-		new TableColumn(table, SWT.LEFT)
-		.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Event);
-		new TableColumn(table, SWT.LEFT)
-		.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Condition);
-		new TableColumn(table, SWT.LEFT)
-		.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Comment);
+		addColumn(table); // creates a table column without headline for the order numbering
+		addColumn(table).setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Destination);
+		addColumn(table).setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Event);
+		addColumn(table).setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Condition);
+		addColumn(table).setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Comment);
 
 		final TableLayout tabLayout = new TableLayout();
 		tabLayout.addColumnData(new ColumnWeightData(1, 50));
@@ -248,6 +244,10 @@ public class TransitionEditingComposite {
 
 		transitionsOutViewer.setColumnProperties(new String[] { TRANSITION_PRIORITY, TRANSITION_DESTINATION,
 				TRANSITION_EVENT, TRANSITION_CONDITION, TRANSITION_COMMENT });
+	}
+
+	private static TableColumn addColumn(final Table table) {
+		return new TableColumn(table, SWT.LEFT);
 	}
 
 	private CellEditor[] createTransitionViewerCellEditors(final Table table) {

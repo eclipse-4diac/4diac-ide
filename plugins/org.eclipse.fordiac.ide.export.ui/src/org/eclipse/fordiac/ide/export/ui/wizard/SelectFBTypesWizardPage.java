@@ -100,7 +100,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL));
 
-		final Label label = new Label(composite, SWT.NONE);
+		final Label label = addLabel(composite);
 		label.setText(Messages.SelectFBTypesWizardPage_Exporter);
 
 		filters = new Combo(composite, SWT.READ_ONLY);
@@ -266,7 +266,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL));
 		destinationSelectionGroup.setFont(font);
 
-		final Label destinationLabel = new Label(destinationSelectionGroup, SWT.NONE);
+		final Label destinationLabel = addLabel(destinationSelectionGroup);
 		destinationLabel.setText(Messages.SelectFBTypesWizardPage_ExportDestination);
 		destinationLabel.setFont(font);
 
@@ -299,7 +299,11 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		destinationBrowseButton.setFont(font);
 		setButtonLayoutData(destinationBrowseButton);
 
-		new Label(parent, SWT.NONE); // vertical spacer
+		addLabel(parent); // Vertical Spacer
+	}
+
+	private static Label addLabel(final Composite parent) {
+		return new Label(parent, SWT.NONE);
 	}
 
 	@Override

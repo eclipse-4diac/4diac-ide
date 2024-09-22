@@ -61,7 +61,7 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 	protected Control createMessageArea(final Composite parent) {
 		final Control retval = super.createMessageArea(parent);
 
-		new Label(parent, SWT.NONE); // simple placeholder label
+		addPlaceholderLabel(parent);
 
 		text = new StyledText(parent, SWT.MULTI | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(text);
@@ -70,6 +70,11 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 		printMessages();
 
 		return retval;
+	}
+
+	@SuppressWarnings("unused")
+	private static void addPlaceholderLabel(final Composite parent) {
+		new Label(parent, SWT.NONE); // simple placeholder label
 	}
 
 	/** writes all the messages ( warnings and errors) in the text field. */

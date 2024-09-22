@@ -195,9 +195,15 @@ public class TypeSelectionWidget {
 		table.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		table.setLinesVisible(false);
 		table.setHeaderVisible(false);
-		new TableColumn(table, SWT.NONE);
+		addTableColumn(table);
 
 		return viewer;
+	}
+
+	@SuppressWarnings("unused")
+	private static void addTableColumn(final Table table) {
+		// The constructor adds the newly instantiated TableColumn to the table
+		new TableColumn(table, SWT.NONE);
 	}
 
 	private void resizeTextField() {
