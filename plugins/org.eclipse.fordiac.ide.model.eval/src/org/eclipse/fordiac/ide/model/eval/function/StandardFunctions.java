@@ -485,12 +485,12 @@ public interface StandardFunctions extends Functions {
 	/* Array functions */
 
 	@Comment("Returns the lower bound of the dimension of the given array")
-	static <T extends ArrayValue, U extends AnyIntValue> AnyIntValue LOWER_BOUND(final T array, final U dimension) {
+	static <U extends AnyIntValue> AnyIntValue LOWER_BOUND(final ArrayValue array, final U dimension) {
 		return DIntValue.toDIntValue(array.getType().getSubranges().get(dimension.intValue() - 1).getLowerLimit());
 	}
 
 	@Comment("Returns the upper bound of the dimension of the given array")
-	static <T extends ArrayValue, U extends AnyIntValue> AnyIntValue UPPER_BOUND(final T array, final U dimension) {
+	static <U extends AnyIntValue> AnyIntValue UPPER_BOUND(final ArrayValue array, final U dimension) {
 		return DIntValue.toDIntValue(array.getType().getSubranges().get(dimension.intValue() - 1).getUpperLimit());
 	}
 

@@ -250,7 +250,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	}
 
 	@Override
-	protected List getModelChildren() {
+	protected List<? extends Object> getModelChildren() {
 		if (isInExpandedSubapp()) {
 			return targetPinManager.getModelChildren(isOverflow);
 		}

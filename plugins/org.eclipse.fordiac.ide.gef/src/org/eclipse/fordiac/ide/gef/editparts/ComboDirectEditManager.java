@@ -55,7 +55,7 @@ public class ComboDirectEditManager extends DirectEditManager {
 	 * @param locator    the locator
 	 * @param label      the label
 	 */
-	public ComboDirectEditManager(final GraphicalEditPart source, final Class editorType,
+	public ComboDirectEditManager(final GraphicalEditPart source, final Class<? extends CellEditor> editorType,
 			final CellEditorLocator locator, final Label label) {
 		super(source, editorType, locator);
 		this.label = label;

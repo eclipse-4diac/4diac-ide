@@ -183,7 +183,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements Annotable
 	}
 
 	@Override
-	protected List getModelChildren() {
+	protected List<Object> getModelChildren() {
 		return getModel().getChildren();
 	}
 }

@@ -116,7 +116,7 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 	}
 
 	@Override
-	protected List getModelChildren() {
+	protected List<AbstractContainerElement> getModelChildren() {
 		return containerChildren;
 	}
 
