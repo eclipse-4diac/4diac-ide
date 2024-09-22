@@ -22,8 +22,10 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECCXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
+import org.eclipse.fordiac.ide.gef.tools.FordiacViewportAutoexposeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.gef.AutoexposeHelper;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
@@ -54,6 +56,14 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 			super.deactivate();
 			((Notifier) getModel()).eAdapters().remove(getContentAdapter());
 		}
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == AutoexposeHelper.class) {
+			return key.cast(new FordiacViewportAutoexposeHelper(this));
+		}
+		return super.getAdapter(key);
 	}
 
 	/**
