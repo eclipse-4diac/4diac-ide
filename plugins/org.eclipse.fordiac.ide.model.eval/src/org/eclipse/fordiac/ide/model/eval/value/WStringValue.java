@@ -102,7 +102,7 @@ public final class WStringValue implements AnyStringValue, AnyWCharsValue {
 
 	@Override
 	public String toString() {
-		return WStringValueConverter.INSTANCE.toString(stringValue(), true);
+		return WStringValueConverter.toString(stringValue(), true);
 	}
 
 	private static String truncate(final String value, final int maxLength) {
