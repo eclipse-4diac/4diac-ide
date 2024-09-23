@@ -158,7 +158,7 @@ final package class ExpressionAnnotations {
 			VarDeclaration,
 			STVarDeclaration,
 			AdapterDeclaration,
-			FB:
+			FB case !expr.call:
 				feature.featureType
 			STStandardFunction: {
 				val argumentTypes = expr.parameters.map[declaredResultType].filter(DataType).toList
