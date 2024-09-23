@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
 import org.eclipse.fordiac.ide.model.ui.nat.FBTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.nat.FBTreeNodeLabelProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.window.Window;
@@ -66,7 +67,7 @@ public class ChangeFBMarkerResolution extends AbstractErrorMarkerResolution {
 	private void selectTypeEntry() {
 		final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-				FBTypeSelectionTreeContentProvider.INSTANCE);
+				FBTypeSelectionTreeContentProvider.INSTANCE, FBTreeNodeLabelProvider.INSTANCE);
 		dialog.setInput(getTypeLibrary());
 		if (dialog.open() == Window.OK && dialog.getFirstResult() instanceof final TypeNode node
 				&& !node.isDirectory()) {
