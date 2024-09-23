@@ -76,39 +76,41 @@ final package class ExpressionAnnotations {
 	def package static INamedElement getDeclaredResultType(STBinaryExpression expr) { getResultType(expr, true) }
 
 	def package static INamedElement getResultType(STBinaryExpression expr, boolean declared) {
-		val left = declared ? expr.left?.declaredResultType : expr.left?.resultType
-		val right = declared ? expr.right?.declaredResultType : expr.right?.resultType
-		if (left instanceof DataType) {
-			if (right instanceof DataType) {
-				if (expr.op.arithmetic || expr.op.logical) {
-					if (left instanceof AnyDurationType && right instanceof AnyNumType)
-						left
-					else if (left instanceof AnyDateType && right instanceof TimeType)
-						left
-					else if (left instanceof AnyDateType && right instanceof LtimeType)
-						left.equivalentAnyLDateType
-					else if (left.instanceofAnySDateType && right.instanceofAnySDateType)
-						ElementaryTypes.TIME
-					else if (left instanceof AnyDateType && right instanceof AnyDateType)
-						ElementaryTypes.LTIME
-					else if (left.isAssignableFrom(right))
-						left
-					else if (right.isAssignableFrom(left))
-						right
-					else
+		if (expr.op.comparison)
+			ElementaryTypes.BOOL // always return BOOL for comparison
+		else {
+			val left = declared ? expr.left?.declaredResultType : expr.left?.resultType
+			val right = declared ? expr.right?.declaredResultType : expr.right?.resultType
+			if (left instanceof DataType) {
+				if (right instanceof DataType) {
+					if (expr.op.arithmetic || expr.op.logical) {
+						if (left instanceof AnyDurationType && right instanceof AnyNumType)
+							left
+						else if (left instanceof AnyDateType && right instanceof TimeType)
+							left
+						else if (left instanceof AnyDateType && right instanceof LtimeType)
+							left.equivalentAnyLDateType
+						else if (left.instanceofAnySDateType && right.instanceofAnySDateType)
+							ElementaryTypes.TIME
+						else if (left instanceof AnyDateType && right instanceof AnyDateType)
+							ElementaryTypes.LTIME
+						else if (left.isAssignableFrom(right))
+							left
+						else if (right.isAssignableFrom(left))
+							right
+						else
+							null
+					} else
 						null
-				} else if (expr.op.comparison)
-					ElementaryTypes.BOOL
+				} else if (declared)
+					left // if looking for declared result type and right is null/invalid, propagate left
 				else
 					null
-			} else if (declared)
-				left // if looking for declared result type and right is null/invalid, propagate left
+			} else if (declared && right instanceof DataType)
+				right // if looking for declared result type and left is null/invalid, propagate right
 			else
 				null
-		} else if (declared && right instanceof DataType)
-			right // if looking for declared result type and left is null/invalid, propagate right
-		else
-			null
+		}
 	}
 
 	def package static INamedElement getResultType(STUnaryExpression expr) { expr.expression?.resultType }
