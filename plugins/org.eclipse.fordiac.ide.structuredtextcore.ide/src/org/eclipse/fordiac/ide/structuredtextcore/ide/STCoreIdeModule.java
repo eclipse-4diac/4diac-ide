@@ -18,4 +18,5 @@ package org.eclipse.fordiac.ide.structuredtextcore.ide;
  * Use this class to register ide components.
  */
 public class STCoreIdeModule extends AbstractSTCoreIdeModule {
+	// No modifications to generated abstract class required
 }

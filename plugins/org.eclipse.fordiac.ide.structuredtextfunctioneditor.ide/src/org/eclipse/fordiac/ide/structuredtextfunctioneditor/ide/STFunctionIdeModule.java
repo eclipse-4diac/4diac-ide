@@ -18,4 +18,5 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ide;
  * Use this class to register ide components.
  */
 public class STFunctionIdeModule extends AbstractSTFunctionIdeModule {
+	// No modifications to generated abstract class required
 }

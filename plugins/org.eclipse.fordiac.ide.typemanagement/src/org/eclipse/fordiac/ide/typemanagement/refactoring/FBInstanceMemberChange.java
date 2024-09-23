@@ -48,7 +48,7 @@ public class FBInstanceMemberChange extends Change {
 
 	@Override
 	public void initializeValidationData(final IProgressMonitor pm) {
-
+		// No special initialization required
 	}
 
 	@Override

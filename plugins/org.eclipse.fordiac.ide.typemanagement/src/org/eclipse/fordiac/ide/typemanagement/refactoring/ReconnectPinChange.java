@@ -76,7 +76,7 @@ public class ReconnectPinChange extends AbstractCommandChange<FBNetworkElement> 
 
 	@Override
 	public void initializeValidationData(final FBNetworkElement element, final IProgressMonitor pm) {
-
+		// No special initialization required
 	}
 
 	@Override

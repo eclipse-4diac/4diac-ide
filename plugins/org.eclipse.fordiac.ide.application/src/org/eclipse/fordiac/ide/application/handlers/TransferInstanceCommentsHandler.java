@@ -83,9 +83,7 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 						}
 						return result;
 					}
-				}) {
-
-		};
+				});
 
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final CommandStack commandStack = editor.getAdapter(CommandStack.class);

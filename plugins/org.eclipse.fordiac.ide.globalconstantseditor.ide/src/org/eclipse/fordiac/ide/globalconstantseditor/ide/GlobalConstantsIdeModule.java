@@ -19,4 +19,5 @@ package org.eclipse.fordiac.ide.globalconstantseditor.ide;
  * Use this class to register ide components.
  */
 public class GlobalConstantsIdeModule extends AbstractGlobalConstantsIdeModule {
+	// No modifications to generated abstract class required
 }
