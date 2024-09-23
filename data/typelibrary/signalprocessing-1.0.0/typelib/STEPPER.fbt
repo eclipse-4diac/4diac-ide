@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="STEPPER" Comment="Setpoint Stepper: Step up and down Values">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH   &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;Setpoint Stepper: Step up and down Values, like well-known for the cruise control in your Car. Long press increase or decrease by 10, short press increase or decrease at 1. &#10;&#10;this FB adds Maximum and Minimum Value and also Inputs to set them. &#10;For some Applications it is neccessary to store the setpoint in Non-Volatile Storage, e.g. with a ini File, for this we have here a LOAD event input which loads value from the PV input" >
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2024-09-20">
+	</VersionInfo>
+	<CompilerInfo packageName="signalprocessing">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="ZERO" Type="Event" Comment="Set OUT to VAL_ZERO">
+				<With Var="VAL_ZERO"/>
+			</Event>
+			<Event Name="UP_SLOW" Type="Event" Comment="Increase OUT by SLOW">
+				<With Var="SLOW"/>
+			</Event>
+			<Event Name="UP_FAST" Type="Event" Comment="Increase OUT by FAST">
+				<With Var="FAST"/>
+			</Event>
+			<Event Name="DOWN_SLOW" Type="Event" Comment="Decrease OUT by SLOW">
+				<With Var="SLOW"/>
+			</Event>
+			<Event Name="DOWN_FAST" Type="Event" Comment="Decrease OUT by FAST">
+				<With Var="FAST"/>
+			</Event>
+			<Event Name="FULL" Type="Event" Comment="Set OUT to VAL_FULL">
+				<With Var="VAL_FULL"/>
+			</Event>
+			<Event Name="LOAD" Type="Event" Comment="Load PV into OUT">
+				<With Var="PV"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="PV" Type="DINT" Comment="Preset Value"/>
+			<VarDeclaration Name="VAL_ZERO" Type="DINT" Comment="Minimum Value"/>
+			<VarDeclaration Name="SLOW" Type="DINT" Comment="Value for slower Change"/>
+			<VarDeclaration Name="FAST" Type="DINT" Comment="Value for faster change"/>
+			<VarDeclaration Name="VAL_FULL" Type="DINT" Comment="Maximum Value"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="DINT" Comment="Output"/>
+		</OutputVars>
+	</InterfaceList>
+	<SimpleFB>
+		<Algorithm Name="ZERO" Comment="">
+			<ST><![CDATA[ALGORITHM ZERO
+OUT := VAL_ZERO;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="UP_SLOW" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM UP_SLOW
+OUT := ADD(OUT, SLOW);
+IF GT(OUT, VAL_FULL) THEN
+	OUT := VAL_FULL;
+END_IF;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="UP_FAST" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM UP_FAST
+OUT := ADD(OUT, FAST);
+IF GT(OUT, VAL_FULL) THEN
+	OUT := VAL_FULL;
+END_IF;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="DOWN_SLOW" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM DOWN_SLOW
+OUT := SUB(OUT, SLOW);
+IF LT(OUT, VAL_ZERO) THEN
+	OUT := VAL_ZERO;
+END_IF;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="DOWN_FAST" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM DOWN_FAST
+OUT := SUB(OUT, FAST);
+IF LT(OUT, VAL_ZERO) THEN
+	OUT := VAL_ZERO;
+END_IF;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="FULL" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM FULL
+OUT := VAL_FULL;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="LOAD" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM LOAD
+OUT := PV;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</SimpleFB>
+</FBType>
