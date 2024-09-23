@@ -940,7 +940,8 @@ public enum LibraryManager {
 	 */
 	private static LibraryRecord getLibraryRecord(final Map<String, List<LibraryRecord>> libs,
 			final String symbolicName, final Version version) {
-		return libs.get(symbolicName).stream().filter(l -> l.version().equals(version)).findFirst().orElse(null);
+		return libs.getOrDefault(symbolicName, Collections.emptyList()).stream()
+				.filter(l -> l.version().equals(version)).findFirst().orElse(null);
 	}
 
 	/**
