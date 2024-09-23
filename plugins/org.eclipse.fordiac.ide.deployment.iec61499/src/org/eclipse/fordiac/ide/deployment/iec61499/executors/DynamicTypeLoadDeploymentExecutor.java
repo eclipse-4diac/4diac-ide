@@ -485,13 +485,12 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private static SubApp findSubAppOfFB(final String path, final FBNetwork network) {
 		final String[] paths = path.split("\\."); //$NON-NLS-1$
 		SubApp subapp = null;
-		for (int i = 0; i < paths.length; i++) {
-			if (i == 0) {
-				subapp = network.getSubAppNamed(paths[i]);
-				if (subapp == null) {
-					subapp = createSubApp(network, paths[i]);
-				}
-			} else {
+		if (paths.length > 0) {
+			subapp = network.getSubAppNamed(paths[0]);
+			if (subapp == null) {
+				subapp = createSubApp(network, paths[0]);
+			}
+			for (int i = 1; i < paths.length; i++) {
 				final SubApp newSubapp = subapp.getSubAppNetwork().getSubAppNamed(paths[i]);
 				if (newSubapp == null) {
 					subapp = createSubApp(subapp.getSubAppNetwork(), paths[i]);
