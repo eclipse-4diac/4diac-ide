@@ -19,7 +19,6 @@ import java.util.List;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.annotations.MappingAnnotations;
@@ -31,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.Command;
@@ -61,7 +61,7 @@ public class MapHandler extends AbstractHandler {
 				HandlerHelper.getCommandStack(editor).execute(mapCommands);
 			}
 		}
-		return Status.OK_STATUS;
+		return null;
 	}
 
 	private static CompoundCommand openDialog(final Shell shell, final AutomationSystem system,
@@ -194,7 +194,8 @@ public class MapHandler extends AbstractHandler {
 
 	private static boolean allFbsAreMapable(final List<FBNetworkElement> fbs) {
 		for (final FBNetworkElement fb : fbs) {
-			if (fb.getOuterFBNetworkElement() instanceof SubApp) {
+			if (fb.getOuterFBNetworkElement() instanceof SubApp || !fb.getInterface().getErrorMarker().isEmpty()
+					|| fb.getTypeEntry() instanceof ErrorTypeEntry) {
 				return false;
 			}
 		}
