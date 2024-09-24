@@ -112,7 +112,7 @@ public class MultiplexerSection extends StructManipulatorSection {
 					case 0:
 						return varDecl.getName();
 					case 1:
-						return varDecl.getTypeName();
+						return varDecl.getFullTypeName();
 					case 2:
 						return varDecl.getComment();
 					default:
