@@ -260,46 +260,52 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private void handleFileCopy(final IResourceDelta delta) {
 		final IFile file = (IFile) delta.getResource();
-		final IProject project = file.getProject();
-
-		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(project) || !project.isOpen()
-				|| delta.getFlags() == IResourceDelta.MARKERS) {
+		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(file.getProject())) {
 			return;
 		}
+		if (file.getProject().isOpen() && delta.getFlags() != IResourceDelta.MARKERS) {
+			final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
+			final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 
-		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
-		final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-
-		if (null == typeEntryForFile) {
-			final TypeEntry entry = typeLib.createTypeEntry(file);
-			if (null == entry && containedTypeNameIsDifferent(file)) {
-				updateTypeEntry(file, entry);
-				return;
+			if (null == typeEntryForFile) {
+				final TypeEntry entry = typeLib.createTypeEntry(file);
+				if (null != entry && containedTypeNameIsDifferent(file)) {
+					// we only need to update the type entry if the file content is different from
+					// the file name
+					// this happens when a type is copied into a new project or when a project is
+					// opened or imported
+					updateTypeEntry(file, entry);
+					return;
+				}
+				if (fileExists(file, delta)) {
+					Display.getDefault().syncExec(() -> {
+						openRenameDialog(file, entry);
+					});
+					return;
+				}
+			} else if (!file.equals(typeEntryForFile.getFile())) {
+				// After a file has been copied and the copied file is not the same as the
+				// founded type entry
+				// the file and the resulting type must be renamed with a unique name put it in
+				// the rename list
+				filesToRename.add(new FileToRenameEntry(file, typeEntryForFile));
 			}
-
-			if (fileExists(file, delta)) {
-				Display.getDefault().asyncExec(() -> handleFileCopyConflict(file, entry));
-				return;
-			}
-		} else if (!file.equals(typeEntryForFile.getFile())) {
-			filesToRename.add(new FileToRenameEntry(file, typeEntryForFile));
 		}
 	}
 
-	private void handleFileCopyConflict(final IFile file, final TypeEntry entry) {
+	private static void openRenameDialog(final IFile file, final TypeEntry entry) {
 		final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 		final InputDialog renameDialog = new InputDialog(shell,
 				Messages.FordiacResourceChangeListener_CopyConflictTitle,
 				Messages.FordiacResourceChangeListener_CopyConflictBody + file.getName() + "'", //$NON-NLS-1$
 				file.getName(), null);
-
 		if (renameDialog.open() == Window.OK && !renameDialog.getValue().equals(file.getName())) {
 			final String newFileName = renameDialog.getValue();
 			final IFile newFile = file.getParent().getFile(new Path(newFileName));
+
 			try {
 				file.move(newFile.getFullPath(), true, new NullProgressMonitor());
 				updateTypeEntryByRename(newFile, entry);
-				filesToRename.add(new FileToRenameEntry(newFile, entry));
 			} catch (final CoreException e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}
