@@ -29,7 +29,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -172,6 +172,7 @@ public class LibrarySelectionPage extends WizardPage {
 		table.setLinesVisible(true);
 		table.setLayout(createTableLayout());
 		table.setSortDirection(SWT.DOWN);
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		final TableViewerColumn nameColumn = new TableViewerColumn(viewer, SWT.LEAD);
 		nameColumn.getColumn().setText(Messages.LibraryPage_Name);
@@ -245,10 +246,10 @@ public class LibrarySelectionPage extends WizardPage {
 	@SuppressWarnings("static-method")
 	private TableLayout createTableLayout() {
 		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(100));
-		layout.addColumnData(new ColumnPixelData(50));
-		layout.addColumnData(new ColumnPixelData(200));
-		layout.addColumnData(new ColumnPixelData(100));
+		layout.addColumnData(new ColumnWeightData(180, 100, true));
+		layout.addColumnData(new ColumnWeightData(50, 50, true));
+		layout.addColumnData(new ColumnWeightData(150, 200, true));
+		layout.addColumnData(new ColumnWeightData(100, 100, true));
 		return layout;
 	}
 
