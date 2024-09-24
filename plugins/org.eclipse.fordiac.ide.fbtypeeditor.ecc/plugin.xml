@@ -3,12 +3,11 @@
 <plugin>
    <extension-point id="algorithmEditor" name="algorithmEditor" schema="schema/algorithmEditor.exsd"/>
    <extension
-         point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs">
-      <editor
-            class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.ECCEditor"
-            sortIndex="40"
-            type="basic">
-      </editor>
+         point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">
+      <editorPage
+            class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.ECCEditorDescriptor"
+            sortIndex="40">
+      </editorPage>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">

@@ -39,6 +39,8 @@ public interface ITypeEntryEditor extends IEditorPart {
 	 * Get the LibraryElement that is edited with this editor.
 	 *
 	 * @return libraryElement
+	 * @deprecated use getAdapter(LibraryElement.class) instead
 	 */
+	@Deprecated
 	LibraryElement getEditedElement();
 }

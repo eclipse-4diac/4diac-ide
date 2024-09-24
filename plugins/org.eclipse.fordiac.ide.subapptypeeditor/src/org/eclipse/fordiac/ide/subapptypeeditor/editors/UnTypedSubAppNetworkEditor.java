@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
@@ -78,7 +77,8 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 
 	@Override
 	public void gotoMarker(final IMarker marker) {
-		// nothing needed to be done here, should be handled by the parent SubAppNetworkBreadCrumbEditor
+		// nothing needed to be done here, should be handled by the parent
+		// SubAppNetworkBreadCrumbEditor
 	}
 
 	@Override
@@ -92,9 +92,9 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 	}
 
 	@Override
-	public void reloadType(final FBType type) {
-		if (type instanceof SubAppType) {
-			final FBNetwork fbNetwork = ((SubAppType) type).getFBNetwork();
+	public void reloadType() {
+		if (getType() instanceof final SubAppType subAppType) {
+			final FBNetwork fbNetwork = subAppType.getFBNetwork();
 			if (fbNetwork != null) {
 				getGraphicalViewer().setContents(fbNetwork);
 			} else {
@@ -105,7 +105,7 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 	}
 
 	@Override
-	public Object getSelectableEditPart() {
+	public Object getSelectableObject() {
 		if (getGraphicalViewer() == null) {
 			return null;
 		}

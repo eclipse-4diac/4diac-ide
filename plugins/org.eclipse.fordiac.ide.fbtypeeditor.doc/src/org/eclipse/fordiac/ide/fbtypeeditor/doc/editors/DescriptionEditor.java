@@ -30,8 +30,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDocumentationCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.Command;
@@ -76,13 +75,9 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 	private CommandStack commandStack;
 	private RichTextEditor editor;
 
-	private FBType getFbType() {
-		return getEditorInput().getContent();
-	}
-
 	@Override
-	public FBTypeEditorInput getEditorInput() {
-		return (FBTypeEditorInput) super.getEditorInput();
+	public TypeEditorInput getEditorInput() {
+		return (TypeEditorInput) super.getEditorInput();
 	}
 
 	@Override
@@ -171,19 +166,19 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 			editor = new RichTextEditor(parent, createRichTextEditorConfiguration());
 
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
-			editor.setText(getFbType().getDocumentation());
+			editor.setText(getType().getDocumentation());
 			editor.addModifyListener(e -> {
 				if (editor != null && editor.getText() != null
-						&& !editor.getText().equals(getFbType().getDocumentation())) {
-					executeCommand(new ChangeDocumentationCommand(getFbType(), editor.getText()));
+						&& !editor.getText().equals(getType().getDocumentation())) {
+					executeCommand(new ChangeDocumentationCommand(getType(), editor.getText()));
 				}
 			});
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
-			editor.setText(getFbType().getDocumentation());
+			editor.setText(getType().getDocumentation());
 			editor.addModifyListener(e -> {
 				if (editor != null && editor.getText() != null
-						&& !editor.getText().equals(getFbType().getDocumentation())) {
-					executeCommand(new ChangeDocumentationCommand(getFbType(), editor.getText()));
+						&& !editor.getText().equals(getType().getDocumentation())) {
+					executeCommand(new ChangeDocumentationCommand(getType(), editor.getText()));
 				}
 			});
 		} catch (final SWTError e) {
@@ -253,15 +248,14 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 	}
 
 	@Override
-	public void reloadType(final FBType type) {
-		getEditorInput().setFbType(type);
+	public void reloadType() {
 		if (editor != null && !editor.isDisposed()) {
-			editor.setText(getFbType().getDocumentation());
+			editor.setText(getType().getDocumentation());
 		}
 	}
 
 	@Override
-	public Object getSelectableEditPart() {
+	public Object getSelectableObject() {
 		return null;
 	}
 
