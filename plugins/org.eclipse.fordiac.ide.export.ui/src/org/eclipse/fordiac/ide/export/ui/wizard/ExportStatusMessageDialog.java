@@ -52,7 +52,8 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 	@Override
 	protected void createDialogAndButtonArea(final Composite parent) {
 		super.createDialogAndButtonArea(parent);
-		// ensure that dialog area also fills in both directions. Otherwise the text area is not resized correctly.
+		// ensure that dialog area also fills in both directions. Otherwise the text
+		// area is not resized correctly.
 		// introduced to fix Bug #579939.
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(dialogArea);
 	}

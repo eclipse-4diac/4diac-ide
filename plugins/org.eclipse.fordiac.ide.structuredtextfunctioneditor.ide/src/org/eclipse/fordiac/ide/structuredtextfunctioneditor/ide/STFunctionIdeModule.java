@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ide;
 
-
 /**
  * Use this class to register ide components.
  */

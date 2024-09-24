@@ -29,11 +29,11 @@ public class ModelSearchPattern { // extends SearchPattern
 
 	private String convertSearchStringToPattern() {
 		String temp = searchString;
-			if (searchString.contains("?")) { //$NON-NLS-1$
-				temp = searchString.replace("?", "[a-zA-Z0-9_]"); //$NON-NLS-1$ //$NON-NLS-2$
+		if (searchString.contains("?")) { //$NON-NLS-1$
+			temp = searchString.replace("?", "[a-zA-Z0-9_]"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-			if (searchString.contains("*")) { //$NON-NLS-1$
-				temp = searchString.replace("*", ".*");  //$NON-NLS-1$//$NON-NLS-2$
+		if (searchString.contains("*")) { //$NON-NLS-1$
+			temp = searchString.replace("*", ".*"); //$NON-NLS-1$//$NON-NLS-2$
 		}
 		return temp;
 	}
