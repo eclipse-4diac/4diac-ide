@@ -38,14 +38,14 @@ public class NewStateAction extends WorkbenchPartAction {
 	private org.eclipse.swt.graphics.Point pos = new org.eclipse.swt.graphics.Point(0, 0);
 	private ZoomManager zoomManager;
 
-	public NewStateAction(IWorkbenchPart part) {
+	public NewStateAction(final IWorkbenchPart part) {
 		super(part);
 		setId(CREATE_STATE);
 		setText(Messages.ECCActions_AddState);
 		setImageDescriptor(FordiacImage.ICON_ADD_STATE.getImageDescriptor());
 	}
 
-	public void setViewerControl(FigureCanvas control) {
+	public void setViewerControl(final FigureCanvas control) {
 		viewerControl = control;
 		if (null != viewerControl) {
 			viewerControl.addMenuDetectListener(e -> pos = viewerControl.toControl(e.x, e.y));
@@ -63,14 +63,14 @@ public class NewStateAction extends WorkbenchPartAction {
 
 	@Override
 	public void run() {
-		ECCEditor editor = (ECCEditor) getWorkbenchPart();
+		final ECCEditor editor = (ECCEditor) getWorkbenchPart();
 
-		Point location = viewerControl.getViewport().getViewLocation();
-		Point realPos = new Point(pos.x + location.x, pos.y + location.y);
+		final Point location = viewerControl.getViewport().getViewLocation();
+		final Point realPos = new Point(pos.x + location.x, pos.y + location.y);
 		realPos.scale(1.0 / zoomManager.getZoom());
 
-		ECState model = (ECState) stateFactory.getNewObject();
-		execute(new CreateECStateCommand(model, realPos, editor.getFbType().getECC()));
+		final ECState model = (ECState) stateFactory.getNewObject();
+		execute(new CreateECStateCommand(model, realPos, editor.getModel()));
 
 		editor.outlineSelectionChanged(model);
 	}

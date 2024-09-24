@@ -37,9 +37,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -56,7 +55,6 @@ import org.eclipse.ui.IEditorInput;
 
 public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEditorPart {
 
-	private CompositeFBType fbType;
 	private CommandStack commandStack;
 	private TypeLibrary typeLib;
 	private final Adapter adapter = new AdapterImpl() {
@@ -100,7 +98,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	@Override
 	protected void createActions() {
 		super.createActions();
-		InterfaceContextMenuProvider.createInterfaceEditingActions(this, getActionRegistry(), fbType);
+		InterfaceContextMenuProvider.createInterfaceEditingActions(this, getActionRegistry(), getType());
 	}
 
 	@Override
@@ -137,10 +135,9 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected void setModel(final IEditorInput input) {
-		if ((input instanceof final FBTypeEditorInput untypedInput)
+		if ((input instanceof final TypeEditorInput untypedInput)
 				&& (untypedInput.getContent() instanceof final CompositeFBType cfbTye)) {
-			fbType = cfbTye;
-			setModel(fbType.getFBNetwork());
+			setModel(cfbTye.getFBNetwork());
 			getModel().eAdapters().add(adapter);
 			configurePalette(untypedInput);
 		}
@@ -159,8 +156,8 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 		setPartName(FordiacMessages.FBNetwork);
 	}
 
-	protected void configurePalette(final FBTypeEditorInput fbTypeEditorInput) {
-		typeLib = fbTypeEditorInput.getTypeEntry().getTypeLibrary();
+	protected void configurePalette(final TypeEditorInput typeEditorInput) {
+		typeLib = typeEditorInput.getTypeEntry().getTypeLibrary();
 	}
 
 	@Override
@@ -170,7 +167,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new FBTypePaletteViewerProvider(fbType.getTypeEntry().getFile().getProject(), getEditDomain(),
+		return new FBTypePaletteViewerProvider(getTypeEntry().getFile().getProject(), getEditDomain(),
 				getPaletteNavigatorID());
 	}
 
@@ -188,7 +185,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	@Override
 	protected TransferDropTargetListener createTransferDropTargetListener() {
 		return new FbTypeTemplateTransferDropTargetListener(getGraphicalViewer(),
-				fbType.getTypeEntry().getFile().getProject());
+				getTypeEntry().getFile().getProject());
 	}
 
 	@Override
@@ -211,11 +208,10 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	@Override
-	public void reloadType(final FBType type) {
-		if (type instanceof final CompositeFBType cfbTye) {
+	public void reloadType() {
+		if (getType() instanceof final CompositeFBType cfbTye) {
 			getModel().eAdapters().remove(adapter);
-			fbType = cfbTye;
-			setModel(fbType.getFBNetwork());
+			setModel(cfbTye.getFBNetwork());
 			if (getModel() != null) {
 				getModel().eAdapters().add(adapter);
 				getGraphicalViewer().setContents(getModel());
@@ -226,7 +222,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	@Override
-	public Object getSelectableEditPart() {
+	public Object getSelectableObject() {
 		if (getGraphicalViewer() == null) {
 			return null;
 		}

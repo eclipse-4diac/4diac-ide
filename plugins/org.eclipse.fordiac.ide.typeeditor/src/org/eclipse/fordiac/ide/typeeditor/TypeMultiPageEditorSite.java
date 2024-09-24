@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,22 +10,23 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.editors;
+package org.eclipse.fordiac.ide.typeeditor;
 
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 
-public class FBTypeMultiPageEditorSite extends MultiPageEditorSite {
-	public FBTypeMultiPageEditorSite(final MultiPageEditorPart multiPageEditor, final IEditorPart editor) {
+public class TypeMultiPageEditorSite extends MultiPageEditorSite {
+
+	public TypeMultiPageEditorSite(final MultiPageEditorPart multiPageEditor, final IEditorPart editor) {
 		super(multiPageEditor, editor);
 	}
 
 	@Override
 	public String getId() {
 		final IEditorPart editorPart = getEditor();
-		if (editorPart instanceof IFBTEditorPart) {
-			return ((IFBTEditorPart) editorPart).getEditorId();
+		if (editorPart instanceof final ITypeEditorPage typeEditorPage) {
+			return typeEditorPage.getEditorId();
 		}
 		return super.getId();
 	}

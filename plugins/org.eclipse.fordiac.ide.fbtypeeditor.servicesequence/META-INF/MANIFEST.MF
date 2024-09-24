@@ -17,7 +17,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface,
  org.eclipse.fordiac.ide.model.edit,
  org.eclipse.fordiac.ide.model.ui,
- org.eclipse.fordiac.ide.fb.interpreter
+ org.eclipse.fordiac.ide.fb.interpreter,
+ org.eclipse.fordiac.ide.typeeditor
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.0.0.qualifier

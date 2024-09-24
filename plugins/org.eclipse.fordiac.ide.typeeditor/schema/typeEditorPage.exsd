@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.fordiac.ide.fbtypeeditor" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.eclipse.fordiac.ide.typeeditor" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.eclipse.fordiac.ide.fbtypeeditor" id="fBTEditorTabs" name="Function Block Type Editor Tabs"/>
+         <meta.schema plugin="org.eclipse.fordiac.ide.typeeditor" id="typeEditorPage" name="Type Editor Page"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -17,8 +17,8 @@
          </appInfo>
       </annotation>
       <complexType>
-         <sequence>
-            <element ref="editor" minOccurs="1" maxOccurs="unbounded"/>
+      	 <sequence>
+            <element ref="editorPage" minOccurs="1" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -43,11 +43,11 @@
                   <meta.attribute translatable="true"/>
                </appInfo>
             </annotation>
-         </attribute>
+         </attribute>         
       </complexType>
    </element>
 
-   <element name="editor">
+   <element name="editorPage">
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
@@ -55,44 +55,9 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.fbtypeeditor.IFBTEditorPart"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.typeeditor.ITypeEditorPageDescriptor"/>
                </appInfo>
             </annotation>
-         </attribute>
-         <attribute name="type" use="required">
-            <annotation>
-               <documentation>
-                  The type of the new function block type.
-               </documentation>
-            </annotation>
-            <simpleType>
-               <restriction base="string">
-                  <enumeration value="composite">
-                  </enumeration>
-                  <enumeration value="serviceInterface">
-                  </enumeration>
-                  <enumeration value="base">
-                  </enumeration>
-                  <enumeration value="basic">
-                  </enumeration>
-                  <enumeration value="simple">
-                  </enumeration>
-                  <enumeration value="subapp">
-                  </enumeration>
-                  <enumeration value="function">
-                  </enumeration>
-                  <enumeration value="ForAllFBTypes">
-                  </enumeration>
-                  <enumeration value="ForAllNonAdapterFBTypes">
-                  </enumeration>
-                  <enumeration value="ForAllNonFunctionFBTypes">
-                  </enumeration>
-                  <enumeration value="ForInterpretableFBTypes">
-                  </enumeration>
-                  <enumeration value="ForAllTypes">
-                  </enumeration>
-               </restriction>
-            </simpleType>
          </attribute>
          <attribute name="sortIndex" type="string" use="required">
             <annotation>
@@ -109,7 +74,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         3.0.0
       </documentation>
    </annotation>
 
@@ -124,7 +89,7 @@
 
    <annotation>
       <appInfo>
-         <meta.section type="apiInfo"/>
+         <meta.section type="apiinfo"/>
       </appInfo>
       <documentation>
          [Enter API information here.]
@@ -145,7 +110,7 @@
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH, 2018 TU Wien/ACIN.
+         Copyright (c) 2024 Primetals Technologies Austria GmbH
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
@@ -154,12 +119,7 @@ http://www.eclipse.org/legal/epl-2.0.
 SPDX-License-Identifier: EPL-2.0
 
 Contributors:
-
-Gerhard Ebenhofer, Alois Zoitl
-- initial API and implementation and/or initial documentation
-
-Peter Gsellmann
-- addition of simple to enumeration
+  Alois Zoitl - initial API and implementation and/or initial documentation
       </documentation>
    </annotation>
 

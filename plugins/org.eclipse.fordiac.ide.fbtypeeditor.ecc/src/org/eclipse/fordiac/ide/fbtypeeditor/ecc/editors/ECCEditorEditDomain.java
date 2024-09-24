@@ -126,7 +126,7 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 
 	private final StateCreationTool stateCreationTool = new StateCreationTool();
 	private final TransitionStateCreationTool transitionStateCreationTool = new TransitionStateCreationTool(
-			((ECCEditor) getEditorPart()).getFbType().getECC());
+			((ECCEditor) getEditorPart()).getModel());
 	private boolean transition = false;
 	private boolean createTransitionAndState = false;
 
