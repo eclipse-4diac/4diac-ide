@@ -43,10 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.ECCItemProvider;
-import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
@@ -110,20 +107,14 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		}
 	}
 
-	/** The fb type. */
-	private BasicFBType fbType;
-
-	public BasicFBType getFbType() {
-		return fbType;
+	@Override
+	public BasicFBType getType() {
+		return (BasicFBType) IFBTEditorPart.super.getType();
 	}
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setInput(input);
-		if ((input instanceof final FBTypeEditorInput fbtEditorInput)
-				&& (fbtEditorInput.getContent() instanceof final BasicFBType bfbType)) {
-			fbType = bfbType;
-		}
 		super.init(site, input);
 		setPartName(Messages.ECCEditor_LABEL_ECCEditorTabName);
 		setTitleImage(FordiacImage.ICON_ECC.getImage());
@@ -283,7 +274,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	public ECC getModel() {
-		return fbType.getECC();
+		return getType().getECC();
 	}
 
 	@Override
@@ -344,18 +335,12 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	}
 
 	@Override
-	public void reloadType(final FBType type) {
-		if (type instanceof final BasicFBType bfbType) {
-			fbType = bfbType;
-			getGraphicalViewer().setContents(getModel());
-		} else {
-			EditorUtils.CloseEditor.run(this);
-		}
-
+	public void reloadType() {
+		getGraphicalViewer().setContents(getModel());
 	}
 
 	@Override
-	public Object getSelectableEditPart() {
+	public Object getSelectableObject() {
 		if (getGraphicalViewer() == null) {
 			return null;
 		}

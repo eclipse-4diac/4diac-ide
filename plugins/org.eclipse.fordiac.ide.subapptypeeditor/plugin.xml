@@ -13,23 +13,18 @@
             id="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor"
             matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy">
       </editor>
-   </extension>
-<extension
-         point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs">
-      <editor
-            class="org.eclipse.fordiac.ide.subapptypeeditor.editors.SubAppInterfaceEditor"
-            sortIndex="20"
-            type="subapp">
-      </editor>
-   </extension>
-<extension
-         point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs">
-      <editor
-            class="org.eclipse.fordiac.ide.subapptypeeditor.editors.SubAppNetworkBreadCrumbEditor"
-            sortIndex="30"
-            type="subapp">
-      </editor>
-   </extension>
+	</extension>
+	<extension
+         point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">
+      	<editorPage
+            class="org.eclipse.fordiac.ide.subapptypeeditor.editors.SubAppInterfaceEditorDescriptor"
+            sortIndex="20">
+      	</editorPage>
+      	<editorPage
+            class="org.eclipse.fordiac.ide.subapptypeeditor.editors.SubAppNetworkBreadCrumbEditorDescriptor"
+            sortIndex="30">
+    	</editorPage>
+	</extension>
    
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertyContributor">

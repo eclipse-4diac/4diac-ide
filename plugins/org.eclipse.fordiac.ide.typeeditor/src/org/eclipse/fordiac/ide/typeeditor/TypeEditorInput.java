@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,28 +11,28 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement;
+package org.eclipse.fordiac.ide.typeeditor;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 /**
- * An EditorInput for opening FBType files with specified content. The equals
+ * An EditorInput for opening any type file with specified content. The equals
  * method is adapted that EditorInput is equal to another EditorInput if the
  * content is equal.
  */
-public class FBTypeEditorInput implements IFileEditorInput {
-	private FBType fbType;
+public class TypeEditorInput implements IFileEditorInput {
+	private LibraryElement type;
 	private final TypeEntry entry;
 
-	public FBTypeEditorInput(final FBType fbType, final TypeEntry entry) {
-		this.fbType = fbType;
+	public TypeEditorInput(final LibraryElement type, final TypeEntry entry) {
+		this.type = type;
 		this.entry = entry;
 	}
 
@@ -48,7 +48,7 @@ public class FBTypeEditorInput implements IFileEditorInput {
 
 	@Override
 	public String getName() {
-		return fbType.getName() == null ? "" : fbType.getName(); //$NON-NLS-1$
+		return type.getName() == null ? "" : type.getName(); //$NON-NLS-1$
 	}
 
 	@Override
@@ -58,8 +58,8 @@ public class FBTypeEditorInput implements IFileEditorInput {
 
 	@Override
 	public String getToolTipText() {
-		return fbType.getComment() == null ? "" //$NON-NLS-1$
-				: fbType.getComment() + " (" + entry.getFile().getProjectRelativePath().toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+		return type.getComment() == null ? "" //$NON-NLS-1$
+				: type.getComment() + " (" + entry.getFile().getProjectRelativePath().toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -67,8 +67,8 @@ public class FBTypeEditorInput implements IFileEditorInput {
 		return null;
 	}
 
-	public FBType getContent() {
-		return fbType;
+	public LibraryElement getContent() {
+		return type;
 	}
 
 	public TypeEntry getTypeEntry() {
@@ -95,8 +95,8 @@ public class FBTypeEditorInput implements IFileEditorInput {
 		return getFile().hashCode();
 	}
 
-	public void setFbType(final FBType fbType) {
-		this.fbType = fbType;
+	public void setType(final LibraryElement fbType) {
+		this.type = fbType;
 	}
 
 	@Override

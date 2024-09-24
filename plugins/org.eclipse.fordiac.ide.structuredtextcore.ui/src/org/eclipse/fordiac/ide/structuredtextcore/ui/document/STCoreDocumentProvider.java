@@ -50,7 +50,7 @@ public class STCoreDocumentProvider extends LibraryElementXtextDocumentProvider 
 				Display.getDefault().syncExec(() -> {
 					reconciler.reconcile(element, partition);
 					// save type if opened directly from a file and not in an FB type editor,
-					// indicated by a FileEditorInput instead of a FBTypeEditorInput
+					// indicated by a FileEditorInput instead of a TypeEditorInput
 					if (fileEditorInput instanceof FileEditorInput) {
 						try {
 							element.getTypeEntry().save(element, monitor);
