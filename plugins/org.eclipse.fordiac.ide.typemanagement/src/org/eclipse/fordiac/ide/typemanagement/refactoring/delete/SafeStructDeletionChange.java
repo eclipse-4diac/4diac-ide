@@ -74,7 +74,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 	}
 
 	private RootNodeChange getOrCreateRootChange(EObject eObject) {
-		if (eObject instanceof final INamedElement node) {
+		if (eObject instanceof INamedElement) {
 			eObject = EcoreUtil.getRootContainer(eObject);
 			final RootNodeChange change = new RootNodeChange(eObject);
 			if (!rootChanges.containsKey(eObject)) {

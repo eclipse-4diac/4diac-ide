@@ -56,8 +56,7 @@ public class NewServiceSequenceHandler extends AbstractHandler {
 		if (selected instanceof Service) {
 			return new CreateServiceSequenceCommand((Service) selected);
 		}
-		if (selected instanceof ServiceSequence) {
-			final ServiceSequence refElement = (ServiceSequence) selected;
+		if (selected instanceof final ServiceSequence refElement) {
 			return new CreateServiceSequenceCommand(refElement.getService(), refElement);
 		}
 		return null;
