@@ -40,6 +40,7 @@ public class IsNoReadOnlyEditorTester extends PropertyTester {
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	private static List<Object> getList(final Object reciever) {
 		if (reciever instanceof final List list) {
 			return list;
