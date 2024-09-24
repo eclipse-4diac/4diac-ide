@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
 public class CreateConnectionAtSubappInterfaceCommand extends Command implements ScopedCommand {
@@ -37,8 +38,12 @@ public class CreateConnectionAtSubappInterfaceCommand extends Command implements
 
 	@Override
 	public void execute() {
+		String arraySize = null;
+		if (ie instanceof final VarDeclaration sourceVar && sourceVar.getArraySize() != null) {
+			arraySize = sourceVar.getArraySize().getValue();
+		}
 		createIECmdCommand = new CreateInterfaceElementCommand(ie.getType(), ie.getName(), subApp.getInterface(),
-				ie.isIsInput(), -1);
+				ie.isIsInput(), arraySize, -1);
 
 		if (ie.getType() instanceof EventType) {
 			createConCommand = new EventConnectionCreateCommand(subApp.getSubAppNetwork());
