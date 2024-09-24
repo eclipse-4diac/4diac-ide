@@ -30,6 +30,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class DeploymentLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
 
+	public static final String MONITOR_MODE = "org.eclipse.fordiac.ide.deployment.debug.monitor"; //$NON-NLS-1$
+
 	@Override
 	public void launch(final ILaunchConfiguration configuration, final String mode, final ILaunch launch,
 			final IProgressMonitor monitor) throws CoreException {
@@ -43,6 +45,9 @@ public class DeploymentLaunchConfigurationDelegate extends LaunchConfigurationDe
 				process.start();
 			} else if (ILaunchManager.DEBUG_MODE.equals(mode)) {
 				final DeploymentDebugTarget debugTarget = new DeploymentDebugTarget(system, selection, launch, true);
+				debugTarget.start();
+			} else if (MONITOR_MODE.equals(mode)) {
+				final DeploymentDebugTarget debugTarget = new DeploymentDebugTarget(system, Set.of(), launch, false);
 				debugTarget.start();
 			} else {
 				throw new CoreException(Status.error(

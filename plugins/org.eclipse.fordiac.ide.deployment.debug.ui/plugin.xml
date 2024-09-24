@@ -26,6 +26,10 @@
 				mode="debug"
 				perspective="org.eclipse.debug.ui.DebugPerspective">
 			</launchMode>
+			<launchMode
+				mode="org.eclipse.fordiac.ide.deployment.debug.monitor"
+				perspective="org.eclipse.debug.ui.DebugPerspective">
+			</launchMode>
 		</launchConfigurationTabGroup>
 		<launchConfigurationTabGroup
 			class="org.eclipse.fordiac.ide.deployment.debug.ui.fb.DeploymentFBLaunchConfigurationTabGroup"
@@ -47,7 +51,7 @@
 			icon="platform:/plugin/org.eclipse.debug.ui/icons/full/etool16/run_exc.png"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.deployShortcut"
 			label="Deploy"
-			modes="run, debug">
+			modes="run, debug, org.eclipse.fordiac.ide.deployment.debug.monitor">
 			<contextualLaunch>
 				<contextLabel
 					label="Deploy"
@@ -56,6 +60,10 @@
 				<contextLabel
 					label="Deploy and Monitor"
 					mode="debug">
+				</contextLabel>
+				<contextLabel
+					label="Monitor"
+					mode="org.eclipse.fordiac.ide.deployment.debug.monitor">
 				</contextLabel>
 				<enablement>
 					<with
@@ -237,6 +245,18 @@
 			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateConnection"
 			name="Online Create Connection">
+		</command>
+		<command
+			categoryId="org.eclipse.debug.ui.category.run"
+			description="Open monitor launch configuration dialog"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.OpenMonitorConfigurations"
+			name="Monitor...">
+		</command>
+		<command
+			categoryId="org.eclipse.debug.ui.category.run"
+			description="Runs the last launched monitor configuration"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.MonitorToolbar"
+			name="Run Last Launch Monitor Configuration">
 		</command>
 	</extension>
 	<extension
@@ -523,5 +543,116 @@
 				id="org.eclipse.debug.ui.launchActionSet">
 			</actionSet>
 		</perspectiveExtension>
+	</extension>
+	<extension
+		point="org.eclipse.debug.ui.launchGroups">
+		<launchGroup
+			bannerImage="fordiacimage://ICON_START_MONITORING"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.monitor"
+			image="fordiacimage://ICON_START_MONITORING"
+			label="Monitor"
+			mode="org.eclipse.fordiac.ide.deployment.debug.monitor"
+			title="Monitor">
+		</launchGroup>
+	</extension>
+	<!-- org.eclipse.ui.actionSets is required to use action base classes from
+	debug framework -->
+	<extension
+		point="org.eclipse.ui.actionSets">
+		<actionSet
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.MonitorSet"
+			label="Monitor"
+			visible="true">
+			<menu
+				id="org.eclipse.ui.run"
+				label="Run"
+				path="additions">
+				<separator
+					name="monitorGroup">
+				</separator>
+			</menu>
+			<action
+				class="org.eclipse.fordiac.ide.deployment.debug.ui.actions.OpenMonitorConfigurations"
+				definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.OpenMonitorConfigurations"
+				id="org.eclipse.fordiac.ide.deployment.debug.ui.OpenMonitorConfigurations"
+				label="Monitor Configurations..."
+				menubarPath="org.eclipse.ui.run/monitorGroup">
+			</action>
+			<action
+				class="org.eclipse.fordiac.ide.deployment.debug.ui.actions.MonitorAsAction"
+				icon="fordiacimage://ICON_START_MONITORING"
+				id="org.eclipse.fordiac.ide.deployment.debug.ui.MonitorWithConfigurationAction"
+				label="Monitor As"
+				menubarPath="org.eclipse.ui.run/monitorGroup"
+				style="pulldown">
+			</action>
+			<action
+				label="Monitor History"
+				style="pulldown"
+				class="org.eclipse.fordiac.ide.deployment.debug.ui.actions.MonitorHistoryMenuAction"
+				menubarPath="org.eclipse.ui.run/monitorGroup"
+				id="org.eclipse.fordiac.ide.deployment.debug.ui.MonitorHistoryMenuAction">
+			</action>
+			<action
+				id="org.eclipse.fordiac.ide.deployment.debug.ui.MonitorDropDownAction"
+				toolbarPath="org.eclipse.debug.ui.launchActionSet/debug"
+				hoverIcon="fordiacimage://ICON_START_MONITORING"
+				class="org.eclipse.fordiac.ide.deployment.debug.ui.actions.MonitorToolbarAction"
+				icon="fordiacimage://ICON_START_MONITORING"
+				label="Monitor"
+				style="pulldown">
+			</action>
+		</actionSet>
+	</extension>
+	<!-- org.eclipse.ui.popupMenus is required to use action base class from
+	debug framework -->
+	<extension
+		point="org.eclipse.ui.popupMenus">
+		<objectContribution
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.contextualLaunch.monitor"
+			objectClass="java.lang.Object">
+			<action
+				class="org.eclipse.fordiac.ide.deployment.debug.ui.actions.MonitorContextualLaunchAction"
+				enablesFor="+"
+				icon="fordiacimage://ICON_START_MONITORING"
+				id="org.eclipse.fordiac.ide.deployment.debug.ui.contextualLaunch.monitor.submenu"
+				label="Monitor As"
+				menubarPath="additions"
+				style="pulldown">
+			</action>
+			<enablement>
+				<or>
+					<and>
+						<not>
+							<with
+								variable="org.eclipse.core.runtime.Platform">
+								<test
+									args="org.eclipse.debug.core"
+									property="org.eclipse.core.runtime.bundleState"
+									value="ACTIVE">
+								</test>
+							</with>
+						</not>
+						<adapt
+							type="org.eclipse.core.resources.IResource">
+						</adapt>
+					</and>
+					<and>
+						<with
+							variable="org.eclipse.core.runtime.Platform">
+							<test
+								args="org.eclipse.debug.core"
+								property="org.eclipse.core.runtime.bundleState"
+								value="ACTIVE">
+							</test>
+						</with>
+						<test
+							property="org.eclipse.debug.core.launchable"
+							value="org.eclipse.fordiac.ide.deployment.debug.monitor">
+						</test>
+					</and>
+				</or>
+			</enablement>
+		</objectContribution>
 	</extension>
 </plugin>

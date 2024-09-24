@@ -7,7 +7,7 @@
 			delegate="org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationDelegate"
 			delegateName="Deploy"
 			id="org.eclipse.fordiac.ide.deployment.debug.deployLaunch"
-			modes="run, debug"
+			modes="run, debug, org.eclipse.fordiac.ide.deployment.debug.monitor"
 			name="Deploy">
 		</launchConfigurationType>
 		<launchConfigurationType
@@ -18,5 +18,13 @@
 			name="Remote Evaluate FB"
 			sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
 		</launchConfigurationType>
+	</extension>
+	<extension
+		point="org.eclipse.debug.core.launchModes">
+		<launchMode
+			label="Monitor"
+			launchAsLabel="Monitor As"
+			mode="org.eclipse.fordiac.ide.deployment.debug.monitor">
+		</launchMode>
 	</extension>
 </plugin>
