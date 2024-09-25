@@ -4,7 +4,7 @@
 	</Identification>
 	<VersionInfo Organization="HR Agrartechnik" Version="1.0" Author="Franz Höpfinger" Date="2024-02-22" Remarks="initial Implementation">
 	</VersionInfo>
-	<VersionInfo Organization="HR Agrartechnik" Version="1.1" Author="Moritz Ortmeier" Date="2024-07-28" Remarks="rename Function">
+	<VersionInfo Organization="HR Agrartechnik" Version="1.1" Author="Moritz Ortmeier" Date="2024-07-28" Remarks="rename Function and change Input/Output Variables">
 	</VersionInfo>
 	<CompilerInfo>
 	</CompilerInfo>
