@@ -96,7 +96,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -515,11 +514,6 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 				i++;
 			}
 		}
-	}
-
-	@SuppressWarnings("static-method")
-	public IEditorActionBarContributor getActionBarContributor() {
-		return null;
 	}
 
 	@Override
