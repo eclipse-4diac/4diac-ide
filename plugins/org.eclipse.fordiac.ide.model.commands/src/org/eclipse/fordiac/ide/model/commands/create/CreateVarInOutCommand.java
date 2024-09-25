@@ -34,11 +34,6 @@ public class CreateVarInOutCommand extends CreateInterfaceElementCommand {
 		super(dataType, getNameProposal(), interfaceList, true, index);
 	}
 
-	public CreateVarInOutCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
-			final String arraySize, final String value, final int index) {
-		super(dataType, name, interfaceList, true, arraySize, value, index);
-	}
-
 	@Override
 	protected EList<? extends IInterfaceElement> getInterfaceListContainer() {
 		return getInterfaceList().getInOutVars();

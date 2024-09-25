@@ -44,8 +44,8 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 	private final boolean isInOut;
 	private boolean switchOpposite;
 	private final int index;
-	private String arraySize;
-	private String value;
+	private final String arraySize;
+	private final String value;
 
 	private AdapterFBCreateCommand adapterCreateCmd;
 
@@ -76,22 +76,13 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 	}
 
 	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
-			final boolean isInput, final boolean isInOut, final int index) {
-		this(dataType, name, interfaceList, isInput, isInOut, null, index);
-	}
-
-	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
-			final boolean isInput, final int index) {
-		this(dataType, name, interfaceList, isInput, false, index);
-	}
-
-	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
 			final boolean isInput, final String arraySize, final int index) {
 		this(dataType, name, interfaceList, isInput, false, arraySize, index);
 	}
 
-	private static boolean isValidName(final String name) {
-		return !IdentifierVerifier.verifyIdentifier(name).isPresent();
+	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
+			final boolean isInput, final int index) {
+		this(dataType, name, interfaceList, isInput, null, index);
 	}
 
 	public CreateInterfaceElementCommand(final DataType dataType, final InterfaceList interfaceList,
@@ -99,11 +90,8 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 		this(dataType, getNameProposal(dataType, isInput), interfaceList, isInput, index);
 	}
 
-	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
-			final boolean isInput, final String arraySize, final String value, final int index) {
-		this(dataType, name, interfaceList, isInput, index);
-		this.arraySize = arraySize;
-		this.value = value != null ? value : ""; //$NON-NLS-1$
+	private static boolean isValidName(final String name) {
+		return !IdentifierVerifier.verifyIdentifier(name).isPresent();
 	}
 
 	private static String getNameProposal(final DataType dataType, final boolean isInput) {
