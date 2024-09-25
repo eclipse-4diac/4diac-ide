@@ -720,7 +720,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			throws EvaluatorException, InterruptedException {
 		return switch (expr) {
 		case final STFeatureExpression featureExpression -> switch (receiver) {
-		case final FBVariable fbVariable -> evaluateVariable(featureExpression, receiver);
+		case final FBVariable fbVariable -> evaluateVariable(featureExpression, fbVariable);
 		case final StructVariable structVariable -> evaluateVariable(featureExpression, structVariable);
 		case null, default -> throw createUnsupportedOperationException(receiver);
 		};
