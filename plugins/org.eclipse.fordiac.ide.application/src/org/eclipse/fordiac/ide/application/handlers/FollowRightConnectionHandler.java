@@ -24,8 +24,9 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.fordiac.ide.ui.UIPlugin;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -38,11 +39,9 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 		final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 
-		final IInterfaceElement originPin = ((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement())
-				.getModel();
+		final IInterfaceElement originPin = ((InterfaceEditPart) selection.getFirstElement()).getModel();
 
-		final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) ((IStructuredSelection) selection)
-				.getFirstElement();
+		final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) selection.getFirstElement();
 		if (isEditorBorderPin(interfaceEditPart.getModel(), getFBNetwork(editor))
 				&& !interfaceEditPart.getModel().isIsInput()) {
 			gotoParent(event);
@@ -54,9 +53,14 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 			return Status.OK_STATUS;
 		}
 
-		final List<IInterfaceElement> opposites = getConnectionOposites(interfaceEditPart);
-		final List<IInterfaceElement> resolvedOpposites = resolveTargetPins(opposites, viewer);
-		selectOpposites(event, viewer, originPin, resolvedOpposites, editor);
+		List<IInterfaceElement> opposites = getConnectionOposites(interfaceEditPart);
+		final boolean stepMode = UIPlugin.getDefault().getPreferenceStore()
+				.getBoolean(PreferenceConstants.P_TOGGLE_JUMP_STEP);
+		if (!stepMode) {
+			opposites = resolveTargetPins(opposites, viewer);
+		}
+
+		selectOpposites(event, viewer, originPin, opposites, editor);
 		return Status.OK_STATUS;
 	}
 
