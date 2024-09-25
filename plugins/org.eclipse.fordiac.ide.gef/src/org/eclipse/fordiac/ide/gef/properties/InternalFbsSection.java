@@ -27,19 +27,12 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalFBCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertFBCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
 import org.eclipse.fordiac.ide.model.ui.nat.FBTypeSelectionTreeContentProvider;
-import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
+import org.eclipse.fordiac.ide.model.ui.nat.FBTreeNodeLabelProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.FBTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
-import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderToolbarWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -54,7 +47,6 @@ import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.selection.RowPostSelectionProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -188,32 +180,6 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	public void removeEntry(final Object entry, final CompoundCommand cmd) {
 		if (entry instanceof final FB fb) {
 			cmd.add(new DeleteInternalFBCommand(fb));
-		}
-	}
-
-	public static class FBTreeNodeLabelProvider extends DataTypeTreeSelectionDialog.TreeNodeLabelProvider {
-
-		public static final FBTreeNodeLabelProvider INSTANCE = new FBTreeNodeLabelProvider();
-
-		@Override
-		public Image getImage(final Object element) {
-			if (element instanceof final TypeNode node && node.getType() != null) {
-				final LibraryElement type = node.getType();
-
-				if (type instanceof BasicFBType) {
-					return FordiacImage.ICON_BASIC_FB.getImage();
-				}
-				if (type instanceof CompositeFBType) {
-					return FordiacImage.ICON_COMPOSITE_FB.getImage();
-				}
-				if (type instanceof SimpleFBType) {
-					return FordiacImage.ICON_SIMPLE_FB.getImage();
-				}
-				if (type instanceof ServiceInterfaceFBType) {
-					return FordiacImage.ICON_SIFB.getImage();
-				}
-			}
-			return super.getImage(element);
 		}
 	}
 

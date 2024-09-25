@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
-import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestPinHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFB;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotSubapp;
@@ -101,9 +101,9 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(100, 100));
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		assertNotNull(connectBot.createConnection(PinNamesHelper.EO0, PinNamesHelper.S));
-		assertNotNull(connectBot.createConnection(PinNamesHelper.EO1, PinNamesHelper.R));
-		assertNotNull(connectBot.createConnection(PinNamesHelper.Q, PinNamesHelper.G));
+		assertNotNull(connectBot.createConnection(UITestPinHelper.EO0, UITestPinHelper.S));
+		assertNotNull(connectBot.createConnection(UITestPinHelper.EO1, UITestPinHelper.R));
+		assertNotNull(connectBot.createConnection(UITestPinHelper.Q, UITestPinHelper.G));
 
 		// drag rectangle over to FB, therefore FB should be selected
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
@@ -117,9 +117,9 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		assertEquals(5, selectedEditParts.size());
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
-		assertTrue(connectBot.checkIfConnectionCanBeFound(PinNamesHelper.EO0, PinNamesHelper.S));
-		assertTrue(connectBot.checkIfConnectionCanBeFound(PinNamesHelper.EO1, PinNamesHelper.R));
-		assertTrue(connectBot.checkIfConnectionCanBeFound(PinNamesHelper.Q, PinNamesHelper.G));
+		assertTrue(connectBot.checkIfConnectionCanBeFound(UITestPinHelper.EO0, UITestPinHelper.S));
+		assertTrue(connectBot.checkIfConnectionCanBeFound(UITestPinHelper.EO1, UITestPinHelper.R));
+		assertTrue(connectBot.checkIfConnectionCanBeFound(UITestPinHelper.Q, UITestPinHelper.G));
 
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 		// renew list of selectedEditParts and then check if SubApp was created
@@ -146,7 +146,7 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(300, 100));
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(500, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		assertNotNull(connectBot.createConnection(PinNamesHelper.EO, PinNamesHelper.EI));
+		assertNotNull(connectBot.createConnection(UITestPinHelper.EO, UITestPinHelper.EI));
 
 		// drag rectangle over to FBs E_SWITCH and E_SR, therefore FBs should be
 		// selected
@@ -159,7 +159,7 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
 		assertFalse(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_CYCLE_TREE_ITEM));
-		assertTrue(connectBot.checkIfConnectionCanBeFound(PinNamesHelper.EO, PinNamesHelper.EI));
+		assertTrue(connectBot.checkIfConnectionCanBeFound(UITestPinHelper.EO, UITestPinHelper.EI));
 
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 		// renew list of selectedEditParts and then check if SubApp was created
@@ -167,7 +167,7 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		assertEquals(1, selectedEditParts.size());
 		final SWTBotSubapp subappBot = new SWTBotSubapp(bot);
 		assertTrue(subappBot.isSubappSelected(selectedEditParts, UITestNamesHelper.SUBAPP));
-		assertTrue(connectBot.checkIfConnectionCanBeFound(PinNamesHelper.EO, PinNamesHelper.EO));
+		assertTrue(connectBot.checkIfConnectionCanBeFound(UITestPinHelper.EO, UITestPinHelper.EO));
 	}
 
 	/**
@@ -200,9 +200,9 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		// in UI thread. Without this, the connections are not created correctly
 		UIThreadRunnable.syncExec(() -> HandlerHelper.selectEditPart(viewer.getGraphicalViewer(), editPart.part()));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		assertNotNull(connectBot.createConnection(PinNamesHelper.EO0, PinNamesHelper.S));
-		assertNotNull(connectBot.createConnection(PinNamesHelper.EO1, PinNamesHelper.R));
-		assertNotNull(connectBot.createConnection(PinNamesHelper.Q, PinNamesHelper.G));
+		assertNotNull(connectBot.createConnection(UITestPinHelper.EO0, UITestPinHelper.S));
+		assertNotNull(connectBot.createConnection(UITestPinHelper.EO1, UITestPinHelper.R));
+		assertNotNull(connectBot.createConnection(UITestPinHelper.Q, UITestPinHelper.G));
 	}
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Prashantkumar Khatri
+ * Copyright (c) 2024 Prashantkumar Khatri, Andrea Zoitl
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Prashantkumar Khatri - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl - Creation of a fluid API design for UI SWTBot testing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui.fbtype;
 
@@ -16,10 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
-import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
-import org.eclipse.fordiac.ide.test.ui.helpers.PropertySheetHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotNatTable;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotPropertySheet;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestPinHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -30,12 +32,13 @@ import org.junit.jupiter.api.Test;
 
 public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 
+	public VarInAndOutputsTabTests() {
+		super(UITestPinHelper.DI1, UITestPinHelper.DI2, UITestPinHelper.DI3);
+	}
+
 	@Override
 	@BeforeEach
 	public void operationsInitialization() {
-		TESTVAR1 = PinNamesHelper.DI1;
-		TESTVAR2 = PinNamesHelper.DI2;
-		TESTVAR3 = PinNamesHelper.DI3;
 		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
 		fbTypeBot.createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
 				UITestNamesHelper.ADAPTER);
@@ -44,12 +47,12 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 		assertNotNull(propertiesBot);
 		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
 		bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).show();
-		PropertySheetHelper.selectPropertyTabItem(UITestNamesHelper.VAR_IN_AND_OUTPUTS, propertiesBot);
+		SWTBotPropertySheet.selectPropertyTabItem(UITestNamesHelper.VAR_IN_AND_OUTPUTS, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
-		natTableBot = new SWTBot4diacNatTable(natTable);
+		swt4diacNatTable = new SWTBot4diacNatTable(natTable);
 		editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertNotNull(editor);
-		NatTableHelper.createNewVariableInDataTypeEditor(natTableBot);
+		new SWTBotNatTable(bot, swt4diacNatTable).createNewVariableInDataTypeEditor();
 	}
 
 	/**
@@ -58,11 +61,11 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	 * This test checks whether the initial value of a variable can be changed, and
 	 * asserts that the new value is correctly assigned.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void changeInitialValueOfVariable() {
-		NatTableHelper.changeCellValueInNatTbale(natTableBot, UITestNamesHelper.TRUE, 1, 4);
-		NatTableHelper.changeCellValueInNatTbale(natTableBot, "1", 1, 4); //$NON-NLS-1$
+		final SWTBotNatTable swtBotNatTable = new SWTBotNatTable(bot, swt4diacNatTable);
+		swtBotNatTable.changeCellValueInNatTbale(UITestNamesHelper.TRUE, 1, 4);
+		swtBotNatTable.changeCellValueInNatTbale("1", 1, 4); //$NON-NLS-1$
 	}
 
 	/**
@@ -72,10 +75,9 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	 * verifies whether the assignment is successful and what impact it has on the
 	 * editor.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void tryToSetInValidInitialValue() {
-		NatTableHelper.setInvalidDataType(natTableBot, 1, 4, UITestNamesHelper.TESTVAR);
+		new SWTBotNatTable(bot, swt4diacNatTable).setInvalidDataType(1, 4, UITestNamesHelper.TESTVAR);
 	}
 
 	/**
@@ -84,12 +86,11 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	 * This test verifies the toggling behavior of a variable's configuration
 	 * setting, ensuring that the value switches between "true" and "false".
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void toggleVarConfiguration() {
-		assertEquals(natTableBot.getCellDataValueByPosition(2, 6), UITestNamesHelper.FALSE_SMALL);
-		natTableBot.click(2, 6);
-		assertEquals(natTableBot.getCellDataValueByPosition(2, 6), UITestNamesHelper.TRUE_SMALL);
+		assertEquals(swt4diacNatTable.getCellDataValueByPosition(2, 6), UITestNamesHelper.FALSE_SMALL);
+		swt4diacNatTable.click(2, 6);
+		assertEquals(swt4diacNatTable.getCellDataValueByPosition(2, 6), UITestNamesHelper.TRUE_SMALL);
 	}
 
 	/**
@@ -98,12 +99,11 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	 * This test checks the toggling behavior of a variable's visibility setting,
 	 * confirming that the value alternates between "true" and "false".
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void toggleVarVisibility() {
-		assertEquals(natTableBot.getCellDataValueByPosition(2, 5), UITestNamesHelper.TRUE_SMALL);
-		natTableBot.click(2, 5);
-		assertEquals(natTableBot.getCellDataValueByPosition(2, 5), UITestNamesHelper.FALSE_SMALL);
+		assertEquals(swt4diacNatTable.getCellDataValueByPosition(2, 5), UITestNamesHelper.TRUE_SMALL);
+		swt4diacNatTable.click(2, 5);
+		assertEquals(swt4diacNatTable.getCellDataValueByPosition(2, 5), UITestNamesHelper.FALSE_SMALL);
 	}
 
 	/**
@@ -113,9 +113,8 @@ public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 	 * successfully and checks that the new retain tag value is correctly set in the
 	 * NatTable.
 	 */
-	@SuppressWarnings("static-method")
 	@Test
 	public void changeRetainTag() {
-		NatTableHelper.setRetainValue(natTableBot, 1, 7, RetainTag.RETAIN);
+		new SWTBotNatTable(bot, swt4diacNatTable).setRetainValue(1, 7, RetainTag.RETAIN);
 	}
 }

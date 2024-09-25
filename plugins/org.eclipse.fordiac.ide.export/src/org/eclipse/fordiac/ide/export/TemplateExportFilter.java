@@ -3,6 +3,7 @@
  * 				 2020 Andrea Zoitl
  *               2020 Johannes Kepler University Linz
  *               2022 Martin Erich Jobst
+ *               2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +19,7 @@
  *     - externalized all translatable strings
  *   Ernst Blecha
  *     - improved error handling and handling of forceOverwrite
+ *     - Add "Overwrite All" and "Cancel All"
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export;
 
@@ -51,15 +53,21 @@ public abstract class TemplateExportFilter extends ExportFilter {
 	// Prepare the button labels
 	private static final String[] BUTTON_LABELS = new String[] { //
 			Messages.TemplateExportFilter_OVERWRITE_LABEL_STRING, //
+			Messages.TemplateExportFilter_OVERWRITE_ALL_LABEL_STRING, //
 			Messages.TemplateExportFilter_MERGE_LABEL_STRING, //
+			Messages.TemplateExportFilter_CANCEL_ALL_LABEL_STRING, //
 			JFaceResources.getString(IDialogLabelKeys.CANCEL_LABEL_KEY)//
 	};
 
 	// extract the button ids from the label-array (avoid magic numbers)
 	private static final int BUTTON_OVERWRITE = Arrays.asList(BUTTON_LABELS)
 			.indexOf(Messages.TemplateExportFilter_OVERWRITE_LABEL_STRING);
+	private static final int BUTTON_OVERWRITE_ALL = Arrays.asList(BUTTON_LABELS)
+			.indexOf(Messages.TemplateExportFilter_OVERWRITE_ALL_LABEL_STRING);
 	private static final int BUTTON_MERGE = Arrays.asList(BUTTON_LABELS)
 			.indexOf(Messages.TemplateExportFilter_MERGE_LABEL_STRING);
+	private static final int BUTTON_CANCEL_ALL = Arrays.asList(BUTTON_LABELS)
+			.indexOf(Messages.TemplateExportFilter_CANCEL_ALL_LABEL_STRING);
 
 	protected TemplateExportFilter() {
 	}
@@ -75,7 +83,7 @@ public abstract class TemplateExportFilter extends ExportFilter {
 
 	@Override
 	public final void export(final IFile typeFile, final String destination, final boolean forceOverwrite)
-			throws ExportException {
+			throws ExportException.UserInteraction {
 		this.export(typeFile, destination, forceOverwrite, null);
 	}
 
@@ -99,7 +107,7 @@ public abstract class TemplateExportFilter extends ExportFilter {
 
 	@Override
 	public void export(final IFile typeFile, final String destination, final boolean forceOverwrite, EObject source)
-			throws ExportException {
+			throws ExportException.UserInteraction {
 		if (source == null && typeFile != null && TypeLibraryManager.INSTANCE.getTypeEntryForFile(typeFile) == null) {
 			getWarnings().add(MessageFormat.format(Messages.TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME,
 					typeFile.getFullPath(), Messages.TemplateExportFilter_FILE_IGNORED));
@@ -156,6 +164,16 @@ public abstract class TemplateExportFilter extends ExportFilter {
 					openMergeEditor(writtenFiles);
 				}
 			}
+
+			if (res == BUTTON_OVERWRITE_ALL) {
+				throw (new ExportException.OverwriteAll());
+			}
+			if (res == BUTTON_CANCEL_ALL) {
+				throw (new ExportException.CancelAll());
+			}
+
+		} catch (final ExportException.UserInteraction e) {
+			throw (e);
 		} catch (final Exception t) {
 			FordiacLogHelper.logError(Messages.TemplateExportFilter_ErrorDuringTemplateGeneration, t);
 			this.getErrors().add(t.getMessage() != null ? t.getMessage()

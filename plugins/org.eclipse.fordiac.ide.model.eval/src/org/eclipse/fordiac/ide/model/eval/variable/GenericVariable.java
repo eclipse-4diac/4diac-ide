@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.eval.variable;
 
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.eval.value.AnyValue;
@@ -52,5 +53,14 @@ public class GenericVariable extends AbstractVariable<AnyValue> {
 	@Override
 	public AnyValue getValue() {
 		return variable.getValue();
+	}
+
+	@Override
+	public Stream<Variable<?>> getChildren() {
+		return variable.getChildren();
+	}
+
+	public Variable<?> getVariable() {
+		return variable;
 	}
 }

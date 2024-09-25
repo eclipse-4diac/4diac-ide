@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
@@ -124,6 +125,11 @@ public class ArrayVariable extends AbstractVariable<ArrayValue> implements Itera
 
 	public List<Variable<?>> getElements() {
 		return value.getElements();
+	}
+
+	@Override
+	public Stream<Variable<?>> getChildren() {
+		return getElements().stream();
 	}
 
 	@Override

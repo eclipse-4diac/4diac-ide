@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="platform:/resource/org.eclipse.fordiac.ide.library.model/model/library.xsd" Scope="Library">
+    <Product Name="Storage" SymbolicName="storage" Comment="Standard Library - Storage">
+        <VersionInfo Version="1.0.0" Author="Eclipse 4diac" Date="2024-02-21"/>
+    </Product>
+</Manifest>

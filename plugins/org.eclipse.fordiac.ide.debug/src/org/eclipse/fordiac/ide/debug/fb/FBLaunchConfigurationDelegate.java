@@ -65,7 +65,7 @@ public class FBLaunchConfigurationDelegate extends CommonLaunchConfigurationDele
 
 	public static List<Variable<?>> getDefaultArguments(final FBType type) throws CoreException {
 		try {
-			return List.copyOf(new FBVariable("dummy", type).getMembers().values()); //$NON-NLS-1$
+			return List.copyOf(new FBVariable("dummy", type).getChildren().toList()); //$NON-NLS-1$
 		} catch (final Exception e) {
 			throw new CoreException(Status.error(MessageFormat
 					.format(Messages.FBLaunchConfigurationDelegate_InvalidDefaultArguments, type.getName()), e));

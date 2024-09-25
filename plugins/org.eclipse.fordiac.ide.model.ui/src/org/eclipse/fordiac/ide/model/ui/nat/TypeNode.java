@@ -78,6 +78,17 @@ public class TypeNode {
 		return null;
 	}
 
+	public TypeEntry getTypeEntry() {
+		if (type instanceof final TypeEntry typeEntry) {
+			return typeEntry;
+		}
+		if (type instanceof final LibraryElement libraryElement) {
+			return libraryElement.getTypeEntry();
+		}
+
+		return null;
+	}
+
 	public boolean isDirectory() {
 		return null == type;
 	}

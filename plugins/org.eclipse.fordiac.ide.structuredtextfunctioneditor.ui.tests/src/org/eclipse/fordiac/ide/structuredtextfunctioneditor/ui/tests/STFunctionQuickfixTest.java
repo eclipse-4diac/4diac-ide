@@ -119,4 +119,58 @@ class STFunctionQuickfixTest extends AbstractQuickfixTest {
 
 						"""));
 	}
+
+	@Test
+	void fixMissingVariableExpression() {
+		testQuickfixesOn("""
+				FUNCTION TEST
+				X := DINT#17 = 4; // test comment
+				END_FUNCTION
+
+				""", Diagnostic.LINKING_DIAGNOSTIC,
+				// INPUT
+				new Quickfix("Create missing INPUT variable", "Create missing INPUT variable", """
+						FUNCTION TEST
+						VAR_INPUT
+							X : BOOL;
+						END_VAR
+
+						X := DINT#17 = 4; // test comment
+						END_FUNCTION
+
+						"""),
+				// IN_OUT
+				new Quickfix("Create missing IN_OUT variable", "Create missing IN_OUT variable", """
+						FUNCTION TEST
+						VAR_IN_OUT
+							X : BOOL;
+						END_VAR
+
+						X := DINT#17 = 4; // test comment
+						END_FUNCTION
+
+						"""),
+				// OUTPUT
+				new Quickfix("Create missing OUTPUT variable", "Create missing OUTPUT variable", """
+						FUNCTION TEST
+						VAR_OUTPUT
+							X : BOOL;
+						END_VAR
+
+						X := DINT#17 = 4; // test comment
+						END_FUNCTION
+
+						"""),
+				// TEMP
+				new Quickfix("Create missing TEMP variable", "Create missing TEMP variable", """
+						FUNCTION TEST
+						VAR_TEMP
+							X : BOOL;
+						END_VAR
+
+						X := DINT#17 = 4; // test comment
+						END_FUNCTION
+
+						"""));
+	}
 }

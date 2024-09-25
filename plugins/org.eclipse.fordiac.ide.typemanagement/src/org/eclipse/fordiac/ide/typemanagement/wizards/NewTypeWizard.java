@@ -97,6 +97,11 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 		return false;
 	}
 
+	public static void openTypeEditor(final IFile file) {
+		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+		EditorUtils.openEditor(new FileEditorInput(file), desc.getId());
+	}
+
 	private IFile getTargetFile() {
 		final String typeName = page1.getFileName();
 		return ResourcesPlugin.getWorkspace().getRoot()
@@ -115,11 +120,6 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 		final MessageBox mbx = new MessageBox(Display.getDefault().getActiveShell());
 		mbx.setMessage(MessageFormat.format(Messages.NewFBTypeWizard_TemplateNotAvailable, templatePath));
 		mbx.open();
-	}
-
-	private static void openTypeEditor(final IFile file) {
-		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
-		EditorUtils.openEditor(new FileEditorInput(file), desc.getId());
 	}
 
 	public TypeEntry getTypeEntry() {

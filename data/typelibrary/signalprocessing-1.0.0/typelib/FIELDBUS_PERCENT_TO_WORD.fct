@@ -1,57 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Function Name="FIELDBUS_PERCENT_TO_WORD" Comment="">
-	<Identification Standard="SAE J1939; ISO 11783" Description="Copyright (c) 2023 HR Agrartechnik GmbH  
-&#10;  
-&#10;This program and the accompanying materials are made   
-&#10;available under the terms of the Eclipse Public License 2.0   
-&#10;which is available at https://www.eclipse.org/legal/epl-2.0/   
-&#10;   
-&#10;SPDX-License-Identifier: EPL-2.0" >
+<Function Name="FIELDBUS_PERCENT_TO_WORD" Comment="Convert a WORD Value Range 0-FAFF to a REAL in the Range 0.0 to 100.0">
+	<Identification Standard="SAE J1939; ISO 11783" Description="Copyright (c) 2023 HR Agrartechnik GmbH   &#10;   &#10;This program and the accompanying materials are made    &#10;available under the terms of the Eclipse Public License 2.0    &#10;which is available at https://www.eclipse.org/legal/epl-2.0/    &#10;    &#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
-	<VersionInfo Version="1.0" Author="franz" Date="2023-10-21">
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2023-10-21">
+	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Höpfinger" Date="2024-09-19" Remarks="Update to a more Function like Interface">
 	</VersionInfo>
 	<CompilerInfo packageName="signalprocessing">
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event" Comment="">
-				<With Var="QI"/>
 				<With Var="RI"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event" Comment="">
-				<With Var="QO"/>
-				<With Var="WO"/>
+				<With Var=""/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="QI" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="RI" Type="REAL" Comment=""/>
+			<VarDeclaration Name="RI" Type="REAL" Comment="Input Value"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="QO" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="WO" Type="WORD" Comment=""/>
+			<VarDeclaration Name="" Type="WORD" Comment=""/>
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
 		<ST><![CDATA[PACKAGE signalprocessing;
 
-FUNCTION FIELDBUS_PERCENT_TO_WORD
+(* Convert a WORD Value Range 0-FAFF to a REAL in the Range 0.0 to 100.0 *)
+FUNCTION FIELDBUS_PERCENT_TO_WORD : WORD
 VAR_INPUT
-	QI : BOOL;
-	RI : REAL;
+	RI : REAL;    // Input Value
 END_VAR
 
-VAR_OUTPUT
-	QO : BOOL;
-	WO : WORD;
-END_VAR
+FIELDBUS_PERCENT_TO_WORD := UDINT_TO_WORD(REAL_TO_UDINT(RI * UDINT_TO_REAL(WORD_TO_UDINT(FIELDBUS_VALID_SIGNAL_W))));
 
-QO := QI;
-IF (TRUE = QI) THEN
-	WO := UDINT_TO_WORD(REAL_TO_UDINT(RI * UDINT_TO_REAL(WORD_TO_UDINT(FIELDBUS_VALID_SIGNAL_W))));
-END_IF;
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>

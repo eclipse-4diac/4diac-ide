@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.GraphicalEditPart;
@@ -33,6 +34,9 @@ public class InitialValueDirectEditManager extends TextDirectEditManager {
 
 	@Override
 	protected CellEditor createCellEditorOn(final Composite composite) {
+		if (varDeclaration.getType() instanceof StructuredType || varDeclaration.isArray()) {
+			return new InitialValueStructuredCellEditor(composite, varDeclaration);
+		}
 		return new InitialValueCellEditor(composite, varDeclaration);
 	}
 

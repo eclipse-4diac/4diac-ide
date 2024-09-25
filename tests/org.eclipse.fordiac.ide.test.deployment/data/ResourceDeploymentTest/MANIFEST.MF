@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="platform:/resource/org.eclipse.fordiac.ide.library.model/model/library.xsd" Scope="Project">
+  <Product>
+    <VersionInfo Author="" Date="2024-08-21" Version="1.0.0"/>
+  </Product>
+</Manifest>

@@ -76,7 +76,8 @@ final class CallableAnnotations {
 
 	static EList<INamedElement> getOutputParameters(final Event event) {
 		if (event.eContainer() instanceof final InterfaceList interfaceList) {
-			return ECollections.unmodifiableEList(interfaceList.getOutputVars());
+			return ECollections.unmodifiableEList(
+					interfaceList.getOutputVars().stream().filter(v -> !v.getName().isEmpty()).toList());
 		}
 		return ECollections.emptyEList();
 	}
@@ -88,9 +89,12 @@ final class CallableAnnotations {
 		return ECollections.emptyEList();
 	}
 
-	@SuppressWarnings("unused")
 	static DataType getReturnType(final Event event) {
-		return null; // events may not have a return type
+		if (event.eContainer() instanceof final InterfaceList interfaceList) {
+			return interfaceList.getOutputVars().stream().filter(v -> v.getName().isEmpty()).findAny()
+					.map(VarDeclaration::getType).orElse(null);
+		}
+		return null;
 	}
 
 	static EList<INamedElement> getInputParameters(final FB fb) {
@@ -98,15 +102,16 @@ final class CallableAnnotations {
 	}
 
 	static EList<INamedElement> getOutputParameters(final FB fb) {
-		return ECollections.unmodifiableEList(fb.getInterface().getOutputVars());
+		return ECollections.unmodifiableEList(
+				fb.getInterface().getOutputVars().stream().filter(v -> !v.getName().isEmpty()).toList());
 	}
 
 	static EList<INamedElement> getInOutParameters(final FB fb) {
 		return ECollections.unmodifiableEList(fb.getInterface().getInOutVars());
 	}
 
-	@SuppressWarnings("unused")
 	static DataType getReturnType(final FB fb) {
-		return null; // FBs may not have a return type
+		return fb.getInterface().getOutputVars().stream().filter(v -> v.getName().isEmpty()).findAny()
+				.map(VarDeclaration::getType).orElse(null);
 	}
 }

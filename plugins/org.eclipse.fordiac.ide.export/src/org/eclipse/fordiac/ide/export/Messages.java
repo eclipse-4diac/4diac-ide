@@ -26,6 +26,8 @@ public final class Messages extends NLS {
 
 	public static String ExportTemplate_ExportTemplate;
 
+	public static String TemplateExportFilter_CANCEL_ALL_LABEL_STRING;
+
 	public static String TemplateExportFilter_ErrorDuringTemplateGeneration;
 
 	public static String TemplateExportFilter_FILE_EXISTS;
@@ -49,6 +51,8 @@ public final class Messages extends NLS {
 	public static String TemplateExportFilter_OVERWRITE_REQUEST;
 
 	public static String TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME;
+
+	public static String TemplateExportFilter_OVERWRITE_ALL_LABEL_STRING;
 
 	static {
 		// initialize resource bundle

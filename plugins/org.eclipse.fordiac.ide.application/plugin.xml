@@ -17,6 +17,13 @@
     </editor>
   </extension>
   
+  <extension point="org.eclipse.ui.ide.markerResolution">
+		<markerResolutionGenerator
+			markerType="org.eclipse.fordiac.ide.model.validation"
+			class="org.eclipse.fordiac.ide.application.marker.resolution.FordiacMarkerResolutionGenerator">
+		</markerResolutionGenerator>
+  </extension>
+  
   <extension point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
     <propertyContributor contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
       <propertyCategory category="FB">
@@ -30,6 +37,8 @@
       <propertyCategory category="Resource">
       </propertyCategory>
       <propertyCategory category="Application">
+      </propertyCategory>
+      <propertyCategory category="Info">
       </propertyCategory>
     </propertyContributor>
   </extension>
@@ -137,6 +146,12 @@
                    id="org.eclipse.fordiac.ide.application.propertyVarConfigTab"
                    indented="false"
                    label="Var Config">
+      </propertyTab>
+	  <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyAttributeTab"
+      			   category="Application"
+                   id="org.eclipse.fordiac.ide.application.propertyInfoTab"
+                   indented="false"
+                   label="Info">
       </propertyTab>
       <propertyTab category="Interface"
                    id="org.eclipse.fordiac.ide.application.propertyStructInterfaceElementTab"
@@ -302,6 +317,12 @@
               id="org.eclipse.fordiac.ide.application.properties.ConfigurableFBSection"
               tab="org.eclipse.fordiac.ide.application.propertyConfigurableFBTab">
         </propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.InfoPropertySection"
+              filter="org.eclipse.fordiac.ide.application.properties.InfoSectionFilter"
+              id="org.eclipse.fordiac.ide.application.properties.InfoSection"
+              tab="org.eclipse.fordiac.ide.application.propertyInfoTab">
+        </propertySection>
      </propertySections>
   </extension>
   
@@ -335,11 +356,6 @@
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              id="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor"
              name="Focus On Predecessor">
-    </command>
-     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-     		defaultHandler="org.eclipse.fordiac.ide.application.handlers.RepairCommandHandler"
-             id="org.eclipse.fordiac.ide.application.commands.repair"
-             name="Repair Error Marker">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              id="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
@@ -884,6 +900,9 @@
     </handler>
     <handler class="org.eclipse.fordiac.ide.application.handlers.MoveThroughHierarchyHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.moveThroughHierarchy" />
+	<handler class="org.eclipse.fordiac.ide.application.handlers.FordiacQuickFixHandler"
+             commandId="org.eclipse.jdt.ui.edit.text.java.correction.assist.proposals">
+	</handler>
   </extension>
   
   <extension point="org.eclipse.ui.bindings">
@@ -1067,9 +1086,8 @@
           <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
         </visibleWhen>
       </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.repair"
-               label="Repair Errormarker"
-               tooltip="Attempt to repair error marker">
+      <command commandId="org.eclipse.jdt.ui.edit.text.java.correction.assist.proposals"
+               label="Quick Fix">
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
                label="Group"
@@ -1144,18 +1162,6 @@
         </command>
       </toolbar>
     </menuContribution>
-    <menuContribution
-            locationURI="popup:org.eclipse.ui.ide.MarkersView">
-            <command commandId="org.eclipse.fordiac.ide.application.commands.repair"
-               label="Repair Errormarker"
-               tooltip="Attempt to repair Errormarker">
-         <visibleWhen checkEnabled="false">
-          <and>
-           <test property="org.eclipse.fordiac.ide.application.properties.repairSupported"/>
-          </and>
-        </visibleWhen>     
-      </command> 
-     </menuContribution>
     <menuContribution locationURI="toolbar:org.eclipse.ui.workbench.navigate">
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotochild"/>
@@ -1256,9 +1262,8 @@
           </with>
         </visibleWhen>
       </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.repair"
-               label="Repair Errormarker"
-               tooltip="Attempt to repair Errormarker">
+      <command commandId="org.eclipse.jdt.ui.edit.text.java.correction.assist.proposals"
+               label="Quick Fix">
         <visibleWhen checkEnabled="false">
           <and>
             <with variable="activeEditor">
