@@ -126,7 +126,7 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 			final FBNetworkElement fbnElement) {
 		final Set<IInterfaceElement> foundElements = new HashSet<>();
 		foundElements.addAll(getWatchedIfElementsForFB(manager, fbnElement));
-		if (fbnElement.getType() instanceof BaseFBType) {
+		if (fbnElement.getType() instanceof BaseFBType && fbnElement instanceof FB) {
 			foundElements.addAll(getWatchedInternalVars(manager, (FB) fbnElement));
 		} else if (fbnElement instanceof final SubApp subapp && subapp.getSubAppNetwork() != null) {
 			foundElements.addAll(getWatchedElementsFromFBNetwork(manager, subapp.getSubAppNetwork()));
