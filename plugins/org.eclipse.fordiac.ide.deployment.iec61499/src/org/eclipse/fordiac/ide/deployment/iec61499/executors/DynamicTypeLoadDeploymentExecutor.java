@@ -400,7 +400,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 					entry = res.getDevice().getAutomationSystem().getTypeLibrary().getFBTypeEntry(fbresult.getType());
 				}
 
-				FBCreateCommand fbcmd = null;
+				final FBCreateCommand fbcmd;
 				if (fbresult.getName().contains(".")) {
 					final SubApp parent = findSubAppOfFB(
 							fbresult.getName().substring(0, fbresult.getName().lastIndexOf(".")), res.getFBNetwork());
