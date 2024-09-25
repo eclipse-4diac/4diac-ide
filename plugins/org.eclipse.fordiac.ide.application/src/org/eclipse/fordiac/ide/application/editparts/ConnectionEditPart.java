@@ -57,7 +57,9 @@ import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
@@ -155,9 +157,20 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 					updateConnectionLables(editPart.getTargetConnections());
 				}
 			}
-			if (LibraryElementPackage.eINSTANCE.getFBNetworkElement_Group().equals(feature)) {
+			if (LibraryElementPackage.eINSTANCE.getFBNetworkElement_Group().equals(feature)
+					|| (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
+							.equals(notification.getFeature()) && unfoldedStateChanged(notification))) {
 				getFigure().handleVisibilityChange(getFigure().isHidden()); // triggers new label creation
 			}
+		}
+
+		private boolean unfoldedStateChanged(final Notification notification) {
+			if (notification.getNewValue() instanceof final Attribute attribute
+					&& attribute.getAttributeDeclaration() == InternalAttributeDeclarations.UNFOLDED) {
+				return true;
+			}
+			return notification.getOldValue() instanceof final Attribute attribute
+					&& attribute.getAttributeDeclaration() == InternalAttributeDeclarations.UNFOLDED;
 		}
 	}
 
