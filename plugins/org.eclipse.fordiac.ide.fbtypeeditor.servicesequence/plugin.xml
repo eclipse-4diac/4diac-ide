@@ -4,8 +4,18 @@
    <extension
          point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">
       <editorPage
-            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceSequenceEditorDescriptor"
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceSequenceEditor"
             sortIndex="66">
+         <enablement>
+            <instanceof
+                  value="org.eclipse.fordiac.ide.model.libraryElement.FBType">
+            </instanceof>
+            <not>
+               <instanceof
+                     value="org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType">
+               </instanceof>
+            </not>
+         </enablement>
       </editorPage>
    </extension>
    <extension
