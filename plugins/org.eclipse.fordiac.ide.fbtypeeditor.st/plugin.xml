@@ -4,12 +4,22 @@
    <extension
          point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">
       <editorPage
-            class="org.eclipse.fordiac.ide.fbtypeeditor.st.StructuredTextFBTypeExecutableExtensionFactory:org.eclipse.fordiac.ide.fbtypeeditor.st.StructuredTextFBTypeEditorDescriptor"
+            class="org.eclipse.fordiac.ide.fbtypeeditor.st.StructuredTextFBTypeExecutableExtensionFactory:org.eclipse.fordiac.ide.fbtypeeditor.st.StructuredTextFBTypeEditor"
             sortIndex="60">
+         <enablement>
+            <instanceof
+                  value="org.eclipse.fordiac.ide.model.libraryElement.BaseFBType">
+            </instanceof>
+         </enablement>
       </editorPage>
       <editorPage
-            class="org.eclipse.fordiac.ide.fbtypeeditor.st.StructuredTextFunctionFBTypeExecutableExtensionFactory:org.eclipse.fordiac.ide.fbtypeeditor.st.StructuredTextFunctionFBTypeEditorDescriptor"
+            class="org.eclipse.fordiac.ide.fbtypeeditor.st.StructuredTextFunctionFBTypeExecutableExtensionFactory:org.eclipse.fordiac.ide.fbtypeeditor.st.StructuredTextFBTypeEditor"
             sortIndex="60">
+         <enablement>
+            <instanceof
+                  value="org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType">
+            </instanceof>
+         </enablement>
       </editorPage>
    </extension>
 </plugin>
