@@ -18,8 +18,18 @@
    <extension
          point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">
       <editorPage
-            class="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBInterfaceEditorDescriptor"
+            class="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBInterfaceEditor"
             sortIndex="20">
+         <enablement>
+            <instanceof
+                  value="org.eclipse.fordiac.ide.model.libraryElement.FBType">
+            </instanceof>
+            <not>
+               <instanceof
+                     value="org.eclipse.fordiac.ide.model.libraryElement.SubAppType">
+               </instanceof>
+            </not>
+         </enablement>
       </editorPage>
    </extension>
    
