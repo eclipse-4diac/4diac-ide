@@ -10,11 +10,21 @@
 		<EventInputs>
 			<Event Name="START" Type="Event" Comment="Start the stopwatch">
 			</Event>
+			<Event Name="ET" Type="Event" Comment="Trigger the Time output">
+			</Event>
 			<Event Name="STOP" Type="Event" Comment="Stop the stopwatch">
+			</Event>
+			<Event Name="RESET" Type="Event" Comment="Reset the stopwatch to 0">
 			</Event>
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="EO" Type="Event" Comment="Event Output">
+				<With Var="TD"/>
+			</Event>
+			<Event Name="ETO" Type="Event" Comment="Trigger the Time output  confirm">
+				<With Var="TD"/>
+			</Event>
+			<Event Name="RESETO" Type="Event" Comment="Reset the stopwatch to 0  confirm">
 				<With Var="TD"/>
 			</Event>
 		</EventOutputs>
@@ -27,23 +37,49 @@
 			<VarDeclaration Name="startTime" Type="TIME" Comment="Holds the time value when the start event occured."/>
 		</InternalVars>
 		<ECC>
-			<ECState Name="START" Comment="" x="375.0" y="750.0">
+			<ECState Name="START" Comment="" x="373.33" y="746.67">
 			</ECState>
-			<ECState Name="Measure" Comment="" x="1643.75" y="593.75">
+			<ECState Name="Measure" Comment="" x="1640" y="593.33">
 				<ECAction Algorithm="captureStartTime"/>
 			</ECState>
-			<ECState Name="STOP" Comment="" x="1375.0" y="1731.25">
+			<ECState Name="STOP" Comment="" x="2533.33" y="2400">
 				<ECAction Algorithm="calcDiff" Output="EO"/>
 			</ECState>
-			<ECTransition Source="START" Destination="Measure" Condition="START" Comment="" x="1162.5" y="750.0"/>
-			<ECTransition Source="Measure" Destination="STOP" Condition="STOP" Comment="" x="1725.0" y="1225.0"/>
-			<ECTransition Source="STOP" Destination="START" Condition="1" Comment="" x="1012.5" y="1337.5"/>
+			<ECState Name="Trig" Comment="" x="3066.67" y="1333.33">
+				<ECAction Algorithm="calcDiff" Output="ETO"/>
+			</ECState>
+			<ECState Name="RESET" Comment="" x="1066.67" y="2533.33">
+				<ECAction Algorithm="reset" Output="RESETO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="Measure" Condition="START" Comment="" x="1160" y="746.67"/>
+			<ECTransition Source="Measure" Destination="STOP" Condition="STOP" Comment="" x="1720" y="1220"/>
+			<ECTransition Source="STOP" Destination="START" Condition="1" Comment="" x="1006.67" y="1333.33"/>
+			<ECTransition Source="Trig" Destination="STOP" Condition="STOP" Comment="" x="2653.33" y="1726.67"/>
+			<ECTransition Source="Measure" Destination="Trig" Condition="ET" Comment="" x="2033.33" y="973.33"/>
+			<ECTransition Source="Trig" Destination="Trig" Condition="ET" Comment="" x="3240" y="1746.67"/>
+			<ECTransition Source="Measure" Destination="RESET" Condition="RESET" Comment="" x="1460" y="1286.67"/>
+			<ECTransition Source="RESET" Destination="START" Condition="1" Comment="" x="786.67" y="1706.67"/>
+			<ECTransition Source="START" Destination="RESET" Condition="RESET" Comment="" x="280" y="1866.67"/>
+			<ECTransition Source="Trig" Destination="RESET" Condition="RESET" Comment="" x="2133.33" y="1446.67"/>
 		</ECC>
-		<Algorithm Name="captureStartTime" Comment="New Algorithm">
-			<ST><![CDATA[startTime := NOW_MONOTONIC();]]></ST>
+		<Algorithm Name="captureStartTime" Comment="">
+			<ST><![CDATA[ALGORITHM captureStartTime
+startTime := NOW_MONOTONIC();
+END_ALGORITHM]]></ST>
 		</Algorithm>
-		<Algorithm Name="calcDiff" Comment="New Algorithm">
-			<ST><![CDATA[TD := NOW_MONOTONIC() - startTime;]]></ST>
+		<Algorithm Name="calcDiff" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM calcDiff
+TD := NOW_MONOTONIC() - startTime;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="reset" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM reset
+TD := T#0s;
+END_ALGORITHM]]></ST>
 		</Algorithm>
 	</BasicFB>
 </FBType>
