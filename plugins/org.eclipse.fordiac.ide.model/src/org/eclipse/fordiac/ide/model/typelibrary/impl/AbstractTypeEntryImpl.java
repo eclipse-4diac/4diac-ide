@@ -95,6 +95,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	private final AtomicReference<String> comment = new AtomicReference<>();
 
 	private final AtomicLong lastModificationTimestamp = new AtomicLong(IResource.NULL_STAMP);
+	private final AtomicLong lastModificationTimestampEditable = new AtomicLong(IResource.NULL_STAMP);
 
 	private SoftReference<LibraryElement> typeRef;
 	private SoftReference<LibraryElement> typeEditableRef;
@@ -173,6 +174,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	@Override
 	public final void setLastModificationTimestamp(final long newLastModificationTimestamp) {
 		lastModificationTimestamp.set(newLastModificationTimestamp);
+		lastModificationTimestampEditable.set(newLastModificationTimestamp);
 	}
 
 	@Override
@@ -278,7 +280,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	public LibraryElement getTypeEditable() {
 		// check if type is present and current
 		LibraryElement typeEditable = basicGetTypeEditable();
-		if (typeEditable != null && !isFileContentChanged()) {
+		if (typeEditable != null && !isFileContentChangedEditable()) {
 			return typeEditable; // simple, non-contended case
 		}
 
@@ -287,7 +289,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		synchronized (this) {
 			// check again
 			typeEditable = basicGetTypeEditable();
-			if (typeEditable != null && !isFileContentChanged()) {
+			if (typeEditable != null && !isFileContentChangedEditable()) {
 				return typeEditable; // concurrent update
 			}
 
@@ -299,18 +301,30 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 			// _we_ need to get a fresh type editable
 
+			final long modificationStamp;
+
 			// try loaded type first
 			final LibraryElement type = basicGetType();
 			if (type != null && !isFileContentChanged()) {
+				// read modification stamp at the beginning to ensure the copied type is at
+				// least as recent as the modification stamp
+				modificationStamp = lastModificationTimestamp.get();
+
 				typeEditable = EcoreUtil.copy(type);
 			} else { // load a fresh copy ourselves
+				// read modification stamp at the beginning to ensure the loaded type is at
+				// least as recent as the read modification stamp
+				modificationStamp = fileCached.getModificationStamp();
+
 				typeEditable = loadType();
-				// do _not_ touch lastModificationTimestamp,
-				// since we are not updating the type here
 			}
 
 			// set the type editable
 			notifications = basicSetTypeEditable(typeEditable, notifications);
+
+			// update the last modification stamp _after_ setting the type to ensure other
+			// readers see the new stamp only together with the new type
+			lastModificationTimestampEditable.set(modificationStamp);
 		}
 		// dispatch notifications
 		if (notifications != null) {
@@ -322,6 +336,16 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	private LibraryElement basicGetTypeEditable() {
 		final SoftReference<LibraryElement> typeEditableRefCached = typeEditableRef;
 		return typeEditableRefCached != null ? typeEditableRefCached.get() : null;
+	}
+
+	private boolean isFileContentChangedEditable() {
+		final IFile fileCached = getFile();
+		if (fileCached != null) {
+			final long modificationStamp = fileCached.getModificationStamp();
+			return modificationStamp != IResource.NULL_STAMP
+					&& modificationStamp != lastModificationTimestampEditable.get();
+		}
+		return false;
 	}
 
 	@Override
@@ -512,6 +536,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		result.append(file);
 		result.append(", lastModificationTimestamp: "); //$NON-NLS-1$
 		result.append(lastModificationTimestamp);
+		result.append(", lastModificationTimestampEditable: "); //$NON-NLS-1$
+		result.append(lastModificationTimestampEditable);
 		result.append(')');
 		return result.toString();
 	}
@@ -547,6 +573,10 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			if (exporter.getType() != currentTypeEditable) {
 				notifications = basicSetTypeEditable(exporter.getType(), notifications);
 			}
+
+			// update the last modification stamp editable _after_ setting the type editable
+			// to ensure readers see the new stamp only together with the new type editable
+			lastModificationTimestampEditable.set(modificationStamp);
 
 			// set type (if requested)
 			if (updateTypeOnSave) {
