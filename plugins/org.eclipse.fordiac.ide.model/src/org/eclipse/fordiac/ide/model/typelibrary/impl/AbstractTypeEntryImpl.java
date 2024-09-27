@@ -206,12 +206,6 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			// least as recent as the read modification stamp
 			final long modificationStamp = fileCached.getModificationStamp();
 
-			// reset editable type to force a fresh copy the next time the editable type is
-			// accessed
-			// also needs to happen before the reload, since SystemEntry delegates to
-			// setType, which would otherwise reset the freshly reloaded type
-			notifications = basicSetTypeEditable(null, notifications);
-
 			// load and set the type
 			type = loadType();
 			notifications = basicSetType(type, notifications);
