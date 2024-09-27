@@ -297,7 +297,11 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateExpression(STBuiltinFeatureExpression expr) {
 		switch (expr.feature) {
-			case THIS: '''(*this)«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
+			case THIS:
+				if (expr.call)
+					'''(*this)(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)'''
+				else
+					"this"
 		}
 	}
 
