@@ -270,7 +270,11 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		}
 	}
 
+	/**
+	 * @deprecated see {@link TypeEntry#getTypeEditable()}
+	 */
 	@Override
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	public LibraryElement getTypeEditable() {
 		// check if type is present and current
 		LibraryElement typeEditable = basicGetTypeEditable();
@@ -342,7 +346,11 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		return false;
 	}
 
+	/**
+	 * @deprecated see {@link TypeEntry#setTypeEditable(LibraryElement)}
+	 */
 	@Override
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	public void setTypeEditable(final LibraryElement newTypeEditable) {
 		final NotificationChain notifications = basicSetTypeEditable(newTypeEditable, null);
 		if (notifications != null) {

@@ -19,7 +19,11 @@ public interface AttributeTypeEntry extends TypeEntry {
 	@Override
 	AttributeDeclaration getType();
 
+	/**
+	 * @deprecated see {@link TypeEntry#getTypeEditable()}
+	 */
 	@Override
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	AttributeDeclaration getTypeEditable();
 
 	@Override

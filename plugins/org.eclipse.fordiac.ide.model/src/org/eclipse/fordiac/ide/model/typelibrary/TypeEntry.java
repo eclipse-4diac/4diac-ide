@@ -55,8 +55,25 @@ public interface TypeEntry extends Notifier {
 
 	void setType(LibraryElement value);
 
+	/**
+	 * @deprecated The "editable" type may not be identical to the type currently
+	 *             used in editors due to automatic reload from disk on changes.
+	 *             However, it was often used this way. In the future, either get a
+	 *             private copy to edit the type via {@link #copyType()} or get the
+	 *             type directly from an editor via
+	 *             {@code Adapters.adapt(editor, LibraryElement.class)}.
+	 */
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	LibraryElement getTypeEditable();
 
+	/**
+	 * @deprecated The "editable" type may not be identical to the type currently
+	 *             used in editors due to automatic reload from disk on changes.
+	 *             However, it was often used this way. In the future, use
+	 *             {@link #save(LibraryElement, IProgressMonitor)} to save a
+	 *             modified type or update the type directly inside an editor.
+	 */
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	void setTypeEditable(LibraryElement value);
 
 	TypeLibrary getTypeLibrary();
