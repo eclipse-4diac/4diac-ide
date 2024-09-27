@@ -47,7 +47,7 @@ public final class STString implements java.io.Serializable, Comparable<STString
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(value, wide);
+		return Objects.hash(value, Boolean.valueOf(wide));
 	}
 
 	@Override

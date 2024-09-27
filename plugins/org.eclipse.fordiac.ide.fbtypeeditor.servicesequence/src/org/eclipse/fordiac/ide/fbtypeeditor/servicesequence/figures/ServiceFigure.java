@@ -145,7 +145,7 @@ public final class ServiceFigure extends FreeformLayeredPane {
 		add(interfaceLayer);
 	}
 
-	private Label createLabel(final boolean isLeftInterface) {
+	private static Label createLabel(final boolean isLeftInterface) {
 		final int centerMargin = 100;
 		final int topMargin = 5;
 		final int borderMargin = 30;

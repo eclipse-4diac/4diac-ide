@@ -96,7 +96,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -399,6 +398,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 	 * @param editorType editor type string as defined the fBTEditorTabs.exsd
 	 * @return true if the editor should be shown otherwise false
 	 */
+	@SuppressWarnings("static-method")
 	protected boolean checkTypeEditorType(final FBType fbType, final String editorType) {
 		return ((editorType.equals("ForAllTypes")) || //$NON-NLS-1$
 				(editorType.equals("ForAllFBTypes")) || //$NON-NLS-1$
@@ -514,10 +514,6 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 				i++;
 			}
 		}
-	}
-
-	public IEditorActionBarContributor getActionBarContributor() {
-		return null;
 	}
 
 	@Override

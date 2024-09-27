@@ -36,7 +36,7 @@ public class VarDeclarationItemProviderEmfCompare extends VarDeclarationItemProv
 		final Collection<Object> children = new ArrayList<>();
 		children.addAll(((VarDeclaration) object).getWiths());
 		children.add(((VarDeclaration) object).getValue());
-		children.add(((VarDeclaration) object).isVarConfig());
+		children.add(Boolean.valueOf(((VarDeclaration) object).isVarConfig()));
 		return children;
 	}
 

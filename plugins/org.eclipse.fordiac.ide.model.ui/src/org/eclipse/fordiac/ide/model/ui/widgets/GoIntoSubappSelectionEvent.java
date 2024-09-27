@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 
 public class GoIntoSubappSelectionEvent extends SelectionChangedEvent {
 
+	private static final long serialVersionUID = 1L;
 	private final SubApp subapp;
 
 	public GoIntoSubappSelectionEvent(final ISelectionProvider source, final SubApp subapp) {

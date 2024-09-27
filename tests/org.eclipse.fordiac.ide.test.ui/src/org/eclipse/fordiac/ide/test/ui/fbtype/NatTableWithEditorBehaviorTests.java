@@ -36,16 +36,14 @@ public abstract class NatTableWithEditorBehaviorTests extends Abstract4diacUITes
 
 	private final String testVar1;
 	private final String testVar2;
-	private final String testVar3;
 
 	protected NatTableWithEditorBehaviorTests() {
-		this("TESTVAR1", "TESTVAR2", "TESTVAR3"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		this("TESTVAR1", "TESTVAR2"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	protected NatTableWithEditorBehaviorTests(final String testVar1, final String testVar2, final String testVar3) {
+	protected NatTableWithEditorBehaviorTests(final String testVar1, final String testVar2) {
 		this.testVar1 = testVar1;
 		this.testVar2 = testVar2;
-		this.testVar3 = testVar3;
 	}
 
 	/**

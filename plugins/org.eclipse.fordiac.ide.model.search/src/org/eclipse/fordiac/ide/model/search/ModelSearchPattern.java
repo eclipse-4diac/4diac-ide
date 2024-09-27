@@ -21,21 +21,19 @@ public class ModelSearchPattern { // extends SearchPattern
 	private final String toTest;
 	private Pattern searchPattern;
 	private final String searchString;
-	private final ModelQuerySpec modelQuerySpec;
 
 	public ModelSearchPattern(final String toTest, final ModelQuerySpec modelQuerySpec) {
 		this.toTest = toTest;
 		this.searchString = modelQuerySpec.getSearchString();
-		this.modelQuerySpec = modelQuerySpec;
 	}
 
 	private String convertSearchStringToPattern() {
 		String temp = searchString;
-			if (searchString.contains("?")) { //$NON-NLS-1$
-				temp = searchString.replace("?", "[a-zA-Z0-9_]"); //$NON-NLS-1$ //$NON-NLS-2$
+		if (searchString.contains("?")) { //$NON-NLS-1$
+			temp = searchString.replace("?", "[a-zA-Z0-9_]"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-			if (searchString.contains("*")) { //$NON-NLS-1$
-				temp = searchString.replace("*", ".*");  //$NON-NLS-1$//$NON-NLS-2$
+		if (searchString.contains("*")) { //$NON-NLS-1$
+			temp = searchString.replace("*", ".*"); //$NON-NLS-1$//$NON-NLS-2$
 		}
 		return temp;
 	}

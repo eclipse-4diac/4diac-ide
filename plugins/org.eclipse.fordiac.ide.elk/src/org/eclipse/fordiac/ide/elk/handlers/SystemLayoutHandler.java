@@ -274,7 +274,7 @@ public class SystemLayoutHandler extends AbstractHandler {
 			final var typeEditable = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file).getTypeEditable();
 			if (typeEditable instanceof final SubAppType subappType) {
 				handleSubappType(multiPageEditor, typeEditable, subappType);
-			} else if (typeEditable instanceof final CompositeFBType composite) {
+			} else if (typeEditable instanceof CompositeFBType) {
 				handleCompositeType(multiPageEditor, typeEditable);
 			}
 		}

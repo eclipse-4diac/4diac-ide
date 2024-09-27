@@ -95,8 +95,6 @@ public enum LibraryManager {
 
 	private static final java.net.URI STANDARD_LIBRARY_URI = java.net.URI
 			.create("ECLIPSE_HOME/" + TypeLibraryTags.TYPE_LIBRARY); //$NON-NLS-1$
-	private static final java.net.URI WORKSPACE_DOWNLOAD_URI = java.net.URI
-			.create("WORKSPACE_LOC/" + PACKAGE_DOWNLOAD_DIRECTORY); //$NON-NLS-1$
 	private static final java.net.URI WORKSPACE_LIBRARY_URI = java.net.URI
 			.create("WORKSPACE_LOC/" + EXTRACTED_LIB_DIRECTORY); //$NON-NLS-1$
 

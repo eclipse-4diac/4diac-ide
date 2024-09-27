@@ -63,21 +63,32 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 
-/** This implementation of an {@link IEObjectMatcher} will create {@link Match}es based on the input EObjects
- * identifiers (either XMI:ID or attribute ID) alone.
+/**
+ * This implementation of an {@link IEObjectMatcher} will create {@link Match}es
+ * based on the input EObjects identifiers (either XMI:ID or attribute ID)
+ * alone.
  *
- * @author <a href="mailto:laurent.goubet@obeo.fr">Laurent Goubet</a> */
+ * @author <a href="mailto:laurent.goubet@obeo.fr">Laurent Goubet</a>
+ */
 public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
-	/** This instance might have a delegate matcher. The delegate matcher will be called when no ID is found and its
-	 * results are aggregated with the current matcher. */
+	/**
+	 * This instance might have a delegate matcher. The delegate matcher will be
+	 * called when no ID is found and its results are aggregated with the current
+	 * matcher.
+	 */
 	private final java.util.Optional<IEObjectMatcher> delegate;
 
-	/** This will be used to determine what represents the "identifier" of an EObject. By default, we will use the
-	 * following logic, in order (i.e. if condition 1 is fulfilled, we will not try conditions 2 and 3) :
+	/**
+	 * This will be used to determine what represents the "identifier" of an
+	 * EObject. By default, we will use the following logic, in order (i.e. if
+	 * condition 1 is fulfilled, we will not try conditions 2 and 3) :
 	 * <ol>
-	 * <li>If the given eObject is a proxy, it is uniquely identified by its URI fragment.</li>
-	 * <li>If the eObject is located in an XMI resource and has an XMI ID, use this as its unique identifier.</li>
-	 * <li>If the eObject's EClass has an eIdAttribute set, use this attribute's value.</li>
+	 * <li>If the given eObject is a proxy, it is uniquely identified by its URI
+	 * fragment.</li>
+	 * <li>If the eObject is located in an XMI resource and has an XMI ID, use this
+	 * as its unique identifier.</li>
+	 * <li>If the eObject's EClass has an eIdAttribute set, use this attribute's
+	 * value.</li>
 	 * </ol>
 	 */
 	private Function<EObject, String> idComputation = new DefaultIDFunction();
@@ -90,25 +101,32 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 		this(null, new DefaultIDFunction());
 	}
 
-	/** Creates an ID based matcher with the given delegate when no ID can be found.
+	/**
+	 * Creates an ID based matcher with the given delegate when no ID can be found.
 	 *
-	 * @param delegateWhenNoID the matcher to delegate to when no ID is found. */
+	 * @param delegateWhenNoID the matcher to delegate to when no ID is found.
+	 */
 	public FordiacIdentifierEObjectMatcher(final IEObjectMatcher delegateWhenNoID) {
 		this(delegateWhenNoID, new DefaultIDFunction());
 	}
 
-	/** Creates an ID based matcher computing the ID with the given function.
+	/**
+	 * Creates an ID based matcher computing the ID with the given function.
 	 *
-	 * @param idComputation the function used to compute the ID. */
+	 * @param idComputation the function used to compute the ID.
+	 */
 	public FordiacIdentifierEObjectMatcher(final Function<EObject, String> idComputation) {
 		this(null, idComputation);
 	}
 
-	/** Create an ID based matcher with a delegate which is going to be called when no ID is found for a given EObject.
-	 * It is computing the ID with the given function
+	/**
+	 * Create an ID based matcher with a delegate which is going to be called when
+	 * no ID is found for a given EObject. It is computing the ID with the given
+	 * function
 	 *
 	 * @param delegateWhenNoID the delegate matcher to use when no ID is found.
-	 * @param idComputation    the function used to compute the ID. */
+	 * @param idComputation    the function used to compute the ID.
+	 */
 	public FordiacIdentifierEObjectMatcher(final IEObjectMatcher delegateWhenNoID,
 			final Function<EObject, String> idComputation) {
 		this.delegate = Optional.ofNullable(delegateWhenNoID);
@@ -169,20 +187,23 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 		}
 	}
 
-	/** Execute matching process for the delegated IEObjectMatcher.
+	/**
+	 * Execute matching process for the delegated IEObjectMatcher.
 	 *
 	 * @param comparison         the comparison object that contains the matches
 	 * @param monitor            the monitor instance to track the matching progress
 	 * @param leftEObjectsNoID   remaining left objects after matching
 	 * @param rightEObjectsNoID  remaining right objects after matching
-	 * @param originEObjectsNoID remaining origin objects after matching */
+	 * @param originEObjectsNoID remaining origin objects after matching
+	 */
 	protected void doDelegation(final Comparison comparison, final List<EObject> leftEObjectsNoID,
 			final List<EObject> rightEObjectsNoID, final List<EObject> originEObjectsNoID, final Monitor monitor) {
 		delegate.get().createMatches(comparison, leftEObjectsNoID.iterator(), rightEObjectsNoID.iterator(),
 				originEObjectsNoID.iterator(), monitor);
 	}
 
-	/** Matches the EObject per ID.
+	/**
+	 * Matches the EObject per ID.
 	 *
 	 * @param leftEObjects       the objects to match (left side).
 	 * @param rightEObjects      the objects to match (right side).
@@ -190,7 +211,8 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 	 * @param leftEObjectsNoID   remaining left objects after matching
 	 * @param rightEObjectsNoID  remaining right objects after matching
 	 * @param originEObjectsNoID remaining origin objects after matching
-	 * @return the match built in the process. */
+	 * @return the match built in the process.
+	 */
 	protected Set<Match> matchPerId(final Iterator<? extends EObject> leftEObjects,
 			final Iterator<? extends EObject> rightEObjects, final Iterator<? extends EObject> originEObjects,
 			final List<EObject> leftEObjectsNoID, final List<EObject> rightEObjectsNoID,
@@ -202,14 +224,18 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 		return computation.getMatches();
 	}
 
-	/** This method is used to determine the parent objects during matching. The default implementation of this method
-	 * returns the eContainer of the given {@code eObject}. Can be overwritten by clients to still allow proper matching
+	/**
+	 * This method is used to determine the parent objects during matching. The
+	 * default implementation of this method returns the eContainer of the given
+	 * {@code eObject}. Can be overwritten by clients to still allow proper matching
 	 * when using a more complex architecture.
 	 *
-	 * @param eObject The {@link EObject} for which the parent object is to determine.
+	 * @param eObject The {@link EObject} for which the parent object is to
+	 *                determine.
 	 * @return The parent of the given {@code eObject}.
-	 * @since 3.2 */
-	protected EObject getParentEObject(final EObject eObject) {
+	 * @since 3.2
+	 */
+	protected static EObject getParentEObject(final EObject eObject) {
 		final EObject parent;
 		if (eObject != null) {
 			parent = eObject.eContainer();
@@ -219,10 +245,12 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 		return parent;
 	}
 
-	/** Adds a warning diagnostic to the comparison for the duplicate ID.
+	/**
+	 * Adds a warning diagnostic to the comparison for the duplicate ID.
 	 *
 	 * @param side    the side where the duplicate ID was found
-	 * @param eObject the element with the duplicate ID */
+	 * @param eObject the element with the duplicate ID
+	 */
 	private void reportDuplicateID(final Side side, final EObject eObject) {
 		final String duplicateID = idComputation.apply(eObject);
 		final String sideName = side.name().toLowerCase();
@@ -238,13 +266,18 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 		diagnostic.add(new BasicDiagnostic(Diagnostic.WARNING, DIAGNOSTIC_SOURCE, 0, message, null));
 	}
 
-	/** Returns a String representation of the URI of the given {@code eObject}'s resource.
+	/**
+	 * Returns a String representation of the URI of the given {@code eObject}'s
+	 * resource.
 	 * <p>
-	 * If the {@code eObject}'s resource or its URI is <code>null</code>, this method returns <code>null</code>.
+	 * If the {@code eObject}'s resource or its URI is <code>null</code>, this
+	 * method returns <code>null</code>.
 	 * </p>
 	 *
-	 * @param eObject The {@link EObject} for which's resource the string representation of its URI is determined.
-	 * @return A String representation of the given {@code eObject}'s resource URI. */
+	 * @param eObject The {@link EObject} for which's resource the string
+	 *                representation of its URI is determined.
+	 * @return A String representation of the given {@code eObject}'s resource URI.
+	 */
 	private static String getUriString(final EObject eObject) {
 		String uriString = null;
 		final Resource resource = eObject.eResource();
@@ -259,9 +292,11 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 		return uriString;
 	}
 
-	/** Adds the diagnostic to the comparison.
+	/**
+	 * Adds the diagnostic to the comparison.
 	 *
-	 * @param comparison the comparison */
+	 * @param comparison the comparison
+	 */
 	private void addDiagnostic(final Comparison comparison) {
 		if (comparison.getDiagnostic() == null) {
 			comparison.setDiagnostic(diagnostic);
@@ -270,14 +305,19 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 		}
 	}
 
-	/** The default function used to retrieve IDs from EObject. You might want to extend or compose with it if you want
-	 * to reuse its behavior. */
+	/**
+	 * The default function used to retrieve IDs from EObject. You might want to
+	 * extend or compose with it if you want to reuse its behavior.
+	 */
 	public static class DefaultIDFunction implements Function<EObject, String> {
-		/** Return an ID for an EObject, null if not found.
+		/**
+		 * Return an ID for an EObject, null if not found.
 		 *
 		 * @param eObject The EObject for which we need an identifier.
-		 * @return The identifier for that EObject if we could determine one. <code>null</code> if no condition (see
-		 *         description above) is fulfilled for the given eObject. */
+		 * @return The identifier for that EObject if we could determine one.
+		 *         <code>null</code> if no condition (see description above) is
+		 *         fulfilled for the given eObject.
+		 */
 		@Override
 		public String apply(final EObject eObject) {
 			final String identifier;
@@ -303,10 +343,13 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 		}
 	}
 
-	/** Helper class to manage two different maps within one class based on a switch boolean.
+	/**
+	 * Helper class to manage two different maps within one class based on a switch
+	 * boolean.
 	 *
 	 * @param <K> The class used as key in the internal maps.
-	 * @param <V> The class used as value in the internal maps. */
+	 * @param <V> The class used as value in the internal maps.
+	 */
 	private class SwitchMap<K, V> {
 
 		/** Map used when the switch boolean is true. */
@@ -315,12 +358,15 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 		/** Map used when the switch boolean is false. */
 		final Map<K, V> falseMap = new HashMap<>();
 
-		/** Puts the key-value pair in the map corresponding to the switch.
+		/**
+		 * Puts the key-value pair in the map corresponding to the switch.
 		 *
 		 * @param switcher The boolean variable defining which map is to be used.
 		 * @param key      The key which is to be put into a map.
 		 * @param value    The value which is to be put into a map.
-		 * @return {@code true} if the key was already contained in the chosen map, {@code false} otherwise. */
+		 * @return {@code true} if the key was already contained in the chosen map,
+		 *         {@code false} otherwise.
+		 */
 		public boolean put(final boolean switcher, final K key, final V value) {
 			final Map<K, V> selectedMap = getMap(switcher);
 			final boolean isContained = selectedMap.containsKey(key);
@@ -328,20 +374,25 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 			return isContained;
 		}
 
-		/** Returns the value mapped to key.
+		/**
+		 * Returns the value mapped to key.
 		 *
 		 * @param switcher The boolean variable defining which map is to be used.
 		 * @param key      The key for which the value is looked up.
-		 * @return The value {@link V} if it exists, {@code null} otherwise. */
+		 * @return The value {@link V} if it exists, {@code null} otherwise.
+		 */
 		public V get(final boolean switcher, final K key) {
 			final Map<K, V> selectedMap = getMap(switcher);
 			return selectedMap.get(key);
 		}
 
-		/** Selects the map based on the given boolean.
+		/**
+		 * Selects the map based on the given boolean.
 		 *
 		 * @param switcher Defined which map is to be used.
-		 * @return {@link #trueMap} if {@code switcher} is true, {@link #falseMap} otherwise. */
+		 * @return {@link #trueMap} if {@code switcher} is true, {@link #falseMap}
+		 *         otherwise.
+		 */
 		private Map<K, V> getMap(final boolean switcher) {
 			if (switcher) {
 				return falseMap;
@@ -350,17 +401,22 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 		}
 	}
 
-	/** Computes matches from eObjects. We'll only iterate once on each of the three sides, building the matches as we
-	 * go.
+	/**
+	 * Computes matches from eObjects. We'll only iterate once on each of the three
+	 * sides, building the matches as we go.
 	 *
-	 * @author <a href="mailto:axel.richard@obeo.fr">Axel Richard</a> */
+	 * @author <a href="mailto:axel.richard@obeo.fr">Axel Richard</a>
+	 */
 	private class MatchComputation {
 
 		/** Matches created by the {@link #compute()} process. */
 		private final Set<Match> matches;
 
-		/** We will try and mimic the structure of the input model. These maps do not need to be ordered, we only need
-		 * fast lookup. Map each match to its left eObject. */
+		/**
+		 * We will try and mimic the structure of the input model. These maps do not
+		 * need to be ordered, we only need fast lookup. Map each match to its left
+		 * eObject.
+		 */
 		private final Map<EObject, Match> leftEObjectsToMatch;
 
 		/** Map each match to its right eObject. */
@@ -387,18 +443,22 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 		/** Remaining origin objects after matching. */
 		private final List<EObject> originEObjectsNoID;
 
-		/** This lookup map will be used by iterations on right and origin to find the match in which they should add
-		 * themselves. */
+		/**
+		 * This lookup map will be used by iterations on right and origin to find the
+		 * match in which they should add themselves.
+		 */
 		private final SwitchMap<String, Match> idProxyMap;
 
-		/** Constructor.
+		/**
+		 * Constructor.
 		 *
 		 * @param leftEObjects       Left eObjects to match.
 		 * @param rightEObjects      Right eObjects to match.
 		 * @param originEObjects     Origin eObjects to match.
 		 * @param leftEObjectsNoID   Remaining left objects after matching.
 		 * @param rightEObjectsNoID  Remaining left objects after matching.
-		 * @param originEObjectsNoID Remaining left objects after matching. */
+		 * @param originEObjectsNoID Remaining left objects after matching.
+		 */
 		MatchComputation(final Iterator<? extends EObject> leftEObjects,
 				final Iterator<? extends EObject> rightEObjects, final Iterator<? extends EObject> originEObjects,
 				final List<EObject> leftEObjectsNoID, final List<EObject> rightEObjectsNoID,
@@ -416,9 +476,11 @@ public class FordiacIdentifierEObjectMatcher implements IEObjectMatcher {
 			this.originEObjectsNoID = originEObjectsNoID;
 		}
 
-		/** Returns the matches created by this computation.
+		/**
+		 * Returns the matches created by this computation.
 		 *
-		 * @return the matches created by this computation. */
+		 * @return the matches created by this computation.
+		 */
 		public Set<Match> getMatches() {
 			return matches;
 		}

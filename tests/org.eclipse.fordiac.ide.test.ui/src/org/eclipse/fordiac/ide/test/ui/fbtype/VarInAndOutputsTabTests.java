@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 public class VarInAndOutputsTabTests extends NatTableWithEditorBehaviorTests {
 
 	public VarInAndOutputsTabTests() {
-		super(UITestPinHelper.DI1, UITestPinHelper.DI2, UITestPinHelper.DI3);
+		super(UITestPinHelper.DI1, UITestPinHelper.DI2);
 	}
 
 	@Override

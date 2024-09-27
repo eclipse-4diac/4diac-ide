@@ -57,6 +57,7 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 * @return true if the space bar was the key event.
 	 */
 
+	@SuppressWarnings("static-method")
 	protected boolean acceptSpaceBar(final KeyEvent e) {
 		return ((e.character == ' ') && ((e.stateMask & SWT.MODIFIER_MASK) == 0));
 	}

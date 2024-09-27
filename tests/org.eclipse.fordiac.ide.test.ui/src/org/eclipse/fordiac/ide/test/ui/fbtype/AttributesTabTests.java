@@ -29,7 +29,7 @@ import org.junit.jupiter.api.BeforeEach;
 public class AttributesTabTests extends NatTableWithoutEditorBehaviorTests {
 
 	public AttributesTabTests() {
-		super(UITestNamesHelper.ATTRIBUTE1, UITestNamesHelper.ATTRIBUTE2, UITestNamesHelper.ATTRIBUTE3);
+		super(UITestNamesHelper.ATTRIBUTE1, UITestNamesHelper.ATTRIBUTE2);
 	}
 
 	/**

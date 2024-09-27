@@ -80,6 +80,7 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 		return openType;
 	}
 
+	@SuppressWarnings("static-method")
 	public String getPackageName() {
 		return ""; //$NON-NLS-1$
 	}

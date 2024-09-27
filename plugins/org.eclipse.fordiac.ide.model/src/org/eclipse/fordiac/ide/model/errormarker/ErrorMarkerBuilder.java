@@ -206,6 +206,7 @@ public final class ErrorMarkerBuilder {
 	public String toString() {
 		return String.format(
 				"ErrorMarkerBuilder [type=%s, message=%s, location=%s, severity=%s, priority=%s, lineNumber=%s, target=%s]", //$NON-NLS-1$
-				type, message, location, severity, priority, lineNumber, EcoreUtil.getURI(target));
+				type, message, location, Integer.valueOf(severity), Integer.valueOf(priority),
+				Integer.valueOf(lineNumber), EcoreUtil.getURI(target));
 	}
 }

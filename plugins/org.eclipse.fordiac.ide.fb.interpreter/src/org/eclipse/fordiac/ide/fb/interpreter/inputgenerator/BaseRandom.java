@@ -36,7 +36,7 @@ import org.eclipse.fordiac.ide.model.data.UsintType;
 import org.eclipse.fordiac.ide.model.data.WcharType;
 import org.eclipse.fordiac.ide.model.data.WordType;
 
-public abstract class BaseRandom {
+public abstract class BaseRandom implements BaseRandomNextValue {
 	protected static final int MAX_DINT_POSITIVE = 31;
 	protected static final int MAX_LINT_POSITIVE = 63;
 	protected static final int MAX_BYTE = 256;
@@ -60,74 +60,6 @@ public abstract class BaseRandom {
 	protected final LocalRandom random = new LocalRandom();
 
 	protected BaseRandom() {
-	}
-
-	public String nextBool() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextByte() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextSint() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextUint() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextInteger() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextWord() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextDword() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextLword() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextChar() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextWchar() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextDint() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextLint() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextUsint() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextUdint() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextUlint() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextReal() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String nextLreal() {
-		throw new UnsupportedOperationException();
 	}
 
 	public void setSeed(final long seed) {

@@ -199,7 +199,7 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		});
 	}
 
-	private boolean projectNameExistsinWSPath(final String projectName) {
+	private static boolean projectNameExistsinWSPath(final String projectName) {
 		final IPath wsPath = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		final IPath localProjectPath = wsPath.append(projectName);
 		return localProjectPath.toFile().exists();
