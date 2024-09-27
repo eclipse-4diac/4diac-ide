@@ -22,7 +22,11 @@ public interface AdapterTypeEntry extends FBTypeEntry {
 	@Override
 	AdapterType getType();
 
+	/**
+	 * @deprecated see {@link TypeEntry#getTypeEditable()}
+	 */
 	@Override
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	AdapterType getTypeEditable();
 
 	@Override

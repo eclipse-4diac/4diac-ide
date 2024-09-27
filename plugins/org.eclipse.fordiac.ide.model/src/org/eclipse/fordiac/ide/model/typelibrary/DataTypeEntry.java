@@ -22,7 +22,11 @@ public interface DataTypeEntry extends TypeEntry {
 	@Override
 	AnyDerivedType getType();
 
+	/**
+	 * @deprecated see {@link TypeEntry#getTypeEditable()}
+	 */
 	@Override
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	AnyDerivedType getTypeEditable();
 
 	@Override
