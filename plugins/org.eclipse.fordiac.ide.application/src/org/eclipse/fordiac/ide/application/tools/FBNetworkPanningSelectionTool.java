@@ -102,6 +102,16 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 		// accordingly
 		super.mouseMove(me, viewer);
 		if (checkConnCreationState(me.stateMask)) {
+			connectionCreationTool.mouseMove(me, viewer);
+		}
+	}
+
+	@Override
+	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
+		// the super call has to be first so that the target editpart is updated
+		// accordingly
+		super.mouseDrag(me, viewer);
+		if (checkConnCreationState(me.stateMask)) {
 			connectionCreationTool.mouseDrag(me, viewer);
 		}
 	}
