@@ -82,7 +82,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 
 		final FBNetworkElement copy = BlockInstanceFactory.createBlockInstanceForTypeEntry(entry);
 		if (srcElement instanceof final AdapterFB adp) {
-			((AdapterFB) copy).setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
+			adp.setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
 		}
 		copy.setTypeEntry(entry);
 		return copy;
