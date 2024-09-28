@@ -59,6 +59,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
@@ -122,7 +123,11 @@ public abstract class StructManipulatorSection extends AbstractSection implement
 	}
 
 	protected void refreshStructTypeTable() {
+		final Object[] expandedElements = memberVarViewer.getExpandedElements();
+		final TreePath[] expandedTreePaths = memberVarViewer.getExpandedTreePaths();
 		memberVarViewer.setInput(getType());
+		memberVarViewer.setExpandedElements(expandedElements);
+		memberVarViewer.setExpandedTreePaths(expandedTreePaths);
 	}
 
 	protected void handleStructSelectionChanged(final String newStructName) {
