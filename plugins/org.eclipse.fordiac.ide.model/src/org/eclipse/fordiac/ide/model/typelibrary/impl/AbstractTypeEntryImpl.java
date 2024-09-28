@@ -247,7 +247,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		}
 	}
 
-	private synchronized NotificationChain basicSetType(final LibraryElement newType, NotificationChain notifications) {
+	protected synchronized NotificationChain basicSetType(final LibraryElement newType,
+			NotificationChain notifications) {
 		final LibraryElement oldType = (typeRef != null) ? typeRef.get() : null;
 		if (newType != null) {
 			Objects.requireNonNull(newType.getName(), "No name in new type"); //$NON-NLS-1$
