@@ -18,9 +18,6 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
@@ -89,32 +86,6 @@ public final class ConnectionHelper {
 				connectionState.remove(ConnectionState.VALID);
 			}
 
-		}
-
-		protected static InterfaceList getInterfaceFromQualString(final String source, final FBNetwork fbNetwork) {
-			if (source == null) {
-				return null;
-			}
-
-			final String[] qualNames = source.split("\\."); //$NON-NLS-1$
-			if (qualNames.length == 0) {
-				return null;
-			}
-
-			final FBNetworkElement fbNetworkElement = fbNetwork.getElementNamed(qualNames[0]);
-			if (fbNetworkElement == null) {
-				return getElementFromType(fbNetwork);
-			}
-			return fbNetworkElement.getInterface();
-		}
-
-		private static InterfaceList getElementFromType(final FBNetwork fbNetwork) {
-			if (fbNetwork.eContainer() instanceof FBType) {
-				final FBType type = (FBType) fbNetwork.eContainer();
-				return type.getInterfaceList();
-			}
-
-			return null;
 		}
 
 		public String getSourceFbName() {
