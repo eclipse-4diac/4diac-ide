@@ -27,6 +27,8 @@ public class Messages extends NLS {
 	public static String DeploymentDebugModelPresentation_Disconnected;
 	public static String DeploymentDebugModelPresentation_Terminated;
 	public static String KillDeviceHandler_KillDeviceError;
+	public static String LaunchActiveStatusHandler_LaunchActiveMessage;
+	public static String LaunchActiveStatusHandler_LaunchActiveTitle;
 	public static String OnlineCreateConnectionHandler_CreateConnectionError;
 	public static String OnlineCreateFBHandler_OnlineCreateFunctionBlockError;
 	public static String OnlineStartFBHandler_OnlineStartFunctionBlockError;

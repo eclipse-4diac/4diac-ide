@@ -655,4 +655,13 @@
 			</enablement>
 		</objectContribution>
 	</extension>
+	<extension
+		point="org.eclipse.debug.core.statusHandlers">
+		<statusHandler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.LaunchActiveStatusHandler"
+			code="200"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.statusHandlerLaunchActive"
+			plugin="org.eclipse.fordiac.ide.deployment.debug">
+		</statusHandler>
+	</extension>
 </plugin>

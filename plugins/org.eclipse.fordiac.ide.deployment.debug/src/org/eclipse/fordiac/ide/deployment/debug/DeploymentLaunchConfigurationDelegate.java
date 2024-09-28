@@ -13,16 +13,22 @@
 package org.eclipse.fordiac.ide.deployment.debug;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.IStatusHandler;
+import org.eclipse.debug.core.model.IDisconnect;
 import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -32,12 +38,24 @@ public class DeploymentLaunchConfigurationDelegate extends LaunchConfigurationDe
 
 	public static final String MONITOR_MODE = "org.eclipse.fordiac.ide.deployment.debug.monitor"; //$NON-NLS-1$
 
+	public static final String SYSTEM_FILE_ATTRIBUTE = "org.eclipse.fordiac.ide.deployment.debug.systemFile"; //$NON-NLS-1$
+
+	public static final int ALREADY_RUNNING_CODE = 200;
+	public static final IStatus ALREADY_RUNNING_STATUS = new Status(IStatus.ERROR,
+			DeploymentLaunchConfigurationDelegate.class, ALREADY_RUNNING_CODE, "", null); //$NON-NLS-1$
+
 	@Override
 	public void launch(final ILaunchConfiguration configuration, final String mode, final ILaunch launch,
 			final IProgressMonitor monitor) throws CoreException {
+		final IResource resource = DeploymentLaunchConfigurationAttributes.getSystemResource(configuration);
 		final AutomationSystem system = DeploymentLaunchConfigurationAttributes.getSystem(configuration);
 		final Set<INamedElement> selection = DeploymentLaunchConfigurationAttributes.getSelection(configuration,
 				system);
+		if (system == null) {
+			throw new CoreException(Status.error(Messages.DeploymentLaunchConfigurationDelegate_CannotFindSystem));
+		}
+
+		launch.setAttribute(SYSTEM_FILE_ATTRIBUTE, resource.getFullPath().toString());
 
 		try {
 			if (ILaunchManager.RUN_MODE.equals(mode)) {
@@ -56,6 +74,55 @@ public class DeploymentLaunchConfigurationDelegate extends LaunchConfigurationDe
 		} catch (final DeploymentException e) {
 			throw new CoreException(Status.error(Messages.DeploymentLaunchConfigurationDelegate_DeploymentError, e));
 		}
+	}
+
+	@Override
+	public boolean preLaunchCheck(final ILaunchConfiguration configuration, final String mode,
+			final IProgressMonitor monitor) throws CoreException {
+		final IResource resource = DeploymentLaunchConfigurationAttributes.getSystemResource(configuration);
+		if (resource != null) {
+			final List<ILaunch> activeLaunches = getActiveLaunches(resource);
+			if (!activeLaunches.isEmpty() && !handleActiveLaunches(resource, activeLaunches)) {
+				return false;
+			}
+		}
+		return super.preLaunchCheck(configuration, mode, monitor);
+	}
+
+	protected static boolean handleActiveLaunches(final IResource resource, final List<ILaunch> activeLaunches)
+			throws CoreException {
+		final IStatusHandler handler = DebugPlugin.getDefault().getStatusHandler(ALREADY_RUNNING_STATUS);
+		if (handler == null) {
+			return false;
+		}
+		final boolean terminate = ((Boolean) handler.handleStatus(ALREADY_RUNNING_STATUS, resource.getName()))
+				.booleanValue();
+		if (!terminate) {
+			return false;
+		}
+		terminateLaunches(activeLaunches);
+		return true;
+	}
+
+	protected static void terminateLaunches(final List<ILaunch> launches) throws CoreException {
+		for (final ILaunch launch : launches) {
+			if (launch instanceof final IDisconnect disconnect && disconnect.canDisconnect()) {
+				disconnect.disconnect();
+			}
+			if (launch.canTerminate()) {
+				launch.terminate();
+			}
+			if (!launch.isTerminated()) {
+				throw new CoreException(
+						Status.error(Messages.DeploymentLaunchConfigurationDelegate_LaunchNotTerminated));
+			}
+		}
+	}
+
+	protected static List<ILaunch> getActiveLaunches(final IResource resource) {
+		return Stream.of(DebugPlugin.getDefault().getLaunchManager().getLaunches())
+				.filter(launch -> resource.getFullPath().toString().equals(launch.getAttribute(SYSTEM_FILE_ATTRIBUTE)))
+				.toList();
 	}
 
 	@Override
