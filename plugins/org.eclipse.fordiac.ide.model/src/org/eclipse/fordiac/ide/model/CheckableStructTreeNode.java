@@ -211,4 +211,31 @@ public class CheckableStructTreeNode extends AbstractStructTreeNode {
 		return vars;
 	}
 
+	// equals and hash code are used by the treeviewer to maintain the expanded
+	// state on updates. For us currently the pinname which contains the full
+	// hierarchical name are the main equality criteria.
+	@Override
+	public int hashCode() {
+		return (getPinName() != null) ? getPinName().hashCode() : super.hashCode();
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final CheckableStructTreeNode other = (CheckableStructTreeNode) obj;
+		if (getPinName() != null && other.getPinName() != null) {
+			return getPinName().equals(other.getPinName());
+		}
+
+		return super.equals(obj);
+	}
+
 }
