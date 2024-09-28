@@ -44,14 +44,14 @@ public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSyst
 	}
 
 	@Override
-	public synchronized AutomationSystem getTypeEditable() {
+	public AutomationSystem getTypeEditable() {
 		// for performance reasons the systemEntry uses only the type and not the type
 		// editable
 		return getSystem();
 	}
 
 	@Override
-	public synchronized void setTypeEditable(final LibraryElement newTypeEditable) {
+	public void setTypeEditable(final LibraryElement newTypeEditable) {
 		// for performance reasons the systemEntry uses only the type and not the type
 		// editable
 		setSystem(newTypeEditable);
