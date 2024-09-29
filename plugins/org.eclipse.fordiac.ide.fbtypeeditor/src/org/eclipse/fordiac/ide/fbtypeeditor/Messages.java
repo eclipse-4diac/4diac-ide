@@ -28,15 +28,6 @@ public final class Messages extends NLS {
 	public static String FBInterfacePaletteFactory_EventTypes;
 	public static String FBInterfacePaletteFactory_RootGroup;
 
-	public static String FBTypeEditor_CheckTypeSaveAble;
-	public static String FBTypeEditor_CompositeContainsFunctionBlockWithoutType;
-	public static String FBTypeEditor_CouldNotLoadType;
-	public static String FBTypeEditor_ViewingComposite_Headline;
-	public static String FBTypeEditor_AlteringButton_SaveAndUpdate;
-	public static String FBTypeEditor_AlteringButton_SaveAs;
-	public static String FBTypeEditor_AlteringDescription;
-
-	public static String WarningDialog_FBNotSaved;
 	public static String InterfaceContextMenuProvider_CreateDataInput;
 	public static String InterfaceContextMenuProvider_CreateDataOutput;
 	public static String InterfaceContextMenuProvider_CreatePlug;

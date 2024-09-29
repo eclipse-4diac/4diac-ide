@@ -19,11 +19,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typeeditor;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Objects;
 
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
@@ -37,6 +41,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.search.dialog.AbstractTypeEntryDataHandler;
+import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
+import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typeeditor.internal.TypeEditorPageFactory;
@@ -48,6 +55,7 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
@@ -67,6 +75,7 @@ import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -77,6 +86,9 @@ import org.eclipse.xtext.ui.editor.XtextEditor;
 
 public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor implements CommandStackEventListener,
 		ITabbedPropertySheetPageContributor, ITypeEntryEditor, ISelectionListener {
+
+	private static final int DEFAULT_BUTTON_INDEX = 0; // Save Button
+	private static final int CANCEL_BUTTON_INDEX = 1;
 
 	private static TypeEditorPageFactory typeEditorPageFactory = new TypeEditorPageFactory();
 
@@ -133,6 +145,17 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		return new TypeMultiPageEditorSite(this, editor);
 	}
 
+	protected abstract AbstractTypeEntryDataHandler<? extends TypeEntry> createTypeEntryDataHandler(
+			TypeEntry typeEntry);
+
+	private MessageDialog createTypeUpdateDialog() {
+		final String[] labels = { Messages.TypeEditor_TypeUpdateDialog_SaveAndUpdate, SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
+
+		return new FBTypeUpdateDialog<>(getSite().getShell(), Messages.TypeEditor_TypeUpdateDialog_Headline,
+				Messages.TypeEditor_TypeUpdateDialog_Description, labels, DEFAULT_BUTTON_INDEX,
+				new FBTypeEntryDataHandler(getTypeEntry()));
+	}
+
 	@Override
 	public void dispose() {
 		final TypeEntry typeEntry = getTypeEntry();
@@ -163,6 +186,64 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 		getCommandStack().removeCommandStackEventListener(this);
 	}
+
+	@Override
+	public void doSave(final IProgressMonitor monitor) {
+		if (null != getTypeEntry()) {
+			int result = DEFAULT_BUTTON_INDEX;
+			if (dependencyAffectingTypeChange()) {
+				result = createTypeUpdateDialog().open();
+			}
+
+			switch (result) {
+			case DEFAULT_BUTTON_INDEX:
+				doSaveInternal(monitor);
+				break;
+			case CANCEL_BUTTON_INDEX:
+				MessageDialog.openInformation(null, Messages.TypeEditor_WarningDialog_Headline,
+						Messages.TypeEditor_WarningDialog_NotSaved);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	@Override
+	public void doSaveAs() {
+		// currently we do not allow any save as of types
+	}
+
+	private void doSaveInternal(final IProgressMonitor monitor) {
+		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(getTypeEntry().getFile().getParent()) {
+			@Override
+			protected void execute(final IProgressMonitor monitor)
+					throws CoreException, InvocationTargetException, InterruptedException {
+				// allow each editor to save back changes before saving to file
+				getEditorPages().stream().filter(IEditorPart::isDirty)
+						.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
+				getTypeEntry().save(getType(), monitor);
+			}
+		};
+		try {
+			operation.run(monitor);
+		} catch (final InvocationTargetException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		} catch (final InterruptedException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			Thread.currentThread().interrupt();
+		}
+
+		getCommandStack().markSaveLocation();
+	}
+
+	/**
+	 * Check if the current changes have an impact on any dependent types.
+	 *
+	 * @return true if the user shall be presented with a dialog with all affected
+	 *         dependent types
+	 */
+	protected abstract boolean dependencyAffectingTypeChange();
 
 	public CommandStack getCommandStack() {
 		return commandStack;
@@ -257,6 +338,11 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	private boolean isEditorActive() {
 		final int index = getActivePage();
 		return index != -1 && !((CTabFolder) getContainer()).getItem(index).isDisposed();
+	}
+
+	@Override
+	public boolean isSaveAsAllowed() {
+		return false;
 	}
 
 	@SuppressWarnings("static-method") // allow subclasses to perform additional checks
