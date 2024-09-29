@@ -22,27 +22,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
-import java.lang.reflect.InvocationTargetException;
-import java.text.MessageFormat;
-
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.SafeRunner;
-import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.search.dialog.AbstractTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
-import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typeeditor.AbstractTypeEditor;
 import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
@@ -52,12 +45,8 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
-import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
@@ -65,42 +54,24 @@ public class FBTypeEditor extends AbstractTypeEditor implements IGotoMarker, INa
 
 	private IContentOutlinePage contentOutline = null;
 
-	private static final int DEFAULT_BUTTON_INDEX = 0; // Save Button
-	private static final int CANCEL_BUTTON_INDEX = 1;
 	private int interfaceChanges = 0; // number of interface changes happend since the last save
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		if ((null != getTypeEntry()) && (checkTypeSaveAble())) {
+		if (null != getTypeEntry()) {
 			performPresaveHooks();
-			if (interfaceChanges != 0) {
-				createSaveDialog(monitor);
-			} else {
-				doSaveInternal(monitor);
-			}
+			super.doSave(monitor);
 		}
 	}
 
-	private void createSaveDialog(final IProgressMonitor monitor) {
-		final String[] labels = { Messages.FBTypeEditor_AlteringButton_SaveAndUpdate, // Messages.StructAlteringButton_SaveAs,
-				SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
+	@Override
+	protected boolean dependencyAffectingTypeChange() {
+		return interfaceChanges != 0;
+	}
 
-		final FBTypeUpdateDialog<TypeEntry> fbSaveDialog = new FBTypeUpdateDialog<>(null,
-				Messages.FBTypeEditor_ViewingComposite_Headline, null, "", //$NON-NLS-1$
-				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, new FBTypeEntryDataHandler(getTypeEntry()));
-
-		// Depending on the button clicked:
-		switch (fbSaveDialog.open()) {
-		case DEFAULT_BUTTON_INDEX:
-			doSaveInternal(monitor);
-			break;
-		case CANCEL_BUTTON_INDEX:
-			MessageDialog.openInformation(null, Messages.FBTypeEditor_ViewingComposite_Headline,
-					Messages.WarningDialog_FBNotSaved);
-			break;
-		default:
-			break;
-		}
+	@Override
+	protected AbstractTypeEntryDataHandler<? extends TypeEntry> createTypeEntryDataHandler(final TypeEntry typeEntry) {
+		return new FBTypeEntryDataHandler(typeEntry);
 	}
 
 	private void performPresaveHooks() {
@@ -118,56 +89,6 @@ public class FBTypeEditor extends AbstractTypeEditor implements IGotoMarker, INa
 				FordiacLogHelper.logError(ex.getMessage(), ex);
 			}
 		}
-	}
-
-	protected boolean checkTypeSaveAble() {
-		if (getType() instanceof final CompositeFBType cFBType) {
-			// only allow to save composite FBs if all contained FBs have types
-			for (final FBNetworkElement fb : cFBType.getFBNetwork().getNetworkElements()) {
-				if (null == fb.getTypeEntry()) {
-					MessageDialog.openInformation(getSite().getShell(),
-							Messages.FBTypeEditor_CompositeContainsFunctionBlockWithoutType,
-							MessageFormat.format(Messages.FBTypeEditor_CheckTypeSaveAble, fb.getName()));
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-	private void doSaveInternal(final IProgressMonitor monitor) {
-
-		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(getTypeEntry().getFile().getParent()) {
-			@Override
-			protected void execute(final IProgressMonitor monitor)
-					throws CoreException, InvocationTargetException, InterruptedException {
-				// allow each editor to save back changes before saving to file
-				getEditorPages().stream().filter(IEditorPart::isDirty)
-						.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
-				getTypeEntry().save(getType(), monitor);
-			}
-		};
-		try {
-			operation.run(monitor);
-		} catch (final InvocationTargetException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		} catch (final InterruptedException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-			Thread.currentThread().interrupt();
-		}
-
-		getCommandStack().markSaveLocation();
-		interfaceChanges = 0;
-	}
-
-	@Override
-	public void doSaveAs() {
-		// TODO implement a save as new type method
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-		return false;
 	}
 
 	@Override
@@ -206,6 +127,8 @@ public class FBTypeEditor extends AbstractTypeEditor implements IGotoMarker, INa
 			default:
 				break;
 			}
+		} else if (event.getDetail() == CommandStack.POST_MARK_SAVE) {
+			interfaceChanges = 0;
 		}
 	}
 

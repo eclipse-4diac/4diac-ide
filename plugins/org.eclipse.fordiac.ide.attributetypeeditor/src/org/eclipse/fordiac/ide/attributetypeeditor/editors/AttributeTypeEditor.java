@@ -190,9 +190,8 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 				SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
 		final FBTypeUpdateDialog<AttributeTypeEntry> structSaveDialog = new FBTypeUpdateDialog<>(null,
-				Messages.StructViewingComposite_Headline, null, "", //$NON-NLS-1$
-				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX,
-				new AttributeTypeEntryDataHandler(attributeTypeEntry));
+				Messages.StructViewingComposite_Headline, "", //$NON-NLS-1$
+				labels, DEFAULT_BUTTON_INDEX, new AttributeTypeEntryDataHandler(attributeTypeEntry));
 
 		// Depending on the button clicked:
 		switch (structSaveDialog.open()) {
