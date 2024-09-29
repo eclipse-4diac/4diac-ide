@@ -94,12 +94,6 @@ public class SubAppTypeEditor extends FBTypeEditor {
 	}
 
 	@Override
-	protected boolean checkTypeSaveAble() {
-		// no additional checks are needed
-		return true;
-	}
-
-	@Override
 	protected void pageChange(final int newPageIndex) {
 		if ((SUBAPP_NETWORL_EDITOR_INDEX == getCurrentPage()) && (newPageIndex != SUBAPP_NETWORL_EDITOR_INDEX)) {
 			// the SubAppNetworkBreadCrumbEditor is open restore our editor as the selection

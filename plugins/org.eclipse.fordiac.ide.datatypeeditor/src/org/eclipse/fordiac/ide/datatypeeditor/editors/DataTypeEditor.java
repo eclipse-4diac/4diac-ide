@@ -159,8 +159,8 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 				SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
 		final FBTypeUpdateDialog<DataTypeEntry> structSaveDialog = new FBTypeUpdateDialog<>(null,
-				Messages.StructViewingComposite_Headline, null, "", //$NON-NLS-1$
-				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, new StructuredDataTypeDataHandler(dataTypeEntry));
+				Messages.StructViewingComposite_Headline, "", //$NON-NLS-1$
+				labels, DEFAULT_BUTTON_INDEX, new StructuredDataTypeDataHandler(dataTypeEntry));
 
 		// Depending on the button clicked:
 		switch (structSaveDialog.open()) {

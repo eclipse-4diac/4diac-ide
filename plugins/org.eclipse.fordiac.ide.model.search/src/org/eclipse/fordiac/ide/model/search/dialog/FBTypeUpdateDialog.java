@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.model.search.dialog;
 
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -25,11 +24,10 @@ public class FBTypeUpdateDialog<T extends TypeEntry> extends MessageDialog {
 
 	protected final AbstractTypeEntryDataHandler<T> data;
 
-	public FBTypeUpdateDialog(final Shell parentShell, final String dialogTitle, final Image dialogTitleImage,
-			final String dialogMessage, final int dialogImageType, final String[] dialogButtonLabels,
-			final int defaultIndex, final AbstractTypeEntryDataHandler<T> dataHandler) {
-		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels,
-				defaultIndex);
+	public FBTypeUpdateDialog(final Shell parentShell, final String dialogTitle, final String dialogMessage,
+			final String[] dialogButtonLabels, final int defaultIndex,
+			final AbstractTypeEntryDataHandler<T> dataHandler) {
+		super(parentShell, dialogTitle, null, dialogMessage, MessageDialog.NONE, dialogButtonLabels, defaultIndex);
 		this.data = dataHandler;
 	}
 
