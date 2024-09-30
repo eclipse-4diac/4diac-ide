@@ -594,7 +594,7 @@
          <navigatorContent
                activeByDefault="true"
                id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.sortOnly"
-               name="name"
+               name="System Sort Override"
                priority="normal"
                sortOnly="true">
             <commonSorter
