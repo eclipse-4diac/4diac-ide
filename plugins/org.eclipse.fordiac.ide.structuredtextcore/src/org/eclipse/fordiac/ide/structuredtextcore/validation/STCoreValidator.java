@@ -80,6 +80,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpre
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
@@ -988,6 +989,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		if (expression instanceof final STFeatureExpression featureExpression) {
 			return isFeatureExpressionAssignable(featureExpression);
 		}
+		if (expression instanceof final STBuiltinFeatureExpression featureExpression) {
+			return isBuiltinFeatureExpressionAssignable(featureExpression);
+		}
 		if (expression instanceof final STArrayAccessExpression arrayAccessExpression) {
 			return isAssignable(arrayAccessExpression.getReceiver());
 		}
@@ -1036,6 +1040,17 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			}
 		}
 		return IsAssignableResult.ASSIGNABLE;
+	}
+
+	private static IsAssignableResult isBuiltinFeatureExpressionAssignable(
+			final STBuiltinFeatureExpression featureExpression) {
+		if (featureExpression.isCall()) {
+			return IsAssignableResult.CALL_NOT_ASSIGNABLE;
+		}
+		return switch (featureExpression.getFeature()) {
+		case THIS -> IsAssignableResult.ASSIGNABLE;
+		default -> IsAssignableResult.NOT_ASSIGNABLE;
+		};
 	}
 
 	private enum IsAssignableResult {
