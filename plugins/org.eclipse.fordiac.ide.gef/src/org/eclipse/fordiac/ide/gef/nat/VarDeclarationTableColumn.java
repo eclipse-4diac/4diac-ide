@@ -24,6 +24,8 @@ public enum VarDeclarationTableColumn implements NatTableColumn {
 	VISIBLE(FordiacMessages.Visible), RETAIN(FordiacMessages.Retain);
 
 	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS = List.of(NAME, TYPE, COMMENT, INITIAL_VALUE);
+	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_VISIBLE = List.of(NAME, TYPE, COMMENT,
+			INITIAL_VALUE, VISIBLE);
 	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_VAR_CONFIG = List.of(NAME, TYPE, COMMENT,
 			INITIAL_VALUE, VAR_CONFIG);
 	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG = List.of(NAME,
