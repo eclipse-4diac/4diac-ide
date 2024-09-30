@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Handle;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 
@@ -65,8 +66,8 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	}
 
 	@Override
-	protected List<? extends IFigure> createSelectionHandles() {
-		final List<ModifiedMoveHandle> list = new ArrayList<>(1);
+	protected List<Handle> createSelectionHandles() {
+		final List<Handle> list = new ArrayList<>(1);
 		list.add(new ModifiedMoveHandle(getHost(), insets, arc));
 		removeSelectionFeedbackFigure();
 		return list;
