@@ -174,6 +174,22 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 	}
 
 	@Test
+	void testMethodCallThisVariableAccess() throws EvaluatorException, InterruptedException {
+		assertEquals(toDIntValue(21),
+				evaluateSimpleFB(List.of(newSTAlgorithm("THIS.TEST_METHOD(A := DI1, B := DI2);", "REQ"), newSTMethod("""
+						METHOD TEST_METHOD
+						VAR_INPUT
+							A: DINT;
+							B: DINT;
+						END_VAR
+						THIS.DO1 := A + B;
+						END_METHOD
+						""", "TEST_METHOD")), "REQ",
+						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
+	}
+
+	@Test
 	void testMethodCallWithDefaultInput() throws EvaluatorException, InterruptedException {
 		assertEquals(toDIntValue(21),
 				evaluateSimpleFB(List.of(newSTAlgorithm("THIS.TEST_METHOD(A := DI1, C => DO1);", "REQ"), newSTMethod("""

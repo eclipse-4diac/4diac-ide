@@ -588,7 +588,28 @@
             </instanceof>
          </filterExpression>
       </commonFilter>
-  </extension>  
+  </extension>
+      <extension
+            point="org.eclipse.ui.navigator.navigatorContent">
+         <navigatorContent
+               activeByDefault="true"
+               id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.sortOnly"
+               name="System Sort Override"
+               priority="normal"
+               sortOnly="true">
+            <commonSorter
+                  class="org.eclipse.jface.viewers.ViewerSorter"
+                  id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.IFolderSorter">
+               <parentExpression>
+                  <or>
+                     <instanceof
+                           value="org.eclipse.core.resources.IFolder">
+                     </instanceof>
+                  </or>
+               </parentExpression>
+            </commonSorter>
+         </navigatorContent>
+      </extension>  
     <extension point="org.eclipse.ui.navigator.linkHelper">    
        <linkHelper
              class="org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.SystemExplorerLinkHelper"

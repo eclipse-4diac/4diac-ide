@@ -441,7 +441,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		if (path == null) {
 			return null;
 		}
-		final int separatorPos = path.lastIndexOf('.');
+		int separatorPos = path.indexOf('.');
 
 		if (separatorPos == -1) {
 			// we have a connection to the containing interface
@@ -453,8 +453,14 @@ class FBNetworkImporter extends CommonElementImporter {
 			return getContainingInterfaceElement(path, conType, isInput);
 		}
 
-		final String elementName = path.substring(0, separatorPos);
-		final FBNetworkElement element = findFBNetworkElement(elementName);
+		String elementName = path.substring(0, separatorPos);
+		FBNetworkElement element = findFBNetworkElement(elementName);
+		while (element == null && separatorPos != -1) {
+			separatorPos = path.indexOf('.', separatorPos + 1);
+			elementName = path.substring(0, separatorPos);
+			element = findFBNetworkElement(elementName);
+		}
+
 		if (null != element) {
 			final InterfaceList ieList = element.getInterface();
 			if (isInput) {

@@ -26,6 +26,7 @@ import java.util.Set;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -39,6 +40,7 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelp
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -48,6 +50,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -151,7 +154,14 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		if (newElement instanceof final ConfigurableFB configFb
 				&& oldElement instanceof final ConfigurableFB oldConfigFb) {
 			configFb.setDataType(oldConfigFb.getDataType());
-			configFb.updateConfiguration();
+
+			if (configFb instanceof final Demultiplexer newDemux && oldConfigFb instanceof final Demultiplexer oldDemux
+					&& oldDemux.isIsConfigured()) {
+				newDemux.loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN,
+						ConfigurableFBManagement.buildVisibleChildrenString(oldDemux.getMemberVars()));
+			} else {
+				configFb.updateConfiguration();
+			}
 		}
 	}
 
