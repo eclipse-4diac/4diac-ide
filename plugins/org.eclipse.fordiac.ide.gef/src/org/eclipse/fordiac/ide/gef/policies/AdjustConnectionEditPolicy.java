@@ -27,7 +27,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editpolicies.BendpointEditPolicy;
-import org.eclipse.gef.handles.ConnectionHandle;
+import org.eclipse.gef.handles.BendpointHandle;
 import org.eclipse.gef.requests.BendpointRequest;
 
 public class AdjustConnectionEditPolicy extends BendpointEditPolicy {
@@ -63,8 +63,8 @@ public class AdjustConnectionEditPolicy extends BendpointEditPolicy {
 	}
 
 	@Override
-	protected List<ConnectionHandle> createSelectionHandles() {
-		final List<ConnectionHandle> list = new ArrayList<>();
+	protected List<BendpointHandle> createSelectionHandles() {
+		final List<BendpointHandle> list = new ArrayList<>();
 		if (connection.isVisible()) {
 			final AbstractConnectionEditPart connEP = (AbstractConnectionEditPart) getHost();
 			final PointList points = getConnection().getPoints();
