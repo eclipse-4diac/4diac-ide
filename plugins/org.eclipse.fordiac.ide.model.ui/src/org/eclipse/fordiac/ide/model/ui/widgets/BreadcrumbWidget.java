@@ -142,7 +142,7 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		return validateAndOpenPath(path, type);
 	}
 
-	private boolean validateAndOpenPath(final String path, final INamedElement parent) {
+	public boolean validateAndOpenPath(final String path, final INamedElement parent) {
 		if (path.isBlank()) {
 			return false;
 		}
@@ -165,7 +165,9 @@ public class BreadcrumbWidget implements ISelectionProvider {
 					return false;
 				}
 				if (i == tokens.length - 1) {
-					setInput(child); // last token, therefore we are at our destination
+					if (getActiveItem().getModel() != child) {
+						setInput(child); // last token, therefore we are at our destination
+					}
 					return true;
 				}
 				current = child;

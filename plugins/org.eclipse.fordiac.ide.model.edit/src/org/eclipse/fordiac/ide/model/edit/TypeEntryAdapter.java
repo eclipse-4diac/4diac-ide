@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -48,6 +49,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.INavigationLocation;
+import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class TypeEntryAdapter extends AdapterImpl {
@@ -159,8 +162,10 @@ public class TypeEntryAdapter extends AdapterImpl {
 		});
 	}
 
-	private static void handleBlockTypeDependencyUpdate(final LibraryElement editedElement, final TypeEntry typeEntry) {
+	private void handleBlockTypeDependencyUpdate(final LibraryElement editedElement, final TypeEntry typeEntry) {
 		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(editedElement, typeEntry);
+
+		final INavigationLocation location = getEditorLocation();
 
 		search.performSearch().stream().filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
 				.map(fbnEl -> {
@@ -169,6 +174,18 @@ public class TypeEntryAdapter extends AdapterImpl {
 					}
 					return new UpdateFBTypeCommand(fbnEl, typeEntry);
 				}).forEach(Command::execute);
+
+		if (location != null) {
+			location.restoreLocation();
+		}
+	}
+
+	private INavigationLocation getEditorLocation() {
+		if (editor.getAdapter(FBNetwork.class) == null
+				&& editor instanceof final INavigationLocationProvider provider) {
+			return provider.createNavigationLocation();
+		}
+		return null;
 	}
 
 	private static void handleDataTypeEntryUpdate(final LibraryElement editedElement, final DataTypeEntry dtEntry) {
