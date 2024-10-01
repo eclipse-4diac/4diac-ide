@@ -130,10 +130,11 @@ public class MonitoringManager extends AbstractMonitoringManager {
 
 				final GraphicalViewer viewer = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 						.getActiveEditor().getAdapter(GraphicalViewer.class);
-
-				viewer.getRootEditPart().refresh();
-				final List<?> children = viewer.getRootEditPart().getChildren();
-				children.forEach(child -> ((EditPart) child).refresh());
+				if (viewer != null) {
+					viewer.getRootEditPart().refresh();
+					final List<?> children = viewer.getRootEditPart().getChildren();
+					children.forEach(child -> ((EditPart) child).refresh());
+				}
 			}
 		}
 	};
