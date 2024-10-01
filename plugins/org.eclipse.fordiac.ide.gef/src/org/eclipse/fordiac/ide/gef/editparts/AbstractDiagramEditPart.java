@@ -23,7 +23,6 @@ import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.gef.CompoundSnapToHelper;
@@ -70,7 +69,6 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	@Override
 	public void refresh() {
 		super.refresh();
-		updateGrid();
 		showGrid();
 		updateRuler();
 	}
@@ -128,9 +126,6 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 				if (event.getProperty().equals(DiagramPreferences.SHOW_GRID)) {
 					showGrid();
 				}
-				if (event.getProperty().equals(DiagramPreferences.GRID_SPACING)) {
-					updateGrid();
-				}
 				if (event.getProperty().equals(DiagramPreferences.SHOW_RULERS)) {
 					updateRuler();
 				}
@@ -139,15 +134,9 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		return listener;
 	}
 
-	@SuppressWarnings("static-method")  // allow children to overwrite and create a different router
+	@SuppressWarnings("static-method") // allow children to overwrite and create a different router
 	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
 		return new BendpointConnectionRouter();
-	}
-
-	protected void updateGrid() {
-		final int gridSpacing = Activator.getDefault().getPreferenceStore().getInt(DiagramPreferences.GRID_SPACING);
-
-		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(gridSpacing, gridSpacing));
 	}
 
 	/*

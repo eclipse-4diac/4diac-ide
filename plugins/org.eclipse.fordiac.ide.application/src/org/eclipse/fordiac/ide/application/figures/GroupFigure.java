@@ -20,8 +20,10 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -29,6 +31,7 @@ import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.figures.AbstractShadowBorder;
 import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 
 public class GroupFigure extends Figure {
 
@@ -42,9 +45,8 @@ public class GroupFigure extends Figure {
 
 	private void createFigure() {
 		createMainFigure();
-		createCommentFigure();
 
-		mainFigure.add(commentFigure, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
+		mainFigure.add(createCommentFigure(), new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 
 		final GridLayout rootLayout = new GridLayout(1, false);
 		rootLayout.verticalSpacing = -1; // this brings a slight overlap between name and main area to avoid drawing
@@ -68,16 +70,32 @@ public class GroupFigure extends Figure {
 		mainFigure.setOpaque(false);
 
 		final GridLayout mainLayout = new GridLayout(1, true);
+		mainLayout.marginHeight = 0;
+		mainLayout.marginWidth = 0;
 		mainLayout.verticalSpacing = 0;
 		mainLayout.horizontalSpacing = 0;
 		mainFigure.setLayoutManager(mainLayout);
 	}
 
-	private void createCommentFigure() {
+	private IFigure createCommentFigure() {
 		commentFigure = new InstanceCommentFigure();
 		commentFigure.setCursor(Cursors.SIZEALL);
 		final AdvancedLineBorder commentBorder = new AdvancedLineBorder(PositionConstants.SOUTH);
 		commentFigure.setBorder(commentBorder);
+
+		final Figure commentContainer = new Figure();
+		commentContainer.setLayoutManager(new ToolbarLayout());
+
+		final int lineHeight = (int) CoordinateConverter.INSTANCE.getLineHeight();
+		int top = lineHeight / 2;
+		final int bottom = top;
+		if (top + bottom != lineHeight) {
+			// we have a rounding error
+			top += lineHeight - (top + bottom);
+		}
+		commentContainer.setBorder(new MarginBorder(top, 5, bottom, 5));
+		commentContainer.add(commentFigure);
+		return commentContainer;
 	}
 
 	private void createNameFigure() {
