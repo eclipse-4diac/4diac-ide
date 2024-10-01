@@ -14,11 +14,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.fordiac.ide.model.commands.change.AbstractUpdateFBNElementCommand;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
@@ -28,75 +27,57 @@ import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class UpdateFBInstanceChange extends Change {
+public class UpdateFBInstanceChange extends AbstractCommandChange<FBNetworkElement> {
 
-	private final FBNetworkElement instance;
 	private final TypeEntry typeEntry;
 
 	public UpdateFBInstanceChange(final FBNetworkElement instance, final TypeEntry typeEntry) {
-		this.instance = instance;
+		super(("Update FB instances - " + FBNetworkHelper.getFullHierarchicalName(instance)),
+				EcoreUtil.getURI(instance), FBNetworkElement.class);
 		this.typeEntry = typeEntry;
-	}
 
-	public UpdateFBInstanceChange(final FBNetworkElement instance) {
-		this(instance, null);
 	}
 
 	@Override
-	public String getName() {
-		return "Update FB instances - " + FBNetworkHelper.getFullHierarchicalName(instance); //$NON-NLS-1$
+	public void initializeValidationData(final FBNetworkElement element, final IProgressMonitor pm) {
+		// no additional ValidationData needed
 	}
 
 	@Override
-	public void initializeValidationData(final IProgressMonitor pm) {
-		// can't think of a way to validate an update
+	public RefactoringStatus isValid(final FBNetworkElement element, final IProgressMonitor pm)
+			throws CoreException, OperationCanceledException {
+
+		final RefactoringStatus status = new RefactoringStatus();
+		if (element.eContainer() == null) {
+			status.addError(element.getQualifiedName() + " eContainer is null"); //$NON-NLS-1$
+		}
+		return status;
 	}
 
-	private Command getCommand(final FBNetworkElement instance) {
-		if (instance instanceof final SubApp subApp && !subApp.isTyped()) {
-			return new UpdateUntypedSubAppInterfaceCommand(instance, (DataTypeEntry) typeEntry);
+	@Override
+	protected Command createCommand(final FBNetworkElement element) {
+
+		if (element instanceof final SubApp subApp && !subApp.isTyped()
+				&& typeEntry instanceof final DataTypeEntry dtEntry) {
+			return new UpdateUntypedSubAppInterfaceCommand(element, dtEntry);
 		}
 
-		if (instance instanceof final StructManipulator muxer) {
-			final LibraryElement structuredType = typeEntry.getTypeEditable();
-			Assert.isTrue(structuredType instanceof StructuredType);
-			return new ChangeStructCommand(muxer, (StructuredType) structuredType);
+		if (element instanceof final StructManipulator muxer
+				&& typeEntry.getType() instanceof final StructuredType structuredType) {
+			return new ChangeStructCommand(muxer, structuredType);
 		}
-		if (instance.eContainer() instanceof BaseFBType && instance instanceof final FB fb) {
+		if (element.eContainer() instanceof BaseFBType && element instanceof final FB fb) {
 			return new UpdateInternalFBCommand(fb, typeEntry);
 		}
 
-		return new UpdateFBTypeCommand(instance, typeEntry);
-	}
-
-	@Override
-	public RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		return new RefactoringStatus();
-	}
-
-	@Override
-	public Change perform(final IProgressMonitor pm) throws CoreException {
-		final var cmd = getCommand(instance);
-		AbstractLiveSearchContext.executeAndSave(cmd, instance, pm);
-		if (cmd instanceof final AbstractUpdateFBNElementCommand ab) {
-			return new UpdateFBInstanceChange(ab.getNewElement(), typeEntry);
-		}
-		return new UpdateFBInstanceChange(instance, typeEntry);
-	}
-
-	@Override
-	public Object getModifiedElement() {
-		return null;
+		return new UpdateFBTypeCommand(element, typeEntry);
 	}
 
 }
