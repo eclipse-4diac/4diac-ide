@@ -391,7 +391,6 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 
 	private static ToolbarLayout createInputContainerLayout() {
 		final ToolbarLayout toolbarLayout = new ToolbarLayout(false);
-		toolbarLayout.setSpacing(2);
 		toolbarLayout.setStretchMinorAxis(true);
 		return toolbarLayout;
 	}
@@ -399,7 +398,6 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	private static ToolbarLayout createOutputContainerLayout() {
 		final ToolbarLayout layout = new ToolbarLayout(false);
 		layout.setStretchMinorAxis(true);
-		layout.setSpacing(2);
 		layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 
 		return layout;
@@ -430,8 +428,8 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		container.add(middle, BorderLayout.CENTER);
 
 		final GridLayout middleLayout = new GridLayout(1, true);
-		middleLayout.marginHeight = 1;
-		middleLayout.verticalSpacing = 1;
+		middleLayout.marginHeight = 0;
+		middleLayout.verticalSpacing = 0;
 		middleLayout.marginWidth = 3;
 
 		middle.setLayoutManager(middleLayout);

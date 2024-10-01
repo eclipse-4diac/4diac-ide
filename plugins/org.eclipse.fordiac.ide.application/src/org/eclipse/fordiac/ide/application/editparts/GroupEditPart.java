@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -68,11 +69,10 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 	private class GroupCommentRenameEditPolicy extends AbstractViewRenameEditPolicy {
 		@Override
 		protected Command getDirectEditCommand(final DirectEditRequest request) {
-			if (getHost() instanceof GroupEditPart) {
+			if (getHost() instanceof final GroupEditPart gEP) {
 				final String str = (String) request.getCellEditor().getValue();
 				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
-					return new ResizeGroupOrSubappCommand(getHost(),
-							new ChangeCommentCommand(((GroupEditPart) getHost()).getModel(), str));
+					return new ResizeGroupOrSubappCommand(getHost(), new ChangeCommentCommand(gEP.getModel(), str));
 				}
 			}
 			return null;
@@ -130,7 +130,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 			if (ep instanceof final AbstractFBNElementEditPart fbEp) {
 				fbEp.getChildren().forEach(pinEp -> {
 					if (pinEp instanceof InterfaceEditPartForFBNetwork) {
-						pinEp.getSourceConnections().forEach(conn -> ((EditPart) conn).refresh());
+						pinEp.getSourceConnections().forEach(ConnectionEditPart::refresh);
 					}
 				});
 			}
@@ -143,7 +143,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 			if (ep instanceof final AbstractFBNElementEditPart fbEp) {
 				fbEp.getChildren().forEach(pinEp -> {
 					if (pinEp instanceof InterfaceEditPartForFBNetwork) {
-						pinEp.getTargetConnections().forEach(conn -> ((EditPart) conn).refresh());
+						pinEp.getTargetConnections().forEach(ConnectionEditPart::refresh);
 					}
 				});
 			}
@@ -191,14 +191,14 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		final GridData layoutConstraint = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
-				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 
 		if (child instanceof InstanceNameFigure) {
 			getFigure().getNameFigure().add(child,
 					new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL));
 		} else {
+			final GridData layoutConstraint = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+					| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 			getFigure().getMainFigure().add(child, layoutConstraint);
 		}
 	}
