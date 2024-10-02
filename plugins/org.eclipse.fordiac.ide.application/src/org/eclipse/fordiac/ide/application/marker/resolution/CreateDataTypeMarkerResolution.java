@@ -57,7 +57,7 @@ public class CreateDataTypeMarkerResolution extends AbstractErrorMarkerResolutio
 		}
 
 		if (newEntry != null) {
-			final EObject errorType = FordiacErrorMarker.getTarget(marker);
+			final EObject errorType = getTargetElement(marker);
 			if (errorType instanceof final IInterfaceElement target) {
 				AbstractLiveSearchContext.executeAndSave(ChangeDataTypeCommand.forDataType(target, newEntry.getType()),
 						target, new NullProgressMonitor());

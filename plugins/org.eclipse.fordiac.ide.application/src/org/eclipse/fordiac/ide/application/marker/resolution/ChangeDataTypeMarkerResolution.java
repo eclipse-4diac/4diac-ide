@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -53,7 +52,7 @@ public class ChangeDataTypeMarkerResolution extends AbstractErrorMarkerResolutio
 		}
 
 		if (selectedType != null) {
-			final EObject errorType = FordiacErrorMarker.getTarget(marker);
+			final EObject errorType = getTargetElement(marker);
 			if (errorType instanceof final IInterfaceElement interfaceElement) {
 				AbstractLiveSearchContext.executeAndSave(
 						ChangeDataTypeCommand.forDataType(interfaceElement, selectedType), interfaceElement,
