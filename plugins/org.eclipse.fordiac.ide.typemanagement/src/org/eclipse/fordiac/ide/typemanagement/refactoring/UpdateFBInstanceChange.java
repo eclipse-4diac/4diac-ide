@@ -73,6 +73,12 @@ public class UpdateFBInstanceChange extends AbstractCommandChange<FBNetworkEleme
 				&& typeEntry.getType() instanceof final StructuredType structuredType) {
 			return new ChangeStructCommand(muxer, structuredType);
 		}
+
+		if (element instanceof final ConfigurableFB confFb
+				&& typeEntry.getType() instanceof final StructuredType structuredType) {
+			return new ConfigureFBCommand(confFb, structuredType);
+		}
+
 		if (element.eContainer() instanceof BaseFBType && element instanceof final FB fb) {
 			return new UpdateInternalFBCommand(fb, typeEntry);
 		}
