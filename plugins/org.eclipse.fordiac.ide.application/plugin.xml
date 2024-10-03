@@ -22,6 +22,10 @@
 			markerType="org.eclipse.fordiac.ide.model.validation"
 			class="org.eclipse.fordiac.ide.application.marker.resolution.FordiacMarkerResolutionGenerator">
 		</markerResolutionGenerator>
+		<markerResolutionGenerator
+			markerType="org.eclipse.fordiac.ide.model.temporary"
+			class="org.eclipse.fordiac.ide.application.marker.resolution.FordiacMarkerResolutionGenerator">
+		</markerResolutionGenerator>
   </extension>
   
   <extension point="org.eclipse.ui.views.properties.tabbed.propertyContributor">

@@ -15,12 +15,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -28,23 +30,29 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.wizards.QuickFixWizardDialog;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
-import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalMarkerAnnotation;
+import org.eclipse.fordiac.ide.gef.annotation.ResourceMarkerGraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.validation.GraphicalValidationAnnotation;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.views.markers.WorkbenchMarkerResolution;
 
 public class FordiacQuickFixHandler extends AbstractHandler {
-
 	@Override
 	public Object execute(final ExecutionEvent event) {
 		final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
@@ -52,12 +60,12 @@ public class FordiacQuickFixHandler extends AbstractHandler {
 
 		final IMarker[] selectedMarkers = getMarkersFromEditorSelection(selection);
 		final IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions(selectedMarkers[0]);
-		final IMarker[] allMarkers = getAllMarker(selectedMarkers[0].getResource().getProject());
+
 		final Map<IMarkerResolution, Collection<IMarker>> resolutionsMap = new HashMap<>();
 
 		for (final IMarkerResolution res : resolutions) {
 			if (res instanceof final WorkbenchMarkerResolution workbenchResolution) {
-				final IMarker[] other = workbenchResolution.findOtherMarkers(allMarkers);
+				final IMarker[] other = workbenchResolution.findOtherMarkers(selectedMarkers);
 				final Set<IMarker> markersSet = new LinkedHashSet<>();
 				markersSet.addAll(Arrays.asList(selectedMarkers));
 				markersSet.addAll(Arrays.asList(other));
@@ -82,6 +90,7 @@ public class FordiacQuickFixHandler extends AbstractHandler {
 		} else {
 			QuickFixWizardDialog.openDialog(shell, selectedMarkers, resolutions, resolutionsMap);
 		}
+		deleteTemporaryMarker(selectedMarkers);
 
 		return null;
 	}
@@ -91,23 +100,93 @@ public class FordiacQuickFixHandler extends AbstractHandler {
 				.map(FordiacQuickFixHandler::getMarker).toArray(IMarker[]::new);
 	}
 
+	public static boolean hasMarker(final EditPart editPart) {
+		final var annotationModel = FordiacAnnotationUtil.getAnnotationModel(editPart);
+		if (annotationModel != null) {
+			return annotationModel.hasAnnotation(editPart.getModel(),
+					annotation -> annotation instanceof GraphicalMarkerAnnotation
+							|| annotation instanceof GraphicalValidationAnnotation);
+		}
+		return false;
+	}
+
 	public static IMarker getMarker(final EditPart editPart) {
 		if (FordiacAnnotationUtil
-				.getAnnotationModel(editPart) instanceof final FordiacMarkerGraphicalAnnotationModel annotationModel) {
+				.getAnnotationModel(editPart) instanceof final ResourceMarkerGraphicalAnnotationModel annotationModel) {
 			final var annotation = annotationModel.getAnnotations(editPart.getModel());
-			if (!annotation.isEmpty()
-					&& annotation.iterator().next() instanceof final GraphicalMarkerAnnotation markerAnnotation) {
-				return markerAnnotation.getMarker();
+
+			final Optional<GraphicalMarkerAnnotation> markerAnnotation = annotation.stream()
+					.filter(GraphicalMarkerAnnotation.class::isInstance).map(GraphicalMarkerAnnotation.class::cast)
+					.findFirst();
+			if (markerAnnotation.isPresent()) {
+				return markerAnnotation.get().getMarker();
+			}
+
+			if (!annotation.isEmpty() && annotation.iterator()
+					.next() instanceof final GraphicalValidationAnnotation validationAnnotation) {
+				createTemporaryMarker(validationAnnotation, annotationModel.getResource());
+				final Optional<GraphicalMarkerAnnotation> newAnnotation = annotationModel
+						.getAnnotations(editPart.getModel()).stream()
+						.filter(GraphicalMarkerAnnotation.class::isInstance).map(GraphicalMarkerAnnotation.class::cast)
+						.findFirst();
+
+				if (newAnnotation.isPresent()) {
+					return newAnnotation.get().getMarker();
+				}
 			}
 		}
 		return null;
 	}
 
-	private static IMarker[] getAllMarker(final IResource resource) {
+	private static void createTemporaryMarker(final GraphicalValidationAnnotation validationAnnotation,
+			final IResource resource) {
 		try {
-			return resource.findMarkers(IMarker.MARKER, true, IResource.DEPTH_INFINITE);
-		} catch (final CoreException e) {
-			return new IMarker[0];
+			new WorkspaceModifyOperation(resource) {
+				@Override
+				protected void execute(final IProgressMonitor monitor)
+						throws CoreException, InvocationTargetException, InterruptedException {
+					ErrorMarkerBuilder.createErrorMarkerBuilder(validationAnnotation.getText())
+							.addAdditionalAttributes(validationAnnotation.getAttributes())
+							.setType(FordiacErrorMarker.TEMPORARY_MARKER).createMarker(resource);
+				}
+			}.run(new NullProgressMonitor());
+		} catch (final InvocationTargetException | InterruptedException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
+	}
+
+	private static void deleteTemporaryMarker(final IMarker[] selectedMarkers) {
+		final var temporaryMarkers = Arrays.stream(selectedMarkers).filter(marker -> {
+			try {
+				return marker.getType().equals(FordiacErrorMarker.TEMPORARY_MARKER);
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
+			return false;
+		}).toList();
+
+		if (temporaryMarkers.isEmpty()) {
+			return;
+		}
+
+		try {
+			new WorkspaceModifyOperation(temporaryMarkers.getFirst().getResource()) {
+				@Override
+				protected void execute(final IProgressMonitor monitor)
+						throws CoreException, InvocationTargetException, InterruptedException {
+					temporaryMarkers.forEach(marker -> {
+						try {
+							if (marker.getType().equals(FordiacErrorMarker.TEMPORARY_MARKER)) {
+								marker.delete();
+							}
+						} catch (final CoreException e) {
+							FordiacLogHelper.logError(e.getMessage(), e);
+						}
+					});
+				}
+			}.run(new NullProgressMonitor());
+		} catch (final InvocationTargetException | InterruptedException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 }
