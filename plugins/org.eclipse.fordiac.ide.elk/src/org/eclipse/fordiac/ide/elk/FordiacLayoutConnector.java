@@ -18,10 +18,6 @@ package org.eclipse.fordiac.ide.elk;
 
 import java.util.List;
 
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.NotEnabledException;
-import org.eclipse.core.commands.NotHandledException;
-import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.elk.core.service.DiagramLayoutEngine;
 import org.eclipse.elk.core.service.IDiagramLayoutConnector;
@@ -33,13 +29,12 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEdi
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.elk.commands.LayoutCommand;
+import org.eclipse.fordiac.ide.elk.handlers.ConnectionLayoutHandler;
 import org.eclipse.fordiac.ide.elk.helpers.FordiacGraphBuilder;
 import org.eclipse.fordiac.ide.elk.helpers.FordiacGraphDataHelper;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.handlers.IHandlerService;
 
 import com.google.inject.Injector;
 
@@ -64,29 +59,14 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 
 		// schedule as async to ensure the changes from the layout command have been
 		// processed
-		Display.getDefault().asyncExec(() -> {
-			final var handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
-			final var networkEditPart = fordiacMapping.getNetworkEditPart();
-
-			try {
-				if (networkEditPart instanceof UnfoldedSubappContentEditPart) {
-					final var event = new Event();
-					event.data = networkEditPart.getParent(); // pass to the handler
-					handlerService.executeCommand("org.eclipse.fordiac.ide.elk.expandedSubappConnectionLayout", event); //$NON-NLS-1$
-				} else {
-					handlerService.executeCommand("org.eclipse.fordiac.ide.elk.connectionLayout", null); //$NON-NLS-1$
-				}
-			} catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e) {
-				e.printStackTrace();
-			}
-		});
+		Display.getDefault().asyncExec(() -> ConnectionLayoutHandler
+				.getLayoutCommandNonHierarchical(fordiacMapping.getWorkbenchPart()).execute());
 	}
 
 	public static void executeManually(final List<SubAppForFBNetworkEditPart> editParts) {
 		final var workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 		final Injector injector = LayoutConnectorsService.getInstance().getInjector(workbenchPart, null);
 		final DiagramLayoutEngine engine = injector.getInstance(DiagramLayoutEngine.class);
-		final var handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
 
 		for (final var ep : editParts) {
 			final FordiacLayoutMapping mapping = new FordiacLayoutMapping(workbenchPart, true,
@@ -101,16 +81,8 @@ public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 				mapping.getCommandStack().execute(new LayoutCommand(mapping.getLayoutData()));
 			}
 
-			Display.getDefault().asyncExec(() -> {
-				final var event = new Event();
-				event.data = ep; // pass to the handler
-				try {
-					handlerService.executeCommand("org.eclipse.fordiac.ide.elk.expandedSubappConnectionLayout", event); //$NON-NLS-1$
-				} catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e) {
-					e.printStackTrace();
-				}
-			});
-
+			Display.getDefault().asyncExec(() -> ConnectionLayoutHandler
+					.getLayoutCommand((UnfoldedSubappContentEditPart) ep.getContentEP()).execute());
 		}
 	}
 
