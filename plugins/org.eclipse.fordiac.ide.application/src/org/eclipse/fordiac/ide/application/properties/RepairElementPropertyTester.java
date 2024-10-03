@@ -25,7 +25,7 @@ public class RepairElementPropertyTester extends PropertyTester {
 
 	protected static boolean isSupported(final Object element) {
 		if (element instanceof final EditPart editPart) {
-			return FordiacQuickFixHandler.getMarker(editPart) != null;
+			return FordiacQuickFixHandler.hasMarker(editPart);
 		}
 
 		return false;
