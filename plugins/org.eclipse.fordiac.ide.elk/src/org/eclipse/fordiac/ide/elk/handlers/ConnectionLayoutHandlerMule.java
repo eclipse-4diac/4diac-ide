@@ -8,34 +8,26 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Daniel Lindhuber
- *     - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.elk.handlers;
 
-import java.util.stream.Collectors;
-
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.elk.FordiacLayoutConnector;
-import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.fordiac.ide.elk.FordiacLayout;
+import org.eclipse.gef.commands.UnexecutableCommand;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class NestedExpandedSubappHandler extends AbstractLayoutHandler {
+public class ConnectionLayoutHandlerMule extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final var selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-		// @formatter:off
-		final var subapps = selection.stream()
-			.filter(SubAppForFBNetworkEditPart.class::isInstance)
-			.map(SubAppForFBNetworkEditPart.class::cast)
-			.filter(subapp -> subapp.getModel().isUnfolded())
-			.collect(Collectors.toList());
-		// @formatter:on
-		FordiacLayoutConnector.executeManually(subapps);
+		final var part = HandlerUtil.getActiveEditor(event);
+		final var mule = (Event) event.getTrigger();
+		mule.data = (part != null) ? FordiacLayout.getConnectionLayoutCommand(part) : UnexecutableCommand.INSTANCE;
 		return Status.OK_STATUS;
 	}
 

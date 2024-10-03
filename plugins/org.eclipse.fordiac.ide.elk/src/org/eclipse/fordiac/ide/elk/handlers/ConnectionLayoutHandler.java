@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022 - 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,46 +13,26 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.elk.handlers;
 
-import java.text.MessageFormat;
-
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.elk.alg.libavoid.server.LibavoidServerException;
-import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
-import org.eclipse.fordiac.ide.elk.Messages;
-import org.eclipse.fordiac.ide.elk.commands.ConnectionLayoutCommand;
-import org.eclipse.fordiac.ide.elk.connection.ConnectionLayoutMapping;
-import org.eclipse.fordiac.ide.elk.connection.ConnectionRoutingHelper;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.fordiac.ide.elk.FordiacLayout;
+import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class ConnectionLayoutHandler extends AbstractConnectionLayoutHandler {
+public class ConnectionLayoutHandler extends AbstractLayoutHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final IWorkbenchPart part = HandlerUtil.getActiveEditor(event);
-		if (null != part) {
-			try {
-				final ConnectionLayoutMapping mapping = run(part);
-				final FordiacLayoutData data = ConnectionRoutingHelper.calculateConnections(mapping);
-				runSubapps(mapping, data);
-				executeCommand(event, part, data);
-			} catch (final LibavoidServerException e) {
-				MessageDialog.openWarning(HandlerUtil.getActiveShell(event), Messages.ConnectionLayout_TimeoutTitle,
-						MessageFormat.format(Messages.ConnectionLayout_TimeoutMessage, e.getMessage()));
-			}
-		}
-		return Status.OK_STATUS;
-	}
+		final var part = HandlerUtil.getActiveEditor(event);
+		final var selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 
-	public static void executeManually(final IEditorPart part) {
-		final ConnectionLayoutMapping mapping = run(part);
-		final FordiacLayoutData data = ConnectionRoutingHelper.calculateConnections(mapping);
-		runSubapps(mapping, data);
-		new ConnectionLayoutCommand(data).execute();
+		if (!selection.isEmpty() && canLayout(selection)) {
+			FordiacLayout.connectionLayout(part, (AbstractFBNetworkEditPart) selection.getFirstElement());
+		}
+
+		return Status.OK_STATUS;
 	}
 
 }

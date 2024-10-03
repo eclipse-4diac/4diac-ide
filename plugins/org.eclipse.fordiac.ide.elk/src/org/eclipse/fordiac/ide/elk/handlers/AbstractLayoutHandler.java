@@ -13,7 +13,12 @@
 package org.eclipse.fordiac.ide.elk.handlers;
 
 import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
+import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeNetworkViewerEditPart;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -30,6 +35,15 @@ public abstract class AbstractLayoutHandler extends AbstractHandler {
 		} else {
 			setBaseEnabled(false);
 		}
+	}
+
+	protected static boolean canLayout(final StructuredSelection selection) {
+		final var elem = selection.getFirstElement();
+		// @formatter:off
+		return elem instanceof FBNetworkEditPart
+				|| elem instanceof UnfoldedSubappContentEditPart
+				|| (elem instanceof EditorWithInterfaceEditPart && !(elem instanceof CompositeNetworkViewerEditPart)) ;
+		// @formatter:on
 	}
 
 }

@@ -32,15 +32,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Position;
 
 public class FordiacLayoutData {
 
-	// this helper class should get a record when upgrading to Java 17
-	public static class ConnectionLayoutData {
-		public final Connection con;
-		public final ConnectionRoutingData routingData;
-
-		public ConnectionLayoutData(final Connection con, final ConnectionRoutingData routingData) {
-			this.con = con;
-			this.routingData = routingData;
-		}
+	public record ConnectionLayoutData(Connection con, ConnectionRoutingData routingData) {
+		// nothing to do here
 	}
 
 	private final Map<FBNetworkElement, Position> positions = new HashMap<>();

@@ -241,7 +241,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		if (isConnectionLayoutPreferenceTicked() && isTagged(event)) {
 			if (event.isPostChangeEvent()) {
 				if (event.getDetail() == CommandStack.POST_EXECUTE) {
-					final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
+					final var viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
 					// running the layout without flushing the viewer results in a bad state of the
 					// libavoid process
 					// -> do not allow auto layout if that is the case
@@ -395,7 +395,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		final IHandlerService handlerService = getHandlerService();
 		try {
 			final Event mule = new Event();
-			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.connectionLayout", mule); //$NON-NLS-1$
+			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.connectionLayoutMule", mule); //$NON-NLS-1$
 			return (Command) mule.data;
 		} catch (final Exception ex) {
 			throw new IllegalStateException("Could not execute layout command", ex); //$NON-NLS-1$

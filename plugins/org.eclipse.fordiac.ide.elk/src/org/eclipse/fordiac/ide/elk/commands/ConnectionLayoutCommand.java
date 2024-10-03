@@ -18,9 +18,9 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutData.ConnectionLayoutData;
+import org.eclipse.gef.commands.Command;
 
-// simplified version of the LayoutCommand
-public class ConnectionLayoutCommand extends AbstractLayoutCommand {
+public class ConnectionLayoutCommand extends Command {
 
 	private final List<ConnectionLayoutData> newRoutingData;
 	private final List<ConnectionLayoutData> oldRoutingData;
@@ -44,6 +44,15 @@ public class ConnectionLayoutCommand extends AbstractLayoutCommand {
 	@Override
 	public void undo() {
 		setRoutingData(oldRoutingData);
+	}
+
+	private static void setRoutingData(final List<ConnectionLayoutData> routingData) {
+		routingData.forEach(rd -> rd.con().setRoutingData(rd.routingData()));
+	}
+
+	private static void saveRoutingDataForUndo(final List<ConnectionLayoutData> newRoutingData,
+			final List<ConnectionLayoutData> oldRoutingData) {
+		newRoutingData.forEach(cd -> oldRoutingData.add(new ConnectionLayoutData(cd.con(), cd.con().getRoutingData())));
 	}
 
 }

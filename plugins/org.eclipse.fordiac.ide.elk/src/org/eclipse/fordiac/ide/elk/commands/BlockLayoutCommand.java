@@ -26,15 +26,16 @@ import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
+import org.eclipse.gef.commands.Command;
 
-public class LayoutCommand extends AbstractLayoutCommand {
+public class BlockLayoutCommand extends Command {
 
 	private final FordiacLayoutData data;
 
 	private final Map<FBNetworkElement, Position> oldPositions = new HashMap<>();
 	private final Map<Group, Entry<Double, Double>> oldGroupSizes = new HashMap<>();
 
-	public LayoutCommand(final FordiacLayoutData data) {
+	public BlockLayoutCommand(final FordiacLayoutData data) {
 		this.data = data;
 	}
 
@@ -52,7 +53,7 @@ public class LayoutCommand extends AbstractLayoutCommand {
 	@Override
 	public void undo() {
 		oldPositions.forEach(FBNetworkElement::setPosition);
-		oldGroupSizes.forEach(LayoutCommand::setGroupSize);
+		oldGroupSizes.forEach(BlockLayoutCommand::setGroupSize);
 	}
 
 	private void saveDataForUndo() {
@@ -66,7 +67,7 @@ public class LayoutCommand extends AbstractLayoutCommand {
 			final var pos = entry.getValue();
 			entry.getKey().updatePositionFromScreenCoordinates((int) pos.getX(), (int) pos.getY());
 		}
-		data.getGroups().forEach(LayoutCommand::setGroupSize);
+		data.getGroups().forEach(BlockLayoutCommand::setGroupSize);
 	}
 
 	private static void setGroupSize(final Group group, final Entry<Double, Double> size) {

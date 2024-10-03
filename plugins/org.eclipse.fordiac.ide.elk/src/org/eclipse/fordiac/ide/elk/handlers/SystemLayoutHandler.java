@@ -34,7 +34,9 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
+import org.eclipse.fordiac.ide.elk.FordiacLayout;
 import org.eclipse.fordiac.ide.elk.Messages;
+import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -284,8 +286,9 @@ public class SystemLayoutHandler extends AbstractHandler {
 			final SubAppType subappType) {
 		final var breadcrumbEditor = multiPageEditor.getAdapter(AbstractBreadCrumbEditor.class);
 		multiPageEditor.setActiveEditor(breadcrumbEditor);
-		multiPageEditor.getAdapter(GraphicalViewer.class).flush();
-		ConnectionLayoutHandler.executeManually(multiPageEditor);
+		final var viewer = multiPageEditor.getAdapter(GraphicalViewer.class);
+		viewer.flush();
+		FordiacLayout.blockLayout(multiPageEditor, (AbstractFBNetworkEditPart) viewer.getRootEditPart().getContents());
 
 		final List<EObject> elements = new ArrayList<>();
 		collectSubapps(elements, subappType.getFBNetwork());
@@ -299,8 +302,9 @@ public class SystemLayoutHandler extends AbstractHandler {
 	private static void handleCompositeType(final FormEditor multiPageEditor, final LibraryElement typeEditable) {
 		final var networkEditor = multiPageEditor.getAdapter(FBNetworkEditor.class);
 		multiPageEditor.setActiveEditor(networkEditor);
-		multiPageEditor.getAdapter(GraphicalViewer.class).flush();
-		ConnectionLayoutHandler.executeManually(multiPageEditor);
+		final var viewer = multiPageEditor.getAdapter(GraphicalViewer.class);
+		viewer.flush();
+		FordiacLayout.blockLayout(multiPageEditor, (AbstractFBNetworkEditPart) viewer.getRootEditPart().getContents());
 
 		saveTypeEditor(multiPageEditor, typeEditable);
 	}
@@ -341,8 +345,9 @@ public class SystemLayoutHandler extends AbstractHandler {
 
 	private static void layoutBreadcrumbEditor(final EObject refElement, final AbstractBreadCrumbEditor editor) {
 		editor.getBreadcrumb().setInput(refElement);
-		editor.getAdapter(GraphicalViewer.class).flush();
-		ConnectionLayoutHandler.executeManually(editor);
+		final var viewer = editor.getAdapter(GraphicalViewer.class);
+		viewer.flush();
+		FordiacLayout.blockLayout(editor, (AbstractFBNetworkEditPart) viewer.getRootEditPart().getContents());
 	}
 
 	private static EObject getBreadCrumbRefElement(final EObject sel) {
