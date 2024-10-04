@@ -143,7 +143,7 @@ public class STFunctionPartitioner
 		function.getInOutParameters().stream().map(STVarDeclaration.class::cast)
 				.filter(STFunctionPartitioner::isValidParameter).map(this::convertInOutParameter)
 				.forEachOrdered(result.getInOutParameters()::add);
-		result.setReturnType(resolveDataType(function.getReturnType(), function));
+		result.setReturnType(resolveDataType(function.getReturnType(), function, null));
 		result.setText(node.getText());
 		return result;
 	}

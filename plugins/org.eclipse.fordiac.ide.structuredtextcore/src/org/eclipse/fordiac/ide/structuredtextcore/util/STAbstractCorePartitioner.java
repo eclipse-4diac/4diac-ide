@@ -81,7 +81,7 @@ public abstract class STAbstractCorePartitioner<E extends INamedElement> impleme
 		if (comment != null) {
 			result.setComment(comment);
 		}
-		result.setType(resolveDataType(declaration.getType(), declaration));
+		result.setType(resolveDataType(declaration.getType(), declaration, GenericTypes.ANY));
 		if (declaration.isArray()) {
 			ArraySizeHelper.setArraySize(result, extractArraySize(declaration));
 		}
@@ -135,7 +135,8 @@ public abstract class STAbstractCorePartitioner<E extends INamedElement> impleme
 				.map(INode::getText).collect(Collectors.joining()).trim();
 	}
 
-	protected static DataType resolveDataType(final INamedElement type, final EObject context) {
+	protected static DataType resolveDataType(final INamedElement type, final EObject context,
+			final DataType defaultType) {
 		if (type != null && type.eIsProxy()) {
 			final String linkName = extractLinkName(type, context);
 			if (!linkName.isEmpty()) {
@@ -147,7 +148,7 @@ public abstract class STAbstractCorePartitioner<E extends INamedElement> impleme
 		} else if (type instanceof final DataType dataType) {
 			return dataType;
 		}
-		return GenericTypes.ANY;
+		return defaultType;
 	}
 
 	protected static String extractLinkName(final EObject proxy, final EObject context) {

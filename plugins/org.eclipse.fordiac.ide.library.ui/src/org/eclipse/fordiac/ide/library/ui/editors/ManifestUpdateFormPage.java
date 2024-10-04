@@ -108,19 +108,19 @@ public class ManifestUpdateFormPage extends FormPage {
 		final TableViewerColumn buttonColumn = new TableViewerColumn(viewer, SWT.LEAD);
 		buttonColumn.getColumn().setText("Update"); //$NON-NLS-1$
 		buttonColumn.setLabelProvider(new ColumnLabelProvider() {
-			private TableItem item;
 
 			@Override
 			public void update(final ViewerCell cell) {
 				final Button button = new Button((Composite) cell.getControl(), SWT.NONE);
-				item = (TableItem) cell.getItem();
+				final TableItem item = (TableItem) cell.getItem();
 				button.setText("Update"); //$NON-NLS-1$
 
 				button.addSelectionListener(new SelectionListener() {
+					private final TableItem tItem = item;
 
 					@Override
 					public void widgetSelected(final SelectionEvent e) {
-						final Required req = (Required) item.getData();
+						final Required req = (Required) tItem.getData();
 						LibraryManager.INSTANCE.updateLibrary(manifestFile.getProject(), req.getSymbolicName(),
 								req.getVersion());
 					}

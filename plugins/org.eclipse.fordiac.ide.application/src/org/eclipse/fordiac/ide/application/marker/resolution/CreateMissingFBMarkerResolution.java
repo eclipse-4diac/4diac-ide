@@ -67,7 +67,7 @@ public class CreateMissingFBMarkerResolution extends AbstractErrorMarkerResoluti
 	public void run(final IMarker[] markers, final IProgressMonitor monitor) {
 		// save Error-Objects for new Type has same name
 		for (final IMarker marker : markers) {
-			targets.add(FordiacErrorMarker.getTarget(marker));
+			targets.add(getTargetElement(marker));
 		}
 
 		final String errorName = FordiacErrorMarker.getData(this.marker)[0];

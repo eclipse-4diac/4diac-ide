@@ -72,6 +72,8 @@ import com.google.common.base.Objects;
 
 public class FordiacResourceChangeListener implements IResourceChangeListener {
 
+	private static final boolean ENABLE_COPY_DIALOG = false;
+
 	private static class FileToRenameEntry {
 
 		private final IFile filetoRename;
@@ -277,7 +279,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					updateTypeEntry(file, entry);
 					return;
 				}
-				if (fileExists(file, delta)) {
+				if (ENABLE_COPY_DIALOG && fileExists(file, delta)) {
 					Display.getDefault().syncExec(() -> {
 						openRenameDialog(file, entry);
 					});

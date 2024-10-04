@@ -360,6 +360,11 @@
         <genParameters ecoreParameter="lib.ecore#//ErrorMarkerInterface/validateValue/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//ErrorMarkerInterface/validateValue/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerInterface/validateAttributes"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceAnnotations.validateAttributes(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//ErrorMarkerInterface/validateAttributes/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//ErrorMarkerInterface/validateAttributes/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Event">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Event/with"/>

@@ -17,11 +17,20 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.Adapters;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.markers.WorkbenchMarkerResolution;
 
 public abstract class AbstractErrorMarkerResolution extends WorkbenchMarkerResolution {
@@ -60,5 +69,21 @@ public abstract class AbstractErrorMarkerResolution extends WorkbenchMarkerResol
 
 	public TypeLibrary getTypeLibrary() {
 		return TypeLibraryManager.INSTANCE.getTypeLibrary(marker.getResource().getProject());
+	}
+
+	protected static EObject getTargetElement(final IMarker marker) {
+		final URI uri = FordiacErrorMarker.getTargetUri(marker);
+		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri);
+
+		final IEditorPart editor = Display.getDefault().syncCall(() -> PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage().findEditor(new FileEditorInput(typeEntry.getFile())));
+
+		LibraryElement libElement;
+		if (editor != null) {
+			libElement = Adapters.adapt(editor, LibraryElement.class);
+		} else {
+			libElement = typeEntry.copyType();
+		}
+		return libElement.eResource().getEObject(uri.fragment());
 	}
 }

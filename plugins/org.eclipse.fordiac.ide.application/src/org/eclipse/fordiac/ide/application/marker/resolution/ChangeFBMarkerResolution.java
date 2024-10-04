@@ -18,15 +18,14 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
-import org.eclipse.fordiac.ide.model.ui.nat.FBTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.FBTreeNodeLabelProvider;
+import org.eclipse.fordiac.ide.model.ui.nat.FBTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.window.Window;
@@ -52,7 +51,8 @@ public class ChangeFBMarkerResolution extends AbstractErrorMarkerResolution {
 		}
 
 		if (selectedEntry != null) {
-			final EObject target = FordiacErrorMarker.getTarget(marker);
+			final EObject target = getTargetElement(marker);
+
 			if (target instanceof final FB fb && fb.eContainer() instanceof final BaseFBType base
 					&& base.getInternalFbs().contains(fb)) {
 				AbstractLiveSearchContext.executeAndSave(new UpdateInternalFBCommand(fb, selectedEntry), fb,

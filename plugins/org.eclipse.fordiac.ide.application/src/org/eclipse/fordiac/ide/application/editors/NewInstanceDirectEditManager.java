@@ -94,9 +94,9 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 	public void show(final String initialValue) {
 		this.initialValue = initialValue;
 		super.show();
-		if (null != initialValue) {
+		if (initialValue != null) {
 			final Text text = getCellEditor().getText();
-			text.selectAll();
+			text.setSelection(text.getText().length());
 			setDirty(true);
 		}
 	}

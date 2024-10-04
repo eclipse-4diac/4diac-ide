@@ -551,7 +551,15 @@
           id="org.eclipse.fordiac.ide.application.commands.moveThroughHierarchy"
           name="Move elements through hierarchy">
     </command>
-
+    <command
+          categoryId="org.eclipse.fordiac.ide.commands.category"
+          id="org.eclipse.fordiac.ide.application.commands.toggleJumpStep"
+          name="Toggle Step Mode"
+          defaultHandler="org.eclipse.fordiac.ide.application.handlers.ToggleJumpStepHandler">
+      <state class="org.eclipse.ui.handlers.RegistryToggleState"
+             id="org.eclipse.ui.commands.toggleState">
+      </state>
+    </command>
   </extension>
   
   <extension point="org.eclipse.ui.commandImages">
@@ -1165,6 +1173,11 @@
     <menuContribution locationURI="toolbar:org.eclipse.ui.workbench.navigate">
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotochild"/>
+      <command 
+      	commandId="org.eclipse.fordiac.ide.application.commands.toggleJumpStep"
+      	tooltip="Toggle Step Mode"
+      	icon="platform:/plugin/org.eclipse.egit.ui/icons/elcl16/skip.png"
+      	style="toggle"/>
     </menuContribution>
     <menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.edit">
       <command commandId="org.eclipse.fordiac.ide.application.commands.insertFB" >
