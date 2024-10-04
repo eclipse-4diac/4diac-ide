@@ -30,10 +30,28 @@ public final class ErrorMarkerInterfaceAnnotations {
 		if (element.getValue() != null && element.getValue().getValue() != null
 				&& !element.getValue().getValue().isBlank()) {
 			if (diagnostics != null) {
-				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-						LibraryElementValidator.ERROR_MARKER_INTERFACE__VALIDATE_VALUE,
-						MessageFormat.format(Messages.ErrorMarkerInterfaceAnnotations_MissingVariableForValue, element.getValue().getValue()),
-						FordiacMarkerHelper.getDiagnosticData(element)));
+				diagnostics
+						.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+								LibraryElementValidator.ERROR_MARKER_INTERFACE__VALIDATE_VALUE,
+								MessageFormat.format(Messages.ErrorMarkerInterfaceAnnotations_MissingVariableForValue,
+										element.getValue().getValue()),
+								FordiacMarkerHelper.getDiagnosticData(element)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean validateAttributes(final ErrorMarkerInterface element, final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
+		if (!element.getAttributes().isEmpty()) {
+			if (diagnostics != null) {
+				element.getAttributes()
+						.forEach(attribute -> diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR,
+								LibraryElementValidator.DIAGNOSTIC_SOURCE,
+								LibraryElementValidator.ERROR_MARKER_INTERFACE__VALIDATE_ATTRIBUTES,
+								MessageFormat.format(Messages.ErrorMarkerInterfaceAnnotations_MissingVariableForAttribute, attribute.getName()),
+								FordiacMarkerHelper.getDiagnosticData(element))));
 			}
 			return false;
 		}
