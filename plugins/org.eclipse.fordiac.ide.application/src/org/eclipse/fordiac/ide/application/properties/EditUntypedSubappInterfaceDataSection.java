@@ -131,25 +131,6 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 		inputTable.configure();
 	}
 
-//	@Override
-//	public void setupInputTable(final Group inputsGroup) {
-//		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
-//				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG_AND_RETAIN));
-//		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
-//				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG_AND_RETAIN);
-//		inputDataLayer.setConfigLabelAccumulator(
-//				new VarDeclarationConfigLabelAccumulator(inputProvider, this::getAnnotationModel,
-//						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG_AND_RETAIN));
-//		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-//				new NatTableColumnProvider<>(
-//						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG_AND_RETAIN),
-//				getSectionEditableRule(), null, this, true);
-//		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
-//		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
-//		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
-//		inputTable.configure();
-//	}
-
 	@Override
 	protected SubApp getInputType(final Object input) {
 		return SubappPropertySectionFilter.getFBNetworkElementFromSelectedElement(input);
