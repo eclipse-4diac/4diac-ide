@@ -166,7 +166,7 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<ICallable> {
 		method.getInOutParameters().stream().map(STVarDeclaration.class::cast)
 				.filter(STAlgorithmPartitioner::isValidParameter).map(this::convertInOutParameter)
 				.forEachOrdered(result.getInOutParameters()::add);
-		result.setReturnType(resolveDataType(method.getReturnType(), method));
+		result.setReturnType(resolveDataType(method.getReturnType(), method, null));
 		result.setText(node.getText());
 		return result;
 	}
