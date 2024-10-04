@@ -206,13 +206,12 @@ public abstract class TemplateExportFilter extends ExportFilter {
 	}
 
 	private static void openMergeEditor(final Iterable<StoredFiles> writtenFiles) throws ExportException {
-		final ICompareEditorOpener opener = CompareEditorOpenerUtil.getOpener();
-		if (null == opener) {
-			throw new ExportException(Messages.TemplateExportFilter_MERGE_EDITOR_FAILED);
-		}
-
 		for (final StoredFiles sf : writtenFiles) {
 			if ((null != sf.newFile()) && (null != sf.oldFile())) {
+				final ICompareEditorOpener opener = CompareEditorOpenerUtil.getOpener();
+				if (null == opener) {
+					throw new ExportException(Messages.TemplateExportFilter_MERGE_EDITOR_FAILED);
+				}
 				opener.setName(sf.newFile().getName());
 				opener.setTitle(sf.newFile().getName());
 				opener.setNewFile(sf.newFile());
