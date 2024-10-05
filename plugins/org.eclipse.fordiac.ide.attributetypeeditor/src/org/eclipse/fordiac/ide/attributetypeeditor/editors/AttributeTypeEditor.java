@@ -527,9 +527,4 @@ public class AttributeTypeEditor extends EditorPart implements CommandStackEvent
 		setInputWithNotify(input);
 	}
 
-	@Override
-	public LibraryElement getEditedElement() {
-		return attributeDeclaration;
-	}
-
 }

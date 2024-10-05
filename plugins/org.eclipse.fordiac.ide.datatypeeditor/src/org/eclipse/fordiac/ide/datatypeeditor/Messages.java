@@ -15,19 +15,11 @@ package org.eclipse.fordiac.ide.datatypeeditor;
 
 import org.eclipse.osgi.util.NLS;
 
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.datatypeeditor.messages"; //$NON-NLS-1$
-	public static String MessageDialogTitle_SaveError;
-	public static String MessageDialogContent_SaveError;
-	public static String ErrorCompositeMessage;
-	public static String MessageDialogTitle_OutsideWorkspaceError;
-	public static String MessageDialogContent_OutsideWorkspaceError;
-	public static String StructAlteringButton_SaveAndUpdate;
-	public static String StructAlteringButton_SaveAs;
-	public static String StructAlteringDescription;
-	public static String StructViewingComposite_Headline;
-	public static String WarningDialog_StructNotSaved;
+
+	public static String DataTypeEditorPage_DataType;
 
 	static {
 		// initialize resource bundle

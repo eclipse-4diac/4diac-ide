@@ -24,6 +24,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Objects;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -42,7 +43,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.dialog.AbstractTypeEntryDataHandler;
-import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -84,8 +84,8 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 
-public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor implements CommandStackEventListener,
-		ITabbedPropertySheetPageContributor, ITypeEntryEditor, ISelectionListener {
+public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor implements IGotoMarker,
+		CommandStackEventListener, ITabbedPropertySheetPageContributor, ITypeEntryEditor, ISelectionListener {
 
 	private static final int DEFAULT_BUTTON_INDEX = 0; // Save Button
 	private static final int CANCEL_BUTTON_INDEX = 1;
@@ -145,15 +145,14 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		return new TypeMultiPageEditorSite(this, editor);
 	}
 
-	protected abstract AbstractTypeEntryDataHandler<? extends TypeEntry> createTypeEntryDataHandler(
-			TypeEntry typeEntry);
+	protected abstract AbstractTypeEntryDataHandler<? extends TypeEntry> createTypeEntryDataHandler();
 
 	private MessageDialog createTypeUpdateDialog() {
 		final String[] labels = { Messages.TypeEditor_TypeUpdateDialog_SaveAndUpdate, SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
 		return new FBTypeUpdateDialog<>(getSite().getShell(), Messages.TypeEditor_TypeUpdateDialog_Headline,
 				Messages.TypeEditor_TypeUpdateDialog_Description, labels, DEFAULT_BUTTON_INDEX,
-				new FBTypeEntryDataHandler(getTypeEntry()));
+				createTypeEntryDataHandler());
 	}
 
 	@Override
@@ -303,6 +302,19 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	protected TypeEntry getTypeEntry() {
 		final TypeEditorInput ei = getEditorInput();
 		return (ei != null) ? ei.getTypeEntry() : null;
+	}
+
+	@Override
+	public void gotoMarker(final IMarker marker) {
+		int i = 0;
+		for (final ITypeEditorPage editorPart : getEditorPages()) {
+			if (editorPart.isMarkerTarget(marker)) {
+				setActivePage(i);
+				editorPart.gotoMarker(marker);
+				break;
+			}
+			i++;
+		}
 	}
 
 	public void handleContentOutlineSelection(final ISelection selection) {
