@@ -15,11 +15,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typeeditor;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ide.IGotoMarker;
 
@@ -64,6 +66,13 @@ public interface ITypeEditorPage extends ISelectionListener, IEditorPart, IGotoM
 	default TypeEntry getTypeEntry() {
 		if (getEditorInput() instanceof final TypeEditorInput typeEI) {
 			return typeEI.getTypeEntry();
+		}
+		return null;
+	}
+
+	default IFile getFile() {
+		if (getEditorInput() instanceof final IFileEditorInput fileEI) {
+			return fileEI.getFile();
 		}
 		return null;
 	}
