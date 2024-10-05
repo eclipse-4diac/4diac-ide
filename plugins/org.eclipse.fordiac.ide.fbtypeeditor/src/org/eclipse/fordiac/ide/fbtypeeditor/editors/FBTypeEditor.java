@@ -22,7 +22,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -33,12 +32,10 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.search.dialog.AbstractTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typeeditor.AbstractTypeEditor;
-import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.contentoutline.MultiPageEditorContentOutlinePage;
 import org.eclipse.gef.commands.Command;
@@ -50,7 +47,7 @@ import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-public class FBTypeEditor extends AbstractTypeEditor implements IGotoMarker, INavigationLocationProvider {
+public class FBTypeEditor extends AbstractTypeEditor implements INavigationLocationProvider {
 
 	private IContentOutlinePage contentOutline = null;
 
@@ -70,8 +67,8 @@ public class FBTypeEditor extends AbstractTypeEditor implements IGotoMarker, INa
 	}
 
 	@Override
-	protected AbstractTypeEntryDataHandler<? extends TypeEntry> createTypeEntryDataHandler(final TypeEntry typeEntry) {
-		return new FBTypeEntryDataHandler(typeEntry);
+	protected AbstractTypeEntryDataHandler<? extends TypeEntry> createTypeEntryDataHandler() {
+		return new FBTypeEntryDataHandler(getTypeEntry());
 	}
 
 	private void performPresaveHooks() {
@@ -138,19 +135,6 @@ public class FBTypeEditor extends AbstractTypeEditor implements IGotoMarker, INa
 	}
 
 	@Override
-	public void gotoMarker(final IMarker marker) {
-		int i = 0;
-		for (final ITypeEditorPage editorPart : getEditorPages()) {
-			if (editorPart.isMarkerTarget(marker)) {
-				setActivePage(i);
-				editorPart.gotoMarker(marker);
-				break;
-			}
-			i++;
-		}
-	}
-
-	@Override
 	public INavigationLocation createEmptyNavigationLocation() {
 		return null;
 	}
@@ -184,11 +168,6 @@ public class FBTypeEditor extends AbstractTypeEditor implements IGotoMarker, INa
 						&& fbType.getInterfaceList().equals(changeIFCmd.getInterfaceElement().eContainer()))
 				|| (cmd instanceof final ChangeNameCommand chgNameCmd
 						&& fbType.getInterfaceList().equals(chgNameCmd.getElement().eContainer())));
-	}
-
-	@Override
-	public LibraryElement getEditedElement() {
-		return getType();
 	}
 
 	@Override

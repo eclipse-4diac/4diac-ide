@@ -14,6 +14,18 @@
       </editor>
    </extension>
    <extension
+         point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">
+      <editorPage
+            class="org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditorPage"
+            sortIndex="20">
+         <enablement>
+            <instanceof
+                  value="org.eclipse.fordiac.ide.model.data.AnyDerivedType">
+            </instanceof>            
+         </enablement>
+      </editorPage>
+   </extension>
+   <extension
          point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
       <propertyContributor
             contributorId="org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor">
