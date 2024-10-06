@@ -1280,17 +1280,6 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="setDocumentation">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.setDocumentation(this, value);"/>
-      </eAnnotations>
-      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </eOperations>
-    <eOperations name="getDocumentation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.getDocumentation(this);"/>
-      </eAnnotations>
-    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interfaceList" lowerBound="1"
         eType="#//InterfaceList" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -1668,6 +1657,17 @@
     <eOperations name="getTypeLibrary" lowerBound="1" eType="#//TypeLibrary">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="if (null != getTypeEntry()) {&#xA;&#x9;return getTypeEntry().getTypeLibrary();&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setDocumentation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementAnnotations.setDocumentation(this, value);"/>
+      </eAnnotations>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getDocumentation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementAnnotations.getDocumentation(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="versionInfo" upperBound="-1"

@@ -225,26 +225,6 @@ public class FBTypeImpl extends LibraryElementImpl implements FBType {
 	 * @generated
 	 */
 	@Override
-	public void setDocumentation(final String value) {
-		org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.setDocumentation(this, value);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getDocumentation() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.getDocumentation(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:

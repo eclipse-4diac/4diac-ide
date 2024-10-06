@@ -585,6 +585,26 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	 * @generated
 	 */
 	@Override
+	public void setDocumentation(final String value) {
+		org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementAnnotations.setDocumentation(this, value);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getDocumentation() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementAnnotations.getDocumentation(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public void setAttribute(final String attributeName, final DataType type, final String value, final String comment) {
 		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
 	}
