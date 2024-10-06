@@ -20,14 +20,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPersistableElement;
+import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.part.FileEditorInputFactory;
 
 /**
  * An EditorInput for opening any type file with specified content. The equals
  * method is adapted that EditorInput is equal to another EditorInput if the
  * content is equal.
  */
-public class TypeEditorInput implements IFileEditorInput {
+public class TypeEditorInput implements IFileEditorInput, IPersistableElement {
 	private LibraryElement type;
 	private final TypeEntry entry;
 
@@ -53,7 +56,7 @@ public class TypeEditorInput implements IFileEditorInput {
 
 	@Override
 	public IPersistableElement getPersistable() {
-		return null;
+		return this;
 	}
 
 	@Override
@@ -95,6 +98,11 @@ public class TypeEditorInput implements IFileEditorInput {
 		return getFile().hashCode();
 	}
 
+	@Override
+	public void saveState(final IMemento memento) {
+		FileEditorInputFactory.saveState(memento, new FileEditorInput(getFile()));
+	}
+
 	public void setType(final LibraryElement fbType) {
 		this.type = fbType;
 	}
@@ -105,7 +113,13 @@ public class TypeEditorInput implements IFileEditorInput {
 	}
 
 	@Override
+	public String getFactoryId() {
+		return FileEditorInputFactory.getFactoryId();
+	}
+
+	@Override
 	public IFile getFile() {
 		return entry.getFile();
 	}
+
 }
