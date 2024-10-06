@@ -28,8 +28,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDocumentationCommand;
+import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
 import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -55,7 +55,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 import org.osgi.framework.Bundle;
 
-public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
+public class DescriptionEditor extends EditorPart implements ITypeEditorPage {
 	// @formatter:off
 	private static final String TOOLBAR_GROUP_CONFIGURATION =
 				"""
