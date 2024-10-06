@@ -17,16 +17,16 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeDocumentationCommand extends Command implements ScopedCommand {
 
-	private final FBType type;
+	private final LibraryElement type;
 	private final String newDocumentation;
 	private String oldDocumentation;
 
-	public ChangeDocumentationCommand(final FBType type, final String newDocumenation) {
+	public ChangeDocumentationCommand(final LibraryElement type, final String newDocumenation) {
 		this.type = Objects.requireNonNull(type);
 		this.newDocumentation = (null == newDocumenation) ? "" : newDocumenation; //$NON-NLS-1$
 	}
