@@ -17,6 +17,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.ui.UIPlugin;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -31,10 +33,13 @@ public abstract class AbstractFollowTargetPinConnectionHandler extends FollowCon
 		final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 
-		final TargetInterfaceElementEditPart targetIEEditPart = (TargetInterfaceElementEditPart) ((IStructuredSelection) selection)
+		final TargetInterfaceElementEditPart targetIEEditPart = (TargetInterfaceElementEditPart) selection
 				.getFirstElement();
 
-		if (useTargetRefElement(targetIEEditPart)) {
+		final boolean stepMode = UIPlugin.getDefault().getPreferenceStore()
+				.getBoolean(PreferenceConstants.P_TOGGLE_JUMP_STEP);
+
+		if (useTargetRefElement(targetIEEditPart) && !stepMode) {
 			// select the element the target pin is referring to
 			selectInterfaceElement(targetIEEditPart.getModel().getRefElement(), editor);
 		} else {

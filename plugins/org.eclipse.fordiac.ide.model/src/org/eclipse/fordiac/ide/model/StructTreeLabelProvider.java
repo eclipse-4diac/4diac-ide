@@ -32,7 +32,7 @@ public class StructTreeLabelProvider extends LabelProvider implements ITableLabe
 			case 0:
 				return memVar.getName();
 			case 1:
-				return memVar.getTypeName();
+				return memVar.getFullTypeName();
 			case 2:
 				return memVar.getComment();
 			default:

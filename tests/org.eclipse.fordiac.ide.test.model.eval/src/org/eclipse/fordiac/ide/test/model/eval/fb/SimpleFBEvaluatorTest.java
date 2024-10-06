@@ -174,6 +174,22 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 	}
 
 	@Test
+	void testMethodCallThisVariableAccess() throws EvaluatorException, InterruptedException {
+		assertEquals(toDIntValue(21),
+				evaluateSimpleFB(List.of(newSTAlgorithm("THIS.TEST_METHOD(A := DI1, B := DI2);", "REQ"), newSTMethod("""
+						METHOD TEST_METHOD
+						VAR_INPUT
+							A: DINT;
+							B: DINT;
+						END_VAR
+						THIS.DO1 := A + B;
+						END_METHOD
+						""", "TEST_METHOD")), "REQ",
+						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
+	}
+
+	@Test
 	void testMethodCallWithDefaultInput() throws EvaluatorException, InterruptedException {
 		assertEquals(toDIntValue(21),
 				evaluateSimpleFB(List.of(newSTAlgorithm("THIS.TEST_METHOD(A := DI1, C => DO1);", "REQ"), newSTMethod("""
@@ -666,6 +682,190 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						FB1(DI1 := DI1);
 						FB1(DI1 := DI2);
 						FB1.REQ(DI1 := FB1.DO1, DO1 => DO1);
+						""", "REQ")), "REQ",
+						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
+								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
+						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
+						List.of(internalFB)).getVariables().get("DO1").getValue());
+	}
+
+	@Test
+	void testFunctionFBCall() throws EvaluatorException, InterruptedException {
+		final FB internalFB = newFB("FB1",
+				newFunctionFBType("TEST_FUNC",
+						List.of(newVarDeclaration("DI1", ElementaryTypes.DINT, true),
+								newVarDeclaration("DI2", ElementaryTypes.DINT, true),
+								newVarDeclaration("", ElementaryTypes.DINT, false)),
+						"""
+								FUNCTION TEST_FUNC : DINT
+								VAR_INPUT
+									DI1 : DINT;
+									DI2 : DINT;
+								END_VAR
+								TEST_FUNC := DI1 + DI2;
+								END_FUNCTION
+								"""));
+		assertEquals(toDIntValue(21),
+				evaluateSimpleFB(List.of(newSTAlgorithm("""
+						DO1 := FB1(DI1, DI2);
+						""", "REQ")), "REQ",
+						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
+								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
+						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
+						List.of(internalFB)).getVariables().get("DO1").getValue());
+	}
+
+	@Test
+	void testFunctionFBCallFormal() throws EvaluatorException, InterruptedException {
+		final FB internalFB = newFB("FB1",
+				newFunctionFBType("TEST_FUNC",
+						List.of(newVarDeclaration("DI1", ElementaryTypes.DINT, true),
+								newVarDeclaration("DI2", ElementaryTypes.DINT, true),
+								newVarDeclaration("", ElementaryTypes.DINT, false)),
+						"""
+								FUNCTION TEST_FUNC : DINT
+								VAR_INPUT
+									DI1 : DINT;
+									DI2 : DINT;
+								END_VAR
+								TEST_FUNC := DI1 + DI2;
+								END_FUNCTION
+								"""));
+		assertEquals(toDIntValue(21),
+				evaluateSimpleFB(List.of(newSTAlgorithm("""
+						DO1 := FB1(DI1 := 17, DI2 := 4);
+						""", "REQ")), "REQ",
+						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
+								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
+						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
+						List.of(internalFB)).getVariables().get("DO1").getValue());
+	}
+
+	@Test
+	void testFunctionFBCallEvent() throws EvaluatorException, InterruptedException {
+		final FB internalFB = newFB("FB1",
+				newFunctionFBType("TEST_FUNC",
+						List.of(newVarDeclaration("DI1", ElementaryTypes.DINT, true),
+								newVarDeclaration("DI2", ElementaryTypes.DINT, true),
+								newVarDeclaration("", ElementaryTypes.DINT, false)),
+						"""
+								FUNCTION TEST_FUNC : DINT
+								VAR_INPUT
+									DI1 : DINT;
+									DI2 : DINT;
+								END_VAR
+								TEST_FUNC := DI1 + DI2;
+								END_FUNCTION
+								"""));
+		assertEquals(toDIntValue(21),
+				evaluateSimpleFB(List.of(newSTAlgorithm("""
+						DO1 := FB1.REQ(DI1, DI2);
+						""", "REQ")), "REQ",
+						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
+								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
+						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
+						List.of(internalFB)).getVariables().get("DO1").getValue());
+	}
+
+	@Test
+	void testFunctionFBCallEventFormal() throws EvaluatorException, InterruptedException {
+		final FB internalFB = newFB("FB1",
+				newFunctionFBType("TEST_FUNC",
+						List.of(newVarDeclaration("DI1", ElementaryTypes.DINT, true),
+								newVarDeclaration("DI2", ElementaryTypes.DINT, true),
+								newVarDeclaration("", ElementaryTypes.DINT, false)),
+						"""
+								FUNCTION TEST_FUNC : DINT
+								VAR_INPUT
+									DI1 : DINT;
+									DI2 : DINT;
+								END_VAR
+								TEST_FUNC := DI1 + DI2;
+								END_FUNCTION
+								"""));
+		assertEquals(toDIntValue(21),
+				evaluateSimpleFB(List.of(newSTAlgorithm("""
+						DO1 := FB1.REQ(DI1 := DI1, DI2 := DI2);
+						""", "REQ")), "REQ",
+						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
+								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
+						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
+						List.of(internalFB)).getVariables().get("DO1").getValue());
+	}
+
+	@Test
+	void testFunctionFBCallNestedExpression() throws EvaluatorException, InterruptedException {
+		final FB internalFB = newFB("FB1",
+				newFunctionFBType("TEST_FUNC",
+						List.of(newVarDeclaration("DI1", ElementaryTypes.DINT, true),
+								newVarDeclaration("DI2", ElementaryTypes.DINT, true),
+								newVarDeclaration("", ElementaryTypes.DINT, false)),
+						"""
+								FUNCTION TEST_FUNC : DINT
+								VAR_INPUT
+									DI1 : DINT;
+									DI2 : DINT;
+								END_VAR
+								TEST_FUNC := DI1 + DI2;
+								END_FUNCTION
+								"""));
+		assertEquals(toDIntValue(42),
+				evaluateSimpleFB(List.of(newSTAlgorithm("""
+						DO1 := FB1(DI1, DI2) * 2;
+						""", "REQ")), "REQ",
+						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
+								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
+						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
+						List.of(internalFB)).getVariables().get("DO1").getValue());
+	}
+
+	@Test
+	void testFunctionFBCallNestedCall() throws EvaluatorException, InterruptedException {
+		final FB internalFB = newFB("FB1",
+				newFunctionFBType("TEST_FUNC",
+						List.of(newVarDeclaration("DI1", ElementaryTypes.DINT, true),
+								newVarDeclaration("DI2", ElementaryTypes.DINT, true),
+								newVarDeclaration("", ElementaryTypes.DINT, false)),
+						"""
+								FUNCTION TEST_FUNC : DINT
+								VAR_INPUT
+									DI1 : DINT;
+									DI2 : DINT;
+								END_VAR
+								TEST_FUNC := DI1 + DI2;
+								END_FUNCTION
+								"""));
+		assertEquals(toDIntValue(42),
+				evaluateSimpleFB(List.of(newSTAlgorithm("""
+						DO1 := MUL(FB1(DI1, DI2), 2);
+						""", "REQ")), "REQ",
+						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
+								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
+						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
+						List.of(internalFB)).getVariables().get("DO1").getValue());
+	}
+
+	@Test
+	void testFunctionFBCallVariables() throws EvaluatorException, InterruptedException {
+		final FB internalFB = newFB("FB1",
+				newFunctionFBType("TEST_FUNC",
+						List.of(newVarDeclaration("DI1", ElementaryTypes.DINT, true),
+								newVarDeclaration("DI2", ElementaryTypes.DINT, true),
+								newVarDeclaration("", ElementaryTypes.DINT, false)),
+						"""
+								FUNCTION TEST_FUNC : DINT
+								VAR_INPUT
+									DI1 : DINT;
+									DI2 : DINT;
+								END_VAR
+								TEST_FUNC := DI1 + DI2;
+								END_FUNCTION
+								"""));
+		assertEquals(toDIntValue(42),
+				evaluateSimpleFB(List.of(newSTAlgorithm("""
+						FB1.DI1 := DI1;
+						FB1.DI2 := DI2;
+						DO1 := MUL(FB1(), 2);
 						""", "REQ")), "REQ",
 						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
 								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),

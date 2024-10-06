@@ -35,6 +35,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.fordiac.ide.ui.UIPlugin;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.ISelection;
@@ -87,11 +89,23 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	}
 
 	protected List<IInterfaceElement> getConnectionOposites(final InterfaceEditPart iep) {
+		final IInterfaceElement ie = iep.getModel();
+		final EList<Connection> connList = getConnectionList(ie);
+
+		final boolean stepMode = UIPlugin.getDefault().getPreferenceStore()
+				.getBoolean(PreferenceConstants.P_TOGGLE_JUMP_STEP);
+
+		if (stepMode) {
+			if (isLeft()) {
+				return connList.stream().map(Connection::getSource).toList();
+			}
+			return connList.stream().map(Connection::getDestination).toList();
+		}
+
 		if (useTargetPins(iep)) {
 			return getTargetPins(iep);
 		}
-		final IInterfaceElement ie = iep.getModel();
-		final EList<Connection> connList = getConnectionList(ie);
+
 		return connList.stream().map(con -> (con.getSource().equals(ie) ? con.getDestination() : con.getSource()))
 				.toList();
 	}
@@ -148,7 +162,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		selectInterfaceElement(opposites.getFirst(), editor);
 		viewer.flush();
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-		final IFigure figure = ((InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement()).getFigure();
+		final IFigure figure = ((InterfaceEditPart) selection.getFirstElement()).getFigure();
 		final OppositeSelectionDialog dialog = new OppositeSelectionDialog(opposites, originPin, viewer.getControl(),
 				figure, editor);
 		dialog.open();

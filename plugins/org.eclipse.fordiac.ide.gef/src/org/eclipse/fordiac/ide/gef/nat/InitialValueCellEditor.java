@@ -41,6 +41,10 @@ public class InitialValueCellEditor extends XtextStyledTextCellEditor {
 
 	@Override
 	protected IEditedResourceProvider createEditedResourceProvider() {
-		return new STAlgorithmInitialValueEditedResourceProvider(dataProvider.getRowObject(getRowIndex()));
+		return new STAlgorithmInitialValueEditedResourceProvider(getRowObject());
+	}
+
+	protected ITypedElement getRowObject() {
+		return dataProvider.getRowObject(getRowIndex());
 	}
 }

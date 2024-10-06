@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Prashantkumar Khatri
+ * Copyright (c) 2024 Prashantkumar Khatri, Andrea Zoitl
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,10 +10,12 @@
  * Contributors:
  *
  *   Prashantkumar Khatri - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl - Creation of a fluid API design for UI SWTBot testing
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui.fbtype;
 
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
+import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotNatTable;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -23,12 +25,13 @@ import org.junit.jupiter.api.BeforeEach;
 
 public class DataTypeEditorTests extends NatTableWithoutEditorBehaviorTests {
 
+	public DataTypeEditorTests() {
+		super(UITestNamesHelper.VAR1, UITestNamesHelper.VAR2, UITestNamesHelper.VAR3);
+	}
+
 	@Override
 	@BeforeEach
 	public void operationsInitialization() {
-		TESTVAR1 = UITestNamesHelper.VAR1;
-		TESTVAR2 = UITestNamesHelper.VAR2;
-		TESTVAR3 = UITestNamesHelper.VAR3;
 
 		final SWTBotFBType fbTypeBot = new SWTBotFBType(bot);
 		fbTypeBot.createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
@@ -37,7 +40,7 @@ public class DataTypeEditorTests extends NatTableWithoutEditorBehaviorTests {
 
 		final Composite tableComposite = (Composite) bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).getWidget();
 		natTable = bot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), tableComposite);
-		natTableBot = new SWTBot4diacNatTable(natTable);
-		NatTableHelper.createNewVariableInDataTypeEditor(natTableBot);
+		swt4diacNatTable = new SWTBot4diacNatTable(natTable);
+		new SWTBotNatTable(bot, swt4diacNatTable).createNewVariableInDataTypeEditor();
 	}
 }

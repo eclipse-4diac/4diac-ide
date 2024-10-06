@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- *                          Johannes Kepler University Linz
+ * Copyright (c) 2008 - 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                           Johannes Kepler University Linz
+ *                           Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Extract export process into own class for better code
  *                 readability and addressing several sonar issues
+ *   Ernst Blecha - Add "Overwrite All" and "Cancel All"
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.ui.wizard;
 
@@ -121,8 +123,8 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		private final List<IFile> exportees;
 		private final String outputDirectory;
 		private final IConfigurationElement conf;
-		private final boolean overwriteWithoutWarning;
-		private final boolean enableCMakeLists;
+		private boolean overwriteWithoutWarning;
+		private boolean enableCMakeLists;
 
 		public Exporter(final IConfigurationElement conf, final List<IFile> exportees, final String outputDirectory,
 				final boolean overwriteWithoutWarning, final boolean enableCMakeLists) {
@@ -141,14 +143,29 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 			final IExportFilter filter = createExportFilter();
 			if (null != filter) {
 				for (final IFile file : exportees) {
+
 					if (monitor.isCanceled()) {
 						break;
 					}
-					exportElement(monitor, filter, file, null);
+					try {
+						exportElement(monitor, filter, file, null);
+					} catch (final ExportException.OverwriteAll e) {
+						overwriteWithoutWarning = true;
+					} catch (final ExportException.CancelAll e) {
+						enableCMakeLists = false;
+						break;
+					} catch (final ExportException.UserInteraction e) {
+						// noop
+					}
 					monitor.worked(1);
 				}
 				if (enableCMakeLists && !monitor.isCanceled()) {
-					exportElement(monitor, filter, null, new CMakeListsMarker());
+					try {
+						exportElement(monitor, filter, null, new CMakeListsMarker());
+					} catch (final ExportException.UserInteraction e) {
+						// noop
+					}
+					monitor.worked(1);
 				}
 				monitor.worked(1);
 				if (monitor.isCanceled()) {
@@ -160,7 +177,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		}
 
 		private void exportElement(final IProgressMonitor monitor, final IExportFilter filter, final IFile file,
-				final EObject source) {
+				final EObject source) throws ExportException.UserInteraction {
 			try {
 				if (source instanceof CMakeListsMarker) {
 					monitor.subTask(Messages.FordiacExportWizard_ExportingCMakeLists);
@@ -176,6 +193,8 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 					monitor.subTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingType, name));
 					filter.export(file, outputDirectory, overwriteWithoutWarning, source);
 				}
+			} catch (final ExportException.UserInteraction e) {
+				throw (e);
 			} catch (final ExportException e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 				final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());

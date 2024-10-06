@@ -16,7 +16,7 @@
 
 package org.eclipse.fordiac.ide.test.ui.helpers;
 
-public final class PinNamesHelper {
+public final class UITestPinHelper {
 
 	// FB pins and values in alphabetical order and length
 

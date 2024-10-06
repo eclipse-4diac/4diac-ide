@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="SCALE_LIM" Comment="Scaling Function Block with limits">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH   &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;" >
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2024-09-19">
+	</VersionInfo>
+	<CompilerInfo packageName="signalprocessing">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="IN"/>
+				<With Var="MAX_IN"/>
+				<With Var="MIN_IN"/>
+				<With Var="MAX_IN_LIM"/>
+				<With Var="MIN_IN_LIM"/>
+				<With Var="MAX_OUT"/>
+				<With Var="MIN_OUT"/>
+				<With Var="MAX_OUT_FIX"/>
+				<With Var="MIN_OUT_FIX"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="REAL" Comment="Input to be Scaled"/>
+			<VarDeclaration Name="MAX_IN" Type="REAL" Comment="Maximum Input"/>
+			<VarDeclaration Name="MIN_IN" Type="REAL" Comment="Minimum Input"/>
+			<VarDeclaration Name="MAX_IN_LIM" Type="REAL" Comment="Maximum Input Limit, if IN is bigger, Output is MAX2_ESC"/>
+			<VarDeclaration Name="MIN_IN_LIM" Type="REAL" Comment="Minimum Input Limit, if IN is smaller, Output is MIN2_ESC"/>
+			<VarDeclaration Name="MAX_OUT" Type="REAL" Comment="Maximum Ouput"/>
+			<VarDeclaration Name="MIN_OUT" Type="REAL" Comment="Minimum Output"/>
+			<VarDeclaration Name="MAX_OUT_FIX" Type="REAL" Comment="Maximum Ouput Fix Value, ist set if IN is bigger than MAX_IN_LIM"/>
+			<VarDeclaration Name="MIN_OUT_FIX" Type="REAL" Comment="Minimum Output Fix Value, ist set if IN is smaller than MIN_IN_LIM"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="" Type="REAL" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[PACKAGE signalprocessing;
+
+(* Scaling Function Block with limits *)
+FUNCTION SCALE_LIM : REAL
+VAR_INPUT
+	IN : REAL;    // Input to be Scaled
+	MAX_IN : REAL;    // Maximum Input
+	MIN_IN : REAL;    // Minimum Input
+	MAX_IN_LIM : REAL;    // Maximum Input Limit, if IN is bigger, Output is MAX2_ESC
+	MIN_IN_LIM : REAL;    // Minimum Input Limit, if IN is smaller, Output is MIN2_ESC
+	MAX_OUT : REAL;    // Maximum Ouput
+	MIN_OUT : REAL;    // Minimum Output
+	MAX_OUT_FIX : REAL;    // Maximum Ouput Fix Value, ist set if IN is bigger than MAX_IN_LIM
+	MIN_OUT_FIX : REAL;    // Minimum Output Fix Value, ist set if IN is smaller than MIN_IN_LIM
+END_VAR
+
+IF (IN < MIN_IN_LIM) THEN
+	SCALE_LIM := MIN_OUT_FIX;
+ELSIF (IN > MAX_IN_LIM) THEN
+	SCALE_LIM := MAX_OUT_FIX;
+ELSE
+	SCALE_LIM := (IN - MIN_IN) * (MAX_OUT - MIN_OUT) / (MAX_IN - MIN_IN) + MIN_OUT;
+END_IF;
+
+END_FUNCTION
+
+]]></ST>
+	</FunctionBody>
+</Function>

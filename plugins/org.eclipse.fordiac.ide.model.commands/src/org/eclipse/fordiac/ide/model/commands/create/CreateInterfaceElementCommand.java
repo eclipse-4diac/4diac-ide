@@ -85,6 +85,11 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 		this(dataType, name, interfaceList, isInput, false, index);
 	}
 
+	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
+			final boolean isInput, final String arraySize, final int index) {
+		this(dataType, name, interfaceList, isInput, false, arraySize, index);
+	}
+
 	private static boolean isValidName(final String name) {
 		return !IdentifierVerifier.verifyIdentifier(name).isPresent();
 	}

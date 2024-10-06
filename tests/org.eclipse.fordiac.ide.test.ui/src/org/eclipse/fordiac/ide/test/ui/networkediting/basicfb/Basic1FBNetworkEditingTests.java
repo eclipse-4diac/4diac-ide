@@ -29,7 +29,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.InstanceNameEditPart;
 import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
-import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestPinHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFB;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
@@ -309,13 +309,13 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 200));
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
-		editor.getEditPart(PinNamesHelper.DEF_VAL);
-		editor.doubleClick(PinNamesHelper.DEF_VAL);
+		editor.getEditPart(UITestPinHelper.DEF_VAL);
+		editor.doubleClick(UITestPinHelper.DEF_VAL);
 		final SWTBotEclipseEditor e = editor.toTextEditor();
 		assertNotNull(e);
-		e.setText(PinNamesHelper.NEW_VAL);
+		e.setText(UITestPinHelper.NEW_VAL);
 		e.save();
-		assertNotNull(editor.getEditPart(PinNamesHelper.NEW_VAL));
+		assertNotNull(editor.getEditPart(UITestPinHelper.NEW_VAL));
 	}
 
 	/**
@@ -331,11 +331,11 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 100));
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
-		editor.getEditPart(PinNamesHelper.DEF_VAL);
-		editor.doubleClick(PinNamesHelper.DEF_VAL);
+		editor.getEditPart(UITestPinHelper.DEF_VAL);
+		editor.doubleClick(UITestPinHelper.DEF_VAL);
 		final SWTBotEclipseEditor e = editor.toTextEditor();
 		assertNotNull(e);
-		assertEquals(PinNamesHelper.DEF_VAL, e.getText());
+		assertEquals(UITestPinHelper.DEF_VAL, e.getText());
 		e.save();
 	}
 
@@ -352,15 +352,15 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 100));
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
-		editor.getEditPart(PinNamesHelper.DEF_VAL);
-		editor.doubleClick(PinNamesHelper.DEF_VAL);
+		editor.getEditPart(UITestPinHelper.DEF_VAL);
+		editor.doubleClick(UITestPinHelper.DEF_VAL);
 		final SWTBotEclipseEditor e = editor.toTextEditor();
 		assertNotNull(e);
-		e.setText(PinNamesHelper.NEW_VAL);
+		e.setText(UITestPinHelper.NEW_VAL);
 		e.save();
-		editor.getEditPart(PinNamesHelper.NEW_VAL);
-		editor.doubleClick(PinNamesHelper.NEW_VAL);
-		assertEquals(PinNamesHelper.NEW_VAL, editor.toTextEditor().getText());
+		editor.getEditPart(UITestPinHelper.NEW_VAL);
+		editor.doubleClick(UITestPinHelper.NEW_VAL);
+		assertEquals(UITestPinHelper.NEW_VAL, editor.toTextEditor().getText());
 	}
 
 	/**
@@ -420,7 +420,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(200, 200));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.START, PinNamesHelper.EO);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.START, UITestPinHelper.EO);
 		assertDoesNotThrow(viewer::waitForConnection);
 	}
 
@@ -439,7 +439,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.EO1, PinNamesHelper.START);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.EO1, UITestPinHelper.START);
 		assertDoesNotThrow(viewer::waitForConnection);
 	}
 
@@ -458,7 +458,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(150, 150));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.PV, PinNamesHelper.CV);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.PV, UITestPinHelper.CV);
 		assertDoesNotThrow(viewer::waitForConnection);
 	}
 
@@ -477,7 +477,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_D_FF_TREE_ITEM, new Point(150, 150));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.D, PinNamesHelper.Q);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.D, UITestPinHelper.Q);
 		assertDoesNotThrow(viewer::waitForConnection);
 	}
 
@@ -492,8 +492,8 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, pos1);
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		connectBot.createConnection(PinNamesHelper.INIT, PinNamesHelper.CLKO);
-		connectBot.createConnection(PinNamesHelper.N, PinNamesHelper.CV);
+		connectBot.createConnection(UITestPinHelper.INIT, UITestPinHelper.CLKO);
+		connectBot.createConnection(UITestPinHelper.N, UITestPinHelper.CV);
 
 		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		final SWTBot4diacGefViewer viewer = (SWTBot4diacGefViewer) editor.getSWTBotGefViewer();
@@ -502,8 +502,8 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertNotNull(canvas);
 		canvas.setFocus();
 
-		assertTrue(connectBot.checkIfConnectionCanBeFound(PinNamesHelper.CLKO, PinNamesHelper.INIT));
-		assertTrue(connectBot.checkIfConnectionCanBeFound(PinNamesHelper.CV, PinNamesHelper.N));
+		assertTrue(connectBot.checkIfConnectionCanBeFound(UITestPinHelper.CLKO, UITestPinHelper.INIT));
+		assertTrue(connectBot.checkIfConnectionCanBeFound(UITestPinHelper.CV, UITestPinHelper.N));
 
 		assertNotNull(editor);
 		assertNotNull(editor.getEditPart(UITestNamesHelper.E_TABLE_CTRL_FB));
@@ -535,8 +535,8 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertEquals(posToCheck2.x, fbBounds.x);
 		assertEquals(posToCheck2.y, fbBounds.y);
 
-		assertTrue(connectBot.checkIfConnectionCanBeFound(PinNamesHelper.CLKO, PinNamesHelper.INIT));
-		assertTrue(connectBot.checkIfConnectionCanBeFound(PinNamesHelper.CV, PinNamesHelper.N));
+		assertTrue(connectBot.checkIfConnectionCanBeFound(UITestPinHelper.CLKO, UITestPinHelper.INIT));
+		assertTrue(connectBot.checkIfConnectionCanBeFound(UITestPinHelper.CV, UITestPinHelper.N));
 	}
 
 	/**
@@ -555,7 +555,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.START, PinNamesHelper.STOP);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.START, UITestPinHelper.STOP);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -575,7 +575,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(150, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.START, PinNamesHelper.N);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.START, UITestPinHelper.N);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -595,7 +595,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(150, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.START, PinNamesHelper.DT);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.START, UITestPinHelper.DT);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -615,7 +615,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_D_FF_TREE_ITEM, new Point(150, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.CLK, PinNamesHelper.D);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.CLK, UITestPinHelper.D);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -635,7 +635,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 150));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.CD, PinNamesHelper.CV);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.CD, UITestPinHelper.CV);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -655,7 +655,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.INIT, PinNamesHelper.DTO);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.INIT, UITestPinHelper.DTO);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -675,7 +675,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 150));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.CD, PinNamesHelper.QU);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.CD, UITestPinHelper.QU);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -695,7 +695,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.DT, PinNamesHelper.DTO);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.DT, UITestPinHelper.DTO);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -715,7 +715,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.DT, PinNamesHelper.N);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.DT, UITestPinHelper.N);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -735,7 +735,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.PV, PinNamesHelper.QU);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.PV, UITestPinHelper.QU);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -755,7 +755,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.EO0, PinNamesHelper.N);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.EO0, UITestPinHelper.N);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -775,7 +775,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.EO1, PinNamesHelper.DT);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.EO1, UITestPinHelper.DT);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -795,7 +795,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_D_FF_TREE_ITEM, new Point(100, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.EO, PinNamesHelper.D);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.EO, UITestPinHelper.D);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -815,7 +815,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.EO0, PinNamesHelper.EO2);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.EO0, UITestPinHelper.EO2);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -835,7 +835,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.CLKO, PinNamesHelper.CV);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.CLKO, UITestPinHelper.CV);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -855,7 +855,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, new Point(100, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.CLKO, PinNamesHelper.DTO);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.CLKO, UITestPinHelper.DTO);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -875,7 +875,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_D_FF_TREE_ITEM, new Point(100, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.EO, PinNamesHelper.Q);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.EO, UITestPinHelper.Q);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 
@@ -895,7 +895,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(100, 100));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		final SWTBot4diacGefViewer viewer = connectBot.createConnection(PinNamesHelper.QU, PinNamesHelper.QD);
+		final SWTBot4diacGefViewer viewer = connectBot.createConnection(UITestPinHelper.QU, UITestPinHelper.QD);
 		assertThrows(TimeoutException.class, viewer::waitForConnection);
 	}
 

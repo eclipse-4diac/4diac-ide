@@ -27,7 +27,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkConnectionLabel;
-import org.eclipse.fordiac.ide.application.figures.GroupInterfaceConnectionLabel;
 import org.eclipse.fordiac.ide.application.handles.FBNConnectionEndPointHandle;
 import org.eclipse.fordiac.ide.application.handles.HiddenFBNConnectionEndPointHandle;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
@@ -45,8 +44,7 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 			final org.eclipse.gef.ConnectionEditPart connectionEditPart, final int connectionLocator) {
 		final FBNetworkConnection con = (FBNetworkConnection) connectionEditPart.getFigure();
 
-		if (!con.isHidden() || isGroupCrossingEndPoint((ConnectionEditPart) connectionEditPart, connectionLocator)
-				|| (connectionLocator == ConnectionLocator.SOURCE && con.getSourceDecoration() == null)
+		if (!con.isHidden() || (connectionLocator == ConnectionLocator.SOURCE && con.getSourceDecoration() == null)
 				|| (connectionLocator == ConnectionLocator.TARGET && con.getTargetDecoration() == null)) {
 			return new FBNConnectionEndPointHandle(connectionEditPart, connectionLocator);
 		}
@@ -109,7 +107,7 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 			public Rectangle getBounds() {
 				if (bounds == null) {
 					bounds = new Rectangle();
-					getChildren().forEach(el -> bounds.union(((IFigure) el).getBounds()));
+					getChildren().forEach(el -> bounds.union(el.getBounds()));
 				}
 				return bounds;
 			}
@@ -166,17 +164,6 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 
 	private static Rectangle getSelectableFigureBounds(final IFigure figure) {
 		return figure.getBounds().getExpanded(2, 2);
-	}
-
-	private static boolean isGroupCrossingEndPoint(final ConnectionEditPart connectionEditPart,
-			final int connectionLocator) {
-		return switch (connectionLocator) {
-		case ConnectionLocator.SOURCE ->
-			connectionEditPart.getFigure().getSourceDecoration() instanceof GroupInterfaceConnectionLabel;
-		case ConnectionLocator.TARGET ->
-			connectionEditPart.getFigure().getTargetDecoration() instanceof GroupInterfaceConnectionLabel;
-		default -> false;
-		};
 	}
 
 }

@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange;
@@ -104,8 +105,8 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 			if (state.contains(ChangeState.DELETE)) {
 				cmd = new DeleteInternalFBCommand(internalFb);
 			} else if (state.contains(ChangeState.REPLACE_WITH_MARKER)) {
-				// use empty string to force errormarker
-				cmd = new ChangeFbTypeCommand(internalFb, getErrorMarkerEntry(internalFb));
+				final FBTypeEntry errorMarkerEntry = (FBTypeEntry) getErrorMarkerEntry(internalFb);
+				cmd = ChangeFbTypeCommand.forDataType(internalFb, errorMarkerEntry);
 			}
 			AbstractLiveSearchContext.executeAndSave(cmd, baseFb, pm);
 			return super.perform(pm);
@@ -133,9 +134,10 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 
 	}
 
-	private static FBTypeEntry getErrorMarkerEntry(final FBNetworkElement fb) {
+	private static TypeEntry getErrorMarkerEntry(final FBNetworkElement fb) {
 		final TypeLibrary typeLibrary = fb.getTypeEntry().getTypeLibrary();
-		return (FBTypeEntry) typeLibrary.createErrorTypeEntry(fb.getFullTypeName(), fb.getType().eClass());
+		final TypeEntry errorTypeEntry = typeLibrary.createErrorTypeEntry(fb.getFullTypeName(), fb.getType().eClass());
+		return errorTypeEntry;
 	}
 
 }

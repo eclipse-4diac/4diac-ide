@@ -141,7 +141,7 @@ public class SWTBotConnection {
 		SWTBot propertiesBot = bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).bot();
 		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
 
-		if (PropertySheetHelper.selectPropertyTabItem(UITestNamesHelper.EVENT, propertiesBot)) {
+		if (SWTBotPropertySheet.selectPropertyTabItem(UITestNamesHelper.EVENT, propertiesBot)) {
 			propertiesBot = Abstract4diacUITests.selectTabFromInterfaceProperties(UITestNamesHelper.EVENT);
 		} else {
 			propertiesBot = Abstract4diacUITests.selectTabFromInterfaceProperties(UITestNamesHelper.DATA);
@@ -175,7 +175,7 @@ public class SWTBotConnection {
 		SWTBot propertiesBot = bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).bot();
 		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
 
-		if (PropertySheetHelper.selectPropertyTabItem(UITestNamesHelper.EVENT, propertiesBot)) {
+		if (SWTBotPropertySheet.selectPropertyTabItem(UITestNamesHelper.EVENT, propertiesBot)) {
 			propertiesBot = Abstract4diacUITests.selectTabFromInterfaceProperties(UITestNamesHelper.EVENT);
 		} else {
 			propertiesBot = Abstract4diacUITests.selectTabFromInterfaceProperties(UITestNamesHelper.DATA);

@@ -24,6 +24,8 @@ public final class Messages extends NLS {
 	public static String FordiacResourceChangeListener_4;
 	public static String FordiacResourceChangeListener_7;
 	public static String FordiacResourceChangeListener_UpdateTypeLibForNewProject;
+	public static String FordiacResourceChangeListener_CopyConflictTitle;
+	public static String FordiacResourceChangeListener_CopyConflictBody;
 	public static String ValidateTypeLibrary;
 
 	static {

@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.test.model.eval;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
@@ -21,7 +22,6 @@ import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue;
@@ -32,10 +32,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -49,6 +51,7 @@ import org.eclipse.fordiac.ide.test.model.typelibrary.DataTypeEntryMock;
 import org.eclipse.fordiac.ide.test.model.typelibrary.FBTypeEntryMock;
 import org.junit.jupiter.api.BeforeAll;
 
+@SuppressWarnings("nls")
 public abstract class AbstractEvaluatorTest {
 
 	protected static TypeLibrary typeLib;
@@ -168,14 +171,14 @@ public abstract class AbstractEvaluatorTest {
 		return derivedType;
 	}
 
-	protected StructuredType newStructuredType(final String name, final Collection<VarDeclaration> vars) {
+	protected static StructuredType newStructuredType(final String name, final Collection<VarDeclaration> vars) {
 		final StructuredType structType = DataFactory.eINSTANCE.createStructuredType();
 		structType.setName(name);
-		structType.getMemberVariables().add(newVarDeclaration("a", ElementaryTypes.DINT, false));
-		structType.getMemberVariables().add(newVarDeclaration("b", ElementaryTypes.DINT, false));
-		typeLib.addTypeEntry(new DataTypeEntryMock(structType, typeLib, null));
-		final ResourceImpl structResource = new ResourceImpl();
-		structResource.getContents().add(structType);
+		structType.getMemberVariables().addAll(vars);
+		final DataTypeEntryMock typeEntry = new DataTypeEntryMock(structType, typeLib, null);
+		structType.setTypeEntry(typeEntry);
+		typeLib.addTypeEntry(typeEntry);
+		new ResourceImpl().getContents().add(structType);
 		return structType;
 	}
 
@@ -208,5 +211,20 @@ public abstract class AbstractEvaluatorTest {
 		typeLib.addTypeEntry(typeEntry);
 		new ResourceImpl().getContents().add(simpleType);
 		return simpleType;
+	}
+
+	public static FunctionFBType newFunctionFBType(final String name, final Collection<VarDeclaration> vars,
+			final String text) {
+		final FunctionFBType functionType = LibraryElementFactory.eINSTANCE.createFunctionFBType();
+		functionType.setName(name);
+		functionType.setInterfaceList(newInterfaceList(List.of(newEvent("REQ", true), newEvent("CNF", false)), vars));
+		final STFunctionBody body = LibraryElementFactory.eINSTANCE.createSTFunctionBody();
+		body.setText(text);
+		functionType.setBody(body);
+		final FBTypeEntryMock typeEntry = new FBTypeEntryMock(functionType, typeLib, null);
+		functionType.setTypeEntry(typeEntry);
+		typeLib.addTypeEntry(typeEntry);
+		new ResourceImpl().getContents().add(functionType);
+		return functionType;
 	}
 }

@@ -311,7 +311,7 @@ public class StyledTextCellEditor extends AbstractCellEditor {
 	}
 
 	@Override
-	public StyledText getEditorControl() {
+	public Control getEditorControl() {
 		return this.text;
 	}
 

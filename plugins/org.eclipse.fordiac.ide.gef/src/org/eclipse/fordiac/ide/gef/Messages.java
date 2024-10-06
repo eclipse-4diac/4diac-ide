@@ -111,6 +111,14 @@ public final class Messages extends NLS {
 
 	public static String ValidationJob_ValidationJobName;
 
+	public static String VariableDialog_DefaultTitle;
+
+	public static String VariableDialog_ValueError;
+
+	public static String VariableWidget_CollapseAll;
+
+	public static String VariableWidget_ExpandAll;
+
 	public static String ViewRenameCommand_LABEL_RenameView;
 
 	public static String InterfaceElementSection_ConnectionGroup;

@@ -64,22 +64,23 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STStringValueConverter;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
@@ -988,6 +989,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		if (expression instanceof final STFeatureExpression featureExpression) {
 			return isFeatureExpressionAssignable(featureExpression);
 		}
+		if (expression instanceof final STBuiltinFeatureExpression featureExpression) {
+			return isBuiltinFeatureExpressionAssignable(featureExpression);
+		}
 		if (expression instanceof final STArrayAccessExpression arrayAccessExpression) {
 			return isAssignable(arrayAccessExpression.getReceiver());
 		}
@@ -1015,27 +1019,38 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			return IsAssignableResult.CALL_NOT_ASSIGNABLE;
 		}
 		final var feature = featureExpression.getFeature();
-		if (feature instanceof final VarDeclaration varDeclaration
-				&& EcoreUtil2.getContainerOfType(varDeclaration, FBType.class) instanceof final BaseFBType baseFBType) {
-			if (baseFBType.getInternalConstVars().stream()
-					.anyMatch(variable -> variable.getName().equals(varDeclaration.getName()))) {
+		if (feature instanceof VarDeclaration) {
+			if (feature.eContainmentFeature() == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS) {
 				return IsAssignableResult.CONST_NOT_ASSIGNABLE;
 			}
-			if (baseFBType.getInterfaceList().getInputVars().stream()
-					.anyMatch(variable -> variable.getName().equals(varDeclaration.getName()))) {
+			if (feature.eContainmentFeature() == LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS
+					&& featureExpression.eResource() instanceof final LibraryElementXtextResource libResource
+					&& EcoreUtil2.getContainerOfType(feature, LibraryElement.class) == libResource
+							.getInternalLibraryElement()) {
 				return IsAssignableResult.INPUT_NOT_ASSIGNABLE;
 			}
-		}
-		if (feature instanceof final STVarDeclaration varDeclaration
+		} else if (feature instanceof final STVarDeclaration varDeclaration
 				&& varDeclaration.eContainer() instanceof final STVarDeclarationBlock varBlock) {
 			if (varBlock.isConstant()) {
 				return IsAssignableResult.CONST_NOT_ASSIGNABLE;
 			}
-			if (varBlock instanceof STVarInputDeclarationBlock) {
+			if (varBlock instanceof STVarInputDeclarationBlock && EcoreUtil2.getContainerOfType(varBlock,
+					ICallable.class) == EcoreUtil2.getContainerOfType(featureExpression, ICallable.class)) {
 				return IsAssignableResult.INPUT_NOT_ASSIGNABLE;
 			}
 		}
 		return IsAssignableResult.ASSIGNABLE;
+	}
+
+	private static IsAssignableResult isBuiltinFeatureExpressionAssignable(
+			final STBuiltinFeatureExpression featureExpression) {
+		if (featureExpression.isCall()) {
+			return IsAssignableResult.CALL_NOT_ASSIGNABLE;
+		}
+		return switch (featureExpression.getFeature()) {
+		case THIS -> IsAssignableResult.ASSIGNABLE;
+		default -> IsAssignableResult.NOT_ASSIGNABLE;
+		};
 	}
 
 	private enum IsAssignableResult {

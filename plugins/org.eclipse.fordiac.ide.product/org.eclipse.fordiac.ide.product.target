@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="4diac-ide Target" sequenceNumber="22">
+<target name="4diac IDE Target" sequenceNumber="23">
 	<locations>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://download.eclipse.org/elk/updates/releases/0.9.1/"/>
@@ -29,9 +29,9 @@
 			<unit id="org.eclipse.gef.source.feature.group" version="0.0.0"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/eclipse/updates/4.32"/>
-			<unit id="org.eclipse.pde.feature.group" version="3.15.400.v20240601-0610"/>
-			<unit id="org.eclipse.platform.ide" version="4.32.0.I20240601-0610"/>
+			<repository location="https://download.eclipse.org/eclipse/updates/4.33"/>
+			<unit id="org.eclipse.pde.feature.group" version="3.16.0.v20240903-0240"/>
+			<unit id="org.eclipse.platform.ide" version="4.33.0.I20240903-0240"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="http://download.eclipse.org/modeling/emf/compare/updates/releases/3.3/R202406060900"/>
@@ -45,34 +45,34 @@
 			<unit id="org.eclipse.emf.compare.source.feature.group" version="3.3.25.202406060900"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/nattable/releases/2.3.0/repository/"/>
-			<unit id="org.eclipse.nebula.widgets.nattable.core.feature.feature.group" version="2.3.0.202402191815"/>
-			<unit id="org.eclipse.nebula.widgets.nattable.core.source.feature.feature.group" version="2.3.0.202402191815"/>
+			<repository location="https://download.eclipse.org/nattable/releases/2.4.0/repository/"/>
+			<unit id="org.eclipse.nebula.widgets.nattable.core.feature.feature.group" version="2.4.0.202405230453"/>
+			<unit id="org.eclipse.nebula.widgets.nattable.core.feature.source.feature.group" version="2.4.0.202405230453"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/releases/2024-06"/>
+			<repository location="https://download.eclipse.org/releases/2024-09"/>
 			<unit id="javax.activation" version="1.2.2.v20221203-1659"/>
-			<unit id="org.eclipse.egit.feature.group" version="6.10.0.202406032230-r"/>
-			<unit id="org.eclipse.emf.sdk.feature.group" version="2.38.0.v20240314-1003"/>
-			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.21.0.v20240603-0658"/>			
-			<unit id="org.eclipse.sirius.properties.feature.feature.group" version="7.4.0.202403051613"/>
-			<unit id="org.eclipse.sirius.samples.feature.group" version="7.4.0.202403051613"/>
-			<unit id="org.eclipse.sirius.specifier.feature.group" version="7.4.0.202403051613"/>
-			<unit id="org.eclipse.sirius.specifier.properties.feature.feature.group" version="7.4.0.202403051613"/>
-			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.35.0.v20240528-1523"/>
-		</location>
-		<location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+			<unit id="org.eclipse.egit.feature.group" version="7.0.0.202409031743-r"/>
+			<unit id="org.eclipse.emf.sdk.feature.group" version="2.39.0.v20240731-0952"/>
+			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.22.0.v20240902-1518"/>			
+			<unit id="org.eclipse.sirius.properties.feature.feature.group" version="7.4.3.202408230712"/>
+			<unit id="org.eclipse.sirius.samples.feature.group" version="7.4.3.202408230712"/>
+			<unit id="org.eclipse.sirius.specifier.feature.group" version="7.4.3.202408230712"/>
+			<unit id="org.eclipse.sirius.specifier.properties.feature.feature.group" version="7.4.3.202408230712"/>
+			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.36.0.v20240825-0714"/>
       		<unit id="org.eclipse.swtbot.eclipse.feature.group" version="4.2.1.202406141605"/>
       		<unit id="org.eclipse.swtbot.eclipse.gef.feature.group" version="4.2.1.202406141605"/>
       		<unit id="org.eclipse.swtbot.feature.group" version="4.2.1.202406141605"/>
       		<unit id="org.eclipse.swtbot.generator.feature.feature.group" version="4.2.1.202406141605"/>
       		<unit id="org.eclipse.swtbot.ide.feature.group" version="4.2.1.202406141605"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+      		<repository location="https://download.eclipse.org/technology/swtbot/releases/4.2.1/"/>
       		<unit id="org.eclipse.swtbot.nebula.nattable.finder" version="4.2.1.202406141605"/>
-      		<repository id="SWTBot-3_1" location="https://download.eclipse.org/technology/swtbot/releases/4.2.1/"/>
     	</location>
 		<location includeDependencyDepth="infinite" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 
-			<feature id="org.eclipse.fordiac.ide.milo" label="Milo Dependencies" provider-name="Eclipse 4diac" version="2.0.1.qualifier">
+			<feature id="org.eclipse.fordiac.ide.milo" label="Milo Dependencies" provider-name="Eclipse 4diac" version="3.0.0.qualifier">
 
    
 
@@ -96,13 +96,13 @@
 				<dependency>
 					<groupId>org.eclipse.milo</groupId>
 					<artifactId>sdk-client</artifactId>
-					<version>0.6.13</version>
+					<version>0.6.14</version>
 					<type>jar</type>
 				</dependency>
 				<dependency>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-simple</artifactId>
-					<version>1.7.32</version>
+					<version>1.7.36</version>
 					<type>jar</type>
 				</dependency>
 			</dependencies>

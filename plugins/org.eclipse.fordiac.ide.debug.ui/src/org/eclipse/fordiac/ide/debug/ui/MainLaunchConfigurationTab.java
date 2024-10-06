@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.debug.ui;
 
 import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
 
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -31,26 +30,12 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
-import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable;
-import org.eclipse.fordiac.ide.model.eval.variable.FBVariable;
-import org.eclipse.fordiac.ide.model.eval.variable.StructVariable;
+import org.eclipse.fordiac.ide.gef.widgets.VariableWidget;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
-import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
-import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.StyledString;
-import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
@@ -59,7 +44,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
@@ -69,7 +53,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 	private Text resourceText;
 	private Button stopOnFirstLineCheckbox;
-	private TreeViewer argumentsTable;
+	private VariableWidget argumentsWidget;
 
 	private List<Variable<?>> arguments;
 
@@ -133,28 +117,10 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		GridLayoutFactory.swtDefaults().applyTo(group);
 		group.setText("Arguments"); //$NON-NLS-1$
 
-		final Composite comp = new Composite(group, SWT.NONE);
-		GridLayoutFactory.swtDefaults().numColumns(1).applyTo(comp);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(comp);
-
-		argumentsTable = new TreeViewer(comp,
-				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
-		final Tree tree = argumentsTable.getTree();
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(tree);
-		tree.setHeaderVisible(true);
-		tree.setLinesVisible(true);
-		argumentsTable.setContentProvider(new ArgumentsContentProvider());
-
-		final TreeViewerColumn nameColumn = new TreeViewerColumn(argumentsTable, SWT.NONE);
-		nameColumn.getColumn().setText("Name"); //$NON-NLS-1$
-		nameColumn.getColumn().setWidth(300);
-		nameColumn.setLabelProvider(new DelegatingStyledCellLabelProvider(new ArgumentsNameLabelProvider()));
-
-		final TreeViewerColumn valueColumn = new TreeViewerColumn(argumentsTable, SWT.NONE);
-		valueColumn.getColumn().setText("Value"); //$NON-NLS-1$
-		valueColumn.getColumn().setWidth(300);
-		valueColumn.setLabelProvider(new DelegatingStyledCellLabelProvider(new ArgumentsValueLabelProvider()));
-		valueColumn.setEditingSupport(new ArgumentsValueEditingSupport(argumentsTable));
+		argumentsWidget = new VariableWidget();
+		argumentsWidget
+				.addVariableModificationListener((variable, oldValue, newValue) -> updateLaunchConfigurationDialog());
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(argumentsWidget.createWidget(group));
 
 		return group;
 	}
@@ -215,7 +181,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 					Messages.MainLaunchConfigurationTab_ErrorInitializingArguments, e.getStatus());
 			arguments = Collections.emptyList();
 		}
-		argumentsTable.setInput(arguments);
+		argumentsWidget.setInput(arguments);
 	}
 
 	@Override
@@ -255,7 +221,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 					Messages.MainLaunchConfigurationTab_ErrorUpdatingArguments, e.getStatus());
 			arguments = Collections.emptyList();
 		}
-		argumentsTable.setInput(arguments);
+		argumentsWidget.setInput(arguments);
 		updateLaunchConfigurationDialog();
 	}
 
@@ -292,118 +258,5 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 			return ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(resourceString));
 		}
 		return null;
-	}
-
-	public static class ArgumentsContentProvider implements ITreeContentProvider {
-
-		@Override
-		public Object[] getElements(final Object inputElement) {
-			return ArrayContentProvider.getInstance().getElements(inputElement);
-		}
-
-		@Override
-		public Object[] getChildren(final Object parentElement) {
-			return switch (parentElement) {
-			case final ArrayVariable arrayVariable -> arrayVariable.getElements().toArray();
-			case final StructVariable structVariable -> structVariable.getMembers().values().toArray();
-			case final FBVariable fbVariable -> fbVariable.getMembers().values().toArray();
-			default -> new Object[0];
-			};
-		}
-
-		@Override
-		public Object getParent(final Object element) {
-			return null;
-		}
-
-		@Override
-		public boolean hasChildren(final Object element) {
-			return element instanceof ArrayVariable || element instanceof StructVariable
-					|| element instanceof FBVariable;
-		}
-	}
-
-	private static class ArgumentsNameLabelProvider extends LabelProvider implements IStyledLabelProvider {
-
-		@Override
-		public StyledString getStyledText(final Object element) {
-			if (element instanceof final Variable<?> variable) {
-				return new StyledString(variable.getName());
-			}
-			return null;
-		}
-
-	}
-
-	private static class ArgumentsValueLabelProvider extends LabelProvider implements IStyledLabelProvider {
-
-		@Override
-		public StyledString getStyledText(final Object element) {
-			if (element instanceof final Variable<?> variable) {
-				return new StyledString(variable.toString());
-			}
-			return null;
-		}
-
-	}
-
-	private final class ArgumentsValueEditingSupport extends EditingSupport {
-		private final CellEditor editor;
-
-		private ArgumentsValueEditingSupport(final TreeViewer viewer) {
-			super(viewer);
-			this.editor = new TextCellEditor(viewer.getTree());
-		}
-
-		@Override
-		protected CellEditor getCellEditor(final Object element) {
-			return editor;
-		}
-
-		@Override
-		protected boolean canEdit(final Object element) {
-			return element instanceof Variable;
-		}
-
-		@Override
-		protected Object getValue(final Object element) {
-			if (element instanceof final Variable<?> variable) {
-				return variable.toString();
-			}
-			return null;
-		}
-
-		@Override
-		protected void setValue(final Object element, final Object value) {
-			if (element instanceof final Variable<?> variable) {
-				try {
-					variable.setValue(value.toString());
-				} catch (final Exception e) {
-					FordiacLogHelper.logWarning(e.getMessage(), e);
-					MessageDialog.openError(getViewer().getControl().getShell(),
-							Messages.MainLaunchConfigurationTab_InvalidValueTitle,
-							MessageFormat.format(Messages.MainLaunchConfigurationTab_InvalidValueMessage,
-									value.toString(), variable.getName(), variable.getType().getName()));
-				}
-				// update element itself
-				getViewer().update(element, null);
-				// update child elements
-				if (variable instanceof final ArrayVariable arrayVariable) {
-					arrayVariable.getElements().forEach(child -> getViewer().update(child, null));
-				} else if (variable instanceof final StructVariable structVariable) {
-					structVariable.getMembers().values().forEach(child -> getViewer().update(child, null));
-				} else if (variable instanceof final FBVariable fbVariable) {
-					fbVariable.getMembers().values().forEach(child -> getViewer().update(child, null));
-				}
-				// update parent element (if exists)
-				arguments.stream().filter(arg -> switch (arg) {
-				case final ArrayVariable arrayVariable -> arrayVariable.getElements().contains(element);
-				case final StructVariable structVariable -> structVariable.getMembers().containsValue(element);
-				case final FBVariable fbVariable -> fbVariable.getMembers().containsValue(element);
-				default -> false;
-				}).forEach(container -> getViewer().update(container, null));
-				updateLaunchConfigurationDialog();
-			}
-		}
 	}
 }

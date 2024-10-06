@@ -25,7 +25,8 @@ Require-Bundle: org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.gef,
- org.eclipse.xtext
+ org.eclipse.xtext,
+ org.eclipse.fordiac.ide.model.eval
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.ui.codemining;resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-21

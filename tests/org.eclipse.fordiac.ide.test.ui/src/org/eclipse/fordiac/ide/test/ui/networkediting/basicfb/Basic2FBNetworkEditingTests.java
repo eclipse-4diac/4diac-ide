@@ -25,7 +25,7 @@ import java.util.List;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
-import org.eclipse.fordiac.ide.test.ui.helpers.PinNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestPinHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFB;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
@@ -299,8 +299,8 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, pos1);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_DEMUX_TREE_ITEM, new Point(300, 50));
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		connectBot.createConnection(PinNamesHelper.EO, PinNamesHelper.EI);
-		final ConnectionEditPart connection = connectBot.findConnection(PinNamesHelper.EO, PinNamesHelper.EI);
+		connectBot.createConnection(UITestPinHelper.EO, UITestPinHelper.EI);
+		final ConnectionEditPart connection = connectBot.findConnection(UITestPinHelper.EO, UITestPinHelper.EI);
 		assertNotNull(connection);
 
 		// select E_CYCLE
@@ -360,8 +360,8 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		final Point pos2 = new Point(175, 125);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, pos2);
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		connectBot.createConnection(PinNamesHelper.QU, PinNamesHelper.G);
-		final ConnectionEditPart connection = connectBot.findConnection(PinNamesHelper.QU, PinNamesHelper.G);
+		connectBot.createConnection(UITestPinHelper.QU, UITestPinHelper.G);
+		final ConnectionEditPart connection = connectBot.findConnection(UITestPinHelper.QU, UITestPinHelper.G);
 		assertNotNull(connection);
 
 		// select E_SELECT
@@ -439,8 +439,8 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		final Point pos2 = new Point(100, 275);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, pos2);
 		final SWTBotConnection connectBot = new SWTBotConnection(bot);
-		connectBot.createConnection(PinNamesHelper.EO1, PinNamesHelper.R);
-		ConnectionEditPart connection = connectBot.findConnection(PinNamesHelper.EO1, PinNamesHelper.R);
+		connectBot.createConnection(UITestPinHelper.EO1, UITestPinHelper.R);
+		ConnectionEditPart connection = connectBot.findConnection(UITestPinHelper.EO1, UITestPinHelper.R);
 		assertNotNull(connection);
 		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
@@ -473,7 +473,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		final int translationY = pointTo.y - pointFrom.y;
 
 		// check if connection has been moved
-		connection = connectBot.findConnection(PinNamesHelper.EO1, PinNamesHelper.R);
+		connection = connectBot.findConnection(UITestPinHelper.EO1, UITestPinHelper.R);
 		assertNotNull(connection);
 		final org.eclipse.draw2d.geometry.Point newStartPointConnection = polyLineConnection.getPoints()
 				.getFirstPoint();

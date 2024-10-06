@@ -12,6 +12,8 @@
  */
 package org.eclipse.fordiac.ide.model.eval.variable;
 
+import java.util.stream.Stream;
+
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
@@ -71,4 +73,13 @@ public interface Variable<T extends Value> {
 	 * @see java.lang.Object#toString()
 	 */
 	String toString(boolean pretty);
+
+	/**
+	 * Get the children variables
+	 *
+	 * @return The children variables
+	 */
+	default Stream<Variable<?>> getChildren() {
+		return Stream.empty();
+	}
 }
