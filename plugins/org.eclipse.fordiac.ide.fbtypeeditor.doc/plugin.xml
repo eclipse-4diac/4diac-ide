@@ -6,11 +6,6 @@
 		<editorPage
         		class="org.eclipse.fordiac.ide.fbtypeeditor.doc.editors.DescriptionEditor"
             	sortIndex="70">
-			<enablement>
-            	<instanceof
-                	value="org.eclipse.fordiac.ide.model.libraryElement.FBType">
-	            </instanceof>
-    	     </enablement>
       	</editorPage>
    	</extension>
 </plugin>
