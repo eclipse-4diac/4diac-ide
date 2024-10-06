@@ -483,10 +483,6 @@
       <genOperations ecoreOperation="lib.ecore#//FBType/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBType/getInOutParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBType/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//FBType/setDocumentation" body="org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.setDocumentation(this, value);">
-        <genParameters ecoreParameter="lib.ecore#//FBType/setDocumentation/value"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//FBType/getDocumentation" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.getDocumentation(this);"/>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//Function"/>
     <genClasses image="false" ecoreClass="lib.ecore#//FunctionBody"/>
@@ -613,6 +609,12 @@
       <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/compilerInfo"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LibraryElement/typeEntry"/>
       <genOperations ecoreOperation="lib.ecore#//LibraryElement/getTypeLibrary" body="if (null != getTypeEntry()) {&#xA;&#x9;return getTypeEntry().getTypeLibrary();&#xA;}&#xA;return null;"/>
+      <genOperations ecoreOperation="lib.ecore#//LibraryElement/setDocumentation"
+          body="org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementAnnotations.setDocumentation(this, value);">
+        <genParameters ecoreParameter="lib.ecore#//LibraryElement/setDocumentation/value"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//LibraryElement/getDocumentation"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementAnnotations.getDocumentation(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Link">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Link/segment"/>

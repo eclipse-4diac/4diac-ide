@@ -127,4 +127,20 @@ public interface LibraryElement extends INamedElement, ConfigurableObject {
 	 */
 	TypeLibrary getTypeLibrary();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void setDocumentation(String value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getDocumentation();
+
 } // LibraryElement

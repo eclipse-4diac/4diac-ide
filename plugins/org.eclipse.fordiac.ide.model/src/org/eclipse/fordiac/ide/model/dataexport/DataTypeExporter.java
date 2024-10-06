@@ -48,6 +48,10 @@ public class DataTypeExporter extends AbstractTypeExporter {
 					MessageFormat.format(Messages.DataTypeExporter_UNSUPPORTED_DATA_TYPE, getType()));
 		}
 		createStructContent((StructuredType) getType());
+
+		if (!getType().getAttributes().isEmpty()) {
+			addAttributes(getType().getAttributes());
+		}
 	}
 
 	private void createStructContent(final StructuredType type) throws XMLStreamException {
@@ -56,9 +60,6 @@ public class DataTypeExporter extends AbstractTypeExporter {
 			addVarDeclaration(varDecl);
 		}
 		addEndElement();
-		if (!type.getAttributes().isEmpty()) {
-			addAttributes(type.getAttributes());
-		}
 	}
 
 }
