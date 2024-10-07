@@ -56,8 +56,8 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case VAR_CONFIG -> Boolean.valueOf(rowObject.isVarConfig());
 		case VISIBLE -> Boolean.valueOf(rowObject.isVisible());
 		case RETAIN -> getAttributeValueAsString(rowObject);
-		case VISIBLEIN -> Boolean.valueOf(VisibilityManager.getInputVisibility(rowObject)); // Input visibility
-		case VISIBLEOUT -> Boolean.valueOf(VisibilityManager.getOutputVisibility(rowObject)); // Output visibility
+		case VISIBLEIN -> Boolean.valueOf(rowObject.isVisible());
+		case VISIBLEOUT -> Boolean.valueOf(rowObject.isVisible());
 
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
@@ -81,7 +81,6 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 	@Override
 	public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
 			final Object newValue) {
-		System.out.println(VisibilityManager.getInputVisibility(rowObject));
 		final boolean newVisible = Boolean.parseBoolean(newValue.toString());
 		return switch (column) {
 		case NAME -> ChangeNameCommand.forName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
@@ -91,10 +90,10 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case VAR_CONFIG -> new ChangeVarConfigurationCommand(rowObject,
 				Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 		case VISIBLE -> new HidePinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
-		case VISIBLEIN ->
-			new HideInOutPinCommand(rowObject, newVisible, VisibilityManager.getOutputVisibility(rowObject));
-		case VISIBLEOUT ->
-			new HideInOutPinCommand(rowObject, VisibilityManager.getInputVisibility(rowObject), newVisible);
+//		case VISIBLEIN ->
+//			new HideInOutPinCommand(rowObject, newVisible, VisibilityManager.getOutputVisibility(rowObject));
+//		case VISIBLEOUT ->
+//			new HideInOutPinCommand(rowObject, VisibilityManager.getInputVisibility(rowObject), newVisible);
 		case RETAIN -> new ChangeRetainAttributeCommand(rowObject,
 				RetainHelper.deriveTag(rowObject.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE)),
 				RetainHelper.deriveTag(Objects.toString(newValue, NULL_DEFAULT)));

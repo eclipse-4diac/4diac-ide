@@ -22,13 +22,11 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractEditVarInOutSection;
 import org.eclipse.fordiac.ide.model.commands.create.CreateVarInOutCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.widgets.Composite;
 
@@ -87,16 +85,7 @@ public class EditUntypedSubappVarInOutSection extends AbstractEditVarInOutSectio
 	@Override
 	public void setupInputTable(final Composite parent) {
 		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS) {
-			@Override
-			public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
-					final Object newValue) {
-				return switch (column) {
-				default -> super.createCommand(rowObject, column, newValue);
-				};
-			}
-
-		});
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS));
 
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS);
@@ -107,7 +96,6 @@ public class EditUntypedSubappVarInOutSection extends AbstractEditVarInOutSectio
 				getSectionEditableRule(), null, this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
-		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		inputTable.configure();
 	}
