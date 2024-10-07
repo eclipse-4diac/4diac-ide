@@ -17,6 +17,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.ui;
 
+import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
@@ -40,6 +41,7 @@ import org.eclipse.xtext.ide.serializer.impl.RelatedEmfResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.ResourceLifecycleManager;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
+import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider;
 import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
 import org.eclipse.xtext.ui.refactoring.ILinkedPositionGroupCalculator;
 import org.eclipse.xtext.ui.refactoring.impl.AbstractRenameProcessor;
@@ -66,6 +68,10 @@ public class DTPUiModule extends EmfUiModule {
 
 	public Class<? extends IEObjectHoverProvider> bindIEObjectHoverProvider() {
 		return STCoreHoverProvider.class;
+	}
+
+	public Class<? extends IEObjectHoverDocumentationProvider> bindIEObjectHoverDocumentationProvider() {
+		return STCoreHoverDocumentationProvider.class;
 	}
 
 	public Class<? extends IResourceUIServiceProvider> bindIResourceUIServiceProvider() {
