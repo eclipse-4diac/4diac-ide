@@ -82,11 +82,21 @@ public class EditUntypedSubappVarInOutSection extends AbstractEditVarInOutSectio
 	 *
 	 * boolean isInput
 	 */
+
 	@Override
 	public void setupInputTable(final Composite parent) {
 		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS));
-
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS)
+//			{
+//			@Override
+//			public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
+//					final Object newValue) {
+//				return switch (column) {
+//				default -> super.createCommand(rowObject, column, newValue);
+//				};
+//			}
+//		}
+		);
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,

@@ -18,6 +18,11 @@ import java.util.Set;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
 
+/**
+ * Output list in the model impl plugin isvisible
+ * 
+ */
+
 public enum VarDeclarationTableColumn implements NatTableColumn {
 	NAME(FordiacMessages.Name), TYPE(FordiacMessages.Type), COMMENT(FordiacMessages.Comment),
 	INITIAL_VALUE(FordiacMessages.InitialValue), VAR_CONFIG(FordiacMessages.VarConfig),

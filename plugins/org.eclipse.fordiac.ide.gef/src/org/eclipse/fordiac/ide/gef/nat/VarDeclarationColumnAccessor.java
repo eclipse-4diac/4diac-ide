@@ -56,17 +56,15 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case VAR_CONFIG -> Boolean.valueOf(rowObject.isVarConfig());
 		case VISIBLE -> Boolean.valueOf(rowObject.isVisible());
 		case RETAIN -> getAttributeValueAsString(rowObject);
-		case VISIBLEIN -> Boolean.valueOf(rowObject.isVisible());
-		case VISIBLEOUT -> Boolean.valueOf(rowObject.isVisible());
+		case VISIBLEIN -> Boolean.valueOf(testmethod(rowObject));
+		case VISIBLEOUT -> Boolean.valueOf(testmethod(rowObject));
 
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
 	}
 
 	private boolean testmethod(final VarDeclaration rowObject) {
-		// System.out.println(rowObject.getInOutVarOpposite().getQualifiedName());
-		// final HidePinCommand hp = new HidePinCommand(rowObject, false);
-		// System.out.println(rowObject.getInOutVarOpposite().getInOutVarOpposite());
+		// System.out.println(rowObject.getFBNetworkElement().getFbNetwork().getNetworkElements().stream());
 		return rowObject.isVisible();
 	}
 
@@ -90,10 +88,9 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case VAR_CONFIG -> new ChangeVarConfigurationCommand(rowObject,
 				Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 		case VISIBLE -> new HidePinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
-//		case VISIBLEIN ->
-//			new HideInOutPinCommand(rowObject, newVisible, VisibilityManager.getOutputVisibility(rowObject));
-//		case VISIBLEOUT ->
-//			new HideInOutPinCommand(rowObject, VisibilityManager.getInputVisibility(rowObject), newVisible);
+//		case VISIBLEIN -> new HidePinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
+//		case VISIBLEOUT -> new HidePinCommand(rowObject.getInOutVarOpposite(),
+//				Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 		case RETAIN -> new ChangeRetainAttributeCommand(rowObject,
 				RetainHelper.deriveTag(rowObject.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE)),
 				RetainHelper.deriveTag(Objects.toString(newValue, NULL_DEFAULT)));
