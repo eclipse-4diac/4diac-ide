@@ -58,6 +58,7 @@ import org.eclipse.xtext.scoping.impl.IScopeWrapper;
 import org.eclipse.xtext.scoping.impl.ImportNormalizer;
 import org.eclipse.xtext.scoping.impl.ImportScope;
 import org.eclipse.xtext.scoping.impl.ScopeBasedSelectable;
+import org.eclipse.xtext.scoping.impl.SelectableBasedScope;
 import org.eclipse.xtext.scoping.impl.SimpleScope;
 
 import com.google.common.base.Predicate;
@@ -174,14 +175,18 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 	protected IScope qualifiedScope(final Iterable<? extends EObject> elements, final EReference reference,
 			final IScope parent) {
 		final Iterable<IEObjectDescription> descriptions = Scopes.scopedElementsFor(elements, qualifiedNameProvider);
-		final List<ImportNormalizer> importNormalizers = createImportNormalizers(descriptions);
 		final ScopeBasedSelectable importFrom = new ScopeBasedSelectable(wrap(new SimpleScope(descriptions, true)));
+		final List<ImportNormalizer> importNormalizers = createImportNormalizers(descriptions);
+		if (importNormalizers.isEmpty()) {
+			return SelectableBasedScope.createScope(parent, importFrom, reference.getEReferenceType(), true);
+		}
 		return new ImportScope(importNormalizers, parent, importFrom, reference.getEReferenceType(), true);
 	}
 
 	protected static List<ImportNormalizer> createImportNormalizers(final Iterable<IEObjectDescription> descriptions) {
 		return StreamSupport.stream(descriptions.spliterator(), false).map(IEObjectDescription::getQualifiedName)
-				.map(name -> name.skipLast(1)).distinct().map(STCoreScopeProvider::createImportNormalizer).toList();
+				.map(name -> name.skipLast(1)).filter(java.util.function.Predicate.not(QualifiedName::isEmpty))
+				.distinct().map(STCoreScopeProvider::createImportNormalizer).toList();
 	}
 
 	protected static ImportNormalizer createImportNormalizer(final QualifiedName importedNamespace) {
