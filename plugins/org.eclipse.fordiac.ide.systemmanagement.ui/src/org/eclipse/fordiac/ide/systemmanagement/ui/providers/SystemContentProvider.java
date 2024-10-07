@@ -15,37 +15,22 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.providers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class SystemContentProvider extends AdapterFactoryContentProvider implements DistributedSystemListener {
 
-	private static ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
+	private static ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(Collections.emptyList());
 
 	public SystemContentProvider() {
 		super(systemAdapterFactory);
@@ -59,10 +44,10 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 
 	@Override
 	public Object[] getChildren(final Object parentElement) {
-		if (parentElement instanceof final IResource ires) {
-			return getResourceChildren(ires);
+		if (parentElement instanceof final IWorkspaceRoot root) {
+			return Arrays.stream(root.getProjects()).filter(SystemContentProvider::projectToShow).toArray();
 		}
-		return super.getChildren(parentElement);
+		return new Object[0];
 	}
 
 	@Override
@@ -70,23 +55,7 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 		if (object instanceof final IResource ires) {
 			return ires.getParent();
 		}
-		if (object instanceof final Application app) {
-			// the automation system can be null if the the app was just deleted
-			return (null != app.getAutomationSystem()) ? app.getAutomationSystem().getTypeEntry().getFile() : null;
-		}
-		if (object instanceof final SystemConfiguration sysConf) {
-			return sysConf.getAutomationSystem().getTypeEntry().getFile();
-		}
-		if (object instanceof final AutomationSystem sys) {
-			return sys.getTypeEntry().getFile();
-		}
-		final Object parent = super.getParent(object);
-		if (parent instanceof final FBType fbType) {
-			// the FBType is not in the tree we have to immediately return the file it is
-			// contained in
-			return fbType.getTypeEntry().getFile();
-		}
-		return parent;
+		return null;
 	}
 
 	@Override
@@ -102,29 +71,6 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 		return super.hasChildren(element);
 	}
 
-	private static List<AdapterFactory> createFactoryList() {
-		final ArrayList<AdapterFactory> factories = new ArrayList<>();
-		factories.add(new SystemElementItemProviderAdapterFactory());
-		factories.add(new DataItemProviderAdapterFactory());
-		return factories;
-	}
-
-	@Override
-	public void notifyChanged(final Notification notification) {
-		if (notification.getNotifier() instanceof final AutomationSystem system) {
-			// as the automation system is changed we need to perform a special refresh here
-			super.notifyChanged(new ViewerNotification(notification, system.getTypeEntry().getFile()));
-		} else {
-			super.notifyChanged(notification);
-			if (LibraryElementPackage.INAMED_ELEMENT == notification.getFeatureID(ConfigurableObject.class)
-					|| LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__NAME == notification
-							.getFeatureID(TypedConfigureableObject.class)) {
-				// trigger a resorting
-				distributedSystemWorkspaceChanged();
-			}
-		}
-	}
-
 	@Override
 	public void distributedSystemWorkspaceChanged() {
 		if (null != viewer && null != viewer.getControl() && null != viewer.getControl().getDisplay()) {
@@ -134,26 +80,6 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 				}
 			});
 		}
-	}
-
-	private Object[] getResourceChildren(final IResource resource) {
-		if (resource instanceof final IWorkspaceRoot root) {
-			return Arrays.stream(root.getProjects()).filter(SystemContentProvider::projectToShow).toArray();
-		}
-		if (((resource instanceof final IProject project) && project.isOpen()) || (resource instanceof IFolder)) {
-			try {
-				return ((IContainer) resource).members();
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError("Could not read project children", e); //$NON-NLS-1$
-			}
-		}
-
-		if (SystemManager.isSystemFile(resource)) {
-			// retrieve the children for the Automation system
-			return super.getChildren(SystemManager.INSTANCE.getSystem((IFile) resource));
-		}
-
-		return new Object[0];
 	}
 
 	private static boolean projectToShow(final IProject proj) {
