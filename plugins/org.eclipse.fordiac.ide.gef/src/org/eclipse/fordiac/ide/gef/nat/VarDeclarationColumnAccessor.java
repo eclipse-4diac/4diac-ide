@@ -56,11 +56,18 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case VAR_CONFIG -> Boolean.valueOf(rowObject.isVarConfig());
 		case VISIBLE -> Boolean.valueOf(rowObject.isVisible());
 		case RETAIN -> getAttributeValueAsString(rowObject);
-		case VISIBLEIN -> Boolean.valueOf(rowObject.isVisible());
-		case VISIBLEOUT -> Boolean.valueOf(rowObject.isVisible());
+		case VISIBLEIN -> Boolean.valueOf(VisibilityManager.getInputVisibility(rowObject)); // Input visibility
+		case VISIBLEOUT -> Boolean.valueOf(VisibilityManager.getOutputVisibility(rowObject)); // Output visibility
 
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
+	}
+
+	private boolean testmethod(final VarDeclaration rowObject) {
+		// System.out.println(rowObject.getInOutVarOpposite().getQualifiedName());
+		// final HidePinCommand hp = new HidePinCommand(rowObject, false);
+		// System.out.println(rowObject.getInOutVarOpposite().getInOutVarOpposite());
+		return rowObject.isVisible();
 	}
 
 	private static String getAttributeValueAsString(final VarDeclaration rowObject) {
@@ -74,9 +81,8 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 	@Override
 	public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
 			final Object newValue) {
-		System.out.println(newValue.toString());
-		final Command c = new HidePinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
-		System.out.println(c.getLabel());
+		System.out.println(VisibilityManager.getInputVisibility(rowObject));
+		final boolean newVisible = Boolean.parseBoolean(newValue.toString());
 		return switch (column) {
 		case NAME -> ChangeNameCommand.forName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case TYPE -> ChangeDataTypeCommand.forTypeDeclaration(rowObject, Objects.toString(newValue, NULL_DEFAULT));
@@ -85,8 +91,10 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case VAR_CONFIG -> new ChangeVarConfigurationCommand(rowObject,
 				Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 		case VISIBLE -> new HidePinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
-		case VISIBLEIN -> new HidePinCommand(rowObject, Boolean.parseBoolean(newValue.toString()));
-		case VISIBLEOUT -> new HidePinCommand(rowObject, Boolean.parseBoolean(newValue.toString()));
+		case VISIBLEIN ->
+			new HideInOutPinCommand(rowObject, newVisible, VisibilityManager.getOutputVisibility(rowObject));
+		case VISIBLEOUT ->
+			new HideInOutPinCommand(rowObject, VisibilityManager.getInputVisibility(rowObject), newVisible);
 		case RETAIN -> new ChangeRetainAttributeCommand(rowObject,
 				RetainHelper.deriveTag(rowObject.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE)),
 				RetainHelper.deriveTag(Objects.toString(newValue, NULL_DEFAULT)));
