@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils
 import org.eclipse.xtext.ui.editor.hover.html.DefaultHoverDocumentationProvider
+import org.eclipse.fordiac.ide.model.libraryElement.Event
 
 class STCoreHoverDocumentationProvider extends DefaultHoverDocumentationProvider {
 	override getDocumentation(EObject object) {
@@ -119,6 +120,26 @@ class STCoreHoverDocumentationProvider extends DefaultHoverDocumentationProvider
 		«IF !object.typeEntry.type.comment.isEmpty»		
 			<p>DESCRIPTION: 
 				<div style="text-indent:10px;"><b>«object.typeEntry.type.comment»</b></div>
+			</p>
+		«ENDIF»
+		
+	'''
+
+	def dispatch getSTElementAutoDocumentation(Event object) '''
+		
+			
+			   <p>INPUTS:
+		«FOR in : object.inputParameters»
+			<div style="text-indent:10px;"><b>«in.name» : «(in as VarDeclaration).type.name»</b></div>
+		«ENDFOR»
+		    </p>
+			<p>OUTPUTS:
+		«FOR out : object.outputParameters»
+			<div style="text-indent:10px;"><b>«out.name» : «(out as VarDeclaration).type.name»</b></div>
+		«ENDFOR»
+		«IF !object.comment.isEmpty»		
+			<p>DESCRIPTION: 
+				<div style="text-indent:10px;"><b>«object.comment»</b></div>
 			</p>
 		«ENDIF»
 		
