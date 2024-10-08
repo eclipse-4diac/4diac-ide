@@ -18,19 +18,17 @@ import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
 import org.eclipse.elk.core.util.BasicProgressMonitor;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
-import org.eclipse.fordiac.ide.elk.commands.ConnectionLayoutCommand;
 import org.eclipse.fordiac.ide.elk.connection.ConnectionLayoutMapping;
 import org.eclipse.fordiac.ide.elk.connection.ConnectionRoutingHelper;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchPart;
 
 public abstract class AbstractConnectionLayoutHandler extends AbstractLayoutHandler {
 
-	protected static void executeCommand(final ExecutionEvent event, final IWorkbenchPart part,
-			final FordiacLayoutData data) {
-		final ConnectionLayoutCommand cmd = new ConnectionLayoutCommand(data);
+	protected static void executeCommand(final ExecutionEvent event, final IWorkbenchPart part, final Command cmd) {
 		if (isAutomaticLayout(event)) {
 			// passes the cmd back to the editor to be handled there
 			((Event) event.getTrigger()).data = cmd;
