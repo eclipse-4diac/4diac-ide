@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
-import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -163,24 +162,8 @@ public final class LinkConstraints {
 		final DataType targetType = getFullDataType(target);
 		// check for InOut sources
 		if (source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()) {
-			// get defining declaration (determines the _actual_ type)
-			final IInterfaceElement definingSource = VarInOutHelper
-					.getDefiningVarInOutDeclaration(sourceVar.getInOutVarOpposite());
-			if (definingSource == null) { // cannot determine defining source (we have a loop)
-				return targetType.isAssignableFrom(sourceType); // fallback to simple type check
-			}
-			// get the defining source type
-			final DataType definingSourceType = getFullDataType(definingSource);
-			// check if target is also an InOut variable
-			if (target instanceof final VarDeclaration targetVar && targetVar.isInOutVar()) {
-				// connections between InOut variables must be mutually assignable
-				// special exception for generic target variables, which adapt to the source
-				// note that the defining source can never be generic (not well-defined)
-				return targetType.isAssignableFrom(definingSourceType)
-						&& (GenericTypes.isAnyType(targetType) || definingSourceType.isAssignableFrom(targetType));
-			}
-			// target is a simple input (simple type check)
-			return targetType.isAssignableFrom(definingSourceType);
+			// relaxed checking if types could be compatible at all
+			return targetType.isAssignableFrom(sourceType) || sourceType.isAssignableFrom(targetType);
 		}
 		// check for adapter connections
 		if (source instanceof final AdapterDeclaration sourceAdapter
@@ -195,7 +178,7 @@ public final class LinkConstraints {
 		return targetType.isAssignableFrom(sourceType);
 	}
 
-	private static DataType getFullDataType(final IInterfaceElement element) {
+	public static DataType getFullDataType(final IInterfaceElement element) {
 		if (element instanceof final VarDeclaration varDeclaration && varDeclaration.isArray()) {
 			return TypeDeclarationParser.parseTypeDeclaration(varDeclaration.getType(), getArraySize(varDeclaration));
 		}
