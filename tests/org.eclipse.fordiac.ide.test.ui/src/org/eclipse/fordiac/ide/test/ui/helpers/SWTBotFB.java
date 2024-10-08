@@ -19,10 +19,12 @@ package org.eclipse.fordiac.ide.test.ui.helpers;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.treeItemHasNode;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
@@ -169,6 +171,28 @@ public class SWTBotFB {
 		assertNotNull(fbBounds);
 		figure.translateToAbsolute(fbBounds);
 		return fbBounds;
+	}
+
+	/**
+	 * Moves a Function Block to the given position
+	 *
+	 * @param editor
+	 * @param fBname  The FB that should be moved
+	 * @param toPoint The new position of the FB
+	 */
+	public void moveSingleFB(SWTBotGefEditor editor, final String fBname, final Point toPoint) {
+		assertNotNull(editor);
+		assertNotNull(editor.getEditPart(fBname));
+		editor = selectFBWithFBNameInEditor((SWTBot4diacGefEditor) editor, fBname);
+		final SWTBotGefEditPart fbEditPart = editor.getEditPart(fBname).parent();
+		assertNotNull(fbEditPart);
+
+		// move FB, get bounds of FB and expand bounds to have a tolerance for the grid
+		// alignment when checking the new position
+		editor.drag(fbEditPart, toPoint.x, toPoint.y);
+		final Rectangle toPosition = getBoundsOfFB(editor, fBname);
+		final Rectangle expandedBounds = toPosition.expand(new Insets(2));
+		assertTrue(expandedBounds.contains(toPoint.x, toPoint.y));
 	}
 
 }
