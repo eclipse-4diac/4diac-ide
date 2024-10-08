@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeRetainAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
+import org.eclipse.fordiac.ide.model.commands.change.HideInOutPinCommand;
 import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
@@ -64,7 +65,6 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 	}
 
 	private boolean testmethod(final VarDeclaration rowObject) {
-		// System.out.println(rowObject.getFBNetworkElement().getFbNetwork().getNetworkElements().stream());
 		return rowObject.isVisible();
 	}
 
@@ -79,7 +79,7 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 	@Override
 	public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
 			final Object newValue) {
-		final boolean newVisible = Boolean.parseBoolean(newValue.toString());
+		// System.out.println(rowObject.getFBNetworkElement().getInterface().getOutMappedInOutVars().get(0));
 		return switch (column) {
 		case NAME -> ChangeNameCommand.forName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case TYPE -> ChangeDataTypeCommand.forTypeDeclaration(rowObject, Objects.toString(newValue, NULL_DEFAULT));
@@ -88,9 +88,10 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case VAR_CONFIG -> new ChangeVarConfigurationCommand(rowObject,
 				Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 		case VISIBLE -> new HidePinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
-//		case VISIBLEIN -> new HidePinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
-//		case VISIBLEOUT -> new HidePinCommand(rowObject.getInOutVarOpposite(),
-//				Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
+		case VISIBLEIN ->
+			new HideInOutPinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
+		case VISIBLEOUT ->
+			new HideInOutPinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 		case RETAIN -> new ChangeRetainAttributeCommand(rowObject,
 				RetainHelper.deriveTag(rowObject.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE)),
 				RetainHelper.deriveTag(Objects.toString(newValue, NULL_DEFAULT)));
