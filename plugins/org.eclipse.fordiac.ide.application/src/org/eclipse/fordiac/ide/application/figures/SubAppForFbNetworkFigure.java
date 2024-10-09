@@ -195,7 +195,20 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	}
 
 	private void createContentContainer() {
-		expandedContentArea = new Figure();
+		expandedContentArea = new Figure() {
+			@Override
+			public void setBounds(final Rectangle rect) {
+				final Rectangle copy = rect.getCopy();
+				final int lineHeight = (int) CoordinateConverter.INSTANCE.getLineHeight();
+				// ensure that the content is aligned on the grid in x direction. We have to do
+				// that here to compensate for different interface bar widths and also to
+				// compensate changing interface bar widths.
+				final int offset = lineHeight - copy.x % lineHeight;
+				copy.x += offset;
+				copy.width -= offset;
+				super.setBounds(copy);
+			}
+		};
 		final GridLayout expContentLayout = new GridLayout();
 		expContentLayout.marginHeight = 0;
 		expContentLayout.marginWidth = 0;
