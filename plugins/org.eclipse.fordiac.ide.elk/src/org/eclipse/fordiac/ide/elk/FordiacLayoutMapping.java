@@ -139,7 +139,6 @@ public class FordiacLayoutMapping extends LayoutMapping {
 	private static void setGraphBounds(final ElkNode graph, final AbstractFBNetworkEditPart networkEditPart) {
 		Rectangle bounds = null;
 		if (networkEditPart instanceof EditorWithInterfaceEditPart) {
-			@SuppressWarnings("unchecked")
 			final Object figure = ((IFigure) networkEditPart.getFigure().getChildren().get(0)).getChildren().stream()
 					.filter(FreeformLayer.class::isInstance).findFirst().orElse(null);
 			if (figure instanceof IFigure) {

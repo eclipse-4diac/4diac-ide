@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -310,12 +311,8 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 
 	private IInterfaceElement createInterfaceElement(final IInterfaceElement ie, final String srcName) {
 		final boolean isInOut = ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar();
-		String arraySize = null;
-		if (ie instanceof final VarDeclaration sourceVar && sourceVar.getArraySize() != null) {
-			arraySize = sourceVar.getArraySize().getValue();
-		}
 		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(ie.getType(), srcName,
-				targetSubApp.getInterface(), ie.isIsInput(), isInOut, arraySize, -1);
+				targetSubApp.getInterface(), ie.isIsInput(), isInOut, ArraySizeHelper.getArraySize(ie), -1);
 		cmd.execute();
 		changedSubAppIEs.add(cmd);
 		return cmd.getCreatedElement();

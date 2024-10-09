@@ -58,6 +58,16 @@ public final class Messages extends NLS {
 	public static String STCoreContentAssistPreferencePage_ContentAssist;
 	public static String STCoreContentAssistPreferencePage_AutoActivationTriggers;
 	public static String STCoreContentAssistPreferencePage_ChangedSettingsEffect;
+	public static String STCoreHoverProvider_EventKind;
+	public static String STCoreHoverProvider_FBKind;
+	public static String STCoreHoverProvider_FBTypeKind;
+	public static String STCoreHoverProvider_StructKind;
+	public static String STCoreHoverProvider_VarInOutKind;
+	public static String STCoreHoverProvider_VarInputKind;
+	public static String STCoreHoverProvider_VarInternalConstKind;
+	public static String STCoreHoverProvider_VarInternalKind;
+	public static String STCoreHoverProvider_VarOutputKind;
+	public static String STCoreLabelProvider_FBText;
 	public static String STCoreLabelProvider_VarDeclarationText;
 	public static String STCoreLabelProvider_VarInOutDeclarationBlockText;
 	public static String STCoreLabelProvider_VarInputDeclarationBlockText;

@@ -298,7 +298,7 @@ public class FBNetworkConnection extends HideableConnection {
 		final InterfaceEditPart source = (InterfaceEditPart) connEP.getSource();
 		return ((List<ConnectionEditPart>) source.getSourceConnections()).stream()
 				.filter(conn -> !conn.getModel().isVisible())
-				.map(ep -> ep.getFigure().getSourceDecoration().getLabel().getBounds().width).max(Integer::compare)
+				.mapToInt(ep -> ep.getFigure().getSourceDecoration().getLabel().getBounds().width).max()
 				.orElse(0);
 	}
 

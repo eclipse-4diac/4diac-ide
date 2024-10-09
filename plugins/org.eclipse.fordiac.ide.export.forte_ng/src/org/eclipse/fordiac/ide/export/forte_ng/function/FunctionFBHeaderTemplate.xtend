@@ -16,8 +16,6 @@ import java.nio.file.Path
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 
-import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
-
 class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 
 	new(FunctionFBType type, String name, Path prefix) {

@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2016 Profactor GmbH, fortiss GmbH
- * 				 2020			  Andrea Zoitl
+ * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH, Andrea Zoitl
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -30,6 +29,12 @@ public final class Messages extends NLS {
 	public static String ForteLauncher_LABEL_PortParam;
 	public static String FortePreferencePage_FORTEPreferencesPage;
 	public static String FortePreferencePage_FORTELocation;
+
+	public static String BuildForteTab_TabTitle;
+	public static String BuildForteTab_CMakeLocation;
+	public static String BuildForteTab_BuildDirectory;
+	public static String ForteLaunchTabError_NoCMakeExecutableSet;
+	public static String BuildForteTab_NoBuildDirectory;
 
 	public static String ForteLaunchTab_TabTitle;
 	public static String ForteLaunchTab_WorkingDirectory;

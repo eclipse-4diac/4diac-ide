@@ -22,7 +22,11 @@ public interface DeviceTypeEntry extends TypeEntry {
 	@Override
 	DeviceType getType();
 
+	/**
+	 * @deprecated see {@link TypeEntry#getTypeEditable()}
+	 */
 	@Override
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	DeviceType getTypeEditable();
 
 	@Override

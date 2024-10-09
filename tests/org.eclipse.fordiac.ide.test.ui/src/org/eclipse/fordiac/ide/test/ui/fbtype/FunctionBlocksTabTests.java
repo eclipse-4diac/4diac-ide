@@ -32,7 +32,7 @@ import org.junit.jupiter.api.BeforeEach;
 public class FunctionBlocksTabTests extends NatTableWithoutEditorBehaviorTests {
 
 	public FunctionBlocksTabTests() {
-		super(UITestNamesHelper.INTERNALFB1, UITestNamesHelper.INTERNALFB2, UITestNamesHelper.INTERNALFB3);
+		super(UITestNamesHelper.INTERNALFB1, UITestNamesHelper.INTERNALFB2);
 	}
 
 	@Override

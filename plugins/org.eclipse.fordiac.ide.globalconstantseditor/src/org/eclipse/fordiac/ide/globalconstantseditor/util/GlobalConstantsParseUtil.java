@@ -74,9 +74,8 @@ public final class GlobalConstantsParseUtil {
 		resource.setLibraryElement(type);
 		resource.setIncludeInternalLibraryElement(false);
 		resourceSet.getResources().add(resource);
-		final GlobalConstantsPartitioner partitioner = SERVICE_PROVIDER_GCF.get(GlobalConstantsPartitioner.class);
 		try {
-			resource.load(new LazyStringInputStream(partitioner.combine(type)),
+			resource.load(new LazyStringInputStream(GlobalConstantsPartitioner.combine(type)),
 					Map.of(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE,
 							ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS, Boolean.TRUE,
 							GlobalConstantsResource.OPTION_PLAIN_ST, Boolean.TRUE));

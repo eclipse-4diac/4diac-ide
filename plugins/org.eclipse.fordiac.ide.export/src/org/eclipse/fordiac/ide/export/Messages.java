@@ -30,6 +30,8 @@ public final class Messages extends NLS {
 
 	public static String TemplateExportFilter_ErrorDuringTemplateGeneration;
 
+	public static String TemplateExportFilter_EXPORT_CANCELED;
+
 	public static String TemplateExportFilter_FILE_EXISTS;
 
 	public static String TemplateExportFilter_FILE_IGNORED;

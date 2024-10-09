@@ -29,7 +29,6 @@ import java.util.List
 import java.util.Map
 import java.util.Set
 import org.eclipse.fordiac.ide.model.LibraryElementTags
-import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration

@@ -373,10 +373,11 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 		}
 	}
 
-	private int getHeight() {
+	private static int getHeight() {
 		return FigureUtilities.getFontMetrics(JFaceResources.getFontRegistry().get(DIAGRAM_FONT)).getHeight();
 	}
 
+	@SuppressWarnings("static-method")
 	protected void setBackgroundColor(final IFigure l) {
 		l.setBackgroundColor(PreferenceGetter.getColor(Activator.getDefault().getPreferenceStore(),
 				PreferenceConstants.P_WATCH_COLOR));

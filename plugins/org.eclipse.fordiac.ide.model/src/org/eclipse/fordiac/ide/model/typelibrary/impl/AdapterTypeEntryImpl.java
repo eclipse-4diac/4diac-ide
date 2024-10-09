@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
@@ -54,12 +55,13 @@ public class AdapterTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AdapterTy
 	}
 
 	@Override
-	public synchronized void setType(final LibraryElement type) {
+	protected synchronized NotificationChain basicSetType(final LibraryElement type,
+			final NotificationChain notifications) {
 		if (type instanceof final AdapterType adpType) {
-			// wenn we get a new type ensure that the plug is the mirror of the socket
+			// ensure that the plug is the mirror of the socket
 			adpType.setPlugType(createPlugType(adpType));
 		}
-		super.setType(type);
+		return super.basicSetType(type, notifications);
 	}
 
 	public static AdapterType createPlugType(final AdapterType adapterType) {

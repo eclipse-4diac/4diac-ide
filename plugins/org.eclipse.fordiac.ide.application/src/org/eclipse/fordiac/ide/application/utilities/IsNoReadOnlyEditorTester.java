@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.application.utilities;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.expressions.PropertyTester;
@@ -41,8 +42,8 @@ public class IsNoReadOnlyEditorTester extends PropertyTester {
 	}
 
 	private static List<Object> getList(final Object reciever) {
-		if (reciever instanceof final List list) {
-			return list;
+		if (reciever instanceof final List<?> list) {
+			return Collections.unmodifiableList(list);
 		}
 		return Arrays.asList(reciever);
 	}

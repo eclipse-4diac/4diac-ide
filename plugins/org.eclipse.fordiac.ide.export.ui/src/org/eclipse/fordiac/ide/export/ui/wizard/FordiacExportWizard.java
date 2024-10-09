@@ -153,6 +153,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 						overwriteWithoutWarning = true;
 					} catch (final ExportException.CancelAll e) {
 						enableCMakeLists = false;
+						filter.getWarnings().add(Messages.FordiacExportWizard_EXPORT_CANCELED);
 						break;
 					} catch (final ExportException.UserInteraction e) {
 						// noop

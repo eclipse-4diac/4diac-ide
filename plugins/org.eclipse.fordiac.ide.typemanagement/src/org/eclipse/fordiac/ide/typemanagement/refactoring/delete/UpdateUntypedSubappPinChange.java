@@ -68,7 +68,7 @@ public class UpdateUntypedSubappPinChange extends AbstractCommandChange<VarDecla
 
 	@Override
 	public void initializeValidationData(final VarDeclaration element, final IProgressMonitor pm) {
-
+		// No special initialization required
 	}
 
 	@Override

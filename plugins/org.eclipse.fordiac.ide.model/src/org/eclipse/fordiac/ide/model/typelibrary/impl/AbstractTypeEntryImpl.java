@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -37,6 +38,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.NotificationImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -57,12 +59,14 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	private static class TypeEntryNotificationImpl extends NotificationImpl {
 		protected final TypeEntry notifier;
 		protected final String feature;
+		protected final int featureID;
 
 		public TypeEntryNotificationImpl(final TypeEntry notifier, final int eventType, final String feature,
-				final Object oldValue, final Object newValue) {
+				final int featureID, final Object oldValue, final Object newValue) {
 			super(eventType, oldValue, newValue, NO_INDEX);
 			this.notifier = notifier;
 			this.feature = feature;
+			this.featureID = featureID;
 		}
 
 		@Override
@@ -75,6 +79,10 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			return feature;
 		}
 
+		@Override
+		public int getFeatureID(final Class<?> expectedClass) {
+			return featureID;
+		}
 	}
 
 	private static final Pattern TYPE_NAME_PATTERN = Pattern.compile("Name=\\\"(\\w*)\\\""); //$NON-NLS-1$
@@ -86,7 +94,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	private String fullTypeName;
 	private final AtomicReference<String> comment = new AtomicReference<>();
 
-	private long lastModificationTimestamp = IResource.NULL_STAMP;
+	private final AtomicLong lastModificationTimestamp = new AtomicLong(IResource.NULL_STAMP);
+	private final AtomicLong lastModificationTimestampEditable = new AtomicLong(IResource.NULL_STAMP);
 
 	private SoftReference<LibraryElement> typeRef;
 	private SoftReference<LibraryElement> typeEditableRef;
@@ -108,9 +117,17 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		}
 		final IFile oldFile = file;
 		file = newFile;
+		final LibraryElement type = basicGetType();
+		if (type != null) {
+			type.eResource().setURI(getURI());
+		}
+		final LibraryElement typeEditable = basicGetTypeEditable();
+		if (typeEditable != null) {
+			typeEditable.eResource().setURI(getURI());
+		}
 		if (eNotificationRequired()) {
-			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_FILE_FEATURE, oldFile,
-					file));
+			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_FILE_FEATURE,
+					TypeEntry.TYPE_ENTRY_FILE_FEATURE_ID, oldFile, file));
 		}
 	}
 
@@ -158,49 +175,84 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	@Override
-	public final synchronized long getLastModificationTimestamp() {
-		return lastModificationTimestamp;
+	public final long getLastModificationTimestamp() {
+		return lastModificationTimestamp.get();
 	}
 
 	@Override
-	public final synchronized void setLastModificationTimestamp(final long newLastModificationTimestamp) {
-		lastModificationTimestamp = newLastModificationTimestamp;
+	public final void setLastModificationTimestamp(final long newLastModificationTimestamp) {
+		lastModificationTimestamp.set(newLastModificationTimestamp);
+		lastModificationTimestampEditable.set(newLastModificationTimestamp);
 	}
 
 	@Override
-	public synchronized LibraryElement getType() {
-		if (typeRef != null) {
-			final LibraryElement type = typeRef.get();
+	public LibraryElement getType() {
+		// check if type is present and current
+		LibraryElement type = basicGetType();
+		if (type != null && !isFileContentChanged()) {
+			return type; // simple, non-contended case
+		}
+
+		// the hard way
+		NotificationChain notifications = null;
+		synchronized (this) {
+			// check again
+			type = basicGetType();
 			if (type != null && !isFileContentChanged()) {
-				return type;
+				return type; // concurrent update
 			}
+
+			// get and check file
+			final IFile fileCached = getFile();
+			if (fileCached == null) {
+				return null; // no file, no type
+			}
+
+			// _we_ need to (re-)load the type
+
+			// read modification stamp at the beginning to ensure the loaded type is at
+			// least as recent as the read modification stamp
+			final long modificationStamp = fileCached.getModificationStamp();
+
+			// load and set the type
+			type = loadType();
+			notifications = basicSetType(type, notifications);
+
+			// update the last modification stamp _after_ setting the type to ensure other
+			// readers see the new stamp only together with the new type
+			lastModificationTimestamp.set(modificationStamp);
 		}
-		return reloadType();
+		// dispatch notifications
+		if (notifications != null) {
+			notifications.dispatch();
+		}
+		return type;
 	}
 
-	private LibraryElement reloadType() {
-		// reset editable type to force a fresh copy the next time the editable type is
-		// accessed
-		// also needs to happen before the reload, since SystemEntry delegates to
-		// setType,
-		// which would otherwise reset the freshly reloaded type
-		if (getFile() != null) {
-			setTypeEditable(null);
-			lastModificationTimestamp = getFile().getModificationStamp();
-			final LibraryElement loadType = loadType();
-			setType(loadType);
-			return loadType;
-		}
-		return null;
+	private LibraryElement basicGetType() {
+		final SoftReference<LibraryElement> typeRefCached = typeRef;
+		return typeRefCached != null ? typeRefCached.get() : null;
 	}
 
 	private boolean isFileContentChanged() {
-		return getFile() != null && getFile().getModificationStamp() != IResource.NULL_STAMP
-				&& getFile().getModificationStamp() != lastModificationTimestamp;
+		final IFile fileCached = getFile();
+		if (fileCached != null) {
+			final long modificationStamp = fileCached.getModificationStamp();
+			return modificationStamp != IResource.NULL_STAMP && modificationStamp != lastModificationTimestamp.get();
+		}
+		return false;
 	}
 
 	@Override
-	public synchronized void setType(final LibraryElement newType) {
+	public void setType(final LibraryElement newType) {
+		final NotificationChain notifications = basicSetType(newType, null);
+		if (notifications != null) {
+			notifications.dispatch();
+		}
+	}
+
+	protected synchronized NotificationChain basicSetType(final LibraryElement newType,
+			NotificationChain notifications) {
 		final LibraryElement oldType = (typeRef != null) ? typeRef.get() : null;
 		if (newType != null) {
 			Objects.requireNonNull(newType.getName(), "No name in new type"); //$NON-NLS-1$
@@ -214,9 +266,10 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			typeRef = null;
 		}
 		if (eNotificationRequired()) {
-			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_TYPE_FEATURE, oldType,
-					newType));
+			notifications = chainNotification(notifications, new TypeEntryNotificationImpl(this, Notification.SET,
+					TypeEntry.TYPE_ENTRY_TYPE_FEATURE, TypeEntry.TYPE_ENTRY_TYPE_FEATURE_ID, oldType, newType));
 		}
+		return notifications;
 	}
 
 	protected void encloseInResource(final LibraryElement newType) {
@@ -225,34 +278,96 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		}
 	}
 
+	/**
+	 * @deprecated see {@link TypeEntry#getTypeEditable()}
+	 */
 	@Override
-	public synchronized LibraryElement getTypeEditable() {
-		final LibraryElement typeEditable = getTypeEditableFromRef();
-		if (typeEditable != null && !isFileContentChanged()) {
-			return typeEditable;
+	@Deprecated(since = "3.0.0", forRemoval = true)
+	public LibraryElement getTypeEditable() {
+		// check if type is present and current
+		LibraryElement typeEditable = basicGetTypeEditable();
+		if (typeEditable != null && !isFileContentChangedEditable()) {
+			return typeEditable; // simple, non-contended case
 		}
 
-		// we need to get a fresh type editable
-		LibraryElement loadType = null;
-		if (typeRef != null && typeRef.get() != null) {
-			// only copy if the none editable type is already loaded, copying takes about
-			// the same time then loading
-			loadType = EcoreUtil.copy(getType());
-		} else {
-			lastModificationTimestamp = getFile().getModificationStamp();
-			loadType = loadType();
+		// the hard way
+		NotificationChain notifications = null;
+		synchronized (this) {
+			// check again
+			typeEditable = basicGetTypeEditable();
+			if (typeEditable != null && !isFileContentChangedEditable()) {
+				return typeEditable; // concurrent update
+			}
+
+			// get and check file
+			final IFile fileCached = getFile();
+			if (fileCached == null) {
+				return null; // no file, no type
+			}
+
+			// _we_ need to get a fresh type editable
+
+			final long modificationStamp;
+
+			// try loaded type first
+			final LibraryElement type = basicGetType();
+			if (type != null && !isFileContentChanged()) {
+				// read modification stamp at the beginning to ensure the copied type is at
+				// least as recent as the modification stamp
+				modificationStamp = lastModificationTimestamp.get();
+
+				typeEditable = EcoreUtil.copy(type);
+			} else { // load a fresh copy ourselves
+				// read modification stamp at the beginning to ensure the loaded type is at
+				// least as recent as the read modification stamp
+				modificationStamp = fileCached.getModificationStamp();
+
+				typeEditable = loadType();
+			}
+
+			// set the type editable
+			notifications = basicSetTypeEditable(typeEditable, notifications);
+
+			// update the last modification stamp _after_ setting the type to ensure other
+			// readers see the new stamp only together with the new type
+			lastModificationTimestampEditable.set(modificationStamp);
 		}
-
-		setTypeEditable(loadType);
-		return loadType;
+		// dispatch notifications
+		if (notifications != null) {
+			notifications.dispatch();
+		}
+		return typeEditable;
 	}
 
-	private LibraryElement getTypeEditableFromRef() {
-		return (typeEditableRef != null) ? typeEditableRef.get() : null;
+	private LibraryElement basicGetTypeEditable() {
+		final SoftReference<LibraryElement> typeEditableRefCached = typeEditableRef;
+		return typeEditableRefCached != null ? typeEditableRefCached.get() : null;
 	}
 
+	private boolean isFileContentChangedEditable() {
+		final IFile fileCached = getFile();
+		if (fileCached != null) {
+			final long modificationStamp = fileCached.getModificationStamp();
+			return modificationStamp != IResource.NULL_STAMP
+					&& modificationStamp != lastModificationTimestampEditable.get();
+		}
+		return false;
+	}
+
+	/**
+	 * @deprecated see {@link TypeEntry#setTypeEditable(LibraryElement)}
+	 */
 	@Override
-	public synchronized void setTypeEditable(final LibraryElement newTypeEditable) {
+	@Deprecated(since = "3.0.0", forRemoval = true)
+	public void setTypeEditable(final LibraryElement newTypeEditable) {
+		final NotificationChain notifications = basicSetTypeEditable(newTypeEditable, null);
+		if (notifications != null) {
+			notifications.dispatch();
+		}
+	}
+
+	private synchronized NotificationChain basicSetTypeEditable(final LibraryElement newTypeEditable,
+			NotificationChain notifications) {
 		final LibraryElement oldTypeEditable = (typeEditableRef != null) ? typeEditableRef.get() : null;
 		if (newTypeEditable != null) {
 			encloseInResource(newTypeEditable);
@@ -262,9 +377,11 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			typeEditableRef = null;
 		}
 		if (eNotificationRequired()) {
-			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE,
-					oldTypeEditable, newTypeEditable));
+			notifications = chainNotification(notifications,
+					new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE,
+							TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE_ID, oldTypeEditable, newTypeEditable));
 		}
+		return notifications;
 	}
 
 	private LibraryElement loadType() {
@@ -310,29 +427,38 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		if ((notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_FEATURE
 				|| notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE)
 				&& dependencies.get().contains(notification.getNotifier())) {
-			synchronized (this) {
 
+			NotificationChain notifications = null;
+			synchronized (this) {
 				if (!getTypeEClass().equals(LibraryElementPackage.Literals.AUTOMATION_SYSTEM)) {
 					// currently we only want to purge the models if it is not an automation system,
 					// as it is used as identification in system explorer and monitoring
 					// FIXME remove if when monitoring is fixed
-					setType(null);
-					setTypeEditable(null);
+					notifications = basicSetType(null, notifications);
+					notifications = basicSetTypeEditable(null, notifications);
 				}
 
 				// if there is an editor opened then this notification will be delegated to the
 				// corresponding editor.
 				// If not, then nothing will happen
-				delegateNotificationToEditor(notification);
+				notifications = delegateNotificationToEditor(notification, notifications);
+			}
+
+			if (notifications != null) {
+				notifications.dispatch();
 			}
 		}
 	}
 
-	private void delegateNotificationToEditor(final Notification notification) {
+	private NotificationChain delegateNotificationToEditor(final Notification notification,
+			NotificationChain notifications) {
 		if (eNotificationRequired()) {
-			eNotify(new TypeEntryNotificationImpl(this, Notification.SET,
-					TypeEntry.TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE, null, notification.getNotifier()));
+			notifications = chainNotification(notifications,
+					new TypeEntryNotificationImpl(this, Notification.SET,
+							TypeEntry.TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE,
+							TypeEntry.TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE_ID, null, notification.getNotifier()));
 		}
+		return notifications;
 	}
 
 	@Override
@@ -368,7 +494,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		typeLibrary = newTypeLibrary;
 		if (eNotificationRequired()) {
 			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE,
-					oldTypeLibrary, newTypeLibrary));
+					TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE_ID, oldTypeLibrary, newTypeLibrary));
 		}
 	}
 
@@ -387,14 +513,27 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	@Override
-	public synchronized void refresh() {
-		if (isFileContentChanged()) {
-			loadTypeNameFromFile();
-			setType(null);
-			if (eNotificationRequired()) {
-				eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE,
-						null, null));
+	public void refresh() {
+		NotificationChain notifications = null;
+		synchronized (this) {
+			// check content changed
+			if (isFileContentChanged()) {
+				// load type name
+				loadTypeNameFromFile();
+				// clear cached type
+				notifications = basicSetType(null, notifications);
+				// also notify changed contents
+				if (eNotificationRequired()) {
+					notifications = chainNotification(notifications,
+							new TypeEntryNotificationImpl(this, Notification.SET,
+									TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE,
+									TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE_ID, null, null));
+				}
 			}
+		}
+		// dispatch notifications
+		if (notifications != null) {
+			notifications.dispatch();
 		}
 	}
 
@@ -407,6 +546,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		result.append(file);
 		result.append(", lastModificationTimestamp: "); //$NON-NLS-1$
 		result.append(lastModificationTimestamp);
+		result.append(", lastModificationTimestampEditable: "); //$NON-NLS-1$
+		result.append(lastModificationTimestampEditable);
 		result.append(')');
 		return result.toString();
 	}
@@ -415,29 +556,51 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		this.updateTypeOnSave = updateTypeOnSave;
 	}
 
-	private synchronized void writeToFile(final InputStream fileContent, final AbstractTypeExporter exporter,
+	private void writeToFile(final InputStream fileContent, final AbstractTypeExporter exporter,
 			final IProgressMonitor monitor) throws CoreException {
-		// writing to the file and setting the time stamp need to be atomic
-		if (getFile().exists()) {
-			getFile().setContents(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
-		} else {
-			checkAndCreateFolderHierarchy(getFile(), monitor);
-			getFile().create(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
-		}
-		// "reset" the modification timestamp in the TypeEntry to avoid reload - as
-		// for
-		// this timestamp it is not necessary as the data is in memory
-		setLastModificationTimestamp(getFile().getModificationStamp());
-		updateDependencies(exporter.getDependencies());
+		NotificationChain notifications = null;
+		synchronized (this) {
+			// get and check file
+			final IFile fileCached = getFile();
+			if (fileCached == null) {
+				return; // no file, nothing to write
+			}
 
-		final LibraryElement currentTypeEditable = getTypeEditableFromRef();
-		if (exporter.getType() != currentTypeEditable) {
-			setTypeEditable(exporter.getType());
-		}
+			// write or create file
+			if (fileCached.exists()) {
+				fileCached.setContents(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
+			} else {
+				checkAndCreateFolderHierarchy(fileCached, monitor);
+				fileCached.create(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
+			}
+			updateDependencies(exporter.getDependencies());
 
-		if (updateTypeOnSave) {
-			// make the edit result available for the reading entities
-			setType(EcoreUtil.copy(exporter.getType()));
+			// get updated modification stamp
+			final long modificationStamp = fileCached.getModificationStamp();
+
+			// set type editable (if different)
+			final LibraryElement currentTypeEditable = basicGetTypeEditable();
+			if (exporter.getType() != currentTypeEditable) {
+				notifications = basicSetTypeEditable(exporter.getType(), notifications);
+			}
+
+			// update the last modification stamp editable _after_ setting the type editable
+			// to ensure readers see the new stamp only together with the new type editable
+			lastModificationTimestampEditable.set(modificationStamp);
+
+			// set type (if requested)
+			if (updateTypeOnSave) {
+				// make the edit result available for the reading entities
+				notifications = basicSetType(EcoreUtil.copy(exporter.getType()), notifications);
+			}
+
+			// update the last modification stamp _after_ setting the type to ensure other
+			// readers see the new stamp only together with the new type
+			lastModificationTimestamp.set(modificationStamp);
+		}
+		// dispatch notifications
+		if (notifications != null) {
+			notifications.dispatch();
 		}
 	}
 
@@ -494,5 +657,14 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			}
 		}
 		return ""; //$NON-NLS-1$
+	}
+
+	private static NotificationChain chainNotification(final NotificationChain notifications,
+			final TypeEntryNotificationImpl notification) {
+		if (notifications == null) {
+			return notification;
+		}
+		notifications.add(notification);
+		return notifications;
 	}
 }

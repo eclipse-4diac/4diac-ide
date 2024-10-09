@@ -40,6 +40,7 @@ public abstract class ResourceMarkerGraphicalAnnotationModel extends AbstractGra
 		reload();
 	}
 
+	@Override
 	public void reload() {
 		final Set<IMarker> markers = findMarkers();
 		final Set<GraphicalAnnotation> added = new HashSet<>();

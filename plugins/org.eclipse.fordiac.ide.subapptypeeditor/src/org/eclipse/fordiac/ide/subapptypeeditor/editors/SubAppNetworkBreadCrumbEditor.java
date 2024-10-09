@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -269,6 +270,9 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == GraphicalAnnotationModel.class) {
 			return adapter.cast(annotationModel);
+		}
+		if (adapter == LibraryElement.class) {
+			return adapter.cast(getSubAppType());
 		}
 		return super.getAdapter(adapter);
 	}

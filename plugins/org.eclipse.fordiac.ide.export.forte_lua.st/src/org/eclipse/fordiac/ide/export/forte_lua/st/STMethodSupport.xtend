@@ -17,7 +17,6 @@ import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock
@@ -147,8 +146,6 @@ class STMethodSupport extends StructuredTextSupport {
 	def private CharSequence generateOutReturn(STMethod method) '''
 		«FOR param : method.structuredTextOutParameters BEFORE ', ' SEPARATOR ', '»«param.generateFeatureName(false)»«ENDFOR»
 	'''
-
-	def private getFBType() { switch (root : method.rootContainer) { BaseFBType: root } }
 
 	override getDependencies(Map<?, ?> options) {
 		prepare()

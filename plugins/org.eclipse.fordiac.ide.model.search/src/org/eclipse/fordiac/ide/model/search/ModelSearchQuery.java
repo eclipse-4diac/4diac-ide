@@ -117,8 +117,12 @@ public class ModelSearchQuery implements ISearchQuery {
 	 * (mis)used for search in 4diac Analytics until this functionality is
 	 * refactored out of this class
 	 *
+	 * @deprecated searchApplication can take a long time and should not be used
+	 *             without considering use of a IProgressMonitor for cancellation
+	 *
 	 * @param app
 	 */
+	@Deprecated
 	public void searchApplication(final Application app) {
 		this.searchApplication(app, null);
 	}
