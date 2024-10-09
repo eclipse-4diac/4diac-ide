@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.marker.resolution;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
@@ -62,8 +61,7 @@ public abstract class AbstractErrorMarkerResolution extends WorkbenchMarkerResol
 	public IMarker[] findOtherMarkers(final IMarker[] markers) {
 		return Stream.of(markers)
 				.filter(other -> LibraryElementValidator.DIAGNOSTIC_SOURCE.equals(FordiacErrorMarker.getSource(other))
-						&& FordiacErrorMarker.getCode(marker) == FordiacErrorMarker.getCode(other)
-						&& Arrays.equals(FordiacErrorMarker.getData(other), FordiacErrorMarker.getData(marker)))
+						&& FordiacErrorMarker.getCode(marker) == FordiacErrorMarker.getCode(other))
 				.toArray(IMarker[]::new);
 	}
 
