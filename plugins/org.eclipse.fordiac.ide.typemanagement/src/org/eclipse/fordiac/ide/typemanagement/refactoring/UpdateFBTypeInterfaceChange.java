@@ -69,24 +69,28 @@ public class UpdateFBTypeInterfaceChange extends AbstractCommandChange<FBType> i
 
 	@Override
 	public void initializeValidationData(final FBType element, final IProgressMonitor pm) {
-
+		// nothing to do here
 	}
 
 	@Override
 	public RefactoringStatus isValid(final FBType element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
+		final RefactoringStatus status = new RefactoringStatus();
 
-		return null;
+		final List<VarDeclaration> varDeclaration = getVarDeclaratinsForStruct(element);
+
+		if (varDeclaration.isEmpty()) {
+			status.addError(struct.getQualifiedName() + " is not part of the interface of " + getName());
+		}
+
+		return status;
 	}
 
 	@Override
 	protected Command createCommand(final FBType type) {
 
 		// @formatter:off
-				final List<VarDeclaration> varDeclaration = type.getInterfaceList().getAllInterfaceElements().stream()
-						.filter(VarDeclaration.class::isInstance)
-						.map(VarDeclaration.class::cast)
-						.filter(decl -> decl.getType().getName().equals(struct.getName())).toList(); // TODO: FQN
+		final List<VarDeclaration> varDeclaration = getVarDeclaratinsForStruct(type);
 		// @formatter:on
 
 		Command cmd = null;
@@ -108,5 +112,11 @@ public class UpdateFBTypeInterfaceChange extends AbstractCommandChange<FBType> i
 		}
 
 		return cmd;
+	}
+
+	private List<VarDeclaration> getVarDeclaratinsForStruct(final FBType element) {
+		return element.getInterfaceList().getAllInterfaceElements().stream().filter(VarDeclaration.class::isInstance)
+				.map(VarDeclaration.class::cast)
+				.filter(decl -> decl.getType().getQualifiedName().equals(struct.getQualifiedName())).toList();
 	}
 }
