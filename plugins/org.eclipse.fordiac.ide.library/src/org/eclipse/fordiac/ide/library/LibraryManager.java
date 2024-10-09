@@ -468,7 +468,9 @@ public enum LibraryManager {
 		case final IFolder f -> true;
 		case final IFile file when TYPE_ENDINGS.contains(file.getFileExtension().toUpperCase()) -> {
 			final TypeEntry entry = typeLibrary.getTypeEntry(file);
-			existingTypes.put(entry.getFullTypeName(), entry);
+			if (entry != null) {
+				existingTypes.put(entry.getFullTypeName(), entry);
+			}
 			yield false;
 		}
 		default -> false;
@@ -618,12 +620,7 @@ public enum LibraryManager {
 
 		ManifestHelper.sortAndSaveManifest(manifest);
 
-		/*
-		 * for (final Required req : manifest.getDependencies().getRequired()) {
-		 * checkDependency(req, project, typeLibrary); }
-		 */
 		startLocalResolveJob(project, typeLibrary);
-
 	}
 
 	/**
