@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.InterfaceDataTypeChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBTypeInterfaceChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateManipulatorChange;
@@ -108,8 +107,9 @@ public class SafeStructDeletionChange extends CompositeChange {
 		} else if (rootElements.add(rootContainer)) {
 			if (rootContainer instanceof final StructuredType stElement) {
 				createChanges((DataTypeEntry) stElement.getTypeEntry());
-			} else if (rootContainer instanceof final FBType fbType) {
-				rootChange.add(new InterfaceDataTypeChange(fbType, dataTypeEntry));
+			} else if (rootContainer instanceof final FBType fbType
+					&& dataTypeEntry.getType() instanceof final StructuredType type) {
+				rootChange.add(new UpdateFBTypeInterfaceChange(fbType, type));
 			}
 		}
 	}
