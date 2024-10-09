@@ -117,6 +117,14 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		}
 		final IFile oldFile = file;
 		file = newFile;
+		final LibraryElement type = basicGetType();
+		if (type != null) {
+			type.eResource().setURI(getURI());
+		}
+		final LibraryElement typeEditable = basicGetTypeEditable();
+		if (typeEditable != null) {
+			typeEditable.eResource().setURI(getURI());
+		}
 		if (eNotificationRequired()) {
 			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_FILE_FEATURE,
 					TypeEntry.TYPE_ENTRY_FILE_FEATURE_ID, oldFile, file));
