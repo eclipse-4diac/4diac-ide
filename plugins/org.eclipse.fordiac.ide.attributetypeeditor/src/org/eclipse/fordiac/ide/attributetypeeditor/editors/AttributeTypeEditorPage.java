@@ -315,6 +315,7 @@ public class AttributeTypeEditorPage extends EditorPart implements ITypeEditorPa
 	@Override
 	public void reloadType() {
 		removeListenerFromAttributeDeclaration();
+		changeEditingComposite(); // make sure we got the right editing composite for the reloaded type
 		final AnyDerivedType type = getType().getType();
 		if (type instanceof final StructuredType structType) {
 			structComposite.setStructType(structType);
