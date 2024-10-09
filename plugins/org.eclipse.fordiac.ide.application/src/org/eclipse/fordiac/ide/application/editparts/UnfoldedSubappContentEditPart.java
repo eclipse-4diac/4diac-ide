@@ -20,7 +20,6 @@ package org.eclipse.fordiac.ide.application.editparts;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.policies.SubAppContentLayoutEditPolicy;
@@ -50,7 +49,7 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			((Notifier) getModel()).eAdapters().add(adapter);
+			getModel().eAdapters().add(adapter);
 		}
 	}
 
@@ -58,7 +57,7 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			((Notifier) getModel()).eAdapters().remove(adapter);
+			getModel().eAdapters().remove(adapter);
 		}
 	}
 

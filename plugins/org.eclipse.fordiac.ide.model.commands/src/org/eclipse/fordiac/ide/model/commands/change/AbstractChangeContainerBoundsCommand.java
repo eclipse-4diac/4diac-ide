@@ -44,8 +44,22 @@ public abstract class AbstractChangeContainerBoundsCommand extends Command
 		this.dy = dy;
 		this.oldWidth = oldWidth;
 		this.oldHeight = oldHeight;
-		newWidth = oldWidth + CoordinateConverter.INSTANCE.screenToIEC61499(dw);
-		newHeight = oldHeight + CoordinateConverter.INSTANCE.screenToIEC61499(dh);
+		newWidth = calcNewSize(dx, dw, oldWidth);
+		newHeight = calcNewSize(dy, dh, oldHeight);
+	}
+
+	private static double calcNewSize(final int deltaPos, int deltaSize, final double oldSize) {
+		if (deltaSize == 0) {
+			return oldSize;
+		}
+		if (deltaPos == 0) {
+			// snap to grid gives us always one pixel to much in size
+			deltaSize--;
+		}
+		// use screen coordinates for the new size calculation to reduce rounding
+		// artefact issues
+		return CoordinateConverter.INSTANCE
+				.screenToIEC61499(CoordinateConverter.INSTANCE.iec61499ToScreen(oldSize) + deltaSize);
 	}
 
 	@Override
@@ -82,10 +96,8 @@ public abstract class AbstractChangeContainerBoundsCommand extends Command
 			final CompoundCommand cmd = new CompoundCommand();
 			cmd.add(new SetPositionCommand(target, dx, dy));
 			// Ensure that the children stay at their position when the group grows or
-			// shrinks on the left/top side
-			// If the child is in a group we must only consider it if the group the child is
-			// contained in itself is
-			// changed.
+			// shrinks on the left/top side. If the child is in a group we must only
+			// consider it if the group the child is contained in itself is changed.
 			getChildren().stream().filter(el -> !el.isInGroup() || target.equals(el.getGroup()))
 					.forEach(el -> cmd.add(new SetPositionCommand(el, -dx, -dy)));
 			return cmd;

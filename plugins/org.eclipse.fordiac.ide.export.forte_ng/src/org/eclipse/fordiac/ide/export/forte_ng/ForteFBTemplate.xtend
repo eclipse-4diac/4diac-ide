@@ -533,7 +533,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«param.generateNameAsParameter»«ENDFOR»'''
 
 	def protected getEventAccessorParameters(Event event) {
-		(event.inputParameters + event.outputParameters + event.inOutParameters).filter(VarDeclaration)
+		(event.inputParameters + event.inOutParameters + event.outputParameters).filter(VarDeclaration)
 	}
 
 	def protected getFBClassName() { className }

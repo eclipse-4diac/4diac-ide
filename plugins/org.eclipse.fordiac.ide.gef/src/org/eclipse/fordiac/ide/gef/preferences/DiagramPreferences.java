@@ -52,8 +52,6 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	public static final int CORNER_DIM = 6;
 	public static final int CORNER_DIM_HALF = CORNER_DIM / 2;
 
-	public static final String GRID_SPACING = "GridSpacing"; //$NON-NLS-1$
-
 	public static final String SNAP_TO_GRID = "SnapToGrid"; //$NON-NLS-1$
 
 	public static final String SHOW_GRID = "ShowGrid"; //$NON-NLS-1$
@@ -255,10 +253,6 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 				Messages.DiagramPreferences_FieldEditors_SnapToGrid, group);
 		addField(snapToGrid);
 
-		final IntegerFieldEditor gridSpacing = new IntegerFieldEditor(GRID_SPACING,
-				Messages.DiagramPreferences_FieldEditors_GridSpacingInPixels, group);
-		gridSpacing.setTextLimit(10);
-		addField(gridSpacing);
 		configGroup(group);
 	}
 
