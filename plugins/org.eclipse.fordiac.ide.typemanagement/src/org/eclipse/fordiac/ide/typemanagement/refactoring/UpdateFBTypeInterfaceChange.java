@@ -26,12 +26,13 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public class UpdateFBTypeInterfaceChange extends AbstractCommandChange<FBType> implements IFordiacPreviewChange {
@@ -77,10 +78,14 @@ public class UpdateFBTypeInterfaceChange extends AbstractCommandChange<FBType> i
 			throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
 
-		final List<VarDeclaration> varDeclaration = getVarDeclaratinsForStruct(element);
+		final List<VarDeclaration> varDeclaration = getVarDeclarationsForStruct(element);
 
 		if (varDeclaration.isEmpty()) {
 			status.addError(struct.getQualifiedName() + " is not part of the interface of " + getName());
+		}
+
+		if (element.getTypeLibrary() == null || element.getTypeLibrary().getDataTypeLibrary() == null) {
+			status.addError("Type Library is null");
 		}
 
 		return status;
@@ -89,34 +94,29 @@ public class UpdateFBTypeInterfaceChange extends AbstractCommandChange<FBType> i
 	@Override
 	protected Command createCommand(final FBType type) {
 
-		// @formatter:off
-		final List<VarDeclaration> varDeclaration = getVarDeclaratinsForStruct(type);
-		// @formatter:on
+		final List<VarDeclaration> varDeclarations = getVarDeclarationsForStruct(type);
+		final CompoundCommand cmd = new CompoundCommand();
 
-		Command cmd = null;
-
-		for (final VarDeclaration varDec : varDeclaration) {
-			final ErrorMarkerDataType markerType = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
-			markerType.setName(varDec.getTypeName());
-
-			cmd = ChangeDataTypeCommand.forDataType(varDec, markerType);
+		for (final VarDeclaration varDec : varDeclarations) {
 
 			if (state.contains(ChangeState.CHANGE_TO_ANY)) {
-				cmd = ChangeDataTypeCommand.forDataType(varDec, IecTypes.GenericTypes.ANY_STRUCT);
+				cmd.add(ChangeDataTypeCommand.forDataType(varDec, IecTypes.GenericTypes.ANY_STRUCT));
+			} else if (state.contains(ChangeState.DELETE)) {
+				cmd.add(new DeleteInterfaceCommand(varDec));
+			} else {
+				final ErrorMarkerDataType markerType = type.getTypeLibrary().getDataTypeLibrary()
+						.createErrorMarkerType(varDec.getTypeName(), "");
+				cmd.add(ChangeDataTypeCommand.forDataType(varDec, markerType));
 			}
-
-			if (state.contains(ChangeState.DELETE)) {
-				cmd = new DeleteInterfaceCommand(varDec);
-			}
-
 		}
 
 		return cmd;
 	}
 
-	private List<VarDeclaration> getVarDeclaratinsForStruct(final FBType element) {
+	private List<VarDeclaration> getVarDeclarationsForStruct(final FBType element) {
 		return element.getInterfaceList().getAllInterfaceElements().stream().filter(VarDeclaration.class::isInstance)
-				.map(VarDeclaration.class::cast)
-				.filter(decl -> decl.getType().getQualifiedName().equals(struct.getQualifiedName())).toList();
+				.map(VarDeclaration.class::cast).filter(decl -> PackageNameHelper.getFullTypeName(decl.getType())
+						.equalsIgnoreCase(PackageNameHelper.getFullTypeName(struct)))
+				.toList();
 	}
 }
