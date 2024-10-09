@@ -135,22 +135,26 @@ public class QuickFixWizardDialog {
 			final Composite selectResolutionComposite = new Composite(pageComposite, SWT.NONE);
 			selectResolutionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			selectResolutionComposite.setLayout(new GridLayout());
-			Label label = new Label(selectResolutionComposite, SWT.NONE);
+			Label label = addLabel(selectResolutionComposite);
 			label.setText(Messages.QuickFixDialog_Resolutions_List_Title);
 			createResolutionList(selectResolutionComposite);
 
 			final Composite selectMarkerComposite = new Composite(pageComposite, SWT.NONE);
 			selectMarkerComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 			selectMarkerComposite.setLayout(new GridLayout(2, false));
-			label = new Label(selectMarkerComposite, SWT.NONE);
+			label = addLabel(selectMarkerComposite);
 			label.setText(Messages.QuickFixDialog_Problems_List_Title);
-			new Label(selectMarkerComposite, SWT.NONE);
+			addLabel(selectMarkerComposite);
 			createMarkerList(selectMarkerComposite);
 
 			resolutionsList.setSelection(new StructuredSelection(resolutionsList.getElementAt(0)));
 			markersTable.setCheckedElements(initialMarkers);
 
 			setPageComplete(markersTable.getCheckedElements().length > 0);
+		}
+
+		private static Label addLabel(final Composite selectMarkerComposite) {
+			return new Label(selectMarkerComposite, SWT.NONE);
 		}
 
 		private void createResolutionList(final Composite parent) {

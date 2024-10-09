@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSystem> implements SystemEntry {
 
@@ -43,15 +44,23 @@ public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSyst
 		setType(system);
 	}
 
+	/**
+	 * @deprecated see {@link TypeEntry#getTypeEditable()}
+	 */
 	@Override
-	public synchronized AutomationSystem getTypeEditable() {
+	@Deprecated(since = "3.0.0", forRemoval = true)
+	public AutomationSystem getTypeEditable() {
 		// for performance reasons the systemEntry uses only the type and not the type
 		// editable
 		return getSystem();
 	}
 
+	/**
+	 * @deprecated see {@link TypeEntry#setTypeEditable(LibraryElement)}
+	 */
 	@Override
-	public synchronized void setTypeEditable(final LibraryElement newTypeEditable) {
+	@Deprecated(since = "3.0.0", forRemoval = true)
+	public void setTypeEditable(final LibraryElement newTypeEditable) {
 		// for performance reasons the systemEntry uses only the type and not the type
 		// editable
 		setSystem(newTypeEditable);

@@ -33,30 +33,14 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 	}
 
 	public CreateSubAppInterfaceElementCommand(final DataType dataType, final String name,
-			final InterfaceList interfaceList, final boolean isInput, final int index) {
-		super(dataType, name, interfaceList, isInput, index);
-	}
-
-	public CreateSubAppInterfaceElementCommand(final DataType dataType, final String name,
-			final InterfaceList interfaceList, final boolean isInput, final boolean isInOut, final int index) {
-		super(dataType, name, interfaceList, isInput, isInOut, index);
-	}
-
-	public CreateSubAppInterfaceElementCommand(final DataType dataType, final String name,
 			final InterfaceList interfaceList, final boolean isInput, final boolean isInOut, final String arraySize,
 			final int index) {
 		super(dataType, name, interfaceList, isInput, isInOut, arraySize, index);
 	}
 
-	public CreateSubAppInterfaceElementCommand(final DataType dataType, final InterfaceList interfaceList,
-			final boolean isInput, final int index) {
-		super(dataType, interfaceList, isInput, index);
-	}
-
 	public CreateSubAppInterfaceElementCommand(final DataType dataType, final String name,
-			final InterfaceList interfaceList, final boolean isInput, final String arraySize, final String value,
-			final int index) {
-		super(dataType, name, interfaceList, isInput, arraySize, value, index);
+			final InterfaceList interfaceList, final boolean isInput, final int index) {
+		super(dataType, name, interfaceList, isInput, index);
 	}
 
 	public CreateInterfaceElementCommand getMirroredElement() {

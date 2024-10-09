@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 public class VarInternalsTabTests extends NatTableWithoutEditorBehaviorTests {
 
 	public VarInternalsTabTests() {
-		super(UITestNamesHelper.INTERNALVAR1, UITestNamesHelper.INTERNALVAR2, UITestNamesHelper.INTERNALVAR3);
+		super(UITestNamesHelper.INTERNALVAR1, UITestNamesHelper.INTERNALVAR2);
 	}
 
 	@Override

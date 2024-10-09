@@ -19,6 +19,10 @@ public interface ErrorDataTypeEntry extends ErrorTypeEntry {
 	@Override
 	ErrorMarkerDataType getType();
 
+	/**
+	 * @deprecated see {@link TypeEntry#getTypeEditable()}
+	 */
 	@Override
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	ErrorMarkerDataType getTypeEditable();
 }

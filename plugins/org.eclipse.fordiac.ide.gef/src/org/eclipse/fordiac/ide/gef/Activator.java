@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
 
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -46,7 +45,6 @@ public class Activator extends Abstract4DIACUIPlugin {
 		// were used, the grid spacing is set to a default
 		if (getPreferenceStore().contains(RULER_UNITS)
 				&& org.eclipse.gef.rulers.RulerProvider.UNIT_PIXELS != getPreferenceStore().getInt(RULER_UNITS)) {
-			getPreferenceStore().setValue(DiagramPreferences.GRID_SPACING, 20);
 			getPreferenceStore().setValue(RULER_UNITS, org.eclipse.gef.rulers.RulerProvider.UNIT_PIXELS);
 			// thre's no way to delete a key. See
 			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=279774
@@ -66,7 +64,7 @@ public class Activator extends Abstract4DIACUIPlugin {
 		super.stop(context);
 	}
 
-	private static synchronized void setPlugin(Activator newPlugin) {
+	private static synchronized void setPlugin(final Activator newPlugin) {
 		plugin = newPlugin;
 	}
 

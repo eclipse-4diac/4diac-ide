@@ -87,10 +87,11 @@ public class VarDeclarationAnnotations {
 	public static boolean validateVarInOutSourceTypeIsWellDefined(@NonNull final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isInOutVar() && varDeclaration.isIsInput() && varDeclaration.getFBNetworkElement() != null
-				&& varDeclaration.getInputConnections().isEmpty() && varDeclaration.isArray()
-				&& varDeclaration.getArraySize().getValue().contains("*")) { //$NON-NLS-1$
+				&& varDeclaration.getInputConnections().isEmpty()
+				&& ((varDeclaration.isArray() && varDeclaration.getArraySize().getValue().contains("*")) //$NON-NLS-1$
+						|| GenericTypes.isAnyType(varDeclaration.getType()))) {
 			// We have a VarInOut input on a FB instance which is an array of variable
-			// length, so its not well defined
+			// length or an ANY variable, so its not well defined
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED,

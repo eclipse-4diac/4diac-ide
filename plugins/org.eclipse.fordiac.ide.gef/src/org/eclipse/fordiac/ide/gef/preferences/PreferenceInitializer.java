@@ -28,7 +28,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setDefault(DiagramPreferences.SNAP_TO_GRID, true);
 		store.setDefault(DiagramPreferences.SHOW_GRID, true);
-		store.setDefault(DiagramPreferences.GRID_SPACING, 20);
 
 		store.setDefault(DiagramPreferences.PIN_LABEL_STYLE, DiagramPreferences.PIN_LABEL_STYLE_PIN_NAME);
 

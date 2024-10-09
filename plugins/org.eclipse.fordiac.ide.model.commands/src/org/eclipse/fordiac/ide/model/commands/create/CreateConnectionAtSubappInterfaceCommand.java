@@ -18,10 +18,10 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
 public class CreateConnectionAtSubappInterfaceCommand extends Command implements ScopedCommand {
@@ -38,12 +38,8 @@ public class CreateConnectionAtSubappInterfaceCommand extends Command implements
 
 	@Override
 	public void execute() {
-		String arraySize = null;
-		if (ie instanceof final VarDeclaration sourceVar && sourceVar.getArraySize() != null) {
-			arraySize = sourceVar.getArraySize().getValue();
-		}
 		createIECmdCommand = new CreateInterfaceElementCommand(ie.getType(), ie.getName(), subApp.getInterface(),
-				ie.isIsInput(), arraySize, -1);
+				ie.isIsInput(), ArraySizeHelper.getArraySize(ie), -1);
 
 		if (ie.getType() instanceof EventType) {
 			createConCommand = new EventConnectionCreateCommand(subApp.getSubAppNetwork());

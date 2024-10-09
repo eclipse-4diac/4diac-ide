@@ -49,6 +49,7 @@ import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.FBShapeShadowBorder;
 import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.SWT;
@@ -194,8 +195,22 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	}
 
 	private void createContentContainer() {
-		expandedContentArea = new Figure();
+		expandedContentArea = new Figure() {
+			@Override
+			public void setBounds(final Rectangle rect) {
+				final Rectangle copy = rect.getCopy();
+				final int lineHeight = (int) CoordinateConverter.INSTANCE.getLineHeight();
+				// ensure that the content is aligned on the grid in x direction. We have to do
+				// that here to compensate for different interface bar widths and also to
+				// compensate changing interface bar widths.
+				final int offset = lineHeight - copy.x % lineHeight;
+				copy.x += offset;
+				copy.width -= offset;
+				super.setBounds(copy);
+			}
+		};
 		final GridLayout expContentLayout = new GridLayout();
+		expContentLayout.marginHeight = 0;
 		expContentLayout.marginWidth = 0;
 		expContentLayout.verticalSpacing = 0;
 		expContentLayout.horizontalSpacing = 0;
@@ -247,15 +262,22 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		final Figure commentContainer = new Figure();
 		commentContainer.setLayoutManager(new ToolbarLayout());
 		expandedMainFigure.add(commentContainer, createCommentLayoutData(), 0);
-		// create a grid layout to get the default margin which is also used in groups
-		final GridLayout marginGetter = new GridLayout();
-		commentContainer.setBorder(new MarginBorder(marginGetter.marginHeight));
 
 		commentFigure = new InstanceCommentFigure();
-		commentFigure.setBorder(new AdvancedLineBorder(PositionConstants.SOUTH));
+		final AdvancedLineBorder commentLineSeperator = new AdvancedLineBorder(PositionConstants.SOUTH);
+		commentFigure.setBorder(commentLineSeperator);
 		commentFigure.setCursor(Cursors.SIZEALL);
 		commentContainer.add(commentFigure);
 		refreshComment();
+
+		final int lineHeight = (int) CoordinateConverter.INSTANCE.getLineHeight();
+		int top = lineHeight / 2;
+		final int bottom = top;
+		if (top + bottom != lineHeight) {
+			// we have a rounding error
+			top += lineHeight - (top + bottom);
+		}
+		commentContainer.setBorder(new MarginBorder(top, 5, bottom, 5));
 	}
 
 	private static GridData createCommentLayoutData() {
@@ -283,7 +305,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 
 	protected static GridLayout createExpandedMainFigureLayout() {
 		final GridLayout topLayout = new GridLayout(3, false);
-		topLayout.marginHeight = 1;
+		topLayout.marginHeight = 0;
 		topLayout.marginWidth = 0;
 		topLayout.verticalSpacing = 0;
 		topLayout.horizontalSpacing = 0;

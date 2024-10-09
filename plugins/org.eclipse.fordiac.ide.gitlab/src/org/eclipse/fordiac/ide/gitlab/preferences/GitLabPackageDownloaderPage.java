@@ -52,7 +52,7 @@ public class GitLabPackageDownloaderPage extends FieldEditorPreferencePage imple
 
 	@Override
 	public void init(final IWorkbench workbench) {
-		
+		// No initialization for the Preference Page needed
 	}
 
 }

@@ -96,7 +96,7 @@ public class SystemNetworkEditPart extends AbstractDiagramEditPart {
 	}
 
 	@Override
-	protected List getModelChildren() {
+	protected List<EObject> getModelChildren() {
 		final ArrayList<EObject> children = new ArrayList<>();
 		children.addAll(getModel().getDevices());
 		children.addAll(getModel().getSegments());

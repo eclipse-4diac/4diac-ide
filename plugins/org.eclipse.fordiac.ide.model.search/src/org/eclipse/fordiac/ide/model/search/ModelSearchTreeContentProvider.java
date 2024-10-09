@@ -22,9 +22,6 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 // TODO: implement to the end
 public class ModelSearchTreeContentProvider implements ITreeContentProvider, IModelSearchContentProvider {
 
-	private final ModelSearchResultPage resultPage;
-
-
 	private final AbstractTreeViewer treeViewer;
 	private Map<Object, Set<Object>> childrenMap;
 
@@ -32,7 +29,6 @@ public class ModelSearchTreeContentProvider implements ITreeContentProvider, IMo
 
 	public ModelSearchTreeContentProvider(final ModelSearchResultPage resultPage,
 			final AbstractTreeViewer abstractTreeViewer) {
-		this.resultPage = resultPage;
 		this.treeViewer = abstractTreeViewer; // Have to see if relevant for us
 	}
 

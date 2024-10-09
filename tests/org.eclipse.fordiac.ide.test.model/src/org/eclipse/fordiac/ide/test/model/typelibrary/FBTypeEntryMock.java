@@ -67,7 +67,11 @@ public class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEntry {
 		fbType = (FBType) value;
 	}
 
+	/**
+	 * @deprecated see {@link TypeEntry#setTypeEditable(LibraryElement)}
+	 */
 	@Override
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	public void setTypeEditable(final LibraryElement value) {
 		// currently not needed in mock
 	}
@@ -87,7 +91,11 @@ public class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEntry {
 		return fbType;
 	}
 
+	/**
+	 * @deprecated see {@link TypeEntry#getTypeEditable()}
+	 */
 	@Override
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	public FBType getTypeEditable() {
 		// currently not needed in mock
 		return null;

@@ -71,8 +71,7 @@ public class TransitionEditingComposite {
 
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof ECTransition) {
-				final ECTransition ecTransition = (ECTransition) element;
+			if (element instanceof final ECTransition ecTransition) {
 				switch (columnIndex) {
 				case TRANSITION_COLUMN_PRIORITY:
 					return Integer.toString(ecTransition.getPriority());
@@ -112,24 +111,28 @@ public class TransitionEditingComposite {
 		@Override
 		public Object getValue(final Object element, final String property) {
 			final ECTransition selectedTransition = (ECTransition) element;
-			switch (property) {
+			return switch (property) {
 			case TRANSITION_DESTINATION: // int for Combobox
+			{
 				final List<String> dest = ECCContentAndLabelProvider.getStateNames(getBasicFBType());
-				return Integer.valueOf((null != selectedTransition.getDestination())
+				yield Integer.valueOf((null != selectedTransition.getDestination())
 						? dest.indexOf(selectedTransition.getDestination().getName())
-								: dest.size());
-			case TRANSITION_EVENT:
-				final List<String> events = ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType());
-				return Integer.valueOf((null != selectedTransition.getConditionEvent())
-						? events.indexOf(selectedTransition.getConditionEvent().getName())
-								: events.size());
-			case TRANSITION_CONDITION: // String for TextCellEditor
-				return selectedTransition.getConditionExpression();
-			case TRANSITION_COMMENT:
-				return selectedTransition.getComment();
-			default:
-				return ""; //$NON-NLS-1$
+						: dest.size());
 			}
+			case TRANSITION_EVENT: {
+				final List<String> events = ECCContentAndLabelProvider
+						.getTransitionConditionEventNames(getBasicFBType());
+				yield Integer.valueOf((null != selectedTransition.getConditionEvent())
+						? events.indexOf(selectedTransition.getConditionEvent().getName())
+						: events.size());
+			}
+			case TRANSITION_CONDITION: // String for TextCellEditor
+				yield selectedTransition.getConditionExpression();
+			case TRANSITION_COMMENT:
+				yield selectedTransition.getComment();
+			default:
+				yield ""; //$NON-NLS-1$
+			};
 		}
 
 		@Override
@@ -144,13 +147,14 @@ public class TransitionEditingComposite {
 				final List<ECState> destinations = ECCContentAndLabelProvider.getStates(getBasicFBType());
 				final ECState dest = ((0 <= selectedDest) && (selectedDest < destinations.size()))
 						? destinations.get(selectedDest)
-								: null;
+						: null;
 				cmd = new ChangeTransitionDestinationCommand(selectedTransition, dest);
 				break;
 
 			case TRANSITION_EVENT:
 				final int selectedEv = ((Integer) value).intValue();
-				final List<String> events = ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType());
+				final List<String> events = ECCContentAndLabelProvider
+						.getTransitionConditionEventNames(getBasicFBType());
 				final String ev = ((0 <= selectedEv) && (selectedEv < events.size())) ? events.get(selectedEv) : null;
 				cmd = new ChangeConditionEventCommand(selectedTransition, ev);
 				break;
@@ -198,8 +202,8 @@ public class TransitionEditingComposite {
 	private ECState type;
 	private CommandStack commandStack;
 
-	public TransitionEditingComposite(final Composite parent, final TabbedPropertySheetWidgetFactory transitionWidgetFactory,
-			final CommandExecutor commandExecutor) {
+	public TransitionEditingComposite(final Composite parent,
+			final TabbedPropertySheetWidgetFactory transitionWidgetFactory, final CommandExecutor commandExecutor) {
 		this.transitionWidgetFactory = transitionWidgetFactory;
 		this.transitionGroup = transitionWidgetFactory.createGroup(parent,
 				Messages.TransitionEditingComposite_TransitionsFromSelectedState);
@@ -228,15 +232,11 @@ public class TransitionEditingComposite {
 	}
 
 	private void configureTransitionTableLayout(final Table table) {
-		new TableColumn(table, SWT.LEFT); // creates a table column without headline for the order numbering
-		new TableColumn(table, SWT.LEFT)
-		.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Destination);
-		new TableColumn(table, SWT.LEFT)
-		.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Event);
-		new TableColumn(table, SWT.LEFT)
-		.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Condition);
-		new TableColumn(table, SWT.LEFT)
-		.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Comment);
+		addColumn(table); // creates a table column without headline for the order numbering
+		addColumn(table).setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Destination);
+		addColumn(table).setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Event);
+		addColumn(table).setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Condition);
+		addColumn(table).setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Comment);
 
 		final TableLayout tabLayout = new TableLayout();
 		tabLayout.addColumnData(new ColumnWeightData(1, 50));
@@ -249,6 +249,10 @@ public class TransitionEditingComposite {
 
 		transitionsOutViewer.setColumnProperties(new String[] { TRANSITION_PRIORITY, TRANSITION_DESTINATION,
 				TRANSITION_EVENT, TRANSITION_CONDITION, TRANSITION_COMMENT });
+	}
+
+	private static TableColumn addColumn(final Table table) {
+		return new TableColumn(table, SWT.LEFT);
 	}
 
 	private CellEditor[] createTransitionViewerCellEditors(final Table table) {

@@ -54,7 +54,6 @@ public class InfoPropertySection extends AbstractSection {
 
 	private Composite parent;
 
-	private Button checkBox;
 	private Combo sortCombo;
 
 	private Label numbConVal;
@@ -89,8 +88,8 @@ public class InfoPropertySection extends AbstractSection {
 		instancesVal = createLabelPair(group, Messages.InfoPropertySection_Number_Of_All_Instances_Label,
 				backgroundColor);
 
-		final Label checkLabl = createLabel(group, Messages.InfoPropertySection_CheckBox_Label, backgroundColor, false);
-		checkBox = createCheckBox(group);
+		createLabel(group, Messages.InfoPropertySection_CheckBox_Label, backgroundColor, false);
+		createCheckBox(group);
 
 		fbGroup = createGroup(parent, Messages.InfoPropertySection_All_Types_And_Counts_Label, backgroundColor);
 		fbGroup.setVisible(false);

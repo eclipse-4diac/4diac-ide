@@ -85,6 +85,7 @@ public class SWTBotFBType {
 				break;
 			}
 		}
+		assertNotNull(projectItem);
 		projectItem.select();
 		bot.menu(UITestNamesHelper.EDIT).menu(UITestNamesHelper.DELETE).click();
 
@@ -118,6 +119,7 @@ public class SWTBotFBType {
 				break;
 			}
 		}
+		assertNotNull(projectItem);
 		assertTrue(projectItem.getText().contains(typeName));
 	}
 

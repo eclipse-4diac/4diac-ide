@@ -27,10 +27,11 @@ import org.eclipse.swt.widgets.Text;
 
 public abstract class RuntimeLaunchTab extends AbstractLaunchConfigurationTab {
 
-	protected static final String ATTR_LOCATION = "org.eclipse.ui.externaltools.ATTR_LOCATION"; //$NON-NLS-1$
-	protected static final String ATTR_WORKING_DIRECTORY = "org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY"; //$NON-NLS-1$
-	protected static final String ATTR_BUILD_SCOPE = "org.eclipse.ui.externaltools.ATTR_LAUNCH_CONFIGURATION_BUILD_SCOPE"; //$NON-NLS-1$
-	private static final String ATTR_APPEND_ENVIRONMENT_VARIABLES = "org.eclipse.debug.core.appendEnvironmentVariables"; //$NON-NLS-1$
+	public static final String ATTR_LOCATION = "org.eclipse.ui.externaltools.ATTR_LOCATION"; //$NON-NLS-1$
+	public static final String ATTR_WORKING_DIRECTORY = "org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY"; //$NON-NLS-1$
+	public static final String ATTR_BUILD_SCOPE = "org.eclipse.ui.externaltools.ATTR_LAUNCH_CONFIGURATION_BUILD_SCOPE"; //$NON-NLS-1$
+	public static final String ATTR_APPEND_ENVIRONMENT_VARIABLES = "org.eclipse.debug.core.appendEnvironmentVariables"; //$NON-NLS-1$
+	public static final String ATTR_LUNCH_IN_BACKGROUND = "org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND"; //$NON-NLS-1$
 
 	private Text portField;
 
@@ -41,7 +42,7 @@ public abstract class RuntimeLaunchTab extends AbstractLaunchConfigurationTab {
 		configuration.removeAttribute(RefreshUtil.ATTR_REFRESH_SCOPE);
 		configuration.setAttribute(ATTR_BUILD_SCOPE, "NONE"); //$NON-NLS-1$
 		configuration.setAttribute(ATTR_APPEND_ENVIRONMENT_VARIABLES, true);
-		configuration.setAttribute("org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", false);
+		configuration.setAttribute(ATTR_LUNCH_IN_BACKGROUND, false);
 		configuration.setAttribute(DebugPlugin.ATTR_MERGE_OUTPUT, true);
 	}
 

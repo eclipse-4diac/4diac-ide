@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -346,13 +347,10 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 		final boolean isInOut = source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar();
 
-		String arraySize = null;
-		if (source instanceof final VarDeclaration sourceVar && sourceVar.getArraySize() != null) {
-			arraySize = sourceVar.getArraySize().getValue();
-		}
-
 		final CreateSubAppInterfaceElementCommand pinCmd = new CreateSubAppInterfaceElementCommand(ie.getType(),
-				source.getName(), subapp.getInterface(), isRightPath, isInOut, arraySize, -1);
+				source.getName(), subapp.getInterface(), isRightPath, isInOut, ArraySizeHelper.getArraySize(source),
+				-1);
+
 		pinCmd.execute();
 		commands.add(pinCmd);
 		return pinCmd.getCreatedElement();

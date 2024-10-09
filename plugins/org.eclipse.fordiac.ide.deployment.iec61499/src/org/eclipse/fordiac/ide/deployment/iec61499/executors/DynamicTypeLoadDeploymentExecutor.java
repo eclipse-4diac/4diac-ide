@@ -400,7 +400,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 					entry = res.getDevice().getAutomationSystem().getTypeLibrary().getFBTypeEntry(fbresult.getType());
 				}
 
-				FBCreateCommand fbcmd = null;
+				final FBCreateCommand fbcmd;
 				if (fbresult.getName().contains(".")) {
 					final SubApp parent = findSubAppOfFB(
 							fbresult.getName().substring(0, fbresult.getName().lastIndexOf(".")), res.getFBNetwork());
@@ -408,7 +408,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				} else {
 					fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
 				}
-				if (fbcmd != null && fbcmd.canExecute()) {
+				if (fbcmd.canExecute()) {
 					fbcmd.execute();
 					if (fbresult.getName().contains(".")) {
 						fbcmd.getFB().setName(fbresult.getName().substring(fbresult.getName().lastIndexOf(".") + 1,
@@ -485,13 +485,12 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private static SubApp findSubAppOfFB(final String path, final FBNetwork network) {
 		final String[] paths = path.split("\\."); //$NON-NLS-1$
 		SubApp subapp = null;
-		for (int i = 0; i < paths.length; i++) {
-			if (i == 0) {
-				subapp = network.getSubAppNamed(paths[i]);
-				if (subapp == null) {
-					subapp = createSubApp(network, paths[i]);
-				}
-			} else {
+		if (paths.length > 0) {
+			subapp = network.getSubAppNamed(paths[0]);
+			if (subapp == null) {
+				subapp = createSubApp(network, paths[0]);
+			}
+			for (int i = 1; i < paths.length; i++) {
 				final SubApp newSubapp = subapp.getSubAppNetwork().getSubAppNamed(paths[i]);
 				if (newSubapp == null) {
 					subapp = createSubApp(subapp.getSubAppNetwork(), paths[i]);

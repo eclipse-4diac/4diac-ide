@@ -31,6 +31,12 @@
     		modes="run"               
     		id="org.eclipse.fordiac.ide.runLocalFORTE">        
 		</launchConfigurationType>
+		<launchConfigurationType
+    		name="Build 4diac FORTE"
+    		delegate="org.eclipse.core.externaltools.internal.launchConfigurations.ProgramLaunchDelegate"
+    		modes="run"               
+    		id="org.eclipse.fordiac.ide.buildFORTE">        
+		</launchConfigurationType>
 	</extension>
 
 	<extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
@@ -38,6 +44,11 @@
 			type="org.eclipse.fordiac.ide.runLocalFORTE"
 			class="org.eclipse.fordiac.ide.fortelauncher.ForteLaunchGroup"
 			id="org.eclipse.fordiac.ide.fortelauncher.launchConfigurationTabGroup">
+		</launchConfigurationTabGroup>
+		<launchConfigurationTabGroup
+			type="org.eclipse.fordiac.ide.buildFORTE"
+			class="org.eclipse.fordiac.ide.fortelauncher.BuildForteLaunchGroup"
+			id="org.eclipse.fordiac.ide.fortelauncher.buildConfigurationTabGroup">
 		</launchConfigurationTabGroup>
 	</extension>
 	
@@ -47,6 +58,11 @@
             configTypeID="org.eclipse.fordiac.ide.runLocalFORTE"
 			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/4diacFORTE.png"
             id="org.eclipse.fordiac.ide.launchConfigurationTypeImage.runLocalFORTE">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.fordiac.ide.buildFORTE"
+			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/Build4diacFORTE.png"
+            id="org.eclipse.fordiac.ide.launchConfigurationTypeImage.buildFORTE">
       </launchConfigurationTypeImage>
    </extension>
 

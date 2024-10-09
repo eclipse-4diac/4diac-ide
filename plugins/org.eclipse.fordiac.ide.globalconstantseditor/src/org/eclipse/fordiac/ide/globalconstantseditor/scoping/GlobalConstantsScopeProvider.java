@@ -22,5 +22,5 @@ package org.eclipse.fordiac.ide.globalconstantseditor.scoping;
  * on how and when to use it.
  */
 public class GlobalConstantsScopeProvider extends AbstractGlobalConstantsScopeProvider {
-
+	// No modifications to generated abstract class required
 }

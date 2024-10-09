@@ -16,8 +16,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
@@ -36,7 +34,7 @@ public class NewServiceSequenceHandler extends AbstractHandler {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final int i = selection.size() - 1;
 		if (i < 0) {
-			return IStatus.ERROR;
+			return null;
 		}
 
 		Object selected = selection.toList().get(i);
@@ -48,18 +46,17 @@ public class NewServiceSequenceHandler extends AbstractHandler {
 		}
 
 		cmdstack.execute(getCommand(selected));
-		return Status.OK_STATUS;
+		return null;
 	}
 
-	private Command getCommand(Object selected) {
+	private static Command getCommand(Object selected) {
 		if (selected instanceof FBType) {
 			selected = ((FBType) selected).getService();
 		}
 		if (selected instanceof Service) {
 			return new CreateServiceSequenceCommand((Service) selected);
 		}
-		if (selected instanceof ServiceSequence) {
-			final ServiceSequence refElement = (ServiceSequence) selected;
+		if (selected instanceof final ServiceSequence refElement) {
 			return new CreateServiceSequenceCommand(refElement.getService(), refElement);
 		}
 		return null;

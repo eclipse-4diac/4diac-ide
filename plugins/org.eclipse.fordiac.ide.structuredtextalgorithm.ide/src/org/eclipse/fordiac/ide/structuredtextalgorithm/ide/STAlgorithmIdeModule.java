@@ -16,4 +16,5 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ide;
  * Use this class to register ide components.
  */
 public class STAlgorithmIdeModule extends AbstractSTAlgorithmIdeModule {
+	// No modifications to generated abstract class required
 }

@@ -52,14 +52,14 @@ public class SWTBotPropertySheet {
 				.allOf(WidgetMatcherFactory.widgetOfType(TabbedPropertyList.class));
 		final TabbedPropertyList widgets = propertiesBot.widget(matcher);
 		final Boolean result = UIThreadRunnable.syncExec(SWTUtils.display(), (BoolResult) () -> {
-			boolean result1 = false;
+			Boolean result1 = Boolean.FALSE;
 			final Control[] children = widgets.getTabList();
 			for (final Control control : children) {
 				if (control.toString().equals(label)) {
 					final Event mouseEvent = createEvent(control, control.getBounds().x, control.getBounds().y, 1,
 							SWT.BUTTON1, 1);
 					control.notifyListeners(SWT.MouseUp, mouseEvent);
-					result1 = true;
+					result1 = Boolean.TRUE;
 					break; // quit the for
 				}
 			}

@@ -13,4 +13,5 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.serializer;
 
 public class STAlgorithmSyntacticSequencer extends AbstractSTAlgorithmSyntacticSequencer {
+	// No modifications to generated abstract class required
 }

@@ -29,7 +29,6 @@ import java.util.List
 import java.util.Map
 import java.util.Set
 import org.eclipse.fordiac.ide.model.LibraryElementTags
-import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
@@ -534,7 +533,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«param.generateNameAsParameter»«ENDFOR»'''
 
 	def protected getEventAccessorParameters(Event event) {
-		(event.inputParameters + event.outputParameters + event.inOutParameters).filter(VarDeclaration)
+		(event.inputParameters + event.inOutParameters + event.outputParameters).filter(VarDeclaration)
 	}
 
 	def protected getFBClassName() { className }

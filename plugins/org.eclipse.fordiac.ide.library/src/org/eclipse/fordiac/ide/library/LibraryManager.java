@@ -95,8 +95,6 @@ public enum LibraryManager {
 
 	private static final java.net.URI STANDARD_LIBRARY_URI = java.net.URI
 			.create("ECLIPSE_HOME/" + TypeLibraryTags.TYPE_LIBRARY); //$NON-NLS-1$
-	private static final java.net.URI WORKSPACE_DOWNLOAD_URI = java.net.URI
-			.create("WORKSPACE_LOC/" + PACKAGE_DOWNLOAD_DIRECTORY); //$NON-NLS-1$
 	private static final java.net.URI WORKSPACE_LIBRARY_URI = java.net.URI
 			.create("WORKSPACE_LOC/" + EXTRACTED_LIB_DIRECTORY); //$NON-NLS-1$
 
@@ -468,7 +466,9 @@ public enum LibraryManager {
 		case final IFolder f -> true;
 		case final IFile file when TYPE_ENDINGS.contains(file.getFileExtension().toUpperCase()) -> {
 			final TypeEntry entry = typeLibrary.getTypeEntry(file);
-			existingTypes.put(entry.getFullTypeName(), entry);
+			if (entry != null) {
+				existingTypes.put(entry.getFullTypeName(), entry);
+			}
 			yield false;
 		}
 		default -> false;
@@ -618,12 +618,7 @@ public enum LibraryManager {
 
 		ManifestHelper.sortAndSaveManifest(manifest);
 
-		/*
-		 * for (final Required req : manifest.getDependencies().getRequired()) {
-		 * checkDependency(req, project, typeLibrary); }
-		 */
 		startLocalResolveJob(project, typeLibrary);
-
 	}
 
 	/**

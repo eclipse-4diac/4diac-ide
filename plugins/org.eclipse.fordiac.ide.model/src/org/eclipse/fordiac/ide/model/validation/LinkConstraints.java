@@ -160,10 +160,10 @@ public final class LinkConstraints {
 	public static boolean typeCheck(final IInterfaceElement source, final IInterfaceElement target) {
 		final DataType sourceType = getFullDataType(source);
 		final DataType targetType = getFullDataType(target);
-		// Stricter type checks for VAR_IN_OUTs
-		if (source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()
-				&& target instanceof final VarDeclaration targetVar && targetVar.isInOutVar()) {
-			return targetType.isAssignableFrom(sourceType) && sourceType.isAssignableFrom(targetType);
+		// check for InOut sources
+		if (source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()) {
+			// relaxed checking if types could be compatible at all
+			return targetType.isAssignableFrom(sourceType) || sourceType.isAssignableFrom(targetType);
 		}
 		// check for adapter connections
 		if (source instanceof final AdapterDeclaration sourceAdapter
@@ -178,7 +178,7 @@ public final class LinkConstraints {
 		return targetType.isAssignableFrom(sourceType);
 	}
 
-	private static DataType getFullDataType(final IInterfaceElement element) {
+	public static DataType getFullDataType(final IInterfaceElement element) {
 		if (element instanceof final VarDeclaration varDeclaration && varDeclaration.isArray()) {
 			return TypeDeclarationParser.parseTypeDeclaration(varDeclaration.getType(), getArraySize(varDeclaration));
 		}

@@ -68,7 +68,11 @@ public class AttributeTypeEntryMock extends BasicNotifierImpl implements Attribu
 		attributeDeclaration = (AttributeDeclaration) value;
 	}
 
+	/**
+	 * @deprecated see {@link TypeEntry#setTypeEditable(LibraryElement)}
+	 */
 	@Override
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	public void setTypeEditable(final LibraryElement value) {
 		// currently not needed in mock
 	}
@@ -88,7 +92,11 @@ public class AttributeTypeEntryMock extends BasicNotifierImpl implements Attribu
 		return attributeDeclaration;
 	}
 
+	/**
+	 * @deprecated see {@link TypeEntry#getTypeEditable()}
+	 */
 	@Override
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	public AttributeDeclaration getTypeEditable() {
 		// currently not needed in mock
 		return null;

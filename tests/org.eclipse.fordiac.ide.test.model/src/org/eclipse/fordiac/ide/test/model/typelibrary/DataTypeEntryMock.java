@@ -69,7 +69,11 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 		dataType = (AnyDerivedType) value;
 	}
 
+	/**
+	 * @deprecated see {@link TypeEntry#setTypeEditable(LibraryElement)}
+	 */
 	@Override
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	public void setTypeEditable(final LibraryElement value) {
 		// currently not needed in mock
 	}
@@ -89,7 +93,11 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 		return dataType;
 	}
 
+	/**
+	 * @deprecated see {@link TypeEntry#getTypeEditable()}
+	 */
 	@Override
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	public AnyDerivedType getTypeEditable() {
 		// currently not needed in mock
 		return null;

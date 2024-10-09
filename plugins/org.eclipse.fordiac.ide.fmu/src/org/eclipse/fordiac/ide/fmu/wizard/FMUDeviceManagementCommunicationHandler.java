@@ -87,8 +87,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			this.mInitialValue = ""; //$NON-NLS-1$
 		}
 
-		public FMUInputOutput(final String name, final boolean input, final variableScope variable, final variableType varType,
-				final String initialValue) {
+		public FMUInputOutput(final String name, final boolean input, final variableScope variable,
+				final variableType varType, final String initialValue) {
 			this.mName = name;
 			this.mIsInput = input;
 			this.mVarType = varType;
@@ -237,8 +237,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 
 	private final Device device;
 
-	public static void createFMU(final Device device, final List<Resource> resources, final List<String> librariesToAdd, final String directory,
-			final Shell shell, final IProgressMonitor monitor) {
+	public static void createFMU(final Device device, final List<Resource> resources, final List<String> librariesToAdd,
+			final String directory, final Shell shell, final IProgressMonitor monitor) {
 		if (null != directory) {
 			if (!librariesToAdd.isEmpty()) {
 				monitor.beginTask(
@@ -264,7 +264,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			}
 		} else {
 			IDeviceManagementCommunicationHandler
-			.showErrorMessage(Messages.FMUDeviceManagementCommunicationHandler_TheDirectoryIsInvalid, shell);
+					.showErrorMessage(Messages.FMUDeviceManagementCommunicationHandler_TheDirectoryIsInvalid, shell);
 		}
 	}
 
@@ -347,11 +347,11 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		return null;
 	}
 
-	private static boolean writeAllFiles(final FMUDeviceManagementCommunicationHandler fmuFileHandler, final String tempFolder,
-			final String outputName, final Shell shell) {
+	private static boolean writeAllFiles(final FMUDeviceManagementCommunicationHandler fmuFileHandler,
+			final String tempFolder, final String outputName, final Shell shell) {
 		return (fmuFileHandler.writeToBootFile(
 				new File(tempFolder + File.separatorChar + RESOURCES_FOLDER_NAME + File.separatorChar + "forte.fboot") //$NON-NLS-1$
-				.getAbsolutePath(),
+						.getAbsolutePath(),
 				true, shell)
 				&& writeToAnyFile(new File(tempFolder + File.separatorChar + "modelDescription.xml").getAbsolutePath(), //$NON-NLS-1$
 						fmuFileHandler.createModelDescription(outputName).toString(), true, shell));
@@ -391,8 +391,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		return true;
 	}
 
-	private static boolean createTempFoldersAndFiles(final String root, final String outputName, final List<String> librariesToAdd,
-			final Shell shell) {
+	private static boolean createTempFoldersAndFiles(final String root, final String outputName,
+			final List<String> librariesToAdd, final Shell shell) {
 
 		final Map<String, String> librariesToNames = new HashMap<>();
 
@@ -401,20 +401,18 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		librariesToNames.put(PreferenceConstants.P_FMU_LIN32, PreferenceConstants.P_FMU_LIN32_LIBRARY);
 		librariesToNames.put(PreferenceConstants.P_FMU_LIN64, PreferenceConstants.P_FMU_LIN64_LIBRARY);
 
-		if (createNotBinaryFiles(root, shell)) {
-			// copy libraries
-			for (final String name : librariesToAdd) {
-				final String libraryName = librariesToNames.get(name);
-				if (!copyLibraries(root + File.separatorChar + BINARIES_FOLDER_NAME + File.separatorChar + name,
-						outputName,
-						Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH)
-						+ File.separatorChar + libraryName,
-						libraryName.substring(libraryName.indexOf('.')), shell)) {
-					return false;
-				}
-			}
-		} else {
+		if (!createNotBinaryFiles(root, shell)) {
 			return false;
+		}
+		// copy libraries
+		for (final String name : librariesToAdd) {
+			final String libraryName = librariesToNames.get(name);
+			if (!copyLibraries(root + File.separatorChar + BINARIES_FOLDER_NAME + File.separatorChar + name, outputName,
+					Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH)
+							+ File.separatorChar + libraryName,
+					libraryName.substring(libraryName.indexOf('.')), shell)) {
+				return false;
+			}
 		}
 
 		return true;
@@ -437,8 +435,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 
 	}
 
-	private static boolean copyLibraries(final String outputFolder, final String outputName, final String sourceBinary, final String extension,
-			final Shell shell) {
+	private static boolean copyLibraries(final String outputFolder, final String outputName, final String sourceBinary,
+			final String extension, final Shell shell) {
 		File tempFile = new File(outputFolder);
 		if (tempFile.mkdir()) {
 			tempFile = new File(outputFolder + File.separatorChar + outputName + extension);
@@ -479,8 +477,10 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		}
 	}
 
-	private static void zipFoderCore(final String root, final String directoryPath, final String dirElement, final ZipOutputStream zos) {
-		final String dirElementPath = directoryPath + '/' + dirElement; // there are some problems when File.separatorChar is
+	private static void zipFoderCore(final String root, final String directoryPath, final String dirElement,
+			final ZipOutputStream zos) {
+		final String dirElementPath = directoryPath + '/' + dirElement; // there are some problems when
+																		// File.separatorChar is
 		// used here
 
 		if (new File(dirElementPath).isDirectory()) {
@@ -509,7 +509,6 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 	 * only the static function of this class should be able to create an instance
 	 */
 	private FMUDeviceManagementCommunicationHandler(final Device device) {
-		super();
 		this.device = device;
 	}
 
@@ -531,10 +530,11 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		return ""; //$NON-NLS-1$
 	}
 
-	private void handlePubSubVars(final FBNetwork fbNetwork, final String fbName, final String previousNames, final EList<VarDeclaration> vars,
-			final boolean isInput) {
+	private void handlePubSubVars(final FBNetwork fbNetwork, final String fbName, final String previousNames,
+			final EList<VarDeclaration> vars, final boolean isInput) {
 		for (int i = 2; i < vars.size(); i++) { // skip two first variables
-			for (final DataConnection con : fbNetwork.getDataConnections()) { // If an SD or RD has no connected endpoint and
+			for (final DataConnection con : fbNetwork.getDataConnections()) { // If an SD or RD has no connected
+																				// endpoint and
 				// therefore the type is unknown, the variable
 				// shouldn't be added
 				if (isItsConnection(isInput, con, fbName, vars.get(i))) {
@@ -544,7 +544,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 					if (FMUInputOutput.variableType.UNKNOWN != varType) {
 						inputsAndOutputs.add(new FMUInputOutput(
 								previousNames + fbName + "@" + otherEndpoint.getFBNetworkElement().getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
-								+ otherEndpoint.getName(),
+										+ otherEndpoint.getName(),
 								!isInput, FMUInputOutput.variableScope.IO, varType, "")); // @ to avoid //$NON-NLS-1$
 						// problems if some part of
 						// the interface has the
@@ -556,7 +556,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		}
 	}
 
-	private void handleIO(final IOInfo info, final String previousNames, final String fbName, final FBNetwork fbNetwork) {
+	private void handleIO(final IOInfo info, final String previousNames, final String fbName,
+			final FBNetwork fbNetwork) {
 		if (info.isPubSub()) {
 			final FB commFB = fbNetwork.getFBNamed(fbName);
 			handlePubSubVars(fbNetwork, fbName, previousNames, commFB.getInterface().getInputVars(), true);
@@ -615,7 +616,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		return returnValue;
 	}
 
-	private void populateInputsAndOutputs(final String fbName, final String fbType, final FBNetwork fbNetwork, final String previousNames) {
+	private void populateInputsAndOutputs(final String fbName, final String fbType, final FBNetwork fbNetwork,
+			final String previousNames) {
 		final IOInfo info = getInfoFromIOAndComm(fbName, fbType, fbNetwork);
 		if (info.isIo()) {
 			handleIO(info, previousNames, fbName, fbNetwork);
@@ -667,8 +669,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		}
 		// store ECC
 		inputsAndOutputs
-		.add(new FMUInputOutput(previousNames + fbName + ".$ECC", false, FMUInputOutput.variableScope.INTERNAL, //$NON-NLS-1$
-				FMUInputOutput.variableType.INTEGER, "0")); //$NON-NLS-1$
+				.add(new FMUInputOutput(previousNames + fbName + ".$ECC", false, FMUInputOutput.variableScope.INTERNAL, //$NON-NLS-1$
+						FMUInputOutput.variableType.INTEGER, "0")); //$NON-NLS-1$
 	}
 
 	private void handleCompositeFB(final CompositeFBType composite, final String previousNames, final String fbName) {
@@ -680,15 +682,15 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 
 		// store internal FB. Take care of the names
 		for (final FBNetworkElement elem : composite.getFBNetwork().getNetworkElements()) {
-			if (elem instanceof FB && !(elem instanceof AdapterFB)) {
-				final FB fb = (FB) elem;
+			if (elem instanceof final FB fb && !(elem instanceof AdapterFB)) {
 				populateInputsAndOutputs(fb.getName(), fb.getTypeName(), composite.getFBNetwork(),
 						previousNames + fbName + "."); //$NON-NLS-1$
 			}
 		}
 	}
 
-	private void getAllVariablesFromInterface(final String fbName, final FBNetwork paFBNetwork, final String previousNames) {
+	private void getAllVariablesFromInterface(final String fbName, final FBNetwork paFBNetwork,
+			final String previousNames) {
 		// Add the interface var and events as variables
 		final InterfaceList fbInterface = paFBNetwork.getFBNamed(fbName).getInterface();
 
@@ -750,13 +752,13 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 	}
 
 	private static FMUInputOutput.variableType getInfoFromConnectedFB(final FB commFB, final FBNetwork paFBNetwork,
-			final String fbName,
-			final IInterfaceElement variable) {
+			final String fbName, final IInterfaceElement variable) {
 		FMUInputOutput.variableType returnValue = FMUInputOutput.variableType.UNKNOWN;
 		final boolean isInput = commFB.getInterface().getVariable(variable.getName()).isIsInput();
 		for (final DataConnection con : paFBNetwork.getDataConnections()) {
 			if (isItsConnection(isInput, con, fbName, variable)) {
-				final String destinationType = isInput ? con.getSource().getTypeName() : con.getDestination().getTypeName();
+				final String destinationType = isInput ? con.getSource().getTypeName()
+						: con.getDestination().getTypeName();
 				if (null != destinationType) {
 					returnValue = FMUInputOutput.getTypeFromString(destinationType);
 				}
@@ -780,9 +782,9 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		final StringBuilder modelDescription = new StringBuilder();
 		modelDescription.append(
 				"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<fmiModelDescription\n  fmiVersion=\"2.0\"\n  modelName=\"" //$NON-NLS-1$
-				+ outputName + "\"\n  guid=\"" + outputName + "\">\n\n<CoSimulation\n  modelIdentifier=\"" //$NON-NLS-1$ //$NON-NLS-2$
-				+ outputName
-				+ "\"\n  canHandleVariableCommunicationStepSize=\"true\"/>\n\n<LogCategories>\n  <Category name=\"logAll\"/>\n  <Category name=\"logError\"/>\n  <Category name=\"logCalls\"/>\n</LogCategories>"); //$NON-NLS-1$
+						+ outputName + "\"\n  guid=\"" + outputName + "\">\n\n<CoSimulation\n  modelIdentifier=\"" //$NON-NLS-1$ //$NON-NLS-2$
+						+ outputName
+						+ "\"\n  canHandleVariableCommunicationStepSize=\"true\"/>\n\n<LogCategories>\n  <Category name=\"logAll\"/>\n  <Category name=\"logError\"/>\n  <Category name=\"logCalls\"/>\n</LogCategories>"); //$NON-NLS-1$
 
 		modelDescription.append("\n\n<ModelVariables>\n"); //$NON-NLS-1$
 
@@ -820,7 +822,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		return modelDescription;
 	}
 
-	private void writeVariableToBuffer(final StringBuilder modelDescription, final int outputIndex, final FMUInputOutput element) {
+	private static void writeVariableToBuffer(final StringBuilder modelDescription, final int outputIndex,
+			final FMUInputOutput element) {
 
 		final String causality = getCausality(element);
 		final String variability = getVariability(element);
@@ -832,7 +835,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 				+ "\" variability=\"" + variability + "\"" //$NON-NLS-1$ //$NON-NLS-2$
 				+ (!element.getInput() || (element.getScope() == FMUInputOutput.variableScope.PARAM)
 						? " initial=\"exact\">" //$NON-NLS-1$
-								: ">") //$NON-NLS-1$
+						: ">") //$NON-NLS-1$
 				+ "\n    <"); //$NON-NLS-1$
 		switch (element.getVarType()) {
 		case BOOLEAN:
@@ -855,16 +858,12 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 	}
 
 	private static String getCausality(final FMUInputOutput element) {
-		switch (element.getScope()) {
-		case PARAM:
-			return "parameter"; //$NON-NLS-1$
-		case INTERNAL:
-			return "local"; //$NON-NLS-1$
-		case IO:
-			return element.getInput() ? "input" : "output"; //$NON-NLS-1$ //$NON-NLS-2$
-		default:
-			return ""; //$NON-NLS-1$
-		}
+		return switch (element.getScope()) {
+		case PARAM -> "parameter"; //$NON-NLS-1$
+		case INTERNAL -> "local"; //$NON-NLS-1$
+		case IO -> element.getInput() ? "input" : "output"; //$NON-NLS-1$ //$NON-NLS-2$
+		default -> ""; //$NON-NLS-1$
+		};
 	}
 
 	private static String getVariability(final FMUInputOutput element) {

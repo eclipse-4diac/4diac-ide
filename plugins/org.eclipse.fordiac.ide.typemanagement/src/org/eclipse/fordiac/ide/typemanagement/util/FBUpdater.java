@@ -23,12 +23,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.UpdatePinInTypeDeclarationCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -71,23 +69,6 @@ public final class FBUpdater {
 			cmd = cmd.chain(subCmd);
 		}
 		return cmd;
-	}
-
-	public static Command createUpdatePinInTypeDeclarationCommand(final List<FBType> types,
-			final List<DataTypeEntry> dataTypeEntries) {
-		final List<Command> commands = new ArrayList<>();
-		types.forEach(type -> commands
-				.add(createUpdatePinInTypeDeclarationCommand(type, dataTypeEntries.get(types.indexOf(type)))));
-		Command cmd = new CompoundCommand();
-		for (final Command subCmd : commands) {
-			cmd = cmd.chain(subCmd);
-		}
-		return cmd;
-	}
-
-	public static Command createUpdatePinInTypeDeclarationCommand(final FBType type,
-			final DataTypeEntry dataTypeEntry) {
-		return new UpdatePinInTypeDeclarationCommand(type, dataTypeEntry);
 	}
 
 	public static Command createStructManipulatorsUpdateCommand(final List<StructManipulator> muxes,

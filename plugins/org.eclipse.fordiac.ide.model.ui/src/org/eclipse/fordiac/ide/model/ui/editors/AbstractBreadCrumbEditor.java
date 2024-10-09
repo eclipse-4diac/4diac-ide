@@ -322,19 +322,17 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	public INavigationLocation createNavigationLocation() {
 		if (breadcrumb != null) {
 			final Object modelItem = breadcrumb.getActiveItem().getModel();
-			return (modelItem != null) ? new BreadcrumbNavigationLocation(this, modelItem) : null;
+			return (modelItem != null) ? new BreadcrumbNavigationLocation(this) : null;
 		}
 		return null;
 	}
 
 	@Override
 	public void saveState(final IMemento memento) {
-		final StringBuilder itemPath = new StringBuilder();
 		// if the editor content could not be loaded the bread crumb can be null
 		if (getBreadcrumb() != null) {
-			BreadcrumbNavigationLocation.generateItemPath(itemPath, getBreadcrumb().getActiveItem().getModel(),
-					getBreadcrumb().getContentProvider(), getBreadcrumb().getLabelProvider());
-			memento.putString(TAG_BREADCRUMB_HIERACHY, itemPath.substring(1));
+			memento.putString(TAG_BREADCRUMB_HIERACHY,
+					BreadcrumbNavigationLocation.generateItemPath(getBreadcrumb()).substring(1));
 
 			final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
 			if (null != viewer) {

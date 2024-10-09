@@ -24,8 +24,8 @@ import org.eclipse.gef.commands.Command;
 
 public class SetPositionCommand extends Command {
 	private final PositionableElement positionableElement;
-	private final double dx;
-	private final double dy;
+//	private final double dx;
+//	private final double dy;
 	private Position oldPos;
 	private Position newPos;
 
@@ -33,16 +33,25 @@ public class SetPositionCommand extends Command {
 		return positionableElement;
 	}
 
-	public SetPositionCommand(final PositionableElement positionableElement, final double dx, final double dy) {
+	private SetPositionCommand(final PositionableElement positionableElement) {
 		this.positionableElement = positionableElement;
-		this.dx = dx;
-		this.dy = dy;
 		setLabel(Messages.ViewSetPositionCommand_LABEL_Move);
 	}
 
+	public SetPositionCommand(final PositionableElement positionableElement, final double dx, final double dy) {
+		this(positionableElement);
+		if (positionableElement != null) {
+			oldPos = getPositionableElement().getPosition();
+			newPos = createNewPosition(oldPos, dx, dy);
+		}
+	}
+
 	public SetPositionCommand(final PositionableElement positionableElement, final int dx, final int dy) {
-		this(positionableElement, CoordinateConverter.INSTANCE.screenToIEC61499(dx),
-				CoordinateConverter.INSTANCE.screenToIEC61499(dy));
+		this(positionableElement);
+		if (positionableElement != null) {
+			oldPos = getPositionableElement().getPosition();
+			newPos = createNewPosition(oldPos, dx, dy);
+		}
 	}
 
 	@Override
@@ -52,8 +61,6 @@ public class SetPositionCommand extends Command {
 
 	@Override
 	public void execute() {
-		oldPos = getPositionableElement().getPosition();
-		newPos = createNewPosition();
 		setPosition(newPos);
 	}
 
@@ -67,11 +74,23 @@ public class SetPositionCommand extends Command {
 		setPosition(oldPos);
 	}
 
-	private Position createNewPosition() {
+	private static Position createNewPosition(final Position oldPos, final double dx, final double dy) {
 		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
 		pos.setX(oldPos.getX() + dx);
 		pos.setY(oldPos.getY() + dy);
 		return pos;
+	}
+
+	private static Position createNewPosition(final Position oldPos, final int dx, final int dy) {
+		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+		pos.setX(newPosFromScreenDelta(dx, oldPos.getX()));
+		pos.setY(newPosFromScreenDelta(dy, oldPos.getY()));
+		return pos;
+	}
+
+	private static double newPosFromScreenDelta(final int delta, final double oldPos) {
+		final int oldPosScreen = CoordinateConverter.INSTANCE.iec61499ToScreen(oldPos);
+		return CoordinateConverter.INSTANCE.screenToIEC61499(oldPosScreen + delta);
 	}
 
 	protected void setPosition(final Position pos) {

@@ -15,11 +15,9 @@ package org.eclipse.fordiac.ide.export.forte_lua.st
 
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
@@ -31,7 +29,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 @FinalFieldsConstructor
 class STFunctionSupport extends StructuredTextSupport {
 	final STFunctionSource source
-	STFunction currentFunction
 	CharSequence outReturn
 
 	override prepare() {
@@ -46,9 +43,7 @@ class STFunctionSupport extends StructuredTextSupport {
 	def private CharSequence generateStructuredTextFunctionSource(STFunctionSource source) {
 		val result = new StringBuilder
 		for (function : source.functions) {
-			currentFunction = function
 			result.append(function.generateStructuredTextFunction)
-			currentFunction = null
 		}
 		result
 	}

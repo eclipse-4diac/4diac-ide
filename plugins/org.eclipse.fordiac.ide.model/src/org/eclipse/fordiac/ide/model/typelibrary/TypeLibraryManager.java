@@ -138,6 +138,16 @@ public enum TypeLibraryManager {
 		return library;
 	}
 
+	public void resendCreateEvent(final IProject project) {
+		if (project == null) {
+			return;
+		}
+		final TypeLibrary library = getTypeLibrary(project);
+		if (library != null) {
+			eventBroker.send(TypeLibraryTags.TYPE_LIBRARY_CREATION_TOPIC, library);
+		}
+	}
+
 	public void loadToolLibrary() {
 		synchronized (typeLibraryList) {
 			final IProject toolLibProject = getToolLibProject();

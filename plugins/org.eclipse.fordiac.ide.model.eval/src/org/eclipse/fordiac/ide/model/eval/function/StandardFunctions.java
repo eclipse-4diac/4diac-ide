@@ -486,11 +486,15 @@ public interface StandardFunctions extends Functions {
 
 	@Comment("Returns the lower bound of the dimension of the given array")
 	static <T extends ArrayValue, U extends AnyIntValue> AnyIntValue LOWER_BOUND(final T array, final U dimension) {
+		// The exact signature of this method, including the generic parameters, is
+		// important for deriving ST declarations.
 		return DIntValue.toDIntValue(array.getType().getSubranges().get(dimension.intValue() - 1).getLowerLimit());
 	}
 
 	@Comment("Returns the upper bound of the dimension of the given array")
 	static <T extends ArrayValue, U extends AnyIntValue> AnyIntValue UPPER_BOUND(final T array, final U dimension) {
+		// The exact signature of this method, including the generic parameters, is
+		// important for deriving ST declarations.
 		return DIntValue.toDIntValue(array.getType().getSubranges().get(dimension.intValue() - 1).getUpperLimit());
 	}
 

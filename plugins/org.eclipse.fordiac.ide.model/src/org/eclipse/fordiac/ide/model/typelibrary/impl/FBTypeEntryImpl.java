@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
@@ -56,11 +57,12 @@ public class FBTypeEntryImpl extends AbstractCheckedTypeEntryImpl<FBType> implem
 	}
 
 	@Override
-	public synchronized void setType(final LibraryElement type) {
-		super.setType(type);
-		if (type != null) {
+	protected synchronized NotificationChain basicSetType(final LibraryElement type,
+			final NotificationChain notifications) {
+		if (type instanceof FBType) {
 			typeEClass.set(type.eClass());
 		}
+		return super.basicSetType(type, notifications);
 	}
 
 	@Override

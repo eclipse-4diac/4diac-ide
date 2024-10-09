@@ -75,7 +75,8 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 	@Override
 	public void connectionOpened(final Device dev) {
 		currentDest = null;
-		outputStreamMonitor.message(MessageFormat.format(Messages.DeploymentStreamsProxy_ConnectedToDevice, dev.getName()));
+		outputStreamMonitor
+				.message(MessageFormat.format(Messages.DeploymentStreamsProxy_ConnectedToDevice, dev.getName()));
 	}
 
 	@Override
@@ -95,7 +96,8 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 	}
 
 	private void printDeployStatistics() {
-		outputStreamMonitor.message(MessageFormat.format(Messages.DeploymentStreamsProxy_DeployedElements, currentDest, count));
+		outputStreamMonitor.message(MessageFormat.format(Messages.DeploymentStreamsProxy_DeployedElements, currentDest,
+				Integer.valueOf(count)));
 	}
 
 	private void printDeployingResource(final String destination) {
@@ -130,7 +132,8 @@ public class DeploymentStreamsProxy implements IStreamsProxy, IDeploymentListene
 		if (currentDest != null && !currentDest.isBlank()) {
 			printDeployStatistics();
 		}
-		outputStreamMonitor.message(MessageFormat.format(Messages.DeploymentStreamsProxy_DisconnectedFromDevice, dev.getName()));
+		outputStreamMonitor
+				.message(MessageFormat.format(Messages.DeploymentStreamsProxy_DisconnectedFromDevice, dev.getName()));
 	}
 
 	private String getFormattedXML(final String input) throws TransformerFactoryConfigurationError {
