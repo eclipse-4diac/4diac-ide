@@ -757,4 +757,24 @@
 			plugin="org.eclipse.fordiac.ide.deployment.debug">
 		</statusHandler>
 	</extension>
+	<extension
+		point="org.eclipse.debug.ui.detailPaneFactories">
+		<detailFactories
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.breakpoint.DeploymentWatchpointDetailPaneFactory"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.watchpoint.detailFactory">
+			<enablement>
+				<with
+					variable="selection">
+					<count
+						value="1">
+					</count>
+					<iterate>
+						<adapt
+							type="org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint">
+						</adapt>
+					</iterate>
+				</with>
+			</enablement>
+		</detailFactories>
+	</extension>
 </plugin>

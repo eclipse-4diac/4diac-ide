@@ -23,7 +23,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.deployment.debug,
  org.eclipse.fordiac.ide.systemconfiguration,
  org.eclipse.fordiac.ide.ui,
- org.eclipse.gef
+ org.eclipse.gef,
+ org.eclipse.fordiac.ide.gef
 Export-Package: org.eclipse.fordiac.ide.deployment.debug.ui,
  org.eclipse.fordiac.ide.deployment.debug.ui.actions,
  org.eclipse.fordiac.ide.deployment.debug.ui.fb,
