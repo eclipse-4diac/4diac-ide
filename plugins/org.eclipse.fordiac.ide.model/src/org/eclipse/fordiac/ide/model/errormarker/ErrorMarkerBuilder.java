@@ -50,8 +50,8 @@ public final class ErrorMarkerBuilder {
 		return new ErrorMarkerBuilder(message);
 	}
 
-	public void createMarker(final IResource resource) throws CoreException {
-		resource.createMarker(type, getAttributes(resource));
+	public IMarker createMarker(final IResource resource) throws CoreException {
+		return resource.createMarker(type, getAttributes(resource));
 	}
 
 	public Map<String, Object> getAttributes() {

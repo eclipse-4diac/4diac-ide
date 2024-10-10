@@ -208,6 +208,34 @@
 				type="org.eclipse.debug.ui.actions.ILaunchable">
 			</adapter>
 		</factory>
+		<factory
+			adaptableType="org.eclipse.fordiac.ide.model.libraryElement.INamedElement"
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.breakpoint.DeploymentToggleBreakpointsTargetExtension">
+			<adapter
+				type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget">
+			</adapter>
+		</factory>
+		<factory
+			adaptableType="org.eclipse.gef.EditPart"
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.breakpoint.DeploymentToggleBreakpointsTargetExtension">
+			<adapter
+				type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget">
+			</adapter>
+		</factory>
+		<factory
+			adaptableType="org.eclipse.ui.IEditorPart"
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.breakpoint.DeploymentToggleBreakpointsTargetExtension">
+			<adapter
+				type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget">
+			</adapter>
+		</factory>
+		<factory
+			adaptableType="org.eclipse.fordiac.ide.deployment.debug.watch.IWatch"
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.breakpoint.DeploymentToggleBreakpointsTargetExtension">
+			<adapter
+				type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget">
+			</adapter>
+		</factory>
 	</extension>
 	<extension
 		point="org.eclipse.ui.commands">
@@ -257,6 +285,11 @@
 			description="Runs the last launched monitor configuration"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.MonitorToolbar"
 			name="Run Last Launch Monitor Configuration">
+		</command>
+		<command
+			categoryId="org.eclipse.debug.ui.category.run"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatch"
+			name="Toggle Watch">
 		</command>
 	</extension>
 	<extension
@@ -323,6 +356,47 @@
 					</iterate>
 				</with>
 			</activeWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.ToggleWatchpointHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatch">
+			<activeWhen>
+				<or>
+					<with
+						variable="activePartId">
+						<equals
+							value="org.eclipse.fordiac.ide.editors.SystemEditor">
+						</equals>
+					</with>
+					<with
+						variable="selection">
+						<iterate
+							ifEmpty="false"
+							operator="or">
+							<instanceof
+								value="org.eclipse.fordiac.ide.deployment.debug.watch.IWatch">
+							</instanceof>
+						</iterate>
+					</with>
+				</or>
+			</activeWhen>
+			<enabledWhen>
+				<with
+					variable="selection">
+					<iterate
+						ifEmpty="false"
+						operator="or">
+						<or>
+							<adapt
+								type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
+							</adapt>
+							<adapt
+								type="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement">
+							</adapt>
+						</or>
+					</iterate>
+				</with>
+			</enabledWhen>
 		</handler>
 	</extension>
 	<extension
@@ -425,6 +499,17 @@
 					</with>
 				</visibleWhen>
 			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatch"
+				disabledIcon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/read_obj_disabled.png"
+				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/read_obj.png"
+				label="Toggle Watch"
+				style="push"
+				tooltip="Toggle watch for selected elements">
+				<visibleWhen
+					checkEnabled="true">
+				</visibleWhen>
+			</command>
 		</menuContribution>
 		<menuContribution
 			locationURI="menu:org.eclipse.ui.run?after=additions">
@@ -473,6 +558,14 @@
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateConnection"
 				label="Online Create Connection"
 				style="push">
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatch"
+				disabledIcon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/read_obj_disabled.png"
+				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/read_obj.png"
+				label="Toggle Watch"
+				style="push"
+				tooltip="Toggle watch for selected elements">
 			</command>
 		</menuContribution>
 	</extension>

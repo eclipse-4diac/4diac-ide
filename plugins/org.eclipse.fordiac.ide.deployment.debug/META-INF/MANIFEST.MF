@@ -17,4 +17,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.debug
 Export-Package: org.eclipse.fordiac.ide.deployment.debug,
+ org.eclipse.fordiac.ide.deployment.debug.breakpoint,
  org.eclipse.fordiac.ide.deployment.debug.fb

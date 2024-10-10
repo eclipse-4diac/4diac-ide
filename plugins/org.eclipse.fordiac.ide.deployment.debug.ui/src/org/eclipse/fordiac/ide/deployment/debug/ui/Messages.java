@@ -38,6 +38,7 @@ public class Messages extends NLS {
 	public static String DeploymentLaunchConfigurationTab_SelectionLabel;
 	public static String DeploymentLaunchConfigurationTab_SystemLabel;
 	public static String DeploymentLaunchConfigurationTab_SystemMessage;
+	public static String DeploymentDebugModelPresentation_WatchpointText;
 	public static String KillDeviceHandler_KillDeviceError;
 	public static String LaunchActiveStatusHandler_LaunchActiveMessage;
 	public static String LaunchActiveStatusHandler_LaunchActiveTitle;

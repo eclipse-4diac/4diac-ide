@@ -27,4 +27,33 @@
 			mode="org.eclipse.fordiac.ide.deployment.debug.monitor">
 		</launchMode>
 	</extension>
+	<extension
+		id="org.eclipse.fordiac.ide.deployment.debug.watchpointMarker"
+		name="Watch"
+		point="org.eclipse.core.resources.markers">
+		<super
+			type="org.eclipse.debug.core.breakpointMarker">
+		</super>
+		<persistent
+			value="true">
+		</persistent>
+		<attribute
+			name="org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.installed">
+		</attribute>
+		<attribute
+			name="org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.forceValue">
+		</attribute>
+		<attribute
+			name="org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.forceEnabled">
+		</attribute>
+	</extension>
+	<extension
+		point="org.eclipse.debug.core.breakpoints">
+		<breakpoint
+			class="org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint"
+			id="org.eclipse.fordiac.ide.deployment.debug.watchpoint"
+			markerType="org.eclipse.fordiac.ide.deployment.debug.watchpointMarker"
+			name="Watch">
+		</breakpoint>
+	</extension>
 </plugin>
