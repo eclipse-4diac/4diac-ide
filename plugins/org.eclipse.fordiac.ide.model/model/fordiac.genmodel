@@ -23,6 +23,7 @@
     <genDataTypes ecoreDataType="lib.ecore#//IFile"/>
     <genDataTypes ecoreDataType="lib.ecore#//InterfaceElementStream"/>
     <genDataTypes ecoreDataType="lib.ecore#//IProject"/>
+    <genDataTypes ecoreDataType="lib.ecore#//NamedElementStream"/>
     <genDataTypes ecoreDataType="lib.ecore#//Point"/>
     <genDataTypes ecoreDataType="lib.ecore#//TypeEntry"/>
     <genDataTypes ecoreDataType="lib.ecore#//TypeLibrary"/>
@@ -119,6 +120,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CFBInstance/cfbNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//CFBInstance/loadCFBNetwork" body="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.loadCFBNetwork(this);"/>
       <genOperations ecoreOperation="lib.ecore#//CFBInstance/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xA;if(type instanceof CompositeFBType){&#xA;   return (CompositeFBType) type; &#xA;}&#xA;return null;"/>
+      <genOperations ecoreOperation="lib.ecore#//CFBInstance/findBySimpleName" body="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.findBySimpleName(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//CFBInstance/findBySimpleName/name"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Color">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Color/red"/>
@@ -544,6 +548,13 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//INamedElement/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//INamedElement/comment"/>
       <genOperations ecoreOperation="lib.ecore#//INamedElement/getQualifiedName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//INamedElement/findBySimpleName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.findBySimpleName(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//INamedElement/findBySimpleName/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//INamedElement/findByQualifiedName"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.findByQualifiedName(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//INamedElement/findByQualifiedName/name"/>
+      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//INamedElement/validateName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.validateName(this, diagnostics, context);">
         <genParameters ecoreParameter="lib.ecore#//INamedElement/validateName/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//INamedElement/validateName/context"/>
@@ -811,6 +822,9 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//TypedSubApp/subAppNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//TypedSubApp/isTyped" body="return true;"/>
       <genOperations ecoreOperation="lib.ecore#//TypedSubApp/loadSubAppNetwork" body="return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.loadSubAppNetwork(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//TypedSubApp/findBySimpleName" body="return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.findBySimpleName(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//TypedSubApp/findBySimpleName/name"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//UntypedSubApp">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//UntypedSubApp/subAppNetwork"/>

@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import java.util.Map;
+import java.util.stream.Stream;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.ecore.EObject;
 
@@ -91,6 +92,22 @@ public interface INamedElement extends EObject {
 	 * @generated
 	 */
 	String getQualifiedName();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model dataType="org.eclipse.fordiac.ide.model.libraryElement.NamedElementStream"
+	 * @generated
+	 */
+	Stream<INamedElement> findBySimpleName(String name);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model dataType="org.eclipse.fordiac.ide.model.libraryElement.NamedElementStream"
+	 * @generated
+	 */
+	Stream<INamedElement> findByQualifiedName(String name);
 
 	/**
 	 * <!-- begin-user-doc -->

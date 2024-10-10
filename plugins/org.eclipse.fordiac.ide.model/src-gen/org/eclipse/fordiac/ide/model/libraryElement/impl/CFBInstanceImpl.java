@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.util.stream.Stream;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
@@ -26,6 +27,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
@@ -162,6 +164,16 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 		   return (CompositeFBType) type; 
 		}
 		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Stream<INamedElement> findBySimpleName(final String name) {
+		return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.findBySimpleName(this, name);
 	}
 
 	/**

@@ -75,6 +75,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
@@ -282,6 +283,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return createInterfaceElementStreamFromString(eDataType, initialValue);
 			case LibraryElementPackage.IPROJECT:
 				return createIProjectFromString(eDataType, initialValue);
+			case LibraryElementPackage.NAMED_ELEMENT_STREAM:
+				return createNamedElementStreamFromString(eDataType, initialValue);
 			case LibraryElementPackage.POINT:
 				return createPointFromString(eDataType, initialValue);
 			case LibraryElementPackage.TYPE_ENTRY:
@@ -313,6 +316,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return convertInterfaceElementStreamToString(eDataType, instanceValue);
 			case LibraryElementPackage.IPROJECT:
 				return convertIProjectToString(eDataType, instanceValue);
+			case LibraryElementPackage.NAMED_ELEMENT_STREAM:
+				return convertNamedElementStreamToString(eDataType, instanceValue);
 			case LibraryElementPackage.POINT:
 				return convertPointToString(eDataType, instanceValue);
 			case LibraryElementPackage.TYPE_ENTRY:
@@ -1374,6 +1379,25 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 */
 	public String convertIProjectToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	public Stream<INamedElement> createNamedElementStreamFromString(EDataType eDataType, String initialValue) {
+		return (Stream<INamedElement>)super.createFromString(initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertNamedElementStreamToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(instanceValue);
 	}
 
 	/**

@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.util.stream.Stream;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -25,6 +26,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 
@@ -157,6 +159,16 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 	@Override
 	public FBNetwork loadSubAppNetwork() {
 		return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.loadSubAppNetwork(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Stream<INamedElement> findBySimpleName(final String name) {
+		return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.findBySimpleName(this, name);
 	}
 
 	/**

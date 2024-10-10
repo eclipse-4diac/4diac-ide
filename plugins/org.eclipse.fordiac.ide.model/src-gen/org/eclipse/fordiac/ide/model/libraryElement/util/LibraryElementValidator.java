@@ -675,6 +675,8 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateInterfaceElementStream((Stream<IInterfaceElement>)value, diagnostics, context);
 			case LibraryElementPackage.IPROJECT:
 				return validateIProject((IProject)value, diagnostics, context);
+			case LibraryElementPackage.NAMED_ELEMENT_STREAM:
+				return validateNamedElementStream((Stream<INamedElement>)value, diagnostics, context);
 			case LibraryElementPackage.POINT:
 				return validatePoint((Point)value, diagnostics, context);
 			case LibraryElementPackage.TYPE_ENTRY:
@@ -2805,6 +2807,15 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateIProject(IProject iProject, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return true;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateNamedElementStream(Stream<INamedElement> namedElementStream, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return true;
 	}
 
