@@ -19,7 +19,6 @@ package org.eclipse.fordiac.ide.deployment;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,10 +36,8 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor.IDeviceManagementInteractorCloser;
-import org.eclipse.fordiac.ide.deployment.monitoringbase.AbstractMonitoringManager;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -66,14 +63,6 @@ public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListe
 	 * if the user should be asked
 	 */
 	private boolean overrideAll = false;
-
-	/**
-	 * set of automation systems where monitoring was active during deployment.
-	 *
-	 * For these automation systems monitoring was disabled and need to be renabled
-	 * after deployment.
-	 */
-	private final Set<AutomationSystem> monitoredSystems = new HashSet<>();
 
 	/**
 	 * DownloadRunnable constructor.
@@ -114,16 +103,13 @@ public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListe
 			}
 			deployDevice(devData);
 		}
-		reenableMonitoring();
 		monitor.done();
 	}
 
-	private void deployDevice(final DeviceDeploymentData devData)
-			throws InvocationTargetException, InterruptedException {
+	private void deployDevice(final DeviceDeploymentData devData) throws InterruptedException {
 		final IDeviceManagementInteractor executor = DeviceManagementInteractorFactory.INSTANCE
 				.getDeviceManagementInteractor(devData.getDevice(), overrideDevMgmCommHandler, profile);
 		if (executor != null) {
-			checkMonitoring(devData.getDevice().getAutomationSystem());
 			addDeploymentListener(executor);
 			try (IDeviceManagementInteractorCloser closer = executor::disconnect) {
 				executor.connect();
@@ -298,24 +284,6 @@ public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListe
 					}
 				}
 			}
-		}
-	}
-
-	private void checkMonitoring(final AutomationSystem automationSystem)
-			throws InvocationTargetException, InterruptedException {
-		if (!monitoredSystems.contains(automationSystem)) {
-			final AbstractMonitoringManager monitoringManager = AbstractMonitoringManager.getMonitoringManager();
-			if (monitoringManager.isSystemMonitored(automationSystem)) {
-				monitoringManager.disableSystemSynch(automationSystem, curMonitor);
-				monitoredSystems.add(automationSystem);
-			}
-		}
-	}
-
-	private void reenableMonitoring() throws InvocationTargetException, InterruptedException {
-		final AbstractMonitoringManager monitoringManager = AbstractMonitoringManager.getMonitoringManager();
-		for (final AutomationSystem system : monitoredSystems) {
-			monitoringManager.enableSystemSynch(system, curMonitor);
 		}
 	}
 

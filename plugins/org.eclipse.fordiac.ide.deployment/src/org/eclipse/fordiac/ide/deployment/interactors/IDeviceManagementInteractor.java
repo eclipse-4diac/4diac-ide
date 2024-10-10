@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
-import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -312,44 +311,4 @@ public interface IDeviceManagementInteractor {
 	 * @throws DeploymentException if an error occurred
 	 */
 	void clearForce(Resource resource, String name) throws DeploymentException;
-
-	/**
-	 * @deprecated use {@link #addWatch(Resource, String)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	default void addWatch(final MonitoringBaseElement element) throws DeploymentException {
-		element.setOffline(!addWatch(element.getPort().getResource(), element.getQualifiedString()));
-	}
-
-	/**
-	 * @deprecated use {@link #removeWatch(Resource, String)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	default void removeWatch(final MonitoringBaseElement element) throws DeploymentException {
-		element.setOffline(!removeWatch(element.getPort().getResource(), element.getQualifiedString()));
-	}
-
-	/**
-	 * @deprecated use {@link #triggerEvent(Resource, String)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	default void triggerEvent(final MonitoringBaseElement element) throws DeploymentException {
-		triggerEvent(element.getPort().getResource(), element.getQualifiedString());
-	}
-
-	/**
-	 * @deprecated use {@link #forceValue(Resource, String, String)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	default void forceValue(final MonitoringBaseElement element, final String value) throws DeploymentException {
-		forceValue(element.getPort().getResource(), element.getQualifiedString(), value);
-	}
-
-	/**
-	 * @deprecated use {@link #clearForce(Resource, String)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	default void clearForce(final MonitoringBaseElement element) throws DeploymentException {
-		clearForce(element.getPort().getResource(), element.getQualifiedString());
-	}
 }

@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor.IDeviceManagementInteractorCloser;
-import org.eclipse.fordiac.ide.deployment.monitoringbase.AbstractMonitoringManager;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -129,8 +128,6 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 							this);
 					interactor.addDeploymentListener(errorChecker);
 
-					checkAndSaveMonitoringState(device.getAutomationSystem());
-
 					try (IDeviceManagementInteractorCloser closer = interactor::disconnect) {
 						interactor.connect();
 						executeCommand(interactor);
@@ -143,21 +140,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 				}
 			}
 		}
-		reenableMonitoring();
 		return null;
-	}
-
-	private void checkAndSaveMonitoringState(final AutomationSystem system) {
-		final AbstractMonitoringManager monMan = AbstractMonitoringManager.getMonitoringManager();
-		if (monMan.isSystemMonitored(system)) {
-			monMan.disableSystem(system);
-			monitoredSystems.add(system);
-		}
-	}
-
-	private void reenableMonitoring() {
-		final AbstractMonitoringManager monMan = AbstractMonitoringManager.getMonitoringManager();
-		monitoredSystems.forEach(monMan::enableSystem);
 	}
 
 	private static List<Object> getObjectSelectionArray(final ExecutionEvent event) {
