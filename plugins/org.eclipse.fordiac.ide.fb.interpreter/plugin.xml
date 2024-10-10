@@ -55,7 +55,7 @@
    <extension
            point="org.eclipse.ui.menus">
 	<menuContribution
-         locationURI="menu:org.eclipse.4diac.ide.monitoring.menus.debug?after=org.eclipse.fordiac.ide.monitoring.monitoringAdditions">  
+         locationURI="menu:org.eclipse.ui.run">  
       <command
             commandId="org.eclipse.fordiac.ide.fb.interpreter.recordExecutionTrace"
             label="Record Execution Trace for Network"
