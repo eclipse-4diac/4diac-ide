@@ -110,6 +110,9 @@
                commandId="org.eclipse.fordiac.ide.debug.ui.st.breakpointProperties"
                label="Breakpoint Properties..."
                style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
          </command>
       </menuContribution>
    </extension>
