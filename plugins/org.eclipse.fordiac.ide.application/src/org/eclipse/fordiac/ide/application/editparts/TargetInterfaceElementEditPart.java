@@ -209,4 +209,12 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 
 		return parent;
 	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == IInterfaceElement.class) {
+			return key.cast(getModel().getHost());
+		}
+		return super.getAdapter(key);
+	}
 }

@@ -370,6 +370,14 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == IInterfaceElement.class) {
+			return key.cast(getModel());
+		}
+		return super.getAdapter(key);
+	}
+
+	@Override
 	public IInterfaceElement getModel() {
 		return (IInterfaceElement) super.getModel();
 	}

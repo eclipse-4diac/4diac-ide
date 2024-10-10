@@ -232,6 +232,14 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == FBNetworkElement.class) {
+			return key.cast(getModel());
+		}
+		return super.getAdapter(key);
+	}
+
+	@Override
 	public FBNetworkElement getModel() {
 		return (FBNetworkElement) super.getModel();
 	}
