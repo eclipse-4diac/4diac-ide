@@ -122,20 +122,6 @@
          </activeWhen>
       </handler>
       <handler 
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.DeleteSystem"
-            commandId="org.eclipse.ui.edit.delete">
-         <activeWhen>
-            <with variable="selection">
-		    <iterate
-            operator="and">
-         <adapt
-               type="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-         </adapt>
-      </iterate>
-		   </with>            
-         </activeWhen>
-      </handler>
-      <handler 
             class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.RefreshHandler"
             commandId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.refresh">
          <activeWhen>
