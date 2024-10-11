@@ -14,14 +14,14 @@ package org.eclipse.fordiac.ide.debug.value;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
-import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
+import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 
 public final class EvaluatorDebugElementaryValue extends EvaluatorDebugValue {
 
 	public EvaluatorDebugElementaryValue(final Value value, final String expression,
-			final EvaluatorDebugTarget target) {
+			final IEvaluatorDebugTarget target) {
 		super(value, target);
 	}
 

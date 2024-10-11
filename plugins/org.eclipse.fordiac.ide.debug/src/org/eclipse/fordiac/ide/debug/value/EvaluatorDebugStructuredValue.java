@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.value;
 
-import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
+import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.model.eval.value.Value;
 public abstract class EvaluatorDebugStructuredValue extends EvaluatorDebugValue {
 	private final EvaluatorDebugVariable variable;
 
-	protected EvaluatorDebugStructuredValue(final Value value, final EvaluatorDebugTarget target) {
+	protected EvaluatorDebugStructuredValue(final Value value, final IEvaluatorDebugTarget target) {
 		super(value, target);
 		this.variable = null;
 	}

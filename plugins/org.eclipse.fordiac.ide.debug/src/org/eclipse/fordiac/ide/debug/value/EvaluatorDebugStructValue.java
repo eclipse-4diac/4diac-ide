@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
-import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
+import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.model.eval.value.StructValue;
 
 public final class EvaluatorDebugStructValue extends EvaluatorDebugStructuredValue {
@@ -27,18 +27,18 @@ public final class EvaluatorDebugStructValue extends EvaluatorDebugStructuredVal
 	private final Map<String, EvaluatorDebugVariable> members;
 
 	public EvaluatorDebugStructValue(final StructValue value, final String expression,
-			final EvaluatorDebugTarget target) {
+			final IEvaluatorDebugTarget target) {
 		super(value, target);
-		members = value.getMembers().values().stream().map(
-				member -> new EvaluatorDebugVariable(member, createSubExpression(expression, member.getName()), target))
+		members = value.getMembers().values().stream()
+				.map(member -> target.createVariable(member, createSubExpression(expression, member.getName())))
 				.collect(Collectors.toUnmodifiableMap(EvaluatorDebugVariable::getName, Function.identity()));
 	}
 
 	public EvaluatorDebugStructValue(final StructValue value, final EvaluatorDebugVariable variable) {
 		super(value, variable);
 		members = value.getMembers().values().stream()
-				.map(member -> new EvaluatorDebugVariable(member,
-						createSubExpression(variable.getExpression(), member.getName()), variable))
+				.map(member -> variable.createSubVariable(member,
+						createSubExpression(variable.getExpression(), member.getName())))
 				.collect(Collectors.toUnmodifiableMap(EvaluatorDebugVariable::getName, Function.identity()));
 	}
 

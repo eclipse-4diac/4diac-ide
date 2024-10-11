@@ -18,26 +18,26 @@ import java.util.stream.Collectors;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
-import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
+import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.model.eval.value.FBValue;
 
 public final class EvaluatorDebugFBValue extends EvaluatorDebugStructuredValue {
 
 	private final Map<String, EvaluatorDebugVariable> members;
 
-	public EvaluatorDebugFBValue(final FBValue value, final String expression, final EvaluatorDebugTarget target) {
+	public EvaluatorDebugFBValue(final FBValue value, final String expression, final IEvaluatorDebugTarget target) {
 		super(value, target);
-		members = value.getMembers().values().stream().map(
-				member -> new EvaluatorDebugVariable(member, createSubExpression(expression, member.getName()), target))
+		members = value.getMembers().values().stream()
+				.map(member -> target.createVariable(member, createSubExpression(expression, member.getName())))
 				.collect(Collectors.toUnmodifiableMap(EvaluatorDebugVariable::getName, Function.identity()));
 	}
 
 	public EvaluatorDebugFBValue(final FBValue value, final EvaluatorDebugVariable variable) {
 		super(value, variable);
 		members = value.getMembers().values().stream()
-				.map(member -> new EvaluatorDebugVariable(member,
-						createSubExpression(variable.getExpression(), member.getName()), variable))
+				.map(member -> variable.createSubVariable(member,
+						createSubExpression(variable.getExpression(), member.getName())))
 				.collect(Collectors.toUnmodifiableMap(EvaluatorDebugVariable::getName, Function.identity()));
 	}
 
