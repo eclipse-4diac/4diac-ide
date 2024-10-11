@@ -22,19 +22,23 @@
 			<launchMode
 				mode="run">
 			</launchMode>
+			<launchMode
+				mode="debug"
+				perspective="org.eclipse.debug.ui.DebugPerspective">
+			</launchMode>
 		</launchConfigurationTabGroup>
-  <launchConfigurationTabGroup
-        class="org.eclipse.fordiac.ide.deployment.debug.ui.fb.DeploymentFBLaunchConfigurationTabGroup"
-        id="org.eclipse.fordiac.ide.deployment.debug.ui.deployFBLaunchConfigurationTabGroup"
-        type="org.eclipse.fordiac.ide.deployment.debug.deployFBLaunch">
-     <launchMode
-           mode="run">
-     </launchMode>
-     <launchMode
-           mode="debug"
-           perspective="org.eclipse.debug.ui.DebugPerspective">
-     </launchMode>
-  </launchConfigurationTabGroup>
+		<launchConfigurationTabGroup
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.fb.DeploymentFBLaunchConfigurationTabGroup"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.deployFBLaunchConfigurationTabGroup"
+			type="org.eclipse.fordiac.ide.deployment.debug.deployFBLaunch">
+			<launchMode
+				mode="run">
+			</launchMode>
+			<launchMode
+				mode="debug"
+				perspective="org.eclipse.debug.ui.DebugPerspective">
+			</launchMode>
+		</launchConfigurationTabGroup>
 	</extension>
 	<extension
 		point="org.eclipse.debug.ui.launchShortcuts">
@@ -43,11 +47,15 @@
 			icon="platform:/plugin/org.eclipse.debug.ui/icons/full/etool16/run_exc.png"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.deployShortcut"
 			label="Deploy"
-			modes="run">
+			modes="run, debug">
 			<contextualLaunch>
 				<contextLabel
 					label="Deploy"
 					mode="run">
+				</contextLabel>
+				<contextLabel
+					label="Deploy and Monitor"
+					mode="debug">
 				</contextLabel>
 				<enablement>
 					<with
@@ -79,54 +87,54 @@
 				</enablement>
 			</contextualLaunch>
 		</shortcut>
-  <shortcut
-        class="org.eclipse.fordiac.ide.deployment.debug.ui.fb.DeploymentFBLaunchShortcut"
-        icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_type_run.png"
-        id="org.eclipse.fordiac.ide.deployment.debug.ui.deployFBLaunchShortcut"
-        label="Remote Evaluate FB Type"
-        modes="run, debug">
-     <contextualLaunch>
-        <contextLabel
-              label="Run FB Type on Device"
-              mode="run">
-        </contextLabel>
-        <contextLabel
-              label="Debug FB Type on Device"
-              mode="debug">
-        </contextLabel>
-        <enablement>
-           <with
-                 variable="selection">
-              <count
-                    value="1">
-              </count>
-              <iterate>
-                 <adapt
-                       type="org.eclipse.core.resources.IResource">
-                    <or>
-                       <test
-                             property="org.eclipse.fordiac.ide.typemanagement.fbType"
-                             value="SimpleFBType">
-                       </test>
-                       <test
-                             property="org.eclipse.fordiac.ide.typemanagement.fbType"
-                             value="BasicFBType">
-                       </test>
-                       <test
-                             property="org.eclipse.fordiac.ide.typemanagement.fbType"
-                             value="FunctionFBType">
-                       </test>
-                       <test
-                             property="org.eclipse.fordiac.ide.typemanagement.fbType"
-                             value="ServiceInterfaceFBType">
-                       </test>
-                    </or>
-                 </adapt>
-              </iterate>
-           </with>
-        </enablement>
-     </contextualLaunch>
-  </shortcut>
+		<shortcut
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.fb.DeploymentFBLaunchShortcut"
+			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_type_run.png"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.deployFBLaunchShortcut"
+			label="Remote Evaluate FB Type"
+			modes="run, debug">
+			<contextualLaunch>
+				<contextLabel
+					label="Run FB Type on Device"
+					mode="run">
+				</contextLabel>
+				<contextLabel
+					label="Debug FB Type on Device"
+					mode="debug">
+				</contextLabel>
+				<enablement>
+					<with
+						variable="selection">
+						<count
+							value="1">
+						</count>
+						<iterate>
+							<adapt
+								type="org.eclipse.core.resources.IResource">
+								<or>
+									<test
+										property="org.eclipse.fordiac.ide.typemanagement.fbType"
+										value="SimpleFBType">
+									</test>
+									<test
+										property="org.eclipse.fordiac.ide.typemanagement.fbType"
+										value="BasicFBType">
+									</test>
+									<test
+										property="org.eclipse.fordiac.ide.typemanagement.fbType"
+										value="FunctionFBType">
+									</test>
+									<test
+										property="org.eclipse.fordiac.ide.typemanagement.fbType"
+										value="ServiceInterfaceFBType">
+									</test>
+								</or>
+							</adapt>
+						</iterate>
+					</with>
+				</enablement>
+			</contextualLaunch>
+		</shortcut>
 	</extension>
 	<extension
 		point="org.eclipse.debug.ui.launchConfigurationTypeImages">
@@ -135,11 +143,18 @@
 			icon="platform:/plugin/org.eclipse.debug.ui/icons/full/etool16/run_exc.png"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.deploymentLaunchConfigurationTypeImage">
 		</launchConfigurationTypeImage>
-  <launchConfigurationTypeImage
-        configTypeID="org.eclipse.fordiac.ide.deployment.debug.deployFBLaunch"
-        icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_type_run.png"
-        id="org.eclipse.fordiac.ide.deployment.debug.ui.launchConfigurationTypeImageDeployFB">
-  </launchConfigurationTypeImage>
+		<launchConfigurationTypeImage
+			configTypeID="org.eclipse.fordiac.ide.deployment.debug.deployFBLaunch"
+			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_type_run.png"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.launchConfigurationTypeImageDeployFB">
+		</launchConfigurationTypeImage>
+	</extension>
+	<extension
+		point="org.eclipse.debug.ui.debugModelPresentations">
+		<debugModelPresentation
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentDebugModelPresentation"
+			id="org.eclipse.fordiac.ide.deployment.debug.model">
+		</debugModelPresentation>
 	</extension>
 	<extension
 		point="org.eclipse.core.runtime.adapters">
@@ -308,7 +323,7 @@
 					<reference
 						definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition" />
 				</visibleWhen>
-			</command>			
+			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice"
 				icon="fordiacimage://ICON_KILL_DEVICE"
@@ -500,13 +515,13 @@
 			</with>
 		</definition>
 	</extension>
- <extension
-       point="org.eclipse.ui.perspectiveExtensions">
-    <perspectiveExtension
-          targetID="org.eclipse.fordiac.ide.SystemPerspective">
-       <actionSet
-             id="org.eclipse.debug.ui.launchActionSet">
-       </actionSet>
-    </perspectiveExtension>
- </extension>
+	<extension
+		point="org.eclipse.ui.perspectiveExtensions">
+		<perspectiveExtension
+			targetID="org.eclipse.fordiac.ide.SystemPerspective">
+			<actionSet
+				id="org.eclipse.debug.ui.launchActionSet">
+			</actionSet>
+		</perspectiveExtension>
+	</extension>
 </plugin>

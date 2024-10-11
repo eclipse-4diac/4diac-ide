@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         point="org.eclipse.debug.core.launchConfigurationTypes">
-      <launchConfigurationType
-            delegate="org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationDelegate"
-            delegateName="Deploy"
-            id="org.eclipse.fordiac.ide.deployment.debug.deployLaunch"
-            modes="run"
-            name="Deploy">
-      </launchConfigurationType>
-      <launchConfigurationType
-            delegate="org.eclipse.fordiac.ide.deployment.debug.fb.DeploymentFBLaunchConfigurationDelegate"
-            delegateName="Remote Evaluate FB"
-            id="org.eclipse.fordiac.ide.deployment.debug.deployFBLaunch"
-            modes="run, debug"
-            name="Remote Evaluate FB"
-            sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
-      </launchConfigurationType>
-   </extension>
+	<extension
+		point="org.eclipse.debug.core.launchConfigurationTypes">
+		<launchConfigurationType
+			delegate="org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationDelegate"
+			delegateName="Deploy"
+			id="org.eclipse.fordiac.ide.deployment.debug.deployLaunch"
+			modes="run, debug"
+			name="Deploy">
+		</launchConfigurationType>
+		<launchConfigurationType
+			delegate="org.eclipse.fordiac.ide.deployment.debug.fb.DeploymentFBLaunchConfigurationDelegate"
+			delegateName="Remote Evaluate FB"
+			id="org.eclipse.fordiac.ide.deployment.debug.deployFBLaunch"
+			modes="run, debug"
+			name="Remote Evaluate FB"
+			sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
+		</launchConfigurationType>
+	</extension>
 </plugin>

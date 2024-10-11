@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug;
 
+import java.text.MessageFormat;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
@@ -32,21 +33,23 @@ public class DeploymentLaunchConfigurationDelegate extends LaunchConfigurationDe
 	@Override
 	public void launch(final ILaunchConfiguration configuration, final String mode, final ILaunch launch,
 			final IProgressMonitor monitor) throws CoreException {
-		if (!ILaunchManager.RUN_MODE.equals(mode) && !ILaunchManager.DEBUG_MODE.equals(mode)) {
-			throw new CoreException(Status.error("Illegal launch mode: " + mode)); //$NON-NLS-1$
-		}
-		launch(configuration, launch);
-	}
+		final AutomationSystem system = DeploymentLaunchConfigurationAttributes.getSystem(configuration);
+		final Set<INamedElement> selection = DeploymentLaunchConfigurationAttributes.getSelection(configuration,
+				system);
 
-	protected static void launch(final ILaunchConfiguration configuration, final ILaunch launch) throws CoreException {
 		try {
-			final AutomationSystem system = DeploymentLaunchConfigurationAttributes.getSystem(configuration);
-			final Set<INamedElement> selection = DeploymentLaunchConfigurationAttributes.getSelection(configuration,
-					system);
-			final DeploymentProcess process = new DeploymentProcess(configuration.getName(), selection, launch);
-			process.start();
+			if (ILaunchManager.RUN_MODE.equals(mode)) {
+				final DeploymentProcess process = new DeploymentProcess(system, selection, launch);
+				process.start();
+			} else if (ILaunchManager.DEBUG_MODE.equals(mode)) {
+				final DeploymentDebugTarget debugTarget = new DeploymentDebugTarget(system, selection, launch, true);
+				debugTarget.start();
+			} else {
+				throw new CoreException(Status.error(
+						MessageFormat.format(Messages.DeploymentLaunchConfigurationDelegate_IllegalLaunchMode, mode)));
+			}
 		} catch (final DeploymentException e) {
-			throw new CoreException(Status.error("Error computing deployment data", e)); //$NON-NLS-1$
+			throw new CoreException(Status.error(Messages.DeploymentLaunchConfigurationDelegate_DeploymentError, e));
 		}
 	}
 
