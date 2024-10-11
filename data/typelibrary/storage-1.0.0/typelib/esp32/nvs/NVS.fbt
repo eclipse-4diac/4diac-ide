@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="NVS" Comment="Load and Store Data from NVS by Key">
+	<Identification Standard="61499-2" Description="Copyright (c) 2022, 2024 HR Agrartechnik GmbH   &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2022-09-23">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Service Initialization">
+				<With Var="QI"/>
+				<With Var="KEY"/>
+				<With Var="VALUE"/>
+			</Event>
+			<Event Name="SET" Type="Event" Comment="set value for given key">
+				<With Var="VALUE"/>
+			</Event>
+			<Event Name="GET" Type="Event" Comment="get value for given key">
+				<With Var="VALUE"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+				<With Var="VALUEO"/>
+			</Event>
+			<Event Name="SETO" Type="Event" Comment="Confirmation of SET">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+				<With Var="VALUEO"/>
+			</Event>
+			<Event Name="GETO" Type="Event" Comment="Confirmation of GET">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+				<With Var="VALUEO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+			<VarDeclaration Name="KEY" Type="STRING" Comment="Key name."/>
+			<VarDeclaration Name="VALUE" Type="ANY_ELEMENTARY" Comment="The value to set."/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="STRING" Comment="Service Status"/>
+			<VarDeclaration Name="VALUEO" Type="ANY_ELEMENTARY" Comment="The output value"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>
