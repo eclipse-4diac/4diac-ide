@@ -13,14 +13,20 @@
 package org.eclipse.fordiac.ide.deployment.debug;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.core.resources.IMarkerDelta;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobGroup;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
@@ -32,6 +38,7 @@ import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class DeploymentDebugTarget extends DeploymentDebugElement implements IDeploymentDebugTarget {
@@ -62,16 +69,50 @@ public class DeploymentDebugTarget extends DeploymentDebugElement implements IDe
 
 	private void deploymentDone(final IJobChangeEvent event) {
 		if (event.getResult().isOK()) {
-			Job.create(MessageFormat.format(Messages.DeploymentDebugTarget_ConnectJobName, getName()), this::doConnect)
-					.schedule();
+			Job.create(MessageFormat.format(Messages.DeploymentDebugTarget_ConnectJobName, getName()),
+					(ICoreRunnable) this::doConnect).schedule();
 		} else {
 			terminated();
 		}
 	}
 
-	protected void doConnect(final IProgressMonitor monitor) {
-		// TODO connect
-		thread.fireSuspendEvent(DebugEvent.CLIENT_REQUEST);
+	protected void doConnect(final IProgressMonitor monitor) throws CoreException {
+		final List<Device> devices = system.getSystemConfiguration().getDevices();
+		monitor.beginTask(MessageFormat.format(Messages.DeploymentDebugTarget_ConnectJobName, getName()),
+				devices.size());
+		final JobGroup group = new ConnectJobGroup(getName(), devices.size());
+		for (final Device device : devices) {
+			final Job job = Job.create(
+					MessageFormat.format(Messages.DeploymentDebugTarget_ConnectJobName, device.getName()),
+					(ICoreRunnable) unused -> doConnect(device));
+			job.setProgressGroup(monitor, 1);
+			job.setJobGroup(group);
+			job.schedule();
+		}
+		try {
+			group.join(0, monitor);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			throw new CoreException(Status.error(e.getLocalizedMessage(), e));
+		}
+		if (group.getResult().isOK()) { // all succeeded
+			thread.fireSuspendEvent(DebugEvent.CLIENT_REQUEST);
+		} else if (group.getResult().getChildren().length < devices.size()) { // some failed
+			fireChangeEvent(DebugEvent.STATE);
+			thread.fireSuspendEvent(DebugEvent.CLIENT_REQUEST);
+		} else { // all failed
+			terminated();
+		}
+	}
+
+	protected void doConnect(final Device device) throws DebugException {
+		final DeploymentDebugDevice deploymentDevice = new DeploymentDebugDevice(device, this, allowTerminate);
+		try {
+			deploymentDevice.connect();
+		} catch (final DebugException e) {
+			deploymentDevice.disconnect();
+			throw e;
+		}
 	}
 
 	public void start() {
@@ -228,5 +269,21 @@ public class DeploymentDebugTarget extends DeploymentDebugElement implements IDe
 	@Override
 	public boolean hasThreads() {
 		return process.isTerminated() && !isTerminated() && !isDisconnected();
+	}
+
+	protected static class ConnectJobGroup extends JobGroup {
+
+		private final int devices;
+
+		public ConnectJobGroup(final String name, final int devices) {
+			super(MessageFormat.format(Messages.DeploymentDebugTarget_ConnectJobName, name), 0, devices);
+			this.devices = devices;
+		}
+
+		@Override
+		protected boolean shouldCancel(final IStatus lastCompletedJobResult, final int numberOfFailedJobs,
+				final int numberOfCanceledJobs) {
+			return numberOfFailedJobs + numberOfCanceledJobs >= devices;
+		}
 	}
 }
