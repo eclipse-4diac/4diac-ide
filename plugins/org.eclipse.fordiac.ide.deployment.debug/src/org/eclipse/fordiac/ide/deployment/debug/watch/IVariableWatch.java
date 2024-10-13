@@ -10,30 +10,24 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment.debug;
+package org.eclipse.fordiac.ide.deployment.debug.watch;
 
-import java.util.Map;
+import org.eclipse.fordiac.ide.model.eval.value.Value;
+import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
-import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
-import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-
-public interface IDeploymentDebugTarget extends IEvaluatorDebugTarget {
-
-	@Override
-	String getName();
+public interface IVariableWatch extends IWatch {
 
 	/**
-	 * Get the automation system
+	 * Get the internal value
 	 *
-	 * @return The system
+	 * @return The internal value
 	 */
-	AutomationSystem getSystem();
+	Value getInternalValue();
 
 	/**
-	 * Get the current watches
+	 * Get the internal variable
 	 *
-	 * @return The watches
+	 * @return The internal variable
 	 */
-	Map<String, IWatch> getWatches();
+	Variable<?> getInternalVariable();
 }

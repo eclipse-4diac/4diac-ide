@@ -124,12 +124,12 @@ public class DeploymentDebugStackFrame extends DeploymentDebugElement implements
 
 	@Override
 	public IVariable[] getVariables() {
-		return new IVariable[0];
+		return getDebugTarget().getWatches().values().toArray(IVariable[]::new);
 	}
 
 	@Override
 	public boolean hasVariables() {
-		return false;
+		return !getDebugTarget().getWatches().isEmpty();
 	}
 
 	@Override

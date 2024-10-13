@@ -777,4 +777,25 @@
 			</enablement>
 		</detailFactories>
 	</extension>
+	<extension
+		point="org.eclipse.ui.themes">
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.forceColor"
+			label="Force background"
+			value="97,53,131">
+		</colorDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.watchColor"
+			label="Watch background"
+			value="26,95,180">
+		</colorDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.watchErrorColor"
+			label="Watch error background"
+			value="192,28,40">
+		</colorDefinition>
+	</extension>
 </plugin>

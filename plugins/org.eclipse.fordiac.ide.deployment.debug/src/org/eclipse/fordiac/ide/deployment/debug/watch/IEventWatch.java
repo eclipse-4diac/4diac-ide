@@ -10,30 +10,30 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.deployment.debug;
+package org.eclipse.fordiac.ide.deployment.debug.watch;
 
-import java.util.Map;
+import org.eclipse.debug.core.DebugException;
+import org.eclipse.fordiac.ide.model.eval.value.EventValue;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 
-import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
-import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+public interface IEventWatch extends IInterfaceElementWatch, IVariableWatch {
 
-public interface IDeploymentDebugTarget extends IEvaluatorDebugTarget {
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	String getName();
+	Event getWatchedElement();
 
 	/**
-	 * Get the automation system
-	 *
-	 * @return The system
+	 * {@inheritDoc}
 	 */
-	AutomationSystem getSystem();
+	@Override
+	EventValue getInternalValue();
 
 	/**
-	 * Get the current watches
+	 * Trigger an event
 	 *
-	 * @return The watches
+	 * @throws DebugException if there was a problem triggering the event
 	 */
-	Map<String, IWatch> getWatches();
+	void triggerEvent() throws DebugException;
 }

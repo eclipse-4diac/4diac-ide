@@ -14,9 +14,14 @@ package org.eclipse.fordiac.ide.deployment.debug;
 
 import java.text.MessageFormat;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.runtime.CoreException;
@@ -36,6 +41,8 @@ import org.eclipse.debug.core.model.IDisconnect;
 import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
+import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
+import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -52,6 +59,7 @@ public class DeploymentDebugTarget extends DeploymentDebugElement implements IDe
 	private final DeploymentProcess process;
 	private final DeploymentDebugThread thread;
 	private final AtomicLong variableUpdateCount = new AtomicLong();
+	private final Map<String, IWatch> watches = new ConcurrentSkipListMap<>();
 
 	private boolean terminated;
 	private boolean disconnected;
@@ -139,6 +147,11 @@ public class DeploymentDebugTarget extends DeploymentDebugElement implements IDe
 	}
 
 	@Override
+	public Map<String, IWatch> getWatches() {
+		return Collections.unmodifiableMap(watches);
+	}
+
+	@Override
 	public boolean canResume() {
 		return false;
 	}
@@ -165,22 +178,34 @@ public class DeploymentDebugTarget extends DeploymentDebugElement implements IDe
 
 	@Override
 	public boolean supportsBreakpoint(final IBreakpoint breakpoint) {
-		return false; // none yet
+		return breakpoint instanceof final DeploymentWatchpoint watchpoint && watchpoint.isRelevant(getSystem());
 	}
 
 	@Override
 	public void breakpointAdded(final IBreakpoint breakpoint) {
-		// do nothing
+		updateWatches(true);
 	}
 
 	@Override
 	public void breakpointRemoved(final IBreakpoint breakpoint, final IMarkerDelta delta) {
-		// do nothing
+		updateWatches(true);
 	}
 
 	@Override
 	public void breakpointChanged(final IBreakpoint breakpoint, final IMarkerDelta delta) {
-		// do nothing
+		updateWatches(false);
+	}
+
+	public void updateWatches(final boolean structureChanged) {
+		if (structureChanged) {
+			final Map<String, IWatch> combinedWatches = Stream.of(launch.getDebugTargets())
+					.filter(DeploymentDebugDevice.class::isInstance).map(DeploymentDebugDevice.class::cast)
+					.map(DeploymentDebugDevice::getWatches).map(Map::entrySet).flatMap(Set::stream)
+					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+			watches.keySet().retainAll(combinedWatches.keySet());
+			watches.putAll(combinedWatches);
+		}
+		thread.getTopStackFrame().fireChangeEvent(DebugEvent.CONTENT);
 	}
 
 	@Override
