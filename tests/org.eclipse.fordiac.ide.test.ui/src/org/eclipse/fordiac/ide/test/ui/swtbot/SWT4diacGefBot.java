@@ -20,6 +20,11 @@ import org.eclipse.ui.IEditorReference;
 public class SWT4diacGefBot extends SWTGefBot {
 
 	@Override
+	public SWTBot4diacGefEditor gefEditor(final String fileName) throws WidgetNotFoundException {
+		return (SWTBot4diacGefEditor) super.gefEditor(fileName);
+	}
+
+	@Override
 	protected SWTBot4diacGefEditor createEditor(final IEditorReference reference, final SWTWorkbenchBot bot) {
 		return new SWTBot4diacGefEditor(reference, bot);
 	}

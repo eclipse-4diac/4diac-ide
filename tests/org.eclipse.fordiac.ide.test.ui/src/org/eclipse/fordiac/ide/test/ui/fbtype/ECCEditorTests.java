@@ -56,7 +56,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 		eccTab.setFocus();
 
 		bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).show();
-		editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
+		editor = bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 	}
 
 	/**
@@ -125,6 +125,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 	@Test
 	@Order(4)
 	public void createAlgorithm() {
+
 		new SWTBotECC(bot).changeAlgorithmAndEventValue(editor, UITestNamesHelper.TESTSTATE,
 				UITestNamesHelper.DEINITIALIZE, 0);
 	}
