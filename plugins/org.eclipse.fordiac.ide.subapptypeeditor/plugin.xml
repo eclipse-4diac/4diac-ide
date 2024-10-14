@@ -70,16 +70,6 @@
                label="Instance">
          </propertyTab>
          <propertyTab
-               category="FB"
-               id="org.eclipse.fordiac.ide.application.propertyStructManipulatorTab"
-               label="Struct Handling">
-         </propertyTab>
-         <propertyTab
-               category="FB"
-               id="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab"
-               label="Struct Handling">
-         </propertyTab>
-         <propertyTab
                category="Resource"
                id="org.eclipse.fordiac.ide.application.propertyResourceInterfaceTab"
                label="Instance">
@@ -172,12 +162,6 @@
                indented="false"
                label="Attributes">
          </propertyTab>
-         <propertyTab
-               category="Interface"
-               id="org.eclipse.fordiac.ide.application.propertyStructInterfaceElementTab"
-               indented="false"
-               label="Struct Element">
-         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -191,37 +175,17 @@
               tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab">
          </propertySection>   
          <propertySection
-         	class="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
-         	id="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
-         	tab="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab"
-         	filter="org.eclipse.fordiac.ide.application.properties.DemultiplexerFilter">
-         </propertySection>
-         <propertySection
-         	class="org.eclipse.fordiac.ide.application.properties.MultiplexerSection"
-         	id="org.eclipse.fordiac.ide.application.properties.MultiplexerSection"
-         	tab="org.eclipse.fordiac.ide.application.propertyStructManipulatorTab"
-         	filter="org.eclipse.fordiac.ide.application.properties.MultiplexerFilter">
-         </propertySection>
-         <propertySection
-               class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-               filter="org.eclipse.fordiac.ide.application.properties.StructInterfacePinFilter"                       
-               id="org.eclipse.fordiac.ide.application.properties.StructInterfaceElementSection"
-               tab="org.eclipse.fordiac.ide.application.propertyStructInterfaceElementTab">
-         </propertySection>
-         <propertySection
                class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
                filter="org.eclipse.fordiac.ide.application.properties.TypedInterfacePinFilter"
                id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
                tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
          </propertySection>
-         
          <propertySection
                class="org.eclipse.fordiac.ide.subapptypeeditor.properties.EditTypedSubappInterfaceSection"
                filter="org.eclipse.fordiac.ide.subapptypeeditor.properties.FBSubappTypePropertiesFilter"
                id="org.eclipse.fordiac.ide.subapptypeeditor.properties.section.EditDataTypedSubapp"
                tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData">
          </propertySection>
-         
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.ShowInterfaceDataSection"
                id="org.eclipse.fordiac.ide.application.properties.section.ShowData"
