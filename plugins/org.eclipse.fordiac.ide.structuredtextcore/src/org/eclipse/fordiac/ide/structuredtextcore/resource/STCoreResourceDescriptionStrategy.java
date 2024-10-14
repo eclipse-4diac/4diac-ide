@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +17,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -44,7 +46,7 @@ import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.impl.DefaultResourceDescriptionStrategy;
 import org.eclipse.xtext.util.IAcceptor;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ForwardingMap;
 
 /**
  * Resource description strategy for ST core and derivatives.
@@ -82,9 +84,7 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 		try {
 			final QualifiedName qualifiedName = getQualifiedNameProvider().getFullyQualifiedName(eObject);
 			if (qualifiedName != null) {
-				final ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
-				fillUserData(eObject, builder);
-				acceptor.accept(EObjectDescription.create(qualifiedName, eObject, builder.build()));
+				acceptor.accept(EObjectDescription.create(qualifiedName, eObject, createLazyUserData(eObject)));
 			}
 		} catch (final Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -92,21 +92,37 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 		return true;
 	}
 
+	protected Map<String, String> createLazyUserData(final EObject eObject) {
+		return new ForwardingMap<>() {
+			private Map<String, String> delegate;
+
+			@Override
+			protected Map<String, String> delegate() {
+				if (delegate == null) {
+					final Map<String, String> userData = new HashMap<>();
+					fillUserData(eObject, userData);
+					delegate = Map.copyOf(userData);
+				}
+				return delegate;
+			}
+		};
+	}
+
 	@SuppressWarnings("static-method") // subclasses may override
-	protected void fillUserData(final EObject eObject, final ImmutableMap.Builder<String, String> builder) {
+	protected void fillUserData(final EObject eObject, final Map<String, String> userData) {
 		final EObject container = eObject.eContainer();
 		if (container != null) {
-			builder.put(CONTAINER_ECLASS_NAME, container.eClass().getName());
+			userData.put(CONTAINER_ECLASS_NAME, container.eClass().getName());
 		}
 		if (eObject instanceof final ICallable callable) {
-			builder.put(SIGNATURE_HASH, computeSignatureHash(callable));
-			builder.put(DISPLAY_STRING, getCallableDisplayString(callable));
+			userData.put(SIGNATURE_HASH, computeSignatureHash(callable));
+			userData.put(DISPLAY_STRING, getCallableDisplayString(callable));
 			final STCoreRegionString regionString = getCallableParameterProposal(callable);
-			builder.put(PARAMETER_PROPOSAL, regionString.toString());
-			builder.put(PARAMETER_PROPOSAL_REGIONS, regionString.getRegions().toString());
+			userData.put(PARAMETER_PROPOSAL, regionString.toString());
+			userData.put(PARAMETER_PROPOSAL_REGIONS, regionString.getRegions().toString());
 		} else if (eObject instanceof final ITypedElement typedElement && typedElement.getType() != null) {
-			builder.put(TYPE_URI, EcoreUtil.getURI(typedElement.getType()).toString());
-			builder.put(DISPLAY_STRING, getTypedElementDisplayString(typedElement));
+			userData.put(TYPE_URI, EcoreUtil.getURI(typedElement.getType()).toString());
+			userData.put(DISPLAY_STRING, getTypedElementDisplayString(typedElement));
 		}
 	}
 
