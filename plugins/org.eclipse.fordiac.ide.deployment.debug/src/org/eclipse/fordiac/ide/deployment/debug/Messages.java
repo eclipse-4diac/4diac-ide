@@ -28,6 +28,9 @@ public class Messages extends NLS {
 	public static String DeploymentDebugTarget_ConnectJobName;
 	public static String DeploymentDebugTarget_UnsupportedOperation;
 	public static String DeploymentDebugThread_Name;
+	public static String DeploymentLaunchConfigurationAttributes_AllowTerminate_Always;
+	public static String DeploymentLaunchConfigurationAttributes_AllowTerminate_DebugOnly;
+	public static String DeploymentLaunchConfigurationAttributes_AllowTerminate_Never;
 	public static String DeploymentLaunchConfigurationDelegate_CannotFindSystem;
 	public static String DeploymentLaunchConfigurationDelegate_DeploymentError;
 	public static String DeploymentLaunchConfigurationDelegate_IllegalLaunchMode;

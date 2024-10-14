@@ -44,22 +44,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 
 public class DeploymentDebugDevice extends DeploymentDebugElement implements IDeploymentDebugTarget {
 
-	public static final Duration DEFAULT_POLLING_INTERVAL = Duration.ofMillis(300);
-
 	private final Device device;
 	private final boolean allowTerminate;
+	private final Duration pollingInterval;
 	private final IDeviceManagementExecutorService deviceManagementExecutor;
 	private final Map<String, DeploymentDebugResource> resources = new ConcurrentSkipListMap<>();
 	private final AtomicLong variableUpdateCount = new AtomicLong();
 
 	private boolean terminate;
-	private Duration pollingInterval = DEFAULT_POLLING_INTERVAL;
 
 	public DeploymentDebugDevice(final Device device, final DeploymentDebugTarget debugTarget,
-			final boolean allowTerminate) {
+			final boolean allowTerminate, final Duration pollingInterval) {
 		super(debugTarget);
 		this.device = Objects.requireNonNull(device);
 		this.allowTerminate = allowTerminate;
+		this.pollingInterval = pollingInterval;
 
 		deviceManagementExecutor = IDeviceManagementExecutorService
 				.of(DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device));

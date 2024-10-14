@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.deployment.debug;
 
 import java.text.MessageFormat;
+import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -30,6 +31,7 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.IStatusHandler;
 import org.eclipse.debug.core.model.IDisconnect;
 import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
+import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAttributes.AllowTerminate;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -49,11 +51,13 @@ public class DeploymentLaunchConfigurationDelegate extends LaunchConfigurationDe
 			final IProgressMonitor monitor) throws CoreException {
 		final IResource resource = DeploymentLaunchConfigurationAttributes.getSystemResource(configuration);
 		final AutomationSystem system = DeploymentLaunchConfigurationAttributes.getSystem(configuration);
-		final Set<INamedElement> selection = DeploymentLaunchConfigurationAttributes.getSelection(configuration,
-				system);
 		if (system == null) {
 			throw new CoreException(Status.error(Messages.DeploymentLaunchConfigurationDelegate_CannotFindSystem));
 		}
+		final Set<INamedElement> selection = DeploymentLaunchConfigurationAttributes.getSelection(configuration,
+				system);
+		final Duration pollingInterval = DeploymentLaunchConfigurationAttributes.getPollingInterval(configuration);
+		final AllowTerminate allowTerminate = DeploymentLaunchConfigurationAttributes.getAllowTerminate(configuration);
 
 		launch.setAttribute(SYSTEM_FILE_ATTRIBUTE, resource.getFullPath().toString());
 
@@ -62,10 +66,12 @@ public class DeploymentLaunchConfigurationDelegate extends LaunchConfigurationDe
 				final DeploymentProcess process = new DeploymentProcess(system, selection, launch);
 				process.start();
 			} else if (ILaunchManager.DEBUG_MODE.equals(mode)) {
-				final DeploymentDebugTarget debugTarget = new DeploymentDebugTarget(system, selection, launch, true);
+				final DeploymentDebugTarget debugTarget = new DeploymentDebugTarget(system, selection, launch,
+						allowTerminate != AllowTerminate.NEVER, pollingInterval);
 				debugTarget.start();
 			} else if (MONITOR_MODE.equals(mode)) {
-				final DeploymentDebugTarget debugTarget = new DeploymentDebugTarget(system, Set.of(), launch, false);
+				final DeploymentDebugTarget debugTarget = new DeploymentDebugTarget(system, Set.of(), launch,
+						allowTerminate == AllowTerminate.ALWAYS, pollingInterval);
 				debugTarget.start();
 			} else {
 				throw new CoreException(Status.error(

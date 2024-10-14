@@ -28,6 +28,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAttributes;
+import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAttributes.AllowTerminate;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -51,9 +52,11 @@ import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -69,6 +72,8 @@ public class DeploymentLaunchConfigurationTab extends AbstractLaunchConfiguratio
 
 	private Text systemText;
 	private CheckboxTreeViewer selectionTree;
+	private Text pollingIntervalText;
+	private Combo allowTerminateCombo;
 
 	@Override
 	public void createControl(final Composite parent) {
@@ -78,29 +83,32 @@ public class DeploymentLaunchConfigurationTab extends AbstractLaunchConfiguratio
 
 		final Composite selectionComponent = createSelectionComponent(comp);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(selectionComponent);
+
+		final Composite optionsComponent = createOptionsComponent(comp);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(optionsComponent);
 	}
 
 	protected Composite createSelectionComponent(final Composite parent) {
 		final Group group = new Group(parent, SWT.BORDER);
 		GridLayoutFactory.swtDefaults().applyTo(group);
-		group.setText("Selection"); //$NON-NLS-1$
+		group.setText(Messages.DeploymentLaunchConfigurationTab_SelectionLabel);
 
 		final Composite comp = new Composite(group, SWT.NONE);
 		GridLayoutFactory.swtDefaults().numColumns(3).applyTo(comp);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(comp);
 
 		final Label systemLabel = new Label(comp, SWT.NONE);
-		systemLabel.setText("System:"); //$NON-NLS-1$
+		systemLabel.setText(Messages.DeploymentLaunchConfigurationTab_SystemLabel);
 		GridDataFactory.swtDefaults().applyTo(systemLabel);
 
 		systemText = new Text(comp, SWT.BORDER);
 		systemText.setEnabled(false);
-		systemText.setMessage("System File"); //$NON-NLS-1$
+		systemText.setMessage(Messages.DeploymentLaunchConfigurationTab_SystemMessage);
 		systemText.addModifyListener(e -> scheduleUpdateJob());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(systemText);
 
 		final Button systemButton = new Button(comp, SWT.BORDER);
-		systemButton.setText("Browse..."); //$NON-NLS-1$
+		systemButton.setText(Messages.DeploymentLaunchConfigurationTab_BrowseLabel);
 		systemButton.addSelectionListener(widgetSelectedAdapter(e -> handleSystemButtonSelected()));
 		GridDataFactory.swtDefaults().applyTo(systemButton);
 
@@ -145,10 +153,48 @@ public class DeploymentLaunchConfigurationTab extends AbstractLaunchConfiguratio
 		}
 	}
 
+	private Composite createOptionsComponent(final Composite parent) {
+		final Group group = new Group(parent, SWT.BORDER);
+		GridLayoutFactory.swtDefaults().applyTo(group);
+		group.setText(Messages.DeploymentLaunchConfigurationTab_OptionsLabel);
+
+		final Composite comp = new Composite(group, SWT.NONE);
+		GridLayoutFactory.swtDefaults().numColumns(3).applyTo(comp);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(comp);
+
+		final Label pollingIntervalLabel = new Label(comp, SWT.NONE);
+		pollingIntervalLabel.setText(Messages.DeploymentLaunchConfigurationTab_PollingIntervalLabel);
+		GridDataFactory.swtDefaults().applyTo(pollingIntervalLabel);
+
+		pollingIntervalText = new Text(comp, SWT.BORDER);
+		pollingIntervalText.setMessage(Messages.DeploymentLaunchConfigurationTab_PollingIntervalMessage);
+		pollingIntervalText.addModifyListener(e -> scheduleUpdateJob());
+		GridDataFactory.fillDefaults().grab(false, false).applyTo(pollingIntervalText);
+
+		final Label pollingIntervalUnitLabel = new Label(comp, SWT.NONE);
+		pollingIntervalUnitLabel.setText(Messages.DeploymentLaunchConfigurationTab_PollingIntervalUnitLabel);
+		GridDataFactory.swtDefaults().applyTo(pollingIntervalUnitLabel);
+
+		final Label allowTerminateLabel = new Label(comp, SWT.NONE);
+		allowTerminateLabel.setText(Messages.DeploymentLaunchConfigurationTab_AllowTerminateLabel);
+		GridDataFactory.swtDefaults().applyTo(allowTerminateLabel);
+
+		allowTerminateCombo = new Combo(comp, SWT.DROP_DOWN | SWT.READ_ONLY);
+		for (final AllowTerminate value : AllowTerminate.values()) {
+			allowTerminateCombo.add(value.getDisplayString());
+		}
+		allowTerminateCombo.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> scheduleUpdateJob()));
+		GridDataFactory.swtDefaults().span(2, 1).applyTo(allowTerminateCombo);
+
+		return group;
+	}
+
 	@Override
 	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
 		configuration.removeAttribute(DeploymentLaunchConfigurationAttributes.SYSTEM);
 		configuration.removeAttribute(DeploymentLaunchConfigurationAttributes.SELECTION);
+		configuration.removeAttribute(DeploymentLaunchConfigurationAttributes.POLLING_INTERVAL);
+		configuration.removeAttribute(DeploymentLaunchConfigurationAttributes.ALLOW_TERMINATE);
 	}
 
 	@Override
@@ -159,6 +205,11 @@ public class DeploymentLaunchConfigurationTab extends AbstractLaunchConfiguratio
 			selectionTree.setInput(system);
 			selectionTree.setCheckedElements(
 					DeploymentLaunchConfigurationAttributes.getSelection(configuration, system).toArray());
+			pollingIntervalText.setText(Integer
+					.toString(configuration.getAttribute(DeploymentLaunchConfigurationAttributes.POLLING_INTERVAL,
+							DeploymentLaunchConfigurationAttributes.POLLING_INTERVAL_DEFAULT)));
+			allowTerminateCombo
+					.select(DeploymentLaunchConfigurationAttributes.getAllowTerminate(configuration).ordinal());
 		} catch (final CoreException e) {
 			FordiacLogHelper.logWarning(e.getMessage(), e);
 		}
@@ -171,6 +222,33 @@ public class DeploymentLaunchConfigurationTab extends AbstractLaunchConfiguratio
 				Stream.of(selectionTree.getCheckedElements()).filter(INamedElement.class::isInstance)
 						.map(INamedElement.class::cast).map(INamedElement::getQualifiedName)
 						.collect(Collectors.toSet()));
+		try {
+			configuration.setAttribute(DeploymentLaunchConfigurationAttributes.POLLING_INTERVAL,
+					Integer.parseInt(pollingIntervalText.getText()));
+		} catch (final NumberFormatException e) {
+			configuration.removeAttribute(DeploymentLaunchConfigurationAttributes.POLLING_INTERVAL);
+		}
+		if (allowTerminateCombo.getSelectionIndex() >= 0) {
+			configuration.setAttribute(DeploymentLaunchConfigurationAttributes.ALLOW_TERMINATE,
+					AllowTerminate.values()[allowTerminateCombo.getSelectionIndex()].name());
+		} else {
+			configuration.removeAttribute(DeploymentLaunchConfigurationAttributes.ALLOW_TERMINATE);
+		}
+	}
+
+	@Override
+	public boolean isValid(final ILaunchConfiguration launchConfig) {
+		try {
+			if (Integer.parseInt(pollingIntervalText.getText()) <= 0) {
+				setErrorMessage(Messages.DeploymentLaunchConfigurationTab_NegativePollingIntervalError);
+				return false;
+			}
+		} catch (final IllegalArgumentException e) {
+			setErrorMessage(Messages.DeploymentLaunchConfigurationTab_InvalidPollingIntervalError);
+			return false;
+		}
+		setErrorMessage(null);
+		return true;
 	}
 
 	protected void handleSystemUpdated() {
@@ -197,7 +275,7 @@ public class DeploymentLaunchConfigurationTab extends AbstractLaunchConfiguratio
 
 	@Override
 	public String getName() {
-		return "Deploy"; //$NON-NLS-1$
+		return Messages.DeploymentLaunchConfigurationTab_Name;
 	}
 
 	@Override

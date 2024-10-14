@@ -26,6 +26,18 @@ public class Messages extends NLS {
 	public static String DeleteResourceHandler_Resource;
 	public static String DeploymentDebugModelPresentation_Disconnected;
 	public static String DeploymentDebugModelPresentation_Terminated;
+	public static String DeploymentLaunchConfigurationTab_AllowTerminateLabel;
+	public static String DeploymentLaunchConfigurationTab_BrowseLabel;
+	public static String DeploymentLaunchConfigurationTab_InvalidPollingIntervalError;
+	public static String DeploymentLaunchConfigurationTab_Name;
+	public static String DeploymentLaunchConfigurationTab_NegativePollingIntervalError;
+	public static String DeploymentLaunchConfigurationTab_OptionsLabel;
+	public static String DeploymentLaunchConfigurationTab_PollingIntervalLabel;
+	public static String DeploymentLaunchConfigurationTab_PollingIntervalMessage;
+	public static String DeploymentLaunchConfigurationTab_PollingIntervalUnitLabel;
+	public static String DeploymentLaunchConfigurationTab_SelectionLabel;
+	public static String DeploymentLaunchConfigurationTab_SystemLabel;
+	public static String DeploymentLaunchConfigurationTab_SystemMessage;
 	public static String KillDeviceHandler_KillDeviceError;
 	public static String LaunchActiveStatusHandler_LaunchActiveMessage;
 	public static String LaunchActiveStatusHandler_LaunchActiveTitle;

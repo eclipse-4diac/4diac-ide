@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
@@ -33,6 +34,10 @@ public final class DeploymentLaunchConfigurationAttributes {
 	public static final String ID = "org.eclipse.fordiac.ide.deployment.debug.deployLaunch"; //$NON-NLS-1$
 	public static final String SYSTEM = "org.eclipse.fordiac.ide.deployment.debug.system"; //$NON-NLS-1$
 	public static final String SELECTION = "org.eclipse.fordiac.ide.deployment.debug.selection"; //$NON-NLS-1$
+	public static final String POLLING_INTERVAL = "org.eclipse.fordiac.ide.deployment.debug.pollingInterval"; //$NON-NLS-1$
+	public static final int POLLING_INTERVAL_DEFAULT = 300;
+	public static final String ALLOW_TERMINATE = "org.eclipse.fordiac.ide.deployment.debug.allowTerminate"; //$NON-NLS-1$
+	public static final String ALLOW_TERMINATE_DEFAULT = AllowTerminate.DEBUG_ONLY.name();
 
 	public static IResource getSystemResource(final ILaunchConfiguration configuration) throws CoreException {
 		final String systemAttribute = configuration.getAttribute(SYSTEM, ""); //$NON-NLS-1$
@@ -84,7 +89,32 @@ public final class DeploymentLaunchConfigurationAttributes {
 		return Optional.empty();
 	}
 
+	public static Duration getPollingInterval(final ILaunchConfiguration configuration) throws CoreException {
+		return Duration.ofMillis(configuration.getAttribute(POLLING_INTERVAL, POLLING_INTERVAL_DEFAULT));
+	}
+
+	public static AllowTerminate getAllowTerminate(final ILaunchConfiguration configuration) throws CoreException {
+		final String allowTerminate = configuration.getAttribute(ALLOW_TERMINATE, ALLOW_TERMINATE_DEFAULT);
+		return AllowTerminate.valueOf(allowTerminate);
+	}
+
 	private DeploymentLaunchConfigurationAttributes() {
 		throw new UnsupportedOperationException();
+	}
+
+	public enum AllowTerminate {
+		NEVER(Messages.DeploymentLaunchConfigurationAttributes_AllowTerminate_Never),
+		DEBUG_ONLY(Messages.DeploymentLaunchConfigurationAttributes_AllowTerminate_DebugOnly),
+		ALWAYS(Messages.DeploymentLaunchConfigurationAttributes_AllowTerminate_Always);
+
+		private final String displayString;
+
+		AllowTerminate(final String displayString) {
+			this.displayString = displayString;
+		}
+
+		public String getDisplayString() {
+			return displayString;
+		}
 	}
 }
