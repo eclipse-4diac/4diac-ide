@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -57,15 +58,17 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case VAR_CONFIG -> Boolean.valueOf(rowObject.isVarConfig());
 		case VISIBLE -> Boolean.valueOf(rowObject.isVisible());
 		case RETAIN -> getAttributeValueAsString(rowObject);
-		case VISIBLEIN -> Boolean.valueOf(testmethod(rowObject));
-		case VISIBLEOUT -> Boolean.valueOf(testmethod(rowObject));
+		case VISIBLEIN, VISIBLEOUT -> Boolean.valueOf(handleInOutCheck(rowObject, column));
 
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
 	}
 
-	private boolean testmethod(final VarDeclaration rowObject) {
-		return rowObject.isVisible();
+	@SuppressWarnings("boxing")
+	private static boolean handleInOutCheck(final VarDeclaration rowObject, final VarDeclarationTableColumn column) {
+		final IInterfaceElement ie = getPin(rowObject, column);
+		return ie.isVisible();
+
 	}
 
 	private static String getAttributeValueAsString(final VarDeclaration rowObject) {
@@ -79,7 +82,6 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 	@Override
 	public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
 			final Object newValue) {
-		// System.out.println(rowObject.getFBNetworkElement().getInterface().getOutMappedInOutVars().get(0));
 		return switch (column) {
 		case NAME -> ChangeNameCommand.forName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case TYPE -> ChangeDataTypeCommand.forTypeDeclaration(rowObject, Objects.toString(newValue, NULL_DEFAULT));
@@ -88,15 +90,28 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case VAR_CONFIG -> new ChangeVarConfigurationCommand(rowObject,
 				Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 		case VISIBLE -> new HidePinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
-		case VISIBLEIN ->
-			new HideInOutPinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
-		case VISIBLEOUT ->
-			new HideInOutPinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
+		case VISIBLEIN, VISIBLEOUT -> handleInOut(rowObject, column, newValue);
 		case RETAIN -> new ChangeRetainAttributeCommand(rowObject,
 				RetainHelper.deriveTag(rowObject.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE)),
 				RetainHelper.deriveTag(Objects.toString(newValue, NULL_DEFAULT)));
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
+	}
+
+	private static Command handleInOut(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
+			final Object newValue) {
+		final IInterfaceElement ie = getPin(rowObject, column);
+		return new HideInOutPinCommand(ie, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)),
+				column.equals(VarDeclarationTableColumn.VISIBLEIN) ? true : false);
+	}
+
+	private static IInterfaceElement getPin(final VarDeclaration rowObject, final VarDeclarationTableColumn column) {
+		if (column.equals(VarDeclarationTableColumn.VISIBLEIN)) {
+			return rowObject.getFBNetworkElement().getInterface().getInOutVars().stream()
+					.filter(x -> x.getName().equals(Objects.toString(rowObject.getName()))).toList().getFirst();
+		}
+		return rowObject.getFBNetworkElement().getInterface().getOutMappedInOutVars().stream()
+				.filter(x -> x.getName().equals(Objects.toString(rowObject.getName()))).toList().getFirst();
 	}
 
 	protected static String getInitialValue(final VarDeclaration rowObject) {
