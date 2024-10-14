@@ -140,8 +140,11 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	protected String generateWriteParamRequest(final String targetElementName, final String parameter,
 			final String value) {
-		return MessageFormat.format(getWriteParameterMessage(), getNextId(), value,
-				targetElementName + "." + parameter); //$NON-NLS-1$
+		return generateWriteParamRequest(targetElementName + "." + parameter, value); //$NON-NLS-1$
+	}
+
+	protected String generateWriteParamRequest(final String name, final String value) {
+		return MessageFormat.format(getWriteParameterMessage(), getNextId(), value, name);
 	}
 
 	@SuppressWarnings("static-method") // this method needs to be overwritable by subclasses
@@ -156,6 +159,20 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		retVal = retVal.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		retVal = retVal.replace(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		return retVal;
+	}
+
+	@Override
+	public void writeFBParameter(final Resource resource, final String name, final String value)
+			throws DeploymentException {
+		final String encodedValue = encodeXMLChars(value);
+		final String request = generateWriteParamRequest(name, encodedValue);
+		try {
+			sendREQ(resource.getName(), request);
+		} catch (final IOException e) {
+			throw new DeploymentException(
+					MessageFormat.format(Messages.DeploymentExecutor_WriteFBParameterFailed, resource.getName(), name),
+					e);
+		}
 	}
 
 	@Override

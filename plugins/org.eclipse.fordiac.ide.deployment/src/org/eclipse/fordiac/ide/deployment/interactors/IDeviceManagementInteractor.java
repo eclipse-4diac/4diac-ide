@@ -120,6 +120,15 @@ public interface IDeviceManagementInteractor {
 	/**
 	 * Write fb parameter.
 	 *
+	 * @param resource The resource
+	 * @param name     The qualified name, relative to the resource
+	 * @throws DeploymentException if an error occurred
+	 */
+	void writeFBParameter(Resource resource, String name, String value) throws DeploymentException;
+
+	/**
+	 * Write fb parameter.
+	 *
 	 * @param resource the resource
 	 * @param value    the value
 	 * @param fb       the fb
