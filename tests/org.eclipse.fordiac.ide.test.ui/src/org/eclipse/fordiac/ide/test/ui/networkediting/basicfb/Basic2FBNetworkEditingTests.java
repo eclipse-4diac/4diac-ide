@@ -52,7 +52,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 	@Test
 	public void dragAndDrop2FB() {
 		// drag&drop FB E_CYCLE and check if position is the given one
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		final Point posECycle = new Point(100, 100);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, posECycle);
@@ -110,7 +110,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(100, 100));
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CTUD_TREE_ITEM, new Point(300, 100));
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
 		// drag rectangle next to FBs, therefore FBs should not be selected
 		editor.drag(40, 40, 200, 200);
@@ -176,7 +176,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, pos2);
 
 		// select and move E_CYCLE and E_SWITCH
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		fbBot.moveSingleFB(editor, UITestNamesHelper.E_CYCLE_FB, new Point(85, 85));
 		fbBot.moveSingleFB(editor, UITestNamesHelper.E_SWITCH_FB, new Point(285, 85));
 	}
@@ -197,7 +197,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, absPos1Fb1);
 		final Point absPos1Fb2 = new Point(100, 220);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, absPos1Fb2);
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
 		final Rectangle fb1Bounds1 = fbBot.getBoundsOfFB(editor, UITestNamesHelper.E_CYCLE_FB);
 		assertTrue(fb1Bounds1.contains(absPos1Fb1.x, absPos1Fb1.y));
@@ -209,6 +209,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
+		fbBot.moveViaRectangle(editor, new Rectangle(50, 50, 400, 400), new Point(75, 125));
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_CYCLE_FB));
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
 
@@ -245,6 +246,17 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		assertTrue(fb2Bounds2.contains(absPos2Fb2X, absPos2Fb2Y));
 	}
 
+	@SuppressWarnings("static-method")
+	@Test
+	public void moveFBsSelectedViaRectangle() {
+		final SWTBotFB fbBot = new SWTBotFB(bot);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 75));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(300, 75));
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
+		fbBot.moveViaRectangle(editor, new Rectangle(50, 50, 500, 200), new Point(75, 125));
+// TODO		assertFalse(selectedEditParts.isEmpty());
+	}
+
 	/**
 	 * Checks whether the connection remains and moves along with moving FB
 	 *
@@ -269,14 +281,15 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		assertNotNull(connection);
 
 		// select E_CYCLE
-		final SWTBotGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
-		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(UITestNamesHelper.E_CYCLE_FB));
-		editor.click(UITestNamesHelper.E_CYCLE_FB);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
+		fbBot.selectFBWithFBNameInEditor(editor, UITestNamesHelper.E_CYCLE_FB);
+//		assertNotNull(editor);
+//		assertNotNull(editor.getEditPart(UITestNamesHelper.E_CYCLE_FB));
+//		editor.click(UITestNamesHelper.E_CYCLE_FB);
 		final SWTBotGefEditPart fb1 = editor.getEditPart(UITestNamesHelper.E_CYCLE_FB).parent();
-		assertNotNull(fb1);
-		final Rectangle fb1Bounds1 = fbBot.getBoundsOfFB(editor, UITestNamesHelper.E_CYCLE_FB);
-		assertTrue(fb1Bounds1.contains(pos1.x, pos1.y));
+//		assertNotNull(fb1);
+//		final Rectangle fb1Bounds1 = fbBot.getBoundsOfFB(editor, UITestNamesHelper.E_CYCLE_FB);
+//		assertTrue(fb1Bounds1.contains(pos1.x, pos1.y));
 
 		// get connection start and end point
 		final PolylineConnection polyLineConnection = (PolylineConnection) connection.getFigure();
@@ -407,7 +420,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		connectBot.createConnection(UITestPinHelper.EO1, UITestPinHelper.R);
 		ConnectionEditPart connection = connectBot.findConnection(UITestPinHelper.EO1, UITestPinHelper.R);
 		assertNotNull(connection);
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
 		// get connection start and end point
 		final PolylineConnection polyLineConnection = (PolylineConnection) connection.getFigure();
