@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,12 +10,11 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Alois Zoitl  - extracted AbstractLaunchProcess
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -24,15 +24,9 @@ import java.util.concurrent.TimeoutException;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
-import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
-import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.model.IDebugTarget;
-import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamsProxy;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorCache;
@@ -40,20 +34,16 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 
-public class EvaluatorProcess extends PlatformObject implements IProcess, Callable<IStatus> {
+public class EvaluatorProcess extends AbstractLaunchProcess implements Callable<IStatus> {
 
-	private final String name;
 	private final Evaluator evaluator;
-	private final ILaunch launch;
 	private final FutureTask<IStatus> task;
 	private final EvaluatorThreadPoolExecutor executor;
 	private final EvaluatorStreamsProxy streamsProxy;
-	private final Map<String, String> attributes = new HashMap<>();
 
 	public EvaluatorProcess(final String name, final Evaluator evaluator, final ILaunch launch) throws CoreException {
-		this.name = evaluator.getClass().getSimpleName();
+		super(evaluator.getClass().getSimpleName(), launch);
 		this.evaluator = evaluator;
-		this.launch = launch;
 		task = new FutureTask<>(this);
 		executor = new EvaluatorThreadPoolExecutor(name);
 		executor.getContext().putAll(launch.getLaunchConfiguration().getAttributes());
@@ -132,71 +122,8 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 	}
 
 	@Override
-	public String getLabel() {
-		return name;
-	}
-
-	@Override
-	public ILaunch getLaunch() {
-		return launch;
-	}
-
-	@Override
 	public IStreamsProxy getStreamsProxy() {
 		return streamsProxy;
-	}
-
-	protected void fireCreationEvent() {
-		fireEvent(new DebugEvent(this, DebugEvent.CREATE));
-	}
-
-	protected void fireTerminateEvent() {
-		fireEvent(new DebugEvent(this, DebugEvent.TERMINATE));
-	}
-
-	protected void fireChangeEvent() {
-		fireEvent(new DebugEvent(this, DebugEvent.CHANGE));
-	}
-
-	@SuppressWarnings("static-method")
-	protected void fireEvent(final DebugEvent event) {
-		final DebugPlugin manager = DebugPlugin.getDefault();
-		if (manager != null) {
-			manager.fireDebugEventSet(new DebugEvent[] { event });
-		}
-	}
-
-	@Override
-	public void setAttribute(final String key, final String value) {
-		attributes.put(key, value);
-	}
-
-	@Override
-	public String getAttribute(final String key) {
-		return attributes.get(key);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T getAdapter(final Class<T> adapter) {
-		if (adapter.equals(IProcess.class)) {
-			return (T) this;
-		}
-		if (adapter.equals(IDebugTarget.class)) {
-			for (final IDebugTarget target : getLaunch().getDebugTargets()) {
-				if (equals(target.getProcess())) {
-					return (T) target;
-				}
-			}
-			return null;
-		}
-		if (adapter.equals(ILaunch.class)) {
-			return (T) getLaunch();
-		}
-		if (adapter.equals(ILaunchConfiguration.class)) {
-			return (T) getLaunch().getLaunchConfiguration();
-		}
-		return super.getAdapter(adapter);
 	}
 
 	private class EvaluatorTerminationMonitor extends EvaluatorMonitor.NullEvaluatorMonitor {
