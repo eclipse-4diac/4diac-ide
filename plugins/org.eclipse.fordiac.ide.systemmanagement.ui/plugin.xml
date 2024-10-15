@@ -343,13 +343,10 @@
                viewerId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer">
             <includes>
                <contentExtension isRoot="true"
-                    pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemcontent">
+                    pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.rootcontent">
                	</contentExtension>
                <contentExtension
                      pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.automationsystemcontent">
-               </contentExtension>
-               <contentExtension
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.eobjectcontent">
                </contentExtension>
                <contentExtension
                      pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.sortOnly">
@@ -392,37 +389,14 @@
          point="org.eclipse.ui.navigator.navigatorContent">
         <navigatorContent
             activeByDefault="true"
-            contentProvider="org.eclipse.fordiac.ide.systemmanagement.ui.providers.SystemContentProvider"
-            id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemcontent"
+            contentProvider="org.eclipse.fordiac.ide.systemmanagement.ui.providers.SystemExplorerRootContentProvider"
+            id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.rootcontent"
             labelProvider="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider"
             name="System Content"
             priority="high">
             <possibleChildren>
-	           <or>         
                  <instanceof value="org.eclipse.core.resources.IProject"/>
-                  <instanceof value="org.eclipse.core.resources.IResource"/>
-	              <instanceof value="org.eclipse.emf.ecore.EObject"/>
-	              <instanceof value="org.eclipse.emf.edit.provider.ItemProviderAdapter"/>
-	           </or>
 	        </possibleChildren> 
-            <triggerPoints>
-                <or>
-                    <instanceof value="org.eclipse.emf.ecore.EObject"/>
-                    <instanceof value="org.eclipse.core.resources.IFolder"/>
-                    <adapt type="org.eclipse.core.resources.IProject" >
-                        <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature"/>
-                    </adapt>
-                    <instanceof value="org.eclipse.core.resources.IWorkspaceRoot" />
-                    <and>
-                        <instanceof value="org.eclipse.core.resources.IFile" />
-                        <test
-                            forcePluginActivation="true"   
-                            property="org.eclipse.core.resources.extension"
-                            value="sys">
-                        </test>                   
-                    </and>
-                </or>
-            </triggerPoints>
        </navigatorContent>
         <navigatorContent
               activeByDefault="true"

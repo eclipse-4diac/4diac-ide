@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2024 TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2011, 2024 TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,8 +16,6 @@
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 public class FBTypeContentProvider extends LibraryElementContentProvider {
 
@@ -27,11 +25,8 @@ public class FBTypeContentProvider extends LibraryElementContentProvider {
 
 	@Override
 	public Object getParent(final Object element) {
-		if (element instanceof IFile) {
-			return ((IResource) element).getParent();
-		}
-		if (element instanceof final FBType fbtype) {
-			return fbtype.getTypeEntry().getFile();
+		if (element instanceof final IFile file) {
+			return file.getParent();
 		}
 		return super.getParent(element);
 	}
