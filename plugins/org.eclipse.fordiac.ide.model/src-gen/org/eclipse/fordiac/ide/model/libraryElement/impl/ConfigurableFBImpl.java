@@ -16,8 +16,10 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.util.Map;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
@@ -142,6 +144,16 @@ public abstract class ConfigurableFBImpl extends FBImpl implements ConfigurableF
 	@Override
 	public EList<Attribute> getConfigurationAsAttributes() {
 		return ConfigurableFBManagement.getConfigurableFbAttributes(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateDataType(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBAnnotations.validateDataType(this, diagnostics, context);
 	}
 
 	/**
