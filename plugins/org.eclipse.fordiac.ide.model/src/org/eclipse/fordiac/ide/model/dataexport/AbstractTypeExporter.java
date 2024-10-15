@@ -193,7 +193,8 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	 * @throws XMLStreamException
 	 */
 	protected void addVarDeclaration(final VarDeclaration varDecl) throws XMLStreamException {
-		final boolean hasAttributes = !varDecl.getAttributes().isEmpty();
+		final boolean hasAttributes = !varDecl.getAttributes().isEmpty()
+				|| (varDecl.isInOutVar() && !varDecl.getInOutVarOpposite().getAttributes().isEmpty());
 		if (hasAttributes) {
 			addStartElement(LibraryElementTags.VAR_DECLARATION_ELEMENT);
 		} else {
@@ -210,6 +211,10 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 
 		if (hasAttributes) {
 			addAttributes(varDecl.getAttributes());
+			if (varDecl.isInOutVar() && !varDecl.getInOutVarOpposite().isVisible()) {
+				addAttributeElement("VisibleOutSide", null, "false", null);
+			}
+
 			addEndElement();
 		}
 	}

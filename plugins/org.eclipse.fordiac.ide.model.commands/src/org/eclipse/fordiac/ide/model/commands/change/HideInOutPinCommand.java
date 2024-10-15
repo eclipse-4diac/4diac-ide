@@ -27,8 +27,13 @@ public class HideInOutPinCommand extends Command implements ScopedCommand {
 	private final boolean visible;
 	private final boolean isInput;
 
-	public HideInOutPinCommand(final IInterfaceElement interfaceElement, final boolean visible, final boolean isInput) {
-		this.interfaceElement = Objects.requireNonNull(interfaceElement);
+	public HideInOutPinCommand(final IInterfaceElement inputVarInOut, final boolean visible, final boolean isInput) {
+		this.interfaceElement = Objects.requireNonNull(inputVarInOut);
+//
+//		final VarDeclaration output = inputVarInOut.getInOutVarOpposite();
+//
+//		((InterfaceList)interfaceElement.eContainer()).get
+
 		this.visible = visible;
 		this.isInput = isInput;
 	}
@@ -50,7 +55,7 @@ public class HideInOutPinCommand extends Command implements ScopedCommand {
 
 	@Override
 	public boolean canExecute() {
-		return (interfaceElement instanceof VarDeclaration && ((VarDeclaration) interfaceElement).isInOutVar()
+		return (interfaceElement instanceof final VarDeclaration varDecl && varDecl.isInOutVar()
 				&& interfaceElement.getInputConnections().isEmpty()
 				&& interfaceElement.getOutputConnections().isEmpty());
 	}
@@ -60,7 +65,7 @@ public class HideInOutPinCommand extends Command implements ScopedCommand {
 		return Set.of(getPin(isInput));
 	}
 
-	private IInterfaceElement getPin(final boolean isInput) {
+	private VarDeclaration getPin(final boolean isInput) {
 		if (isInput) {
 			return interfaceElement.getFBNetworkElement().getInterface().getInOutVars().stream()
 					.filter(x -> x.getName().equals(Objects.toString(interfaceElement.getName()))).toList().getFirst();
