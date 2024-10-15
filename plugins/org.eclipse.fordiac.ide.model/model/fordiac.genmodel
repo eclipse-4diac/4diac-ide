@@ -204,6 +204,11 @@
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//ConfigurableFB/getConfigurationAsAttributes"
           body="return ConfigurableFBManagement.getConfigurableFbAttributes(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableFB/validateDataType"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBAnnotations.validateDataType(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableFB/validateDataType/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableFB/validateDataType/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ConfigurableMoveFB"/>
     <genClasses image="false" ecoreClass="lib.ecore#//Connection">
