@@ -39,6 +39,8 @@ import org.junit.jupiter.api.Test;
 
 public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 
+	static final int TOLERANCE_SNAP_TO_GRID = 15;
+
 	/**
 	 * Drags and Drops two Function Blocks onto the canvas.
 	 *
@@ -195,7 +197,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		final Point absPos1Fb1 = new Point(100, 100);
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, absPos1Fb1);
-		final Point absPos1Fb2 = new Point(100, 220);
+		final Point absPos1Fb2 = new Point(250, 150);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, absPos1Fb2);
 		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
@@ -205,18 +207,17 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		assertTrue(fb2Bounds1.contains(absPos1Fb2.x, absPos1Fb2.y));
 
 		// drag rectangle over FBs, therefore FBs should be selected
-		editor.drag(50, 50, 400, 400);
+		editor.drag(50, 50, 400, 300);
 		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
-		fbBot.moveViaRectangle(editor, new Rectangle(50, 50, 400, 400), new Point(75, 125));
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_CYCLE_FB));
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
 
 		// move selection by clicking on point within selection (120, 120) and drag to
 		// new Point (285, 85)
 		final Point pointFrom = new Point(120, 120);
-		final Point pointTo = new Point(285, 85);
+		final Point pointTo = new Point(250, 80);
 		editor.drag(pointFrom.x, pointFrom.y, pointTo.x, pointTo.y);
 
 		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
@@ -230,31 +231,41 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		final int translationY = pointTo.y - pointFrom.y;
 
 		// Calculation of new Position of E_CYCLEs
-		final int absPos2Fb1X = absPos1Fb1.x + translationX;
-		final int absPos2Fb1Y = absPos1Fb1.y + translationY;
+		final int absPos2Fb1X = absPos1Fb1.x + translationX + TOLERANCE_SNAP_TO_GRID;
+		final int absPos2Fb1Y = absPos1Fb1.y + translationY + TOLERANCE_SNAP_TO_GRID;
 		final Rectangle fb1Bounds2 = fbBot.getBoundsOfFB(editor, UITestNamesHelper.E_CYCLE_FB);
-		assertEquals(absPos2Fb1X, fb1Bounds2.x);
-		assertEquals(absPos2Fb1Y, fb1Bounds2.y);
 		assertTrue(fb1Bounds2.contains(absPos2Fb1X, absPos2Fb1Y));
 
 		// Calculation of new Position of E_SR
-		final int absPos2Fb2X = absPos1Fb2.x + translationX;
-		final int absPos2Fb2Y = absPos1Fb2.y + translationY;
+		final int absPos2Fb2X = absPos1Fb2.x + translationX + TOLERANCE_SNAP_TO_GRID;
+		final int absPos2Fb2Y = absPos1Fb2.y + translationY + TOLERANCE_SNAP_TO_GRID;
 		final Rectangle fb2Bounds2 = fbBot.getBoundsOfFB(editor, UITestNamesHelper.E_SR_FB);
-		assertEquals(absPos2Fb2X, fb2Bounds2.x);
-		assertEquals(absPos2Fb2Y, fb2Bounds2.y);
 		assertTrue(fb2Bounds2.contains(absPos2Fb2X, absPos2Fb2Y));
 	}
 
+	/**
+	 * Checks if Elements can be moved via selection with a rectangle
+	 *
+	 * First 3 FBs are dragged onto the editing area. Afterwards a rectangle is
+	 * drawn up to select them and to be moved to a new location with the given
+	 * translation.
+	 */
 	@SuppressWarnings("static-method")
 	@Test
 	public void moveFBsSelectedViaRectangle() {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
-		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(100, 75));
-		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(300, 75));
+		final Point posFB = new Point(100, 75);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, posFB);
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(250, 75));
+		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_N_TABLE_TREE_ITEM, new Point(400, 100));
 		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
-		fbBot.moveViaRectangle(editor, new Rectangle(50, 50, 500, 200), new Point(75, 125));
-// TODO		assertFalse(selectedEditParts.isEmpty());
+		final Point translation = new Point(75, 125);
+		fbBot.moveViaRectangle(editor, new Rectangle(50, 50, 600, 300), translation);
+		// check first FB
+		final Rectangle endPosFB = fbBot.getBoundsOfFB(editor, UITestNamesHelper.E_CYCLE_FB);
+		final int expectedEndPosX = posFB.x + translation.x + TOLERANCE_SNAP_TO_GRID;
+		final int expectedEndPosY = posFB.y + translation.y + TOLERANCE_SNAP_TO_GRID;
+		assertTrue(endPosFB.contains(expectedEndPosX, expectedEndPosY));
 	}
 
 	/**
@@ -283,13 +294,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		// select E_CYCLE
 		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		fbBot.selectFBWithFBNameInEditor(editor, UITestNamesHelper.E_CYCLE_FB);
-//		assertNotNull(editor);
-//		assertNotNull(editor.getEditPart(UITestNamesHelper.E_CYCLE_FB));
-//		editor.click(UITestNamesHelper.E_CYCLE_FB);
 		final SWTBotGefEditPart fb1 = editor.getEditPart(UITestNamesHelper.E_CYCLE_FB).parent();
-//		assertNotNull(fb1);
-//		final Rectangle fb1Bounds1 = fbBot.getBoundsOfFB(editor, UITestNamesHelper.E_CYCLE_FB);
-//		assertTrue(fb1Bounds1.contains(pos1.x, pos1.y));
 
 		// get connection start and end point
 		final PolylineConnection polyLineConnection = (PolylineConnection) connection.getFigure();
@@ -356,7 +361,7 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		// get connection start and end point
 		final PolylineConnection polyLineConnection = (PolylineConnection) connection.getFigure();
 		final org.eclipse.draw2d.geometry.Point startPointConnection = polyLineConnection.getPoints().getFirstPoint();
-		final org.eclipse.draw2d.geometry.Point endPointConnection = polyLineConnection.getPoints().getLastPoint();
+		org.eclipse.draw2d.geometry.Point endPointConnection = polyLineConnection.getPoints().getLastPoint();
 
 		// calculate deltas of translation
 		final Point pos3 = new Point(45, 105);
@@ -368,16 +373,18 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		final int fb2DeltaY = pos4.y - pos2.y;
 
 		// move E_SELECT
-		editor.drag(fb1, pos3.x, pos3.y);
-		final Rectangle fb1Bounds2 = fbBot.getBoundsOfFB(editor, UITestNamesHelper.E_SELECT_FB);
-		assertTrue(fb1Bounds2.contains(pos3.x, pos3.y));
+		fbBot.moveSingleFB(editor, UITestNamesHelper.E_SELECT_FB, pos3);
+
 		assertNotNull(connection);
 		org.eclipse.draw2d.geometry.Point newStartPointConnection = polyLineConnection.getPoints().getFirstPoint();
 		org.eclipse.draw2d.geometry.Point newEndPointConnection = polyLineConnection.getPoints().getLastPoint();
 
-		assertEquals(startPointConnection, newStartPointConnection);
-		assertEquals(endPointConnection.x + (long) fb1DeltaX, newEndPointConnection.x);
-		assertEquals(endPointConnection.y + (long) fb1DeltaY, newEndPointConnection.y);
+		double distance = startPointConnection.getDistance(newStartPointConnection);
+		assertTrue(distance <= TOLERANCE_SNAP_TO_GRID);
+		distance = endPointConnection.translate(fb1DeltaX, fb1DeltaY).getDistance(newEndPointConnection);
+		assertTrue(distance <= TOLERANCE_SNAP_TO_GRID);
+
+		endPointConnection = newEndPointConnection;
 
 		// select E_CTUD
 		editor.click(UITestNamesHelper.E_CTUD_FB);
@@ -386,17 +393,16 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		final Rectangle fb2Bounds1 = fbBot.getBoundsOfFB(editor, UITestNamesHelper.E_CTUD_FB);
 		assertTrue(fb2Bounds1.contains(pos2.x, pos2.y));
 		// move E_CTUD
-		editor.drag(fb2, pos4.x, pos4.y);
+		fbBot.moveSingleFB(editor, UITestNamesHelper.E_CTUD_FB, pos4);
 		final Rectangle fb2Bounds2 = fbBot.getBoundsOfFB(editor, UITestNamesHelper.E_CTUD_FB);
 		assertTrue(fb2Bounds2.contains(pos4.x, pos4.y));
 		assertNotNull(connection);
 		newStartPointConnection = polyLineConnection.getPoints().getFirstPoint();
 		newEndPointConnection = polyLineConnection.getPoints().getLastPoint();
 
-		assertEquals(startPointConnection.x + (long) fb2DeltaX, newStartPointConnection.x);
-		assertEquals(startPointConnection.y + (long) fb2DeltaY, newStartPointConnection.y);
-		assertEquals(endPointConnection.x + (long) fb1DeltaX, newEndPointConnection.x);
-		assertEquals(endPointConnection.y + (long) fb1DeltaY, newEndPointConnection.y);
+		assertTrue(startPointConnection.translate(fb2DeltaX, fb2DeltaY)
+				.getDistance(newStartPointConnection) <= TOLERANCE_SNAP_TO_GRID);
+		assertTrue(endPointConnection.getDistance(newEndPointConnection) <= TOLERANCE_SNAP_TO_GRID);
 	}
 
 	/**
