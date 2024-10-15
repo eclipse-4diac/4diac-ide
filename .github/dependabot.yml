@@ -4,7 +4,6 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    target-branch: "develop"
     labels:
       - "Github Action Dependencies"
   - package-ecosystem: maven
@@ -15,6 +14,5 @@ updates:
       prefix: fix
       prefix-development: chore
       include: scope
-    target-branch: "develop"
     labels:
       - dependencies
