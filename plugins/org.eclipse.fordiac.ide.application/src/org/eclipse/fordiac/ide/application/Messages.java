@@ -23,6 +23,16 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.application.messages"; //$NON-NLS-1$
 
+	public static String AbstractCommandMarkerResolution_CannotCreateCommand;
+
+	public static String AbstractCommandMarkerResolution_CannotExecuteCommand;
+
+	public static String AbstractCommandMarkerResolution_CommitTask;
+
+	public static String AbstractCommandMarkerResolution_NoSuchElement;
+
+	public static String AbstractCommandMarkerResolution_PerformTask;
+
 	public static String AddFBBookMark_AddBookmark;
 
 	public static String AddFBBookMark_AddBookMarkTitle;
