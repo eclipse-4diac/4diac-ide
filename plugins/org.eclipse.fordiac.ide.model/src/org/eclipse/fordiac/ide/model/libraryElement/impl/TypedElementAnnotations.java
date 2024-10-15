@@ -43,7 +43,7 @@ public final class TypedElementAnnotations {
 				&& libraryElement.getTypeEntry() instanceof ErrorTypeEntry) {
 			if (diagnostics != null) {
 				diagnostics.add(createTypeValidationDiagnostic(
-						MessageFormat.format(Messages.TypedElementAnnotations_TypeNotFound, element.getTypeName()),
+						MessageFormat.format(Messages.TypedElementAnnotations_TypeNotFound, getFullTypeName(element)),
 						element));
 			}
 			return false;
