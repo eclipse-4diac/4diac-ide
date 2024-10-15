@@ -16,6 +16,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.marker.resolution;
 
+import java.util.Arrays;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -24,10 +26,12 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
@@ -69,6 +73,14 @@ public class ChangeDataTypeMarkerResolution extends AbstractCommandMarkerResolut
 		case final ConfigurableFB fb -> new ConfigureFBCommand(fb, selectedType);
 		default -> null;
 		};
+	}
+
+	@Override
+	protected boolean isApplicable(final IMarker other) {
+		final int code = FordiacErrorMarker.getCode(other);
+		return (code == LibraryElementValidator.ITYPED_ELEMENT__VALIDATE_TYPE
+				|| code == LibraryElementValidator.CONFIGURABLE_FB__VALIDATE_DATA_TYPE)
+				&& Arrays.equals(FordiacErrorMarker.getData(other), FordiacErrorMarker.getData(getMarker()));
 	}
 
 	@Override

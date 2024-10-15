@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.application.marker.resolution;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -37,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -87,6 +89,14 @@ public class CreateDataTypeMarkerResolution extends AbstractCommandMarkerResolut
 		case final ConfigurableFB fb -> new ConfigureFBCommand(fb, newEntry.getType());
 		default -> null;
 		};
+	}
+
+	@Override
+	protected boolean isApplicable(final IMarker other) {
+		final int code = FordiacErrorMarker.getCode(other);
+		return (code == LibraryElementValidator.ITYPED_ELEMENT__VALIDATE_TYPE
+				|| code == LibraryElementValidator.CONFIGURABLE_FB__VALIDATE_DATA_TYPE)
+				&& Arrays.equals(FordiacErrorMarker.getData(other), FordiacErrorMarker.getData(getMarker()));
 	}
 
 	@Override
