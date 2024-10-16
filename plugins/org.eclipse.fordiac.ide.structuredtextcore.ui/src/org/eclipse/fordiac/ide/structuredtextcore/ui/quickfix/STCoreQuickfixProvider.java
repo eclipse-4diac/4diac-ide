@@ -229,10 +229,10 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 								final ISemanticRegion parametersRegionEnd = expressionRegion.getRegionFor()
 										.keyword(")"); //$NON-NLS-1$
 								if (parametersRegionBegin != null && parametersRegionEnd != null) {
-									textRegionDiffBuilder.replace(expressionRegion.getPreviousHiddenRegion(),
-											expressionRegion.getNextHiddenRegion(),
-											parametersRegionBegin.getNextHiddenRegion(),
-											parametersRegionEnd.getPreviousHiddenRegion());
+									textRegionDiffBuilder.remove(expressionRegion.getPreviousHiddenRegion(),
+											parametersRegionBegin.getNextHiddenRegion());
+									textRegionDiffBuilder.remove(parametersRegionEnd.getPreviousHiddenRegion(),
+											expressionRegion.getNextHiddenRegion());
 								}
 							}
 						}
