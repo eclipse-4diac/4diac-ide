@@ -55,6 +55,10 @@ public class Import4diacProject extends Task {
 			workspace.setDescription(desc);
 			Job.getJobManager().cancel(null);
 
+			// ensure SystemManager is loaded
+			@SuppressWarnings("unused")
+			final SystemManager mgr = SystemManager.INSTANCE;
+
 			final IPath projectPath = getProjectPath();
 			final IProjectDescription description = loadProjectDescription(workspace, projectPath);
 			final IProject project = workspace.getRoot().getProject(description.getName());
