@@ -426,6 +426,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 			cmd.setDestination(dest);
 			cmd.setVisible(oldConn.isVisible());
 			cmd.setArrangementConstraints(oldConn.getRoutingData());
+			cmd.setElementIndex(fbn.getConnectionIndex(oldConn));
 			reconnCmds.add(cmd);
 		}
 	}
