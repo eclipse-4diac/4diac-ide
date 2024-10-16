@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreLinkedPos
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRecordingXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreReferenceUpdater;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRegionDiffFormatter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedEmfResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementProcessor;
@@ -69,6 +70,7 @@ import org.eclipse.xtext.ide.serializer.IChangeSerializer;
 import org.eclipse.xtext.ide.serializer.impl.PartialSerializer;
 import org.eclipse.xtext.ide.serializer.impl.RecordingXtextResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.ReferenceUpdater;
+import org.eclipse.xtext.ide.serializer.impl.RegionDiffFormatter;
 import org.eclipse.xtext.ide.serializer.impl.RelatedEmfResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.RelatedXtextResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.ResourceLifecycleManager;
@@ -306,6 +308,10 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 	@Override
 	public Class<? extends IWhitespaceInformationProvider> bindIWhitespaceInformationProvider() {
 		return STCoreWhitespaceInformationProvider.class;
+	}
+
+	public Class<? extends RegionDiffFormatter> bindRegionDiffFormatter() {
+		return STCoreRegionDiffFormatter.class;
 	}
 
 	@Override
