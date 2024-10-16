@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage
 import org.eclipse.fordiac.ide.model.value.StringValueConverter
 
+
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 
 final class ForteNgExportUtil {
@@ -134,6 +135,14 @@ final class ForteNgExportUtil {
 			case !path.empty: '''«path»/«type.generateTypeBasename»_gen.cpp'''
 			default: '''«type.generateTypeBasename»_gen.cpp'''
 		}
+	}
+	
+	def static String getHashType() {
+		return Hasher.getHashType(); 
+	}
+	
+	def static String generateTypeHash(INamedElement type) {
+		return Hasher.getINamedElementHash(type); 
 	}
 
 	def static String generateTypeInclude(INamedElement type) '''«type.generateTypeBasename».h'''

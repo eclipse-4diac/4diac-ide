@@ -308,6 +308,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateInterfaceDeclarations() '''
 		«generateInterfaceVariableAndConnectionDeclarations()»
+		static const std::string hash_version = "«getHashType»";
+		static const std::string hash_value = "«type.generateTypeHash»";
+		
 		«generateAccessorDeclarations()»
 		«generateEventAccessorDefinitions»
 	'''
