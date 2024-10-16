@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 fortiss GmbH
- * 				 2020 Johannes Kepler University Linz
+ * Copyright (c) 2015, 2024 fortiss GmbH, Johannes Kepler University Linz
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,24 +16,22 @@
 package org.eclipse.fordiac.ide.systemmanagement.ui.providers;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.Viewer;
 
-public class SystemContentProvider extends AdapterFactoryContentProvider implements DistributedSystemListener {
+public class SystemExplorerRootContentProvider implements ITreeContentProvider, DistributedSystemListener {
 
-	private static ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(Collections.emptyList());
+	private Viewer viewer;
 
-	public SystemContentProvider() {
-		super(systemAdapterFactory);
+	public SystemExplorerRootContentProvider() {
 		SystemManager.INSTANCE.addWorkspaceListener(this);
 	}
 
@@ -45,9 +43,14 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	@Override
 	public Object[] getChildren(final Object parentElement) {
 		if (parentElement instanceof final IWorkspaceRoot root) {
-			return Arrays.stream(root.getProjects()).filter(SystemContentProvider::projectToShow).toArray();
+			return Arrays.stream(root.getProjects()).filter(SystemExplorerRootContentProvider::projectToShow).toArray();
 		}
 		return new Object[0];
+	}
+
+	@Override
+	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+		this.viewer = viewer;
 	}
 
 	@Override
@@ -68,7 +71,7 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 				return true;
 			}
 		}
-		return super.hasChildren(element);
+		return false;
 	}
 
 	@Override

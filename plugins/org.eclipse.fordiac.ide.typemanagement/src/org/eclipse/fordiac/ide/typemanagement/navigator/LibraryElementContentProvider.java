@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2024 TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2011, 2024 TU Wien ACIN, fortiss GmbH
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -58,8 +59,17 @@ public class LibraryElementContentProvider extends AdapterFactoryContentProvider
 	}
 
 	@Override
-	public Object[] getChildren(Object parentElement) {
-		parentElement = getTypeParent(parentElement);
+	public Object[] getChildren(final Object parentElement) {
+		if (parentElement instanceof final IFile element) {
+			final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(element);
+			if (null != entry) {
+				hookToTypeEntry(entry);
+				return super.getChildren(entry.getTypeEditable());
+			}
+			// we don't have a type entry for the full so we don't have children
+			return new Object[0];
+		}
+
 		return super.getChildren(parentElement);
 	}
 
@@ -70,28 +80,6 @@ public class LibraryElementContentProvider extends AdapterFactoryContentProvider
 			return libElement.getTypeEntry().getFile();
 		}
 		return parent;
-	}
-
-	/**
-	 * Get the correct type if it exists
-	 *
-	 * Note: use in {@link #getChildren(Object)} to obtain the correct object
-	 *
-	 * @param parentElement
-	 * @return the parentElement or its respective type
-	 */
-	protected Object getTypeParent(final Object parentElement) {
-		TypeEntry entry = null;
-		if (parentElement instanceof final IFile element) {
-			entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(element);
-		} else if (parentElement instanceof final LibraryElement element) {
-			entry = element.getTypeEntry();
-		}
-		if (null != entry) {
-			hookToTypeEntry(entry);
-			return entry.getTypeEditable();
-		}
-		return parentElement;
 	}
 
 	/**
