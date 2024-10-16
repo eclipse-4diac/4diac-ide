@@ -380,6 +380,37 @@ class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
 	}
 
 	@Test
+	void fixUnnecessaryConversionNested() {
+		testMultiQuickfix("""
+				FUNCTION TEST
+				VAR_TEMP
+					TESTVAR : DINT;
+				END_VAR
+				TESTVAR := INT_TO_DINT(17 + SINT_TO_INT(4));
+				END_FUNCTION
+				""", """
+				FUNCTION TEST
+				VAR_TEMP
+					TESTVAR : DINT;
+				END_VAR
+				TESTVAR := <0<INT_TO_DINT>0>(17 + <1<SINT_TO_INT>1>(4));
+				END_FUNCTION
+				-----
+				0: message=Unnecessary conversion from INT to DINT
+				1: message=Unnecessary conversion from SINT to INT
+				""", """
+				FUNCTION TEST
+				VAR_TEMP
+					TESTVAR : DINT;
+				END_VAR
+				TESTVAR := 17 + 4;
+				END_FUNCTION
+				-----
+				(no markers found)
+				""");
+	}
+
+	@Test
 	void fixUnnecessaryNarrowConversionSingle() {
 		testMultiQuickfix("""
 				FUNCTION TEST
