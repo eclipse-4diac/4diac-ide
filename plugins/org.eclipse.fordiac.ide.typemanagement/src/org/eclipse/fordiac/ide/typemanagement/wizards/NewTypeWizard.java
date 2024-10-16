@@ -80,7 +80,7 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 		final String packageName = page1.getPackageName();
 		final TypeFromTemplateCreator creator = new TypeFromTemplateCreator(getTargetFile(), template, packageName);
 		try {
-			getContainer().run(true, true, creator::createTypeFromTemplate);
+			getContainer().run(false, true, creator::createTypeFromTemplate);
 		} catch (final InvocationTargetException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		} catch (final InterruptedException e) {
