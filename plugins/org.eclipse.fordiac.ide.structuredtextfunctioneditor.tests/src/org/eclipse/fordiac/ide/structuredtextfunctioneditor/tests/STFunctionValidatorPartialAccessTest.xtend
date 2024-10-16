@@ -28,6 +28,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.^extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.api.Test
 
 @ExtendWith(InjectionExtension)
 @InjectWith(STFunctionInjectorProvider)
@@ -284,6 +285,19 @@ class STFunctionValidatorPartialAccessTest {
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STMultibitPartialExpression,
 			STCoreValidator.BIT_ACCESS_INVALID_RECEIVER, "Receiving expression invalid for partial access")
+	}
+
+	@Test
+	def void testValidPartialAccessOnArraySubscript() {
+		'''
+			FUNCTION partialTest
+			VAR
+			x : ARRAY [0..1] OF DWORD;
+			END_VAR
+			x[0].1 := NOT x[0].1;
+			x[1].%b1 := NOT x[1].%b1;
+			END_FUNCTION
+		'''.parse.assertNoErrors
 	}
 
 	@ParameterizedTest(name="Check valid access expression of type {0}")
