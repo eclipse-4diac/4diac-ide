@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.ResourceMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
 import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
@@ -95,7 +96,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	private final CommandStack commandStack = new CommandStack();
 	private Collection<ITypeEditorPage> editorPages;
 	private final TypeEntryAdapter adapter = new TypeEntryAdapter(this);
-	private GraphicalAnnotationModel annotationModel;
+	private ResourceMarkerGraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
 
 	@Override
@@ -425,6 +426,9 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 						.forEach(e -> e.setInput(getEditorInput()));
 			}
 			setInputWithNotify(getEditorInput());
+			if (annotationModel != null) {
+				annotationModel.setResource(getEditorInput().getFile());
+			}
 		} else {
 			setInputWithNotify(input);
 		}
