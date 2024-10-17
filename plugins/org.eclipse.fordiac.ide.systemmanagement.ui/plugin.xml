@@ -122,20 +122,6 @@
          </activeWhen>
       </handler>
       <handler 
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.DeleteSystem"
-            commandId="org.eclipse.ui.edit.delete">
-         <activeWhen>
-            <with variable="selection">
-		    <iterate
-            operator="and">
-         <adapt
-               type="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-         </adapt>
-      </iterate>
-		   </with>            
-         </activeWhen>
-      </handler>
-      <handler 
             class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.RefreshHandler"
             commandId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.refresh">
          <activeWhen>
@@ -357,8 +343,14 @@
                viewerId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer">
             <includes>
                <contentExtension isRoot="true"
-                    pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemcontent">
-               	</contentExtension> 
+                    pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.rootcontent">
+               	</contentExtension>
+               <contentExtension
+                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.automationsystemcontent">
+               </contentExtension>
+               <contentExtension
+                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.sortOnly">
+               </contentExtension> 
                <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.startsWithDot"/>
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.mux"/>
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.fb"/>
@@ -382,7 +374,7 @@
                </contentExtension>
                <contentExtension
                      pattern="org.eclipse.fordiac.ide.typemanagement.navigator.FBContentSorter" >
-               </contentExtension>      
+               </contentExtension>
             </includes>
          </viewerContentBinding>
          <viewer
@@ -397,85 +389,114 @@
          point="org.eclipse.ui.navigator.navigatorContent">
         <navigatorContent
             activeByDefault="true"
-            contentProvider="org.eclipse.fordiac.ide.systemmanagement.ui.providers.SystemContentProvider"
-            id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemcontent"
+            contentProvider="org.eclipse.fordiac.ide.systemmanagement.ui.providers.SystemExplorerRootContentProvider"
+            id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.rootcontent"
             labelProvider="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider"
             name="System Content"
-            priority="highest">
+            priority="high">
             <possibleChildren>
-	           <or>         
                  <instanceof value="org.eclipse.core.resources.IProject"/>
-                  <instanceof value="org.eclipse.core.resources.IResource"/>
-	              <instanceof value="org.eclipse.emf.ecore.EObject"/>
-	              <instanceof value="org.eclipse.emf.edit.provider.ItemProviderAdapter"/>
-	           </or>
 	        </possibleChildren> 
-            <triggerPoints>
-                <or>
-                    <instanceof value="org.eclipse.emf.ecore.EObject"/>
-                    <instanceof value="org.eclipse.core.resources.IFolder"/>
-                    <adapt type="org.eclipse.core.resources.IProject" >
-                        <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature"/>
-                    </adapt>
-                    <instanceof value="org.eclipse.core.resources.IWorkspaceRoot" />
-                    <and>
-                        <instanceof value="org.eclipse.core.resources.IFile" />
-                        <test
-                            forcePluginActivation="true"   
-                            property="org.eclipse.core.resources.extension"
-                            value="sys">
-                        </test>                   
-                    </and>
-                </or>
-            </triggerPoints>
-            <commonSorter
-                class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.FordiacProjectSorter"
-                id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.FordiacProjectSorter">
-                <parentExpression>
-                    <adapt type="org.eclipse.core.resources.IProject" >
-                        <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature"/>
-                    </adapt>
-                </parentExpression>
-            </commonSorter>
-            <commonSorter
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentSorter"
-                  id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentSorter">
-               <parentExpression>
-                  <and>
-                   <instanceof 
-                         value="org.eclipse.core.resources.IFile">
-                   </instanceof>
-                   <test
-                         forcePluginActivation="true"   
-                         property="org.eclipse.core.resources.extension"
-                         value="sys">
-                   </test>
-               </and>
-               </parentExpression>
-            </commonSorter>  
-            <commonSorter
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.DeviceContentSorter"
-                  id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.DeviceContentSorter">
-               <parentExpression>
-                  <or>
-                     <instanceof
-                           value="org.eclipse.fordiac.ide.model.libraryElement.Device">
-                     </instanceof>
-                  </or>
-               </parentExpression>
-            </commonSorter>
-            <commonSorter
-                  class="org.eclipse.fordiac.ide.typemanagement.navigator.KeepOrderContentSorter"
-                  id="org.eclipse.fordiac.ide.typemanagement.navigator.FBContentSorter">
-               <parentExpression>
-                  <or>
-                     <instanceof
-                           value="org.eclipse.fordiac.ide.model.libraryElement.InterfaceList">
-                     </instanceof>
-                  </or>
-               </parentExpression>
-            </commonSorter>          
-       </navigatorContent>          
+       </navigatorContent>
+        <navigatorContent
+              activeByDefault="true"
+              contentProvider="org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemContentProvider"
+              id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.automationsystemcontent"
+              labelProvider="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider"
+              name="Automation System Content"
+              priority="high">
+           <possibleChildren>
+              <or>
+                 <instanceof
+                       value="org.eclipse.emf.ecore.EObject">
+                 </instanceof>
+                 <instanceof
+                       value="org.eclipse.emf.edit.provider.ItemProviderAdapter">
+                 </instanceof>
+              </or>
+           </possibleChildren>
+           <triggerPoints>
+              <and>
+                 <instanceof
+                       value="org.eclipse.core.resources.IFile">
+                 </instanceof>
+                 <test
+                       forcePluginActivation="true"
+                       property="org.eclipse.core.resources.extension"
+                       value="sys">
+                 </test>
+              </and>
+           </triggerPoints>
+           <commonSorter
+                 class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentSorter"
+                 id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentSorter">
+              <parentExpression>
+                 <and>
+                    <instanceof
+                          value="org.eclipse.core.resources.IFile">
+                    </instanceof>
+                    <test
+                          forcePluginActivation="true"
+                          property="org.eclipse.core.resources.extension"
+                          value="sys">
+                    </test>
+                 </and>
+              </parentExpression>
+           </commonSorter>
+        </navigatorContent>
+        <navigatorContent
+              activeByDefault="true"
+              id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.sortOnly"
+              name="System Sort Override"
+              priority="highest"
+              sortOnly="true">
+           <commonSorter
+                 class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.FordiacProjectSorter"
+                 id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.FordiacProjectSorter">
+              <parentExpression>
+                 <adapt
+                       type="org.eclipse.core.resources.IProject">
+                    <test
+                          property="org.eclipse.core.resources.projectNature"
+                          value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+                    </test>
+                 </adapt>
+              </parentExpression>
+           </commonSorter>
+           <commonSorter
+                 class="org.eclipse.fordiac.ide.typemanagement.navigator.KeepOrderContentSorter"
+                 id="org.eclipse.fordiac.ide.typemanagement.navigator.FBContentSorter">
+              <parentExpression>
+                 <or>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.model.libraryElement.InterfaceList">
+                    </instanceof>
+                 </or>
+              </parentExpression>
+           </commonSorter>
+           <commonSorter
+                 class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.DeviceContentSorter"
+                 id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.DeviceContentSorter">
+              <parentExpression>
+                 <or>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.model.libraryElement.Device">
+                    </instanceof>
+                 </or>
+              </parentExpression>
+           </commonSorter>
+           <commonSorter
+                 class="org.eclipse.jface.viewers.ViewerSorter"
+                 id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.IFolderSorter">
+              <parentExpression>
+                 <or>
+                    <instanceof
+                          value="org.eclipse.core.resources.IFolder">
+                    </instanceof>
+                 </or>
+              </parentExpression>
+           </commonSorter>
+        </navigatorContent>          
       <commonWizard
             type="new"
             wizardId="org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard">
@@ -589,27 +610,6 @@
          </filterExpression>
       </commonFilter>
   </extension>
-      <extension
-            point="org.eclipse.ui.navigator.navigatorContent">
-         <navigatorContent
-               activeByDefault="true"
-               id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.sortOnly"
-               name="System Sort Override"
-               priority="normal"
-               sortOnly="true">
-            <commonSorter
-                  class="org.eclipse.jface.viewers.ViewerSorter"
-                  id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.IFolderSorter">
-               <parentExpression>
-                  <or>
-                     <instanceof
-                           value="org.eclipse.core.resources.IFolder">
-                     </instanceof>
-                  </or>
-               </parentExpression>
-            </commonSorter>
-         </navigatorContent>
-      </extension>  
     <extension point="org.eclipse.ui.navigator.linkHelper">    
        <linkHelper
              class="org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.SystemExplorerLinkHelper"

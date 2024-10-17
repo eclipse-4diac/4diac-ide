@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
-import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -80,16 +79,20 @@ public class DeploymentEvaluatorSharedState implements Closeable {
 		deviceManagementInteractor.deleteFB(resource, deploymentData);
 	}
 
-	public void addWatch(final MonitoringBaseElement element) throws DeploymentException {
-		deviceManagementInteractor.addWatch(element);
+	public void addWatch(final Resource resource, final String name) throws DeploymentException {
+		deviceManagementInteractor.addWatch(resource, name);
+	}
+
+	public void removeWatch(final Resource resource, final String name) throws DeploymentException {
+		deviceManagementInteractor.removeWatch(resource, name);
 	}
 
 	public Response readWatches() throws DeploymentException {
 		return deviceManagementInteractor.readWatches();
 	}
 
-	public void triggerEvent(final MonitoringBaseElement element) throws DeploymentException {
-		deviceManagementInteractor.triggerEvent(element);
+	public void triggerEvent(final Resource resource, final String name) throws DeploymentException {
+		deviceManagementInteractor.triggerEvent(resource, name);
 	}
 
 	public void writeFBParameter(final String value, final FBDeploymentData deploymentData,

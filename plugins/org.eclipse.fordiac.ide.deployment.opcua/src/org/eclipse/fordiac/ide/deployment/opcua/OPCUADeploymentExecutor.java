@@ -39,7 +39,6 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
 import org.eclipse.fordiac.ide.deployment.interactors.ForteTypeNameCreator;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
-import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.opcua.helpers.Constants;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
@@ -326,6 +325,12 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			final VarDeclaration varDecl) throws DeploymentException {
 		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, fbData.getPrefix(),
 				fbData.getFb().getName(), varDecl.getName());
+		writeFBParameter(resource, destination, value);
+	}
+
+	@Override
+	public void writeFBParameter(final Resource resource, final String destination, final String value)
+			throws DeploymentException {
 		final String message = MessageFormat.format(Constants.WRITE_FB_PARAMETER, destination, value);
 		if (combinedRequest) { // Add request to list of requests
 			writeFBParameterCombined(destination, value, message);
@@ -578,12 +583,11 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	}
 
 	@Override
-	public void addWatch(final MonitoringBaseElement element) throws DeploymentException {
+	public boolean addWatch(final Resource resource, final String fullFbName) throws DeploymentException {
 		if (availableResources.isEmpty() && !getResourcesHandle()) {
-			return;
+			return false;
 		}
-		final String fullFbName = element.getQualifiedString();
-		final String resName = element.getResourceString();
+		final String resName = resource.getName();
 		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
 				Constants.ADD_WATCH_NODE, new Variant[] { new Variant(fullFbName) });
 		final String message = MessageFormat.format(Constants.ADD_WATCH, fullFbName);
@@ -597,20 +601,19 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			Thread.currentThread().interrupt();
 			FordiacLogHelper.logError(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
-			return;
+			return false;
 		}
 		final StatusCode opcuaStatus = result.getStatusCode();
 		logResponseStatus(opcuaStatus, resName, fullFbName, Messages.OPCUADeploymentExecutor_ErrorOnMonitoringRequest);
-		element.setOffline(Constants.MGM_RESPONSE_UNKNOWN.equals(getIEC61499Status(opcuaStatus)));
+		return !Constants.MGM_RESPONSE_UNKNOWN.equals(getIEC61499Status(opcuaStatus));
 	}
 
 	@Override
-	public void removeWatch(final MonitoringBaseElement element) throws DeploymentException {
+	public boolean removeWatch(final Resource resource, final String fullFbName) throws DeploymentException {
 		if (availableResources.isEmpty() && !getResourcesHandle()) {
-			return;
+			return false;
 		}
-		final String fullFbName = element.getQualifiedString();
-		final String resName = element.getResourceString();
+		final String resName = resource.getName();
 		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
 				Constants.REMOVE_WATCH_NODE, new Variant[] { new Variant(fullFbName) });
 		final String message = MessageFormat.format(Constants.REMOVE_WATCH, fullFbName);
@@ -624,20 +627,19 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			Thread.currentThread().interrupt();
 			FordiacLogHelper.logError(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
-			return;
+			return false;
 		}
 		final StatusCode opcuaStatus = result.getStatusCode();
 		logResponseStatus(opcuaStatus, resName, fullFbName, Messages.OPCUADeploymentExecutor_ErrorOnMonitoringRequest);
-		element.setOffline(Constants.MGM_RESPONSE_UNKNOWN.equals(getIEC61499Status(opcuaStatus)));
+		return !Constants.MGM_RESPONSE_UNKNOWN.equals(getIEC61499Status(opcuaStatus));
 	}
 
 	@Override
-	public void triggerEvent(final MonitoringBaseElement element) throws DeploymentException {
+	public void triggerEvent(final Resource resource, final String fullFbName) throws DeploymentException {
 		if (availableResources.isEmpty() && !getResourcesHandle()) {
 			return;
 		}
-		final String fullFbName = element.getQualifiedString();
-		final String resName = element.getResourceString();
+		final String resName = resource.getName();
 		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
 				Constants.TRIGGER_EVENT_NODE, new Variant[] { new Variant(fullFbName) });
 		final String message = MessageFormat.format(Constants.TRIGGER_EVENT, fullFbName);
@@ -658,12 +660,12 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	}
 
 	@Override
-	public void forceValue(final MonitoringBaseElement element, final String value) throws DeploymentException {
+	public void forceValue(final Resource resource, final String fullFbName, final String value)
+			throws DeploymentException {
 		if (availableResources.isEmpty() && !getResourcesHandle()) {
 			return;
 		}
-		final String fullFbName = element.getQualifiedString();
-		final String resName = element.getResourceString();
+		final String resName = resource.getName();
 		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
 				Constants.FORCE_VALUE_NODE, new Variant[] { new Variant(fullFbName), new Variant(value) });
 		final String message = MessageFormat.format(Constants.FORCE_VALUE, fullFbName);
@@ -684,12 +686,11 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	}
 
 	@Override
-	public void clearForce(final MonitoringBaseElement element) throws DeploymentException {
+	public void clearForce(final Resource resource, final String fullFbName) throws DeploymentException {
 		if (availableResources.isEmpty() && !getResourcesHandle()) {
 			return;
 		}
-		final String fullFbName = element.getQualifiedString();
-		final String resName = element.getResourceString();
+		final String resName = resource.getName();
 		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
 				Constants.CLEAR_FORCE_NODE, new Variant[] { new Variant(fullFbName) });
 		final String message = MessageFormat.format(Constants.CLEAR_FORCE, fullFbName);
@@ -905,5 +906,4 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		// TOD Needs to be implemented due to interface changes in
 		// IDeviceManagementInteractor
 	}
-
 }

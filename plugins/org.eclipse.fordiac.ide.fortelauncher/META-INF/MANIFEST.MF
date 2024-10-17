@@ -15,3 +15,4 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fortelauncher;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.fortelauncher
+Import-Package: org.eclipse.fordiac.ide.debug

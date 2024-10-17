@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.debug.value;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugElement;
-import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
+import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue;
 import org.eclipse.fordiac.ide.model.eval.value.FBValue;
@@ -25,13 +25,13 @@ import org.eclipse.fordiac.ide.model.eval.value.Value;
 public abstract class EvaluatorDebugValue extends EvaluatorDebugElement implements IValue {
 	private final Value value;
 
-	protected EvaluatorDebugValue(final Value value, final EvaluatorDebugTarget target) {
+	protected EvaluatorDebugValue(final Value value, final IEvaluatorDebugTarget target) {
 		super(target);
 		this.value = value;
 	}
 
 	public static EvaluatorDebugValue forValue(final Value value, final String expression,
-			final EvaluatorDebugTarget target) {
+			final IEvaluatorDebugTarget target) {
 		return switch (value) {
 		case final ArrayValue arrayValue -> new EvaluatorDebugArrayValue(arrayValue, expression, target);
 		case final FBValue arrayValue -> new EvaluatorDebugFBValue(arrayValue, expression, target);
@@ -71,7 +71,7 @@ public abstract class EvaluatorDebugValue extends EvaluatorDebugElement implemen
 	public abstract EvaluatorDebugVariable getVariable(final String name);
 
 	@Override
-	public final EvaluatorDebugTarget getDebugTarget() {
-		return (EvaluatorDebugTarget) super.getDebugTarget();
+	public final IEvaluatorDebugTarget getDebugTarget() {
+		return (IEvaluatorDebugTarget) super.getDebugTarget();
 	}
 }

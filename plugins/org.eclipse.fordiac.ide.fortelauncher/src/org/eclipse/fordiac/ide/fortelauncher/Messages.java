@@ -42,6 +42,9 @@ public final class Messages extends NLS {
 
 	public static String ForteLaunchTabError_No4diacFORTEExecutableSet;
 
+	public static String StopForte_NoForteExecutableGiven;
+	public static String StopForteProcess_ExeceptionOccured;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

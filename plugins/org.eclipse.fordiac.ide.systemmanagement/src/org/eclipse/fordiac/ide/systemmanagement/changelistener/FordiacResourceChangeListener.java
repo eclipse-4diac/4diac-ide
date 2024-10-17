@@ -252,7 +252,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				typeLib.addTypeEntry(entry);
 				filesToRename.remove(rnEntry);
 			}
-			systemManager.notifyListeners();
 		}
 	}
 
@@ -370,7 +369,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		final IProject oldProject = ResourcesPlugin.getWorkspace().getRoot()
 				.getProject(delta.getMovedFromPath().lastSegment());
 		final IProject newProject = delta.getResource().getProject();
-		systemManager.renameProject(oldProject, newProject);
+		TypeLibraryManager.INSTANCE.renameProject(oldProject, newProject);
 	}
 
 	private void handleFileMove(final IResourceDelta delta) {
@@ -419,7 +418,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private void handleFileRename(final IFile dst, final IFile src) {
 		handleTypeRename(src, dst);
-		systemManager.notifyListeners();
 	}
 
 	public static void handleTypeRename(final IFile src, final IFile file) {
@@ -528,7 +526,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				} catch (final CoreException e) {
 					FordiacLogHelper.logError(e.getMessage(), e);
 				}
-				systemManager.notifyListeners();
 				ResourcesPlugin.getWorkspace().addResourceChangeListener(FordiacResourceChangeListener.this);
 				return Status.OK_STATUS;
 			}
@@ -543,7 +540,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	private void handleProjectRemove(final IResourceDelta delta) {
 		final IProject project = delta.getResource().getProject();
 		closeAllProjectRelatedEditors(project);
-		systemManager.removeProject(project);
+		TypeLibraryManager.INSTANCE.removeProject(project);
 	}
 
 	private static void closeAllProjectRelatedEditors(final IProject project) {

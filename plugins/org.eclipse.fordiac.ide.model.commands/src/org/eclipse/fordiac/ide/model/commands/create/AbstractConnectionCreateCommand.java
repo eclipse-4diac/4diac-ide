@@ -70,6 +70,8 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 
 	private boolean visible = true;
 
+	private int elementIndex = -1;
+
 	protected AbstractConnectionCreateCommand(final FBNetwork parent) {
 		// initialize values
 		this.parent = parent;
@@ -125,7 +127,7 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 		connection.setDestination(destination);
 		connection.setRoutingData(routingData);
 
-		parent.addConnection(connection);
+		parent.addConnectionWithIndex(connection, elementIndex);
 		// visible needs to be setup after the connection is added to correctly update
 		// ui
 		connection.setVisible(visible);
@@ -153,7 +155,7 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 	public void redo() {
 		connection.setSource(source);
 		connection.setDestination(destination);
-		parent.addConnection(connection);
+		parent.addConnectionWithIndex(connection, elementIndex);
 
 		if (null != mirroredConnection) {
 			mirroredConnection.redo();
@@ -309,5 +311,9 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 	public Set<EObject> getAffectedObjects() {
 		return Stream.of(parent, connection, source, destination).filter(Objects::nonNull)
 				.collect(Collectors.toUnmodifiableSet());
+	}
+
+	public void setElementIndex(final int elementIndex) {
+		this.elementIndex = elementIndex;
 	}
 }

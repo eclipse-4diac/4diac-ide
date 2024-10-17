@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="TIMESTAMP_NS" Comment="creates default a Unix-Epoch-Timestamp in nanoseconds use other start dates for other timestamp types">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 Monika Wenger&#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="Monika Wenger" Date="2024-10-14">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="request to create a timestamp">
+				<With Var="startDate"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="confirms the creation of a timestamp">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="startDate" Type="DT" Comment="the start date used to calculate different timestamp types" InitialValue="DT#1970-01-01-00:00:00"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="" Type="ULINT" Comment="the new timestamp in nanoseconds, default Unix-Epoch"/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[FUNCTION TIMESTAMP_NS : ULINT
+VAR_INPUT
+	startDate : DT := DT#1970-01-01-00:00:00;
+END_VAR
+TIMESTAMP_NS := TIME_IN_NS_TO_ULINT(NOW() - startDate);
+END_FUNCTION
+
+]]></ST>
+	</FunctionBody>
+</Function>

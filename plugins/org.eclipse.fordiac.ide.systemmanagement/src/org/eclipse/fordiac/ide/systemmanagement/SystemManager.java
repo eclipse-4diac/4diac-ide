@@ -150,16 +150,6 @@ public enum SystemManager {
 		return system;
 	}
 
-	public synchronized void removeProject(final IProject project) {
-		TypeLibraryManager.INSTANCE.removeProject(project);
-		notifyListeners();
-	}
-
-	public synchronized void renameProject(final IProject oldProject, final IProject newProject) {
-		TypeLibraryManager.INSTANCE.renameProject(oldProject, newProject);
-		notifyListeners();
-	}
-
 	/**
 	 * Load system.
 	 *
