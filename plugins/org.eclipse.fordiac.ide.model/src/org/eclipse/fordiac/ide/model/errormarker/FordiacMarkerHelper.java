@@ -18,10 +18,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.errormarker;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,6 +32,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobGroup;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -243,71 +242,36 @@ public final class FordiacMarkerHelper {
 		);
 	}
 
-	public static List<IMarker> findMarkers(final EObject target) {
-		return findMarkers(target, FordiacErrorMarker.IEC61499_MARKER);
-	}
-
-	public static List<IMarker> findMarkers(final EObject target, final String type) {
-		final IResource resource = getResource(target);
-		return findMarkers(resource, target, type);
-	}
-
-	public static List<IMarker> findMarkers(final IResource resource, final EObject target, final String type) {
-		final List<IMarker> result = new ArrayList<>();
-		if (resource != null && resource.isAccessible() && target != null) {
-			final String targetUriString = getTargetUri(resource, target).toString();
-			try {
-				final IMarker[] markers = resource.findMarkers(type, true, IResource.DEPTH_INFINITE);
-				for (final var marker : markers) {
-					if (marker.getAttribute(FordiacErrorMarker.TARGET_URI, "").equals(targetUriString)) { //$NON-NLS-1$
-						result.add(marker);
-					}
-				}
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError("Could not find error markers", e); //$NON-NLS-1$
-			}
-		}
-		return result;
-	}
-
-	public static void findAllMarkers(final IResource resource, final EObject root, final String type,
-			final BiConsumer<EObject, IMarker> consumer) {
-		if (resource != null && resource.isAccessible() && root != null) {
-			try {
-				final IMarker[] markers = resource.findMarkers(type, true, IResource.DEPTH_INFINITE);
-				for (final var marker : markers) {
-					final EObject target = FordiacErrorMarker.getTargetRelative(marker, root);
-					if (target != null) {
-						consumer.accept(target, marker);
-					}
-				}
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError("Could not find all error markers", e); //$NON-NLS-1$
-			}
-		}
-	}
-
 	public static void createMarkers(final IResource resource, final List<ErrorMarkerBuilder> builders) {
 		if (resource != null && resource.isAccessible()) {
-			final WorkspaceJob job = new WorkspaceJob("Create error markers on resource: " + resource.getName()) { //$NON-NLS-1$
-				@Override
-				public IStatus runInWorkspace(final IProgressMonitor monitor) {
-					try {
-						for (final var builder : builders) {
-							builder.createMarker(resource);
-						}
-					} catch (final CoreException e) {
-						FordiacLogHelper.logError("Could not create error markers", e); //$NON-NLS-1$
+			final ISchedulingRule currentRule = Job.getJobManager().currentRule();
+			if (currentRule != null && currentRule.contains(resource)) {
+				createMarkersInWorkspace(resource, builders);
+			} else {
+				final WorkspaceJob job = new WorkspaceJob("Create error markers on resource: " + resource.getName()) { //$NON-NLS-1$
+					@Override
+					public IStatus runInWorkspace(final IProgressMonitor monitor) {
+						createMarkersInWorkspace(resource, builders);
+						return Status.OK_STATUS;
 					}
-					return Status.OK_STATUS;
-				}
-			};
-			job.setUser(false);
-			job.setSystem(true);
-			job.setPriority(Job.DECORATE);
-			job.setRule(resource);
-			job.setJobGroup(JOB_GROUP);
-			job.schedule();
+				};
+				job.setUser(false);
+				job.setSystem(true);
+				job.setPriority(Job.DECORATE);
+				job.setRule(resource);
+				job.setJobGroup(JOB_GROUP);
+				job.schedule();
+			}
+		}
+	}
+
+	private static void createMarkersInWorkspace(final IResource resource, final List<ErrorMarkerBuilder> builders) {
+		try {
+			for (final var builder : builders) {
+				builder.createMarker(resource);
+			}
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError("Could not create error markers", e); //$NON-NLS-1$
 		}
 	}
 
@@ -324,27 +288,37 @@ public final class FordiacMarkerHelper {
 			final List<ErrorMarkerBuilder> builders, final boolean force) {
 		if (resource != null && resource.isAccessible()
 				&& (force || errorMarkersNeedsUpdate(resource, type, builders))) {
-			final WorkspaceJob job = new WorkspaceJob("Update error markers on resource: " + resource.getName()) { //$NON-NLS-1$
-				@Override
-				public IStatus runInWorkspace(final IProgressMonitor monitor) {
-					try {
-						resource.deleteMarkers(type, true, IResource.DEPTH_INFINITE);
-						for (final var builder : builders) {
-							builder.createMarker(resource);
-						}
-					} catch (final CoreException e) {
-						FordiacLogHelper.logError("Could not update error markers on resource: " + resource.getName(), //$NON-NLS-1$
-								e);
+			final ISchedulingRule currentRule = Job.getJobManager().currentRule();
+			if (currentRule != null && currentRule.contains(resource)) {
+				createMarkersInWorkspace(resource, builders);
+			} else {
+				final WorkspaceJob job = new WorkspaceJob("Update error markers on resource: " + resource.getName()) { //$NON-NLS-1$
+					@Override
+					public IStatus runInWorkspace(final IProgressMonitor monitor) {
+						updateMarkersInWorkspace(resource, type, builders);
+						return Status.OK_STATUS;
 					}
-					return Status.OK_STATUS;
-				}
-			};
-			job.setUser(false);
-			job.setSystem(true);
-			job.setPriority(Job.DECORATE);
-			job.setRule(resource);
-			job.setJobGroup(JOB_GROUP);
-			job.schedule();
+				};
+				job.setUser(false);
+				job.setSystem(true);
+				job.setPriority(Job.DECORATE);
+				job.setRule(resource);
+				job.setJobGroup(JOB_GROUP);
+				job.schedule();
+			}
+		}
+	}
+
+	private static void updateMarkersInWorkspace(final IResource resource, final String type,
+			final List<ErrorMarkerBuilder> builders) {
+		try {
+			resource.deleteMarkers(type, true, IResource.DEPTH_INFINITE);
+			for (final var builder : builders) {
+				builder.createMarker(resource);
+			}
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError("Could not update error markers on resource: " + resource.getName(), //$NON-NLS-1$
+					e);
 		}
 	}
 
