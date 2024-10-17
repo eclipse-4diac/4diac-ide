@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Johannes Kepler University, Linz,
+ * Copyright (c) 2020, 2024 Johannes Kepler University, Linz,
  *                          Primetals Technologies Germany GmbH,
  *                          Martin Erich Jobst
  *
@@ -50,7 +50,6 @@ import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -68,7 +67,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
@@ -82,8 +80,6 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 	private final IChangeableRowDataProvider<VarDeclaration> structMemberProvider;
 	private RowPostSelectionProvider<VarDeclaration> selectionProvider;
 	private final IWorkbenchSite site;
-
-	private Label titleLabel;
 
 	private final Adapter adapter = new SingleRecursiveContentAdapter() {
 
@@ -122,7 +118,6 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 		final TabbedPropertySheetWidgetFactory widgetFactory = new TabbedPropertySheetWidgetFactory();
 		setLayout(new GridLayout(2, false));
 		setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		showLabel(this);
 
 		buttons = new AddDeleteReorderToolbarWidget();
 		buttons.createControls(this, widgetFactory, site);
@@ -140,15 +135,6 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 				ref -> new DeleteMemberVariableCommand(getType(), (VarDeclaration) ref),
 				ref -> new ChangeVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, true),
 				ref -> new ChangeVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, false));
-	}
-
-	private void showLabel(final Composite parent) {
-		titleLabel = new Label(parent, SWT.LEFT);
-		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).span(2, 1).applyTo(titleLabel);
-	}
-
-	public void setTitel(final String title) {
-		titleLabel.setText(title);
 	}
 
 	private void createNatTable() {

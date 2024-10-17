@@ -36,7 +36,6 @@ import org.eclipse.fordiac.ide.model.search.dialog.StructuredDataTypeDataHandler
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
@@ -57,8 +56,7 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 		final String[] labels = { Messages.TransferInstanceComments_TransferLabel, SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
 		final FBTypeUpdateDialog<DataTypeEntry> structUpdateDialog = new FBTypeUpdateDialog<>(null,
-				Messages.TransferInstanceComments_WizardTitle, null, "", MessageDialog.NONE, labels,
-				DEFAULT_BUTTON_INDEX,
+				Messages.TransferInstanceComments_WizardTitle, "", labels, DEFAULT_BUTTON_INDEX, //$NON-NLS-1$
 				new StructuredDataTypeDataHandler((DataTypeEntry) struct.getModel().getDataType().getTypeEntry()) {
 					@Override
 					public final List<? extends EObject> performStructSearch() {

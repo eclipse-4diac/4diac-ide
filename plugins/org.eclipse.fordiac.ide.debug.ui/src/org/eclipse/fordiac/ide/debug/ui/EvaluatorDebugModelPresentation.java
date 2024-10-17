@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.debug.preferences.FordiacDebugPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
@@ -47,7 +47,7 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 		if (element instanceof final EObject object) {
 			final EObject root = EcoreUtil.getRootContainer(object);
 			if (root instanceof final FBType fbType) {
-				return new FBTypeEditorInput(fbType, fbType.getTypeEntry());
+				return new TypeEditorInput(fbType, fbType.getTypeEntry());
 			}
 			return getEditorInput(((EObject) element).eResource());
 		}
@@ -61,7 +61,7 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 			if (workspaceResource instanceof final IFile file) {
 				final var typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 				if (typeEntry != null && typeEntry.getTypeEditable() instanceof final FBType fbType) {
-					return new FBTypeEditorInput(fbType, typeEntry);
+					return new TypeEditorInput(fbType, typeEntry);
 				}
 				return new FileEditorInput(file);
 			}

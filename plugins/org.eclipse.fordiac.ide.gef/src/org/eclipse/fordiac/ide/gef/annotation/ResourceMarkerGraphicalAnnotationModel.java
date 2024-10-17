@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.CoreException;
 
 public abstract class ResourceMarkerGraphicalAnnotationModel extends AbstractGraphicalAnnotationModel {
 
-	private final IResource resource;
+	private IResource resource;
 	private final Map<IMarker, GraphicalMarkerAnnotation> markerAnnotations = new ConcurrentHashMap<>();
 	private final IResourceChangeListener resourceChangeListener = this::resourceChanged;
 
@@ -135,6 +135,13 @@ public abstract class ResourceMarkerGraphicalAnnotationModel extends AbstractGra
 	@Override
 	public long getModificationStamp() {
 		return resource.getModificationStamp();
+	}
+
+	public final void setResource(final IResource resource) {
+		if (this.resource != resource) {
+			this.resource = resource;
+			reload();
+		}
 	}
 
 	public IResource getResource() {

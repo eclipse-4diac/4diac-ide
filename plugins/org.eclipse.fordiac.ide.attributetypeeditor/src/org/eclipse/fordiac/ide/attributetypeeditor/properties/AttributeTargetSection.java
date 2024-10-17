@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeTargetAttributeComman
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -104,7 +105,7 @@ public class AttributeTargetSection extends AbstractSection {
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		super.setInput(part, selection);
 		if (part instanceof final AttributeTypeEditor editor) {
-			setType(editor.getEditedElement());
+			setType(editor.getAdapter(LibraryElement.class));
 			target = getTarget(getType());
 		}
 	}

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs">
-      <editor
-            class="org.eclipse.fordiac.ide.fbtypeeditor.doc.editors.DescriptionEditor"
-            sortIndex="70"
-            type="ForAllTypes">
-      </editor>
-   </extension>
-
+	<extension
+    		point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">
+		<editorPage
+        		class="org.eclipse.fordiac.ide.fbtypeeditor.doc.editors.DescriptionEditor"
+            	sortIndex="70">
+      	</editorPage>
+   	</extension>
 </plugin>

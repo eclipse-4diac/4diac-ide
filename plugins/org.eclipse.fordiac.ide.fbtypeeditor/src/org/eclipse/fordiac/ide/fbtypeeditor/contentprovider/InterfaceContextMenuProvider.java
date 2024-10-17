@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -117,7 +117,7 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 	private static void buildAdapterMenuEntries(final IMenuManager menu, final ActionRegistry registry,
 			final IWorkbenchPart part, final FBType fbType) {
 
-		if (((EditorPart) part).getEditorInput() instanceof final FBTypeEditorInput untypedInput) {
+		if (((EditorPart) part).getEditorInput() instanceof final TypeEditorInput untypedInput) {
 			final TypeLibrary typeLib = untypedInput.getTypeEntry().getTypeLibrary();
 			if (null != typeLib) {
 				final MenuManager socketEntry = new MenuManager(CREATE_SOCKET);

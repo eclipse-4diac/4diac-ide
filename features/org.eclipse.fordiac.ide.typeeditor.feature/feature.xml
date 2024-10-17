@@ -172,59 +172,41 @@ United States, other countries, or both.\n
    </requires>
 
    <plugin
+         id="org.eclipse.fordiac.ide.typeeditor"
+         version="0.0.0"/>
+
+   <plugin
          id="org.eclipse.fordiac.ide.fbtypeeditor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.fordiac.ide.fbtypeeditor.ecc"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.fordiac.ide.fbtypeeditor.network"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.fordiac.ide.subapptypeeditor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.fordiac.ide.datatypeeditor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.fordiac.ide.fbtypeeditor.doc"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.fordiac.ide.attributetypeeditor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
+
+  
 
 </feature>

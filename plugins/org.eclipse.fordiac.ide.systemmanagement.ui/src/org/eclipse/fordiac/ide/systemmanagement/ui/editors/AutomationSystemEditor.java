@@ -484,9 +484,4 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		return selection;
 	}
 
-	@Override
-	public LibraryElement getEditedElement() {
-		return system;
-	}
-
 }
