@@ -54,11 +54,11 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 	}
 
 	@Override
-	protected void setModel(final IEditorInput input) {
+	public void setInput(final IEditorInput input) {
 		if (input instanceof final SystemConfigurationEditorInput sysConfInput) {
 			sysConf = sysConfInput.getContent();
 		}
-		super.setModel(input);
+		super.setInput(input);
 	}
 
 	@Override

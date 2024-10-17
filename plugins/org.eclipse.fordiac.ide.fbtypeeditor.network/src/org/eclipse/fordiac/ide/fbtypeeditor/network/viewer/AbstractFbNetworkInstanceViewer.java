@@ -98,9 +98,7 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 	}
 
 	@Override
-	protected void setModel(final IEditorInput input) {
-		super.setModel(input);
-
+	public void setInput(final IEditorInput input) {
 		if (input instanceof final CompositeAndSubAppInstanceViewerInput untypedInput) {
 			fbNetworkElement = untypedInput.getContent();
 			final String name = getNameHierarchy();
@@ -114,6 +112,7 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 				container.eAdapters().add(fbNetworkAdapter);
 			}
 		}
+		super.setInput(input);
 	}
 
 	@Override

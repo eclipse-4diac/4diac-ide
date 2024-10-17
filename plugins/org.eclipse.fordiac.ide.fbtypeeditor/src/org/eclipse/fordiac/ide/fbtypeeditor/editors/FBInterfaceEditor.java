@@ -70,7 +70,6 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		setInput(input);
 		if (input instanceof final TypeEditorInput untypedInput) {
 			typeLib = untypedInput.getTypeEntry().getTypeLibrary();
 		}

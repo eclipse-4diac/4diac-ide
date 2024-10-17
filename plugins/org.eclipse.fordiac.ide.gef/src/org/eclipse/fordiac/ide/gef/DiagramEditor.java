@@ -62,9 +62,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
@@ -78,7 +77,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public abstract class DiagramEditor extends GraphicalEditor
-		implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
+		implements ITabbedPropertySheetPageContributor, I4diacModelEditor, IReusableEditor {
 
 	public static final int INITIAL_SCROLL_OFFSET = 5;
 
@@ -255,27 +254,20 @@ public abstract class DiagramEditor extends GraphicalEditor
 		getGraphicalViewer().addDropTargetListener(new TemplateTransferDropTargetListener(getGraphicalViewer()));
 		viewer.addDropTargetListener(new ParameterDropTargetListener(getGraphicalViewer()));
 
-		if (annotationModel != null) {
+		addAnnotationModelDispatcher();
+	}
+
+	protected void addAnnotationModelDispatcher() {
+		if (annotationModel != null && getGraphicalViewer() != null) {
 			annotationModelEventDispatcher = new FordiacAnnotationModelEventDispatcher(getGraphicalViewer());
 			annotationModel.addAnnotationModelListener(annotationModelEventDispatcher, true);
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite,
-	 * org.eclipse.ui.IEditorInput)
-	 */
-	@Override
-	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		setModel(input);
-
-		if (site instanceof final MultiPageEditorSite multiPageEditorSite) {
-			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
+	protected void removeAnnotationModelDispatcher() {
+		if (annotationModel != null && annotationModelEventDispatcher != null) {
+			annotationModel.removeAnnotationModelListener(annotationModelEventDispatcher);
 		}
-
-		super.init(site, input);
 	}
 
 	/**
@@ -283,7 +275,8 @@ public abstract class DiagramEditor extends GraphicalEditor
 	 *
 	 * @param input the new model
 	 */
-	protected void setModel(final IEditorInput input) {
+	@Override
+	public void setInput(final IEditorInput input) {
 		setEditDomain(createEditDomain());
 		getEditDomain().setDefaultTool(createDefaultTool());
 		getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
@@ -291,6 +284,11 @@ public abstract class DiagramEditor extends GraphicalEditor
 		// undo redo
 		if (null != getSystem()) {
 			getEditDomain().setCommandStack(getSystem().getCommandStack());
+		}
+		if (getSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
+			removeAnnotationModelDispatcher();
+			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
+			addAnnotationModelDispatcher();
 		}
 	}
 
@@ -457,9 +455,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 	@Override
 	public void dispose() {
 		outlinePage = null;
-		if (annotationModel != null && annotationModelEventDispatcher != null) {
-			annotationModel.removeAnnotationModelListener(annotationModelEventDispatcher);
-		}
+		removeAnnotationModelDispatcher();
 		super.dispose();
 	}
 

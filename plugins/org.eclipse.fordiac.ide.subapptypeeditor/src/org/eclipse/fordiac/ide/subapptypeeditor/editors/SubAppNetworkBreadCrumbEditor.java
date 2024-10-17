@@ -50,6 +50,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
@@ -58,6 +59,7 @@ import org.eclipse.ui.part.MultiPageEditorSite;
 public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor implements IFBTEditorPart {
 
 	private CommandStack commandStack;
+	private MultiPageEditorSite multiPageEditorSite;
 
 	private GraphicalAnnotationModel annotationModel;
 
@@ -70,7 +72,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 		IEditorSite siteToUse = site;
 		ISelectionProvider selProvider = null;
 		if (siteToUse instanceof final MultiPageEditorSite multiPageEditorSite) {
-			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
+			this.multiPageEditorSite = multiPageEditorSite;
 			siteToUse = (IEditorSite) multiPageEditorSite.getMultiPageEditor().getSite();
 			selProvider = siteToUse.getSelectionProvider();
 		}
@@ -240,6 +242,16 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 		return FordiacErrorMarker.markerTargetsFBNetworkElement(marker)
 				|| FordiacErrorMarker.markerTargetsErrorMarkerInterface(marker)
 				|| FordiacErrorMarker.markerTargetsConnection(marker) || FordiacErrorMarker.markerTargetsValue(marker);
+	}
+
+	@Override
+	public void setInput(final IEditorInput input) {
+		if (multiPageEditorSite != null) {
+			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
+		}
+		pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
+				.forEach(e -> e.setInput(input));
+		super.setInputWithNotify(input);
 	}
 
 	@Override

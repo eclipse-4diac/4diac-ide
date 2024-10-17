@@ -71,13 +71,11 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.ide.IGotoMarker;
-import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -335,15 +333,8 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput editorInput) throws PartInitException {
-		final TypeEditorInput typeEditorInput = checkEditorInput(editorInput);
-
-		if (isValidTypeEditorInput(typeEditorInput)) {
-			typeEditorInput.getTypeEntry().eAdapters().add(adapter);
-			annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEditorInput.getTypeEntry().getFile());
-			validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
-		}
 		getCommandStack().addCommandStackEventListener(this);
-		super.init(site, typeEditorInput);
+		super.init(site, editorInput);
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 	}
 
@@ -414,17 +405,26 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void setInput(final IEditorInput input) {
+		if (validationJob != null) {
+			validationJob.dispose();
+			validationJob = null;
+		}
+		if (annotationModel != null) {
+			annotationModel.dispose();
+			annotationModel = null;
+		}
 		if (input != null) {
 			setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
 		}
-
-		if (input instanceof FileEditorInput) {
-			// we have a new file
+		final TypeEditorInput typeEditorInput = checkEditorInput(input);
+		if (isValidTypeEditorInput(typeEditorInput)) {
+			typeEditorInput.getTypeEntry().eAdapters().add(adapter);
+			annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEditorInput.getFile());
+			validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
 			if (getEditorPages() != null) {
-				getEditorPages().stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
-						.forEach(e -> e.setInput(getEditorInput()));
+				getEditorPages().forEach(e -> e.setInput(typeEditorInput));
 			}
-			setInputWithNotify(getEditorInput());
+			setInputWithNotify(typeEditorInput);
 		} else {
 			setInputWithNotify(input);
 		}

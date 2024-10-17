@@ -58,6 +58,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -71,7 +72,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorSite;
 
 public class SystemEditor extends EditorPart
-		implements CommandStackEventListener, ISelectionListener, ISelectionProvider {
+		implements CommandStackEventListener, ISelectionListener, ISelectionProvider, IReusableEditor {
 
 	private static final ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
 
@@ -129,9 +130,7 @@ public class SystemEditor extends EditorPart
 			system.eAdapters().remove(appListener);
 			system.getSystemConfiguration().eAdapters().remove(sysConfListener);
 		}
-		if (annotationModel != null) {
-			annotationModel.removeAnnotationModelListener(annotationModelListener);
-		}
+		removeAnnotationModelListener();
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 		getActionRegistry().dispose();
 		super.dispose();
@@ -157,23 +156,30 @@ public class SystemEditor extends EditorPart
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		setInput(input);
 		setSite(site);
+		setInput(input);
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
+		initializeActionRegistry();
+		setActionHandlers(site);
+	}
+
+	@Override
+	public void setInput(final IEditorInput input) {
 		if (input instanceof final FileEditorInput fileEditorInput) {
 			system = SystemManager.INSTANCE.getSystem(fileEditorInput.getFile());
 			if (system != null) {
 				getCommandStack().addCommandStackEventListener(this);
 				setPartName(system.getName());
-				initializeActionRegistry();
-				setActionHandlers(site);
 				system.eAdapters().add(appListener);
 				system.getSystemConfiguration().eAdapters().add(sysConfListener);
 			}
 		}
-		if (site instanceof final MultiPageEditorSite multiPageEditorSite) {
+		if (getSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
+			removeAnnotationModelListener();
 			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
+			addAnnotationModelListener();
 		}
+		super.setInputWithNotify(input);
 	}
 
 	private void setActionHandlers(final IEditorSite site) {
@@ -233,9 +239,19 @@ public class SystemEditor extends EditorPart
 			typeInfo.refresh();
 			appTreeViewer.setInput(system.getApplication());
 			sysConfTreeViewer.setInput(system.getSystemConfiguration());
-			if (annotationModel != null) {
-				annotationModel.addAnnotationModelListener(annotationModelListener);
-			}
+			addAnnotationModelListener();
+		}
+	}
+
+	protected void addAnnotationModelListener() {
+		if (annotationModel != null) {
+			annotationModel.addAnnotationModelListener(annotationModelListener);
+		}
+	}
+
+	protected void removeAnnotationModelListener() {
+		if (annotationModel != null) {
+			annotationModel.removeAnnotationModelListener(annotationModelListener);
 		}
 	}
 

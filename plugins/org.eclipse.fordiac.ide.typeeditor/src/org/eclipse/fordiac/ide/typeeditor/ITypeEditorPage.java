@@ -20,12 +20,12 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ide.IGotoMarker;
 
-public interface ITypeEditorPage extends ISelectionListener, IEditorPart, IGotoMarker {
+public interface ITypeEditorPage extends ISelectionListener, IReusableEditor, IGotoMarker {
 
 	/**
 	 * Inform the FBTEditorPart that an element has been selected in the outline

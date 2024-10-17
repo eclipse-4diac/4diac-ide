@@ -114,7 +114,6 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		setInput(input);
 		super.init(site, input);
 		setPartName(Messages.ECCEditor_LABEL_ECCEditorTabName);
 		setTitleImage(FordiacImage.ICON_ECC.getImage());

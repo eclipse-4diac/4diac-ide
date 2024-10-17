@@ -72,7 +72,7 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 	}
 
 	@Override
-	protected void setModel(final IEditorInput input) {
+	public void setInput(final IEditorInput input) {
 		if (input instanceof final SubApplicationEditorInput subAppInput) {
 			setModel(subAppInput.getSubApp().getSubAppNetwork());
 			// register Adapter to be informed on changes of the subapplication name
@@ -83,7 +83,7 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 				container.eAdapters().add(fbNetworkAdapter);
 			}
 		}
-		super.setModel(input);
+		super.setInput(input);
 	}
 
 	@Override
