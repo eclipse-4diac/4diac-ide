@@ -94,17 +94,14 @@ public class DataTypeEditorPage extends EditorPart implements ITypeEditorPage, C
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		setInput(input);
 		setSite(site);
+		setInput(input);
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		getCommandStack().addCommandStackEventListener(this);
 		initializeActionRegistry();
 		setActionHandlers(site);
 		setPartName(Messages.DataTypeEditorPage_DataType);
 		setTitleImage(FordiacImage.ICON_DATA_TYPE.getImage());
-		if (getSite() instanceof final MultiPageEditorSite mpes) {
-			annotationModel = mpes.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
-		}
 	}
 
 	private void setActionHandlers(final IEditorSite site) {
@@ -208,6 +205,17 @@ public class DataTypeEditorPage extends EditorPart implements ITypeEditorPage, C
 			actionRegistry = new ActionRegistry();
 		}
 		return actionRegistry;
+	}
+
+	@Override
+	public void setInput(final IEditorInput input) {
+		if (getSite() instanceof final MultiPageEditorSite mpes) {
+			annotationModel = mpes.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
+		}
+		if (structComposite != null) {
+			structComposite.setAnnotationModel(annotationModel);
+		}
+		super.setInputWithNotify(input);
 	}
 
 	@Override

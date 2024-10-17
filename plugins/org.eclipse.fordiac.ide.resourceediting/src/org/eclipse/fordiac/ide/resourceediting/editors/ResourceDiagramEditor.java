@@ -85,15 +85,14 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 	}
 
 	@Override
-	protected void setModel(final IEditorInput input) {
-		if (input instanceof ResourceEditorInput) {
-			final ResourceEditorInput resInput = (ResourceEditorInput) input;
+	public void setInput(final IEditorInput input) {
+		if (input instanceof final ResourceEditorInput resInput) {
 			final Resource res = resInput.getContent();
 			setModel(res.getFBNetwork());
 			getResource().eAdapters().add(resourceAdapter);
 			getResource().getDevice().eAdapters().add(colorChangeListener);
 		}
-		super.setModel(input);
+		super.setInput(input);
 	}
 
 	@Override

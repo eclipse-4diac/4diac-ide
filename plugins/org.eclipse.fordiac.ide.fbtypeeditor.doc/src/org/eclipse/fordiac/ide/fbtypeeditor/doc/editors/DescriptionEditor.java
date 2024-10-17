@@ -248,6 +248,11 @@ public class DescriptionEditor extends EditorPart implements ITypeEditorPage {
 	}
 
 	@Override
+	public void setInput(final IEditorInput input) {
+		super.setInputWithNotify(input);
+	}
+
+	@Override
 	public void reloadType() {
 		if (editor != null && !editor.isDisposed()) {
 			editor.setText(getType().getDocumentation());

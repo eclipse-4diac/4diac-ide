@@ -22,11 +22,11 @@ import org.eclipse.ui.IEditorInput;
 public class ApplicationEditor extends FBNetworkEditor {
 
 	/** The adapter. */
-	private Adapter adapter = new AdapterImpl() {
+	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-			int type = notification.getEventType();
-			int featureId = notification.getFeatureID(Application.class);
+			final int type = notification.getEventType();
+			final int featureId = notification.getFeatureID(Application.class);
 
 			if ((Notification.SET == type) && (LibraryElementPackage.INAMED_ELEMENT__NAME == featureId)) {
 				updateEditorTitle(getModel().getApplication().getName());
@@ -36,17 +36,16 @@ public class ApplicationEditor extends FBNetworkEditor {
 	};
 
 	@Override
-	protected void setModel(final IEditorInput input) {
-		if (input instanceof ApplicationEditorInput) {
-			ApplicationEditorInput appInput = (ApplicationEditorInput) input;
-			Application app = appInput.getContent();
+	public void setInput(final IEditorInput input) {
+		if (input instanceof final ApplicationEditorInput appInput) {
+			final Application app = appInput.getContent();
 			setModel(app.getFBNetwork());
 
 			// register Adapter to be informed on changes of the application name
 			app.eAdapters().add(adapter);
 
 		}
-		super.setModel(input);
+		super.setInput(input);
 	}
 
 	@Override

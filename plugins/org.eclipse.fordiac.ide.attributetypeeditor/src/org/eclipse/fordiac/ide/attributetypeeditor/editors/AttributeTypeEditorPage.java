@@ -132,8 +132,8 @@ public class AttributeTypeEditorPage extends EditorPart implements ITypeEditorPa
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		setInput(input);
 		setSite(site);
+		setInput(input);
 		addListenerToAttributeDeclaration();
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		getCommandStack().addCommandStackEventListener(this);
@@ -141,9 +141,17 @@ public class AttributeTypeEditorPage extends EditorPart implements ITypeEditorPa
 		setActionHandlers(site);
 		setPartName(Messages.AttributeTypeEditorPage_Title);
 		setTitleImage(FordiacImage.ICON_ATTRIBUTE_DECLARATION.getImage());
+	}
+
+	@Override
+	public void setInput(final IEditorInput input) {
 		if (getSite() instanceof final MultiPageEditorSite mpes) {
 			annotationModel = mpes.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
 		}
+		if (structComposite != null) {
+			structComposite.setAnnotationModel(annotationModel);
+		}
+		super.setInputWithNotify(input);
 	}
 
 	private void addListenerToAttributeDeclaration() {

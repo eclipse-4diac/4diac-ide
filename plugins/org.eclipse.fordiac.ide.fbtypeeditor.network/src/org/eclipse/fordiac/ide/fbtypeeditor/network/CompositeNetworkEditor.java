@@ -134,7 +134,8 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	@Override
-	protected void setModel(final IEditorInput input) {
+	public void setInput(final IEditorInput input) {
+		super.setInput(input);
 		if ((input instanceof final TypeEditorInput untypedInput)
 				&& (untypedInput.getContent() instanceof final CompositeFBType cfbTye)) {
 			setModel(cfbTye.getFBNetwork());
@@ -143,7 +144,6 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 		}
 
 		setTitleImage(FordiacImage.ICON_FB_NETWORK.getImage());
-		super.setModel(input);
 	}
 
 	@Override

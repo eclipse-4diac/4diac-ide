@@ -75,7 +75,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 	private NatTable natTable;
 	private AddDeleteReorderToolbarWidget buttons;
 	private final CommandStack cmdStack;
-	private final GraphicalAnnotationModel annotationModel;
+	private GraphicalAnnotationModel annotationModel;
 	private StructuredType structType;
 	private final IChangeableRowDataProvider<VarDeclaration> structMemberProvider;
 	private RowPostSelectionProvider<VarDeclaration> selectionProvider;
@@ -205,7 +205,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 
 	protected void addAnnotationModelListener() {
 		if (annotationModel != null) {
-			annotationModel.addAnnotationModelListener(annotationModelListener);
+			annotationModel.addAnnotationModelListener(annotationModelListener, true);
 		}
 	}
 
@@ -248,6 +248,12 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 
 	public GraphicalAnnotationModel getAnnotationModel() {
 		return annotationModel;
+	}
+
+	public void setAnnotationModel(final GraphicalAnnotationModel annotationModel) {
+		removeAnnotationModelListener();
+		this.annotationModel = annotationModel;
+		addAnnotationModelListener();
 	}
 
 	public ISelectionProvider getSelectionProvider() {

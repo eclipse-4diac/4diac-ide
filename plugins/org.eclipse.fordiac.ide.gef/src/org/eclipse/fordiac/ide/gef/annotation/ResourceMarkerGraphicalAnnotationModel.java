@@ -34,8 +34,7 @@ public abstract class ResourceMarkerGraphicalAnnotationModel extends AbstractGra
 	private final IResourceChangeListener resourceChangeListener = this::resourceChanged;
 
 	protected ResourceMarkerGraphicalAnnotationModel(final IResource resource) {
-		Objects.requireNonNull(resource);
-		this.resource = resource;
+		this.resource = Objects.requireNonNull(resource);
 		resource.getWorkspace().addResourceChangeListener(resourceChangeListener);
 		reload();
 	}
