@@ -1,72 +1,72 @@
 *               text=auto
 
 # plain text files
-*.md            text
-*.txt           text
+*.md            text eol=lf
+*.txt           text eol=lf
 
 # sources
-*.java          text diff=java
-*.xtend         text diff=java
-*.xtext         text
-*.mwe2          text
+*.java          text eol=lf diff=java
+*.xtend         text eol=lf diff=java
+*.xtext         text eol=lf
+*.mwe2          text eol=lf
 
 # scripts
-*.sh            text diff=bash
+*.sh            text eol=lf diff=bash
 
 # configuration
-.classpath      text
-.project        text
-.options        text
+.classpath      text eol=lf
+.project        text eol=lf
+.options        text eol=lf
 
-*.MF            text
-*.META-INF      text
-*.prefs         text
-*.product       text
-*.target        text
-*.launch        text
-*.mappings      text
+*.MF            text eol=lf
+*.META-INF      text eol=lf
+*.prefs         text eol=lf
+*.product       text eol=lf
+*.target        text eol=lf
+*.launch        text eol=lf
+*.mappings      text eol=lf
 
 # model files
-*.ecore         text
-*.genmodel      text
-*.xsd           text
-*.exsd          text
-*.aird          text
-*.e4xmi         text
-*.odesign       text
+*.ecore         text eol=lf
+*.genmodel      text eol=lf
+*.xsd           text eol=lf
+*.exsd          text eol=lf
+*.aird          text eol=lf
+*.e4xmi         text eol=lf
+*.odesign       text eol=lf
 
 # resources
-*.properties    text
-*.inf           text
-*.ini           text
-*.ocl           text
+*.properties    text eol=lf
+*.inf           text eol=lf
+*.ini           text eol=lf
+*.ocl           text eol=lf
 
-*.xml           text
+*.xml           text eol=lf
 
-*.css           text diff=css
-*.html          text diff=html
-*.js            text
+*.css           text eol=lf diff=css
+*.html          text eol=lf diff=html
+*.js            text eol=lf
 
-*.aml           text
+*.aml           text eol=lf
 
 # generated files
-*.g             text
-*.tokens        text
-*.ISetup        text
-*.xml_gen       text
+*.g             text eol=lf
+*.tokens        text eol=lf
+*.ISetup        text eol=lf
+*.xml_gen       text eol=lf
 
 # 4diac files
-*.adp           text
-*.dev           text
-*.dtp           text
-*.fbt           text
-*.fct           text
-*.res           text
-*.seg           text
-*.sub           text
-*.sys           text
+*.adp           text eol=lf
+*.dev           text eol=lf
+*.dtp           text eol=lf
+*.fbt           text eol=lf
+*.fct           text eol=lf
+*.res           text eol=lf
+*.seg           text eol=lf
+*.sub           text eol=lf
+*.sys           text eol=lf
 
-*.opsem         text
+*.opsem         text eol=lf
 
 # binary files
 *.class         binary
