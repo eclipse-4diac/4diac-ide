@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
+import java.text.MessageFormat;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -110,7 +111,7 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		final LibraryElement libraryElement = acquireLibraryElement(false);
 		final T element = getElement(libraryElement);
 		if (element == null) {
-			status.addFatalError(Messages.AbstractCommandChange_NoSuchElement);
+			status.addFatalError(MessageFormat.format(Messages.AbstractCommandChange_NoSuchElement, elementURI));
 		} else {
 			status.merge(isValid(element, pm));
 		}
@@ -154,7 +155,8 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		final LibraryElement libraryElement = acquireLibraryElement(true);
 		final T element = getElement(libraryElement);
 		if (element == null) {
-			throw new CoreException(Status.error(Messages.AbstractCommandChange_NoSuchElement));
+			throw new CoreException(
+					Status.error(MessageFormat.format(Messages.AbstractCommandChange_NoSuchElement, elementURI)));
 		}
 		final Command command = performCommand(element);
 		commit(libraryElement, pm);
@@ -173,7 +175,9 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	protected Command performCommand(final T element) throws CoreException {
 		final Command command = Objects.requireNonNull(createCommand(element));
 		if (!command.canExecute()) {
-			throw new CoreException(Status.error(Messages.AbstractCommandChange_CannotExecuteCommand));
+			throw new CoreException(
+					Status.error(MessageFormat.format(Messages.AbstractCommandChange_CannotExecuteCommand,
+							command.getClass().getName(), getClass().getName(), elementURI)));
 		}
 		final CommandStack commandStack = getCommandStack();
 		if (commandStack != null) {

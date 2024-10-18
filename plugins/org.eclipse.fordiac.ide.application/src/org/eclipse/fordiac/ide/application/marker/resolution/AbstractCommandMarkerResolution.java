@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.application.marker.resolution;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -165,13 +166,21 @@ public abstract class AbstractCommandMarkerResolution<T extends EObject> extends
 		final LibraryElementInfo info = getOrCreateInfo(marker.getResource());
 		final T element = getElement(marker, info.libraryElement());
 		if (element == null) {
-			throw new CoreException(Status.error(Messages.AbstractCommandMarkerResolution_NoSuchElement));
+			throw createExceptionForMarker(Messages.AbstractCommandMarkerResolution_NoSuchElement, marker);
 		}
 		final Command command = createCommand(element, monitor);
 		if (command == null) {
-			throw new CoreException(Status.error(Messages.AbstractCommandMarkerResolution_CannotCreateCommand));
+			throw createExceptionForMarker(Messages.AbstractCommandMarkerResolution_CannotCreateCommand, marker);
+		}
+		if (!command.canExecute()) {
+			throw createExceptionForMarker(Messages.AbstractCommandMarkerResolution_CannotExecuteCommand, marker);
 		}
 		info.commands().add(command);
+	}
+
+	private static CoreException createExceptionForMarker(final String pattern, final IMarker marker) {
+		return new CoreException(Status.error(MessageFormat.format(pattern, marker.getAttribute(IMarker.LOCATION, ""), //$NON-NLS-1$
+				marker.getResource().getFullPath())));
 	}
 
 	/**
@@ -185,11 +194,7 @@ public abstract class AbstractCommandMarkerResolution<T extends EObject> extends
 	protected abstract Command createCommand(T element, IProgressMonitor monitor) throws CoreException;
 
 	protected void commit(final IProgressMonitor monitor) throws CoreException {
-		monitor.beginTask(Messages.AbstractCommandMarkerResolution_CommitTask, infos.size() + 1);
-		if (!infos.values().stream().map(LibraryElementInfo::commands).allMatch(Command::canExecute)) {
-			throw new CoreException(Status.error(Messages.AbstractCommandMarkerResolution_CannotExecuteCommand));
-		}
-		monitor.worked(1);
+		monitor.beginTask(Messages.AbstractCommandMarkerResolution_CommitTask, infos.size());
 		for (final LibraryElementInfo info : infos.values()) {
 			commit(info, monitor.slice(1));
 		}
