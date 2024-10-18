@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.text.MessageFormat;
 import java.util.Map;
+import java.util.SequencedSet;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -128,7 +130,8 @@ public class ConnectionAnnotations {
 		if (src == null || dest == null) {
 			return true; // ignore incomplete connections
 		}
-		if (!typeCheck(src, dest)) {
+		// basic type check
+		if (!LinkConstraints.typeCheck(src, dest)) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.CONNECTION__VALIDATE_TYPE_MISMATCH,
@@ -138,6 +141,29 @@ public class ConnectionAnnotations {
 			}
 			return false;
 		}
+		// extended type check for InOuts
+		if (src instanceof final VarDeclaration srcVar && srcVar.isInOutVar()
+				&& dest instanceof final VarDeclaration destVar && !typeCheckInOut(srcVar, destVar)) {
+			if (diagnostics != null) {
+				final SequencedSet<VarDeclaration> path = VarInOutHelper.getDefiningVarInOutDeclarationPath(destVar);
+				final VarDeclaration definingVar = path.removeLast();
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.CONNECTION__VALIDATE_TYPE_MISMATCH,
+						MessageFormat.format(Messages.ConnectionAnnotations_TypeMismatchInOut,
+								definingVar.getQualifiedName(), definingVar.getFullTypeName(), dest.getQualifiedName(),
+								dest.getFullTypeName(), path.isEmpty() ? "" : //$NON-NLS-1$
+										path.stream()
+												.map(v -> MessageFormat.format(
+														Messages.ConnectionAnnotations_TypeMismatchInOutIntermediate,
+														v.getQualifiedName(), v.getFullTypeName()))
+												.collect(Collectors.joining(
+														Messages.ConnectionAnnotations_TypeMismatchInOutSeparator,
+														Messages.ConnectionAnnotations_TypeMismatchInOutVia, ""))), //$NON-NLS-1$
+						FordiacMarkerHelper.getDiagnosticData(connection)));
+			}
+			return false;
+		}
+		// check generic endpoints
 		if (GenericTypes.isAnyType(src.getType()) && GenericTypes.isAnyType(connection.getDestination().getType())
 				&& !isContainerPin(src.eContainer().eContainer(), dest.eContainer().eContainer())) {
 			if (diagnostics != null) {
@@ -152,35 +178,27 @@ public class ConnectionAnnotations {
 		return true;
 	}
 
-	private static boolean typeCheck(final IInterfaceElement source, final IInterfaceElement destination) {
-		// basic type check
-		if (!LinkConstraints.typeCheck(source, destination)) {
-			return false;
-		}
+	private static boolean typeCheckInOut(final VarDeclaration source, final VarDeclaration destination) {
 		// check defining source for InOut sources
-		if (source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()) {
-			// get defining declaration (determines the _actual_ type)
-			final VarDeclaration definingVar = VarInOutHelper
-					.getDefiningVarInOutDeclaration(sourceVar.getInOutVarOpposite());
-			if (definingVar == null) { // cannot determine defining source (we have a loop)
-				return true; // ignore
-			}
-			// get the defining and destination types
-			final DataType definingType = LinkConstraints.getFullDataType(definingVar);
-			final DataType destinationType = LinkConstraints.getFullDataType(destination);
-			// check if destination is also an InOut variable
-			if (destination instanceof final VarDeclaration destVar && destVar.isInOutVar()) {
-				// connections between InOut variables must be mutually assignable
-				// special exception for generic destination variables, which adapt to the
-				// source
-				// note that the defining source can never be generic (not well-defined)
-				return destinationType.isAssignableFrom(definingType)
-						&& (GenericTypes.isAnyType(destinationType) || definingType.isAssignableFrom(destinationType));
-			}
-			// destination is a simple input (simple type check)
-			return destinationType.isAssignableFrom(definingType);
+		// get defining declaration (determines the _actual_ type)
+		final VarDeclaration definingVar = VarInOutHelper.getDefiningVarInOutDeclaration(destination);
+		if (definingVar == null) { // cannot determine defining source (we have a loop)
+			return true; // ignore
 		}
-		return true;
+		// get the defining and destination types
+		final DataType definingType = LinkConstraints.getFullDataType(definingVar);
+		final DataType destinationType = LinkConstraints.getFullDataType(destination);
+		// check if destination is also an InOut variable
+		if (destination instanceof final VarDeclaration destVar && destVar.isInOutVar()) {
+			// connections between InOut variables must be mutually assignable
+			// special exception for generic destination variables, which adapt to the
+			// source
+			// note that the defining source can never be generic (not well-defined)
+			return destinationType.isAssignableFrom(definingType)
+					&& (GenericTypes.isAnyType(destinationType) || definingType.isAssignableFrom(destinationType));
+		}
+		// destination is a simple input (simple type check)
+		return destinationType.isAssignableFrom(definingType);
 	}
 
 	private static boolean isContainerPin(final EObject srcParent, final EObject destParent) {
