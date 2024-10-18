@@ -75,18 +75,12 @@ public class UpdateUntypedSubappPinChange extends AbstractCommandChange<VarDecla
 	protected Command createCommand(final VarDeclaration varDecl) {
 		if (state.contains(ChangeState.DELETE)) {
 			return new DeleteSubAppInterfaceElementCommand(varDecl);
-
 		}
 		if (state.contains(ChangeState.CHANGE_TO_ANY)) {
-			final var cmd = ChangeDataTypeCommand.forDataType(varDecl, IecTypes.GenericTypes.ANY_STRUCT);
-			cmd.setIgnoreConnections(true);
-			return cmd;
+			return ChangeDataTypeCommand.forDataType(varDecl, IecTypes.GenericTypes.ANY_STRUCT);
 		}
-
 		if (state.contains(ChangeState.NO_CHANGE)) {
-			final var cmd = ChangeDataTypeCommand.forDataType(varDecl, varDecl.getType());
-			cmd.setIgnoreConnections(true);
-			return cmd;
+			return ChangeDataTypeCommand.forDataType(varDecl, varDecl.getType());
 		}
 		return null;
 	}
