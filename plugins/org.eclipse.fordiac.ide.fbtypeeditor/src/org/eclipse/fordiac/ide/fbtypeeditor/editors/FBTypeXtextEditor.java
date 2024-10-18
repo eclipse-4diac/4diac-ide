@@ -120,7 +120,11 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 
 	@Override
 	public boolean outlineSelectionChanged(final Object selectedElement) {
-		return selectAndReveal(selectedElement, false);
+		// do not react to selection changes from the FB type editor, until we can
+		// determine the text position for the selected element without:
+		// - blocking the UI thread waiting for a lock on the Xtext document,
+		// - interrupting the Xtext validation job when executed with priority.
+		return false;
 	}
 
 	@Override
