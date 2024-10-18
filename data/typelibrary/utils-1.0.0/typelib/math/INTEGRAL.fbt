@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="INTEGRAL" Comment="determines approximately the integral over time.">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;This Block was inspired by &#10;https://content.helpme-codesys.com/en/libs/Util/Current/Mathematical-Functions/INTEGRAL.html&#10;" >
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2024-10-18" Remarks="initial Version">
+	</VersionInfo>
+	<CompilerInfo packageName="utils::math">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+				<With Var="TM"/>
+			</Event>
+			<Event Name="RESET" Type="Event" Comment="TRUE: OUT is set to zero and OVERFLOW to FALSE">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="OUT"/>
+				<With Var="OVERFLOW"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="REAL" Comment="Input value" InitialValue="0.0"/>
+			<VarDeclaration Name="TM" Type="DINT" Comment="Time since last call in msec" InitialValue="0"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="REAL" Comment="Value of the integral. This is done by summing all part integrals IN * TM" InitialValue="0.0"/>
+			<VarDeclaration Name="OVERFLOW" Type="BOOL" Comment="TRUE: The value of OUT is out of range of REAL variables. he function is blocked till it is new initialised by input RESET." InitialValue="FALSE"/>
+		</OutputVars>
+	</InterfaceList>
+	<SimpleFB>
+		<Algorithm Name="REQ" Comment="">
+			<ST><![CDATA[ALGORITHM REQ
+IF NOT OVERFLOW THEN
+	IF (1.0E38 - IN * DINT_TO_REAL(TM) < OUT OR -1.0E38 - IN * DINT_TO_REAL(TM) > OUT) THEN
+		OVERFLOW := TRUE;
+	ELSIF (TM > 0) THEN    // Time Difference since last call must be positive.
+		OUT := OUT + IN * DINT_TO_REAL(TM) / 1000.0;
+	END_IF;
+END_IF;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="RESET" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM RESET
+OUT := 0.0;
+OVERFLOW := FALSE;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</SimpleFB>
+</FBType>
