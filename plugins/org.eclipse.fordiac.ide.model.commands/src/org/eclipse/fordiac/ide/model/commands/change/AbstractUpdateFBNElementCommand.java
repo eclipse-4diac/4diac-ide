@@ -142,6 +142,10 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		// Map FB
 		if (resource != null) {
 			mapCmd = MapToCommand.createMapToCommand(newElement, resource);
+			if (mapCmd instanceof final MapToCommand mapToCommand) {
+				mapToCommand.setElementIndex(unmapCmd.getElementIndex());
+			}
+
 			if (mapCmd.canExecute()) {
 				mapCmd.execute();
 				recreateResourceConns(resourceConns);

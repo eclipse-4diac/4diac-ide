@@ -31,6 +31,7 @@ import org.eclipse.gef.commands.Command;
 public class UnmapCommand extends Command implements ScopedCommand {
 	private final Mapping mapping;
 	private final AutomationSystem system;
+	private int elementIndex;
 
 	private final DeleteFBNetworkElementCommand deleteMappedFBCmd;
 
@@ -50,6 +51,7 @@ public class UnmapCommand extends Command implements ScopedCommand {
 	public void execute() {
 		mapping.getFrom().setMapping(null);
 		mapping.getTo().setMapping(null);
+		elementIndex = system.getMapping().indexOf(mapping);
 		system.getMapping().remove(mapping);
 		deleteMappedFBCmd.execute();
 	}
@@ -59,7 +61,7 @@ public class UnmapCommand extends Command implements ScopedCommand {
 		deleteMappedFBCmd.undo();
 		mapping.getFrom().setMapping(mapping);
 		mapping.getTo().setMapping(mapping);
-		system.getMapping().add(mapping);
+		system.getMapping().add(elementIndex, mapping);
 	}
 
 	@Override
@@ -84,5 +86,9 @@ public class UnmapCommand extends Command implements ScopedCommand {
 	@Override
 	public Set<EObject> getAffectedObjects() {
 		return Set.of(mapping.getFrom(), deleteMappedFBCmd.getFbParent().eContainer());
+	}
+
+	public int getElementIndex() {
+		return elementIndex;
 	}
 }
