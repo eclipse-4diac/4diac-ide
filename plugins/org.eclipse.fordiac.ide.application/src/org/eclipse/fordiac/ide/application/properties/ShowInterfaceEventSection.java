@@ -66,7 +66,7 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 
 	@Override
 	protected InterfaceList getInterface() {
-		return getType().getInterface();
+		return getType().getType().getInterfaceList();
 	}
 
 }

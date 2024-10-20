@@ -79,7 +79,7 @@ public class ShowInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 
 	@Override
 	protected InterfaceList getInterface() {
-		return getType().getInterface();
+		return getType().getType().getInterfaceList();
 	}
 
 }

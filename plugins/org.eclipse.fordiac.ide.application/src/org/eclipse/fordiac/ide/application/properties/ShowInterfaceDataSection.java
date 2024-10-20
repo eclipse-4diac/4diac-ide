@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
@@ -61,15 +60,11 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 
 	@Override
 	protected void setTableInput() {
-		final FBNetworkElement selection = getType();
-		if (selection instanceof StructManipulator) {
-			setTableInput(selection.getInterface());
-		} else if ((selection instanceof SubApp) && (selection.getType() != null)) { // typed subapp
-			setTableInput(selection.getType().getInterfaceList());
+		if (getType() instanceof final StructManipulator structSel) {
+			setTableInput(structSel.getInterface());
 		} else {
 			super.setTableInput();
 		}
-
 	}
 
 	@Override
@@ -84,7 +79,7 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 
 	@Override
 	protected InterfaceList getInterface() {
-		return getType().getInterface();
+		return getType().getType().getInterfaceList();
 	}
 
 }
