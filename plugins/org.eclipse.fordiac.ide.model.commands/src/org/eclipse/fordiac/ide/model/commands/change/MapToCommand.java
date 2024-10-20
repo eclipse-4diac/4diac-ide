@@ -62,6 +62,7 @@ public class MapToCommand extends Command implements ScopedCommand {
 	protected FBNetworkElement targetElement;
 	private final Mapping mapping = LibraryElementFactory.eINSTANCE.createMapping();
 	private final CompoundCommand createdConnections = new CompoundCommand();
+	private int elementIndex = -1;
 
 	protected MapToCommand(final FBNetworkElement srcElement, final MappingTarget resource) {
 		this.srcElement = srcElement;
@@ -100,7 +101,7 @@ public class MapToCommand extends Command implements ScopedCommand {
 		mapping.setTo(targetElement);
 		srcElement.setMapping(mapping);
 		targetElement.setMapping(mapping);
-		getAutomationSystem().getMapping().add(mapping);
+		addMapping();
 
 		checkConnections();
 
@@ -152,7 +153,7 @@ public class MapToCommand extends Command implements ScopedCommand {
 		addMappedElements();
 		srcElement.setMapping(mapping);
 		targetElement.setMapping(mapping);
-		getAutomationSystem().getMapping().add(mapping);
+		addMapping();
 		createdConnections.redo();
 	}
 
@@ -409,11 +410,23 @@ public class MapToCommand extends Command implements ScopedCommand {
 		return null;
 	}
 
+	private void addMapping() {
+		if (elementIndex == -1) {
+			getAutomationSystem().getMapping().add(mapping);
+		} else {
+			getAutomationSystem().getMapping().add(elementIndex, mapping);
+		}
+	}
+
 	@Override
 	public Set<EObject> getAffectedObjects() {
 		if (srcElement != null && resource != null) {
 			return Set.of(srcElement, resource);
 		}
 		return Set.of();
+	}
+
+	public void setElementIndex(final int elementIndex) {
+		this.elementIndex = elementIndex;
 	}
 }
