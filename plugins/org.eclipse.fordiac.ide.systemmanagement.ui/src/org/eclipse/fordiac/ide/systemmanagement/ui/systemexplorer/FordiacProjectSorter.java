@@ -54,7 +54,7 @@ public class FordiacProjectSorter extends ViewerComparator {
 	}
 
 	public static boolean isTypeLibFolder(final Object entry) {
-		return ((entry instanceof IFolder) && SystemManager.TYPE_LIB_FOLDER_NAME.equals(((IFolder) entry).getName()));
+		return ((entry instanceof final IFolder folder) && SystemManager.TYPE_LIB_FOLDER_NAME.equals(folder.getName()));
 	}
 
 }

@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 fortiss GmbH
- * 				 2020 Johannes Kepler University Linz
+ * Copyright (c) 2015, 2024 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,16 +22,16 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.typemanagement.navigator.LibraryElementLabelProvider;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.navigator.IDescriptionProvider;
 
-public class SystemLabelProvider extends AdapterFactoryLabelProvider implements IDescriptionProvider {
+public class SystemLabelProvider extends LibraryElementLabelProvider implements IDescriptionProvider {
 
 	private static ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
 
@@ -42,8 +41,8 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	@Override
 	public String getText(final Object object) {
-		if (object instanceof IFile) {
-			return getTextForFiles((IFile) object);
+		if (object instanceof final IFile file) {
+			return getTextForFiles(file);
 		}
 		if (object instanceof IResource) {
 			return null;
@@ -65,17 +64,16 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 
 	@Override
 	public Image getImage(final Object object) {
-		if (object instanceof IResource) {
-			return getImageForResource((IResource) object);
+		if (object instanceof final IResource res) {
+			return getImageForResource(res);
 		}
 		return super.getImage(object);
 	}
 
-	private static Image getImageForResource(final IResource resource) {
+	private Image getImageForResource(final IResource resource) {
 		if (FordiacProjectSorter.isTypeLibFolder(resource)) {
-			return FordiacImage.ICON_TYPE_NAVIGATOR.getImage();
+			return getDecoratedImage(resource, FordiacImage.ICON_TYPE_NAVIGATOR.getImageDescriptor());
 		}
-
 		return null;
 	}
 

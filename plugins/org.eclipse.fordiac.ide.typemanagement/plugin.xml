@@ -376,7 +376,8 @@
             labelProvider="org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider"
             name="FB Type Content">
             <possibleChildren>
-	           <or>         
+	           <or>     
+	              <!-- this possible child flag is need so that our lable provider is styling the icon and text of FB type files -->    
 	              <instanceof value="org.eclipse.core.resources.IFile" /> 
 	              <instanceof value="org.eclipse.emf.ecore.EObject"/>
 	              <instanceof value="org.eclipse.emf.edit.provider.ItemProviderAdapter"/>
