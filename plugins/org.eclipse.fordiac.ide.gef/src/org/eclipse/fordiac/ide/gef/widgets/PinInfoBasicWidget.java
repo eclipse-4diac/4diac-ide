@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.gef.editors.TypeDeclarationEditor;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -132,7 +131,7 @@ public class PinInfoBasicWidget implements CommandExecutor {
 	protected boolean isTypeChangeable() {
 		// currently we have only one event type therefore we don't want it be
 		// changeable
-		return isEditable() && !(type instanceof Event) && hasNoConnections();
+		return isEditable() && hasNoConnections();
 	}
 
 	public IInterfaceElement getType() {
