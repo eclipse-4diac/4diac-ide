@@ -25,23 +25,19 @@ import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.commands.change.ChangePackageNameCommand;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacModifiablePreviewChange;
 import org.eclipse.fordiac.ide.typemanagement.wizards.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class MoveTypeChange extends AbstractCommandChange<LibraryElement> implements IFordiacModifiablePreviewChange {
+public class MoveTypeChange extends AbstractCommandChange<LibraryElement> {
 
-	private String newPackageName;
+	private final String newPackageName;
 	private String oldPackageName;
-	private final TypeEntry type;
 
-	protected MoveTypeChange(final String newPackageName, final TypeEntry type, final String name, final URI uri) {
+	protected MoveTypeChange(final String newPackageName, final String name, final URI uri) {
 		super(name, uri, LibraryElement.class);
 		this.newPackageName = newPackageName;
-		this.type = type;
 	}
 
 	@Override
@@ -70,25 +66,4 @@ public class MoveTypeChange extends AbstractCommandChange<LibraryElement> implem
 	protected Command createCommand(final LibraryElement element) {
 		return new ChangePackageNameCommand(element, newPackageName);
 	}
-
-	@Override
-	public void updateChange(final String textInput) {
-		this.newPackageName = textInput;
-	}
-
-	@Override
-	public String getText() {
-		return this.newPackageName;
-	}
-
-	@Override
-	public TypeEntry getType() {
-		return this.type;
-	}
-
-	@Override
-	public boolean isEditable() {
-		return false;
-	}
-
 }
