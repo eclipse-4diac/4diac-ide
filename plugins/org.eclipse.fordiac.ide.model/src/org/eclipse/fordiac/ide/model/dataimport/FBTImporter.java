@@ -1144,8 +1144,8 @@ public class FBTImporter extends TypeImporter {
 
 	private Event parseEvent(final String eventName) throws TypeImportException, XMLStreamException {
 		final Event e = LibraryElementFactory.eINSTANCE.createEvent();
-		e.setType(EventTypeLibrary.getInstance().getType(null));
-
+		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		e.setType(EventTypeLibrary.getInstance().getType(type));
 		readNameCommentAttributes(e);
 		final List<String> withVars = new ArrayList<>();
 
