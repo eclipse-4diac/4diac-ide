@@ -27,11 +27,13 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -52,7 +54,12 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 	public static ChangeDataTypeCommand forTypeName(final IInterfaceElement interfaceElement, final String typeName) {
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(interfaceElement);
 		final DataType dataType;
-		if (interfaceElement instanceof AdapterDeclaration) {
+		if (interfaceElement instanceof Event) {
+			dataType = ImportHelper.resolveImport(typeName, interfaceElement, EventTypeLibrary.getInstance()::getType,
+					name -> {
+						throw new NoSuchElementException(name);
+					});
+		} else if (interfaceElement instanceof AdapterDeclaration) {
 			dataType = ImportHelper
 					.resolveImport(typeName, interfaceElement, typeLibrary::getAdapterTypeEntry, name -> {
 						throw new NoSuchElementException(name);
