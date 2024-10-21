@@ -38,8 +38,7 @@ public class MoveTypeChange extends AbstractCommandChange<LibraryElement> implem
 	private String oldPackageName;
 	private final TypeEntry type;
 
-	protected MoveTypeChange(final String newPackageName, final TypeEntry type, final String name, final URI uri,
-			final URI destination) {
+	protected MoveTypeChange(final String newPackageName, final TypeEntry type, final String name, final URI uri) {
 		super(name, uri, LibraryElement.class);
 		this.newPackageName = newPackageName;
 		this.type = type;
@@ -54,7 +53,7 @@ public class MoveTypeChange extends AbstractCommandChange<LibraryElement> implem
 	public RefactoringStatus isValid(final LibraryElement element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
-		if (!Objects.equals(element.getTypeEntry().getPackageName(), oldPackageName)) {
+		if (!Objects.equals(PackageNameHelper.getPackageName(element), oldPackageName)) {
 			status.addFatalError(Messages.MoveTypeToPackage_NameChanged);
 		}
 		if (oldPackageName.equals(newPackageName)) {

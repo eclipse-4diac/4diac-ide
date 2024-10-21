@@ -37,10 +37,10 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class UpdateTypeEntryChange extends Change {
 
-	protected IFile file;
-	protected TypeEntry typeEntry;
-	protected String newName;
-	protected String oldName;
+	protected final IFile file;
+	protected final TypeEntry typeEntry;
+	protected final String newName;
+	protected final String oldName;
 
 	public UpdateTypeEntryChange(final IFile file, final TypeEntry typeEntry, final String newName,
 			final String oldName) {

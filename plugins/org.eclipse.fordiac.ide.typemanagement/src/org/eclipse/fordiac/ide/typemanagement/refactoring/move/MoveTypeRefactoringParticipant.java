@@ -48,7 +48,7 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 	private String oldPackageName;
 	private String newPackageName;
 	private TypeEntry type;
-	private URI destinationURI;
+	private IFile destinationFile;
 	private IFile file;
 
 	@Override
@@ -58,9 +58,10 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 			this.type = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 			this.oldPackageName = type.getPackageName();
 			if (getArguments().getDestination() instanceof final IResource folder) {
-				this.destinationURI = URI.createPlatformResourceURI(folder.getFullPath().toString(), true)
+				final URI destinationURI = URI.createPlatformResourceURI(folder.getFullPath().toString(), true)
 						.appendSegment(type.getURI().lastSegment());
-				this.newPackageName = PackageNameHelper.getPackageNameFromFile(getFileFromURI(destinationURI));
+				this.destinationFile = getFileFromURI(destinationURI);
+				this.newPackageName = PackageNameHelper.getPackageNameFromFile(destinationFile);
 				return true;
 			}
 		}
@@ -90,10 +91,14 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 	}
 
 	@Override
+	public Change createPreChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
+		return new MoveTypeChange(newPackageName, this.type, getName(), this.type.getURI());
+	}
+
+	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final CompositeChange parentChange = new CompositeChange(Messages.MoveTypeToPackage);
-		parentChange.add(new UpdateTypeEntryFileChange(file, type, getFileFromURI(destinationURI)));
-		parentChange.add(new MoveTypeChange(newPackageName, this.type, getName(), this.type.getURI(), destinationURI));
+		parentChange.add(new UpdateTypeEntryFileChange(file, type, destinationFile));
 		parentChange.add(getInstanceChanges(type));
 		return parentChange;
 	}
