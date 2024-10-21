@@ -712,15 +712,6 @@
          </or>
          </enablement>
       </changePreviewViewer>
-       <changePreviewViewer
-            class="org.eclipse.fordiac.ide.typemanagement.wizards.MoveToPackageChangeViewer"
-            id="org.eclipse.fordiac.ide.typemanagement.wizards.MoveToPackageChangeViewer1">
-         <enablement>
-         <or>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.move.MoveTypeChange"/>
-         </or>
-         </enablement>
-      </changePreviewViewer>
    </extension>
    <extension
          point="org.eclipse.ui.menus">

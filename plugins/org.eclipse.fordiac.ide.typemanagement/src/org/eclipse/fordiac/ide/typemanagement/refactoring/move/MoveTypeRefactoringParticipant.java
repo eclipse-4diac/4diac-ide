@@ -49,12 +49,12 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 	private String newPackageName;
 	private TypeEntry type;
 	private IFile destinationFile;
-	private IFile file;
+	private IFile currentFile;
 
 	@Override
 	protected boolean initialize(final Object element) {
 		if (element instanceof final IFile file) {
-			this.file = file;
+			this.currentFile = file;
 			this.type = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 			this.oldPackageName = type.getPackageName();
 			if (getArguments().getDestination() instanceof final IResource folder) {
@@ -92,13 +92,13 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 
 	@Override
 	public Change createPreChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		return new MoveTypeChange(newPackageName, this.type, getName(), this.type.getURI());
+		return new MoveTypeChange(newPackageName, getName(), this.type.getURI());
 	}
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final CompositeChange parentChange = new CompositeChange(Messages.MoveTypeToPackage);
-		parentChange.add(new UpdateTypeEntryFileChange(file, type, destinationFile));
+		parentChange.add(new UpdateTypeEntryFileChange(currentFile, type, destinationFile));
 		parentChange.add(getInstanceChanges(type));
 		return parentChange;
 	}
