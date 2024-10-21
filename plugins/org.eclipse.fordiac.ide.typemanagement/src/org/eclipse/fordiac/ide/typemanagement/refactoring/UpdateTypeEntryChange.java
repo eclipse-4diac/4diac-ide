@@ -37,10 +37,10 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class UpdateTypeEntryChange extends Change {
 
-	IFile file;
-	TypeEntry typeEntry;
-	String newName;
-	String oldName;
+	protected final IFile file;
+	protected final TypeEntry typeEntry;
+	protected final String newName;
+	protected final String oldName;
 
 	public UpdateTypeEntryChange(final IFile file, final TypeEntry typeEntry, final String newName,
 			final String oldName) {
@@ -67,7 +67,7 @@ public class UpdateTypeEntryChange extends Change {
 		return status;
 	}
 
-	public static void checkEditor(final RefactoringStatus result, final TypeEntry typeEntry, final String oldName) {
+	public void checkEditor(final RefactoringStatus result, final TypeEntry typeEntry, final String oldName) {
 		// depending if the in-place renaming is active we may not be in the display
 		// thread
 		Display.getDefault().syncExec(() -> {
@@ -84,7 +84,8 @@ public class UpdateTypeEntryChange extends Change {
 		});
 	}
 
-	private static boolean shouldSaveFile(final Shell shell, final String oldName) {
+	@SuppressWarnings("static-method")
+	protected boolean shouldSaveFile(final Shell shell, final String oldName) {
 		final int result = MessageDialog.open(MessageDialog.QUESTION, shell, "Rename of Type with unsaved changes!", //$NON-NLS-1$
 				MessageFormat.format(
 						"There are unsaved changes for type \"{0}\". Do you want to save them before renaming?", //$NON-NLS-1$
@@ -98,7 +99,6 @@ public class UpdateTypeEntryChange extends Change {
 		final IFile newFile = findNewResource(newName);
 		if (newFile != null) {
 			FordiacResourceChangeListener.updateTypeEntryByRename(newFile, typeEntry);
-
 			return new UpdateTypeEntryChange(newFile, typeEntry, oldName, newName);
 		}
 		return null;

@@ -34,6 +34,17 @@ public class Messages extends NLS {
 	public static String RepairBrokenConnectionWizardPage_Name;
 	public static String RepairBrokenConnectionWizardPage_Title;
 	public static String RepairBrokenConnectionWizardPage_Type;
+
+	public static String MoveToPackageChangePreview_EnterPackageName;
+	public static String MoveTypeToPackage;
+	public static String MoveTypeToPackage_RenamePackageTo;
+	public static String MoveTypeToPackage_PackageNameIsTheSame;
+	public static String MoveTypeToPackage_PackageNameIsEmpty;
+	public static String MoveTypeToPackage_InvalidDestination;
+	public static String MoveTypeToPackage_UpdateInstances;
+	public static String MoveTypeToPackage_NameChanged;
+	public static String MoveTypeToPackage_UpdateTypeEntryFile;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
