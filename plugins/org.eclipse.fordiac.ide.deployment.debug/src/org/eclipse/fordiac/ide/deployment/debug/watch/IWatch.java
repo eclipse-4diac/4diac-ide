@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.deployment.debug.IDeploymentDebugElement;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -102,6 +103,7 @@ public interface IWatch extends IVariable, IDeploymentDebugElement {
 		return switch (element) {
 		case final Event event -> new EventWatch(name, event, debugTarget);
 		case final VarDeclaration varDeclaration -> new VarDeclarationWatch(name, varDeclaration, debugTarget);
+		case final FBNetworkElement networkElement -> new FBNetworkElementWatch(name, networkElement, debugTarget);
 		default -> throw new UnsupportedOperationException("Unsupported element: " + element.eClass().getName()); //$NON-NLS-1$
 		};
 	}
