@@ -25,11 +25,13 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedMarqueeDragTracker;
+import org.eclipse.fordiac.ide.gef.tools.FordiacViewportAutoexposeHelper;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.gef.AutoexposeHelper;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
@@ -137,6 +139,9 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == AutoexposeHelper.class) {
+			return adapter.cast(new FordiacViewportAutoexposeHelper(this));
+		}
 		if (adapter == FBNetwork.class) {
 			return adapter.cast(fbNetwork);
 		}

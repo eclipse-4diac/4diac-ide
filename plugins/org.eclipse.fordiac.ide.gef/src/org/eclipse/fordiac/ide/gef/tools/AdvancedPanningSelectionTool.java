@@ -135,7 +135,8 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	protected boolean handleDrag() {
 		if (isInState(PAN_IN_PROGRESS) && (getCurrentViewer().getControl() instanceof FigureCanvas)) {
 			final FigureCanvas canvas = (FigureCanvas) getCurrentViewer().getControl();
-			canvas.scrollTo(viewLocation.x - getDragMoveDelta().width, viewLocation.y - getDragMoveDelta().height);
+			// canvas.scrollTo(viewLocation.x - getDragMoveDelta().width, viewLocation.y -
+			// getDragMoveDelta().height);
 			return true;
 		}
 		return super.handleDrag();
