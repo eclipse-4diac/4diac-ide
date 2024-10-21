@@ -29,7 +29,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text,
  org.eclipse.xtext.ui,
  org.eclipse.nebula.widgets.nattable.core,
- org.eclipse.fordiac.ide.model.search
+ org.eclipse.fordiac.ide.model.search,
+ org.eclipse.fordiac.ide.typeeditor
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.0.0.qualifier

@@ -26,7 +26,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.fbtypeeditor,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.fordiac.ide.model.ui,
- org.eclipse.fordiac.ide.ui.errormessages
+ org.eclipse.fordiac.ide.ui.errormessages,
+ org.eclipse.fordiac.ide.typeeditor
 Export-Package: org.eclipse.fordiac.ide.debug.ui,
  org.eclipse.fordiac.ide.debug.ui.breakpoint,
  org.eclipse.fordiac.ide.debug.ui.fb

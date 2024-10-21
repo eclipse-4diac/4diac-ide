@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,20 +15,20 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
-final class FBTypeAnnotations {
+final class LibraryElementAnnotations {
 
-	static void setDocumentation(final FBType type, final String value) {
+	static void setDocumentation(final LibraryElement type, final String value) {
 		type.setAttribute(LibraryElementTags.DOCUMENTATION, HelperTypes.CDATA, value, null);
 	}
 
-	static String getDocumentation(final FBType type) {
+	static String getDocumentation(final LibraryElement type) {
 		final Attribute attribute = type.getAttribute(LibraryElementTags.DOCUMENTATION);
 		return attribute != null ? attribute.getValue() : ""; //$NON-NLS-1$
 	}
 
-	private FBTypeAnnotations() {
+	private LibraryElementAnnotations() {
 		throw new UnsupportedOperationException("Helper class must not be instantiated"); //$NON-NLS-1$
 	}
 

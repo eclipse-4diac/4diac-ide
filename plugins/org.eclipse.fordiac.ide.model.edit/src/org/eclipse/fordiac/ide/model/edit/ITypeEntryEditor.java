@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.edit;
 
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 
@@ -35,10 +34,4 @@ public interface ITypeEntryEditor extends IEditorPart {
 	 */
 	void setInput(IEditorInput input);
 
-	/**
-	 * Get the LibraryElement that is edited with this editor.
-	 *
-	 * @return libraryElement
-	 */
-	LibraryElement getEditedElement();
 }

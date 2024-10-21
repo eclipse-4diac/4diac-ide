@@ -6,7 +6,7 @@ Bundle-Version: 3.0.0.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.ftypeeditor.doc
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: org.eclipse.ui,
- org.eclipse.fordiac.ide.fbtypeeditor,
+ org.eclipse.ui.ide,
  org.eclipse.ui.workbench,
  org.eclipse.core.runtime,
  org.eclipse.gef,
@@ -15,4 +15,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.nebula.widgets.richtext,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.typemanagement,
- org.eclipse.fordiac.ide.ui
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.fordiac.ide.typeeditor

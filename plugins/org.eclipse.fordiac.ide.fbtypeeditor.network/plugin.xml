@@ -22,12 +22,21 @@
       </openListener>
    </extension>
    <extension
-         point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs">
-      <editor
+         point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">
+      <editorPage
             class="org.eclipse.fordiac.ide.fbtypeeditor.network.CompositeNetworkEditor"
-            sortIndex="65"
-            type="composite">
-      </editor>
+            sortIndex="65">
+         <enablement>
+            <instanceof
+                  value="org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType">
+            </instanceof>
+            <not>
+               <instanceof
+                     value="org.eclipse.fordiac.ide.model.libraryElement.SubAppType">
+               </instanceof>
+            </not>
+         </enablement>
+      </editorPage>
    </extension>
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
