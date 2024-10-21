@@ -18,10 +18,12 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
@@ -49,18 +51,16 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 	private String newPackageName;
 	private TypeEntry type;
 	private IFile destinationFile;
-	private IFile file;
+	private IFile currentFile;
 
 	@Override
 	protected boolean initialize(final Object element) {
 		if (element instanceof final IFile file) {
-			this.file = file;
+			this.currentFile = file;
 			this.type = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 			this.oldPackageName = type.getPackageName();
-			if (getArguments().getDestination() instanceof final IResource folder) {
-				final URI destinationURI = URI.createPlatformResourceURI(folder.getFullPath().toString(), true)
-						.appendSegment(type.getURI().lastSegment());
-				this.destinationFile = getFileFromURI(destinationURI);
+			if (getArguments().getDestination() instanceof final IContainer destination) {
+				this.destinationFile = destination.getFile(IPath.fromOSString(file.getFullPath().lastSegment()));
 				this.newPackageName = PackageNameHelper.getPackageNameFromFile(destinationFile);
 				return true;
 			}
@@ -98,7 +98,7 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final CompositeChange parentChange = new CompositeChange(Messages.MoveTypeToPackage);
-		parentChange.add(new UpdateTypeEntryFileChange(file, type, destinationFile));
+		parentChange.add(new UpdateTypeEntryFileChange(currentFile, type, destinationFile));
 		parentChange.add(getInstanceChanges(type));
 		return parentChange;
 	}
