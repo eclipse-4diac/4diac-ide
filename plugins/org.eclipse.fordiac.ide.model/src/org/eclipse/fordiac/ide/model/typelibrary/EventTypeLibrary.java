@@ -21,15 +21,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 
 public final class EventTypeLibrary {
 	public static final String EVENT = "Event"; //$NON-NLS-1$
+	public static final String EINIT = "EInit"; //$NON-NLS-1$
 
 	private static final EventTypeLibrary INSTANCE = new EventTypeLibrary();
 
-	private final Map<String, DataType> typeMap = new ConcurrentHashMap<>();
+	private final Map<String, EventType> typeMap = new ConcurrentHashMap<>();
 
 	private EventTypeLibrary() {
 		initElementaryTypes();
@@ -41,13 +41,14 @@ public final class EventTypeLibrary {
 
 	private void initElementaryTypes() {
 		getType(EVENT);
+		getType(EINIT);
 	}
 
-	public Collection<DataType> getEventTypes() {
+	public Collection<EventType> getEventTypes() {
 		return Collections.unmodifiableCollection(typeMap.values());
 	}
 
-	public DataType getType(final String name) {
+	public EventType getType(final String name) {
 		if (name == null) {
 			return getType(EVENT);
 		}
