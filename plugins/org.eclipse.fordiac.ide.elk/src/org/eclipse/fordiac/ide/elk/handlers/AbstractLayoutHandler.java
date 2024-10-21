@@ -13,7 +13,9 @@
 package org.eclipse.fordiac.ide.elk.handlers;
 
 import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -30,6 +32,10 @@ public abstract class AbstractLayoutHandler extends AbstractHandler {
 		} else {
 			setBaseEnabled(false);
 		}
+	}
+
+	protected static boolean isSubappLayout(final StructuredSelection selection) {
+		return selection != null && selection.getFirstElement() instanceof UnfoldedSubappContentEditPart;
 	}
 
 }

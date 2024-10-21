@@ -285,7 +285,7 @@ public class SystemLayoutHandler extends AbstractHandler {
 		final var breadcrumbEditor = multiPageEditor.getAdapter(AbstractBreadCrumbEditor.class);
 		multiPageEditor.setActiveEditor(breadcrumbEditor);
 		multiPageEditor.getAdapter(GraphicalViewer.class).flush();
-		ConnectionLayoutHandler.executeManually(multiPageEditor);
+		ConnectionLayoutHandler.getLayoutCommand(multiPageEditor).execute();
 
 		final List<EObject> elements = new ArrayList<>();
 		collectSubapps(elements, subappType.getFBNetwork());
@@ -300,7 +300,7 @@ public class SystemLayoutHandler extends AbstractHandler {
 		final var networkEditor = multiPageEditor.getAdapter(FBNetworkEditor.class);
 		multiPageEditor.setActiveEditor(networkEditor);
 		multiPageEditor.getAdapter(GraphicalViewer.class).flush();
-		ConnectionLayoutHandler.executeManually(multiPageEditor);
+		ConnectionLayoutHandler.getLayoutCommand(multiPageEditor).execute();
 
 		saveTypeEditor(multiPageEditor, typeEditable);
 	}
@@ -342,7 +342,7 @@ public class SystemLayoutHandler extends AbstractHandler {
 	private static void layoutBreadcrumbEditor(final EObject refElement, final AbstractBreadCrumbEditor editor) {
 		editor.getBreadcrumb().setInput(refElement);
 		editor.getAdapter(GraphicalViewer.class).flush();
-		ConnectionLayoutHandler.executeManually(editor);
+		ConnectionLayoutHandler.getLayoutCommand(editor).execute();
 	}
 
 	private static EObject getBreadCrumbRefElement(final EObject sel) {
