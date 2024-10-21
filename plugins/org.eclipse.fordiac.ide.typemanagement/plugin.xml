@@ -768,5 +768,18 @@
    </extension>
        <extension
              point="org.eclipse.ltk.core.refactoring.refactoringContributions">
+       </extension>
+       <extension
+             point="org.eclipse.ltk.core.refactoring.moveParticipants">
+          <moveParticipant
+                class="org.eclipse.fordiac.ide.typemanagement.refactoring.move.MoveTypeRefactoringParticipant"
+                id="org.eclipse.fordiac.ide.typemanagement.moveParticipant1"
+                name="Move To Package Handler">
+             <enablement>
+             	<adapt
+             		type="org.eclipse.core.resources.IFile">
+             	</adapt>
+             </enablement>
+          </moveParticipant>
        </extension>   
 </plugin>
