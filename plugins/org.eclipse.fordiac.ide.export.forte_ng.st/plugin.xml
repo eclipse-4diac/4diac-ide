@@ -31,6 +31,11 @@
                type="org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody">
          </source>
       </factory>
+   </extension>   
+   <extension 
+   		point="org.eclipse.fordiac.ide.export.forte_ng.util.LibraryElementHasherExtension">
+   	 <client
+   	 		class="org.eclipse.fordiac.ide.export.forte_ng.st.LibraryElementHasher"/>
    </extension>
 
 </plugin>
