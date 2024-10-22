@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.gef.widgets.PinInfoDataWidget;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
@@ -118,7 +117,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 		// container can be null when refactoring operations are performed while
 		// section is open
 		final EObject container = getType().eContainer();
-		if (container != null && container.eContainer() instanceof FBType) {
+		if (container != null && !(container.eContainer() instanceof SubAppType)) {
 			eventComposite.setVisible(true);
 			withEventsViewer.setInput(getType());
 			withEventsViewer.getTable().setEnabled(isEditable());
@@ -138,8 +137,6 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 			} else {
 				setupPinInfoWidget(getType());
 			}
-
-			eventComposite.setVisible(!(getType().eContainer().eContainer() instanceof SubAppType));
 		}
 		if (null == getCurrentCommandStack()) { // disable all fields
 			withEventsViewer.setInput(null);
