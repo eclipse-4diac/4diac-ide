@@ -11,5 +11,28 @@
 
   <artifactId>org.eclipse.fordiac.ide.test.ui</artifactId>
   <packaging>eclipse-test-plugin</packaging>
+  <name> 4diac SWTBot UI Tests </name>
+  
+  <repositories>
+	<repository>
+		<id>tycho-latest</id>
+		<url>${tycho-repo.url}</url>
+		<layout>p2</layout>
+	</repository>
+  </repositories>
+  
+  <build>
+	<plugins>
+		<plugin>
+			<groupId>org.eclipse.tycho</groupId>
+			<artifactId>tycho-surefire-plugin</artifactId>
+			<version>${tycho.version}</version>
+			<configuration>
+				<useUIHarness>true</useUIHarness>
+				<product>org.eclipse.platform.ide</product>
+			</configuration>
+		</plugin>
+	</plugins>
+  </build>
 
 </project> 
