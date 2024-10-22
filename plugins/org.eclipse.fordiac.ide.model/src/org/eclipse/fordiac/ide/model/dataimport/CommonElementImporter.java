@@ -184,6 +184,7 @@ public abstract class CommonElementImporter {
 		reader = importer.reader;
 		file = importer.file;
 		typeLibrary = importer.typeLibrary;
+		element = importer.element;
 		errors = importer.errors;
 		warnings = importer.warnings;
 		dependencies = importer.dependencies;
