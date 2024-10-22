@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.Arrays;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.VarContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.VarDeclarationLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
@@ -99,9 +100,6 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 	@Override
 	protected void setInputInit() {
 		super.setInputInit();
-		if (getType() != null) {
-			eventComposite.setVisible(!(getType().eContainer().eContainer() instanceof SubAppType));
-		}
 		if (null == getCurrentCommandStack()) { // disable all fields
 			withEventsViewer.setInput(null);
 			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setGrayed(true));
@@ -111,12 +109,18 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 	@Override
 	protected void performRefresh() {
 		super.performRefresh();
-		withEventsViewer.setInput(getType());
-		withEventsViewer.getTable().setEnabled(isEditable());
-		Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
-		getType().getWith().stream().filter(with -> (with.getVariables() != null))
-				.map(with -> withEventsViewer.testFindItem(with.getVariables())).filter(TableItem.class::isInstance)
-				.forEach(item -> ((TableItem) item).setChecked(true));
+		final EObject container = getType().eContainer();
+		if (container != null && !(container.eContainer() instanceof SubAppType)) {
+			eventComposite.setVisible(true);
+			withEventsViewer.setInput(getType());
+			withEventsViewer.getTable().setEnabled(isEditable());
+			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
+			getType().getWith().stream().filter(with -> (with.getVariables() != null))
+					.map(with -> withEventsViewer.testFindItem(with.getVariables())).filter(TableItem.class::isInstance)
+					.forEach(item -> ((TableItem) item).setChecked(true));
+		} else {
+			eventComposite.setVisible(false);
+		}
 	}
 
 	@Override
