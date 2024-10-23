@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Dictionary;
-import java.util.Hashtable;
+import java.util.Map;
 
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.osgi.framework.Bundle;
@@ -46,8 +46,8 @@ public class FordiacImageURLStreamHandlerService extends AbstractURLStreamHandle
 		final Bundle bundle = FrameworkUtil.getBundle(FordiacImageURLStreamHandlerService.class);
 		final BundleContext bundleContext = bundle.getBundleContext();
 		try {
-			final Dictionary<String, String[]> properties = new Hashtable<>();
-			properties.put(URLConstants.URL_HANDLER_PROTOCOL, new String[] { FORDIAC_IMAGE_PROTOCOL });
+			final Dictionary<String, String[]> properties = FrameworkUtil
+					.asDictionary(Map.of(URLConstants.URL_HANDLER_PROTOCOL, new String[] { FORDIAC_IMAGE_PROTOCOL }));
 			iconUrlHandler = bundleContext.registerService(URLStreamHandlerService.class, this, properties);
 		} catch (final Exception e) {
 			FordiacLogHelper.logError("Could not register icon URL handler.", e); //$NON-NLS-1$
