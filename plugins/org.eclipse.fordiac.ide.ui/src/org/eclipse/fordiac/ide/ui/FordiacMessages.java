@@ -95,6 +95,8 @@ public final class FordiacMessages extends NLS {
 	public static String Version; // NOSONAR
 	public static String VersionInfo; // NOSONAR
 	public static String Visible; // NOSONAR
+	public static String Visible_IN; // NOSONAR
+	public static String Visible_OUT; // NOSONAR
 	public static String VarConfig; // NOSONAR
 	public static String Width; // NOSONAR
 	public static String With; // NOSONAR

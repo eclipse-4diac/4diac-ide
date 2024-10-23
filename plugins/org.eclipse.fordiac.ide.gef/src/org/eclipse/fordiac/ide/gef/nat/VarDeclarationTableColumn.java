@@ -21,9 +21,14 @@ import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
 public enum VarDeclarationTableColumn implements NatTableColumn {
 	NAME(FordiacMessages.Name), TYPE(FordiacMessages.Type), COMMENT(FordiacMessages.Comment),
 	INITIAL_VALUE(FordiacMessages.InitialValue), VAR_CONFIG(FordiacMessages.VarConfig),
-	VISIBLE(FordiacMessages.Visible), RETAIN(FordiacMessages.Retain);
+	VISIBLE(FordiacMessages.Visible), RETAIN(FordiacMessages.Retain), VISIBLEIN(FordiacMessages.Visible_IN),
+	VISIBLEOUT(FordiacMessages.Visible_OUT);
 
 	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS = List.of(NAME, TYPE, COMMENT, INITIAL_VALUE);
+	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_VISIBLE = List.of(NAME, TYPE, COMMENT,
+			INITIAL_VALUE, VISIBLE);
+	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS = List.of(NAME, TYPE,
+			COMMENT, INITIAL_VALUE, VISIBLEIN, VISIBLEOUT);
 	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_VAR_CONFIG = List.of(NAME, TYPE, COMMENT,
 			INITIAL_VALUE, VAR_CONFIG);
 	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG = List.of(NAME,
@@ -35,10 +40,12 @@ public enum VarDeclarationTableColumn implements NatTableColumn {
 
 	public static final Set<VarDeclarationTableColumn> DEFAULT_EDITABLE = Set.of(VarDeclarationTableColumn.COMMENT,
 			VarDeclarationTableColumn.INITIAL_VALUE, VarDeclarationTableColumn.VISIBLE,
-			VarDeclarationTableColumn.VAR_CONFIG, VarDeclarationTableColumn.RETAIN);
+			VarDeclarationTableColumn.VAR_CONFIG, VarDeclarationTableColumn.RETAIN, VarDeclarationTableColumn.VISIBLEIN,
+			VarDeclarationTableColumn.VISIBLEOUT);
 
 	public static final Set<VarDeclarationTableColumn> DEFAULT_EDITABLE_NO_INITIAL_VALUE = Set.of(
-			VarDeclarationTableColumn.COMMENT, VarDeclarationTableColumn.VISIBLE, VarDeclarationTableColumn.VAR_CONFIG);
+			VarDeclarationTableColumn.COMMENT, VarDeclarationTableColumn.VISIBLE, VarDeclarationTableColumn.VAR_CONFIG,
+			VarDeclarationTableColumn.VISIBLEIN, VarDeclarationTableColumn.VISIBLEOUT);
 
 	public static final Set<VarDeclarationTableColumn> ALL_EDITABLE = Set.of(VarDeclarationTableColumn.values());
 
