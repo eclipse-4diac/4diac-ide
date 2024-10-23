@@ -33,7 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.gef.commands.Command;
 
-public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection {
+public class EditUntypedSubappInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
 	protected CreationCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
 		final DataType last = getLastUsedEventType(getType().getInterface(), isInput, interfaceElement);

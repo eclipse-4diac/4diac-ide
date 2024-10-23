@@ -66,5 +66,4 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 	protected InterfaceList getInterface() {
 		return (getType() != null) ? getType().getInterfaceList() : null;
 	}
-
 }

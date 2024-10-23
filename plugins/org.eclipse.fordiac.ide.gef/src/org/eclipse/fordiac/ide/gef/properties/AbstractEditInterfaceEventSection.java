@@ -17,7 +17,6 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.Objects;
-import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.InterfaceElementColumnAccessor;
@@ -32,7 +31,6 @@ import org.eclipse.fordiac.ide.model.ui.nat.EventTypeSelectionTreeContentProvide
 import org.eclipse.fordiac.ide.model.ui.widgets.EventTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
@@ -96,12 +94,10 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		final DataLayer outputDataLayer = new DataLayer(outputProvider);
 		outputDataLayer.setConfigLabelAccumulator(
 				new TypedElementConfigLabelAccumulator<>(outputProvider, this::getAnnotationModel));
-		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS),
-				new NatTableColumnEditableRule<>(getSectionEditableRule(), TypedElementTableColumn.DEFAULT_COLUMNS,
-						Set.of(TypedElementTableColumn.NAME, TypedElementTableColumn.COMMENT)),
-				new TypeSelectionButton(this::getTypeLibrary, EventTypeSelectionContentProvider.INSTANCE,
-						EventTypeSelectionTreeContentProvider.INSTANCE),
+		outputTable = NatTableWidgetFactory.createRowNatTable(
+				outputsGroup, outputDataLayer, new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS),
+				getSectionEditableRule(), new TypeSelectionButton(this::getTypeLibrary,
+						EventTypeSelectionContentProvider.INSTANCE, EventTypeSelectionTreeContentProvider.INSTANCE),
 				this, false);
 	}
 
@@ -120,12 +116,10 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		final DataLayer inputDataLayer = new DataLayer(inputProvider);
 		inputDataLayer.setConfigLabelAccumulator(
 				new TypedElementConfigLabelAccumulator<>(inputProvider, this::getAnnotationModel));
-		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS),
-				new NatTableColumnEditableRule<>(getSectionEditableRule(), TypedElementTableColumn.DEFAULT_COLUMNS,
-						Set.of(TypedElementTableColumn.NAME, TypedElementTableColumn.COMMENT)),
-				new TypeSelectionButton(this::getTypeLibrary, EventTypeSelectionContentProvider.INSTANCE,
-						EventTypeSelectionTreeContentProvider.INSTANCE),
+		inputTable = NatTableWidgetFactory.createRowNatTable(
+				inputsGroup, inputDataLayer, new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS),
+				getSectionEditableRule(), new TypeSelectionButton(this::getTypeLibrary,
+						EventTypeSelectionContentProvider.INSTANCE, EventTypeSelectionTreeContentProvider.INSTANCE),
 				this, true);
 	}
 
@@ -134,5 +128,4 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		inputProvider.setInput(il.getEventInputs());
 		outputProvider.setInput(il.getEventOutputs());
 	}
-
 }

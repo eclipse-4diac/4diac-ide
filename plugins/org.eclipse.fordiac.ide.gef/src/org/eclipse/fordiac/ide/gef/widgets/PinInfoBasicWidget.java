@@ -80,7 +80,6 @@ public class PinInfoBasicWidget implements CommandExecutor {
 	public void disableAllFields() {
 		nameText.setEnabled(false);
 		commentText.setEnabled(false);
-
 	}
 
 	public void refresh() {
@@ -129,17 +128,11 @@ public class PinInfoBasicWidget implements CommandExecutor {
 	}
 
 	protected boolean isTypeChangeable() {
-		// currently we have only one event type therefore we don't want it be
-		// changeable
-		return isEditable() && hasNoConnections();
+		return isEditable();
 	}
 
 	public IInterfaceElement getType() {
 		return type;
-	}
-
-	private boolean hasNoConnections() {
-		return type.getOutputConnections().isEmpty() && type.getInputConnections().isEmpty();
 	}
 
 	public TypeSelectionWidget getTypeSelectionWidget() {
