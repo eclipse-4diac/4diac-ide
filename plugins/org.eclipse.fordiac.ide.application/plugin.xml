@@ -244,7 +244,7 @@
               tab="org.eclipse.fordiac.ide.application.CreateConnection">
         </propertySection>
         <propertySection
-              class="org.eclipse.fordiac.ide.application.properties.EditInterfaceEventSection"
+              class="org.eclipse.fordiac.ide.application.properties.EditUntypedSubappInterfaceEventSection"
               filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
               id="org.eclipse.fordiac.ide.application.properties.section.EditEvents"
               tab="org.eclipse.fordiac.ide.application.property.tab.EditEvents">
