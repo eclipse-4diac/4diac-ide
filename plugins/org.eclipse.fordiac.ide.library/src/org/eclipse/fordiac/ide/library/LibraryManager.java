@@ -45,6 +45,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IPathVariableManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
@@ -54,6 +55,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.URIUtil;
+import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobGroup;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
@@ -124,6 +126,8 @@ public enum LibraryManager {
 	private IEventBroker eventBroker;
 	private JobGroup jobGroup;
 	private boolean uninitialised = true;
+	private final IResourceChangeListener libraryListener = new LibraryChangeListener();
+	private final Set<IProject> resolvingProjects = Collections.synchronizedSet(new HashSet<>());
 
 	/**
 	 * Initialise library maps and start the {@link WatchService}
@@ -157,6 +161,7 @@ public enum LibraryManager {
 			// empty
 		}
 		jobGroup = new JobGroup("LibraryManager JobGroup", 0, 0); //$NON-NLS-1$
+		addLibraryChangeListener();
 		uninitialised = false;
 	}
 
@@ -370,6 +375,7 @@ public enum LibraryManager {
 		final IFolder libDirectory = project.getFolder(TYPE_LIB_FOLDER_NAME)
 				.getFolder(libManifest.getProduct().getSymbolicName());
 
+		removeLibraryChangeListener();
 		SystemManager.INSTANCE.removeFordiacChangeListener();
 		final Map<String, TypeEntry> cachedTypes = removeOldLibVersion(libDirectory, typeLib);
 		final java.net.URI libUri = URIUtil.append(uri, LIB_TYPELIB_FOLDER_NAME);
@@ -399,20 +405,10 @@ public enum LibraryManager {
 		}
 
 		SystemManager.INSTANCE.addFordiacChangeListener();
+		addLibraryChangeListener();
 		// dependency resolution
 		if (resolve && imported) {
-			final WorkspaceJob job = new WorkspaceJob(
-					"Resolve dependencies for: " + libManifest.getProduct().getSymbolicName()) { //$NON-NLS-1$
-				@Override
-				public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-					resolveDependencies(project, typeLib);
-					return Status.OK_STATUS;
-				}
-			};
-			job.setRule(project);
-			job.setJobGroup(jobGroup);
-			job.setPriority(Job.LONG);
-			job.schedule();
+			startResolveJob(project, typeLibrary);
 		}
 	}
 
@@ -618,7 +614,7 @@ public enum LibraryManager {
 
 		ManifestHelper.sortAndSaveManifest(manifest);
 
-		startLocalResolveJob(project, typeLibrary);
+		startResolveJob(project, typeLibrary);
 	}
 
 	/**
@@ -628,7 +624,12 @@ public enum LibraryManager {
 	 * @param project     selected project
 	 * @param typeLibrary {@link TypeLibrary} to use
 	 */
-	private void startLocalResolveJob(final IProject project, final TypeLibrary typeLibrary) {
+	public void startResolveJob(final IProject project, final TypeLibrary typeLibrary) {
+		if (resolvingProjects.contains(project)) {
+			return;
+		}
+		resolvingProjects.add(project);
+
 		final WorkspaceJob job = new WorkspaceJob("Resolve dependencies: " + project.getName()) { //$NON-NLS-1$
 
 			@Override
@@ -641,6 +642,8 @@ public enum LibraryManager {
 		job.setJobGroup(jobGroup);
 		job.setPriority(Job.LONG);
 		job.schedule();
+		// act after job is done and has sent its POST_CHANGE notifications
+		job.addJobChangeListener(IJobChangeListener.onDone(c -> resolvingProjects.remove(project)));
 	}
 
 	/**
@@ -1038,4 +1041,11 @@ public enum LibraryManager {
 		}
 	};
 
+	public void removeLibraryChangeListener() {
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(libraryListener);
+	}
+
+	public void addLibraryChangeListener() {
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(libraryListener);
+	}
 }

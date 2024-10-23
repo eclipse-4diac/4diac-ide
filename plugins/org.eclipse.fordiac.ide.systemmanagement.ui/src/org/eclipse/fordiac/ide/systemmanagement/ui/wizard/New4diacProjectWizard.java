@@ -19,14 +19,12 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.library.ui.wizards.LibrarySelectionPage;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
@@ -82,19 +80,10 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 	@Override
 	public boolean performFinish() {
 		try {
-			WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
+			final WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 				@Override
 				protected void execute(final IProgressMonitor monitor) {
 					createProject(monitor != null ? monitor : new NullProgressMonitor());
-				}
-			};
-			getContainer().run(false, true, op);
-			// re-send TypeLibrary event after complete project setup
-			final IProject newProject = ResourcesPlugin.getWorkspace().getRoot().getProject(page.getProjectName());
-			op = new WorkspaceModifyOperation() {
-				@Override
-				protected void execute(final IProgressMonitor monitor) {
-					TypeLibraryManager.INSTANCE.resendCreateEvent(newProject);
 				}
 			};
 			getContainer().run(false, true, op);
