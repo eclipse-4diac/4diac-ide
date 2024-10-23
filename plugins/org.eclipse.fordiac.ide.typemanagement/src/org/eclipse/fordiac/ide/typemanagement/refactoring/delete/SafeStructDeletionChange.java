@@ -60,8 +60,6 @@ public class SafeStructDeletionChange extends CompositeChange {
 					} else if (isUntypedSubappPin(varDecl)) {
 						rootChange.add(new UpdateUntypedSubappPinChange(varDecl));
 					} else if (isFbTypePin(varDecl)) {
-						rootChange.add(new UpdateFBTypeInterfaceChange((FBType) varDecl.eContainer().eContainer(),
-								(StructuredType) varDecl.getType()));
 						handleTransitiveRefactoring(varDecl, rootChange, doneElements);
 					}
 				} else if (eObject instanceof final StructManipulator muxer && doneElements.add(muxer)) {
