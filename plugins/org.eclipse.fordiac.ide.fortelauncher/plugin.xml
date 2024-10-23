@@ -37,6 +37,12 @@
     		modes="run"               
     		id="org.eclipse.fordiac.ide.buildFORTE">        
 		</launchConfigurationType>
+		<launchConfigurationType
+    		name="Stop 4diac FORTEs"
+    		delegate="org.eclipse.fordiac.ide.fortelauncher.StopForteLaunchDelegate"
+    		modes="run"               
+    		id="org.eclipse.fordiac.ide.stopFORTE">        
+		</launchConfigurationType>
 	</extension>
 
 	<extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
@@ -49,6 +55,11 @@
 			type="org.eclipse.fordiac.ide.buildFORTE"
 			class="org.eclipse.fordiac.ide.fortelauncher.BuildForteLaunchGroup"
 			id="org.eclipse.fordiac.ide.fortelauncher.buildConfigurationTabGroup">
+		</launchConfigurationTabGroup>
+		<launchConfigurationTabGroup
+			type="org.eclipse.fordiac.ide.stopFORTE"
+			class="org.eclipse.fordiac.ide.fortelauncher.StopForteLaunchGroup"
+			id="org.eclipse.fordiac.ide.fortelauncher.stopForteConfigurationTabGroup">
 		</launchConfigurationTabGroup>
 	</extension>
 	
@@ -63,6 +74,11 @@
             configTypeID="org.eclipse.fordiac.ide.buildFORTE"
 			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/Build4diacFORTE.png"
             id="org.eclipse.fordiac.ide.launchConfigurationTypeImage.buildFORTE">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.fordiac.ide.stopFORTE"
+			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/Stop4diacFORTE.png"
+            id="org.eclipse.fordiac.ide.launchConfigurationTypeImage.stopFORTE">
       </launchConfigurationTypeImage>
    </extension>
 

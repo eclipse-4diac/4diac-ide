@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
@@ -69,6 +70,9 @@ public final class DeploymentCoordinator {
 			final DownloadRunnable download = new DownloadRunnable(createDeploymentdata(selection),
 					overrideDevMgmCommHandler, null, profile);
 			new ProgressMonitorDialog(shell).run(true, true, download);
+			if (!download.getResult().isOK()) {
+				ErrorDialog.openError(shell, null, null, download.getResult());
+			}
 		} catch (final DeploymentException | InvocationTargetException ex) {
 			MessageDialog.openError(shell, Messages.DeploymentCoordinator_DepoymentError, ex.getMessage());
 		} catch (final InterruptedException ex) {

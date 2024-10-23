@@ -18,7 +18,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 
@@ -34,9 +33,8 @@ final class FBTypeComposedAdapterFactory {
 	}
 
 	private static List<AdapterFactory> createFactoryList() {
-		List<AdapterFactory> factories = new ArrayList<>();
+		final List<AdapterFactory> factories = new ArrayList<>();
 		factories.add(new LibraryElementItemProviderAdapterFactory());
-		factories.add(new DataItemProviderAdapterFactory());
 		return factories;
 	}
 

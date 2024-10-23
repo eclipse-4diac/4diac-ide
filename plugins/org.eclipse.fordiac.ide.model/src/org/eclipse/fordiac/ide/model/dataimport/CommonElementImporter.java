@@ -184,6 +184,7 @@ public abstract class CommonElementImporter {
 		reader = importer.reader;
 		file = importer.file;
 		typeLibrary = importer.typeLibrary;
+		element = importer.element;
 		errors = importer.errors;
 		warnings = importer.warnings;
 		dependencies = importer.dependencies;
@@ -435,7 +436,9 @@ public abstract class CommonElementImporter {
 				}
 			} else {
 				// AttributeDeclarations
-				final AttributeTypeEntry entry = ImportHelper.resolveImport(attribute.getName(), confObject,
+				// use element for resolving import since confObject may not have been added to
+				// enclosing type yet
+				final AttributeTypeEntry entry = ImportHelper.resolveImport(attribute.getName(), getElement(),
 						name -> getTypeLibrary().getAttributeTypeEntry(name), name -> null);
 				final AttributeTypeEntry attributeTypeEntry = addDependency(entry);
 				if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {

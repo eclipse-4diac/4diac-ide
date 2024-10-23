@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2011, 2013, 2017, 2018 Profactor GmbH, fortiss GmbH,
- * 						Johanns Kepler University
+ * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH,
+ *                          Johanns Kepler University
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
+ *   Martin Erich Jobst - rework monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
@@ -114,6 +116,15 @@ public interface IDeviceManagementInteractor {
 	 * @throws CreateFBInstanceException the create fb instance exception
 	 */
 	void createFBInstance(FBDeploymentData fb, Resource res) throws DeploymentException;
+
+	/**
+	 * Write fb parameter.
+	 *
+	 * @param resource The resource
+	 * @param name     The qualified name, relative to the resource
+	 * @throws DeploymentException if an error occurred
+	 */
+	void writeFBParameter(Resource resource, String name, String value) throws DeploymentException;
 
 	/**
 	 * Write fb parameter.
@@ -245,16 +256,100 @@ public interface IDeviceManagementInteractor {
 	/***********************
 	 * monitoring commands
 	 ****************************************************/
+
+	/**
+	 * Read watches from device
+	 *
+	 * @return The device response
+	 * @throws DeploymentException if an error occurred
+	 */
 	Response readWatches() throws DeploymentException;
 
-	void addWatch(MonitoringBaseElement element) throws DeploymentException;
+	/**
+	 * Add a watch
+	 *
+	 * @param resource The resource
+	 * @param name     The qualified name, relative to the resource
+	 * @return true on success, false otherwise
+	 * @throws DeploymentException if an error occurred
+	 */
+	boolean addWatch(Resource resource, String name) throws DeploymentException;
 
-	void removeWatch(MonitoringBaseElement element) throws DeploymentException;
+	/**
+	 * Remove a watch
+	 *
+	 * @param resource The resource
+	 * @param name     The qualified name, relative to the resource
+	 * @return true on success, false otherwise
+	 * @throws DeploymentException if an error occurred
+	 */
+	boolean removeWatch(Resource resource, String name) throws DeploymentException;
 
-	void triggerEvent(MonitoringBaseElement element) throws DeploymentException;
+	/**
+	 * Trigger an event
+	 *
+	 * @param resource The resource
+	 * @param name     The qualified name, relative to the resource
+	 * @throws DeploymentException if an error occurred
+	 */
+	void triggerEvent(Resource resource, String name) throws DeploymentException;
 
-	void forceValue(MonitoringBaseElement element, String value) throws DeploymentException;
+	/**
+	 * Force a watch value
+	 *
+	 * @param resource The resource
+	 * @param name     The qualified name, relative to the resource
+	 * @param value    The value to force
+	 * @throws DeploymentException if an error occurred
+	 */
+	void forceValue(Resource resource, String name, String value) throws DeploymentException;
 
-	void clearForce(MonitoringBaseElement element) throws DeploymentException;
+	/**
+	 * Clear the force of a watch value
+	 *
+	 * @param resource The resource
+	 * @param name     The qualified name, relative to the resource
+	 * @throws DeploymentException if an error occurred
+	 */
+	void clearForce(Resource resource, String name) throws DeploymentException;
 
+	/**
+	 * @deprecated use {@link #addWatch(Resource, String)} instead
+	 */
+	@Deprecated(forRemoval = true)
+	default void addWatch(final MonitoringBaseElement element) throws DeploymentException {
+		element.setOffline(!addWatch(element.getPort().getResource(), element.getQualifiedString()));
+	}
+
+	/**
+	 * @deprecated use {@link #removeWatch(Resource, String)} instead
+	 */
+	@Deprecated(forRemoval = true)
+	default void removeWatch(final MonitoringBaseElement element) throws DeploymentException {
+		element.setOffline(!removeWatch(element.getPort().getResource(), element.getQualifiedString()));
+	}
+
+	/**
+	 * @deprecated use {@link #triggerEvent(Resource, String)} instead
+	 */
+	@Deprecated(forRemoval = true)
+	default void triggerEvent(final MonitoringBaseElement element) throws DeploymentException {
+		triggerEvent(element.getPort().getResource(), element.getQualifiedString());
+	}
+
+	/**
+	 * @deprecated use {@link #forceValue(Resource, String, String)} instead
+	 */
+	@Deprecated(forRemoval = true)
+	default void forceValue(final MonitoringBaseElement element, final String value) throws DeploymentException {
+		forceValue(element.getPort().getResource(), element.getQualifiedString(), value);
+	}
+
+	/**
+	 * @deprecated use {@link #clearForce(Resource, String)} instead
+	 */
+	@Deprecated(forRemoval = true)
+	default void clearForce(final MonitoringBaseElement element) throws DeploymentException {
+		clearForce(element.getPort().getResource(), element.getQualifiedString());
+	}
 }

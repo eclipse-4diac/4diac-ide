@@ -16,19 +16,14 @@ import org.eclipse.osgi.util.NLS;
 
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
-
+	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.deployment.debug.messages"; //$NON-NLS-1$
 	public static String DeploymentProcess_ExeceptionOccured;
+	public static String DeploymentProcess_StillRunning;
 	public static String DeploymentProcess_Terminated;
-
 	public static String DeploymentStreamsProxy_ConnectedToDevice;
-
 	public static String DeploymentStreamsProxy_DeployedElements;
-
 	public static String DeploymentStreamsProxy_Deploying;
-
 	public static String DeploymentStreamsProxy_DisconnectedFromDevice;
-
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

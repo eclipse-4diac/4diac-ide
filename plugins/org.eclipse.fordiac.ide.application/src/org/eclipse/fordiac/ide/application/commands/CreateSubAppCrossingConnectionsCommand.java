@@ -31,7 +31,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -121,9 +123,27 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 	@Override
 	public void execute() {
-		final IInterfaceElement left = buildPath(source, sourceNetworks, destination, false);
-		final IInterfaceElement right = buildPath(destination, destinationNetworks, source, true);
+		final DataType commonType = resolveGenericDataType();
+
+		final IInterfaceElement left = buildPath(source, sourceNetworks, destination, false,
+				commonType != null ? commonType : source.getType());
+		final IInterfaceElement right = buildPath(destination, destinationNetworks, source, true,
+				commonType != null ? commonType : destination.getType());
 		createConnection(match, left, right);
+	}
+
+	private DataType resolveGenericDataType() {
+		if (IecTypes.GenericTypes.isAnyType(source.getType())
+				&& !IecTypes.GenericTypes.isAnyType(destination.getType())) {
+			return destination.getType();
+		}
+
+		if (!IecTypes.GenericTypes.isAnyType(source.getType())
+				&& IecTypes.GenericTypes.isAnyType(destination.getType())) {
+			return source.getType();
+		}
+
+		return null;
 	}
 
 	private static boolean isSwapNeeded(final IInterfaceElement source, final IInterfaceElement destination,
@@ -198,7 +218,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 	// build left or right path as seen from the matching network
 	private IInterfaceElement buildPath(final IInterfaceElement element, final List<FBNetwork> networks,
-			final IInterfaceElement oppositePin, final boolean isRightPath) {
+			final IInterfaceElement oppositePin, final boolean isRightPath, final DataType commonType) {
 		IInterfaceElement ie = element;
 		FBNetwork network = networks.get(0);
 		int i = 0;
@@ -211,7 +231,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 			if (existingConnection != null) {
 				ie = existingConnection;
 			} else {
-				final IInterfaceElement createdPin = createInterfaceElement(isRightPath, ie, subapp);
+				final IInterfaceElement createdPin = createInterfaceElement(isRightPath, ie, subapp, commonType);
 
 				if (isRightPath) {
 					createConnection(network, createdPin, ie);
@@ -339,7 +359,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 	}
 
 	private IInterfaceElement createInterfaceElement(final boolean isRightPath, final IInterfaceElement ie,
-			final SubApp subapp) {
+			final SubApp subapp, final DataType commonType) {
 
 		if (emptyPinAlreadyExists(subapp, ie, isRightPath)) {
 			return subapp.getInterfaceElement(ie.getName());
@@ -347,7 +367,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 		final boolean isInOut = source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar();
 
-		final CreateSubAppInterfaceElementCommand pinCmd = new CreateSubAppInterfaceElementCommand(ie.getType(),
+		final CreateSubAppInterfaceElementCommand pinCmd = new CreateSubAppInterfaceElementCommand(commonType,
 				source.getName(), subapp.getInterface(), isRightPath, isInOut, ArraySizeHelper.getArraySize(source),
 				-1);
 

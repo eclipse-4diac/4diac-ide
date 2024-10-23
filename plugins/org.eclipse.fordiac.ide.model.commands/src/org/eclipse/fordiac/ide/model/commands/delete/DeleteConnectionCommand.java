@@ -176,4 +176,8 @@ public class DeleteConnectionCommand extends Command implements ScopedCommand {
 		return Stream.of(connectionParent, connection, source, destination).filter(Objects::nonNull)
 				.collect(Collectors.toUnmodifiableSet());
 	}
+
+	public int getElementIndex() {
+		return elementIndex;
+	}
 }

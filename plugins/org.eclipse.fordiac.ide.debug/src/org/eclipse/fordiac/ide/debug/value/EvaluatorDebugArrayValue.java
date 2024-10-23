@@ -19,8 +19,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IIndexedValue;
 import org.eclipse.debug.core.model.IVariable;
-import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
+import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue;
 
 public final class EvaluatorDebugArrayValue extends EvaluatorDebugStructuredValue implements IIndexedValue {
@@ -28,18 +28,18 @@ public final class EvaluatorDebugArrayValue extends EvaluatorDebugStructuredValu
 	private final List<EvaluatorDebugVariable> elements;
 
 	public EvaluatorDebugArrayValue(final ArrayValue value, final String expression,
-			final EvaluatorDebugTarget target) {
+			final IEvaluatorDebugTarget target) {
 		super(value, target);
-		elements = IntStream.rangeClosed(value.getStart(), value.getEnd()).mapToObj(
-				index -> new EvaluatorDebugVariable(value.get(index), createSubExpression(expression, index), target))
+		elements = IntStream.rangeClosed(value.getStart(), value.getEnd())
+				.mapToObj(index -> target.createVariable(value.get(index), createSubExpression(expression, index)))
 				.toList();
 	}
 
 	public EvaluatorDebugArrayValue(final ArrayValue value, final EvaluatorDebugVariable variable) {
 		super(value, variable);
-		elements = IntStream.rangeClosed(value.getStart(), value.getEnd())
-				.mapToObj(index -> new EvaluatorDebugVariable(value.get(index),
-						createSubExpression(variable.getExpression(), index), variable))
+		elements = IntStream
+				.rangeClosed(value.getStart(), value.getEnd()).mapToObj(index -> variable
+						.createSubVariable(value.get(index), createSubExpression(variable.getExpression(), index)))
 				.toList();
 	}
 

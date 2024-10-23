@@ -97,6 +97,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command impleme
 		connectionCreateCmd.setDestination(getNewDestination());
 		connectionCreateCmd.setArrangementConstraints(con.getRoutingData());
 		connectionCreateCmd.setVisible(con.isVisible());
+		connectionCreateCmd.setElementIndex(parent.getConnectionIndex(con));
 		connectionCreateCmd.execute(); // perform adding the connection first to preserve any error markers
 		deleteConnectionCmd.execute();
 		copyAttributes(connectionCreateCmd.getConnection(), deleteConnectionCmd.getConnection());

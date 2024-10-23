@@ -41,7 +41,7 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
-public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebugTarget {
+public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IEvaluatorDebugTarget {
 	private final String name;
 	private final ILaunch launch;
 	private final EvaluatorProcess process;
@@ -77,6 +77,7 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 		return debugger;
 	}
 
+	@Override
 	public long getVariableUpdateCount() {
 		return variableUpdateCount.get();
 	}

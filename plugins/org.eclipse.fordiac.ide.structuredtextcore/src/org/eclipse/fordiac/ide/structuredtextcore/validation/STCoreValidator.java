@@ -817,8 +817,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		final var receiverExpression = memberAccessExpr.getReceiver();
 		final DataType accessType = (DataType) memberAccessExpr.getResultType();
 		final DataType receiverType = (DataType) receiverExpression.getResultType();
-		// Valid target receiver is a variable or a function name usable as variable
+		// Valid target receiver is a variable, an array access or a function name
+		// usable as variable
 		if (memberAccessExpr.getReceiver() instanceof STMemberAccessExpression
+				|| memberAccessExpr.getReceiver() instanceof STArrayAccessExpression
 				|| (memberAccessExpr.getReceiver() instanceof final STFeatureExpression featureExpression
 						&& !(featureExpression.isCall()))) {
 			checkMultibitPartialExpression(expression, accessType, receiverType);

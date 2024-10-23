@@ -18,7 +18,7 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
-import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
 public class DeploymentFunctionFBEvaluator extends DeploymentFBEvaluator<FunctionFBType> {
 
@@ -43,8 +43,8 @@ public class DeploymentFunctionFBEvaluator extends DeploymentFBEvaluator<Functio
 
 	@Override
 	protected void updateWatch(final Port port) {
-		final MonitoringElement monitoringElement = getMonitoringElements().get(port.getName());
-		if (monitoringElement != null && monitoringElement.getPort().getInterfaceElement().isIsInput()) {
+		final IInterfaceElement element = getType().getInterfaceList().getInterfaceElement(port.getName());
+		if (element != null && element.isIsInput()) {
 			return; // ignore inputs
 		}
 		super.updateWatch(port);

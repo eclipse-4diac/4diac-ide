@@ -82,9 +82,11 @@ public class MultiPageEditorContentOutlinePage extends Page
 	}
 
 	private PageRecord createPage(final IEditorPart editorPart) {
-		final IContentOutlinePage page = Adapters.adapt(editorPart, IContentOutlinePage.class);
-		if (page != null) {
-			return createPage(editorPart, page);
+		if (editorPart != this.editorPart) {
+			final IContentOutlinePage page = Adapters.adapt(editorPart, IContentOutlinePage.class);
+			if (page != null) {
+				return createPage(editorPart, page);
+			}
 		}
 		return createPage(editorPart, defaultPage);
 	}

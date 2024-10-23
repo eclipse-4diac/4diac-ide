@@ -413,7 +413,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		if (dirty && system != null) {
 			((SystemEntry) system.getTypeEntry()).setSystem(null);
 			system = null;
-			SystemManager.INSTANCE.notifyListeners();
 		}
 	}
 

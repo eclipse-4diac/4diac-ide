@@ -99,7 +99,12 @@ public final class VariableOperations {
 	}
 
 	public static Variable<?> newVariable(final String name, final Value value) {
-		return newVariable(name, value.getType(), value);
+		return switch (value.getType()) {
+		case final DataType dataType when GenericTypes.isAnyType(dataType) -> throw new UnsupportedOperationException(
+				MessageFormat.format(Messages.VariableOperations_UnsupportedType, name, value.getType().getName()));
+		case null -> throw new NullPointerException(Messages.VariableOperations_TypeMustNotBeNull);
+		default -> newVariable(name, value.getType(), value);
+		};
 	}
 
 	public static Variable<?> newVariable(final ITypedElement element) throws EvaluatorException {

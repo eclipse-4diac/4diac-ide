@@ -38,23 +38,22 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 	private long updateCount;
 
 	public EvaluatorDebugVariable(final Variable<?> variable, final String expression,
-			final EvaluatorDebugTarget debugTarget) {
+			final IEvaluatorDebugTarget debugTarget) {
 		this(variable, expression, null, debugTarget);
 	}
 
-	public EvaluatorDebugVariable(final Variable<?> variable, final String expression,
-			final EvaluatorDebugVariable parent) {
-		this(variable, expression, parent, parent.getDebugTarget());
-	}
-
-	private EvaluatorDebugVariable(final Variable<?> variable, final String expression,
-			final EvaluatorDebugVariable parent, final EvaluatorDebugTarget debugTarget) {
+	protected EvaluatorDebugVariable(final Variable<?> variable, final String expression,
+			final EvaluatorDebugVariable parent, final IEvaluatorDebugTarget debugTarget) {
 		super(debugTarget);
 		this.variable = variable;
 		this.parent = parent;
 		this.expression = expression;
 		cachedValue = EvaluatorDebugValue.forValue(variable.getValue(), this);
 		updateCount = debugTarget.getVariableUpdateCount();
+	}
+
+	public EvaluatorDebugVariable createSubVariable(final Variable<?> variable, final String expression) {
+		return new EvaluatorDebugVariable(variable, expression, this, getDebugTarget());
 	}
 
 	@Override
@@ -111,7 +110,7 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 	public EvaluatorDebugValue getValue() {
 		final Value value = variable.getValue();
 		if (value != cachedValue.getInternalValue()) {
-			final EvaluatorDebugTarget debugTarget = getDebugTarget();
+			final IEvaluatorDebugTarget debugTarget = getDebugTarget();
 			if (!value.equals(cachedValue.getInternalValue())) {
 				updateCount = debugTarget.getVariableUpdateCount();
 			}
@@ -144,8 +143,8 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 	}
 
 	@Override
-	public EvaluatorDebugTarget getDebugTarget() {
-		return (EvaluatorDebugTarget) super.getDebugTarget();
+	public IEvaluatorDebugTarget getDebugTarget() {
+		return (IEvaluatorDebugTarget) super.getDebugTarget();
 	}
 
 	public final EvaluatorDebugVariable getParent() {

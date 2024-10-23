@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -31,16 +31,18 @@ public class GraphicalViewerNavigationLocationData {
 	}
 
 	public void restoreGraphicalViewerData(final EditPartViewer viewer) {
-		if (viewer.getRootEditPart() instanceof ScalableFreeformRootEditPart) {
-			((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getZoomManager().setZoom(zoom);
+		if (viewer.getRootEditPart() instanceof final ScalableFreeformRootEditPart rootEP) {
+			rootEP.getZoomManager().setZoom(zoom);
 		}
 
-		if (viewer.getControl() instanceof FigureCanvas) {
-			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
-			// we have to wait to set the scroll position until the editor is drawn and the canvas is setup
-			if (!canvas.isDisposed()) {
-				Display.getDefault().asyncExec(() -> canvas.scrollTo(location.x, location.y));
-			}
+		// we have to wait to set the scroll position until the editor is drawn and the
+		// canvas is setup
+		if ((viewer.getControl() instanceof final FigureCanvas canvas) && !canvas.isDisposed()) {
+			Display.getDefault().asyncExec(() -> {
+				if (!canvas.isDisposed()) {
+					canvas.scrollTo(location.x, location.y);
+				}
+			});
 		}
 
 	}
@@ -63,15 +65,14 @@ public class GraphicalViewerNavigationLocationData {
 	}
 
 	private static double getCurrentZoom(final GraphicalViewer viewer) {
-		if (viewer.getRootEditPart() instanceof ScalableFreeformRootEditPart) {
-			return ((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getZoomManager().getZoom();
+		if (viewer.getRootEditPart() instanceof final ScalableFreeformRootEditPart rootEP) {
+			return rootEP.getZoomManager().getZoom();
 		}
 		return 1.0;
 	}
 
 	private static Point getViewerLocation(final GraphicalViewer viewer) {
-		if (viewer.getControl() instanceof FigureCanvas) {
-			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+		if (viewer.getControl() instanceof final FigureCanvas canvas) {
 			return canvas.getViewport().getViewLocation();
 		}
 		return new Point(0, 0);
