@@ -15,20 +15,40 @@
 
   <build>
 	<plugins>
-		<plugin>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>tycho-surefire-plugin</artifactId>
-			<version>${tycho.version}</version>
-			<configuration>
-				<useUIHarness>true</useUIHarness>
-				<properties>
-					<property>
-						<name>product</name>
-						<value>org.eclipse.fordiac.ide.product</value>
-					</property>
-				</properties>
-			</configuration>
-		</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<target>
+						<artifact>
+							<groupId>org.eclipse.fordiac</groupId>
+							<artifactId>org.eclipse.fordiac.ide.product</artifactId>
+							<version>3.0.0-SNAPSHOT</version>
+						</artifact>
+					</target>
+					
+					<resolveWithExecutionEnvironmentConstraints>false</resolveWithExecutionEnvironmentConstraints>
+					
+					<dependency-resolution>	
+						<extraRequirements>
+							<requirement>
+								<type>eclipse-feature</type>
+								<id>org.eclipse.equinox.executable</id>
+								<versionRange>${equinox.executable.version}</versionRange>
+							</requirement>
+							<requirement>
+								<type>eclipse-feature</type>
+								<id>org.eclipse.platform</id>
+								<versionRange>${eclipse.platform.version}</versionRange>
+							</requirement>
+						</extraRequirements>
+						<profileProperties>
+							<org.eclipse.justj.buildtime>true</org.eclipse.justj.buildtime>
+						</profileProperties>
+					</dependency-resolution>
+				</configuration>
+			</plugin>
 	</plugins>
   </build>
 
