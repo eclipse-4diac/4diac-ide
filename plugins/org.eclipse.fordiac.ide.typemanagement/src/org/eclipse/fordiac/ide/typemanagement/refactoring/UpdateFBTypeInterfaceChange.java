@@ -42,8 +42,8 @@ public class UpdateFBTypeInterfaceChange extends AbstractCommandChange<FBType> i
 	private final EnumSet<ChangeState> state = EnumSet.noneOf(ChangeState.class);
 
 	public UpdateFBTypeInterfaceChange(final FBType type, final StructuredType struct) {
-		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteFBTypeInterface, type.getName()),
-				EcoreUtil.getURI(type), FBType.class);
+		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteFBTypeInterface, type.getName(),
+				struct.getName()), EcoreUtil.getURI(type), FBType.class);
 		this.struct = struct;
 		this.state.addAll(getDefaultSelection());
 	}
