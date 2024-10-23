@@ -12,15 +12,7 @@
   <artifactId>org.eclipse.fordiac.ide.test.ui</artifactId>
   <packaging>eclipse-test-plugin</packaging>
   <name> 4diac SWTBot UI Tests </name>
-  
-  <repositories>
-	<repository>
-		<id>tycho-latest</id>
-		<url>${tycho-repo.url}</url>
-		<layout>p2</layout>
-	</repository>
-  </repositories>
-  
+
   <build>
 	<plugins>
 		<plugin>
@@ -29,7 +21,12 @@
 			<version>${tycho.version}</version>
 			<configuration>
 				<useUIHarness>true</useUIHarness>
-				<product>org.eclipse.platform.ide</product>
+				<properties>
+					<property>
+						<name>product</name>
+						<value>org.eclipse.fordiac.ide.product</value>
+					</property>
+				</properties>
 			</configuration>
 		</plugin>
 	</plugins>
