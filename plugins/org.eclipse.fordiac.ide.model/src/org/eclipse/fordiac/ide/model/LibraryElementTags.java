@@ -196,6 +196,7 @@ public final class LibraryElementTags {
 	public static final String DIRECTLY_DERIVED_TYPE = "DirectlyDerivedType"; //$NON-NLS-1$
 	public static final String BASE_TYPE_ATTRIBUTE = "BaseType"; //$NON-NLS-1$
 	public static final String TARGET_ATTRIBUTE_DEFINITION = "TARGET"; //$NON-NLS-1$
+	public static final String ELEMENT_INOUTVISIBLEOUT = "VisibleOutSide"; //$NON-NLS-1$
 
 	private LibraryElementTags() {
 		throw new UnsupportedOperationException("Class should not be instantiated!"); //$NON-NLS-1$

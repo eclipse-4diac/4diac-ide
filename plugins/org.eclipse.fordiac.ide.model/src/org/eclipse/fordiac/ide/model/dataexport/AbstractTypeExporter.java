@@ -29,6 +29,7 @@ import java.io.OutputStream;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -192,8 +193,12 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	 * @param varDecl the var decl
 	 * @throws XMLStreamException
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	protected void addVarDeclaration(final VarDeclaration varDecl) throws XMLStreamException {
-		final boolean hasAttributes = !varDecl.getAttributes().isEmpty();
+		final boolean hasAttributes = !varDecl.getAttributes().isEmpty()
+				|| (varDecl.isInOutVar() && !varDecl.getInOutVarOpposite().getAttributes().isEmpty());
+		final boolean hasOutAttributes = varDecl.getAttributes().stream().map(Attribute::getName).toList()
+				.contains("VisibleOutSide"); //$NON-NLS-1$
 		if (hasAttributes) {
 			addStartElement(LibraryElementTags.VAR_DECLARATION_ELEMENT);
 		} else {
@@ -209,7 +214,13 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		}
 
 		if (hasAttributes) {
-			addAttributes(varDecl.getAttributes());
+			if (varDecl.isInOutVar() && !varDecl.getInOutVarOpposite().isVisible() && !hasOutAttributes) {
+				addAttributeElement(LibraryElementTags.ELEMENT_INOUTVISIBLEOUT, null, "false", null); //$NON-NLS-1$
+			} else if (varDecl.isInOutVar() && varDecl.getInOutVarOpposite().isVisible() && hasOutAttributes) {
+				varDecl.deleteAttribute(LibraryElementTags.ELEMENT_INOUTVISIBLEOUT);
+			} else {
+				addAttributes(varDecl.getAttributes());
+			}
 			addEndElement();
 		}
 	}
