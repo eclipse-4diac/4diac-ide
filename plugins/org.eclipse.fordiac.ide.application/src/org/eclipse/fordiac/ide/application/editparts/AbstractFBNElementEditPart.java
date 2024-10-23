@@ -387,10 +387,12 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			return interfaceList.getSockets().indexOf(interfaceEditPart.getModel());
 		}
 		if (interfaceEditPart.isVariable()) {
-			if (((VarDeclaration) interfaceEditPart.getModel()).isInOutVar()) {
-				return interfaceList.getInOutVars().indexOf(interfaceEditPart.getModel());
+			final VarDeclaration varDecl = (VarDeclaration) interfaceEditPart.getModel();
+			if (varDecl.isInOutVar()) {
+				return interfaceList.getInOutVars().stream().filter(VarDeclaration::isVisible).toList()
+						.indexOf(varDecl);
 			}
-			return interfaceList.getVisibleInputVars().indexOf(interfaceEditPart.getModel());
+			return interfaceList.getVisibleInputVars().indexOf(varDecl);
 		}
 		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
 			return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
@@ -408,10 +410,12 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			return interfaceList.getPlugs().indexOf(interfaceEditPart.getModel());
 		}
 		if (interfaceEditPart.isVariable()) {
-			if (((VarDeclaration) interfaceEditPart.getModel()).isInOutVar()) {
-				return interfaceList.getOutMappedInOutVars().indexOf(interfaceEditPart.getModel());
+			final VarDeclaration varDecl = (VarDeclaration) interfaceEditPart.getModel();
+			if (varDecl.isInOutVar()) {
+				return interfaceList.getOutMappedInOutVars().stream().filter(VarDeclaration::isVisible).toList()
+						.indexOf(varDecl);
 			}
-			return interfaceList.getVisibleOutputVars().indexOf(interfaceEditPart.getModel());
+			return interfaceList.getVisibleOutputVars().indexOf(varDecl);
 		}
 		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
 			return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
@@ -456,6 +460,14 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		final List<Object> elements = new ArrayList<>();
 		elements.add(getInstanceName());
 		elements.addAll(getModel().getInterface().getAllInterfaceElements());
+
+		final List<VarDeclaration> inoutInRemovalList = getModel().getInterface().getInOutVars().stream()
+				.filter(it -> !it.isVisible()).toList();
+		final List<VarDeclaration> inoutOutRemovalList = getModel().getInterface().getOutMappedInOutVars().stream()
+				.filter(it -> !it.isVisible()).toList();
+		elements.removeAll(inoutInRemovalList);
+		elements.removeAll(inoutOutRemovalList);
+
 		final List<VarDeclaration> inputRemovalList = getModel().getInterface().getInputVars().stream()
 				.filter(it -> !it.isVisible()).toList();
 		final List<VarDeclaration> outputRemovalList = getModel().getInterface().getOutputVars().stream()
