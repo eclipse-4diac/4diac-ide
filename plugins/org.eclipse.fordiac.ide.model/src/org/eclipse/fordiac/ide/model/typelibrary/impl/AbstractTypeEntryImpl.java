@@ -570,7 +570,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			if (fileCached.exists()) {
 				fileCached.setContents(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
 			} else {
-				checkAndCreateFolderHierarchy(fileCached, monitor);
+				checkAndCreateFolderHierarchy(fileCached.getParent(), monitor);
 				fileCached.create(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
 			}
 			updateDependencies(exporter.getDependencies());
@@ -605,17 +605,20 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	/**
-	 * Check if the folders in the file's path exist and if not create them
-	 * accordingly
+	 * Recursively check if the parents in the resource's path exist and if not
+	 * create them
 	 *
-	 * @param file    for which the path should be checked
+	 * @param container for which the path should be checked
 	 * @param monitor
 	 * @throws CoreException
 	 */
-	private static void checkAndCreateFolderHierarchy(final IFile file, final IProgressMonitor monitor)
+	private static void checkAndCreateFolderHierarchy(final IContainer container, final IProgressMonitor monitor)
 			throws CoreException {
-		final IContainer container = file.getParent();
-		if (!container.exists() && container instanceof final IFolder folder) {
+		if (container == null || container.exists()) {
+			return;
+		}
+		checkAndCreateFolderHierarchy(container.getParent(), monitor);
+		if (container instanceof final IFolder folder) {
 			folder.create(true, true, monitor);
 			folder.refreshLocal(IResource.DEPTH_ZERO, monitor);
 		}
