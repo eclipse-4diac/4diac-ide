@@ -46,7 +46,9 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.StyledString;
@@ -131,24 +133,27 @@ public class PackageInfoWidget extends TypeInfoWidget {
 			packageViewer.refresh();
 		}));
 
-		packageViewer = TableWidgetFactory.createPropertyTableViewer(compositeBottom);
-		configureImportsTableLayout(packageViewer);
+		final Composite tableComposite = new Composite(compositeBottom, SWT.NONE);
+		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		packageViewer = TableWidgetFactory.createPropertyTableViewer(tableComposite);
+		configureImportsTableLayout(packageViewer, tableComposite);
 		packageViewer.setContentProvider(new PackageContentProvider());
-		packageViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		buttons.bindToTableViewer(packageViewer, this, ref -> new AddNewImportCommand(getType()),
 				ref -> new DeleteImportCommand(getType().getCompilerInfo(), (Import) ref));
 	}
 
-	private void configureImportsTableLayout(final TableViewer viewer) {
-		final TableViewerColumn nameColumn = new TableViewerColumn(viewer, SWT.NONE);
+	private void configureImportsTableLayout(final TableViewer viewer, final Composite parentComposite) {
+		final TableViewerColumn nameColumn = new TableViewerColumn(viewer, SWT.FILL);
 		nameColumn.setLabelProvider(
 				new DelegatingStyledCellLabelProvider(new PackageLabelProvider(annotationModelSupplier)));
 		nameColumn.setEditingSupport(new ImportsEditingSupport(viewer, this::getTypeLibrary, this));
 		final TableColumn nameTableColumn = nameColumn.getColumn();
 		nameTableColumn.setText(FordiacMessages.Name);
-		nameTableColumn.setWidth(200);
-		nameTableColumn.setResizable(true);
+
+		final TableColumnLayout tableLayout = new TableColumnLayout();
+		tableLayout.setColumnData(nameTableColumn, new ColumnWeightData(100, true));
+		parentComposite.setLayout(tableLayout);
 	}
 
 	@Override
