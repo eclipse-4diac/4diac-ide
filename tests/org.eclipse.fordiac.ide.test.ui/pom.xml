@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <relativePath>../../pom.xml</relativePath>
+    <groupId>org.eclipse.fordiac</groupId>
+    <artifactId>parent</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>org.eclipse.fordiac.ide.test.ui</artifactId>
+  <packaging>eclipse-test-plugin</packaging>
+  <name> 4diac SWTBot UI Tests </name>
+
+  <build>
+  	<pluginManagement>
+		<plugins>
+	      <plugin>
+	        <groupId>org.eclipse.tycho</groupId>
+	        <artifactId>tycho-versions-plugin</artifactId>
+	        <version>4.0.8</version>
+	      </plugin>
+	      <plugin>
+	        <groupId>org.eclipse.tycho</groupId>
+	        <artifactId>tycho-surefire-plugin</artifactId>
+	        <version>4.0.8</version>
+	        <executions>
+	          <execution>
+	            <id>default-test</id>
+	            <phase>integration-test</phase>
+	            <goals>
+	              <goal>test</goal>
+	            </goals>
+	            <configuration>
+	              <useUIHarness>true</useUIHarness>
+	              <product>org.eclipse.fordiac.ide.product</product>
+	            </configuration>
+	          </execution>
+	        </executions>
+	        <configuration>
+	          <useUIHarness>true</useUIHarness>
+	          <product>org.eclipse.fordiac.ide.product</product>
+	        </configuration>
+	      </plugin>
+		</plugins>
+	</pluginManagement>
+  </build>
+
+</project> 
