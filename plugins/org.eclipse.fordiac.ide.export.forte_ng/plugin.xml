@@ -20,5 +20,6 @@
          </source>
       </factory>
    </extension>
+   <extension-point id="org.eclipse.fordiac.ide.export.forte_ng.util.LibraryElementHasherExtension" name="Extension point for Library Element Hasher" schema="schema/org.eclipse.fordiac.ide.export.forte_ng.util.LibraryElementHasherExtension.exsd"/>
 
 </plugin>
