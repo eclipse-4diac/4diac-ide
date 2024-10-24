@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 
 public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection {
+	// Typed SubApp/Type
 	@Override
 	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement,
 			final boolean isInput) {

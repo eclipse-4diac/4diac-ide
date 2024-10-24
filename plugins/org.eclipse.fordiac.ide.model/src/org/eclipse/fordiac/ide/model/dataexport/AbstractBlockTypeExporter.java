@@ -203,7 +203,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	private void addEvent(final Event event) throws XMLStreamException {
 		addStartElement(getEventElementName());
 		addNameAttribute(event.getName());
-		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, "Event"); //$NON-NLS-1$
+		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, event.getTypeName());
 		addCommentAttribute(event.getComment());
 		addWith(event);
 		addAttributes(event.getAttributes());
