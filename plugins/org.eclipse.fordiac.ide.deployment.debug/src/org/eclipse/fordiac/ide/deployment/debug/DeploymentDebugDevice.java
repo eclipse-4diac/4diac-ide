@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementExecutorService;
+import org.eclipse.fordiac.ide.deployment.interactors.SharedWatchDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -60,8 +61,8 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 		this.allowTerminate = allowTerminate;
 		this.pollingInterval = pollingInterval;
 
-		deviceManagementExecutor = IDeviceManagementExecutorService
-				.of(DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device));
+		deviceManagementExecutor = IDeviceManagementExecutorService.of(new SharedWatchDeviceManagementInteractor(
+				DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device)));
 
 		debugTarget.getLaunch().addDebugTarget(this);
 		fireCreationEvent();

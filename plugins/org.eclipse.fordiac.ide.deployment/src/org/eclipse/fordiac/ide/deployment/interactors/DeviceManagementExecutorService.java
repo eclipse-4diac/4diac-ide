@@ -25,23 +25,17 @@ import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
-import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public class DeviceManagementExecutorService implements IDeviceManagementExecutorService {
+public class DeviceManagementExecutorService extends AbstractDelegatingDeviceManagementInteractor
+		implements IDeviceManagementExecutorService {
 
-	private final IDeviceManagementInteractor delegate;
 	private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
 	protected DeviceManagementExecutorService(final IDeviceManagementInteractor delegate) {
-		this.delegate = delegate;
-	}
-
-	@Override
-	public boolean isConnected() {
-		return delegate.isConnected();
+		super(delegate);
 	}
 
 	@Override
@@ -52,16 +46,6 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public void disconnect() throws DeploymentException {
 		unwrap(disconnectAsync());
-	}
-
-	@Override
-	public void addDeploymentListener(final IDeploymentListener listener) {
-		delegate.addDeploymentListener(listener);
-	}
-
-	@Override
-	public void removeDeploymentListener(final IDeploymentListener listener) {
-		delegate.removeDeploymentListener(listener);
 	}
 
 	@Override
@@ -192,7 +176,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> connectAsync() {
 		return executorService.submit(() -> {
-			delegate.connect();
+			getDelegate().connect();
 			return null;
 		});
 	}
@@ -200,7 +184,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> disconnectAsync() {
 		return executorService.submit(() -> {
-			delegate.disconnect();
+			getDelegate().disconnect();
 			return null;
 		});
 	}
@@ -208,7 +192,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> createResourceAsync(final Resource resource) {
 		return executorService.submit(() -> {
-			delegate.createResource(resource);
+			getDelegate().createResource(resource);
 			return null;
 		});
 	}
@@ -217,7 +201,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	public Future<Void> writeResourceParameterAsync(final Resource resource, final String parameter,
 			final String value) {
 		return executorService.submit(() -> {
-			delegate.writeResourceParameter(resource, parameter, value);
+			getDelegate().writeResourceParameter(resource, parameter, value);
 			return null;
 		});
 	}
@@ -225,7 +209,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> writeDeviceParameterAsync(final Device device, final String parameter, final String value) {
 		return executorService.submit(() -> {
-			delegate.writeDeviceParameter(device, parameter, value);
+			getDelegate().writeDeviceParameter(device, parameter, value);
 			return null;
 		});
 	}
@@ -233,7 +217,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> createFBInstanceAsync(final FBDeploymentData fb, final Resource res) {
 		return executorService.submit(() -> {
-			delegate.createFBInstance(fb, res);
+			getDelegate().createFBInstance(fb, res);
 			return null;
 		});
 	}
@@ -242,7 +226,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	public Future<Void> writeFBParameterAsync(final Resource resource, final String name, final String value)
 			throws DeploymentException {
 		return executorService.submit(() -> {
-			delegate.writeFBParameter(resource, name, value);
+			getDelegate().writeFBParameter(resource, name, value);
 			return null;
 		});
 	}
@@ -251,7 +235,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	public Future<Void> writeFBParameterAsync(final Resource resource, final String value, final FBDeploymentData fb,
 			final VarDeclaration varDecl) throws DeploymentException {
 		return executorService.submit(() -> {
-			delegate.writeFBParameter(resource, value, fb, varDecl);
+			getDelegate().writeFBParameter(resource, value, fb, varDecl);
 			return null;
 		});
 	}
@@ -259,7 +243,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> createConnectionAsync(final Resource res, final ConnectionDeploymentData connectionData) {
 		return executorService.submit(() -> {
-			delegate.createConnection(res, connectionData);
+			getDelegate().createConnection(res, connectionData);
 			return null;
 		});
 	}
@@ -267,7 +251,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> startFBAsync(final Resource res, final FBDeploymentData fb) {
 		return executorService.submit(() -> {
-			delegate.startFB(res, fb);
+			getDelegate().startFB(res, fb);
 			return null;
 		});
 	}
@@ -275,7 +259,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> startResourceAsync(final Resource res) {
 		return executorService.submit(() -> {
-			delegate.startResource(res);
+			getDelegate().startResource(res);
 			return null;
 		});
 	}
@@ -283,7 +267,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> resetResourceAsync(final String resName) {
 		return executorService.submit(() -> {
-			delegate.resetResource(resName);
+			getDelegate().resetResource(resName);
 			return null;
 		});
 	}
@@ -291,7 +275,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> killResourceAsync(final String resName) {
 		return executorService.submit(() -> {
-			delegate.killResource(resName);
+			getDelegate().killResource(resName);
 			return null;
 		});
 	}
@@ -299,7 +283,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> stopResourceAsync(final Resource res) {
 		return executorService.submit(() -> {
-			delegate.stopResource(res);
+			getDelegate().stopResource(res);
 			return null;
 		});
 	}
@@ -307,7 +291,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> startDeviceAsync(final Device dev) {
 		return executorService.submit(() -> {
-			delegate.startDevice(dev);
+			getDelegate().startDevice(dev);
 			return null;
 		});
 	}
@@ -315,7 +299,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> deleteResourceAsync(final String resName) {
 		return executorService.submit(() -> {
-			delegate.deleteResource(resName);
+			getDelegate().deleteResource(resName);
 			return null;
 		});
 	}
@@ -323,7 +307,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> deleteFBAsync(final Resource res, final FBDeploymentData fb) {
 		return executorService.submit(() -> {
-			delegate.deleteFB(res, fb);
+			getDelegate().deleteFB(res, fb);
 			return null;
 		});
 	}
@@ -331,7 +315,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> deleteConnectionAsync(final Resource res, final ConnectionDeploymentData con) {
 		return executorService.submit(() -> {
-			delegate.deleteConnection(res, con);
+			getDelegate().deleteConnection(res, con);
 			return null;
 		});
 	}
@@ -339,14 +323,14 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> killDeviceAsync(final Device dev) {
 		return executorService.submit(() -> {
-			delegate.killDevice(dev);
+			getDelegate().killDevice(dev);
 			return null;
 		});
 	}
 
 	@Override
 	public Future<List<org.eclipse.fordiac.ide.deployment.devResponse.Resource>> queryResourcesAsync() {
-		return executorService.submit(delegate::queryResources);
+		return executorService.submit(getDelegate()::queryResources);
 	}
 
 	@Override
@@ -356,7 +340,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 			final TimeUnit unit) {
 		return (ScheduledFuture<Void>) executorService.scheduleAtFixedRate(() -> {
 			try {
-				consumer.accept(delegate.queryResources());
+				consumer.accept(getDelegate().queryResources());
 			} catch (final DeploymentException e) {
 				sneakyThrow(e); // will be wrapped in an ExecutionException anyway
 			}
@@ -365,7 +349,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 
 	@Override
 	public Future<Response> readWatchesAsync() {
-		return executorService.submit(delegate::readWatches);
+		return executorService.submit(getDelegate()::readWatches);
 	}
 
 	@Override
@@ -374,7 +358,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 			final TimeUnit unit) {
 		return (ScheduledFuture<Void>) executorService.scheduleAtFixedRate(() -> {
 			try {
-				consumer.accept(delegate.readWatches());
+				consumer.accept(getDelegate().readWatches());
 			} catch (final DeploymentException e) {
 				sneakyThrow(e); // will be wrapped in an ExecutionException anyway
 			}
@@ -383,18 +367,18 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 
 	@Override
 	public Future<Boolean> addWatchAsync(final Resource resource, final String name) {
-		return executorService.submit(() -> Boolean.valueOf(delegate.addWatch(resource, name)));
+		return executorService.submit(() -> Boolean.valueOf(getDelegate().addWatch(resource, name)));
 	}
 
 	@Override
 	public Future<Boolean> removeWatchAsync(final Resource resource, final String name) {
-		return executorService.submit(() -> Boolean.valueOf(delegate.removeWatch(resource, name)));
+		return executorService.submit(() -> Boolean.valueOf(getDelegate().removeWatch(resource, name)));
 	}
 
 	@Override
 	public Future<Void> triggerEventAsync(final Resource resource, final String name) {
 		return executorService.submit(() -> {
-			delegate.triggerEvent(resource, name);
+			getDelegate().triggerEvent(resource, name);
 			return null;
 		});
 	}
@@ -402,7 +386,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> forceValueAsync(final Resource resource, final String name, final String value) {
 		return executorService.submit(() -> {
-			delegate.forceValue(resource, name, value);
+			getDelegate().forceValue(resource, name, value);
 			return null;
 		});
 	}
@@ -410,7 +394,7 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public Future<Void> clearForceAsync(final Resource resource, final String name) {
 		return executorService.submit(() -> {
-			delegate.clearForce(resource, name);
+			getDelegate().clearForce(resource, name);
 			return null;
 		});
 	}
@@ -433,8 +417,8 @@ public class DeviceManagementExecutorService implements IDeviceManagementExecuto
 	@Override
 	public void close() throws Exception {
 		executorService.close();
-		if (delegate.isConnected()) {
-			delegate.disconnect();
+		if (getDelegate().isConnected()) {
+			getDelegate().disconnect();
 		}
 	}
 
