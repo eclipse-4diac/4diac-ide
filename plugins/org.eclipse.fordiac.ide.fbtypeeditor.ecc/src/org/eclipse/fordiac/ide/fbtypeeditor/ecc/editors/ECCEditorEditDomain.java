@@ -30,7 +30,6 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.requests.LocationRequest;
-import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.gef.tools.CreationTool;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -82,21 +81,17 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 		}
 
 		public void changeCursor() {
-			if (getDragTracker() instanceof ConnCreateDirectEditDragTrackerProxy) {
-				final ConnectionDragCreationTool tool = ((ConnCreateDirectEditDragTrackerProxy) getDragTracker())
-						.getConnectionTool();
-				tool.setDisabledCursor(SharedCursors.CURSOR_TREE_ADD);
+			if (getDragTracker() instanceof final ConnCreateDirectEditDragTrackerProxy ccdProxy) {
+				ccdProxy.getConnectionTool().setDisabledCursor(SharedCursors.CURSOR_TREE_ADD);
 			}
 		}
 	}
 
 	private static class TransitionStateCreationTool extends CreationTool {
-		private final ECC ecc;
 		private Point point;
 		private ECState sourceState;
 
-		public TransitionStateCreationTool(final ECC ecc) {
-			this.ecc = ecc;
+		public TransitionStateCreationTool() {
 			setFactory(new StateCreationFactory());
 			setUnloadWhenFinished(false);
 		}
@@ -112,7 +107,7 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 
 		public void performCreation() {
 			final ECState destState = (ECState) getFactory().getNewObject();
-			final CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, point, ecc);
+			final CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, point, getECC());
 			final CreateTransitionCommand createTransitionCommand = new CreateTransitionCommand(sourceState, destState,
 					null);
 			createTransitionCommand.setDestinationLocation(point);
@@ -122,11 +117,17 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 			setCurrentCommand(compCom);
 			performCreation(1);
 		}
+
+		private ECC getECC() {
+			if (sourceState != null) {
+				return sourceState.getECC();
+			}
+			return null;
+		}
 	}
 
 	private final StateCreationTool stateCreationTool = new StateCreationTool();
-	private final TransitionStateCreationTool transitionStateCreationTool = new TransitionStateCreationTool(
-			((ECCEditor) getEditorPart()).getModel());
+	private final TransitionStateCreationTool transitionStateCreationTool = new TransitionStateCreationTool();
 	private boolean transition = false;
 	private boolean createTransitionAndState = false;
 
