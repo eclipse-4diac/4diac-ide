@@ -12,10 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.watch;
 
+import java.util.stream.Stream;
+
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public final class DeploymentDebugWatchUtils {
 
@@ -34,6 +38,20 @@ public final class DeploymentDebugWatchUtils {
 			return qualifiedName.substring(resourceName.length() + 1);
 		}
 		return qualifiedName;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends IInterfaceElement> Stream<T> resolveSubappInterfaceConnections(final T element) {
+		if (!(element.getFBNetworkElement() instanceof final SubApp subapp)) {
+			return Stream.of(element);
+		}
+		subapp.loadSubAppNetwork(); // ensure network is loaded
+		if (element.isIsInput()) {
+			return (Stream<T>) element.getOutputConnections().stream().map(Connection::getDestination)
+					.flatMap(DeploymentDebugWatchUtils::resolveSubappInterfaceConnections);
+		}
+		return (Stream<T>) element.getInputConnections().stream().map(Connection::getSource)
+				.flatMap(DeploymentDebugWatchUtils::resolveSubappInterfaceConnections);
 	}
 
 	private DeploymentDebugWatchUtils() {

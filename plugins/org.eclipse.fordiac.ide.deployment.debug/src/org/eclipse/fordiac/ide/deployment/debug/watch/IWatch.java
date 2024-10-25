@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public interface IWatch extends IVariable, IDeploymentDebugElement {
@@ -101,7 +102,11 @@ public interface IWatch extends IVariable, IDeploymentDebugElement {
 	static IWatch watchFor(final String name, final INamedElement element, final DeploymentDebugDevice debugTarget)
 			throws EvaluatorException, UnsupportedOperationException {
 		return switch (element) {
+		case final Event event when event.getFBNetworkElement() instanceof SubApp ->
+			new SubAppEventWatch(name, event, debugTarget);
 		case final Event event -> new EventWatch(name, event, debugTarget);
+		case final VarDeclaration varDeclaration when varDeclaration.getFBNetworkElement() instanceof SubApp ->
+			new SubAppVarDeclarationWatch(name, varDeclaration, debugTarget);
 		case final VarDeclaration varDeclaration -> new VarDeclarationWatch(name, varDeclaration, debugTarget);
 		case final FBNetworkElement networkElement -> new FBNetworkElementWatch(name, networkElement, debugTarget);
 		default -> throw new UnsupportedOperationException("Unsupported element: " + element.eClass().getName()); //$NON-NLS-1$
