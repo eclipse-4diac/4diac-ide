@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -258,10 +259,11 @@ public final class FordiacErrorMarker {
 	 * Get the originating model element relative to an existing root object.
 	 *
 	 * @param marker The marker
+	 * @param root   The root element
 	 * @return The target or null if no valid attribute is present.
 	 * @see Diagnostic#getData()
 	 */
-	public static EObject getTargetRelative(final IMarker marker, final EObject root) {
+	public static EObject getTargetRelative(final IMarker marker, final LibraryElement root) {
 		final URI targetUri = FordiacErrorMarker.getTargetUri(marker);
 		if (targetUri != null) {
 			final SegmentSequence segments = SegmentSequence.create("/", targetUri.fragment()); //$NON-NLS-1$

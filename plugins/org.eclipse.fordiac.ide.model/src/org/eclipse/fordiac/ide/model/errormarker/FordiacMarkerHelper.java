@@ -25,12 +25,10 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
@@ -88,22 +86,6 @@ public final class FordiacMarkerHelper {
 			return getLocation(object) + "/" + feature.getName(); //$NON-NLS-1$
 		}
 		return getLocation(object);
-	}
-
-	/**
-	 * Get the workspace resource for an object
-	 *
-	 * @param object The object
-	 * @return The workspace resource or null if not applicable
-	 */
-	public static IResource getResource(final EObject object) {
-		if (object != null && object.eResource() != null) {
-			final URI uri = EcoreUtil.getURI(object);
-			if (uri.isPlatformResource()) {
-				return ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true)));
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -273,15 +255,6 @@ public final class FordiacMarkerHelper {
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError("Could not create error markers", e); //$NON-NLS-1$
 		}
-	}
-
-	public static void updateMarkers(final IResource resource, final List<ErrorMarkerBuilder> builders) {
-		updateMarkers(resource, FordiacErrorMarker.IEC61499_MARKER, builders);
-	}
-
-	public static void updateMarkers(final IResource resource, final String type,
-			final List<ErrorMarkerBuilder> builders) {
-		updateMarkers(resource, type, builders, false);
 	}
 
 	public static void updateMarkers(final IResource resource, final String type,
