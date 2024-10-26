@@ -13,17 +13,24 @@
 package org.eclipse.fordiac.ide.gef.annotation;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public class FordiacMarkerGraphicalAnnotationModel extends ResourceMarkerGraphicalAnnotationModel {
 
-	public FordiacMarkerGraphicalAnnotationModel(final IResource resource) {
+	private final Supplier<LibraryElement> libraryElementSupplier;
+
+	public FordiacMarkerGraphicalAnnotationModel(final IResource resource,
+			final Supplier<LibraryElement> libraryElementSupplier) {
 		super(resource);
+		this.libraryElementSupplier = Objects.requireNonNull(libraryElementSupplier);
+		reload();
 	}
 
 	@Override
@@ -35,10 +42,9 @@ public class FordiacMarkerGraphicalAnnotationModel extends ResourceMarkerGraphic
 		return null;
 	}
 
-	@SuppressWarnings("static-method") // subclasses may override
 	protected Object findTarget(final IMarker marker) {
 		try {
-			return FordiacErrorMarker.getTargetEditable(marker);
+			return FordiacErrorMarker.getTargetRelative(marker, libraryElementSupplier.get());
 		} catch (final Exception e) {
 			return null;
 		}

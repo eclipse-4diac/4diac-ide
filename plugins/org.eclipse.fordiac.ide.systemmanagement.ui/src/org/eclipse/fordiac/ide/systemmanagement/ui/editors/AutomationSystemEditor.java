@@ -438,7 +438,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 				system.getTypeEntry().eAdapters().add(adapter);
 			}
 			setPartName(TypeEntry.getTypeNameFromFile(fileEI.getFile()));
-			annotationModel = new FordiacMarkerGraphicalAnnotationModel(fileEI.getFile());
+			annotationModel = new FordiacMarkerGraphicalAnnotationModel(fileEI.getFile(), () -> system);
 			validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
 			pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
 					.forEach(e -> e.setInput(fileEI));

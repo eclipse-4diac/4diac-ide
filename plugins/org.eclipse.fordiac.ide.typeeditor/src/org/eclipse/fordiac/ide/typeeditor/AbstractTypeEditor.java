@@ -419,7 +419,8 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		final TypeEditorInput typeEditorInput = checkEditorInput(input);
 		if (isValidTypeEditorInput(typeEditorInput)) {
 			typeEditorInput.getTypeEntry().eAdapters().add(adapter);
-			annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEditorInput.getFile());
+			annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEditorInput.getFile(),
+					typeEditorInput::getContent);
 			validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
 			if (getEditorPages() != null) {
 				getEditorPages().forEach(e -> e.setInput(typeEditorInput));
