@@ -232,7 +232,15 @@ public final class FordiacErrorMarker {
 	 * @see Diagnostic#getData()
 	 * @implNote This can be a resource-intensive operation since it may force to
 	 *           load the target file.
+	 * @deprecated The "editable" type may not be identical to the type currently
+	 *             used in editors due to automatic reload from disk on changes.
+	 *             However, it was often used this way. In the future, use
+	 *             {@link #getTargetRelative(IMarker, EObject)} and either get a
+	 *             private copy to edit the type via {@link #copyType()} or get the
+	 *             type directly from an editor via
+	 *             {@code Adapters.adapt(editor, LibraryElement.class)}.
 	 */
+	@Deprecated(since = "3.0.0", forRemoval = true)
 	public static EObject getTargetEditable(final IMarker marker) {
 		final URI targetUri = FordiacErrorMarker.getTargetUri(marker);
 		if (targetUri != null) {
