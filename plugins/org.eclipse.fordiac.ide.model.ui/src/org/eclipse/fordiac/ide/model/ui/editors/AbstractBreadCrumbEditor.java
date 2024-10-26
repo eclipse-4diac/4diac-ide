@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
@@ -275,7 +276,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 
 	@Override
 	public void gotoMarker(final IMarker marker) {
-		final EObject target = FordiacErrorMarker.getTargetEditable(marker);
+		final EObject target = FordiacErrorMarker.getTargetRelative(marker, getAdapter(LibraryElement.class));
 		gotoElement(target);
 	}
 

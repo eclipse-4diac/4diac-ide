@@ -190,7 +190,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	public void gotoMarker(final IMarker marker) {
-		final EObject target = FordiacErrorMarker.getTargetEditable(marker);
+		final EObject target = FordiacErrorMarker.getTargetRelative(marker, getType());
 		if (target != null) {
 			selectElement(target);
 		}
@@ -199,7 +199,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
 		if (FordiacErrorMarker.markerTargetsValue(marker)) {
-			final EObject target = FordiacErrorMarker.getTargetEditable(marker);
+			final EObject target = FordiacErrorMarker.getTargetRelative(marker, getType());
 			return EcoreUtil.isAncestor(getModel(), target);
 		}
 		return FordiacErrorMarker.markerTargetsFBNetworkElement(marker)
