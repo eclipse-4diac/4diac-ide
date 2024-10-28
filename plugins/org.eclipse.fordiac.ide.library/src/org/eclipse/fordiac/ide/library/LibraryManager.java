@@ -367,6 +367,9 @@ public enum LibraryManager {
 			return;
 		}
 		final Manifest projManifest = ManifestHelper.getOrCreateProjectManifest(project);
+		if (projManifest == null) {
+			return;
+		}
 		final IFolder libDirectory = project.getFolder(TYPE_LIB_FOLDER_NAME)
 				.getFolder(libManifest.getProduct().getSymbolicName());
 
