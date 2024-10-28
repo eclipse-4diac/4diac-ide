@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
+import org.eclipse.draw2d.AbstractBorder;
 import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.Graphics;
@@ -34,6 +35,7 @@ import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -147,6 +149,12 @@ public final class GraphicalAnnotationStyles {
 		annonFigure.repaint();
 	}
 
+	public static void setAnnotationImageBorder(final IFigure annonFigure, final Image image) {
+		findAnnotationBorder(annonFigure, AnnotationImageBorder.class).ifPresentOrElse(border -> border.setImage(image),
+				() -> addAnnotationBorder(annonFigure, new AnnotationImageBorder(image)));
+		annonFigure.repaint();
+	}
+
 	public interface AnnotationBorder extends Border {
 		// marker interface
 	}
@@ -249,6 +257,38 @@ public final class GraphicalAnnotationStyles {
 				dy = distance;
 			}
 			return dy;
+		}
+	}
+
+	public static class AnnotationImageBorder extends AbstractBorder implements AnnotationBorder {
+		private static final Insets INSETS = new Insets();
+		private Image image;
+
+		public AnnotationImageBorder(final Image image) {
+			this.image = Objects.requireNonNull(image);
+		}
+
+		@Override
+		public Insets getInsets(final IFigure figure) {
+			// we want 0 insets so that the feedback border is not changing the size of the
+			// annotated figure
+			return INSETS;
+		}
+
+		@Override
+		public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
+			final Rectangle rect = getPaintRectangle(figure, insets);
+			final int x = rect.x;
+			final int y = rect.y;
+			graphics.drawImage(image, x, y);
+		}
+
+		public Image getImage() {
+			return image;
+		}
+
+		public void setImage(final Image image) {
+			this.image = image;
 		}
 	}
 
