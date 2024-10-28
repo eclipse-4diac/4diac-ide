@@ -46,6 +46,7 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	@Override
 	protected void createEditPolicies() {
+		super.createEditPolicies();
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		// handles constraint changes (e.g. moving and/or resizing) of model
 		// elements and creation of new model elements

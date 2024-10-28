@@ -23,26 +23,18 @@ import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart.FBNetworkMarqueeDragTracker;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
-import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.tools.MarqueeSelectionTool;
 import org.eclipse.jface.viewers.StructuredSelection;
 
@@ -75,7 +67,7 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			((Notifier) getModel()).eAdapters().add(adapter);
+			getModel().eAdapters().add(adapter);
 		}
 	}
 
@@ -83,7 +75,7 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			((Notifier) getModel()).eAdapters().remove(adapter);
+			getModel().eAdapters().remove(adapter);
 		}
 	}
 
@@ -140,40 +132,6 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		final FBNetworkMarqueeDragTracker dragTracker = new ContainerMarqueeDragTracker(this);
 		dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
 		return dragTracker;
-	}
-
-	@Override
-	public void performRequest(final Request request) {
-		final Object type = request.getType();
-		if ((type == RequestConstants.REQ_DIRECT_EDIT || type == RequestConstants.REQ_OPEN)
-				&& (request instanceof final SelectionRequest selReq)) {
-			performDirectEdit(selReq);
-		} else {
-			super.performRequest(request);
-		}
-	}
-
-	private void performDirectEdit(final SelectionRequest request) {
-		final NewInstanceDirectEditManager directEditManager = createDirectEditManager();
-		directEditManager.updateRefPosition(
-				new org.eclipse.swt.graphics.Point(request.getLocation().x, request.getLocation().y));
-		if (request.getExtendedData().isEmpty()) {
-			directEditManager.show();
-		} else {
-			final Object key = request.getExtendedData().keySet().iterator().next();
-			if (key instanceof final String string) {
-				directEditManager.show(string);
-			}
-		}
-	}
-
-	private NewInstanceDirectEditManager createDirectEditManager() {
-		return new NewInstanceDirectEditManager(this, getTypeLibrary(), false);
-	}
-
-	private TypeLibrary getTypeLibrary() {
-		final EObject root = EcoreUtil.getRootContainer(getContainerElement());
-		return (root instanceof final LibraryElement le) ? le.getTypeEntry().getTypeLibrary() : null;
 	}
 
 	public abstract FBNetworkElement getContainerElement();

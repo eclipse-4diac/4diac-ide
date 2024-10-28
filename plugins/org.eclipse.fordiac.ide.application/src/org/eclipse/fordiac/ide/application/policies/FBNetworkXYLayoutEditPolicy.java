@@ -196,7 +196,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Command getCloneCommand(final ChangeBoundsRequest request) {
 		final CopyPasteData copyPasteData = new CopyPasteData(getFBNetwork());
-		request.getEditParts().stream().map(n -> (EObject) (((EditPart) n).getModel())).forEach(m -> {
+		request.getEditParts().stream().map(n -> (EObject) (n.getModel())).forEach(m -> {
 			if (m instanceof final FBNetworkElement el) {
 				copyPasteData.elements().add(el);
 			}

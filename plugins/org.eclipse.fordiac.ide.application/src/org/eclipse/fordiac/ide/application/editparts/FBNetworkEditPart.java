@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -33,8 +33,9 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.application.policies.AbstractCreateInstanceDirectEditPolicy;
+import org.eclipse.fordiac.ide.application.policies.FBNetworkCreateInstanceDirectEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
@@ -55,32 +56,38 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 	/** The adapter. */
 	private Adapter adapter;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate() */
+	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
+	 */
 	@Override
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			((Notifier) getModel()).eAdapters().add(getContentAdapter());
+			getModel().eAdapters().add(getContentAdapter());
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate() */
+	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
+	 */
 	@Override
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			((Notifier) getModel()).eAdapters().remove(getContentAdapter());
+			getModel().eAdapters().remove(getContentAdapter());
 
 		}
 	}
 
-	/** Gets the content adapter.
+	/**
+	 * Gets the content adapter.
 	 *
-	 * @return the content adapter */
+	 * @return the content adapter
+	 */
 	protected Adapter getContentAdapter() {
 		if (adapter == null) {
 			adapter = new AdapterImpl() {
@@ -104,9 +111,11 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 		return adapter;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#refresh() */
+	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#refresh()
+	 */
 	@Override
 	public void refresh() {
 		super.refresh();
@@ -122,9 +131,11 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 		}
 	}
 
-	/** Creates the EditPolicies used for this EditPart.
+	/**
+	 * Creates the EditPolicies used for this EditPart.
 	 *
-	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies() */
+	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
+	 */
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
@@ -132,6 +143,7 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 		// handles constraint changes of model elements and creation of new
 		// model elements
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBNetworkXYLayoutEditPolicy());
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new FBNetworkCreateInstanceDirectEditPolicy());
 	}
 
 	private static final int BASE_WIDTH = 400;
@@ -150,7 +162,8 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 			if (newBounds.y > 0) {
 				newBounds.y = 0;
 			}
-			// get the size of the feedback/handle layer and use it to calculate our size, this is needed when stuff is
+			// get the size of the feedback/handle layer and use it to calculate our size,
+			// this is needed when stuff is
 			// moved around or
 			FreeformLayer layer = (FreeformLayer) getLayer(LayerConstants.FEEDBACK_LAYER);
 			layer.validate();
@@ -160,7 +173,8 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 			newBounds.union(layer.getFreeformExtent());
 
 			final Rectangle resultingBounds = calculateModuloExtent(newBounds);
-			// it is important to keep the width and height in the constraints to -1 otherwise it will never be
+			// it is important to keep the width and height in the constraints to -1
+			// otherwise it will never be
 			// recalculated
 			figure.getParent().setConstraint(figure, new Rectangle(resultingBounds.x, resultingBounds.y, -1, -1));
 			return resultingBounds.getSize();
@@ -224,7 +238,7 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 		createCommentContainer(mainFigure);
 
 		final IFigure root = super.createFigure();
-		root.setBorder(null);  // we don't want a border here
+		root.setBorder(null); // we don't want a border here
 		root.add(mainFigure);
 		root.setConstraint(mainFigure, new Rectangle(0, 0, -1, -1));
 
@@ -312,7 +326,10 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 		if (((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 				|| (request.getType() == RequestConstants.REQ_OPEN))
 				&& (request instanceof final SelectionRequest selectionRequest)) {
-			((FBNetworkRootEditPart) getParent()).performDirectEdit(selectionRequest);
+			if (getEditPolicy(
+					EditPolicy.DIRECT_EDIT_ROLE) instanceof final AbstractCreateInstanceDirectEditPolicy createInstanceDEP) {
+				createInstanceDEP.performDirectEdit(selectionRequest);
+			}
 		} else {
 			super.performRequest(request);
 		}

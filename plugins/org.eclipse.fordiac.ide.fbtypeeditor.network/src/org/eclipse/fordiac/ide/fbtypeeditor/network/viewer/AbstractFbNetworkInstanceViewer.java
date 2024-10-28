@@ -170,9 +170,7 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 
 	@Override
 	protected ScalableFreeformRootEditPart createRootEditPart() {
-		return new FBNetworkRootEditPart(getModel(), null, // viewers don't need a palette to simplify things just set
-				// it null
-				getSite(), getActionRegistry()) {
+		return new FBNetworkRootEditPart(getModel(), getSite(), getActionRegistry()) {
 			@Override
 			protected IFigure createFigure() {
 				final IFigure viewPort = super.createFigure();

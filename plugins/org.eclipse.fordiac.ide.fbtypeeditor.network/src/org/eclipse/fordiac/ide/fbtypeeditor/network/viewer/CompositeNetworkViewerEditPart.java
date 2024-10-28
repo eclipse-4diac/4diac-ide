@@ -34,6 +34,7 @@ public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 
 	@Override
 	protected void createEditPolicies() {
+		// we don not want any parent edit policies
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new NetworkViewerLayoutPolicy());
 	}

@@ -18,6 +18,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
+import org.eclipse.fordiac.ide.application.policies.AbstractContainerCreateInstanceDirectEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.GroupXYLayoutPolicy;
 import org.eclipse.fordiac.ide.gef.figures.AbstractShadowBorder;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
@@ -46,7 +47,7 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 	protected void createEditPolicies() {
 		super.createEditPolicies();
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new GroupXYLayoutPolicy());
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractCreateInstanceDirectEditPolicy() {
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractContainerCreateInstanceDirectEditPolicy() {
 			@Override
 			public Command getElementCreateCommand(final TypeEntry type, final Point refPoint) {
 				return new ResizeGroupOrSubappCommand(this.getHost(),

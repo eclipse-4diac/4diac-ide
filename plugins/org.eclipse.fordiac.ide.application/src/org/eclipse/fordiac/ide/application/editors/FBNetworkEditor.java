@@ -87,7 +87,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	@Override
 	protected ScalableFreeformRootEditPart createRootEditPart() {
-		return new FBNetworkRootEditPart(getModel(), getTypeLibrary(), getSite(), getActionRegistry());
+		return new FBNetworkRootEditPart(getModel(), getSite(), getActionRegistry());
 	}
 
 	@Override

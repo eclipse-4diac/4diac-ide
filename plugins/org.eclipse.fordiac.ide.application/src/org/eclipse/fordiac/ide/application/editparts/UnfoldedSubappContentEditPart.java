@@ -27,6 +27,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
+import org.eclipse.fordiac.ide.application.policies.AbstractContainerCreateInstanceDirectEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.SubAppContentLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
@@ -77,7 +78,7 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 		super.createEditPolicies();
 		// Add policy to handle drag&drop of fbs
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new SubAppContentLayoutEditPolicy());
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractCreateInstanceDirectEditPolicy() {
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractContainerCreateInstanceDirectEditPolicy() {
 			@Override
 			protected Command getElementCreateCommand(final TypeEntry value, final Point refPoint) {
 				return new ResizeGroupOrSubappCommand(getHost(), AbstractCreateFBNetworkElementCommand

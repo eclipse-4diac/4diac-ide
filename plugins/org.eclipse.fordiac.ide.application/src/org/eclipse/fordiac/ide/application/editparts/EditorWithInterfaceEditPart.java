@@ -46,6 +46,8 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.fordiac.ide.application.policies.AbstractCreateInstanceDirectEditPolicy;
+import org.eclipse.fordiac.ide.application.policies.FBNetworkCreateInstanceDirectEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
@@ -64,6 +66,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
@@ -245,6 +248,12 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 				&& (getParent().getViewer().getControl() != null)) {
 			getParent().getViewer().getControl().removeControlListener(controlListener);
 		}
+	}
+
+	@Override
+	protected void createEditPolicies() {
+		super.createEditPolicies();
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new FBNetworkCreateInstanceDirectEditPolicy());
 	}
 
 	@Override
@@ -589,7 +598,10 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		if (((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 				|| (request.getType() == RequestConstants.REQ_OPEN))
 				&& (request instanceof final SelectionRequest selReq)) {
-			((FBNetworkRootEditPart) getParent()).performDirectEdit(selReq);
+			if (getEditPolicy(
+					EditPolicy.DIRECT_EDIT_ROLE) instanceof final AbstractCreateInstanceDirectEditPolicy createInstanceDEP) {
+				createInstanceDEP.performDirectEdit(selReq);
+			}
 		} else {
 			super.performRequest(request);
 		}

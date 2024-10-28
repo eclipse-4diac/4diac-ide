@@ -47,6 +47,7 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	 */
 	@Override
 	protected void createEditPolicies() {
+		super.createEditPolicies();
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		// // handles constraint changes of model elements and creation of new
 		// // model elements
