@@ -1716,6 +1716,52 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SimpleECActionItemProvider simpleECActionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSimpleECActionAdapter() {
+		if (simpleECActionItemProvider == null) {
+			simpleECActionItemProvider = new SimpleECActionItemProvider(this);
+		}
+
+		return simpleECActionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECState} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SimpleECStateItemProvider simpleECStateItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECState}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSimpleECStateAdapter() {
+		if (simpleECStateItemProvider == null) {
+			simpleECStateItemProvider = new SimpleECStateItemProvider(this);
+		}
+
+		return simpleECStateItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

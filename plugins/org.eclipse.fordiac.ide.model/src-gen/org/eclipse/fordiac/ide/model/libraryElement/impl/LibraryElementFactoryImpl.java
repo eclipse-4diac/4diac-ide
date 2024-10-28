@@ -112,6 +112,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -245,6 +247,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.SERVICE_TRANSACTION: return createServiceTransaction();
 			case LibraryElementPackage.SERVICE_INTERFACE: return createServiceInterface();
 			case LibraryElementPackage.SERVICE_INTERFACE_FB_TYPE: return createServiceInterfaceFBType();
+			case LibraryElementPackage.SIMPLE_EC_ACTION: return createSimpleECAction();
+			case LibraryElementPackage.SIMPLE_EC_STATE: return createSimpleECState();
 			case LibraryElementPackage.SIMPLE_FB_TYPE: return createSimpleFBType();
 			case LibraryElementPackage.ST_ALGORITHM: return createSTAlgorithm();
 			case LibraryElementPackage.ST_FUNCTION: return createSTFunction();
@@ -1110,6 +1114,28 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public ServiceInterfaceFBType createServiceInterfaceFBType() {
 		ServiceInterfaceFBTypeImpl serviceInterfaceFBType = new ServiceInterfaceFBTypeImpl();
 		return serviceInterfaceFBType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SimpleECAction createSimpleECAction() {
+		SimpleECActionImpl simpleECAction = new SimpleECActionImpl();
+		return simpleECAction;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SimpleECState createSimpleECState() {
+		SimpleECStateImpl simpleECState = new SimpleECStateImpl();
+		return simpleECState;
 	}
 
 	/**

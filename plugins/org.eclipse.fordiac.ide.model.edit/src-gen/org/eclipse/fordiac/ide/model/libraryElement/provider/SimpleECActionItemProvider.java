@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,26 +23,42 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
+import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
+
+import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType} object.
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class SimpleFBTypeItemProvider extends BaseFBTypeItemProvider {
+public class SimpleECActionItemProvider 
+	extends ItemProviderAdapter
+	implements
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SimpleFBTypeItemProvider(AdapterFactory adapterFactory) {
+	public SimpleECActionItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -57,25 +73,26 @@ public class SimpleFBTypeItemProvider extends BaseFBTypeItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addSimpleECStatesPropertyDescriptor(object);
+			addAlgorithmPropertyDescriptor(object);
+			addOutputPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Simple EC States feature.
+	 * This adds a property descriptor for the Algorithm feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addSimpleECStatesPropertyDescriptor(Object object) {
+	protected void addAlgorithmPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SimpleFBType_simpleECStates_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_SimpleFBType_simpleECStates_feature", "_UI_SimpleFBType_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.SIMPLE_FB_TYPE__SIMPLE_EC_STATES,
+				 getString("_UI_SimpleECAction_algorithm_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_SimpleECAction_algorithm_feature", "_UI_SimpleECAction_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.SIMPLE_EC_ACTION__ALGORITHM,
 				 true,
 				 false,
 				 true,
@@ -85,14 +102,36 @@ public class SimpleFBTypeItemProvider extends BaseFBTypeItemProvider {
 	}
 
 	/**
-	 * This returns SimpleFBType.gif.
+	 * This adds a property descriptor for the Output feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOutputPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SimpleECAction_output_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_SimpleECAction_output_feature", "_UI_SimpleECAction_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.SIMPLE_EC_ACTION__OUTPUT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This returns SimpleECAction.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SimpleFBType")); //$NON-NLS-1$
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/SimpleECAction")); //$NON-NLS-1$
 	}
 
 	/**
@@ -103,10 +142,7 @@ public class SimpleFBTypeItemProvider extends BaseFBTypeItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((SimpleFBType)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_SimpleFBType_type") : //$NON-NLS-1$
-			getString("_UI_SimpleFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		return getString("_UI_SimpleECAction_type"); //$NON-NLS-1$
 	}
 
 
@@ -136,30 +172,14 @@ public class SimpleFBTypeItemProvider extends BaseFBTypeItemProvider {
 	}
 
 	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * Return the resource locator for this item provider's resources.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__METHODS;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2", //$NON-NLS-1$
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
+	public ResourceLocator getResourceLocator() {
+		return FordiacEditPlugin.INSTANCE;
 	}
 
 }

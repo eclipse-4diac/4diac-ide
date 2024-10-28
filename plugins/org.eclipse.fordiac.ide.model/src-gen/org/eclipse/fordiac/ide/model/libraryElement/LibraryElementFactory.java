@@ -675,6 +675,24 @@ public interface LibraryElementFactory extends EFactory {
 	ServiceInterfaceFBType createServiceInterfaceFBType();
 
 	/**
+	 * Returns a new object of class '<em>Simple EC Action</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Simple EC Action</em>'.
+	 * @generated
+	 */
+	SimpleECAction createSimpleECAction();
+
+	/**
+	 * Returns a new object of class '<em>Simple EC State</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Simple EC State</em>'.
+	 * @generated
+	 */
+	SimpleECState createSimpleECState();
+
+	/**
 	 * Returns a new object of class '<em>Simple FB Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -120,6 +120,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -625,6 +627,10 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateServiceInterface((ServiceInterface)value, diagnostics, context);
 			case LibraryElementPackage.SERVICE_INTERFACE_FB_TYPE:
 				return validateServiceInterfaceFBType((ServiceInterfaceFBType)value, diagnostics, context);
+			case LibraryElementPackage.SIMPLE_EC_ACTION:
+				return validateSimpleECAction((SimpleECAction)value, diagnostics, context);
+			case LibraryElementPackage.SIMPLE_EC_STATE:
+				return validateSimpleECState((SimpleECState)value, diagnostics, context);
 			case LibraryElementPackage.SIMPLE_FB_TYPE:
 				return validateSimpleFBType((SimpleFBType)value, diagnostics, context);
 			case LibraryElementPackage.ST_ALGORITHM:
@@ -2321,6 +2327,34 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(serviceInterfaceFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(serviceInterfaceFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateINamedElement_validateName(serviceInterfaceFBType, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateSimpleECAction(SimpleECAction simpleECAction, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(simpleECAction, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateSimpleECState(SimpleECState simpleECState, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(simpleECState, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(simpleECState, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(simpleECState, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(simpleECState, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(simpleECState, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(simpleECState, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(simpleECState, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(simpleECState, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(simpleECState, diagnostics, context);
+		if (result || diagnostics != null) result &= validateINamedElement_validateName(simpleECState, diagnostics, context);
 		return result;
 	}
 

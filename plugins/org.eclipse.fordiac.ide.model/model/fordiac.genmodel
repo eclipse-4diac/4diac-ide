@@ -750,7 +750,19 @@
           body="return this.equals(getService().getLeftInterface());"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceInterfaceFBType"/>
-    <genClasses ecoreClass="lib.ecore#//SimpleFBType"/>
+    <genClasses ecoreClass="lib.ecore#//SimpleECAction">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//SimpleECAction/algorithm"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//SimpleECAction/output"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//SimpleECAction/simpleECState"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//SimpleECState">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SimpleECState/simpleECActions"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//SimpleECState/inputEvent"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//SimpleECState/simpleFBType"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//SimpleFBType">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//SimpleFBType/simpleECStates"/>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//STAlgorithm"/>
     <genClasses ecoreClass="lib.ecore#//STFunction"/>
     <genClasses ecoreClass="lib.ecore#//STFunctionBody"/>
