@@ -813,6 +813,26 @@
 			layer="80"
 			styler="org.eclipse.fordiac.ide.deployment.debug.ui.annotation.WatchpointAnnotationStyler">
 		</style>
+		<style
+			annotationType="org.eclipse.fordiac.ide.deployment.debug.ui.annotation.watchValue"
+			layer="100"
+			styler="org.eclipse.fordiac.ide.deployment.debug.ui.annotation.WatchValueAnnotationStyler">
+		</style>
+	</extension>
+	<extension
+		point="org.eclipse.fordiac.ide.gef.graphicalAnnotationProvider">
+		<provider
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.annotation.WatchValueAnnotationProvider">
+			<enablement>
+				<adapt
+					type="org.eclipse.core.resources.IResource">
+					<test
+						property="org.eclipse.core.resources.extension"
+						value="sys">
+					</test>
+				</adapt>
+			</enablement>
+		</provider>
 	</extension>
 	<extension
 		point="org.eclipse.ui.preferencePages">

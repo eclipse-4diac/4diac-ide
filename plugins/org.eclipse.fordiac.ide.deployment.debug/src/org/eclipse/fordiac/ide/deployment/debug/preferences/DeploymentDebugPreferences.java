@@ -24,7 +24,7 @@ public final class DeploymentDebugPreferences {
 		return InstanceScope.INSTANCE.getNode(QUALIFIER).getInt(MONITORING_VALUE_TRANSPARENCY, 190);
 	}
 
-	public static boolean getMonitoringValueWriteThrough() {
+	public static boolean isMonitoringValueWriteThrough() {
 		return InstanceScope.INSTANCE.getNode(QUALIFIER).getBoolean(MONITORING_VALUE_WRITE_THROUGH, false);
 	}
 
