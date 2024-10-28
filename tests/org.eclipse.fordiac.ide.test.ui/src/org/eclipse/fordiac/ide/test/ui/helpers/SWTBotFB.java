@@ -178,6 +178,16 @@ public class SWTBotFB {
 	}
 
 	/**
+	 *
+	 * @param editor
+	 * @param fBname
+	 * @return
+	 */
+	public Rectangle getBoundsOfFBWithTolerance(final SWTBotGefEditor editor, final String fBname) {
+		return getBoundsOfFB(editor, fBname).expand(new Insets(TOLERANCE_SNAP_TO_GRID));
+	}
+
+	/**
 	 * Moves a Function Block to the given position
 	 *
 	 * @param editor
@@ -246,6 +256,11 @@ public class SWTBotFB {
 		return this;
 	}
 
+	/**
+	 *
+	 * @param editor
+	 * @return
+	 */
 	private static List<org.eclipse.draw2d.geometry.Point> getPositionOfSelectedElements(
 			final SWTBot4diacGefEditor editor) {
 		return editor.selectedEditParts().stream() //

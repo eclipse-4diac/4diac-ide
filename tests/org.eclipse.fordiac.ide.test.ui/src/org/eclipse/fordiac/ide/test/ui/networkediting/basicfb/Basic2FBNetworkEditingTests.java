@@ -209,37 +209,24 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		// drag rectangle over FBs, therefore FBs should be selected
 		editor.drag(50, 50, 400, 300);
 		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
-		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
+		final List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_CYCLE_FB));
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
 
-		// move selection by clicking on point within selection (120, 120) and drag to
-		// new Point (285, 85)
-		final Point pointFrom = new Point(120, 120);
-		final Point pointTo = new Point(250, 80);
-		editor.drag(pointFrom.x, pointFrom.y, pointTo.x, pointTo.y);
+		// move Fbs to new position by selecting them with a rectangle
+		final Point translation = new Point(130, -40);
+		fbBot.moveViaRectangle(editor, new Rectangle(50, 50, 400, 300), translation);
 
-		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
-		selectedEditParts = editor.selectedEditParts();
-		assertFalse(selectedEditParts.isEmpty());
-		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_CYCLE_FB));
-		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
-
-		// Calculation of translation
-		final int translationX = pointTo.x - pointFrom.x;
-		final int translationY = pointTo.y - pointFrom.y;
-
-		// Calculation of new Position of E_CYCLEs
-		final int absPos2Fb1X = absPos1Fb1.x + translationX + TOLERANCE_SNAP_TO_GRID;
-		final int absPos2Fb1Y = absPos1Fb1.y + translationY + TOLERANCE_SNAP_TO_GRID;
-		final Rectangle fb1Bounds2 = fbBot.getBoundsOfFB(editor, UITestNamesHelper.E_CYCLE_FB);
+		// check if translation was correct
+		final Rectangle fb1Bounds2 = fbBot.getBoundsOfFBWithTolerance(editor, UITestNamesHelper.E_CYCLE_FB);
+		final int absPos2Fb1X = absPos1Fb1.x + translation.x;
+		final int absPos2Fb1Y = absPos1Fb1.y + translation.y;
 		assertTrue(fb1Bounds2.contains(absPos2Fb1X, absPos2Fb1Y));
 
-		// Calculation of new Position of E_SR
-		final int absPos2Fb2X = absPos1Fb2.x + translationX + TOLERANCE_SNAP_TO_GRID;
-		final int absPos2Fb2Y = absPos1Fb2.y + translationY + TOLERANCE_SNAP_TO_GRID;
-		final Rectangle fb2Bounds2 = fbBot.getBoundsOfFB(editor, UITestNamesHelper.E_SR_FB);
+		final Rectangle fb2Bounds2 = fbBot.getBoundsOfFBWithTolerance(editor, UITestNamesHelper.E_SR_FB);
+		final int absPos2Fb2X = absPos1Fb2.x + translation.x;
+		final int absPos2Fb2Y = absPos1Fb2.y + translation.y;
 		assertTrue(fb2Bounds2.contains(absPos2Fb2X, absPos2Fb2Y));
 	}
 
