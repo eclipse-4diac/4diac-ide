@@ -18,8 +18,10 @@ package org.eclipse.fordiac.ide.application.policies;
 import java.util.List;
 
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.actions.CopyPasteData;
@@ -54,6 +56,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -122,14 +125,28 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	protected Command getCreateCommand(final CreateRequest request) {
 		if (null != request) {
 			final Object childClass = request.getNewObjectType();
-			final Rectangle constraint = (Rectangle) getConstraintFor(request);
+			final Point insertPoint = getInsertPoint(request);
 			final FBNetwork fbNetwork = getFBNetwork();
 			if ((fbNetwork != null) && (childClass instanceof final TypeEntry typeEntry)) {
-				return AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, fbNetwork,
-						constraint.getLocation().x, constraint.getLocation().y);
+				return AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, fbNetwork, insertPoint.x,
+						insertPoint.y);
 			}
 		}
 		return null;
+	}
+
+	protected Point getInsertPoint(final CreateRequest request) {
+		final Point insertPoint = ((Rectangle) getConstraintFor(request)).getTopLeft();
+		final SnapToHelper helper = getHost().getAdapter(SnapToHelper.class);
+		if (helper != null) {
+			getHost().getFigure().translateToAbsolute(insertPoint);
+			final PrecisionPoint preciseLocation = new PrecisionPoint(insertPoint);
+			final PrecisionPoint result = new PrecisionPoint(insertPoint);
+			helper.snapPoint(null, PositionConstants.HORIZONTAL | PositionConstants.VERTICAL, preciseLocation, result);
+			getHost().getFigure().translateToRelative(result);
+			return result;
+		}
+		return insertPoint;
 	}
 
 	@Override

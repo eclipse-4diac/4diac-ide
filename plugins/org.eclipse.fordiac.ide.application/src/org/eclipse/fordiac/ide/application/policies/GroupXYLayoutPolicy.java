@@ -37,9 +37,9 @@ public class GroupXYLayoutPolicy extends ContainerContentLayoutPolicy {
 	protected Command getCreateCommand(final CreateRequest request) {
 		if (null != request) {
 			final Object childClass = request.getNewObjectType();
-			final Point refPoint = ((Rectangle) getConstraintFor(request)).getTopLeft();
+			final Point insertPoint = getInsertPoint(request);
 			if (childClass instanceof final TypeEntry typeEntry) {
-				return new CreateFBElementInGroupCommand(typeEntry, getParentModel(), refPoint.x, refPoint.y);
+				return new CreateFBElementInGroupCommand(typeEntry, getParentModel(), insertPoint.x, insertPoint.y);
 			}
 		}
 		return null;

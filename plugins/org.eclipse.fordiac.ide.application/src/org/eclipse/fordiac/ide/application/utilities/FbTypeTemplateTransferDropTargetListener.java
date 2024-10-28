@@ -19,8 +19,6 @@
 package org.eclipse.fordiac.ide.application.utilities;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -28,10 +26,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.gef.EditPartViewer;
-import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
-import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.swt.dnd.DND;
 
@@ -39,18 +35,22 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 
 	private final IProject targetProject;
 
-	/** Constructs a listener on the specified viewer.
+	/**
+	 * Constructs a listener on the specified viewer.
 	 *
-	 * @param viewer the EditPartViewer */
+	 * @param viewer the EditPartViewer
+	 */
 	public FbTypeTemplateTransferDropTargetListener(final EditPartViewer viewer, final IProject targetProject) {
 		super(viewer);
 		this.targetProject = targetProject;
 	}
 
-	/** The purpose of a template is to be copied. Therefore, the Drop operation is set to <code>DND.DROP_COPY</code> by
-	 * default.
+	/**
+	 * The purpose of a template is to be copied. Therefore, the Drop operation is
+	 * set to <code>DND.DROP_COPY</code> by default.
 	 *
-	 * @see org.eclipse.gef.dnd.AbstractTransferDropTargetListener#handleDragOver() */
+	 * @see org.eclipse.gef.dnd.AbstractTransferDropTargetListener#handleDragOver()
+	 */
 	@Override
 	protected void handleDragOver() {
 		super.handleDragOver();
@@ -83,9 +83,11 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 		}
 	}
 
-	/** Overridden to select the created object.
+	/**
+	 * Overridden to select the created object.
 	 *
-	 * @see org.eclipse.gef.dnd.AbstractTransferDropTargetListener#handleDrop() */
+	 * @see org.eclipse.gef.dnd.AbstractTransferDropTargetListener#handleDrop()
+	 */
 	@Override
 	protected void handleDrop() {
 		if (!(getCurrentEvent().data instanceof FBTypeEntry) && !(getCurrentEvent().data instanceof SubAppTypeEntry)
@@ -96,24 +98,6 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 		}
 		super.handleDrop();
 		TemplateTransfer.getInstance().setTemplate(null);
-	}
-
-	/* The code in this method is based on a commit to the Eclipse Siriuse project by Laurent Redor
-	 * https://git.eclipse.org/c/sirius/org.eclipse.sirius.git/commit/?id= 278bcefbf04a5e93636b16b45ccce27e455cc3be */
-	@Override
-	protected void updateTargetRequest() {
-		super.updateTargetRequest();
-		if (null != getTargetEditPart()) {
-			final SnapToHelper helper = getTargetEditPart().getAdapter(SnapToHelper.class);
-			if (null != helper) {
-				final PrecisionPoint preciseLocation = new PrecisionPoint(getDropLocation());
-				final PrecisionPoint result = new PrecisionPoint(getDropLocation());
-				final CreateRequest req = getCreateRequest();
-				helper.snapPoint(req, PositionConstants.HORIZONTAL | PositionConstants.VERTICAL, preciseLocation,
-						result);
-				req.setLocation(result.getCopy());
-			}
-		}
 	}
 
 	@Override
