@@ -53,6 +53,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class DeploymentDebugDevice extends DeploymentDebugElement implements IDeploymentDebugTarget {
@@ -147,6 +148,11 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 
 	public long incrementVariableUpdateCount() {
 		return variableUpdateCount.incrementAndGet();
+	}
+
+	@Override
+	public TypeLibrary getTypeLibrary() {
+		return device.getAutomationSystem().getTypeLibrary();
 	}
 
 	@Override

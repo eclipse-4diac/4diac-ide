@@ -27,13 +27,13 @@ public abstract class CommonLaunchConfigurationDelegate extends LaunchConfigurat
 
 	@SuppressWarnings("static-method")
 	protected void launch(final Evaluator evaluator, final ILaunchConfiguration configuration, final String mode,
-			final ILaunch launch, final IProgressMonitor monitor) throws CoreException {
+			final ILaunch launch, final IResource resource, final IProgressMonitor monitor) throws CoreException {
 		if (ILaunchManager.RUN_MODE.equals(mode)) {
 			final EvaluatorProcess process = new EvaluatorProcess(configuration.getName(), evaluator, launch);
 			process.start();
 		} else if (ILaunchManager.DEBUG_MODE.equals(mode)) {
 			final EvaluatorDebugTarget debugTarget = new EvaluatorDebugTarget(configuration.getName(), evaluator,
-					launch);
+					launch, resource);
 			if (LaunchConfigurationAttributes.isStopOnFirstLine(configuration)) {
 				debugTarget.getDebugger().setSuspendOnFirstLine(true);
 			}

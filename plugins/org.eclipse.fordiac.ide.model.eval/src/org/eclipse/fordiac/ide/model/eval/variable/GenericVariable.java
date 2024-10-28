@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.eval.value.AnyValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class GenericVariable extends AbstractVariable<AnyValue> {
 	private Variable<AnyValue> variable;
@@ -38,17 +39,17 @@ public class GenericVariable extends AbstractVariable<AnyValue> {
 	}
 
 	@Override
-	public void setValue(final String value) {
+	public void setValue(final String value, final TypeLibrary typeLibrary) {
 		try {
-			variable.setValue(value);
+			variable.setValue(value, typeLibrary);
 		} catch (final Exception e) {
-			super.setValue(value);
+			super.setValue(value, typeLibrary);
 		}
 	}
 
 	@Override
-	public boolean validateValue(final String value) {
-		return variable.validateValue(value) || super.validateValue(value);
+	public boolean validateValue(final String value, final TypeLibrary typeLibrary) {
+		return variable.validateValue(value, typeLibrary) || super.validateValue(value, typeLibrary);
 	}
 
 	@Override

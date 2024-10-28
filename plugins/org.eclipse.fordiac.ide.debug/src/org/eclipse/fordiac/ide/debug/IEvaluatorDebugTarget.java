@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.debug;
 
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public interface IEvaluatorDebugTarget extends IDebugTarget {
 
@@ -23,6 +24,13 @@ public interface IEvaluatorDebugTarget extends IDebugTarget {
 	 * @return The count
 	 */
 	long getVariableUpdateCount();
+
+	/**
+	 * Get the type library
+	 *
+	 * @return The type library
+	 */
+	TypeLibrary getTypeLibrary();
 
 	default EvaluatorDebugVariable createVariable(final Variable<?> variable, final String expression) {
 		return new EvaluatorDebugVariable(variable, expression, this);

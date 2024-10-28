@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarkerDelta;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -40,19 +41,23 @@ import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IEvaluatorDebugTarget {
 	private final String name;
 	private final ILaunch launch;
+	private final IResource resource;
 	private final EvaluatorProcess process;
 	private final CommonEvaluatorDebugger debugger;
 	private final AtomicLong variableUpdateCount = new AtomicLong();
 
-	public EvaluatorDebugTarget(final String name, final Evaluator evaluator, final ILaunch launch)
-			throws CoreException {
+	public EvaluatorDebugTarget(final String name, final Evaluator evaluator, final ILaunch launch,
+			final IResource resource) throws CoreException {
 		super(null);
 		this.name = name;
 		this.launch = launch;
+		this.resource = resource;
 		process = new EvaluatorProcess(name, evaluator, launch);
 		debugger = new CommonEvaluatorDebugger(this);
 		process.getExecutor().attachDebugger(debugger);
@@ -84,6 +89,11 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IEval
 
 	public long incrementVariableUpdateCount() {
 		return variableUpdateCount.incrementAndGet();
+	}
+
+	@Override
+	public TypeLibrary getTypeLibrary() {
+		return TypeLibraryManager.INSTANCE.getTypeLibrary(resource.getProject());
 	}
 
 	@Override

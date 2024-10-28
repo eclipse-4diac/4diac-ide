@@ -59,7 +59,7 @@ public class STLaunchConfigurationDelegate extends CommonLaunchConfigurationDele
 			final var defaultArguments = getDefaultArguments(function);
 			final var variables = LaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
 			final Evaluator evaluator = createEvaluator(function, variables);
-			launch(evaluator, configuration, mode, launch, monitor);
+			launch(evaluator, configuration, mode, launch, resource, monitor);
 		}
 	}
 

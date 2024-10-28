@@ -106,6 +106,8 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.value.TypedValue;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 
 public final class ValueOperations {
@@ -1157,6 +1159,9 @@ public final class ValueOperations {
 		if (value == null) {
 			return defaultValue(type);
 		}
+		if (value instanceof final TypedValue typedValue) {
+			return castValue(wrapValue(typedValue.value(), typedValue.type()), type);
+		}
 		return switch (type) { // NOSONAR
 		case null -> null;
 		case final LrealType unused -> switch (value) {
@@ -1358,11 +1363,15 @@ public final class ValueOperations {
 	}
 
 	public static Value parseValue(final String value, final INamedElement type) {
+		return parseValue(value, type, null);
+	}
+
+	public static Value parseValue(final String value, final INamedElement type, final DataTypeLibrary typeLibrary) {
 		if (value == null || value.isEmpty()) {
 			return defaultValue(type);
 		}
 		if (type instanceof final DataType dataType) {
-			return wrapValue(new TypedValueConverter(dataType).toValue(value), type);
+			return wrapValue(new TypedValueConverter(dataType, typeLibrary).toTypedValue(value), type);
 		}
 		throw createUnsupportedTypeException(type);
 	}

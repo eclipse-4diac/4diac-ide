@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.variable;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.eval.value.EventValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class EventVariable extends AbstractVariable<EventValue> {
 	private EventValue value;
@@ -48,7 +49,7 @@ public class EventVariable extends AbstractVariable<EventValue> {
 	}
 
 	@Override
-	public void setValue(final String value) {
+	public void setValue(final String value, final TypeLibrary typeLibrary) {
 		setValue(Long.parseLong(value));
 	}
 
@@ -57,7 +58,7 @@ public class EventVariable extends AbstractVariable<EventValue> {
 	}
 
 	@Override
-	public boolean validateValue(final String value) {
+	public boolean validateValue(final String value, final TypeLibrary typeLibrary) {
 		try {
 			Long.parseLong(value);
 			return true;

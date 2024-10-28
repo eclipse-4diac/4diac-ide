@@ -114,6 +114,10 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 
 	@Override
 	public Object toValue(final String string) throws IllegalArgumentException {
+		return toTypedValue(string).value();
+	}
+
+	public TypedValue toTypedValue(final String string) throws IllegalArgumentException {
 		String value = string;
 		DataType valueType = type;
 		final Matcher matcher = TYPE_PREFIX_PATTERN.matcher(string);
@@ -130,11 +134,16 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 					MessageFormat.format(Messages.VALIDATOR_DatatypeRequiresTypeSpecifier, type.getName()));
 		}
 		final ValueConverter<?> delegate = getValueConverter(valueType);
-		return checkValue(valueType, string, delegate.toValue(value), strict);
+		return new TypedValue(valueType, checkValue(valueType, string, delegate.toValue(value), strict));
 	}
 
 	@Override
 	public Object toValue(final Scanner scanner)
+			throws IllegalArgumentException, NoSuchElementException, IllegalStateException {
+		return toTypedValue(scanner).value();
+	}
+
+	public TypedValue toTypedValue(final Scanner scanner)
 			throws IllegalArgumentException, NoSuchElementException, IllegalStateException {
 		DataType valueType = type;
 		if (scanner.findWithinHorizon(TYPE_PREFIX_PATTERN, 0) != null) {
@@ -149,7 +158,7 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 					MessageFormat.format(Messages.VALIDATOR_DatatypeRequiresTypeSpecifier, type.getName()));
 		}
 		final ValueConverter<?> delegate = getValueConverter(valueType);
-		return checkValue(valueType, "<scanner>", delegate.toValue(scanner), strict); //$NON-NLS-1$
+		return new TypedValue(valueType, checkValue(valueType, "<scanner>", delegate.toValue(scanner), strict)); //$NON-NLS-1$
 	}
 
 	@SuppressWarnings("unchecked")

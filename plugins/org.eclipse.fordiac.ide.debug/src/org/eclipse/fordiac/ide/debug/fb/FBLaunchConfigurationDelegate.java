@@ -53,7 +53,7 @@ public class FBLaunchConfigurationDelegate extends CommonLaunchConfigurationDele
 			fBLaunchEventQueue.setDebugTimeValue(FBLaunchConfigurationAttributes.getClockMode(configuration),
 					FBLaunchConfigurationAttributes.getClockInterval(configuration));
 			evaluator.setEventQueue(fBLaunchEventQueue);
-			launch(evaluator, configuration, mode, launch, monitor);
+			launch(evaluator, configuration, mode, launch, resource, monitor);
 		}
 	}
 

@@ -170,7 +170,7 @@ public class DeploymentFBEvaluator<T extends FBType> extends FBEvaluator<T> {
 			throws IllegalArgumentException {
 		final Variable<?> variable = getVariables().get(varDeclaration.getName());
 		if (variable != null) {
-			variable.setValue(newValue);
+			variable.setValue(newValue, getType().getTypeLibrary());
 		}
 	}
 

@@ -59,7 +59,7 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 	@Override
 	public void setValue(final String expression) throws DebugException {
 		try {
-			variable.setValue(expression);
+			variable.setValue(expression, getDebugTarget().getTypeLibrary());
 		} catch (final Exception e) {
 			throw new DebugException(Status.error(e.getMessage(), e));
 		}
@@ -89,7 +89,7 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 
 	@Override
 	public boolean verifyValue(final String expression) {
-		return variable.validateValue(expression);
+		return variable.validateValue(expression, getDebugTarget().getTypeLibrary());
 	}
 
 	@Override

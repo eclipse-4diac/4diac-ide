@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public abstract class AbstractVariable<T extends Value> implements Variable<T> {
 	private final String name;
@@ -54,14 +55,25 @@ public abstract class AbstractVariable<T extends Value> implements Variable<T> {
 	}
 
 	@Override
-	public void setValue(final String value) {
-		setValue(ValueOperations.parseValue(value, getType()));
+	public final void setValue(final String value) throws IllegalArgumentException {
+		setValue(value, null);
 	}
 
 	@Override
-	public boolean validateValue(final String value) {
+	public void setValue(final String value, final TypeLibrary typeLibrary) {
+		setValue(ValueOperations.parseValue(value, getType(),
+				typeLibrary != null ? typeLibrary.getDataTypeLibrary() : null));
+	}
+
+	@Override
+	public final boolean validateValue(final String value) {
+		return validateValue(value, null);
+	}
+
+	@Override
+	public boolean validateValue(final String value, final TypeLibrary typeLibrary) {
 		try {
-			ValueOperations.parseValue(value, getType());
+			ValueOperations.parseValue(value, getType(), typeLibrary != null ? typeLibrary.getDataTypeLibrary() : null);
 		} catch (final Exception e) {
 			return false;
 		}

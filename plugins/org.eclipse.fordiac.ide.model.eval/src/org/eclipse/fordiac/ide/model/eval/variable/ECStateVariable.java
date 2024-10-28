@@ -16,6 +16,7 @@ import org.eclipse.fordiac.ide.model.eval.value.ECStateValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class ECStateVariable extends AbstractVariable<ECStateValue> {
 	public static final String NAME = "__STATE"; //$NON-NLS-1$
@@ -49,7 +50,7 @@ public class ECStateVariable extends AbstractVariable<ECStateValue> {
 	}
 
 	@Override
-	public void setValue(final String value) {
+	public void setValue(final String value, final TypeLibrary typeLibrary) {
 		this.value = new ECStateValue(
 				getType().getECC().getECState().stream().filter(state -> state.getName().equals(value)).findFirst()
 						.orElseThrow(() -> new IllegalArgumentException(
@@ -57,7 +58,7 @@ public class ECStateVariable extends AbstractVariable<ECStateValue> {
 	}
 
 	@Override
-	public boolean validateValue(final String value) {
+	public boolean validateValue(final String value, final TypeLibrary typeLibrary) {
 		return getType().getECC().getECState().stream().anyMatch(state -> state.getName().equals(value));
 	}
 

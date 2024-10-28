@@ -38,7 +38,7 @@ public abstract class AbstractVariableWatch extends DeploymentDebugVariable impl
 
 	protected void updateValue(final String value) {
 		try {
-			getInternalVariable().setValue(value);
+			getInternalVariable().setValue(value, getDebugTarget().getTypeLibrary());
 			aliveCount = getDebugTarget().getVariableUpdateCount();
 		} catch (final Exception e) {
 			FordiacLogHelper.logWarning("Invalid watch value for " + getQualifiedName() + ": " + value, e); //$NON-NLS-1$ //$NON-NLS-2$
