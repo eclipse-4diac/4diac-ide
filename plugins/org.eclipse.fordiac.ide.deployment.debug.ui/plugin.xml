@@ -798,4 +798,20 @@
 			value="192,28,40">
 		</colorDefinition>
 	</extension>
+	<extension
+		point="org.eclipse.ui.editors.annotationTypes">
+		<type
+			markerType="org.eclipse.fordiac.ide.deployment.debug.watchpointMarker"
+			name="org.eclipse.fordiac.ide.deployment.debug.ui.watchpoint"
+			super="org.eclipse.debug.core.breakpoint">
+		</type>
+	</extension>
+	<extension
+		point="org.eclipse.fordiac.ide.gef.graphicalAnnotationStyle">
+		<style
+			annotationType="org.eclipse.fordiac.ide.deployment.debug.ui.watchpoint"
+			layer="80"
+			styler="org.eclipse.fordiac.ide.deployment.debug.ui.annotation.WatchpointAnnotationStyler">
+		</style>
+	</extension>
 </plugin>
