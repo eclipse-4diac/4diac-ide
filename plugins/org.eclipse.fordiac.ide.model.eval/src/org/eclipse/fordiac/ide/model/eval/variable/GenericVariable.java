@@ -38,11 +38,29 @@ public class GenericVariable extends AbstractVariable<AnyValue> {
 	}
 
 	@Override
+	public void setValue(final String value) {
+		try {
+			variable.setValue(value);
+		} catch (final Exception e) {
+			super.setValue(value);
+		}
+	}
+
+	@Override
+	public boolean validateValue(final String value) {
+		return variable.validateValue(value) || super.validateValue(value);
+	}
+
+	@Override
 	@SuppressWarnings("unchecked")
 	public void setValue(final Value value) {
 		Objects.requireNonNull(value);
-		this.variable = (Variable<AnyValue>) VariableOperations.newVariable(getName(),
-				ValueOperations.castValue(value, getType()));
+		if (variable != null && variable.getType().equals(value.getType())) {
+			variable.setValue(value);
+		} else {
+			variable = (Variable<AnyValue>) VariableOperations.newVariable(getName(),
+					ValueOperations.castValue(value, getType()));
+		}
 	}
 
 	@Override
