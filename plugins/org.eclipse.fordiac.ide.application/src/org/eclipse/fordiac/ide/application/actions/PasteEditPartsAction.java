@@ -21,8 +21,9 @@
 package org.eclipse.fordiac.ide.application.actions;
 
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.CopyElementsToGroupCommand;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
@@ -31,11 +32,13 @@ import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
-import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
 import org.eclipse.fordiac.ide.application.utilities.GetEditPartFromGraficalViewerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.ui.FordiacClipboard;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -90,26 +93,46 @@ public class PasteEditPartsAction extends SelectionAction {
 					return new ResizeGroupOrSubappCommand(editPart, cmd);
 				}
 			}
+			final GraphicalViewer graphicalViewer = getWorkbenchPart().getAdapter(GraphicalViewer.class);
+			if (graphicalViewer.getEditPartForModel(fbNetwork) instanceof final GraphicalEditPart graphicalEditPart) {
+				pasteRefPosition = getSnapCorrectPastePos(graphicalEditPart);
+			}
 			return new PasteCommand(getClipboardContents(), fbNetwork, pasteRefPosition);
 		}
 		return new CompoundCommand();
 	}
 
 	private Command createPasteCommandForSubApp(final UnfoldedSubappContentEditPart subAppContentEP) {
-		final Rectangle subAppContentBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(subAppContentEP);
-		final Point pastePointInSubApp = new Point(pasteRefPosition.x - subAppContentBounds.x,
-				pasteRefPosition.y - subAppContentBounds.y);
+		final org.eclipse.draw2d.geometry.Point subAppOffset = getOffsetPosition(subAppContentEP);
+		final Point pastePointInSubApp = getSnapCorrectPastePos(subAppContentEP);
+		pastePointInSubApp.x -= subAppOffset.x;
+		pastePointInSubApp.y -= subAppOffset.y;
 		return new PasteCommand(getClipboardContents(), subAppContentEP.getModel(), pastePointInSubApp);
 	}
 
 	private Command createPasteCommandForGroup(final GroupContentEditPart group) {
 		final PasteCommand pasteCommand = new PasteCommand(getClipboardContents(),
-				group.getModel().getGroup().getFbNetwork(), pasteRefPosition);
+				group.getModel().getGroup().getFbNetwork(), getSnapCorrectPastePos(group));
 		return new CopyElementsToGroupCommand(group.getModel().getGroup(), pasteCommand, getOffsetPosition(group));
 	}
 
-	private static org.eclipse.draw2d.geometry.Point getOffsetPosition(final GroupContentEditPart group) {
-		return ContainerContentLayoutPolicy.getContainerAreaBounds(group).getTopLeft();
+	private Point getSnapCorrectPastePos(final GraphicalEditPart gep) {
+		final SnapToHelper helper = gep.getAdapter(SnapToHelper.class);
+		if (helper != null) {
+			final org.eclipse.draw2d.geometry.Point refPoint = new org.eclipse.draw2d.geometry.Point(pasteRefPosition.x,
+					pasteRefPosition.y);
+			gep.getFigure().translateToAbsolute(refPoint);
+			final PrecisionPoint preciseLocation = new PrecisionPoint(refPoint);
+			final PrecisionPoint result = new PrecisionPoint(refPoint);
+			helper.snapPoint(null, PositionConstants.HORIZONTAL | PositionConstants.VERTICAL, preciseLocation, result);
+			gep.getFigure().translateToRelative(result);
+			return new Point(result.x, result.y);
+		}
+		return pasteRefPosition;
+	}
+
+	private static org.eclipse.draw2d.geometry.Point getOffsetPosition(final GraphicalEditPart gep) {
+		return gep.getFigure().getClientArea().getTopLeft();
 	}
 
 	private static CopyPasteData getClipboardContents() {
