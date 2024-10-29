@@ -25,16 +25,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.InstanceNameEditPart;
 import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
-import org.eclipse.fordiac.ide.test.ui.helpers.UITestPinHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFB;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestPinHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
+import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -167,7 +169,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	public void selectFbViaMouseLeftClickRectangleOverFB() {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_D_FF_TREE_ITEM, new Point(200, 200));
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
 		// drag rectangle next to FB, therefore FB should not be selected
 		editor.drag(40, 40, 80, 80);
@@ -195,7 +197,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	public void selectFbViaMouseLeftClickOnFB() {
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(150, 250));
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 
 		// check bounds of FB
 		editor.getEditPart(UITestNamesHelper.E_SWITCH_FB);
@@ -268,12 +270,12 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertNotNull(editor);
 		assertNotNull(editor.getEditPart(UITestNamesHelper.E_CYCLE_FB));
 		editor.click(UITestNamesHelper.E_CYCLE_FB);
-		SWTBotGefEditPart parent = editor.getEditPart(UITestNamesHelper.E_CYCLE_FB).parent();
+		final SWTBotGefEditPart parent = editor.getEditPart(UITestNamesHelper.E_CYCLE_FB).parent();
 		assertNotNull(parent);
 
-		IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
+		final IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
 		assertNotNull(figure);
-		Rectangle fbBounds = figure.getBounds().getCopy();
+		final Rectangle fbBounds = figure.getBounds().getCopy();
 		assertNotNull(fbBounds);
 		figure.translateToAbsolute(fbBounds);
 		assertEquals(pos1.x, fbBounds.x);
@@ -285,15 +287,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		parent.click();
 
 		final Point pos2 = new Point(85, 85);
-		editor.drag(parent, pos2.x, pos2.y);
-		final org.eclipse.draw2d.geometry.Point posToCheck2 = new org.eclipse.draw2d.geometry.Point(pos2);
-
-		parent = editor.getEditPart(UITestNamesHelper.E_CYCLE_FB).parent();
-		figure = ((GraphicalEditPart) parent.part()).getFigure();
-		fbBounds = figure.getBounds().getCopy();
-		figure.translateToAbsolute(fbBounds);
-		assertEquals(posToCheck2.x, fbBounds.x);
-		assertEquals(posToCheck2.y, fbBounds.y);
+		fbBot.moveSingleFB(editor, UITestNamesHelper.E_CYCLE_FB, pos2);
 	}
 
 	/**
@@ -487,7 +481,6 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void connectionCanBeFoundAfterMovingFB() {
-		// in progress
 		final Point pos1 = new Point(100, 150);
 		final SWTBotFB fbBot = new SWTBotFB(bot);
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_TABLE_CTRL_TREE_ITEM, pos1);
@@ -505,38 +498,27 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		assertTrue(connectBot.checkIfConnectionCanBeFound(UITestPinHelper.CLKO, UITestPinHelper.INIT));
 		assertTrue(connectBot.checkIfConnectionCanBeFound(UITestPinHelper.CV, UITestPinHelper.N));
 
-		assertNotNull(editor);
-		assertNotNull(editor.getEditPart(UITestNamesHelper.E_TABLE_CTRL_FB));
-		editor.click(UITestNamesHelper.E_TABLE_CTRL_FB);
-		SWTBotGefEditPart parent = editor.getEditPart(UITestNamesHelper.E_TABLE_CTRL_FB).parent();
-		assertNotNull(parent);
-
-		IFigure figure = ((GraphicalEditPart) parent.part()).getFigure();
-		assertNotNull(figure);
-		Rectangle fbBounds = figure.getBounds().getCopy();
-		assertNotNull(fbBounds);
-		figure.translateToAbsolute(fbBounds);
-		assertEquals(pos1.x, fbBounds.x);
-		assertEquals(pos1.y, fbBounds.y);
-
-		final org.eclipse.draw2d.geometry.Point posToCheck1 = new org.eclipse.draw2d.geometry.Point(pos1);
-		assertEquals(posToCheck1.x, fbBounds.x);
-		assertEquals(posToCheck1.y, fbBounds.y);
-		parent.click();
-
 		final Point pos2 = new Point(85, 85);
-		editor.drag(parent, pos2.x, pos2.y);
-		final org.eclipse.draw2d.geometry.Point posToCheck2 = new org.eclipse.draw2d.geometry.Point(pos2);
+		fbBot.moveSingleFB(editor, UITestNamesHelper.E_TABLE_CTRL_FB, pos2);
 
-		parent = editor.getEditPart(UITestNamesHelper.E_TABLE_CTRL_FB).parent();
-		figure = ((GraphicalEditPart) parent.part()).getFigure();
-		fbBounds = figure.getBounds().getCopy();
-		figure.translateToAbsolute(fbBounds);
-		assertEquals(posToCheck2.x, fbBounds.x);
-		assertEquals(posToCheck2.y, fbBounds.y);
-
+		// check if moving has worked correctly
 		assertTrue(connectBot.checkIfConnectionCanBeFound(UITestPinHelper.CLKO, UITestPinHelper.INIT));
 		assertTrue(connectBot.checkIfConnectionCanBeFound(UITestPinHelper.CV, UITestPinHelper.N));
+
+		final Point translation = new Point(pos1.x - pos2.x, pos1.y - pos2.y);
+		fbBot.selectFBWithFBNameInEditor((SWTBot4diacGefEditor) editor, UITestNamesHelper.E_TABLE_CTRL_FB);
+		final ConnectionEditPart connection1 = connectBot.findConnection(UITestPinHelper.CLKO, UITestPinHelper.INIT);
+		assertNotNull(connection1);
+		final ConnectionEditPart connection2 = connectBot.findConnection(UITestPinHelper.CV, UITestPinHelper.N);
+
+		final PolylineConnection polyLineConnection = (PolylineConnection) connection1.getFigure();
+		final org.eclipse.draw2d.geometry.Point origStartPointConnection = polyLineConnection.getPoints()
+				.getFirstPoint();
+		final org.eclipse.draw2d.geometry.Point origEndPointConnection = polyLineConnection.getPoints().getLastPoint();
+		fbBot.checkIfMovingConnectionWasCorrect((SWTBot4diacGefEditor) editor, origStartPointConnection,
+				origEndPointConnection, connection1, translation);
+		fbBot.checkIfMovingConnectionWasCorrect((SWTBot4diacGefEditor) editor, origStartPointConnection,
+				origEndPointConnection, connection2, translation);
 	}
 
 	/**
