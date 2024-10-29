@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Johannes Kepler University Linz
+ * Copyright (c) 2020, 2024 Johannes Kepler University Linz
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -39,7 +39,7 @@ public class InsertFB extends AbstractHandler {
 		final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
 		if (null != viewer) {
 			final SelectionRequest request = createSelectionRequest(viewer);
-			getTargetEditPart(viewer).performRequest(request);
+			getTargetEditPart(part, viewer).performRequest(request);
 		}
 		return Status.OK_STATUS;
 	}
@@ -58,7 +58,12 @@ public class InsertFB extends AbstractHandler {
 		return new Point(0, 0);
 	}
 
-	private static EditPart getTargetEditPart(final GraphicalViewer viewer) {
+	private static EditPart getTargetEditPart(final IWorkbenchPart part, final GraphicalViewer viewer) {
+		final FBNetwork fbn = part.getAdapter(FBNetwork.class);
+		final EditPart editPart = viewer.getEditPartForModel(fbn);
+		if (editPart != null) {
+			return editPart;
+		}
 		return viewer.getSelectedEditParts().stream().filter(FBNetworkEditPart.class::isInstance)
 				.map(EditPart.class::cast).findAny().orElse(viewer.getRootEditPart());
 	}
@@ -66,7 +71,7 @@ public class InsertFB extends AbstractHandler {
 	private static SelectionRequest createSelectionRequest(final GraphicalViewer viewer) {
 		final SelectionRequest request = new SelectionRequest();
 		request.setLocation(getInsertPoint(viewer));
-		request.setType(RequestConstants.REQ_OPEN);
+		request.setType(RequestConstants.REQ_DIRECT_EDIT);
 		return request;
 	}
 }
