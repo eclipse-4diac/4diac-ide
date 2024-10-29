@@ -23,10 +23,6 @@ public class GraphicalMarkerAnnotation extends GraphicalAnnotation {
 
 	private final IMarker marker;
 
-	public GraphicalMarkerAnnotation(final IMarker marker, final Object target) {
-		this(marker, getType(marker), target);
-	}
-
 	protected GraphicalMarkerAnnotation(final IMarker marker, final String type, final Object target) {
 		super(type, target);
 		this.marker = marker;
@@ -82,14 +78,5 @@ public class GraphicalMarkerAnnotation extends GraphicalAnnotation {
 		}
 		final GraphicalMarkerAnnotation other = (GraphicalMarkerAnnotation) obj;
 		return Objects.equals(marker, other.marker);
-	}
-
-	protected static String getType(final IMarker marker) {
-		return switch (marker.getAttribute(IMarker.SEVERITY, -1)) {
-		case IMarker.SEVERITY_INFO -> TYPE_INFO;
-		case IMarker.SEVERITY_WARNING -> TYPE_WARNING;
-		case IMarker.SEVERITY_ERROR -> TYPE_ERROR;
-		default -> TYPE_UNKNOWN;
-		};
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.ui.editors.text.EditorsUI;
 
 public class FordiacMarkerGraphicalAnnotationModel extends ResourceMarkerGraphicalAnnotationModel {
 
@@ -35,9 +36,12 @@ public class FordiacMarkerGraphicalAnnotationModel extends ResourceMarkerGraphic
 
 	@Override
 	protected GraphicalMarkerAnnotation createMarkerAnnotation(final IMarker marker) {
-		final Object target = findTarget(marker);
-		if (target != null) {
-			return new GraphicalMarkerAnnotation(marker, target);
+		final String type = EditorsUI.getAnnotationTypeLookup().getAnnotationType(marker);
+		if (type != null) {
+			final Object target = findTarget(marker);
+			if (target != null) {
+				return new GraphicalMarkerAnnotation(marker, type, target);
+			}
 		}
 		return null;
 	}

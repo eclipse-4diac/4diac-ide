@@ -16,11 +16,10 @@ import java.util.Map;
 
 public abstract class GraphicalAnnotation {
 
-	private static final String TYPE_PREFIX = GraphicalAnnotation.class.getPackageName();
-	public static final String TYPE_UNKNOWN = TYPE_PREFIX + ".unknown"; //$NON-NLS-1$
-	public static final String TYPE_ERROR = TYPE_PREFIX + ".error"; //$NON-NLS-1$
-	public static final String TYPE_WARNING = TYPE_PREFIX + ".warning"; //$NON-NLS-1$
-	public static final String TYPE_INFO = TYPE_PREFIX + ".info"; //$NON-NLS-1$
+	public static final String TYPE_UNKNOWN = "org.eclipse.fordiac.ide.model.ui.annotation.unknown"; //$NON-NLS-1$
+	public static final String TYPE_ERROR = "org.eclipse.fordiac.ide.model.ui.annotation.error"; //$NON-NLS-1$
+	public static final String TYPE_WARNING = "org.eclipse.fordiac.ide.model.ui.annotation.warning"; //$NON-NLS-1$
+	public static final String TYPE_INFO = "org.eclipse.fordiac.ide.model.ui.annotation.info"; //$NON-NLS-1$
 
 	private final String type;
 	private final Object target;

@@ -9,6 +9,7 @@ Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.model,
  org.eclipse.core.runtime,
  org.eclipse.gef,
+ org.eclipse.ui.editors,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.ui.navigator,
  org.eclipse.fordiac.ide.ui
