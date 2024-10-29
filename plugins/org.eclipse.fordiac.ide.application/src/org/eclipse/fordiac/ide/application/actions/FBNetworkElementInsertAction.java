@@ -20,7 +20,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
@@ -31,7 +33,9 @@ import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElem
 import org.eclipse.fordiac.ide.model.commands.create.CreateFBElementInGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.WorkbenchPartAction;
 import org.eclipse.ui.IEditorPart;
@@ -62,21 +66,30 @@ public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 	}
 
 	private Command createFBNetworkElementCreateCommand() {
-		final Point pt = getPositionInViewer((IEditorPart) getWorkbenchPart());
+		Point pt = getPositionInViewer((IEditorPart) getWorkbenchPart());
 		final AbstractContainerContentEditPart containerEP = GetEditPartFromGraficalViewerHelper
 				.findAbstractContainerContentEditPartAtPosition((IEditorPart) getWorkbenchPart(), pt, fbNetwork);
 
 		if (containerEP instanceof final GroupContentEditPart groupContentEP) {
+			pt = applySnapToGrid(pt, groupContentEP);
+			final Point topLeft = containerEP.getFigure().getClientArea().getTopLeft();
+			pt.translate(-topLeft.x, -topLeft.y);
 			return new ResizeGroupOrSubappCommand(containerEP,
-					new CreateFBElementInGroupCommand(typeEntry, groupContentEP.getModel().getGroup(),
-							pt.x - containerEP.getFigure().getBounds().x,
-							pt.y - containerEP.getFigure().getBounds().y));
+					new CreateFBElementInGroupCommand(typeEntry, groupContentEP.getModel().getGroup(), pt.x, pt.y));
 		}
 		if (containerEP instanceof final UnfoldedSubappContentEditPart subappContentEP) {
+			pt = applySnapToGrid(pt, subappContentEP);
+			final Point topLeft = containerEP.getFigure().getClientArea().getTopLeft();
+			pt.translate(-topLeft.x, -topLeft.y);
 			return new ResizeGroupOrSubappCommand(containerEP,
 					AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, subappContentEP.getModel(),
 							pt.x - containerEP.getFigure().getBounds().x,
 							pt.y - containerEP.getFigure().getBounds().y));
+		}
+		final GraphicalViewer graphicalViewer = getWorkbenchPart().getAdapter(GraphicalViewer.class);
+		if (graphicalViewer != null && graphicalViewer
+				.getEditPartForModel(fbNetwork) instanceof final GraphicalEditPart graphicalEditPart) {
+			pt = applySnapToGrid(pt, graphicalEditPart);
 		}
 		return AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, fbNetwork, pt.x, pt.y);
 	}
@@ -84,5 +97,18 @@ public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 	private static Point getPositionInViewer(final IEditorPart editor) {
 		final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 		return ((FBNetworkContextMenuProvider) viewer.getContextMenu()).getTranslatedAndZoomedPoint();
+	}
+
+	private static Point applySnapToGrid(final Point refPoint, final GraphicalEditPart gep) {
+		final SnapToHelper helper = gep.getAdapter(SnapToHelper.class);
+		if (helper != null) {
+			gep.getFigure().translateToAbsolute(refPoint);
+			final PrecisionPoint preciseLocation = new PrecisionPoint(refPoint);
+			final PrecisionPoint result = new PrecisionPoint(refPoint);
+			helper.snapPoint(null, PositionConstants.HORIZONTAL | PositionConstants.VERTICAL, preciseLocation, result);
+			gep.getFigure().translateToRelative(result);
+			return result;
+		}
+		return refPoint;
 	}
 }
