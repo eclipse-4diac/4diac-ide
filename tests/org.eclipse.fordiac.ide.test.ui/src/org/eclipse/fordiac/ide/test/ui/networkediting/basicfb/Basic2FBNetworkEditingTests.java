@@ -214,20 +214,13 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_CYCLE_FB));
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
 
-		// move Fbs to new position by selecting them with a rectangle
+		// move FBs to new position by selecting them with a rectangle
 		final Point translation = new Point(130, -40);
 		fbBot.moveViaRectangle(editor, new Rectangle(50, 50, 400, 300), translation);
 
 		// check if translation was correct
-		final Rectangle fb1Bounds2 = fbBot.getBoundsOfFBWithTolerance(editor, UITestNamesHelper.E_CYCLE_FB);
-		final int absPos2Fb1X = absPos1Fb1.x + translation.x;
-		final int absPos2Fb1Y = absPos1Fb1.y + translation.y;
-		assertTrue(fb1Bounds2.contains(absPos2Fb1X, absPos2Fb1Y));
-
-		final Rectangle fb2Bounds2 = fbBot.getBoundsOfFBWithTolerance(editor, UITestNamesHelper.E_SR_FB);
-		final int absPos2Fb2X = absPos1Fb2.x + translation.x;
-		final int absPos2Fb2Y = absPos1Fb2.y + translation.y;
-		assertTrue(fb2Bounds2.contains(absPos2Fb2X, absPos2Fb2Y));
+		fbBot.checkIfMovingFBWasCorrect(editor, UITestNamesHelper.E_CYCLE_FB, absPos1Fb1, translation);
+		fbBot.checkIfMovingFBWasCorrect(editor, UITestNamesHelper.E_SR_FB, absPos1Fb2, translation);
 	}
 
 	/**
@@ -285,26 +278,18 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 
 		// get connection start and end point
 		final PolylineConnection polyLineConnection = (PolylineConnection) connection.getFigure();
-		final org.eclipse.draw2d.geometry.Point startPointConnection = polyLineConnection.getPoints().getFirstPoint();
-		final org.eclipse.draw2d.geometry.Point endPointConnection = polyLineConnection.getPoints().getLastPoint();
+		final org.eclipse.draw2d.geometry.Point origStartPointConnection = polyLineConnection.getPoints()
+				.getFirstPoint();
+		final org.eclipse.draw2d.geometry.Point origEndPointConnection = polyLineConnection.getPoints().getLastPoint();
 
 		// calculate deltas of translation
 		final Point pos2 = new Point(305, 245);
-		final int deltaX = pos2.x - pos1.x;
-		final int deltaY = pos2.y - pos1.y;
+		final Point translation = new Point(pos2.x - pos1.x, pos2.y - pos1.y);
 
 		// move E_CYCLE
 		editor.drag(fb1, pos2.x, pos2.y);
-		final Rectangle fb1Bounds2 = fbBot.getBoundsOfFB(editor, UITestNamesHelper.E_CYCLE_FB);
-		assertTrue(fb1Bounds2.contains(pos2.x, pos2.y));
-		assertNotNull(connection);
-		final org.eclipse.draw2d.geometry.Point newStartPointConnection = polyLineConnection.getPoints()
-				.getFirstPoint();
-		final org.eclipse.draw2d.geometry.Point newEndPointConnection = polyLineConnection.getPoints().getLastPoint();
-
-		assertEquals(startPointConnection.x + (long) deltaX, newStartPointConnection.x);
-		assertEquals(startPointConnection.y + (long) deltaY, newStartPointConnection.y);
-		assertEquals(endPointConnection, newEndPointConnection);
+		fbBot.checkIfMovingConnectionWasCorrect(editor, origStartPointConnection, origEndPointConnection, connection,
+				translation);
 	}
 
 	/**
@@ -417,8 +402,9 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 
 		// get connection start and end point
 		final PolylineConnection polyLineConnection = (PolylineConnection) connection.getFigure();
-		final org.eclipse.draw2d.geometry.Point startPointConnection = polyLineConnection.getPoints().getFirstPoint();
-		final org.eclipse.draw2d.geometry.Point endPointConnection = polyLineConnection.getPoints().getLastPoint();
+		final org.eclipse.draw2d.geometry.Point origStartPointConnection = polyLineConnection.getPoints()
+				.getFirstPoint();
+		final org.eclipse.draw2d.geometry.Point origEndPointConnection = polyLineConnection.getPoints().getLastPoint();
 
 		// drag rectangle over FBs, therefore FBs should be selected
 		editor.drag(30, 30, 400, 400);
@@ -440,20 +426,12 @@ public class Basic2FBNetworkEditingTests extends Abstract4diacUITests {
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SR_FB));
 
 		// calculation of translation
-		final int translationX = pointTo.x - pointFrom.x;
-		final int translationY = pointTo.y - pointFrom.y;
+		final Point translation = new Point(pointTo.x - pointFrom.x, pointTo.y - pointFrom.y);
 
 		// check if connection has been moved
 		connection = connectBot.findConnection(UITestPinHelper.EO1, UITestPinHelper.R);
-		assertNotNull(connection);
-		final org.eclipse.draw2d.geometry.Point newStartPointConnection = polyLineConnection.getPoints()
-				.getFirstPoint();
-		final org.eclipse.draw2d.geometry.Point newEndPointConnection = polyLineConnection.getPoints().getLastPoint();
-
-		assertEquals(startPointConnection.x + (long) translationX, newStartPointConnection.x);
-		assertEquals(startPointConnection.y + (long) translationY, newStartPointConnection.y);
-		assertEquals(endPointConnection.x + (long) translationX, newEndPointConnection.x);
-		assertEquals(endPointConnection.y + (long) translationY, newEndPointConnection.y);
+		fbBot.checkIfMovingConnectionWasCorrect(editor, origStartPointConnection, origEndPointConnection, connection,
+				translation);
 
 	}
 }

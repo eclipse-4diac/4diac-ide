@@ -25,12 +25,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.FBEditPart;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefViewer;
+import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.graphics.Point;
@@ -272,6 +274,38 @@ public class SWTBotFB {
 					figure.translateToAbsolute(topLeft);
 					return topLeft;
 				}).toList();
+	}
+
+	public void checkIfMovingFBWasCorrect(final SWTBot4diacGefEditor editor, final String fbName,
+			final Point originalPos, final Point translation) {
+		final Rectangle fbBounds = getBoundsOfFBWithTolerance(editor, fbName);
+		final int absPos2Fb2X = originalPos.x + translation.x;
+		final int absPos2Fb2Y = originalPos.y + translation.y;
+		assertTrue(fbBounds.contains(absPos2Fb2X, absPos2Fb2Y));
+	}
+
+	@SuppressWarnings("static-method")
+	public void checkIfMovingConnectionWasCorrect(final SWTBot4diacGefEditor editor,
+			final org.eclipse.draw2d.geometry.Point origStartPointConnection,
+			final org.eclipse.draw2d.geometry.Point origEndPointConnection, final ConnectionEditPart connection,
+			final Point translation) {
+
+		final PolylineConnection polyLineConnection = (PolylineConnection) connection.getFigure();
+
+		assertNotNull(connection);
+		final org.eclipse.draw2d.geometry.Point newStartPointConnection = polyLineConnection.getPoints()
+				.getFirstPoint();
+		final org.eclipse.draw2d.geometry.Point newEndPointConnection = polyLineConnection.getPoints().getLastPoint();
+
+		assertTrue(Math.abs(origStartPointConnection.x) - Math.abs(newStartPointConnection.x)
+				- Math.abs(translation.x) <= TOLERANCE_SNAP_TO_GRID);
+		assertTrue(Math.abs(origStartPointConnection.y) - Math.abs(newStartPointConnection.y)
+				- Math.abs(translation.y) <= TOLERANCE_SNAP_TO_GRID);
+		assertTrue(Math.abs(origEndPointConnection.x) - Math.abs(newEndPointConnection.x)
+				- Math.abs(translation.x) <= TOLERANCE_SNAP_TO_GRID);
+		assertTrue(Math.abs(origEndPointConnection.y) - Math.abs(newEndPointConnection.y)
+				- Math.abs(translation.y) <= TOLERANCE_SNAP_TO_GRID);
+
 	}
 
 }
