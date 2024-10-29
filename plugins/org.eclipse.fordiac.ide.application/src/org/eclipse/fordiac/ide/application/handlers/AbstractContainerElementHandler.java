@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 fortiss GmbH, Johannes Kepler University Linz,
+ * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -28,7 +28,9 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
@@ -45,6 +47,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
@@ -128,8 +131,8 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 	protected FBNetwork getFBNetworkFromContainer(final Object selection, final ExecutionEvent event) {
 		if (selection instanceof final AbstractContainerContentEditPart cEP) {
 			final FBNetworkElement containerElement = cEP.getContainerElement();
-			if (containerElement instanceof final Group group) {
-				this.group = group;
+			if (containerElement instanceof final Group g) {
+				this.group = g;
 				return containerElement.getFbNetwork();
 			}
 			if (containerElement instanceof final SubApp subApp) {
@@ -161,6 +164,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 				}
 			}
 		}
+		applySnapToGrid(selectionExtend, getTargetEP(event, viewer, network));
 		return selectionExtend;
 	}
 
@@ -171,32 +175,46 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 				.ofNullable(((FBNetworkContextMenuProvider) viewer.getContextMenu()).getPoint())
 				.orElse(new org.eclipse.swt.graphics.Point(0, 0));
 		selectionExtend = new Rectangle(point.x, point.y, 200, 100);
-		final IFigure targetFigure = getTargetFigure(event, viewer, network);
+		final GraphicalEditPart gep = getTargetEP(event, viewer, network);
+		final IFigure targetFigure = gep.getFigure();
 		targetFigure.translateToRelative(selectionExtend);
+		applySnapToGrid(selectionExtend, gep);
 		if (!isEditorRootNetwork(event, network)) {
 			// if the target is not the root figure we need to remove its bounds to get to
 			// the correct position
-			final Rectangle bounds = targetFigure.getBounds();
+			final Rectangle bounds = targetFigure.getClientArea();
 			selectionExtend.translate(-bounds.x, -bounds.y);
 		}
 		return selectionExtend;
 	}
 
-	protected IFigure getTargetFigure(final ExecutionEvent event, final EditPartViewer viewer,
+	protected GraphicalEditPart getTargetEP(final ExecutionEvent event, final EditPartViewer viewer,
 			final FBNetwork network) {
-		GraphicalEditPart ep = null;
 		final var editPartRegistry = viewer.getEditPartRegistry();
 		if (group != null) {
-			ep = ((GroupEditPart) editPartRegistry.get(group)).getContentEP();
-		} else if (isEditorRootNetwork(event, network)) {
-			// we are creating in the root network of the editor
-			ep = (GraphicalEditPart) editPartRegistry.get(network);
-		} else {
-			// we are inside of expanded subapp
-			ep = ((IContainerEditPart) editPartRegistry.get(network.eContainer())).getContentEP();
+			return ((GroupEditPart) editPartRegistry.get(group)).getContentEP();
 		}
+		if (isEditorRootNetwork(event, network)) {
+			// we are creating in the root network of the editor
+			return (GraphicalEditPart) editPartRegistry.get(network);
+		}
+		// we are inside of expanded subapp
+		return ((IContainerEditPart) editPartRegistry.get(network.eContainer())).getContentEP();
+	}
 
-		return ep.getFigure();
+	private static void applySnapToGrid(final Rectangle selectionExtend, final GraphicalEditPart gep) {
+		final SnapToHelper helper = gep.getAdapter(SnapToHelper.class);
+		if (helper != null) {
+			final Point refPoint = new Point(selectionExtend.x, selectionExtend.y);
+			gep.getFigure().translateToAbsolute(refPoint);
+			final PrecisionPoint preciseLocation = new PrecisionPoint(refPoint);
+			final PrecisionPoint result = new PrecisionPoint(refPoint);
+			helper.snapPoint(null, PositionConstants.HORIZONTAL | PositionConstants.VERTICAL, preciseLocation, result);
+			gep.getFigure().translateToRelative(result);
+
+			selectionExtend.x = result.x;
+			selectionExtend.y = result.y;
+		}
 	}
 
 	private boolean isEditorRootNetwork(final ExecutionEvent event, final FBNetwork network) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 fortiss GmbH, Johannes Kepler University Linz,
+ * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -46,8 +46,7 @@ public class NewSubApplication extends AbstractContainerElementHandler {
 			final ISelection sel = (ISelection) HandlerUtil.getVariable(evaluationContext,
 					ISources.ACTIVE_CURRENT_SELECTION_NAME);
 			boolean maxInOneGroup = false;
-			if (sel instanceof StructuredSelection) {
-				final StructuredSelection selection = (StructuredSelection) sel;
+			if (sel instanceof final StructuredSelection selection) {
 				maxInOneGroup = isMaxInOneGroup(selection);
 			}
 			setBaseEnabled(maxInOneGroup);
@@ -57,24 +56,22 @@ public class NewSubApplication extends AbstractContainerElementHandler {
 	private static boolean isMaxInOneGroup(final StructuredSelection selection) {
 		Group group = null;
 		int i = 0;
-		for(final Object selElement : selection.toList()) {
+		for (final Object selElement : selection.toList()) {
 			final Object modelElement = getModelElement(selElement);
-			if(modelElement instanceof FBNetworkElement) {
-				final FBNetworkElement fbel = (FBNetworkElement) modelElement;
+			if (modelElement instanceof final FBNetworkElement fbel) {
 				if (fbel.isInGroup()) {
 					if (group == null) {
-						if (i == 0) {
-							group = fbel.getGroup();
-						} else {
+						if (i != 0) {
 							return false;
 						}
+						group = fbel.getGroup();
 					} else if (group != fbel.getGroup()) {
 						return false;
 					}
-				} else if(group != null){
+				} else if (group != null) {
 					return false;
 				}
-				i++;  // only count FBNetworkElements
+				i++; // only count FBNetworkElements
 			}
 		}
 		return true;

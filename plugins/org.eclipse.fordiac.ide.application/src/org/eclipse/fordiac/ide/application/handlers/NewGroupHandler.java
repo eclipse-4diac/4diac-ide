@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -39,8 +39,7 @@ public class NewGroupHandler extends AbstractContainerElementHandler {
 			final ISelection sel = (ISelection) HandlerUtil.getVariable(evaluationContext,
 					ISources.ACTIVE_CURRENT_SELECTION_NAME);
 			boolean notInGroup = false;
-			if (sel instanceof StructuredSelection) {
-				final StructuredSelection selection = (StructuredSelection) sel;
+			if (sel instanceof final StructuredSelection selection) {
 				notInGroup = selection.toList().stream().map(AbstractContainerElementHandler::getModelElement)
 						.filter(FBNetworkElement.class::isInstance)
 						.noneMatch(fbel -> ((FBNetworkElement) fbel).isInGroup());
