@@ -19,7 +19,7 @@ package org.eclipse.fordiac.ide.gef.provider;
 import java.util.function.Supplier;
 
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
+import org.eclipse.fordiac.ide.gef.annotation.TextualAnnotationStyles;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -39,7 +39,7 @@ public class PackageLabelProvider extends LabelProvider implements IStyledLabelP
 		if (element instanceof final Import imp) {
 			if (annotationModel != null) {
 				return new StyledString(imp.getImportedNamespace(),
-						GraphicalAnnotationStyles.getAnnotationStyle(annotationModel.getAnnotations(imp)));
+						TextualAnnotationStyles.getAnnotationStyle(annotationModel.getAnnotations(imp)));
 			}
 			return new StyledString(imp.getImportedNamespace());
 		}

@@ -26,11 +26,8 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.jface.viewers.StyledString.Styler;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
@@ -95,31 +92,6 @@ public final class GraphicalAnnotationStyles {
 		return null;
 	}
 
-	public static Styler getAnnotationStyle(final Set<GraphicalAnnotation> annotations) {
-		return getAnnotationStyle(annotations, annotation -> true);
-	}
-
-	public static Styler getAnnotationStyle(final Set<GraphicalAnnotation> annotations,
-			final Predicate<GraphicalAnnotation> filter) {
-		if (containsType(annotations, filter, GraphicalAnnotation.TYPE_ERROR)) {
-			return ErrorStyler.ERROR_STYLE;
-		}
-		if (containsType(annotations, filter, GraphicalAnnotation.TYPE_WARNING)) {
-			return ErrorStyler.WARNING_STYLE;
-		}
-		return null;
-	}
-
-	public static Styler getAnnotationStyle(final GraphicalAnnotation annotation) {
-		if (annotation.getType().equals(GraphicalAnnotation.TYPE_ERROR)) {
-			return ErrorStyler.ERROR_STYLE;
-		}
-		if (annotation.getType().equals(GraphicalAnnotation.TYPE_WARNING)) {
-			return ErrorStyler.WARNING_STYLE;
-		}
-		return null;
-	}
-
 	public static void updateAnnotationFeedback(final IFigure annonFigure, final Object target,
 			final GraphicalAnnotationModelEvent event) {
 		updateAnnotationFeedback(annonFigure, target, event, annotation -> true);
@@ -177,25 +149,6 @@ public final class GraphicalAnnotationStyles {
 	private static boolean containsType(final Set<GraphicalAnnotation> annotations,
 			final Predicate<GraphicalAnnotation> filter, final String type) {
 		return annotations.stream().filter(filter).anyMatch(annotation -> annotation.getType().equals(type));
-	}
-
-	private static class ErrorStyler extends Styler {
-
-		private static final Styler ERROR_STYLE = new ErrorStyler(ERROR_RED);
-		private static final Styler WARNING_STYLE = new ErrorStyler(WARNING_YELLOW);
-
-		private final Color underlineColor;
-
-		private ErrorStyler(final Color underlineColor) {
-			this.underlineColor = underlineColor;
-		}
-
-		@Override
-		public void applyStyles(final TextStyle textStyle) {
-			textStyle.underline = true;
-			textStyle.underlineColor = underlineColor;
-			textStyle.underlineStyle = SWT.UNDERLINE_ERROR;
-		}
 	}
 
 	public static class AnnotationFeedbackBorder extends LineBorder {

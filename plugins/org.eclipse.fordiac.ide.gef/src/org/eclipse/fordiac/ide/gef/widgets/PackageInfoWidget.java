@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
+import org.eclipse.fordiac.ide.gef.annotation.TextualAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.ImportCellEditor;
 import org.eclipse.fordiac.ide.gef.provider.PackageContentProvider;
 import org.eclipse.fordiac.ide.gef.provider.PackageLabelProvider;
@@ -183,7 +183,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		final CompilerInfo compilerInfo = getType().getCompilerInfo();
 		final StyledString nameStyledString = new StyledString(PackageNameHelper.getPackageName(getType()),
 				annotationModel != null && compilerInfo != null
-						? GraphicalAnnotationStyles.getAnnotationStyle(annotationModel.getAnnotations(compilerInfo))
+						? TextualAnnotationStyles.getAnnotationStyle(annotationModel.getAnnotations(compilerInfo))
 						: null);
 
 		final int caretOffset = nameText.getCaretOffset();
