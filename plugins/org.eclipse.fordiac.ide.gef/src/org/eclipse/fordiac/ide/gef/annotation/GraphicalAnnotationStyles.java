@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst, Primetals Technologies GmbH
+ * Copyright (c) 2023, 2024 Martin Erich Jobst, Primetals Technologies GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,9 +13,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.annotation;
 
-import java.util.Set;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.Graphics;
@@ -28,66 +37,37 @@ import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 public final class GraphicalAnnotationStyles {
 
-	public static final Color WARNING_YELLOW = new Color(246, 211, 89);
-	public static final Color ERROR_RED = new Color(255, 42, 69);
+	private record GraphicalAnnotationStyle(String annotationType, GraphicalAnnotationStyler styler, int layer)
+			implements Comparable<GraphicalAnnotationStyle> {
 
-	public static Color getAnnotationColor(final Set<GraphicalAnnotation> annotations) {
-		return getAnnotationColor(annotations, annotation -> true);
+		@Override
+		public int compareTo(final GraphicalAnnotationStyle o) {
+			return Integer.compare(layer, o.layer);
+		}
 	}
 
-	public static Color getAnnotationColor(final Set<GraphicalAnnotation> annotations,
-			final Predicate<GraphicalAnnotation> filter) {
-		if (containsType(annotations, filter, GraphicalAnnotation.TYPE_ERROR)) {
-			return ERROR_RED;
-		}
-		if (containsType(annotations, filter, GraphicalAnnotation.TYPE_WARNING)) {
-			return WARNING_YELLOW;
-		}
-		return null;
-	}
+	private static final String GRAPHICAL_ANNOTATION_STYLES_EXTENSION_POINT_ID = "org.eclipse.fordiac.ide.gef.graphicalAnnotationStyle"; //$NON-NLS-1$
+	private static final String ANNOTATION_TYPE_ATTRIBUTE = "annotationType"; //$NON-NLS-1$
+	private static final String STYLER_ATTRIBUTE = "styler"; //$NON-NLS-1$
+	private static final String LAYER_ATTRIBUTE = "layer"; //$NON-NLS-1$
 
-	public static Color getAnnotationColor(final GraphicalAnnotation annotation) {
-		if (annotation.getType().equals(GraphicalAnnotation.TYPE_ERROR)) {
-			return ERROR_RED;
-		}
-		if (annotation.getType().equals(GraphicalAnnotation.TYPE_WARNING)) {
-			return WARNING_YELLOW;
-		}
-		return null;
-	}
-
-	public static Image getAnnotationImage(final Set<GraphicalAnnotation> annotations) {
-		return getAnnotationImage(annotations, annotation -> true);
-	}
-
-	public static Image getAnnotationImage(final Set<GraphicalAnnotation> annotations,
-			final Predicate<GraphicalAnnotation> filter) {
-		if (containsType(annotations, filter, GraphicalAnnotation.TYPE_ERROR)) {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
-		}
-		if (containsType(annotations, filter, GraphicalAnnotation.TYPE_WARNING)) {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_WARN_TSK);
-		}
-		if (containsType(annotations, filter, GraphicalAnnotation.TYPE_INFO)) {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_INFO_TSK);
-		}
-		return null;
-	}
+	private static final Map<String, GraphicalAnnotationStyle> styles = loadStyles();
 
 	public static Image getAnnotationImage(final GraphicalAnnotation annotation) {
-		if (annotation.getType().equals(GraphicalAnnotation.TYPE_ERROR)) {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
+		final GraphicalAnnotationStyle style = getAnnotationStyle(annotation);
+		if (style != null) {
+			return style.styler().getImage(annotation);
 		}
-		if (annotation.getType().equals(GraphicalAnnotation.TYPE_WARNING)) {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_WARN_TSK);
-		}
-		if (annotation.getType().equals(GraphicalAnnotation.TYPE_INFO)) {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_INFO_TSK);
+		return null;
+	}
+
+	public static Image getAnnotationOverlayImage(final GraphicalAnnotation annotation) {
+		final GraphicalAnnotationStyle style = getAnnotationStyle(annotation);
+		if (style != null) {
+			return style.styler().getOverlayImage(annotation);
 		}
 		return null;
 	}
@@ -99,59 +79,72 @@ public final class GraphicalAnnotationStyles {
 
 	public static void updateAnnotationFeedback(final IFigure annonFigure, final Object target,
 			final GraphicalAnnotationModelEvent event, final Predicate<GraphicalAnnotation> filter) {
-		final Color annotationColor = GraphicalAnnotationStyles
-				.getAnnotationColor(event.getModel().getAnnotations(target), filter);
-		if (annotationColor != null) {
-			setAnnotationBorder(annonFigure, annotationColor);
-		} else {
-			removeAnnotationBorder(annonFigure);
-		}
+		// remove styles for removed annotations
+		event.getRemoved().stream().filter(filter).map(GraphicalAnnotationStyles::getStyledAnnotation)
+				.filter(Objects::nonNull)
+				.forEachOrdered(entry -> entry.getValue().styler().removeStyles(annonFigure, entry.getKey()));
+		// apply styles for all current annotations
+		event.getModel().getAnnotations(target).stream().filter(filter)
+				.map(GraphicalAnnotationStyles::getStyledAnnotation).filter(Objects::nonNull)
+				.sorted(Map.Entry.comparingByValue())
+				.forEachOrdered(entry -> entry.getValue().styler().applyStyles(annonFigure, entry.getKey()));
 	}
 
-	public static void updateAnnotationFeedback(final PolylineConnection annonFigure, final Object target,
-			final GraphicalAnnotationModelEvent event) {
-		updateAnnotationFeedback(annonFigure, target, event, annotation -> true);
-	}
-
-	public static void updateAnnotationFeedback(final PolylineConnection annonFigure, final Object target,
-			final GraphicalAnnotationModelEvent event, final Predicate<GraphicalAnnotation> filter) {
-		final Color annotationColor = GraphicalAnnotationStyles
-				.getAnnotationColor(event.getModel().getAnnotations(target), filter);
-		if (annotationColor != null) {
-			annonFigure.setBorder(new AnnotationFeedbackConnectionBorder(annotationColor));
-		} else {
-			annonFigure.setBorder(null);
-		}
-	}
-
-	private static void setAnnotationBorder(final IFigure annonFigure, final Color annotationColor) {
-		var border = annonFigure.getBorder();
-		if (border == null || border instanceof AnnotationFeedbackBorder) {
-			annonFigure.setBorder(new AnnotationFeedbackBorder(annotationColor));
-		} else {
-			if (border instanceof final AnnotationCompoundBorder compBorder) {
-				// we are updating the annotation border of an annotated figure
-				border = compBorder.getOuterBorder();
-			}
-			annonFigure.setBorder(new AnnotationCompoundBorder(border, annotationColor));
-		}
-	}
-
-	private static void removeAnnotationBorder(final IFigure annonFigure) {
+	public static void addAnnotationBorder(final IFigure annonFigure, final AnnotationBorder annonBorder) {
 		final var border = annonFigure.getBorder();
-		if (border instanceof AnnotationFeedbackBorder) {
-			annonFigure.setBorder(null);
-		} else if (border instanceof final AnnotationCompoundBorder compBorder) {
-			annonFigure.setBorder(compBorder.getOuterBorder());
+		if (border == null) {
+			annonFigure.setBorder(annonBorder);
+		} else {
+			annonFigure.setBorder(new AnnotationCompoundBorder(border, annonBorder));
 		}
 	}
 
-	private static boolean containsType(final Set<GraphicalAnnotation> annotations,
-			final Predicate<GraphicalAnnotation> filter, final String type) {
-		return annotations.stream().filter(filter).anyMatch(annotation -> annotation.getType().equals(type));
+	public static <T extends AnnotationBorder> Optional<T> findAnnotationBorder(final IFigure annonFigure,
+			final Class<T> borderClass) {
+		return findAnnotationBorder(annonFigure.getBorder(), borderClass);
 	}
 
-	public static class AnnotationFeedbackBorder extends LineBorder {
+	private static <T extends AnnotationBorder> Optional<T> findAnnotationBorder(final Border border,
+			final Class<T> borderClass) {
+		if (borderClass.isInstance(border)) {
+			return Optional.of(borderClass.cast(border));
+		}
+		if (border instanceof final AnnotationCompoundBorder compBorder) {
+			return findAnnotationBorder(compBorder.getOuterBorder(), borderClass)
+					.or(() -> findAnnotationBorder(compBorder.getInnerBorder(), borderClass));
+		}
+		return Optional.empty();
+	}
+
+	public static void removeAnnotationBorders(final IFigure annonFigure) {
+		var border = annonFigure.getBorder();
+		while (border instanceof final AnnotationCompoundBorder compBorder) {
+			border = compBorder.getOuterBorder();
+		}
+		if (border instanceof AnnotationBorder) {
+			annonFigure.setBorder(null);
+		} else {
+			annonFigure.setBorder(border);
+		}
+	}
+
+	public static void setAnnotationFeedbackBorder(final IFigure annonFigure, final Color color) {
+		findAnnotationBorder(annonFigure, AnnotationFeedbackBorder.class)
+				.ifPresentOrElse(border -> border.setColor(color), () -> {
+					if (annonFigure instanceof PolylineConnection) {
+						addAnnotationBorder(annonFigure, new AnnotationFeedbackConnectionBorder(color));
+					} else {
+						addAnnotationBorder(annonFigure, new AnnotationFeedbackBorder(color));
+					}
+				});
+		annonFigure.repaint();
+	}
+
+	public interface AnnotationBorder extends Border {
+		// marker interface
+	}
+
+	public static class AnnotationFeedbackBorder extends LineBorder implements AnnotationBorder {
 		private static final Insets INSETS = new Insets();
 		private static final int FEEDBACK_BORDER_LINE_WIDTH = 2;
 		public static final int ANNOTATION_FILL_ALPHA = 90;
@@ -252,10 +245,10 @@ public final class GraphicalAnnotationStyles {
 		}
 	}
 
-	public static final class AnnotationCompoundBorder extends CompoundBorder {
+	public static final class AnnotationCompoundBorder extends CompoundBorder implements AnnotationBorder {
 
-		public AnnotationCompoundBorder(final Border outer, final Color annotationColor) {
-			super(outer, new AnnotationFeedbackBorder(annotationColor));
+		public AnnotationCompoundBorder(final Border outer, final Border inner) {
+			super(outer, inner);
 		}
 
 		@Override
@@ -272,6 +265,51 @@ public final class GraphicalAnnotationStyles {
 				inner.paint(figure, g, insets);
 			}
 		}
+	}
+
+	private static GraphicalAnnotationStyle getAnnotationStyle(final GraphicalAnnotation annotation) {
+		return styles.get(annotation.getType());
+	}
+
+	private static Map.Entry<GraphicalAnnotation, GraphicalAnnotationStyle> getStyledAnnotation(
+			final GraphicalAnnotation annotation) {
+		final GraphicalAnnotationStyle style = getAnnotationStyle(annotation);
+		if (style != null) {
+			return Map.entry(annotation, style);
+		}
+		return null;
+	}
+
+	private static Map<String, GraphicalAnnotationStyle> loadStyles() {
+		return Stream
+				.of(Platform.getExtensionRegistry().getExtensionPoint(GRAPHICAL_ANNOTATION_STYLES_EXTENSION_POINT_ID)
+						.getExtensions())
+				.map(IExtension::getConfigurationElements).flatMap(Stream::of)
+				.map(GraphicalAnnotationStyles::loadStyles).filter(Objects::nonNull)
+				.collect(Collectors.toUnmodifiableMap(GraphicalAnnotationStyle::annotationType, Function.identity()));
+	}
+
+	private static GraphicalAnnotationStyle loadStyles(final IConfigurationElement element) {
+		final String annotationType = element.getAttribute(ANNOTATION_TYPE_ATTRIBUTE);
+		if (annotationType == null || annotationType.isEmpty()) {
+			log("Missing annotation type", element); //$NON-NLS-1$
+			return null;
+		}
+		final GraphicalAnnotationStyler styler = SafeRunner
+				.run(() -> (GraphicalAnnotationStyler) element.createExecutableExtension(STYLER_ATTRIBUTE));
+		if (styler == null) {
+			log("Invalid annotation styler", element); //$NON-NLS-1$
+			return null;
+		}
+		final int layer = Integer.parseInt(element.getAttribute(LAYER_ATTRIBUTE));
+		return new GraphicalAnnotationStyle(annotationType, styler, layer);
+	}
+
+	private static void log(final String message, final IConfigurationElement element) {
+		Platform.getLog(GraphicalAnnotationStyles.class)
+				.error(String.format("%s in extension %s from plugin %s", message, //$NON-NLS-1$
+						element.getDeclaringExtension().getExtensionPointUniqueIdentifier(),
+						element.getDeclaringExtension().getContributor().getName()));
 	}
 
 	private GraphicalAnnotationStyles() {

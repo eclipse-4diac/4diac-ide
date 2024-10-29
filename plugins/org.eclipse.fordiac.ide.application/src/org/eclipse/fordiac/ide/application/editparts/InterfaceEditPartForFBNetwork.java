@@ -28,8 +28,7 @@ import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationCompoundBorder;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationFeedbackBorder;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationBorder;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -80,8 +79,7 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 		private boolean valueHasAnnotation() {
 			final IFigure fig = getValueFigure();
 			if (fig != null) {
-				final Border border = fig.getBorder();
-				return border instanceof AnnotationFeedbackBorder || border instanceof AnnotationCompoundBorder;
+				return fig.getBorder() instanceof AnnotationBorder;
 			}
 			return false;
 		}

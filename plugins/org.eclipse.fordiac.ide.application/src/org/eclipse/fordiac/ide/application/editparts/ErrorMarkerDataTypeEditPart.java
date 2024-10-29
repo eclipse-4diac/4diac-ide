@@ -15,8 +15,8 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.application.figures.StructuredTypeFigure;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationFeedbackBorder;
+import org.eclipse.fordiac.ide.gef.annotation.ProblemAnnotationStyler;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.EditPolicy;
@@ -54,7 +54,7 @@ public class ErrorMarkerDataTypeEditPart extends AbstractGraphicalEditPart {
 	protected IFigure createFigure() {
 		final StructuredTypeFigure fig = new StructuredTypeFigure();
 		fig.setIcon(FordiacImage.ICON_DATA_TYPE.getImage());
-		fig.setBorder(new AnnotationFeedbackBorder(GraphicalAnnotationStyles.ERROR_RED));
+		fig.setBorder(new AnnotationFeedbackBorder(ProblemAnnotationStyler.getErrorAnnotationColor()));
 		return fig;
 	}
 }

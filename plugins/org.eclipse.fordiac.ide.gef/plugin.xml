@@ -3,6 +3,7 @@
 <plugin>
    <extension-point id="ConnectionRouterProvider" name="ConnectionRouterProvider" schema="schema/ConnectionRouterProvider.exsd"/>
    <extension-point id="ChildrenProvider" name="ChildrenProvider" schema="schema/ChildrenProvider.exsd"/>
+   <extension-point id="graphicalAnnotationStyle" name="Graphical Annotation Style" schema="schema/graphicalAnnotationStyle.exsd"/>
     <extension point="org.eclipse.ui.themes">
         <themeElementCategory
             id="org.eclipse.fordiac.ide.themeCategory"
@@ -33,6 +34,24 @@
 	            value="Menlo-regular-12">
 	         </fontValue>
         </fontDefinition>
+        <colorDefinition
+              categoryId="org.eclipse.fordiac.ide.themeCategory"
+              id="org.eclipse.fordiac.ide.gef.errorColor"
+              label="Error Color"
+              value="255,0,128">
+        </colorDefinition>
+        <colorDefinition
+              categoryId="org.eclipse.fordiac.ide.themeCategory"
+              id="org.eclipse.fordiac.ide.gef.warningColor"
+              label="Warning Color"
+              value="244,200,45">
+        </colorDefinition>
+        <colorDefinition
+              categoryId="org.eclipse.fordiac.ide.themeCategory"
+              id="org.eclipse.fordiac.ide.gef.infoColor"
+              label="Info Color"
+              value="130,160,190">
+        </colorDefinition>
     </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -207,4 +226,22 @@
          </propertySection>
          </propertySections>         
    </extension>
+ <extension
+       point="org.eclipse.fordiac.ide.gef.graphicalAnnotationStyle">
+    <style
+          annotationType="org.eclipse.fordiac.ide.model.ui.annotation.info"
+          layer="10"
+          styler="org.eclipse.fordiac.ide.gef.annotation.ProblemAnnotationStyler">
+    </style>
+    <style
+          annotationType="org.eclipse.fordiac.ide.model.ui.annotation.warning"
+          layer="20"
+          styler="org.eclipse.fordiac.ide.gef.annotation.ProblemAnnotationStyler">
+    </style>
+    <style
+          annotationType="org.eclipse.fordiac.ide.model.ui.annotation.error"
+          layer="30"
+          styler="org.eclipse.fordiac.ide.gef.annotation.ProblemAnnotationStyler">
+    </style>
+ </extension>
 </plugin>

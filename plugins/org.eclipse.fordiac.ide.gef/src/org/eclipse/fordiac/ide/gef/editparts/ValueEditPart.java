@@ -16,7 +16,6 @@
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import org.eclipse.draw2d.AncestorListener;
-import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.FigureUtilities;
@@ -35,8 +34,7 @@ import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationCompoundBorder;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationFeedbackBorder;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationBorder;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
@@ -241,8 +239,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	}
 
 	private boolean valueHasAnnotation() {
-		final Border border = getFigure().getBorder();
-		return border instanceof AnnotationFeedbackBorder || border instanceof AnnotationCompoundBorder;
+		return getFigure().getBorder() instanceof AnnotationBorder;
 	}
 
 	protected void updateDefaultValue(final String value) {
