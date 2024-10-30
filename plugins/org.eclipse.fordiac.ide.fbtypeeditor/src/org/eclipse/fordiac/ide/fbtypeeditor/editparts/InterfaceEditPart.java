@@ -147,7 +147,7 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 	@Override
 	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
 		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel(), event,
-				FordiacAnnotationUtil::showOnTarget);
+				FordiacAnnotationUtil::showOnTarget, FordiacAnnotationUtil::showOnTargetName);
 		final CommentTypeEditPart commentTypeEditPart = findAssociatedCommentTypeEP();
 		if (commentTypeEditPart != null) {
 			commentTypeEditPart.updateAnnotations(event);

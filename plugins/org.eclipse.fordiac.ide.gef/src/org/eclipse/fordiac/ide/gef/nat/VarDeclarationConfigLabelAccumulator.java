@@ -54,7 +54,7 @@ public class VarDeclarationConfigLabelAccumulator extends AbstractAnnotatedConfi
 		switch (columns.get(columnPosition)) {
 		case NAME:
 			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			accumulateAttributeConfigLabels(configLabels, rowItem, FordiacAnnotationUtil::showOnTarget);
+			accumulateAttributeConfigLabels(configLabels, rowItem, FordiacAnnotationUtil::showOnTargetName);
 			break;
 		case TYPE:
 			configLabels.addLabel(TypeDeclarationEditorConfiguration.TYPE_DECLARATION_CELL);

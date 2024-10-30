@@ -25,7 +25,17 @@ public final class FordiacAnnotationUtil {
 
 	public static boolean showOnTarget(final GraphicalAnnotation annotation) {
 		final EStructuralFeature targetFeature = getTargetFeature(annotation);
-		return targetFeature == null || targetFeature == LibraryElementPackage.eINSTANCE.getINamedElement_Name();
+		return targetFeature == null;
+	}
+
+	public static boolean showOnTargetName(final GraphicalAnnotation annotation) {
+		final EStructuralFeature targetFeature = getTargetFeature(annotation);
+		return targetFeature == LibraryElementPackage.eINSTANCE.getINamedElement_Name();
+	}
+
+	public static boolean showOnTargetPosition(final GraphicalAnnotation annotation) {
+		final EStructuralFeature targetFeature = getTargetFeature(annotation);
+		return targetFeature == LibraryElementPackage.eINSTANCE.getPositionableElement_Position();
 	}
 
 	public static boolean showOnTargetType(final GraphicalAnnotation annotation) {

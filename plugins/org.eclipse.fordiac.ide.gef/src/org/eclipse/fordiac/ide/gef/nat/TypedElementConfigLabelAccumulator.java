@@ -53,7 +53,7 @@ public class TypedElementConfigLabelAccumulator<T extends ITypedElement>
 		switch (columns.get(columnPosition)) {
 		case NAME:
 			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			accumulateAttributeConfigLabels(configLabels, rowItem, FordiacAnnotationUtil::showOnTarget);
+			accumulateAttributeConfigLabels(configLabels, rowItem, FordiacAnnotationUtil::showOnTargetName);
 			break;
 		case TYPE:
 			configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);

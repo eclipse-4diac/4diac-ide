@@ -77,6 +77,13 @@ public final class GraphicalAnnotationStyles {
 		updateAnnotationFeedback(annonFigure, target, event, annotation -> true);
 	}
 
+	@SafeVarargs
+	public static void updateAnnotationFeedback(final IFigure annonFigure, final Object target,
+			final GraphicalAnnotationModelEvent event, final Predicate<GraphicalAnnotation>... filters) {
+		updateAnnotationFeedback(annonFigure, target, event,
+				Stream.of(filters).reduce(Predicate::or).orElse(annotation -> true));
+	}
+
 	public static void updateAnnotationFeedback(final IFigure annonFigure, final Object target,
 			final GraphicalAnnotationModelEvent event, final Predicate<GraphicalAnnotation> filter) {
 		// remove styles for removed annotations

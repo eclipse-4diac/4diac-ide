@@ -55,7 +55,7 @@ public class AttributeConfigLabelAccumulator extends AbstractAnnotatedConfigLabe
 		case NAME:
 			configLabels.addLabel(NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
 			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			accumulateAttributeConfigLabels(configLabels, rowItem, FordiacAnnotationUtil::showOnTarget);
+			accumulateAttributeConfigLabels(configLabels, rowItem, FordiacAnnotationUtil::showOnTargetName);
 			break;
 		case TYPE:
 			configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);

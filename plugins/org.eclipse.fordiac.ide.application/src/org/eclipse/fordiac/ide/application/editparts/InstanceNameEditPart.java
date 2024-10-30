@@ -88,7 +88,7 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart
 	@Override
 	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
 		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel().getRefElement(), event,
-				FordiacAnnotationUtil::showOnTarget);
+				FordiacAnnotationUtil::showOnTargetName, FordiacAnnotationUtil::showOnTargetPosition);
 	}
 
 	@Override

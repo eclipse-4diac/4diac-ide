@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.util.SpatialHash;
@@ -129,7 +130,8 @@ final class FBNetworkAnnotations {
 				LibraryElementValidator.FB_NETWORK__VALIDATE_COLLISIONS,
 				MessageFormat.format(Messages.FBNetworkAnnotations_CollisionMessage, element.getQualifiedName(),
 						other.getQualifiedName()),
-				FordiacMarkerHelper.getDiagnosticData(element));
+				FordiacMarkerHelper.getDiagnosticData(element,
+						LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__POSITION));
 	}
 
 	private static int getIntPreference(final Map<Object, Object> context, final String name) {
