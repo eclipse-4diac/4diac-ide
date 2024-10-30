@@ -198,7 +198,7 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		final boolean hasAttributes = !varDecl.getAttributes().isEmpty()
 				|| (varDecl.isInOutVar() && !varDecl.getInOutVarOpposite().getAttributes().isEmpty());
 		final boolean hasOutAttributes = varDecl.getAttributes().stream().map(Attribute::getName).toList()
-				.contains("VisibleOutSide"); //$NON-NLS-1$
+				.contains(LibraryElementTags.ELEMENT_INOUTVISIBLEOUT);
 		if (hasAttributes) {
 			addStartElement(LibraryElementTags.VAR_DECLARATION_ELEMENT);
 		} else {
