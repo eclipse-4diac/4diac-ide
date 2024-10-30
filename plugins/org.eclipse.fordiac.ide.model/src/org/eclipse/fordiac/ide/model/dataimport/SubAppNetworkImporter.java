@@ -14,7 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
@@ -88,9 +87,8 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 			}
 		}
 		for (final VarDeclaration inOutVar : subApp.getInterface().getInOutVars()) {
-			final List<String> attributeList = inOutVar.getAttributes().stream().map(Attribute::getName).toList();
-			if (attributeList.contains(LibraryElementTags.ELEMENT_INOUTVISIBLEOUT)
-					&& inOutVar.getInOutVarOpposite().isVisible()) {
+			if (inOutVar.getAttributes().stream().map(Attribute::getName).anyMatch(
+					LibraryElementTags.ELEMENT_INOUTVISIBLEOUT::equals) && inOutVar.getInOutVarOpposite().isVisible()) {
 				inOutVar.getInOutVarOpposite().setVisible(false);
 			}
 		}
