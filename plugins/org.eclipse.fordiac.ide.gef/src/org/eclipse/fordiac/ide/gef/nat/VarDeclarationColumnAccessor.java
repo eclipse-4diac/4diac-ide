@@ -64,9 +64,8 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		};
 	}
 
-	@SuppressWarnings("boxing")
 	private static boolean handleInOutCheck(final VarDeclaration rowObject, final VarDeclarationTableColumn column) {
-		final IInterfaceElement vD = getPin(rowObject, column);
+		final IInterfaceElement vD = getCorrectVarInOutPin(rowObject, column);
 		return vD.isVisible();
 
 	}
@@ -100,11 +99,12 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 
 	private static Command handleInOut(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
 			final Object newValue) {
-		final VarDeclaration vD = getPin(rowObject, column);
+		final VarDeclaration vD = getCorrectVarInOutPin(rowObject, column);
 		return new HideInOutPinCommand(vD, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 	}
 
-	private static VarDeclaration getPin(final VarDeclaration rowObject, final VarDeclarationTableColumn column) {
+	private static VarDeclaration getCorrectVarInOutPin(final VarDeclaration rowObject,
+			final VarDeclarationTableColumn column) {
 		if (column.equals(VarDeclarationTableColumn.VISIBLEIN)) {
 			return rowObject;
 		}
