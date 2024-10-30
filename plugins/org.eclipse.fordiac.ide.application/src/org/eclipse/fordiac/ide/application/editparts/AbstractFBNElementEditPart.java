@@ -458,24 +458,47 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	@Override
 	protected List<Object> getModelChildren() {
 		final List<Object> elements = new ArrayList<>();
+
+		addBasicElements(elements);
+		removeInvisibleInOutVars(elements);
+		removeInvisibleInputOutputVars(elements);
+		addPinIndicators(elements);
+
+		return elements;
+	}
+
+	private void addBasicElements(final List<Object> elements) {
 		elements.add(getInstanceName());
 		elements.addAll(getModel().getInterface().getAllInterfaceElements());
+	}
 
+	private void removeInvisibleInOutVars(final List<Object> elements) {
 		final List<VarDeclaration> inoutInRemovalList = getModel().getInterface().getInOutVars().stream()
 				.filter(it -> !it.isVisible()).toList();
 		final List<VarDeclaration> inoutOutRemovalList = getModel().getInterface().getOutMappedInOutVars().stream()
 				.filter(it -> !it.isVisible()).toList();
+
 		elements.removeAll(inoutInRemovalList);
 		elements.removeAll(inoutOutRemovalList);
+	}
 
+	private void removeInvisibleInputOutputVars(final List<Object> elements) {
 		final List<VarDeclaration> inputRemovalList = getModel().getInterface().getInputVars().stream()
 				.filter(it -> !it.isVisible()).toList();
 		final List<VarDeclaration> outputRemovalList = getModel().getInterface().getOutputVars().stream()
 				.filter(it -> !it.isVisible()).toList();
+
 		elements.removeAll(inputRemovalList);
 		elements.removeAll(outputRemovalList);
-		elements.addAll(getPinIndicators(!inputRemovalList.isEmpty(), !outputRemovalList.isEmpty()));
-		return elements;
+	}
+
+	private void addPinIndicators(final List<Object> elements) {
+		final boolean hasInvisibleInputs = !getModel().getInterface().getInputVars().stream()
+				.filter(it -> !it.isVisible()).toList().isEmpty();
+		final boolean hasInvisibleOutputs = !getModel().getInterface().getOutputVars().stream()
+				.filter(it -> !it.isVisible()).toList().isEmpty();
+
+		elements.addAll(getPinIndicators(hasInvisibleInputs, hasInvisibleOutputs));
 	}
 
 	protected List<Object> getPinIndicators(final boolean input, final boolean output) {
