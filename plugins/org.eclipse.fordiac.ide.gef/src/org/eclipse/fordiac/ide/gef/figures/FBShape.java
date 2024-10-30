@@ -40,7 +40,7 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
-import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
+import org.eclipse.fordiac.ide.gef.draw2d.OverlayAlphaLabel;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.edit.providers.TypeImageProvider;
@@ -105,7 +105,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	/** The plugs. */
 	private final Figure plugs = new Figure();
 
-	private UnderlineAlphaLabel typeLabel;
+	private OverlayAlphaLabel typeLabel;
 
 	private static int maxWidth = -1;
 
@@ -184,7 +184,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		return plugs;
 	}
 
-	public UnderlineAlphaLabel getTypeLabel() {
+	public OverlayAlphaLabel getTypeLabel() {
 		return typeLabel;
 	}
 
@@ -434,7 +434,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 
 		middle.setLayoutManager(middleLayout);
 
-		typeLabel = new UnderlineAlphaLabel();
+		typeLabel = new OverlayAlphaLabel();
 		changeTypeLabelText((null != type) ? type.getName() : Messages.FBFigure_TYPE_NOT_SET);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
 		typeLabel.setOpaque(true);
@@ -450,5 +450,4 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		}
 		typeLabel.setText(text);
 	}
-
 }
