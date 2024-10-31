@@ -186,13 +186,17 @@ public class PackageInfoWidget extends TypeInfoWidget {
 						? TextualAnnotationStyles.getAnnotationStyle(annotationModel.getAnnotations(compilerInfo))
 						: null);
 
-		final int caretOffset = nameText.getCaretOffset();
-		final Point nameTextSelection = nameText.getSelection();
-		nameText.setText(nameStyledString.toString());
-		nameText.setStyleRanges(nameStyledString.getStyleRanges());
-		nameText.setSelection(nameTextSelection);
-		nameText.setCaretOffset(caretOffset);
-		packageViewer.refresh();
+		if (nameText != null && !nameText.isDisposed()) {
+			final int caretOffset = nameText.getCaretOffset();
+			final Point nameTextSelection = nameText.getSelection();
+			nameText.setText(nameStyledString.toString());
+			nameText.setStyleRanges(nameStyledString.getStyleRanges());
+			nameText.setSelection(nameTextSelection);
+			nameText.setCaretOffset(caretOffset);
+		}
+		if (packageViewer != null && !packageViewer.getControl().isDisposed()) {
+			packageViewer.refresh();
+		}
 		setCommandExecutor(commandExecutorBuffer);
 	}
 
