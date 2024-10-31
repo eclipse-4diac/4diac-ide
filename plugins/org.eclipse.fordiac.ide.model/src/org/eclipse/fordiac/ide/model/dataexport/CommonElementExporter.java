@@ -1,6 +1,7 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor Gmbh, TU Wien ACIN, fortiss GmbH
- * 				 2018 - 2020 Johannes Kepler University, Linz
+ * Copyright (c) 2008 - 2024 Profactor Gmbh, TU Wien ACIN, fortiss GmbH,
+ *                           Johannes Kepler University, Linz,
+ *                           Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -327,7 +328,7 @@ public class CommonElementExporter {
 				writer.writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, ident.getType());
 			}
 			if ((null != ident.getDescription()) && !ident.getDescription().equals("")) { //$NON-NLS-1$
-				writeAttributeRaw(LibraryElementTags.DESCRIPTION_ELEMENT, fullyEscapeValue(ident.getDescription()));
+				writeAttributeRaw(LibraryElementTags.DESCRIPTION_ELEMENT, ident.getDescription());
 			}
 			addEndElement();
 		}
@@ -368,8 +369,8 @@ public class CommonElementExporter {
 	}
 
 	protected void addCommentAttribute(final String comment) throws XMLStreamException {
-		if (null != comment) {
-			writer.writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, fullyEscapeValue(comment));
+		if (comment != null && !comment.isBlank()) {
+			writeAttributeRaw(LibraryElementTags.DESCRIPTION_ELEMENT, comment);
 		}
 	}
 
@@ -407,7 +408,7 @@ public class CommonElementExporter {
 			osWriter.write(" "); //$NON-NLS-1$
 			osWriter.write(attributeName);
 			osWriter.write("=\""); //$NON-NLS-1$
-			osWriter.write(attributeValue);
+			osWriter.write(fullyEscapeValue(attributeValue));
 			osWriter.write("\" "); //$NON-NLS-1$
 		} catch (final IOException e) {
 			throw new XMLStreamException("Could not write raw attribute", e); //$NON-NLS-1$
@@ -467,7 +468,7 @@ public class CommonElementExporter {
 		final boolean hasAttributes = hasNonTrivialAttributes(ie);
 		final boolean hasInitalValue = (ie instanceof final VarDeclaration varDecl) && (varDecl.getValue() != null
 				&& varDecl.getValue().getValue() != null && !varDecl.getValue().getValue().isBlank());
-		final boolean hasComment = !"".equals(ie.getComment());
+		final boolean hasComment = ie.getComment() != null && !ie.getComment().isBlank();
 
 		if (hasAttributes) {
 			addStartElement(LibraryElementTags.PARAMETER_ELEMENT);
