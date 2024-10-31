@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.annotation;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -26,11 +27,13 @@ import org.eclipse.ui.editors.text.EditorsUI;
 public class FordiacMarkerGraphicalAnnotationModel extends ResourceMarkerGraphicalAnnotationModel {
 
 	private final Supplier<LibraryElement> libraryElementSupplier;
+	private final List<GraphicalAnnotationProvider> providers;
 
 	public FordiacMarkerGraphicalAnnotationModel(final IResource resource,
 			final Supplier<LibraryElement> libraryElementSupplier) {
 		super(resource);
 		this.libraryElementSupplier = Objects.requireNonNull(libraryElementSupplier);
+		providers = GraphicalAnnotationModelManager.getInstance().getProviders(this, resource);
 		reload();
 	}
 
@@ -59,5 +62,21 @@ public class FordiacMarkerGraphicalAnnotationModel extends ResourceMarkerGraphic
 		return delta.getKind() == IResourceDelta.CHANGED
 				&& !Objects.equals(delta.getAttribute(FordiacErrorMarker.TARGET_URI, null),
 						delta.getMarker().getAttribute(FordiacErrorMarker.TARGET_URI, null));
+	}
+
+	@Override
+	public void reload() {
+		super.reload();
+		providers.forEach(GraphicalAnnotationProvider::reload);
+	}
+
+	@Override
+	public void dispose() {
+		providers.forEach(GraphicalAnnotationProvider::dispose);
+		super.dispose();
+	}
+
+	public LibraryElement getLibraryElement() {
+		return libraryElementSupplier.get();
 	}
 }

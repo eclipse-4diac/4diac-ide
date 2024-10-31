@@ -4,6 +4,7 @@
    <extension-point id="ConnectionRouterProvider" name="ConnectionRouterProvider" schema="schema/ConnectionRouterProvider.exsd"/>
    <extension-point id="ChildrenProvider" name="ChildrenProvider" schema="schema/ChildrenProvider.exsd"/>
    <extension-point id="graphicalAnnotationStyle" name="Graphical Annotation Style" schema="schema/graphicalAnnotationStyle.exsd"/>
+   <extension-point id="graphicalAnnotationProvider" name="Graphical Annotation Provider" schema="schema/graphicalAnnotationProvider.exsd"/>
     <extension point="org.eclipse.ui.themes">
         <themeElementCategory
             id="org.eclipse.fordiac.ide.themeCategory"
