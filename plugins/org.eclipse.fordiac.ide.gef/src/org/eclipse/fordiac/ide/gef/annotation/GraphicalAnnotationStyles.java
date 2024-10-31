@@ -37,6 +37,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.gef.EditPart;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
@@ -70,6 +71,14 @@ public final class GraphicalAnnotationStyles {
 		final GraphicalAnnotationStyle style = getAnnotationStyle(annotation);
 		if (style != null) {
 			return style.styler().getOverlayImage(annotation);
+		}
+		return null;
+	}
+
+	public static EditPart getAnnotationEditPart(final GraphicalAnnotation annotation) {
+		final GraphicalAnnotationStyle style = getAnnotationStyle(annotation);
+		if (style != null) {
+			return style.styler().getEditPart(annotation);
 		}
 		return null;
 	}

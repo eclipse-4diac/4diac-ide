@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gef.annotation;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.gef.EditPart;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
@@ -27,4 +28,8 @@ public interface GraphicalAnnotationStyler {
 	Image getImage(GraphicalAnnotation annotation);
 
 	Image getOverlayImage(GraphicalAnnotation annotation);
+
+	default EditPart getEditPart(final GraphicalAnnotation annotation) {
+		return null;
+	}
 }

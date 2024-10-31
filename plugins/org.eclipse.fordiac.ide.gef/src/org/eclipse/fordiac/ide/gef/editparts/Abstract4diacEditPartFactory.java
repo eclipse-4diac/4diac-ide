@@ -14,6 +14,8 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.gef.Messages;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotation;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
@@ -43,6 +45,8 @@ public abstract class Abstract4diacEditPartFactory implements EditPartFactory {
 				part = epCreator.createEditPart();
 			} else if (modelElement instanceof final IConnectionEditPartCreator connCreator) {
 				part = connCreator.createEditPart();
+			} else if (modelElement instanceof final GraphicalAnnotation annotation) {
+				part = GraphicalAnnotationStyles.getAnnotationEditPart(annotation);
 			} else {
 				part = getPartForElement(context, modelElement);
 			}
