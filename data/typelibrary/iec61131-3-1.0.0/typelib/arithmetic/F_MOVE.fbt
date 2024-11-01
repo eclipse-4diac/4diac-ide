@@ -22,5 +22,4 @@
 			<VarDeclaration Name="OUT" Type="ANY" Comment="input = output"/>
 		</OutputVars>
 	</InterfaceList>
-	<Attribute Name="GenericClassName" Value="'GEN_FORTE_F_MOVE'"/>
 </FBType>
