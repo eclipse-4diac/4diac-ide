@@ -14,6 +14,8 @@ package org.eclipse.fordiac.ide.deployment.debug.watch;
 
 import java.util.stream.Stream;
 
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -26,6 +28,9 @@ public final class DeploymentDebugWatchUtils {
 	public static Resource getResource(final INamedElement element) {
 		return switch (element) {
 		case final IInterfaceElement interfaceElement -> getResource(interfaceElement.getFBNetworkElement());
+		case final AdapterFB adapterFB when adapterFB
+				.eContainer() instanceof final AdapterDeclaration adapterDeclaration ->
+			getResource(adapterDeclaration);
 		case final FBNetworkElement networkElement -> networkElement.getResource();
 		default -> null;
 		};
@@ -40,18 +45,29 @@ public final class DeploymentDebugWatchUtils {
 		return qualifiedName;
 	}
 
+	public static boolean isSubAppInterfaceElement(final IInterfaceElement interfaceElement) {
+		final FBNetworkElement fbNetworkElement = interfaceElement.getFBNetworkElement();
+		return fbNetworkElement instanceof SubApp || fbNetworkElement instanceof final AdapterFB adapterFB
+				&& isSubAppInterfaceElement(adapterFB.getAdapterDecl());
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <T extends IInterfaceElement> Stream<T> resolveSubappInterfaceConnections(final T element) {
-		if (!(element.getFBNetworkElement() instanceof final SubApp subapp)) {
-			return Stream.of(element);
-		}
-		subapp.loadSubAppNetwork(); // ensure network is loaded
-		if (element.isIsInput()) {
-			return (Stream<T>) element.getOutputConnections().stream().map(Connection::getDestination)
+		return switch (element.getFBNetworkElement()) {
+		case final SubApp subapp -> {
+			subapp.loadSubAppNetwork(); // ensure network is loaded
+			if (element.isIsInput()) {
+				yield (Stream<T>) element.getOutputConnections().stream().map(Connection::getDestination)
+						.flatMap(DeploymentDebugWatchUtils::resolveSubappInterfaceConnections);
+			}
+			yield (Stream<T>) element.getInputConnections().stream().map(Connection::getSource)
 					.flatMap(DeploymentDebugWatchUtils::resolveSubappInterfaceConnections);
 		}
-		return (Stream<T>) element.getInputConnections().stream().map(Connection::getSource)
-				.flatMap(DeploymentDebugWatchUtils::resolveSubappInterfaceConnections);
+		case final AdapterFB adapterFB -> (Stream<T>) resolveSubappInterfaceConnections(adapterFB.getAdapterDecl())
+				.map(AdapterDeclaration::getAdapterFB).flatMap(resolved -> resolved.findBySimpleName(element.getName()))
+				.filter(IInterfaceElement.class::isInstance);
+		default -> Stream.of(element);
+		};
 	}
 
 	private DeploymentDebugWatchUtils() {

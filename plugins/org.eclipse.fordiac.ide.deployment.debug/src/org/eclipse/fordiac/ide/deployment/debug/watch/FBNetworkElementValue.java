@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.deployment.debug.watch;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.eclipse.debug.core.DebugException;
@@ -22,6 +23,7 @@ import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugElement;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -52,7 +54,8 @@ public class FBNetworkElementValue extends DeploymentDebugElement implements IVa
 			Stream.concat(baseFBType.getInternalVars().stream(), baseFBType.getInternalFbs().stream());
 		case final Group group -> group.getGroupElements().stream();
 		case final SubApp subapp -> subapp.loadSubAppNetwork().getNetworkElements().stream();
-		case final CFBInstance cfbInstance -> cfbInstance.loadCFBNetwork().getNetworkElements().stream();
+		case final CFBInstance cfbInstance -> cfbInstance.loadCFBNetwork().getNetworkElements().stream()
+				.filter(Predicate.not(AdapterFB.class::isInstance));
 		default -> Stream.empty();
 		};
 	}
