@@ -77,6 +77,7 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Display;
 
 /** This class implements an EditPart for a FunctionBlock. */
 public abstract class AbstractFBNElementEditPart extends AbstractPositionableElementEditPart
@@ -126,10 +127,12 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
 				if (!notification.isTouch()) {
-					refreshChildren();
-					// this ensure that parameters are correctly updated when pins are added or
-					// removed (e.g., errormarkerpins are deleted)
-					getParent().refresh();
+					Display.getDefault().execute(() -> {
+						refreshChildren();
+						// this ensure that parameters are correctly updated when pins are added or
+						// removed (e.g., errormarkerpins are deleted)
+						getParent().refresh();
+					});
 				}
 			}
 		};
