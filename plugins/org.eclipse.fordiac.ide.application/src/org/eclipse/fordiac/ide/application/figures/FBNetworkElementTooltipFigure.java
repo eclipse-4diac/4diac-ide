@@ -66,7 +66,7 @@ public class FBNetworkElementTooltipFigure extends Figure {
 			line.setConstraint(fp, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, false, true));
 		}
 
-		final FBNetwork fbNetwork = (FBNetwork) element.eContainer();
+		final FBNetwork fbNetwork = element.getFbNetwork();
 
 		final Application app = (null != fbNetwork) ? (fbNetwork.getApplication()) : null;
 		if (app != null && app
