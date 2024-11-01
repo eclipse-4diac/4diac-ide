@@ -39,12 +39,17 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterFB"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterNetworkFB"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterDeclaration/getType" body="return (AdapterType)getType_();"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterDeclaration/findBySimpleName"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationAnnotations.findBySimpleName(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//AdapterDeclaration/findBySimpleName/name"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterFB">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterFB/adapterDecl"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterFB/isSocket" body="return org.eclipse.fordiac.ide.model.Annotations.isSocket(this);"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterFB/getType" body="return org.eclipse.fordiac.ide.model.Annotations.getType(this);"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterFB/isPlug" body="return org.eclipse.fordiac.ide.model.Annotations.isPlug(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterFB/getQualifiedName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBAnnotations.getQualifiedName(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterType/plugType"/>

@@ -147,6 +147,16 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * @generated
 	 */
 	@Override
+	public String getQualifiedName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBAnnotations.getQualifiedName(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL:

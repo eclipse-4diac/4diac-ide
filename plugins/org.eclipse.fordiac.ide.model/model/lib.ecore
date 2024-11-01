@@ -22,6 +22,12 @@
         <details key="body" value="return (AdapterType)getType_();"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="findBySimpleName" eType="#//NamedElementStream">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationAnnotations.findBySimpleName(this, name);"/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterFB" eType="#//AdapterFB"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterNetworkFB" eType="#//AdapterFB"/>
@@ -40,6 +46,11 @@
     <eOperations name="isPlug" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isPlug(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getQualifiedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBAnnotations.getQualifiedName(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterDecl" lowerBound="1"

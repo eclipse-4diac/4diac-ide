@@ -16,6 +16,8 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import java.util.stream.Stream;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Adapter Declaration</b></em>'.
@@ -85,5 +87,13 @@ public interface AdapterDeclaration extends IInterfaceElement {
 	 * @generated
 	 */
 	AdapterType getType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model dataType="org.eclipse.fordiac.ide.model.libraryElement.NamedElementStream"
+	 * @generated
+	 */
+	Stream<INamedElement> findBySimpleName(String name);
 
 } // AdapterDeclaration

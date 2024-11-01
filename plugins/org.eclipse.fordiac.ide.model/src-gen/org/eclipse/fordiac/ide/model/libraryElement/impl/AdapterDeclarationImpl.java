@@ -615,7 +615,7 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	 */
 	@Override
 	public Stream<INamedElement> findBySimpleName(final String name) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.findBySimpleName(this, name);
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationAnnotations.findBySimpleName(this, name);
 	}
 
 	/**
