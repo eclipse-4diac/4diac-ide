@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
@@ -32,13 +32,20 @@ public class UntypeSubAppCommand extends AbstractUpdateFBNElementCommand {
 
 	@Override
 	protected void createNewFB() {
-		newElement = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
-		newElement.setName(oldElement.getName());
-		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
-		newElement.setInterface(oldElement.getType().getInterfaceList().copy());
-		createValues();
-		transferInstanceComments();
+		super.createNewFB();
+		// the FBNetwork can only be copied at the end when the interface is correctly
+		// setup
 		((UntypedSubApp) newElement).setSubAppNetwork(FBNetworkHelper
 				.copyFBNetWork(((TypedSubApp) oldElement).getType().getFBNetwork(), newElement.getInterface()));
+	}
+
+	@Override
+	protected FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement) {
+		return LibraryElementFactory.eINSTANCE.createUntypedSubApp();
+	}
+
+	@Override
+	protected void setInterface() {
+		newElement.setInterface(oldElement.getType().getInterfaceList().copy());
 	}
 }

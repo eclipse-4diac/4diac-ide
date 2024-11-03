@@ -20,7 +20,6 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.List;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -58,17 +57,6 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		return FBNetworkHelper.isTypeInsertionSafe((FBType) entry.getType(), network);
 	}
 
-	@Override
-	protected void createNewFB() {
-		newElement = createCopiedFBEntry(oldElement);
-		setInterface();
-		handleConfigurableFB();
-		newElement.setName(oldElement.getName());
-		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
-		createValues();
-		transferInstanceComments();
-	}
-
 	protected void setEntry(final TypeEntry entry) {
 		this.entry = entry;
 	}
@@ -77,6 +65,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		return entry;
 	}
 
+	@Override
 	protected FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement) {
 		entry = reloadTypeEntry(entry, srcElement);
 

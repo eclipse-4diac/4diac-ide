@@ -20,11 +20,11 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.text.MessageFormat;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
@@ -76,22 +76,18 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 	}
 
 	@Override
-	protected void createNewFB() {
-		if (oldElement instanceof Multiplexer) {
-			newElement = LibraryElementFactory.eINSTANCE.createMultiplexer();
-		} else if (oldElement instanceof Demultiplexer) {
-			newElement = LibraryElementFactory.eINSTANCE.createDemultiplexer();
+	protected FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement) {
+		FBNetworkElement copy = null;
+
+		if (srcElement instanceof Multiplexer) {
+			copy = LibraryElementFactory.eINSTANCE.createMultiplexer();
+		} else if (srcElement instanceof Demultiplexer) {
+			copy = LibraryElementFactory.eINSTANCE.createDemultiplexer();
 		}
-		newElement.setTypeEntry(entry);
-		setInterface();
-		handleConfigurableFB();
-		newElement.setName(oldElement.getName());
-
-		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
-		copyAttributes();
-
-		createValues();
-		transferInstanceComments();
+		if (copy != null) {
+			copy.setTypeEntry(entry);
+		}
+		return copy;
 	}
 
 	@Override
@@ -111,10 +107,6 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 			return demux.isIsConfigured() || newVisibleChildren != null;
 		}
 		return false;
-	}
-
-	protected void copyAttributes() {
-		newElement.getAttributes().addAll(EcoreUtil.copyAll(oldElement.getAttributes()));
 	}
 
 	public StructManipulator getNewMux() {

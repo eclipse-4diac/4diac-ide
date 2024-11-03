@@ -25,6 +25,7 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
@@ -211,7 +212,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		}
 	}
 
-	public void setInterface() {
+	protected void setInterface() {
 		newElement.setInterface(newElement.getType().getInterfaceList().copy());
 	}
 
@@ -222,7 +223,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 						|| (!newDecl.isIsInput() && newDecl.getOutputConnections().isEmpty())) {
 					newDecl.setVisible(varDecl.isVisible());
 				}
-
 				newDecl.setVarConfig(varDecl.isVarConfig());
 			}
 		});
@@ -467,7 +467,22 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		return new DataConnectionCreateCommand(fbn);
 	}
 
-	protected abstract void createNewFB();
+	protected void createNewFB() {
+		newElement = createCopiedFBEntry(oldElement);
+		setInterface();
+		handleConfigurableFB();
+		newElement.setName(oldElement.getName());
+		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
+		copyAttributes();
+		createValues();
+		transferInstanceComments();
+	}
+
+	private void copyAttributes() {
+		newElement.getAttributes().addAll(EcoreUtil.copyAll(oldElement.getAttributes()));
+	}
+
+	protected abstract FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement);
 
 	public FBNetworkElement getOldElement() {
 		return oldElement;
