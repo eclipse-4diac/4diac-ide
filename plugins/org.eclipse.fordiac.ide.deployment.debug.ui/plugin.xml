@@ -814,4 +814,13 @@
 			styler="org.eclipse.fordiac.ide.deployment.debug.ui.annotation.WatchpointAnnotationStyler">
 		</style>
 	</extension>
+	<extension
+		point="org.eclipse.ui.preferencePages">
+		<page
+			category="org.eclipse.fordiac.ide.debug.ui.preferences.FordiacDebugPreferencePage"
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.preferences.DeploymentDebugPreferencePage"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.preferences"
+			name="Deployment">
+		</page>
+	</extension>
 </plugin>
