@@ -77,6 +77,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
@@ -391,7 +392,8 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 						|| selectedElement instanceof Method || selectedElement instanceof VarDeclaration) {
 					handleContentOutlineSelection(new StructuredSelection(selectedElement));
 				}
-			} else {
+			} else if (part instanceof ContentOutline) {
+				// only update selection if it comes from the outline
 				handleContentOutlineSelection(selection);
 			}
 		}

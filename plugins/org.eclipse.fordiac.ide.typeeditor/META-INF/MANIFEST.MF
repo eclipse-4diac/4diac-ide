@@ -45,6 +45,7 @@ Import-Package: org.eclipse.core.commands.common,
  org.eclipse.ui.ide,
  org.eclipse.ui.part,
  org.eclipse.ui.texteditor,
+ org.eclipse.ui.views.contentoutline,
  org.eclipse.ui.views.properties,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.xtext.ui.editor
