@@ -50,14 +50,11 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 		} else if (eventPins.size() == 2) {
 			final DefineFBDecisionTwoPinDialog dialog = new DefineFBDecisionTwoPinDialog(
 					HandlerUtil.getActiveShell(event));
-			boolean isReaction = true;
-			if (dialog.open() != CANCEL) {
-				isReaction = dialog.isReaction();
 
-			}
-			if (isReaction) {
+			dialog.open();
+			if (dialog.isReaction()) {
 				makeTwoPinReaction(event, eventPins);
-			} else {
+			} else if (dialog.isGuarantee()) {
 				makeTwoPinGuarantee(event, eventPins);
 			}
 

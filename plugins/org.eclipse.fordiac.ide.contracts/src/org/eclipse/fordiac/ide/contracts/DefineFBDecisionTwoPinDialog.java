@@ -10,94 +10,40 @@
  * Contributors:
  *   Paul Pavlicek
  *     - initial API and implementation and/or initial documentation
+ *   Felix Schmid
+ *     - improved UX by replacing checkboxes with buttons
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts;
 
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 public class DefineFBDecisionTwoPinDialog extends MessageDialog {
-	private static final int NUM_COLUMNS = 3;
-	private boolean isReaction;
-	private Button reactionCheckbox;
-	private Button guaranteeCheckbox;
+
+	private static final int CREATE_REACTION = 0;
+	private static final int CREATE_GUARANTEE = 1;
+
+	private int pressedButtonId = -1;
 
 	public DefineFBDecisionTwoPinDialog(final Shell parentShell) {
 		super(parentShell, Messages.DefineFBReactionOnePinDialog_Title, null,
 				Messages.DefineFBDecisionTwoPinDialog_Info, MessageDialog.INFORMATION, 0,
-				Messages.DefineFBReactionOnePinDialog_Button);
+				Messages.DefineFBDecisionTwoPinDialog_CreateReaction,
+				Messages.DefineFBDecisionTwoPinDialog_CreateGuarantee);
 	}
 
 	public boolean isReaction() {
-		return isReaction;
+		return pressedButtonId == CREATE_REACTION;
 	}
 
-	@Override
-	protected Control createCustomArea(final Composite parent) {
-		parent.setLayout(new FillLayout());
-		final Composite dialogArea = new Composite(parent, SWT.FILL);
-		dialogArea.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
-		dialogArea.setLayout(new GridLayout(2, false));
-
-		final Composite dialog = new Composite(dialogArea, SWT.NONE);
-		dialog.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
-		dialog.setLayout(new GridLayout(NUM_COLUMNS, false));
-
-		reactionCheckbox = new Button(dialog, SWT.CHECK);
-		reactionCheckbox.setText(Messages.DefineFBDecisionTwoPinDialog_CreateReaction);
-		reactionCheckbox.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
-		reactionCheckbox.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				guaranteeCheckbox.setEnabled(!reactionCheckbox.getSelection());
-
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-				// is never called
-			}
-		});
-
-		guaranteeCheckbox = new Button(dialog, SWT.CHECK);
-		guaranteeCheckbox.setText(Messages.DefineFBDecisionTwoPinDialog_CreateGuarantee);
-		guaranteeCheckbox.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
-		guaranteeCheckbox.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				reactionCheckbox.setEnabled(!guaranteeCheckbox.getSelection());
-
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-				// is never called
-			}
-		});
-
-		return dialogArea;
+	public boolean isGuarantee() {
+		return pressedButtonId == CREATE_GUARANTEE;
 	}
 
 	@Override
 	protected void buttonPressed(final int buttonId) {
-		isReaction = reactionCheckbox.getSelection();
-		if (reactionCheckbox.getSelection() == guaranteeCheckbox.getSelection()) {
-			MessageDialog.openError(this.getShell(), Messages.DefineFBDecisionTwoPinDialog_Error,
-					Messages.DefineFBDecisionTwoPinDialog_ErrorInfo);
-		} else {
-			super.buttonPressed(buttonId);
-		}
+		pressedButtonId = buttonId;
+		super.buttonPressed(buttonId);
 	}
 
 }
