@@ -50,8 +50,12 @@ public class ReconnectPinChange extends AbstractCommandChange<FBNetworkElement> 
 
 	@Override
 	protected Command createCommand(final FBNetworkElement element) {
+		if (state.size() == 1 && state.contains(ChangeState.NO_CHANGE)) {
+			return new Command() {
+				// empty command that is not doing any change
+			};
+		}
 		return new ReconnectPinByName(oldName, newName, element, state);
-
 	}
 
 	@Override
