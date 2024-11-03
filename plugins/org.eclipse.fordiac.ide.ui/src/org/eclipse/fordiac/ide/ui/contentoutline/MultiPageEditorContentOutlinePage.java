@@ -13,7 +13,9 @@
 package org.eclipse.fordiac.ide.ui.contentoutline;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.core.runtime.Adapters;
@@ -52,6 +54,7 @@ public class MultiPageEditorContentOutlinePage extends Page
 	private final CopyOnWriteArrayList<ISelectionChangedListener> selectionChangedListeners = new CopyOnWriteArrayList<>();
 	private final CopyOnWriteArrayList<ISelectionChangedListener> postSelectionChangedListeners = new CopyOnWriteArrayList<>();
 	private final Map<IEditorPart, PageRecord> pages = new HashMap<>();
+	private final Set<MultiPageEditorPart> multiPageChildren = new HashSet<>();
 
 	private final ISelectionChangedListener selectionChangedListener = this::selectionChanged;
 	private final ISelectionChangedListener postSelectionChangedListener = this::postSelectionChanged;
@@ -149,6 +152,13 @@ public class MultiPageEditorContentOutlinePage extends Page
 	}
 
 	protected void pageChanged(final PageChangedEvent event) {
+		if ((event.getSelectedPage() instanceof final MultiPageEditorPart multiPageEditor)
+				&& multiPageChildren.add(multiPageEditor)) {
+			// register to sub pages that are themselves again multipage editors e.g.,
+			// breadcrumb editor in typed subapp
+			multiPageEditor.addPageChangedListener(pageChangedListener);
+		}
+
 		if (event.getSelectedPage() instanceof final IEditorPart activeEditor) {
 			showPage(getOrCreatePage(activeEditor));
 		} else {
@@ -236,6 +246,7 @@ public class MultiPageEditorContentOutlinePage extends Page
 	@Override
 	public void dispose() {
 		editorPart.removePageChangedListener(pageChangedListener);
+		multiPageChildren.forEach(child -> child.removePageChangedListener(pageChangedListener));
 		showPage(null);
 		pages.values().forEach(PageRecord::dispose);
 		if (book != null) {
