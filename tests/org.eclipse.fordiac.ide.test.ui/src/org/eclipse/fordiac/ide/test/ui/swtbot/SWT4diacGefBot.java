@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.test.ui.swtbot;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.finder.SWTGefBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.ui.IEditorReference;
@@ -57,6 +58,16 @@ public class SWT4diacGefBot extends SWTGefBot {
 			return gefEditor.getSWTBotGefViewer();
 		}
 		return null;
+	}
+
+	public boolean closeViewByTitle(final String title) {
+		try {
+			final SWTBotView view = this.viewByTitle(title);
+			view.close();
+			return true;
+		} catch (final WidgetNotFoundException e) {
+			return false;
+		}
 	}
 
 }
