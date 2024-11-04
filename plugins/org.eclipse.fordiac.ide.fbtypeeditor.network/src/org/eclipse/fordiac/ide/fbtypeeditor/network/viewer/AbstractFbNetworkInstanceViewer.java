@@ -95,6 +95,7 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 		if (fbNetworkElement != null) {
 			viewer.setContents(getModel());
 		}
+		addAnnotationModelDispatcher();
 	}
 
 	@Override
