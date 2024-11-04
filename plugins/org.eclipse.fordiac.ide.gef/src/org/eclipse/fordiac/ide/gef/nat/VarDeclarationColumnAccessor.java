@@ -64,8 +64,8 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 	}
 
 	private static boolean handleInOutCheck(final VarDeclaration rowObject, final VarDeclarationTableColumn column) {
-		final IInterfaceElement vD = getCorrectVarInOutPin(rowObject, column);
-		return vD.isVisible();
+		final IInterfaceElement interfaceElement = getCorrectVarInOutPin(rowObject, column);
+		return interfaceElement.isVisible();
 
 	}
 
@@ -98,8 +98,8 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 
 	private static Command handleInOut(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
 			final Object newValue) {
-		final VarDeclaration vD = getCorrectVarInOutPin(rowObject, column);
-		return new HidePinCommand(vD, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
+		final VarDeclaration varDeclaration = getCorrectVarInOutPin(rowObject, column);
+		return new HidePinCommand(varDeclaration, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 	}
 
 	private static VarDeclaration getCorrectVarInOutPin(final VarDeclaration rowObject,
