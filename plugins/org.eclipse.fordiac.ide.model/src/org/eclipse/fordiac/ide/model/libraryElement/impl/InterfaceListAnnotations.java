@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  *                          Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
@@ -23,7 +23,6 @@ import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.Annotations;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -53,12 +52,12 @@ final class InterfaceListAnnotations {
 
 	public static Event getEvent(final InterfaceList il, final String name) {
 		for (final Event event : il.getEventInputs()) {
-			if (Annotations.getTransitionEventName(event).equals(name)) {
+			if (event.getName().equals(name)) {
 				return event;
 			}
 		}
 		for (final Event event : il.getEventOutputs()) {
-			if (Annotations.getTransitionEventName(event).equals(name)) {
+			if (event.getName().equals(name)) {
 				return event;
 			}
 		}

@@ -123,6 +123,7 @@ public final class FBNetworkHelper {
 				final AdapterDeclaration adapter = destInterface.getAdapter(elem.getName());
 				if (null != adapter) {
 					adapterfb.setAdapterDecl(adapter);
+					adapter.setAdapterNetworkFB(adapterfb);
 				}
 			}
 		}
@@ -154,11 +155,11 @@ public final class FBNetworkHelper {
 		return newConn;
 	}
 
-	private static IInterfaceElement getInterfaceElement(final IInterfaceElement ie, final InterfaceList typeInterface,
+	private static IInterfaceElement getInterfaceElement(final IInterfaceElement ie, final InterfaceList destInterface,
 			final FBNetwork dstNetwork, final FBNetwork srcNetwork) {
 		final IInterfaceElement interfaceElement;
 		if (ie.getFBNetworkElement() == null || srcNetwork != ie.getFBNetworkElement().getFbNetwork()) {
-			interfaceElement = typeInterface.getInterfaceElement(ie.getName());
+			interfaceElement = destInterface.getInterfaceElement(ie.getName());
 		} else {
 			final FBNetworkElement element = dstNetwork.getElementNamed(ie.getFBNetworkElement().getName());
 			if (null == element) {
