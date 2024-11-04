@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2011, 2024 Profactor GmbH, fortiss GmbH,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -14,9 +14,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public class TypeField {
+public class TypeField implements IAdaptable {
 	private final IInterfaceElement referencedElement;
 
 	public IInterfaceElement getReferencedElement() {
@@ -31,4 +33,11 @@ public class TypeField {
 		return getReferencedElement().getFullTypeName();
 	}
 
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == ConfigurableObject.class) {
+			return adapter.cast(referencedElement);
+		}
+		return null;
+	}
 }

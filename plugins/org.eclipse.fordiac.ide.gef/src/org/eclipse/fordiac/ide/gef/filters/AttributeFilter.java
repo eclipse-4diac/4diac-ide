@@ -13,6 +13,8 @@
 
 package org.eclipse.fordiac.ide.gef.filters;
 
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -31,7 +33,11 @@ public class AttributeFilter implements IFilter {
 
 	public static Object parseObject(final Object input) {
 		if (input instanceof final EditPart editpart) {
-			final Object inputHelper = editpart.getModel();
+			Object inputHelper = editpart.getModel();
+
+			if (!(inputHelper instanceof EObject) && inputHelper instanceof final IAdaptable adaptable) {
+				inputHelper = adaptable.getAdapter(ConfigurableObject.class);
+			}
 
 			// handle exception: interface elements of functions
 			if (inputHelper instanceof final IInterfaceElement interfaceElement
