@@ -26,6 +26,7 @@ package org.eclipse.fordiac.ide.export.forte_ng.simple
 import java.nio.file.Path
 import org.eclipse.fordiac.ide.export.forte_ng.base.BaseFBImplTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState
 
 class SimpleFBImplTemplate extends BaseFBImplTemplate<SimpleFBType> {
 	new(SimpleFBType type, String name, Path prefix) {
@@ -35,12 +36,9 @@ class SimpleFBImplTemplate extends BaseFBImplTemplate<SimpleFBType> {
 	override generateExecuteEvent() '''
 		void «FBClassName»::executeEvent(const TEventID paEIID, CEventChainExecutionThread *const paECET) {
 		  switch(paEIID) {
-		    «FOR event : type.interfaceList.eventInputs»
-		    	case «event.generateEventID»:
-		    	  «FOR alg : type.algorithm.filter[name == event.name]»
-		    	  	«alg.generateAlgorithmName»();
-		    	  «ENDFOR»
-		    	  break;
+		    «FOR state : type.simpleECStates»
+		     	case «state.inputEvent.generateEventID»:
+		     	  enterState«state.name»(paECET)
 		    «ENDFOR»
 		    default:
 		      break;
@@ -50,5 +48,30 @@ class SimpleFBImplTemplate extends BaseFBImplTemplate<SimpleFBType> {
 		  «ENDFOR»
 		}
 		
+		«generateStates»
 	'''
+	
+	def protected generateStates() '''
+		«FOR state : type.simpleECStates»
+			«state.generateState»
+			
+		«ENDFOR»
+	'''
+
+	def protected generateState(SimpleECState state) '''
+		void «FBClassName»::enterState«state.name»(CEventChainExecutionThread *const«IF hasOutputEvent(state)» paECET«ENDIF») {
+		  «FOR action : state.simpleECActions»
+		  	«IF action.algorithm !== null»
+		  		«action.algorithm.generateAlgorithmName»();
+		  	«ENDIF»
+		  	«IF action.output !== null»
+		  		«action.output.generateSendEvent»
+		  	«ENDIF»
+		  «ENDFOR»
+		}
+	'''
+		
+	def private static hasOutputEvent(SimpleECState state) {
+		return state.simpleECActions.exists[it.output !== null];
+	}
 }

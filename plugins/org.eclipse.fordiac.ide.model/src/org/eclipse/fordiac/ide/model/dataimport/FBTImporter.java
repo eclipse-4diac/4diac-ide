@@ -25,6 +25,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +68,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
@@ -92,6 +95,9 @@ public class FBTImporter extends TypeImporter {
 
 	/** The algorithm name ec action mapping. */
 	private final Map<String, List<ECAction>> algorithmNameECActionMapping = new HashMap<>();
+
+	/** The algorithm name simple ec action mapping. */
+	private final Map<String, List<SimpleECAction>> algorithmNameSimpleECActionMapping = new HashMap<>();
 
 	/** The ec states. */
 	private final Map<String, ECState> ecStates = new HashMap<>();
@@ -426,7 +432,38 @@ public class FBTImporter extends TypeImporter {
 	 * @throws XMLStreamException
 	 */
 	private void parseSimpleFB(final SimpleFBType type) throws TypeImportException, XMLStreamException {
-		processChildren(LibraryElementTags.SIMPLE_F_B_ELEMENT, name -> handleBaseFBChildren(type, name));
+		processChildren(LibraryElementTags.SIMPLE_F_B_ELEMENT, name -> handleSimpleFBChildren(type, name));
+		// create SimpleECSTate Elements if needed
+		// (this implicitly converts old type files)
+		final var inEvents = type.getInterfaceList().getEventInputs();
+		if (inEvents.size() > type.getSimpleECStates().size()) {
+			final var outEvents = type.getInterfaceList().getEventOutputs();
+			final Event stdOutEvent = !outEvents.isEmpty() ? outEvents.get(0) : null;
+			final var inEventSet = new LinkedHashSet<>(inEvents);
+			for (final var state : type.getSimpleECStates()) {
+				inEventSet.remove(state.getInputEvent());
+			}
+			for (final Event inEvent : inEventSet) {
+				final var state = LibraryElementFactory.eINSTANCE.createSimpleECState();
+				state.setName(inEvent.getName());
+				state.setInputEvent(inEvent);
+				final var action = LibraryElementFactory.eINSTANCE.createSimpleECAction();
+				action.setAlgorithm(type.getAlgorithmNamed(inEvent.getName()));
+				action.setOutput(stdOutEvent);
+				state.getSimpleECActions().add(action);
+				type.getSimpleECStates().add(state);
+			}
+		}
+
+	}
+
+	private boolean handleSimpleFBChildren(final SimpleFBType type, final String name)
+			throws TypeImportException, XMLStreamException {
+		if (LibraryElementTags.ECSTATE_ELEMENT.equals(name)) {
+			parseSimpleECState(type);
+			return true;
+		}
+		return handleBaseFBChildren(type, name);
 	}
 
 	private boolean handleBaseFBChildren(final BaseFBType type, final String name)
@@ -445,6 +482,12 @@ public class FBTImporter extends TypeImporter {
 				final List<ECAction> list = algorithmNameECActionMapping.get(alg.getName());
 				if (null != list) {
 					for (final ECAction action : list) {
+						action.setAlgorithm(alg);
+					}
+				}
+				final List<SimpleECAction> simplelist = algorithmNameSimpleECActionMapping.get(alg.getName());
+				if (null != simplelist) {
+					for (final SimpleECAction action : simplelist) {
 						action.setAlgorithm(alg);
 					}
 				}
@@ -833,6 +876,52 @@ public class FBTImporter extends TypeImporter {
 		}
 		proceedToEndElementNamed(LibraryElementTags.ECACTION_ELEMENT);
 		type.getECAction().add(ecAction);
+	}
+
+	/**
+	 * This method parses an SimpleECState.
+	 *
+	 * @param type - the SimpleFBType containing the SimpleECState being parsed
+	 *
+	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException
+	 */
+	private void parseSimpleECState(final SimpleFBType type) throws TypeImportException, XMLStreamException {
+		final SimpleECState state = LibraryElementFactory.eINSTANCE.createSimpleECState();
+		readNameCommentAttributes(state);
+
+		state.setInputEvent(type.getInterfaceList().getEvent(state.getName()));
+
+		processChildren(LibraryElementTags.ECSTATE_ELEMENT, name -> {
+			if (LibraryElementTags.ECACTION_ELEMENT.equals(name)) {
+				parseSimpleECAction(state);
+				return true;
+			}
+			return false;
+		});
+
+		type.getSimpleECStates().add(state);
+	}
+
+	/**
+	 * This method parses an SimpleECAction.
+	 *
+	 * @param type - the SimpleECState belonging to the SimpleECAction being parsed
+	 * @throws XMLStreamException
+	 */
+	private void parseSimpleECAction(final SimpleECState type) throws XMLStreamException {
+		final SimpleECAction ecAction = LibraryElementFactory.eINSTANCE.createSimpleECAction();
+		final String algorithm = getAttributeValue(LibraryElementTags.ALGORITHM_ELEMENT);
+		algorithmNameSimpleECActionMapping.computeIfAbsent(algorithm, s -> new ArrayList<>()).add(ecAction);
+		final String output = getAttributeValue(LibraryElementTags.OUTPUT_ATTRIBUTE);
+		if (null != output) {
+			final Event outp = outputEvents.get(output);
+			if (null != outp) {
+				ecAction.setOutput(outp);
+			}
+		}
+		proceedToEndElementNamed(LibraryElementTags.ECACTION_ELEMENT);
+		type.getSimpleECActions().add(ecAction);
 	}
 
 	/**

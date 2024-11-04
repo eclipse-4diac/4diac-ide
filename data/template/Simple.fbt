@@ -39,11 +39,11 @@
   <VersionInfo Organization="TU Wien/ACIN" Version="0.0" Author="Peter Gsellmann" Date="2018-10-15" />
   <InterfaceList>
     <EventInputs>
-      <Event Name="REQ" Comment="Normal Execution Request" >
+      <Event Name="REQ" Type="Event" Comment="Normal Execution Request" >
       </Event>
     </EventInputs>
     <EventOutputs>
-      <Event Name="CNF" Comment="Execution Confirmation" >
+      <Event Name="CNF" Type="Event" Comment="Execution Confirmation" >
       </Event>
     </EventOutputs>
     <InputVars>
@@ -52,8 +52,11 @@
     </OutputVars>
   </InterfaceList>
   <SimpleFB>
-  <Algorithm Name="REQ" Comment="" >
-    <ST Text="" />
-  </Algorithm>
+    <ECState Name="REQ" Comment="">
+      <ECAction Algorithm="REQ" Output="CNF"/>
+    </ECState>
+    <Algorithm Name="REQ" Comment="" >
+      <ST Text="" />
+    </Algorithm>
   </SimpleFB>
 </FBType>

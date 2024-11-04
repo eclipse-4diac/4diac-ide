@@ -41,6 +41,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -229,10 +231,57 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 		addStartElement(LibraryElementTags.SIMPLE_F_B_ELEMENT);
 		addInternalVarList(type.getInternalVars(), type.getInternalFbs(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
 		addVarList(type.getInternalConstVars(), LibraryElementTags.INTERNAL_CONST_VARS_ELEMENT);
+		addSimpleECStates(type.getSimpleECStates());
 		for (final ICallable callable : type.getCallables()) {
 			addICallable(callable);
 		}
 		addEndElement();
+	}
+
+	/**
+	 * Adds the simple ec states.
+	 *
+	 * @param states the states
+	 * @throws XMLStreamException
+	 */
+	private void addSimpleECStates(final List<SimpleECState> states) throws XMLStreamException {
+		for (final SimpleECState state : states) {
+			createSimpleECState(state);
+		}
+	}
+
+	/**
+	 * Creates the simple ec state.
+	 *
+	 * @param state the state
+	 * @throws XMLStreamException
+	 */
+	private void createSimpleECState(final SimpleECState state) throws XMLStreamException {
+		addStartElement(LibraryElementTags.ECSTATE_ELEMENT);
+
+		addNameAndCommentAttribute(state);
+		addSimpleECActions(state.getSimpleECActions());
+
+		addEndElement();
+	}
+
+	/**
+	 * Adds the simple ec actions.
+	 *
+	 * @param actions the actions
+	 * @throws XMLStreamException
+	 */
+	private void addSimpleECActions(final List<SimpleECAction> actions) throws XMLStreamException {
+		for (final SimpleECAction action : actions) {
+			addEmptyStartElement(LibraryElementTags.ECACTION_ELEMENT);
+			if (action.getAlgorithm() != null) {
+				getWriter().writeAttribute(LibraryElementTags.ALGORITHM_ELEMENT, action.getAlgorithm().getName());
+			}
+			if (action.getOutput() != null) {
+				getWriter().writeAttribute(LibraryElementTags.OUTPUT_ATTRIBUTE,
+						getActionOutputEventName(action.getOutput()));
+			}
+		}
 	}
 
 	/**
