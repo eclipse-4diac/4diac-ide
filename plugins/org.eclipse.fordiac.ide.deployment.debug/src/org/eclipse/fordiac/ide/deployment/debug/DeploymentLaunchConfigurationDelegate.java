@@ -125,7 +125,7 @@ public class DeploymentLaunchConfigurationDelegate extends LaunchConfigurationDe
 		}
 	}
 
-	protected static List<ILaunch> getActiveLaunches(final IResource resource) {
+	public static List<ILaunch> getActiveLaunches(final IResource resource) {
 		return Stream.of(DebugPlugin.getDefault().getLaunchManager().getLaunches())
 				.filter(launch -> resource.getFullPath().toString().equals(launch.getAttribute(SYSTEM_FILE_ATTRIBUTE)))
 				.toList();

@@ -291,6 +291,16 @@
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatch"
 			name="Toggle Watch">
 		</command>
+		<command
+			categoryId="org.eclipse.fordiac.ide.commands.category"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.force"
+			name="Force Value">
+		</command>
+		<command
+			categoryId="org.eclipse.fordiac.ide.commands.category"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.triggerEvent"
+			name="Trigger Event">
+		</command>
 	</extension>
 	<extension
 		point="org.eclipse.ui.handlers">
@@ -394,6 +404,87 @@
 								type="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement">
 							</adapt>
 						</or>
+					</iterate>
+				</with>
+			</enabledWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.ForceHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.force">
+			<activeWhen>
+				<or>
+					<with
+						variable="activePartId">
+						<equals
+							value="org.eclipse.fordiac.ide.editors.SystemEditor">
+						</equals>
+					</with>
+					<with
+						variable="selection">
+						<iterate
+							ifEmpty="false"
+							operator="or">
+							<instanceof
+								value="org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch">
+							</instanceof>
+						</iterate>
+					</with>
+				</or>
+			</activeWhen>
+			<enabledWhen>
+				<with
+					variable="selection">
+					<count
+						value="1">
+					</count>
+					<iterate
+						ifEmpty="false"
+						operator="and">
+						<adapt
+							type="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement">
+							<instanceof
+								value="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
+							</instanceof>
+						</adapt>
+					</iterate>
+				</with>
+			</enabledWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.TriggerEventHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.triggerEvent">
+			<activeWhen>
+				<or>
+					<with
+						variable="activePartId">
+						<equals
+							value="org.eclipse.fordiac.ide.editors.SystemEditor">
+						</equals>
+					</with>
+					<with
+						variable="selection">
+						<iterate
+							ifEmpty="false"
+							operator="or">
+							<instanceof
+								value="org.eclipse.fordiac.ide.deployment.debug.watch.IEventWatch">
+							</instanceof>
+						</iterate>
+					</with>
+				</or>
+			</activeWhen>
+			<enabledWhen>
+				<with
+					variable="selection">
+					<iterate
+						ifEmpty="false"
+						operator="and">
+						<adapt
+							type="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement">
+							<instanceof
+								value="org.eclipse.fordiac.ide.model.libraryElement.Event">
+							</instanceof>
+						</adapt>
 					</iterate>
 				</with>
 			</enabledWhen>
@@ -510,6 +601,25 @@
 					checkEnabled="true">
 				</visibleWhen>
 			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.force"
+				disabledIcon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_disabled.png"
+				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_obj.png"
+				label="Force Value..."
+				tooltip="Force the watch value">
+				<visibleWhen
+					checkEnabled="true">
+				</visibleWhen>
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.triggerEvent"
+				icon="fordiacimage://ICON_TRIGGER_EVENT"
+				label="Trigger Event"
+				tooltip="Trigger an event">
+				<visibleWhen
+					checkEnabled="true">
+				</visibleWhen>
+			</command>
 		</menuContribution>
 		<menuContribution
 			locationURI="menu:org.eclipse.ui.run?after=additions">
@@ -566,6 +676,19 @@
 				label="Toggle Watch"
 				style="push"
 				tooltip="Toggle watch for selected elements">
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.force"
+				disabledIcon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_disabled.png"
+				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_obj.png"
+				label="Force Value"
+				tooltip="Force the watch value">
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.triggerEvent"
+				icon="fordiacimage://ICON_TRIGGER_EVENT"
+				label="Trigger Event"
+				tooltip="Trigger an event">
 			</command>
 		</menuContribution>
 	</extension>
