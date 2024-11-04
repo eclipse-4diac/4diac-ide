@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeRetainAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
-import org.eclipse.fordiac.ide.model.commands.change.HideInOutPinCommand;
 import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
@@ -100,7 +99,7 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 	private static Command handleInOut(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
 			final Object newValue) {
 		final VarDeclaration vD = getCorrectVarInOutPin(rowObject, column);
-		return new HideInOutPinCommand(vD, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
+		return new HidePinCommand(vD, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 	}
 
 	private static VarDeclaration getCorrectVarInOutPin(final VarDeclaration rowObject,
