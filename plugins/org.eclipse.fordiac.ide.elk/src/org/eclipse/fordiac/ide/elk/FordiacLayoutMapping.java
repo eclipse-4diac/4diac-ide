@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPa
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeNetworkViewerEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.ui.IEditorPart;
 
 public class FordiacLayoutMapping extends LayoutMapping {
 
@@ -45,8 +46,8 @@ public class FordiacLayoutMapping extends LayoutMapping {
 
 	public LayoutType type;
 
-	public FordiacLayoutMapping(final AbstractFBNetworkEditPart ep) {
-		super(null); // WorkbenchPart only needed for configuration store, which we don't use
+	public FordiacLayoutMapping(final IEditorPart part, final AbstractFBNetworkEditPart ep) {
+		super(part);
 		this.ep = ep;
 		type = getLayoutType(ep);
 

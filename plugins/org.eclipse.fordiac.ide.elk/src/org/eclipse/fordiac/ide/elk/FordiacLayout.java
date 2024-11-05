@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.elk.alg.layered.options.LayeredMetaDataProvider;
 import org.eclipse.elk.alg.libavoid.options.LibavoidMetaDataProvider;
@@ -35,8 +36,11 @@ import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPa
 import org.eclipse.fordiac.ide.application.utilities.GetEditPartFromGraficalViewerHelper;
 import org.eclipse.fordiac.ide.elk.commands.BlockLayoutCommand;
 import org.eclipse.fordiac.ide.elk.commands.ConnectionLayoutCommand;
+import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -65,21 +69,21 @@ public class FordiacLayout {
 			final boolean isBlockLayout) {
 		final var engine = new RecursiveGraphLayoutEngine();
 		final var cmd = new CompoundCommand();
-		cmd.add(performLayoutRun(ep, engine, isBlockLayout)); // initial run, e.g. application
+		cmd.add(performLayoutRun(part, ep, engine, isBlockLayout)); // initial run, e.g. application
 
 		if (ep instanceof UnfoldedSubappContentEditPart) { // have to look for further subapps
 			final List<UnfoldedSubappContentEditPart> subapps = new ArrayList<>();
 			collectSubapps(ep, subapps);
 			Collections.reverse(subapps);
-			subapps.stream().forEach(subapp -> cmd.add(performLayoutRun(subapp, engine, isBlockLayout)));
+			subapps.stream().forEach(subapp -> cmd.add(performLayoutRun(part, subapp, engine, isBlockLayout)));
 		}
 
 		return cmd;
 	}
 
-	private static Command performLayoutRun(final AbstractFBNetworkEditPart ep, final RecursiveGraphLayoutEngine engine,
-			final boolean isBlockLayout) {
-		final FordiacLayoutMapping mapping = new FordiacLayoutMapping(ep);
+	private static Command performLayoutRun(final IEditorPart part, final AbstractFBNetworkEditPart ep,
+			final RecursiveGraphLayoutEngine engine, final boolean isBlockLayout) {
+		final FordiacLayoutMapping mapping = new FordiacLayoutMapping(part, ep);
 
 		FordiacGraphBuilder.build(mapping);
 
@@ -88,6 +92,10 @@ public class FordiacLayout {
 			engine.layout(mapping.getLayoutGraph(), new NullElkProgressMonitor());
 
 			mapping.getLayoutGraph().getAllProperties().clear();
+
+			if (Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SNAP_TO_GRID)) {
+				snapToGrid(mapping);
+			}
 		}
 
 		configureConnectionLayoutGraph(mapping.getLayoutGraph());
@@ -107,6 +115,18 @@ public class FordiacLayout {
 		}
 		cmd.add(new ConnectionLayoutCommand(mapping.getLayoutData()));
 		return cmd;
+	}
+
+	private static void snapToGrid(final FordiacLayoutMapping mapping) {
+		final var viewer = mapping.getWorkbenchPart().getAdapter(GraphicalViewer.class);
+		final var dim = (Dimension) viewer.getProperty(SnapToGrid.PROPERTY_GRID_SPACING);
+		final var gridSize = dim.preciseHeight();
+
+		mapping.getLayoutGraph().getChildren().forEach(node -> {
+			final double x = Math.round((node.getX()) / gridSize) * gridSize;
+			final double y = Math.round((node.getY()) / gridSize) * gridSize;
+			node.setLocation(x, y);
+		});
 	}
 
 	private static void configureBlockLayoutGraph(final ElkGraphElement graph) {
