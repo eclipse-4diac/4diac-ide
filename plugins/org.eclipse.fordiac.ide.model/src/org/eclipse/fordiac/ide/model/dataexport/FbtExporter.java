@@ -275,7 +275,7 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 		for (final SimpleECAction action : actions) {
 			addEmptyStartElement(LibraryElementTags.ECACTION_ELEMENT);
 			if (action.getAlgorithm() != null) {
-				getWriter().writeAttribute(LibraryElementTags.ALGORITHM_ELEMENT, action.getAlgorithm().getName());
+				getWriter().writeAttribute(LibraryElementTags.ALGORITHM_ELEMENT, action.getAlgorithm());
 			}
 			if (action.getOutput() != null) {
 				getWriter().writeAttribute(LibraryElementTags.OUTPUT_ATTRIBUTE,

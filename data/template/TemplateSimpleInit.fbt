@@ -37,7 +37,7 @@
  *******************************************************************************/
  -->
 <!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
-<FBType Name="TemplateSimple" Comment="Example for a Simple Function Block Type" >
+<FBType Name="TemplateSimpleInit" Comment="Example for a Simple Function Block Type with init event" >
   <Identification Standard="61499-1" />
   <VersionInfo Organization="TU Wien/ACIN" Version="0.0" Author="Peter Gsellmann" Date="2018-10-15" />
   <InterfaceList>

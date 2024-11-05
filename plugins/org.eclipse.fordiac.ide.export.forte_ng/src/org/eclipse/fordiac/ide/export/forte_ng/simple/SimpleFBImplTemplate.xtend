@@ -38,14 +38,12 @@ class SimpleFBImplTemplate extends BaseFBImplTemplate<SimpleFBType> {
 		  switch(paEIID) {
 		    «FOR state : type.simpleECStates»
 		     	case «state.inputEvent.generateEventID»:
-		     	  enterState«state.name»(paECET)
+		     	  enterState«state.name»(paECET);
+		     	  break;
 		    «ENDFOR»
 		    default:
 		      break;
 		  }
-		  «FOR event : type.interfaceList.eventOutputs»
-		  	«event.generateSendEvent»
-		  «ENDFOR»
 		}
 		
 		«generateStates»
@@ -62,7 +60,7 @@ class SimpleFBImplTemplate extends BaseFBImplTemplate<SimpleFBType> {
 		void «FBClassName»::enterState«state.name»(CEventChainExecutionThread *const«IF hasOutputEvent(state)» paECET«ENDIF») {
 		  «FOR action : state.simpleECActions»
 		  	«IF action.algorithm !== null»
-		  		«action.algorithm.generateAlgorithmName»();
+		  		alg_«action.algorithm»();
 		  	«ENDIF»
 		  	«IF action.output !== null»
 		  		«action.output.generateSendEvent»

@@ -2003,7 +2003,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceFBType" eSuperTypes="#//FBType"/>
   <eClassifiers xsi:type="ecore:EClass" name="SimpleECAction">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="algorithm" eType="#//Algorithm"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="algorithm" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="#//Event"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleECState" lowerBound="1"
         eType="#//SimpleECState" eOpposite="#//SimpleECState/simpleECActions"/>

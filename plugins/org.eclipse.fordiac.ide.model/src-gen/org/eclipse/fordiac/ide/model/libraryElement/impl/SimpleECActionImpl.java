@@ -26,7 +26,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
@@ -49,14 +48,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
  */
 public class SimpleECActionImpl extends EObjectImpl implements SimpleECAction {
 	/**
-	 * The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' reference.
+	 * The default value of the '{@link #getAlgorithm() <em>Algorithm</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getAlgorithm()
 	 * @generated
 	 * @ordered
 	 */
-	protected Algorithm algorithm;
+	protected static final String ALGORITHM_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAlgorithm()
+	 * @generated
+	 * @ordered
+	 */
+	protected String algorithm = ALGORITHM_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getOutput() <em>Output</em>}' reference.
@@ -93,24 +102,7 @@ public class SimpleECActionImpl extends EObjectImpl implements SimpleECAction {
 	 * @generated
 	 */
 	@Override
-	public Algorithm getAlgorithm() {
-		if (algorithm != null && algorithm.eIsProxy()) {
-			InternalEObject oldAlgorithm = (InternalEObject)algorithm;
-			algorithm = (Algorithm)eResolveProxy(oldAlgorithm);
-			if (algorithm != oldAlgorithm) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SIMPLE_EC_ACTION__ALGORITHM, oldAlgorithm, algorithm));
-			}
-		}
-		return algorithm;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Algorithm basicGetAlgorithm() {
+	public String getAlgorithm() {
 		return algorithm;
 	}
 
@@ -120,8 +112,8 @@ public class SimpleECActionImpl extends EObjectImpl implements SimpleECAction {
 	 * @generated
 	 */
 	@Override
-	public void setAlgorithm(Algorithm newAlgorithm) {
-		Algorithm oldAlgorithm = algorithm;
+	public void setAlgorithm(String newAlgorithm) {
+		String oldAlgorithm = algorithm;
 		algorithm = newAlgorithm;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SIMPLE_EC_ACTION__ALGORITHM, oldAlgorithm, algorithm));
@@ -276,8 +268,7 @@ public class SimpleECActionImpl extends EObjectImpl implements SimpleECAction {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.SIMPLE_EC_ACTION__ALGORITHM:
-				if (resolve) return getAlgorithm();
-				return basicGetAlgorithm();
+				return getAlgorithm();
 			case LibraryElementPackage.SIMPLE_EC_ACTION__OUTPUT:
 				if (resolve) return getOutput();
 				return basicGetOutput();
@@ -298,7 +289,7 @@ public class SimpleECActionImpl extends EObjectImpl implements SimpleECAction {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case LibraryElementPackage.SIMPLE_EC_ACTION__ALGORITHM:
-				setAlgorithm((Algorithm)newValue);
+				setAlgorithm((String)newValue);
 				return;
 			case LibraryElementPackage.SIMPLE_EC_ACTION__OUTPUT:
 				setOutput((Event)newValue);
@@ -321,7 +312,7 @@ public class SimpleECActionImpl extends EObjectImpl implements SimpleECAction {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case LibraryElementPackage.SIMPLE_EC_ACTION__ALGORITHM:
-				setAlgorithm((Algorithm)null);
+				setAlgorithm(ALGORITHM_EDEFAULT);
 				return;
 			case LibraryElementPackage.SIMPLE_EC_ACTION__OUTPUT:
 				setOutput((Event)null);
@@ -344,7 +335,7 @@ public class SimpleECActionImpl extends EObjectImpl implements SimpleECAction {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case LibraryElementPackage.SIMPLE_EC_ACTION__ALGORITHM:
-				return algorithm != null;
+				return ALGORITHM_EDEFAULT == null ? algorithm != null : !ALGORITHM_EDEFAULT.equals(algorithm);
 			case LibraryElementPackage.SIMPLE_EC_ACTION__OUTPUT:
 				return output != null;
 			case LibraryElementPackage.SIMPLE_EC_ACTION__SIMPLE_EC_STATE:
@@ -352,6 +343,22 @@ public class SimpleECActionImpl extends EObjectImpl implements SimpleECAction {
 			default:
 				return super.eIsSet(featureID);
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (algorithm: "); //$NON-NLS-1$
+		result.append(algorithm);
+		result.append(')');
+		return result.toString();
 	}
 
 } //SimpleECActionImpl

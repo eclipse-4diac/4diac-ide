@@ -21,7 +21,7 @@ public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
 
 	public static String STAlgorithmValidator_DuplicateMethodOrAlgorithmName;
-	public static String STAlgorithmValidator_NoAlgorithmForInputEvent;
+	public static String STAlgorithmValidator_MissingAlgorithmForECState;
 	public static String STAlgorithmValidator_UnqualifiedMethodOrAlgorithmShadowingFunction;
 	public static String STAlgorithmValidator_UnusedAlgorithm;
 	public static String STAlgorithmValidator_NameUsedAsEventInput;

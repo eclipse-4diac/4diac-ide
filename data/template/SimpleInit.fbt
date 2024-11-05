@@ -34,7 +34,7 @@
  *******************************************************************************/
  -->
 <!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
-<FBType Name="Simple" Comment="Simple FB with one algorithm" >
+<FBType Name="SimpleInit" Comment="Simple FB with init event and one algorithm" >
   <Identification Standard="61499-1" />
   <VersionInfo Organization="TU Wien/ACIN" Version="0.0" Author="Peter Gsellmann" Date="2018-10-15" />
   <InterfaceList>

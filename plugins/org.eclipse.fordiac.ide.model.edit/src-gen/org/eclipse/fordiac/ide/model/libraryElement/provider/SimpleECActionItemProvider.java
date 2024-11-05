@@ -32,11 +32,13 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 
 import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction} object.
@@ -96,7 +98,7 @@ public class SimpleECActionItemProvider
 				 true,
 				 false,
 				 true,
-				 null,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -142,7 +144,10 @@ public class SimpleECActionItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_SimpleECAction_type"); //$NON-NLS-1$
+		String label = ((SimpleECAction)object).getAlgorithm();
+		return label == null || label.length() == 0 ?
+			getString("_UI_SimpleECAction_type") : //$NON-NLS-1$
+			getString("_UI_SimpleECAction_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 

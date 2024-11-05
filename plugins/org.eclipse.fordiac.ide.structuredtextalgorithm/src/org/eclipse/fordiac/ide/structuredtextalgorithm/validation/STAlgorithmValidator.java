@@ -152,29 +152,29 @@ public class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 		}
 	}
 
-	// TODO: change check to InputEvent 1:1 SimpleECState and move it somewhere else
-//	@Check
-//	public void checkAlgorithmForInputEvent(final STAlgorithmSource source) {
-//		if (source.eResource() instanceof final STAlgorithmResource resource
-//				&& resource.getInternalLibraryElement() instanceof final SimpleFBType simpleFBType) {
-//			simpleFBType.getInterfaceList().getEventInputs().stream()
-//					.filter(event -> simpleFBType.getAlgorithm().stream()
-//							.noneMatch(alg -> alg.getName().equalsIgnoreCase(event.getName()))
-//							&& source.getElements().stream().filter(STAlgorithm.class::isInstance)
-//									.noneMatch(alg -> alg.getName().equalsIgnoreCase(event.getName())))
-//					.forEach(event -> acceptError(
-//							MessageFormat.format(Messages.STAlgorithmValidator_NoAlgorithmForInputEvent,
-//									event.getName()),
-//							source, 0, 0, STAlgorithmValidator.NO_ALGORITHM_FOR_INPUT_EVENT, event.getName()));
-//		}
-//	}
+	@Check
+	public void checkAlgorithmForSimpleECAction(final STAlgorithmSource source) {
+		if (source.eResource() instanceof final STAlgorithmResource resource
+				&& resource.getInternalLibraryElement() instanceof final SimpleFBType simpleFBType) {
+			simpleFBType.getSimpleECStates().stream().flatMap(state -> state.getSimpleECActions().stream())
+					.filter(action -> simpleFBType.getAlgorithm().stream()
+							.noneMatch(alg -> alg.getName().equalsIgnoreCase(action.getAlgorithm()))
+							&& source.getElements().stream().filter(STAlgorithm.class::isInstance)
+									.noneMatch(alg -> alg.getName().equalsIgnoreCase(action.getAlgorithm())))
+					.forEach(action -> acceptError(
+							MessageFormat.format(Messages.STAlgorithmValidator_MissingAlgorithmForECState,
+									action.getAlgorithm(), action.getSimpleECState().getName()),
+							source, 0, 0, STAlgorithmValidator.NO_ALGORITHM_FOR_INPUT_EVENT,
+							action.getSimpleECState().getName()));
+		}
+	}
 
 	@Check
 	public void checkUnusedAlgorithm(final STAlgorithm algorithm) {
 		if ((algorithm.eResource() instanceof final STAlgorithmResource resource
 				&& resource.getInternalLibraryElement() instanceof final SimpleFBType simpleFBType)
 				&& simpleFBType.getSimpleECStates().stream().flatMap(state -> state.getSimpleECActions().stream())
-						.noneMatch(action -> action.getAlgorithm().getName().equalsIgnoreCase(algorithm.getName()))) {
+						.noneMatch(action -> action.getAlgorithm().equalsIgnoreCase(algorithm.getName()))) {
 			warning(MessageFormat.format(Messages.STAlgorithmValidator_UnusedAlgorithm, algorithm.getName()), algorithm,
 					LibraryElementPackage.eINSTANCE.getINamedElement_Name(),
 					STAlgorithmValidator.NO_INPUT_EVENT_FOR_ALGORITHM, algorithm.getName());

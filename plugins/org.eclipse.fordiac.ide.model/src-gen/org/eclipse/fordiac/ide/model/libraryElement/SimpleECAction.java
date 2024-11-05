@@ -38,26 +38,26 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface SimpleECAction extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Algorithm</b></em>' reference.
+	 * Returns the value of the '<em><b>Algorithm</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Algorithm</em>' reference.
-	 * @see #setAlgorithm(Algorithm)
+	 * @return the value of the '<em>Algorithm</em>' attribute.
+	 * @see #setAlgorithm(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSimpleECAction_Algorithm()
-	 * @model
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
 	 * @generated
 	 */
-	Algorithm getAlgorithm();
+	String getAlgorithm();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction#getAlgorithm <em>Algorithm</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction#getAlgorithm <em>Algorithm</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Algorithm</em>' reference.
+	 * @param value the new value of the '<em>Algorithm</em>' attribute.
 	 * @see #getAlgorithm()
 	 * @generated
 	 */
-	void setAlgorithm(Algorithm value);
+	void setAlgorithm(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Output</b></em>' reference.

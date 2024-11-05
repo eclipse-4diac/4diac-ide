@@ -6753,7 +6753,7 @@ public interface LibraryElementPackage extends EPackage {
 	int SIMPLE_EC_ACTION = 85;
 
 	/**
-	 * The feature id for the '<em><b>Algorithm</b></em>' reference.
+	 * The feature id for the '<em><b>Algorithm</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -10787,15 +10787,15 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getSimpleECAction();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction#getAlgorithm <em>Algorithm</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction#getAlgorithm <em>Algorithm</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Algorithm</em>'.
+	 * @return the meta object for the attribute '<em>Algorithm</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction#getAlgorithm()
 	 * @see #getSimpleECAction()
 	 * @generated
 	 */
-	EReference getSimpleECAction_Algorithm();
+	EAttribute getSimpleECAction_Algorithm();
 
 	/**
 	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction#getOutput <em>Output</em>}'.
@@ -13726,12 +13726,12 @@ public interface LibraryElementPackage extends EPackage {
 		EClass SIMPLE_EC_ACTION = eINSTANCE.getSimpleECAction();
 
 		/**
-		 * The meta object literal for the '<em><b>Algorithm</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Algorithm</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SIMPLE_EC_ACTION__ALGORITHM = eINSTANCE.getSimpleECAction_Algorithm();
+		EAttribute SIMPLE_EC_ACTION__ALGORITHM = eINSTANCE.getSimpleECAction_Algorithm();
 
 		/**
 		 * The meta object literal for the '<em><b>Output</b></em>' reference feature.

@@ -96,9 +96,6 @@ public class FBTImporter extends TypeImporter {
 	/** The algorithm name ec action mapping. */
 	private final Map<String, List<ECAction>> algorithmNameECActionMapping = new HashMap<>();
 
-	/** The algorithm name simple ec action mapping. */
-	private final Map<String, List<SimpleECAction>> algorithmNameSimpleECActionMapping = new HashMap<>();
-
 	/** The ec states. */
 	private final Map<String, ECState> ecStates = new HashMap<>();
 
@@ -448,7 +445,7 @@ public class FBTImporter extends TypeImporter {
 				state.setName(inEvent.getName());
 				state.setInputEvent(inEvent);
 				final var action = LibraryElementFactory.eINSTANCE.createSimpleECAction();
-				action.setAlgorithm(type.getAlgorithmNamed(inEvent.getName()));
+				action.setAlgorithm(inEvent.getName());
 				action.setOutput(stdOutEvent);
 				state.getSimpleECActions().add(action);
 				type.getSimpleECStates().add(state);
@@ -482,12 +479,6 @@ public class FBTImporter extends TypeImporter {
 				final List<ECAction> list = algorithmNameECActionMapping.get(alg.getName());
 				if (null != list) {
 					for (final ECAction action : list) {
-						action.setAlgorithm(alg);
-					}
-				}
-				final List<SimpleECAction> simplelist = algorithmNameSimpleECActionMapping.get(alg.getName());
-				if (null != simplelist) {
-					for (final SimpleECAction action : simplelist) {
 						action.setAlgorithm(alg);
 					}
 				}
@@ -911,8 +902,7 @@ public class FBTImporter extends TypeImporter {
 	 */
 	private void parseSimpleECAction(final SimpleECState type) throws XMLStreamException {
 		final SimpleECAction ecAction = LibraryElementFactory.eINSTANCE.createSimpleECAction();
-		final String algorithm = getAttributeValue(LibraryElementTags.ALGORITHM_ELEMENT);
-		algorithmNameSimpleECActionMapping.computeIfAbsent(algorithm, s -> new ArrayList<>()).add(ecAction);
+		ecAction.setAlgorithm(getAttributeValue(LibraryElementTags.ALGORITHM_ELEMENT));
 		final String output = getAttributeValue(LibraryElementTags.OUTPUT_ATTRIBUTE);
 		if (null != output) {
 			final Event outp = outputEvents.get(output);
