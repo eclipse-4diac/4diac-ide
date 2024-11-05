@@ -39,7 +39,7 @@ public final class FBAnnotations {
 	public static FBNetwork loadCFBNetwork(final CFBInstance cfb) {
 		FBNetwork fbNetwork = cfb.getCfbNetwork();
 		if (null == fbNetwork) {
-			fbNetwork = FBNetworkHelper.copyFBNetWork(cfb.getType().getFBNetwork(), cfb.getInterface());
+			fbNetwork = FBNetworkHelper.copyCFBNetWork(cfb.getType().getFBNetwork(), cfb.getInterface());
 			cfb.setCfbNetwork(fbNetwork);
 		}
 		return fbNetwork;

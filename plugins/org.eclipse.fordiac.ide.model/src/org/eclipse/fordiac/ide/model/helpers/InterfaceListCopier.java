@@ -18,6 +18,7 @@ import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.setArraySize
 import java.util.Collection;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -178,6 +179,9 @@ public final class InterfaceListCopier {
 	public static AdapterDeclaration copyAdapter(final AdapterDeclaration adapter, final boolean copyComments) {
 		final AdapterDeclaration copy = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
 		copyInterfaceElement(adapter, copy, copyComments);
+		copy.setAdapterFB(EcoreUtil.copy(adapter.getAdapterFB()));
+		copy.getAdapterFB().setAdapterDecl(copy);
+		copy.setInterfaceOnlyAdapterFB(copy.getAdapterFB());
 		return copy;
 	}
 

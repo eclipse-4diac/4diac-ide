@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -88,13 +89,9 @@ public class ChangeNameCommand extends Command implements ConnectionLayoutTagger
 
 	private static void handleAdapterDeclarationRename(final String name, final ChangeNameCommand result,
 			final AdapterDeclaration adapterDeclaration) {
-		if (adapterDeclaration.getAdapterFB() != null) {
-			// we don't need and we can't do a name check as the parent is not an fbnetwork
-			result.getAdditionalCommands().add(new ChangeNameCommand(adapterDeclaration.getAdapterFB(), name, false));
-		}
-		if (adapterDeclaration.getAdapterNetworkFB() != null) {
-			result.getAdditionalCommands().add(new ChangeNameCommand(adapterDeclaration.getAdapterNetworkFB(), name));
-		}
+		// only when the adapter fb is in a FBNetwork we need to perform a name check.
+		result.getAdditionalCommands().add(new ChangeNameCommand(adapterDeclaration.getAdapterFB(), name,
+				adapterDeclaration.getAdapterFB().eContainer() instanceof FBNetwork));
 	}
 
 	@Override

@@ -247,7 +247,7 @@ public class AdapterDeclarationItemProvider extends ItemProviderAdapter implemen
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB);
+			childrenFeatures.add(LibraryElementPackage.Literals.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB);
 		}
 		return childrenFeatures;
 	}
@@ -308,7 +308,7 @@ public class AdapterDeclarationItemProvider extends ItemProviderAdapter implemen
 			case LibraryElementPackage.ADAPTER_DECLARATION__IS_INPUT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
+			case LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 			default:
@@ -330,7 +330,7 @@ public class AdapterDeclarationItemProvider extends ItemProviderAdapter implemen
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LibraryElementPackage.Literals.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB,
+				(LibraryElementPackage.Literals.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB,
 				 LibraryElementFactory.eINSTANCE.createAdapterFB()));
 	}
 

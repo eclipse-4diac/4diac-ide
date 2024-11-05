@@ -380,7 +380,6 @@ public class FBTImporter extends TypeImporter {
 	private static void addAdapterFBToNetwork(final FBNetwork fbNetwork, final AdapterDeclaration adapterDecl) {
 		final AdapterFB adapterFB = adapterDecl.getAdapterFB();
 		fbNetwork.getNetworkElements().add(adapterFB);
-		adapterDecl.setAdapterNetworkFB(adapterFB);
 	}
 
 	/**
@@ -1071,6 +1070,7 @@ public class FBTImporter extends TypeImporter {
 		aFB.setTypeEntry(adapter.getType().getTypeEntry());
 		aFB.setAdapterDecl(adapter);
 		adapter.setAdapterFB(aFB);
+		adapter.setInterfaceOnlyAdapterFB(aFB);
 		aFB.setName(adapter.getName());
 
 		if (null != aFB.getType() && null != aFB.getType().getInterfaceList()) {

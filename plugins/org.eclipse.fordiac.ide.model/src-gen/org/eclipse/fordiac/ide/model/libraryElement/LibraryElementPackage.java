@@ -486,7 +486,7 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_DECLARATION__TYPE = IINTERFACE_ELEMENT__TYPE;
 
 	/**
-	 * The feature id for the '<em><b>Adapter FB</b></em>' containment reference.
+	 * The feature id for the '<em><b>Adapter FB</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -495,13 +495,13 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_DECLARATION__ADAPTER_FB = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Adapter Network FB</b></em>' reference.
+	 * The feature id for the '<em><b>Interface Only Adapter FB</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION__ADAPTER_NETWORK_FB = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
+	int ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Adapter Declaration</em>' class.
@@ -8024,10 +8024,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getAdapterDeclaration();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}'.
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Adapter FB</em>'.
+	 * @return the meta object for the reference '<em>Adapter FB</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB()
 	 * @see #getAdapterDeclaration()
 	 * @generated
@@ -8035,15 +8035,15 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getAdapterDeclaration_AdapterFB();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterNetworkFB <em>Adapter Network FB</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getInterfaceOnlyAdapterFB <em>Interface Only Adapter FB</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Adapter Network FB</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterNetworkFB()
+	 * @return the meta object for the containment reference '<em>Interface Only Adapter FB</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getInterfaceOnlyAdapterFB()
 	 * @see #getAdapterDeclaration()
 	 * @generated
 	 */
-	EReference getAdapterDeclaration_AdapterNetworkFB();
+	EReference getAdapterDeclaration_InterfaceOnlyAdapterFB();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB <em>Adapter FB</em>}'.
@@ -11358,7 +11358,7 @@ public interface LibraryElementPackage extends EPackage {
 		EClass ADAPTER_DECLARATION = eINSTANCE.getAdapterDeclaration();
 
 		/**
-		 * The meta object literal for the '<em><b>Adapter FB</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Adapter FB</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -11366,12 +11366,12 @@ public interface LibraryElementPackage extends EPackage {
 		EReference ADAPTER_DECLARATION__ADAPTER_FB = eINSTANCE.getAdapterDeclaration_AdapterFB();
 
 		/**
-		 * The meta object literal for the '<em><b>Adapter Network FB</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Interface Only Adapter FB</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ADAPTER_DECLARATION__ADAPTER_NETWORK_FB = eINSTANCE.getAdapterDeclaration_AdapterNetworkFB();
+		EReference ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB = eINSTANCE.getAdapterDeclaration_InterfaceOnlyAdapterFB();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBImpl <em>Adapter FB</em>}' class.

@@ -20,9 +20,11 @@ package org.eclipse.fordiac.ide.model.helpers;
 import java.text.MessageFormat;
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.BasicEList;
@@ -32,7 +34,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.annotations.MappingAnnotations;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -78,9 +79,42 @@ public final class FBNetworkHelper {
 	public static FBNetwork copyFBNetWork(final FBNetwork srcNetwork, final InterfaceList destInterface) {
 		final FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		dstNetwork.getNetworkElements().addAll(EcoreUtil.copyAll(srcNetwork.getNetworkElements()));
+		createConnections(srcNetwork, dstNetwork, destInterface);
+		return dstNetwork;
+	}
+
+	/**
+	 * Take the src FBNetwork from a composite FB and copy it into a new network.
+	 *
+	 * @param srcNetwork    the FBNetwork to copy
+	 * @param destInterface if not null the interface of the component the new
+	 *                      FBNetwork should be contained in
+	 * @return the copied FBNetwork
+	 */
+	public static FBNetwork copyCFBNetWork(final FBNetwork srcNetwork, final InterfaceList destInterface) {
+		final FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
+
+		final FBNetworkAdapterLessCopier copier = new FBNetworkAdapterLessCopier();
+		final Collection<FBNetworkElement> result = copier.copyAll(srcNetwork.getNetworkElements());
+		copier.copyReferences();
+		dstNetwork.getNetworkElements().addAll(result);
+
 		checkForAdapterFBs(dstNetwork, destInterface);
 		createConnections(srcNetwork, dstNetwork, destInterface);
 		return dstNetwork;
+	}
+
+	private static class FBNetworkAdapterLessCopier extends EcoreUtil.Copier {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public EObject copy(final EObject eObject) {
+			// copy all FBNetworkElements except adapter FBs
+			if (!(eObject instanceof AdapterFB)) {
+				return super.copy(eObject);
+			}
+			return null;
+		}
 	}
 
 	/**
@@ -96,7 +130,6 @@ public final class FBNetworkHelper {
 			final InterfaceList destInterface) {
 		final FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		createResourceTypeFBs(resourceTypeNetwork.getNetworkElements(), dstNetwork);
-		checkForAdapterFBs(dstNetwork, destInterface);
 		createConnections(resourceTypeNetwork, dstNetwork, destInterface);
 		return dstNetwork;
 	}
@@ -118,15 +151,8 @@ public final class FBNetworkHelper {
 	}
 
 	private static void checkForAdapterFBs(final FBNetwork dstNetwork, final InterfaceList destInterface) {
-		for (final FBNetworkElement elem : dstNetwork.getNetworkElements()) {
-			if (elem instanceof final AdapterFB adapterfb) {
-				final AdapterDeclaration adapter = destInterface.getAdapter(elem.getName());
-				if (null != adapter) {
-					adapterfb.setAdapterDecl(adapter);
-					adapter.setAdapterNetworkFB(adapterfb);
-				}
-			}
-		}
+		Stream.concat(destInterface.getPlugs().stream(), destInterface.getSockets().stream())
+				.forEach(adp -> dstNetwork.getNetworkElements().add(adp.getAdapterFB()));
 	}
 
 	private static void createConnections(final FBNetwork srcNetwork, final FBNetwork dstNetwork,

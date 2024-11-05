@@ -28,9 +28,9 @@
       </eAnnotations>
       <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="adapterFB" eType="#//AdapterFB"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="adapterNetworkFB" eType="#//AdapterFB"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="adapterFB" eType="#//AdapterFB"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interfaceOnlyAdapterFB"
+        eType="#//AdapterFB" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdapterFB" eSuperTypes="#//FB">
     <eOperations name="isSocket" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">

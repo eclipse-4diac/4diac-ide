@@ -39,12 +39,11 @@ class AdapterFBCreateCommand extends FBCreateCommand {
 
 	@Override
 	public void execute() {
-		if (getFBNetwork() != null) {
-			// we are creating the adapter FB in a CFB we need to set the adapter network fb
-			// field here, nothing needs to be done in undo or redo
-			adapterDecl.setAdapterNetworkFB(getAdapterFB());
-		} else {
-			adapterDecl.setAdapterFB(getAdapterFB());
+		adapterDecl.setAdapterFB(getAdapterFB());
+		if (getFBNetwork() == null) {
+			// if it is a non CFB we need to set the interface only adapter FB ref for
+			// keeping the adapter FBs containment
+			adapterDecl.setInterfaceOnlyAdapterFB(getAdapterFB());
 		}
 		super.execute();
 

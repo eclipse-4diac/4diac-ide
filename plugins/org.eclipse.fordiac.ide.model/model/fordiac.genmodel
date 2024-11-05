@@ -37,7 +37,7 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterFB"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterNetworkFB"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/interfaceOnlyAdapterFB"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterDeclaration/getType" body="return (AdapterType)getType_();"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterDeclaration/findBySimpleName"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationAnnotations.findBySimpleName(this, name);">

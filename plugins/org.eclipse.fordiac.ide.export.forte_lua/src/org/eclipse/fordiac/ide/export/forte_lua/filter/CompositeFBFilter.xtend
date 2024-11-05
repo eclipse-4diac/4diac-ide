@@ -94,8 +94,8 @@ class CompositeFBFilter {
 	}'''
 	
 	def static String luaConnectionString(FBNetworkElement e, IInterfaceElement ev, CompositeFBType type, String stringID){
-		var plugs = type.interfaceList.plugs.map[it.adapterNetworkFB].toList
-		var sockets = type.interfaceList.sockets.map[it.adapterNetworkFB].toList
+		var plugs = type.interfaceList.plugs.map[it.adapterFB].toList
+		var sockets = type.interfaceList.sockets.map[it.adapterFB].toList
 		if (e instanceof AdapterFB){
 			if(plugs.contains(e)){
 				return '''«stringID»ID = "«ev.name»", «stringID»FBNum = «ADAPTER_MARKER.bitwiseOr(plugs.indexOf(e))»'''

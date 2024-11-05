@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
@@ -107,8 +108,8 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		}
 
 		addNameTypeCommentAttribute(adapterDecl, adapterDecl.getType());
-		if (null != adapterDecl.getAdapterNetworkFB()) {
-			addXYAttributes(adapterDecl.getAdapterNetworkFB());
+		if (adapterDecl.getAdapterFB().eContainer() instanceof FBNetwork) {
+			addXYAttributes(adapterDecl.getAdapterFB());
 		}
 
 		if (hasAttributes) {

@@ -64,7 +64,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getAdapterFB <em>Adapter FB</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getAdapterNetworkFB <em>Adapter Network FB</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getInterfaceOnlyAdapterFB <em>Interface Only Adapter FB</em>}</li>
  * </ul>
  *
  * @generated
@@ -171,7 +171,7 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	protected DataType type;
 
 	/**
-	 * The cached value of the '{@link #getAdapterFB() <em>Adapter FB</em>}' containment reference.
+	 * The cached value of the '{@link #getAdapterFB() <em>Adapter FB</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getAdapterFB()
@@ -181,14 +181,14 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	protected AdapterFB adapterFB;
 
 	/**
-	 * The cached value of the '{@link #getAdapterNetworkFB() <em>Adapter Network FB</em>}' reference.
+	 * The cached value of the '{@link #getInterfaceOnlyAdapterFB() <em>Interface Only Adapter FB</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAdapterNetworkFB()
+	 * @see #getInterfaceOnlyAdapterFB()
 	 * @generated
 	 * @ordered
 	 */
-	protected AdapterFB adapterNetworkFB;
+	protected AdapterFB interfaceOnlyAdapterFB;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -367,12 +367,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			InternalEObject oldAdapterFB = (InternalEObject)adapterFB;
 			adapterFB = (AdapterFB)eResolveProxy(oldAdapterFB);
 			if (adapterFB != oldAdapterFB) {
-				InternalEObject newAdapterFB = (InternalEObject)adapterFB;
-				NotificationChain msgs = oldAdapterFB.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, null, null);
-				if (newAdapterFB.eInternalContainer() == null) {
-					msgs = newAdapterFB.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, oldAdapterFB, adapterFB));
 			}
@@ -394,11 +388,57 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetAdapterFB(AdapterFB newAdapterFB, NotificationChain msgs) {
+	@Override
+	public void setAdapterFB(AdapterFB newAdapterFB) {
 		AdapterFB oldAdapterFB = adapterFB;
 		adapterFB = newAdapterFB;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, oldAdapterFB, adapterFB));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AdapterFB getInterfaceOnlyAdapterFB() {
+		if (interfaceOnlyAdapterFB != null && interfaceOnlyAdapterFB.eIsProxy()) {
+			InternalEObject oldInterfaceOnlyAdapterFB = (InternalEObject)interfaceOnlyAdapterFB;
+			interfaceOnlyAdapterFB = (AdapterFB)eResolveProxy(oldInterfaceOnlyAdapterFB);
+			if (interfaceOnlyAdapterFB != oldInterfaceOnlyAdapterFB) {
+				InternalEObject newInterfaceOnlyAdapterFB = (InternalEObject)interfaceOnlyAdapterFB;
+				NotificationChain msgs = oldInterfaceOnlyAdapterFB.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB, null, null);
+				if (newInterfaceOnlyAdapterFB.eInternalContainer() == null) {
+					msgs = newInterfaceOnlyAdapterFB.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB, oldInterfaceOnlyAdapterFB, interfaceOnlyAdapterFB));
+			}
+		}
+		return interfaceOnlyAdapterFB;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AdapterFB basicGetInterfaceOnlyAdapterFB() {
+		return interfaceOnlyAdapterFB;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetInterfaceOnlyAdapterFB(AdapterFB newInterfaceOnlyAdapterFB, NotificationChain msgs) {
+		AdapterFB oldInterfaceOnlyAdapterFB = interfaceOnlyAdapterFB;
+		interfaceOnlyAdapterFB = newInterfaceOnlyAdapterFB;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, oldAdapterFB, newAdapterFB);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB, oldInterfaceOnlyAdapterFB, newInterfaceOnlyAdapterFB);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -410,58 +450,18 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	 * @generated
 	 */
 	@Override
-	public void setAdapterFB(AdapterFB newAdapterFB) {
-		if (newAdapterFB != adapterFB) {
+	public void setInterfaceOnlyAdapterFB(AdapterFB newInterfaceOnlyAdapterFB) {
+		if (newInterfaceOnlyAdapterFB != interfaceOnlyAdapterFB) {
 			NotificationChain msgs = null;
-			if (adapterFB != null)
-				msgs = ((InternalEObject)adapterFB).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, null, msgs);
-			if (newAdapterFB != null)
-				msgs = ((InternalEObject)newAdapterFB).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, null, msgs);
-			msgs = basicSetAdapterFB(newAdapterFB, msgs);
+			if (interfaceOnlyAdapterFB != null)
+				msgs = ((InternalEObject)interfaceOnlyAdapterFB).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB, null, msgs);
+			if (newInterfaceOnlyAdapterFB != null)
+				msgs = ((InternalEObject)newInterfaceOnlyAdapterFB).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB, null, msgs);
+			msgs = basicSetInterfaceOnlyAdapterFB(newInterfaceOnlyAdapterFB, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, newAdapterFB, newAdapterFB));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public AdapterFB getAdapterNetworkFB() {
-		if (adapterNetworkFB != null && adapterNetworkFB.eIsProxy()) {
-			InternalEObject oldAdapterNetworkFB = (InternalEObject)adapterNetworkFB;
-			adapterNetworkFB = (AdapterFB)eResolveProxy(oldAdapterNetworkFB);
-			if (adapterNetworkFB != oldAdapterNetworkFB) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB, oldAdapterNetworkFB, adapterNetworkFB));
-			}
-		}
-		return adapterNetworkFB;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AdapterFB basicGetAdapterNetworkFB() {
-		return adapterNetworkFB;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setAdapterNetworkFB(AdapterFB newAdapterNetworkFB) {
-		AdapterFB oldAdapterNetworkFB = adapterNetworkFB;
-		adapterNetworkFB = newAdapterNetworkFB;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB, oldAdapterNetworkFB, adapterNetworkFB));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB, newInterfaceOnlyAdapterFB, newInterfaceOnlyAdapterFB));
 	}
 
 	/**
@@ -660,8 +660,8 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 				return ((InternalEList<?>)getInputConnections()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.ADAPTER_DECLARATION__OUTPUT_CONNECTIONS:
 				return ((InternalEList<?>)getOutputConnections()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
-				return basicSetAdapterFB(null, msgs);
+			case LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB:
+				return basicSetInterfaceOnlyAdapterFB(null, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -693,9 +693,9 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
 				if (resolve) return getAdapterFB();
 				return basicGetAdapterFB();
-			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
-				if (resolve) return getAdapterNetworkFB();
-				return basicGetAdapterNetworkFB();
+			case LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB:
+				if (resolve) return getInterfaceOnlyAdapterFB();
+				return basicGetInterfaceOnlyAdapterFB();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -737,8 +737,8 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
 				setAdapterFB((AdapterFB)newValue);
 				return;
-			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
-				setAdapterNetworkFB((AdapterFB)newValue);
+			case LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB:
+				setInterfaceOnlyAdapterFB((AdapterFB)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -778,8 +778,8 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
 				setAdapterFB((AdapterFB)null);
 				return;
-			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
-				setAdapterNetworkFB((AdapterFB)null);
+			case LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB:
+				setInterfaceOnlyAdapterFB((AdapterFB)null);
 				return;
 			default:
 				super.eUnset(featureID);
@@ -811,8 +811,8 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 				return type != null;
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
 				return adapterFB != null;
-			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
-				return adapterNetworkFB != null;
+			case LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB:
+				return interfaceOnlyAdapterFB != null;
 			default:
 				return super.eIsSet(featureID);
 		}
