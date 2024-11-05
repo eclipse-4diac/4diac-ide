@@ -27,23 +27,23 @@ import org.eclipse.fordiac.ide.model.monitoring.InternalVarInstance;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Internal Var Instance</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Internal Var Instance</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.InternalVarInstanceImpl#getFb <em>Fb</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.model.monitoring.impl.InternalVarInstanceImpl#getFb
+ * <em>Fb</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class InternalVarInstanceImpl extends VarDeclarationImpl implements InternalVarInstance {
 	/**
-	 * The cached value of the '{@link #getFb() <em>Fb</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getFb() <em>Fb</em>}' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getFb()
 	 * @generated
 	 * @ordered
@@ -51,17 +51,16 @@ public class InternalVarInstanceImpl extends VarDeclarationImpl implements Inter
 	protected FB fb;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected InternalVarInstanceImpl() {
-		super();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -70,27 +69,26 @@ public class InternalVarInstanceImpl extends VarDeclarationImpl implements Inter
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public FB getFb() {
 		if (fb != null && fb.eIsProxy()) {
-			InternalEObject oldFb = (InternalEObject)fb;
-			fb = (FB)eResolveProxy(oldFb);
-			if (fb != oldFb) {
-				if (eNotificationRequired()) {
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringPackage.INTERNAL_VAR_INSTANCE__FB, oldFb, fb));
-				}
+			final InternalEObject oldFb = (InternalEObject) fb;
+			fb = (FB) eResolveProxy(oldFb);
+			if ((fb != oldFb) && eNotificationRequired()) {
+				eNotify(new ENotificationImpl(this, Notification.RESOLVE, MonitoringPackage.INTERNAL_VAR_INSTANCE__FB,
+						oldFb, fb));
 			}
 		}
 		return fb;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public FB basicGetFb() {
@@ -98,22 +96,23 @@ public class InternalVarInstanceImpl extends VarDeclarationImpl implements Inter
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setFb(FB newFb) {
-		FB oldFb = fb;
+	public void setFb(final FB newFb) {
+		final FB oldFb = fb;
 		fb = newFb;
 		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.INTERNAL_VAR_INSTANCE__FB, oldFb, fb));
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.INTERNAL_VAR_INSTANCE__FB, oldFb,
+					fb));
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -122,70 +121,66 @@ public class InternalVarInstanceImpl extends VarDeclarationImpl implements Inter
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
-			case MonitoringPackage.INTERNAL_VAR_INSTANCE__FB:
-				if (resolve) {
-					return getFb();
-				}
-				return basicGetFb();
-			default:
-				return super.eGet(featureID, resolve, coreType);
+		case MonitoringPackage.INTERNAL_VAR_INSTANCE__FB:
+			if (resolve) {
+				return getFb();
+			}
+			return basicGetFb();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case MonitoringPackage.INTERNAL_VAR_INSTANCE__FB:
-				setFb((FB)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case MonitoringPackage.INTERNAL_VAR_INSTANCE__FB:
+			setFb((FB) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case MonitoringPackage.INTERNAL_VAR_INSTANCE__FB:
-				setFb((FB)null);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case MonitoringPackage.INTERNAL_VAR_INSTANCE__FB:
+			setFb((FB) null);
+			return;
+		default:
+			super.eUnset(featureID);
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case MonitoringPackage.INTERNAL_VAR_INSTANCE__FB:
-				return fb != null;
-			default:
-				return super.eIsSet(featureID);
-		}
+	public boolean eIsSet(final int featureID) {
+		return switch (featureID) {
+		case MonitoringPackage.INTERNAL_VAR_INSTANCE__FB -> fb != null;
+		default -> super.eIsSet(featureID);
+		};
 	}
 
-} //InternalVarInstanceImpl
+} // InternalVarInstanceImpl

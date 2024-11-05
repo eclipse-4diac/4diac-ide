@@ -33,23 +33,24 @@ import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
  * end-user-doc -->
+ *
  * @generated
  */
 public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFactory {
 	/**
-	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc --> <!--
+	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static MonitoringFactory init() {
 		try {
-			MonitoringFactory theMonitoringFactory = (MonitoringFactory)EPackage.Registry.INSTANCE.getEFactory(MonitoringPackage.eNS_URI);
+			final MonitoringFactory theMonitoringFactory = (MonitoringFactory) EPackage.Registry.INSTANCE
+					.getEFactory(MonitoringPackage.eNS_URI);
 			if (theMonitoringFactory != null) {
 				return theMonitoringFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (final Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new MonitoringFactoryImpl();
@@ -62,123 +63,121 @@ public class MonitoringFactoryImpl extends EFactoryImpl implements MonitoringFac
 	 * @generated
 	 */
 	public MonitoringFactoryImpl() {
-		super();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public EObject create(EClass eClass) {
-		switch (eClass.getClassifierID()) {
-			case MonitoringPackage.MONITORING_ELEMENT: return createMonitoringElement();
-			case MonitoringPackage.MONITORING_ADAPTER_ELEMENT: return createMonitoringAdapterElement();
-			case MonitoringPackage.ADAPTER_PORT_ELEMENT: return createAdapterPortElement();
-			case MonitoringPackage.ADAPTER_MONITORING_EVENT: return createAdapterMonitoringEvent();
-			case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION: return createAdapterMonitoringVarDeclaration();
-			case MonitoringPackage.SUB_APP_PORT_ELEMENT: return createSubAppPortElement();
-			case MonitoringPackage.SUBAPP_MONITORING_ELEMENT: return createSubappMonitoringElement();
-			case MonitoringPackage.INTERNAL_VAR_INSTANCE: return createInternalVarInstance();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
+	public EObject create(final EClass eClass) {
+		return switch (eClass.getClassifierID()) {
+		case MonitoringPackage.MONITORING_ELEMENT -> createMonitoringElement();
+		case MonitoringPackage.MONITORING_ADAPTER_ELEMENT -> createMonitoringAdapterElement();
+		case MonitoringPackage.ADAPTER_PORT_ELEMENT -> createAdapterPortElement();
+		case MonitoringPackage.ADAPTER_MONITORING_EVENT -> createAdapterMonitoringEvent();
+		case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION -> createAdapterMonitoringVarDeclaration();
+		case MonitoringPackage.SUB_APP_PORT_ELEMENT -> createSubAppPortElement();
+		case MonitoringPackage.SUBAPP_MONITORING_ELEMENT -> createSubappMonitoringElement();
+		case MonitoringPackage.INTERNAL_VAR_INSTANCE -> createInternalVarInstance();
+		default -> throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+		};
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public MonitoringElement createMonitoringElement() {
-		MonitoringElementImpl monitoringElement = new MonitoringElementImpl();
-		return monitoringElement;
+		return new MonitoringElementImpl();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public MonitoringAdapterElement createMonitoringAdapterElement() {
-		MonitoringAdapterElementImpl monitoringAdapterElement = new MonitoringAdapterElementImpl();
-		return monitoringAdapterElement;
+		return new MonitoringAdapterElementImpl();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public AdapterPortElement createAdapterPortElement() {
-		AdapterPortElementImpl adapterPortElement = new AdapterPortElementImpl();
-		return adapterPortElement;
+		return new AdapterPortElementImpl();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public AdapterMonitoringEvent createAdapterMonitoringEvent() {
-		AdapterMonitoringEventImpl adapterMonitoringEvent = new AdapterMonitoringEventImpl();
-		return adapterMonitoringEvent;
+		return new AdapterMonitoringEventImpl();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public AdapterMonitoringVarDeclaration createAdapterMonitoringVarDeclaration() {
-		AdapterMonitoringVarDeclarationImpl adapterMonitoringVarDeclaration = new AdapterMonitoringVarDeclarationImpl();
-		return adapterMonitoringVarDeclaration;
+		return new AdapterMonitoringVarDeclarationImpl();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public SubAppPortElement createSubAppPortElement() {
-		SubAppPortElementImpl subAppPortElement = new SubAppPortElementImpl();
-		return subAppPortElement;
+		return new SubAppPortElementImpl();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public SubappMonitoringElement createSubappMonitoringElement() {
-		SubappMonitoringElementImpl subappMonitoringElement = new SubappMonitoringElementImpl();
-		return subappMonitoringElement;
+		return new SubappMonitoringElementImpl();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public InternalVarInstance createInternalVarInstance() {
-		InternalVarInstanceImpl internalVarInstance = new InternalVarInstanceImpl();
-		return internalVarInstance;
+		return new InternalVarInstanceImpl();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public MonitoringPackage getMonitoringPackage() {
-		return (MonitoringPackage)getEPackage();
+		return (MonitoringPackage) getEPackage();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @deprecated
 	 * @generated
 	 */
