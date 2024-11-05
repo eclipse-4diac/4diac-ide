@@ -274,8 +274,10 @@
                 <configuration>
                     <useUIHarness>true</useUIHarness>
                     <useUIThread>false</useUIThread>
-                    <application>org.eclipse.ui.ide.workbench</application>
                     <product>org.eclipse.fordiac.ide.product</product>
+                    <includes>
+                    	<include>**/ECCEditorTests.*</include>                    
+                    </includes>
                 </configuration>
             </plugin>
             <plugin>
