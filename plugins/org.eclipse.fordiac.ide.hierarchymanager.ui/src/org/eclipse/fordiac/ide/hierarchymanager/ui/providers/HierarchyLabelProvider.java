@@ -14,21 +14,11 @@
 package org.eclipse.fordiac.ide.hierarchymanager.ui.providers;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider.HierarchyItemProviderAdapterFactory;
-import org.eclipse.jface.viewers.IToolTipProvider;
 
-public class HierarchyLabelProvider extends AdapterFactoryLabelProvider implements IToolTipProvider {
+public class HierarchyLabelProvider extends AdapterFactoryLabelProvider {
 
 	public HierarchyLabelProvider() {
 		super(new HierarchyItemProviderAdapterFactory());
-	}
-
-	@Override
-	public String getToolTipText(final Object element) {
-		if (element instanceof final Level lvl) {
-			return lvl.getComment();
-		}
-		return null;
 	}
 }

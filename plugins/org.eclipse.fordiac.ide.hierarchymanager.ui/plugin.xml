@@ -259,18 +259,18 @@
     <extension
          point="org.eclipse.ui.decorators">
       <decorator
-            class="org.eclipse.fordiac.ide.hierarchymanager.ui.decorator.LevelCommentDecorator"
-            id="org.eclipse.fordiac.ide.hierarchymanager.ui.LevelCommentDecorator"
-            label="Level comment decoration"
+            class="org.eclipse.fordiac.ide.hierarchymanager.ui.decorator.NodeCommentDecorator"
+            id="org.eclipse.fordiac.ide.hierarchymanager.ui.NodeCommentDecorator"
+            label="Node comment decoration"
             lightweight="true"
             state="true">
             <enablement>
             	<or>
-                	<objectClass name="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level" />
+                	<objectClass name="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node" />
                	</or>
             </enablement>
             <description>
-               Show instance comment beside typed fbnetwork elements.
+               Show comments beside nodes.
             </description>
       </decorator>
    </extension>

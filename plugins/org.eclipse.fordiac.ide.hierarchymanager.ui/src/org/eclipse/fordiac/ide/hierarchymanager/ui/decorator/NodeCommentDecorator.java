@@ -12,15 +12,25 @@
  *   Fabio Gandolfi - added Application
  *   Alois Zoitl    - copied from InstanceCommentDecorator and adjusted for
  *                    levels
+ *   Sebastian Hollersbacher - added leaves
  *******************************************************************************/
 package org.eclipse.fordiac.ide.hierarchymanager.ui.decorator;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
+import org.eclipse.fordiac.ide.hierarchymanager.ui.util.HierarchyManagerUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 
-public class LevelCommentDecorator implements ILightweightLabelDecorator {
+public class NodeCommentDecorator implements ILightweightLabelDecorator {
 
 	@Override
 	public void addListener(final ILabelProviderListener listener) {
@@ -46,8 +56,20 @@ public class LevelCommentDecorator implements ILightweightLabelDecorator {
 	@Override
 	public void decorate(final Object element, final IDecoration decoration) {
 		String comment = null;
-		if (element instanceof final Level fbNetworkElement) {
-			comment = fbNetworkElement.getComment();
+
+		if (element instanceof final Level level) {
+			comment = level.getComment();
+		} else if (element instanceof final Leaf leaf
+				&& EcoreUtil.getRootContainer(leaf) instanceof final RootLevel root) {
+			final Resource resource = root.eResource();
+
+			final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(resource.getURI().segment(1));
+			final EObject obj = HierarchyManagerUtil.getElementReferencedbyLeaf(leaf, project);
+			if (obj instanceof final SubApp subapp) {
+				comment = subapp.getComment();
+			} else {
+				comment = "SubApp not found"; //$NON-NLS-1$
+			}
 		}
 
 		if (null != comment && !comment.isBlank()) {
