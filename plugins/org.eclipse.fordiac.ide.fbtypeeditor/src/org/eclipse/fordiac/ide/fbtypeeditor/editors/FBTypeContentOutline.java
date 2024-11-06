@@ -21,6 +21,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
+import org.eclipse.fordiac.ide.model.edit.FBTypeSorter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -71,6 +72,7 @@ public class FBTypeContentOutline extends ContentOutlinePage {
 		contentOutlineViewer = getTreeViewer();
 		contentOutlineViewer.setUseHashlookup(true);
 		contentOutlineViewer.addSelectionChangedListener(this);
+		contentOutlineViewer.setComparator(new FBTypeSorter());
 
 		// Set up the tree viewer.
 		//
