@@ -234,7 +234,7 @@ public class EventItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.EVENT__WITH);
+			childrenFeatures.add(LibraryElementPackage.Literals.CONFIGURABLE_OBJECT__ATTRIBUTES);
 		}
 		return childrenFeatures;
 	}
@@ -291,11 +291,11 @@ public class EventItemProvider
 		switch (notification.getFeatureID(Event.class)) {
 			case LibraryElementPackage.EVENT__NAME:
 			case LibraryElementPackage.EVENT__COMMENT:
-			case LibraryElementPackage.EVENT__ATTRIBUTES:
 			case LibraryElementPackage.EVENT__IS_INPUT:
+			case LibraryElementPackage.EVENT__WITH:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case LibraryElementPackage.EVENT__WITH:
+			case LibraryElementPackage.EVENT__ATTRIBUTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 			default:

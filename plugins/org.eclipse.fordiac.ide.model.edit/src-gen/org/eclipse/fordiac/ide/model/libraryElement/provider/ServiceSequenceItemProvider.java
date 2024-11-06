@@ -190,6 +190,7 @@ public class ServiceSequenceItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
+			childrenFeatures.add(LibraryElementPackage.Literals.CONFIGURABLE_OBJECT__ATTRIBUTES);
 			childrenFeatures.add(LibraryElementPackage.Literals.SERVICE_SEQUENCE__SERVICE_TRANSACTION);
 			childrenFeatures.add(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER);
 		}
@@ -247,10 +248,10 @@ public class ServiceSequenceItemProvider
 		switch (notification.getFeatureID(ServiceSequence.class)) {
 			case LibraryElementPackage.SERVICE_SEQUENCE__NAME:
 			case LibraryElementPackage.SERVICE_SEQUENCE__COMMENT:
-			case LibraryElementPackage.SERVICE_SEQUENCE__ATTRIBUTES:
 			case LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_SEQUENCE_TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
+			case LibraryElementPackage.SERVICE_SEQUENCE__ATTRIBUTES:
 			case LibraryElementPackage.SERVICE_SEQUENCE__SERVICE_TRANSACTION:
 			case LibraryElementPackage.SERVICE_SEQUENCE__EVENT_MANAGER:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));

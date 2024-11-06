@@ -4809,31 +4809,13 @@ public interface LibraryElementPackage extends EPackage {
 	int INPUT_PRIMITIVE_FEATURE_COUNT = PRIMITIVE_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Plugs</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INTERFACE_LIST__PLUGS = 0;
-
-	/**
-	 * The feature id for the '<em><b>Sockets</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INTERFACE_LIST__SOCKETS = 1;
-
-	/**
 	 * The feature id for the '<em><b>Event Inputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INTERFACE_LIST__EVENT_INPUTS = 2;
+	int INTERFACE_LIST__EVENT_INPUTS = 0;
 
 	/**
 	 * The feature id for the '<em><b>Event Outputs</b></em>' containment reference list.
@@ -4842,7 +4824,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INTERFACE_LIST__EVENT_OUTPUTS = 3;
+	int INTERFACE_LIST__EVENT_OUTPUTS = 1;
 
 	/**
 	 * The feature id for the '<em><b>Input Vars</b></em>' containment reference list.
@@ -4851,7 +4833,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INTERFACE_LIST__INPUT_VARS = 4;
+	int INTERFACE_LIST__INPUT_VARS = 2;
 
 	/**
 	 * The feature id for the '<em><b>Output Vars</b></em>' containment reference list.
@@ -4860,7 +4842,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INTERFACE_LIST__OUTPUT_VARS = 5;
+	int INTERFACE_LIST__OUTPUT_VARS = 3;
 
 	/**
 	 * The feature id for the '<em><b>In Out Vars</b></em>' containment reference list.
@@ -4869,7 +4851,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INTERFACE_LIST__IN_OUT_VARS = 6;
+	int INTERFACE_LIST__IN_OUT_VARS = 4;
 
 	/**
 	 * The feature id for the '<em><b>Out Mapped In Out Vars</b></em>' containment reference list.
@@ -4878,7 +4860,25 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS = 7;
+	int INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS = 5;
+
+	/**
+	 * The feature id for the '<em><b>Plugs</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERFACE_LIST__PLUGS = 6;
+
+	/**
+	 * The feature id for the '<em><b>Sockets</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERFACE_LIST__SOCKETS = 7;
 
 	/**
 	 * The feature id for the '<em><b>Error Marker</b></em>' containment reference list.

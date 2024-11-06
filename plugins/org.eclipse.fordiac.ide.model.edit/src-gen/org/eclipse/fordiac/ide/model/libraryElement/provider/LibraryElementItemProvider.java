@@ -25,6 +25,7 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -150,6 +151,36 @@ public class LibraryElementItemProvider
 	}
 
 	/**
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(LibraryElementPackage.Literals.CONFIGURABLE_OBJECT__ATTRIBUTES);
+		}
+		return childrenFeatures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
+	}
+
+	/**
 	 * This returns LibraryElement.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -189,12 +220,14 @@ public class LibraryElementItemProvider
 		switch (notification.getFeatureID(LibraryElement.class)) {
 			case LibraryElementPackage.LIBRARY_ELEMENT__NAME:
 			case LibraryElementPackage.LIBRARY_ELEMENT__COMMENT:
-			case LibraryElementPackage.LIBRARY_ELEMENT__ATTRIBUTES:
 			case LibraryElementPackage.LIBRARY_ELEMENT__VERSION_INFO:
 			case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
 			case LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO:
 			case LibraryElementPackage.LIBRARY_ELEMENT__TYPE_ENTRY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case LibraryElementPackage.LIBRARY_ELEMENT__ATTRIBUTES:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 			default:
 				super.notifyChanged(notification);

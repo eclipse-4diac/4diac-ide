@@ -118,14 +118,13 @@ public class InterfaceListItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__PLUGS);
-			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__SOCKETS);
 			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_INPUTS);
 			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_OUTPUTS);
 			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS);
 			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS);
 			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS);
-			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS);
+			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__PLUGS);
+			childrenFeatures.add(LibraryElementPackage.Literals.INTERFACE_LIST__SOCKETS);
 		}
 		return childrenFeatures;
 	}
@@ -178,14 +177,16 @@ public class InterfaceListItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(InterfaceList.class)) {
-			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
-			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
+			case LibraryElementPackage.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
 			case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
 			case LibraryElementPackage.INTERFACE_LIST__INPUT_VARS:
 			case LibraryElementPackage.INTERFACE_LIST__OUTPUT_VARS:
 			case LibraryElementPackage.INTERFACE_LIST__IN_OUT_VARS:
-			case LibraryElementPackage.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS:
+			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
+			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 			default:
@@ -204,16 +205,6 @@ public class InterfaceListItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.INTERFACE_LIST__PLUGS,
-				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.INTERFACE_LIST__SOCKETS,
-				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -269,6 +260,16 @@ public class InterfaceListItemProvider
 			(createChildParameter
 				(LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
 				 LibraryElementFactory.eINSTANCE.createMemberVarDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__PLUGS,
+				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__SOCKETS,
+				 LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
 	}
 
 	/**
@@ -283,13 +284,13 @@ public class InterfaceListItemProvider
 		Object childObject = child;
 
 		boolean qualify =
-			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__PLUGS ||
-			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__SOCKETS ||
 			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_INPUTS ||
 			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_OUTPUTS ||
 			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS ||
 			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS ||
-			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS;
+			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS ||
+			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__PLUGS ||
+			childFeature == LibraryElementPackage.Literals.INTERFACE_LIST__SOCKETS;
 
 		if (qualify) {
 			return getString

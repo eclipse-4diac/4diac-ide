@@ -37,7 +37,7 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterFB"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/interfaceOnlyAdapterFB"/>
+      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/interfaceOnlyAdapterFB"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterDeclaration/getType" body="return (AdapterType)getType_();"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterDeclaration/findBySimpleName"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationAnnotations.findBySimpleName(this, name);">
@@ -52,7 +52,7 @@
       <genOperations ecoreOperation="lib.ecore#//AdapterFB/getQualifiedName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterFBAnnotations.getQualifiedName(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterType">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterType/plugType"/>
+      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterType/plugType"/>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//Algorithm">
       <genOperations ecoreOperation="lib.ecore#//Algorithm/getInputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
@@ -175,7 +175,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompositeFBType/fBNetwork"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ConfigurableObject">
-      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//ConfigurableObject/attributes"/>
+      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//ConfigurableObject/attributes"/>
       <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/setAttribute"
           body="org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);">
         <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute/attributeName"/>
@@ -381,7 +381,7 @@
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Event">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Event/with"/>
+      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Event/with"/>
       <genOperations ecoreOperation="lib.ecore#//Event/getInputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Event/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Event/getInOutParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
@@ -567,14 +567,14 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//InputPrimitive"/>
     <genClasses provider="Stateful" ecoreClass="lib.ecore#//InterfaceList">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/plugs"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/sockets"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/eventInputs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/eventOutputs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/inputVars"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/outputVars"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/inOutVars"/>
-      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/outMappedInOutVars"/>
+      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/outMappedInOutVars"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/plugs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/sockets"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/errorMarker"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAllInterfaceElements"
           body="return InterfaceListAnnotations.getAllInterfaceElements(this);"/>
@@ -848,7 +848,7 @@
     <genClasses ecoreClass="lib.ecore#//VarDeclaration">
       <genFeatures createChild="false" ecoreFeature="ecore:EReference lib.ecore#//VarDeclaration/arraySize"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//VarDeclaration/withs"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//VarDeclaration/value"/>
+      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//VarDeclaration/value"/>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/isVarConfig" body="return org.eclipse.fordiac.ide.model.Annotations.isVarConfig(this);"/>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/isArray" body="return org.eclipse.fordiac.ide.model.Annotations.isArray(this);"/>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/setVarConfig" body="org.eclipse.fordiac.ide.model.Annotations.setVarConfig(this,config);">

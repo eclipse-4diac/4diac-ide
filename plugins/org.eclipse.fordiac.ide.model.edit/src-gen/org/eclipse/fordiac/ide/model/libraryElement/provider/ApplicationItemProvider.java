@@ -164,6 +164,7 @@ public class ApplicationItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
+			childrenFeatures.add(LibraryElementPackage.Literals.CONFIGURABLE_OBJECT__ATTRIBUTES);
 			childrenFeatures.add(LibraryElementPackage.Literals.APPLICATION__FB_NETWORK);
 		}
 		return childrenFeatures;
@@ -220,8 +221,10 @@ public class ApplicationItemProvider
 		switch (notification.getFeatureID(Application.class)) {
 			case LibraryElementPackage.APPLICATION__NAME:
 			case LibraryElementPackage.APPLICATION__COMMENT:
-			case LibraryElementPackage.APPLICATION__ATTRIBUTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case LibraryElementPackage.APPLICATION__ATTRIBUTES:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 			default:
 				super.notifyChanged(notification);

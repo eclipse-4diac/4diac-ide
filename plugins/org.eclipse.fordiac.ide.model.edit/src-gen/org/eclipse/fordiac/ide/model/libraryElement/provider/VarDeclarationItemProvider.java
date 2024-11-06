@@ -280,7 +280,7 @@ public class VarDeclarationItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.VAR_DECLARATION__VALUE);
+			childrenFeatures.add(LibraryElementPackage.Literals.CONFIGURABLE_OBJECT__ATTRIBUTES);
 		}
 		return childrenFeatures;
 	}
@@ -318,9 +318,16 @@ public class VarDeclarationItemProvider
 	 */
 	@Override
 	public String getText(final Object object) {
-		final String label = ((VarDeclaration) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_VarDeclaration_type") : //$NON-NLS-1$
-			label + " : " + ((VarDeclaration) object).getFullTypeName(); //$NON-NLS-1$
+		VarDeclaration varDecl = (VarDeclaration) object;
+		String label = varDecl.getName();
+		if(label == null || label.isBlank()){
+			return getString("_UI_VarDeclaration_type"); //$NON-NLS-1$
+		} 
+		label += " : " + varDecl.getFullTypeName(); //$NON-NLS-1$
+		if(varDecl.getValue() != null && varDecl.getValue().getValue() != null && !varDecl.getValue().getValue().isBlank()){
+			label += " := " + varDecl.getValue().getValue(); //$NON-NLS-1$
+		} 
+		return label;	
 	}
 
 
@@ -338,12 +345,12 @@ public class VarDeclarationItemProvider
 		switch (notification.getFeatureID(VarDeclaration.class)) {
 			case LibraryElementPackage.VAR_DECLARATION__NAME:
 			case LibraryElementPackage.VAR_DECLARATION__COMMENT:
-			case LibraryElementPackage.VAR_DECLARATION__ATTRIBUTES:
 			case LibraryElementPackage.VAR_DECLARATION__IS_INPUT:
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
+			case LibraryElementPackage.VAR_DECLARATION__VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case LibraryElementPackage.VAR_DECLARATION__VALUE:
+			case LibraryElementPackage.VAR_DECLARATION__ATTRIBUTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 			default:

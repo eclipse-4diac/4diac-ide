@@ -83,7 +83,6 @@ public class AdapterTypeItemProvider extends DataTypeItemProvider {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(LibraryElementPackage.Literals.FB_TYPE__INTERFACE_LIST);
 			childrenFeatures.add(LibraryElementPackage.Literals.FB_TYPE__SERVICE);
-			childrenFeatures.add(LibraryElementPackage.Literals.ADAPTER_TYPE__PLUG_TYPE);
 		}
 		return childrenFeatures;
 	}
@@ -139,9 +138,11 @@ public class AdapterTypeItemProvider extends DataTypeItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(AdapterType.class)) {
+			case LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case LibraryElementPackage.ADAPTER_TYPE__INTERFACE_LIST:
 			case LibraryElementPackage.ADAPTER_TYPE__SERVICE:
-			case LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 			default:

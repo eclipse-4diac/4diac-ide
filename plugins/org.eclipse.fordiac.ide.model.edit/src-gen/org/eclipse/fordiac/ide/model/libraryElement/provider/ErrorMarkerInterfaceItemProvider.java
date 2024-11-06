@@ -233,6 +233,7 @@ public class ErrorMarkerInterfaceItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
+			childrenFeatures.add(LibraryElementPackage.Literals.CONFIGURABLE_OBJECT__ATTRIBUTES);
 			childrenFeatures.add(LibraryElementPackage.Literals.ERROR_MARKER_INTERFACE__VALUE);
 		}
 		return childrenFeatures;
@@ -291,10 +292,10 @@ public class ErrorMarkerInterfaceItemProvider
 		switch (notification.getFeatureID(ErrorMarkerInterface.class)) {
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__NAME:
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__COMMENT:
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ATTRIBUTES:
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__IS_INPUT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
+			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ATTRIBUTES:
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;

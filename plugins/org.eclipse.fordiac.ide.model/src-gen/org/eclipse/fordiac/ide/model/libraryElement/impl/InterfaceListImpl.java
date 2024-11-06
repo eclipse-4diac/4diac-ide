@@ -42,38 +42,20 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getPlugs <em>Plugs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getSockets <em>Sockets</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getEventInputs <em>Event Inputs</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getEventOutputs <em>Event Outputs</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getInputVars <em>Input Vars</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getOutputVars <em>Output Vars</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getInOutVars <em>In Out Vars</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getOutMappedInOutVars <em>Out Mapped In Out Vars</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getPlugs <em>Plugs</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getSockets <em>Sockets</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getErrorMarker <em>Error Marker</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
-	/**
-	 * The cached value of the '{@link #getPlugs() <em>Plugs</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getPlugs()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<AdapterDeclaration> plugs;
-
-	/**
-	 * The cached value of the '{@link #getSockets() <em>Sockets</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getSockets()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<AdapterDeclaration> sockets;
-
 	/**
 	 * The cached value of the '{@link #getEventInputs() <em>Event Inputs</em>}' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -128,6 +110,24 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @ordered
 	 */
 	protected EList<VarDeclaration> outMappedInOutVars;
+
+	/**
+	 * The cached value of the '{@link #getPlugs() <em>Plugs</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getPlugs()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AdapterDeclaration> plugs;
+
+	/**
+	 * The cached value of the '{@link #getSockets() <em>Sockets</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getSockets()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AdapterDeclaration> sockets;
 
 	/**
 	 * The cached value of the '{@link #getErrorMarker() <em>Error Marker</em>}' containment reference list.
@@ -394,10 +394,6 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
-				return ((InternalEList<?>)getPlugs()).basicRemove(otherEnd, msgs);
-			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
-				return ((InternalEList<?>)getSockets()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
 				return ((InternalEList<?>)getEventInputs()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
@@ -410,6 +406,10 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				return ((InternalEList<?>)getInOutVars()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS:
 				return ((InternalEList<?>)getOutMappedInOutVars()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
+				return ((InternalEList<?>)getPlugs()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
+				return ((InternalEList<?>)getSockets()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
 				return ((InternalEList<?>)getErrorMarker()).basicRemove(otherEnd, msgs);
 			default:
@@ -424,10 +424,6 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
-				return getPlugs();
-			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
-				return getSockets();
 			case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
 				return getEventInputs();
 			case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
@@ -440,6 +436,10 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				return getInOutVars();
 			case LibraryElementPackage.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS:
 				return getOutMappedInOutVars();
+			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
+				return getPlugs();
+			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
+				return getSockets();
 			case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
 				return getErrorMarker();
 			default:
@@ -455,14 +455,6 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
-				getPlugs().clear();
-				getPlugs().addAll((Collection<? extends AdapterDeclaration>)newValue);
-				return;
-			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
-				getSockets().clear();
-				getSockets().addAll((Collection<? extends AdapterDeclaration>)newValue);
-				return;
 			case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
 				getEventInputs().clear();
 				getEventInputs().addAll((Collection<? extends Event>)newValue);
@@ -487,6 +479,14 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				getOutMappedInOutVars().clear();
 				getOutMappedInOutVars().addAll((Collection<? extends VarDeclaration>)newValue);
 				return;
+			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
+				getPlugs().clear();
+				getPlugs().addAll((Collection<? extends AdapterDeclaration>)newValue);
+				return;
+			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
+				getSockets().clear();
+				getSockets().addAll((Collection<? extends AdapterDeclaration>)newValue);
+				return;
 			case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
 				getErrorMarker().clear();
 				getErrorMarker().addAll((Collection<? extends ErrorMarkerInterface>)newValue);
@@ -504,12 +504,6 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
-				getPlugs().clear();
-				return;
-			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
-				getSockets().clear();
-				return;
 			case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
 				getEventInputs().clear();
 				return;
@@ -528,6 +522,12 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 			case LibraryElementPackage.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS:
 				getOutMappedInOutVars().clear();
 				return;
+			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
+				getPlugs().clear();
+				return;
+			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
+				getSockets().clear();
+				return;
 			case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
 				getErrorMarker().clear();
 				return;
@@ -544,10 +544,6 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
-				return plugs != null && !plugs.isEmpty();
-			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
-				return sockets != null && !sockets.isEmpty();
 			case LibraryElementPackage.INTERFACE_LIST__EVENT_INPUTS:
 				return eventInputs != null && !eventInputs.isEmpty();
 			case LibraryElementPackage.INTERFACE_LIST__EVENT_OUTPUTS:
@@ -560,6 +556,10 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				return inOutVars != null && !inOutVars.isEmpty();
 			case LibraryElementPackage.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS:
 				return outMappedInOutVars != null && !outMappedInOutVars.isEmpty();
+			case LibraryElementPackage.INTERFACE_LIST__PLUGS:
+				return plugs != null && !plugs.isEmpty();
+			case LibraryElementPackage.INTERFACE_LIST__SOCKETS:
+				return sockets != null && !sockets.isEmpty();
 			case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
 				return errorMarker != null && !errorMarker.isEmpty();
 			default:
