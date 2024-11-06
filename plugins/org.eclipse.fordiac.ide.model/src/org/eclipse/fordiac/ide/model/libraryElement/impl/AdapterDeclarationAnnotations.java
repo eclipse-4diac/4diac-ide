@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 public final class AdapterDeclarationAnnotations {
 
 	static Stream<INamedElement> findBySimpleName(final AdapterDeclaration root, final String name) {
-		final AdapterFB adapterFB = root.getAdapterFB();
+		final AdapterFB adapterFB = root.getInterfaceOnlyAdapterFB();
 		if (adapterFB != null) {
 			return Stream.concat(NamedElementAnnotations.findBySimpleName(root, name)
 					.filter(Predicate.not(AdapterFB.class::isInstance)), adapterFB.findBySimpleName(name));
