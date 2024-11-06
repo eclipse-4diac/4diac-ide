@@ -496,6 +496,21 @@
                  </or>
               </parentExpression>
            </commonSorter>
+           <commonSorter
+                 class="org.eclipse.fordiac.ide.model.edit.FBTypeSorter"
+                 id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.FBTypeContentSorter">
+              <parentExpression>
+                 <and>
+                    <instanceof value="org.eclipse.core.resources.IFile" />
+                    <or>
+	                  <test property="org.eclipse.core.resources.extension" value="adp"/>
+	                  <test property="org.eclipse.core.resources.extension" value="fbt"/>
+	                  <test property="org.eclipse.core.resources.extension" value="fct"/>
+	                  <test property="org.eclipse.core.resources.extension" value="sub"/>
+	               </or>
+                 </and>
+              </parentExpression>
+           </commonSorter>
         </navigatorContent>          
       <commonWizard
             type="new"
