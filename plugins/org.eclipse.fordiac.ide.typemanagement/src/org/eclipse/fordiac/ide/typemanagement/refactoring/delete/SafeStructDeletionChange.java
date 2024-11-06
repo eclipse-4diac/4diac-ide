@@ -63,8 +63,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 						handleTransitiveRefactoring(varDecl, rootChange, doneElements);
 					}
 				} else if (eObject instanceof final StructManipulator muxer && doneElements.add(muxer)) {
-					final boolean isDeletion = deletedStruct == muxer.getDataType().getTypeEntry();
-					rootChange.add(new UpdateManipulatorChange(muxer, isDeletion));
+					rootChange.add(new UpdateManipulatorChange(muxer));
 				}
 			});
 		}

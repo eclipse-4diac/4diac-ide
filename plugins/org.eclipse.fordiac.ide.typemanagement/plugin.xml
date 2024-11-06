@@ -709,6 +709,7 @@
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.SafeFBTypeDeletionChange$DeleteInternalFBChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.UpdateUntypedSubappPinChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateManipulatorChange"/>
          </or>
          </enablement>
       </changePreviewViewer>

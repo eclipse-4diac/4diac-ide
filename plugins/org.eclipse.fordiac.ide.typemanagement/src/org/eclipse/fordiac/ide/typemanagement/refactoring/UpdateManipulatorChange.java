@@ -14,27 +14,25 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
+import java.util.EnumSet;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class UpdateManipulatorChange extends AbstractCommandChange<StructManipulator> {
+public class UpdateManipulatorChange extends AbstractCommandChange<StructManipulator> implements IFordiacPreviewChange {
 
-	final boolean structWasDeleted;
+	private final EnumSet<ChangeState> state = EnumSet.of(ChangeState.NO_CHANGE);
 
-	public UpdateManipulatorChange(final StructManipulator manipulator, final boolean structWasDeleted) {
+	public UpdateManipulatorChange(final StructManipulator manipulator) {
 		super(getName(manipulator), EcoreUtil.getURI(manipulator), StructManipulator.class);
-		this.structWasDeleted = structWasDeleted;
 	}
 
 	public static String getName(final StructManipulator manipulator) {
@@ -59,15 +57,31 @@ public class UpdateManipulatorChange extends AbstractCommandChange<StructManipul
 
 	@Override
 	protected Command createCommand(final StructManipulator manipulator) {
-		if (structWasDeleted) {
-			return new ChangeStructCommand(manipulator, getErrorMarkerEntry(manipulator.getDataType(), manipulator),
-					true);
+		if (state.contains(ChangeState.CHANGE_TO_ANY)) {
+			return new ChangeStructCommand(manipulator, IecTypes.GenericTypes.ANY, true);
 		}
-		return new ChangeStructCommand(manipulator);
+		// only return null if the UI has an incosistency, so returning null will force
+		// an error
+		return null;
 	}
 
-	private static ErrorMarkerDataType getErrorMarkerEntry(final DataType dtp, final StructManipulator manipulator) {
-		final DataTypeLibrary lib = manipulator.getTypeEntry().getTypeLibrary().getDataTypeLibrary();
-		return lib.createErrorMarkerType(dtp.getTypeEntry().getFullTypeName(), ""); //$NON-NLS-1$
+	@Override
+	public EnumSet<ChangeState> getState() {
+		return state;
+	}
+
+	@Override
+	public EnumSet<ChangeState> getAllowedChoices() {
+		return EnumSet.of(ChangeState.CHANGE_TO_ANY, ChangeState.NO_CHANGE);
+	}
+
+	@Override
+	public void addState(final ChangeState newState) {
+		state.add(newState);
+	}
+
+	@Override
+	public EnumSet<ChangeState> getDefaultSelection() {
+		return EnumSet.of(ChangeState.NO_CHANGE);
 	}
 }

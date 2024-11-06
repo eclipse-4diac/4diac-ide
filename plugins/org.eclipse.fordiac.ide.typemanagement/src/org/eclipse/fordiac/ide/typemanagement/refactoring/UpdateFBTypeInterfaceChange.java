@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
@@ -98,16 +97,14 @@ public class UpdateFBTypeInterfaceChange extends AbstractCommandChange<FBType> i
 		final CompoundCommand cmd = new CompoundCommand();
 
 		for (final VarDeclaration varDec : varDeclarations) {
-
 			if (state.contains(ChangeState.CHANGE_TO_ANY)) {
 				cmd.add(ChangeDataTypeCommand.forDataType(varDec, IecTypes.GenericTypes.ANY_STRUCT));
 			} else if (state.contains(ChangeState.DELETE)) {
 				cmd.add(new DeleteInterfaceCommand(varDec));
-			} else {
-				final ErrorMarkerDataType markerType = type.getTypeLibrary().getDataTypeLibrary()
-						.createErrorMarkerType(varDec.getTypeName(), "");
-				cmd.add(ChangeDataTypeCommand.forDataType(varDec, markerType));
 			}
+
+			// if NO_CHANGE is selected, nothing has to be done. The creation of an error
+			// marker will be handled by the builder
 		}
 
 		return cmd;
