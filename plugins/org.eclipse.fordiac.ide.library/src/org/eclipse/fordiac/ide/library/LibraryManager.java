@@ -499,12 +499,14 @@ public enum LibraryManager {
 		case final IFolder f -> true;
 		case final IFile file -> {
 			final TypeEntry entry = TypeEntryFactory.INSTANCE.createTypeEntry(file);
-			final TypeEntry oldEntry = cachedTypes.get(entry.getFullTypeName());
-			if (oldEntry != null) {
-				FordiacResourceChangeListener.updateTypeEntry(file, oldEntry);
-				cachedTypes.remove(entry.getFullTypeName());
-			} else {
-				typeLibrary.createTypeEntry(file);
+			if (entry != null) {
+				final TypeEntry oldEntry = cachedTypes.get(entry.getFullTypeName());
+				if (oldEntry != null) {
+					FordiacResourceChangeListener.updateTypeEntry(file, oldEntry);
+					cachedTypes.remove(entry.getFullTypeName());
+				} else {
+					typeLibrary.createTypeEntry(file);
+				}
 			}
 			yield false;
 		}
