@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchUtils;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
@@ -30,7 +32,9 @@ public class TriggerEventHandler extends AbstractDeploymentHandler<Event> {
 	}
 
 	@Override
-	protected Event getTarget(final Object selectedElement) {
-		return Adapters.adapt(selectedElement, IInterfaceElement.class) instanceof final Event event ? event : null;
+	protected List<Event> getTargets(final Object selectedElement) {
+		return Adapters.adapt(selectedElement, IInterfaceElement.class) instanceof final Event event
+				? DeploymentDebugWatchUtils.resolveSubappInterfaceConnections(event).toList()
+				: null;
 	}
 }

@@ -71,10 +71,16 @@ public abstract class AbstractDeploymentHandler<T extends INamedElement> extends
 
 	private void execute(final Object selectedElement, final Shell shell)
 			throws DeploymentException, ExecutionException {
-		final T target = getTarget(selectedElement);
-		if (target == null) {
+		final List<T> targets = getTargets(selectedElement);
+		if (targets == null) {
 			return;
 		}
+		for (final T target : targets) {
+			execute(target, shell);
+		}
+	}
+
+	private void execute(final T target, final Shell shell) throws DeploymentException, ExecutionException {
 		final Resource resource = DeploymentDebugWatchUtils.getResource(target);
 		if (resource == null) {
 			throw new DeploymentException(MessageFormat.format(Messages.AbstractDeploymentHandler_ElementNotInResource,
@@ -109,7 +115,7 @@ public abstract class AbstractDeploymentHandler<T extends INamedElement> extends
 	protected abstract void perform(T target, Resource resource, IDeviceManagementInteractor interactor, Shell shell)
 			throws DeploymentException;
 
-	protected abstract T getTarget(Object selectedElement);
+	protected abstract List<T> getTargets(Object selectedElement);
 
 	protected static ILaunch launch(final AutomationSystem system) throws DeploymentException {
 		final Optional<IResource> resource = getResource(system);
