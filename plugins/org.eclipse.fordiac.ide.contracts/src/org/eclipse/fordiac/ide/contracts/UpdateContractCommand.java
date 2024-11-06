@@ -18,12 +18,10 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
 import org.eclipse.fordiac.ide.contracts.model.ContractKeywords;
-import org.eclipse.fordiac.ide.contracts.model.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
@@ -42,34 +40,6 @@ public class UpdateContractCommand extends Command {
 	public UpdateContractCommand(final FBNetworkElement fbNetworkElement, final String comment) {
 		this.comment = comment;
 		this.fbNetworkElement = fbNetworkElement;
-	}
-
-	public static UpdateContractCommand createContractAssumption(final List<Event> eventPins, final String time,
-			final String offset) {
-		final StringBuilder comment = new StringBuilder();
-		comment.append(ContractUtils.createAssumptionString(eventPins.get(0).getName(), time));
-		comment.append(" "); //$NON-NLS-1$
-		if (offset != null) {
-			comment.append(ContractUtils.createOffsetString(offset));
-		}
-		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(), comment.toString());
-	}
-
-	public static UpdateContractCommand createContractReaction(final List<Event> eventPins, final String time) {
-		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(),
-				ContractUtils.createReactionString(eventPins.get(0).getName(), eventPins.get(1).getName(), time));
-	}
-
-	public static UpdateContractCommand createContractGuarantee(final List<Event> eventPins, final String time) {
-		return new UpdateContractCommand(eventPins.get(0).getFBNetworkElement(),
-				ContractUtils.createGuaranteeString(eventPins.get(0).getName(), eventPins.get(1).getName(), time));
-	}
-
-	public static UpdateContractCommand createContractGuarantee(final Event event, final List<Event> outputEvents,
-			final String time) {
-		return new UpdateContractCommand(outputEvents.get(0).getFBNetworkElement(),
-				ContractUtils.createGuaranteeTwoEvents(event.getName(), outputEvents.get(0).getName(),
-						outputEvents.get(1).getName(), time));
 	}
 
 	@Override

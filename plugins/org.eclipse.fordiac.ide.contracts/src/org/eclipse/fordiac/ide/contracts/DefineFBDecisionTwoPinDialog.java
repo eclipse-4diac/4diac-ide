@@ -26,7 +26,7 @@ public class DefineFBDecisionTwoPinDialog extends MessageDialog {
 	private int pressedButtonId = -1;
 
 	public DefineFBDecisionTwoPinDialog(final Shell parentShell) {
-		super(parentShell, Messages.DefineFBReactionOnePinDialog_Title, null,
+		super(parentShell, Messages.DefineFBDecisionTwoPinDialog_Title, null,
 				Messages.DefineFBDecisionTwoPinDialog_Info, MessageDialog.INFORMATION, 0,
 				Messages.DefineFBDecisionTwoPinDialog_CreateReaction,
 				Messages.DefineFBDecisionTwoPinDialog_CreateGuarantee);

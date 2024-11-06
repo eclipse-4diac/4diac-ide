@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Paul Pavlicek
+ * Copyright (c) 2023, 2024 Paul Pavlicek and others
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,8 @@
  * Contributors:
  *   Paul Pavlicek
  *     - initial API and implementation and/or initial documentation
+ *   Felix Schmid
+ *     - removed unused messages
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts;
 
@@ -34,73 +36,25 @@ public final class Messages extends NLS {
 
 	public static String Contract_ErrorName;
 
-	public static String DefineFBDecisionTwoPinDialog_CreateGuarantee;
-
-	public static String DefineFBDecisionTwoPinDialog_CreateReaction;
-
-	public static String DefineFBDecisionTwoPinDialog_Error;
-
-	public static String DefineFBDecisionTwoPinDialog_ErrorInfo;
-
-	public static String DefineFBDecisionTwoPinDialog_Info;
-
-	public static String DefineFBReactionOnePinDialog_SpecifyOffset;
-
-	public static String DefineFbInterfaceConstraintHandler_ErrorMessage;
-
-	public static String DefineFbInterfaceConstraintHandler_Error;
-
-	public static String DefineFbInterfaceConstraintHandler_ErrorText;
-
-	public static String DefineFbInterfaceConstraintHandler_ErrorTitle;
+	public static String DefineFbInterfaceConstraintHandler_Title;
 
 	public static String DefineFbInterfaceConstraintHandler_Info;
 
-	public static String DefineFbInterfaceConstraintHandler_InfoErrorGuarantee;
+	public static String DefineFBDecisionTwoPinDialog_Title;
 
-	public static String DefineFbInterfaceConstraintHandler_ThreePinErrorMessage;
+	public static String DefineFBDecisionTwoPinDialog_Info;
 
-	public static String DefineFbInterfaceConstraintHandler_Title;
+	public static String DefineFBDecisionTwoPinDialog_CreateReaction;
 
-	public static String DefineFBReactionOnePinDialog_Button;
+	public static String DefineFBDecisionTwoPinDialog_CreateGuarantee;
 
-	public static String DefineFBReactionOnePinDialog_DefineAssumption;
+	public static String ContractElementDialog_Title;
 
-	public static String DefineFBReactionOnePinDialog_DefineConstraint;
+	public static String ContractElementDialog_Info;
 
-	public static String DefineFBReactionOnePinDialog_Error;
+	public static String ContractElementDialog_Ok;
 
-	public static String DefineFBReactionOnePinDialog_Event;
-
-	public static String DefineFBReactionOnePinDialog_Every;
-
-	public static String DefineFBReactionOnePinDialog_Info;
-
-	public static String DefineFBReactionOnePinDialog_Occurs;
-
-	public static String DefineFBReactionOnePinDialog_Offset;
-
-	public static String DefineFBReactionOnePinDialog_PleaseFill;
-
-	public static String DefineFBReactionOnePinDialog_Reaction;
-
-	public static String DefineFBReactionOnePinDialog_OffsetDialog;
-
-	public static String DefineFBReactionOnePinDialog_Title;
-
-	public static String DefineFBReactionOnePinDialog_Within;
-
-	public static String DefineFBReactionThreePinDialog_DefineGuarantee;
-
-	public static String DefineFBReactionTwoPinDialog_Button;
-
-	public static String DefineFBReactionTwoPinDialog_Info;
-
-	public static String DefineFBReactionTwoPinDialog_OccursWithin;
-
-	public static String DefineFBReactionTwoPinDialog_Reaction;
-
-	public static String DefineFBReactionTwoPinDialog_Title;
+	public static String ContractElementDialog_Define;
 
 	static {
 		// initialize resource bundle
