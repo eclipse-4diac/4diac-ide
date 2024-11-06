@@ -652,4 +652,10 @@
        </enablement>
     </moveParticipant>
  </extension>
+ <extension
+       point="org.eclipse.xtext.ui.resourceRelocationStrategy">
+    <strategy
+          class="org.eclipse.fordiac.ide.structuredtextcore.ui.DTPExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.LibraryElementResourceRelocationStrategy">
+    </strategy>
+ </extension>
 </plugin>
