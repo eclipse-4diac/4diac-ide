@@ -290,6 +290,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
 			addAnnotationModelDispatcher();
 		}
+		super.setInputWithNotify(input);
 	}
 
 	protected DefaultEditDomain createEditDomain() {
