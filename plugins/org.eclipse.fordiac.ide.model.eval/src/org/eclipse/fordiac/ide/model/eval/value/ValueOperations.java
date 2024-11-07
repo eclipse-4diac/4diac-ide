@@ -1115,6 +1115,7 @@ public final class ValueOperations {
 		case final DwordType unused -> toDWordValue(value);
 		case final WordType unused -> toWordValue(value);
 		case final ByteType unused -> toByteValue(value);
+		case final BoolType unused -> toBoolValue(value);
 		case final DataType dataType when dataType.isAssignableFrom(value.getType()) -> value;
 		case null, default -> throw createCastException(value, type);
 		};

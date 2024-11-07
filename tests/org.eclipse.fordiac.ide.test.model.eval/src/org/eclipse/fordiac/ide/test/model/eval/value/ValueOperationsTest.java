@@ -400,7 +400,7 @@ class ValueOperationsTest {
 			}
 		}
 		case final AnyBitType unused -> {
-			if (castType instanceof AnyNumType || (castType instanceof AnyBitType && !(castType instanceof BoolType))) {
+			if (castType instanceof AnyNumType || castType instanceof AnyBitType) {
 				assertEquals(defaultCastValue, castValue(defaultValue, castType));
 			} else {
 				assertThrows(ClassCastException.class, () -> castValue(defaultValue, castType));
