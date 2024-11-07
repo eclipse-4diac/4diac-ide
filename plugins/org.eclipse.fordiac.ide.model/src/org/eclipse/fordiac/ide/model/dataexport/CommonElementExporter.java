@@ -370,7 +370,7 @@ public class CommonElementExporter {
 
 	protected void addCommentAttribute(final String comment) throws XMLStreamException {
 		if (comment != null && !comment.isBlank()) {
-			writeAttributeRaw(LibraryElementTags.DESCRIPTION_ELEMENT, comment);
+			writeAttributeRaw(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
 		}
 	}
 
