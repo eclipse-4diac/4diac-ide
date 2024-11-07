@@ -81,7 +81,13 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	private final class SubappContentAdapter extends AdapterImpl {
 		@Override
 		public void notifyChanged(final Notification notification) {
+			if (!notification.isTouch()) {
+				Display.getDefault().execute(() -> handleRefresh(notification));
+			}
 			super.notifyChanged(notification);
+		}
+
+		protected void handleRefresh(final Notification notification) {
 			switch (notification.getEventType()) {
 			case Notification.ADD, Notification.ADD_MANY, Notification.MOVE:
 				handleAddMove(notification);
@@ -162,7 +168,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 		private void refreshRoot() {
 			final EditPart root = getRoot();
 			if (root != null) {
-				root.getChildren().forEach(child -> ((EditPart) child).refresh());
+				root.getChildren().forEach(EditPart::refresh);
 			}
 		}
 
