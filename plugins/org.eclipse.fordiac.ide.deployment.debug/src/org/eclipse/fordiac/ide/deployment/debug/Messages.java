@@ -19,6 +19,7 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.deployment.debug.messages"; //$NON-NLS-1$
 	public static String AbstractRuntimeWatch_AddWatch;
 	public static String AbstractRuntimeWatch_RemoveWatch;
+	public static String AbstractVariableWatch_ElementNotInResource;
 	public static String DeploymentDebugDevice_ConnectError;
 	public static String DeploymentDebugDevice_DisconnectError;
 	public static String DeploymentDebugDevice_ReadWatchesError;

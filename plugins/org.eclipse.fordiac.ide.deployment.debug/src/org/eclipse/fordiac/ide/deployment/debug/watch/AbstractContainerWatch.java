@@ -35,7 +35,7 @@ public abstract class AbstractContainerWatch extends DeploymentDebugElement impl
 		this.name = name;
 		this.element = element;
 		qualifiedName = element.getQualifiedName();
-		resource = Objects.requireNonNull(DeploymentDebugWatchUtils.getResource(element), "element not in a resource"); //$NON-NLS-1$
+		resource = DeploymentDebugWatchUtils.getResource(element);
 	}
 
 	@Override

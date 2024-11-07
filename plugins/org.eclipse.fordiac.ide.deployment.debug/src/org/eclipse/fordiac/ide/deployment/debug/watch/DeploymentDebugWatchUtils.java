@@ -32,15 +32,20 @@ public final class DeploymentDebugWatchUtils {
 				.eContainer() instanceof final AdapterDeclaration adapterDeclaration ->
 			getResource(adapterDeclaration);
 		case final FBNetworkElement networkElement -> networkElement.getResource();
-		default -> null;
+		case null, default -> null;
 		};
 	}
 
 	public static String getResourceRelativeName(final INamedElement element, final Resource resource) {
+		if (element == null) {
+			return ""; //$NON-NLS-1$
+		}
 		final String qualifiedName = element.getQualifiedName();
-		final String resourceName = resource.getQualifiedName();
-		if (qualifiedName.startsWith(resourceName)) {
-			return qualifiedName.substring(resourceName.length() + 1);
+		if (resource != null) {
+			final String resourceName = resource.getQualifiedName();
+			if (qualifiedName.startsWith(resourceName)) {
+				return qualifiedName.substring(resourceName.length() + 1);
+			}
 		}
 		return qualifiedName;
 	}
@@ -53,7 +58,11 @@ public final class DeploymentDebugWatchUtils {
 
 	@SuppressWarnings("unchecked")
 	public static <T extends IInterfaceElement> Stream<T> resolveSubappInterfaceConnections(final T element) {
+		if (element == null) {
+			return Stream.empty();
+		}
 		return switch (element.getFBNetworkElement()) {
+		case null -> Stream.empty();
 		case final SubApp subapp -> {
 			subapp.loadSubAppNetwork(); // ensure network is loaded
 			if (element.isIsInput()) {

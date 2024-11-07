@@ -37,7 +37,7 @@ public class EventWatch extends AbstractRuntimeWatch implements IEventWatch {
 	@Override
 	public void triggerEvent() throws DebugException {
 		try {
-			getDeviceManagementExecutorService().triggerEvent(getResource(), getResourceRelativeName());
+			getDeviceManagementExecutorService().triggerEvent(getResourceChecked(), getResourceRelativeName());
 		} catch (final DeploymentException e) {
 			throw new DebugException(
 					Status.error(MessageFormat.format(Messages.EventWatch_TriggerEventError, getQualifiedName()), e));

@@ -12,10 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.watch;
 
+import java.text.MessageFormat;
 import java.util.Objects;
 
+import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugException;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugVariable;
+import org.eclipse.fordiac.ide.deployment.debug.Messages;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
@@ -32,7 +36,7 @@ public abstract class AbstractVariableWatch extends DeploymentDebugVariable impl
 	protected AbstractVariableWatch(final Variable<?> variable, final ITypedElement element,
 			final DeploymentDebugDevice debugTarget) throws EvaluatorException {
 		super(variable, element.getQualifiedName(), debugTarget);
-		resource = Objects.requireNonNull(DeploymentDebugWatchUtils.getResource(element), "element not in a resource"); //$NON-NLS-1$
+		resource = DeploymentDebugWatchUtils.getResource(element);
 		this.element = element;
 	}
 
@@ -66,6 +70,14 @@ public abstract class AbstractVariableWatch extends DeploymentDebugVariable impl
 
 	@Override
 	public Resource getResource() {
+		return resource;
+	}
+
+	protected Resource getResourceChecked() throws DebugException {
+		if (resource == null) {
+			throw new DebugException(Status.error(
+					MessageFormat.format(Messages.AbstractVariableWatch_ElementNotInResource, getQualifiedName())));
+		}
 		return resource;
 	}
 

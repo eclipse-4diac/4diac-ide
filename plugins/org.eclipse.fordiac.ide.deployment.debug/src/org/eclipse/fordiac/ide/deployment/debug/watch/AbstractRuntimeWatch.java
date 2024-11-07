@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementExecutorS
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 public abstract class AbstractRuntimeWatch extends AbstractVariableWatch {
 
@@ -37,28 +38,39 @@ public abstract class AbstractRuntimeWatch extends AbstractVariableWatch {
 
 	@Override
 	public void addWatch() throws DebugException {
+		final Resource resource = getResource();
+		if (resource == null) {
+			return; // silently ignore
+		}
 		try {
-			getDeviceManagementExecutorService().addWatch(getResource(), getResourceRelativeName());
+			getDeviceManagementExecutorService().addWatch(resource, getResourceRelativeName());
 		} catch (final DeploymentException e) {
-			throw new DebugException(Status.error(
-					MessageFormat.format(Messages.AbstractRuntimeWatch_AddWatch, getQualifiedName()),
-					e));
+			throw new DebugException(
+					Status.error(MessageFormat.format(Messages.AbstractRuntimeWatch_AddWatch, getQualifiedName()), e));
 		}
 	}
 
 	@Override
 	public void removeWatch() throws DebugException {
+		final Resource resource = getResource();
+		if (resource == null) {
+			return; // silently ignore
+		}
 		try {
-			getDeviceManagementExecutorService().removeWatch(getResource(), getResourceRelativeName());
+			getDeviceManagementExecutorService().removeWatch(resource, getResourceRelativeName());
 		} catch (final DeploymentException e) {
-			throw new DebugException(Status.error(MessageFormat
-					.format(Messages.AbstractRuntimeWatch_RemoveWatch, getQualifiedName()), e));
+			throw new DebugException(Status
+					.error(MessageFormat.format(Messages.AbstractRuntimeWatch_RemoveWatch, getQualifiedName()), e));
 		}
 	}
 
 	@Override
 	public final void updateValue(final DeploymentDebugWatchData watchData) {
-		final Data data = watchData.getLastData(getResource(), getResourceRelativeName());
+		final Resource resource = getResource();
+		if (resource == null) {
+			return; // silently ignore
+		}
+		final Data data = watchData.getLastData(resource, getResourceRelativeName());
 		if (data != null) {
 			updateValue(data);
 		}

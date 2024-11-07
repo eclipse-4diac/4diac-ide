@@ -64,7 +64,7 @@ public class VarDeclarationWatch extends AbstractRuntimeWatch implements IVarDec
 
 	protected void writeWatch() throws DebugException {
 		try {
-			getDeviceManagementExecutorService().writeFBParameter(getResource(), getResourceRelativeName(),
+			getDeviceManagementExecutorService().writeFBParameter(getResourceChecked(), getResourceRelativeName(),
 					getInternalVariable().toString(false));
 		} catch (final DeploymentException e) {
 			throw new DebugException(
@@ -87,7 +87,7 @@ public class VarDeclarationWatch extends AbstractRuntimeWatch implements IVarDec
 
 	protected void writeForce() throws DebugException {
 		try {
-			getDeviceManagementExecutorService().forceValue(getResource(), getResourceRelativeName(),
+			getDeviceManagementExecutorService().forceValue(getResourceChecked(), getResourceRelativeName(),
 					getInternalVariable().toString(false));
 		} catch (final DeploymentException e) {
 			throw new DebugException(
@@ -98,7 +98,7 @@ public class VarDeclarationWatch extends AbstractRuntimeWatch implements IVarDec
 	@Override
 	public void clearForce() throws DebugException {
 		try {
-			getDeviceManagementExecutorService().clearForce(getResource(), getResourceRelativeName());
+			getDeviceManagementExecutorService().clearForce(getResourceChecked(), getResourceRelativeName());
 		} catch (final DeploymentException e) {
 			throw new DebugException(Status
 					.error(MessageFormat.format(Messages.VarDeclarationWatch_ClearForceError, getQualifiedName()), e));
