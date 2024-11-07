@@ -47,8 +47,14 @@ public abstract class AbstractVirtualWatch extends AbstractVariableWatch {
 
 	@Override
 	public void updateValue(final DeploymentDebugWatchData watchData) {
+		if (watches.isEmpty()) {
+			return;
+		}
 		for (final IWatch watch : watches) {
 			watch.updateValue(watchData);
+			if (!watch.isAlive()) {
+				return;
+			}
 		}
 		updateValue(watches.stream().map(IVariableWatch::getInternalValue).toList());
 	}
