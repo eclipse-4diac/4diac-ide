@@ -34,27 +34,14 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class UpdateFBTypeInterfaceChange extends AbstractCommandChange<FBType> implements IFordiacPreviewChange {
+public class UpdateFBTypeInterfaceChange extends ViewableChange<FBType> {
 
 	final StructuredType struct;
-
-	private final EnumSet<ChangeState> state = EnumSet.noneOf(ChangeState.class);
 
 	public UpdateFBTypeInterfaceChange(final FBType type, final StructuredType struct) {
 		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteFBTypeInterface, type.getName(),
 				struct.getName()), EcoreUtil.getURI(type), FBType.class);
 		this.struct = struct;
-		this.state.addAll(getDefaultSelection());
-	}
-
-	@Override
-	public EnumSet<ChangeState> getState() {
-		return state;
-	}
-
-	@Override
-	public void addState(final ChangeState newState) {
-		state.add(newState);
 	}
 
 	@Override
@@ -97,9 +84,9 @@ public class UpdateFBTypeInterfaceChange extends AbstractCommandChange<FBType> i
 		final CompoundCommand cmd = new CompoundCommand();
 
 		for (final VarDeclaration varDec : varDeclarations) {
-			if (state.contains(ChangeState.CHANGE_TO_ANY)) {
+			if (getState().contains(ChangeState.CHANGE_TO_ANY)) {
 				cmd.add(ChangeDataTypeCommand.forDataType(varDec, IecTypes.GenericTypes.ANY_STRUCT));
-			} else if (state.contains(ChangeState.DELETE)) {
+			} else if (getState().contains(ChangeState.DELETE)) {
 				cmd.add(new DeleteInterfaceCommand(varDec));
 			}
 

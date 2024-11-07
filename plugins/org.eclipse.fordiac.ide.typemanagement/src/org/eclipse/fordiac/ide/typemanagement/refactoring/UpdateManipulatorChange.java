@@ -27,9 +27,7 @@ import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class UpdateManipulatorChange extends AbstractCommandChange<StructManipulator> implements IFordiacPreviewChange {
-
-	private final EnumSet<ChangeState> state = EnumSet.of(ChangeState.NO_CHANGE);
+public class UpdateManipulatorChange extends ViewableChange<StructManipulator> {
 
 	public UpdateManipulatorChange(final StructManipulator manipulator) {
 		super(getName(manipulator), EcoreUtil.getURI(manipulator), StructManipulator.class);
@@ -57,7 +55,7 @@ public class UpdateManipulatorChange extends AbstractCommandChange<StructManipul
 
 	@Override
 	protected Command createCommand(final StructManipulator manipulator) {
-		if (state.contains(ChangeState.CHANGE_TO_ANY)) {
+		if (getState().contains(ChangeState.CHANGE_TO_ANY)) {
 			return new ChangeStructCommand(manipulator, IecTypes.GenericTypes.ANY, true);
 		}
 		// only return null if the UI has an incosistency, so returning null will force
@@ -66,22 +64,8 @@ public class UpdateManipulatorChange extends AbstractCommandChange<StructManipul
 	}
 
 	@Override
-	public EnumSet<ChangeState> getState() {
-		return state;
-	}
-
-	@Override
 	public EnumSet<ChangeState> getAllowedChoices() {
 		return EnumSet.of(ChangeState.CHANGE_TO_ANY, ChangeState.NO_CHANGE);
 	}
 
-	@Override
-	public void addState(final ChangeState newState) {
-		state.add(newState);
-	}
-
-	@Override
-	public EnumSet<ChangeState> getDefaultSelection() {
-		return EnumSet.of(ChangeState.NO_CHANGE);
-	}
 }

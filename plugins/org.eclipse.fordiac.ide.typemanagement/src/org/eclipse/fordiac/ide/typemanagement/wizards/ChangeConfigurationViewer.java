@@ -18,8 +18,8 @@ package org.eclipse.fordiac.ide.typemanagement.wizards;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ViewableChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ViewableChange.ChangeState;
 import org.eclipse.ltk.ui.refactoring.ChangePreviewViewerInput;
 import org.eclipse.ltk.ui.refactoring.IChangePreviewViewer;
 import org.eclipse.swt.SWT;
@@ -33,7 +33,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class ChangeConfigurationViewer implements IChangePreviewViewer {
 	private Composite control;
-	private IFordiacPreviewChange change;
+	private ViewableChange change;
 
 	private Table table;
 	private final Map<TableItem, ChangeState> choices = new HashMap<>();
@@ -79,12 +79,12 @@ public class ChangeConfigurationViewer implements IChangePreviewViewer {
 		if (choices.isEmpty()) {
 			initializeChoices(input);
 		}
-		if (input.getChange() instanceof final IFordiacPreviewChange deleteChange) {
+		if (input.getChange() instanceof final ViewableChange deleteChange) {
 			setSelection(deleteChange);
 		}
 	}
 
-	private void setSelection(final IFordiacPreviewChange delChange) {
+	private void setSelection(final ViewableChange delChange) {
 		choices.keySet().stream().forEach(i -> i.setChecked(false));
 		change = delChange;
 
@@ -94,7 +94,7 @@ public class ChangeConfigurationViewer implements IChangePreviewViewer {
 	}
 
 	private void initializeChoices(final ChangePreviewViewerInput input) {
-		if (input.getChange() instanceof final IFordiacPreviewChange previewChange) {
+		if (input.getChange() instanceof final ViewableChange previewChange) {
 			previewChange.getAllowedChoices().forEach(s -> {
 				if (!s.equals(ChangeState.NO_CHANGE)) { // no change should not be selectable by the User
 					final TableItem ti = new TableItem(table, SWT.NONE);

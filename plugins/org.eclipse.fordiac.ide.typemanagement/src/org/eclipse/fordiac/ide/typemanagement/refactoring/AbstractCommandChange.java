@@ -30,7 +30,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -67,22 +66,12 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	 */
 	protected AbstractCommandChange(final URI elementURI, final Class<T> elementClass) {
 		this(elementURI.lastSegment(), elementURI, elementClass);
-		initEnablement();
 	}
 
 	/**
-	 * It needs to be checked whether a change has been set to "NO_CHANGE"
 	 *
-	 */
-	private void initEnablement() {
-		if ((this instanceof final IFordiacPreviewChange change)
-				&& change.getDefaultSelection().contains(ChangeState.NO_CHANGE)) {
-			setEnabled(false);
-		}
-	}
-
-	/**
-	 * Create an abstract command change
+	 *
+	 * /** Create an abstract command change
 	 *
 	 * @param name         The name of the change
 	 * @param elementURI   The element URI
@@ -92,7 +81,6 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		this.name = Objects.requireNonNull(name);
 		this.elementURI = Objects.requireNonNull(elementURI);
 		this.elementClass = Objects.requireNonNull(elementClass);
-		initEnablement();
 	}
 
 	/**

@@ -30,14 +30,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ViewableChange.ChangeState;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class ReconnectPinChange extends AbstractCommandChange<FBNetworkElement> implements IFordiacPreviewChange {
+public class ReconnectPinChange extends ViewableChange<FBNetworkElement> {
 
-	private final EnumSet<ChangeState> state = EnumSet.of(ChangeState.RECONNECT);
 	private final String newName;
 	private final String oldName;
 
@@ -50,23 +49,13 @@ public class ReconnectPinChange extends AbstractCommandChange<FBNetworkElement> 
 
 	@Override
 	protected Command createCommand(final FBNetworkElement element) {
-		return new ReconnectPinByName(oldName, newName, element, state);
+		return new ReconnectPinByName(oldName, newName, element, getState());
 
-	}
-
-	@Override
-	public EnumSet<ChangeState> getState() {
-		return state;
 	}
 
 	@Override
 	public EnumSet<ChangeState> getAllowedChoices() {
 		return EnumSet.of(ChangeState.RECONNECT, ChangeState.NO_CHANGE, ChangeState.DELETE);
-	}
-
-	@Override
-	public void addState(final ChangeState newState) {
-		state.add(newState);
 	}
 
 	@Override

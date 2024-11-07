@@ -53,4 +53,5 @@ public class AttributeValueChange extends AbstractCommandChange<Attribute> {
 		}
 		return status;
 	}
+
 }

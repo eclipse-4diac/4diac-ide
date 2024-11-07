@@ -18,6 +18,7 @@ import java.util.EnumSet;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeFbTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalFBCommand;
@@ -32,7 +33,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ViewableChange;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
@@ -85,7 +86,7 @@ public class SafeFBTypeDeletionChange extends CompositeChange {
 		}
 	}
 
-	private static class DeleteInternalFBChange extends CompositeChange implements IFordiacPreviewChange {
+	private static class DeleteInternalFBChange extends ViewableChange<EObject> {
 		private final EnumSet<ChangeState> state = EnumSet.noneOf(ChangeState.class);
 		final BaseFBType baseFb;
 		final FB internalFb;
