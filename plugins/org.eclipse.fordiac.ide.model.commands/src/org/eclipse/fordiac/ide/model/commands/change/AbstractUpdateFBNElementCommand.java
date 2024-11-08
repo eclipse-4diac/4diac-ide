@@ -480,6 +480,13 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	private void copyAttributes() {
 		newElement.getAttributes().addAll(EcoreUtil.copyAll(oldElement.getAttributes()));
+		oldElement.getInterface().getAllInterfaceElements().stream().filter(ie -> !ie.getAttributes().isEmpty())
+				.forEach(ie -> {
+					final IInterfaceElement newIE = newElement.getInterfaceElement(ie.getName());
+					if (newIE != null) {
+						newIE.getAttributes().addAll(EcoreUtil.copyAll(ie.getAttributes()));
+					}
+				});
 	}
 
 	protected abstract FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement);
