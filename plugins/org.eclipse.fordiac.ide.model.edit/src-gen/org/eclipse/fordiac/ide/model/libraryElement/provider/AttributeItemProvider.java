@@ -198,14 +198,12 @@ public class AttributeItemProvider extends ItemProviderAdapter implements IEditi
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 *
+	 * @generated not
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Attribute)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Attribute_type") : //$NON-NLS-1$
-			getString("_UI_Attribute_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		return AttributeItemProviderAnnotation.getText((Attribute) object, this);
 	}
 
 	/**
