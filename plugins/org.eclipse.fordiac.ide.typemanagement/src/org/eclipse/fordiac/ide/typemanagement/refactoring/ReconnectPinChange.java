@@ -30,12 +30,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.ViewableChange.ChangeState;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class ReconnectPinChange extends ViewableChange<FBNetworkElement> {
+public class ReconnectPinChange extends ConfigurableChange<FBNetworkElement> {
 
 	private final String newName;
 	private final String oldName;

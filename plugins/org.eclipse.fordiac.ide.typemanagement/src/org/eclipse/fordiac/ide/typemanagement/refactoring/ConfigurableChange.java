@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Dario Romano
+ *   Michael Oberlehner
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
@@ -17,19 +17,19 @@ import java.util.EnumSet;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.typemanagement.Messages;
 
-public abstract class ViewableChange<T extends EObject> extends AbstractCommandChange<T> {
+public abstract class ConfigurableChange<T extends EObject> extends AbstractCommandChange<T>
+		implements IFordiacPreviewChange {
 
 	private final EnumSet<ChangeState> state;
 
-	protected ViewableChange(final String name, final URI elementURI, final Class elementClass) {
+	protected ConfigurableChange(final String name, final URI elementURI, final Class elementClass) {
 		super(name, elementURI, elementClass);
 		this.state = getDefaultSelection();
 		initEnablement();
 	}
 
-	protected ViewableChange(final URI elementURI, final Class elementClass) {
+	protected ConfigurableChange(final URI elementURI, final Class elementClass) {
 		super(elementURI, elementClass);
 		this.state = getDefaultSelection();
 		initEnablement();
@@ -41,34 +41,20 @@ public abstract class ViewableChange<T extends EObject> extends AbstractCommandC
 		}
 	}
 
-	public enum ChangeState {
-		NO_SELECTION(""), DELETE(Messages.PreviewChange_DeleteChoice),
-		CHANGE_TO_ANY(Messages.PreviewChange_ChangeToAnyStruct),
-		REPLACE_WITH_MARKER(Messages.PreviewChange_ReplaceWithMarker), NO_CHANGE(Messages.PreviewChange_NoChange),
-		RECONNECT(Messages.IFordiacPreviewChange_Reconnect0);
-
-		private final String descriptor;
-
-		ChangeState(final String desc) {
-			this.descriptor = desc;
-		}
-
-		@Override
-		public String toString() {
-			return this.descriptor;
-		}
-	}
-
+	@Override
 	public EnumSet<ChangeState> getState() {
 		return state;
 	}
 
+	@Override
 	public abstract EnumSet<ChangeState> getAllowedChoices();
 
+	@Override
 	public void addState(final ChangeState newState) {
 		state.add(newState);
 	}
 
+	@Override
 	public EnumSet<ChangeState> getDefaultSelection() {
 		return EnumSet.of(ChangeState.NO_CHANGE);
 	}

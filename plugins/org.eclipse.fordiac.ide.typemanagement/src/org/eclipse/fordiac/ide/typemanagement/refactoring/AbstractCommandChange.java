@@ -69,9 +69,7 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	}
 
 	/**
-	 *
-	 *
-	 * /** Create an abstract command change
+	 * Create an abstract command change
 	 *
 	 * @param name         The name of the change
 	 * @param elementURI   The element URI
@@ -89,7 +87,6 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	@Override
 	public final void initializeValidationData(final IProgressMonitor pm) {
 		initializeEditor();
-
 		final LibraryElement libraryElement = acquireLibraryElement(false);
 		final T element = getElement(libraryElement);
 		if (element != null) {
@@ -118,7 +115,6 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		} else {
 			status.merge(isValid(element, pm));
 		}
-
 		return status;
 	}
 

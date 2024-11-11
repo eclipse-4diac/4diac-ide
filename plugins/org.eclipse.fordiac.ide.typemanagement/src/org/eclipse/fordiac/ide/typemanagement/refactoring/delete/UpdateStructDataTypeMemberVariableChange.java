@@ -27,31 +27,17 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ConfigurableChange;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class UpdateStructDataTypeMemberVariableChange extends AbstractCommandChange<VarDeclaration>
-		implements IFordiacPreviewChange {
-	private final EnumSet<ChangeState> state = EnumSet.noneOf(ChangeState.class);
+public class UpdateStructDataTypeMemberVariableChange extends ConfigurableChange<VarDeclaration> {
 
 	public UpdateStructDataTypeMemberVariableChange(final VarDeclaration varDeclaration) {
 		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_UpdateMemberVariable,
 				varDeclaration.getName(), varDeclaration.getTypeName(),
 				((INamedElement) varDeclaration.eContainer()).getName()), EcoreUtil.getURI(varDeclaration),
 				VarDeclaration.class);
-		this.state.addAll(getDefaultSelection());
-	}
-
-	@Override
-	public EnumSet<ChangeState> getState() {
-		return state;
-	}
-
-	@Override
-	public void addState(final ChangeState newState) {
-		state.add(newState);
 	}
 
 	@Override
@@ -83,14 +69,15 @@ public class UpdateStructDataTypeMemberVariableChange extends AbstractCommandCha
 
 	@Override
 	protected Command createCommand(final VarDeclaration varDeclaration) {
-		if (state.contains(ChangeState.DELETE) && varDeclaration.eContainer() instanceof final StructuredType type) {
+		if (getState().contains(ChangeState.DELETE)
+				&& varDeclaration.eContainer() instanceof final StructuredType type) {
 			return new DeleteMemberVariableCommand(type, varDeclaration);
 		}
-		if (state.contains(ChangeState.CHANGE_TO_ANY)) {
+		if (getState().contains(ChangeState.CHANGE_TO_ANY)) {
 			return ChangeDataTypeCommand.forDataType(varDeclaration, IecTypes.GenericTypes.ANY_STRUCT);
 		}
 
-		if (state.contains(ChangeState.NO_CHANGE)) {
+		if (getState().contains(ChangeState.NO_CHANGE)) {
 			return ChangeDataTypeCommand.forDataType(varDeclaration, varDeclaration.getType());
 		}
 

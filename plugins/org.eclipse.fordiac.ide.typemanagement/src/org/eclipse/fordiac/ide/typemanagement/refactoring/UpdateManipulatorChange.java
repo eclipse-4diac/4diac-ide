@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class UpdateManipulatorChange extends ViewableChange<StructManipulator> {
+public class UpdateManipulatorChange extends ConfigurableChange<StructManipulator> {
 
 	public UpdateManipulatorChange(final StructManipulator manipulator) {
 		super(getName(manipulator), EcoreUtil.getURI(manipulator), StructManipulator.class);

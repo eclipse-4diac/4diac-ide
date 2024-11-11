@@ -34,7 +34,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class UpdateFBTypeInterfaceChange extends ViewableChange<FBType> {
+public class UpdateFBTypeInterfaceChange extends ConfigurableChange<FBType> {
 
 	final StructuredType struct;
 
