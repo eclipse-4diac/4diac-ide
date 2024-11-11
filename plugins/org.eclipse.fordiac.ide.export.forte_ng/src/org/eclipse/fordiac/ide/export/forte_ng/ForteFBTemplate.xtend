@@ -119,6 +119,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			«IF hasOutputWith»static const TDataIOID scmEOWith[];«ENDIF»
 			static const TForteInt16 scmEOWithIndexes[];
 			static const CStringDictionary::TStringId scmEventOutputNames[];
+			static const CStringDictionary::TStringId scmEventOutputTypeIds[]; 
 		«ENDIF»'''
 
 	def protected generateFBEventInputInterfaceDecl() '''«IF !type.interfaceList.eventInputs.empty»
@@ -126,6 +127,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			«IF hasInputWith»static const TDataIOID scmEIWith[];«ENDIF»
 			static const TForteInt16 scmEIWithIndexes[];
 			static const CStringDictionary::TStringId scmEventInputNames[];
+			static const CStringDictionary::TStringId scmEventInputTypeIds[]; 
 		«ENDIF»'''
 
 	def protected generateEventConstants(List<Event> events) '''«FOR event : events»
@@ -182,6 +184,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 				«ENDIF»
 				const TForteInt16 «FBClassName»::scmEIWithIndexes[] = {«inputWithIndexes.join(", ")»};
 				const CStringDictionary::TStringId «FBClassName»::scmEventInputNames[] = {«type.interfaceList.eventInputs.FORTENameList»};
+				const CStringDictionary::TStringId «FBClassName»::scmEventInputTypeIds[] = {«type.interfaceList.eventInputs.FORTEEventTypeList»};
 			«ENDIF»
 			«IF !type.interfaceList.eventOutputs.empty»
 				«IF !outputWith.empty»
@@ -189,6 +192,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 				«ENDIF»
 				const TForteInt16 «FBClassName»::scmEOWithIndexes[] = {«outputWithIndexes.join(", ")»};
 				const CStringDictionary::TStringId «FBClassName»::scmEventOutputNames[] = {«type.interfaceList.eventOutputs.FORTENameList»};
+				const CStringDictionary::TStringId «FBClassName»::scmEventOutputTypeIds[] = {«type.interfaceList.eventOutputs.FORTEEventTypeList»};
 			«ENDIF»
 			«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
 				const SAdapterInstanceDef «FBClassName»::scmAdapterInstances[] = {
@@ -214,8 +218,8 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	// as there this code is duplicated
 	def protected generateFBInterfaceSpecDefinition() '''
 		const SFBInterfaceSpec «FBClassName»::scmFBInterfaceSpec = {
-		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scmEventInputNames, «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
-		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
+		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventInputNames, scmEventInputTypeIds,  «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
+		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, scmEventOutputTypeIds, «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
 		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scmDataInputNames, scmDataInputTypeIds«ENDIF»,
 		  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scmDataOutputNames, scmDataOutputTypeIds«ENDIF»,
 		  «type.interfaceList.inOutVars.size», «IF type.interfaceList.inOutVars.empty»nullptr«ELSE»scmDataInOutNames«ENDIF»,

@@ -32,6 +32,8 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.xtext.EcoreUtil2.*
+import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.emf.common.util.EList
 
 abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends ForteNgExportTemplate {
 
@@ -151,7 +153,11 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	}
 
 	def protected getFORTETypeList(List<? extends VarDeclaration> elements) {
-		elements.map [generateVariableTypeSpec].join(", ")
+		elements.map[generateVariableTypeSpec].join(", ")
+	}
+	
+	def protected getFORTEEventTypeList(List<? extends Event> elements) {
+		elements.map[it.typeName.FORTEStringId].join(", ")
 	}
 
 	override getErrors() {
