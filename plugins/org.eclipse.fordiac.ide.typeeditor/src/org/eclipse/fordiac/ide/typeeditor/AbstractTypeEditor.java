@@ -71,6 +71,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -316,7 +317,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		}
 	}
 
-	public void handleContentOutlineSelection(final ISelection selection) {
+	private void handleContentOutlineSelection(final IWorkbenchPart part, final ISelection selection) {
 		if ((selection instanceof final IStructuredSelection sel) && !selection.isEmpty()) {
 			final Object selectedElement = sel.getFirstElement();
 			int i = 0;
@@ -325,10 +326,20 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 					if (getActivePage() != i) {
 						setActivePage(i);
 					}
+					// the property sheet needs the original part the selection came from!
+					forwardSelectionToPropertySheet(part, selection);
 					break;
 				}
 				i++;
 			}
+		}
+	}
+
+	private void forwardSelectionToPropertySheet(final IWorkbenchPart part, final ISelection selection) {
+		final IWorkbenchPart propertySheetPart = getSite().getWorkbenchWindow().getActivePage()
+				.findView(IPageLayout.ID_PROP_SHEET);
+		if (propertySheetPart instanceof final PropertySheet propertySheet) {
+			propertySheet.selectionChanged(part, selection);
 		}
 	}
 
@@ -390,11 +401,11 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 				final EObject selectedElement = getType().eResource().getEObject(uri.fragment());
 				if (selectedElement instanceof FBNetworkElement || selectedElement instanceof Algorithm
 						|| selectedElement instanceof Method || selectedElement instanceof VarDeclaration) {
-					handleContentOutlineSelection(new StructuredSelection(selectedElement));
+					handleContentOutlineSelection(part, new StructuredSelection(selectedElement));
 				}
 			} else if (part instanceof ContentOutline) {
 				// only update selection if it comes from the outline
-				handleContentOutlineSelection(selection);
+				handleContentOutlineSelection(part, selection);
 			}
 		}
 	}
