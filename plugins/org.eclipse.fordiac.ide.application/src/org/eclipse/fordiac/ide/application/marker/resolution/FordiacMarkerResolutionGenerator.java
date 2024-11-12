@@ -16,6 +16,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.marker.resolution;
 
+import java.util.stream.Stream;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
@@ -29,10 +31,12 @@ public class FordiacMarkerResolutionGenerator implements IMarkerResolutionGenera
 		return switch (FordiacErrorMarker.getCode(marker)) {
 		case LibraryElementValidator.ITYPED_ELEMENT__VALIDATE_TYPE,
 				LibraryElementValidator.CONFIGURABLE_FB__VALIDATE_DATA_TYPE ->
-			new IMarkerResolution[] { new ChangeDataTypeMarkerResolution(marker),
-					new CreateDataTypeMarkerResolution(marker) };
-		case LibraryElementValidator.TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE -> new IMarkerResolution[] {
-				new CreateMissingFBMarkerResolution(marker), new ChangeFBMarkerResolution(marker) };
+			Stream.concat(
+					Stream.of(new CreateDataTypeMarkerResolution(marker), new ChangeDataTypeMarkerResolution(marker)),
+					BestFitDataTypeMarkerResolution.createResolutions(marker)).toArray(IMarkerResolution[]::new);
+		case LibraryElementValidator.TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE ->
+			Stream.concat(Stream.of(new CreateMissingFBMarkerResolution(marker), new ChangeFBMarkerResolution(marker)),
+					BestFitFBMarkerResolution.createResolutions(marker)).toArray(IMarkerResolution[]::new);
 		default -> new IMarkerResolution[0];
 		};
 	}
