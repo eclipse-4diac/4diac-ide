@@ -191,7 +191,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 					return change;
 				}
 				if (rootContainer instanceof final FBType fbType
-						&& dataTypeEntry instanceof final StructuredType type) {
+						&& dataTypeEntry.getType() instanceof final StructuredType type) {
 					return new UpdateFBTypeInterfaceChange(fbType, type);
 				}
 			}
