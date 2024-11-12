@@ -90,6 +90,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 			if (inOutVar.getAttributes().stream().map(Attribute::getName).anyMatch(
 					LibraryElementTags.ELEMENT_INOUTVISIBLEOUT::equals) && inOutVar.getInOutVarOpposite().isVisible()) {
 				inOutVar.getInOutVarOpposite().setVisible(false);
+				inOutVar.deleteAttribute(LibraryElementTags.ELEMENT_INOUTVISIBLEOUT);
 			}
 		}
 

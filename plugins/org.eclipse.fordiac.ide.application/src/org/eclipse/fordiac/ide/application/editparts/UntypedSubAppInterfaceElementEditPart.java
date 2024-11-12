@@ -285,7 +285,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		if (key == ErrorMarkerDataTypeImpl.class) {
 			final IInterfaceElement model = getModel();
 			final ErrorMarkerDataTypeImpl marker = model instanceof VarDeclaration
-					? (ErrorMarkerDataTypeImpl) ((VarDeclaration) model).getType()
+					? (ErrorMarkerDataTypeImpl) model.getType()
 					: null;
 			return key.cast(marker);
 		}
