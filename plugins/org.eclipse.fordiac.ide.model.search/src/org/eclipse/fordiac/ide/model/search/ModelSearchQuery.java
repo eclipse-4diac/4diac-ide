@@ -50,6 +50,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
@@ -61,10 +63,12 @@ import org.eclipse.swt.widgets.Display;
 public class ModelSearchQuery implements ISearchQuery {
 
 	private final ModelQuerySpec modelQuerySpec;
+	private final ModelSearchPattern pattern;
 	private ModelSearchResult searchResult;
 
 	public ModelSearchQuery(final ModelQuerySpec modelQuerySpec) {
 		this.modelQuerySpec = modelQuerySpec;
+		pattern = new ModelSearchPattern(modelQuerySpec);
 	}
 
 	@Override
@@ -297,23 +301,43 @@ public class ModelSearchQuery implements ISearchQuery {
 						|| (varDecl.getType() != null && varDecl.getType().getTypeEntry() != null
 								&& compareStrings(varDecl.getType().getTypeEntry().getFullTypeName()));
 			}
-			if (modelElement instanceof Algorithm || modelElement instanceof Method) {
-				for (final String fqn : VariableOperations.getAllDependencies(modelElement)) {
-					if (compareStrings(fqn)) {
-						return true;
-					}
+			if ((modelElement instanceof Algorithm || modelElement instanceof Method) && matchInST(modelElement)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean matchInST(final INamedElement modelElement) {
+		final String text = getImplText(modelElement);
+		if (text == null || pattern.preScanST(text)) {
+			for (final String fqn : VariableOperations.getAllDependencies(modelElement)) {
+				if (compareStrings(fqn)) {
+					return true;
 				}
 			}
 		}
 		return false;
 	}
 
+	private static String getImplText(final INamedElement modelElement) {
+		if (modelElement instanceof final TextAlgorithm textAlg) {
+			return textAlg.getText();
+		}
+
+		if (modelElement instanceof final TextMethod textMethod) {
+			return textMethod.getText();
+		}
+
+		return null;
+	}
+
 	private boolean compareStrings(final String toTest) {
 		if (toTest == null) {
 			return false;
 		}
-		final ModelSearchPattern pattern = new ModelSearchPattern(toTest, modelQuerySpec);
-		if (pattern.matchSearchString()) {
+
+		if (pattern.matchSearchString(toTest)) {
 			return true;
 		}
 		if (modelQuerySpec.isCheckExactMatching()) {

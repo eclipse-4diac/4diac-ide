@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,21 +13,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ModelSearchPattern { // extends SearchPattern
 
-	private final String toTest;
-	private Pattern searchPattern;
-	private final String searchString;
+	private final Pattern searchPattern;
+	private final Pattern preScannSTPattern;
+	private final String preScannSTStringPattern;
 
-	public ModelSearchPattern(final String toTest, final ModelQuerySpec modelQuerySpec) {
-		this.toTest = toTest;
-		this.searchString = modelQuerySpec.getSearchString();
+	public ModelSearchPattern(final ModelQuerySpec modelQuerySpec) {
+		searchPattern = Pattern.compile(convertSearchStringToPattern(modelQuerySpec.getSearchString()));
+
+		preScannSTStringPattern = generatePreScanSTStringPattern(modelQuerySpec.getSearchString());
+		preScannSTPattern = (containsRegex(preScannSTStringPattern))
+				? Pattern.compile(preScannSTStringPattern, Pattern.CASE_INSENSITIVE)
+				: null;
 	}
 
-	private String convertSearchStringToPattern() {
+	private static String convertSearchStringToPattern(final String searchString) {
 		String temp = searchString;
 		if (searchString.contains("?")) { //$NON-NLS-1$
 			temp = searchString.replace("?", "[a-zA-Z0-9_]"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -38,11 +41,39 @@ public class ModelSearchPattern { // extends SearchPattern
 		return temp;
 	}
 
-	public boolean matchSearchString() {
-		final String bah = convertSearchStringToPattern();
-		searchPattern = Pattern.compile(bah);
-		final Matcher matcher = searchPattern.matcher(toTest);
-		return matcher.matches();
+	public boolean matchSearchString(final String toTest) {
+		return searchPattern.matcher(toTest).matches();
+	}
+
+	public boolean preScanST(final String toTest) {
+		if (preScannSTPattern != null) {
+			return preScannSTPattern.matcher(toTest).find();
+		}
+		return preScanSTIgnoreCase(toTest);
+	}
+
+	private static String generatePreScanSTStringPattern(final String searchString) {
+		String result = searchString;
+		final int lastPackageSepeartor = result.lastIndexOf("::"); //$NON-NLS-1$
+		if (lastPackageSepeartor != -1) {
+			result = result.substring(lastPackageSepeartor + 2);
+		}
+		return convertSearchStringToPattern(result);
+	}
+
+	private static boolean containsRegex(final String pattern) {
+		return pattern.matches(".*[.*+?^${}()|\\[\\]\\\\].*"); //$NON-NLS-1$
+	}
+
+	private boolean preScanSTIgnoreCase(final String toTest) {
+		final int patternLength = preScannSTStringPattern.length();
+
+		for (int i = 0; i <= toTest.length() - patternLength; i++) {
+			if (toTest.regionMatches(true, i, preScannSTStringPattern, 0, patternLength)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
