@@ -147,8 +147,9 @@ final package class ExpressionAnnotations {
 	def package static INamedElement getResultType(STFeatureExpression expr) {
 		switch (feature : expr.feature) {
 			STStandardFunction:
-				feature.javaMethod.inferReturnTypeFromDataTypes(switch (type: expr.expectedType) { DataType: type },
-					expr.parameters.map[resultType].filter(DataType).toList)
+				feature.javaMethod.inferReturnTypeFromDataTypes([switch (type: expr.expectedType) { DataType: type }], [
+					expr.parameters.map[resultType].filter(DataType).toList
+				])
 			default:
 				getDeclaredResultType(expr)
 		}
@@ -162,13 +163,14 @@ final package class ExpressionAnnotations {
 			AdapterDeclaration,
 			FB case !expr.call:
 				feature.featureType
-			STStandardFunction: {
-				val argumentTypes = expr.parameters.map[declaredResultType].filter(DataType).toList
-				if (argumentTypes.size == expr.parameters.size) // all parameters have valid types
-					feature.javaMethod.inferReturnTypeFromDataTypes(null, argumentTypes)
-				else
-					feature.javaMethod.inferReturnTypeFromDataTypes(null, emptyList)
-			}
+			STStandardFunction:
+				feature.javaMethod.inferReturnTypeFromDataTypes(null) [
+					val argumentTypes = expr.parameters.map[declaredResultType].filter(DataType).toList
+					if (argumentTypes.size == expr.parameters.size) // all parameters have valid types
+						argumentTypes
+					else
+						null
+				]
 			ICallable:
 				feature.returnType
 		}
