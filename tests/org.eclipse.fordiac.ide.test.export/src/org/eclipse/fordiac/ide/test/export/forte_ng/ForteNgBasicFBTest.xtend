@@ -127,8 +127,8 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringId«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»)
 						
 						const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scmFBInterfaceSpec = {
-						  0, nullptr, nullptr, nullptr,
-						  0, nullptr, nullptr, nullptr,
+						  0, nullptr, nullptr, nullptr, nullptr,
+						  0, nullptr, nullptr, nullptr, nullptr,
 						  0, nullptr, nullptr,
 						  0, nullptr, nullptr,
 						  0, nullptr,
