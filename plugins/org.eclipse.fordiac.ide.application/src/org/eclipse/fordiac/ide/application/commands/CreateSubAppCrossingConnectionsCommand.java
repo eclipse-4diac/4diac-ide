@@ -31,10 +31,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
+import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -123,27 +123,29 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 	@Override
 	public void execute() {
-		final DataType commonType = resolveGenericDataType();
+		final IInterfaceElement leftTemplate = resolveTemplate(source, destination);
+		final IInterfaceElement rightTemplate = resolveTemplate(destination, source);
 
-		final IInterfaceElement left = buildPath(source, sourceNetworks, destination, false,
-				commonType != null ? commonType : source.getType());
-		final IInterfaceElement right = buildPath(destination, destinationNetworks, source, true,
-				commonType != null ? commonType : destination.getType());
+		final IInterfaceElement left = buildPath(source, sourceNetworks, destination, false, leftTemplate);
+		final IInterfaceElement right = buildPath(destination, destinationNetworks, source, true, rightTemplate);
 		createConnection(match, left, right);
 	}
 
-	private DataType resolveGenericDataType() {
-		if (IecTypes.GenericTypes.isAnyType(source.getType())
-				&& !IecTypes.GenericTypes.isAnyType(destination.getType())) {
-			return destination.getType();
+	private IInterfaceElement resolveTemplate(final IInterfaceElement template, final IInterfaceElement opposite) {
+		// check if source is an InOut variable
+		if (source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar()) {
+			final VarDeclaration definingVar = VarInOutHelper
+					.getDefiningVarInOutDeclaration(sourceVar.getInOutVarOpposite());
+			if (definingVar != null) {
+				return definingVar; // always use defining variable if InOut
+			}
 		}
-
-		if (!IecTypes.GenericTypes.isAnyType(source.getType())
-				&& IecTypes.GenericTypes.isAnyType(destination.getType())) {
-			return source.getType();
+		// check if template is generic
+		if (IecTypes.GenericTypes.isAnyType(template.getType())
+				&& !IecTypes.GenericTypes.isAnyType(opposite.getType())) {
+			return opposite; // use opposite if template is generic and opposite is not
 		}
-
-		return null;
+		return template;
 	}
 
 	private static boolean isSwapNeeded(final IInterfaceElement source, final IInterfaceElement destination,
@@ -218,7 +220,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 	// build left or right path as seen from the matching network
 	private IInterfaceElement buildPath(final IInterfaceElement element, final List<FBNetwork> networks,
-			final IInterfaceElement oppositePin, final boolean isRightPath, final DataType commonType) {
+			final IInterfaceElement oppositePin, final boolean isRightPath, final IInterfaceElement template) {
 		IInterfaceElement ie = element;
 		FBNetwork network = networks.get(0);
 		int i = 0;
@@ -231,7 +233,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 			if (existingConnection != null) {
 				ie = existingConnection;
 			} else {
-				final IInterfaceElement createdPin = createInterfaceElement(isRightPath, ie, subapp, commonType);
+				final IInterfaceElement createdPin = createInterfaceElement(isRightPath, ie, subapp, template);
 
 				if (isRightPath) {
 					createConnection(network, createdPin, ie);
@@ -359,16 +361,15 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 	}
 
 	private IInterfaceElement createInterfaceElement(final boolean isRightPath, final IInterfaceElement ie,
-			final SubApp subapp, final DataType commonType) {
+			final SubApp subapp, final IInterfaceElement template) {
 
 		if (emptyPinAlreadyExists(subapp, ie, isRightPath)) {
 			return subapp.getInterfaceElement(ie.getName());
 		}
 
-		final boolean isInOut = source instanceof final VarDeclaration sourceVar && sourceVar.isInOutVar();
-
-		final CreateSubAppInterfaceElementCommand pinCmd = new CreateSubAppInterfaceElementCommand(commonType,
-				source.getName(), subapp.getInterface(), isRightPath, isInOut, ArraySizeHelper.getArraySize(source),
+		final boolean isInOut = template instanceof final VarDeclaration templateVar && templateVar.isInOutVar();
+		final CreateSubAppInterfaceElementCommand pinCmd = new CreateSubAppInterfaceElementCommand(template.getType(),
+				source.getName(), subapp.getInterface(), isRightPath, isInOut, ArraySizeHelper.getArraySize(template),
 				-1);
 
 		pinCmd.execute();
