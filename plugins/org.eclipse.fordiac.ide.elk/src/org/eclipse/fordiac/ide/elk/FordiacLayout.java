@@ -19,7 +19,15 @@ import java.util.List;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.elk.alg.layered.options.CrossingMinimizationStrategy;
+import org.eclipse.elk.alg.layered.options.EdgeStraighteningStrategy;
+import org.eclipse.elk.alg.layered.options.FixedAlignment;
+import org.eclipse.elk.alg.layered.options.GreedySwitchType;
 import org.eclipse.elk.alg.layered.options.LayeredMetaDataProvider;
+import org.eclipse.elk.alg.layered.options.LayeringStrategy;
+import org.eclipse.elk.alg.layered.options.NodePlacementStrategy;
+import org.eclipse.elk.alg.layered.options.NodePromotionStrategy;
+import org.eclipse.elk.alg.layered.options.ValidifyStrategy;
 import org.eclipse.elk.alg.libavoid.options.LibavoidMetaDataProvider;
 import org.eclipse.elk.alg.libavoid.server.LibavoidServerException;
 import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
@@ -29,6 +37,7 @@ import org.eclipse.elk.core.options.Direction;
 import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.util.NullElkProgressMonitor;
 import org.eclipse.elk.graph.ElkGraphElement;
+import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
@@ -129,15 +138,33 @@ public class FordiacLayout {
 		});
 	}
 
-	private static void configureBlockLayoutGraph(final ElkGraphElement graph) {
-		graph.setProperty(CoreOptions.INTERACTIVE, Boolean.TRUE)
+	private static void configureBlockLayoutGraph(final ElkNode graph) {
+		graph.setProperty(CoreOptions.INTERACTIVE, Boolean.FALSE)
 				.setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.layered") //$NON-NLS-1$
 				.setProperty(CoreOptions.DIRECTION, Direction.RIGHT)
 				.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS)
-				.setProperty(CoreOptions.PADDING, new ElkPadding(80.0))
+				.setProperty(CoreOptions.PADDING, new ElkPadding(5.0, 20.0, 20.0, 20.0))
 				.setProperty(CoreOptions.SPACING_NODE_NODE, Double.valueOf(50))
 				.setProperty(LayeredMetaDataProvider.SPACING_NODE_NODE_BETWEEN_LAYERS, Double.valueOf(50))
-				.setProperty(LayeredMetaDataProvider.THOROUGHNESS, Integer.valueOf(10));
+				.setProperty(LayeredMetaDataProvider.THOROUGHNESS, Integer.valueOf(10))
+				.setProperty(LayeredMetaDataProvider.LAYERING_STRATEGY, LayeringStrategy.MIN_WIDTH)
+				.setProperty(LayeredMetaDataProvider.LAYERING_MIN_WIDTH_UPPER_BOUND_ON_WIDTH, Integer.valueOf(-1))
+				.setProperty(LayeredMetaDataProvider.LAYERING_MIN_WIDTH_UPPER_LAYER_ESTIMATION_SCALING_FACTOR,
+						Integer.valueOf(-1))
+				.setProperty(LayeredMetaDataProvider.LAYERING_NODE_PROMOTION_STRATEGY,
+						NodePromotionStrategy.NO_BOUNDARY)
+				.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_STRATEGY, NodePlacementStrategy.BRANDES_KOEPF)
+				.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_BK_FIXED_ALIGNMENT, FixedAlignment.BALANCED)
+				.setProperty(LayeredMetaDataProvider.NODE_PLACEMENT_BK_EDGE_STRAIGHTENING,
+						EdgeStraighteningStrategy.IMPROVE_STRAIGHTNESS)
+				.setProperty(LayeredMetaDataProvider.CROSSING_MINIMIZATION_STRATEGY,
+						CrossingMinimizationStrategy.LAYER_SWEEP)
+				.setProperty(LayeredMetaDataProvider.CROSSING_MINIMIZATION_GREEDY_SWITCH_TYPE,
+						GreedySwitchType.TWO_SIDED)
+				.setProperty(LayeredMetaDataProvider.COMPACTION_CONNECTED_COMPONENTS, Boolean.TRUE)
+				.setProperty(CoreOptions.SEPARATE_CONNECTED_COMPONENTS, Boolean.TRUE)
+				.setProperty(LayeredMetaDataProvider.WRAPPING_VALIDIFY_STRATEGY, ValidifyStrategy.LOOK_BACK);
+		// TODO layer unzipping is currently in elk develop, wait for next release
 	}
 
 	private static void configureConnectionLayoutGraph(final ElkGraphElement graph) {
@@ -147,10 +174,10 @@ public class FordiacLayout {
 				.setProperty(LibavoidMetaDataProvider.CROSSING_PENALTY, Double.valueOf(10000))
 				// .setProperty(LibavoidMetaDataProvider.CLUSTER_CROSSING_PENALTY,
 				// Double.valueOf(10))
-				.setProperty(LibavoidMetaDataProvider.NUDGE_SHARED_PATHS_WITH_COMMON_END_POINT, Boolean.valueOf(false))
-				.setProperty(LibavoidMetaDataProvider.ENABLE_HYPEREDGES_FROM_COMMON_SOURCE, Boolean.valueOf(true))
+				.setProperty(LibavoidMetaDataProvider.NUDGE_SHARED_PATHS_WITH_COMMON_END_POINT, Boolean.FALSE)
+				.setProperty(LibavoidMetaDataProvider.ENABLE_HYPEREDGES_FROM_COMMON_SOURCE, Boolean.TRUE)
 				.setProperty(LibavoidMetaDataProvider.IMPROVE_HYPEREDGE_ROUTES_MOVING_ADDING_AND_DELETING_JUNCTIONS,
-						Boolean.valueOf(true));
+						Boolean.TRUE);
 	}
 
 	private static void collectSubapps(final AbstractFBNetworkEditPart ep,
