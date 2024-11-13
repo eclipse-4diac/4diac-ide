@@ -42,6 +42,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.With
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+import org.eclipse.emf.common.util.EList
+import org.eclipse.fordiac.ide.model.data.EventType
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary
 
 abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemplate<T> {
 
@@ -119,7 +122,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			«IF hasOutputWith»static const TDataIOID scmEOWith[];«ENDIF»
 			static const TForteInt16 scmEOWithIndexes[];
 			static const CStringDictionary::TStringId scmEventOutputNames[];
-			static const CStringDictionary::TStringId scmEventOutputTypeIds[]; 
+			«IF !type.interfaceList.eventOutputs.containsOnlyBasicEventType»
+				static const CStringDictionary::TStringId scmEventOutputTypeIds[]; 
+			«ENDIF»
 		«ENDIF»'''
 
 	def protected generateFBEventInputInterfaceDecl() '''«IF !type.interfaceList.eventInputs.empty»
@@ -127,7 +132,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			«IF hasInputWith»static const TDataIOID scmEIWith[];«ENDIF»
 			static const TForteInt16 scmEIWithIndexes[];
 			static const CStringDictionary::TStringId scmEventInputNames[];
-			static const CStringDictionary::TStringId scmEventInputTypeIds[]; 
+			«IF !type.interfaceList.eventInputs.containsOnlyBasicEventType»
+				static const CStringDictionary::TStringId scmEventInputTypeIds[]; 
+			«ENDIF»
 		«ENDIF»'''
 
 	def protected generateEventConstants(List<Event> events) '''«FOR event : events»
@@ -184,7 +191,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 				«ENDIF»
 				const TForteInt16 «FBClassName»::scmEIWithIndexes[] = {«inputWithIndexes.join(", ")»};
 				const CStringDictionary::TStringId «FBClassName»::scmEventInputNames[] = {«type.interfaceList.eventInputs.FORTENameList»};
-				const CStringDictionary::TStringId «FBClassName»::scmEventInputTypeIds[] = {«type.interfaceList.eventInputs.FORTEEventTypeList»};
+				«IF !type.interfaceList.eventInputs.containsOnlyBasicEventType»
+					const CStringDictionary::TStringId «FBClassName»::scmEventInputTypeIds[] = {«type.interfaceList.eventInputs.FORTEEventTypeList»};
+				«ENDIF»
 			«ENDIF»
 			«IF !type.interfaceList.eventOutputs.empty»
 				«IF !outputWith.empty»
@@ -192,7 +201,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 				«ENDIF»
 				const TForteInt16 «FBClassName»::scmEOWithIndexes[] = {«outputWithIndexes.join(", ")»};
 				const CStringDictionary::TStringId «FBClassName»::scmEventOutputNames[] = {«type.interfaceList.eventOutputs.FORTENameList»};
-				const CStringDictionary::TStringId «FBClassName»::scmEventOutputTypeIds[] = {«type.interfaceList.eventOutputs.FORTEEventTypeList»};
+				«IF !type.interfaceList.eventOutputs.containsOnlyBasicEventType»
+						const CStringDictionary::TStringId «FBClassName»::scmEventOutputTypeIds[] = {«type.interfaceList.eventOutputs.FORTEEventTypeList»};
+				«ENDIF»
 			«ENDIF»
 			«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
 				const SAdapterInstanceDef «FBClassName»::scmAdapterInstances[] = {
@@ -214,12 +225,16 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		!type.interfaceList.eventOutputs.flatMap[it.with].filter[!it.variables.inOutVar].empty
 	}
 
+	def containsOnlyBasicEventType(EList<Event> events) {
+		events.findFirst[!it.typeName.contentEquals(EventTypeLibrary.EVENT)] === null
+	}
+	
 	// changes to this method require a recheck of the two methods generateFBInterfaceSpecSocket, generateFBInterfaceSpecPlug of AdapterFBImplTemplate
 	// as there this code is duplicated
 	def protected generateFBInterfaceSpecDefinition() '''
 		const SFBInterfaceSpec «FBClassName»::scmFBInterfaceSpec = {
-		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventInputNames, scmEventInputTypeIds,  «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
-		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, scmEventOutputTypeIds, «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
+		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventInputNames,«IF type.interfaceList.eventInputs.containsOnlyBasicEventType» nullptr,«ELSE» scmEventInputTypeIds,«ENDIF»«IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
+		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventOutputNames,«IF type.interfaceList.eventOutputs.containsOnlyBasicEventType» nullptr,«ELSE» scmEventOutputTypeIds,«ENDIF»«IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
 		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scmDataInputNames, scmDataInputTypeIds«ENDIF»,
 		  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scmDataOutputNames, scmDataOutputTypeIds«ENDIF»,
 		  «type.interfaceList.inOutVars.size», «IF type.interfaceList.inOutVars.empty»nullptr«ELSE»scmDataInOutNames«ENDIF»,
