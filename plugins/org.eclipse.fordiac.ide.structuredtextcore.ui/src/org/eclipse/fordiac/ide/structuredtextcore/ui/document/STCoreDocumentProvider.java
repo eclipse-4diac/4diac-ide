@@ -64,4 +64,13 @@ public class STCoreDocumentProvider extends LibraryElementXtextDocumentProvider 
 			monitor.done();
 		}
 	}
+
+	@Override
+	protected void handleElementContentChanged(final IFileEditorInput fileEditorInput) {
+		// update if opened directly from a file and not in an FB type editor,
+		// indicated by a FileEditorInput instead of a TypeEditorInput
+		if (fileEditorInput instanceof FileEditorInput) {
+			super.handleElementContentChanged(fileEditorInput);
+		}
+	}
 }
