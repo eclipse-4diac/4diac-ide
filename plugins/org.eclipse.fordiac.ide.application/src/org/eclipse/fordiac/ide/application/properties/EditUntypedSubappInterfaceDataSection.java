@@ -170,7 +170,7 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 	private class UntypedSubappInterfaceEditableRule extends NatTableColumnEditableRule<VarDeclarationTableColumn> {
 
 		private static final Set<VarDeclarationTableColumn> CONNECTED_EDITABLE_COLUMNS = Set.of(
-				VarDeclarationTableColumn.NAME, VarDeclarationTableColumn.COMMENT,
+				VarDeclarationTableColumn.NAME, VarDeclarationTableColumn.TYPE, VarDeclarationTableColumn.COMMENT,
 				VarDeclarationTableColumn.VAR_CONFIG);
 
 		private final IRowDataProvider<VarDeclaration> dataProvider;
