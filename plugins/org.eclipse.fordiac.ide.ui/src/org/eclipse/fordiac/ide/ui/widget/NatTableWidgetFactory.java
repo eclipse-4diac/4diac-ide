@@ -275,7 +275,6 @@ public final class NatTableWidgetFactory {
 	}
 
 	public static DataLayer getDataLayer(final NatTable table) {
-		//
 		final SelectionLayer selectionLayer = getSelectionLayer(table);
 		if (selectionLayer != null) {
 			return (DataLayer) selectionLayer.getUnderlyingLayerByPosition(0, 0);

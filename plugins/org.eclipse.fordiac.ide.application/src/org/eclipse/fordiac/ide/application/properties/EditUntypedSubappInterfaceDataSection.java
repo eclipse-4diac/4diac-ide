@@ -19,6 +19,7 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,6 +28,7 @@ import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElement
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.commands.ResizingSubappInterfaceCreationCommand;
 import org.eclipse.fordiac.ide.application.utilities.GetEditPartFromGraficalViewerHelper;
+import org.eclipse.fordiac.ide.gef.nat.CopyDataImportCommandHandler;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -53,6 +55,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.swt.widgets.Group;
 
 public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterfaceDataSection {
@@ -120,8 +123,9 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,
 				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
-		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG),
+		final var columnProvider = new NatTableColumnProvider<>(
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer, columnProvider,
 				new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),
 						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG, inputProvider),
 				null, this, true);
@@ -129,6 +133,10 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		inputTable.configure();
+
+		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(inputTable);
+		selectionLayer.registerCommandHandler(new CopyDataImportCommandHandler(selectionLayer, columnProvider,
+				Map.of(VarDeclarationTableColumn.TYPE, eObject -> ((VarDeclaration) eObject).getType())));
 	}
 
 	@Override
