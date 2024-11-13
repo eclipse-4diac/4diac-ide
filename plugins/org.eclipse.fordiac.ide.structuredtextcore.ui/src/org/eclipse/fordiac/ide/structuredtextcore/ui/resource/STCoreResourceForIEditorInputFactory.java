@@ -27,17 +27,15 @@ public class STCoreResourceForIEditorInputFactory extends ResourceForIEditorInpu
 	@Override
 	public Resource createResource(final IEditorInput editorInput) {
 		final Resource resource = super.createResource(editorInput);
-		if (resource instanceof final LibraryElementXtextResource libraryElementXtextResource) {
-			libraryElementXtextResource.setEagerLinking(true);
-			if (editorInput instanceof final IFileEditorInput fileEditorInput) {
-				final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEditorInput.getFile());
-				if (typeEntry != null) {
-					final LibraryElement libraryElement = typeEntry.getTypeEditable();
-					libraryElementXtextResource.setLibraryElement(libraryElement);
-					libraryElementXtextResource.setIncludeInternalLibraryElement(libraryElement instanceof BaseFBType);
-					if (resource instanceof final STCoreResource stCoreResource) {
-						stCoreResource.getDefaultLoadOptions().put(STCoreResource.OPTION_PLAIN_ST, Boolean.TRUE);
-					}
+		if (resource instanceof final LibraryElementXtextResource libraryElementXtextResource
+				&& editorInput instanceof final IFileEditorInput fileEditorInput) {
+			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEditorInput.getFile());
+			if (typeEntry != null) {
+				final LibraryElement libraryElement = typeEntry.getTypeEditable();
+				libraryElementXtextResource.setLibraryElement(libraryElement);
+				libraryElementXtextResource.setIncludeInternalLibraryElement(libraryElement instanceof BaseFBType);
+				if (resource instanceof final STCoreResource stCoreResource) {
+					stCoreResource.getDefaultLoadOptions().put(STCoreResource.OPTION_PLAIN_ST, Boolean.TRUE);
 				}
 			}
 		}
