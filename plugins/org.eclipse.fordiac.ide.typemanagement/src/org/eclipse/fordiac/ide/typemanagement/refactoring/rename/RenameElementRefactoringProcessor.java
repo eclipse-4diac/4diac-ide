@@ -90,17 +90,21 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 				? new DataTypeInstanceSearch(dtEntry).performSearch()
 				: new BlockTypeInstanceSearch(typeEntry).performSearch();
 		final var eChild = getChildByURI(typeEntry.getType(), elementURI);
-		String oldName = ""; //$NON-NLS-1$
-		if (eChild instanceof final IInterfaceElement varDecl) {
-			oldName = varDecl.getName();
-		}
 
-		for (final EObject eObject : result) {
-			if (eObject instanceof FBNetworkElement) {
-				change.add(new ReconnectPinChange(EcoreUtil.getURI(eObject), FBNetworkElement.class, newName, oldName));
+		if (eChild instanceof final IInterfaceElement interfaceElement) {
+			for (final EObject eObject : result) {
+				if (eObject instanceof final FBNetworkElement element) {
+					createRenameInterfaceChanges(change, element, interfaceElement);
+				}
 			}
 		}
 
+	}
+
+	private void createRenameInterfaceChanges(final CompositeChange change, final FBNetworkElement element,
+			final IInterfaceElement interfaceElement) {
+		final String oldName = interfaceElement.getName();
+		change.add(new ReconnectPinChange(EcoreUtil.getURI(element), FBNetworkElement.class, newName, oldName));
 	}
 
 	public static EObject getChildByURI(final EObject parent, final URI uri) {
