@@ -115,8 +115,8 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 
 final class STCoreUtil {
-	static final LoadingCache<Pair<DataType, String>, DataType> TYPE_DECLARATION_CACHE = CacheBuilder.newBuilder.maximumSize(1000).
-		build[TypeDeclarationParser.parseTypeDeclaration(key, value)]
+	static final LoadingCache<Pair<DataType, String>, DataType> TYPE_DECLARATION_CACHE = CacheBuilder.newBuilder.
+		maximumSize(1000).build[TypeDeclarationParser.parseTypeDeclaration(key, value)]
 
 	private new() {
 	}
@@ -321,6 +321,22 @@ final class STCoreUtil {
 	}
 
 	def static INamedElement getExpectedType(STExpression expression) {
+		val resource = expression.eResource
+		if (resource instanceof STResource)
+			resource.getExpectedType(expression)
+		else
+			expression.computeExpectedType
+	}
+
+	def static INamedElement getExpectedType(STInitializerExpression expression) {
+		val resource = expression.eResource
+		if (resource instanceof STResource)
+			resource.getExpectedType(expression)
+		else
+			expression.computeExpectedType
+	}
+
+	def static INamedElement computeExpectedType(STExpression expression) {
 		switch (it : expression.eContainer) {
 			STUnaryExpression case op.arithmetic:
 				expectedType.equivalentAnyNumType
@@ -347,24 +363,24 @@ final class STCoreUtil {
 			STInitializerExpression:
 				expectedType
 			STArrayInitElement:
-				expectedType
+				computeExpectedType
 			STStructInitElement:
 				variable.featureType
 			STCallArgument:
-				expectedType
+				computeExpectedType
 			STExpressionSource:
 				(eResource as STResource).expectedType
 		}
 	}
 
-	def static INamedElement getExpectedType(STInitializerExpression expression) {
+	def static INamedElement computeExpectedType(STInitializerExpression expression) {
 		switch (it : expression.eContainer) {
 			STAttribute:
 				declaration.featureType
 			STVarDeclaration:
 				featureType
 			STArrayInitElement:
-				expectedType
+				computeExpectedType
 			STStructInitElement:
 				variable.featureType
 			STArrayInitializerExpression:
@@ -376,7 +392,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def static INamedElement getExpectedType(STArrayInitElement initElement) {
+	def private static INamedElement computeExpectedType(STArrayInitElement initElement) {
 		switch (it : initElement.eContainer) {
 			STArrayInitializerExpression:
 				switch (type : expectedType) {
@@ -389,7 +405,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def static INamedElement getExpectedType(STCallArgument argument) {
+	def private static INamedElement computeExpectedType(STCallArgument argument) {
 		val featureExpression = argument.eContainer
 		if (featureExpression instanceof STFeatureExpression) {
 			val feature = featureExpression.featureNoresolve
