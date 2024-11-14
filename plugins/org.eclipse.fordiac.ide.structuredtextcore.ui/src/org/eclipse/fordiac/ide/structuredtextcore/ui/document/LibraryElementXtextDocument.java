@@ -284,6 +284,9 @@ public class LibraryElementXtextDocument extends XtextDocument implements IAdapt
 		}
 
 		private void notifyModelListenersOnUiThread() {
+			if (modelListeners.isEmpty()) {
+				return;
+			}
 			final Display display = PlatformUI.getWorkbench().getDisplay();
 			if (Thread.currentThread() == display.getThread()) {
 				// We are already running on the display thread. Run the listeners immediately.
