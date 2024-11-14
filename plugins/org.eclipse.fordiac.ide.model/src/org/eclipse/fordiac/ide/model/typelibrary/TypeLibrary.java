@@ -248,9 +248,10 @@ public final class TypeLibrary {
 	}
 
 	public TypeEntry createErrorTypeEntry(final String typeName, final EClass typeClass) {
-		return errorTypes.computeIfAbsent(typeName.toLowerCase(), name -> {
+		final String resolvedTypeName = typeName == null ? "" : typeName; //$NON-NLS-1$
+		return errorTypes.computeIfAbsent(resolvedTypeName.toLowerCase(), name -> {
 			final FBType fbType = (FBType) LibraryElementFactory.eINSTANCE.create(typeClass);
-			PackageNameHelper.setFullTypeName(fbType, typeName);
+			PackageNameHelper.setFullTypeName(fbType, resolvedTypeName);
 			fbType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 			final TypeEntry entry = createErrorTypeEntry(fbType);
 			entry.setType(fbType);
