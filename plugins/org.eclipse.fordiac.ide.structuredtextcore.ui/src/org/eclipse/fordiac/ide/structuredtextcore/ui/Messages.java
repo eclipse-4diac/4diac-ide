@@ -58,6 +58,7 @@ public final class Messages extends NLS {
 	public static String STCoreContentAssistPreferencePage_ContentAssist;
 	public static String STCoreContentAssistPreferencePage_AutoActivationTriggers;
 	public static String STCoreContentAssistPreferencePage_ChangedSettingsEffect;
+	public static String STCoreEditorPreferencePage_PerformanceModeThreshold;
 	public static String STCoreHoverProvider_EventKind;
 	public static String STCoreHoverProvider_FBKind;
 	public static String STCoreHoverProvider_FBTypeKind;

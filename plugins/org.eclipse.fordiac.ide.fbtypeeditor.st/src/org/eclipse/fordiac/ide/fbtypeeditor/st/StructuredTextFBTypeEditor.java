@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeXtextEditor;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocument;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocumentUpdater;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -37,6 +38,9 @@ public class StructuredTextFBTypeEditor extends FBTypeXtextEditor {
 
 	@Inject
 	private LibraryElementXtextDocumentUpdater fbTypeUpdater;
+
+	@Inject
+	private STCoreEditorPreferences editorPreferences;
 
 	@Override
 	protected void installFBTypeUpdater() {
@@ -88,6 +92,11 @@ public class StructuredTextFBTypeEditor extends FBTypeXtextEditor {
 			}
 		}
 		return location != null;
+	}
+
+	@Override
+	protected boolean shouldEnablePerformanceMode() {
+		return getDocument().getNumberOfLines() > editorPreferences.getPerformanceModeThreshold();
 	}
 
 	@Override
