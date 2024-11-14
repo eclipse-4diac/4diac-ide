@@ -31,8 +31,8 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 
 	final List<FB> fbs
 
-	new(CompositeFBType type, String name, Path prefix) {
-		super(type, name, prefix, "CCompositeFB")
+	new(CompositeFBType type, String name, Path prefix, Map<?,?> options) {
+		super(type, name, prefix, "CCompositeFB", options)
 		fbs = type.FBNetwork.networkElements.filter(FB).reject(AdapterFB).toList
 	}
 

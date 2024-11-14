@@ -52,6 +52,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration
 import org.eclipse.fordiac.ide.export.Messages
 import java.text.MessageFormat
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem
+import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 
 class ForteNgExportFilter extends TemplateExportFilter {
 
@@ -61,60 +62,73 @@ class ForteNgExportFilter extends TemplateExportFilter {
 	public static final String OPTION_HEADER = "header"
 
 	override protected getTemplates(String name, EObject source) {
+		val cache = newHashMap
+		val options = #{ILanguageSupport.OPTION_CACHE -> cache}
 		switch (source) {
 			BasicFBType:
 				#{
-					new BasicFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
-					new BasicFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
+					new BasicFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath),
+						options),
+					new BasicFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath),
+						options)
 				}
 			SimpleFBType:
 				#{
-					new SimpleFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
-					new SimpleFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
+					new SimpleFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath),
+						options),
+					new SimpleFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath),
+						options)
 				}
 			FunctionFBType:
 				#{
-					new FunctionFBHeaderTemplate(source, source.generateTypeInclude,
-						Paths.get(source.generateTypePath)),
-					new FunctionFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
+					new FunctionFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath),
+						options),
+					new FunctionFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath),
+						options)
 				}
-			SubAppType, AttributeDeclaration, AutomationSystem: // SubAppType is derived from CompositeFBType and needs to be handled first
+			SubAppType,
+			AttributeDeclaration,
+			AutomationSystem: // SubAppType is derived from CompositeFBType and needs to be handled first
 			{
-				warnings.add(MessageFormat.format(Messages.TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME,
-					source.typeEntry.file.fullPath.toString, Messages.TemplateExportFilter_FILE_IGNORED))
+				warnings.add(
+					MessageFormat.format(Messages.TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME,
+						source.typeEntry.file.fullPath.toString, Messages.TemplateExportFilter_FILE_IGNORED))
 				emptySet
 			}
 			CompositeFBType:
 				#{
 					new CompositeFBHeaderTemplate(source, source.generateTypeInclude,
-						Paths.get(source.generateTypePath)),
-					new CompositeFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
+						Paths.get(source.generateTypePath), options),
+					new CompositeFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath),
+						options)
 				}
 			AdapterType:
 				#{
-					new AdapterFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath)),
-					new AdapterFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath))
+					new AdapterFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath),
+						options),
+					new AdapterFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath),
+						options)
 				}
 			ServiceInterfaceFBType:
 				#{
 					new ServiceInterfaceFBHeaderTemplate(source, source.generateTypeInclude,
-						Paths.get(source.generateTypePath)),
+						Paths.get(source.generateTypePath), options),
 					new ServiceInterfaceFBImplTemplate(source, source.generateTypeSource,
-						Paths.get(source.generateTypePath))
+						Paths.get(source.generateTypePath), options)
 				}
 			StructuredType:
 				#{
 					new StructuredTypeHeaderTemplate(source, source.generateTypeInclude,
-						Paths.get(source.generateTypePath)),
+						Paths.get(source.generateTypePath), options),
 					new StructuredTypeImplTemplate(source, source.generateTypeSource,
-						Paths.get(source.generateTypePath))
+						Paths.get(source.generateTypePath), options)
 				}
 			CMakeListsMarker:
 				#{
 					new CMakeListsTemplate('''CMakeLists.txt''', Paths.get(""))
 				}
 			INamedElement: {
-				val languageSupport = ILanguageSupportFactory.createLanguageSupport("forte_ng", source)
+				val languageSupport = ILanguageSupportFactory.createLanguageSupport("forte_ng", source, options)
 				if (languageSupport !== null) {
 					#{
 						new LanguageHeaderTemplate(languageSupport, source.generateTypeInclude,
@@ -128,7 +142,7 @@ class ForteNgExportFilter extends TemplateExportFilter {
 				}
 			}
 			default: {
-				val languageSupport = ILanguageSupportFactory.createLanguageSupport("forte_ng", source)
+				val languageSupport = ILanguageSupportFactory.createLanguageSupport("forte_ng", source, options)
 				if (languageSupport !== null) {
 					#{
 						new LanguageHeaderTemplate(languageSupport, '''«name».h''', Paths.get("")),

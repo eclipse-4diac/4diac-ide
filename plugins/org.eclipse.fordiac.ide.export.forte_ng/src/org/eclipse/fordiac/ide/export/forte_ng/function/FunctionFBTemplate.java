@@ -33,10 +33,10 @@ public abstract class FunctionFBTemplate extends ForteFBTemplate<FunctionFBType>
 	private final ILanguageSupport bodyLanguageSupport;
 
 	protected FunctionFBTemplate(final FunctionFBType type, final String name, final Path prefix,
-			final String baseClass) {
-		super(type, name, prefix, baseClass);
+			final String baseClass, final Map<?, ?> options) {
+		super(type, name, prefix, baseClass, options);
 		bodyLanguageSupport = type.getBody() != null
-				? ILanguageSupportFactory.createLanguageSupport("forte_ng", type.getBody()) //$NON-NLS-1$
+				? ILanguageSupportFactory.createLanguageSupport("forte_ng", type.getBody(), options) //$NON-NLS-1$
 				: null;
 	}
 

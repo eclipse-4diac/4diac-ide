@@ -19,13 +19,14 @@
 package org.eclipse.fordiac.ide.export.forte_ng.simple
 
 import java.nio.file.Path
+import java.util.Map
 import org.eclipse.fordiac.ide.export.forte_ng.base.BaseFBHeaderTemplate
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 
 class SimpleFBHeaderTemplate extends BaseFBHeaderTemplate<SimpleFBType> {
-	new(SimpleFBType type, String name, Path prefix) {
-		super(type, name, prefix, "CSimpleFB")
+	new(SimpleFBType type, String name, Path prefix, Map<?,?> options) {
+		super(type, name, prefix, "CSimpleFB", options)
 	}
 
 	override generateClassInclude() '''«generateDependencyInclude("simplefb.h")»'''
