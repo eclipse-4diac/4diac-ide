@@ -17,6 +17,7 @@ import java.util.Set
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.ResourceSet
+import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody
@@ -74,11 +75,11 @@ final class STFunctionParseUtil {
 	def static STFunctionSource parse(URI uri, List<String> errors, List<String> warnings, List<String> infos) {
 		val resourceSet = SERVICE_PROVIDER_FCT.get(ResourceSet) as XtextResourceSet
 		resourceSet.loadOptions.putAll(#{
-			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
 			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE
 		})
 		val resource = resourceSet.createResource(uri) as XtextResource
 		resource.load(resourceSet.loadOptions)
+		EcoreUtil.resolveAll(resource)
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
 		return resource.parseResult.postProcess(errors, warnings, infos, issues)?.rootASTElement as STFunctionSource
@@ -98,7 +99,6 @@ final class STFunctionParseUtil {
 		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("gcf", SERVICE_PROVIDER_GCF.get(IResourceFactory))
 		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("GCF", SERVICE_PROVIDER_GCF.get(IResourceFactory))
 		SERVICE_PROVIDER_FCT.parse(resourceSet, text, null, type, null, issues, uri ?: SYNTHETIC_URI_FCT, #{
-			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
 			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE,
 			STCoreResource.OPTION_PLAIN_ST -> Boolean.TRUE
 		})
