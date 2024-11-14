@@ -21,15 +21,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectEventConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -101,18 +104,29 @@ class ReconnectPinByName extends Command {
 	public void execute() {
 		final IInterfaceElement interfaceElement = element.getInterfaceElement(newName);
 		final IInterfaceElement oldinterfaceElement = element.getInterfaceElement(oldName);
+		propagateInitialValue(interfaceElement, oldinterfaceElement);
 		if (oldinterfaceElement instanceof final ErrorMarkerInterface errorMarkerInterface) {
 			final EList<Connection> inputConnections = getConnection(errorMarkerInterface);
-
-			if (state.contains(ChangeState.RECONNECT)) {
+			if (inputConnections.isEmpty()) {
+				cmds.add(new DeleteInterfaceCommand(oldinterfaceElement));
+			} else if (state.contains(ChangeState.RECONNECT)) {
 				reconnect(interfaceElement, errorMarkerInterface, inputConnections);
 			} else if (state.contains(ChangeState.DELETE)) {
 				deleteConnection(inputConnections);
 			}
 
-			cmds.execute();
 		}
+		cmds.execute();
 
+	}
+
+	private void propagateInitialValue(final IInterfaceElement interfaceElement,
+			final IInterfaceElement oldinterfaceElement) {
+		if (oldinterfaceElement instanceof final ErrorMarkerInterface old && old.getValue() != null
+				&& !old.getValue().getValue().isEmpty()
+				&& interfaceElement instanceof final VarDeclaration varDeclnew) {
+			cmds.add(new ChangeValueCommand(varDeclnew, old.getValue().getValue()));
+		}
 	}
 
 	private void deleteConnection(final EList<Connection> inputConnections) {
@@ -124,12 +138,12 @@ class ReconnectPinByName extends Command {
 	private void reconnect(final IInterfaceElement interfaceElement, final ErrorMarkerInterface errorMarkerInterface,
 			final EList<Connection> inputConnections) {
 		for (final Connection c : inputConnections) {
-			reconnect(c, interfaceElement, errorMarkerInterface, cmds);
+			reconnect(c, interfaceElement, errorMarkerInterface);
 		}
 	}
 
 	private void reconnect(final Connection c, final IInterfaceElement interfaceElement,
-			final ErrorMarkerInterface errorMarkerInterface, final CompoundCommand cmds) {
+			final ErrorMarkerInterface errorMarkerInterface) {
 		if (c instanceof final DataConnection dc) {
 			final ReconnectDataConnectionCommand cmd = new ReconnectDataConnectionCommand(dc,
 					!errorMarkerInterface.isIsInput(), interfaceElement, element.getFbNetwork());
@@ -143,9 +157,8 @@ class ReconnectPinByName extends Command {
 		}
 	}
 
-	private static EList<Connection> getConnection(final IInterfaceElement errorMarkerInterface) {
-		return errorMarkerInterface.isIsInput() ? errorMarkerInterface.getInputConnections()
-				: errorMarkerInterface.getOutputConnections();
+	private static EList<Connection> getConnection(final IInterfaceElement iE) {
+		return iE.isIsInput() ? iE.getInputConnections() : iE.getOutputConnections();
 	}
 
 	@Override
