@@ -169,9 +169,8 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 
 	private class UntypedSubappInterfaceEditableRule extends NatTableColumnEditableRule<VarDeclarationTableColumn> {
 
-		private static final Set<VarDeclarationTableColumn> CONNECTED_EDITABLE_COLUMNS = Set.of(
-				VarDeclarationTableColumn.NAME, VarDeclarationTableColumn.TYPE, VarDeclarationTableColumn.COMMENT,
-				VarDeclarationTableColumn.VAR_CONFIG);
+		private static final Set<VarDeclarationTableColumn> CONNECTED_UNEDITABLE_COLUMNS = Set
+				.of(VarDeclarationTableColumn.VISIBLE);
 
 		private final IRowDataProvider<VarDeclaration> dataProvider;
 
@@ -184,7 +183,7 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 		@Override
 		public boolean isEditable(final int columnIndex, final int rowIndex) {
 			final VarDeclaration rowItem = dataProvider.getRowObject(rowIndex);
-			if (isConnected(rowItem) && !CONNECTED_EDITABLE_COLUMNS.contains(getColumns().get(columnIndex))) {
+			if (isConnected(rowItem) && CONNECTED_UNEDITABLE_COLUMNS.contains(getColumns().get(columnIndex))) {
 				return false;
 			}
 			return super.isEditable(columnIndex, rowIndex);
