@@ -17,6 +17,9 @@ package org.eclipse.fordiac.ide.model.annotations;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
@@ -29,6 +32,9 @@ public final class SubAppAnnotations {
 		if (null == subAppNetwork) {
 			subAppNetwork = FBNetworkHelper.copyFBNetWork(subApp.getType().getFBNetwork(), subApp.getInterface());
 			subApp.setSubAppNetwork(subAppNetwork);
+			subAppNetwork.getEventConnections().forEach(EventConnection::checkIfConnectionBroken);
+			subAppNetwork.getDataConnections().forEach(DataConnection::checkIfConnectionBroken);
+			subAppNetwork.getAdapterConnections().forEach(AdapterConnection::checkIfConnectionBroken);
 		}
 		return subAppNetwork;
 	}

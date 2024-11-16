@@ -17,7 +17,10 @@ package org.eclipse.fordiac.ide.model.annotations;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -41,6 +44,9 @@ public final class FBAnnotations {
 		if (null == fbNetwork) {
 			fbNetwork = FBNetworkHelper.copyCFBNetWork(cfb.getType().getFBNetwork(), cfb.getInterface());
 			cfb.setCfbNetwork(fbNetwork);
+			fbNetwork.getEventConnections().forEach(EventConnection::checkIfConnectionBroken);
+			fbNetwork.getDataConnections().forEach(DataConnection::checkIfConnectionBroken);
+			fbNetwork.getAdapterConnections().forEach(AdapterConnection::checkIfConnectionBroken);
 		}
 		return fbNetwork;
 	}
