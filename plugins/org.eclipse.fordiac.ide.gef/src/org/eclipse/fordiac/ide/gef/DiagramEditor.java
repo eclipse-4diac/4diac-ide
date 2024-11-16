@@ -59,7 +59,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IReusableEditor;
@@ -122,7 +121,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 		final AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
 		if (viewer.getControl() instanceof FigureCanvas) {
-			Display.getDefault().asyncExec(() -> performInitialsationScroll(viewer));
+			performInitialsationScroll(viewer);
 		}
 	}
 

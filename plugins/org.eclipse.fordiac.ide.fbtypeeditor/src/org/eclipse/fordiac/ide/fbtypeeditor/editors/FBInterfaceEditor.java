@@ -18,9 +18,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.draw2d.FreeformViewport;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.RangeModel;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBInterfacePaletteFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenuProvider;
@@ -35,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -56,6 +56,7 @@ import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -232,15 +233,19 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	}
 
 	@Override
-	protected Point getInitialScrollPos(final GraphicalEditPart rootEditPart) {
-		final FreeformViewport rootviewPort = (FreeformViewport) rootEditPart.getFigure();
-		return new Point(calculateCenterScrollPos(rootviewPort.getHorizontalRangeModel()),
-				calculateCenterScrollPos(rootviewPort.getVerticalRangeModel()));
+	protected void performInitialsationScroll(final AdvancedScrollingGraphicalViewer viewer) {
+		// In order that the interface editor can get the size of the canvas we need to
+		// run the initial scroll asynchronously so that SWT will layout the editor
+		// first.
+		Display.getDefault().asyncExec(() -> super.performInitialsationScroll(viewer));
 	}
 
-	private static int calculateCenterScrollPos(final RangeModel rangeModel) {
-		final int center = (rangeModel.getMaximum() + rangeModel.getMinimum()) / 2;
-		return center - rangeModel.getExtent() / 2;
+	@Override
+	protected Point getInitialScrollPos(final GraphicalEditPart rootEditPart) {
+		final Point figureCanvasSize = getViewer().getFigureCanvasSize();
+		final Rectangle drawingAreaBounds = rootEditPart.getContentPane().getBounds();
+		final org.eclipse.draw2d.geometry.Point center = drawingAreaBounds.getCenter();
+		return new Point(center.x - figureCanvasSize.x / 2, center.y - figureCanvasSize.y / 2);
 	}
 
 	@Override

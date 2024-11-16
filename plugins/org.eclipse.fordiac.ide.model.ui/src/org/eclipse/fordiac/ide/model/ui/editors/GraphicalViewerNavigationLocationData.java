@@ -38,8 +38,9 @@ public class GraphicalViewerNavigationLocationData {
 		// we have to wait to set the scroll position until the editor is drawn and the
 		// canvas is setup
 		if ((viewer.getControl() instanceof final FigureCanvas canvas) && !canvas.isDisposed()) {
-			Display.getDefault().asyncExec(() -> {
+			Display.getDefault().syncExec(() -> {
 				if (!canvas.isDisposed()) {
+					viewer.flush();
 					canvas.scrollTo(location.x, location.y);
 				}
 			});
