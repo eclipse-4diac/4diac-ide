@@ -20,8 +20,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
@@ -37,7 +35,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreRegionString;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreRegionStringCollectors;
 import org.eclipse.xtext.naming.QualifiedName;
@@ -116,7 +113,7 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 		}
 		if (eObject instanceof final ICallable callable) {
 			userData.put(SIGNATURE_HASH, computeSignatureHash(callable));
-			userData.put(DISPLAY_STRING, getCallableDisplayString(callable));
+			userData.put(DISPLAY_STRING, callable.getSignature());
 			final STCoreRegionString regionString = getCallableParameterProposal(callable);
 			userData.put(PARAMETER_PROPOSAL, regionString.toString());
 			userData.put(PARAMETER_PROPOSAL_REGIONS, regionString.getRegions().toString());
@@ -141,24 +138,6 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 			return Objects.hash(typedElement.getName(), typedElement.getType());
 		}
 		return parameter.getName().hashCode();
-	}
-
-	public static String getCallableDisplayString(final ICallable callable) {
-		return callable.getName()
-				+ Stream.of(callable.getInputParameters().stream().map(param -> getCallableDisplayString(param, "")), //$NON-NLS-1$
-						callable.getOutputParameters().stream().map(param -> getCallableDisplayString(param, "&")), //$NON-NLS-1$
-						callable.getInOutParameters().stream().map(param -> getCallableDisplayString(param, "&&"))) //$NON-NLS-1$
-						.flatMap(Function.identity())
-						.collect(Collectors.joining(", ", "(", STCoreUtil.isCallableVarargs(callable) ? " ...)" : ")")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				+ (callable.getReturnType() != null ? " : " + callable.getReturnType().getName() : ""); //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
-	protected static String getCallableDisplayString(final INamedElement parameter, final String typePrefix) {
-		final INamedElement type = STCoreUtil.getFeatureType(parameter);
-		if (type != null) {
-			return parameter.getName() + " : " + typePrefix + type.getName(); //$NON-NLS-1$
-		}
-		return parameter.getName();
 	}
 
 	public static STCoreRegionString getCallableParameterProposal(final ICallable callable) {

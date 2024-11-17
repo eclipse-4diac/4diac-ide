@@ -431,7 +431,7 @@ final class STCoreUtil {
 					val inOutParameters = feature.inOutParameters
 					if (index < inputParameters.size)
 						inputParameters.get(index)
-					else if (feature.callableVarargs)
+					else if (feature.varargs)
 						inputParameters.last
 					else if (index < inputParameters.size + inOutParameters.size)
 						inOutParameters.get(index - inputParameters.size)
@@ -448,7 +448,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def static List<? extends INamedElement> computeInputParameters(ICallable callable,
+	def static List<? extends ITypedElement> computeInputParameters(ICallable callable,
 		Iterable<STCallArgument> arguments) {
 		if (callable instanceof STStandardFunction)
 			callable.javaMethod.inferParameterVariables(arguments.map[resultType].filter(DataType).toList, true)
@@ -456,7 +456,7 @@ final class STCoreUtil {
 			callable.inputParameters
 	}
 
-	def static List<? extends INamedElement> computeOutputParameters(ICallable callable,
+	def static List<? extends ITypedElement> computeOutputParameters(ICallable callable,
 		Iterable<STCallArgument> arguments) {
 		if (callable instanceof STStandardFunction)
 			callable.javaMethod.inferParameterVariables(arguments.map[resultType].filter(DataType).toList, false)
@@ -464,16 +464,9 @@ final class STCoreUtil {
 			callable.outputParameters
 	}
 
-	def static List<? extends INamedElement> computeInOutParameters(ICallable callable,
+	def static List<? extends ITypedElement> computeInOutParameters(ICallable callable,
 		Iterable<STCallArgument> arguments) {
 		callable.inOutParameters
-	}
-
-	def static boolean isCallableVarargs(ICallable callable) {
-		switch (callable) {
-			STStandardFunction: callable.varargs
-			default: false
-		}
 	}
 
 	def package static List<STVarDeclaration> inferParameterVariables(Method method, List<DataType> argumentTypes,
@@ -490,12 +483,6 @@ final class STCoreUtil {
 			}
 		].filterNull.toList
 	}
-
-	def static String generateSignature(ICallable callable) //
-	'''«callable.name»(«(callable.inputParameters.filter(ITypedElement).map[type?.name ?: "NULL"]
-		+ callable.outputParameters.filter(ITypedElement).map['''&«type?.name ?: "NULL"»''']
-		+ callable.inOutParameters.filter(ITypedElement).map['''&&«type?.name ?: "NULL"»''']
-	).join(",")»)'''
 
 	def static getFeatureType(INamedElement feature) {
 		switch (feature) {

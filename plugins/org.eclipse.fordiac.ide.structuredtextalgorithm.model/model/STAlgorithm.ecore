@@ -3,17 +3,17 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="stalgorithm" nsURI="http://www.eclipse.org/fordiac/ide/structuredtextalgorithm/STAlgorithm"
     nsPrefix="stalgorithm">
   <eClassifiers xsi:type="ecore:EClass" name="STAlgorithm" eSuperTypes="#//STAlgorithmSourceElement ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ICallable">
-    <eOperations name="getInputParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+    <eOperations name="getInputParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInputParameters(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getOutputParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+    <eOperations name="getOutputParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getOutputParameters(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getInOutParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+    <eOperations name="getInOutParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInOutParameters(this);"/>
       </eAnnotations>
@@ -40,17 +40,17 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STAlgorithmSourceElement" eSuperTypes="../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STMethod" eSuperTypes="#//STAlgorithmSourceElement ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ICallable">
-    <eOperations name="getInputParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+    <eOperations name="getInputParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInputParameters(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getOutputParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+    <eOperations name="getOutputParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getOutputParameters(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getInOutParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+    <eOperations name="getInOutParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInOutParameters(this);"/>
       </eAnnotations>

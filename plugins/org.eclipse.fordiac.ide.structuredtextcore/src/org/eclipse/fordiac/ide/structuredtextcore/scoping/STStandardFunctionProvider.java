@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.eval.function.ReturnValueComment;
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
@@ -154,8 +155,8 @@ public class STStandardFunctionProvider {
 				method.getReturnType() != void.class ? ValueOperations.dataType(method.getReturnType()) : null);
 		result.getInputParameters().addAll(STCoreUtil.computeInputParameters(result, Collections.emptyList()));
 		result.getOutputParameters().addAll(STCoreUtil.computeOutputParameters(result, Collections.emptyList()));
-		result.setSignature(STCoreUtil.generateSignature(result));
 		result.setVarargs(method.isVarArgs());
+		result.setSignature(CallableAnnotations.getSignature(result)); // call annotation directly as an exception
 		Stream.of(method.getAnnotationsByType(OnlySupportedBy.class)).map(OnlySupportedBy::value).flatMap(Stream::of)
 				.forEachOrdered(result.getOnlySupportedBy()::add);
 		functionResource.getContents().add(result);
@@ -180,8 +181,7 @@ public class STStandardFunctionProvider {
 		final STCoreRegionString regionString = STCoreResourceDescriptionStrategy
 				.getCallableParameterProposal(standardFunction);
 		return new EObjectDescription(QualifiedName.create(standardFunction.getName()), standardFunction,
-				Map.of(STCoreResourceDescriptionStrategy.DISPLAY_STRING,
-						STCoreResourceDescriptionStrategy.getCallableDisplayString(standardFunction),
+				Map.of(STCoreResourceDescriptionStrategy.DISPLAY_STRING, standardFunction.getSignature(),
 						STCoreResourceDescriptionStrategy.PARAMETER_PROPOSAL, regionString.toString(),
 						STCoreResourceDescriptionStrategy.PARAMETER_PROPOSAL_REGIONS,
 						regionString.getRegions().toString()));

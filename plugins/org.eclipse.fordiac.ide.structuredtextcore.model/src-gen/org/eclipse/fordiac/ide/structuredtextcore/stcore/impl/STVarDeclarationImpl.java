@@ -547,7 +547,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	 */
 	@Override
 	public String getFullTypeName() {
-		return getTypeName();
+		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarDeclarationAnnotations.getFullTypeName(this);
 	}
 
 	/**

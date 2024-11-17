@@ -19,7 +19,6 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.labeling;
 import java.text.MessageFormat;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.labeling.STCoreLabelProvider;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
@@ -42,8 +41,7 @@ public class STFunctionLabelProvider extends STCoreLabelProvider {
 	}
 
 	public String text(final STFunction element) {
-		return MessageFormat.format(Messages.STFunctionLabelProvider_FunctionText,
-				STCoreResourceDescriptionStrategy.getCallableDisplayString(element));
+		return MessageFormat.format(Messages.STFunctionLabelProvider_FunctionText, element.getSignature());
 	}
 
 	public ImageDescriptor image(final STFunction element) {

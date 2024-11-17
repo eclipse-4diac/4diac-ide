@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -89,7 +90,7 @@ public interface STMethod extends STAlgorithmSourceElement, ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<INamedElement> getInputParameters();
+	EList<ITypedElement> getInputParameters();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -97,7 +98,7 @@ public interface STMethod extends STAlgorithmSourceElement, ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<INamedElement> getOutputParameters();
+	EList<ITypedElement> getOutputParameters();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -105,6 +106,6 @@ public interface STMethod extends STAlgorithmSourceElement, ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<INamedElement> getInOutParameters();
+	EList<ITypedElement> getInOutParameters();
 
 } // STMethod

@@ -525,6 +525,8 @@
       <genOperations ecoreOperation="lib.ecore#//ICallable/getOutputParameters"/>
       <genOperations ecoreOperation="lib.ecore#//ICallable/getInOutParameters"/>
       <genOperations ecoreOperation="lib.ecore#//ICallable/getReturnType"/>
+      <genOperations ecoreOperation="lib.ecore#//ICallable/getSignature" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getSignature(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//ICallable/isVarargs" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.isVarargs(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Identification">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Identification/applicationDomain"/>
@@ -751,7 +753,7 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceInterfaceFBType"/>
     <genClasses ecoreClass="lib.ecore#//SimpleECAction">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//SimpleECAction/algorithm"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute lib.ecore#//SimpleECAction/algorithm"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//SimpleECAction/output"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//SimpleECAction/simpleECState"/>
     </genClasses>
@@ -807,6 +809,7 @@
       <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//TextFunction/outputParameters"/>
       <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//TextFunction/inOutParameters"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//TextFunction/returnType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TextFunction/varargs"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TextFunction/text"/>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//TextFunctionBody">
@@ -817,6 +820,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/outputParameters"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/inOutParameters"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/returnType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TextMethod/varargs"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TextMethod/text"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//TypedConfigureableObject">
