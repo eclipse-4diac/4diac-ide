@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.ui.editors.ITypeEditorInput;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IMemento;
@@ -30,7 +31,7 @@ import org.eclipse.ui.part.FileEditorInputFactory;
  * method is adapted that EditorInput is equal to another EditorInput if the
  * content is equal.
  */
-public class TypeEditorInput implements IFileEditorInput, IPersistableElement {
+public class TypeEditorInput implements ITypeEditorInput, IPersistableElement {
 	private LibraryElement type;
 	private final TypeEntry entry;
 
@@ -70,10 +71,12 @@ public class TypeEditorInput implements IFileEditorInput, IPersistableElement {
 		return null;
 	}
 
+	@Override
 	public LibraryElement getContent() {
 		return type;
 	}
 
+	@Override
 	public TypeEntry getTypeEntry() {
 		return entry;
 	}

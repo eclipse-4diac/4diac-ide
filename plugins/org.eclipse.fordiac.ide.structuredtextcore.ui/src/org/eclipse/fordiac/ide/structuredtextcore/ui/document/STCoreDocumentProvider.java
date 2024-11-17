@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,7 +19,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
 
 import com.google.inject.Inject;
@@ -47,18 +46,7 @@ public class STCoreDocumentProvider extends LibraryElementXtextDocumentProvider 
 			monitor.worked(1);
 			monitor.subTask("Reconciling"); //$NON-NLS-1$
 			if (partition.isPresent()) {
-				Display.getDefault().syncExec(() -> {
-					reconciler.reconcile(element, partition);
-					// save type if opened directly from a file and not in an FB type editor,
-					// indicated by a FileEditorInput instead of a TypeEditorInput
-					if (fileEditorInput instanceof FileEditorInput) {
-						try {
-							element.getTypeEntry().save(element, monitor);
-						} catch (final CoreException e) {
-							throw new RuntimeException(e);
-						}
-					}
-				});
+				Display.getDefault().syncExec(() -> reconciler.reconcile(element, partition));
 			}
 		} finally {
 			monitor.done();

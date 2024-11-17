@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.ui.editors.ITypeEditorInput;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IEditorInput;
@@ -30,10 +31,17 @@ public abstract class LibraryElementXtextDocumentProvider extends XtextDocumentP
 	protected boolean setDocumentContent(final IDocument document, final IEditorInput editorInput,
 			final String encoding) throws CoreException {
 		var result = false;
-		if (editorInput instanceof final IFileEditorInput fileEditorInput) {
+		if (editorInput instanceof final ITypeEditorInput typeEditorInput) {
+			final LibraryElement libraryElement = typeEditorInput.getContent();
+			if (libraryElement != null) {
+				setDocumentContent(document, libraryElement);
+				result = true;
+			}
+		} else if (editorInput instanceof final IFileEditorInput fileEditorInput) {
 			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEditorInput.getFile());
 			if (typeEntry != null) {
-				setDocumentContent(document, typeEntry.getTypeEditable());
+				// use type without copying, since we make an internal copy anyway
+				setDocumentContent(document, typeEntry.getType());
 				result = true;
 			} else {
 				result = super.setDocumentContent(document, editorInput, encoding);
@@ -48,26 +56,47 @@ public abstract class LibraryElementXtextDocumentProvider extends XtextDocumentP
 	@Override
 	protected void doSaveDocument(final IProgressMonitor monitor, final Object element, final IDocument document,
 			final boolean overwrite) throws CoreException {
-		if (element instanceof final IFileEditorInput fileEditorInput) {
-			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEditorInput.getFile());
-			if (typeEntry != null) {
-				doSaveDocument(monitor, fileEditorInput, typeEntry.getTypeEditable(), (XtextDocument) document);
-				final FileInfo info = (FileInfo) getElementInfo(element);
-				if (info != null) {
-					final var model = info.fModel;
-					if (model instanceof final ResourceMarkerAnnotationModel resourceMarkerAnnotationModel) {
-						resourceMarkerAnnotationModel.updateMarkers(info.fDocument);
-					}
-					info.fModificationStamp = computeModificationStamp(fileEditorInput.getFile());
-				}
-				return;
+		switch (element) {
+		case final ITypeEditorInput typeEditorInput -> {
+			final LibraryElement libraryElement = typeEditorInput.getContent();
+			if (libraryElement != null) {
+				doSaveDocument(monitor, typeEditorInput, libraryElement, (XtextDocument) document);
+				updateFileInfo(typeEditorInput);
 			}
 		}
-		super.doSaveDocument(monitor, element, document, overwrite);
+		case final IFileEditorInput fileEditorInput -> {
+			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEditorInput.getFile());
+			if (typeEntry != null) {
+				final LibraryElement libraryElement = typeEntry.copyType();
+				if (libraryElement != null) {
+					doSaveDocument(monitor, fileEditorInput, libraryElement, (XtextDocument) document);
+					typeEntry.save(libraryElement, monitor);
+					updateFileInfo(fileEditorInput);
+				}
+			} else {
+				super.doSaveDocument(monitor, element, document, overwrite);
+			}
+		}
+		default -> super.doSaveDocument(monitor, element, document, overwrite);
+		}
+	}
+
+	protected void updateFileInfo(final IFileEditorInput fileEditorInput) throws CoreException {
+		final FileInfo info = (FileInfo) getElementInfo(fileEditorInput);
+		if (info != null) {
+			final var model = info.fModel;
+			if (model instanceof final ResourceMarkerAnnotationModel resourceMarkerAnnotationModel) {
+				resourceMarkerAnnotationModel.updateMarkers(info.fDocument);
+			}
+			info.fModificationStamp = computeModificationStamp(fileEditorInput.getFile());
+		}
 	}
 
 	@Override
 	protected void handleElementContentChanged(final IFileEditorInput fileEditorInput) {
+		if (fileEditorInput instanceof ITypeEditorInput) {
+			return; // update only if opened directly from a file and not in an FB type editor
+		}
 		final FileInfo info = (FileInfo) getElementInfo(fileEditorInput);
 		if (info == null) {
 			return;
@@ -77,7 +106,8 @@ public abstract class LibraryElementXtextDocumentProvider extends XtextDocumentP
 		if (document == info.fDocument) { // still unchanged? -> update FB reference and reparse
 			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEditorInput.getFile());
 			if (typeEntry != null) {
-				final LibraryElement libraryElement = typeEntry.getTypeEditable();
+				// use type without copying, since we make an internal copy anyway
+				final LibraryElement libraryElement = typeEntry.getType();
 				removeUnchangedElementListeners(fileEditorInput, info);
 
 				document.internalModify(resource -> {

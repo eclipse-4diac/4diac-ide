@@ -71,7 +71,8 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 			if (getLibraryElement() == null) {
 				final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri);
 				if (typeEntry != null) {
-					setLibraryElement(typeEntry.getTypeEditable());
+					// use type without copying, since we make an internal copy anyway
+					setLibraryElement(typeEntry.getType());
 				}
 			} else {
 				updateInternalLibraryElement();
