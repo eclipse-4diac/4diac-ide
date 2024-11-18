@@ -231,11 +231,8 @@ final package class ExpressionAnnotations {
 			Boolean: ElementaryTypes.BOOL
 			BigDecimal: ElementaryTypes.LREAL
 			BigInteger case checkRange(Byte.MIN_VALUE, Byte.MAX_VALUE): ElementaryTypes.SINT
-			BigInteger case checkRangeUnsigned(0xff#bi): ElementaryTypes.USINT
 			BigInteger case checkRange(Short.MIN_VALUE, Short.MAX_VALUE): ElementaryTypes.INT
-			BigInteger case checkRangeUnsigned(0xffff#bi): ElementaryTypes.UINT
 			BigInteger case checkRange(Integer.MIN_VALUE, Integer.MAX_VALUE): ElementaryTypes.DINT
-			BigInteger case checkRangeUnsigned(0xffffffff#bi): ElementaryTypes.UDINT
 			BigInteger case checkRange(Long.MIN_VALUE, Long.MAX_VALUE): ElementaryTypes.LINT
 			BigInteger case checkRangeUnsigned(0xffffffffffffffff#bi): ElementaryTypes.ULINT
 			default: null
