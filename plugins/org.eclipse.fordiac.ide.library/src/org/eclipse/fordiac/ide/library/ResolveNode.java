@@ -24,7 +24,7 @@ import org.osgi.framework.VersionRange;
 class ResolveNode {
 	private final String symbolicName;
 	private final Version version;
-	private java.net.URI uri;
+	private final java.net.URI uri;
 	private final String error;
 	private final Map<String, VersionRange> dependencies;
 
@@ -41,8 +41,7 @@ class ResolveNode {
 	}
 
 	public ResolveNode(final LibraryRecord lib) {
-		this(lib.symbolicName(), Version.emptyVersion, null, null);
-		uri = lib.uri();
+		this(lib.symbolicName(), lib.version(), lib.uri(), null);
 		final Manifest manifest = ManifestHelper.getFolderManifest(lib.path());
 		if (manifest != null && manifest.getDependencies() != null) {
 			manifest.getDependencies().getRequired().forEach(req -> {
