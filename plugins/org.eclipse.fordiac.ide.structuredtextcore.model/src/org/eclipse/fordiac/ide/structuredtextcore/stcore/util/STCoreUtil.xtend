@@ -188,30 +188,31 @@ final class STCoreUtil {
 			case first.anyType || second.anyType:
 				false
 			case ADD:
-				(first instanceof AnyNumType && second instanceof AnyNumType) ||
-					(first instanceof AnyDurationType && second instanceof AnyDurationType) ||
-					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) ||
-					(first.instanceofAnyDateAndTimeType && second instanceof AnyDurationType)
+				(first instanceof AnyNumType && second instanceof AnyNumType && first.hasCommonSupertype(second)) ||
+					(first instanceof AnyDurationType && second instanceof AnyDurationType) || // durations always have a common supertype
+					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) || // result type is always first
+					(first.instanceofAnyDateAndTimeType && second instanceof AnyDurationType) // result type is always first
 			case SUB:
-				(first instanceof AnyNumType && second instanceof AnyNumType) ||
-					(first instanceof AnyDurationType && second instanceof AnyDurationType) ||
-					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) ||
-					(first.instanceofAnyDateAndTimeType && second instanceof AnyDurationType) ||
-					(first.instanceofAnySimpleDateType && second.instanceofAnySimpleDateType) ||
-					(first.instanceofAnyDateAndTimeType && second.instanceofAnyDateAndTimeType) ||
-					(first.instanceofAnyTimeOfDayType && second.instanceofAnyTimeOfDayType)
+				(first instanceof AnyNumType && second instanceof AnyNumType && first.hasCommonSupertype(second)) ||
+					(first instanceof AnyDurationType && second instanceof AnyDurationType) || // durations always have a common supertype
+					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) || // result type is always first
+					(first.instanceofAnyDateAndTimeType && second instanceof AnyDurationType) || // result type is always first
+					(first.instanceofAnySimpleDateType && second.instanceofAnySimpleDateType) || // (L)DATEs always have a common supertype
+					(first.instanceofAnyDateAndTimeType && second.instanceofAnyDateAndTimeType) || // (L)DTs always have a common supertype
+					(first.instanceofAnyTimeOfDayType && second.instanceofAnyTimeOfDayType) // (L)TODs always have a common supertype
 			case MUL,
 			case DIV:
-				first instanceof AnyMagnitudeType && second instanceof AnyNumType
+				(first instanceof AnyNumType && second instanceof AnyNumType && first.hasCommonSupertype(second)) ||
+					(first instanceof AnyDurationType && second instanceof AnyNumType) // result type is always first
 			case MOD:
-				first instanceof AnyIntType && second instanceof AnyIntType
+				first instanceof AnyIntType && second instanceof AnyIntType && first.hasCommonSupertype(second)
 			case POWER:
-				first instanceof AnyRealType && second instanceof AnyNumType
+				first instanceof AnyRealType && second instanceof AnyNumType && first.hasCommonSupertype(second)
 			case AMPERSAND,
 			case AND,
 			case OR,
 			case XOR:
-				first instanceof AnyBitType && second instanceof AnyBitType
+				first instanceof AnyBitType && second instanceof AnyBitType // bit types always have a common supertype
 			case EQ,
 			case NE,
 			case GE,
@@ -219,12 +220,7 @@ final class STCoreUtil {
 			case LE,
 			case LT,
 			case RANGE:
-				(first instanceof AnyNumType && second instanceof AnyNumType) ||
-					(first instanceof AnyDurationType && second instanceof AnyDurationType) ||
-					(first instanceof AnyBitType && second instanceof AnyBitType) ||
-					(first instanceof DataType && second instanceof DataType &&
-						((first as DataType).isAssignableFrom(second as DataType) ||
-							(second as DataType).isAssignableFrom(first as DataType)))
+				first.hasCommonSupertype(second)
 		}
 	}
 
@@ -637,6 +633,23 @@ final class STCoreUtil {
 			type1
 		else
 			null
+	}
+
+	def static hasCommonSupertype(INamedElement type1, INamedElement type2) {
+		if (type1 == type2)
+			true
+		else if (type1 instanceof DataType)
+			if (type2 instanceof DataType)
+				if (type1.isAssignableFrom(type2))
+					true
+				else if (type2.isAssignableFrom(type1))
+					true
+				else
+					false
+			else
+				false
+		else
+			false
 	}
 
 	def static boolean isAnyVariableReference(STExpression expr) {
