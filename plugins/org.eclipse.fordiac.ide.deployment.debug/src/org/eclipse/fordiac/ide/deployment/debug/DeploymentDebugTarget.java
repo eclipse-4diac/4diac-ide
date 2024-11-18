@@ -211,7 +211,9 @@ public class DeploymentDebugTarget extends DeploymentDebugElement implements IDe
 			watches.keySet().retainAll(combinedWatches.keySet());
 			watches.putAll(combinedWatches);
 		}
-		thread.getTopStackFrame().fireChangeEvent(DebugEvent.CONTENT);
+		if (hasThreads()) {
+			thread.getTopStackFrame().fireChangeEvent(DebugEvent.CONTENT);
+		}
 	}
 
 	@Override
