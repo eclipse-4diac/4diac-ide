@@ -83,7 +83,7 @@ final package class ExpressionAnnotations {
 			val right = declared ? expr.right?.declaredResultType : expr.right?.resultType
 			if (left instanceof DataType) {
 				if (right instanceof DataType) {
-					if (expr.op.arithmetic || expr.op.logical) {
+					if (expr.op.arithmetic) {
 						if (left instanceof AnyDurationType && right instanceof AnyNumType)
 							left
 						else if (left instanceof AnyDateType && right instanceof TimeType)
@@ -95,6 +95,13 @@ final package class ExpressionAnnotations {
 						else if (left instanceof AnyDateType && right instanceof AnyDateType)
 							ElementaryTypes.LTIME
 						else if (left.isAssignableFrom(right))
+							left
+						else if (right.isAssignableFrom(left))
+							right
+						else
+							null
+					} else if (expr.op.logical || expr.op.range) {
+						if (left.isAssignableFrom(right))
 							left
 						else if (right.isAssignableFrom(left))
 							right
