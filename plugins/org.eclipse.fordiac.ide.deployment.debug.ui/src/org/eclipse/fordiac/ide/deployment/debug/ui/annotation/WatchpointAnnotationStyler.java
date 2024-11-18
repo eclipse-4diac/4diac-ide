@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotation;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyler;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
-import org.eclipse.fordiac.ide.gef.draw2d.OverlayAlphaLabel;
 import org.eclipse.fordiac.ide.gef.figures.FBShape;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.graphics.Color;
@@ -43,8 +42,8 @@ public class WatchpointAnnotationStyler implements GraphicalAnnotationStyler {
 
 	@Override
 	public void removeStyles(final IFigure figure, final GraphicalAnnotation annotation) {
-		if (figure instanceof final OverlayAlphaLabel overlayLabel) {
-			overlayLabel.setOverlayIcon(null);
+		if (figure instanceof final FBShape fbShape && FigureUtilities.isAncestor(fbShape, fbShape.getTypeLabel())) {
+			fbShape.getTypeLabel().setOverlayIcon(null);
 		} else {
 			GraphicalAnnotationStyles.removeAnnotationBorders(figure);
 		}
