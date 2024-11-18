@@ -19,6 +19,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ltk.ui.refactoring,
  org.eclipse.fordiac.ide.model.search,
  org.eclipse.fordiac.ide.model.commands,
+ org.eclipse.compare,
+ org.eclipse.emf.compare,
+ org.eclipse.emf.compare.edit,
+ org.eclipse.emf.compare.ide.ui,
  org.eclipse.fordiac.ide.model.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
@@ -36,4 +40,6 @@ Export-Package: org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.typemanagement.util,
  org.eclipse.fordiac.ide.typemanagement.wizards
 Automatic-Module-Name: org.eclipse.fordiac.ide.typemanagement
-Import-Package: org.eclipse.fordiac.ide.model.ui.editors
+Import-Package: org.eclipse.emf.compare,
+ org.eclipse.fordiac.ide.model.ui.editors,
+ org.eclipse.fordiac.ide.model.ui.widgets

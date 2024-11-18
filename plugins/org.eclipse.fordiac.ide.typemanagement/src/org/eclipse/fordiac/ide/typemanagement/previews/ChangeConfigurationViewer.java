@@ -12,8 +12,10 @@
  *     - initial API and implementation and/or initial documentation
  *   Dario Romano
  *     - add correct preservation of selection and ui initialization from change state
+ *   Martin Schwarz
+ *     - moved file
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.wizards;
+package org.eclipse.fordiac.ide.typemanagement.previews;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +69,6 @@ public class ChangeConfigurationViewer implements IChangePreviewViewer {
 				}
 			}
 		});
-
 	}
 
 	@Override

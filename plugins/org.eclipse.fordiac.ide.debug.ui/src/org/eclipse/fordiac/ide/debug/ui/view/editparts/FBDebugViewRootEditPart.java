@@ -11,6 +11,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Martin Jobst - refactor evaluator API
+ *   Martin Schwarz - Build fixes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.view.editparts;
 

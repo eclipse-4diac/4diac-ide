@@ -14,6 +14,7 @@
  *   Alois Zoitl - extracted most code into common base class for group
  *                 infrastructure
  *               - extracted this policy from the AbstractContainerContentEditPart
+ *   Martin Schwarz - Build fixes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
