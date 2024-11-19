@@ -136,7 +136,7 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 		for (final FBNetworkElement element : getNetworkElements()) {
 			element.getInterface().getVisibleInputVars().stream().filter(di -> (di.getValue() != null))
 					.forEach(di -> valueElements.add(di.getValue()));
-			element.getInterface().getInOutVars().stream().filter(di -> (di.getValue() != null))
+			element.getInterface().getInOutVars().stream().filter(di -> (di.isVisible() && di.getValue() != null))
 					.forEach(di -> valueElements.add(di.getValue()));
 			element.getInterface().getErrorMarker().stream().filter(er -> (er.getValue() != null))
 					.forEach(er -> valueElements.add(er.getValue()));
