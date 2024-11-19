@@ -49,14 +49,16 @@ public final class InternalAttributeDeclarations {
 			ElementaryTypes.BOOL);
 	public static final AttributeDeclaration VISIBLE = createAttributeDeclaration(LibraryElementTags.ELEMENT_VISIBLE,
 			ElementaryTypes.BOOL);
+	public static final AttributeDeclaration INOUT_VISIBLE_OUT = createAttributeDeclaration(
+			LibraryElementTags.ELEMENT_INOUTVISIBLEOUT, ElementaryTypes.BOOL);
 	public static final AttributeDeclaration UNFOLDED = createAttributeDeclaration(
 			LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE, ElementaryTypes.BOOL);
 	public static final AttributeDeclaration RETAIN = createAttributeDeclaration(LibraryElementTags.RETAIN_ATTRIBUTE,
 			ElementaryTypes.USINT);
 	public static final AttributeDeclaration TARGET = createTargetAttributeDeclaration();
 
-	private static final List<AttributeDeclaration> allAttributes = List.of(VAR_CONFIG, VISIBLE, UNFOLDED, RETAIN,
-			TARGET);
+	private static final List<AttributeDeclaration> allAttributes = List.of(VAR_CONFIG, VISIBLE, INOUT_VISIBLE_OUT,
+			UNFOLDED, RETAIN, TARGET);
 
 	private static AttributeDeclaration createAttributeDeclaration(final String name, final DataType type) {
 		final AttributeDeclaration declaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
