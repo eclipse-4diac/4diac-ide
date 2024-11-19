@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.gef.filters;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -32,6 +31,10 @@ public class AttributeFilter implements IFilter {
 	}
 
 	public static Object parseObject(final Object input) {
+		if (input instanceof ConfigurableObject) {
+			return input;
+		}
+
 		if (input instanceof final EditPart editpart) {
 			Object inputHelper = editpart.getModel();
 
@@ -47,10 +50,6 @@ public class AttributeFilter implements IFilter {
 			}
 
 			return (inputHelper instanceof final FBNetwork fbNetwork) ? fbNetwork.eContainer() : inputHelper;
-		}
-		if (input instanceof final AutomationSystem automationSystem) {
-			// handle exception: SystemEditor
-			return automationSystem;
 		}
 		return null;
 	}
