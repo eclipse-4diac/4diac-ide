@@ -110,18 +110,6 @@
          </activeWhen>
       </handler>      
       <handler 
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.RenameSystem"
-            commandId="org.eclipse.ui.edit.rename">
-         <activeWhen>
-            <with variable="selection">
-		    <count value="1" />
-		    <iterate operator="and">
-		     <adapt type="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem" />
-		    </iterate>
-		   </with>            
-         </activeWhen>
-      </handler>
-      <handler 
             class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.RefreshHandler"
             commandId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.refresh">
          <activeWhen>
@@ -323,9 +311,6 @@
                <actionExtension
                      pattern="org.eclipse.ui.navigator.resources.*">
                </actionExtension>
-               <actionExtension
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.SystemExplorerNewActionProvider">
-               </actionExtension>                     
                <actionExtension
                      pattern="org.eclipse.fordiac.ide.systemmanagement.OpenActionProvider">
                </actionExtension>   
@@ -537,16 +522,6 @@
          </enablement>
       </commonWizard>
       <actionProvider
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.actions.SystemExplorerNewActionProvider"
-            id="org.eclipse.fordiac.ide.systemmanagement.SystemExplorerNewActionProvider">
-            <enablement>
-            <or>
-               <instanceof value="org.eclipse.emf.ecore.EObject"> </instanceof>
-               
-            </or>
-         </enablement>
-      </actionProvider>
-      <actionProvider
             class="org.eclipse.fordiac.ide.model.ui.actions.Open4DIACElementActionProvider"
             id="org.eclipse.fordiac.ide.systemmanagement.OpenActionProvider">
             <enablement>
@@ -576,15 +551,6 @@
             </and>
           </or>
 		</enablement>
-      </actionProvider>
-      <actionProvider
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.actions.CloseSystemActionProvider"
-            id="org.eclipse.fordiac.ide.systemmanagement.CloseProjectActionProvider">
-            <enablement>
-            <or>
-               <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem"> </instanceof>               
-            </or>
-         </enablement>
       </actionProvider>
       <commonFilter
             activeByDefault="false"
