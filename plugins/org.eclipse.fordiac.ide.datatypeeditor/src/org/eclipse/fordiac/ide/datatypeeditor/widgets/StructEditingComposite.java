@@ -19,12 +19,15 @@
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
 import java.util.Collections;
+import java.util.Map;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
+import org.eclipse.fordiac.ide.gef.nat.CopyDataImportCommandHandler;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.PasteDataImportFromClipboardCommandHandler;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
@@ -142,15 +145,21 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		inputDataLayer.setConfigLabelAccumulator(
 				new VarDeclarationConfigLabelAccumulator(structMemberProvider, this::getAnnotationModel));
-		natTable = NatTableWidgetFactory.createRowNatTable(this, inputDataLayer,
-				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), IEditableRule.ALWAYS_EDITABLE,
-				null, this, false);
+		final var columnProvider = new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS);
+		natTable = NatTableWidgetFactory.createRowNatTable(this, inputDataLayer, columnProvider,
+				IEditableRule.ALWAYS_EDITABLE, null, this, false);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
 		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(structMemberProvider));
 		natTable.configure();
 
 		selectionProvider = new StructEditingCompositeSelectionProvider(natTable,
 				NatTableWidgetFactory.getSelectionLayer(natTable), structMemberProvider);
+
+		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
+		selectionLayer.registerCommandHandler(new CopyDataImportCommandHandler(selectionLayer, columnProvider,
+				Map.of(VarDeclarationTableColumn.TYPE, eObject -> ((VarDeclaration) eObject).getType())));
+		selectionLayer.registerCommandHandler(new PasteDataImportFromClipboardCommandHandler(selectionLayer, cmdStack,
+				(typeLib, name) -> typeLib.getDataTypeLibrary().getDerivedTypeEntry(name)));
 	}
 
 	private DataType getDataType() {

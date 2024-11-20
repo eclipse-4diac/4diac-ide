@@ -136,6 +136,7 @@ public final class NatTableWidgetFactory {
 			}
 		});
 		selectionLayer.registerCommandHandler(new CopyDataCommandHandler(selectionLayer));
+		selectionLayer.registerCommandHandler(new PasteDataFromClipboardCommandHandler(selectionLayer));
 		selectionLayer.registerCommandHandler(new DeleteSelectionCommandHandler(selectionLayer));
 		final ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
 
@@ -181,6 +182,7 @@ public final class NatTableWidgetFactory {
 			}
 		});
 		selectionLayer.registerCommandHandler(new CopyDataCommandHandler(selectionLayer));
+		selectionLayer.registerCommandHandler(new PasteDataFromClipboardCommandHandler(selectionLayer));
 		selectionLayer.registerCommandHandler(new DeleteSelectionCommandHandler(selectionLayer));
 		final ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
 

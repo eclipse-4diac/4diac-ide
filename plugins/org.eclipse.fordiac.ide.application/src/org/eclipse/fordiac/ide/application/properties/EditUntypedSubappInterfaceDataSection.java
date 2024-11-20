@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.application.commands.ResizingSubappInterfaceCreat
 import org.eclipse.fordiac.ide.application.utilities.GetEditPartFromGraficalViewerHelper;
 import org.eclipse.fordiac.ide.gef.nat.CopyDataImportCommandHandler;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.PasteDataImportFromClipboardCommandHandler;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
@@ -137,6 +138,9 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(inputTable);
 		selectionLayer.registerCommandHandler(new CopyDataImportCommandHandler(selectionLayer, columnProvider,
 				Map.of(VarDeclarationTableColumn.TYPE, eObject -> ((VarDeclaration) eObject).getType())));
+		selectionLayer.registerCommandHandler(
+				new PasteDataImportFromClipboardCommandHandler(selectionLayer, getCurrentCommandStack()));
+
 	}
 
 	@Override
