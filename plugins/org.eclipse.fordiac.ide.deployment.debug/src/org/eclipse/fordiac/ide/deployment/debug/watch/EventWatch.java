@@ -27,11 +27,17 @@ import org.eclipse.fordiac.ide.model.eval.value.EventValue;
 import org.eclipse.fordiac.ide.model.eval.variable.EventVariable;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 public class EventWatch extends AbstractRuntimeWatch implements IEventWatch {
 
 	public EventWatch(final String name, final Event event, final DeploymentDebugDevice debugTarget) {
 		super(new EventVariable(name, (EventType) event.getType()), event, debugTarget);
+	}
+
+	public EventWatch(final String name, final Event event, final Resource resource, final String resourceRelativeName,
+			final DeploymentDebugDevice debugTarget) {
+		super(new EventVariable(name, (EventType) event.getType()), event, resource, resourceRelativeName, debugTarget);
 	}
 
 	@Override

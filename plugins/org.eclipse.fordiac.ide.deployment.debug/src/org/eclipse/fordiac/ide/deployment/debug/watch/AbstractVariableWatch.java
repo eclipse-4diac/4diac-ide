@@ -35,8 +35,13 @@ public abstract class AbstractVariableWatch extends DeploymentDebugVariable impl
 
 	protected AbstractVariableWatch(final Variable<?> variable, final ITypedElement element,
 			final DeploymentDebugDevice debugTarget) throws EvaluatorException {
+		this(variable, element, DeploymentDebugWatchUtils.getResource(element), debugTarget);
+	}
+
+	protected AbstractVariableWatch(final Variable<?> variable, final ITypedElement element, final Resource resource,
+			final DeploymentDebugDevice debugTarget) throws EvaluatorException {
 		super(variable, element.getQualifiedName(), debugTarget);
-		resource = DeploymentDebugWatchUtils.getResource(element);
+		this.resource = resource;
 		this.element = element;
 	}
 

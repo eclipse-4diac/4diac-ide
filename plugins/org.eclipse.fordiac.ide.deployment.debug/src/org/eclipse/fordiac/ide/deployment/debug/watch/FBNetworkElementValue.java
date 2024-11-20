@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugElement;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
@@ -28,18 +29,31 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class FBNetworkElementValue extends DeploymentDebugElement implements IValue {
+	private static final String QUALIFIED_NAME_DELIMITER = "."; //$NON-NLS-1$
 
 	private final FBNetworkElement element;
+	private final Resource resource;
+	private final String resourceRelativeName;
 	private final List<IWatch> watches;
 
 	public FBNetworkElementValue(final FBNetworkElement element, final DeploymentDebugDevice target) {
+		this(element, element.getResource(),
+				DeploymentDebugWatchUtils.getResourceRelativeName(element, element.getResource()), target);
+	}
+
+	public FBNetworkElementValue(final FBNetworkElement element, final Resource resource,
+			final String resourceRelativeName, final DeploymentDebugDevice target) {
 		super(target);
 		this.element = element;
+		this.resource = resource;
+		this.resourceRelativeName = resourceRelativeName;
 		watches = getSubElements().map(this::createSubWatch).toList();
 	}
 
@@ -62,6 +76,10 @@ public class FBNetworkElementValue extends DeploymentDebugElement implements IVa
 
 	private IWatch createSubWatch(final INamedElement element)
 			throws EvaluatorException, UnsupportedOperationException {
+		if (EcoreUtil.getRootContainer(element) instanceof FBType) {
+			return IWatch.watchFor(element.getName(), element, resource,
+					resourceRelativeName + QUALIFIED_NAME_DELIMITER + element.getName(), getDebugTarget());
+		}
 		return IWatch.watchFor(element.getName(), element, getDebugTarget());
 	}
 

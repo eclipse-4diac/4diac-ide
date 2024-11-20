@@ -36,6 +36,12 @@ public abstract class AbstractRuntimeWatch extends AbstractVariableWatch {
 		resourceRelativeName = DeploymentDebugWatchUtils.getResourceRelativeName(element, getResource());
 	}
 
+	protected AbstractRuntimeWatch(final Variable<?> variable, final ITypedElement element, final Resource resource,
+			final String resourceRelativeName, final DeploymentDebugDevice debugTarget) throws EvaluatorException {
+		super(variable, element, resource, debugTarget);
+		this.resourceRelativeName = resourceRelativeName;
+	}
+
 	@Override
 	public void addWatch() throws DebugException {
 		final Resource resource = getResource();

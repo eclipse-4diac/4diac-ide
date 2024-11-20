@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.eval.value.AnyValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class VarDeclarationWatch extends AbstractRuntimeWatch implements IVarDeclarationWatch {
@@ -36,6 +37,12 @@ public class VarDeclarationWatch extends AbstractRuntimeWatch implements IVarDec
 			final DeploymentDebugDevice debugTarget) throws EvaluatorException {
 		super(VariableOperations.newVariable(name, VariableOperations.evaluateResultType(varDeclaration)),
 				varDeclaration, debugTarget);
+	}
+
+	public VarDeclarationWatch(final String name, final VarDeclaration varDeclaration, final Resource resource,
+			final String resourceRelativeName, final DeploymentDebugDevice debugTarget) throws EvaluatorException {
+		super(VariableOperations.newVariable(name, VariableOperations.evaluateResultType(varDeclaration)),
+				varDeclaration, resource, resourceRelativeName, debugTarget);
 	}
 
 	@Override

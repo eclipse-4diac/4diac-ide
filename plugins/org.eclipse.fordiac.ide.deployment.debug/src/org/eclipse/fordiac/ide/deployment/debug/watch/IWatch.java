@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -112,6 +113,37 @@ public interface IWatch extends IVariable, IDeploymentDebugElement {
 		case final AdapterDeclaration adapterDeclaration ->
 			new AdapterDeclarationWatch(name, adapterDeclaration, debugTarget);
 		case final FBNetworkElement networkElement -> new FBNetworkElementWatch(name, networkElement, debugTarget);
+		default -> throw new UnsupportedOperationException("Unsupported element: " + element.eClass().getName()); //$NON-NLS-1$
+		};
+	}
+
+	/**
+	 * Create a new watch for an element
+	 *
+	 * @param name                 The name of the watch
+	 * @param element              The element
+	 * @param resource             The resource of the element
+	 * @param resourceRelativeName The resource-relative name of the element
+	 * @param debugTarget          The debug target
+	 * @return The created watch
+	 * @throws EvaluatorException            if there is a problem creating the
+	 *                                       watch
+	 * @throws UnsupportedOperationException if the element is not supported
+	 */
+	static IWatch watchFor(final String name, final INamedElement element, final Resource resource,
+			final String resourceRelativeName, final DeploymentDebugDevice debugTarget)
+			throws EvaluatorException, UnsupportedOperationException {
+		return switch (element) {
+		case final IInterfaceElement interfaceElement when DeploymentDebugWatchUtils
+				.isSubAppInterfaceElement(interfaceElement) ->
+			throw new UnsupportedOperationException("Unsupported element: " + element.eClass().getName()); //$NON-NLS-1$
+		case final Event event -> new EventWatch(name, event, resource, resourceRelativeName, debugTarget);
+		case final VarDeclaration varDeclaration ->
+			new VarDeclarationWatch(name, varDeclaration, resource, resourceRelativeName, debugTarget);
+		case final AdapterDeclaration adapterDeclaration ->
+			new AdapterDeclarationWatch(name, adapterDeclaration, resource, resourceRelativeName, debugTarget);
+		case final FBNetworkElement networkElement ->
+			new FBNetworkElementWatch(name, networkElement, resource, resourceRelativeName, debugTarget);
 		default -> throw new UnsupportedOperationException("Unsupported element: " + element.eClass().getName()); //$NON-NLS-1$
 		};
 	}

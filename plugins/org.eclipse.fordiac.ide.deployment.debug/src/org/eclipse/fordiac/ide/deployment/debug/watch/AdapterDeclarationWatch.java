@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 public class AdapterDeclarationWatch extends AbstractContainerWatch implements IAdapterDeclarationWatch {
 
@@ -26,6 +27,12 @@ public class AdapterDeclarationWatch extends AbstractContainerWatch implements I
 			final DeploymentDebugDevice target) {
 		super(name, element, target);
 		value = new FBNetworkElementValue(element.getAdapterFB(), target);
+	}
+
+	public AdapterDeclarationWatch(final String name, final AdapterDeclaration element, final Resource resource,
+			final String resourceRelativeName, final DeploymentDebugDevice target) {
+		super(name, element, target);
+		value = new FBNetworkElementValue(element.getAdapterFB(), resource, resourceRelativeName, target);
 	}
 
 	@Override
