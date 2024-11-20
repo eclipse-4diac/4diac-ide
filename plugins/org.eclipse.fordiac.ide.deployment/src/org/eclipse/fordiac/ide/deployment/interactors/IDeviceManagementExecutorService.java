@@ -243,6 +243,20 @@ public interface IDeviceManagementExecutorService extends IDeviceManagementInter
 			Consumer<List<org.eclipse.fordiac.ide.deployment.devResponse.Resource>> consumer, long period,
 			TimeUnit unit);
 
+	/**
+	 * Query resources periodically
+	 *
+	 * @param consumer The consumer
+	 * @param error    The error handler
+	 * @param period   The period
+	 * @param unit     The unit
+	 * @return The future
+	 * @see #queryResources()
+	 */
+	ScheduledFuture<Void> queryResourcesPeriodically(
+			Consumer<List<org.eclipse.fordiac.ide.deployment.devResponse.Resource>> consumer,
+			Consumer<DeploymentException> error, long period, TimeUnit unit);
+
 	/***********************
 	 * monitoring commands
 	 ****************************************************/
@@ -265,6 +279,19 @@ public interface IDeviceManagementExecutorService extends IDeviceManagementInter
 	 * @see #readWatches()
 	 */
 	ScheduledFuture<Void> readWatchesPeriodically(Consumer<Response> consumer, long period, TimeUnit unit);
+
+	/**
+	 * Read watches from device periodically
+	 *
+	 * @param consumer The consumer
+	 * @param error    The error handler
+	 * @param period   The period
+	 * @param unit     The unit
+	 * @return The future
+	 * @see #readWatches()
+	 */
+	ScheduledFuture<Void> readWatchesPeriodically(Consumer<Response> consumer, Consumer<DeploymentException> error,
+			long period, TimeUnit unit);
 
 	/**
 	 * Add a watch asynchronously

@@ -85,6 +85,8 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 
 	protected void terminated() {
 		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
+		incrementVariableUpdateCount(); // mark watch values as stale
+		getPrimaryDebugTarget().updateWatches(false);
 		fireTerminateEvent();
 	}
 
@@ -105,13 +107,21 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 		getPrimaryDebugTarget().updateWatches(false);
 	}
 
+	protected void handleDeviceError(final DeploymentException exception) {
+		FordiacLogHelper.logWarning(exception.getLocalizedMessage(), exception);
+		if (canDisconnect()) {
+			deviceManagementExecutor.shutdown();
+			terminated();
+		}
+	}
+
 	public void connect() throws DebugException {
 		try {
 			deviceManagementExecutor.connect();
-			deviceManagementExecutor.queryResourcesPeriodically(this::updateResources,
+			deviceManagementExecutor.queryResourcesPeriodically(this::updateResources, this::handleDeviceError,
 					pollingInterval.get(ChronoUnit.NANOS), TimeUnit.NANOSECONDS);
-			deviceManagementExecutor.readWatchesPeriodically(this::updateWatches, pollingInterval.get(ChronoUnit.NANOS),
-					TimeUnit.NANOSECONDS);
+			deviceManagementExecutor.readWatchesPeriodically(this::updateWatches, this::handleDeviceError,
+					pollingInterval.get(ChronoUnit.NANOS), TimeUnit.NANOSECONDS);
 			Stream.of(DebugPlugin.getDefault().getBreakpointManager().getBreakpoints())
 					.forEachOrdered(this::breakpointAdded);
 		} catch (final DeploymentException e) {
