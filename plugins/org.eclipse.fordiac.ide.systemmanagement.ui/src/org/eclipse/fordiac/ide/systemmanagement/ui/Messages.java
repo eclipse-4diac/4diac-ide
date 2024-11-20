@@ -20,7 +20,7 @@ import org.eclipse.osgi.util.NLS;
  */
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.systemmanagement.ui.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
 	public static String AutomationSystemEditor_CouldNotLoadSystem;
 
@@ -44,11 +44,19 @@ public final class Messages extends NLS {
 	/** The New system wizard_ wizard name. */
 	public static String New4diacProjectWizard_WizardName;
 
+	public static String New4diacProjectWizard_WizardTitle;
+
+	public static String New4diacProjectWizard_LibPageTitle;
+	public static String New4diacProjectWizard_LibPageName;
+	public static String New4diacProjectWizard_LibPageDesc;
+
 	public static String New4diacProjectWizard_InitialSystemName;
 	public static String New4diacProjectWizard_InitialApplicationName;
 	public static String New4diacProjectWizard_SystemNameNotValid;
 	public static String New4diacProjectWizard_DirectoryWithProjectNameAlreadyExistsInWorkspace;
 
+	public static String NewSystemWizardPage_NewSystemName;
+	public static String NewSystemWizardPage_Title;
 	public static String NewSystemWizardPage_CreateNewSystem;
 
 	public static String SystemEditor_Applications;

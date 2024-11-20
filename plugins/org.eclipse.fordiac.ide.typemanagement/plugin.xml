@@ -766,6 +766,18 @@
                style="push">
          </command>
       </menuContribution>
+      <menuContribution
+			locationURI="toolbar:org.eclipse.ui.workbench.file?after=new.group">
+        <command
+            commandId="org.eclipse.ui.newWizard"
+            label="New Type"
+            tooltip="Create a new type"
+            icon="fordiacimage://ICON_NEW_FUNCTIONBLOCK">
+            <parameter
+                name="newWizardId"
+                value="org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard" />
+        </command>
+      </menuContribution>
    </extension>
        <extension
              point="org.eclipse.ltk.core.refactoring.refactoringContributions">

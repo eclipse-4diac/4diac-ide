@@ -9,11 +9,11 @@
             finalPerspective="org.eclipse.fordiac.ide.SystemPerspective"
             icon="fordiacimage://ICON_NEW_4DIAC_PROJECT"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard"
-            name="%wizard.name.0"
+            name="%New4diacProjectWizard_WizardName"
             preferredPerspectives="org.eclipse.fordiac.ide.SystemPerspective, org.eclipse.fordiac.ide.typemanagement.perspective"
             project="true">
          <description>
-            %wizard.description.0
+            %New4diacProjectWizard_WizardDesc
          </description>
       </wizard>
       <wizard
@@ -21,10 +21,10 @@
             class="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"
             icon="fordiacimage://ICON_NEW_SYSTEM"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"
-            name="%newsystemwizard.name"
+            name="%NewSystemWizardPage_NewSystemName"
             project="false">
          <description>
-            %newsystemwizard.description
+            %NewSystemWizard.description
          </description>
       </wizard>
       <category
@@ -106,7 +106,19 @@
                </iterate>
             </visibleWhen>
          </command>
-      </menuContribution>            
+      </menuContribution>
+      <menuContribution
+			locationURI="toolbar:org.eclipse.ui.workbench.file?after=new.group">
+        <command
+            commandId="org.eclipse.ui.newWizard"
+            label="%New4diacProjectWizard_WizardName"
+            tooltip="%New4diacProjectWizard_WizardDesc"
+            icon="fordiacimage://ICON_NEW_4DIAC_PROJECT">
+            <parameter
+                name="newWizardId"
+                value="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard" />
+        </command>
+      </menuContribution>
    </extension>
       <extension
             point="org.eclipse.ui.views.properties.tabbed.propertyContributor">

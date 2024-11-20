@@ -51,8 +51,8 @@ public class NewSystemWizardPage extends WizardNewFileCreationPage {
 	}
 
 	public NewSystemWizardPage(final IStructuredSelection selection) {
-		super(FordiacMessages.NewSystem, selection);
-		this.setTitle(FordiacMessages.NewSystem);
+		super(Messages.NewSystemWizardPage_NewSystemName, selection);
+		this.setTitle(Messages.NewSystemWizardPage_Title);
 		this.setDescription(Messages.NewSystemWizardPage_CreateNewSystem);
 		this.setAllowExistingResources(true); // needed for correct duplicate type check
 	}

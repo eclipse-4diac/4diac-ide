@@ -63,7 +63,6 @@ public final class FordiacMessages extends NLS {
 	public static String ND; // NOSONAR
 	public static String Name; // NOSONAR
 	public static String NewType; // NOSONAR
-	public static String NewSystem; // NOSONAR
 	public static String Organization; // NOSONAR
 	public static String Outputs; // NOSONAR
 	public static String Package; // NOSONAR

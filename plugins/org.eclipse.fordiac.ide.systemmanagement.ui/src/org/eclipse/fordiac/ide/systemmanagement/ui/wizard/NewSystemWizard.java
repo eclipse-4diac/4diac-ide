@@ -29,9 +29,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
@@ -43,13 +43,13 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 	private NewSystemWizardPage page;
 
 	public NewSystemWizard() {
-		setWindowTitle(FordiacMessages.NewType);
+		setWindowTitle(Messages.NewSystemWizardPage_NewSystemName);
 	}
 
 	@Override
 	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 		this.selection = selection;
-		setWindowTitle(FordiacMessages.NewType);
+		setWindowTitle(Messages.NewSystemWizardPage_NewSystemName);
 	}
 
 	@Override

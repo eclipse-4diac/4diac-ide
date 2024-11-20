@@ -4,7 +4,7 @@ Export-Package: org.eclipse.fordiac.ide.systemmanagement.ui,
  org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer,
  org.eclipse.fordiac.ide.systemmanagement.ui.wizard
 Bundle-ActivationPolicy: lazy
-Bundle-Name: System Management UI
+Bundle-Name: %pluginName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: org.eclipse.ui,
@@ -36,7 +36,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.fbtypeeditor.network,
  org.eclipse.fordiac.ide.library.model,
  org.eclipse.fordiac.ide.library.ui
-Bundle-Vendor: Eclipse 4diac
+Bundle-Vendor: %Bundle-Vendor
 Bundle-Version: 3.0.0.qualifier
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.systemmanagement.ui;singleton:=true

@@ -61,12 +61,12 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 	@Override
 	public void addPages() {
 		page = new New4diacProjectPage(Messages.New4diacProjectWizard_WizardName);
-		page.setTitle(Messages.New4diacProjectWizard_WizardName);
+		page.setTitle(Messages.New4diacProjectWizard_WizardTitle);
 		page.setDescription(Messages.New4diacProjectWizard_WizardDesc);
 
-		libPage = new LibrarySelectionPage(Messages.New4diacProjectWizard_WizardName, true, true, true, false);
-		libPage.setTitle(Messages.New4diacProjectWizard_WizardName);
-		libPage.setDescription(Messages.New4diacProjectWizard_WizardDesc);
+		libPage = new LibrarySelectionPage(Messages.New4diacProjectWizard_LibPageName, true, true, true, false);
+		libPage.setTitle(Messages.New4diacProjectWizard_LibPageName);
+		libPage.setDescription(Messages.New4diacProjectWizard_LibPageDesc);
 
 		addPage(page);
 		addPage(libPage);
