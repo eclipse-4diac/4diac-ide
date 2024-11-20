@@ -57,7 +57,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobGroup;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
@@ -123,8 +122,9 @@ public enum LibraryManager {
 	private final HashMap<String, List<LibraryRecord>> stdlibraries = new HashMap<>();
 	private final HashMap<String, List<LibraryRecord>> libraries = new HashMap<>();
 
+	public static final Object FAMILY_FORDIAC_LIBRARY = new Object();
+
 	private IEventBroker eventBroker;
-	private JobGroup jobGroup;
 	private boolean uninitialised = true;
 	private final IResourceChangeListener libraryListener = new LibraryChangeListener();
 	private final Set<IProject> resolvingProjects = Collections.synchronizedSet(new HashSet<>());
@@ -160,7 +160,6 @@ public enum LibraryManager {
 		} catch (final IOException e) {
 			// empty
 		}
-		jobGroup = new JobGroup("LibraryManager JobGroup", 0, 0); //$NON-NLS-1$
 		addLibraryChangeListener();
 		uninitialised = false;
 	}
@@ -646,13 +645,17 @@ public enum LibraryManager {
 				resolveDependencies(project, typeLibrary);
 				return Status.OK_STATUS;
 			}
+
+			@Override
+			public boolean belongsTo(final Object family) {
+				return family == FAMILY_FORDIAC_LIBRARY;
+			}
 		};
 		job.setRule(project);
-		job.setJobGroup(jobGroup);
 		job.setPriority(Job.LONG);
-		job.schedule();
 		// act after job is done and has sent its POST_CHANGE notifications
 		job.addJobChangeListener(IJobChangeListener.onDone(c -> resolvingProjects.remove(project)));
+		job.schedule();
 	}
 
 	/**
@@ -713,9 +716,13 @@ public enum LibraryManager {
 						true);
 				return Status.OK_STATUS;
 			}
+
+			@Override
+			public boolean belongsTo(final Object family) {
+				return family == FAMILY_FORDIAC_LIBRARY;
+			}
 		};
 		job.setRule(project);
-		job.setJobGroup(jobGroup);
 		job.setPriority(Job.LONG);
 		job.schedule();
 	}
@@ -1034,15 +1041,6 @@ public enum LibraryManager {
 	 */
 	void stopEventBroker() {
 		eventBroker.unsubscribe(handler);
-	}
-
-	/**
-	 * Returns the internal JobGroup used for all Jobs.
-	 *
-	 * @return JobGroup
-	 */
-	public JobGroup getJobGroup() {
-		return jobGroup;
 	}
 
 	private final EventHandler handler = event -> {

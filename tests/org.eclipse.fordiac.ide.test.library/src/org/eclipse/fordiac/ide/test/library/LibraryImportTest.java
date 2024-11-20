@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.library.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
@@ -56,6 +57,7 @@ class LibraryImportTest {
 	private static final String V2_0_0 = "2.0.0"; //$NON-NLS-1$
 	private static final String LIB_LOC = "WORKSPACE_LOC/.lib/"; //$NON-NLS-1$
 	private static final String PROJECT = "testproject"; //$NON-NLS-1$
+
 	private IProject project;
 	@SuppressWarnings("nls")
 	public static final List<String> archives = List.of("data/test01-1.0.0.zip", "data/test01-1.1.0.zip",
@@ -99,7 +101,7 @@ class LibraryImportTest {
 		}
 		FordiacMarkerHelper.updateMarkers(project.getFile(LibraryManager.MANIFEST), FordiacErrorMarker.LIBRARY_MARKER,
 				Collections.emptyList(), true);
-		FordiacMarkerHelper.JOB_GROUP.join(1000, null);
+		Job.getJobManager().join(FordiacMarkerHelper.FAMILY_FORDIAC_MARKER, null);
 		project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).accept(resource -> {
 			if (resource instanceof final IFolder folder) {
 				if (folder.getName().equals(LibraryManager.TYPE_LIB_FOLDER_NAME)) {
@@ -155,7 +157,7 @@ class LibraryImportTest {
 		ManifestHelper.saveManifest(manifest);
 
 		LibraryManager.INSTANCE.checkManifestFile(project, TypeLibraryManager.INSTANCE.getTypeLibrary(project));
-		LibraryManager.INSTANCE.getJobGroup().join(5000, null);
+		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_5_0, 0);
@@ -186,7 +188,7 @@ class LibraryImportTest {
 	void testImportWithRangeResolve() throws Exception {
 		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST02 + "-" + V1_1_0), //$NON-NLS-1$
 				true, true);
-		LibraryManager.INSTANCE.getJobGroup().join(5000, null);
+		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST02, V1_1_0, 0);
@@ -200,7 +202,7 @@ class LibraryImportTest {
 				true, false);
 		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST04 + "-" + V1_0_0), //$NON-NLS-1$
 				true, true);
-		LibraryManager.INSTANCE.getJobGroup().join(5000, null);
+		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_0_0, 0);
@@ -215,7 +217,7 @@ class LibraryImportTest {
 				true, false);
 		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST04 + "-" + V1_0_0), //$NON-NLS-1$
 				true, true);
-		LibraryManager.INSTANCE.getJobGroup().join(5000, null);
+		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_1_0, 0);
@@ -230,7 +232,7 @@ class LibraryImportTest {
 				true, false);
 		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST04 + "-" + V1_1_0), //$NON-NLS-1$
 				true, true);
-		LibraryManager.INSTANCE.getJobGroup().join(5000, null);
+		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_1_0, 0);
@@ -238,9 +240,6 @@ class LibraryImportTest {
 		assertEquals(2, manifest.getDependencies().getRequired().size());
 
 		assertFalse(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder(TEST01).exists());
-
-		LibraryManager.INSTANCE.getJobGroup().join(1000, null);
-		FordiacMarkerHelper.JOB_GROUP.join(1000, null);
 
 		final var manifestFile = project.getFile(LibraryManager.MANIFEST);
 		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
@@ -254,7 +253,7 @@ class LibraryImportTest {
 	void testDependencyChain() throws Exception {
 		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST06 + "-" + V1_0_0), //$NON-NLS-1$
 				true, true);
-		LibraryManager.INSTANCE.getJobGroup().join(5000, null);
+		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST06, V1_0_0, 0);
@@ -269,13 +268,20 @@ class LibraryImportTest {
 	void testMissingStandardLibrary() throws Exception {
 		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST07 + "-" + V1_0_0), //$NON-NLS-1$
 				true, true);
-		LibraryManager.INSTANCE.getJobGroup().join(5000, null);
+		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST07, V1_0_0, 0);
 		assertEquals(1, manifest.getDependencies().getRequired().size());
 
 		assertFalse(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder(MATH).exists());
+
+		final var manifestFile = project.getFile(LibraryManager.MANIFEST);
+		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
+				IResource.DEPTH_INFINITE);
+
+		assertEquals(1, markers.length);
+		assertEquals(MATH, markers[0].getAttribute(LibraryManager.MARKER_ATTRIBUTE, null));
 	}
 
 }

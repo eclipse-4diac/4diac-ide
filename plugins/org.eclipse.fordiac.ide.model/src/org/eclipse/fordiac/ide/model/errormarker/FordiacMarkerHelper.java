@@ -32,7 +32,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobGroup;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -50,7 +49,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class FordiacMarkerHelper {
-	public static final JobGroup JOB_GROUP = new JobGroup("FordiacMarkerHelper JobGroup", 0, 0); //$NON-NLS-1$
+	public static final Object FAMILY_FORDIAC_MARKER = new Object();
 
 	/**
 	 * Get the human-readable location string for an object.
@@ -236,12 +235,16 @@ public final class FordiacMarkerHelper {
 						createMarkersInWorkspace(resource, builders);
 						return Status.OK_STATUS;
 					}
+
+					@Override
+					public boolean belongsTo(final Object family) {
+						return family == FAMILY_FORDIAC_MARKER;
+					}
 				};
 				job.setUser(false);
 				job.setSystem(true);
 				job.setPriority(Job.DECORATE);
 				job.setRule(resource);
-				job.setJobGroup(JOB_GROUP);
 				job.schedule();
 			}
 		}
@@ -271,12 +274,16 @@ public final class FordiacMarkerHelper {
 						updateMarkersInWorkspace(resource, type, builders);
 						return Status.OK_STATUS;
 					}
+
+					@Override
+					public boolean belongsTo(final Object family) {
+						return family == FAMILY_FORDIAC_MARKER;
+					}
 				};
 				job.setUser(false);
 				job.setSystem(true);
 				job.setPriority(Job.DECORATE);
 				job.setRule(resource);
-				job.setJobGroup(JOB_GROUP);
 				job.schedule();
 			}
 		}
