@@ -17,6 +17,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -77,6 +78,7 @@ public class OpenTypeHandler extends AbstractHandler {
 			}
 
 			final LibraryElement type = switch (obj) {
+			case final FBNetwork fbn -> getTypeFromFbn(fbn);
 			case final FBNetworkElement fbnEl -> fbnEl.getType();
 			case final IInterfaceElement ie -> ie.getType();
 			default -> null;
@@ -86,6 +88,15 @@ public class OpenTypeHandler extends AbstractHandler {
 				return type.getTypeEntry().getFile();
 			}
 		}
+
+		return null;
+	}
+
+	private static LibraryElement getTypeFromFbn(final FBNetwork fbn) {
+		if (fbn.eContainer() instanceof final FBNetworkElement fbne) {
+			return fbne.getType();
+		}
+
 		return null;
 	}
 
