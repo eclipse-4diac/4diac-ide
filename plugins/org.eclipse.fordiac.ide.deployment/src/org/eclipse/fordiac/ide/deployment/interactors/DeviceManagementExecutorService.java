@@ -370,7 +370,7 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 	@SuppressWarnings("unchecked")
 	public ScheduledFuture<Void> readWatchesPeriodically(final Consumer<Response> consumer, final long period,
 			final TimeUnit unit) {
-		return (ScheduledFuture<Void>) executorService.scheduleAtFixedRate(() -> {
+		return (ScheduledFuture<Void>) executorService.scheduleWithFixedDelay(() -> {
 			try {
 				consumer.accept(getDelegate().readWatches());
 			} catch (final DeploymentException e) {
@@ -383,7 +383,7 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 	@SuppressWarnings("unchecked")
 	public ScheduledFuture<Void> readWatchesPeriodically(final Consumer<Response> consumer,
 			final Consumer<DeploymentException> error, final long period, final TimeUnit unit) {
-		return (ScheduledFuture<Void>) executorService.scheduleAtFixedRate(() -> {
+		return (ScheduledFuture<Void>) executorService.scheduleWithFixedDelay(() -> {
 			try {
 				consumer.accept(getDelegate().readWatches());
 			} catch (final DeploymentException e) {
