@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.value.TypedValue;
 
 public interface Variable<T extends Value> {
 	/**
@@ -67,6 +68,15 @@ public interface Variable<T extends Value> {
 	 *                                  variable
 	 */
 	void setValue(final String value, TypeLibrary typeLibrary) throws IllegalArgumentException;
+
+	/**
+	 * Set the value of the variable
+	 *
+	 * @param value The new value
+	 * @throws IllegalArgumentException If the new value is illegal for this
+	 *                                  variable
+	 */
+	void setValue(final TypedValue value) throws IllegalArgumentException;
 
 	/**
 	 * Validate if the value is assignable to this variable

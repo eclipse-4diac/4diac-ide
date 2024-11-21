@@ -20,6 +20,8 @@ import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.value.TypedValue;
+import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 
 public abstract class AbstractVariable<T extends Value> implements Variable<T> {
 	private final String name;
@@ -61,8 +63,19 @@ public abstract class AbstractVariable<T extends Value> implements Variable<T> {
 
 	@Override
 	public void setValue(final String value, final TypeLibrary typeLibrary) {
-		setValue(ValueOperations.parseValue(value, getType(),
-				typeLibrary != null ? typeLibrary.getDataTypeLibrary() : null));
+		if (value == null || value.isEmpty()) {
+			setValue(ValueOperations.defaultValue(type));
+		} else if (type instanceof final DataType dataType) {
+			setValue(new TypedValueConverter(dataType, typeLibrary != null ? typeLibrary.getDataTypeLibrary() : null)
+					.toTypedValue(value));
+		} else {
+			throw new UnsupportedOperationException("The type " + type.getName() + " is not supported"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+	}
+
+	@Override
+	public void setValue(final TypedValue value) {
+		setValue(ValueOperations.wrapValue(value.value(), value.type()));
 	}
 
 	@Override
@@ -82,6 +95,11 @@ public abstract class AbstractVariable<T extends Value> implements Variable<T> {
 
 	protected RuntimeException createCastException(final Value value) {
 		throw new ClassCastException("Cannot assign value with incompatible type " + value.getType().getName() //$NON-NLS-1$
+				+ " as " + type.getName()); //$NON-NLS-1$
+	}
+
+	protected RuntimeException createCastException(final TypedValue value) {
+		throw new ClassCastException("Cannot assign value with incompatible type " + value.type().getName() //$NON-NLS-1$
 				+ " as " + type.getName()); //$NON-NLS-1$
 	}
 }

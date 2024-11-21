@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.eval.value.AnyValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.value.TypedValue;
 
 public class GenericVariable extends AbstractVariable<AnyValue> {
 	private Variable<AnyValue> variable;
@@ -44,6 +45,15 @@ public class GenericVariable extends AbstractVariable<AnyValue> {
 			variable.setValue(value, typeLibrary);
 		} catch (final Exception e) {
 			super.setValue(value, typeLibrary);
+		}
+	}
+
+	@Override
+	public void setValue(final TypedValue value) {
+		try {
+			variable.setValue(value);
+		} catch (final Exception e) {
+			super.setValue(value);
 		}
 	}
 

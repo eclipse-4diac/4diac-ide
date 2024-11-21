@@ -16,6 +16,7 @@ import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorInitializerException;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.value.TypedValue;
 
 public class DirectlyDerivedVariable extends AbstractVariable<Value> {
 
@@ -53,6 +54,11 @@ public class DirectlyDerivedVariable extends AbstractVariable<Value> {
 	@Override
 	public void setValue(final String value, final TypeLibrary typeLibrary) throws IllegalArgumentException {
 		delegate.setValue(value, typeLibrary);
+	}
+
+	@Override
+	public void setValue(final TypedValue value) {
+		delegate.setValue(value);
 	}
 
 	@Override

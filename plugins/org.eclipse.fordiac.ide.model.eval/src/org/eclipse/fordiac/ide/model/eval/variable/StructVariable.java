@@ -17,10 +17,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.eval.value.StructValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
+import org.eclipse.fordiac.ide.model.value.TypedValue;
 
 public class StructVariable extends AbstractVariable<StructValue> implements Iterable<Variable<?>> {
 	private final StructValue value;
@@ -50,6 +52,22 @@ public class StructVariable extends AbstractVariable<StructValue> implements Ite
 			throw createCastException(value);
 		}
 		return structValue;
+	}
+
+	@Override
+	public void setValue(final TypedValue value) {
+		if (!getType().isAssignableFrom(value.type())) {
+			createCastException(value);
+		}
+		final Map<?, ?> memberValues = (Map<?, ?>) value.value();
+		this.value.getMembers().forEach((name, member) -> {
+			final Object memberValue = memberValues.get(name);
+			if (memberValue != null) {
+				member.setValue(new TypedValue((DataType) member.getType(), memberValue));
+			} else {
+				member.setValue(ValueOperations.defaultValue(member.getType()));
+			}
+		});
 	}
 
 	@Override

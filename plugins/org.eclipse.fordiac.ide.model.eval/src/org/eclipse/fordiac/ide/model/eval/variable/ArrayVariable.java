@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
+import org.eclipse.fordiac.ide.model.value.TypedValue;
 
 public class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Variable<?>> {
 	private final ArrayValue value;
@@ -55,10 +56,23 @@ public class ArrayVariable extends AbstractVariable<ArrayValue> implements Itera
 	}
 
 	protected ArrayValue checkValue(final Value value) {
-		if (!(value instanceof final ArrayValue arrayValue)) {
+		if (!(value instanceof final ArrayValue arrayValue) || !getType().isAssignableFrom(arrayValue.getType())) {
 			throw createCastException(value);
 		}
 		return arrayValue;
+	}
+
+	@Override
+	public void setValue(final TypedValue value) {
+		if (!getType().isAssignableFrom(value.type())) {
+			createCastException(value);
+		}
+		final List<?> elements = (List<?>) value.value();
+		final int commonSize = Math.min(this.value.getElements().size(), elements.size());
+		IntStream.range(0, commonSize).forEach(
+				index -> this.value.getRaw(index).setValue(new TypedValue(getElementType(), elements.get(index))));
+		IntStream.range(commonSize, this.value.getElements().size())
+				.forEach(index -> this.value.getRaw(index).setValue(ValueOperations.defaultValue(getElementType())));
 	}
 
 	@Override
