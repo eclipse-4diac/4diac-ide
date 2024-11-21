@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.deployment.debug;
 
 import java.text.MessageFormat;
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -122,9 +121,9 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 		try {
 			deviceManagementExecutor.connect();
 			deviceManagementExecutor.queryResourcesPeriodically(this::updateResources, this::handleDeviceError,
-					pollingInterval.get(ChronoUnit.NANOS), TimeUnit.NANOSECONDS);
+					pollingInterval.toMillis(), TimeUnit.MILLISECONDS);
 			deviceManagementExecutor.readWatchesPeriodically(this::updateWatches, this::handleDeviceError,
-					pollingInterval.get(ChronoUnit.NANOS), TimeUnit.NANOSECONDS);
+					pollingInterval.toMillis(), TimeUnit.MILLISECONDS);
 			try (EvaluatorCache cache = EvaluatorCache.open()) {
 				Stream.of(DebugPlugin.getDefault().getBreakpointManager().getBreakpoints())
 						.forEachOrdered(this::breakpointAdded);
