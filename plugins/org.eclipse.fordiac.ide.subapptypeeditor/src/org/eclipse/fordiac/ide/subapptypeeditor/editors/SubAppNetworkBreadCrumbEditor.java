@@ -246,11 +246,12 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 
 	@Override
 	public void setInput(final IEditorInput input) {
+		checkEditorInput(input);
 		if (multiPageEditorSite != null) {
 			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
 		}
 		pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
-				.forEach(e -> e.setInput(input));
+				.forEach(e -> e.setInput(e.getEditorInput()));
 		super.setInputWithNotify(input);
 	}
 

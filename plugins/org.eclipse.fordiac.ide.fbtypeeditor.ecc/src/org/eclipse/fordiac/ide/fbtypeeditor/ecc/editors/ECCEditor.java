@@ -346,4 +346,10 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		return getGraphicalViewer().getEditPartForModel(getModel());
 	}
 
+	@Override
+	public void setInput(final IEditorInput input) {
+		checkEditorInput(input);
+		super.setInput(input);
+	}
+
 }

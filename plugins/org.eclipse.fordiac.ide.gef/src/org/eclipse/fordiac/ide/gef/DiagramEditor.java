@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.model.ui.editors.IContentEditorInput;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
@@ -276,13 +277,25 @@ public abstract class DiagramEditor extends GraphicalEditor
 	 */
 	@Override
 	public void setInput(final IEditorInput input) {
-		setEditDomain(createEditDomain());
-		getEditDomain().setDefaultTool(createDefaultTool());
-		getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
-		// use one "System - Wide" command stack to avoid incositensies due to
-		// undo redo
-		if (null != getSystem()) {
-			getEditDomain().setCommandStack(getSystem().getCommandStack());
+		if (!(input instanceof final IContentEditorInput contentEI)) {
+			throw new IllegalArgumentException("Diagram editors only accept IContentEditorInput as valid inputs!"); //$NON-NLS-1$
+		}
+
+		final IContentEditorInput currentEditorInput = (IContentEditorInput) getEditorInput();
+		if (currentEditorInput != null && currentEditorInput.getContent() != contentEI.getContent()) {
+			throw new IllegalArgumentException(
+					"Editor input with new content given to diagram editor. This is currently not supported!"); //$NON-NLS-1$
+		}
+
+		if (getEditorInput() == null) {
+			setEditDomain(createEditDomain());
+			getEditDomain().setDefaultTool(createDefaultTool());
+			getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
+			// use one "System - Wide" command stack to avoid inconsistencies due to undo
+			// redo
+			if (null != getSystem()) {
+				getEditDomain().setCommandStack(getSystem().getCommandStack());
+			}
 		}
 		if (getSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
 			removeAnnotationModelDispatcher();

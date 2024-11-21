@@ -73,8 +73,13 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		if (input instanceof final SubApplicationEditorInput subAppInput) {
-			setModel(subAppInput.getSubApp().getSubAppNetwork());
+		if (!(input instanceof final SubApplicationEditorInput subAppEI)) {
+			throw new IllegalArgumentException(
+					"SuppApp editors only accept SubApplicationEditorInput as valid inputs!"); //$NON-NLS-1$
+		}
+		if (getEditorInput() == null) {
+			// initial editor setup
+			setModel(subAppEI.getSubApp().getSubAppNetwork());
 			// register Adapter to be informed on changes of the subapplication name
 			getSubApp().eAdapters().add(adapter);
 			final EObject container = getSubApp().eContainer();

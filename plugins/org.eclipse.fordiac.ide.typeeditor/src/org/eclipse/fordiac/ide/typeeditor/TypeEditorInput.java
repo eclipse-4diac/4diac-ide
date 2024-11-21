@@ -34,10 +34,16 @@ import org.eclipse.ui.part.FileEditorInputFactory;
 public class TypeEditorInput implements ITypeEditorInput, IPersistableElement {
 	private LibraryElement type;
 	private final TypeEntry entry;
+	private final IFile file;
 
 	public TypeEditorInput(final LibraryElement type, final TypeEntry entry) {
+		this(type, entry, entry.getFile());
+	}
+
+	public TypeEditorInput(final LibraryElement type, final TypeEntry entry, final IFile file) {
 		this.type = type;
 		this.entry = entry;
+		this.file = file;
 	}
 
 	@Override
@@ -63,7 +69,7 @@ public class TypeEditorInput implements ITypeEditorInput, IPersistableElement {
 	@Override
 	public String getToolTipText() {
 		return type.getComment() == null ? "" //$NON-NLS-1$
-				: type.getComment() + " (" + entry.getFile().getProjectRelativePath().toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+				: type.getComment() + " (" + getFile().getProjectRelativePath().toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -122,7 +128,7 @@ public class TypeEditorInput implements ITypeEditorInput, IPersistableElement {
 
 	@Override
 	public IFile getFile() {
-		return entry.getFile();
+		return file;
 	}
 
 }

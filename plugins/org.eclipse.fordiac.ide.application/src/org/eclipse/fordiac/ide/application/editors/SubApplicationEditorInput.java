@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.application.editors;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.util.PersistableUntypedEditorInput;
+import org.eclipse.fordiac.ide.model.ui.editors.PersistableUntypedEditorInput;
 import org.eclipse.ui.IMemento;
 
 public class SubApplicationEditorInput extends PersistableUntypedEditorInput {

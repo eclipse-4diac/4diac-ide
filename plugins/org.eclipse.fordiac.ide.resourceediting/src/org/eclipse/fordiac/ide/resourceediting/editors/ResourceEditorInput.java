@@ -14,7 +14,7 @@
 package org.eclipse.fordiac.ide.resourceediting.editors;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.util.PersistableUntypedEditorInput;
+import org.eclipse.fordiac.ide.model.ui.editors.PersistableUntypedEditorInput;
 import org.eclipse.ui.IMemento;
 
 public class ResourceEditorInput extends PersistableUntypedEditorInput {

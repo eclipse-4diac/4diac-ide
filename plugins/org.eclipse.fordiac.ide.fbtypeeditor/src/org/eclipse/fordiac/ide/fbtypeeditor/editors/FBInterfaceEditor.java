@@ -256,4 +256,10 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 		return getGraphicalViewer().getEditPartForModel(getType());
 	}
 
+	@Override
+	public void setInput(final IEditorInput input) {
+		checkEditorInput(input);
+		super.setInput(input);
+	}
+
 }

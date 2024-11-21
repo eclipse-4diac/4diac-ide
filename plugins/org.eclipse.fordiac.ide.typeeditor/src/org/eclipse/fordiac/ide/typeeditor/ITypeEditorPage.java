@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.ISelectionListener;
@@ -75,6 +76,17 @@ public interface ITypeEditorPage extends ISelectionListener, IReusableEditor, IG
 			return fileEI.getFile();
 		}
 		return null;
+	}
+
+	default void checkEditorInput(final IEditorInput input) {
+		if (!(input instanceof final TypeEditorInput typeEI)) {
+			throw new IllegalArgumentException("Type Editor Pages only accept TypeEditorInputs as valid inputs!"); //$NON-NLS-1$
+		}
+		final TypeEditorInput currentEditorInput = (TypeEditorInput) getEditorInput();
+		if (currentEditorInput != null && currentEditorInput.getContent() != typeEI.getContent()) {
+			throw new IllegalArgumentException(
+					"Editor input with new content given to type editor. This is currently not supported!"); //$NON-NLS-1$
+		}
 	}
 
 	Object getSelectableObject();

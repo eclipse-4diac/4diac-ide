@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011, 2013, 2017 Profactor GbmH, fortiss GmbH
+ * Copyright (c) 2008, 2024 Profactor GbmH, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,10 +11,10 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.util;
+package org.eclipse.fordiac.ide.model.ui.editors;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.IEditorInput;
 
 /**
  * An EditorInput for opening IEC 61499 Editors with specified content. The
@@ -23,9 +23,9 @@ import org.eclipse.ui.IEditorInput;
  *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
-public abstract class UntypedEditorInput implements IEditorInput {
+public abstract class UntypedEditorInput implements IContentEditorInput {
 
-	private final Object content;
+	private final EObject content;
 
 	private String name;
 
@@ -36,7 +36,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 * @param name    the name
 	 * @param toolTip the tool tip
 	 */
-	protected UntypedEditorInput(final Object content, final String name) {
+	protected UntypedEditorInput(final EObject content, final String name) {
 		this.content = content;
 		this.name = name;
 	}
@@ -99,7 +99,8 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 *
 	 * @return the content
 	 */
-	public Object getContent() {
+	@Override
+	public EObject getContent() {
 		return content;
 	}
 
@@ -112,8 +113,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj instanceof UntypedEditorInput && content != null) {
-			final UntypedEditorInput input = (UntypedEditorInput) obj;
+		if (obj instanceof final UntypedEditorInput input && content != null) {
 			return content.equals(input.getContent());
 		}
 		return false;

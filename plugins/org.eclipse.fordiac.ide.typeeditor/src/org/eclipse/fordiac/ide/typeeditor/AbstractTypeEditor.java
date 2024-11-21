@@ -121,6 +121,13 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		}
 
 		if (editorInput instanceof final IFileEditorInput fileEI) {
+			if (getEditorInput() != null) {
+				// when we already had an input it means the file for our type has changed,
+				// provide a new TypeEditorInput with the new file
+				return new TypeEditorInput(getEditorInput().getContent(), getEditorInput().getTypeEntry(),
+						fileEI.getFile());
+			}
+
 			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEI.getFile());
 			final LibraryElement type = (typeEntry != null) ? typeEntry.getTypeEditable() : null;
 			// FIXME replace with EcoreUtil.copy(typeEntry.getType()) when type editable is
@@ -429,6 +436,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		if (input != null) {
 			setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
 		}
+
 		final TypeEditorInput typeEditorInput = checkEditorInput(input);
 		if (isValidTypeEditorInput(typeEditorInput)) {
 			typeEditorInput.getTypeEntry().eAdapters().add(adapter);

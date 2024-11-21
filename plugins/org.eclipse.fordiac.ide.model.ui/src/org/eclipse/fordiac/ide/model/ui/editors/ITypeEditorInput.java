@@ -16,12 +16,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.ui.IFileEditorInput;
 
-public interface ITypeEditorInput extends IFileEditorInput {
+public interface ITypeEditorInput extends IFileEditorInput, IContentEditorInput {
 	/**
 	 * Get the content of this input
 	 *
 	 * @return The content
 	 */
+	@Override
 	LibraryElement getContent();
 
 	/**

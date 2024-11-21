@@ -11,8 +11,9 @@
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.util;
+package org.eclipse.fordiac.ide.model.ui.editors;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.ui.IPersistableElement;
 
 /**
@@ -24,7 +25,7 @@ import org.eclipse.ui.IPersistableElement;
  */
 public abstract class PersistableUntypedEditorInput extends UntypedEditorInput implements IPersistableElement {
 
-	protected PersistableUntypedEditorInput(final Object content, final String name) {
+	protected PersistableUntypedEditorInput(final EObject content, final String name) {
 		super(content, name);
 	}
 

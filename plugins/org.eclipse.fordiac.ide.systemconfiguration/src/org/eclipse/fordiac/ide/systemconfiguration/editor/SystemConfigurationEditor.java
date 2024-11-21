@@ -55,10 +55,22 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		if (input instanceof final SystemConfigurationEditorInput sysConfInput) {
-			sysConf = sysConfInput.getContent();
-		}
+		final SystemConfigurationEditorInput sysConfInput = checkEditorInput(input);
+		sysConf = sysConfInput.getContent();
 		super.setInput(input);
+	}
+
+	private SystemConfigurationEditorInput checkEditorInput(final IEditorInput input) {
+		if (!(input instanceof final SystemConfigurationEditorInput sysConfEI)) {
+			throw new IllegalArgumentException(
+					"System configuration editors only accept SystemConfigurationEditorInput as valid inputs!"); //$NON-NLS-1$
+		}
+		final SystemConfigurationEditorInput currentEditorInput = (SystemConfigurationEditorInput) getEditorInput();
+		if (currentEditorInput != null && currentEditorInput.getContent() != sysConfEI.getContent()) {
+			throw new IllegalArgumentException(
+					"Editor input with new content given to system configuration editor. This is currently not supported!"); //$NON-NLS-1$
+		}
+		return sysConfEI;
 	}
 
 	@Override

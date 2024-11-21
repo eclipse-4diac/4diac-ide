@@ -16,8 +16,8 @@ package org.eclipse.fordiac.ide.systemconfiguration.editor;
 import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.ui.editors.PersistableUntypedEditorInput;
 import org.eclipse.fordiac.ide.systemconfiguration.Messages;
-import org.eclipse.fordiac.ide.util.PersistableUntypedEditorInput;
 import org.eclipse.ui.IMemento;
 
 public class SystemConfigurationEditorInput extends PersistableUntypedEditorInput {

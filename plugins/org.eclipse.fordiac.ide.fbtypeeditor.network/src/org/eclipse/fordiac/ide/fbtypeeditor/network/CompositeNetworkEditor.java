@@ -51,6 +51,7 @@ import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 
 public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEditorPart {
@@ -85,6 +86,11 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	@Override
+	public TypeEditorInput getEditorInput() {
+		return (TypeEditorInput) super.getEditorInput();
+	}
+
+	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		// currently nothing needs to be done here
 	}
@@ -99,6 +105,12 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	protected void createActions() {
 		super.createActions();
 		InterfaceContextMenuProvider.createInterfaceEditingActions(this, getActionRegistry(), getType());
+	}
+
+	@Override
+	public void createPartControl(final Composite parent) {
+		super.createPartControl(parent);
+		setTitleImage(FordiacImage.ICON_FB_NETWORK.getImage());
 	}
 
 	@Override
@@ -135,15 +147,14 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	public void setInput(final IEditorInput input) {
+		checkEditorInput(input);
+		final boolean firstTime = getEditorInput() == null;
 		super.setInput(input);
-		if ((input instanceof final TypeEditorInput untypedInput)
-				&& (untypedInput.getContent() instanceof final CompositeFBType cfbTye)) {
+		if (firstTime && (getEditorInput().getContent() instanceof final CompositeFBType cfbTye)) {
 			setModel(cfbTye.getFBNetwork());
 			getModel().eAdapters().add(adapter);
-			configurePalette(untypedInput);
+			configurePalette(getEditorInput());
 		}
-
-		setTitleImage(FordiacImage.ICON_FB_NETWORK.getImage());
 	}
 
 	@Override

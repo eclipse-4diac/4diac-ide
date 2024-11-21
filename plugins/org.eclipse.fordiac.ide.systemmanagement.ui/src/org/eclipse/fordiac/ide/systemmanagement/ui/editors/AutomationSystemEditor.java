@@ -430,18 +430,23 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			annotationModel.dispose();
 			annotationModel = null;
 		}
+
 		if (input instanceof final FileEditorInput fileEI) {
-			system = SystemManager.INSTANCE.getSystem(fileEI.getFile());
-			if (system != null) {
-				getCommandStack().addCommandStackEventListener(this);
-				getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
-				system.getTypeEntry().eAdapters().add(adapter);
+			if (getEditorInput() == null) {
+				system = SystemManager.INSTANCE.getSystem(fileEI.getFile());
+				if (system != null) {
+					getCommandStack().addCommandStackEventListener(this);
+					getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
+					system.getTypeEntry().eAdapters().add(adapter);
+				}
 			}
 			setPartName(TypeEntry.getTypeNameFromFile(fileEI.getFile()));
 			annotationModel = new FordiacMarkerGraphicalAnnotationModel(fileEI.getFile(), () -> system);
 			validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
+			// inform child editors about the new file and that they should update the
+			// annotation model. Currently we use for simplicity their existing editor input
 			pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
-					.forEach(e -> e.setInput(fileEI));
+					.forEach(e -> e.setInput(e.getEditorInput()));
 		}
 		setInputWithNotify(input);
 	}
