@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
+import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 
 public class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Variable<?>> {
 	private final ArrayValue value;
@@ -35,25 +36,29 @@ public class ArrayVariable extends AbstractVariable<ArrayValue> implements Itera
 	}
 
 	public ArrayVariable(final String name, final ArrayType type, final String value) {
-		this(name, type);
-		setValue(value);
+		super(name, type);
+		this.value = new ArrayValue((ArrayValue) ValueOperations.parseValue(value, type, null));
 	}
 
 	public ArrayVariable(final String name, final ArrayType type, final Value value) {
-		this(name, ArrayVariable.withKnownBounds(type, value));
-		setValue(value);
+		super(name, ArrayVariable.withKnownBounds(type, value));
+		this.value = new ArrayValue(checkValue(value));
 	}
 
 	@Override
 	public void setValue(final Value value) {
-		if (!(value instanceof final ArrayValue arrayValue)) {
-			throw createCastException(value);
-		}
-
+		final ArrayValue arrayValue = checkValue(value);
 		IntStream.rangeClosed(//
 				Math.max(this.value.getStart(), arrayValue.getStart()),
 				Math.min(this.value.getEnd(), arrayValue.getEnd()))
 				.forEach(index -> this.value.get(index).setValue(arrayValue.get(index).getValue()));
+	}
+
+	protected ArrayValue checkValue(final Value value) {
+		if (!(value instanceof final ArrayValue arrayValue)) {
+			throw createCastException(value);
+		}
+		return arrayValue;
 	}
 
 	@Override

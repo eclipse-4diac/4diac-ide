@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 
+@SuppressWarnings("java:S1452")
 public final class ArrayValue implements AnyDerivedValue, Iterable<Value> {
 	private static final int COLLAPSE_ELEMENTS_SIZE = 100;
 
@@ -36,28 +37,58 @@ public final class ArrayValue implements AnyDerivedValue, Iterable<Value> {
 	private final List<Variable<?>> elements;
 
 	public ArrayValue(final ArrayType type) {
+		this.type = checkType(type);
+		elementType = getElementType(type);
+		start = type.getSubranges().get(0).getLowerLimit();
+		end = type.getSubranges().get(0).getUpperLimit();
+		elements = IntStream.rangeClosed(start, end).<Variable<?>>mapToObj(this::initializeElement).toList();
+	}
+
+	public ArrayValue(final ArrayType type, final List<?> values) {
+		this.type = checkType(type);
+		elementType = getElementType(type);
+		start = type.getSubranges().get(0).getLowerLimit();
+		end = type.getSubranges().get(0).getUpperLimit();
+		elements = IntStream.rangeClosed(start, end).<Variable<?>>mapToObj(index -> initializeElement(index, values))
+				.toList();
+	}
+
+	public ArrayValue(final ArrayValue value) {
+		type = value.getType();
+		elementType = value.getElementType();
+		start = value.getStart();
+		end = value.getEnd();
+		elements = value.getElements().stream().<Variable<?>>map(VariableOperations::newVariable).toList();
+	}
+
+	protected static ArrayType checkType(final ArrayType type) {
 		if (type.getSubranges().isEmpty() || type.getSubranges().stream()
 				.anyMatch(subrange -> !subrange.isSetLowerLimit() || !subrange.isSetUpperLimit())) {
 			throw new IllegalArgumentException("Cannot instantiate array value with unknown bounds"); //$NON-NLS-1$
 		}
-		this.type = type;
-		if (type.getSubranges().size() > 1) {
-			elementType = ArrayVariable.newArrayType(type.getBaseType(),
-					type.getSubranges().stream().skip(1).map(EcoreUtil::copy).toList());
-		} else {
-			elementType = type.getBaseType();
-		}
-		start = type.getSubranges().get(0).getLowerLimit();
-		end = type.getSubranges().get(0).getUpperLimit();
-		elements = IntStream.rangeClosed(start, end)
-				.<Variable<?>>mapToObj(index -> VariableOperations.newVariable(Integer.toString(index), elementType))
-				.toList();
+		return type;
 	}
 
-	public ArrayValue(final ArrayType type, final List<?> values) {
-		this(type);
-		IntStream.range(0, values.size()).forEach(
-				index -> elements.get(index).setValue(ValueOperations.wrapValue(values.get(index), elementType)));
+	protected static DataType getElementType(final ArrayType type) {
+		if (type.getSubranges().size() > 1) {
+			return ArrayVariable.newArrayType(type.getBaseType(),
+					type.getSubranges().stream().skip(1).map(EcoreUtil::copy).toList());
+		}
+		return type.getBaseType();
+	}
+
+	protected Variable<?> initializeElement(final int index) {
+		return VariableOperations.newVariable(Integer.toString(index), elementType);
+	}
+
+	protected Variable<?> initializeElement(final int index, final Object value) {
+		return VariableOperations.newVariable(Integer.toString(index), elementType,
+				ValueOperations.wrapValue(value, elementType));
+	}
+
+	protected Variable<?> initializeElement(final int index, final List<?> values) {
+		return index - start < values.size() ? initializeElement(index, values.get(index - start))
+				: initializeElement(index);
 	}
 
 	public Variable<?> get(final int index) {

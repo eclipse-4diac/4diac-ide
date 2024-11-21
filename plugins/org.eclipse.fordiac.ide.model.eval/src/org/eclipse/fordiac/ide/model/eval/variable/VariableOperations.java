@@ -107,6 +107,10 @@ public final class VariableOperations {
 		};
 	}
 
+	public static Variable<?> newVariable(final Variable<?> variable) {
+		return newVariable(variable.getName(), variable.getType(), variable.getValue());
+	}
+
 	public static Variable<?> newVariable(final ITypedElement element) throws EvaluatorException {
 		return switch (element) {
 		case final VarDeclaration varDeclaration -> newVariable(varDeclaration);

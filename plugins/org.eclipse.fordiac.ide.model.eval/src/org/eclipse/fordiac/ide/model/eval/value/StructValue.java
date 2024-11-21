@@ -24,8 +24,10 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorInitializerException;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
+@SuppressWarnings("java:S1452")
 public final class StructValue implements AnyDerivedValue, Iterable<Value> {
 	private final StructuredType type;
 	private final Map<String, Variable<?>> members;
@@ -37,13 +39,15 @@ public final class StructValue implements AnyDerivedValue, Iterable<Value> {
 	}
 
 	public StructValue(final StructuredType type, final Map<String, ?> values) {
-		this(type);
-		values.forEach((name, value) -> {
-			final Variable<?> member = members.get(name);
-			if (member != null) {
-				member.setValue(ValueOperations.wrapValue(value, member.getType()));
-			}
-		});
+		this.type = type;
+		members = type.getMemberVariables().stream().map(member -> initializeMember(member, values))
+				.collect(Collectors.toMap(Variable::getName, Function.identity(), (a, b) -> a, LinkedHashMap::new));
+	}
+
+	public StructValue(final StructValue value) {
+		type = value.getType();
+		members = value.getMembers().values().stream().map(VariableOperations::newVariable)
+				.collect(Collectors.toMap(Variable::getName, Function.identity(), (a, b) -> a, LinkedHashMap::new));
 	}
 
 	protected static Variable<?> initializeMember(final VarDeclaration variable) {
@@ -52,6 +56,20 @@ public final class StructValue implements AnyDerivedValue, Iterable<Value> {
 		} catch (final Exception e) {
 			throw new EvaluatorInitializerException(variable, e);
 		}
+	}
+
+	protected static Variable<?> initializeMember(final VarDeclaration variable, final Object value) {
+		try {
+			final INamedElement type = VariableOperations.evaluateResultType(variable);
+			return VariableOperations.newVariable(variable.getName(), type, ValueOperations.wrapValue(value, type));
+		} catch (final Exception e) {
+			throw new EvaluatorInitializerException(variable, e);
+		}
+	}
+
+	protected static Variable<?> initializeMember(final VarDeclaration member, final Map<String, ?> values) {
+		final Object value = values.get(member.getName());
+		return value != null ? initializeMember(member, value) : initializeMember(member);
 	}
 
 	public Variable<?> get(final String key) {
