@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBTypeInterfaceChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateManipulatorChange;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 
@@ -55,7 +54,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 				final RootNodeChange rootChange = getOrCreateRootChange(eObject);
 				if (eObject instanceof final VarDeclaration varDecl && doneElements.add(varDecl)) {
 					if (varDecl.eContainer() instanceof StructuredType) {
-						rootChange.add(new UpdateStructDataTypeMemberVariableChange(varDecl));
+						rootChange.add(new DeleteUpdateStructDataTypeMemberVariableChange(varDecl));
 						handleTransitiveRefactoring(varDecl, rootChange, doneElements);
 					} else if (isUntypedSubappPin(varDecl)) {
 						rootChange.add(new UpdateUntypedSubappPinChange(varDecl));
@@ -106,7 +105,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 				createChanges((DataTypeEntry) stElement.getTypeEntry());
 			} else if (rootContainer instanceof final FBType fbType
 					&& dataTypeEntry.getType() instanceof final StructuredType type) {
-				rootChange.add(new UpdateFBTypeInterfaceChange(fbType, type));
+				rootChange.add(new DeleteUpdateFBTypeInterfaceChange(fbType, type));
 			}
 		}
 	}

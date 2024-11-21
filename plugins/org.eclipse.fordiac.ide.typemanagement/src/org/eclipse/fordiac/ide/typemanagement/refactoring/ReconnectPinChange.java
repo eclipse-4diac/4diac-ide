@@ -71,7 +71,7 @@ public class ReconnectPinChange extends ConfigurableChange<FBNetworkElement> {
 	@Override
 	public RefactoringStatus isValid(final FBNetworkElement element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
-		return null;
+		return super.isValid(element, pm);
 	}
 
 }

@@ -61,7 +61,7 @@ public class DeleteInternalFBChange extends ConfigurableChange<FB> {
 	@Override
 	public RefactoringStatus isValid(final FB element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = new RefactoringStatus();
+		final RefactoringStatus status = super.isValid(element, pm);
 		if (element.eContainer() == null) {
 			status.addError(element.getQualifiedName() + " is null");
 		}

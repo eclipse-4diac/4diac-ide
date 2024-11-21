@@ -12,7 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Michael Oberlehner - outsourced inner class to own file
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.delete;
 
 import java.text.MessageFormat;
 import java.util.EnumSet;
@@ -30,15 +30,16 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ConfigurableChange;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class UpdateFBTypeInterfaceChange extends ConfigurableChange<FBType> {
+public class DeleteUpdateFBTypeInterfaceChange extends ConfigurableChange<FBType> {
 
 	final StructuredType struct;
 
-	public UpdateFBTypeInterfaceChange(final FBType type, final StructuredType struct) {
+	public DeleteUpdateFBTypeInterfaceChange(final FBType type, final StructuredType struct) {
 		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteFBTypeInterface, type.getName(),
 				struct.getName()), EcoreUtil.getURI(type), FBType.class);
 		this.struct = struct;
@@ -62,7 +63,7 @@ public class UpdateFBTypeInterfaceChange extends ConfigurableChange<FBType> {
 	@Override
 	public RefactoringStatus isValid(final FBType element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = new RefactoringStatus();
+		final RefactoringStatus status = super.isValid(element, pm);
 
 		final List<VarDeclaration> varDeclaration = getVarDeclarationsForStruct(element);
 

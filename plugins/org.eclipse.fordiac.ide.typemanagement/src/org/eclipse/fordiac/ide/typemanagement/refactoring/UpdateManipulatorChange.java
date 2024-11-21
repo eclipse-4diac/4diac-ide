@@ -46,7 +46,7 @@ public class UpdateManipulatorChange extends ConfigurableChange<StructManipulato
 	@Override
 	public RefactoringStatus isValid(final StructManipulator manipulator, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = new RefactoringStatus();
+		final RefactoringStatus status = super.isValid(manipulator, pm);
 		if (manipulator.eContainer() == null) {
 			status.addError(getName() + " invalid element");
 		}

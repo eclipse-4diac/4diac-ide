@@ -39,9 +39,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBTypeInterfaceChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateTypeEntryChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.delete.UpdateStructDataTypeMemberVariableChange;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -186,13 +184,13 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 				if (rootContainer instanceof final StructuredType stElement) {
 					final CompositeChange change = new CompositeChange(MessageFormat.format(
 							Messages.Refactoring_AffectedStruct, stElement.getName(), dataTypeEntry.getTypeName()));
-					change.add(new UpdateStructDataTypeMemberVariableChange(varDecl));
+					change.add(new RenameUpdateStructDataTypeMemberVariableChange(varDecl));
 					createStructChanges((DataTypeEntry) stElement.getTypeEntry(), change);
 					return change;
 				}
 				if (rootContainer instanceof final FBType fbType
 						&& dataTypeEntry.getType() instanceof final StructuredType type) {
-					return new UpdateFBTypeInterfaceChange(fbType, type);
+					return new RenameUpdateFBTypeInterfaceChange(fbType, type);
 				}
 			}
 		}

@@ -15,13 +15,28 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.util.EnumSet;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public abstract class ConfigurableChange<T extends EObject> extends AbstractCommandChange<T>
 		implements IFordiacPreviewChange {
 
 	private final EnumSet<ChangeState> state;
+
+	@Override
+	public RefactoringStatus isValid(final T element, final IProgressMonitor pm)
+			throws CoreException, OperationCanceledException {
+		final RefactoringStatus status = new RefactoringStatus();
+		if (getState().contains(ChangeState.NO_CHANGE)) {
+			status.addFatalError(Messages.ConfigurableChange_noChangeErrorMessage);
+		}
+		return status;
+	}
 
 	protected ConfigurableChange(final String name, final URI elementURI, final Class elementClass) {
 		super(name, elementURI, elementClass);
