@@ -21,6 +21,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.elk.core.options.CoreOptions;
+import org.eclipse.elk.core.options.PortConstraints;
 import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkLabel;
@@ -163,6 +164,8 @@ public final class FordiacGraphBuilder {
 
 		node.setDimensions(bounds.preciseWidth(), bounds.preciseHeight());
 
+		node.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS);
+
 		final ElkLabel label = ElkGraphUtil.createLabel(editPart.getModel().getName(), node);
 		final Rectangle labelBounds = editPart.getFigure().getLabelBounds();
 		label.setDimensions(labelBounds.width(), labelBounds.height());
@@ -195,11 +198,10 @@ public final class FordiacGraphBuilder {
 	private static ElkPort getPort(final Point point, final InterfaceEditPart interfaceEditPart,
 			final FordiacLayoutMapping mapping) {
 		return (ElkPort) mapping.getReverseMapping().computeIfAbsent(interfaceEditPart,
-				ie -> createPort(point, interfaceEditPart, mapping));
+				ie -> createPort(interfaceEditPart, mapping));
 	}
 
-	private static ElkPort createPort(final Point point, final InterfaceEditPart ie,
-			final FordiacLayoutMapping mapping) {
+	private static ElkPort createPort(final InterfaceEditPart ie, final FordiacLayoutMapping mapping) {
 		final EditPart parent = ie.getParent();
 		ElkNode parentNode = (ElkNode) mapping.getReverseMapping().get(parent);
 		if (parent == mapping.getParentElement().getParent()) {
@@ -207,9 +209,10 @@ public final class FordiacGraphBuilder {
 		}
 
 		final ElkPort port = ElkGraphUtil.createPort(parentNode);
-		port.setDimensions(1, 1);
+		final var figure = ie.getFigure();
+		port.setDimensions(1, figure.getBounds().preciseHeight());
 		final int x = ie.isInput() ? 0 : (int) parentNode.getWidth();
-		final int y = point.y - (int) parentNode.getY() - (int) mapping.getLayoutGraph().getY();
+		final int y = figure.getLocation().y - (int) parentNode.getY() - (int) mapping.getLayoutGraph().getY();
 		port.setLocation(x, y);
 		port.setProperty(CoreOptions.PORT_SIDE, ie.isInput() ? PortSide.WEST : PortSide.EAST);
 

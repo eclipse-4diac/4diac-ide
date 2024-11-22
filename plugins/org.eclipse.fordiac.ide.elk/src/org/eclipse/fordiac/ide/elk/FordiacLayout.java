@@ -28,7 +28,6 @@ import org.eclipse.elk.alg.layered.options.LayeringStrategy;
 import org.eclipse.elk.alg.layered.options.NodePlacementStrategy;
 import org.eclipse.elk.alg.layered.options.NodePromotionStrategy;
 import org.eclipse.elk.alg.layered.options.ValidifyStrategy;
-import org.eclipse.elk.alg.libavoid.options.LibavoidMetaDataProvider;
 import org.eclipse.elk.alg.libavoid.server.LibavoidServerException;
 import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
 import org.eclipse.elk.core.math.ElkPadding;
@@ -100,8 +99,6 @@ public class FordiacLayout {
 			configureBlockLayoutGraph(mapping.getLayoutGraph());
 			engine.layout(mapping.getLayoutGraph(), new NullElkProgressMonitor());
 
-			mapping.getLayoutGraph().getAllProperties().clear();
-
 			if (Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SNAP_TO_GRID)) {
 				snapToGrid(mapping);
 			}
@@ -145,7 +142,7 @@ public class FordiacLayout {
 				.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS)
 				.setProperty(CoreOptions.PADDING, new ElkPadding(5.0, 20.0, 20.0, 20.0))
 				.setProperty(CoreOptions.SPACING_NODE_NODE, Double.valueOf(50))
-				.setProperty(LayeredMetaDataProvider.SPACING_NODE_NODE_BETWEEN_LAYERS, Double.valueOf(50))
+				.setProperty(LayeredMetaDataProvider.SPACING_NODE_NODE_BETWEEN_LAYERS, Double.valueOf(80))
 				.setProperty(LayeredMetaDataProvider.THOROUGHNESS, Integer.valueOf(10))
 				.setProperty(LayeredMetaDataProvider.LAYERING_STRATEGY, LayeringStrategy.MIN_WIDTH)
 				.setProperty(LayeredMetaDataProvider.LAYERING_MIN_WIDTH_UPPER_BOUND_ON_WIDTH, Integer.valueOf(-1))
@@ -169,15 +166,16 @@ public class FordiacLayout {
 
 	private static void configureConnectionLayoutGraph(final ElkGraphElement graph) {
 		graph.setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.alg.libavoid") //$NON-NLS-1$
-				.setProperty(LibavoidMetaDataProvider.SHAPE_BUFFER_DISTANCE, Double.valueOf(10))
-				.setProperty(LibavoidMetaDataProvider.IDEAL_NUDGING_DISTANCE, Double.valueOf(5))
-				.setProperty(LibavoidMetaDataProvider.CROSSING_PENALTY, Double.valueOf(10000))
-				// .setProperty(LibavoidMetaDataProvider.CLUSTER_CROSSING_PENALTY,
-				// Double.valueOf(10))
-				.setProperty(LibavoidMetaDataProvider.NUDGE_SHARED_PATHS_WITH_COMMON_END_POINT, Boolean.FALSE)
-				.setProperty(LibavoidMetaDataProvider.ENABLE_HYPEREDGES_FROM_COMMON_SOURCE, Boolean.TRUE)
-				.setProperty(LibavoidMetaDataProvider.IMPROVE_HYPEREDGE_ROUTES_MOVING_ADDING_AND_DELETING_JUNCTIONS,
-						Boolean.TRUE);
+				.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS)
+				.setProperty(CoreOptions.DEBUG_MODE, Boolean.TRUE).setProperty(CoreOptions.DIRECTION, Direction.RIGHT);
+
+//				.setProperty(LibavoidMetaDataProvider.SHAPE_BUFFER_DISTANCE, Double.valueOf(10))
+//				.setProperty(LibavoidMetaDataProvider.IDEAL_NUDGING_DISTANCE, Double.valueOf(5))
+//				.setProperty(LibavoidMetaDataProvider.CLUSTER_CROSSING_PENALTY, Double.valueOf(10));
+//				.setProperty(LibavoidMetaDataProvider.NUDGE_SHARED_PATHS_WITH_COMMON_END_POINT, Boolean.FALSE)
+//				.setProperty(LibavoidMetaDataProvider.ENABLE_HYPEREDGES_FROM_COMMON_SOURCE, Boolean.TRUE)
+//				.setProperty(LibavoidMetaDataProvider.IMPROVE_HYPEREDGE_ROUTES_MOVING_ADDING_AND_DELETING_JUNCTIONS,
+//						Boolean.TRUE);
 	}
 
 	private static void collectSubapps(final AbstractFBNetworkEditPart ep,
