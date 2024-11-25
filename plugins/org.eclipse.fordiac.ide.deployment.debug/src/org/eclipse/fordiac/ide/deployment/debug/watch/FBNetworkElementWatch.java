@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 public class FBNetworkElementWatch extends AbstractContainerWatch {
 
@@ -26,12 +25,6 @@ public class FBNetworkElementWatch extends AbstractContainerWatch {
 			final DeploymentDebugDevice target) {
 		super(name, element, target);
 		value = new FBNetworkElementValue(element, target);
-	}
-
-	public FBNetworkElementWatch(final String name, final FBNetworkElement element, final Resource resource,
-			final String resourceRelativeName, final DeploymentDebugDevice target) {
-		super(name, element, target);
-		value = new FBNetworkElementValue(element, resource, resourceRelativeName, target);
 	}
 
 	@Override

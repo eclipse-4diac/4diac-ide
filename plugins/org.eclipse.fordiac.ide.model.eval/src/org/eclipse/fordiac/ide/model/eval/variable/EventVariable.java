@@ -16,7 +16,6 @@ import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.eval.value.EventValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.model.value.TypedValue;
 
 public class EventVariable extends AbstractVariable<EventValue> {
 	private EventValue value;
@@ -52,14 +51,6 @@ public class EventVariable extends AbstractVariable<EventValue> {
 	@Override
 	public void setValue(final String value, final TypeLibrary typeLibrary) {
 		setValue(Long.parseLong(value));
-	}
-
-	@Override
-	public void setValue(final TypedValue value) {
-		if (!getType().isAssignableFrom(value.type())) {
-			createCastException(value);
-		}
-		setValue(((Number) value.value()).longValue());
 	}
 
 	public void setValue(final long value) {

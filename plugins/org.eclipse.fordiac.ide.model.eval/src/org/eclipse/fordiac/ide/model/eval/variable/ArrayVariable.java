@@ -25,8 +25,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
-import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
-import org.eclipse.fordiac.ide.model.value.TypedValue;
 
 public class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Variable<?>> {
 	private final ArrayValue value;
@@ -37,42 +35,25 @@ public class ArrayVariable extends AbstractVariable<ArrayValue> implements Itera
 	}
 
 	public ArrayVariable(final String name, final ArrayType type, final String value) {
-		super(name, type);
-		this.value = new ArrayValue((ArrayValue) ValueOperations.parseValue(value, type, null));
+		this(name, type);
+		setValue(value);
 	}
 
 	public ArrayVariable(final String name, final ArrayType type, final Value value) {
-		super(name, ArrayVariable.withKnownBounds(type, value));
-		this.value = new ArrayValue(checkValue(value));
+		this(name, ArrayVariable.withKnownBounds(type, value));
+		setValue(value);
 	}
 
 	@Override
 	public void setValue(final Value value) {
-		final ArrayValue arrayValue = checkValue(value);
+		if (!(value instanceof final ArrayValue arrayValue)) {
+			throw createCastException(value);
+		}
+
 		IntStream.rangeClosed(//
 				Math.max(this.value.getStart(), arrayValue.getStart()),
 				Math.min(this.value.getEnd(), arrayValue.getEnd()))
 				.forEach(index -> this.value.get(index).setValue(arrayValue.get(index).getValue()));
-	}
-
-	protected ArrayValue checkValue(final Value value) {
-		if (!(value instanceof final ArrayValue arrayValue) || !getType().isAssignableFrom(arrayValue.getType())) {
-			throw createCastException(value);
-		}
-		return arrayValue;
-	}
-
-	@Override
-	public void setValue(final TypedValue value) {
-		if (!getType().isAssignableFrom(value.type())) {
-			createCastException(value);
-		}
-		final List<?> elements = (List<?>) value.value();
-		final int commonSize = Math.min(this.value.getElements().size(), elements.size());
-		IntStream.range(0, commonSize).forEach(
-				index -> this.value.getRaw(index).setValue(new TypedValue(getElementType(), elements.get(index))));
-		IntStream.range(commonSize, this.value.getElements().size())
-				.forEach(index -> this.value.getRaw(index).setValue(ValueOperations.defaultValue(getElementType())));
 	}
 
 	@Override

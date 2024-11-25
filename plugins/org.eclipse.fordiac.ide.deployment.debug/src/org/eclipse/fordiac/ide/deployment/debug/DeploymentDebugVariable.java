@@ -57,11 +57,6 @@ public class DeploymentDebugVariable extends EvaluatorDebugVariable {
 	}
 
 	@Override
-	public boolean hasValueChanged() {
-		return false; // prevents annoying flickering in variables view
-	}
-
-	@Override
 	public String getModelIdentifier() {
 		return DeploymentDebugElement.MODEL_IDENTIFIER;
 	}

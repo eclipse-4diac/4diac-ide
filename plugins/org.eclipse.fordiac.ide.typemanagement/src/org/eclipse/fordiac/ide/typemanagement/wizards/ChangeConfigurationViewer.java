@@ -15,7 +15,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
@@ -35,7 +36,7 @@ public class ChangeConfigurationViewer implements IChangePreviewViewer {
 	private IFordiacPreviewChange change;
 
 	private Table table;
-	private final LinkedHashMap<TableItem, ChangeState> choices = new LinkedHashMap<>();
+	private final Map<TableItem, ChangeState> choices = new HashMap<>();
 
 	@Override
 	public void createControl(final Composite parent) {
@@ -90,11 +91,6 @@ public class ChangeConfigurationViewer implements IChangePreviewViewer {
 		// initialize UI from change state
 		choices.entrySet().stream().filter(entry -> delChange.getState().contains(entry.getValue()))
 				.forEach(entry -> entry.getKey().setChecked(true));
-
-		if (choices.keySet().stream().filter(TableItem::getChecked).toList().isEmpty()) {
-			choices.firstEntry().getKey().setChecked(true);
-		}
-
 	}
 
 	private void initializeChoices(final ChangePreviewViewerInput input) {

@@ -209,7 +209,6 @@ public class DataTypeEditorPage extends EditorPart implements ITypeEditorPage, C
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		checkEditorInput(input);
 		if (getSite() instanceof final MultiPageEditorSite mpes) {
 			annotationModel = mpes.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
 		}

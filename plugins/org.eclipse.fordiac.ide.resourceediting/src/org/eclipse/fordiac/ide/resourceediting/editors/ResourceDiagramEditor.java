@@ -86,10 +86,7 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		if (!(input instanceof final ResourceEditorInput resInput)) {
-			throw new IllegalArgumentException("Resource editors only accept ResourceEditorInput as valid inputs!"); //$NON-NLS-1$
-		}
-		if (getEditorInput() == null) {
+		if (input instanceof final ResourceEditorInput resInput) {
 			final Resource res = resInput.getContent();
 			setModel(res.getFBNetwork());
 			getResource().eAdapters().add(resourceAdapter);

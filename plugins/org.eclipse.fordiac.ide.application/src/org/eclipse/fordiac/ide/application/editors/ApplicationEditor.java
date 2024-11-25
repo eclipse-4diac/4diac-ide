@@ -37,12 +37,7 @@ public class ApplicationEditor extends FBNetworkEditor {
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		if (!(input instanceof final ApplicationEditorInput appInput)) {
-			throw new IllegalArgumentException(
-					"Application editors only accept ApplicationEditorInput as valid inputs!"); //$NON-NLS-1$
-		}
-		if (getEditorInput() == null) {
-			// initial editor setup
+		if (input instanceof final ApplicationEditorInput appInput) {
 			final Application app = appInput.getContent();
 			setModel(app.getFBNetwork());
 
@@ -55,7 +50,7 @@ public class ApplicationEditor extends FBNetworkEditor {
 
 	@Override
 	public void dispose() {
-		if (getModel() != null && getModel().eAdapters().contains(adapter)) {
+		if (adapter != null && getModel() != null && getModel().eAdapters().contains(adapter)) {
 			getModel().eAdapters().remove(adapter);
 		}
 		super.dispose();

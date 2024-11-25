@@ -76,6 +76,7 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
+		setInputWithNotify(input);
 		super.init(site, input);
 		setPartName(Messages.ServiceSequenceEditor_Service);
 		setTitleImage(FordiacImage.ICON_SERVICE_SEQUENCE.getImage());
@@ -285,11 +286,6 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 		if (cmds.canExecute()) {
 			cmds.execute();
 		}
-	}
 
-	@Override
-	public void setInput(final IEditorInput input) {
-		checkEditorInput(input);
-		super.setInput(input);
 	}
 }

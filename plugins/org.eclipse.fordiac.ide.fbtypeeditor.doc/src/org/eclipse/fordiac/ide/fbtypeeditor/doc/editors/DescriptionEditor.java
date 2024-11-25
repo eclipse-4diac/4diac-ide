@@ -249,7 +249,6 @@ public class DescriptionEditor extends EditorPart implements ITypeEditorPage {
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		checkEditorInput(input);
 		super.setInputWithNotify(input);
 	}
 

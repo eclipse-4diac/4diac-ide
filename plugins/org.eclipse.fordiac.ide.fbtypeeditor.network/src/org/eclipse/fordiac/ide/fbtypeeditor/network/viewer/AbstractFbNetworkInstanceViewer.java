@@ -100,18 +100,12 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		if (!(input instanceof final CompositeAndSubAppInstanceViewerInput viewerEI)) {
-			throw new IllegalArgumentException(
-					"Network viewers only accept CompositeAndSubAppInstanceViewerInput as valid inputs!"); //$NON-NLS-1$
-		}
-		if (getEditorInput() == null) {
-			// basic viewer setup that should be done only the first time the viewer is
-			// getting an input
-			fbNetworkElement = viewerEI.getContent();
+		if (input instanceof final CompositeAndSubAppInstanceViewerInput untypedInput) {
+			fbNetworkElement = untypedInput.getContent();
 			final String name = getNameHierarchy();
 			setPartName(name);
 			// the tooltip will show the whole name when hovering
-			viewerEI.setName(name);
+			untypedInput.setName(name);
 			fbNetworkElement.eAdapters().add(fbNetworkElementAdapter);
 			final EObject container = fbNetworkElement.eContainer();
 			if (container != null) {
