@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.DiagnosticChain;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 
@@ -31,6 +32,9 @@ public final class AttributeAnnotations {
 
 	public static boolean validateName(final Attribute attribute, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
+		if (InternalAttributeDeclarations.isInternalAttribue(attribute.getAttributeDeclaration())) {
+			return true;// do not validate internal attributes
+		}
 		return (attribute.getAttributeDeclaration() != null // do not validate name when a declaration is set
 				|| NamedElementAnnotations.validateName(attribute, diagnostics, context))
 				&& NamedElementAnnotations.validateDuplicateName(attribute, diagnostics, context, NAMED_ELEMENTS_KEY);
