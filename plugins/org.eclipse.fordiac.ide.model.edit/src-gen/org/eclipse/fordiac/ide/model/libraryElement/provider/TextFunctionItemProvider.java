@@ -58,7 +58,6 @@ public class TextFunctionItemProvider extends FunctionItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addReturnTypePropertyDescriptor(object);
-			addVarargsPropertyDescriptor(object);
 			addTextPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -82,28 +81,6 @@ public class TextFunctionItemProvider extends FunctionItemProvider {
 				 false,
 				 true,
 				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Varargs feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addVarargsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_TextFunction_varargs_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_TextFunction_varargs_feature", "_UI_TextFunction_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.TEXT_FUNCTION__VARARGS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -160,7 +137,6 @@ public class TextFunctionItemProvider extends FunctionItemProvider {
 			case LibraryElementPackage.TEXT_FUNCTION__INPUT_PARAMETERS:
 			case LibraryElementPackage.TEXT_FUNCTION__OUTPUT_PARAMETERS:
 			case LibraryElementPackage.TEXT_FUNCTION__IN_OUT_PARAMETERS:
-			case LibraryElementPackage.TEXT_FUNCTION__VARARGS:
 			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

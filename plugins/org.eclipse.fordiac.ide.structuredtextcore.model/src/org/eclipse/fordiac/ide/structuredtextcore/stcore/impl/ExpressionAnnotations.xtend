@@ -83,7 +83,7 @@ final package class ExpressionAnnotations {
 			val right = declared ? expr.right?.declaredResultType : expr.right?.resultType
 			if (left instanceof DataType) {
 				if (right instanceof DataType) {
-					if (expr.op.arithmetic) {
+					if (expr.op.arithmetic || expr.op.logical) {
 						if (left instanceof AnyDurationType && right instanceof AnyNumType)
 							left
 						else if (left instanceof AnyDateType && right instanceof TimeType)
@@ -95,13 +95,6 @@ final package class ExpressionAnnotations {
 						else if (left instanceof AnyDateType && right instanceof AnyDateType)
 							ElementaryTypes.LTIME
 						else if (left.isAssignableFrom(right))
-							left
-						else if (right.isAssignableFrom(left))
-							right
-						else
-							null
-					} else if (expr.op.logical || expr.op.range) {
-						if (left.isAssignableFrom(right))
 							left
 						else if (right.isAssignableFrom(left))
 							right
@@ -154,9 +147,8 @@ final package class ExpressionAnnotations {
 	def package static INamedElement getResultType(STFeatureExpression expr) {
 		switch (feature : expr.feature) {
 			STStandardFunction:
-				feature.javaMethod.inferReturnTypeFromDataTypes([switch (type: expr.expectedType) { DataType: type }], [
-					expr.parameters.map[resultType].filter(DataType).toList
-				])
+				feature.javaMethod.inferReturnTypeFromDataTypes(switch (type: expr.expectedType) { DataType: type },
+					expr.parameters.map[resultType].filter(DataType).toList)
 			default:
 				getDeclaredResultType(expr)
 		}
@@ -170,14 +162,13 @@ final package class ExpressionAnnotations {
 			AdapterDeclaration,
 			FB case !expr.call:
 				feature.featureType
-			STStandardFunction:
-				feature.javaMethod.inferReturnTypeFromDataTypes(null) [
-					val argumentTypes = expr.parameters.map[declaredResultType].filter(DataType).toList
-					if (argumentTypes.size == expr.parameters.size) // all parameters have valid types
-						argumentTypes
-					else
-						null
-				]
+			STStandardFunction: {
+				val argumentTypes = expr.parameters.map[declaredResultType].filter(DataType).toList
+				if (argumentTypes.size == expr.parameters.size) // all parameters have valid types
+					feature.javaMethod.inferReturnTypeFromDataTypes(null, argumentTypes)
+				else
+					feature.javaMethod.inferReturnTypeFromDataTypes(null, emptyList)
+			}
 			ICallable:
 				feature.returnType
 		}
@@ -231,8 +222,11 @@ final package class ExpressionAnnotations {
 			Boolean: ElementaryTypes.BOOL
 			BigDecimal: ElementaryTypes.LREAL
 			BigInteger case checkRange(Byte.MIN_VALUE, Byte.MAX_VALUE): ElementaryTypes.SINT
+			BigInteger case checkRangeUnsigned(0xff#bi): ElementaryTypes.USINT
 			BigInteger case checkRange(Short.MIN_VALUE, Short.MAX_VALUE): ElementaryTypes.INT
+			BigInteger case checkRangeUnsigned(0xffff#bi): ElementaryTypes.UINT
 			BigInteger case checkRange(Integer.MIN_VALUE, Integer.MAX_VALUE): ElementaryTypes.DINT
+			BigInteger case checkRangeUnsigned(0xffffffff#bi): ElementaryTypes.UDINT
 			BigInteger case checkRange(Long.MIN_VALUE, Long.MAX_VALUE): ElementaryTypes.LINT
 			BigInteger case checkRangeUnsigned(0xffffffffffffffff#bi): ElementaryTypes.ULINT
 			default: null

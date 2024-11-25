@@ -45,7 +45,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
@@ -366,7 +365,7 @@ public class EventImpl extends EObjectImpl implements Event {
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getInputParameters() {
+	public EList<INamedElement> getInputParameters() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);
 	}
 
@@ -376,7 +375,7 @@ public class EventImpl extends EObjectImpl implements Event {
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getOutputParameters() {
+	public EList<INamedElement> getOutputParameters() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);
 	}
 
@@ -386,7 +385,7 @@ public class EventImpl extends EObjectImpl implements Event {
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getInOutParameters() {
+	public EList<INamedElement> getInOutParameters() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);
 	}
 
@@ -398,26 +397,6 @@ public class EventImpl extends EObjectImpl implements Event {
 	@Override
 	public DataType getReturnType() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getSignature() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getSignature(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isVarargs() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.isVarargs(this);
 	}
 
 	/**

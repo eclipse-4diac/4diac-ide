@@ -32,7 +32,8 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TextFunction;
 
@@ -48,7 +49,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextFunction;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionImpl#getOutputParameters <em>Output Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionImpl#getInOutParameters <em>In Out Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionImpl#getReturnType <em>Return Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionImpl#isVarargs <em>Varargs</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionImpl#getText <em>Text</em>}</li>
  * </ul>
  *
@@ -63,7 +63,7 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ITypedElement> inputParameters;
+	protected EList<INamedElement> inputParameters;
 
 	/**
 	 * The cached value of the '{@link #getOutputParameters() <em>Output Parameters</em>}' containment reference list.
@@ -73,7 +73,7 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ITypedElement> outputParameters;
+	protected EList<INamedElement> outputParameters;
 
 	/**
 	 * The cached value of the '{@link #getInOutParameters() <em>In Out Parameters</em>}' containment reference list.
@@ -83,7 +83,7 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ITypedElement> inOutParameters;
+	protected EList<INamedElement> inOutParameters;
 
 	/**
 	 * The cached value of the '{@link #getReturnType() <em>Return Type</em>}' reference.
@@ -94,26 +94,6 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	 * @ordered
 	 */
 	protected DataType returnType;
-
-	/**
-	 * The default value of the '{@link #isVarargs() <em>Varargs</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isVarargs()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean VARARGS_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isVarargs() <em>Varargs</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isVarargs()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean varargs = VARARGS_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getText() <em>Text</em>}' attribute.
@@ -160,9 +140,9 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getInputParameters() {
+	public EList<INamedElement> getInputParameters() {
 		if (inputParameters == null) {
-			inputParameters = new EObjectContainmentEList.Resolving<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_FUNCTION__INPUT_PARAMETERS);
+			inputParameters = new EObjectContainmentEList.Resolving<INamedElement>(INamedElement.class, this, LibraryElementPackage.TEXT_FUNCTION__INPUT_PARAMETERS);
 		}
 		return inputParameters;
 	}
@@ -173,9 +153,9 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getOutputParameters() {
+	public EList<INamedElement> getOutputParameters() {
 		if (outputParameters == null) {
-			outputParameters = new EObjectContainmentEList.Resolving<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_FUNCTION__OUTPUT_PARAMETERS);
+			outputParameters = new EObjectContainmentEList.Resolving<INamedElement>(INamedElement.class, this, LibraryElementPackage.TEXT_FUNCTION__OUTPUT_PARAMETERS);
 		}
 		return outputParameters;
 	}
@@ -186,9 +166,9 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getInOutParameters() {
+	public EList<INamedElement> getInOutParameters() {
 		if (inOutParameters == null) {
-			inOutParameters = new EObjectContainmentEList.Resolving<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_FUNCTION__IN_OUT_PARAMETERS);
+			inOutParameters = new EObjectContainmentEList.Resolving<INamedElement>(INamedElement.class, this, LibraryElementPackage.TEXT_FUNCTION__IN_OUT_PARAMETERS);
 		}
 		return inOutParameters;
 	}
@@ -231,29 +211,6 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 		returnType = newReturnType;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.TEXT_FUNCTION__RETURN_TYPE, oldReturnType, returnType));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isVarargs() {
-		return varargs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVarargs(boolean newVarargs) {
-		boolean oldVarargs = varargs;
-		varargs = newVarargs;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.TEXT_FUNCTION__VARARGS, oldVarargs, varargs));
 	}
 
 	/**
@@ -315,8 +272,6 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 			case LibraryElementPackage.TEXT_FUNCTION__RETURN_TYPE:
 				if (resolve) return getReturnType();
 				return basicGetReturnType();
-			case LibraryElementPackage.TEXT_FUNCTION__VARARGS:
-				return isVarargs();
 			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
 				return getText();
 			default:
@@ -335,21 +290,18 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 		switch (featureID) {
 			case LibraryElementPackage.TEXT_FUNCTION__INPUT_PARAMETERS:
 				getInputParameters().clear();
-				getInputParameters().addAll((Collection<? extends ITypedElement>)newValue);
+				getInputParameters().addAll((Collection<? extends INamedElement>)newValue);
 				return;
 			case LibraryElementPackage.TEXT_FUNCTION__OUTPUT_PARAMETERS:
 				getOutputParameters().clear();
-				getOutputParameters().addAll((Collection<? extends ITypedElement>)newValue);
+				getOutputParameters().addAll((Collection<? extends INamedElement>)newValue);
 				return;
 			case LibraryElementPackage.TEXT_FUNCTION__IN_OUT_PARAMETERS:
 				getInOutParameters().clear();
-				getInOutParameters().addAll((Collection<? extends ITypedElement>)newValue);
+				getInOutParameters().addAll((Collection<? extends INamedElement>)newValue);
 				return;
 			case LibraryElementPackage.TEXT_FUNCTION__RETURN_TYPE:
 				setReturnType((DataType)newValue);
-				return;
-			case LibraryElementPackage.TEXT_FUNCTION__VARARGS:
-				setVarargs((Boolean)newValue);
 				return;
 			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
 				setText((String)newValue);
@@ -380,9 +332,6 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 			case LibraryElementPackage.TEXT_FUNCTION__RETURN_TYPE:
 				setReturnType((DataType)null);
 				return;
-			case LibraryElementPackage.TEXT_FUNCTION__VARARGS:
-				setVarargs(VARARGS_EDEFAULT);
-				return;
 			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
 				setText(TEXT_EDEFAULT);
 				return;
@@ -408,8 +357,6 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 				return inOutParameters != null && !inOutParameters.isEmpty();
 			case LibraryElementPackage.TEXT_FUNCTION__RETURN_TYPE:
 				return returnType != null;
-			case LibraryElementPackage.TEXT_FUNCTION__VARARGS:
-				return varargs != VARARGS_EDEFAULT;
 			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
 				return TEXT_EDEFAULT == null ? text != null : !TEXT_EDEFAULT.equals(text);
 			default:
@@ -427,9 +374,7 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (varargs: "); //$NON-NLS-1$
-		result.append(varargs);
-		result.append(", text: "); //$NON-NLS-1$
+		result.append(" (text: "); //$NON-NLS-1$
 		result.append(text);
 		result.append(')');
 		return result.toString();

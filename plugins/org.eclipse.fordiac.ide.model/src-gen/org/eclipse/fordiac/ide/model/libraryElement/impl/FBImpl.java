@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
@@ -95,7 +95,7 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getInputParameters() {
+	public EList<INamedElement> getInputParameters() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);
 	}
 
@@ -105,7 +105,7 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getOutputParameters() {
+	public EList<INamedElement> getOutputParameters() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);
 	}
 
@@ -115,7 +115,7 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getInOutParameters() {
+	public EList<INamedElement> getInOutParameters() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);
 	}
 
@@ -127,26 +127,6 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 	@Override
 	public DataType getReturnType() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getSignature() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getSignature(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isVarargs() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.isVarargs(this);
 	}
 
 	/**

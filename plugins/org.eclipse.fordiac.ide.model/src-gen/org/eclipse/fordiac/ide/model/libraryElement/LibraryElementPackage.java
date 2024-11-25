@@ -5712,22 +5712,13 @@ public interface LibraryElementPackage extends EPackage {
 	int TEXT_METHOD__RETURN_TYPE = METHOD_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Varargs</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TEXT_METHOD__VARARGS = METHOD_FEATURE_COUNT + 4;
-
-	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_METHOD__TEXT = METHOD_FEATURE_COUNT + 5;
+	int TEXT_METHOD__TEXT = METHOD_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Text Method</em>' class.
@@ -5736,7 +5727,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_METHOD_FEATURE_COUNT = METHOD_FEATURE_COUNT + 6;
+	int TEXT_METHOD_FEATURE_COUNT = METHOD_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OtherMethodImpl <em>Other Method</em>}' class.
@@ -5801,15 +5792,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int OTHER_METHOD__RETURN_TYPE = TEXT_METHOD__RETURN_TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Varargs</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OTHER_METHOD__VARARGS = TEXT_METHOD__VARARGS;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -7144,22 +7126,13 @@ public interface LibraryElementPackage extends EPackage {
 	int TEXT_FUNCTION__RETURN_TYPE = FUNCTION_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Varargs</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TEXT_FUNCTION__VARARGS = FUNCTION_FEATURE_COUNT + 4;
-
-	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_FUNCTION__TEXT = FUNCTION_FEATURE_COUNT + 5;
+	int TEXT_FUNCTION__TEXT = FUNCTION_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Text Function</em>' class.
@@ -7168,7 +7141,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_FUNCTION_FEATURE_COUNT = FUNCTION_FEATURE_COUNT + 6;
+	int TEXT_FUNCTION_FEATURE_COUNT = FUNCTION_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.STFunctionImpl <em>ST Function</em>}' class.
@@ -7233,15 +7206,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ST_FUNCTION__RETURN_TYPE = TEXT_FUNCTION__RETURN_TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Varargs</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ST_FUNCTION__VARARGS = TEXT_FUNCTION__VARARGS;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -7380,15 +7344,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ST_METHOD__RETURN_TYPE = TEXT_METHOD__RETURN_TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Varargs</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ST_METHOD__VARARGS = TEXT_METHOD__VARARGS;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -11150,17 +11105,6 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getTextFunction_ReturnType();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.TextFunction#isVarargs <em>Varargs</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Varargs</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextFunction#isVarargs()
-	 * @see #getTextFunction()
-	 * @generated
-	 */
-	EAttribute getTextFunction_Varargs();
-
-	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.TextFunction#getText <em>Text</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11245,17 +11189,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getTextMethod_ReturnType();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#isVarargs <em>Varargs</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Varargs</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextMethod#isVarargs()
-	 * @see #getTextMethod()
-	 * @generated
-	 */
-	EAttribute getTextMethod_Varargs();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getText <em>Text</em>}'.
@@ -14057,14 +13990,6 @@ public interface LibraryElementPackage extends EPackage {
 		EReference TEXT_FUNCTION__RETURN_TYPE = eINSTANCE.getTextFunction_ReturnType();
 
 		/**
-		 * The meta object literal for the '<em><b>Varargs</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TEXT_FUNCTION__VARARGS = eINSTANCE.getTextFunction_Varargs();
-
-		/**
 		 * The meta object literal for the '<em><b>Text</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -14131,14 +14056,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TEXT_METHOD__RETURN_TYPE = eINSTANCE.getTextMethod_ReturnType();
-
-		/**
-		 * The meta object literal for the '<em><b>Varargs</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TEXT_METHOD__VARARGS = eINSTANCE.getTextMethod_Varargs();
 
 		/**
 		 * The meta object literal for the '<em><b>Text</b></em>' attribute feature.

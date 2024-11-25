@@ -284,27 +284,30 @@ class StructuredTextEvaluatorTest {
 		Byte.MIN_VALUE.toSIntValue.assertEquals("-128".evaluateExpression)
 		Byte.MAX_VALUE.toSIntValue.assertEquals("127".evaluateExpression)
 		Byte.MAX_VALUE.toSIntValue.assertEquals("16#7f".evaluateExpression)
+		// USINT
+		128.toUSIntValue.assertEquals("128".evaluateExpression)
+		128.toUSIntValue.assertEquals("16#80".evaluateExpression)
+		255.toUSIntValue.assertEquals("255".evaluateExpression)
+		255.toUSIntValue.assertEquals("16#ff".evaluateExpression)
 		// INT
-		128.toIntValue.assertEquals("128".evaluateExpression)
-		128.toIntValue.assertEquals("16#80".evaluateExpression)
-		255.toIntValue.assertEquals("255".evaluateExpression)
-		255.toIntValue.assertEquals("16#ff".evaluateExpression)
 		Short.MIN_VALUE.toIntValue.assertEquals("-32768".evaluateExpression)
 		Short.MAX_VALUE.toIntValue.assertEquals("32767".evaluateExpression)
 		Short.MAX_VALUE.toIntValue.assertEquals("16#7fff".evaluateExpression)
+		// UINT
+		32768.toUIntValue.assertEquals("32768".evaluateExpression)
+		32768.toUIntValue.assertEquals("16#8000".evaluateExpression)
+		65535.toUIntValue.assertEquals("65535".evaluateExpression)
+		65535.toUIntValue.assertEquals("16#ffff".evaluateExpression)
 		// DINT
-		32768.toDIntValue.assertEquals("32768".evaluateExpression)
-		32768.toDIntValue.assertEquals("16#8000".evaluateExpression)
-		65535.toDIntValue.assertEquals("65535".evaluateExpression)
-		65535.toDIntValue.assertEquals("16#ffff".evaluateExpression)
 		Integer.MIN_VALUE.toDIntValue.assertEquals("-2147483648".evaluateExpression)
 		Integer.MAX_VALUE.toDIntValue.assertEquals("2147483647".evaluateExpression)
 		Integer.MAX_VALUE.toDIntValue.assertEquals("16#7fffffff".evaluateExpression)
+		// UDINT
+		0x80000000.toUDIntValue.assertEquals("2147483648".evaluateExpression)
+		0x80000000.toUDIntValue.assertEquals("16#80000000".evaluateExpression)
+		0xffffffff.toUDIntValue.assertEquals("4294967295".evaluateExpression)
+		0xffffffff.toUDIntValue.assertEquals("16#ffffffff".evaluateExpression)
 		// LINT
-		0x80000000#L.toLIntValue.assertEquals("2147483648".evaluateExpression)
-		0x80000000#L.toLIntValue.assertEquals("16#80000000".evaluateExpression)
-		0xffffffff#L.toLIntValue.assertEquals("4294967295".evaluateExpression)
-		0xffffffff#L.toLIntValue.assertEquals("16#ffffffff".evaluateExpression)
 		Long.MAX_VALUE.toLIntValue.assertEquals("9223372036854775807".evaluateExpression)
 		Long.MAX_VALUE.toLIntValue.assertEquals("16#7fffffffffffffff".evaluateExpression)
 		// ULINT

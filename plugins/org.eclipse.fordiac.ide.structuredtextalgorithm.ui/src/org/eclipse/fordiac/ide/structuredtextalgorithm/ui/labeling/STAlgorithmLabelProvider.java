@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.Messages;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.labeling.STCoreLabelProvider;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -56,7 +57,8 @@ public class STAlgorithmLabelProvider extends STCoreLabelProvider {
 	}
 
 	public String text(final STMethod element) {
-		return MessageFormat.format(Messages.STAlgorithmLabelProvider_MethodText, element.getSignature());
+		return MessageFormat.format(Messages.STAlgorithmLabelProvider_MethodText,
+				STCoreResourceDescriptionStrategy.getCallableDisplayString(element));
 	}
 
 	public ImageDescriptor image(final STMethod element) {

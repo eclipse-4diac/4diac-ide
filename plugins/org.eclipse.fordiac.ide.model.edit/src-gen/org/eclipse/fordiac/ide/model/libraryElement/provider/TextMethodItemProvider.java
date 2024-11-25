@@ -59,7 +59,6 @@ public class TextMethodItemProvider extends MethodItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addReturnTypePropertyDescriptor(object);
-			addVarargsPropertyDescriptor(object);
 			addTextPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -83,28 +82,6 @@ public class TextMethodItemProvider extends MethodItemProvider {
 				 false,
 				 true,
 				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Varargs feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addVarargsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_TextMethod_varargs_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_TextMethod_varargs_feature", "_UI_TextMethod_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.TEXT_METHOD__VARARGS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}

@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Function;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
@@ -161,7 +160,7 @@ public abstract class FunctionImpl extends EObjectImpl implements Function {
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getInputParameters() {
+	public EList<INamedElement> getInputParameters() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();
@@ -173,7 +172,7 @@ public abstract class FunctionImpl extends EObjectImpl implements Function {
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getOutputParameters() {
+	public EList<INamedElement> getOutputParameters() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();
@@ -185,7 +184,7 @@ public abstract class FunctionImpl extends EObjectImpl implements Function {
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getInOutParameters() {
+	public EList<INamedElement> getInOutParameters() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();
@@ -201,26 +200,6 @@ public abstract class FunctionImpl extends EObjectImpl implements Function {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getSignature() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getSignature(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isVarargs() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.isVarargs(this);
 	}
 
 	/**

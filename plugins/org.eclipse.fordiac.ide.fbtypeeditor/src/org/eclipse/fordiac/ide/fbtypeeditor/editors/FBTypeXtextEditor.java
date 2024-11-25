@@ -14,26 +14,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.text.source.SourceViewer;
-import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 
 import com.google.inject.Inject;
@@ -45,13 +38,14 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 
 	private boolean restoringSelection;
 
-	private boolean performanceMode;
-	private boolean performanceModeShowDialog;
+	@Override
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
+		super.init(site, input);
+	}
 
 	@Override
 	public void createPartControl(final Composite parent) {
 		super.createPartControl(parent);
-		checkPerformanceMode();
 		installFBTypeUpdater();
 	}
 
@@ -115,59 +109,7 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 		if (adapter == CommandStack.class) {
 			return adapter.cast(getCommandStack());
 		}
-		if (adapter == IContentOutlinePage.class && performanceMode) {
-			return adapter
-					.cast(new FBTypeXtextMessageOutline(Messages.FBTypeXtextEditor_PerformanceModeOutlineMessage));
-		}
 		return super.getAdapter(adapter);
-	}
-
-	@Override
-	public void setFocus() {
-		if (performanceModeShowDialog) {
-			performanceModeShowDialog = false;
-			MessageDialog.openInformation(getShell(), Messages.FBTypeXtextEditor_PerformanceModeDialogTitle,
-					Messages.FBTypeXtextEditor_PerformanceModeDialogMessage);
-		}
-		super.setFocus();
-	}
-
-	protected void checkPerformanceMode() {
-		if (performanceMode) {
-			return;
-		}
-		if (shouldEnablePerformanceMode()) {
-			enablePerformanceMode();
-		}
-	}
-
-	@SuppressWarnings("static-method") // subclasses should override
-	protected boolean shouldEnablePerformanceMode() {
-		return false; // disabled by default
-	}
-
-	protected void enablePerformanceMode() {
-		performanceMode = true;
-		performanceModeShowDialog = true;
-		if (getSourceViewer() instanceof final ProjectionViewer projectionViewer) {
-			projectionViewer.disableProjection();
-		}
-		uninstallFoldingSupport();
-		invokeUninstallHighlightingHelper();
-		if (getSourceViewer() instanceof final SourceViewer sourceViewer) {
-			sourceViewer.setCodeMiningProviders(null);
-		}
-	}
-
-	protected void invokeUninstallHighlightingHelper() {
-		// uninstallHighlightingHelper() is unfortunately private in XtextEditor
-		try {
-			final Method method = XtextEditor.class.getDeclaredMethod("uninstallHighlightingHelper"); //$NON-NLS-1$
-			method.setAccessible(true); // NOSONAR
-			method.invoke(this);
-		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
-			FordiacLogHelper.logError("Cannot invoke uninstallHighlightingHelper() in XtextEditor", e); //$NON-NLS-1$
-		}
 	}
 
 	@Override

@@ -15,14 +15,13 @@
 package org.eclipse.fordiac.ide.export.forte_ng.service
 
 import java.nio.file.Path
-import java.util.Map
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
 
 class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate<ServiceInterfaceFBType> {
 
-	new(ServiceInterfaceFBType type, String name, Path prefix, Map<?,?> options) {
-		super(type, name, prefix, "CFunctionBlock", options)
+	new(ServiceInterfaceFBType type, String name, Path prefix) {
+		super(type, name, prefix, "CFunctionBlock")
 	}
 
 	override generate() '''

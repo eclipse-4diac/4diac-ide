@@ -261,8 +261,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/maxLength"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/defaultValue"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/pragma"/>
-      <genOperations ecoreOperation="STCore.ecore#//STVarDeclaration/getFullTypeName"
-          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarDeclarationAnnotations.getFullTypeName(this);"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STTypeDeclaration">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STTypeDeclaration/array"/>

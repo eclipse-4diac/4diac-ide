@@ -77,6 +77,8 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	public static final String MAX_DEFAULT_VALUE_LENGTH = "MaxDefaultValueLength"; //$NON-NLS-1$
 
+	public static final String VIRTUAL_GROUP_INTERFACES = "VirtualGroupInterfaces"; //$NON-NLS-1$
+
 	public static final String CONNECTION_AUTO_LAYOUT = "ConnectionAutoLayout"; //$NON-NLS-1$
 
 	public static final String EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR = "ExpandedInterfaceOldDirectBehaviour"; //$NON-NLS-1$
@@ -113,6 +115,9 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 		// Create a Group to hold the layout options field
 		createGroupLayoutOptionsPins();
+
+		// Create a Group to hold the virtual group interface fields
+		createGroupVirtualGroupInterfaceOptionsPins();
 
 		// Create a Group to hold the block margin fields
 		createGroupBlockMargins();
@@ -256,6 +261,14 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 		final BooleanFieldEditor connectionAutoLayout = new BooleanFieldEditor(CONNECTION_AUTO_LAYOUT,
 				Messages.DiagramPreferences_LayoutConnectionsAutomatically, group);
 		addField(connectionAutoLayout);
+		configGroup(group);
+	}
+
+	private void createGroupVirtualGroupInterfaceOptionsPins() {
+		final Group group = createGroup(Messages.DiagramPreferences_VirtualGroupInterfaceOptions);
+		final BooleanFieldEditor vgi = new BooleanFieldEditor(VIRTUAL_GROUP_INTERFACES,
+				Messages.DiagramPreferences_EnableVirtualGroupInterfaces, group);
+		addField(vgi);
 		configGroup(group);
 	}
 

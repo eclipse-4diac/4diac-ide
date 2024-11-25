@@ -91,7 +91,10 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 	// semantic highlighting for calls of functions and methods and static variables
 	def protected dispatch boolean highlightElement(STFeatureExpression featuresExpression,
 		IHighlightedPositionAcceptor acceptor, CancelIndicator cancelIndicator) {
-		val style = switch (feature : featuresExpression.feature) {
+
+		// do not resolve features during highlighting
+		// features are resolved by the reconciler and we are then called again anyway
+		val style = switch (feature : featuresExpression.featureNoresolve) {
 			VarDeclaration:
 				STCoreHighlightingStyles.MEMBER_VARIABLE_ID
 			FB:
@@ -116,6 +119,12 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 			if (!n.hidden) {
 				acceptor.addPosition(n.getOffset(), n.getLength(), style)
 			}
+		}
+	}
+
+	def protected INamedElement getFeatureNoresolve(STFeatureExpression expression) {
+		switch (feature : expression.eGet(STCorePackage.eINSTANCE.STFeatureExpression_Feature, false)) {
+			INamedElement case !feature.eIsProxy: feature
 		}
 	}
 }

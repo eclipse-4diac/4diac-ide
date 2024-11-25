@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -120,7 +119,7 @@ public interface STStandardFunction extends ICallable {
 
 	/**
 	 * Returns the value of the '<em><b>Input Parameters</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ITypedElement}.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Input Parameters</em>' containment reference list.
@@ -128,11 +127,11 @@ public interface STStandardFunction extends ICallable {
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<ITypedElement> getInputParameters();
+	EList<INamedElement> getInputParameters();
 
 	/**
 	 * Returns the value of the '<em><b>Output Parameters</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ITypedElement}.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Output Parameters</em>' containment reference list.
@@ -140,11 +139,11 @@ public interface STStandardFunction extends ICallable {
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<ITypedElement> getOutputParameters();
+	EList<INamedElement> getOutputParameters();
 
 	/**
 	 * Returns the value of the '<em><b>In Out Parameters</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ITypedElement}.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>In Out Parameters</em>' containment reference list.
@@ -152,7 +151,7 @@ public interface STStandardFunction extends ICallable {
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<ITypedElement> getInOutParameters();
+	EList<INamedElement> getInOutParameters();
 
 	/**
 	 * Returns the value of the '<em><b>Varargs</b></em>' attribute.

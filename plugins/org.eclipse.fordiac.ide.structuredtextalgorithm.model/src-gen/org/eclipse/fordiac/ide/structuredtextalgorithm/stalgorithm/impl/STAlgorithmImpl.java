@@ -27,7 +27,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage;
@@ -126,7 +125,7 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getInputParameters() {
+	public EList<INamedElement> getInputParameters() {
 		return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInputParameters(this);
 	}
 
@@ -136,7 +135,7 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getOutputParameters() {
+	public EList<INamedElement> getOutputParameters() {
 		return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getOutputParameters(this);
 	}
 
@@ -146,7 +145,7 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getInOutParameters() {
+	public EList<INamedElement> getInOutParameters() {
 		return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInOutParameters(this);
 	}
 
@@ -158,26 +157,6 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	@Override
 	public DataType getReturnType() {
 		return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getReturnType(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getSignature() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getSignature(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isVarargs() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.isVarargs(this);
 	}
 
 	/**

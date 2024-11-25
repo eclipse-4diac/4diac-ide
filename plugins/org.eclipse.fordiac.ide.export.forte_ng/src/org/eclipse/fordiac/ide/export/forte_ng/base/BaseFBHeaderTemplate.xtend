@@ -29,11 +29,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.Method
 
 abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplate<T> {
 	final Map<Method, ILanguageSupport> methodLanguageSupport
+	final Map<Object, Object> cache = newHashMap
 
-	new(T type, String name, Path prefix, String baseClass, Map<?,?> options) {
-		super(type, name, prefix, baseClass, options)
+	new(T type, String name, Path prefix, String baseClass) {
+		super(type, name, prefix, baseClass)
 		methodLanguageSupport = type.methods.toInvertedMap [
-			ILanguageSupportFactory.createLanguageSupport("forte_ng", it, options)
+			ILanguageSupportFactory.createLanguageSupport("forte_ng", it, #{ILanguageSupport.OPTION_CACHE -> cache})
 		]
 	}
 

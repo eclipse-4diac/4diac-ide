@@ -37,7 +37,6 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 
@@ -160,7 +159,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ITypedElement> inputParameters;
+	protected EList<INamedElement> inputParameters;
 
 	/**
 	 * The cached value of the '{@link #getOutputParameters() <em>Output Parameters</em>}' containment reference list.
@@ -170,7 +169,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ITypedElement> outputParameters;
+	protected EList<INamedElement> outputParameters;
 
 	/**
 	 * The cached value of the '{@link #getInOutParameters() <em>In Out Parameters</em>}' containment reference list.
@@ -180,7 +179,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ITypedElement> inOutParameters;
+	protected EList<INamedElement> inOutParameters;
 
 	/**
 	 * The default value of the '{@link #isVarargs() <em>Varargs</em>}' attribute.
@@ -376,9 +375,9 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getInputParameters() {
+	public EList<INamedElement> getInputParameters() {
 		if (inputParameters == null) {
-			inputParameters = new EObjectContainmentEList<ITypedElement>(ITypedElement.class, this, STCorePackage.ST_STANDARD_FUNCTION__INPUT_PARAMETERS);
+			inputParameters = new EObjectContainmentEList<INamedElement>(INamedElement.class, this, STCorePackage.ST_STANDARD_FUNCTION__INPUT_PARAMETERS);
 		}
 		return inputParameters;
 	}
@@ -388,9 +387,9 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getOutputParameters() {
+	public EList<INamedElement> getOutputParameters() {
 		if (outputParameters == null) {
-			outputParameters = new EObjectContainmentEList<ITypedElement>(ITypedElement.class, this, STCorePackage.ST_STANDARD_FUNCTION__OUTPUT_PARAMETERS);
+			outputParameters = new EObjectContainmentEList<INamedElement>(INamedElement.class, this, STCorePackage.ST_STANDARD_FUNCTION__OUTPUT_PARAMETERS);
 		}
 		return outputParameters;
 	}
@@ -400,9 +399,9 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getInOutParameters() {
+	public EList<INamedElement> getInOutParameters() {
 		if (inOutParameters == null) {
-			inOutParameters = new EObjectContainmentEList<ITypedElement>(ITypedElement.class, this, STCorePackage.ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS);
+			inOutParameters = new EObjectContainmentEList<INamedElement>(INamedElement.class, this, STCorePackage.ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS);
 		}
 		return inOutParameters;
 	}
@@ -583,15 +582,15 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return;
 			case STCorePackage.ST_STANDARD_FUNCTION__INPUT_PARAMETERS:
 				getInputParameters().clear();
-				getInputParameters().addAll((Collection<? extends ITypedElement>)newValue);
+				getInputParameters().addAll((Collection<? extends INamedElement>)newValue);
 				return;
 			case STCorePackage.ST_STANDARD_FUNCTION__OUTPUT_PARAMETERS:
 				getOutputParameters().clear();
-				getOutputParameters().addAll((Collection<? extends ITypedElement>)newValue);
+				getOutputParameters().addAll((Collection<? extends INamedElement>)newValue);
 				return;
 			case STCorePackage.ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS:
 				getInOutParameters().clear();
-				getInOutParameters().addAll((Collection<? extends ITypedElement>)newValue);
+				getInOutParameters().addAll((Collection<? extends INamedElement>)newValue);
 				return;
 			case STCorePackage.ST_STANDARD_FUNCTION__VARARGS:
 				setVarargs((Boolean)newValue);

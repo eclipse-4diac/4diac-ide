@@ -50,8 +50,8 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	final String DEFAULT_BASE_CLASS
 
-	new(T type, String name, Path prefix, String baseClass, Map<?,?> options) {
-		super(type, name, prefix, options)
+	new(T type, String name, Path prefix, String baseClass) {
+		super(type, name, prefix)
 		this.DEFAULT_BASE_CLASS = baseClass
 	}
 

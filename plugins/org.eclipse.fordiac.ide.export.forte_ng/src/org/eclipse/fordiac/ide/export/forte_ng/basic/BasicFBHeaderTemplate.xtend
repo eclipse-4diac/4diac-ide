@@ -23,14 +23,13 @@
 package org.eclipse.fordiac.ide.export.forte_ng.basic
 
 import java.nio.file.Path
-import java.util.Map
 import org.eclipse.fordiac.ide.export.forte_ng.base.BaseFBHeaderTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECState
 
 class BasicFBHeaderTemplate extends BaseFBHeaderTemplate<BasicFBType> {
-	new(BasicFBType type, String name, Path prefix, Map<?,?> options) {
-		super(type, name, prefix, "CBasicFB", options)
+	new(BasicFBType type, String name, Path prefix) {
+		super(type, name, prefix, "CBasicFB")
 	}
 
 	override generateAdditionalDeclarations() '''

@@ -466,7 +466,15 @@
              id="org.eclipse.fordiac.ide.application.commands.toggleConnections"
              name="Toggle Connections Visibility">
     </command>
-   <command categoryId="org.eclipse.fordiac.ide.commands.category"
+    <command categoryId="org.eclipse.fordiac.ide.commands.category"
+             defaultHandler="org.eclipse.fordiac.ide.application.handlers.ToggleVirtualGroupInterfaceHandler"
+             id="org.eclipse.fordiac.ide.application.commands.toggleVirtualGroupInterfaces"
+             name="Toggle Virtual Group Interfaces">
+      <state class="org.eclipse.ui.handlers.RegistryToggleState"
+             id="org.eclipse.ui.commands.toggleState">
+      </state>
+    </command>
+    <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.InsertFB"
              id="org.eclipse.fordiac.ide.application.commands.insertFB"
              name="Insert FB">
@@ -1157,6 +1165,12 @@
                  icon="fordiacimage://ICON_FB"
                  id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar"
                  tooltip="Clear Focus-On">
+        </command>
+        <command commandId="org.eclipse.fordiac.ide.application.commands.toggleVirtualGroupInterfaces"
+                 icon="fordiacimage://ICON_HIDE_EVENT"
+                 id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar"
+                 tooltip="Toggle Virtual Group Interfaces"
+                 style="toggle">
         </command>
       </toolbar>
     </menuContribution>

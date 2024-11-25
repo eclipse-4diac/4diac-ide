@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
 
@@ -98,7 +97,7 @@ public interface STFunction extends ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<ITypedElement> getInputParameters();
+	EList<INamedElement> getInputParameters();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -106,7 +105,7 @@ public interface STFunction extends ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<ITypedElement> getOutputParameters();
+	EList<INamedElement> getOutputParameters();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -114,6 +113,6 @@ public interface STFunction extends ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<ITypedElement> getInOutParameters();
+	EList<INamedElement> getInOutParameters();
 
 } // STFunction

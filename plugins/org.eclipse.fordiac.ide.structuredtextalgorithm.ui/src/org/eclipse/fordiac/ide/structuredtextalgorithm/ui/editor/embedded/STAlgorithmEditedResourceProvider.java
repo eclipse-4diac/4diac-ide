@@ -60,7 +60,7 @@ public abstract class STAlgorithmEditedResourceProvider implements IEditedResour
 				SERVICE_PROVIDER_FCT.get(IResourceFactory.class));
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("gcf", //$NON-NLS-1$
 				SERVICE_PROVIDER_GCF.get(IResourceFactory.class));
-		resourceSet.getLoadOptions().putAll(Map.of(//
+		resourceSet.getLoadOptions().putAll(Map.of(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE, // resolve all
 				ResourceDescriptionsProvider.LIVE_SCOPE, Boolean.TRUE // use live scope
 		));
 		final STAlgorithmResource resource = (STAlgorithmResource) SERVICE_PROVIDER_FBT.get(XtextResource.class);
@@ -69,7 +69,7 @@ public abstract class STAlgorithmEditedResourceProvider implements IEditedResour
 		resource.setIncludeInternalLibraryElement(libraryElement instanceof BaseFBType);
 		resource.setEntryPoint(getEntryPoint());
 		resourceSet.getResources().add(resource);
-		resource.getDefaultLoadOptions().putAll(Map.of(//
+		resource.getDefaultLoadOptions().putAll(Map.of(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE, // resolve all
 				STCoreResource.OPTION_PLAIN_ST, Boolean.TRUE // use plain ST
 		));
 		return resource;

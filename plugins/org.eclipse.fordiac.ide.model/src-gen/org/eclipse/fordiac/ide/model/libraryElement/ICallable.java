@@ -37,7 +37,7 @@ public interface ICallable extends INamedElement {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<ITypedElement> getInputParameters();
+	EList<INamedElement> getInputParameters();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -45,7 +45,7 @@ public interface ICallable extends INamedElement {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<ITypedElement> getOutputParameters();
+	EList<INamedElement> getOutputParameters();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -53,7 +53,7 @@ public interface ICallable extends INamedElement {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<ITypedElement> getInOutParameters();
+	EList<INamedElement> getInOutParameters();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -62,21 +62,5 @@ public interface ICallable extends INamedElement {
 	 * @generated
 	 */
 	DataType getReturnType();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	String getSignature();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	boolean isVarargs();
 
 } // ICallable

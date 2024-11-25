@@ -40,11 +40,11 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	@Accessors(PROTECTED_GETTER) final T type
 	final Map<VarDeclaration, ILanguageSupport> variableLanguageSupport
 
-	new(T type, String name, Path prefix, Map<?,?> options) {
+	new(T type, String name, Path prefix) {
 		super(name, prefix)
 		this.type = type;
 		variableLanguageSupport = type.getAllContentsOfType(VarDeclaration).toInvertedMap [
-			ILanguageSupportFactory.createLanguageSupport("forte_ng", it, options)
+			ILanguageSupportFactory.createLanguageSupport("forte_ng", it)
 		]
 	}
 

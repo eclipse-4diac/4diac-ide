@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="RangeBasedPulse" Comment="Distance based Impulse Generator" >
+<FBType Name="RangeBasedPulse ">
 	<Identification Standard="61499-1" Description="Copyright (c) 2025 HR Agrartechnik GmbH   &#10;   &#10;This program and the accompanying materials are made    &#10;available under the terms of the Eclipse Public License 2.0    &#10;which is available at https://www.eclipse.org/legal/epl-2.0/    &#10;    &#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;Distance based Impulse Generator&#10;&#10;START with a HIGH Pulse. " >
 	</Identification>
 	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2024-10-18" Remarks="initial Version">
@@ -36,15 +36,16 @@
 		<InternalVars>
 			<VarDeclaration Name="DIST_REMAINDER" Type="UDINT"/>
 		</InternalVars>
-		<ECState Name="REQ">
-			<ECAction Algorithm="REQ" Output="CNF"/>
-		</ECState>
 		<Algorithm Name="REQ">
 			<ST><![CDATA[ALGORITHM REQ
 
 DIST_REMAINDER := (DIST_IN + DIST_OFF) MOD (DIST_HIGH + DIST_LOW);
 
-Q := DIST_REMAINDER >= DIST_HIGH;
+IF (DIST_REMAINDER >= DIST_HIGH) THEN
+	Q := TRUE;
+ELSE
+	Q := FALSE;
+END_IF;
 
 END_ALGORITHM
 

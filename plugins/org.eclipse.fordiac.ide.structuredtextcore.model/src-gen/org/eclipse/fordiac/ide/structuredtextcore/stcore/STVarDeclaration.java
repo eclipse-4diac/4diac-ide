@@ -201,12 +201,4 @@ public interface STVarDeclaration extends ITypedElement {
 	 */
 	void setPragma(STPragma value);
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	String getFullTypeName();
-
 } // STVarDeclaration

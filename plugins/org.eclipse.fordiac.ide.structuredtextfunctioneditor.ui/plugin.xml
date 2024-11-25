@@ -593,15 +593,6 @@
              id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction">
        </keywordReference>
     </page>
-    <page
-          category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
-          class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferencePage"
-          id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.editor"
-          name="Editor">
-       <keywordReference
-             id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
-       </keywordReference>
-    </page>
  </extension>
  <extension
        point="org.eclipse.xtext.ui.resourceRelocationStrategy">

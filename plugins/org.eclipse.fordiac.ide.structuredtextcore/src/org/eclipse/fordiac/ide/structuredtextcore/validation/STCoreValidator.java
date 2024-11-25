@@ -34,6 +34,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.validation;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getAccessMode;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeaturePath;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType;
+import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isCallableVarargs;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isNumericValueValid;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isStringValueValid;
 
@@ -665,7 +666,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			final int parameterCount = callable.getInputParameters().size() + callable.getInOutParameters().size()
 					+ callable.getOutputParameters().size();
 			if (expression.getParameters().size() != parameterCount
-					&& !(callable.isVarargs() && expression.getParameters().size() >= parameterCount)) {
+					&& !(isCallableVarargs(callable) && expression.getParameters().size() >= parameterCount)) {
 				error(MessageFormat.format(Messages.STCoreValidator_Wrong_Number_Of_Arguments, callable.getName(),
 						Integer.toString(parameterCount), Integer.toString(expression.getParameters().size())),
 						expression, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, WRONG_NUMBER_OF_ARGUMENTS);

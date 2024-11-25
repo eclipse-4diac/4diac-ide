@@ -25,13 +25,15 @@ public class STCoreResourceForIEditorInputFactory extends ResourceForIEditorInpu
 	@Override
 	public Resource createResource(final IEditorInput editorInput) {
 		final Resource resource = super.createResource(editorInput);
-		if (resource instanceof final LibraryElementXtextResource libraryElementXtextResource
-				&& editorInput instanceof final ITypeEditorInput typeEditorInput) {
-			final LibraryElement libraryElement = typeEditorInput.getContent();
-			libraryElementXtextResource.setLibraryElement(libraryElement);
-			libraryElementXtextResource.setIncludeInternalLibraryElement(libraryElement instanceof BaseFBType);
-			if (resource instanceof final STCoreResource stCoreResource) {
-				stCoreResource.getDefaultLoadOptions().put(STCoreResource.OPTION_PLAIN_ST, Boolean.TRUE);
+		if (resource instanceof final LibraryElementXtextResource libraryElementXtextResource) {
+			libraryElementXtextResource.setEagerLinking(true);
+			if (editorInput instanceof final ITypeEditorInput typeEditorInput) {
+				final LibraryElement libraryElement = typeEditorInput.getContent();
+				libraryElementXtextResource.setLibraryElement(libraryElement);
+				libraryElementXtextResource.setIncludeInternalLibraryElement(libraryElement instanceof BaseFBType);
+				if (resource instanceof final STCoreResource stCoreResource) {
+					stCoreResource.getDefaultLoadOptions().put(STCoreResource.OPTION_PLAIN_ST, Boolean.TRUE);
+				}
 			}
 		}
 		return resource;

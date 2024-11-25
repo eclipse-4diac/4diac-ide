@@ -625,15 +625,6 @@
              id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
        </keywordReference>
     </page>
-    <page
-          category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
-          class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferencePage"
-          id="org.eclipse.fordiac.ide.structuredtextcore.ui.editor"
-          name="Editor">
-       <keywordReference
-             id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
-       </keywordReference>
-    </page>
  </extension>
  <extension
        point="org.eclipse.ltk.core.refactoring.renameParticipants">

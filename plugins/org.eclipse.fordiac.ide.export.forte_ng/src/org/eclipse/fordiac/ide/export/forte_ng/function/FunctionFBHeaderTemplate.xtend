@@ -13,14 +13,13 @@
 package org.eclipse.fordiac.ide.export.forte_ng.function
 
 import java.nio.file.Path
-import java.util.Map
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 
 class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 
-	new(FunctionFBType type, String name, Path prefix, Map<?,?> options) {
-		super(type, name, prefix, "CFunctionBlock", options)
+	new(FunctionFBType type, String name, Path prefix) {
+		super(type, name, prefix, "CFunctionBlock")
 	}
 
 	override generate() '''

@@ -21,8 +21,4 @@ public interface STResource {
 	INamedElement getExpectedType();
 
 	void setExpectedType(INamedElement expectedType);
-
-	INamedElement getExpectedType(STExpression expression);
-
-	INamedElement getExpectedType(STInitializerExpression expression);
 }

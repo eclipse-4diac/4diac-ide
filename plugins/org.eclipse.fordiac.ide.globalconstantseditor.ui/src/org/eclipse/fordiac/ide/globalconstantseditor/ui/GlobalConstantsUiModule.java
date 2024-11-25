@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCorePrefixM
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreProposalProvider.STCoreReferenceProposalCreator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentProvider;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.formatting.STCoreWhitespaceInformationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer;
@@ -205,11 +204,6 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 
 	public Class<? extends XtextSourceViewer.Factory> bindXtextSourceViewer$Factory() {
 		return STCoreSourceViewerFactory.class;
-	}
-
-	public void configureEditor(final Binder binder) {
-		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("editorInitializer")) //$NON-NLS-1$
-				.to(STCoreEditorPreferences.Initializer.class);
 	}
 
 	public void configureKeyBindingScope(final Binder binder) {

@@ -39,19 +39,19 @@ public final class STDebugUIUtil {
 		final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 		final XtextResourceSet resourceSet = new XtextResourceSet();
 		new STAlgorithmResourceSetInitializer().initialize(resourceSet, file.getProject());
+		resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
 		return resourceSet.getResource(uri, true);
 	}
 
 	public static Collection<? extends EObject> getSourceElements(final Resource resource) {
-		if (resource instanceof final XtextResource xtextResource) {
-			final IParseResult parseResult = xtextResource.getParseResult();
+		if (resource instanceof XtextResource) {
+			final IParseResult parseResult = ((XtextResource) resource).getParseResult();
 			if (parseResult != null) {
 				final EObject source = parseResult.getRootASTElement();
-				if (source instanceof final STAlgorithmSource algorithmSource) {
-					return algorithmSource.getElements();
-				}
-				if (source instanceof final STFunctionSource functionSource) {
-					return functionSource.getFunctions();
+				if (source instanceof STAlgorithmSource) {
+					return ((STAlgorithmSource) source).getElements();
+				} else if (source instanceof STFunctionSource) {
+					return ((STFunctionSource) source).getFunctions();
 				}
 			}
 		}
@@ -70,14 +70,12 @@ public final class STDebugUIUtil {
 	}
 
 	public static Collection<? extends EObject> getAdditionalScope(final EObject sourceElement) {
-		if (sourceElement instanceof final STAlgorithm algorithm) {
-			return algorithm.getBody().getVarTempDeclarations();
-		}
-		if (sourceElement instanceof final STMethod method) {
-			return method.getBody().getVarDeclarations();
-		}
-		if (sourceElement instanceof final STFunction function) {
-			return function.getVarDeclarations();
+		if (sourceElement instanceof STAlgorithm) {
+			return ((STAlgorithm) sourceElement).getBody().getVarTempDeclarations();
+		} else if (sourceElement instanceof STMethod) {
+			return ((STMethod) sourceElement).getBody().getVarDeclarations();
+		} else if (sourceElement instanceof STFunction) {
+			return ((STFunction) sourceElement).getVarDeclarations();
 		}
 		return Collections.emptyList();
 	}

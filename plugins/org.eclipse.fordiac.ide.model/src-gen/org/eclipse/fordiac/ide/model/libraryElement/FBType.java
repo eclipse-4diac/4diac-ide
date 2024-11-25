@@ -90,7 +90,7 @@ public interface FBType extends LibraryElement, ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<ITypedElement> getInputParameters();
+	EList<INamedElement> getInputParameters();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -98,7 +98,7 @@ public interface FBType extends LibraryElement, ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<ITypedElement> getOutputParameters();
+	EList<INamedElement> getOutputParameters();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -106,7 +106,7 @@ public interface FBType extends LibraryElement, ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<ITypedElement> getInOutParameters();
+	EList<INamedElement> getInOutParameters();
 
 	/**
 	 * <!-- begin-user-doc -->

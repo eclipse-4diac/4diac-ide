@@ -181,6 +181,7 @@ class StructuredTextParseUtil {
 		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("GCF", SERVICE_PROVIDER_GCF.get(IResourceFactory))
 		SERVICE_PROVIDER_FBT.parse(resourceSet, text, entryPoint, type, additionalContent, issues,
 			uri ?: SYNTHETIC_URI_FBT, #{
+				XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
 				ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE,
 				STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE,
 				STResource.OPTION_EXPECTED_TYPE -> expectedType

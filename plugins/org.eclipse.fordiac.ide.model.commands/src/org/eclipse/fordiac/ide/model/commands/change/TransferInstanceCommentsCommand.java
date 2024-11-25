@@ -17,7 +17,6 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.gef.commands.Command;
@@ -34,7 +33,7 @@ public class TransferInstanceCommentsCommand extends Command {
 
 	@Override
 	public void execute() {
-		EList<ITypedElement> srcList;
+		EList<INamedElement> srcList;
 		if (srcStruct instanceof Multiplexer) {
 			srcList = srcStruct.getInputParameters();
 		} else {
@@ -45,10 +44,10 @@ public class TransferInstanceCommentsCommand extends Command {
 			for (final StructManipulator destStruct : destStructs) {
 				if (destStruct instanceof Multiplexer) {
 					destStruct.getInputParameters().stream().filter(dest -> dest.getName().equals(src.getName()))
-							.forEach(dest -> dest.setComment(src.getComment()));
+					.forEach(dest -> dest.setComment(src.getComment()));
 				} else {
 					destStruct.getOutputParameters().stream().filter(dest -> dest.getName().equals(src.getName()))
-							.forEach(dest -> dest.setComment(src.getComment()));
+					.forEach(dest -> dest.setComment(src.getComment()));
 				}
 			}
 		}

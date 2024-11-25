@@ -28,7 +28,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody;
@@ -177,7 +176,7 @@ public class STMethodImpl extends STAlgorithmSourceElementImpl implements STMeth
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getInputParameters() {
+	public EList<INamedElement> getInputParameters() {
 		return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInputParameters(this);
 	}
 
@@ -187,7 +186,7 @@ public class STMethodImpl extends STAlgorithmSourceElementImpl implements STMeth
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getOutputParameters() {
+	public EList<INamedElement> getOutputParameters() {
 		return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getOutputParameters(this);
 	}
 
@@ -197,28 +196,8 @@ public class STMethodImpl extends STAlgorithmSourceElementImpl implements STMeth
 	 * @generated
 	 */
 	@Override
-	public EList<ITypedElement> getInOutParameters() {
+	public EList<INamedElement> getInOutParameters() {
 		return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInOutParameters(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getSignature() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getSignature(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isVarargs() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.isVarargs(this);
 	}
 
 	/**

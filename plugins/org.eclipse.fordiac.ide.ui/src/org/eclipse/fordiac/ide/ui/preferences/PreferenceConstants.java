@@ -48,6 +48,9 @@ public final class PreferenceConstants {
 	/** The Constant P_HIDE_DATA_CON. */
 	public static final String P_HIDE_DATA_CON = "hideDataConnections";//$NON-NLS-1$
 
+	/** The Constant P_TOGGLE_VIRTUAL_GROUP_INTERFACES. */
+	public static final String P_TOGGLE_VIRTUAL_GROUP_INTERFACES = "toggleVirtualGroupInterfaces";//$NON-NLS-1$
+
 	/** The Constant P_TOGGLE_JUMP_STEP. */
 	public static final String P_TOGGLE_JUMP_STEP = "toggleJumpStep";//$NON-NLS-1$
 

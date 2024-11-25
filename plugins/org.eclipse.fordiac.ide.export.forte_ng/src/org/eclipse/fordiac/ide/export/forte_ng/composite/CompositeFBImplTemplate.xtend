@@ -48,12 +48,12 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 	var fannedOutDataConns = 0
 	final Map<VarDeclaration, ILanguageSupport> fbNetworkInitialVariableLanguageSupport
 
-	new(CompositeFBType type, String name, Path prefix, Map<?,?> options) {
-		super(type, name, prefix, "CCompositeFB", options)
+	new(CompositeFBType type, String name, Path prefix) {
+		super(type, name, prefix, "CCompositeFB")
 		fbs = type.FBNetwork.networkElements.filter(FB).reject(AdapterFB).toList
 		fbNetworkInitialVariableLanguageSupport = fbs.flatMap[interface.inputVars].filter[!value?.value.nullOrEmpty].
 			toInvertedMap [
-				ILanguageSupportFactory.createLanguageSupport("forte_ng", it, options)
+				ILanguageSupportFactory.createLanguageSupport("forte_ng", it)
 			]
 	}
 

@@ -36,22 +36,17 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
 import org.eclipse.xtext.resource.FileExtensionProvider;
 import org.eclipse.xtext.util.LazyStringInputStream;
-import org.eclipse.xtext.util.Tuples;
 
 import com.google.inject.Inject;
 
 public class STCoreResource extends LibraryElementXtextResource implements STResource {
 	public static final String OPTION_PLAIN_ST = STCoreResource.class.getName() + ".PLAIN_ST"; //$NON-NLS-1$
-
-	private static final String EXPECTED_TYPE_CACHE_KEY = "EXPECTED_TYPE"; //$NON-NLS-1$
 
 	@Inject
 	private FileExtensionProvider fileExtensionProvider;
@@ -294,17 +289,5 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 	@Override
 	public void setExpectedType(final INamedElement expectedType) {
 		this.expectedType = expectedType;
-	}
-
-	@Override
-	public INamedElement getExpectedType(final STExpression expression) {
-		return getCache().get(Tuples.create(EXPECTED_TYPE_CACHE_KEY, expression), this,
-				() -> STCoreUtil.computeExpectedType(expression));
-	}
-
-	@Override
-	public INamedElement getExpectedType(final STInitializerExpression expression) {
-		return getCache().get(Tuples.create(EXPECTED_TYPE_CACHE_KEY, expression), this,
-				() -> STCoreUtil.computeExpectedType(expression));
 	}
 }
