@@ -33,7 +33,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
@@ -262,9 +261,6 @@ public class SystemImporter extends CommonElementImporter {
 		final FBNetworkElement toElement = (fromElement instanceof CommunicationChannel)
 				? findMappingTargetFromName(toValue, fromElement)
 				: findMappingToElement(fromValue, toValue);
-		if (fromElement instanceof SubApp) {
-			FBNetworkHelper.loadSubappNetwork(fromElement);
-		}
 
 		if ((null != fromElement) && (null != toElement)) {
 			getElement().getMapping().add(createMappingEntry(toElement, fromElement));
