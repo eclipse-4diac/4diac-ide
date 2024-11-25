@@ -76,6 +76,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
@@ -125,9 +126,11 @@ public abstract class StructManipulatorSection extends AbstractSection implement
 	protected void refreshStructTypeTable() {
 		final Object[] expandedElements = memberVarViewer.getExpandedElements();
 		final TreePath[] expandedTreePaths = memberVarViewer.getExpandedTreePaths();
+		final TreeItem topItem = memberVarViewer.getTree().getTopItem();
 		memberVarViewer.setInput(getType());
 		memberVarViewer.setExpandedElements(expandedElements);
 		memberVarViewer.setExpandedTreePaths(expandedTreePaths);
+		memberVarViewer.getTree().setTopItem(topItem);
 	}
 
 	protected void handleStructSelectionChanged(final String newStructName) {
