@@ -210,7 +210,7 @@
                tab="org.eclipse.fordiac.ide.application.property.tab.ShowAdapter">
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.application.properties.EditInterfaceEventSection"
+               class="org.eclipse.fordiac.ide.application.properties.EditUntypedSubappInterfaceEventSection"
                id="org.eclipse.fordiac.ide.application.properties.section.EditEvents"
                filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
                tab="org.eclipse.fordiac.ide.application.property.tab.EditEvents">
