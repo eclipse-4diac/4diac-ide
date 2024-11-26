@@ -229,7 +229,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		return type;
 	}
 
-	private LibraryElement basicGetType() {
+	protected LibraryElement basicGetType() {
 		final SoftReference<LibraryElement> typeRefCached = typeRef;
 		return typeRefCached != null ? typeRefCached.get() : null;
 	}
@@ -339,7 +339,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		return typeEditable;
 	}
 
-	private LibraryElement basicGetTypeEditable() {
+	protected LibraryElement basicGetTypeEditable() {
 		final SoftReference<LibraryElement> typeEditableRefCached = typeEditableRef;
 		return typeEditableRefCached != null ? typeEditableRefCached.get() : null;
 	}
@@ -366,7 +366,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		}
 	}
 
-	private synchronized NotificationChain basicSetTypeEditable(final LibraryElement newTypeEditable,
+	protected synchronized NotificationChain basicSetTypeEditable(final LibraryElement newTypeEditable,
 			NotificationChain notifications) {
 		final LibraryElement oldTypeEditable = (typeEditableRef != null) ? typeEditableRef.get() : null;
 		if (newTypeEditable != null) {

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
@@ -80,4 +81,16 @@ public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSyst
 	public EClass getTypeEClass() {
 		return LibraryElementPackage.Literals.AUTOMATION_SYSTEM;
 	}
+
+	@Override
+	protected synchronized NotificationChain basicSetTypeEditable(final LibraryElement newTypeEditable,
+			final NotificationChain notifications) {
+		return super.basicSetType(newTypeEditable, notifications);
+	}
+
+	@Override
+	protected LibraryElement basicGetTypeEditable() {
+		return super.basicGetType();
+	}
+
 }
