@@ -201,23 +201,38 @@ public final class FordiacGraphBuilder {
 				ie -> createPort(interfaceEditPart, mapping));
 	}
 
-	private static ElkPort createPort(final InterfaceEditPart ie, final FordiacLayoutMapping mapping) {
-		final EditPart parent = ie.getParent();
+	private static ElkPort createPort(final InterfaceEditPart interfaceEditPart, final FordiacLayoutMapping mapping) {
+		final EditPart parent = interfaceEditPart.getParent();
+		final ElkNode parentNode = determineParentNode(parent, mapping);
+		final ElkPort port = ElkGraphUtil.createPort(parentNode);
+
+		configurePortDimensions(port, interfaceEditPart);
+		setPortLocation(port, interfaceEditPart, parentNode, mapping);
+		port.setProperty(CoreOptions.PORT_SIDE, interfaceEditPart.isInput() ? PortSide.WEST : PortSide.EAST);
+		mapping.getGraphMap().put(port, interfaceEditPart.getModel());
+		return port;
+	}
+
+	private static ElkNode determineParentNode(final EditPart parent, final FordiacLayoutMapping mapping) {
 		ElkNode parentNode = (ElkNode) mapping.getReverseMapping().get(parent);
 		if (parent == mapping.getParentElement().getParent()) {
 			parentNode = mapping.getLayoutGraph();
 		}
+		return parentNode;
+	}
 
-		final ElkPort port = ElkGraphUtil.createPort(parentNode);
-		final var figure = ie.getFigure();
+	private static void configurePortDimensions(final ElkPort port, final InterfaceEditPart interfaceEditPart) {
+		final var figure = interfaceEditPart.getFigure();
 		port.setDimensions(1, figure.getBounds().preciseHeight());
-		final int x = ie.isInput() ? 0 : (int) parentNode.getWidth();
-		final int y = figure.getLocation().y - (int) parentNode.getY() - (int) mapping.getLayoutGraph().getY();
-		port.setLocation(x, y);
-		port.setProperty(CoreOptions.PORT_SIDE, ie.isInput() ? PortSide.WEST : PortSide.EAST);
+	}
 
-		mapping.getGraphMap().put(port, ie.getModel());
-		return port;
+	private static void setPortLocation(final ElkPort port, final InterfaceEditPart interfaceEditPart,
+			final ElkNode parentNode, final FordiacLayoutMapping mapping) {
+		final int x = interfaceEditPart.isInput() ? 0 : (int) parentNode.getWidth();
+		final int yOffset = interfaceEditPart.getFigure().getLocation().y - (int) parentNode.getY();
+		final int y = (mapping.type == LayoutType.Application) ? yOffset
+				: yOffset - (int) mapping.getLayoutGraph().getY();
+		port.setLocation(x, y);
 	}
 
 	private static ElkPort createParentElementPort(final InterfaceEditPart ie, final FordiacLayoutMapping mapping) {
