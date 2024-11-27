@@ -45,7 +45,7 @@ public class PasteDataFromClipboardCommandHandler extends AbstractLayerCommandHa
 		if (clipboardCellsContents != null) {
 			pasteClipboardCellsContents(command, clipboardCellsContents);
 		}
-		return false;
+		return true;
 	}
 
 	protected void pasteClipboardCellsContents(final PasteDataCommand command, final Object contents) {
@@ -78,7 +78,7 @@ public class PasteDataFromClipboardCommandHandler extends AbstractLayerCommandHa
 		}
 	}
 
-	protected static String[][] parseContent(final Object contents) {
+	protected String[][] parseContent(final Object contents) {
 		final List<String[]> lines = new ArrayList<>();
 		((String) contents).lines().forEach(s -> {
 			final String[] st = s.split("\t", -1); //$NON-NLS-1$

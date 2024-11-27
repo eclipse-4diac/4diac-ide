@@ -95,9 +95,9 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputProvider,
 				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE));
+		final var columnProvider = new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE);
 		outputTable = NatTableWidgetFactory
-				.createRowNatTable(outputsGroup, inputDataLayer,
-						new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE),
+				.createRowNatTable(outputsGroup, inputDataLayer, columnProvider,
 						new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),
 								VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE, outputProvider),
 						null, this, true);
@@ -105,6 +105,13 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.configure();
+
+		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(outputTable);
+		selectionLayer.registerCommandHandler(new CopyDataImportCommandHandler(selectionLayer, columnProvider,
+				Map.of(VarDeclarationTableColumn.TYPE, eObject -> ((VarDeclaration) eObject).getType())));
+		selectionLayer.registerCommandHandler(new PasteDataImportFromClipboardCommandHandler(selectionLayer,
+				this::getCurrentCommandStack, columnProvider, List.of(VarDeclarationTableColumn.TYPE)));
+
 	}
 
 	@Override
@@ -138,8 +145,8 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(inputTable);
 		selectionLayer.registerCommandHandler(new CopyDataImportCommandHandler(selectionLayer, columnProvider,
 				Map.of(VarDeclarationTableColumn.TYPE, eObject -> ((VarDeclaration) eObject).getType())));
-		selectionLayer.registerCommandHandler(
-				new PasteDataImportFromClipboardCommandHandler(selectionLayer, getCurrentCommandStack()));
+		selectionLayer.registerCommandHandler(new PasteDataImportFromClipboardCommandHandler(selectionLayer,
+				this::getCurrentCommandStack, columnProvider, List.of(VarDeclarationTableColumn.TYPE)));
 
 	}
 

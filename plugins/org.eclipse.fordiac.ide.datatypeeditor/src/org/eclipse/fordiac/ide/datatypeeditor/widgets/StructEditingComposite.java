@@ -19,6 +19,7 @@
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -158,8 +159,9 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
 		selectionLayer.registerCommandHandler(new CopyDataImportCommandHandler(selectionLayer, columnProvider,
 				Map.of(VarDeclarationTableColumn.TYPE, eObject -> ((VarDeclaration) eObject).getType())));
-		selectionLayer.registerCommandHandler(new PasteDataImportFromClipboardCommandHandler(selectionLayer, cmdStack,
-				(typeLib, name) -> typeLib.getDataTypeLibrary().getDerivedTypeEntry(name)));
+		selectionLayer.registerCommandHandler(new PasteDataImportFromClipboardCommandHandler(selectionLayer,
+				() -> cmdStack, (typeLib, name) -> typeLib.getDataTypeLibrary().getDerivedTypeEntry(name),
+				columnProvider, List.of(VarDeclarationTableColumn.TYPE)));
 	}
 
 	private DataType getDataType() {

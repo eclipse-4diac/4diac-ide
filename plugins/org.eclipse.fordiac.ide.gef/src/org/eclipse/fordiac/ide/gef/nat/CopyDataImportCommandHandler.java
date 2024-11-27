@@ -18,6 +18,8 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.widget.ImportTransfer;
@@ -66,8 +68,13 @@ public class CopyDataImportCommandHandler extends CopyDataCommandHandler {
 					.filter(cell -> colMapper.containsKey(columnProvider.getColumns().get(cell.getColumnIndex())))
 					.map(cell -> {
 						if (provider.getRowObject(cell.getRowIndex()) instanceof final EObject decl) {
-							return PackageNameHelper.getFullTypeName(
-									colMapper.get(columnProvider.getColumns().get(cell.getColumnIndex())).apply(decl));
+							final LibraryElement element = colMapper
+									.get(columnProvider.getColumns().get(cell.getColumnIndex())).apply(decl);
+							if (element instanceof final DataType dt
+									&& !(IecTypes.ElementaryTypes.getAllElementaryType().contains(dt)
+											|| IecTypes.GenericTypes.isAnyType(dt))) {
+								return PackageNameHelper.getFullTypeName(element);
+							}
 						}
 						return null;
 					}).filter(Objects::nonNull).distinct().toArray(size -> new String[size]);

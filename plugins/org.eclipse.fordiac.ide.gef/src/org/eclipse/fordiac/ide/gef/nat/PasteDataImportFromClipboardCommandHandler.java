@@ -13,8 +13,12 @@
 package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -25,6 +29,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.ImportTransfer;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.PasteDataFromClipboardCommandHandler;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.nebula.widgets.nattable.copy.command.PasteDataCommand;
@@ -36,19 +42,29 @@ import org.eclipse.swt.widgets.Display;
 
 public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromClipboardCommandHandler {
 
-	private final CommandStack cmdStack;
 	private final BiFunction<TypeLibrary, String, TypeEntry> typeResolver;
+	private final Supplier<CommandStack> cmdstk;
+	private final Map<String, String> conflicts = new HashMap<>();
+	private final NatTableColumnProvider<? extends NatTableColumn> columnProvider;
+	private final List<? extends NatTableColumn> columns;
 
 	public PasteDataImportFromClipboardCommandHandler(final SelectionLayer selectionLayer,
-			final CommandStack cmdStack) {
-		this(selectionLayer, cmdStack, (typeLib, name) -> typeLib.getDataTypeLibrary().getDerivedTypeEntry(name));
+			final Supplier<CommandStack> cmdStack,
+			final NatTableColumnProvider<? extends NatTableColumn> columnProvider,
+			final List<? extends NatTableColumn> columns) {
+		this(selectionLayer, cmdStack, (typeLib, name) -> typeLib.getDataTypeLibrary().getDerivedTypeEntry(name),
+				columnProvider, columns);
 	}
 
-	public PasteDataImportFromClipboardCommandHandler(final SelectionLayer selectionLayer, final CommandStack cmdStack,
-			final BiFunction<TypeLibrary, String, TypeEntry> typeResolver) {
+	public PasteDataImportFromClipboardCommandHandler(final SelectionLayer selectionLayer,
+			final Supplier<CommandStack> cmdStack, final BiFunction<TypeLibrary, String, TypeEntry> typeResolver,
+			final NatTableColumnProvider<? extends NatTableColumn> columnProvider,
+			final List<? extends NatTableColumn> columns) {
 		super(selectionLayer);
-		this.cmdStack = cmdStack;
+		this.cmdstk = cmdStack;
 		this.typeResolver = typeResolver;
+		this.columnProvider = columnProvider;
+		this.columns = columns;
 	}
 
 	@Override
@@ -57,10 +73,29 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 		if (rootElement != null) {
 			Arrays.stream(getClipboardContent()).map(imp -> getImportNamespace(rootElement, imp))
 					.filter(Objects::nonNull)
-					.forEach(namespace -> cmdStack.execute(new AddNewImportCommand(rootElement, namespace)));
+					.forEach(namespace -> cmdstk.get().execute(new AddNewImportCommand(rootElement, namespace)));
 		}
 		super.doCommand(command);
-		return false;
+		return true;
+	}
+
+	@Override
+	protected String[][] parseContent(final Object contents) {
+		final var content = super.parseContent(contents);
+
+		if (selectionLayer.getSelectionModel().getSelections().isEmpty()) {
+			return content;
+		}
+		final var location = selectionLayer.getSelectionAnchor();
+		final int idx = columnProvider.getColumns().indexOf(columns.get(0));
+
+		for (final String[] row : content) {
+			if (conflicts.containsKey(row[idx - location.getColumnPosition()])) {
+				row[idx - location.getColumnPosition()] = conflicts.get(row[idx - location.getColumnPosition()]);
+			}
+		}
+
+		return content;
 	}
 
 	private String getImportNamespace(final LibraryElement rootElement, final String imp) {
@@ -75,7 +110,8 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 			return null;
 		}
 
-		return null; // TODO paste FQN now;
+		conflicts.put(PackageNameHelper.extractPlainTypeName(imp), imp);
+		return null;
 	}
 
 	private LibraryElement getRootElement() {
