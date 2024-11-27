@@ -20,10 +20,8 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -37,11 +35,6 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 	private AbstractUIPlugin languageUIPlugin;
 
 	private boolean restoringSelection;
-
-	@Override
-	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		super.init(site, input);
-	}
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -149,6 +142,12 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 	@Override
 	public void reloadType() {
 		doRevertToSaved();
+	}
+
+	@Override
+	protected void handleEditorInputChanged() {
+		// avoid asking the user for a refresh or save as
+		// and leave updates to the enclosing FB type editor
 	}
 
 	@Override
