@@ -93,6 +93,14 @@ public abstract class LibraryElementXtextDocumentProvider extends XtextDocumentP
 	}
 
 	@Override
+	public boolean isSynchronized(final Object element) {
+		if (element instanceof ITypeEditorInput) {
+			return true; // always consider synchronized if in an FB type editor
+		}
+		return super.isSynchronized(element);
+	}
+
+	@Override
 	protected void handleElementContentChanged(final IFileEditorInput fileEditorInput) {
 		if (fileEditorInput instanceof ITypeEditorInput) {
 			return; // update only if opened directly from a file and not in an FB type editor
