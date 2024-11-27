@@ -263,7 +263,7 @@ public final class FordiacMarkerHelper {
 				&& (force || errorMarkersNeedsUpdate(resource, type, builders))) {
 			final ISchedulingRule currentRule = Job.getJobManager().currentRule();
 			if (currentRule != null && currentRule.contains(resource)) {
-				createMarkersInWorkspace(resource, builders);
+				updateMarkersInWorkspace(resource, type, builders);
 			} else {
 				final WorkspaceJob job = new WorkspaceJob("Update error markers on resource: " + resource.getName()) { //$NON-NLS-1$
 					@Override
