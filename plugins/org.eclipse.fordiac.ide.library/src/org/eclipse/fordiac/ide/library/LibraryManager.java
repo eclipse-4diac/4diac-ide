@@ -673,30 +673,41 @@ public enum LibraryManager {
 	 * @param autoImport   if library should be automatically imported into project
 	 * @param resolve      define if dependencies should get resolved on import
 	 *                     (irrelevant if {@code autoImport} is false)
-	 * @return {@link java.net.URI} of the extracted library folder
+	 * @return {@link java.net.URI} of the extracted library folder encapsulated in
+	 *         a {@link DownloadResult}
 	 */
-	private java.net.URI libraryDownload(final String symbolicName, final VersionRange versionRange,
+	private DownloadResult<java.net.URI> libraryDownload(final String symbolicName, final VersionRange versionRange,
 			final Version preferred, final IProject project, final boolean autoImport, final boolean resolve) {
 		FordiacLogHelper.logInfo("Attempting to download library " + symbolicName + " with version " + versionRange //$NON-NLS-1$ //$NON-NLS-2$
 				+ " preferring " + preferred); //$NON-NLS-1$
 		final List<IArchiveDownloader> downloaders = TypeLibraryManager.listExtensions(DOWNLOADER_EXTENSION,
 				IArchiveDownloader.class);
-		Path archivePath;
+		DownloadResult<Path> dlResult;
+		final StringBuilder errors = new StringBuilder();
 		final VersionRange range = (versionRange == null || versionRange.isEmpty()) ? ALL_RANGE : versionRange;
 		for (final var downloader : downloaders) {
 			if (!downloader.isActive()) {
 				continue;
 			}
 			try {
-				archivePath = downloader.downloadLibrary(symbolicName, range, preferred);
-				if (archivePath != null) {
-					return extractLibrary(archivePath, project, autoImport, resolve);
+				dlResult = downloader.downloadLibrary(symbolicName, range, preferred);
+				if (dlResult.status() == DownloadResult.Status.OK) {
+					return new DownloadResult<>(extractLibrary(dlResult.result(), project, autoImport, resolve));
+				}
+				// ignore NO_CONFIG
+				if (dlResult.status() == DownloadResult.Status.NOT_FOUND
+						|| dlResult.status() == DownloadResult.Status.CONFIG_ERROR
+						|| dlResult.status() == DownloadResult.Status.ERROR) {
+					errors.append(" | "); //$NON-NLS-1$
+					errors.append(downloader.getName());
+					errors.append(": "); //$NON-NLS-1$
+					errors.append(dlResult.message());
 				}
 			} catch (final IOException e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
-		return null;
+		return new DownloadResult<>(DownloadResult.Status.ERROR, errors.toString());
 	}
 
 	/**
@@ -927,10 +938,11 @@ public enum LibraryManager {
 			}
 		}
 
-		final java.net.URI uri = libraryDownload(symbolicName, range, prefVersion, null, false, false);
+		final DownloadResult<java.net.URI> dlResult = libraryDownload(symbolicName, range, prefVersion, null, false,
+				false);
 
-		if (uri != null) {
-			rec = getLibraryRecord(libraries, symbolicName, uri);
+		if (dlResult.status() == DownloadResult.Status.OK) {
+			rec = getLibraryRecord(libraries, symbolicName, dlResult.result());
 			if (rec != null) {
 				return new ResolveNode(rec);
 			}
@@ -943,7 +955,7 @@ public enum LibraryManager {
 			}
 		}
 
-		return new ResolveNode(symbolicName, Messages.ErrorMarkerLibNotAvailable);
+		return new ResolveNode(symbolicName, Messages.ErrorMarkerLibNotAvailable + dlResult.message());
 	}
 
 	/**

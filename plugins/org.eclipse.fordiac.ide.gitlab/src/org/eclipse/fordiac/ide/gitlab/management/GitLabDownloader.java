@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -39,6 +40,7 @@ import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
 import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
+import org.eclipse.fordiac.ide.library.DownloadResult;
 import org.eclipse.fordiac.ide.library.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -80,7 +82,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 
 	public void init() {
 		baseUrl = PreferenceConstants.getURL();
-		if (!baseUrl.endsWith("/")) { //$NON-NLS-1$
+		if (!baseUrl.isBlank() && !baseUrl.endsWith("/")) { //$NON-NLS-1$
 			baseUrl = baseUrl + "/"; //$NON-NLS-1$
 		}
 		token = PreferenceConstants.getToken();
@@ -94,7 +96,15 @@ public class GitLabDownloader implements IArchiveDownloader {
 		return projectAndPackageMap;
 	}
 
-	public void fetchProjectsAndPackages() {
+	public DownloadResult<Void> fetchProjectsAndPackages() {
+		final boolean missingUrl = baseUrl == null || baseUrl.isBlank();
+		final boolean missingToken = token == null || token.isBlank();
+		if (missingUrl && missingToken) {
+			return new DownloadResult<>(DownloadResult.Status.NO_CONFIG, Messages.No_Config);
+		}
+		if (missingUrl || missingToken) {
+			return new DownloadResult<>(DownloadResult.Status.CONFIG_ERROR, Messages.Configuration_Incomplete);
+		}
 		projectAndPackageMap = new HashMap<>();
 		packagesAndLeaves = new HashMap<>();
 		try {
@@ -104,7 +114,10 @@ public class GitLabDownloader implements IArchiveDownloader {
 			}
 		} catch (final IOException e) {
 			FordiacLogHelper.logError("Problem with GitLab import", e); //$NON-NLS-1$
+			return new DownloadResult<>(DownloadResult.Status.ERROR,
+					MessageFormat.format(Messages.Download_Error, e.getMessage()));
 		}
+		return new DownloadResult<>(DownloadResult.Status.OK);
 	}
 
 	private static void createRootDir() throws IOException {
@@ -249,61 +262,68 @@ public class GitLabDownloader implements IArchiveDownloader {
 	}
 
 	@Override
-	public List<String> availableLibraries() throws IOException {
-		if (baseUrl == null || baseUrl.isBlank() || token == null || token.isBlank()) {
-			return List.of();
-		}
-		fetchProjectsAndPackages();
-		return new ArrayList<>(packagesAndLeaves.keySet());
+	public String getName() {
+		return baseUrl != null ? "Gitlab(" + baseUrl + ")" : "Gitlab"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override
-	public List<String> availableVersions(final String symbolicName) throws IOException {
-		if (baseUrl == null || baseUrl.isBlank() || token == null || token.isBlank()) {
-			return List.of();
+	public DownloadResult<List<String>> availableLibraries() {
+		final var fetchResult = fetchProjectsAndPackages();
+		if (fetchResult.status() != DownloadResult.Status.OK) {
+			return new DownloadResult<>(fetchResult.status(), fetchResult.message());
 		}
-		fetchProjectsAndPackages();
+		return new DownloadResult<>(new ArrayList<>(packagesAndLeaves.keySet()));
+	}
+
+	@Override
+	public DownloadResult<List<String>> availableVersions(final String symbolicName) {
+		final var fetchResult = fetchProjectsAndPackages();
+		if (fetchResult.status() != DownloadResult.Status.OK) {
+			return new DownloadResult<>(fetchResult.status(), fetchResult.message());
+		}
 		final List<LeafNode> leaves = packagesAndLeaves.get(symbolicName);
 		if (leaves != null) {
-			return leaves.stream().map(LeafNode::getVersion).toList();
+			return new DownloadResult<>(leaves.stream().map(LeafNode::getVersion).toList());
 		}
-		return List.of();
+		return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Library_Not_Found);
 	}
 
 	@Override
-	public Path downloadLibrary(final String symbolicName, final VersionRange range, final Version preferredVersion)
-			throws IOException {
-		if (baseUrl == null || baseUrl.isBlank() || token == null || token.isBlank()) {
-			return null;
+	public DownloadResult<Path> downloadLibrary(final String symbolicName, final VersionRange range,
+			final Version preferredVersion) {
+		final var fetchResult = fetchProjectsAndPackages();
+		if (fetchResult.status() != DownloadResult.Status.OK) {
+			return new DownloadResult<>(fetchResult.status(), fetchResult.message());
 		}
-		fetchProjectsAndPackages();
-		if (packagesAndLeaves.containsKey(symbolicName)) {
-			Stream<LeafNode> st = packagesAndLeaves.get(symbolicName).stream();
-			if (range != null && !range.isEmpty()) {
-				st = st.filter(l -> VersionComparator.contains(range, l.getVersion()));
-			}
-			final List<LeafNode> nodes = st
-					.sorted(Comparator.comparing(LeafNode::getVersion, (o1, o2) -> versionComparator.compare(o2, o1)))
-					.toList();
+		if (!packagesAndLeaves.containsKey(symbolicName)) {
+			return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Library_Not_Found);
+		}
+		Stream<LeafNode> st = packagesAndLeaves.get(symbolicName).stream();
+		if (range != null && !range.isEmpty()) {
+			st = st.filter(l -> VersionComparator.contains(range, l.getVersion()));
+		}
+		final List<LeafNode> nodes = st
+				.sorted(Comparator.comparing(LeafNode::getVersion, (o1, o2) -> versionComparator.compare(o2, o1)))
+				.toList();
 
-			if (nodes.isEmpty()) {
-				return null;
-			}
-			LeafNode node = null;
-			if (preferredVersion != null) {
-				node = nodes.stream().filter(l -> preferredVersion.compareTo(new Version(l.getVersion())) == 0)
-						.findFirst().orElse(null);
-			}
-			if (node == null) {
-				node = nodes.getFirst();
-			}
-			try {
-				return packageDownloader(node.getProject(), node.getPackage());
-			} catch (final IOException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			}
+		if (nodes.isEmpty()) {
+			return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Version_Not_Found);
 		}
-		return null;
+		LeafNode node = null;
+		if (preferredVersion != null) {
+			node = nodes.stream().filter(l -> preferredVersion.compareTo(new Version(l.getVersion())) == 0).findFirst()
+					.orElse(null);
+		}
+		if (node == null) {
+			node = nodes.getFirst();
+		}
+		try {
+			return new DownloadResult<>(packageDownloader(node.getProject(), node.getPackage()));
+		} catch (final IOException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			return new DownloadResult<>(DownloadResult.Status.ERROR,
+					MessageFormat.format(Messages.Download_Error, e.getMessage()));
+		}
 	}
 
 	@Override

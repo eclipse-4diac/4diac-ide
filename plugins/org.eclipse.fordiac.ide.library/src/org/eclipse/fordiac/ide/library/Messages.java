@@ -41,6 +41,9 @@ public class Messages extends NLS {
 	public static String Warning;
 	public static String WillBeImported;
 
+	public static String DownloadNullResult;
+	public static String DownloadUnexpectedError;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

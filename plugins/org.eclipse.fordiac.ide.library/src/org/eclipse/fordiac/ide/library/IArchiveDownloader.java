@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -21,11 +20,18 @@ import org.osgi.framework.VersionRange;
 
 public interface IArchiveDownloader {
 	/**
+	 * Returns configured name of this downloader
+	 *
+	 * @return the configured name
+	 */
+	String getName();
+
+	/**
 	 * Lists the available libraries
 	 *
 	 * @return symbolic names of the available libraries
 	 */
-	List<String> availableLibraries() throws IOException;
+	DownloadResult<List<String>> availableLibraries();
 
 	/**
 	 * Lists the available versions of a specific library
@@ -34,7 +40,7 @@ public interface IArchiveDownloader {
 	 * @return the available versions of the specified library, or an empty list if
 	 *         library is not available
 	 */
-	List<String> availableVersions(String symbolicName) throws IOException;
+	DownloadResult<List<String>> availableVersions(String symbolicName);
 
 	/**
 	 * Download latest available version of the specified library included in the
@@ -50,7 +56,7 @@ public interface IArchiveDownloader {
 	 * @return {@code Path} of the downloaded library archive, or {@code null} if
 	 *         archive couldn't be downloaded
 	 */
-	Path downloadLibrary(String symbolicName, VersionRange range, Version preferredVersion) throws IOException;
+	DownloadResult<Path> downloadLibrary(String symbolicName, VersionRange range, Version preferredVersion);
 
 	/**
 	 * Returns if downloader is active (standard value is {@code true})

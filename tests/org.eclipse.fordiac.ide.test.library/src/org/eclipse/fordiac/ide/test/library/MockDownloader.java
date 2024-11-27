@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.fordiac.ide.library.DownloadResult;
 import org.eclipse.fordiac.ide.library.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.osgi.framework.Bundle;
@@ -41,29 +42,34 @@ public class MockDownloader implements IArchiveDownloader {
 	private final static String FORMAT_STRING = "data/%s-%s.zip"; //$NON-NLS-1$
 
 	@Override
-	public List<String> availableLibraries() throws IOException {
-		return List.copyOf(archiveMap.keySet());
+	public String getName() {
+		return "Mock"; //$NON-NLS-1$
 	}
 
 	@Override
-	public List<String> availableVersions(final String symbolicName) throws IOException {
-		return archiveMap.getOrDefault(symbolicName, Collections.emptyList());
+	public DownloadResult<List<String>> availableLibraries() {
+		return new DownloadResult<>(List.copyOf(archiveMap.keySet()));
 	}
 
 	@Override
-	public Path downloadLibrary(final String symbolicName, final VersionRange range, final Version preferredVersion)
-			throws IOException {
+	public DownloadResult<List<String>> availableVersions(final String symbolicName) {
+		return new DownloadResult<>(archiveMap.getOrDefault(symbolicName, Collections.emptyList()));
+	}
+
+	@Override
+	public DownloadResult<Path> downloadLibrary(final String symbolicName, final VersionRange range,
+			final Version preferredVersion) {
 		if (!archiveMap.containsKey(symbolicName)) {
-			return null;
+			return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Library_Not_Found);
 		}
-		final var st = availableVersions(symbolicName).stream();
+		final var st = availableVersions(symbolicName).result().stream();
 		if (range != null) {
 			st.filter(v -> VersionComparator.contains(range, v));
 		}
 		final var archives = st.sorted(versionComparator).toList();
 
 		if (archives.isEmpty()) {
-			return null;
+			return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Library_Not_Found);
 		}
 		String version = null;
 		if (preferredVersion != null) {
@@ -77,14 +83,18 @@ public class MockDownloader implements IArchiveDownloader {
 		final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.library"); //$NON-NLS-1$
 
 		try {
-			return Paths.get(FileLocator
-					.toFileURL(FileLocator.find(bundle,
-							new org.eclipse.core.runtime.Path(String.format(FORMAT_STRING, symbolicName, version))))
-					.toURI());
+			return new DownloadResult<>(
+					Paths.get(
+							FileLocator
+									.toFileURL(
+											FileLocator.find(bundle,
+													new org.eclipse.core.runtime.Path(
+															String.format(FORMAT_STRING, symbolicName, version))))
+									.toURI()));
 		} catch (URISyntaxException | IOException e) {
 			// empty
 		}
-		return null;
+		return new DownloadResult<>(DownloadResult.Status.ERROR, Messages.Error);
 	}
 
 	@Override
