@@ -285,6 +285,7 @@ public enum LibraryManager {
 		if (path == null || Files.notExists(path)) {
 			return null;
 		}
+		FordiacLogHelper.logInfo("Extracting library at " + path); //$NON-NLS-1$
 		final byte[] buffer = new byte[1024];
 		String folderName;
 		try (InputStream inputStream = Files.newInputStream(path);
@@ -358,6 +359,8 @@ public enum LibraryManager {
 		if (uninitialised) {
 			init(project);
 		}
+		FordiacLogHelper.logInfo("Importing library at " + uri + " into project " + project.getName() + " (update=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				+ update + ", resolve=" + resolve + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 		final TypeLibrary typeLib = typeLibrary != null ? typeLibrary
 				: TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 		checkLibChanges();
@@ -438,6 +441,7 @@ public enum LibraryManager {
 	private static Map<String, TypeEntry> removeOldLibVersion(final IFolder libDirectory,
 			final TypeLibrary typeLibrary) {
 		if (libDirectory.exists()) {
+			FordiacLogHelper.logInfo("Removing old library version at " + libDirectory); //$NON-NLS-1$
 			try {
 				final Map<String, TypeEntry> existingTypes = findExistingTypes(libDirectory, typeLibrary);
 				// Remove the link but keep the resource on disk
@@ -670,6 +674,8 @@ public enum LibraryManager {
 	 */
 	private java.net.URI libraryDownload(final String symbolicName, final VersionRange versionRange,
 			final Version preferred, final IProject project, final boolean autoImport, final boolean resolve) {
+		FordiacLogHelper.logInfo("Attempting to download library " + symbolicName + " with version " + versionRange //$NON-NLS-1$ //$NON-NLS-2$
+				+ " preferring " + preferred); //$NON-NLS-1$
 		final List<IArchiveDownloader> downloaders = TypeLibraryManager.listExtensions(DOWNLOADER_EXTENSION,
 				IArchiveDownloader.class);
 		Path archivePath;
