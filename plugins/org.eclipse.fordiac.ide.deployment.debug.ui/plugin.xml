@@ -236,6 +236,13 @@
 				type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget">
 			</adapter>
 		</factory>
+		<factory
+			adaptableType="org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugStackFrame"
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.actions.DeploymentDebugViewActionProviderFactory">
+			<adapter
+				type="org.eclipse.debug.internal.ui.viewers.model.provisional.IViewActionProvider">
+			</adapter>
+		</factory>
 	</extension>
 	<extension
 		point="org.eclipse.ui.commands">
