@@ -532,7 +532,7 @@
           name="Convert Untyped Subapp To Group">
     </command>
     <command
-          categoryId="org.eclipse.fordiacpopup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.rest.ide.commands.category"
+          categoryId="org.eclipse.fordiac.ide.commands.category"
           defaultHandler="org.eclipse.fordiac.ide.application.handlers.ConvertToSubappHandler"
           id="org.eclipse.fordiac.ide.application.commands.convertToSubapp"
           name="Convert Group to Untyped Subapp">
