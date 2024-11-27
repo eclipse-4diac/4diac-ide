@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
@@ -52,12 +51,12 @@ public final class EvaluatorDebugFBValue extends EvaluatorDebugStructuredValue {
 	}
 
 	@Override
-	public IVariable[] getVariables() throws DebugException {
+	public IVariable[] getVariables() {
 		return members.values().stream().sorted().toArray(IVariable[]::new);
 	}
 
 	@Override
-	public boolean hasVariables() throws DebugException {
+	public boolean hasVariables() {
 		return true;
 	}
 }

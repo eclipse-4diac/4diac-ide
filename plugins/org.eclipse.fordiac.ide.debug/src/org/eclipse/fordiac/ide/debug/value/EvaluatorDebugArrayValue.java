@@ -54,12 +54,12 @@ public final class EvaluatorDebugArrayValue extends EvaluatorDebugStructuredValu
 	}
 
 	@Override
-	public IVariable[] getVariables() throws DebugException {
+	public IVariable[] getVariables() {
 		return elements.toArray(IVariable[]::new);
 	}
 
 	@Override
-	public boolean hasVariables() throws DebugException {
+	public boolean hasVariables() {
 		return true;
 	}
 

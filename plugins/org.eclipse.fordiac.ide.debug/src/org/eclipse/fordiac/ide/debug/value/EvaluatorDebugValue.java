@@ -12,11 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.value;
 
-import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
+import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugElement;
-import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
+import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue;
 import org.eclipse.fordiac.ide.model.eval.value.FBValue;
 import org.eclipse.fordiac.ide.model.eval.value.StructValue;
@@ -54,19 +54,31 @@ public abstract class EvaluatorDebugValue extends EvaluatorDebugElement implemen
 	}
 
 	@Override
-	public final String getReferenceTypeName() throws DebugException {
+	public final String getReferenceTypeName() {
 		return value.getType().getName();
 	}
 
 	@Override
-	public final String getValueString() throws DebugException {
+	public final String getValueString() {
 		return value.toString();
 	}
 
 	@Override
-	public final boolean isAllocated() throws DebugException {
+	public final boolean isAllocated() {
 		return true;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public abstract IVariable[] getVariables();
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public abstract boolean hasVariables();
 
 	public abstract EvaluatorDebugVariable getVariable(final String name);
 

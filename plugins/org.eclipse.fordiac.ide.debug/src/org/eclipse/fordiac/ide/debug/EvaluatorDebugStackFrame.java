@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 import org.eclipse.debug.core.DebugEvent;
-import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IRegisterGroup;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IVariable;
@@ -82,12 +81,12 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 	}
 
 	@Override
-	public void resume() throws DebugException {
+	public void resume() {
 		thread.resume();
 	}
 
 	@Override
-	public void suspend() throws DebugException {
+	public void suspend() {
 		thread.suspend();
 	}
 
@@ -112,17 +111,17 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 	}
 
 	@Override
-	public void stepInto() throws DebugException {
+	public void stepInto() {
 		thread.request(this, DebugEvent.RESUME, DebugEvent.STEP_INTO);
 	}
 
 	@Override
-	public void stepOver() throws DebugException {
+	public void stepOver() {
 		thread.request(this, DebugEvent.RESUME, DebugEvent.STEP_OVER);
 	}
 
 	@Override
-	public void stepReturn() throws DebugException {
+	public void stepReturn() {
 		thread.request(this, DebugEvent.RESUME, DebugEvent.STEP_RETURN);
 	}
 
@@ -137,7 +136,7 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 	}
 
 	@Override
-	public void terminate() throws DebugException {
+	public void terminate() {
 		thread.terminate();
 	}
 
@@ -151,7 +150,7 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 	}
 
 	@Override
-	public IVariable[] getVariables() throws DebugException {
+	public IVariable[] getVariables() {
 		final CommonEvaluatorDebugger debugger = getDebugTarget().getDebugger();
 		final var debugVars = evaluator.getVariables().values().stream().map(debugger::getVariable).toList();
 		// split all vars into this vars and other vars
@@ -163,39 +162,39 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 	}
 
 	@Override
-	public boolean hasVariables() throws DebugException {
+	public boolean hasVariables() {
 		return !evaluator.getVariables().isEmpty();
 	}
 
 	@Override
-	public int getLineNumber() throws DebugException {
+	public int getLineNumber() {
 		final CommonEvaluatorDebugger debugger = getDebugTarget().getDebugger();
 		final Object context = getCurrentContext();
 		return debugger.getLineNumber(context);
 	}
 
 	@Override
-	public int getCharStart() throws DebugException {
+	public int getCharStart() {
 		return -1;
 	}
 
 	@Override
-	public int getCharEnd() throws DebugException {
+	public int getCharEnd() {
 		return -1;
 	}
 
 	@Override
-	public String getName() throws DebugException {
+	public String getName() {
 		return evaluator.getName();
 	}
 
 	@Override
-	public boolean hasRegisterGroups() throws DebugException {
+	public boolean hasRegisterGroups() {
 		return false;
 	}
 
 	@Override
-	public IRegisterGroup[] getRegisterGroups() throws DebugException {
+	public IRegisterGroup[] getRegisterGroups() {
 		return new IRegisterGroup[0];
 	}
 

@@ -12,10 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.value;
 
-import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
-import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
+import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 
 public final class EvaluatorDebugElementaryValue extends EvaluatorDebugValue {
@@ -35,12 +34,12 @@ public final class EvaluatorDebugElementaryValue extends EvaluatorDebugValue {
 	}
 
 	@Override
-	public IVariable[] getVariables() throws DebugException {
+	public IVariable[] getVariables() {
 		return new IVariable[0];
 	}
 
 	@Override
-	public boolean hasVariables() throws DebugException {
+	public boolean hasVariables() {
 		return false;
 	}
 }
