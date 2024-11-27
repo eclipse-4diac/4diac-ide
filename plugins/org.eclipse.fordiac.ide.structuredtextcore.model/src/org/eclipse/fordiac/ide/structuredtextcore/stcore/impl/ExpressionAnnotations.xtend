@@ -122,7 +122,7 @@ final package class ExpressionAnnotations {
 	def package static INamedElement getResultType(STMemberAccessExpression expr) { expr.member.resultType }
 
 	def package static INamedElement getDeclaredResultType(STMemberAccessExpression expr) {
-		expr.member.declaredResultType
+		expr.member?.declaredResultType
 	}
 
 	def package static INamedElement getResultType(STArrayAccessExpression expr) { getResultType(expr, false) }
@@ -130,7 +130,7 @@ final package class ExpressionAnnotations {
 	def package static INamedElement getDeclaredResultType(STArrayAccessExpression expr) { getResultType(expr, true) }
 
 	def package static INamedElement getResultType(STArrayAccessExpression expr, boolean declared) {
-		val receiverType = declared ? expr.receiver.declaredResultType : expr.receiver.resultType
+		val receiverType = declared ? expr.receiver?.declaredResultType : expr.receiver?.resultType
 		switch (receiverType) {
 			ArrayType:
 				if (expr.index.size < receiverType.subranges.size) { // not consumed all dimensions
