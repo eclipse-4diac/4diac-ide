@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 
@@ -217,11 +216,10 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 	}
 
 	private void createAdapterFBCreateCommand() {
-		if (dataType instanceof AdapterType && targetInterfaceList.eContainer() instanceof final FBType fbType
-				&& !(fbType instanceof SubAppType)) {
+		if (dataType instanceof AdapterType) {
 			final int xyPos = 10;
 			adapterCreateCmd = new AdapterFBCreateCommand(xyPos, xyPos, (AdapterDeclaration) newInterfaceElement,
-					fbType);
+					(targetInterfaceList.eContainer() instanceof final FBType fbType) ? fbType : null);
 		}
 	}
 
