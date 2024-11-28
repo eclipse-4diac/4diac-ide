@@ -83,7 +83,7 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 	protected String[][] parseContent(final Object contents) {
 		final var content = super.parseContent(contents);
 
-		if (selectionLayer.getSelectionModel().getSelections().isEmpty()) {
+		if (conflicts.isEmpty() || selectionLayer.getSelectionModel().getSelections().isEmpty()) {
 			return content;
 		}
 		final var location = selectionLayer.getSelectionAnchor();

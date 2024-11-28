@@ -71,13 +71,14 @@ public class CopyDataImportCommandHandler extends CopyDataCommandHandler {
 							final LibraryElement element = colMapper
 									.get(columnProvider.getColumns().get(cell.getColumnIndex())).apply(decl);
 							if (element instanceof final DataType dt
-									&& !(IecTypes.ElementaryTypes.getAllElementaryType().contains(dt)
+									&& (IecTypes.ElementaryTypes.getAllElementaryType().contains(dt)
 											|| IecTypes.GenericTypes.isAnyType(dt))) {
-								return PackageNameHelper.getFullTypeName(element);
+								return null;
 							}
+							return PackageNameHelper.getFullTypeName(element);
 						}
 						return null;
-					}).filter(Objects::nonNull).distinct().toArray(size -> new String[size]);
+					}).filter(Objects::nonNull).filter(s -> !s.isEmpty()).distinct().toArray(size -> new String[size]);
 		}
 		return new String[0];
 	}

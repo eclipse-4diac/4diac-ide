@@ -19,16 +19,13 @@
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
-import org.eclipse.fordiac.ide.gef.nat.CopyDataImportCommandHandler;
+import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.PasteDataImportFromClipboardCommandHandler;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
@@ -151,17 +148,11 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 				IEditableRule.ALWAYS_EDITABLE, null, this, false);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
 		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(structMemberProvider));
+		natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, () -> cmdStack));
 		natTable.configure();
 
 		selectionProvider = new StructEditingCompositeSelectionProvider(natTable,
 				NatTableWidgetFactory.getSelectionLayer(natTable), structMemberProvider);
-
-		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
-		selectionLayer.registerCommandHandler(new CopyDataImportCommandHandler(selectionLayer, columnProvider,
-				Map.of(VarDeclarationTableColumn.TYPE, eObject -> ((VarDeclaration) eObject).getType())));
-		selectionLayer.registerCommandHandler(new PasteDataImportFromClipboardCommandHandler(selectionLayer,
-				() -> cmdStack, (typeLib, name) -> typeLib.getDataTypeLibrary().getDerivedTypeEntry(name),
-				columnProvider, List.of(VarDeclarationTableColumn.TYPE)));
 	}
 
 	private DataType getDataType() {

@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.AttributeEditableRule;
 import org.eclipse.fordiac.ide.gef.nat.AttributeTableColumn;
+import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
@@ -93,8 +94,9 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		provider = new ChangeableListDataProvider<>(new AttributeColumnAccessor(this));
 		final DataLayer dataLayer = new DataLayer(provider);
 		dataLayer.setConfigLabelAccumulator(new AttributeConfigLabelAccumulator(provider, this::getAnnotationModel));
-		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer,
-				new NatTableColumnProvider<>(AttributeTableColumn.DEFAULT_COLUMNS),
+		final NatTableColumnProvider<AttributeTableColumn> columnProvider = new NatTableColumnProvider<>(
+				AttributeTableColumn.DEFAULT_COLUMNS);
+		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, columnProvider,
 				new AttributeEditableRule(IEditableRule.ALWAYS_EDITABLE, AttributeTableColumn.DEFAULT_COLUMNS,
 						provider),
 				new TypeSelectionButton(this::getTypeLibrary, DataTypeSelectionContentProvider.INSTANCE,
@@ -121,6 +123,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 			}
 		});
 
+		table.addConfiguration(
+				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
 		table.configure();
 
 		buttons.bindToTableViewer(table, this,
