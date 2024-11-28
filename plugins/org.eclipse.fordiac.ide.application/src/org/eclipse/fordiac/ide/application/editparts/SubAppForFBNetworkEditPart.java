@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.ContainerResizePolicy;
 import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkElementNonResizeableEP;
+import org.eclipse.fordiac.ide.application.policies.SelectionFeedbackHiddenChildren;
 import org.eclipse.fordiac.ide.application.utilities.ExpandedInterfacePositionMap;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
@@ -239,6 +240,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 		super.createEditPolicies();
 		if (getModel().isUnfolded()) {
 			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new SubappCommentRenameEditPolicy());
+			installEditPolicy("SCROLLABLE_SELECTION_FEEDBACK", new SelectionFeedbackHiddenChildren());
 		} else {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBAddToSubAppLayoutEditPolicy());
 		}
