@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.deployment.debug.breakpoint;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -24,9 +25,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.model.Breakpoint;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchUtils;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
@@ -76,13 +79,21 @@ public class DeploymentWatchpoint extends Breakpoint {
 	}
 
 	public Optional<INamedElement> getTarget(final AutomationSystem system) {
+		return getTargets(system).findFirst();
+	}
+
+	public Optional<INamedElement> getTarget(final Device device) {
+		return getTargets(device.getAutomationSystem())
+				.filter(target -> device.equals(DeploymentDebugWatchUtils.getDevice(target))).findFirst();
+	}
+
+	public Stream<INamedElement> getTargets(final AutomationSystem system) {
 		final String location = getLocation();
 		final Optional<EClass> targetType = getTargetType();
 		if (location.isEmpty() || targetType.isEmpty()) {
-			return Optional.empty();
+			return Stream.empty();
 		}
-		return system.findByQualifiedName(location).filter(element -> targetType.get().equals(element.eClass()))
-				.findFirst();
+		return system.findByQualifiedName(location).filter(element -> targetType.get().equals(element.eClass()));
 	}
 
 	public Optional<EClass> getTargetType() {

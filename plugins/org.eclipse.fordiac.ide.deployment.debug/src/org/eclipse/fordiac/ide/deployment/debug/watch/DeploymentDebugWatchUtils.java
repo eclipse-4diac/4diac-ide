@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -34,6 +35,11 @@ public final class DeploymentDebugWatchUtils {
 		case final FBNetworkElement networkElement -> networkElement.getResource();
 		case null, default -> null;
 		};
+	}
+
+	public static Device getDevice(final INamedElement element) {
+		final Resource resource = getResource(element);
+		return resource != null ? resource.getDevice() : null;
 	}
 
 	public static String getResourceRelativeName(final INamedElement element, final Resource resource) {

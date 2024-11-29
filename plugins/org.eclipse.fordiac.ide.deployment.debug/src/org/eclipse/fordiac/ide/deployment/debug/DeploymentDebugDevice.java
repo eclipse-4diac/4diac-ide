@@ -248,7 +248,7 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 	}
 
 	protected void addWatch(final DeploymentWatchpoint watchpoint) {
-		final Optional<INamedElement> element = watchpoint.getTarget(getSystem());
+		final Optional<INamedElement> element = watchpoint.getTarget(device);
 		if (element.isPresent()) {
 			try {
 				final IWatch watch = watches.computeIfAbsent(element.get().getQualifiedName(),
