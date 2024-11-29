@@ -227,7 +227,7 @@ public final class FordiacMarkerHelper {
 	public static void createMarkers(final IResource resource, final List<ErrorMarkerBuilder> builders) {
 		if (resource != null && resource.isAccessible()) {
 			final ISchedulingRule currentRule = Job.getJobManager().currentRule();
-			if (currentRule != null && currentRule.contains(resource)) {
+			if (currentRule != null && currentRule.contains(resource) && !resource.getWorkspace().isTreeLocked()) {
 				createMarkersInWorkspace(resource, builders);
 			} else {
 				final WorkspaceJob job = new WorkspaceJob("Create error markers on resource: " + resource.getName()) { //$NON-NLS-1$
@@ -262,7 +262,7 @@ public final class FordiacMarkerHelper {
 		if (resource != null && resource.isAccessible()
 				&& (force || errorMarkersNeedsUpdate(resource, type, builders))) {
 			final ISchedulingRule currentRule = Job.getJobManager().currentRule();
-			if (currentRule != null && currentRule.contains(resource)) {
+			if (currentRule != null && currentRule.contains(resource) && !resource.getWorkspace().isTreeLocked()) {
 				updateMarkersInWorkspace(resource, type, builders);
 			} else {
 				final WorkspaceJob job = new WorkspaceJob("Update error markers on resource: " + resource.getName()) { //$NON-NLS-1$
