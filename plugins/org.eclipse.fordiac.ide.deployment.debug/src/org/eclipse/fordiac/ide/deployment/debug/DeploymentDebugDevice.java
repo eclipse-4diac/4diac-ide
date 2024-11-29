@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
@@ -36,6 +37,7 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IThread;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
 import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchData;
@@ -52,6 +54,8 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -124,9 +128,19 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 					pollingInterval.toMillis(), TimeUnit.MILLISECONDS);
 			deviceManagementExecutor.readWatchesPeriodically(this::updateWatches, this::handleDeviceError,
 					pollingInterval.toMillis(), TimeUnit.MILLISECONDS);
-			try (EvaluatorCache cache = EvaluatorCache.open()) {
-				Stream.of(DebugPlugin.getDefault().getBreakpointManager().getBreakpoints())
-						.forEachOrdered(this::breakpointAdded);
+			try (final EvaluatorCache cache = EvaluatorCache.open()) {
+				final var deviceElements = getDeviceElements();
+				Stream.of(DebugPlugin.getDefault().getBreakpointManager().getBreakpoints()).filter(t -> {
+					if (t instanceof final DeploymentWatchpoint watchpoint && watchpoint.isEnabled()
+							&& watchpoint.isRelevant(getSystem())) {
+						final Optional<INamedElement> element = watchpoint.getTarget(getSystem());
+						if (element.isPresent()) {
+							final var elementName = element.get().getName();
+							return deviceElements.contains(elementName);
+						}
+					}
+					return false;
+				}).forEachOrdered(this::breakpointAdded);
 			}
 		} catch (final DeploymentException e) {
 			throw new DebugException(Status
@@ -220,7 +234,7 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 	@Override
 	public void breakpointAdded(final IBreakpoint breakpoint) {
 		if (breakpoint instanceof final DeploymentWatchpoint watchpoint && watchpoint.isEnabled()
-				&& watchpoint.isRelevant(getSystem())) {
+				&& watchpoint.isRelevant(getSystem()) && isWatchAllowed(watchpoint)) {
 			addWatch(watchpoint);
 		}
 	}
@@ -236,7 +250,7 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 	public void breakpointChanged(final IBreakpoint breakpoint, final IMarkerDelta delta) {
 		if (breakpoint instanceof final DeploymentWatchpoint watchpoint && watchpoint.isRelevant(getSystem())) {
 			if (watchpoint.isEnabledChanged(delta)) {
-				if (watchpoint.isEnabled()) {
+				if (watchpoint.isEnabled() && isWatchAllowed(watchpoint)) {
 					addWatch(watchpoint);
 				} else {
 					removeWatch(watchpoint);
@@ -384,4 +398,17 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 	public boolean hasThreads() {
 		return isAlive() && !resources.isEmpty();
 	}
+
+	private boolean isWatchAllowed(final DeploymentWatchpoint watchpoint) {
+		final var element = watchpoint.getTarget(getSystem());
+		return element.isPresent() && getDeviceElements().contains(element.get().getName());
+	}
+
+	private Set<String> getDeviceElements() {
+		return getDevice().getResource().stream()
+				.map(org.eclipse.fordiac.ide.model.libraryElement.Resource::getFBNetwork)
+				.map(FBNetwork::getNetworkElements).flatMap(EList::stream).map(FBNetworkElement::getName)
+				.collect(Collectors.toUnmodifiableSet());
+	}
+
 }
