@@ -23,12 +23,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.library.ui.wizards.LibrarySelectionPage;
+import org.eclipse.fordiac.ide.model.commands.create.CreateApplicationCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
-import org.eclipse.fordiac.ide.systemmanagement.ui.commands.NewAppCommand;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -111,7 +111,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 			final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(newProject,
 					page.getInitialSystemName(), monitor);
 			TypeManagementPreferencesHelper.setupVersionInfo(system);
-			createInitialApplication(monitor, system);
+			createInitialApplication(system);
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		} finally {
@@ -119,11 +119,10 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 		}
 	}
 
-	private void createInitialApplication(final IProgressMonitor monitor, final AutomationSystem system) {
-		final NewAppCommand cmd = new NewAppCommand(system, page.getInitialApplicationName(), ""); //$NON-NLS-1$
-		cmd.execute(monitor, null);
+	private void createInitialApplication(final AutomationSystem system) {
+		final CreateApplicationCommand cmd = new CreateApplicationCommand(system, page.getInitialApplicationName());
 
-		final Application app = cmd.getApplication();
+		final Application app = cmd.getCreatedElement();
 		if (page.getOpenApplication() && null != app) {
 			OpenListenerManager.openEditor(app);
 		}

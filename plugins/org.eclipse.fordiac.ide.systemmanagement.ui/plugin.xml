@@ -27,17 +27,6 @@
             %newsystemwizard.description
          </description>
       </wizard>
-      <wizard
-            category="org.eclipse.fordiac.ide.newWizard.category"
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard"
-            icon="fordiacimage://ICON_NEW_APPLICATION"
-            id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard"
-            name="%LABEL_NewApplicationWizard"
-            project="false">
-         <description>
-            %wizard.description.1 
-         </description>
-      </wizard>
       <category
             id="org.eclipse.fordiac.ide.newWizard.category"
             name="%4DIAC_IDE_Category">
@@ -527,15 +516,6 @@
             wizardId="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard">
          <enablement></enablement>
       </commonWizard> 
-      <commonWizard
-            type="new"
-            wizardId="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard">
-         <enablement>
-            <adapt type="org.eclipse.core.resources.IFile" >
-                <test property="org.eclipse.core.resources.extension" value="sys"/>
-            </adapt>
-         </enablement>
-      </commonWizard>
       <actionProvider
             class="org.eclipse.fordiac.ide.systemmanagement.ui.actions.SystemExplorerNewActionProvider"
             id="org.eclipse.fordiac.ide.systemmanagement.SystemExplorerNewActionProvider">

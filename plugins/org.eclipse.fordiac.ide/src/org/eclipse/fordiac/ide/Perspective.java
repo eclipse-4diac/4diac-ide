@@ -65,7 +65,6 @@ public class Perspective implements IPerspectiveFactory {
 
 		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard"); //$NON-NLS-1$
 		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"); //$NON-NLS-1$
-		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard"); //$NON-NLS-1$
 		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard"); //$NON-NLS-1$
 
 		factory.addPerspectiveShortcut("org.eclipse.debug.ui.DebugPerspective"); //$NON-NLS-1$

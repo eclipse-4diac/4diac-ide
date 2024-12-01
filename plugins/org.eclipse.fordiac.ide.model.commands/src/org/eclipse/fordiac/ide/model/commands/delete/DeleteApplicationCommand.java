@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH
+ * Copyright (c) 2015, 2024 fortiss GmbH, Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,24 +11,14 @@
  *   Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ui.commands;
+package org.eclipse.fordiac.ide.model.commands.delete;
 
-import java.lang.reflect.InvocationTargetException;
-
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 /**
  * The Class NewAppCommand.
@@ -59,47 +49,19 @@ public class DeleteApplicationCommand extends Command {
 	public void execute() {
 		getUnmappCommands();
 		unmappApplicationElements.execute();
-		closeApplicationEditor();
 		system.getApplication().remove(application);
-		doSave();
 	}
 
 	@Override
 	public void redo() {
 		unmappApplicationElements.redo();
 		system.getApplication().remove(application);
-		doSave();
 	}
 
 	@Override
 	public void undo() {
 		system.getApplication().add(application);
 		unmappApplicationElements.undo();
-		doSave();
-	}
-
-	private void doSave() {
-		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(
-				system.getTypeEntry().getFile().getParent()) {
-
-			@Override
-			protected void execute(final IProgressMonitor monitor)
-					throws CoreException, InvocationTargetException, InterruptedException {
-				system.getTypeEntry().save(system, monitor);
-			}
-		};
-		try {
-			if (PlatformUI.isWorkbenchRunning()) {
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().run(true, true, operation);
-			} else {
-				operation.run(new NullProgressMonitor());
-			}
-		} catch (final InvocationTargetException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		} catch (final InterruptedException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-			Thread.currentThread().interrupt();
-		}
 	}
 
 	private void getUnmappCommands() {
@@ -113,8 +75,4 @@ public class DeleteApplicationCommand extends Command {
 		});
 	}
 
-	private void closeApplicationEditor() {
-		EditorUtils.closeEditorsFiltered(editor -> ((editor instanceof FBNetworkEditor)
-				&& (application.getFBNetwork().equals(((FBNetworkEditor) editor).getModel()))));
-	}
 }

@@ -28,10 +28,6 @@ public final class Messages extends NLS {
 
 	public static String AutomationSystemEditor_ShowingSystem;
 
-	public static String NewApplicationWizardTitle;
-
-	public static String NewApplicationPage_NewApplicationDescription;
-
 	/** The New application page_ error message_ empty app name. */
 	public static String NewApplicationPage_ErrorMessage_EmptyElementName;
 
@@ -42,8 +38,6 @@ public final class Messages extends NLS {
 
 	/** The New application page_ error message no system selected. */
 	public static String NewApplicationPage_ErrorMessageNoSystemSelected;
-
-	public static String NewApplicationCommand_LABEL_NewApplication;
 
 	public static String NewSystemWizard_ShowAdvanced;
 
@@ -61,6 +55,12 @@ public final class Messages extends NLS {
 	public static String New4diacProjectWizard_DirectoryWithProjectNameAlreadyExistsInWorkspace;
 
 	public static String NewSystemWizardPage_CreateNewSystem;
+
+	public static String SystemEditor_Applications;
+
+	public static String SystemEditor_SystemConfiguration;
+
+	public static String SystemEditor_SystemInformation;
 
 	static {
 		// initialize resource bundle
