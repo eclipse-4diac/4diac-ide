@@ -358,14 +358,6 @@
               name="4diac IDE Commands">
     </category>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-             id="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor"
-             name="Focus On Predecessor">
-    </command>
-    <command categoryId="org.eclipse.fordiac.ide.commands.category"
-             id="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
-             name="Clear Focus-On">
-    </command>
-    <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.NewSubApplication"
              id="org.eclipse.fordiac.ide.application.commands.newSubApp"
              name="New Subapplication">
@@ -663,25 +655,7 @@
             <test property="org.eclipse.fordiac.ide.application.utilities.isFBInterfaceElementIsFreeAndPartOfSubapp" />
           </and>
         </activeWhen>
-    </handler>
-    <handler class="org.eclipse.fordiac.ide.application.handlers.FocusOnPredecessor"
-             commandId="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor">
-      <activeWhen>
-        <and>
-          <reference definitionId="org.eclipse.fordiac.ide.application.FocusOnActivation" />
-          <with variable="selection">
-            <iterate ifEmpty="false">
-              <or>
-                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
-                </instanceof>
-                <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
-                </instanceof>
-              </or>
-            </iterate>
-          </with>
-        </and>
-      </activeWhen>
-    </handler>
+    </handler>    
     <handler class="org.eclipse.fordiac.ide.application.handlers.UpdateFBTypeHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.updateFBType">
       <activeWhen>
@@ -695,12 +669,6 @@
             </or>
           </iterate>
         </with>
-      </activeWhen>
-    </handler>
-    <handler class="org.eclipse.fordiac.ide.application.handlers.ClearFocusOn"
-             commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn">
-      <activeWhen>
-        <reference definitionId="org.eclipse.fordiac.ide.application.FocusOnActivation" />
       </activeWhen>
     </handler>
     <handler class="org.eclipse.fordiac.ide.application.handlers.FlattenSubApplication"
@@ -841,10 +809,6 @@
   </extension> 
   
   <extension point="org.eclipse.ui.bindings">
-    <key commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
-         contextId="org.eclipse.fordiac.ide.fbnetwork"
-         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-         sequence="M1+6"/>
     <key commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
          contextId="org.eclipse.fordiac.ide.fbnetwork"
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
@@ -908,12 +872,6 @@
   </extension>
   
   <extension point="org.eclipse.ui.menus">
-    <menuContribution locationURI="menu:navigate?after=additions">
-      <command commandId="org.eclipse.fordiac.ide.application.commands.focusOnPredecessor" />
-      <command commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
-               mnemonic="S">
-      </command>
-    </menuContribution>
     <menuContribution locationURI="menu:navigate?after=goTo">
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
                icon="platform:/plugin/org.eclipse.search/icons/full/elcl16/search_prev.png"/>
@@ -1084,11 +1042,6 @@
                  id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar"
                  tooltip="Hide Data Connections"
                  style="toggle">
-        </command>
-        <command commandId="org.eclipse.fordiac.ide.application.commands.clearFocusOn"
-                 icon="fordiacimage://ICON_FB"
-                 id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar"
-                 tooltip="Clear Focus-On">
         </command>
       </toolbar>
     </menuContribution>
@@ -1632,12 +1585,6 @@
             </instanceof>
           </or>
         </iterate>
-      </with>
-    </definition>
-    <definition id="org.eclipse.fordiac.ide.application.FocusOnActivation">
-      <with variable="activeEditor">
-        <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
-        </adapt>
       </with>
     </definition>
     <definition id="org.eclipse.fordiac.ide.application.FBNSelection">
