@@ -265,6 +265,17 @@
     <persistent
           value="false">
     </persistent>
+ </extension>
+ <extension
+       id="projectConfiguration"
+       name="4diac IDE Project Configuration Problem"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.model.problem">
+    </super>
+    <persistent
+          value="false">
+    </persistent>
  </extension>  
  <extension
        id="library"
