@@ -502,6 +502,13 @@
             </description>
       </decorator>
    </extension>
+    <extension
+          point="org.eclipse.ui.ide.markerResolution">
+       <markerResolutionGenerator
+             class="org.eclipse.fordiac.ide.systemmanagement.ui.marker.resolution.FordiacNatureMarkerResolutionGenerator"
+             markerType="org.eclipse.fordiac.ide.model.projectConfiguration">
+       </markerResolutionGenerator>
+    </extension>
 
    
 </plugin>

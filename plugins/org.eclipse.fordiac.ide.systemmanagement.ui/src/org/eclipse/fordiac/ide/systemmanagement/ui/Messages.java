@@ -30,6 +30,10 @@ public final class Messages extends NLS {
 
 	public static String OpenApplicationForEditing;
 
+	public static String MissingExportBuilderMarkerResolution_Description;
+
+	public static String MissingExportBuilderMarkerResolution_Label;
+
 	public static String NewSystemWizard_ShowAdvanced;
 
 	public static String NewSystemWizard_HideAdvanced;
