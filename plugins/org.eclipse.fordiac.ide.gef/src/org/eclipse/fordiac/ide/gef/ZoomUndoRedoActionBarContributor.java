@@ -31,23 +31,7 @@ import org.eclipse.ui.actions.ActionFactory;
  */
 public class ZoomUndoRedoActionBarContributor extends ActionBarContributor {
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToToolBar(org.
-	 * eclipse.jface.action.IToolBarManager)
-	 */
-	@Override
-	public void contributeToToolBar(final IToolBarManager toolBarManager) {
-		toolBarManager.add(getAction(GEFActionConstants.ALIGN_LEFT));
-		toolBarManager.add(getAction(GEFActionConstants.ALIGN_CENTER));
-		toolBarManager.add(getAction(GEFActionConstants.ALIGN_RIGHT));
-		toolBarManager.add(new Separator());
-		toolBarManager.add(getAction(GEFActionConstants.ALIGN_TOP));
-		toolBarManager.add(getAction(GEFActionConstants.ALIGN_MIDDLE));
-		toolBarManager.add(getAction(GEFActionConstants.ALIGN_BOTTOM));
-	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 *

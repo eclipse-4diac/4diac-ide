@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2016, 2017 TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2012, 2024 TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,12 +20,9 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.AlignmentRetargetAction;
 import org.eclipse.gef.ui.actions.DeleteRetargetAction;
-import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.actions.RedoRetargetAction;
 import org.eclipse.gef.ui.actions.UndoRetargetAction;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionFactory;
@@ -74,17 +71,6 @@ public class GraphicalMultipageEditorContributor extends MultiPageEditorActionBa
 		addRetargetAction(new AlignmentRetargetAction(PositionConstants.TOP));
 		addRetargetAction(new AlignmentRetargetAction(PositionConstants.MIDDLE));
 		addRetargetAction(new AlignmentRetargetAction(PositionConstants.BOTTOM));
-	}
-
-	@Override
-	public void contributeToToolBar(final IToolBarManager toolBarManager) {
-		toolBarManager.add(getAction(GEFActionConstants.ALIGN_LEFT));
-		toolBarManager.add(getAction(GEFActionConstants.ALIGN_CENTER));
-		toolBarManager.add(getAction(GEFActionConstants.ALIGN_RIGHT));
-		toolBarManager.add(new Separator());
-		toolBarManager.add(getAction(GEFActionConstants.ALIGN_TOP));
-		toolBarManager.add(getAction(GEFActionConstants.ALIGN_MIDDLE));
-		toolBarManager.add(getAction(GEFActionConstants.ALIGN_BOTTOM));
 	}
 
 	protected IAction getAction(final String id) {
