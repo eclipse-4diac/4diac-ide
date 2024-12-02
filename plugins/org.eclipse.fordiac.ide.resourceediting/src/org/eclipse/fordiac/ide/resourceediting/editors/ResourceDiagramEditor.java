@@ -63,6 +63,14 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 		}
 	};
 
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == Resource.class) {
+			return adapter.cast(getResource());
+		}
+		return super.getAdapter(adapter);
+	}
+
 	private Resource getResource() {
 		return (Resource) getModel().eContainer();
 	}

@@ -50,15 +50,6 @@
       </handler>
    </extension>
    <extension
-         point="org.eclipse.ui.bindings">
-      <key
-            commandId="org.eclipse.fordiac.ide.resourceediting.commands.ShowFBInAppCommand"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+8">
-      </key>
-   </extension>
-   <extension
          point="org.eclipse.ui.menus">
       <menuContribution
             locationURI="menu:navigate?after=additions">
@@ -71,18 +62,6 @@
 		</command>
       </menuContribution>
       <menuContribution
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-         <toolbar
-               id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar">
-            <command
-                  commandId="org.eclipse.fordiac.ide.resourceediting.commands.ShowFBInAppCommand"
-                  icon="fordiacimage://ICON_APPLICATION"
-                  id="org.eclipse.fordiac.ide.resourceediting.toolbars.ShowFBInAppCommand"
-                  tooltip="Show FB in Application">
-            </command>
-         </toolbar>
-      </menuContribution>
-      <menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?after=additions">
          <command
                commandId="org.eclipse.fordiac.ide.resourceediting.commands.ShowFBInAppCommand"
@@ -91,9 +70,7 @@
             <visibleWhen checkEnabled="true">
             	<and>
 	               <with variable="activeEditor">
-	                  <instanceof
-	                        value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor">
-	                  </instanceof>
+	                  <adapt type="org.eclipse.fordiac.ide.model.libraryElement.Resource" />
 	               </with>
 	               <iterate ifEmpty="false">
 	                  <instanceof
