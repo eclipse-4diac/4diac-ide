@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
@@ -192,10 +191,6 @@ public class MapToCommand extends Command implements ScopedCommand {
 	}
 
 	private FBNetworkElement createTargetTypedSubApp() {
-		if (srcElement instanceof SubApp) {
-			FBNetworkHelper.loadSubappNetwork(srcElement);
-		}
-
 		final CreateSubAppInstanceCommand cmd = new CreateSubAppInstanceCommand(
 				(SubAppTypeEntry) srcElement.getTypeEntry(), getTargetFBNetwork(), srcElement.getPosition());
 		cmd.execute();
