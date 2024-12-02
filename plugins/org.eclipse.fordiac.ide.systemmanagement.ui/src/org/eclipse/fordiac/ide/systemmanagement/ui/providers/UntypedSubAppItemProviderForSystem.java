@@ -72,8 +72,8 @@ public class UntypedSubAppItemProviderForSystem extends UntypedSubAppItemProvide
 	@Override
 	public Object getParent(final Object object) {
 		final EObject cont = ((SubApp) object).eContainer();
-		if (cont instanceof FBNetwork) {
-			return ((FBNetwork) cont).eContainer();
+		if (cont instanceof final FBNetwork fbn) {
+			return fbn.eContainer();
 		}
 		return super.getParent(object);
 	}

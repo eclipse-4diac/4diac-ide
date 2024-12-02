@@ -24,10 +24,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.CFBInstanceItemProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvider;
 
-/** a dedicated item provider that will ensure that in the system tree the CFB instances will have the content of the
- * fbnetwork without the intermediate FBnetwork node shown.
+/**
+ * a dedicated item provider that will ensure that in the system tree the CFB
+ * instances will have the content of the fbnetwork without the intermediate
+ * FBnetwork node shown.
  *
- * @author alil */
+ * @author alil
+ */
 public class CFBInstanceItemProviderForSystem extends CFBInstanceItemProvider {
 
 	private FBNetworkItemProvider networkItemProvider = null;
@@ -58,8 +61,8 @@ public class CFBInstanceItemProviderForSystem extends CFBInstanceItemProvider {
 	@Override
 	public Object getParent(final Object object) {
 		final EObject cont = ((EObject) object).eContainer();
-		if (cont instanceof FBNetwork) {
-			return ((FBNetwork) cont).eContainer();
+		if (cont instanceof final FBNetwork fbn) {
+			return fbn.eContainer();
 		}
 		return super.getParent(object);
 	}

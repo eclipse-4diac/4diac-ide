@@ -58,10 +58,9 @@ public class SystemElementItemProviderAdapterFactory extends LibraryElementItemP
 				 */
 				@Override
 				public Object getParent(final Object object) {
-
 					final EObject cont = ((FB) object).eContainer();
-					if (cont instanceof FBNetwork) {
-						return ((FBNetwork) cont).eContainer();
+					if (cont instanceof final FBNetwork fbn) {
+						return fbn.eContainer();
 					}
 					return super.getParent(object);
 				}
