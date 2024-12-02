@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeApplicationOrderComma
 import org.eclipse.fordiac.ide.model.commands.create.CreateApplicationCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteApplicationCommand;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
+import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -52,6 +53,7 @@ import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.gef.ui.actions.UpdateAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelection;
@@ -61,6 +63,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -92,8 +95,6 @@ public class SystemEditor extends EditorPart
 		implements CommandStackEventListener, ISelectionListener, ISelectionProvider, IReusableEditor {
 
 	private static final ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
-	private static final String APP_NAME = "APP_NAME"; //$NON-NLS-1$
-	private static final String APP_COMMENT = "APP_COMMENT"; //$NON-NLS-1$
 
 	private AutomationSystem system;
 
@@ -110,14 +111,16 @@ public class SystemEditor extends EditorPart
 	private final List<String> stackActions = new ArrayList<>();
 	private final List<String> propertyActions = new ArrayList<>();
 
-	private final Adapter appListener = new AdapterImpl() {
+	private final Adapter appListener = new SingleRecursiveContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
 			Display.getDefault().asyncExec(() -> {
 				if ((null != appTableViewer) && (!appTableViewer.getControl().isDisposed())) {
 					appTableViewer.refresh();
 				}
 			});
+
 		}
 	};
 
@@ -319,7 +322,7 @@ public class SystemEditor extends EditorPart
 		return (ref != null) ? ref.getName() : null;
 	}
 
-	private static void configureActionTableLayout(final TableViewer appTableViewer) {
+	private void configureActionTableLayout(final TableViewer appTableViewer) {
 		final Table table = appTableViewer.getTable();
 		final TableViewerColumn nameCol = new TableViewerColumn(appTableViewer, SWT.LEFT);
 		nameCol.getColumn().setText(FordiacMessages.Name);
@@ -356,7 +359,10 @@ public class SystemEditor extends EditorPart
 		tabLayout.addColumnData(new ColumnWeightData(2, 50));
 
 		table.setLayout(tabLayout);
-		appTableViewer.setColumnProperties(new String[] { APP_NAME, APP_COMMENT });
+		appTableViewer.setColumnProperties(
+				new String[] { ApplicationViewerCellModifier.APP_NAME, ApplicationViewerCellModifier.APP_COMMENT });
+		appTableViewer.setCellModifier(new ApplicationViewerCellModifier(getCommandStack()));
+		appTableViewer.setCellEditors(new CellEditor[] { new TextCellEditor(table), new TextCellEditor(table) });
 	}
 
 	private void createSysconfSection(final FormToolkit toolkit, final Composite bottomComp) {
