@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2010 - 2015 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.actions;
 
+import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
@@ -33,20 +34,18 @@ public class SystemExplorerNewActionProvider extends CommonActionProvider {
 	private WizardActionGroup newWizardActionGroup;
 
 	@Override
-	public void init(ICommonActionExtensionSite anExtensionSite) {
-
-		if (anExtensionSite.getViewSite() instanceof ICommonViewerWorkbenchSite) {
-			IWorkbenchWindow window = ((ICommonViewerWorkbenchSite) anExtensionSite.getViewSite()).getWorkbenchWindow();
+	public void init(final ICommonActionExtensionSite anExtensionSite) {
+		if (anExtensionSite.getViewSite() instanceof final ICommonViewerWorkbenchSite wbSite) {
+			final IWorkbenchWindow window = wbSite.getWorkbenchWindow();
 			showDlgAction = ActionFactory.NEW.create(window);
-
 			newWizardActionGroup = new WizardActionGroup(window, PlatformUI.getWorkbench().getNewWizardRegistry(),
 					WizardActionGroup.TYPE_NEW, anExtensionSite.getContentService());
 		}
 	}
 
 	@Override
-	public void fillContextMenu(IMenuManager menu) {
-		IMenuManager submenu = new MenuManager("&New", NEW_MENU_NAME);
+	public void fillContextMenu(final IMenuManager menu) {
+		final IMenuManager submenu = new MenuManager(Messages.SystemExplorerNewActionProvider_New, NEW_MENU_NAME);
 
 		// fill the menu from the commonWizard contributions
 		newWizardActionGroup.setContext(getContext());

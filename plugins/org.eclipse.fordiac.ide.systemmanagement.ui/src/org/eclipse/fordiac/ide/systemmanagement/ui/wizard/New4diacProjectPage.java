@@ -184,7 +184,7 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		advancedGroupContainer.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 
 		final Button openApplicationCheckbox = new Button(advancedGroupContainer, SWT.CHECK);
-		openApplicationCheckbox.setText(Messages.NewApplicationPage_OpenApplicationForEditing);
+		openApplicationCheckbox.setText(Messages.OpenApplicationForEditing);
 		openApplicationCheckbox.setSelection(openApplication);
 		openApplicationCheckbox.addSelectionListener(new SelectionListener() {
 			@Override

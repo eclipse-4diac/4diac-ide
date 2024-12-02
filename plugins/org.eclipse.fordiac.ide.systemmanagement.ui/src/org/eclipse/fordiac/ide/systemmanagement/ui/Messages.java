@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2014 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -28,16 +28,7 @@ public final class Messages extends NLS {
 
 	public static String AutomationSystemEditor_ShowingSystem;
 
-	/** The New application page_ error message_ empty app name. */
-	public static String NewApplicationPage_ErrorMessage_EmptyElementName;
-
-	/** The New application page_ error message invalid app name. */
-	public static String NewApplicationPage_ErrorMessageInvalidAppName;
-
-	public static String NewApplicationPage_OpenApplicationForEditing;
-
-	/** The New application page_ error message no system selected. */
-	public static String NewApplicationPage_ErrorMessageNoSystemSelected;
+	public static String OpenApplicationForEditing;
 
 	public static String NewSystemWizard_ShowAdvanced;
 
@@ -61,6 +52,8 @@ public final class Messages extends NLS {
 	public static String SystemEditor_SystemConfiguration;
 
 	public static String SystemEditor_SystemInformation;
+
+	public static String SystemExplorerNewActionProvider_New;
 
 	static {
 		// initialize resource bundle

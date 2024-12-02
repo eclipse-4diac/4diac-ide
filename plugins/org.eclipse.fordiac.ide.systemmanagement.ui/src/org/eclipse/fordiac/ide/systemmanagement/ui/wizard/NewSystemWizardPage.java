@@ -133,7 +133,7 @@ public class NewSystemWizardPage extends WizardNewFileCreationPage {
 
 	private Button createOpenApplicationGroup(final Composite parent) {
 		openApplicationCheckbox = new Button(parent, SWT.CHECK);
-		openApplicationCheckbox.setText(Messages.NewApplicationPage_OpenApplicationForEditing);
+		openApplicationCheckbox.setText(Messages.OpenApplicationForEditing);
 		openApplicationCheckbox.setSelection(true);
 		setPageComplete(validatePage());
 		openApplicationCheckbox.addListener(SWT.Selection,
