@@ -72,21 +72,6 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler 
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.DeleteHandler"
-            commandId="org.eclipse.ui.edit.delete">
-         <activeWhen>
-         	<with variable="selection">
-		    <iterate operator="and" ifEmpty="false">
-		     <or>
-		     	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Application" />
-		     	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Resource" />
-		     	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Device" />
-		     </or>
-		    </iterate>
-		   </with>           
-         </activeWhen>
-      </handler>      
-      <handler 
             class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.RenameSystem"
             commandId="org.eclipse.ui.edit.rename">
          <activeWhen>
@@ -122,22 +107,6 @@
       <menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
          <command
-               commandId="org.eclipse.ui.edit.delete"
-               tooltip="Delete selected application">
-            <visibleWhen
-                  checkEnabled="false">
-               <iterate
-                     operator="or">
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.model.libraryElement.Application">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-      <menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
-         <command
                commandId="org.eclipse.ui.edit.rename"
                tooltip="Rename selected automation system">
             <visibleWhen
@@ -146,54 +115,6 @@
                      operator="or">
                   <instanceof
                         value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-      <menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
-         <command
-               commandId="org.eclipse.ui.edit.delete"
-               tooltip="Delete selected Automation System">
-            <visibleWhen
-                  checkEnabled="false">
-               <iterate
-                     operator="or">
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-      <menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
-         <command
-               commandId="org.eclipse.ui.edit.delete"
-               tooltip="Delete selected Resource">
-            <visibleWhen
-                  checkEnabled="false">
-               <iterate
-                     operator="or">
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.model.libraryElement.Resource">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-      <menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
-         <command
-               commandId="org.eclipse.ui.edit.delete"
-               tooltip="Delete selected Device">
-            <visibleWhen
-                  checkEnabled="false">
-               <iterate
-                     operator="or">
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.model.libraryElement.Device">
                   </instanceof>
                </iterate>
             </visibleWhen>
