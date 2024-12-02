@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="RangeBasedPulse ">
+<FBType Name="RangeBasedPulse" Comment="Distance based Impulse Generator" >
 	<Identification Standard="61499-1" Description="Copyright (c) 2025 HR Agrartechnik GmbH   &#10;   &#10;This program and the accompanying materials are made    &#10;available under the terms of the Eclipse Public License 2.0    &#10;which is available at https://www.eclipse.org/legal/epl-2.0/    &#10;    &#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;Distance based Impulse Generator&#10;&#10;START with a HIGH Pulse. " >
 	</Identification>
 	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2024-10-18" Remarks="initial Version">
@@ -10,7 +10,7 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ" Type="Event">
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request" >
 				<With Var="DIST_IN"/>
 				<With Var="DIST_OFF"/>
 				<With Var="DIST_HIGH"/>
@@ -18,34 +18,33 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event">
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation" >
 				<With Var="Q"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="DIST_IN" Type="UDINT"/>
-			<VarDeclaration Name="DIST_OFF" Type="UDINT"/>
-			<VarDeclaration Name="DIST_HIGH" Type="UDINT"/>
-			<VarDeclaration Name="DIST_LOW" Type="UDINT"/>
+			<VarDeclaration Name="DIST_IN" Type="UDINT" Comment="Travelled Distance" />
+			<VarDeclaration Name="DIST_OFF" Type="UDINT" Comment="Distance Offset" />
+			<VarDeclaration Name="DIST_HIGH" Type="UDINT" Comment="Distance for Output HIGH" />
+			<VarDeclaration Name="DIST_LOW" Type="UDINT" Comment="Distance for Output LOW" />
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="Q" Type="BOOL"/>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="Output" />
 		</OutputVars>
 	</InterfaceList>
 	<SimpleFB>
 		<InternalVars>
 			<VarDeclaration Name="DIST_REMAINDER" Type="UDINT"/>
 		</InternalVars>
+		<ECState Name="REQ">
+			<ECAction Algorithm="REQ" Output="CNF"/>
+		</ECState>
 		<Algorithm Name="REQ">
 			<ST><![CDATA[ALGORITHM REQ
 
 DIST_REMAINDER := (DIST_IN + DIST_OFF) MOD (DIST_HIGH + DIST_LOW);
 
-IF (DIST_REMAINDER >= DIST_HIGH) THEN
-	Q := TRUE;
-ELSE
-	Q := FALSE;
-END_IF;
+Q := DIST_REMAINDER >= DIST_HIGH;
 
 END_ALGORITHM
 
