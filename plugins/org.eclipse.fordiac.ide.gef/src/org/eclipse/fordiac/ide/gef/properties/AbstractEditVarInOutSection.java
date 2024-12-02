@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -95,11 +96,15 @@ public abstract class AbstractEditVarInOutSection extends AbstractSection
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		inputDataLayer.setConfigLabelAccumulator(
 				new VarDeclarationConfigLabelAccumulator(inputProvider, this::getAnnotationModel));
-		inputTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer,
-				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(), null,
-				this, true);
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
+				VarDeclarationTableColumn.DEFAULT_COLUMNS);
+		inputTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
+				getSectionEditableRule(), null, this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
+
+		inputTable.addConfiguration(
+				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
 		inputTable.configure();
 	}
 

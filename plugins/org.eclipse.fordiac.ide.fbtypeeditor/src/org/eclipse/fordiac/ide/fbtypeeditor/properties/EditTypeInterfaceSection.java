@@ -20,6 +20,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
+import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -63,14 +64,17 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 		outputDataLayer.setConfigLabelAccumulator(
 				new VarDeclarationConfigLabelAccumulator(outputProvider, this::getAnnotationModel,
 						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG_AND_RETAIN));
-		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new NatTableColumnProvider<>(
-						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG_AND_RETAIN),
+
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG_AND_RETAIN);
+		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer, columnProvider,
 				getSectionEditableRule(), null, this, false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.addConfiguration(new DropdownSelectionWidget(RetainTag.getTagList()));
+		outputTable.addConfiguration(
+				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
 		outputTable.configure();
 
 	}
@@ -84,14 +88,16 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 		inputDataLayer.setConfigLabelAccumulator(
 				new VarDeclarationConfigLabelAccumulator(inputProvider, this::getAnnotationModel,
 						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG_AND_RETAIN));
-		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new NatTableColumnProvider<>(
-						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG_AND_RETAIN),
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG_AND_RETAIN);
+		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer, columnProvider,
 				getSectionEditableRule(), null, this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		inputTable.addConfiguration(new DropdownSelectionWidget(RetainTag.getTagList()));
+		inputTable.addConfiguration(
+				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
 		inputTable.configure();
 	}
 

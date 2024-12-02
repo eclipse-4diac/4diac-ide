@@ -143,7 +143,8 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		inputDataLayer.setConfigLabelAccumulator(
 				new VarDeclarationConfigLabelAccumulator(structMemberProvider, this::getAnnotationModel));
-		final var columnProvider = new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS);
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
+				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		natTable = NatTableWidgetFactory.createRowNatTable(this, inputDataLayer, columnProvider,
 				IEditableRule.ALWAYS_EDITABLE, null, this, false);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));

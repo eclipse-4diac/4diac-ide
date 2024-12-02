@@ -20,6 +20,7 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -90,11 +91,14 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		outputDataLayer.setConfigLabelAccumulator(
 				new VarDeclarationConfigLabelAccumulator(outputProvider, this::getAnnotationModel));
-		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(), null,
-				this, false);
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
+				VarDeclarationTableColumn.DEFAULT_COLUMNS);
+		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer, columnProvider,
+				getSectionEditableRule(), null, this, false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
+		outputTable.addConfiguration(
+				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
 		outputTable.configure();
 	}
 
@@ -105,11 +109,15 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				VarDeclarationTableColumn.DEFAULT_COLUMNS);
 		inputDataLayer.setConfigLabelAccumulator(
 				new VarDeclarationConfigLabelAccumulator(inputProvider, this::getAnnotationModel));
-		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(), null,
-				this, true);
+
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
+				VarDeclarationTableColumn.DEFAULT_COLUMNS);
+		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer, columnProvider,
+				getSectionEditableRule(), null, this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
+		inputTable.addConfiguration(
+				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
 		inputTable.configure();
 	}
 

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -69,12 +70,15 @@ public class EditUntypedSubappVarInOutSection extends AbstractEditVarInOutSectio
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,
 				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS));
-		inputTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer,
-				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS),
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS);
+		inputTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
 				getSectionEditableRule(), null, this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
+		inputTable.addConfiguration(
+				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
 		inputTable.configure();
 	}
 

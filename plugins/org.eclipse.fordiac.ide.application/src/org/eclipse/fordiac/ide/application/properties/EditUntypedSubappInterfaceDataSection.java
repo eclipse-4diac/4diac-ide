@@ -92,7 +92,8 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputProvider,
 				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE));
-		final var columnProvider = new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE);
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE);
 		outputTable = NatTableWidgetFactory
 				.createRowNatTable(outputsGroup, inputDataLayer, columnProvider,
 						new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),
@@ -123,7 +124,7 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,
 				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
-		final var columnProvider = new NatTableColumnProvider<>(
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer, columnProvider,
 				new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),

@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
@@ -163,13 +164,13 @@ public class InstancePropertySection extends AbstractSection {
 		outputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputDataProvider,
 				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
 
-		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer,
-				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG),
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, columnProvider,
 				new NatTableColumnEditableRule<>(IEditableRule.ALWAYS_EDITABLE,
 						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG,
 						VarDeclarationTableColumn.DEFAULT_EDITABLE));
-		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer,
-				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG),
+		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer, columnProvider,
 				new NatTableColumnEditableRule<>(IEditableRule.ALWAYS_EDITABLE,
 						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG,
 						VarDeclarationTableColumn.DEFAULT_EDITABLE_NO_INITIAL_VALUE));
@@ -179,6 +180,11 @@ public class InstancePropertySection extends AbstractSection {
 
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputDataProvider));
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputDataProvider));
+
+		inputTable.addConfiguration(
+				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
+		outputTable.addConfiguration(
+				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
 
 		inputTable.configure();
 		outputTable.configure();

@@ -28,6 +28,7 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -89,13 +90,16 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 
 		dataLayer.setConfigLabelAccumulator(acc);
 
-		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer,
-				new NatTableColumnProvider<>(VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_RETAIN),
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_RETAIN);
+		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, columnProvider,
 				IEditableRule.ALWAYS_EDITABLE, null, this, false);
 
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
 		table.addConfiguration(new TypeDeclarationEditorConfiguration(provider));
 		table.addConfiguration(new DropdownSelectionWidget(RetainTag.getTagList()));
+		table.addConfiguration(
+				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
 		table.configure();
 	}
 
