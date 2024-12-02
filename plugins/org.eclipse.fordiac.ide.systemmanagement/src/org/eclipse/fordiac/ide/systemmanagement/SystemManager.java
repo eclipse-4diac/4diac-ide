@@ -69,6 +69,7 @@ public enum SystemManager {
 	INSTANCE;
 
 	public static final String FORDIAC_PROJECT_NATURE_ID = "org.eclipse.fordiac.ide.systemmanagement.FordiacNature"; //$NON-NLS-1$
+	public static final String FORDIAC_EXPORT_BUILDER_ID = "org.eclipse.fordiac.ide.export.builder"; //$NON-NLS-1$
 	public static final String ROBOT_PROJECT_NATURE_ID = "org.robotframework.ide.eclipse.main.plugin.robotNature"; //$NON-NLS-1$
 	public static final String OLD_DISTRIBUTED_PROJECT_NATURE_ID = "org.fordiac.systemManagement.DistributedNature"; //$NON-NLS-1$
 
@@ -187,7 +188,7 @@ public enum SystemManager {
 	}
 
 	private static String[] getBuilderIDs() {
-		return new String[] { XtextProjectHelper.BUILDER_ID };
+		return new String[] { XtextProjectHelper.BUILDER_ID, FORDIAC_EXPORT_BUILDER_ID };
 	}
 
 	/** Notify listeners. */

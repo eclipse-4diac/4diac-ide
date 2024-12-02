@@ -9,6 +9,9 @@
                class="org.eclipse.fordiac.ide.systemmanagement.nature.FordiacNature">
          </run>
       </runtime>
+      <builder
+            id="org.eclipse.fordiac.ide.export.builder">
+      </builder>
    </extension>
    <!-- old nature name so that old projects can still be loaded -->
    <extension

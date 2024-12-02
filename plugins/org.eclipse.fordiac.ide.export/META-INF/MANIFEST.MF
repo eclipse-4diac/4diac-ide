@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.export,
+ org.eclipse.fordiac.ide.export.builder,
  org.eclipse.fordiac.ide.export.language,
  org.eclipse.fordiac.ide.export.utils
 Require-Bundle: org.eclipse.ui,
