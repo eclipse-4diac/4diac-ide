@@ -52,6 +52,7 @@ import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.gef.ui.actions.UpdateAction;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -66,7 +67,6 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -238,15 +238,16 @@ public class SystemEditor extends EditorPart
 		final FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 
 		form = toolkit.createForm(parent);
-		form.getBody().setLayout(new GridLayout(1, true));
+		GridLayoutFactory.fillDefaults().applyTo(form.getBody());
 
-		final SashForm sash = new SashForm(form.getBody(), SWT.VERTICAL);
-		toolkit.adapt(sash);
-		sash.setLayoutData(new GridData(GridData.FILL_BOTH));
+		final Composite parentComposite = toolkit.createComposite(form.getBody());
+		toolkit.adapt(parentComposite);
+		parentComposite.setLayout(new GridLayout(1, false));
+		parentComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		createInfoSection(toolkit, sash);
+		createInfoSection(toolkit, parentComposite);
 
-		final Composite bottomComp = toolkit.createComposite(sash);
+		final Composite bottomComp = toolkit.createComposite(parentComposite);
 		bottomComp.setLayout(new GridLayout(2, true));
 		bottomComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -277,13 +278,12 @@ public class SystemEditor extends EditorPart
 		}
 	}
 
-	private void createInfoSection(final FormToolkit toolkit, final SashForm sash) {
-		final Section infoSection = createExpandableSection(toolkit, sash, Messages.SystemEditor_SystemInformation);
-		infoSection.setLayout(new GridLayout());
+	private void createInfoSection(final FormToolkit toolkit, final Composite parent) {
+		final Section infoSection = createExpandableSection(toolkit, parent, Messages.SystemEditor_SystemInformation);
 
 		typeInfo = new PackageInfoWidget(toolkit, () -> annotationModel);
 		final Composite composite = toolkit.createComposite(infoSection);
-		composite.setLayout(new GridLayout(2, true));
+		GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(true).applyTo(composite);
 		typeInfo.createControls(composite);
 		infoSection.setClient(composite);
 	}
@@ -292,7 +292,7 @@ public class SystemEditor extends EditorPart
 			final String text) {
 		final Section section = toolkit.createSection(parent,
 				ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED);
-		section.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		section.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		section.setText(text);
 		return section;
 	}
@@ -301,7 +301,7 @@ public class SystemEditor extends EditorPart
 		final Section appSection = createExpandableSection(toolkit, bottomComp, Messages.SystemEditor_Applications);
 
 		final Composite appSecComposite = toolkit.createComposite(appSection);
-		appSecComposite.setLayout(new GridLayout(2, false));
+		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(appSecComposite);
 		appSection.setClient(appSecComposite);
 
 		final AddDeleteReorderListWidget actionMgmButtons = new AddDeleteReorderListWidget();
@@ -371,7 +371,7 @@ public class SystemEditor extends EditorPart
 		sysConfSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		final Composite sysConfSecComposite = toolkit.createComposite(sysConfSection);
-		sysConfSecComposite.setLayout(new GridLayout(2, false));
+		GridLayoutFactory.fillDefaults().applyTo(sysConfSecComposite);
 		sysConfSection.setClient(sysConfSecComposite);
 
 		final Tree tree = toolkit.createTree(sysConfSecComposite,
