@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2024 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.dataimport.MappingTargetCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -44,7 +45,7 @@ public class MapCommunicationCommand extends MapToCommand {
 		comm.setPosition(EcoreUtil.copy(srcElement.getPosition()));
 		comm.setTypeEntry(srcElement.getTypeEntry());
 		comm.setInterface(srcElement.getType().getInterfaceList().copy());
-		transferFBParams(srcElement, comm);
+		MappingTargetCreator.transferFBParams(srcElement, comm);
 		target.getMappedElements().add(comm);
 		return comm;
 	}

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2016 - 2017 fortiss GmbH
- * 				 2018 - 2020 Johannes Kepler University, Linz
+ * Copyright (c) 2016, 2024 fortiss GmbH, Johannes Kepler University, Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -260,7 +260,7 @@ public class SystemImporter extends CommonElementImporter {
 		final FBNetworkElement fromElement = findMappingTargetFromName(fromValue);
 		final FBNetworkElement toElement = (fromElement instanceof CommunicationChannel)
 				? findMappingTargetFromName(toValue, fromElement)
-				: findMappingToElement(fromValue, toValue);
+				: findMappingToElement(fromValue, toValue, fromElement);
 
 		if ((null != fromElement) && (null != toElement)) {
 			getElement().getMapping().add(createMappingEntry(toElement, fromElement));
@@ -270,7 +270,8 @@ public class SystemImporter extends CommonElementImporter {
 		proceedToEndElementNamed(LibraryElementTags.MAPPING_ELEMENT);
 	}
 
-	private FBNetworkElement findMappingToElement(final String fromValue, final String toValue) {
+	private FBNetworkElement findMappingToElement(final String fromValue, final String toValue,
+			final FBNetworkElement fromElement) {
 		final var devResSeperator = toValue.indexOf('.');
 		if (devResSeperator == -1) {
 			getErrors().add(
@@ -298,7 +299,12 @@ public class SystemImporter extends CommonElementImporter {
 
 		final String targetFBName = (resFBSeperator == -1) ? fromValue : toValue.substring(resFBSeperator + 1);
 
-		return resFBNElementMapping.getOrDefault(res, Collections.emptyMap()).get(targetFBName);
+		final FBNetworkElement fbNetworkElement = resFBNElementMapping.getOrDefault(res, Collections.emptyMap())
+				.get(targetFBName);
+		if (fbNetworkElement == null && fromElement != null) {
+			return MappingTargetCreator.createMappingTarget(res, fromElement, targetFBName);
+		}
+		return fbNetworkElement;
 	}
 
 	private static Mapping createMappingEntry(final FBNetworkElement toElement, final FBNetworkElement fromElement) {
