@@ -130,7 +130,9 @@ public abstract class StructManipulatorSection extends AbstractSection implement
 		memberVarViewer.setInput(getType());
 		memberVarViewer.setExpandedElements(expandedElements);
 		memberVarViewer.setExpandedTreePaths(expandedTreePaths);
-		memberVarViewer.getTree().setTopItem(topItem);
+		if (topItem != null && !topItem.isDisposed()) {
+			memberVarViewer.getTree().setTopItem(topItem);
+		}
 	}
 
 	protected void handleStructSelectionChanged(final String newStructName) {
