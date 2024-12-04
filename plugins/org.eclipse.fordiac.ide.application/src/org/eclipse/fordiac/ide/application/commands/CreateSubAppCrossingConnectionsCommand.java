@@ -440,6 +440,13 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 		}
 
+		if (destination instanceof final VarDeclaration targetData && targetData.isInOutVar()
+				&& source instanceof final VarDeclaration sourceData && !sourceData.isInOutVar()) {
+			// a non inout is connected to an inout
+			ErrorMessenger.popUpErrorMessage(Messages.ConnectionValidator_OutputsCannotBeConnectedToVarInOuts);
+			return false;
+		}
+
 		return LinkConstraints.isWithConstraintOK(source) && LinkConstraints.isWithConstraintOK(destination);
 	}
 
