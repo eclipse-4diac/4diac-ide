@@ -4,7 +4,7 @@
 
 	<extension point="org.eclipse.core.contenttype.contentTypes">
   		<file-association
-      		content-type=" org.eclipse.emf.compare.content.type"
+      		content-type="org.eclipse.emf.compare.content.type"
       		file-extensions="sys,fbt,sub,adp,dtp,fct,gcf"/>
 	</extension>  
    <extension

@@ -116,7 +116,7 @@
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <file-association
-            content-type=" org.eclipse.emf.compare.content.type"
+            content-type="org.eclipse.emf.compare.content.type"
             file-extensions="opsem">
       </file-association>
    </extension>2
