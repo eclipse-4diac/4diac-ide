@@ -268,6 +268,9 @@ public class LibraryElementXtextDocument extends XtextDocument implements IAdapt
 							if (wasHadUpdates) {
 								notifyModelListenersOnUiThread();
 							}
+							if (isCancelReaders) {
+								checkAndUpdateAnnotations();
+							}
 						}
 					} catch (final RuntimeException e) {
 						if (!operationCanceledManager.isOperationCanceledException(e)) {
