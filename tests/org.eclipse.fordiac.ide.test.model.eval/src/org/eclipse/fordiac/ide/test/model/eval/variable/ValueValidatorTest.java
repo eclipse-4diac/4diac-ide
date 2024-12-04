@@ -146,7 +146,7 @@ class ValueValidatorTest {
 				Arguments.of(IecTypes.ElementaryTypes.SINT, "TRUE", //$NON-NLS-1$
 						"Cannot convert from BOOL to SINT"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.SINT, "129", //$NON-NLS-1$
-						"Cannot convert from USINT to SINT"), //$NON-NLS-1$
+						"Cannot convert from INT to SINT"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.INT, "123456", //$NON-NLS-1$
 						"Cannot convert from DINT to INT"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.INT, "3.14", //$NON-NLS-1$

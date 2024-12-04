@@ -61,17 +61,17 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Algorithm" abstract="true" eSuperTypes="#//ICallable">
-    <eOperations name="getInputParameters" upperBound="-1" eType="#//INamedElement">
+    <eOperations name="getInputParameters" upperBound="-1" eType="#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getOutputParameters" upperBound="-1" eType="#//INamedElement">
+    <eOperations name="getOutputParameters" upperBound="-1" eType="#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getInOutParameters" upperBound="-1" eType="#//INamedElement">
+    <eOperations name="getInOutParameters" upperBound="-1" eType="#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
       </eAnnotations>
@@ -955,17 +955,17 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//IInterfaceElement #//ICallable">
-    <eOperations name="getInputParameters" upperBound="-1" eType="#//INamedElement">
+    <eOperations name="getInputParameters" upperBound="-1" eType="#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getOutputParameters" upperBound="-1" eType="#//INamedElement">
+    <eOperations name="getOutputParameters" upperBound="-1" eType="#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getInOutParameters" upperBound="-1" eType="#//INamedElement">
+    <eOperations name="getInOutParameters" upperBound="-1" eType="#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
       </eAnnotations>
@@ -1014,17 +1014,17 @@
         <details key="body" value="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xA;if(type instanceof FBType){&#xA;   return (FBType) type; &#xA;}&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getInputParameters" upperBound="-1" eType="#//INamedElement">
+    <eOperations name="getInputParameters" upperBound="-1" eType="#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getOutputParameters" upperBound="-1" eType="#//INamedElement">
+    <eOperations name="getOutputParameters" upperBound="-1" eType="#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getInOutParameters" upperBound="-1" eType="#//INamedElement">
+    <eOperations name="getInOutParameters" upperBound="-1" eType="#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
       </eAnnotations>
@@ -1277,17 +1277,17 @@
         eOpposite="#//Group/groupElements"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FBType" eSuperTypes="#//LibraryElement #//ICallable">
-    <eOperations name="getInputParameters" upperBound="-1" eType="#//INamedElement">
+    <eOperations name="getInputParameters" upperBound="-1" eType="#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getOutputParameters" upperBound="-1" eType="#//INamedElement">
+    <eOperations name="getOutputParameters" upperBound="-1" eType="#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getInOutParameters" upperBound="-1" eType="#//INamedElement">
+    <eOperations name="getInOutParameters" upperBound="-1" eType="#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
       </eAnnotations>
@@ -1379,10 +1379,20 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ICallable" abstract="true" interface="true"
       eSuperTypes="#//INamedElement">
-    <eOperations name="getInputParameters" upperBound="-1" eType="#//INamedElement"/>
-    <eOperations name="getOutputParameters" upperBound="-1" eType="#//INamedElement"/>
-    <eOperations name="getInOutParameters" upperBound="-1" eType="#//INamedElement"/>
+    <eOperations name="getInputParameters" upperBound="-1" eType="#//ITypedElement"/>
+    <eOperations name="getOutputParameters" upperBound="-1" eType="#//ITypedElement"/>
+    <eOperations name="getInOutParameters" upperBound="-1" eType="#//ITypedElement"/>
     <eOperations name="getReturnType" eType="ecore:EClass data.ecore#//DataType"/>
+    <eOperations name="getSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getSignature(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isVarargs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.isVarargs(this);"/>
+      </eAnnotations>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Identification">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="applicationDomain" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
@@ -2120,12 +2130,13 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TextFunction" abstract="true" eSuperTypes="#//Function">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputParameters" upperBound="-1"
-        eType="#//INamedElement" containment="true"/>
+        eType="#//ITypedElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputParameters" upperBound="-1"
-        eType="#//INamedElement" containment="true"/>
+        eType="#//ITypedElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inOutParameters" upperBound="-1"
-        eType="#//INamedElement" containment="true"/>
+        eType="#//ITypedElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass data.ecore#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="varargs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TextFunctionBody" abstract="true" eSuperTypes="#//FunctionBody">
@@ -2133,12 +2144,13 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TextMethod" abstract="true" eSuperTypes="#//Method">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputParameters" upperBound="-1"
-        eType="#//INamedElement" containment="true"/>
+        eType="#//ITypedElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputParameters" upperBound="-1"
-        eType="#//INamedElement" containment="true"/>
+        eType="#//ITypedElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inOutParameters" upperBound="-1"
-        eType="#//INamedElement" containment="true"/>
+        eType="#//ITypedElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass data.ecore#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="varargs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TypedConfigureableObject" eSuperTypes="#//ITypedElement #//ConfigurableObject">

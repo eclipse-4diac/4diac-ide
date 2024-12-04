@@ -84,7 +84,6 @@ public class XMIExportFilter extends ExportFilter {
 		new STAlgorithmResourceSetInitializer().initialize(resourceSet, typeFile.getProject());
 		new STFunctionResourceSetInitializer().initialize(resourceSet, typeFile.getProject());
 		new GlobalConstantsResourceSetInitializer().initialize(resourceSet, typeFile.getProject());
-		resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
 
 		final Resource resource = resourceSet.getResource(sourceUri, true);
 		if (resource instanceof final XtextResource xtextResource) {

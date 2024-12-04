@@ -187,8 +187,7 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 	protected StyledString getStyledDisplayString(final EObject element, final String qualifiedNameAsString,
 			final String shortName) {
 		if (!element.eIsProxy() && element instanceof final ICallable callable) {
-			final StyledString result = new StyledString(
-					STCoreResourceDescriptionStrategy.getCallableDisplayString(callable));
+			final StyledString result = new StyledString(callable.getSignature());
 			final QualifiedName qualifiedName = getQualifiedNameConverter().toQualifiedName(qualifiedNameAsString);
 			if (qualifiedName.getSegmentCount() > 1) {
 				result.append(" - " + qualifiedNameAsString, StyledString.QUALIFIER_STYLER); //$NON-NLS-1$
@@ -202,8 +201,7 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 	protected String getDisplayString(final EObject element, final String qualifiedNameAsString,
 			final String shortName) {
 		if (!element.eIsProxy() && element instanceof final ICallable callable) {
-			final StringBuilder result = new StringBuilder(
-					STCoreResourceDescriptionStrategy.getCallableDisplayString(callable));
+			final StringBuilder result = new StringBuilder(callable.getSignature());
 			final QualifiedName qualifiedName = getQualifiedNameConverter().toQualifiedName(qualifiedNameAsString);
 			if (qualifiedName.getSegmentCount() > 1) {
 				result.append(" - " + qualifiedNameAsString); //$NON-NLS-1$

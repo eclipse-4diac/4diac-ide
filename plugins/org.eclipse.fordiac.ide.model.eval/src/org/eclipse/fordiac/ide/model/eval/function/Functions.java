@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -393,24 +394,28 @@ public interface Functions {
 	 */
 	static DataType inferReturnTypeFromDataTypes(final Class<? extends Functions> clazz, final String name,
 			final List<DataType> argumentTypes) throws NoSuchMethodException, SecurityException {
-		return inferReturnTypeFromDataTypes(findMethodFromDataTypes(clazz, name, argumentTypes), null, argumentTypes);
+		return inferReturnTypeFromDataTypes(findMethodFromDataTypes(clazz, name, argumentTypes), null,
+				() -> argumentTypes);
 	}
 
 	/**
 	 * Infer the concrete return type (i.e., resolve generic type) for a function
 	 *
-	 * @param method             The method reference corresponding to the function
-	 * @param expectedReturnType The expected return type used to infer the return
-	 *                           type (may be null)
-	 * @param argumentTypes      The argument types used to infer the return type
+	 * @param method                     The method reference corresponding to the
+	 *                                   function
+	 * @param expectedReturnTypeSupplier The expected return type used to infer the
+	 *                                   return type (may be null and return null)
+	 * @param argumentTypesSupplier      The argument types used to infer the return
+	 *                                   type (may neither be null nor return null)
 	 * @return The concrete return type of the function based on the argument types
 	 */
-	static DataType inferReturnTypeFromDataTypes(final Method method, final DataType expectedReturnType,
-			final List<DataType> argumentTypes) {
+	static DataType inferReturnTypeFromDataTypes(final Method method,
+			final Supplier<DataType> expectedReturnTypeSupplier, final Supplier<List<DataType>> argumentTypesSupplier) {
 		try {
 			final Type returnType = method.getGenericReturnType();
 			if (returnType instanceof TypeVariable<?>) {
 				DataType result = null;
+				final List<DataType> argumentTypes = argumentTypesSupplier.get();
 				for (int i = 0; i < argumentTypes.size(); ++i) {
 					final Type parameterTypeForArgument = getGenericParameterValueType(method, i);
 					if (parameterTypeForArgument != null && parameterTypeForArgument.equals(returnType)) {
@@ -422,9 +427,11 @@ public interface Functions {
 				}
 			} else if (returnType instanceof final Class<?> returnTypeClass && returnType != void.class) {
 				final DataType result = ValueOperations.dataType(returnTypeClass);
-				if (GenericTypes.isAnyType(result) && expectedReturnType != null
-						&& result.isAssignableFrom(expectedReturnType)) {
-					return expectedReturnType;
+				if (GenericTypes.isAnyType(result) && expectedReturnTypeSupplier != null) {
+					final DataType expectedReturnType = expectedReturnTypeSupplier.get();
+					if (expectedReturnType != null && result.isAssignableFrom(expectedReturnType)) {
+						return expectedReturnType;
+					}
 				}
 				return result;
 			}

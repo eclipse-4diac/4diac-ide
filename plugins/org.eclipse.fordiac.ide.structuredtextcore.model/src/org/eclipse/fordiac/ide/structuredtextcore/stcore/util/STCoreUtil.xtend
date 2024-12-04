@@ -115,8 +115,8 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 
 final class STCoreUtil {
-	static final LoadingCache<Pair<DataType, String>, DataType> TYPE_DECLARATION_CACHE = CacheBuilder.newBuilder.maximumSize(1000).
-		build[TypeDeclarationParser.parseTypeDeclaration(key, value)]
+	static final LoadingCache<Pair<DataType, String>, DataType> TYPE_DECLARATION_CACHE = CacheBuilder.newBuilder.
+		maximumSize(1000).build[TypeDeclarationParser.parseTypeDeclaration(key, value)]
 
 	private new() {
 	}
@@ -188,30 +188,31 @@ final class STCoreUtil {
 			case first.anyType || second.anyType:
 				false
 			case ADD:
-				(first instanceof AnyNumType && second instanceof AnyNumType) ||
-					(first instanceof AnyDurationType && second instanceof AnyDurationType) ||
-					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) ||
-					(first.instanceofAnyDateAndTimeType && second instanceof AnyDurationType)
+				(first instanceof AnyNumType && second instanceof AnyNumType && first.hasCommonSupertype(second)) ||
+					(first instanceof AnyDurationType && second instanceof AnyDurationType) || // durations always have a common supertype
+					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) || // result type is always first
+					(first.instanceofAnyDateAndTimeType && second instanceof AnyDurationType) // result type is always first
 			case SUB:
-				(first instanceof AnyNumType && second instanceof AnyNumType) ||
-					(first instanceof AnyDurationType && second instanceof AnyDurationType) ||
-					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) ||
-					(first.instanceofAnyDateAndTimeType && second instanceof AnyDurationType) ||
-					(first.instanceofAnySimpleDateType && second.instanceofAnySimpleDateType) ||
-					(first.instanceofAnyDateAndTimeType && second.instanceofAnyDateAndTimeType) ||
-					(first.instanceofAnyTimeOfDayType && second.instanceofAnyTimeOfDayType)
+				(first instanceof AnyNumType && second instanceof AnyNumType && first.hasCommonSupertype(second)) ||
+					(first instanceof AnyDurationType && second instanceof AnyDurationType) || // durations always have a common supertype
+					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) || // result type is always first
+					(first.instanceofAnyDateAndTimeType && second instanceof AnyDurationType) || // result type is always first
+					(first.instanceofAnySimpleDateType && second.instanceofAnySimpleDateType) || // (L)DATEs always have a common supertype
+					(first.instanceofAnyDateAndTimeType && second.instanceofAnyDateAndTimeType) || // (L)DTs always have a common supertype
+					(first.instanceofAnyTimeOfDayType && second.instanceofAnyTimeOfDayType) // (L)TODs always have a common supertype
 			case MUL,
 			case DIV:
-				first instanceof AnyMagnitudeType && second instanceof AnyNumType
+				(first instanceof AnyNumType && second instanceof AnyNumType && first.hasCommonSupertype(second)) ||
+					(first instanceof AnyDurationType && second instanceof AnyNumType) // result type is always first
 			case MOD:
-				first instanceof AnyIntType && second instanceof AnyIntType
+				first instanceof AnyIntType && second instanceof AnyIntType && first.hasCommonSupertype(second)
 			case POWER:
-				first instanceof AnyRealType && second instanceof AnyNumType
+				first instanceof AnyRealType && second instanceof AnyNumType && first.hasCommonSupertype(second)
 			case AMPERSAND,
 			case AND,
 			case OR,
 			case XOR:
-				first instanceof AnyBitType && second instanceof AnyBitType
+				first instanceof AnyBitType && second instanceof AnyBitType // bit types always have a common supertype
 			case EQ,
 			case NE,
 			case GE,
@@ -219,12 +220,7 @@ final class STCoreUtil {
 			case LE,
 			case LT,
 			case RANGE:
-				(first instanceof AnyNumType && second instanceof AnyNumType) ||
-					(first instanceof AnyDurationType && second instanceof AnyDurationType) ||
-					(first instanceof AnyBitType && second instanceof AnyBitType) ||
-					(first instanceof DataType && second instanceof DataType &&
-						((first as DataType).isAssignableFrom(second as DataType) ||
-							(second as DataType).isAssignableFrom(first as DataType)))
+				first.hasCommonSupertype(second)
 		}
 	}
 
@@ -321,6 +317,22 @@ final class STCoreUtil {
 	}
 
 	def static INamedElement getExpectedType(STExpression expression) {
+		val resource = expression.eResource
+		if (resource instanceof STResource)
+			resource.getExpectedType(expression)
+		else
+			expression.computeExpectedType
+	}
+
+	def static INamedElement getExpectedType(STInitializerExpression expression) {
+		val resource = expression.eResource
+		if (resource instanceof STResource)
+			resource.getExpectedType(expression)
+		else
+			expression.computeExpectedType
+	}
+
+	def static INamedElement computeExpectedType(STExpression expression) {
 		switch (it : expression.eContainer) {
 			STUnaryExpression case op.arithmetic:
 				expectedType.equivalentAnyNumType
@@ -347,24 +359,24 @@ final class STCoreUtil {
 			STInitializerExpression:
 				expectedType
 			STArrayInitElement:
-				expectedType
+				computeExpectedType
 			STStructInitElement:
 				variable.featureType
 			STCallArgument:
-				expectedType
+				computeExpectedType
 			STExpressionSource:
 				(eResource as STResource).expectedType
 		}
 	}
 
-	def static INamedElement getExpectedType(STInitializerExpression expression) {
+	def static INamedElement computeExpectedType(STInitializerExpression expression) {
 		switch (it : expression.eContainer) {
 			STAttribute:
 				declaration.featureType
 			STVarDeclaration:
 				featureType
 			STArrayInitElement:
-				expectedType
+				computeExpectedType
 			STStructInitElement:
 				variable.featureType
 			STArrayInitializerExpression:
@@ -376,7 +388,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def static INamedElement getExpectedType(STArrayInitElement initElement) {
+	def private static INamedElement computeExpectedType(STArrayInitElement initElement) {
 		switch (it : initElement.eContainer) {
 			STArrayInitializerExpression:
 				switch (type : expectedType) {
@@ -389,7 +401,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def static INamedElement getExpectedType(STCallArgument argument) {
+	def private static INamedElement computeExpectedType(STCallArgument argument) {
 		val featureExpression = argument.eContainer
 		if (featureExpression instanceof STFeatureExpression) {
 			val feature = featureExpression.featureNoresolve
@@ -431,7 +443,7 @@ final class STCoreUtil {
 					val inOutParameters = feature.inOutParameters
 					if (index < inputParameters.size)
 						inputParameters.get(index)
-					else if (feature.callableVarargs)
+					else if (feature.varargs)
 						inputParameters.last
 					else if (index < inputParameters.size + inOutParameters.size)
 						inOutParameters.get(index - inputParameters.size)
@@ -448,7 +460,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def static List<? extends INamedElement> computeInputParameters(ICallable callable,
+	def static List<? extends ITypedElement> computeInputParameters(ICallable callable,
 		Iterable<STCallArgument> arguments) {
 		if (callable instanceof STStandardFunction)
 			callable.javaMethod.inferParameterVariables(arguments.map[resultType].filter(DataType).toList, true)
@@ -456,7 +468,7 @@ final class STCoreUtil {
 			callable.inputParameters
 	}
 
-	def static List<? extends INamedElement> computeOutputParameters(ICallable callable,
+	def static List<? extends ITypedElement> computeOutputParameters(ICallable callable,
 		Iterable<STCallArgument> arguments) {
 		if (callable instanceof STStandardFunction)
 			callable.javaMethod.inferParameterVariables(arguments.map[resultType].filter(DataType).toList, false)
@@ -464,16 +476,9 @@ final class STCoreUtil {
 			callable.outputParameters
 	}
 
-	def static List<? extends INamedElement> computeInOutParameters(ICallable callable,
+	def static List<? extends ITypedElement> computeInOutParameters(ICallable callable,
 		Iterable<STCallArgument> arguments) {
 		callable.inOutParameters
-	}
-
-	def static boolean isCallableVarargs(ICallable callable) {
-		switch (callable) {
-			STStandardFunction: callable.varargs
-			default: false
-		}
 	}
 
 	def package static List<STVarDeclaration> inferParameterVariables(Method method, List<DataType> argumentTypes,
@@ -490,12 +495,6 @@ final class STCoreUtil {
 			}
 		].filterNull.toList
 	}
-
-	def static String generateSignature(ICallable callable) //
-	'''«callable.name»(«(callable.inputParameters.filter(ITypedElement).map[type?.name ?: "NULL"]
-		+ callable.outputParameters.filter(ITypedElement).map['''&«type?.name ?: "NULL"»''']
-		+ callable.inOutParameters.filter(ITypedElement).map['''&&«type?.name ?: "NULL"»''']
-	).join(",")»)'''
 
 	def static getFeatureType(INamedElement feature) {
 		switch (feature) {
@@ -650,6 +649,23 @@ final class STCoreUtil {
 			type1
 		else
 			null
+	}
+
+	def static hasCommonSupertype(INamedElement type1, INamedElement type2) {
+		if (type1 == type2)
+			true
+		else if (type1 instanceof DataType)
+			if (type2 instanceof DataType)
+				if (type1.isAssignableFrom(type2))
+					true
+				else if (type2.isAssignableFrom(type1))
+					true
+				else
+					false
+			else
+				false
+		else
+			false
 	}
 
 	def static boolean isAnyVariableReference(STExpression expr) {

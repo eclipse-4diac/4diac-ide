@@ -1,6 +1,5 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.systemmanagement.ui,
- org.eclipse.fordiac.ide.systemmanagement.ui.actions,
  org.eclipse.fordiac.ide.systemmanagement.ui.providers,
  org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer,
  org.eclipse.fordiac.ide.systemmanagement.ui.wizard

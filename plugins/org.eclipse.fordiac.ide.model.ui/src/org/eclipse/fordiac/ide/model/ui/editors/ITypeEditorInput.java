@@ -22,6 +22,7 @@ public interface ITypeEditorInput extends IFileEditorInput, IContentEditorInput 
 	 *
 	 * @return The content
 	 */
+
 	@Override
 	LibraryElement getContent();
 

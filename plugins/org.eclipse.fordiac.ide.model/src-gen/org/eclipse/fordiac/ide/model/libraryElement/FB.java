@@ -61,7 +61,7 @@ public interface FB extends FBNetworkElement, ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<INamedElement> getInputParameters();
+	EList<ITypedElement> getInputParameters();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -69,7 +69,7 @@ public interface FB extends FBNetworkElement, ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<INamedElement> getOutputParameters();
+	EList<ITypedElement> getOutputParameters();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -77,7 +77,7 @@ public interface FB extends FBNetworkElement, ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<INamedElement> getInOutParameters();
+	EList<ITypedElement> getInOutParameters();
 
 	/**
 	 * <!-- begin-user-doc -->

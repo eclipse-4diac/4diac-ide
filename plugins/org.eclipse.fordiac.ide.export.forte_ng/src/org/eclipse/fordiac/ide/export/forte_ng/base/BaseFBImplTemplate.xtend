@@ -30,15 +30,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.Method
 abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<T> {
 	final Map<Algorithm, ILanguageSupport> algorithmLanguageSupport
 	final Map<Method, ILanguageSupport> methodLanguageSupport
-	final Map<Object, Object> cache = newHashMap
 
-	new(T type, String name, Path prefix, String baseClass) {
-		super(type, name, prefix, baseClass)
+	new(T type, String name, Path prefix, String baseClass, Map<?, ?> options) {
+		super(type, name, prefix, baseClass, options)
 		algorithmLanguageSupport = type.algorithm.toInvertedMap [
-			ILanguageSupportFactory.createLanguageSupport("forte_ng", it, #{ILanguageSupport.OPTION_CACHE -> cache})
+			ILanguageSupportFactory.createLanguageSupport("forte_ng", it, options)
 		]
 		methodLanguageSupport = type.methods.toInvertedMap [
-			ILanguageSupportFactory.createLanguageSupport("forte_ng", it, #{ILanguageSupport.OPTION_CACHE -> cache})
+			ILanguageSupportFactory.createLanguageSupport("forte_ng", it, options)
 		]
 	}
 

@@ -16,13 +16,14 @@
 package org.eclipse.fordiac.ide.export.forte_ng.struct
 
 import java.nio.file.Path
+import java.util.Map
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate
 import org.eclipse.fordiac.ide.model.data.StructuredType
 
 abstract class StructBaseTemplate extends ForteLibraryElementTemplate<StructuredType> {
 
-	new(StructuredType type, String name, Path prefix) {
-		super(type, name, prefix)
+	new(StructuredType type, String name, Path prefix, Map<?,?> options) {
+		super(type, name, prefix, options)
 	}
 
 	def protected CharSequence generateConstructorParameters() //

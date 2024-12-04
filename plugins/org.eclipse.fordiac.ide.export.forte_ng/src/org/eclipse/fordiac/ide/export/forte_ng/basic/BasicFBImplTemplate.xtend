@@ -38,10 +38,10 @@ import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExpo
 class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	final Map<ECTransition, ILanguageSupport> transitionLanguageSupport
 
-	new(BasicFBType type, String name, Path prefix) {
-		super(type, name, prefix, "CBasicFB")
+	new(BasicFBType type, String name, Path prefix, Map<?, ?> options) {
+		super(type, name, prefix, "CBasicFB", options)
 		transitionLanguageSupport = type.ECC.ECTransition.toInvertedMap [
-			ILanguageSupportFactory.createLanguageSupport("forte_ng", it)
+			ILanguageSupportFactory.createLanguageSupport("forte_ng", it, options)
 		]
 	}
 
@@ -65,7 +65,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 		  «ENDFOR»
 		}
 	'''
-	
+
 	def private static hasOutputEvent(ECState state) {
 		return state.ECAction.exists[it.output !== null];
 	}
@@ -101,8 +101,8 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 			case conditionEvent !== null: //
 			'''«generateTransitionEvent(transition.conditionEvent)» == paEIID'''
 			case !conditionExpression.nullOrEmpty:
-				if(conditionExpression == "1"){
-					"1"	
+				if (conditionExpression == "1") {
+					"1"
 				} else {
 					transitionLanguageSupport.get(transition)?.generate(emptyMap)
 				}

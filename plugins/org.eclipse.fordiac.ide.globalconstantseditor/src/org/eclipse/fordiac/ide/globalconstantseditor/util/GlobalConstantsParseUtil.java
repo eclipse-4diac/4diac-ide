@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource;
 import org.eclipse.fordiac.ide.globalconstantseditor.resource.GlobalConstantsResource;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
@@ -58,7 +59,6 @@ public final class GlobalConstantsParseUtil {
 
 	private static IParseResult parseInternal(final GlobalConstants type, final List<Issue> issues) {
 		final XtextResourceSet resourceSet = (XtextResourceSet) SERVICE_PROVIDER_GCF.get(ResourceSet.class);
-		resourceSet.getLoadOptions().put(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
 		resourceSet.getLoadOptions().put(ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS, Boolean.TRUE);
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("gcf", //$NON-NLS-1$
 				SERVICE_PROVIDER_GCF.get(IResourceFactory.class));
@@ -76,12 +76,12 @@ public final class GlobalConstantsParseUtil {
 		resourceSet.getResources().add(resource);
 		try {
 			resource.load(new LazyStringInputStream(GlobalConstantsPartitioner.combine(type)),
-					Map.of(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE,
-							ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS, Boolean.TRUE,
+					Map.of(ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS, Boolean.TRUE,
 							GlobalConstantsResource.OPTION_PLAIN_ST, Boolean.TRUE));
 		} catch (final IOException e) {
 			return null;
 		}
+		EcoreUtil.resolveAll(resource);
 		final var validator = resource.getResourceServiceProvider().getResourceValidator();
 		issues.addAll(validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl));
 		return resource.getParseResult();

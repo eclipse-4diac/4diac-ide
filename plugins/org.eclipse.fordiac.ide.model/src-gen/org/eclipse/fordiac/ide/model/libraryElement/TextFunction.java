@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextFunction#getOutputParameters <em>Output Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextFunction#getInOutParameters <em>In Out Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextFunction#getReturnType <em>Return Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextFunction#isVarargs <em>Varargs</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextFunction#getText <em>Text</em>}</li>
  * </ul>
  *
@@ -43,7 +44,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 public interface TextFunction extends Function {
 	/**
 	 * Returns the value of the '<em><b>Input Parameters</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement}.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ITypedElement}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Input Parameters</em>' containment reference list.
@@ -51,11 +52,11 @@ public interface TextFunction extends Function {
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	EList<INamedElement> getInputParameters();
+	EList<ITypedElement> getInputParameters();
 
 	/**
 	 * Returns the value of the '<em><b>Output Parameters</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement}.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ITypedElement}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Output Parameters</em>' containment reference list.
@@ -63,11 +64,11 @@ public interface TextFunction extends Function {
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	EList<INamedElement> getOutputParameters();
+	EList<ITypedElement> getOutputParameters();
 
 	/**
 	 * Returns the value of the '<em><b>In Out Parameters</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement}.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ITypedElement}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>In Out Parameters</em>' containment reference list.
@@ -75,7 +76,7 @@ public interface TextFunction extends Function {
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	EList<INamedElement> getInOutParameters();
+	EList<ITypedElement> getInOutParameters();
 
 	/**
 	 * Returns the value of the '<em><b>Return Type</b></em>' reference.
@@ -98,6 +99,28 @@ public interface TextFunction extends Function {
 	 * @generated
 	 */
 	void setReturnType(DataType value);
+
+	/**
+	 * Returns the value of the '<em><b>Varargs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Varargs</em>' attribute.
+	 * @see #setVarargs(boolean)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextFunction_Varargs()
+	 * @model
+	 * @generated
+	 */
+	boolean isVarargs();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.TextFunction#isVarargs <em>Varargs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Varargs</em>' attribute.
+	 * @see #isVarargs()
+	 * @generated
+	 */
+	void setVarargs(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Text</b></em>' attribute.

@@ -20,6 +20,7 @@ package org.eclipse.fordiac.ide.export.forte_ng.adapter
 
 import java.nio.file.Path
 import java.util.List
+import java.util.Map
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
@@ -28,8 +29,8 @@ import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExpo
 
 class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 
-	new(AdapterType type, String name, Path prefix) {
-		super(type, name, prefix, "CAdapter")
+	new(AdapterType type, String name, Path prefix, Map<?,?> options) {
+		super(type, name, prefix, "CAdapter", options)
 	}
 
 	override generate() '''

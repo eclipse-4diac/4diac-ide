@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
  *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
@@ -16,6 +16,7 @@
  *       - validation for calls
  *       - validation for truncated string literals
  *       - linking diagnostics
+ *       - test binary expression result type
  *   Martin Melik Merkumians
  * 		- validation for duplicate names on FUNCTIONs
  *      - validation of return types
@@ -27,8 +28,10 @@ import java.util.stream.Stream
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator
@@ -47,6 +50,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
+import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.params.provider.Arguments.*
 
 @ExtendWith(InjectionExtension)
@@ -1121,6 +1125,40 @@ class STFunctionValidatorTest {
 			result.assertError(STCorePackage.eINSTANCE.STBinaryExpression, STCoreValidator.OPERATOR_NOT_APPLICABLE)
 	}
 
+	@ParameterizedTest(name="{index}: {0} with {1}")
+	@MethodSource("typeUnaryOperatorApplicableArgumentsCartesianProvider")
+	def void testUnaryOperatorResultType(String operatorName, String typeName) {
+		val operator = STUnaryOperator.getByName(operatorName)
+		val type = ElementaryTypes.getTypeByName(typeName)
+		val result = '''
+		FUNCTION hubert
+		VAR
+		    var1 : «type.name»;
+		END_VAR
+		«operator.literal» var1;
+		END_FUNCTION'''.parse
+		val expression = result.functions.head.code.head as STUnaryExpression
+		assertNotNull(expression.resultType, "invalid result type from applicable operator")
+	}
+
+	@ParameterizedTest(name="{index}: {0} with {1} and {2}")
+	@MethodSource("typeBinaryOperatorApplicableArgumentsCartesianProvider")
+	def void testBinaryOperatorResultType(String operatorName, String leftTypeName, String rightTypeName) {
+		val operator = STBinaryOperator.getByName(operatorName)
+		val leftType = ElementaryTypes.getTypeByName(leftTypeName)
+		val rightType = ElementaryTypes.getTypeByName(rightTypeName)
+		val result = '''
+		FUNCTION hubert
+		VAR
+		    var1 : «leftType.name»;
+		    var2 : «rightType.name»;
+		END_VAR
+		var1 «operator.literal» var2;
+		END_FUNCTION'''.parse
+		val expression = result.functions.head.code.head as STBinaryExpression
+		assertNotNull(expression.resultType, "invalid result type from applicable operator")
+	}
+
 	def static Stream<Arguments> typeUnaryOperatorArgumentsCartesianProvider() {
 		DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ type |
 			STUnaryOperator.VALUES.stream.map [ op |
@@ -1133,6 +1171,24 @@ class STFunctionValidatorTest {
 		DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ first |
 			DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ second |
 				STBinaryOperator.VALUES.stream.map [ op |
+					arguments(op.getName, first.name, second.name)
+				]
+			]
+		]
+	}
+
+	def static Stream<Arguments> typeUnaryOperatorApplicableArgumentsCartesianProvider() {
+		DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ type |
+			STUnaryOperator.VALUES.stream.filter[op|STCoreUtil.isApplicableTo(op, type)].map [ op |
+				arguments(op.getName, type.name)
+			]
+		]
+	}
+
+	def static Stream<Arguments> typeBinaryOperatorApplicableArgumentsCartesianProvider() {
+		DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ first |
+			DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ second |
+				STBinaryOperator.VALUES.stream.filter[op|STCoreUtil.isApplicableTo(op, first, second)].map [ op |
 					arguments(op.getName, first.name, second.name)
 				]
 			]
@@ -1406,8 +1462,8 @@ class STFunctionValidatorTest {
 			END_VAR
 			arrayTest[0] := arrayTest['abc'];
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
-			STCoreValidator.NON_COMPATIBLE_TYPES, "Cannot convert from STRING to ANY_INT")
+		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression, STCoreValidator.NON_COMPATIBLE_TYPES,
+			"Cannot convert from STRING to ANY_INT")
 	}
 
 	@Test

@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCorePrefixM
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocumentUpdater.LibraryElementChangeAdapterFilter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreURIEditorOpener;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.formatting.STCoreWhitespaceInformationProvider;
@@ -244,6 +245,11 @@ public class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	public Class<? extends EmbeddedEditorActions.Factory> bindEmbeddedEditorActions$Factory() {
 		return STAlgorithmEmbeddedEditorActions.Factory.class;
+	}
+
+	public void configureEditor(final Binder binder) {
+		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("editorInitializer")) //$NON-NLS-1$
+				.to(STCoreEditorPreferences.Initializer.class);
 	}
 
 	public void configureKeyBindingScope(final Binder binder) {

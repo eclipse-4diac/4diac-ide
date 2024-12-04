@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -66,7 +67,7 @@ public interface STAlgorithm extends STAlgorithmSourceElement, ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<INamedElement> getInputParameters();
+	EList<ITypedElement> getInputParameters();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -74,7 +75,7 @@ public interface STAlgorithm extends STAlgorithmSourceElement, ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<INamedElement> getOutputParameters();
+	EList<ITypedElement> getOutputParameters();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -82,7 +83,7 @@ public interface STAlgorithm extends STAlgorithmSourceElement, ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<INamedElement> getInOutParameters();
+	EList<ITypedElement> getInOutParameters();
 
 	/**
 	 * <!-- begin-user-doc -->

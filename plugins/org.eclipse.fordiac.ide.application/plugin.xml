@@ -1157,7 +1157,7 @@
                  icon="fordiacimage://ICON_FB"
                  id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar"
                  tooltip="Clear Focus-On">
-        </command>        
+        </command>
       </toolbar>
     </menuContribution>
     <menuContribution locationURI="toolbar:org.eclipse.ui.workbench.navigate">

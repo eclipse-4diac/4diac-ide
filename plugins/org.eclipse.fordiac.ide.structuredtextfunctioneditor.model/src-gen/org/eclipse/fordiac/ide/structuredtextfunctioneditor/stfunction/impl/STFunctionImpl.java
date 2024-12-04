@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
 
@@ -270,7 +271,7 @@ public class STFunctionImpl extends MinimalEObjectImpl.Container implements STFu
 	 * @generated
 	 */
 	@Override
-	public EList<INamedElement> getInputParameters() {
+	public EList<ITypedElement> getInputParameters() {
 		return org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionAnnotations.getInputParameters(this);
 	}
 
@@ -280,7 +281,7 @@ public class STFunctionImpl extends MinimalEObjectImpl.Container implements STFu
 	 * @generated
 	 */
 	@Override
-	public EList<INamedElement> getOutputParameters() {
+	public EList<ITypedElement> getOutputParameters() {
 		return org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionAnnotations.getOutputParameters(this);
 	}
 
@@ -290,8 +291,28 @@ public class STFunctionImpl extends MinimalEObjectImpl.Container implements STFu
 	 * @generated
 	 */
 	@Override
-	public EList<INamedElement> getInOutParameters() {
+	public EList<ITypedElement> getInOutParameters() {
 		return org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionAnnotations.getInOutParameters(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getSignature() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getSignature(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isVarargs() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.isVarargs(this);
 	}
 
 	/**
