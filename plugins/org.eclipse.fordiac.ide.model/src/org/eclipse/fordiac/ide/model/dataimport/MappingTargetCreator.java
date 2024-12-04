@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
+import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -41,7 +42,8 @@ public final class MappingTargetCreator {
 			if (srcElement.getTypeEntry() != null) {
 				created.setTypeEntry(srcElement.getTypeEntry());
 			}
-			created.setInterface(srcElement.getInterface().copy()); // use the src interface to get all parameters
+			// use the src interface to get all parameters
+			created.setInterface(InterfaceListCopier.copy(srcElement.getInterface(), true, true));
 			created.setPosition(EcoreUtil.copy(srcElement.getPosition()));
 			if (srcElement instanceof final ConfigurableFB srcConfFB) {
 				setupConfigureableFB(srcConfFB, (ConfigurableFB) created);
