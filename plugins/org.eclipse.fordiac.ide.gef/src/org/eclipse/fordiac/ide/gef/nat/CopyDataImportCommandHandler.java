@@ -16,10 +16,9 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.widget.ImportTransfer;
@@ -67,18 +66,17 @@ public class CopyDataImportCommandHandler extends CopyDataCommandHandler {
 			return Arrays.stream(assembledCopiedDataStructure).flatMap(Arrays::stream).filter(Objects::nonNull)
 					.filter(cell -> colMapper.containsKey(columnProvider.getColumns().get(cell.getColumnIndex())))
 					.map(cell -> {
-						if (provider.getRowObject(cell.getRowIndex()) instanceof final EObject decl) {
+						if (provider.getRowObject(cell.getRowIndex()) instanceof final EObject eObject) {
 							final LibraryElement element = colMapper
-									.get(columnProvider.getColumns().get(cell.getColumnIndex())).apply(decl);
-							if (element instanceof final DataType dt
-									&& (IecTypes.ElementaryTypes.getAllElementaryType().contains(dt)
-											|| IecTypes.GenericTypes.isAnyType(dt))) {
+									.get(columnProvider.getColumns().get(cell.getColumnIndex())).apply(eObject);
+							if (PackageNameHelper.getPackageName(element).isEmpty()) {
 								return null;
 							}
 							return PackageNameHelper.getFullTypeName(element);
 						}
 						return null;
-					}).filter(Objects::nonNull).filter(s -> !s.isEmpty()).distinct().toArray(size -> new String[size]);
+					}).filter(Objects::nonNull).filter(Predicate.not(String::isEmpty)).distinct()
+					.toArray(String[]::new);
 		}
 		return new String[0];
 	}

@@ -49,13 +49,12 @@ public class DefaultImportCopyPasteLayerConfiguration extends AbstractLayerConfi
 	public void configureTypedLayer(final NatTable layer) {
 		final SelectionLayer sel = NatTableWidgetFactory.getSelectionLayer(layer);
 		final NatTableColumn firstColumn = columnProvider.getColumns().get(0);
-		sel.registerCommandHandler(new CopyDataImportCommandHandler(sel, columnProvider, getColMap(firstColumn)));
+		sel.registerCommandHandler(
+				new CopyDataImportCommandHandler(sel, columnProvider, getMappersForColumn(firstColumn)));
 		sel.registerCommandHandler(new PasteDataImportFromClipboardCommandHandler(sel, cmdStack,
-				getTypeResolver(firstColumn), columnProvider, getColList(firstColumn)));
+				getTypeResolver(firstColumn), columnProvider, getPasteableColumnList(firstColumn)));
 	}
 
-	// TODO: adjust DirectlyDerivedTypeTableColumn, TypedElementTableColumn,
-	// VariableTableColumn
 	private static BiFunction<TypeLibrary, String, TypeEntry> getTypeResolver(final NatTableColumn column) {
 		return switch (column) {
 		case final AttributeTableColumn col -> (typeLib, name) -> {
@@ -65,41 +64,27 @@ public class DefaultImportCopyPasteLayerConfiguration extends AbstractLayerConfi
 			}
 			return typeLib.getDataTypeLibrary().getDerivedTypeEntry(name);
 		};
-		case final DirectlyDerivedTypeTableColumn col ->
-			(typeLib, name) -> typeLib.getDataTypeLibrary().getDerivedTypeEntry(name);
-		case final TypedElementTableColumn col ->
-			(typeLib, name) -> typeLib.getDataTypeLibrary().getDerivedTypeEntry(name);
 		case final VarDeclarationTableColumn col ->
 			(typeLib, name) -> typeLib.getDataTypeLibrary().getDerivedTypeEntry(name);
-		case final VariableTableColumn col -> (typeLib, name) -> typeLib.getDataTypeLibrary().getDerivedTypeEntry(name);
 		default -> throw new IllegalArgumentException("Unexpected value: " + column);
 		};
 	}
 
-	private static List<? extends NatTableColumn> getColList(final NatTableColumn column) {
+	private static List<? extends NatTableColumn> getPasteableColumnList(final NatTableColumn column) {
 		return switch (column) {
 		case final AttributeTableColumn col -> List.of(AttributeTableColumn.NAME, AttributeTableColumn.TYPE);
-		case final DirectlyDerivedTypeTableColumn col -> List.of(DirectlyDerivedTypeTableColumn.BASE_TYPE);
-		case final TypedElementTableColumn col -> List.of(TypedElementTableColumn.TYPE);
 		case final VarDeclarationTableColumn col -> List.of(VarDeclarationTableColumn.TYPE);
-		case final VariableTableColumn col -> List.of(VariableTableColumn.TYPE);
 		default -> throw new IllegalArgumentException("Unexpected value: " + column);
 		};
 	}
 
-	private static Map<? extends NatTableColumn, Function<EObject, LibraryElement>> getColMap(
+	private static Map<? extends NatTableColumn, Function<EObject, LibraryElement>> getMappersForColumn(
 			final NatTableColumn column) {
 		return switch (column) {
 		case final AttributeTableColumn col ->
 			Map.of(AttributeTableColumn.NAME, eObject -> ((Attribute) eObject).getAttributeDeclaration(),
 					AttributeTableColumn.TYPE, eObject -> ((Attribute) eObject).getType());
-		case final DirectlyDerivedTypeTableColumn col ->
-			Map.of(VarDeclarationTableColumn.TYPE, eObject -> ((VarDeclaration) eObject).getType());
-		case final TypedElementTableColumn col ->
-			Map.of(VarDeclarationTableColumn.TYPE, eObject -> ((VarDeclaration) eObject).getType());
 		case final VarDeclarationTableColumn col ->
-			Map.of(VarDeclarationTableColumn.TYPE, eObject -> ((VarDeclaration) eObject).getType());
-		case final VariableTableColumn col ->
 			Map.of(VarDeclarationTableColumn.TYPE, eObject -> ((VarDeclaration) eObject).getType());
 		default -> throw new IllegalArgumentException("Unexpected value: " + column);
 		};

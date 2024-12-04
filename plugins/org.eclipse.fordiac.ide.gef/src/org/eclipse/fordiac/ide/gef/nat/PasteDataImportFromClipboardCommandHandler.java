@@ -37,6 +37,7 @@ import org.eclipse.nebula.widgets.nattable.copy.command.PasteDataCommand;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
+import org.eclipse.nebula.widgets.nattable.selection.SelectionModel;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Display;
 
@@ -47,14 +48,6 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 	private final Map<String, String> conflicts = new HashMap<>();
 	private final NatTableColumnProvider<? extends NatTableColumn> columnProvider;
 	private final List<? extends NatTableColumn> columns;
-
-	public PasteDataImportFromClipboardCommandHandler(final SelectionLayer selectionLayer,
-			final Supplier<CommandStack> cmdStack,
-			final NatTableColumnProvider<? extends NatTableColumn> columnProvider,
-			final List<? extends NatTableColumn> columns) {
-		this(selectionLayer, cmdStack, (typeLib, name) -> typeLib.getDataTypeLibrary().getDerivedTypeEntry(name),
-				columnProvider, columns);
-	}
 
 	public PasteDataImportFromClipboardCommandHandler(final SelectionLayer selectionLayer,
 			final Supplier<CommandStack> cmdStack, final BiFunction<TypeLibrary, String, TypeEntry> typeResolver,
@@ -71,10 +64,17 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 	protected boolean doCommand(final PasteDataCommand command) {
 		final LibraryElement rootElement = getRootElement();
 		if (rootElement != null) {
-			Arrays.stream(getClipboardContent()).map(imp -> getImportNamespace(rootElement, imp))
-					.filter(Objects::nonNull)
-					.forEach(namespace -> cmdstk.get().execute(new AddNewImportCommand(rootElement, namespace)));
+			final var namespaces = Arrays.stream(getClipboardContent()).map(imp -> getImportNamespace(rootElement, imp))
+					.filter(Objects::nonNull).toList();
+			if (selectionLayer.getSelectionModel() instanceof final SelectionModel selModel) {
+				selModel.setClearSelectionOnChange(false);
+				namespaces.forEach(namespace -> cmdstk.get().execute(new AddNewImportCommand(rootElement, namespace)));
+				selModel.setClearSelectionOnChange(true);
+			} else {
+				namespaces.forEach(namespace -> cmdstk.get().execute(new AddNewImportCommand(rootElement, namespace)));
+			}
 		}
+		conflicts.clear();
 		super.doCommand(command);
 		return true;
 	}
@@ -87,11 +87,14 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 			return content;
 		}
 		final var location = selectionLayer.getSelectionAnchor();
-		final int idx = columnProvider.getColumns().indexOf(columns.get(0));
 
-		for (final String[] row : content) {
-			if (conflicts.containsKey(row[idx - location.getColumnPosition()])) {
-				row[idx - location.getColumnPosition()] = conflicts.get(row[idx - location.getColumnPosition()]);
+		for (final var column : columns) {
+			final int idx = columnProvider.getColumns().indexOf(column);
+			final int colIndex = idx - location.getColumnPosition();
+			for (final String[] row : content) {
+				if (colIndex >= 0 && colIndex < row.length && conflicts.containsKey(row[colIndex])) {
+					row[colIndex] = conflicts.get(row[colIndex]);
+				}
 			}
 		}
 
@@ -99,6 +102,9 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 	}
 
 	private String getImportNamespace(final LibraryElement rootElement, final String imp) {
+		if (ImportHelper.matchesImports(imp, ImportHelper.getImports(rootElement))) {
+			return null;
+		}
 		final TypeEntry resolvedType = ImportHelper.resolveImport(PackageNameHelper.extractPlainTypeName(imp),
 				rootElement, name -> typeResolver.apply(rootElement.getTypeLibrary(), name), name -> null);
 
@@ -106,7 +112,7 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 			return imp;
 		}
 
-		if (resolvedType.getFullTypeName().equals(imp)) {
+		if (resolvedType.getFullTypeName().equalsIgnoreCase(imp)) {
 			return null;
 		}
 
@@ -129,7 +135,10 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 	protected static String[] getClipboardContent() {
 		final Clipboard clipboard = new Clipboard(Display.getDefault());
 		try {
-			return (String[]) clipboard.getContents(ImportTransfer.getInstance());
+			if (clipboard.getContents(ImportTransfer.getInstance()) instanceof final String[] stringArray) {
+				return stringArray;
+			}
+			return new String[0];
 		} finally {
 			clipboard.dispose();
 		}

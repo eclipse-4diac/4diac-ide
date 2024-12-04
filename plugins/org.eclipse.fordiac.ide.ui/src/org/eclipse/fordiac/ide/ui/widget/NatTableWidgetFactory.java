@@ -288,9 +288,9 @@ public final class NatTableWidgetFactory {
 		ILayer viewportLayer = null;
 		if (table.getLayer() instanceof final GridLayer gridLayer) {
 			viewportLayer = gridLayer.getBodyLayer();
-		} else if (table.getLayer() instanceof final CompositeLayer compLayer) {
-			viewportLayer = compLayer.getUnderlyingLayersByColumnPosition(0).stream()
-					.filter(ViewportLayer.class::isInstance).findFirst().orElse(null);
+		} else if ((table.getLayer() instanceof final CompositeLayer compLayer)
+				&& (compLayer.getChildLayerByRegionName(GridRegion.BODY) instanceof final ViewportLayer vpl)) {
+			viewportLayer = vpl;
 		}
 
 		if (viewportLayer != null) {

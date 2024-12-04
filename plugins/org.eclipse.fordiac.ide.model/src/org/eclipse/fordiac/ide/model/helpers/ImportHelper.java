@@ -178,7 +178,7 @@ public final class ImportHelper {
 		return null; // skip colliding names
 	}
 
-	private static boolean matchesImports(final String name, final List<Import> imports) {
+	public static boolean matchesImports(final String name, final List<Import> imports) {
 		return imports.stream().anyMatch(imp -> matchesImport(name, imp));
 	}
 
