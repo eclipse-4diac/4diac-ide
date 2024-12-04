@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -383,6 +384,11 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 			final Value value = LibraryElementFactory.eINSTANCE.createValue();
 			value.setValue(oldVarDecl.getValue().getValue());
 			interfaceElement.setValue(value);
+		}
+
+		for (final Attribute attribute : oldInterface.getAttributes()) {
+			interfaceElement.setAttribute(attribute.getName(), attribute.getType(), attribute.getValue(),
+					attribute.getComment());
 		}
 
 		return interfaceElement;

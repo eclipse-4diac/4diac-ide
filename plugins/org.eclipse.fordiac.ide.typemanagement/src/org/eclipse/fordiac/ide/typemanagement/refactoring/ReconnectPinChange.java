@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionComm
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectEventConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -105,6 +106,12 @@ class ReconnectPinByName extends Command {
 		final IInterfaceElement interfaceElement = element.getInterfaceElement(newName);
 		final IInterfaceElement oldinterfaceElement = element.getInterfaceElement(oldName);
 		propagateInitialValue(interfaceElement, oldinterfaceElement);
+
+		for (final Attribute attribute : oldinterfaceElement.getAttributes()) {
+			interfaceElement.setAttribute(attribute.getName(), attribute.getType(), attribute.getValue(),
+					attribute.getComment());
+		}
+
 		if (oldinterfaceElement instanceof final ErrorMarkerInterface errorMarkerInterface) {
 			final EList<Connection> inputConnections = getConnection(errorMarkerInterface);
 			if (inputConnections.isEmpty()) {
