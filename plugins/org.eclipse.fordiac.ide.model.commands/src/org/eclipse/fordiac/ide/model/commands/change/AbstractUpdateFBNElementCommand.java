@@ -391,6 +391,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 					attribute.getComment());
 		}
 
+		interfaceElement.setComment(oldInterface.getComment());
+
 		return interfaceElement;
 	}
 

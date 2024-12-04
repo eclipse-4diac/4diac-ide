@@ -111,6 +111,7 @@ class ReconnectPinByName extends Command {
 			interfaceElement.setAttribute(attribute.getName(), attribute.getType(), attribute.getValue(),
 					attribute.getComment());
 		}
+		interfaceElement.setComment(oldinterfaceElement.getComment());
 
 		if (oldinterfaceElement instanceof final ErrorMarkerInterface errorMarkerInterface) {
 			final EList<Connection> inputConnections = getConnection(errorMarkerInterface);
