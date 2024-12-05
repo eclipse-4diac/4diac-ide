@@ -20,6 +20,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
@@ -76,6 +80,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -124,15 +129,61 @@ public abstract class StructManipulatorSection extends AbstractSection implement
 	}
 
 	protected void refreshStructTypeTable() {
+		if (memberVarViewer.getInput() == getType()) {
+			// the tree already shows the right element don't update
+			return;
+		}
+
 		final Object[] expandedElements = memberVarViewer.getExpandedElements();
 		final TreePath[] expandedTreePaths = memberVarViewer.getExpandedTreePaths();
-		final TreeItem topItem = memberVarViewer.getTree().getTopItem();
+		final Tree memberViewerTree = memberVarViewer.getTree();
+		final TreePath topItemPath = getTreePath(memberViewerTree.getTopItem());
+
 		memberVarViewer.setInput(getType());
 		memberVarViewer.setExpandedElements(expandedElements);
 		memberVarViewer.setExpandedTreePaths(expandedTreePaths);
-		if (topItem != null && !topItem.isDisposed()) {
-			memberVarViewer.getTree().setTopItem(topItem);
+
+		if (topItemPath != null) {
+			Display.getDefault().asyncExec(() -> {
+				// Force tree refresh
+				memberViewerTree.update();
+				memberViewerTree.redraw();
+				final TreeItem topItem = getTreeItemFromPath(topItemPath);
+				if (topItem != null && !topItem.isDisposed()) {
+					final TreeItem[] originalSelection = memberViewerTree.getSelection();
+					memberViewerTree.setSelection(originalSelection);
+					memberViewerTree.setTopItem(topItem);
+				}
+			});
 		}
+	}
+
+	private static TreePath getTreePath(final TreeItem item) {
+		if (item == null || item.isDisposed()) {
+			return null;
+		}
+		final List<Object> pathElements = new ArrayList<>();
+		TreeItem currentItem = item;
+		while (currentItem != null) {
+			pathElements.add(0, currentItem.getData());
+			currentItem = currentItem.getParentItem();
+		}
+		return new TreePath(pathElements.toArray());
+	}
+
+	private TreeItem getTreeItemFromPath(final TreePath path) {
+		if (path.getSegmentCount() == 0) {
+			return null;
+		}
+		TreeItem currentItem = findItemByData(memberVarViewer.getTree().getItems(), path.getSegment(0));
+		for (int i = 1; i < path.getSegmentCount() && currentItem != null; i++) {
+			currentItem = findItemByData(currentItem.getItems(), path.getSegment(i));
+		}
+		return currentItem;
+	}
+
+	private static TreeItem findItemByData(final TreeItem[] items, final Object data) {
+		return Arrays.stream(items).filter(i -> i.getData() != null && i.getData().equals(data)).findAny().orElse(null);
 	}
 
 	protected void handleStructSelectionChanged(final String newStructName) {
