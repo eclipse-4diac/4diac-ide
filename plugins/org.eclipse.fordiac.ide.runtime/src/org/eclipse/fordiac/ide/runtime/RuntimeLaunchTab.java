@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Text;
 
 public abstract class RuntimeLaunchTab extends AbstractLaunchConfigurationTab {
 
+	public static final String ATTR_TOOL_ARGUMENTS = "org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS"; //$NON-NLS-1$
 	public static final String ATTR_LOCATION = "org.eclipse.ui.externaltools.ATTR_LOCATION"; //$NON-NLS-1$
 	public static final String ATTR_WORKING_DIRECTORY = "org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY"; //$NON-NLS-1$
 	public static final String ATTR_BUILD_SCOPE = "org.eclipse.ui.externaltools.ATTR_LAUNCH_CONFIGURATION_BUILD_SCOPE"; //$NON-NLS-1$
@@ -37,7 +38,7 @@ public abstract class RuntimeLaunchTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
-		configuration.removeAttribute(LaunchRuntimeUtils.ATTR_TOOL_ARGUMENTS);
+		configuration.removeAttribute(ATTR_TOOL_ARGUMENTS);
 		configuration.removeAttribute(ATTR_WORKING_DIRECTORY);
 		configuration.removeAttribute(RefreshUtil.ATTR_REFRESH_SCOPE);
 		configuration.setAttribute(ATTR_BUILD_SCOPE, "NONE"); //$NON-NLS-1$

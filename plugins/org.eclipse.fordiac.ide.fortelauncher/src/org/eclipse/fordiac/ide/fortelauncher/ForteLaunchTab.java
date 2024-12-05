@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.fordiac.ide.fortelauncher.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.runtime.LaunchRuntimeUtils;
 import org.eclipse.fordiac.ide.runtime.RuntimeLaunchTab;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.DirectoryChooserControl;
@@ -94,7 +93,7 @@ public class ForteLaunchTab extends RuntimeLaunchTab {
 		configuration.setAttribute(ATTR_FORTE_PORT, getPortValue());
 		configuration.setAttribute(ATTR_FORTE_ARGUMENTS, argumentsField.getText());
 
-		configuration.setAttribute(LaunchRuntimeUtils.ATTR_TOOL_ARGUMENTS,
+		configuration.setAttribute(ATTR_TOOL_ARGUMENTS,
 				"-c localhost:" + getPortValue() + " " + argumentsField.getText()); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 

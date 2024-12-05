@@ -4,8 +4,7 @@ Bundle-Name: Runtime
 Bundle-SymbolicName: org.eclipse.fordiac.ide.runtime;singleton:=true
 Bundle-Version: 3.0.0.qualifier
 Bundle-Vendor: Eclipse 4diac
-Export-Package: org.eclipse.fordiac.ide.runtime,
- org.eclipse.fordiac.ide.runtime.views
+Export-Package: org.eclipse.fordiac.ide.runtime
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.console,

@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.fordiac.ide.fbrtlauncher.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.runtime.LaunchRuntimeUtils;
 import org.eclipse.fordiac.ide.runtime.RuntimeLaunchTab;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.FileChooserControl;
@@ -183,7 +182,7 @@ public class FBRTLaunchTab extends RuntimeLaunchTab {
 					+ portNum + " -p " //$NON-NLS-1$
 					+ configuration.getAttribute(ATTR_FBRT_LIB, ""); //$NON-NLS-1$
 
-			configuration.setAttribute(LaunchRuntimeUtils.ATTR_TOOL_ARGUMENTS, arguments);
+			configuration.setAttribute(ATTR_TOOL_ARGUMENTS, arguments);
 			final File parentFile = runtimeFile.getParentFile();
 			if (parentFile != null) {
 				configuration.setAttribute(ATTR_WORKING_DIRECTORY, parentFile.getAbsolutePath());

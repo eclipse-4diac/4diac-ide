@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<plugin>
-
-   <extension-point id="RuntimeLauncher" name="org.eclipse.fordiac.ide.runtime.launcher" schema="schema/RuntimeLauncher.exsd"/>
-   
-</plugin>

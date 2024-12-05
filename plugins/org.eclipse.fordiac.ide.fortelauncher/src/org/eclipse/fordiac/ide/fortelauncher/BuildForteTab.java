@@ -18,7 +18,6 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.RefreshUtil;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
-import org.eclipse.fordiac.ide.runtime.LaunchRuntimeUtils;
 import org.eclipse.fordiac.ide.runtime.RuntimeLaunchTab;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.DirectoryChooserControl;
@@ -82,7 +81,7 @@ public class BuildForteTab extends AbstractLaunchConfigurationTab {
 		configuration.setAttribute(RuntimeLaunchTab.ATTR_LOCATION, cmakeChooser.getValue());
 		configuration.setAttribute(RuntimeLaunchTab.ATTR_WORKING_DIRECTORY, buildLocationChooser.getValue());
 		configuration.setAttribute(ATTR_BUILD_ARGUMENTS, argumentsField.getText());
-		configuration.setAttribute(LaunchRuntimeUtils.ATTR_TOOL_ARGUMENTS, "--build . " + argumentsField.getText()); //$NON-NLS-1$
+		configuration.setAttribute(RuntimeLaunchTab.ATTR_TOOL_ARGUMENTS, "--build . " + argumentsField.getText()); //$NON-NLS-1$
 	}
 
 	@Override
@@ -109,7 +108,7 @@ public class BuildForteTab extends AbstractLaunchConfigurationTab {
 	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
 		configuration.removeAttribute(RuntimeLaunchTab.ATTR_LOCATION);
 		configuration.removeAttribute(RuntimeLaunchTab.ATTR_WORKING_DIRECTORY);
-		configuration.removeAttribute(LaunchRuntimeUtils.ATTR_TOOL_ARGUMENTS);
+		configuration.removeAttribute(RuntimeLaunchTab.ATTR_TOOL_ARGUMENTS);
 		configuration.removeAttribute(RefreshUtil.ATTR_REFRESH_SCOPE);
 		configuration.setAttribute(RuntimeLaunchTab.ATTR_BUILD_SCOPE, "NONE"); //$NON-NLS-1$
 		configuration.setAttribute(RuntimeLaunchTab.ATTR_APPEND_ENVIRONMENT_VARIABLES, true);
