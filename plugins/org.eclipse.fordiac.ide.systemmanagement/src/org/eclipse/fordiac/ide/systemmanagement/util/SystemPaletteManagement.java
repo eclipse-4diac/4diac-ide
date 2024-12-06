@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008 - 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,13 +15,9 @@ package org.eclipse.fordiac.ide.systemmanagement.util;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IPathVariableManager;
@@ -35,7 +31,6 @@ import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -99,45 +94,6 @@ public final class SystemPaletteManagement {
 		}
 
 		return libraries;
-	}
-
-	/**
-	 * Copy tool type lib to project.
-	 *
-	 * @param destination the project
-	 */
-	public static void copyToolTypeLibToDestination(final IContainer destination) {
-		try {
-			copyDirectory(TypeLibraryManager.getToolLibFolder(), destination);
-		} catch (final Exception e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		}
-	}
-
-	private static void copyDirectory(final IContainer sourceLocation, final IContainer targetLocation)
-			throws IOException, CoreException {
-
-		final IProgressMonitor monitor = new NullProgressMonitor();
-
-		if (!targetLocation.exists()) {
-			((IFolder) targetLocation).create(true, true, monitor);
-			targetLocation.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-		}
-
-		for (final IResource resource : sourceLocation.members()) {
-			if (!resource.getName().startsWith(".")) { //$NON-NLS-1$
-				if (resource instanceof IFolder) {
-					final IFolder target = targetLocation.getFolder(new Path(resource.getName()));
-					copyDirectory((IFolder) resource, target);
-				} else if (resource instanceof IFile) {
-					final IFile file = targetLocation.getFile(new Path(resource.getName()));
-					final File in = ((IFile) resource).getLocation().toFile();
-					final File out = file.getLocation().toFile();
-					Files.copy(in.toPath(), out.toPath(), StandardCopyOption.REPLACE_EXISTING);
-				}
-			}
-		}
-		targetLocation.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 	}
 
 	private SystemPaletteManagement() {

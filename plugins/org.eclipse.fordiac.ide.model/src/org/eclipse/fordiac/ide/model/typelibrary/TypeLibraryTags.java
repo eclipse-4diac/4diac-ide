@@ -16,8 +16,6 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 
 public final class TypeLibraryTags {
 
-	public static final String TOOL_LIBRARY_PROJECT_NAME = "Tool Library"; //$NON-NLS-1$
-
 	/** The Constant for the file ending of FB type files. */
 	public static final String FB_TYPE_FILE_ENDING = "FBT"; //$NON-NLS-1$
 

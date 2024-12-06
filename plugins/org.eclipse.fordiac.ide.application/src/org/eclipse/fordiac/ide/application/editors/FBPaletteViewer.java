@@ -19,8 +19,6 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.util.TypeListPatternFilter;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -48,7 +46,6 @@ public class FBPaletteViewer extends PaletteViewer {
 	private Object[] expandedElements;
 
 	public FBPaletteViewer(final String navigatorId) {
-		super();
 		this.navigatorId = navigatorId;
 	}
 
@@ -124,11 +121,7 @@ public class FBPaletteViewer extends PaletteViewer {
 			}
 		});
 
-		if (project.getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)) {
-			commonViewer.setInput(TypeLibraryManager.getToolLibFolder());
-		} else {
-			commonViewer.setInput(project);
-		}
+		commonViewer.setInput(project);
 
 		final GridData fillBoth = new GridData(GridData.FILL, GridData.FILL, true, true);
 		commonViewer.getControl().setLayoutData(fillBoth);

@@ -36,14 +36,12 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.library.model.library.Required;
@@ -56,7 +54,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
 import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.ui.XtextProjectHelper;
 
 /**
@@ -84,15 +81,6 @@ public enum SystemManager {
 
 	/** Instantiates a new system manager. */
 	SystemManager() {
-		try {
-			// ensure dirty workspaces are cleaned before any type library is loaded
-			ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		}
-		// Correctly setup the tool library needs to be done before loading any systems
-		// and adding the resource change listener
-		TypeLibraryManager.INSTANCE.loadToolLibrary();
 		addFordiacChangeListener();
 	}
 
