@@ -24,6 +24,12 @@
          	<perspectiveShortcut
 				id="org.eclipse.fordiac.ide.SystemPerspective">
 			</perspectiveShortcut>
+			<view
+               id="org.eclipse.ui.views.PropertySheet"
+               minimized="false"
+               relationship="stack"
+               relative="org.eclipse.ui.console.ConsoleView">
+         	</view>
 		</perspectiveExtension>
 		<perspectiveExtension
         		editorOnboardingImage="$nl$/icons/sys_onboarding.png"
