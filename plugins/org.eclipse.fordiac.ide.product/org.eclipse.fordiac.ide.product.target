@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="4diac IDE Target" sequenceNumber="24">
+<target name="4diac IDE Target" sequenceNumber="25">
 	<locations>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://download.eclipse.org/elk/updates/releases/0.9.1/"/>
@@ -29,10 +29,6 @@
 			<unit id="org.eclipse.gef.source.feature.group" version="0.0.0"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/eclipse/updates/4.33"/>
-			<unit id="org.eclipse.platform.ide" version="4.33.0.I20240903-0240"/>
-		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="http://download.eclipse.org/modeling/emf/compare/updates/releases/3.3/R202406060900"/>
 			<unit id="org.eclipse.emf.compare.egit.feature.group" version="3.3.25.202406060900"/>
 			<unit id="org.eclipse.emf.compare.egit.source.feature.group" version="3.3.25.202406060900"/>
@@ -49,16 +45,17 @@
 			<unit id="org.eclipse.nebula.widgets.nattable.core.feature.source.feature.group" version="2.4.0.202405230453"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/releases/2024-09"/>
+			<repository location="https://download.eclipse.org/releases/2024-12"/>
 			<unit id="javax.activation" version="1.2.2.v20221203-1659"/>
-			<unit id="org.eclipse.egit.feature.group" version="7.0.0.202409031743-r"/>
-			<unit id="org.eclipse.emf.sdk.feature.group" version="2.39.0.v20240731-0952"/>
+			<unit id="org.eclipse.platform.feature.group" version="4.34.0.v20241120-1800"/>
+			<unit id="org.eclipse.egit.feature.group" version="7.1.0.202411261347-r"/>
+			<unit id="org.eclipse.emf.sdk.feature.group" version="2.40.0.v20241018-1213"/>
 			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.22.0.v20240902-1518"/>			
-			<unit id="org.eclipse.sirius.properties.feature.feature.group" version="7.4.3.202408230712"/>
-			<unit id="org.eclipse.sirius.samples.feature.group" version="7.4.3.202408230712"/>
-			<unit id="org.eclipse.sirius.specifier.feature.group" version="7.4.3.202408230712"/>
-			<unit id="org.eclipse.sirius.specifier.properties.feature.feature.group" version="7.4.3.202408230712"/>
-			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.36.0.v20240825-0714"/>
+			<unit id="org.eclipse.sirius.properties.feature.feature.group" version="7.4.4.202410041328"/>
+			<unit id="org.eclipse.sirius.samples.feature.group" version="7.4.4.202410041328"/>
+			<unit id="org.eclipse.sirius.specifier.feature.group" version="7.4.4.202410041328"/>
+			<unit id="org.eclipse.sirius.specifier.properties.feature.feature.group" version="7.4.4.202410041328"/>
+			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.37.0.v20241119-0857"/>
       		<unit id="org.eclipse.swtbot.eclipse.feature.group" version="4.2.1.202406141605"/>
       		<unit id="org.eclipse.swtbot.eclipse.gef.feature.group" version="4.2.1.202406141605"/>
       		<unit id="org.eclipse.swtbot.feature.group" version="4.2.1.202406141605"/>
