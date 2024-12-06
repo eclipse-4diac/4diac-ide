@@ -54,7 +54,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jdt.annotation.NonNull;
 
 public class MapToCommand extends Command implements ScopedCommand {
 	protected final FBNetworkElement srcElement;
@@ -220,7 +219,7 @@ public class MapToCommand extends Command implements ScopedCommand {
 		}
 	}
 
-	private void checkInputConnections(@NonNull final IInterfaceElement interfaceElement) {
+	private void checkInputConnections(final IInterfaceElement interfaceElement) {
 
 		// Filter error markers
 		final var inputConnections = interfaceElement.getInputConnections().stream()
@@ -248,7 +247,7 @@ public class MapToCommand extends Command implements ScopedCommand {
 		});
 	}
 
-	private void checkOutputConnections(@NonNull final IInterfaceElement interfaceElement) {
+	private void checkOutputConnections(final IInterfaceElement interfaceElement) {
 
 		// filter out self-connections (handled by input connections) and error markers
 		final var outputConnections = interfaceElement.getOutputConnections().stream()
@@ -281,7 +280,7 @@ public class MapToCommand extends Command implements ScopedCommand {
 		});
 	}
 
-	private static boolean isSelfConnection(@NonNull final Connection connection) {
+	private static boolean isSelfConnection(final Connection connection) {
 		return connection.getSourceElement() == connection.getDestinationElement();
 	}
 

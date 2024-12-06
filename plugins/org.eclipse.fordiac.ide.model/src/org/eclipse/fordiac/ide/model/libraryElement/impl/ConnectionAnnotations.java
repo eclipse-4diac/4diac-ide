@@ -41,11 +41,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
-import org.eclipse.jdt.annotation.NonNull;
 
 public class ConnectionAnnotations {
 
-	public static boolean validateMissingSource(@NonNull final Connection connection, final DiagnosticChain diagnostics,
+	public static boolean validateMissingSource(final Connection connection, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
 		if (connection.getSourceElement() instanceof final ErrorMarkerFBNElement element) {
 			if (diagnostics != null) {
@@ -60,8 +59,8 @@ public class ConnectionAnnotations {
 		return true;
 	}
 
-	public static boolean validateMissingSourceEndpoint(@NonNull final Connection connection,
-			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+	public static boolean validateMissingSourceEndpoint(final Connection connection, final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
 		if (connection.getSource() instanceof final ErrorMarkerInterface endpoint) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
@@ -75,8 +74,8 @@ public class ConnectionAnnotations {
 		return true;
 	}
 
-	public static boolean validateMissingDestination(@NonNull final Connection connection,
-			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+	public static boolean validateMissingDestination(final Connection connection, final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
 		if (connection.getDestinationElement() instanceof final ErrorMarkerFBNElement element) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
@@ -91,7 +90,7 @@ public class ConnectionAnnotations {
 		return true;
 	}
 
-	public static boolean validateMissingDestinationEndpoint(@NonNull final Connection connection,
+	public static boolean validateMissingDestinationEndpoint(final Connection connection,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (connection.getDestination() instanceof final ErrorMarkerInterface endpoint) {
 			if (diagnostics != null) {
@@ -107,7 +106,7 @@ public class ConnectionAnnotations {
 		return true;
 	}
 
-	public static boolean validateDuplicate(@NonNull final Connection connection, final DiagnosticChain diagnostics,
+	public static boolean validateDuplicate(final Connection connection, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
 		if (isDuplicateConnection(connection)) {
 			if (diagnostics != null) {
@@ -123,7 +122,7 @@ public class ConnectionAnnotations {
 		return true;
 	}
 
-	public static boolean validateTypeMismatch(@NonNull final Connection connection, final DiagnosticChain diagnostics,
+	public static boolean validateTypeMismatch(final Connection connection, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
 		final IInterfaceElement src = connection.getSource();
 		final IInterfaceElement dest = connection.getDestination();
@@ -220,7 +219,7 @@ public class ConnectionAnnotations {
 		return false;
 	}
 
-	public static boolean validateMappedVarInOutsDoNotCrossResourceBoundaries(@NonNull final Connection connection,
+	public static boolean validateMappedVarInOutsDoNotCrossResourceBoundaries(final Connection connection,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		final var source = connection.getSource();
 		final var destination = connection.getDestination();
@@ -245,7 +244,7 @@ public class ConnectionAnnotations {
 				&& ie.getFBNetworkElement().isMapped();
 	}
 
-	public static boolean validateVarInOutArraySizesAreCompatible(@NonNull final Connection connection,
+	public static boolean validateVarInOutArraySizesAreCompatible(final Connection connection,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (connection.getDestination() instanceof final VarDeclaration connectionDestinationVar
 				&& connectionDestinationVar.isInOutVar()) { // If the destination is a VAR_IN_OUT the source is also one
@@ -270,7 +269,7 @@ public class ConnectionAnnotations {
 		return true;
 	}
 
-	public static boolean validateVarInOutStringLengthsMatch(@NonNull final Connection connection,
+	public static boolean validateVarInOutStringLengthsMatch(final Connection connection,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (connection.getDestination() instanceof final VarDeclaration connectionDestinationVar
 				&& connectionDestinationVar.isInOutVar()) { // If the destination is a VAR_IN_OUT the source is also one
@@ -325,7 +324,7 @@ public class ConnectionAnnotations {
 		return true;
 	}
 
-	private static boolean isDuplicateConnection(@NonNull final Connection connection) {
+	private static boolean isDuplicateConnection(final Connection connection) {
 		return connection.getSource().getOutputConnections().stream().anyMatch(
 				candidate -> candidate != connection && candidate.getDestination() == connection.getDestination());
 	}

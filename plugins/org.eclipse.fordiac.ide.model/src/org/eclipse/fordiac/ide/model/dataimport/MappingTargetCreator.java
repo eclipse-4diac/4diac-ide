@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.jdt.annotation.NonNull;
 
 public final class MappingTargetCreator {
 
@@ -54,8 +53,7 @@ public final class MappingTargetCreator {
 		return created;
 	}
 
-	public static void transferFBParams(@NonNull final FBNetworkElement srcElement,
-			@NonNull final FBNetworkElement targetElement) {
+	public static void transferFBParams(final FBNetworkElement srcElement, final FBNetworkElement targetElement) {
 		final List<VarDeclaration> destInputs = targetElement.getInterface().getInputVars();
 		final List<VarDeclaration> srcInputs = srcElement.getInterface().getInputVars();
 

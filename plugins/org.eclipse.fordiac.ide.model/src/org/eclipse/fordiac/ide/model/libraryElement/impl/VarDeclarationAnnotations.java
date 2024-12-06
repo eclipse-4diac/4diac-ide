@@ -33,11 +33,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
-import org.eclipse.jdt.annotation.NonNull;
 
 public class VarDeclarationAnnotations {
 
-	public static boolean validateMultipleInputConnections(@NonNull final VarDeclaration varDeclaration,
+	public static boolean validateMultipleInputConnections(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isIsInput() && varDeclaration.getInputConnections().size() > 1) {
 			if (diagnostics != null) {
@@ -52,7 +51,7 @@ public class VarDeclarationAnnotations {
 		return true;
 	}
 
-	public static boolean validateNoValueForGenericTypeVariable(@NonNull final VarDeclaration varDeclaration,
+	public static boolean validateNoValueForGenericTypeVariable(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (GenericTypes.isAnyType(varDeclaration.getType()) && hasValue(varDeclaration)
 				&& varDeclaration.getFBNetworkElement() == null) {
@@ -67,7 +66,7 @@ public class VarDeclarationAnnotations {
 		return true;
 	}
 
-	public static boolean validateValueForGenericInstanceVariable(@NonNull final VarDeclaration varDeclaration,
+	public static boolean validateValueForGenericInstanceVariable(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isIsInput() && varDeclaration.getInputConnections().isEmpty()
 				&& GenericTypes.isAnyType(varDeclaration.getType()) && !hasValue(varDeclaration)
@@ -84,7 +83,7 @@ public class VarDeclarationAnnotations {
 		return true;
 	}
 
-	public static boolean validateVarInOutSourceTypeIsWellDefined(@NonNull final VarDeclaration varDeclaration,
+	public static boolean validateVarInOutSourceTypeIsWellDefined(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isInOutVar() && varDeclaration.isIsInput() && varDeclaration.getFBNetworkElement() != null
 				&& varDeclaration.getInputConnections().isEmpty()
@@ -104,7 +103,7 @@ public class VarDeclarationAnnotations {
 		return true;
 	}
 
-	public static boolean validateVarInOutIsWithed(@NonNull final VarDeclaration varDeclaration,
+	public static boolean validateVarInOutIsWithed(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isInOutVar() && varDeclaration.getWiths().isEmpty()
 				&& varDeclaration.getFBNetworkElement() == null && !isSubappTypeInterface(varDeclaration)) {
@@ -124,7 +123,7 @@ public class VarDeclarationAnnotations {
 		return true;
 	}
 
-	public static boolean validateVarInOutSubappInterface(@NonNull final VarDeclaration varDeclaration,
+	public static boolean validateVarInOutSubappInterface(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isInOutVar() && varDeclaration.getFBNetworkElement() instanceof SubApp
 				&& hasAnyOutputConnections(varDeclaration) && !hasAnyInputConnections(varDeclaration)) {
@@ -142,7 +141,7 @@ public class VarDeclarationAnnotations {
 		return true;
 	}
 
-	public static boolean validateVarInOutSubappNetwork(@NonNull final VarDeclaration varDeclaration,
+	public static boolean validateVarInOutSubappNetwork(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isInOutVar() && !varDeclaration.isIsInput()
 				&& (isUntypedSubappInterface(varDeclaration) || isSubappTypeInterface(varDeclaration))
@@ -163,7 +162,7 @@ public class VarDeclarationAnnotations {
 		return true;
 	}
 
-	public static VarDeclaration getInOutVarOpposite(@NonNull final VarDeclaration inOutVar) {
+	public static VarDeclaration getInOutVarOpposite(final VarDeclaration inOutVar) {
 		final InterfaceList interfaceList = (InterfaceList) inOutVar.eContainer();
 		if (inOutVar.isInOutVar()) {
 			if (inOutVar.isIsInput()) {
