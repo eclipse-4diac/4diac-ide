@@ -328,13 +328,15 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	protected void handleParameters() {
 		for (final VarDeclaration input : oldElement.getInterface().getInputVars()) {
 			// No outside connections to a pin in oldElement and it has an initial value
-			if (input.getInputConnections().isEmpty() && hasValue(input.getValue())) {
+			if (input.getInputConnections().isEmpty()
+					&& (hasValue(input.getValue()) || !input.getAttributes().isEmpty())) {
 				updateSelectedInterface(input, newElement);
 			}
 		}
 
 		for (final VarDeclaration output : oldElement.getInterface().getOutputVars()) {
-			if (output.getOutputConnections().isEmpty() && hasValue(output.getValue())) {
+			if (output.getOutputConnections().isEmpty()
+					&& (hasValue(output.getValue()) || !output.getAttributes().isEmpty())) {
 				updateSelectedInterface(output, newElement);
 			}
 		}

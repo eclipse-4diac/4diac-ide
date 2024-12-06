@@ -105,15 +105,19 @@ class ReconnectPinByName extends Command {
 	public void execute() {
 		final IInterfaceElement interfaceElement = element.getInterfaceElement(newName);
 		final IInterfaceElement oldinterfaceElement = element.getInterfaceElement(oldName);
-		propagateInitialValue(interfaceElement, oldinterfaceElement);
 
-		for (final Attribute attribute : oldinterfaceElement.getAttributes()) {
-			interfaceElement.setAttribute(attribute.getName(), attribute.getType(), attribute.getValue(),
-					attribute.getComment());
-		}
-		interfaceElement.setComment(oldinterfaceElement.getComment());
+		if (interfaceElement != null
+				&& oldinterfaceElement instanceof final ErrorMarkerInterface errorMarkerInterface) {
+			// only if we have a new interface element and the old one is an error marker
+			// interface we need to transfer things
+			propagateInitialValue(interfaceElement, oldinterfaceElement);
 
-		if (oldinterfaceElement instanceof final ErrorMarkerInterface errorMarkerInterface) {
+			for (final Attribute attribute : oldinterfaceElement.getAttributes()) {
+				interfaceElement.setAttribute(attribute.getName(), attribute.getType(), attribute.getValue(),
+						attribute.getComment());
+			}
+			interfaceElement.setComment(oldinterfaceElement.getComment());
+
 			final EList<Connection> inputConnections = getConnection(errorMarkerInterface);
 			if (inputConnections.isEmpty()) {
 				cmds.add(new DeleteInterfaceCommand(oldinterfaceElement));
@@ -122,10 +126,8 @@ class ReconnectPinByName extends Command {
 			} else if (state.contains(ChangeState.DELETE)) {
 				deleteConnection(inputConnections);
 			}
-
 		}
 		cmds.execute();
-
 	}
 
 	private void propagateInitialValue(final IInterfaceElement interfaceElement,
