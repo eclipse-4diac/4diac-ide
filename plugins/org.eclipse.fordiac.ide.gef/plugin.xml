@@ -96,7 +96,7 @@
             id="org.eclipse.fordiac.ide.gef.zoomfitpage"
             name="Zoom fit Page">
       </command>
-	</extension>  
+	</extension> 
 	<extension
     		point="org.eclipse.ui.handlers">
     	<handler class="org.eclipse.fordiac.ide.gef.handlers.ZoomInHandler"
@@ -139,30 +139,50 @@
            		</or>                  
          	</activeWhen>
 		</handler>    
+	</extension>
+	<extension
+		point="org.eclipse.ui.contexts">
+		<context
+			id="org.eclipse.fordiac.ide.gef"
+			description="%context.graphicalEditing.description"
+			name="%context.graphicalEditing.name"
+			parentId="org.eclipse.ui.contexts.window">
+		</context>
 	</extension>  
 	<extension
 			point="org.eclipse.ui.bindings">
 		<key
         	commandId="org.eclipse.fordiac.ide.gef.zoom100"
-            contextId="org.eclipse.ui.contexts.window"
+            contextId="org.eclipse.fordiac.ide.gef"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+0">
-      	</key>
+            sequence="M1+0"/>
 		<key
         	commandId="org.eclipse.fordiac.ide.gef.zoomfitpage"
-            contextId="org.eclipse.ui.contexts.window"
+            contextId="org.eclipse.fordiac.ide.gef"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+M2+0">
-      	</key>
+            sequence="M1+M2+0"/>
+        <key
+	        commandId="org.eclipse.ui.edit.text.zoomIn"
+	        contextId="org.eclipse.fordiac.ide.gef"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+	        sequence="M1+="/>    
+      	<key
+	        commandId="org.eclipse.ui.edit.text.zoomIn"
+	        contextId="org.eclipse.fordiac.ide.gef"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+	        sequence="M1++"/>
+	  	<key
+	        commandId="org.eclipse.ui.edit.text.zoomOut"
+	        contextId="org.eclipse.fordiac.ide.gef"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+	        sequence="M1+-"/>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
 		<menuContribution locationURI="toolbar:org.eclipse.ui.main.toolbar?after=org.eclipse.ui.workbench.navigate">
 			<toolbar id="org.eclipse.fordiac.ide.toolbars.zoomToolbar">
 				<command
 	            		commandId="org.eclipse.ui.edit.text.zoomOut"
-	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"
-	                  	tooltip="Zoom out">
-	            </command>
+	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"/>
 	            <control class="org.eclipse.fordiac.ide.gef.handlers.FontComboContributionItem"
               			id="org.eclipse.fordiac.ide.toolbars.fontToolbarComboBox">
               		<visibleWhen>
@@ -185,9 +205,7 @@
         		</control>
 				<command
 	            		commandId="org.eclipse.ui.edit.text.zoomIn"
-	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"
-	                  	tooltip="Zoom in">
-	            </command>
+	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"/>
 				<command
 	            		commandId="org.eclipse.fordiac.ide.gef.zoom100"
 	                  	icon="fordiacimage://ICON_ZOOM_100"

@@ -84,6 +84,7 @@ import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -323,6 +324,13 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		id = ActionFactory.DELETE.getId();
 		bars.setGlobalActionHandler(id, registry.getAction(id));
 		bars.updateActionBars();
+		final IContextService cs = site.getService(IContextService.class);
+		cs.activateContext(getContextId());
+	}
+
+	@SuppressWarnings("static-method") // allow subclasses to provide refined context ids
+	protected String getContextId() {
+		return "org.eclipse.fordiac.ide.gef"; //$NON-NLS-1$
 	}
 
 	protected void setEditorPartName(final IEditorInput input) {

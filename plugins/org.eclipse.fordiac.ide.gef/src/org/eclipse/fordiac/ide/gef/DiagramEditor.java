@@ -62,9 +62,12 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -95,6 +98,18 @@ public abstract class DiagramEditor extends GraphicalEditor
 
 	/** Instantiates a new diagram editor. */
 	protected DiagramEditor() {
+	}
+
+	@Override
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
+		super.init(site, input);
+		final IContextService cs = site.getService(IContextService.class);
+		cs.activateContext(getContextId());
+	}
+
+	@SuppressWarnings("static-method") // allow subclasses to provide refined context ids
+	protected String getContextId() {
+		return "org.eclipse.fordiac.ide.gef"; //$NON-NLS-1$
 	}
 
 	/*
