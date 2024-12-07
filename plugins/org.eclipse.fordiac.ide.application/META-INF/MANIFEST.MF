@@ -36,4 +36,5 @@ Bundle-Activator: org.eclipse.fordiac.ide.application.ApplicationPlugin
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.application;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-Localization: plugin
 Automatic-Module-Name: org.eclipse.fordiac.ide.application

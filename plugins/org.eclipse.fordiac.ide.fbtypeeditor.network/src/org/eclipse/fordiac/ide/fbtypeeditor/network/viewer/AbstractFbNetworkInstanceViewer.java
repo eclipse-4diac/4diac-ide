@@ -82,6 +82,11 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 	}
 
 	@Override
+	protected String getContextId() {
+		return "org.eclipse.fordiac.ide.fbnetwork"; //$NON-NLS-1$
+	}
+
+	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (FBNetworkElement.class == adapter) {
 			return adapter.cast(getFbNetworkElement());
