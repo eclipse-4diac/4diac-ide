@@ -23,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
@@ -110,9 +111,12 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 
 	@Override
 	protected boolean hasOpposites(final InterfaceEditPart pin) {
-		return !(pin.getModel().getFBNetworkElement().getInterface().getEventOutputs().isEmpty()
-				&& pin.getModel().getFBNetworkElement().getInterface().getOutputVars().isEmpty()
-				&& pin.getModel().getFBNetworkElement().getInterface().getPlugs().isEmpty());
+		if (pin.getModel().getFBNetworkElement() == null) {
+			// we are at a type interface border in the type editor
+			return false;
+		}
+		final InterfaceList il = (InterfaceList) pin.getModel().eContainer();
+		return !(il.getEventOutputs().isEmpty() && il.getOutputVars().isEmpty() && il.getPlugs().isEmpty());
 	}
 
 	@Override
