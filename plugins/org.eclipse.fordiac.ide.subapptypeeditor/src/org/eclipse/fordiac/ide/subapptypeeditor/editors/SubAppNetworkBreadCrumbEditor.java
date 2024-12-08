@@ -44,11 +44,11 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchPart;
@@ -59,7 +59,6 @@ import org.eclipse.ui.part.MultiPageEditorSite;
 public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor implements IFBTEditorPart {
 
 	private CommandStack commandStack;
-	private MultiPageEditorSite multiPageEditorSite;
 
 	private GraphicalAnnotationModel annotationModel;
 
@@ -69,20 +68,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			throw new IllegalArgumentException("SubAppNetworkBreadCrumbEditor is only suitable for TypeEditorInputs"); //$NON-NLS-1$
 		}
 
-		IEditorSite siteToUse = site;
-		ISelectionProvider selProvider = null;
-		if (siteToUse instanceof final MultiPageEditorSite multiPageEditorSite) {
-			this.multiPageEditorSite = multiPageEditorSite;
-			siteToUse = (IEditorSite) multiPageEditorSite.getMultiPageEditor().getSite();
-			selProvider = siteToUse.getSelectionProvider();
-		}
-
-		super.init(siteToUse, input);
-
-		if (selProvider != null) {
-			// restore the outer selection provider
-			siteToUse.setSelectionProvider(selProvider);
-		}
+		super.init(site, input);
 
 		setTitleImage(FordiacImage.ICON_FB_NETWORK.getImage());
 		setPartName("FB Network"); //$NON-NLS-1$
@@ -103,6 +89,14 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 		final Composite pageContainer = new Composite(parent, SWT.NONE);
 		pageContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
 		return pageContainer;
+	}
+
+	@Override
+	protected IEditorSite createSite(final IEditorPart editor) {
+		if (getSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
+			return new MultiPageEditorSite(multiPageEditorSite.getMultiPageEditor(), editor);
+		}
+		return super.createSite(editor);
 	}
 
 	@Override
@@ -247,7 +241,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	@Override
 	public void setInput(final IEditorInput input) {
 		checkEditorInput(input);
-		if (multiPageEditorSite != null) {
+		if (getSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
 			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
 		}
 		pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
