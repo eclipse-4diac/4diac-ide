@@ -122,6 +122,10 @@
            name="Rename Element">
      </command>
      <command
+           id="org.eclipse.fordiac.ide.application.commands.quickFix"  
+           name="Quick Fix">
+     </command>
+     <command
            id="org.eclipse.fordiac.ide.typemanagement.connectionstostruct"
            name="Connections To Struct">
      </command>
@@ -704,8 +708,8 @@
             id="org.eclipse.fordiac.ide.typemanagement.wizards.DeleteStructChangeViewer">
          <enablement>
          <or>
-         <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteUpdateFBTypeInterfaceChange"/>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteUpdateStructDataTypeMemberVariableChange"/>
+         <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBTypeInterfaceChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.UpdateStructDataTypeMemberVariableChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.SafeFBTypeDeletionChange$DeleteInternalFBChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.UpdateUntypedSubappPinChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinChange"/>
@@ -763,6 +767,16 @@
                commandId="org.eclipse.fordiac.ide.typemanagement.renameElement"
                icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/tricks.png"
                label="Rename Element"
+               style="push">
+         </command>
+      </menuContribution>
+	  <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.fordiac.ide.toolbar.table">
+         <command
+               commandId="org.eclipse.fordiac.ide.application.commands.quickFix"
+               icon="platform:/plugin/org.eclipse.ui.ide/icons/full/obj16/quickfix_error_obj.png"
+               label="QuickFix"
                style="push">
          </command>
       </menuContribution>

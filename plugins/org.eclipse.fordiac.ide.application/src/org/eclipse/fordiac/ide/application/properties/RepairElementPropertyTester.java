@@ -14,6 +14,8 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.fordiac.ide.application.handlers.FordiacQuickFixHandler;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
 
 public class RepairElementPropertyTester extends PropertyTester {
@@ -27,7 +29,10 @@ public class RepairElementPropertyTester extends PropertyTester {
 		if (element instanceof final EditPart editPart) {
 			return FordiacQuickFixHandler.hasMarker(editPart);
 		}
-
+		if (element instanceof VarDeclaration || element instanceof FB) {
+			return FordiacQuickFixHandler.retrieveMarkerFromObject(element).length > 0;
+		}
 		return false;
 	}
+
 }

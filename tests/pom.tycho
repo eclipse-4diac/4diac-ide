@@ -1,0 +1,12 @@
+## tycho automatic module detection 2c2c6abd-075f-4057-92c0-a1c9f4a34142
+org.eclipse.fordiac.ide.test.contracts
+org.eclipse.fordiac.ide.test.deployment
+org.eclipse.fordiac.ide.test.export
+org.eclipse.fordiac.ide.test.fb.interpreter
+org.eclipse.fordiac.ide.test.library
+org.eclipse.fordiac.ide.test.model
+org.eclipse.fordiac.ide.test.model.commands
+org.eclipse.fordiac.ide.test.model.eval
+org.eclipse.fordiac.ide.test.model.search
+org.eclipse.fordiac.ide.test.ui
+org.eclipse.fordiac.ide.test.util

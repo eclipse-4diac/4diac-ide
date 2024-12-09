@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -32,6 +33,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.wizards.QuickFixWizardDialog;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
@@ -40,11 +42,16 @@ import org.eclipse.fordiac.ide.gef.annotation.ResourceMarkerGraphicalAnnotationM
 import org.eclipse.fordiac.ide.gef.validation.GraphicalValidationAnnotation;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
@@ -53,14 +60,21 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.views.markers.WorkbenchMarkerResolution;
 
 public class FordiacQuickFixHandler extends AbstractHandler {
+
 	@Override
 	public Object execute(final ExecutionEvent event) {
 		final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
 		final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 
-		final IMarker[] selectedMarkers = getMarkersFromEditorSelection(selection);
-		final IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions(selectedMarkers[0]);
+		IMarker[] selectedMarkers;
 
+		if (selection.getFirstElement() instanceof VarDeclaration || selection.getFirstElement() instanceof FB) {
+			selectedMarkers = getSelectedVdMarkersFromNatTable(selection);
+		} else {
+			selectedMarkers = getMarkersFromEditorSelection(selection);
+		}
+
+		final IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions(selectedMarkers[0]);
 		final Map<IMarkerResolution, Collection<IMarker>> resolutionsMap = new HashMap<>();
 
 		for (final IMarkerResolution res : resolutions) {
@@ -91,8 +105,32 @@ public class FordiacQuickFixHandler extends AbstractHandler {
 			QuickFixWizardDialog.openDialog(shell, selectedMarkers, resolutions, resolutionsMap);
 		}
 		deleteTemporaryMarker(selectedMarkers);
-
 		return null;
+	}
+
+	private static IMarker[] getSelectedVdMarkersFromNatTable(final IStructuredSelection selection) {
+		if (selection.getFirstElement() instanceof final EObject obj) {
+			return retrieveMarkerFromObject(obj);
+		}
+		return new IMarker[0];
+	}
+
+	public static IMarker[] retrieveMarkerFromObject(final Object obj) {
+		final IEditorPart editor = EditorUtils.getCurrentActiveEditor();
+		if (null != editor) {
+			final GraphicalViewer gfv = editor.getAdapter(GraphicalViewer.class);
+			if (null != gfv) {
+				final EditPart rootEditPart = gfv.getContents();
+				if ((null != rootEditPart) && (FordiacAnnotationUtil.getAnnotationModel(
+						rootEditPart) instanceof final ResourceMarkerGraphicalAnnotationModel annotationModel)) {
+					final var annotations = annotationModel.getAnnotations(obj);
+					return annotations.stream().filter(GraphicalMarkerAnnotation.class::isInstance)
+							.map(GraphicalMarkerAnnotation.class::cast).map(GraphicalMarkerAnnotation::getMarker)
+							.filter(Objects::nonNull).toArray(IMarker[]::new);
+				}
+			}
+		}
+		return new IMarker[0];
 	}
 
 	public static IMarker[] getMarkersFromEditorSelection(final IStructuredSelection selection) {
