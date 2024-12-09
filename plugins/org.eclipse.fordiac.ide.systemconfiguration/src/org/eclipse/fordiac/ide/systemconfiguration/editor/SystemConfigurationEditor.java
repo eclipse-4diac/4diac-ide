@@ -19,7 +19,6 @@ import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.SystemConfEditPartFactory;
-import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -29,7 +28,7 @@ import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.ui.IEditorInput;
 
-public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette implements ISystemEditor {
+public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette {
 	private SystemConfiguration sysConf;
 
 	@Override

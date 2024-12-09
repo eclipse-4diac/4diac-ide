@@ -46,12 +46,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.fordiac.ide.systemmanagement.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -61,9 +59,9 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
@@ -544,26 +542,18 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private static void closeAllProjectRelatedEditors(final IProject project) {
-		Display.getDefault().asyncExec(() -> EditorUtils.closeEditorsFiltered((final IEditorPart editor) -> {
-			final IEditorInput input = editor.getEditorInput();
-			if ((input instanceof final FileEditorInput fileEditorInput)
-					&& (project.equals(fileEditorInput.getFile().getProject()))) {
-				return true;
-			}
-			if (editor instanceof final ISystemEditor systemEditor) {
-				final AutomationSystem system = systemEditor.getSystem();
-				return project.equals(system.getTypeLibrary().getProject());
-			}
-			return false;
-		}));
+		Display.getDefault()
+				.asyncExec(() -> EditorUtils.closeEditorsFiltered(
+						editor -> ((editor.getEditorInput() instanceof final IFileEditorInput fileEditorInput)
+								&& (project.equals(fileEditorInput.getFile().getProject())))));
 	}
 
 	private static void closeAllEditorsForFile(final IFile file) {
 		// display related stuff needs to run in a display thread
-		Display.getDefault().asyncExec(() -> EditorUtils.closeEditorsFiltered((final IEditorPart editor) -> {
-			final IEditorInput input = editor.getEditorInput();
-			return (input instanceof final FileEditorInput fileEditorInput) && (file.equals(fileEditorInput.getFile()));
-		}));
+		Display.getDefault()
+				.asyncExec(() -> EditorUtils.closeEditorsFiltered(
+						editor -> ((editor.getEditorInput() instanceof final IFileEditorInput fileEditorInput)
+								&& (file.equals(fileEditorInput.getFile())))));
 	}
 
 	private static FordiacEditorMatchingStrategy editorMatching = new FordiacEditorMatchingStrategy();

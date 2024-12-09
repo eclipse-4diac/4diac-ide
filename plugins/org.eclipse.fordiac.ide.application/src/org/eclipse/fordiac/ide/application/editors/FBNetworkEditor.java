@@ -45,7 +45,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.actions.Open4DIACElementAction;
-import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
@@ -68,7 +67,7 @@ import org.eclipse.ui.actions.ActionFactory;
 /**
  * The main editor for FBNetworks.
  */
-public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements ISystemEditor {
+public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 
 	private static final PaletteFlyoutPreferences PALETTE_PREFERENCES = new PaletteFlyoutPreferences(
 			"FBNetworkPalette.Location", //$NON-NLS-1$
