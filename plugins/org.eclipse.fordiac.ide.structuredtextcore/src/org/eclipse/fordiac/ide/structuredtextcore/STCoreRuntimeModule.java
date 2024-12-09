@@ -20,9 +20,11 @@ package org.eclipse.fordiac.ide.structuredtextcore;
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STCoreLinkingDiagnosticMessageProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSerializer;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreCustomConfigurableIssueCodesProvider;
 import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider;
 import org.eclipse.xtext.serializer.ISerializer;
+import org.eclipse.xtext.validation.ConfigurableIssueCodesProvider;
 
 /**
  * Use this class to register components to be used at runtime / without the
@@ -42,5 +44,10 @@ public class STCoreRuntimeModule extends AbstractSTCoreRuntimeModule {
 	@Override
 	public Class<? extends ISerializer> bindISerializer() {
 		return STCoreSerializer.class;
+	}
+
+	@Override
+	public Class<? extends ConfigurableIssueCodesProvider> bindConfigurableIssueCodesProvider() {
+		return STCoreCustomConfigurableIssueCodesProvider.class;
 	}
 }

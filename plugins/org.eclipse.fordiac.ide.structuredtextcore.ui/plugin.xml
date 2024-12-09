@@ -291,6 +291,19 @@
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore"/>
 		</page>
 	</extension>
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
+			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+			id="org.eclipse.fordiac.ide.structuredtextcore.STCore.validator.propertyPage"
+			name="Errors/Warnings">
+			<keywordReference id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
 	<extension point="org.eclipse.xtext.builder.participant">
 		<participant
 			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"

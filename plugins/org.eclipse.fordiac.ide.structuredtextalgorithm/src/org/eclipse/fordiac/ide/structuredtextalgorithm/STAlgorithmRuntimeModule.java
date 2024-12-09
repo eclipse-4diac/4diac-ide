@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.scoping.STAlgorithmLinkin
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmMapper;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmPartitioner;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmReconciler;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.validation.STAlgorithmCustomConfigurableIssueCodesProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters;
 import org.eclipse.fordiac.ide.structuredtextcore.documentation.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameConverter;
@@ -45,6 +46,7 @@ import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
 import org.eclipse.xtext.serializer.ISerializer;
+import org.eclipse.xtext.validation.ConfigurableIssueCodesProvider;
 import org.eclipse.xtext.validation.IResourceValidator;
 
 import com.google.inject.Binder;
@@ -134,5 +136,10 @@ public class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 	@Override
 	public Class<? extends ISerializer> bindISerializer() {
 		return STCoreSerializer.class;
+	}
+
+	@Override
+	public Class<? extends ConfigurableIssueCodesProvider> bindConfigurableIssueCodesProvider() {
+		return STAlgorithmCustomConfigurableIssueCodesProvider.class;
 	}
 }

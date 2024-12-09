@@ -262,6 +262,19 @@
 			<keywordReference id="org.eclipse.fordiac.ide.globalconstantseditor.ui.keyword_GlobalConstants"/>
 		</page>
 	</extension>
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			category="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
+			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.validator.propertyPage"
+			name="Errors/Warnings">
+			<keywordReference id="org.eclipse.fordiac.ide.globalconstantseditor.ui.keyword_GlobalConstants"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
 	<extension point="org.eclipse.xtext.builder.participant">
 		<participant
 			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"

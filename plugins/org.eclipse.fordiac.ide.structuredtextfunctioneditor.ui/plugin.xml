@@ -278,6 +278,19 @@
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction"/>
 		</page>
 	</extension>
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
+			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.validator.propertyPage"
+			name="Errors/Warnings">
+			<keywordReference id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
 	<extension point="org.eclipse.xtext.builder.participant">
 		<participant
 			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"

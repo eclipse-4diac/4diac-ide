@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSerializer;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreCustomConfigurableIssueCodesProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreResourceValidator;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.naming.STFunctionQualifiedNameProvider;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.resource.STFunctionResource;
@@ -46,6 +47,7 @@ import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
 import org.eclipse.xtext.serializer.ISerializer;
+import org.eclipse.xtext.validation.ConfigurableIssueCodesProvider;
 import org.eclipse.xtext.validation.IResourceValidator;
 
 import com.google.inject.Binder;
@@ -125,5 +127,10 @@ public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
 	@Override
 	public Class<? extends ISerializer> bindISerializer() {
 		return STCoreSerializer.class;
+	}
+
+	@Override
+	public Class<? extends ConfigurableIssueCodesProvider> bindConfigurableIssueCodesProvider() {
+		return STCoreCustomConfigurableIssueCodesProvider.class;
 	}
 }

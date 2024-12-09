@@ -64,6 +64,7 @@ public class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 			+ "noInputEventForAlgorithm"; //$NON-NLS-1$
 	public static final String VARIABLE_NAME_IN_USE_ON_INTERFACE = STAlgorithmValidator.ISSUE_CODE_PREFIX
 			+ "variableNameInUseOnInterface"; //$NON-NLS-1$
+	public static final String SHADOWING_FUNCTION = STAlgorithmValidator.ISSUE_CODE_PREFIX + "shadowingFunction"; //$NON-NLS-1$
 
 	@Check
 	public void checkControlFlow(final STAlgorithmBody body) {
@@ -129,7 +130,8 @@ public class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 	@Check
 	public void checkUniquenessOfSTAlgorithmSourceElementNamesAndFunctionNames(
 			final STFeatureExpression featureExpression) {
-		if (featureExpression.getFeature() instanceof STMethod) {
+		if (!getIssueSeverities(getContext(), featureExpression).isIgnored(SHADOWING_FUNCTION)
+				&& featureExpression.getFeature() instanceof STMethod) {
 			final IResourceDescriptions resourceDescriptions = this.resourceDescriptionsProvider
 					.getResourceDescriptions(featureExpression.getFeature().eResource());
 			final IResourceDescription resourceDescription = resourceDescriptions
@@ -141,11 +143,13 @@ public class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 					if (featureExpression.getFeature().getName()
 							.equalsIgnoreCase(description.getQualifiedName().toString())
 							&& !description.getEObjectURI().equals(EcoreUtil.getURI(featureExpression))) {
-						warning(MessageFormat.format(
-								Messages.STAlgorithmValidator_UnqualifiedMethodOrAlgorithmShadowingFunction,
-								featureExpression.getFeature().getName(),
-								description.getEObjectURI().toPlatformString(true)),
-								STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE);
+						addIssue(
+								MessageFormat.format(
+										Messages.STAlgorithmValidator_UnqualifiedMethodOrAlgorithmShadowingFunction,
+										featureExpression.getFeature().getName(),
+										description.getEObjectURI().toPlatformString(true)),
+								featureExpression, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
+								SHADOWING_FUNCTION);
 					}
 				}
 			}
@@ -175,8 +179,8 @@ public class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 				&& resource.getInternalLibraryElement() instanceof final SimpleFBType simpleFBType)
 				&& simpleFBType.getSimpleECStates().stream().flatMap(state -> state.getSimpleECActions().stream())
 						.noneMatch(action -> action.getAlgorithm().equalsIgnoreCase(algorithm.getName()))) {
-			warning(MessageFormat.format(Messages.STAlgorithmValidator_UnusedAlgorithm, algorithm.getName()), algorithm,
-					LibraryElementPackage.eINSTANCE.getINamedElement_Name(),
+			addIssue(MessageFormat.format(Messages.STAlgorithmValidator_UnusedAlgorithm, algorithm.getName()),
+					algorithm, LibraryElementPackage.eINSTANCE.getINamedElement_Name(),
 					STAlgorithmValidator.NO_INPUT_EVENT_FOR_ALGORITHM, algorithm.getName());
 		}
 	}

@@ -276,6 +276,19 @@
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.keyword_STAlgorithm"/>
 		</page>
 	</extension>
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			category="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+			id="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.validator.propertyPage"
+			name="Errors/Warnings">
+			<keywordReference id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.keyword_STAlgorithm"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
 	<!-- Quick Outline -->
 	<extension
 		point="org.eclipse.ui.handlers">

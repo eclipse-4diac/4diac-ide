@@ -322,9 +322,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				try {
 					final int indexValue = STCoreUtil.asConstantInt(indexExpression);
 					if (isStringIndexOutOfBounds(indexValue, receiverType)) {
-						warning(MessageFormat.format(Messages.STCoreValidator_StringIndexOutOfBounds,
-								Integer.toString(indexValue), receiverType.getName()),
-								STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, index,
+						addIssue(
+								MessageFormat.format(Messages.STCoreValidator_StringIndexOutOfBounds,
+										Integer.toString(indexValue), receiverType.getName()),
+								accessExpression, STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, index,
 								STRING_INDEX_OUT_OF_BOUNDS);
 					}
 				} catch (final ArithmeticException e) {
@@ -398,7 +399,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					final String nameInText = node.getRootNode().getText().substring(node.getOffset(),
 							node.getEndOffset());
 					if (!originalName.equals(nameInText) && originalName.equalsIgnoreCase(nameInText)) {
-						warning(Messages.STCoreValidator_Wrong_Name_Case,
+						addIssue(Messages.STCoreValidator_Wrong_Name_Case, featureExpression,
 								STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, WRONG_NAME_CASE, nameInText,
 								originalName);
 					}
@@ -434,22 +435,27 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			final DataType expectedReturnDataType) {
 		if (expectedReturnDataType.isAssignableFrom(argumentDataType)
 				&& !isCastSemanticallyRelevant(argumentDataType, returnDataType)) {
-			warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryConversion,
-					expectedArgumentDataType.getName(), returnDataType.getName()),
-					STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, UNNECESSARY_CONVERSION,
+			addIssue(
+					MessageFormat.format(Messages.STCoreValidator_UnnecessaryConversion,
+							expectedArgumentDataType.getName(), returnDataType.getName()),
+					getCurrentObject(), STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, UNNECESSARY_CONVERSION,
 					expectedArgumentDataType.getName(), returnDataType.getName());
 		} else if (!expectedArgumentDataType.eClass().equals(argumentDataType.eClass())
 				&& expectedArgumentDataType.isAssignableFrom(argumentDataType)
 				&& isBetterCastPossible(argumentDataType, expectedReturnDataType)) {
-			warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryWideConversion,
-					expectedArgumentDataType.getName()), STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
+			addIssue(
+					MessageFormat.format(Messages.STCoreValidator_UnnecessaryWideConversion,
+							expectedArgumentDataType.getName()),
+					getCurrentObject(), STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
 					UNNECESSARY_WIDE_CONVERSION, expectedArgumentDataType.getName(), argumentDataType.getName(),
 					expectedReturnDataType.getName());
 		} else if (!expectedReturnDataType.eClass().equals(returnDataType.eClass())
 				&& expectedReturnDataType.isAssignableFrom(returnDataType)
 				&& isBetterCastPossible(argumentDataType, expectedReturnDataType)) {
-			warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryNarrowConversion,
-					returnDataType.getName()), STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
+			addIssue(
+					MessageFormat.format(Messages.STCoreValidator_UnnecessaryNarrowConversion,
+							returnDataType.getName()),
+					getCurrentObject(), STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
 					UNNECESSARY_NARROW_CONVERSION, returnDataType.getName(), argumentDataType.getName(),
 					expectedReturnDataType.getName());
 		} else if (argument.getArgument() instanceof final STNumericLiteral numericLiteral) {
@@ -458,8 +464,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 						.castValue(ValueOperations.wrapValue(numericLiteral.getValue(), argumentDataType),
 								expectedReturnDataType)
 						.toString();
-				warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryLiteralConversion,
-						returnDataType.getName()), null, UNNECESSARY_LITERAL_CONVERSION, returnDataType.getName(),
+				addIssue(
+						MessageFormat.format(Messages.STCoreValidator_UnnecessaryLiteralConversion,
+								returnDataType.getName()),
+						getCurrentObject(), null, UNNECESSARY_LITERAL_CONVERSION, returnDataType.getName(),
 						expectedReturnDataType.getName(), value);
 			} catch (final ClassCastException e) {
 				// ignore (conversion is actually necessary)
@@ -470,8 +478,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 						.castValue(ValueOperations.wrapValue(stringLiteral.getValue(), argumentDataType),
 								expectedReturnDataType)
 						.toString();
-				warning(MessageFormat.format(Messages.STCoreValidator_UnnecessaryLiteralConversion,
-						returnDataType.getName()), null, UNNECESSARY_LITERAL_CONVERSION, returnDataType.getName(),
+				addIssue(
+						MessageFormat.format(Messages.STCoreValidator_UnnecessaryLiteralConversion,
+								returnDataType.getName()),
+						getCurrentObject(), null, UNNECESSARY_LITERAL_CONVERSION, returnDataType.getName(),
 						expectedReturnDataType.getName(), value);
 			} catch (final ClassCastException e) {
 				// ignore (conversion is actually necessary)
@@ -612,7 +622,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public void checkForControlVariable(final STForStatement stmt) {
 		final List<INamedElement> featurePath = getFeaturePath(stmt.getVariable());
 		featurePath.stream().filter(Predicate.not(STCoreUtil::isTemporary)).findFirst()
-				.ifPresent(variable -> warning(
+				.ifPresent(variable -> addIssue(
 						MessageFormat.format(Messages.STCoreValidator_UsingNonTemporaryAsControlVariable,
 								variable.getName()),
 						stmt, STCorePackage.Literals.ST_FOR_STATEMENT__VARIABLE, FOR_CONTROL_VARIABLE_NON_TEMPORARY));
@@ -762,8 +772,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				&& !IecTypes.GenericTypes.isAnyType(expectedDataType)
 				&& !(expectedDataType instanceof DirectlyDerivedType)
 				&& !type.eClass().equals(expectedDataType.eClass()) && expectedDataType.isAssignableFrom(type)) {
-			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
-					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
+			addIssue(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
+					expectedType.getName()), expression, null, LITERAL_IMPLICIT_CONVERSION);
 		}
 	}
 
@@ -784,14 +794,16 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		} else if (expectedType instanceof final AnyStringType expectedAnyStringType
 				&& expectedAnyStringType.isSetMaxLength()
 				&& expression.getValue().length() > ((AnyStringType) expectedType).getMaxLength()) {
-			warning(MessageFormat.format(Messages.STCoreValidator_String_Literal_Truncated,
-					Integer.toString(expectedAnyStringType.getMaxLength())), null, TRUNCATED_LITERAL);
+			addIssue(
+					MessageFormat.format(Messages.STCoreValidator_String_Literal_Truncated,
+							Integer.toString(expectedAnyStringType.getMaxLength())),
+					expression, null, TRUNCATED_LITERAL);
 		} else if (expectedType instanceof final DataType expectedDataType
 				&& !IecTypes.GenericTypes.isAnyType(expectedDataType)
 				&& !(expectedDataType instanceof DirectlyDerivedType)
 				&& !type.eClass().equals(expectedDataType.eClass()) && (expectedDataType).isAssignableFrom(type)) {
-			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
-					expectedDataType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
+			addIssue(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
+					expectedDataType.getName()), expression, null, LITERAL_IMPLICIT_CONVERSION);
 		}
 	}
 
