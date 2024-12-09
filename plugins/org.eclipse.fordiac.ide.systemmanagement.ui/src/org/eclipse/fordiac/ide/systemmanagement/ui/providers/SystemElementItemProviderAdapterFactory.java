@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.providers;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.edit.providers.CFBInstanceItemProviderForSystem;
+import org.eclipse.fordiac.ide.model.edit.providers.UntypedSubAppItemProviderForSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBItemProvider;

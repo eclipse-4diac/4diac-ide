@@ -18,9 +18,9 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.edit.providers.UntypedSubAppItemProviderForSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.systemmanagement.ui.providers.UntypedSubAppItemProviderForSystem;
 
 public class UntypedSubAppItemProviderEmfCompare extends UntypedSubAppItemProviderForSystem {
 

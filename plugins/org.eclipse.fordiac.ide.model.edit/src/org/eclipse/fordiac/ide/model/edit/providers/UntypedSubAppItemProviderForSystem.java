@@ -12,7 +12,7 @@
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *               - added defensive checks when the fbnetwork is null
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ui.providers;
+package org.eclipse.fordiac.ide.model.edit.providers;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -73,7 +73,7 @@ public class UntypedSubAppItemProviderForSystem extends UntypedSubAppItemProvide
 	public Object getParent(final Object object) {
 		final EObject cont = ((SubApp) object).eContainer();
 		if (cont instanceof FBNetwork) {
-			return ((FBNetwork) cont).eContainer();
+			return cont.eContainer();
 		}
 		return super.getParent(object);
 	}

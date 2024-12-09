@@ -10,7 +10,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ui.providers;
+package org.eclipse.fordiac.ide.model.edit.providers;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -19,7 +19,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvider;
 
 public class FBNetworkItemProviderForSystem extends FBNetworkItemProvider {
-	protected FBNetworkItemProviderForSystem(final AdapterFactory adapterFactory) {
+	public FBNetworkItemProviderForSystem(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 

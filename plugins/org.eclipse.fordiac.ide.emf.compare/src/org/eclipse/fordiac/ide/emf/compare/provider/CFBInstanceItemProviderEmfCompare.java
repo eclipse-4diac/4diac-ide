@@ -15,9 +15,9 @@ package org.eclipse.fordiac.ide.emf.compare.provider;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.edit.providers.CFBInstanceItemProviderForSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.systemmanagement.ui.providers.CFBInstanceItemProviderForSystem;
 
 public class CFBInstanceItemProviderEmfCompare extends CFBInstanceItemProviderForSystem {
 

@@ -13,6 +13,8 @@
 package org.eclipse.fordiac.ide.subapptypeeditor.providers;
 
 import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.fordiac.ide.model.edit.providers.CFBInstanceItemProviderForSystem;
+import org.eclipse.fordiac.ide.model.edit.providers.UntypedSubAppItemProviderForSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 
 public class TypedSubappProviderAdapterFactory extends LibraryElementItemProviderAdapterFactory {
@@ -31,6 +33,22 @@ public class TypedSubappProviderAdapterFactory extends LibraryElementItemProvide
 			typedSubAppItemProvider = new SubAppItemProviderForTypedSubapps(this);
 		}
 		return typedSubAppItemProvider;
+	}
+
+	@Override
+	public Adapter createUntypedSubAppAdapter() {
+		if (untypedSubAppItemProvider == null) {
+			untypedSubAppItemProvider = new UntypedSubAppItemProviderForSystem(this);
+		}
+		return untypedSubAppItemProvider;
+	}
+
+	@Override
+	public Adapter createCFBInstanceAdapter() {
+		if (cfbInstanceItemProvider == null) {
+			cfbInstanceItemProvider = new CFBInstanceItemProviderForSystem(this);
+		}
+		return cfbInstanceItemProvider;
 	}
 
 }
