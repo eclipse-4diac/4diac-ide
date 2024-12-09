@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.util.SpatialHash;
+import org.eclipse.fordiac.ide.model.validation.ValidationPreferences;
 
 final class FBNetworkAnnotations {
 	/**
@@ -126,8 +127,10 @@ final class FBNetworkAnnotations {
 	}
 
 	private static Diagnostic createCollisionDiagnostic(final FBNetworkElement element, final FBNetworkElement other) {
-		return new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-				LibraryElementValidator.FB_NETWORK__VALIDATE_COLLISIONS,
+		return new BasicDiagnostic(
+				ValidationPreferences.getDiagnosticSeverity(ValidationPreferences.COLLISION_SEVERITY, Diagnostic.WARNING,
+						element),
+				LibraryElementValidator.DIAGNOSTIC_SOURCE, LibraryElementValidator.FB_NETWORK__VALIDATE_COLLISIONS,
 				MessageFormat.format(Messages.FBNetworkAnnotations_CollisionMessage, element.getQualifiedName(),
 						other.getQualifiedName()),
 				FordiacMarkerHelper.getDiagnosticData(element,
