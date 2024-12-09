@@ -68,8 +68,8 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 					namespace -> commandExecutor.executeCommand(new AddNewImportCommand(rootElement, namespace)));
 		}
 
-		conflicts.clear();
 		super.doCommand(command);
+		conflicts.clear();
 		return true;
 	}
 
