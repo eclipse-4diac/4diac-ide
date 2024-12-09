@@ -68,7 +68,9 @@ Workflow {
 					ignoreCase = true
 				}
 			}
-			fragment = validation.ValidatorFragment2 {}
+			fragment = validation.ValidatorFragment2 {
+				generatePropertyPage = true
+			}
 			fragment = scoping.ImportNamespacesScopingFragment2 {
 				ignoreCase = true
 			}
