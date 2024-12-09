@@ -181,10 +181,8 @@ public class InstancePropertySection extends AbstractSection {
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputDataProvider));
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputDataProvider));
 
-		inputTable.addConfiguration(
-				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
-		outputTable.addConfiguration(
-				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
+		inputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
+		outputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 
 		inputTable.configure();
 		outputTable.configure();

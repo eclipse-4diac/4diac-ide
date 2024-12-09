@@ -123,8 +123,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 			}
 		});
 
-		table.addConfiguration(
-				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
+		table.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		table.configure();
 
 		buttons.bindToTableViewer(table, this,

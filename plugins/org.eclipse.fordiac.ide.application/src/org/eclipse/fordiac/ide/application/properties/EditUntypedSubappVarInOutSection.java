@@ -77,8 +77,7 @@ public class EditUntypedSubappVarInOutSection extends AbstractEditVarInOutSectio
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
-		inputTable.addConfiguration(
-				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
+		inputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		inputTable.configure();
 	}
 

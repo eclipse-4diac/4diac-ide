@@ -73,8 +73,7 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.addConfiguration(new DropdownSelectionWidget(RetainTag.getTagList()));
-		outputTable.addConfiguration(
-				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
+		outputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		outputTable.configure();
 
 	}
@@ -96,8 +95,7 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		inputTable.addConfiguration(new DropdownSelectionWidget(RetainTag.getTagList()));
-		inputTable.addConfiguration(
-				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
+		inputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		inputTable.configure();
 	}
 

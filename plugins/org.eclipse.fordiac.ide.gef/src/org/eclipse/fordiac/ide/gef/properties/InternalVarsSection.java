@@ -98,8 +98,7 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
 		table.addConfiguration(new TypeDeclarationEditorConfiguration(provider));
 		table.addConfiguration(new DropdownSelectionWidget(RetainTag.getTagList()));
-		table.addConfiguration(
-				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
+		table.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		table.configure();
 	}
 

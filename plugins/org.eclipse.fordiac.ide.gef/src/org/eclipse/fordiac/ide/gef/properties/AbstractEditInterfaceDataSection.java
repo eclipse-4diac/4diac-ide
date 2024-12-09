@@ -97,8 +97,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				getSectionEditableRule(), null, this, false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
-		outputTable.addConfiguration(
-				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
+		outputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		outputTable.configure();
 	}
 
@@ -116,8 +115,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				getSectionEditableRule(), null, this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
-		inputTable.addConfiguration(
-				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
+		inputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		inputTable.configure();
 	}
 

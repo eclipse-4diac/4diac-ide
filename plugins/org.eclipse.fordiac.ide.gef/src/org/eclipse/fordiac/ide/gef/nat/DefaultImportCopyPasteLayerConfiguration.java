@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -25,10 +24,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractLayerConfiguration;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
@@ -36,13 +35,13 @@ import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 public class DefaultImportCopyPasteLayerConfiguration extends AbstractLayerConfiguration<NatTable> {
 
 	private final NatTableColumnProvider<? extends NatTableColumn> columnProvider;
-	private final Supplier<CommandStack> cmdStack;
+	private final CommandExecutor commandExecutor;
 
 	public DefaultImportCopyPasteLayerConfiguration(
 			final NatTableColumnProvider<? extends NatTableColumn> columnProvider,
-			final Supplier<CommandStack> cmdStack) {
+			final CommandExecutor commandExecutor) {
 		this.columnProvider = columnProvider;
-		this.cmdStack = cmdStack;
+		this.commandExecutor = commandExecutor;
 	}
 
 	@Override
@@ -51,7 +50,7 @@ public class DefaultImportCopyPasteLayerConfiguration extends AbstractLayerConfi
 		final NatTableColumn firstColumn = columnProvider.getColumns().get(0);
 		sel.registerCommandHandler(
 				new CopyDataImportCommandHandler(sel, columnProvider, getMappersForColumn(firstColumn)));
-		sel.registerCommandHandler(new PasteDataImportFromClipboardCommandHandler(sel, cmdStack,
+		sel.registerCommandHandler(new PasteDataImportFromClipboardCommandHandler(sel, commandExecutor,
 				getTypeResolver(firstColumn), columnProvider, getPasteableColumnList(firstColumn)));
 	}
 

@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -28,33 +27,32 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.ImportTransfer;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.PasteDataFromClipboardCommandHandler;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.nebula.widgets.nattable.copy.command.PasteDataCommand;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
-import org.eclipse.nebula.widgets.nattable.selection.SelectionModel;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Display;
 
 public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromClipboardCommandHandler {
 
 	private final BiFunction<TypeLibrary, String, TypeEntry> typeResolver;
-	private final Supplier<CommandStack> cmdstk;
+	private final CommandExecutor commandExecutor;
 	private final Map<String, String> conflicts = new HashMap<>();
 	private final NatTableColumnProvider<? extends NatTableColumn> columnProvider;
 	private final List<? extends NatTableColumn> columns;
 
 	public PasteDataImportFromClipboardCommandHandler(final SelectionLayer selectionLayer,
-			final Supplier<CommandStack> cmdStack, final BiFunction<TypeLibrary, String, TypeEntry> typeResolver,
+			final CommandExecutor commandExecutor, final BiFunction<TypeLibrary, String, TypeEntry> typeResolver,
 			final NatTableColumnProvider<? extends NatTableColumn> columnProvider,
 			final List<? extends NatTableColumn> columns) {
 		super(selectionLayer);
-		this.cmdstk = cmdStack;
+		this.commandExecutor = commandExecutor;
 		this.typeResolver = typeResolver;
 		this.columnProvider = columnProvider;
 		this.columns = columns;
@@ -66,14 +64,10 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 		if (rootElement != null) {
 			final var namespaces = Arrays.stream(getClipboardContent()).map(imp -> getImportNamespace(rootElement, imp))
 					.filter(Objects::nonNull).toList();
-			if (selectionLayer.getSelectionModel() instanceof final SelectionModel selModel) {
-				selModel.setClearSelectionOnChange(false);
-				namespaces.forEach(namespace -> cmdstk.get().execute(new AddNewImportCommand(rootElement, namespace)));
-				selModel.setClearSelectionOnChange(true);
-			} else {
-				namespaces.forEach(namespace -> cmdstk.get().execute(new AddNewImportCommand(rootElement, namespace)));
-			}
+			namespaces.forEach(
+					namespace -> commandExecutor.executeCommand(new AddNewImportCommand(rootElement, namespace)));
 		}
+
 		conflicts.clear();
 		super.doCommand(command);
 		return true;

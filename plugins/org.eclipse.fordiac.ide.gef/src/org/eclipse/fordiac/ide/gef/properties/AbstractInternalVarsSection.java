@@ -107,8 +107,7 @@ public abstract class AbstractInternalVarsSection extends AbstractSection
 
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
 		table.addConfiguration(new TypeDeclarationEditorConfiguration(provider));
-		table.addConfiguration(
-				new DefaultImportCopyPasteLayerConfiguration(columnProvider, this::getCurrentCommandStack));
+		table.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		table.configure();
 	}
 

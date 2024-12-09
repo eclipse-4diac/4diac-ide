@@ -81,6 +81,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 	private final IChangeableRowDataProvider<VarDeclaration> structMemberProvider;
 	private RowPostSelectionProvider<VarDeclaration> selectionProvider;
 	private final IWorkbenchSite site;
+	protected boolean blockRefresh = false;
 
 	private final Adapter adapter = new SingleRecursiveContentAdapter() {
 
@@ -95,7 +96,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 
 	private void notifyRefresh() {
 		Display.getDefault().syncExec(() -> {
-			if (null != structType && natTable != null && !natTable.isDisposed()) {
+			if (null != structType && natTable != null && !natTable.isDisposed() && !blockRefresh) {
 				natTable.refresh();
 			}
 		});
@@ -149,7 +150,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 				IEditableRule.ALWAYS_EDITABLE, null, this, false);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
 		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(structMemberProvider));
-		natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, () -> cmdStack));
+		natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		natTable.configure();
 
 		selectionProvider = new StructEditingCompositeSelectionProvider(natTable,
@@ -215,7 +216,9 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 	@Override
 	public void executeCommand(final Command cmd) {
 		if ((null != getType()) && (null != cmdStack) && (null != cmd) && cmd.canExecute()) {
+			blockRefresh = true;
 			cmdStack.execute(cmd);
+			blockRefresh = false;
 		}
 	}
 
