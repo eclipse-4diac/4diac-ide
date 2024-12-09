@@ -284,25 +284,15 @@ public class LibrarySelectionPage extends WizardPage {
 
 	private class LibDisplay {
 		private boolean selected;
-		private final String name;
-		private final String symbolicName;
-		private final String version;
-		private final String comment;
-		private final URI uri;
+		private final LibraryRecord libraryRecord;
 
-		public LibDisplay(final boolean selected, final String name, final String symbolicName, final String version,
-				final String comment, final URI uri) {
+		public LibDisplay(final boolean selected, final LibraryRecord libRecord) {
 			this.selected = selected;
-			this.name = name;
-			this.symbolicName = symbolicName;
-			this.version = version;
-			this.comment = comment;
-			this.uri = uri;
+			this.libraryRecord = libRecord;
 		}
 
 		public LibDisplay(final LibraryRecord libRecord) {
-			this(false, libRecord.name(), libRecord.symbolicName(), libRecord.version().toString(), libRecord.comment(),
-					libRecord.uri());
+			this(false, libRecord);
 		}
 
 		public void setSelected(final boolean selected) {
@@ -314,23 +304,27 @@ public class LibrarySelectionPage extends WizardPage {
 		}
 
 		public String getName() {
-			return name;
+			return libraryRecord.name();
 		}
 
 		public String getSymbolicName() {
-			return symbolicName;
+			return libraryRecord.symbolicName();
 		}
 
 		public String getVersion() {
-			return version;
+			return libraryRecord.version().toString();
 		}
 
 		public String getComment() {
-			return comment;
+			return libraryRecord.comment();
 		}
 
 		public URI getUri() {
-			return uri;
+			return libraryRecord.uri();
+		}
+
+		public LibraryRecord getLibraryRecord() {
+			return libraryRecord;
 		}
 	}
 

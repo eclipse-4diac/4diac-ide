@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 import java.util.Comparator;
 
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -49,12 +50,30 @@ public class FordiacProjectSorter extends ViewerComparator {
 		if (isTypeLibFolder(e2)) {
 			return 1;
 		}
+
+		if (isLibFolder(e1)) {
+			if (isLibFolder(e2)) {
+				return super.compare(viewer, e1, e2);
+			}
+			return -1;
+		}
+
+		if (isLibFolder(e2)) {
+			return 1;
+		}
+
 		// sort the rest alphabetically
 		return super.compare(viewer, e1, e2);
 	}
 
 	public static boolean isTypeLibFolder(final Object entry) {
-		return ((entry instanceof final IFolder folder) && SystemManager.TYPE_LIB_FOLDER_NAME.equals(folder.getName()));
+		return ((entry instanceof final IFolder folder)
+				&& TypeLibraryTags.TYPE_LIB_FOLDER_NAME.equals(folder.getName()));
 	}
 
+	public static boolean isLibFolder(final Object entry) {
+		return ((entry instanceof final IFolder folder)
+				&& (TypeLibraryTags.STANDARD_LIB_FOLDER_NAME.equals(folder.getName())
+						|| TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME.equals(folder.getName())));
+	}
 }

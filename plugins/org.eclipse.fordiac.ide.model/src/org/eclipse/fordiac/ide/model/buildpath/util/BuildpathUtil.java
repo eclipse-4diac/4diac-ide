@@ -45,12 +45,15 @@ public final class BuildpathUtil {
 	/** The build path file name */
 	public static final String BUILDPATH_FILE_NAME = ".buildpath"; //$NON-NLS-1$
 
-	private static final List<String> DEFAULT_SOURCE_FOLDERS = List.of("Type Library"); //$NON-NLS-1$
+	private static final List<String> DEFAULT_SOURCE_FOLDERS = List.of("Type Library", "Standard Libraries", //$NON-NLS-1$ //$NON-NLS-2$
+			"External Libraries"); //$NON-NLS-1$
 
-	/** Create a default build path configuration for project
+	/**
+	 * Create a default build path configuration for project
 	 *
 	 * @param project The project
-	 * @return The default build path configuration */
+	 * @return The default build path configuration
+	 */
 	public static Buildpath createDefaultBuildpath(final IProject project) {
 		Objects.requireNonNull(project);
 		final Buildpath buildpath = BuildpathFactory.eINSTANCE.createBuildpath();
@@ -65,10 +68,13 @@ public final class BuildpathUtil {
 		return buildpath;
 	}
 
-	/** Load build path configuration for project
+	/**
+	 * Load build path configuration for project
 	 *
 	 * @param project The project
-	 * @return The build path configuration, either loaded from disk or using default values */
+	 * @return The build path configuration, either loaded from disk or using
+	 *         default values
+	 */
 	public static Buildpath loadBuildpath(final IProject project) {
 		Objects.requireNonNull(project);
 		if (project.isAccessible() && getBuildpathFile(project).exists()) {
@@ -87,10 +93,12 @@ public final class BuildpathUtil {
 		return createDefaultBuildpath(project);
 	}
 
-	/** Save build path configuration
+	/**
+	 * Save build path configuration
 	 *
 	 * @param buildpath The build path configuration
-	 * @throws IOException if an error occurrs during save */
+	 * @throws IOException if an error occurrs during save
+	 */
 	public static void saveBuildpath(final Buildpath buildpath) throws IOException {
 		Objects.requireNonNull(buildpath);
 		final Resource resource = buildpath.eResource();
@@ -100,11 +108,14 @@ public final class BuildpathUtil {
 		resource.save(Collections.emptyMap());
 	}
 
-	/** Test if source folders are nested
+	/**
+	 * Test if source folders are nested
 	 *
 	 * @param sourceFolder The source folder
 	 * @param other        The other source folder
-	 * @return {@code true} if {@code sourceFolder} is nested in {@code other}, {@code false} otherwise */
+	 * @return {@code true} if {@code sourceFolder} is nested in {@code other},
+	 *         {@code false} otherwise
+	 */
 	public static boolean isNestedIn(final SourceFolder sourceFolder, final SourceFolder other) {
 		Objects.requireNonNull(sourceFolder);
 		Objects.requireNonNull(other);
@@ -113,13 +124,17 @@ public final class BuildpathUtil {
 		return otherPath.isPrefixOf(path);
 	}
 
-	/** Visit the set of matching resources for a build path configuration in a project
+	/**
+	 * Visit the set of matching resources for a build path configuration in a
+	 * project
 	 *
 	 * @param buildpath The build path configuration
 	 * @param project   The project
 	 * @param visitor   The resource visitor
 	 * @throws CoreException if there was a problem visiting the resources
-	 * @apiNote May visit the same file multiple times if matching in multiple source folders */
+	 * @apiNote May visit the same file multiple times if matching in multiple
+	 *          source folders
+	 */
 	public static void acceptMatches(final Buildpath buildpath, final IProject project, final IResourceVisitor visitor)
 			throws CoreException {
 		Objects.requireNonNull(buildpath);
@@ -130,12 +145,14 @@ public final class BuildpathUtil {
 		}
 	}
 
-	/** Visit the set of matching resources for a source folder in a project
+	/**
+	 * Visit the set of matching resources for a source folder in a project
 	 *
 	 * @param sourceFolder The source folder
 	 * @param project      The project
 	 * @param visitor      The resource visitor
-	 * @throws CoreException if there was a problem visiting the resources */
+	 * @throws CoreException if there was a problem visiting the resources
+	 */
 	public static void acceptMatches(final SourceFolder sourceFolder, final IProject project,
 			final IResourceVisitor visitor) throws CoreException {
 		Objects.requireNonNull(sourceFolder);
@@ -158,11 +175,13 @@ public final class BuildpathUtil {
 		});
 	}
 
-	/** Test if a resource matches the set of resources for the source folder
+	/**
+	 * Test if a resource matches the set of resources for the source folder
 	 *
 	 * @param buildpath The build path configuration
 	 * @param resource  The resource, may be {@code null}
-	 * @return The source folder matching the resource */
+	 * @return The source folder matching the resource
+	 */
 	public static Optional<SourceFolder> findSourceFolder(final Buildpath buildpath, final IResource resource) {
 		Objects.requireNonNull(buildpath);
 		if (resource == null) {
@@ -171,11 +190,13 @@ public final class BuildpathUtil {
 		return buildpath.getSourceFolders().stream().filter(candidate -> matches(candidate, resource)).findFirst();
 	}
 
-	/** Find a path relative to a source folder
+	/**
+	 * Find a path relative to a source folder
 	 *
 	 * @param buildpath The build path configuration
 	 * @param resource  The resource, may be {@code null}
-	 * @return A path relative to a source folder */
+	 * @return A path relative to a source folder
+	 */
 	public static Optional<IPath> findRelativePath(final Buildpath buildpath, final IResource resource) {
 		Objects.requireNonNull(buildpath);
 		if (resource == null) {
@@ -186,20 +207,24 @@ public final class BuildpathUtil {
 				.flatMap(Optional::stream).findFirst();
 	}
 
-	/** Test if a resource matches the set of resources for the source folder
+	/**
+	 * Test if a resource matches the set of resources for the source folder
 	 *
 	 * @param sourceFolder The source folder
 	 * @param resource     The resource, may be {@code null}
-	 * @return {@code true} if the resource matches, {@code false} otherwise */
+	 * @return {@code true} if the resource matches, {@code false} otherwise
+	 */
 	public static boolean matches(final SourceFolder sourceFolder, final IResource resource) {
 		return getRelativePath(sourceFolder, resource).filter(path -> matches(sourceFolder, path)).isPresent();
 	}
 
-	/** Test if a relative path matches the set of resources for the source folder
+	/**
+	 * Test if a relative path matches the set of resources for the source folder
 	 *
 	 * @param sourceFolder The source folder
 	 * @param relativePath The relative path, may be {@code null}
-	 * @return {@code true} if the resource matches, {@code false} otherwise */
+	 * @return {@code true} if the resource matches, {@code false} otherwise
+	 */
 	public static boolean matches(final SourceFolder sourceFolder, final IPath relativePath) {
 		Objects.requireNonNull(sourceFolder);
 		if (relativePath == null) {
@@ -213,11 +238,13 @@ public final class BuildpathUtil {
 				&& excludes.stream().noneMatch(matcher -> matcher.matches(path));
 	}
 
-	/** Get the path relative to the source folder
+	/**
+	 * Get the path relative to the source folder
 	 *
 	 * @param sourceFolder The source folder
 	 * @param resource     The resource, may be {@code null}
-	 * @return A path relative to the source folder */
+	 * @return A path relative to the source folder
+	 */
 	public static Optional<IPath> getRelativePath(final SourceFolder sourceFolder, final IResource resource) {
 		Objects.requireNonNull(sourceFolder);
 		if (resource == null) {
@@ -244,14 +271,15 @@ public final class BuildpathUtil {
 
 	private static PathMatcher getPathMatcher(final Pattern pattern) {
 		return switch (pattern.getSyntax()) {
-		case GLOB -> FileSystems.getDefault()
-				.getPathMatcher(pattern.getSyntax() + ":" + convertGlobPattern(pattern.getValue())); //$NON-NLS-1$
+		case GLOB ->
+			FileSystems.getDefault().getPathMatcher(pattern.getSyntax() + ":" + convertGlobPattern(pattern.getValue())); //$NON-NLS-1$
 		default -> FileSystems.getDefault().getPathMatcher(pattern.getSyntax() + ":" + pattern.getValue()); //$NON-NLS-1$
 		};
 	}
 
 	private static String convertGlobPattern(String pattern) {
-		// patterns starting with '/' match only in the top-level folder (anchor) (e.g., "/.git")
+		// patterns starting with '/' match only in the top-level folder (anchor) (e.g.,
+		// "/.git")
 		if (pattern.startsWith("/")) { //$NON-NLS-1$
 			pattern = pattern.substring(1);
 		} else { // otherwise, match in any sub-folder (e.g., "*.fbt")

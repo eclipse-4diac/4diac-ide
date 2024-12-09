@@ -79,8 +79,19 @@
       				<or>
       					<and>
                         	<instanceof value="org.eclipse.core.resources.IFolder"/>
-                          	<test property="org.eclipse.core.resources.name"
-                             	value="Type Library"/>
+                           <or>
+                              <test
+                                    property="org.eclipse.core.resources.name"
+                                    value="Type Library">
+                              </test>
+                              <test
+                                    property="org.eclipse.core.resources.name"
+                                    value="Standard Libraries">
+                              </test>
+                              <test
+                                    property="org.eclipse.core.resources.name"
+                                    value="External Libraries">
+                              </test></or>
                         </and>
         				<instanceof value="org.eclipse.core.resources.IProject"/>
         			</or>

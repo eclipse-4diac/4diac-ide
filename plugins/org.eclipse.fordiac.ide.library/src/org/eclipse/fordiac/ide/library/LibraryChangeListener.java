@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class LibraryChangeListener implements IResourceChangeListener {
@@ -57,6 +58,11 @@ public class LibraryChangeListener implements IResourceChangeListener {
 			return false;
 		case IResource.FOLDER:
 			if (delta.getResource() instanceof final IFolder folder) {
+				if (delta.getKind() == IResourceDelta.ADDED
+						&& TypeLibraryTags.STANDARD_LIB_FOLDER_NAME.equals(folder.getName())) {
+					LibraryManager.INSTANCE.startResolveJob(folder.getProject(),
+							TypeLibraryManager.INSTANCE.getTypeLibrary(folder.getProject()));
+				}
 				// only search inside linked folders inside the Type Library
 				return isTypeLibraryFolder(folder) || ((folder.isLinked() || delta.getKind() == IResourceDelta.REMOVED)
 						&& isTypeLibraryFolder(folder.getParent()));
@@ -70,6 +76,7 @@ public class LibraryChangeListener implements IResourceChangeListener {
 
 	private static boolean isTypeLibraryFolder(final IContainer container) {
 		return container instanceof IFolder && container.getParent() instanceof IProject
-				&& LibraryManager.TYPE_LIB_FOLDER_NAME.equals(container.getName());
+				&& (TypeLibraryTags.STANDARD_LIB_FOLDER_NAME.equals(container.getName())
+						|| TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME.equals(container.getName()));
 	}
 }

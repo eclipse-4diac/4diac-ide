@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -102,9 +103,18 @@ class LibraryImportTest {
 		FordiacMarkerHelper.updateMarkers(project.getFile(LibraryManager.MANIFEST), FordiacErrorMarker.LIBRARY_MARKER,
 				Collections.emptyList(), true);
 		Job.getJobManager().join(FordiacMarkerHelper.FAMILY_FORDIAC_MARKER, null);
-		project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).accept(resource -> {
+		project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME).accept(resource -> {
 			if (resource instanceof final IFolder folder) {
-				if (folder.getName().equals(LibraryManager.TYPE_LIB_FOLDER_NAME)) {
+				if (folder.getName().equals(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME)) {
+					return true;
+				}
+				folder.delete(false, null);
+			}
+			return false;
+		});
+		project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME).accept(resource -> {
+			if (resource instanceof final IFolder folder) {
+				if (folder.getName().equals(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME)) {
 					return true;
 				}
 				folder.delete(false, null);
@@ -119,7 +129,8 @@ class LibraryImportTest {
 				true, false);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_0_0, 0);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_0_0, 0,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 	}
 
 	@Test
@@ -132,7 +143,8 @@ class LibraryImportTest {
 				true, false);
 
 		manifest = ManifestHelper.getContainerManifest(project);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_1_0, 0);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_1_0, 0,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 		assertEquals("[1.0.0-2.0.0)", manifest.getDependencies().getRequired().get(0).getVersion()); //$NON-NLS-1$
 	}
 
@@ -146,7 +158,8 @@ class LibraryImportTest {
 				true, false);
 
 		manifest = ManifestHelper.getContainerManifest(project);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V2_0_0, 0);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V2_0_0, 0,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 		assertEquals(V2_0_0, manifest.getDependencies().getRequired().get(0).getVersion());
 	}
 
@@ -160,7 +173,8 @@ class LibraryImportTest {
 		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		manifest = ManifestHelper.getContainerManifest(project);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_5_0, 0);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_5_0, 0,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 	}
 
 	@Test
@@ -169,7 +183,8 @@ class LibraryImportTest {
 				true, false);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST02, V1_0_0, 0);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST02, V1_0_0, 0,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 	}
 
 	@Test
@@ -179,9 +194,10 @@ class LibraryImportTest {
 		LibraryManager.INSTANCE.resolveDependencies(project, TypeLibraryManager.INSTANCE.getTypeLibrary(project));
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST02, V1_0_0, 0);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST02, V1_0_0, 0,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 		assertEquals(1, manifest.getDependencies().getRequired().size());
-		LibraryAssert.assertLibraryLinked(project, TEST01, V1_0_0);
+		LibraryAssert.assertLibraryLinked(project, TEST01, V1_0_0, TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 	}
 
 	@Test
@@ -191,9 +207,10 @@ class LibraryImportTest {
 		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST02, V1_1_0, 0);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST02, V1_1_0, 0,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 		assertEquals(1, manifest.getDependencies().getRequired().size());
-		LibraryAssert.assertLibraryLinked(project, TEST01, V1_5_0);
+		LibraryAssert.assertLibraryLinked(project, TEST01, V1_5_0, TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 	}
 
 	@Test
@@ -205,10 +222,12 @@ class LibraryImportTest {
 		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_0_0, 0);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST04, V1_0_0, 1);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_0_0, 0,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST04, V1_0_0, 1,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 		assertEquals(2, manifest.getDependencies().getRequired().size());
-		LibraryAssert.assertLibraryLinked(project, TEST01, V1_1_0);
+		LibraryAssert.assertLibraryLinked(project, TEST01, V1_1_0, TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 	}
 
 	@Test
@@ -220,10 +239,12 @@ class LibraryImportTest {
 		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_1_0, 0);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST04, V1_0_0, 1);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_1_0, 0,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST04, V1_0_0, 1,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 		assertEquals(2, manifest.getDependencies().getRequired().size());
-		LibraryAssert.assertLibraryLinked(project, TEST01, V1_5_0);
+		LibraryAssert.assertLibraryLinked(project, TEST01, V1_5_0, TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 	}
 
 	@Test
@@ -235,11 +256,13 @@ class LibraryImportTest {
 		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_1_0, 0);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST04, V1_1_0, 1);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_1_0, 0,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST04, V1_1_0, 1,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 		assertEquals(2, manifest.getDependencies().getRequired().size());
 
-		assertFalse(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder(TEST01).exists());
+		assertFalse(project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME).getFolder(TEST01).exists());
 
 		final var manifestFile = project.getFile(LibraryManager.MANIFEST);
 		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
@@ -256,12 +279,13 @@ class LibraryImportTest {
 		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST06, V1_0_0, 0);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST06, V1_0_0, 0,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 		assertEquals(1, manifest.getDependencies().getRequired().size());
 
-		LibraryAssert.assertLibraryLinked(project, TEST05, V1_0_0);
-		LibraryAssert.assertLibraryLinked(project, TEST02, V1_0_0);
-		LibraryAssert.assertLibraryLinked(project, TEST01, V1_0_0);
+		LibraryAssert.assertLibraryLinked(project, TEST05, V1_0_0, TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+		LibraryAssert.assertLibraryLinked(project, TEST02, V1_0_0, TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+		LibraryAssert.assertLibraryLinked(project, TEST01, V1_0_0, TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 	}
 
 	@Test
@@ -271,10 +295,11 @@ class LibraryImportTest {
 		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
-		LibraryAssert.assertDependencyLinked(project, manifest, TEST07, V1_0_0, 0);
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST07, V1_0_0, 0,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 		assertEquals(1, manifest.getDependencies().getRequired().size());
 
-		assertFalse(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder(MATH).exists());
+		assertFalse(project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME).getFolder(MATH).exists());
 
 		final var manifestFile = project.getFile(LibraryManager.MANIFEST);
 		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,

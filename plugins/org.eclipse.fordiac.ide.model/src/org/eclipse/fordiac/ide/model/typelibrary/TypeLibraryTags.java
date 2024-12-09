@@ -72,6 +72,15 @@ public final class TypeLibraryTags {
 	/** The Constant for the IEventBroker topic called at type library creation */
 	public static final String TYPE_LIBRARY_CREATION_TOPIC = "org/eclipse/fordiac/event/type_library_creation"; //$NON-NLS-1$
 
+	/** Folder containing the projects types */
+	public static final String TYPE_LIB_FOLDER_NAME = "Type Library"; //$NON-NLS-1$
+
+	/** Folder containing standard libraries linked in the project */
+	public static final String STANDARD_LIB_FOLDER_NAME = "Standard Libraries"; //$NON-NLS-1$
+
+	/** Folder containing external libraries linked in the project */
+	public static final String EXTERNAL_LIB_FOLDER_NAME = "External Libraries"; //$NON-NLS-1$
+
 	private TypeLibraryTags() {
 		throw new UnsupportedOperationException("Helper class TypeLibraryTags can not be instantiated."); //$NON-NLS-1$
 	}

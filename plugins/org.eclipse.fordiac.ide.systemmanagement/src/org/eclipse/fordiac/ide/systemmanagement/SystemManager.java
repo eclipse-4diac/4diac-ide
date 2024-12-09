@@ -36,6 +36,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -51,9 +52,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
-import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
 import org.eclipse.xtext.ui.XtextProjectHelper;
 
 /**
@@ -73,7 +74,6 @@ public enum SystemManager {
 	public static final String SYSTEM_FILE_ENDING = "sys"; //$NON-NLS-1$
 	public static final String SYSTEM_FILE_ENDING_WITH_DOT = ".sys"; //$NON-NLS-1$
 
-	public static final String TYPE_LIB_FOLDER_NAME = "Type Library"; //$NON-NLS-1$
 	private final IResourceChangeListener fordiacListener = new FordiacResourceChangeListener(this);
 
 	/** The listeners. */
@@ -118,12 +118,15 @@ public enum SystemManager {
 		project.create(description, monitor);
 		project.open(monitor);
 
-		// configure type lib
-		SystemPaletteManagement.linkToolTypeLibsToDestination(includes, project.getFolder(TYPE_LIB_FOLDER_NAME));
-
 		TypeLibraryManager.INSTANCE.getTypeLibrary(project); // insert the project into the project list
 
 		ManifestHelper.createProjectManifest(project, includedLibraries.keySet());
+
+		project.getFolder(TypeLibraryTags.TYPE_LIB_FOLDER_NAME).create(true, true, monitor);
+		project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME).create(IResource.VIRTUAL | IResource.FORCE, true,
+				monitor);
+		project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME).create(IResource.VIRTUAL | IResource.FORCE, true,
+				monitor);
 
 		return project;
 	}

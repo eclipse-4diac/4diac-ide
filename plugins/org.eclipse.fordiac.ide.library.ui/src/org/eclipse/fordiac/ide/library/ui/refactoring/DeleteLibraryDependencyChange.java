@@ -73,7 +73,7 @@ public class DeleteLibraryDependencyChange extends CompositeChange implements IF
 
 	@Override
 	public EnumSet<ChangeState> getDefaultSelection() {
-		return EnumSet.of(ChangeState.NO_CHANGE);
+		return EnumSet.of(ChangeState.DELETE);
 	}
 
 }

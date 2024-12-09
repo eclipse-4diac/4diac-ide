@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
@@ -28,8 +27,8 @@ public class LibraryAssert {
 	}
 
 	public static void assertDependencyLinked(final IProject project, final Manifest manifest,
-			final String symbolicName, final String version, final int index) {
-		assertLibraryLinked(project, symbolicName, version);
+			final String symbolicName, final String version, final int index, final String folderName) {
+		assertLibraryLinked(project, symbolicName, version, folderName);
 		assertNotNull(manifest.getDependencies());
 		assertNotNull(manifest.getDependencies().getRequired().get(index));
 		assertEquals(symbolicName, manifest.getDependencies().getRequired().get(index).getSymbolicName());
@@ -37,11 +36,12 @@ public class LibraryAssert {
 				VersionComparator.contains(manifest.getDependencies().getRequired().get(index).getVersion(), version));
 	}
 
-	public static void assertLibraryLinked(final IProject project, final String symbolicName, final String version) {
-		assertTrue(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder(symbolicName).exists());
+	public static void assertLibraryLinked(final IProject project, final String symbolicName, final String version,
+			final String folderName) {
+		assertTrue(project.getFolder(folderName).getFolder(symbolicName).exists());
 		assertNotNull(TypeLibraryManager.INSTANCE.getTypeLibrary(project).find(symbolicName + "::Block")); //$NON-NLS-1$
 		final var libManifest = ManifestHelper
-				.getContainerManifest(project.getFolder(LibraryManager.TYPE_LIB_FOLDER_NAME).getFolder(symbolicName));
+				.getContainerManifest(project.getFolder(folderName).getFolder(symbolicName));
 		assertNotNull(libManifest);
 		assertEquals(version, libManifest.getProduct().getVersionInfo().getVersion());
 	}

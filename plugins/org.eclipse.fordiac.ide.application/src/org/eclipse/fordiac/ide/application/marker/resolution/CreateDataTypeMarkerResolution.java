@@ -41,7 +41,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.util.TypeFromTemplateCreator;
 import org.eclipse.fordiac.ide.typemanagement.wizards.NewTypeWizard;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -74,7 +73,7 @@ public class CreateDataTypeMarkerResolution extends AbstractCommandMarkerResolut
 	}
 
 	private static IFile getTargetFile(final String typeName, final IProject project) {
-		return project.getFile(Path.fromOSString(SystemManager.TYPE_LIB_FOLDER_NAME)
+		return project.getFile(Path.fromOSString(TypeLibraryTags.TYPE_LIB_FOLDER_NAME)
 				.append(typeName.replace(PackageNameHelper.PACKAGE_NAME_DELIMITER, String.valueOf(IPath.SEPARATOR)))
 				.addFileExtension(TypeLibraryTags.DATA_TYPE_FILE_ENDING));
 	}

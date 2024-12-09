@@ -26,11 +26,12 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class ErrorMarkerResolver {
 
 	public static final String TEMPLATE_PATH = Platform.getInstallLocation().getURL().getFile() + File.separatorChar
-			+ "template";
+			+ "template"; //$NON-NLS-1$
 
 	public static void repairMissingStructuredDataType(final VarDeclaration target) {
 		final File template = new File(ErrorMarkerResolver.TEMPLATE_PATH + File.separatorChar + "Struct.dtp"); //$NON-NLS-1$
@@ -46,15 +47,15 @@ public class ErrorMarkerResolver {
 		final DataType type = target.getType();
 
 		if (type instanceof ErrorMarkerDataType) {
-			final IFile targetFile = getTargetFile(type.getName(), fullPath, ".dtp");
-			final TypeFromTemplateCreator creator = new TypeFromTemplateCreator(targetFile, template, "");
+			final IFile targetFile = getTargetFile(type.getName(), fullPath, ".dtp"); //$NON-NLS-1$
+			final TypeFromTemplateCreator creator = new TypeFromTemplateCreator(targetFile, template, ""); //$NON-NLS-1$
 			creator.createTypeFromTemplate(new NullProgressMonitor());
 		}
 	}
 
 	private static IFile getTargetFile(final String typeName, final IPath path, final String fileEnding) {
-		return ResourcesPlugin.getWorkspace().getRoot()
-				.getFile(new Path(path + File.separator + "Type Library" + File.separator + typeName + fileEnding));
+		return ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(
+				path + File.separator + TypeLibraryTags.TYPE_LIB_FOLDER_NAME + File.separator + typeName + fileEnding));
 
 	}
 }

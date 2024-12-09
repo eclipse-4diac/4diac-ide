@@ -86,7 +86,6 @@ public enum LibraryManager {
 
 	INSTANCE;
 
-	public static final String TYPE_LIB_FOLDER_NAME = "Type Library"; //$NON-NLS-1$
 	public static final String LIB_TYPELIB_FOLDER_NAME = "typelib"; //$NON-NLS-1$
 	public static final String PACKAGE_DOWNLOAD_DIRECTORY = ".download"; //$NON-NLS-1$
 	public static final String EXTRACTED_LIB_DIRECTORY = ".lib"; //$NON-NLS-1$
@@ -197,9 +196,10 @@ public enum LibraryManager {
 	/**
 	 * Initialise map with all libraries contained in the folder specified
 	 *
-	 * @param map     map to initialise
-	 * @param path    path to folder
-	 * @param baseURI URI to use as base
+	 * @param map      map to initialise
+	 * @param path     path to folder
+	 * @param standard if libraries are standard
+	 * @param baseURI  URI to use as base
 	 */
 	private static void initLibraryMap(final Map<String, List<LibraryRecord>> map, final Path path,
 			final java.net.URI baseURI) {
@@ -216,9 +216,10 @@ public enum LibraryManager {
 	/**
 	 * Add {@link LibraryRecord} to the given map based on the {@link Path}
 	 *
-	 * @param map     target map
-	 * @param path    path of the library folder
-	 * @param baseUri URI to use as base
+	 * @param map      target map
+	 * @param path     path of the library folder
+	 * @param baseUri  URI to use as base
+	 * @param standard if record belongs to standard library
 	 * @throws IOException if an I/O error occurs
 	 */
 	private static void addLibrary(final Map<String, List<LibraryRecord>> map, final Path path,
@@ -377,7 +378,10 @@ public enum LibraryManager {
 		if (projManifest == null) {
 			return;
 		}
-		final IFolder libDirectory = project.getFolder(TYPE_LIB_FOLDER_NAME)
+		final IFolder libDirectory = project
+				.getFolder(uri.getPath().startsWith(STANDARD_LIBRARY_URI.getPath())
+						? TypeLibraryTags.STANDARD_LIB_FOLDER_NAME
+						: TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME)
 				.getFolder(libManifest.getProduct().getSymbolicName());
 
 		removeLibraryChangeListener();
@@ -752,7 +756,7 @@ public enum LibraryManager {
 		final Map<String, DependencyNode> deps = new HashMap<>();
 		final Map<String, ResolveNode> res = new HashMap<>();
 		final Map<String, Version> preferred = new HashMap<>();
-		final Set<String> linked = new HashSet<>();
+		final Map<String, IFolder> linked = new HashMap<>();
 
 		final Queue<String> queue = new LinkedList<>(); // symbolicNames
 
@@ -763,6 +767,9 @@ public enum LibraryManager {
 		}
 
 		checkLibChanges();
+
+		// remove when no longer needed
+		moveLinksToVirtualFolders(project, typeLibrary);
 
 		findPreferred(project, preferred, linked);
 
@@ -830,7 +837,7 @@ public enum LibraryManager {
 
 				if (rnode.isValid()) {
 					// no need to import the same version again
-					if (!linked.contains(rnode.getSymbolicName())
+					if (!linked.containsKey(rnode.getSymbolicName())
 							|| !preferred.get(rnode.getSymbolicName()).equals(rnode.getVersion())) {
 						importLibrary(project, typeLibrary, rnode.getUri(), false, false);
 
@@ -845,9 +852,9 @@ public enum LibraryManager {
 			}
 		}
 
-		linked.forEach(l -> {
+		linked.values().forEach(f -> {
 			try {
-				project.getFolder(TYPE_LIB_FOLDER_NAME).getFolder(l).delete(true, null);
+				f.delete(true, null);
 			} catch (final CoreException e) {
 				// empty
 			}
@@ -865,36 +872,39 @@ public enum LibraryManager {
 	 * @param linked    set to fill with symbolic names of linked libraries
 	 */
 	private static void findPreferred(final IProject project, final Map<String, Version> preferred,
-			final Set<String> linked) {
-		final IFolder typeLibFolder = project.getFolder(TYPE_LIB_FOLDER_NAME);
-		if (!typeLibFolder.exists()) {
+			final Map<String, IFolder> linked) {
+		final IFolder standardLibFolder = project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME);
+		final IFolder externalLibFolder = project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+		if (!standardLibFolder.exists() || !externalLibFolder.exists()) {
 			return;
 		}
-		try {
-			typeLibFolder.accept(res -> {
-				if (res instanceof final IFolder libFolder) {
-					if (typeLibFolder.equals(libFolder)) {
-						return true;
-					}
-					if (!libFolder.exists() || !libFolder.isLinked()) {
-						return false;
-					}
-					final Manifest libManifest = ManifestHelper.getContainerManifest(libFolder);
-					if (libManifest != null) {
-						linked.add(libFolder.getName());
-						preferred.put(libFolder.getName(),
-								new Version(libManifest.getProduct().getVersionInfo().getVersion()));
-					} else {
-						final IPath path = libFolder.getLocation();
-						final String segment = (path.segmentCount() >= 2) ? path.segment(path.segmentCount() - 2) : ""; //$NON-NLS-1$
-						final int index = segment.lastIndexOf('-');
-						if (index > 0) {
-							preferred.put(libFolder.getName(), new Version(segment.substring(index + 1)));
-						}
+		final IResourceVisitor visitor = res -> {
+			if (res instanceof final IFolder libFolder) {
+				if (standardLibFolder.equals(libFolder) || externalLibFolder.equals(libFolder)) {
+					return true;
+				}
+				if (!libFolder.exists() || !libFolder.isLinked()) {
+					return false;
+				}
+				final Manifest libManifest = ManifestHelper.getContainerManifest(libFolder);
+				if (libManifest != null) {
+					linked.put(libFolder.getName(), libFolder);
+					preferred.put(libFolder.getName(),
+							new Version(libManifest.getProduct().getVersionInfo().getVersion()));
+				} else {
+					final IPath path = libFolder.getLocation();
+					final String segment = (path.segmentCount() >= 2) ? path.segment(path.segmentCount() - 2) : ""; //$NON-NLS-1$
+					final int index = segment.lastIndexOf('-');
+					if (index > 0) {
+						preferred.put(libFolder.getName(), new Version(segment.substring(index + 1)));
 					}
 				}
-				return false;
-			});
+			}
+			return false;
+		};
+		try {
+			standardLibFolder.accept(visitor);
+			externalLibFolder.accept(visitor);
 		} catch (final CoreException e) {
 			// empty
 		}
@@ -956,6 +966,67 @@ public enum LibraryManager {
 		}
 
 		return new ResolveNode(symbolicName, Messages.ErrorMarkerLibNotAvailable + dlResult.message());
+	}
+
+	/**
+	 * Moves linked libraries from 'Type Library' to 'Standard Libraries' and
+	 * 'External Libraries'
+	 *
+	 * @param project     selected project
+	 * @param typeLibrary {@link TypeLibrary} to use
+	 */
+	private void moveLinksToVirtualFolders(final IProject project, final TypeLibrary typeLibrary) {
+		if (project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME).exists()) {
+			return;
+		}
+		removeLibraryChangeListener();
+		SystemManager.INSTANCE.removeFordiacChangeListener();
+
+		try {
+			project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME).create(IResource.VIRTUAL | IResource.FORCE,
+					true, null);
+			project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME).create(IResource.VIRTUAL | IResource.FORCE,
+					true, null);
+
+			for (final IResource res : project.getFolder(TypeLibraryTags.TYPE_LIB_FOLDER_NAME).members()) {
+				if (res instanceof final IFolder folder && folder.isLinked() && folder.getFile(MANIFEST).exists()) {
+					final java.net.URI libURI = folder.getRawLocationURI();
+					final java.net.URI manifestURI = folder.getFile(MANIFEST).getRawLocationURI();
+
+					final IFolder libDirectory = project
+							.getFolder(libURI.getPath().startsWith(STANDARD_LIBRARY_URI.getPath())
+									? TypeLibraryTags.STANDARD_LIB_FOLDER_NAME
+									: TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME)
+							.getFolder(folder.getName());
+
+					libDirectory.createLink(libURI, IResource.NONE, null);
+					final IFile man = libDirectory.getFile(MANIFEST);
+					man.createLink(manifestURI, IResource.HIDDEN, null);
+
+					folder.accept(resource -> (switch (resource) {
+					case final IFolder f -> true;
+					case final IFile file -> {
+						final TypeEntry entry = typeLibrary.getTypeEntry(file);
+						if (entry != null) {
+							final IFile newFile = libDirectory
+									.getFile(file.getFullPath().makeRelativeTo(folder.getFullPath()));
+							FordiacResourceChangeListener.updateTypeEntry(newFile, entry);
+						}
+						yield false;
+					}
+					default -> false;
+					}));
+
+					folder.delete(true, null);
+				}
+			}
+
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
+
+		SystemManager.INSTANCE.addFordiacChangeListener();
+		addLibraryChangeListener();
 	}
 
 	/**

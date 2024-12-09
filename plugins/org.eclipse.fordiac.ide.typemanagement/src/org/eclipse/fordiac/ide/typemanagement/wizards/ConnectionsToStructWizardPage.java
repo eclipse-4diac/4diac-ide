@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
@@ -157,7 +158,7 @@ public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 			}
 			structURI = URI.createPlatformResourceURI(
 					getConnectionsToStructRefactoring().getTypeLibrary().getProject().getFullPath() + File.separator
-							+ "Type Library" + File.separator + structNameText.getText() + ".dtp", //$NON-NLS-1$ //$NON-NLS-2$
+							+ TypeLibraryTags.TYPE_LIB_FOLDER_NAME + File.separator + structNameText.getText() + ".dtp", //$NON-NLS-1$
 					true);
 		}
 
