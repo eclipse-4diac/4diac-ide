@@ -25,7 +25,6 @@ public class STCoreValidatorConfigurationBlock extends AbstractValidatorConfigur
 
 	@Override
 	protected void fillSettingsPage(Composite composite, int nColumns, int defaultIndent) {
-		addComboBox(STCoreConfigurableIssueCodesProvider.DEPRECATED_MODEL_PART, "Deprecated Model Part", composite, defaultIndent);
 	}
 
 	@Override

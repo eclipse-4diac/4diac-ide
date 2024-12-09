@@ -249,6 +249,15 @@
 		<super type="org.eclipse.xtext.ui.check.expensive"/>
 		<persistent value="true"/>
 	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+			id="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.validator.preferencePage"
+			name="Errors/Warnings">
+			<keywordReference id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.keyword_STAlgorithm"/>
+		</page>
+	</extension>
 	<!-- Quick Outline -->
 	<extension
 		point="org.eclipse.ui.handlers">

@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.scoping.STAlgorithmScopeP
 import org.eclipse.fordiac.ide.structuredtextalgorithm.serializer.STAlgorithmSemanticSequencer;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.serializer.STAlgorithmSyntacticSequencer;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGrammarAccess;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.validation.STAlgorithmConfigurableIssueCodesProvider;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.validation.STAlgorithmValidator;
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.IGrammarAccess;
@@ -66,6 +67,7 @@ import org.eclipse.xtext.serializer.sequencer.ISyntacticSequencer;
 import org.eclipse.xtext.serializer.tokens.IKeywordSerializer;
 import org.eclipse.xtext.service.DefaultRuntimeModule;
 import org.eclipse.xtext.service.SingletonBinding;
+import org.eclipse.xtext.validation.ConfigurableIssueCodesProvider;
 
 /**
  * Manual modifications go to {@link STAlgorithmRuntimeModule}.
@@ -171,6 +173,11 @@ public abstract class AbstractSTAlgorithmRuntimeModule extends DefaultRuntimeMod
 	@SingletonBinding(eager=true)
 	public Class<? extends STAlgorithmValidator> bindSTAlgorithmValidator() {
 		return STAlgorithmValidator.class;
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.validation.ValidatorFragment2
+	public Class<? extends ConfigurableIssueCodesProvider> bindConfigurableIssueCodesProvider() {
+		return STAlgorithmConfigurableIssueCodesProvider.class;
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.scoping.ImportNamespacesScopingFragment2

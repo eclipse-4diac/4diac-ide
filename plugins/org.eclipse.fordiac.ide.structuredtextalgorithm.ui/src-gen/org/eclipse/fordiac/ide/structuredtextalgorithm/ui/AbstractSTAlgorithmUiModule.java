@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.labeling.STAlgorithmDe
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.labeling.STAlgorithmLabelProvider;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.outline.STAlgorithmOutlineTreeProvider;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.quickfix.STAlgorithmQuickfixProvider;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.validation.STAlgorithmValidatorConfigurationBlock;
 import org.eclipse.jface.text.codemining.ICodeMiningProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -87,6 +88,7 @@ import org.eclipse.xtext.ui.refactoring2.rename.DefaultLinkedPositionGroupCalcul
 import org.eclipse.xtext.ui.refactoring2.rename.RenameElementProcessor2;
 import org.eclipse.xtext.ui.resource.ResourceServiceDescriptionLabelProvider;
 import org.eclipse.xtext.ui.shared.Access;
+import org.eclipse.xtext.ui.validation.AbstractValidatorConfigurationBlock;
 
 /**
  * Manual modifications go to {@link STAlgorithmUiModule}.
@@ -142,6 +144,11 @@ public abstract class AbstractSTAlgorithmUiModule extends DefaultUiModule {
 	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public void configureContentAssistLexerProvider(Binder binder) {
 		binder.bind(InternalSTAlgorithmLexer.class).toProvider(LexerProvider.create(InternalSTAlgorithmLexer.class));
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.validation.ValidatorFragment2
+	public Class<? extends AbstractValidatorConfigurationBlock> bindAbstractValidatorConfigurationBlock() {
+		return STAlgorithmValidatorConfigurationBlock.class;
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.exporting.QualifiedNamesFragment2
