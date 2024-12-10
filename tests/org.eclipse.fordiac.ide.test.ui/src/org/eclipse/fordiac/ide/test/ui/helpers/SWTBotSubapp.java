@@ -43,7 +43,7 @@ public class SWTBotSubapp {
 	 */
 	public void createSubappWithDragRectangle(final int fromXPosition, final int fromYPosition, final int toXPosition,
 			final int toYPosition) {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		editor.drag(fromXPosition, fromYPosition, toXPosition, toYPosition);
 		bot.menu(UITestNamesHelper.SOURCE).menu(UITestNamesHelper.NEW_SUBAPPLICATION).click();
 	}

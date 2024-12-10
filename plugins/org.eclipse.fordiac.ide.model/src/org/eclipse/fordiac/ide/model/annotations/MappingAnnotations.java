@@ -39,41 +39,37 @@ public class MappingAnnotations {
 	}
 
 	public static List<MappingTarget> getPossibleMappingTargets(final EObject obj) {
-		if (obj instanceof CommunicationChannel) {
-			return getContainedCommunicationMappingTargets(
-					((CommunicationChannel) obj).getFbNetwork().getAutomationSystem());
+		if (obj instanceof final CommunicationChannel commCh) {
+			return getContainedCommunicationMappingTargets(commCh.getFbNetwork().getAutomationSystem());
 		}
-		if (obj instanceof FBNetworkElement) {
-			return getContainedMappingTargets(((FBNetworkElement) obj).getFbNetwork().getAutomationSystem());
+		if (obj instanceof final FBNetworkElement fbnEl) {
+			return getContainedMappingTargets(fbnEl.getFbNetwork().getAutomationSystem());
 		}
-		if (obj instanceof FBNetwork) {
-			final FBNetwork network = (FBNetwork) obj;
+		if (obj instanceof final FBNetwork network) {
 			return getContainedMappingTargets(network.getAutomationSystem());
 		}
 		return Collections.emptyList();
 	}
 
 	public static List<MappingTarget> getContainedMappingTargets(final EObject obj) {
-		if (obj instanceof AutomationSystem) {
-			final AutomationSystem system = (AutomationSystem) obj;
+		if (obj instanceof final AutomationSystem system) {
 			return system.getSystemConfiguration().getDevices().stream().flatMap(dev -> dev.getResource().stream())
 					.collect(Collectors.toList());
 		}
-		if (obj instanceof Device) {
-			return new ArrayList<>(((Device) obj).getResource());
+		if (obj instanceof final Device dev) {
+			return new ArrayList<>(dev.getResource());
 		}
 		return Collections.emptyList();
 	}
 
 	public static List<MappingTarget> getContainedCommunicationMappingTargets(final EObject obj) {
-		if (obj instanceof AutomationSystem) {
-			final AutomationSystem system = (AutomationSystem) obj;
+		if (obj instanceof final AutomationSystem system) {
 			return system.getSystemConfiguration().getSegments().stream().map(Segment::getCommunication)
 					.filter(Objects::nonNull).flatMap(comm -> comm.getMappingTargets().stream())
 					.collect(Collectors.toList());
 		}
-		if (obj instanceof Segment) {
-			final CommunicationConfiguration communication = ((Segment) obj).getCommunication();
+		if (obj instanceof final Segment segment) {
+			final CommunicationConfiguration communication = segment.getCommunication();
 			if (communication != null) {
 				return new ArrayList<>(communication.getMappingTargets());
 			}
@@ -91,21 +87,20 @@ public class MappingAnnotations {
 	}
 
 	public static String getHierarchicalName(final MappingTarget target) {
-		if (target instanceof Resource) {
-			return ((Resource) target).getDevice().getName() + "." //$NON-NLS-1$
-					+ ((Resource) target).getName();
+		if (target instanceof final Resource res) {
+			return res.getDevice().getName() + "." + res.getName(); //$NON-NLS-1$
 		}
 		if ((target instanceof CommunicationMappingTarget) && (target.eContainer() != null)) {
 			return ((Segment) target.eContainer().eContainer()).getName() + "." //$NON-NLS-1$
-					+ ((CommunicationMappingTarget) target).getName();
+					+ target.getName();
 		}
 		return target.toString();
 	}
 
 	public static String getHierarchicalName(final FBNetworkElement element) {
 		if (element instanceof CommunicationChannel) {
-			if (element.eContainer() instanceof MappingTarget) {
-				return getHierarchicalName((MappingTarget) element.eContainer());
+			if (element.eContainer() instanceof final MappingTarget mt) {
+				return getHierarchicalName(mt);
 			}
 			return getHierarchicalName((MappingTarget) element.getOpposite().eContainer());
 		}

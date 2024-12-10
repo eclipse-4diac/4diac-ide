@@ -187,7 +187,7 @@ public final class NameRepository {
 		} else if (refElement instanceof final Segment seg) {
 			elementsList = ((SystemConfiguration) seg.eContainer()).getSegments();
 		} else if (refElement instanceof ECState) {
-			elementsList = ((ECC) ((ECState) refElement).eContainer()).getECState();
+			elementsList = ((ECC) refElement.eContainer()).getECState();
 		} else if (refElement instanceof final IInterfaceElement ie) {
 			if (ie.eContainer() instanceof final StructuredType structType) {
 				elementsList = structType.getMemberVariables();
@@ -198,7 +198,7 @@ public final class NameRepository {
 					interfaceList = il;
 				} else {
 					// this is an internal variable
-					interfaceList = ((BaseFBType) ((IInterfaceElement) refElement).eContainer()).getInterfaceList();
+					interfaceList = ((BaseFBType) refElement.eContainer()).getInterfaceList();
 				}
 				elements.addAll(interfaceList.getAllInterfaceElements());
 				if (interfaceList.eContainer() instanceof final BaseFBType baseFBType) { // has internal variables

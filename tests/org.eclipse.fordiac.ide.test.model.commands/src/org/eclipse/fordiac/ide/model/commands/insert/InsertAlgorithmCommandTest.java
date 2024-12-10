@@ -54,14 +54,15 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 		return commandExecution(state);
 	}
 
-	private static void verifyStateWithAlgorithmIndex(final State state, final TestFunction t, final int index, final String algorithmName) {
+	private static void verifyStateWithAlgorithmIndex(final State state, final TestFunction t, final int index,
+			final String algorithmName) {
 		final EList<Algorithm> algorithmList = ((BasicFBType) state.getFbNetwork().getNetworkElements().get(0)
 				.getType()).getAlgorithm();
 
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getType() instanceof BasicFBType);
 		t.test(!algorithmList.isEmpty());
 		t.test(algorithmList.get(index) instanceof STAlgorithm);
-		t.test(((STAlgorithm) algorithmList.get(index)).getComment(), ALGORITHM_COMMENT);
+		t.test(algorithmList.get(index).getComment(), ALGORITHM_COMMENT);
 		t.test(((STAlgorithm) algorithmList.get(index)).getText(), ALGORITHM_TEXT);
 		t.test(algorithmList.get(index).getName(), algorithmName);
 	}
@@ -100,7 +101,8 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 		return commandExecution(state);
 	}
 
-	private static void verifyOrder(final State state, final TestFunction t, final String name1, final String name2, final String name3) {
+	private static void verifyOrder(final State state, final TestFunction t, final String name1, final String name2,
+			final String name3) {
 		verifyStateWithAlgorithmIndex(state, t, 0, name1);
 		verifyStateWithAlgorithmIndex(state, t, 1, name2);
 		verifyStateWithAlgorithmIndex(state, t, 2, name3);
@@ -112,28 +114,32 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 				new ExecutionDescription<>("Add a ST algorithm", //$NON-NLS-1$
 						InsertAlgorithmCommandTest::executeCommand1, //
 						InsertAlgorithmCommandTest::verifyState1 //
-						), //
+				), //
 				new ExecutionDescription<>("Add a second ST algorithm at index 0", //$NON-NLS-1$
 						InsertAlgorithmCommandTest::executeCommand2, //
 						InsertAlgorithmCommandTest::verifyState2 //
-						), //
+				), //
 				new ExecutionDescription<>("Add a third ST algorithm at end of list", //$NON-NLS-1$
 						InsertAlgorithmCommandTest::executeCommand3, //
 						InsertAlgorithmCommandTest::verifyState3 //
-						), //
+				), //
 				new ExecutionDescription<>("move second algorithmn to third place", //$NON-NLS-1$
 						(final State s) -> executeReorder(s, 1, false), //
-						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, ALGORITHM2_NAME, ALGORITHM3_NAME, ALGORITHM_NAME)), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, ALGORITHM2_NAME,
+								ALGORITHM3_NAME, ALGORITHM_NAME)), //
 				new ExecutionDescription<>("move second algorithmn to first place", //$NON-NLS-1$
 						(final State s) -> executeReorder(s, 1, true), //
-						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME, ALGORITHM2_NAME, ALGORITHM_NAME)), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME,
+								ALGORITHM2_NAME, ALGORITHM_NAME)), //
 				new ExecutionDescription<>("move first algorithmn past lower bound", //$NON-NLS-1$
 						(final State s) -> executeReorder(s, 0, true), //
-						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME, ALGORITHM2_NAME, ALGORITHM_NAME)), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME,
+								ALGORITHM2_NAME, ALGORITHM_NAME)), //
 				new ExecutionDescription<>("move third algorithmn past upper bound", //$NON-NLS-1$
 						(final State s) -> executeReorder(s, 2, false), //
-						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME, ALGORITHM2_NAME, ALGORITHM_NAME)) //
-				);
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, ALGORITHM3_NAME,
+								ALGORITHM2_NAME, ALGORITHM_NAME)) //
+		);
 
 		return createCommands(executionDescriptions);
 	}

@@ -28,6 +28,7 @@ import java.nio.file.Path
 import java.util.List
 import java.util.Map
 import java.util.Set
+import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.LibraryElementTags
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag
@@ -40,11 +41,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.With
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
-import org.eclipse.emf.common.util.EList
-import org.eclipse.fordiac.ide.model.data.EventType
-import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary
 
 abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemplate<T> {
 

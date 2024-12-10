@@ -87,7 +87,7 @@ public class Assumption extends ContractElement {
 				.map(el -> (SubApp) el).toList();
 		final List<FB> containedfBs = fBNetworkElements.parallelStream().filter(FB.class::isInstance)
 				.map(FB.class::cast).toList();
-		final EList<Event> inputEvents = ((SubApp) getContract().getOwner()).getInterface().getEventInputs();
+		final EList<Event> inputEvents = getContract().getOwner().getInterface().getEventInputs();
 		return hasMatchingEvents(containedSubapps, containedfBs, inputEvents);
 	}
 

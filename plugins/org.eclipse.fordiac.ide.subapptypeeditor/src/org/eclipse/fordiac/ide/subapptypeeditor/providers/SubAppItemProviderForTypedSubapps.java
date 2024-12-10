@@ -69,7 +69,7 @@ public class SubAppItemProviderForTypedSubapps extends TypedSubAppItemProvider {
 	public Object getParent(final Object object) {
 		final EObject cont = ((SubApp) object).eContainer();
 		if (cont instanceof FBNetwork) {
-			return ((FBNetwork) cont).eContainer();
+			return cont.eContainer();
 		}
 		return super.getParent(object);
 	}

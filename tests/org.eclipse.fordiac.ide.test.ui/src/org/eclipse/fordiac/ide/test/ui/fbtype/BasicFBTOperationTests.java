@@ -19,10 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
-import org.eclipse.fordiac.ide.test.ui.helpers.UITestPinHelper;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotConnection;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
 import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
+import org.eclipse.fordiac.ide.test.ui.helpers.UITestPinHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.swt.finder.SWTBot;
@@ -78,7 +78,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void createNewEventInput() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		editor.clickContextMenu(UITestNamesHelper.CREATE_INPUT_EVENT);
 		assertNotNull(editor.getEditPart(UITestPinHelper.EI1));
 	}
@@ -93,7 +93,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void createNewEventOutput() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		editor.clickContextMenu(UITestNamesHelper.CREATE_OUTPUT_EVENT);
 		assertNotNull(editor.getEditPart(UITestPinHelper.EO1));
 	}
@@ -111,7 +111,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	@ParameterizedTest
 	@ValueSource(strings = { UITestPinHelper.INT })
 	public void createNewDataInput(final String dataType) {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertNotNull(editor);
 		editor.clickContextMenu(UITestNamesHelper.CREATE_DATA_INPUT).clickContextMenu(dataType);
 		assertNotNull(editor.getEditPart(UITestPinHelper.DI1));
@@ -128,7 +128,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void renamePin() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertNotNull(editor);
 		editor.clickContextMenu(UITestNamesHelper.CREATE_INPUT_EVENT);
 
@@ -154,7 +154,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeEventPinComment() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertNotNull(editor);
 		editor.clickContextMenu(UITestNamesHelper.CREATE_INPUT_EVENT);
 
@@ -178,7 +178,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changeDataPinComment() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertNotNull(editor);
 		editor.clickContextMenu(UITestNamesHelper.CREATE_INPUT_EVENT);
 
@@ -203,7 +203,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void addConnection() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		editor.clickContextMenu(UITestNamesHelper.CREATE_INPUT_EVENT);
 		editor.clickContextMenu(UITestNamesHelper.CREATE_DATA_INPUT).clickContextMenu(UITestPinHelper.INT);
 
@@ -230,7 +230,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	@SuppressWarnings({ "static-method", "static-access" })
 	@Test
 	public void removeConnection() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		editor.clickContextMenu(UITestNamesHelper.CREATE_INPUT_EVENT);
 		editor.clickContextMenu(UITestNamesHelper.CREATE_DATA_INPUT).clickContextMenu(UITestPinHelper.INT);
 
@@ -259,7 +259,7 @@ public class BasicFBTOperationTests extends Abstract4diacUITests {
 	@SuppressWarnings("static-method")
 	@Test
 	public void changePinDataType() {
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.FBT_TEST_PROJECT2);
 		assertNotNull(editor);
 		editor.clickContextMenu(UITestNamesHelper.CREATE_DATA_INPUT).clickContextMenu(UITestPinHelper.INT);
 

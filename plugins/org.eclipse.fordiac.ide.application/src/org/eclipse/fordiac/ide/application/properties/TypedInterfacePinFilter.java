@@ -32,18 +32,18 @@ public class TypedInterfacePinFilter implements IFilter {
 
 	static IInterfaceElement getInterfaceElementFromSelectedElement(final Object element) {
 		Object retval = element;
-		if (retval instanceof EditPart) {
-			retval = ((EditPart) retval).getModel();
+		if (retval instanceof final EditPart ep) {
+			retval = ep.getModel();
 		}
-		if (retval instanceof Value) {
-			retval = ((Value) retval).getParentIE();
+		if (retval instanceof final Value value) {
+			retval = value.getParentIE();
 		}
 		return isPinOfTypedElement(retval) ? (IInterfaceElement) retval : null;
 	}
 
 	private static boolean isPinOfTypedElement(final Object element) {
-		if (element instanceof IInterfaceElement) {
-			final FBNetworkElement fbEl = ((IInterfaceElement) element).getFBNetworkElement();
+		if (element instanceof final IInterfaceElement ie) {
+			final FBNetworkElement fbEl = ie.getFBNetworkElement();
 			return ((fbEl != null) && ((fbEl.getType() != null) || isIndirectlyTyped(fbEl)));
 		}
 		return false;
@@ -51,7 +51,7 @@ public class TypedInterfacePinFilter implements IFilter {
 
 	private static boolean isIndirectlyTyped(final FBNetworkElement subapp) {
 		if (subapp instanceof SubApp) {
-			return ((SubApp) subapp).isContainedInTypedInstance();
+			return subapp.isContainedInTypedInstance();
 		}
 		return false;
 	}

@@ -78,6 +78,7 @@ public class PasteDataFromClipboardCommandHandler extends AbstractLayerCommandHa
 		}
 	}
 
+	@SuppressWarnings("static-method") // allow subclasses to provide special versions
 	protected String[][] parseContent(final Object contents) {
 		final List<String[]> lines = new ArrayList<>();
 		((String) contents).lines().forEach(s -> {

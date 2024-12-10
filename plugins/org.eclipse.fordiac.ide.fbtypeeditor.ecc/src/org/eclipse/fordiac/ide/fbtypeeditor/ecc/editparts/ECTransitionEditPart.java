@@ -136,11 +136,10 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		}
 
 		private void handleConditionEventUpdate(final Notification notification) {
-			if (notification.getNewValue() instanceof String) {
-				final String newValue = (String) notification.getNewValue();
+			if (notification.getNewValue() instanceof final String newValue) {
 				final Event ce = getModel().getConditionEvent();
-				if ((ce.getName().equals(newValue)) || ((ce.getFBNetworkElement() instanceof AdapterFB)
-						&& (((AdapterFB) ce.getFBNetworkElement()).getName().equals(newValue)))) {
+				if ((ce.getName().equals(newValue)) || ((ce.getFBNetworkElement() instanceof final AdapterFB adapterFB)
+						&& (adapterFB.getName().equals(newValue)))) {
 					refresh();
 				}
 			}
@@ -224,8 +223,9 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 			@Override
 			public Command getCommand(final Request request) {
-				if (RequestConstants.REQ_MOVE.equals(request.getType()) && (request instanceof ChangeBoundsRequest)) {
-					return getTransitionMoveCommand((ChangeBoundsRequest) request);
+				if (RequestConstants.REQ_MOVE.equals(request.getType())
+						&& (request instanceof final ChangeBoundsRequest cbReq)) {
+					return getTransitionMoveCommand(cbReq);
 				}
 				return null;
 			}

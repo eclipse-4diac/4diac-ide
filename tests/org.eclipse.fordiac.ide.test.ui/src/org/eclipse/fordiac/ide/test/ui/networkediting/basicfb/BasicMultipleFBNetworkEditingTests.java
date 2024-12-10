@@ -27,23 +27,23 @@ import org.junit.jupiter.api.Test;
 public class BasicMultipleFBNetworkEditingTests extends Abstract4diacUITests {
 
 	// static FB instance names for running numbers tests
-	private static String E_CYCLE = "E_CYCLE"; //$NON-NLS-1$
-	private static String E_CYCLE_0 = "E_CYCLE_0"; //$NON-NLS-1$
-	private static String E_CYCLE_1 = "E_CYCLE_1"; //$NON-NLS-1$
-	private static String E_CYCLE_2 = "E_CYCLE_2"; //$NON-NLS-1$
-	private static String E_CYCLE_3 = "E_CYCLE_3"; //$NON-NLS-1$
+	private static final String E_CYCLE = "E_CYCLE"; //$NON-NLS-1$
+	private static final String E_CYCLE_0 = "E_CYCLE_0"; //$NON-NLS-1$
+	private static final String E_CYCLE_1 = "E_CYCLE_1"; //$NON-NLS-1$
+	private static final String E_CYCLE_2 = "E_CYCLE_2"; //$NON-NLS-1$
+	private static final String E_CYCLE_3 = "E_CYCLE_3"; //$NON-NLS-1$
 
-	private static String E_SWITCH = "E_SWITCH"; //$NON-NLS-1$
-	private static String E_SWITCH_0 = "E_SWITCH_0"; //$NON-NLS-1$
-	private static String E_SWITCH_1 = "E_SWITCH_1"; //$NON-NLS-1$
-	private static String E_SWITCH_2 = "E_SWITCH_2"; //$NON-NLS-1$
-	private static String E_SWITCH_3 = "E_SWITCH_3"; //$NON-NLS-1$
-	private static String E_SWITCH_4 = "E_SWITCH_4"; //$NON-NLS-1$
-	private static String E_SWITCH_5 = "E_SWITCH_5"; //$NON-NLS-1$
+	private static final String E_SWITCH = "E_SWITCH"; //$NON-NLS-1$
+	private static final String E_SWITCH_0 = "E_SWITCH_0"; //$NON-NLS-1$
+	private static final String E_SWITCH_1 = "E_SWITCH_1"; //$NON-NLS-1$
+	private static final String E_SWITCH_2 = "E_SWITCH_2"; //$NON-NLS-1$
+	private static final String E_SWITCH_3 = "E_SWITCH_3"; //$NON-NLS-1$
+	private static final String E_SWITCH_4 = "E_SWITCH_4"; //$NON-NLS-1$
+	private static final String E_SWITCH_5 = "E_SWITCH_5"; //$NON-NLS-1$
 
-	private static String E_SR = "E_SR"; //$NON-NLS-1$
-	private static String E_SR_1 = "E_SR_1"; //$NON-NLS-1$
-	private static String E_SR_2 = "E_SR_2"; //$NON-NLS-1$
+	private static final String E_SR = "E_SR"; //$NON-NLS-1$
+	private static final String E_SR_1 = "E_SR_1"; //$NON-NLS-1$
+	private static final String E_SR_2 = "E_SR_2"; //$NON-NLS-1$
 
 	/**
 	 * Drag and drops a few event FBs of the same type on the editing area and
@@ -63,7 +63,7 @@ public class BasicMultipleFBNetworkEditingTests extends Abstract4diacUITests {
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SR_TREE_ITEM, new Point(300, 250));
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_CYCLE_TREE_ITEM, new Point(500, 250));
 
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 
 		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_CYCLE));
@@ -97,7 +97,7 @@ public class BasicMultipleFBNetworkEditingTests extends Abstract4diacUITests {
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(450, 100));
 		fbBot.dragAndDropEventsFB(UITestNamesHelper.E_SWITCH_TREE_ITEM, new Point(50, 250));
 
-		final SWTBot4diacGefEditor editor = (SWTBot4diacGefEditor) bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
+		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		assertNotNull(editor);
 
 		assertTrue(fbBot.isFBNamePresendOnEditingArea(editor, E_SWITCH));
