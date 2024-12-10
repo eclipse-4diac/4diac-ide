@@ -16,6 +16,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterators;
 import java.util.stream.Collectors;
@@ -460,6 +461,9 @@ public final class VariableOperations {
 	}
 
 	private static VarDeclaration withValue(final VarDeclaration varDeclaration, final String valueString) {
+		if (Objects.equals(valueString, getDeclaredInitialValue(varDeclaration))) {
+			return varDeclaration;
+		}
 		final VarDeclaration copy = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		copy.setName(varDeclaration.getName());
 		copy.setType(varDeclaration.getType());
@@ -474,6 +478,9 @@ public final class VariableOperations {
 	}
 
 	private static Attribute withValue(final Attribute attribute, final String valueString) {
+		if (Objects.equals(valueString, attribute.getValue())) {
+			return attribute;
+		}
 		final Attribute copy = LibraryElementFactory.eINSTANCE.createAttribute();
 		copy.setName(attribute.getName());
 		copy.setType(attribute.getType());
@@ -486,6 +493,10 @@ public final class VariableOperations {
 	}
 
 	private static DirectlyDerivedType withValue(final DataType type, final String valueString) {
+		if (type instanceof final DirectlyDerivedType directlyDerivedType
+				&& Objects.equals(valueString, directlyDerivedType.getInitialValue())) {
+			return directlyDerivedType;
+		}
 		final DirectlyDerivedType copy = DataFactory.eINSTANCE.createDirectlyDerivedType();
 		copy.setName(type.getName());
 		copy.setBaseType(type);
