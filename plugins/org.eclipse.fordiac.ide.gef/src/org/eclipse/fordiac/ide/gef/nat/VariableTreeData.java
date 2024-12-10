@@ -15,7 +15,9 @@ package org.eclipse.fordiac.ide.gef.nat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
@@ -28,6 +30,7 @@ public class VariableTreeData extends ListDataProvider<Variable<?>> implements I
 	private final Integer ZERO = Integer.valueOf(0);
 
 	private Map<Variable<?>, Integer> depthMap;
+	private Map<Variable<?>, Integer> indexMap;
 
 	public VariableTreeData(final IColumnAccessor<Variable<?>> columnAccessor) {
 		super(Collections.emptyList(), columnAccessor);
@@ -55,7 +58,8 @@ public class VariableTreeData extends ListDataProvider<Variable<?>> implements I
 
 	@Override
 	public int indexOf(final Variable<?> child) {
-		return getList().indexOf(child);
+		final Integer index = indexMap.get(child);
+		return index != null ? index.intValue() : -1;
 	}
 
 	@Override
@@ -97,6 +101,8 @@ public class VariableTreeData extends ListDataProvider<Variable<?>> implements I
 		list = variables.stream().flatMap(VariableTreeData::flatten).toList();
 		depthMap = variables.stream().flatMap(variable -> flattenDepth(variable, 0))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+		indexMap = IntStream.range(0, list.size()).mapToObj(Integer::valueOf)
+				.collect(Collectors.toUnmodifiableMap(list::get, Function.identity()));
 	}
 
 	private static Stream<Variable<?>> flatten(final Variable<?> object) {
