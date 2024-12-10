@@ -125,9 +125,6 @@ public enum SystemManager {
 
 		ManifestHelper.createProjectManifest(project, includedLibraries.keySet());
 
-		project.getFolder("xtest").create(IResource.VIRTUAL, true, monitor);
-		project.isReadOnly();
-
 		return project;
 	}
 
