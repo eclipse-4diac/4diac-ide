@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.dialogs;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
@@ -89,12 +90,16 @@ public class VariableDialog extends Dialog {
 
 	public static Optional<String> open(final Shell shell, final String title, final ITypedElement element,
 			final String initialValue) {
-		Variable<?> variable;
+		final Variable<?> variable;
 		try {
-			variable = VariableOperations.newVariable(element, initialValue);
-		} catch (final Exception e) {
-			ErrorDialog.openError(shell, title, null, Status
-					.error(MessageFormat.format(Messages.VariableDialog_ValueError, element.getQualifiedName()), e));
+			variable = computeInitialValue(element, initialValue);
+		} catch (final InvocationTargetException e) {
+			ErrorDialog.openError(shell, title, null,
+					Status.error(MessageFormat.format(Messages.VariableDialog_ValueError, element.getQualifiedName()),
+							e.getTargetException()));
+			return Optional.empty();
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
 			return Optional.empty();
 		}
 		final VariableDialog dialog = new VariableDialog(shell, title, List.of(variable));
@@ -102,5 +107,13 @@ public class VariableDialog extends Dialog {
 			return Optional.of(variable.toString());
 		}
 		return Optional.empty();
+	}
+
+	public static Variable<?> computeInitialValue(final ITypedElement element, final String initialValue)
+			throws InvocationTargetException, InterruptedException {
+		final Variable<?>[] result = new Variable[1];
+		PlatformUI.getWorkbench().getProgressService()
+				.busyCursorWhile(moniotr -> result[0] = VariableOperations.newVariable(element, initialValue));
+		return result[0];
 	}
 }
