@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.gef.editparts;
 
 import org.eclipse.fordiac.ide.gef.dialogs.VariableDialog;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -58,7 +59,8 @@ public class InitialValueStructuredCellEditor extends InitialValueCellEditor {
 	protected void openDialog() {
 		try {
 			variableDialogOpen = true;
-			VariableDialog.open(getControl().getShell(), getVarDeclaration(), text.getText()).ifPresent(text::setText);
+			final String initialValue = FordiacMessages.ValueTooLarge.equals(text.getText()) ? null : text.getText();
+			VariableDialog.open(getControl().getShell(), getVarDeclaration(), initialValue).ifPresent(text::setText);
 		} finally {
 			textControl.forceFocus();
 			variableDialogOpen = false;

@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.gef.nat;
 
 import org.eclipse.fordiac.ide.gef.dialogs.VariableDialog;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
@@ -69,7 +70,9 @@ public class InitialValueStructuredCellEditor extends InitialValueCellEditor {
 			if (focusListener instanceof final InlineFocusListener inlineFL) {
 				inlineFL.handleFocusChanges = false;
 			}
-			VariableDialog.open(composite.getShell(), getRowObject(), getEditorValue()).ifPresent(this::setEditorValue);
+			final String initialValue = FordiacMessages.ValueTooLarge.equals(getEditorValue()) ? null
+					: getEditorValue();
+			VariableDialog.open(composite.getShell(), getRowObject(), initialValue).ifPresent(this::setEditorValue);
 		} finally {
 			textControl.forceFocus();
 			if (focusListener instanceof final InlineFocusListener inlineFL) {
