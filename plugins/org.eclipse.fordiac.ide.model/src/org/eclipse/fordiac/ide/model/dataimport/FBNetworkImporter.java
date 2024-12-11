@@ -1,7 +1,7 @@
 /********************************************************************************
- * Copyright (c) 2016, 2020 fortiss GmbH, Johannes Kepler University, Linz,
- *               2020, 2021, 2022 Primetals Technologies Austria GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2016, 2024 fortiss GmbH, Johannes Kepler University, Linz,
+ *                          Primetals Technologies Austria GmbH,
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,7 +24,6 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -34,23 +33,13 @@ import javax.xml.stream.XMLStreamException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionBuilder;
-import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionState;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
-import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -61,9 +50,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
-import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 class FBNetworkImporter extends CommonElementImporter {
@@ -103,6 +89,10 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	public FBNetwork getFbNetwork() {
 		return fbNetwork;
+	}
+
+	public InterfaceList getInterfaceList() {
+		return interfaceList;
 	}
 
 	public void parseFBNetwork(final String networkNodeName) throws TypeImportException, XMLStreamException {
@@ -255,65 +245,10 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	private <T extends Connection> T parseConnection(final EClass conType)
 			throws XMLStreamException, TypeImportException {
-		@SuppressWarnings("unchecked")
-		final T connection = (T) LibraryElementFactory.eINSTANCE.create(conType);
-
-		final String sourceElement = getAttributeValue(LibraryElementTags.SOURCE_ATTRIBUTE);
-		final String destinationElement = getAttributeValue(LibraryElementTags.DESTINATION_ATTRIBUTE);
-
-		final ConnectionBuilder builder = new ConnectionBuilder(sourceElement, destinationElement);
-
-		final IInterfaceElement destinationEndPoint = getConnectionEndPoint(destinationElement, conType, true, builder);
-		builder.setDestinationEndpoint(destinationEndPoint);
-
-		final IInterfaceElement sourceEndPoint = getConnectionEndPoint(sourceElement, conType, false, builder);
-		builder.setSourceEndpoint(sourceEndPoint);
-
+		final ConnectionBuilder<T> builder = ConnectionHelper.createConnectionBuilder(conType, this);
 		builder.validate();
-
-		if (builder.isValidConnection() || builder.isDuplicate() || builder.isDataTypeMissmatch()) {
-			final IInterfaceElement src = builder.getSourceEndpoint();
-			final IInterfaceElement dst = builder.getDestinationEndpoint();
-			connection.setSource(src);
-			connection.setDestination(dst);
-		}
-
-		if (builder.isMissingConnectionDestination()) {
-			handleMissingConnectionDestination(connection, builder);
-		}
-
-		if (builder.isMissingConnectionDestinationEndpoint()) {
-			handleMissingConnectionDestinationEnpoint(connection, builder);
-		}
-
-		if (builder.isMissingConnectionSource()) {
-			handleMissingConnectionSource(connection, builder);
-		}
-
-		if (builder.isMissingConnectionSourceEndpoint()) {
-			handleMissingConnectionSourceEndpoint(connection, builder);
-		}
-
-		if (builder.isMissingSourceAndDestEndpoint()) {
-			handleMissingSrcAndDestEnpoint(connection, builder);
-		}
-
-		final String commentElement = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
-		if (null != commentElement) {
-			connection.setComment(commentElement);
-		}
-		parseConnectionRouting(connection);
-		parseAttributes(connection);
-
-		if (builder.isEmptyConnection()) {
-			// if 4diac should be capable of seeing the error marker in the FBNetworkEditor
-			// then error marker blocks need to be created at this location
-			getErrors().add(new TypeImportDiagnostic("Connection missing both source and destination element", //$NON-NLS-1$
-					MessageFormat.format("{0} -> {1}", sourceElement, destinationElement), getLineNumber())); //$NON-NLS-1$
-			return null;
-		}
-
-		return connection;
+		builder.handleErrorCases();
+		return builder.getConnection();
 	}
 
 	public <T extends Connection> void parseAttributes(final T connection)
@@ -328,163 +263,17 @@ class FBNetworkImporter extends CommonElementImporter {
 		});
 	}
 
-	protected void handleMissingConnectionSource(final Connection connection, final ConnectionBuilder builder) {
-		final FBNetworkElement sourceFB = FordiacMarkerHelper.createErrorMarkerFB(builder.getSourceFbName());
-		builder.setSrcInterfaceList(sourceFB.getInterface());
-		getFbNetwork().getNetworkElements().add(sourceFB);
-		sourceFB.setName(NameRepository.createUniqueName(sourceFB, sourceFB.getName()));
-		createErrorMarkerInterface(connection, builder, false);
-	}
-
-	protected static void handleMissingConnectionSourceEndpoint(final Connection connection,
-			final ConnectionBuilder builder) {
-		createErrorMarkerInterface(connection, builder, false);
-	}
-
-	protected void handleMissingConnectionDestination(final Connection connection, final ConnectionBuilder builder) {
-		// check if there is already one
-		final FBNetworkElement destinationFb = FordiacMarkerHelper.createErrorMarkerFB(builder.getDestFbName());
-		builder.setDestInterfaceList(destinationFb.getInterface());
-		getFbNetwork().getNetworkElements().add(destinationFb);
-		destinationFb.setName(NameRepository.createUniqueName(destinationFb, destinationFb.getName()));
-
-		createErrorMarkerInterface(connection, builder, true);
-	}
-
-	private void handleMissingSrcAndDestEnpoint(final Connection connection,
-			final ConnectionBuilder connectionBuilder) {
-		final DataType pinType = determineConnectionType(connection);
-
-		final ErrorMarkerInterface srcEndpoint = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterface(pinType,
-				connectionBuilder.getSourcePinName(), false, connectionBuilder.getSrcInterfaceList());
-		final ErrorMarkerInterface destEndpoint = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterface(pinType,
-				connectionBuilder.getDestinationPinName(), true, connectionBuilder.getDestInterfaceList());
-		connection.setSource(srcEndpoint);
-		connection.setDestination(destEndpoint);
-	}
-
-	private DataType determineConnectionType(final Connection connection) {
-		if (connection instanceof EventConnection) {
-			return EventTypeLibrary.getInstance().getType(null);
-		}
-		if (connection instanceof AdapterConnection) {
-			final AdapterTypeEntry entry = getTypeLibrary().getAdapterTypeEntry("ANY_ADAPTER"); //$NON-NLS-1$
-			if (null != entry) {
-				return entry.getType();
-			}
-			// we don't have an any_adapter return generic adapter, may not be reparable
-			return LibraryElementFactory.eINSTANCE.createAdapterType();
-		}
-		if (connection instanceof DataConnection) {
-			return IecTypes.GenericTypes.ANY;
-		}
-		return null;
-	}
-
-	private static ErrorMarkerInterface createErrorMarkerInterface(final Connection connection,
-			final ConnectionBuilder connectionBuilder, final boolean isInput) {
-		final IInterfaceElement oppositeEndpoint = isInput ? connectionBuilder.getSourceEndpoint()
-				: connectionBuilder.getDestinationEndpoint();
-
-		// we need a special treatment for FB's that lost their type
-		if ((oppositeEndpoint == null)) {
-			connectionBuilder.getConnectionState().add(ConnectionState.MISSING_TYPE);
-			return null;
-		}
-
-		DataType type = oppositeEndpoint.getType();
-		if (type == null) {
-			type = IecTypes.GenericTypes.ANY;
-		}
-
-		final InterfaceList ieList = isInput ? connectionBuilder.getDestInterfaceList()
-				: connectionBuilder.getSrcInterfaceList();
-		final String pinName = isInput ? connectionBuilder.getDestinationPinName()
-				: connectionBuilder.getSourcePinName();
-		final ErrorMarkerInterface errorMarkerInterface = FordiacErrorMarkerInterfaceHelper
-				.createErrorMarkerInterface(type, pinName, isInput, ieList);
-
-		if (isInput) {
-			connection.setSource(oppositeEndpoint);
-			connection.setDestination(errorMarkerInterface);
-		} else {
-			connection.setSource(errorMarkerInterface);
-			connection.setDestination(oppositeEndpoint);
-		}
-		return errorMarkerInterface;
-	}
-
-	protected static <T extends Connection> void handleMissingConnectionDestinationEnpoint(final T connection,
-			final ConnectionBuilder builder) {
-		createErrorMarkerInterface(connection, builder, true);
-	}
-
-	private void parseConnectionRouting(final Connection connection) {
-		final ConnectionRoutingData routingData = LibraryElementFactory.eINSTANCE.createConnectionRoutingData();
-		final String dx1Element = getAttributeValue(LibraryElementTags.DX1_ATTRIBUTE);
-		if (null != dx1Element) {
-			routingData.setDx1(parseConnectionValue(dx1Element));
-		}
-		final String dx2Element = getAttributeValue(LibraryElementTags.DX2_ATTRIBUTE);
-		if (null != dx2Element) {
-			routingData.setDx2(parseConnectionValue(dx2Element));
-		}
-		final String dyElement = getAttributeValue(LibraryElementTags.DY_ATTRIBUTE);
-		if (null != dyElement) {
-			routingData.setDy(parseConnectionValue(dyElement));
-		}
-		connection.setRoutingData(routingData);
-	}
-
-	private IInterfaceElement getConnectionEndPoint(final String path, final EClass conType, final boolean isInput,
-			final ConnectionBuilder builder) {
-		if (path == null) {
-			return null;
-		}
-		int separatorPos = path.indexOf('.');
-
-		if (separatorPos == -1) {
-			// we have a connection to the containing interface
-			if (isInput) {
-				builder.setDestInterfaceList(interfaceList);
-			} else {
-				builder.setSrcInterfaceList(interfaceList);
-			}
-			return getContainingInterfaceElement(path, conType, isInput);
-		}
-
-		String elementName = path.substring(0, separatorPos);
-		FBNetworkElement element = findFBNetworkElement(elementName);
-		while (element == null && separatorPos != -1) {
-			separatorPos = path.indexOf('.', separatorPos + 1);
-			elementName = path.substring(0, separatorPos);
-			element = findFBNetworkElement(elementName);
-		}
-
-		if (null != element) {
-			final InterfaceList ieList = element.getInterface();
-			if (isInput) {
-				builder.setDestInterfaceList(ieList);
-			} else {
-				builder.setSrcInterfaceList(ieList);
-			}
-			final String pinName = path.substring(separatorPos + 1);
-			return getInterfaceElement(ieList, pinName, conType, isInput);
-		}
-		return null;
-	}
-
 	/**
 	 * Check if the element that contains the fbnetwork has an interface element
 	 * with the given name. this is needed for subapps, cfbs, devices and resources
 	 */
-	protected IInterfaceElement getContainingInterfaceElement(final String interfaceElement, final EClass conType,
+	IInterfaceElement getContainingInterfaceElement(final String interfaceElement, final EClass conType,
 			final boolean isInput) {
 		// for connections to the interface inputs are the outputs of the FB
 		return getInterfaceElement(interfaceList, interfaceElement, conType, !isInput);
 	}
 
-	private static IInterfaceElement getInterfaceElement(final InterfaceList il, final String interfaceElement,
+	static IInterfaceElement getInterfaceElement(final InterfaceList il, final String interfaceElement,
 			final EClass conType, final boolean isInput) {
 		final Stream<? extends IInterfaceElement> ies = getInterfaceElementList(il, conType, isInput);
 		return ies.filter(ie -> ie.getName().equals(interfaceElement)).findAny().orElse(null);
@@ -516,7 +305,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		return Stream.empty();
 	}
 
-	protected FBNetworkElement findFBNetworkElement(final String fbName) {
+	FBNetworkElement findFBNetworkElement(final String fbName) {
 		return fbNetworkElementMap.get(fbName);
 	}
 
@@ -555,20 +344,6 @@ class FBNetworkImporter extends CommonElementImporter {
 		}
 
 		return variable;
-	}
-
-	/**
-	 * returns an valid dx, dy integer value
-	 *
-	 * @param value
-	 * @return if value is valid the converted int of that otherwise 0
-	 */
-	private static double parseConnectionValue(final String value) {
-		try {
-			return Double.parseDouble(value);
-		} catch (final NumberFormatException ex) {
-			return 0;
-		}
 	}
 
 	@Override

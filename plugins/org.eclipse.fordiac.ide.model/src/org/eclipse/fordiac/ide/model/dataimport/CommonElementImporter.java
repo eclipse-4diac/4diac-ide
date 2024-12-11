@@ -126,7 +126,7 @@ public abstract class CommonElementImporter {
 		return file;
 	}
 
-	protected TypeLibrary getTypeLibrary() {
+	TypeLibrary getTypeLibrary() {
 		return typeLibrary;
 	}
 
