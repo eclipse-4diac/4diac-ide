@@ -83,6 +83,7 @@ public final class Messages extends NLS {
 	public static String FordiacTypeResource_SaveToUnsupportedURI;
 	public static String FordiacTypeResource_TypeImportError;
 	public static String FordiacTypeResource_UnsupportedFileType;
+	public static String FordiacTypeResource_UnsupportedContent;
 	public static String FordiacTypeResource_XMLError;
 	public static String IdentifierVerifier_NameConsecutiveUnderscore;
 	public static String IdentifierVerifier_NameNotAValidIdentifier;

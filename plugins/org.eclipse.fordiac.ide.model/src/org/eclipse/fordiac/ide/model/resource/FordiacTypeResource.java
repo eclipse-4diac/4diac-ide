@@ -1,7 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2021 Johannes Kepler University Austria
- *               2022 - 2023 Primetals Technologies Austria GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2021, 2024 Johannes Kepler University Austria,
+ *                          Primetals Technologies Austria GmbH, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -36,10 +35,19 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AdapterExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AttributeTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.FCTExporter;
+import org.eclipse.fordiac.ide.model.dataexport.FbtExporter;
+import org.eclipse.fordiac.ide.model.dataexport.GlobalConstantsExporter;
+import org.eclipse.fordiac.ide.model.dataexport.SubApplicationTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.AttributeTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
@@ -53,7 +61,14 @@ import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -115,20 +130,25 @@ public class FordiacTypeResource extends ResourceImpl {
 			throw new IOException(
 					MessageFormat.format(Messages.FordiacTypeResource_SaveToUnsupportedURI, uri.toString()));
 		}
-		try {
-			final var fbtFile = ResourcesPlugin.getWorkspace().getRoot()
-					.getFile(new Path(this.uri.toPlatformString(true)));
-			var typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fbtFile);
-			if (typeEntryForFile == null) {
-				typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeLibrary(fbtFile.getProject())
-						.createTypeEntry(fbtFile);
-			}
-			typeEntryForFile.setTypeEditable(EcoreUtil.copy((LibraryElement) getContents().get(0)));
-			typeEntryForFile.setLastModificationTimestamp(typeEntryForFile.getFile().getModificationStamp());
-			AbstractTypeExporter.saveType(typeEntryForFile, outputStream);
-		} catch (final Exception e) {
-			throw new IOWrappedException(e);
+		final AbstractTypeExporter exporter = getTypeExporter(getContents().get(0));
+		try (InputStream inputStream = exporter.getFileContent()) {
+			inputStream.transferTo(outputStream);
 		}
+	}
+
+	private static AbstractTypeExporter getTypeExporter(final EObject content) throws IOException {
+		return switch (content) {
+		case final FunctionFBType funcType -> new FCTExporter(funcType);
+		case final AdapterType adpType -> new AdapterExporter(adpType);
+		case final SubAppType subAppType -> new SubApplicationTypeExporter(subAppType);
+		case final FBType fbType -> new FbtExporter(fbType);
+		case final AnyDerivedType dataType -> new DataTypeExporter(dataType);
+		case final AutomationSystem system -> new SystemExporter(system);
+		case final GlobalConstants globalConstants -> new GlobalConstantsExporter(globalConstants);
+		case final AttributeDeclaration attributeType -> new AttributeTypeExporter(attributeType);
+		default -> throw new IOException(
+				MessageFormat.format(Messages.FordiacTypeResource_UnsupportedContent, content.toString()));
+		};
 	}
 
 	@Override

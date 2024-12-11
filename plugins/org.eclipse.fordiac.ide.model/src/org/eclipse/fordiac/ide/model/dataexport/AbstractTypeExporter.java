@@ -24,7 +24,6 @@ import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -33,15 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.FunctionFBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractTypeExporter extends CommonElementExporter {
@@ -85,48 +75,6 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		addVersionInfo(getType());
 		createTypeSpecificXMLEntries();
 		addEndElement();
-	}
-
-	// Save the model using the Outputstream
-	public static void saveType(final TypeEntry entry, final OutputStream outputStream) {
-		final AbstractTypeExporter exporter = getTypeExporter(entry);
-		if (exporter != null) {
-
-			try (InputStream inputStream = exporter.getFileContent()) {
-				inputStream.transferTo(outputStream);
-			} catch (final IOException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			}
-			entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
-		}
-	}
-
-	private static AbstractTypeExporter getTypeExporter(final TypeEntry entry) {
-		if (entry instanceof final FunctionFBTypeEntry functionFBTypeEntry) {
-			return new FCTExporter(functionFBTypeEntry.getTypeEditable());
-		}
-		if (entry instanceof final FBTypeEntry functionFBTypeEntry) {
-			return new FbtExporter(functionFBTypeEntry.getTypeEditable());
-		}
-		if (entry instanceof final AdapterTypeEntry adapterTypeEntry) {
-			return new AdapterExporter(adapterTypeEntry.getTypeEditable());
-		}
-		if (entry instanceof final SubAppTypeEntry subAppTypeEntry) {
-			return new SubApplicationTypeExporter(subAppTypeEntry.getTypeEditable());
-		}
-		if (entry instanceof final DataTypeEntry dataTypeEntry) {
-			return new DataTypeExporter(dataTypeEntry.getTypeEditable());
-		}
-		if (entry instanceof final SystemEntry systemEntry) {
-			return new SystemExporter(systemEntry.getSystem());
-		}
-		if (entry instanceof final GlobalConstantsEntry globalConstantsEntry) {
-			return new GlobalConstantsExporter(globalConstantsEntry.getTypeEditable());
-		}
-		if (entry instanceof final AttributeTypeEntry attributeTypeEntry) {
-			return new AttributeTypeExporter(attributeTypeEntry.getTypeEditable());
-		}
-		return null;
 	}
 
 	protected abstract String getRootTag();
