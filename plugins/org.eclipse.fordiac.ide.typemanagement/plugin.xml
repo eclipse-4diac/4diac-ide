@@ -121,6 +121,10 @@
            id="org.eclipse.fordiac.ide.typemanagement.renameElement"
            name="Rename Element">
      </command>
+     <command 
+     		id="org.eclipse.fordiac.ide.application.commands.quickFix" 
+     		name="Quick Fix"> 
+     </command>
      <command
            id="org.eclipse.fordiac.ide.typemanagement.connectionstostruct"
            name="Connections To Struct">
@@ -766,6 +770,16 @@
                style="push">
          </command>
       </menuContribution>
+      <menuContribution 
+      		allPopups="false" 
+      		locationURI="toolbar:org.eclipse.fordiac.ide.toolbar.table">
+		<command 
+				commandId="org.eclipse.fordiac.ide.application.commands.quickFix" 
+				icon="platform:/plugin/org.eclipse.ui.ide/icons/full/obj16/quickfix_error_obj.png" 
+				label="QuickFix" 
+				style="push"> 
+		</command>
+	  </menuContribution>
       <menuContribution
 			locationURI="toolbar:org.eclipse.ui.workbench.file?after=new.group">
         <command

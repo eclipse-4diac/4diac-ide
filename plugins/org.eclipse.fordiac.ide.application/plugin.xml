@@ -552,8 +552,10 @@
           categoryId="org.eclipse.fordiac.ide.commands.category"
           description="%command.toggleBoolValue.description"
           id="org.eclipse.fordiac.ide.application.commands.toggleBoolValue"
-          name="%command.toggleBoolValue.name">
-    </command>
+          name="%command.toggleBoolValue.name"/>
+    <command id="org.eclipse.fordiac.ide.application.commands.quickFix" 
+    	  name="Quick Fix" 
+    	  description="Applies a Quick Fix to the selected element"/> 
   </extension>
   
   <extension point="org.eclipse.ui.commandImages">
@@ -802,30 +804,40 @@
 	<handler class="org.eclipse.fordiac.ide.application.handlers.FordiacQuickFixHandler"
              commandId="org.eclipse.jdt.ui.edit.text.java.correction.assist.proposals">
 	</handler>
- <handler
-       class="org.eclipse.fordiac.ide.application.handlers.ToggleBoolValueHandler"
-       commandId="org.eclipse.fordiac.ide.application.commands.toggleBoolValue">
-    <activeWhen>
-       <with
-             variable="selection">
-          <iterate
-                ifEmpty="false"
-                operator="and">
-             <instanceof
-                   value="org.eclipse.fordiac.ide.gef.editparts.ValueEditPart">
-             </instanceof>
-          </iterate>
-       </with>
-    </activeWhen>
-    <enabledWhen>
-       <with
-             variable="activeEditor">
-          <adapt
-                type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
-          </adapt>
-       </with>
-    </enabledWhen>
- </handler>
+	 <handler
+	       class="org.eclipse.fordiac.ide.application.handlers.ToggleBoolValueHandler"
+	       commandId="org.eclipse.fordiac.ide.application.commands.toggleBoolValue">
+	    <activeWhen>
+	       <with
+	             variable="selection">
+	          <iterate
+	                ifEmpty="false"
+	                operator="and">
+	             <instanceof
+	                   value="org.eclipse.fordiac.ide.gef.editparts.ValueEditPart">
+	             </instanceof>
+	          </iterate>
+	       </with>
+	    </activeWhen>
+	    <enabledWhen>
+	       <with
+	             variable="activeEditor">
+	          <adapt
+	                type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
+	          </adapt>
+	       </with>
+	    </enabledWhen>
+	 </handler>
+	<handler class="org.eclipse.fordiac.ide.application.handlers.FordiacQuickFixHandler" commandId="org.eclipse.fordiac.ide.application.commands.quickFix">
+		<enabledWhen>
+			<with variable="selection">
+				<count value="1"> </count>
+					<iterate>
+						<test property="org.eclipse.fordiac.ide.application.properties.repairSupported"> </test>
+					</iterate>
+				</with>
+		</enabledWhen>
+	</handler>
   </extension>
   
   <extension
