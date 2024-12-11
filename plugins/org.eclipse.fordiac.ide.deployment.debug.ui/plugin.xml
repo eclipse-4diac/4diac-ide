@@ -496,6 +496,47 @@
 				</with>
 			</enabledWhen>
 		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.ToggleBoolValueHandler"
+			commandId="org.eclipse.fordiac.ide.application.commands.toggleBoolValue">
+			<activeWhen>
+				<with
+					variable="selection">
+					<iterate
+						ifEmpty="false"
+						operator="and">
+						<instanceof
+							value="org.eclipse.fordiac.ide.deployment.debug.ui.editparts.WatchValueEditPart">
+						</instanceof>
+					</iterate>
+				</with>
+			</activeWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.ToggleBoolWatchHandler"
+			commandId="org.eclipse.fordiac.ide.application.commands.toggleBoolValue">
+			<activeWhen>
+				<with
+					variable="selection">
+					<iterate
+						ifEmpty="false"
+						operator="and">
+						<instanceof
+							value="org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch">
+						</instanceof>
+					</iterate>
+				</with>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.bindings">
+		<key
+			commandId="org.eclipse.fordiac.ide.application.commands.toggleBoolValue"
+			contextId="org.eclipse.debug.ui.debugging"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			sequence="M1+M2+Q">
+		</key>
 	</extension>
 	<extension
 		point="org.eclipse.ui.menus">

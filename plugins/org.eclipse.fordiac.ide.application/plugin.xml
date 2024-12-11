@@ -548,6 +548,12 @@
              id="org.eclipse.ui.commands.toggleState">
       </state>
     </command>
+    <command
+          categoryId="org.eclipse.fordiac.ide.commands.category"
+          description="%command.toggleBoolValue.description"
+          id="org.eclipse.fordiac.ide.application.commands.toggleBoolValue"
+          name="%command.toggleBoolValue.name">
+    </command>
   </extension>
   
   <extension point="org.eclipse.ui.commandImages">
@@ -796,6 +802,30 @@
 	<handler class="org.eclipse.fordiac.ide.application.handlers.FordiacQuickFixHandler"
              commandId="org.eclipse.jdt.ui.edit.text.java.correction.assist.proposals">
 	</handler>
+ <handler
+       class="org.eclipse.fordiac.ide.application.handlers.ToggleBoolValueHandler"
+       commandId="org.eclipse.fordiac.ide.application.commands.toggleBoolValue">
+    <activeWhen>
+       <with
+             variable="selection">
+          <iterate
+                ifEmpty="false"
+                operator="and">
+             <instanceof
+                   value="org.eclipse.fordiac.ide.gef.editparts.ValueEditPart">
+             </instanceof>
+          </iterate>
+       </with>
+    </activeWhen>
+    <enabledWhen>
+       <with
+             variable="activeEditor">
+          <adapt
+                type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
+          </adapt>
+       </with>
+    </enabledWhen>
+ </handler>
   </extension>
   
   <extension
@@ -868,7 +898,13 @@
     <key commandId="org.eclipse.fordiac.ide.application.commands.gotopinunder"
          contextId="org.eclipse.fordiac.ide.fbnetwork"
 		 schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-         sequence="CTRL+ARROW_DOWN"/>    
+         sequence="CTRL+ARROW_DOWN"/>
+    <key
+          commandId="org.eclipse.fordiac.ide.application.commands.toggleBoolValue"
+          contextId="org.eclipse.fordiac.ide.fbnetwork"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+M2+Q">
+    </key>    
   </extension>
   
   <extension point="org.eclipse.ui.menus">
@@ -955,6 +991,20 @@
           </with>
         </visibleWhen>
       </command>
+      <command
+            commandId="org.eclipse.fordiac.ide.application.commands.toggleBoolValue"
+            label="%command.toggleBoolValue.name"
+            tooltip="%command.toggleBoolValue.description">
+         <visibleWhen
+               checkEnabled="false">
+            <with
+                  variable="activeEditor">
+               <adapt
+                     type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
+               </adapt>
+            </with>
+         </visibleWhen>
+      </command>
     </menuContribution>
     <menuContribution allPopups="false"
                       locationURI="popup:org.eclipse.ui.popup.any?after=additions">
@@ -970,6 +1020,14 @@
             <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
           </and>
         </visibleWhen>
+      </command>
+      <command
+            commandId="org.eclipse.fordiac.ide.application.commands.toggleBoolValue"
+            label="%command.toggleBoolValue.name"
+            tooltip="%command.toggleBoolValue.description">
+         <visibleWhen
+               checkEnabled="true">
+         </visibleWhen>
       </command>
     </menuContribution>
     <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup">
