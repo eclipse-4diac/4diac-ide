@@ -554,8 +554,8 @@
           id="org.eclipse.fordiac.ide.application.commands.toggleBoolValue"
           name="%command.toggleBoolValue.name"/>
     <command id="org.eclipse.fordiac.ide.application.commands.quickFix" 
-    	  name="Quick Fix" 
-    	  description="Applies a Quick Fix to the selected element"/> 
+    	  name="%command.quickFix.name" 
+    	  description="%command.quickFix.description"/> 
   </extension>
   
   <extension point="org.eclipse.ui.commandImages">
