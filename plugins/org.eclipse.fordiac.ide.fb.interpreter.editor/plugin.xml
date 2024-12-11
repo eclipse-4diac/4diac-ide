@@ -17,22 +17,6 @@
 
 <plugin>
 
-   <extension point="org.eclipse.ui.newWizards">
-      <!-- @generated OperationalSemantics -->
-      <category
-            id="org.eclipse.emf.ecore.Wizard.category.ID"
-            name="%_UI_Wizard_category"/>
-      <wizard
-            id="org.eclipse.fordiac.ide.fb.interpreter.OpSem.presentation.OperationalSemanticsModelWizardID"
-            name="%_UI_OperationalSemanticsModelWizard_label"
-            class="org.eclipse.fordiac.ide.fb.interpreter.OpSem.presentation.OperationalSemanticsModelWizard"
-            category="org.eclipse.emf.ecore.Wizard.category.ID"
-            icon="icons/full/obj16/OperationalSemanticsModelFile.gif">
-         <description>%_UI_OperationalSemanticsModelWizard_description</description>
-         <selection class="org.eclipse.core.resources.IResource"/>
-      </wizard>
-   </extension>
-
    <extension point="org.eclipse.ui.editors">
       <!-- @generated OperationalSemantics -->
       <editor
