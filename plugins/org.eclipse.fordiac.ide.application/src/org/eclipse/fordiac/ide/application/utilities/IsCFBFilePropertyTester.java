@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.application.utilities;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
@@ -26,7 +26,7 @@ public class IsCFBFilePropertyTester extends PropertyTester {
 		if (receiver instanceof final IFile file) {
 			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 			if (typeEntry != null) {
-				return typeEntry.getTypeEditable() instanceof CompositeFBType;
+				return LibraryElementPackage.Literals.COMPOSITE_FB_TYPE.equals(typeEntry.getTypeEClass());
 			}
 		}
 		return false;

@@ -28,7 +28,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.model.commands,
- org.eclipse.fordiac.ide.model.edit
+ org.eclipse.fordiac.ide.model.edit,
+ org.eclipse.fordiac.ide.fbtypeeditor.network
 Export-Package: org.eclipse.fordiac.ide.deployment.debug.ui,
  org.eclipse.fordiac.ide.deployment.debug.ui.actions,
  org.eclipse.fordiac.ide.deployment.debug.ui.fb,

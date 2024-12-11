@@ -39,6 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -57,9 +58,9 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorAdapterTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorFBTypeEntryImpl;
@@ -141,9 +142,9 @@ public final class TypeLibrary {
 		return Collections.unmodifiableCollection(fileMap.values());
 	}
 
-	public List<CompositeFBType> getCompositeFBTypes() {
-		return fbTypes.values().stream().filter(e -> e.getTypeEditable() instanceof CompositeFBType)
-				.map(e -> (CompositeFBType) e.getTypeEditable()).toList();
+	public Stream<FBTypeEntry> getCompositeFBTypes() {
+		return fbTypes.values().stream()
+				.filter(entry -> LibraryElementPackage.Literals.COMPOSITE_FB_TYPE.equals(entry.getTypeEClass()));
 	}
 
 	public AdapterTypeEntry getAdapterTypeEntry(final String typeName) {

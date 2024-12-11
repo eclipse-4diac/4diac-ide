@@ -38,13 +38,13 @@ public abstract class ConfigurableChange<T extends EObject> extends AbstractComm
 		return status;
 	}
 
-	protected ConfigurableChange(final String name, final URI elementURI, final Class elementClass) {
+	protected ConfigurableChange(final String name, final URI elementURI, final Class<T> elementClass) {
 		super(name, elementURI, elementClass);
 		this.state = getDefaultSelection();
 		initEnablement();
 	}
 
-	protected ConfigurableChange(final URI elementURI, final Class elementClass) {
+	protected ConfigurableChange(final URI elementURI, final Class<T> elementClass) {
 		super(elementURI, elementClass);
 		this.state = getDefaultSelection();
 		initEnablement();
@@ -60,9 +60,6 @@ public abstract class ConfigurableChange<T extends EObject> extends AbstractComm
 	public EnumSet<ChangeState> getState() {
 		return state;
 	}
-
-	@Override
-	public abstract EnumSet<ChangeState> getAllowedChoices();
 
 	@Override
 	public void addState(final ChangeState newState) {

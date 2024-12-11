@@ -669,13 +669,6 @@
             properties="ConnectionsToStructSupported"
             type="java.lang.Object">
       </propertyTester>
-      <propertyTester
-            class="org.eclipse.fordiac.ide.typemanagement.refactoring.connection.RepairBrokenConnectionPropertyTester"
-            id="org.eclipse.fordiac.ide.typemanagement.RepairBrokenConnectionTester"
-            namespace="org.eclipse.fordiac.ide.typemanagement"
-            properties="RepairConnectionSupported"
-            type="java.lang.Object">
-      </propertyTester>
    </extension>  
 
    
@@ -706,7 +699,7 @@
          <or>
          <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteUpdateFBTypeInterfaceChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteUpdateStructDataTypeMemberVariableChange"/>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.SafeFBTypeDeletionChange$DeleteInternalFBChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteInternalFBChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.UpdateUntypedSubappPinChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateManipulatorChange"/>

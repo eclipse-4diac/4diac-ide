@@ -25,7 +25,7 @@
                   </equals>
                   <and>
                      <reference
-                           definitionId="org.eclipse.fordiac.ide.deployment.ui.DeviceDefinition">
+                           definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.DeviceDefinition">
                      </reference>
                   </and>
                </with>

@@ -67,10 +67,9 @@ public class TypeDecorator implements ILightweightLabelDecorator {
 				final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 						.findEditor(new FileEditorInput(file));
 				if (editor != null) {
-					final LibraryElement typeEditable = entry.getTypeEditable();
-					if (typeEditable != null) {
-						// only get the comment when the type could be loaded
-						return typeEditable.getComment();
+					final LibraryElement libraryElement = editor.getAdapter(LibraryElement.class);
+					if (libraryElement != null) {
+						return libraryElement.getComment();
 					}
 				}
 				return null;

@@ -657,7 +657,7 @@
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.force"
-				disabledIcon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_disabled.png"
+				disabledIcon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_obj_disabled.png"
 				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_obj.png"
 				label="Force Value..."
 				tooltip="Force the watch value">
@@ -733,7 +733,7 @@
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.force"
-				disabledIcon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_disabled.png"
+				disabledIcon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_obj_disabled.png"
 				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_obj.png"
 				label="Force Value"
 				tooltip="Force the watch value">
