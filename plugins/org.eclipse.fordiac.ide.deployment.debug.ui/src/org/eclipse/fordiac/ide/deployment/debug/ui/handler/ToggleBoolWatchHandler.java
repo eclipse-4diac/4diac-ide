@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 
+import java.util.stream.Stream;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -28,8 +30,8 @@ public class ToggleBoolWatchHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		HandlerUtil.getCurrentStructuredSelection(event).stream().filter(IVarDeclarationWatch.class::isInstance)
-				.map(IVarDeclarationWatch.class::cast).forEachOrdered(ToggleBoolWatchHandler::toggleValue);
+		getWatches(HandlerUtil.getCurrentStructuredSelection(event))
+				.forEachOrdered(ToggleBoolWatchHandler::toggleValue);
 		return null;
 	}
 
@@ -48,11 +50,14 @@ public class ToggleBoolWatchHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		setBaseEnabled(HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME) instanceof final IStructuredSelection selection
-				&& selection.stream().filter(IVarDeclarationWatch.class::isInstance)
-						.map(IVarDeclarationWatch.class::cast).allMatch(ToggleBoolWatchHandler::isValidValue));
+				&& getWatches(selection).allMatch(ToggleBoolWatchHandler::isValidValue));
 	}
 
 	private static boolean isValidValue(final IVarDeclarationWatch watch) {
 		return watch.getInternalVariable().getType() instanceof BoolType;
+	}
+
+	private static Stream<IVarDeclarationWatch> getWatches(final IStructuredSelection selection) {
+		return selection.stream().filter(IVarDeclarationWatch.class::isInstance).map(IVarDeclarationWatch.class::cast);
 	}
 }

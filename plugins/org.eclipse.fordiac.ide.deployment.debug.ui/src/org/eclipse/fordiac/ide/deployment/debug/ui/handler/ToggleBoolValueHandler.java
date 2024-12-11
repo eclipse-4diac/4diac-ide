@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 
+import java.util.stream.Stream;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -38,9 +40,7 @@ public class ToggleBoolValueHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IEditorPart editor = HandlerUtil.getActiveEditorChecked(event);
 		final CommandStack stack = editor.getAdapter(CommandStack.class);
-		HandlerUtil.getCurrentStructuredSelection(event).stream().filter(WatchValueEditPart.class::isInstance)
-				.map(WatchValueEditPart.class::cast).map(WatchValueEditPart::getModel)
-				.forEachOrdered(value -> toggleValue(value, stack));
+		getValues(HandlerUtil.getCurrentStructuredSelection(event)).forEachOrdered(value -> toggleValue(value, stack));
 		return null;
 	}
 
@@ -65,12 +65,16 @@ public class ToggleBoolValueHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		setBaseEnabled(HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME) instanceof final IStructuredSelection selection
-				&& selection.stream().filter(WatchValueEditPart.class::isInstance).map(WatchValueEditPart.class::cast)
-						.map(WatchValueEditPart::getModel).allMatch(ToggleBoolValueHandler::isValidValue));
+				&& getValues(selection).allMatch(ToggleBoolValueHandler::isValidValue));
 	}
 
 	private static boolean isValidValue(final WatchValueAnnotation annotation) {
 		return annotation.getElement() instanceof final VarDeclaration varDeclaration && varDeclaration.isIsInput()
 				&& varDeclaration.getType() instanceof BoolType && !varDeclaration.isArray();
+	}
+
+	private static Stream<WatchValueAnnotation> getValues(final IStructuredSelection selection) {
+		return selection.stream().filter(WatchValueEditPart.class::isInstance).map(WatchValueEditPart.class::cast)
+				.map(WatchValueEditPart::getModel);
 	}
 }

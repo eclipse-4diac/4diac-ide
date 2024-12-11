@@ -537,6 +537,12 @@
 			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
 			sequence="M1+M2+Q">
 		</key>
+		<key
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.triggerEvent"
+			contextId="org.eclipse.debug.ui.debugging"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			sequence="M1+M2+E">
+		</key>
 	</extension>
 	<extension
 		point="org.eclipse.ui.menus">

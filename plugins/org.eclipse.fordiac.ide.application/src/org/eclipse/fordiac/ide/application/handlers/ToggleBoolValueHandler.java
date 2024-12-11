@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
+import java.util.stream.Stream;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -33,8 +35,7 @@ public class ToggleBoolValueHandler extends AbstractHandler {
 		final IEditorPart editor = HandlerUtil.getActiveEditorChecked(event);
 		final CommandStack stack = editor.getAdapter(CommandStack.class);
 		if (stack != null) {
-			HandlerUtil.getCurrentStructuredSelection(event).stream().filter(ValueEditPart.class::isInstance)
-					.map(ValueEditPart.class::cast).map(ValueEditPart::getModel)
+			getValues(HandlerUtil.getCurrentStructuredSelection(event))
 					.forEachOrdered(value -> toggleValue(value, stack));
 		}
 		return null;
@@ -52,12 +53,16 @@ public class ToggleBoolValueHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		setBaseEnabled(HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME) instanceof final IStructuredSelection selection
-				&& selection.stream().filter(ValueEditPart.class::isInstance).map(ValueEditPart.class::cast)
-						.map(ValueEditPart::getModel).allMatch(ToggleBoolValueHandler::isValidValue));
+				&& getValues(selection).allMatch(ToggleBoolValueHandler::isValidValue));
 	}
 
 	private static boolean isValidValue(final Value value) {
 		return value.getParentIE() instanceof final VarDeclaration varDeclaration && varDeclaration.isIsInput()
 				&& varDeclaration.getType() instanceof BoolType && !varDeclaration.isArray();
+	}
+
+	private static Stream<Value> getValues(final IStructuredSelection selection) {
+		return selection.stream().filter(ValueEditPart.class::isInstance).map(ValueEditPart.class::cast)
+				.map(ValueEditPart::getModel);
 	}
 }
