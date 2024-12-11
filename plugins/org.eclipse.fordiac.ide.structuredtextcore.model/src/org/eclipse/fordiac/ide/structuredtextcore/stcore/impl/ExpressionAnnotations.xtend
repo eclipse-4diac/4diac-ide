@@ -126,7 +126,7 @@ final package class ExpressionAnnotations {
 		expr.expression?.declaredResultType
 	}
 
-	def package static INamedElement getResultType(STMemberAccessExpression expr) { expr.member.resultType }
+	def package static INamedElement getResultType(STMemberAccessExpression expr) { expr.member?.resultType }
 
 	def package static INamedElement getDeclaredResultType(STMemberAccessExpression expr) {
 		expr.member?.declaredResultType
