@@ -148,11 +148,13 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			return;
 		}
 		final List<Issue> issues = new ArrayList<>();
-		if (varDeclaration.isArray()) {
-			validate(varDeclaration.getArraySize(), delta, typeUsageCollector, issues, context);
-			issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getArraySize()));
-		} else {
-			typeUsageCollector.addUsedType(varDeclaration.getType());
+		if (varDeclaration.getType() instanceof AnyType) {
+			if (varDeclaration.isArray()) {
+				validate(varDeclaration.getArraySize(), delta, typeUsageCollector, issues, context);
+				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getArraySize()));
+			} else {
+				typeUsageCollector.addUsedType(varDeclaration.getType());
+			}
 		}
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException();
@@ -170,7 +172,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
 		final String value = getValue(varDeclaration);
 		final List<Issue> issues = new ArrayList<>();
-		if (!value.isBlank()) { // do not parse value if blank
+		// do not parse value if blank or variable has invalid type
+		if (!value.isBlank() && varDeclaration.getType() instanceof AnyType) {
 			final INamedElement featureType = STCoreUtil.getFeatureType(varDeclaration);
 			try {
 				new TypedValueConverter((DataType) featureType, true).toValue(value);

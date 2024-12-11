@@ -43,7 +43,7 @@ public class VariableDiagnostician extends CancelableDiagnostician {
 	protected boolean doValidate(final EValidator eValidator, final EClass eClass, final EObject eObject,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		boolean result = super.doValidate(eValidator, eClass, eObject, diagnostics, context);
-		if (eObject instanceof final VarDeclaration varDeclaration) {
+		if (eObject instanceof final VarDeclaration varDeclaration && varDeclaration.getType() instanceof AnyType) {
 			result &= validate(varDeclaration, VariableOperations::validateType, diagnostics,
 					varDeclaration.getArraySize());
 			result &= validate(varDeclaration, VariableOperations::validateValue, diagnostics,
