@@ -119,6 +119,22 @@ public final class ConnectionHelper {
 			}
 		}
 
+		public void repair() {
+			if (isMissingConnectionSource()) {
+				connection.setSource(getConnectionEndPoint(sourceString, false));
+			}
+			if (isMissingConnectionDestination()) {
+				connection.setDestination(getConnectionEndPoint(destinationString, true));
+			}
+			connectionState.clear();
+			connectionState.add(ConnectionState.VALID);
+			validate();
+			handleErrorCases();
+			if (getConnection() != null) {
+				importer.getFbNetwork().addConnection(connection);
+			}
+		}
+
 		public void handleErrorCases() {
 			if (isMissingConnectionDestination()) {
 				handleMissingConnectionDestination();
@@ -377,6 +393,10 @@ public final class ConnectionHelper {
 			FBNetworkElement element = importer.findFBNetworkElement(elementName);
 			while (element == null && separatorPos != -1) {
 				separatorPos = path.indexOf('.', separatorPos + 1);
+				if (separatorPos == -1) {
+					// we have no element with the name
+					return null;
+				}
 				elementName = path.substring(0, separatorPos);
 				element = importer.findFBNetworkElement(elementName);
 			}

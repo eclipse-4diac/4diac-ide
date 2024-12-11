@@ -15,10 +15,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionBuilder;
+import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -27,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 class ResDevFBNetworkImporter extends SubAppNetworkImporter {
 
 	private final EList<VarDeclaration> varInputs;
+	private final List<ConnectionBuilder<Connection>> brokenConnections = new ArrayList<>();
 
 	ResDevFBNetworkImporter(final CommonElementImporter importer, final EList<VarDeclaration> varInputs) {
 		super(importer);
@@ -37,6 +45,10 @@ class ResDevFBNetworkImporter extends SubAppNetworkImporter {
 			final EList<VarDeclaration> varInputs, final Map<String, FBNetworkElement> fbNetworkElementMap) {
 		super(importer, fbNetwork, fbNetworkElementMap);
 		this.varInputs = varInputs;
+	}
+
+	public List<ConnectionBuilder<Connection>> getBrokenConnections() {
+		return brokenConnections;
 	}
 
 	@Override
@@ -61,6 +73,24 @@ class ResDevFBNetworkImporter extends SubAppNetworkImporter {
 		super.addFBNetworkElement(element);
 		// update name to the correct short one
 		element.setName(name);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected <T extends Connection> T parseConnection(final EClass conType)
+			throws XMLStreamException, TypeImportException {
+		final ConnectionBuilder<T> builder = ConnectionHelper.createConnectionBuilder(conType, this);
+		builder.validate();
+
+		if (builder.isMissingConnectionDestination() || builder.isMissingConnectionSource()) {
+			// potential connection to a mapped fb, store for retry after mapping
+			// information is created
+			brokenConnections.add((ConnectionBuilder<Connection>) builder);
+			return null;
+		}
+
+		builder.handleErrorCases();
+		return builder.getConnection();
 	}
 
 }

@@ -757,8 +757,7 @@ public abstract class CommonElementImporter {
 		processChildren(LibraryElementTags.RESOURCE_ELEMENT, name -> {
 			switch (name) {
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				new ResDevFBNetworkImporter(this, fbNetwork, resource.getVarDeclarations(), fbNetworkElementMap)
-						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
+				parseResourceNetwork(fbNetworkElementMap, resource, fbNetwork);
 				break;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
 				parseGenericAttributeNode(resource);
@@ -782,6 +781,12 @@ public abstract class CommonElementImporter {
 			return true;
 		});
 		return resource;
+	}
+
+	protected void parseResourceNetwork(final Map<String, FBNetworkElement> fbNetworkElementMap,
+			final Resource resource, final FBNetwork fbNetwork) throws TypeImportException, XMLStreamException {
+		new ResDevFBNetworkImporter(this, fbNetwork, resource.getVarDeclarations(), fbNetworkElementMap)
+				.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 	}
 
 	private void parseResourceType(final Resource resource) {

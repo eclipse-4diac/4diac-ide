@@ -243,7 +243,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		});
 	}
 
-	private <T extends Connection> T parseConnection(final EClass conType)
+	protected <T extends Connection> T parseConnection(final EClass conType)
 			throws XMLStreamException, TypeImportException {
 		final ConnectionBuilder<T> builder = ConnectionHelper.createConnectionBuilder(conType, this);
 		builder.validate();
