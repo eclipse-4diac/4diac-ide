@@ -22,29 +22,29 @@ import org.eclipse.core.runtime.CoreException;
 public class GraphicalMarkerAnnotation extends GraphicalAnnotation {
 
 	private final IMarker marker;
+	private String text;
+	private String location;
+	private Map<String, Object> attributes;
 
 	protected GraphicalMarkerAnnotation(final IMarker marker, final String type, final Object target) {
 		super(type, target);
 		this.marker = marker;
+		refresh();
 	}
 
 	@Override
 	public String getText() {
-		return marker.getAttribute(IMarker.MESSAGE, null);
+		return text;
 	}
 
 	@Override
 	public String getLocation() {
-		return marker.getAttribute(IMarker.LOCATION, null);
+		return location;
 	}
 
 	@Override
 	public Object getAttribute(final String attributeName) {
-		try {
-			return marker.getAttribute(attributeName);
-		} catch (final CoreException e) {
-			return null;
-		}
+		return attributes.get(attributeName);
 	}
 
 	@Override
@@ -53,6 +53,16 @@ public class GraphicalMarkerAnnotation extends GraphicalAnnotation {
 			return Objects.requireNonNullElse(marker.getAttributes(), Collections.emptyMap());
 		} catch (final CoreException e) {
 			return Collections.emptyMap();
+		}
+	}
+
+	public void refresh() {
+		text = marker.getAttribute(IMarker.MESSAGE, null);
+		location = marker.getAttribute(IMarker.LOCATION, null);
+		try {
+			attributes = marker.getAttributes();
+		} catch (final CoreException e) {
+			attributes = Map.of();
 		}
 	}
 

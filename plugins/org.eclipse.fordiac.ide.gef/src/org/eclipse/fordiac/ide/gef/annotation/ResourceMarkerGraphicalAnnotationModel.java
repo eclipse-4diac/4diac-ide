@@ -112,6 +112,7 @@ public abstract class ResourceMarkerGraphicalAnnotationModel extends AbstractGra
 					added.add(annotation);
 				}
 			} else {
+				annotation.refresh();
 				changed.add(annotation);
 			}
 			return annotation;
