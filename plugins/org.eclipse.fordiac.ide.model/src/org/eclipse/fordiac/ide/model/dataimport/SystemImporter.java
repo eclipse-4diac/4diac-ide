@@ -521,7 +521,7 @@ public class SystemImporter extends CommonElementImporter {
 		final Connection resCon = EcoreUtil.copy(con);
 		resCon.setSource(srcResFB.getOutput(con.getSource().getName()));
 		resCon.setDestination(dstResFB.getInput(con.getDestination().getName()));
-		return con;
+		return resCon;
 	}
 
 }
