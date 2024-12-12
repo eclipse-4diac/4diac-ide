@@ -216,6 +216,11 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 	}
 
 	@Override
+	protected boolean isPrefQuickDiffAlwaysOn() {
+		return false;
+	}
+
+	@Override
 	public Object getSelectableObject() {
 		return null;
 	}
