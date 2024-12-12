@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="IXA" Comment="Composite FB for boolean input data" >
+	<Identification Standard="61499-2" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Version="1.0" Author="franz" Date="2024-04-24">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="EInit" Comment="Service Initialization" >
+				<With Var="QI"/>
+				<With Var="PARAMS"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm" >
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier" />
+			<VarDeclaration Name="PARAMS" Type="STRING" Comment="Service Parameters" />
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier" />
+			<VarDeclaration Name="STATUS" Type="STRING" Comment="Service Status" />
+		</OutputVars>
+		<Plugs>
+			<AdapterDeclaration Name="IN" Type="AX" x="5600" y="1200"/>
+		</Plugs>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="IX" Type="IX" x="1240" y="433.33">
+		</FB>
+		<EventConnections>
+			<Connection Source="INIT" Destination="IX.INIT" dx1="1286.67"/>
+			<Connection Source="IX.INITO" Destination="INITO" dx1="1026.67"/>
+			<Connection Source="IX.IND" Destination="IN.E1" dx1="1833.33"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="IX.IN" Destination="IN.D1" dx1="633.33"/>
+			<Connection Source="QI" Destination="IX.QI" dx1="953.33"/>
+			<Connection Source="PARAMS" Destination="IX.PARAMS" dx1="626.67"/>
+			<Connection Source="IX.QO" Destination="QO" dx1="3386.67"/>
+			<Connection Source="IX.STATUS" Destination="STATUS" dx1="3893.33"/>
+		</DataConnections>
+	</FBNetwork>
+</FBType>
