@@ -75,14 +75,18 @@ class FBNetworkExporter extends CommonElementExporter {
 			if (fbnElement instanceof final Comment comment) {
 				addCommentElement(comment);
 			} else {
-				final String nodeName = getFBNElementNodeName(fbnElement);
-				if (nodeName != null) {
-					addStartElement(nodeName);
-					addFBNetworkElementXMLAttributes(fbnElement);
-					addFBNetworkElementChildren(fbnElement);
-					addEndElement();
-				}
+				addFBNetworkElement(fbnElement);
 			}
+		}
+	}
+
+	protected void addFBNetworkElement(final FBNetworkElement fbnElement) throws XMLStreamException {
+		final String nodeName = getFBNElementNodeName(fbnElement);
+		if (nodeName != null) {
+			addStartElement(nodeName);
+			addFBNetworkElementXMLAttributes(fbnElement);
+			addFBNetworkElementChildren(fbnElement);
+			addEndElement();
 		}
 	}
 
@@ -214,7 +218,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 	}
 
-	private void addConnections(final List<? extends Connection> connections, final String connectionElementName,
+	protected void addConnections(final List<? extends Connection> connections, final String connectionElementName,
 			final FBNetwork fbNetwork) throws XMLStreamException {
 		if (!connections.isEmpty()) {
 			addStartElement(connectionElementName);

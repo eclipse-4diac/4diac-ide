@@ -18,6 +18,8 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
+import java.util.List;
+
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.emf.common.util.EList;
@@ -25,7 +27,9 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
@@ -34,6 +38,55 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 
 public class SystemExporter extends AbstractTypeExporter {
+
+	/**
+	 * An adjusted FBNetwork exporter that takes mapping into account. That means:
+	 *
+	 * <ul>
+	 * <li>mapped fbs are not written to xml</li>
+	 * <li>connections between mapped fbs are not written to xml</li>
+	 * <li>connections between mapped and not mapped fbs: names of</li>
+	 * <li>mapped fbs are extended with the application hierarchy</li>
+	 * </ul>
+	 *
+	 */
+	private static final class ResourceInSystemFBNetworkExporter extends FBNetworkExporter {
+		private ResourceInSystemFBNetworkExporter(final CommonElementExporter parent) {
+			super(parent);
+		}
+
+		@Override
+		protected void addFBNetworkElement(final FBNetworkElement fbnElement) throws XMLStreamException {
+			if (!fbnElement.isMapped()) {
+				super.addFBNetworkElement(fbnElement);
+			}
+		}
+
+		@Override
+		protected void addConnections(final List<? extends Connection> connections, final String connectionElementName,
+				final FBNetwork fbNetwork) throws XMLStreamException {
+			final List<? extends Connection> resourceConns = connections.stream()
+					.filter(ResourceInSystemFBNetworkExporter::isResCon).toList();
+			super.addConnections(resourceConns, connectionElementName, fbNetwork);
+		}
+
+		@Override
+		protected String getFBNElementName(final FBNetworkElement fbnElement) {
+			if (fbnElement.isMapped()) {
+				return fbnElement.getOpposite().getQualifiedName();
+			}
+			return super.getFBNElementName(fbnElement);
+		}
+
+		private static boolean isResCon(final Connection con) {
+			final FBNetworkElement sourceElement = con.getSourceElement();
+			if (sourceElement == null) {
+				// connection to the resource interface
+				return false;
+			}
+			return !sourceElement.isMapped() || !con.getDestinationElement().isMapped();
+		}
+	}
 
 	public SystemExporter(final AutomationSystem system) {
 		super(system);
@@ -142,15 +195,7 @@ public class SystemExporter extends AbstractTypeExporter {
 				addNameTypeCommentAttribute(resource, resource.getType());
 				addXYAttributes(0, 0);
 				addParamsConfig(resource.getVarDeclarations());
-				final var resNetworkExporter = new FBNetworkExporter(this) {
-					@Override
-					protected String getFBNElementName(final FBNetworkElement fbnElement) {
-						if (fbnElement.isMapped()) {
-							return fbnElement.getOpposite().getQualifiedName();
-						}
-						return super.getFBNElementName(fbnElement);
-					}
-				};
+				final var resNetworkExporter = new ResourceInSystemFBNetworkExporter(this);
 				resNetworkExporter.createFBNetworkElement(resource.getFBNetwork());
 				addAttributes(resource.getAttributes());
 				addEndElement();
