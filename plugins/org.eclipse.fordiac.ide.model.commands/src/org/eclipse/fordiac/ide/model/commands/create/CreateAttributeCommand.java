@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
@@ -38,17 +39,19 @@ public class CreateAttributeCommand extends CreationCommand implements ScopedCom
 	private final String name;
 	private final String comment;
 	private final DataType dataType;
+	private final AttributeDeclaration attributeDecl;
 	private final String value;
 	private final int index;
 
 	static final String DEFAULT_ATTRIBUTE_NAME = "Attribute1"; //$NON-NLS-1$
 
 	private CreateAttributeCommand(final ConfigurableObject configurableObject, final String name, final String comment,
-			final DataType dataType, final String value, final int index) {
+			final DataType dataType, final AttributeDeclaration attributeDecl, final String value, final int index) {
 		this.configurableObject = Objects.requireNonNull(configurableObject);
 		this.name = name;
 		this.comment = comment;
 		this.dataType = dataType;
+		this.attributeDecl = attributeDecl;
 		this.value = value;
 		this.index = index;
 	}
@@ -61,15 +64,16 @@ public class CreateAttributeCommand extends CreationCommand implements ScopedCom
 			final Attribute template, final int index) {
 		if (template != null) {
 			return CreateAttributeCommand.forValues(configurableObject, template.getName(), template.getComment(),
-					template.getType(), template.getValue(), index);
+					template.getType(), template.getAttributeDeclaration(), template.getValue(), index);
 		}
 		return CreateAttributeCommand.forValues(configurableObject, DEFAULT_ATTRIBUTE_NAME, "", ElementaryTypes.STRING, //$NON-NLS-1$
-				"", index); //$NON-NLS-1$
+				null, "", index);
 	}
 
 	public static CreateAttributeCommand forValues(final ConfigurableObject configurableObject, final String name,
-			final String comment, final DataType dataType, final String value, final int index) {
-		return new CreateAttributeCommand(configurableObject, name, comment, dataType, value,
+			final String comment, final DataType dataType, final AttributeDeclaration attributeDecl, final String value,
+			final int index) {
+		return new CreateAttributeCommand(configurableObject, name, comment, dataType, attributeDecl, value,
 				index >= 0 && index <= configurableObject.getAttributes().size() ? index
 						: configurableObject.getAttributes().size());
 	}
@@ -80,9 +84,12 @@ public class CreateAttributeCommand extends CreationCommand implements ScopedCom
 		attribute.setName(name);
 		attribute.setComment(comment);
 		attribute.setType(dataType);
+		attribute.setAttributeDeclaration(attributeDecl);
 		attribute.setValue(value);
 		configurableObject.getAttributes().add(index, attribute);
-		attribute.setName(NameRepository.createUniqueName(attribute, name));
+		if (attributeDecl == null) {
+			attribute.setName(NameRepository.createUniqueName(attribute, name));
+		}
 	}
 
 	@Override
