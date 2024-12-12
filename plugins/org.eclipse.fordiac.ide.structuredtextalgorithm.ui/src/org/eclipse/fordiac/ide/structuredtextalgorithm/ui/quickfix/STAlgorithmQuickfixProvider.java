@@ -55,30 +55,28 @@ import org.eclipse.xtext.validation.Issue;
 
 public class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 
-	@Fix(STAlgorithmValidator.NO_ALGORITHM_FOR_INPUT_EVENT)
-	public static void fixNoAlgorithmForInputEvent(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		final String eventName = issue.getData()[0];
+	@Fix(STAlgorithmValidator.MISSING_ALGORITHM)
+	public static void fixMissingAlgorithm(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		final String algorithmName = issue.getData()[0];
 		acceptor.accept(issue,
-				MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Add_missing_algorithm, eventName),
-				MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Add_missing_algorithm_for_input_event,
-						eventName),
-				null, (element, context) -> {
+				MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Add_missing_algorithm, algorithmName),
+				MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Add_missing_algorithm, algorithmName), null,
+				(element, context) -> {
 					if (element instanceof final STAlgorithmSource source) {
 						final STAlgorithm algorithm = STAlgorithmFactory.eINSTANCE.createSTAlgorithm();
-						algorithm.setName(eventName);
+						algorithm.setName(algorithmName);
 						algorithm.setBody(STAlgorithmFactory.eINSTANCE.createSTAlgorithmBody());
 						source.getElements().add(algorithm);
 					}
 				});
 	}
 
-	@Fix(STAlgorithmValidator.NO_INPUT_EVENT_FOR_ALGORITHM)
-	public static void fixNoInputEventForAlgorithm(final Issue issue, final IssueResolutionAcceptor acceptor) {
+	@Fix(STAlgorithmValidator.UNUSED_ALGORITHM)
+	public static void fixUnusedAlgorithm(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		final String name = issue.getData()[0];
 		acceptor.accept(issue, MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Remove_unused_algorithm, name),
-				MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Remove_unused_algorithm_for_input_event,
-						name),
-				null, (element, context) -> {
+				MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Remove_unused_algorithm, name), null,
+				(element, context) -> {
 					if (element.eContainer() instanceof final STAlgorithmSource source) {
 						source.getElements().remove(element);
 					}

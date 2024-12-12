@@ -29,7 +29,7 @@ public class STAlgorithmCustomValidatorConfigurationBlock extends STCoreCustomVa
 	@Override
 	protected void fillUnnecessaryCodeSection(final Composite composite, final int defaultIndent) {
 		super.fillUnnecessaryCodeSection(composite, defaultIndent);
-		addComboBox(STAlgorithmValidator.NO_INPUT_EVENT_FOR_ALGORITHM,
+		addComboBox(STAlgorithmValidator.UNUSED_ALGORITHM,
 				Messages.STAlgorithmCustomValidatorConfigurationBlock_UnusedAlgorithm, composite, defaultIndent);
 	}
 }

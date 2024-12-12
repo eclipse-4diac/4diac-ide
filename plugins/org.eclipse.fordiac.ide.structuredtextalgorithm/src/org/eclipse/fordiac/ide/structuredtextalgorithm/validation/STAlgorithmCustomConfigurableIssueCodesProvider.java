@@ -22,7 +22,7 @@ public class STAlgorithmCustomConfigurableIssueCodesProvider extends STCoreCusto
 	@Override
 	protected void initialize(final IAcceptor<PreferenceKey> acceptor) {
 		super.initialize(acceptor);
-		acceptor.accept(create(STAlgorithmValidator.NO_INPUT_EVENT_FOR_ALGORITHM, SeverityConverter.SEVERITY_WARNING));
+		acceptor.accept(create(STAlgorithmValidator.UNUSED_ALGORITHM, SeverityConverter.SEVERITY_WARNING));
 		acceptor.accept(create(STAlgorithmValidator.SHADOWING_FUNCTION, SeverityConverter.SEVERITY_IGNORE));
 	}
 }
