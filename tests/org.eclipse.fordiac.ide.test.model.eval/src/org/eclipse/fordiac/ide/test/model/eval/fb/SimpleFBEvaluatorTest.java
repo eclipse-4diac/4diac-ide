@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
@@ -50,7 +50,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 	@Test
 	void testSimpleFB() throws EvaluatorException, InterruptedException {
 		assertEquals(toDIntValue(21),
-				evaluateSimpleFB(List.of(newSTAlgorithm("DO1 := DI1 + DI2;", "REQ")), "REQ",
+				evaluateSimpleFB(List.of(newSTAlgorithm("DO1 := DI1 + DI2;", "REQ")),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
@@ -59,15 +59,38 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 	void testSimpleFBMultiAlgorithm() throws EvaluatorException, InterruptedException {
 		assertEquals(toDIntValue(21),
 				evaluateSimpleFB(
-						List.of(newSTAlgorithm("DO1 := DI1 - DI2;", "REQ1"),
-								newSTAlgorithm("DO1 := DI1 + DI2;", "REQ2")),
-						"REQ2", List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+						List.of(newSTAlgorithm("DO1 := DI1 - DI2;", "INIT"),
+								newSTAlgorithm("DO1 := DI1 + DI2;", "REQ")),
+						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
 
 	@Test
+	void testSimpleFBMultiState() throws EvaluatorException, InterruptedException {
+		final SimpleFBType fbType = newSimpleFBType("Test",
+				List.of(newVarDeclaration("DI1", ElementaryTypes.DINT, true, "17"),
+						newVarDeclaration("DI2", ElementaryTypes.DINT, true, "4"),
+						newVarDeclaration("DO1", ElementaryTypes.DINT, false)));
+		final Event initInputEvent = newEvent("INIT", true);
+		final Event initOutputEvent = newEvent("INITO", true);
+		fbType.getInterfaceList().getEventInputs().add(initInputEvent);
+		fbType.getInterfaceList().getEventOutputs().add(initOutputEvent);
+		final SimpleECState initState = newSimpleECState(initInputEvent);
+		initState.getSimpleECActions().add(newSimpleECAction("INIT", initOutputEvent));
+		fbType.getSimpleECStates().add(initState);
+		fbType.getCallables().add(newSTAlgorithm("DO1 := DI1 - DI2;", "REQ"));
+		fbType.getCallables().add(newSTAlgorithm("DO1 := DI1 + DI2;", "INIT"));
+		final TracingFBEvaluatorEventQueue queue = new TracingFBEvaluatorEventQueue(List.of(initInputEvent));
+		final SimpleFBEvaluator eval = new SimpleFBEvaluator(fbType, null, List.of(), null);
+		eval.setEventQueue(queue);
+		eval.evaluate();
+		assertIterableEquals(List.of(initOutputEvent), queue.getOutputEvents());
+		assertEquals(toDIntValue(21), eval.getVariables().get("DO1").getValue());
+	}
+
+	@Test
 	void testSimpleFBReset() throws EvaluatorException, InterruptedException {
-		final SimpleFBEvaluator evaluator = evaluateSimpleFB(List.of(newSTAlgorithm("DO1 := DI1 + DI2;", "REQ")), "REQ",
+		final SimpleFBEvaluator evaluator = evaluateSimpleFB(List.of(newSTAlgorithm("DO1 := DI1 + DI2;", "REQ")),
 				List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 				newVarDeclaration("DO1", ElementaryTypes.DINT, false));
 		assertEquals(toDIntValue(21), evaluator.getVariables().get("DO1").getValue());
@@ -78,7 +101,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 	@Test
 	void testSimpleFBInternalVar() throws EvaluatorException, InterruptedException {
 		assertEquals(toDIntValue(42),
-				evaluateSimpleFB(List.of(newSTAlgorithm("DO1 := (DI1 + DI2) * INTERNALVAR1;", "REQ")), "REQ",
+				evaluateSimpleFB(List.of(newSTAlgorithm("DO1 := (DI1 + DI2) * INTERNALVAR1;", "REQ")),
 						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
 								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false),
@@ -89,7 +112,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 	@Test
 	void testSimpleFBInternalConst() throws EvaluatorException, InterruptedException {
 		assertEquals(toDIntValue(42),
-				evaluateSimpleFB(List.of(newSTAlgorithm("DO1 := (DI1 + DI2) * INTERNALCONST1;", "REQ")), "REQ",
+				evaluateSimpleFB(List.of(newSTAlgorithm("DO1 := (DI1 + DI2) * INTERNALCONST1;", "REQ")),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(),
 						List.of(newVarDeclaration("INTERNALCONST1", ElementaryTypes.DINT, false, "2")), List.of())
@@ -113,7 +136,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 										C := A + B;
 										END_METHOD
 										""", "TEST_METHOD")),
-						"REQ", List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
 
@@ -131,7 +154,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						END_VAR
 						C := A AND B;
 						END_METHOD
-						""", "TEST_METHOD")), "REQ",
+						""", "TEST_METHOD")),
 				List.of(newVariable(BoolValue.toBoolValue(false), "DI1"),
 						newVariable(BoolValue.toBoolValue(true), "DI2")),
 				newVarDeclaration("DO1", ElementaryTypes.BOOL, false)).getVariables().get("DO1").getValue());
@@ -151,7 +174,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						END_VAR
 						C := A AND B;
 						END_METHOD
-						""", "TEST_METHOD")), "REQ",
+						""", "TEST_METHOD")),
 				List.of(newVariable(WordValue.toWordValue(Integer.valueOf(21)), "DI1"),
 						newVariable(WordValue.toWordValue(Integer.valueOf(4)), "DI2")),
 				newVarDeclaration("DO1", ElementaryTypes.WORD, false)).getVariables().get("DO1").getValue());
@@ -168,7 +191,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						END_VAR
 						DO1 := A + B;
 						END_METHOD
-						""", "TEST_METHOD")), "REQ",
+						""", "TEST_METHOD")),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
@@ -184,7 +207,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						END_VAR
 						THIS.DO1 := A + B;
 						END_METHOD
-						""", "TEST_METHOD")), "REQ",
+						""", "TEST_METHOD")),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
@@ -203,7 +226,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						END_VAR
 						C := A + B;
 						END_METHOD
-						""", "TEST_METHOD")), "REQ",
+						""", "TEST_METHOD")),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
@@ -221,7 +244,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 							C: DINT := 21;
 						END_VAR
 						END_METHOD
-						""", "TEST_METHOD")), "REQ",
+						""", "TEST_METHOD")),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
@@ -240,7 +263,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						END_VAR
 						C := A + B;
 						END_METHOD
-						""", "TEST_METHOD")), "REQ",
+						""", "TEST_METHOD")),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
@@ -256,7 +279,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						END_VAR
 						TEST_METHOD := A + B;
 						END_METHOD
-						""", "TEST_METHOD")), "REQ",
+						""", "TEST_METHOD")),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
@@ -272,63 +295,59 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						END_VAR
 						TEST_METHOD := A + B;
 						END_METHOD
-						""", "TEST_METHOD")), "REQ",
+						""", "TEST_METHOD")),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
 
 	@Test
 	void testMethodCallWithInOut() throws EvaluatorException, InterruptedException {
-		assertEquals(toDIntValue(42),
-				evaluateSimpleFB(List.of(newSTAlgorithm("""
-						VAR_TEMP
-							tempVar : DINT;
-						END_VAR
-						tempVar := DI1;
-						THIS.TEST_METHOD(X := tempVar, A := DI2, O => DO1); DO1 := DO1 + tempVar;
-						""", "REQ"), newSTMethod("""
-						METHOD TEST_METHOD
-						VAR_INPUT
-							A: DINT;
-						END_VAR
-						VAR_OUTPUT
-							O: DINT := 21;
-						END_VAR
-						VAR_IN_OUT
-							X: DINT;
-						END_VAR
-						X := X + A;
-						END_METHOD
-						""", "TEST_METHOD")), "REQ",
-						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
-						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
+		assertEquals(toDIntValue(42), evaluateSimpleFB(List.of(newSTAlgorithm("""
+				VAR_TEMP
+					tempVar : DINT;
+				END_VAR
+				tempVar := DI1;
+				THIS.TEST_METHOD(X := tempVar, A := DI2, O => DO1); DO1 := DO1 + tempVar;
+				""", "REQ"), newSTMethod("""
+				METHOD TEST_METHOD
+				VAR_INPUT
+					A: DINT;
+				END_VAR
+				VAR_OUTPUT
+					O: DINT := 21;
+				END_VAR
+				VAR_IN_OUT
+					X: DINT;
+				END_VAR
+				X := X + A;
+				END_METHOD
+				""", "TEST_METHOD")), List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+				newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
 
 	@Test
 	void testMethodCallNonFormalWithInOut() throws EvaluatorException, InterruptedException {
-		assertEquals(toDIntValue(42),
-				evaluateSimpleFB(List.of(newSTAlgorithm("""
-						VAR_TEMP
-							tempVar : DINT;
-						END_VAR
-						tempVar := DI1;
-						THIS.TEST_METHOD(DI2, tempVar, DO1); DO1 := DO1 + tempVar;
-						""", "REQ"), newSTMethod("""
-						METHOD TEST_METHOD
-						VAR_INPUT
-							A: DINT;
-						END_VAR
-						VAR_OUTPUT
-							O: DINT := 21;
-						END_VAR
-						VAR_IN_OUT
-							X: DINT;
-						END_VAR
-						X := X + A;
-						END_METHOD
-						""", "TEST_METHOD")), "REQ",
-						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
-						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
+		assertEquals(toDIntValue(42), evaluateSimpleFB(List.of(newSTAlgorithm("""
+				VAR_TEMP
+					tempVar : DINT;
+				END_VAR
+				tempVar := DI1;
+				THIS.TEST_METHOD(DI2, tempVar, DO1); DO1 := DO1 + tempVar;
+				""", "REQ"), newSTMethod("""
+				METHOD TEST_METHOD
+				VAR_INPUT
+					A: DINT;
+				END_VAR
+				VAR_OUTPUT
+					O: DINT := 21;
+				END_VAR
+				VAR_IN_OUT
+					X: DINT;
+				END_VAR
+				X := X + A;
+				END_METHOD
+				""", "TEST_METHOD")), List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+				newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
 
 	@Test
@@ -359,7 +378,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 										C := A + B;
 										END_METHOD
 										""", "TEST_METHOD2")),
-						"REQ", List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
 
@@ -382,7 +401,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						END_VAR
 						DO1 := A + B;
 						END_METHOD
-						""", "TEST_METHOD2")), "REQ",
+						""", "TEST_METHOD2")),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
@@ -409,7 +428,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						END_VAR
 						C := A + B;
 						END_METHOD
-						""", "TEST_METHOD2")), "REQ",
+						""", "TEST_METHOD2")),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
@@ -442,7 +461,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 										C := A + B;
 										END_METHOD
 										""", "TEST_METHOD2")),
-						"REQ", List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
 
@@ -473,7 +492,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 										END_VAR
 										END_METHOD
 										""", "TEST_METHOD2")),
-						"REQ", List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
 
@@ -505,7 +524,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 										C := A + B;
 										END_METHOD
 										""", "TEST_METHOD2")),
-						"REQ", List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
 
@@ -534,7 +553,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 										TEST_METHOD2 := A + B;
 										END_METHOD
 										""", "TEST_METHOD2")),
-						"REQ", List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
 
@@ -563,84 +582,80 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 										TEST_METHOD2 := A + B;
 										END_METHOD
 										""", "TEST_METHOD2")),
-						"REQ", List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
 
 	@Test
 	void testMethod2MethodCallWithInOut() throws EvaluatorException, InterruptedException {
-		assertEquals(toDIntValue(42),
-				evaluateSimpleFB(List.of(newSTAlgorithm("""
-						ALGORITHM REQ
-						VAR_TEMP
-							tempVar : DINT;
-						END_VAR
-						tempVar := DI1;
-						THIS.TEST_METHOD(X := tempVar, A := DI2, O => DO1); DO1 := DO1 + tempVar;
-						END_ALGORITHM
-						""", "REQ"), newSTMethod("""
-						METHOD TEST_METHOD
-						VAR_INPUT
-							A: DINT;
-						END_VAR
-						VAR_OUTPUT
-							O: DINT;
-						END_VAR
-						VAR_IN_OUT
-							X: DINT;
-						END_VAR
-						THIS.TEST_METHOD2(A := A, X := X, O => O);
-						END_METHOD
-						""", "TEST_METHOD"), newSTMethod("""
-						METHOD TEST_METHOD2
-						VAR_INPUT
-							A: DINT;
-						END_VAR
-						VAR_OUTPUT
-							O: DINT := 21;
-						END_VAR
-						VAR_IN_OUT
-							X: DINT;
-						END_VAR
-						X := X + A;
-						END_METHOD
-						""", "TEST_METHOD2")), "REQ",
-						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
-						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
+		assertEquals(toDIntValue(42), evaluateSimpleFB(List.of(newSTAlgorithm("""
+				ALGORITHM REQ
+				VAR_TEMP
+					tempVar : DINT;
+				END_VAR
+				tempVar := DI1;
+				THIS.TEST_METHOD(X := tempVar, A := DI2, O => DO1); DO1 := DO1 + tempVar;
+				END_ALGORITHM
+				""", "REQ"), newSTMethod("""
+				METHOD TEST_METHOD
+				VAR_INPUT
+					A: DINT;
+				END_VAR
+				VAR_OUTPUT
+					O: DINT;
+				END_VAR
+				VAR_IN_OUT
+					X: DINT;
+				END_VAR
+				THIS.TEST_METHOD2(A := A, X := X, O => O);
+				END_METHOD
+				""", "TEST_METHOD"), newSTMethod("""
+				METHOD TEST_METHOD2
+				VAR_INPUT
+					A: DINT;
+				END_VAR
+				VAR_OUTPUT
+					O: DINT := 21;
+				END_VAR
+				VAR_IN_OUT
+					X: DINT;
+				END_VAR
+				X := X + A;
+				END_METHOD
+				""", "TEST_METHOD2")), List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+				newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
 
 	@Test
 	void testMethod2MethodCallNonFormalWithInOut() throws EvaluatorException, InterruptedException {
-		assertEquals(toDIntValue(21),
-				evaluateSimpleFB(List.of(newSTAlgorithm("""
-						VAR_TEMP
-							tempVar : DINT;
-						END_VAR
-						tempVar := DI1;
-						THIS.TEST_METHOD(DI2, tempVar); DO1 := tempVar;
-						""", "REQ"), newSTMethod("""
-						METHOD TEST_METHOD
-						VAR_INPUT
-							A: DINT;
-						END_VAR
-						VAR_IN_OUT
-							X: DINT;
-						END_VAR
-						THIS.TEST_METHOD2(A, X);
-						END_METHOD
-						""", "TEST_METHOD"), newSTMethod("""
-						METHOD TEST_METHOD2
-						VAR_INPUT
-							A: DINT;
-						END_VAR
-						VAR_IN_OUT
-							X: DINT;
-						END_VAR
-						X := X + A;
-						END_METHOD
-						""", "TEST_METHOD2")), "REQ",
-						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
-						newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
+		assertEquals(toDIntValue(21), evaluateSimpleFB(List.of(newSTAlgorithm("""
+				VAR_TEMP
+					tempVar : DINT;
+				END_VAR
+				tempVar := DI1;
+				THIS.TEST_METHOD(DI2, tempVar); DO1 := tempVar;
+				""", "REQ"), newSTMethod("""
+				METHOD TEST_METHOD
+				VAR_INPUT
+					A: DINT;
+				END_VAR
+				VAR_IN_OUT
+					X: DINT;
+				END_VAR
+				THIS.TEST_METHOD2(A, X);
+				END_METHOD
+				""", "TEST_METHOD"), newSTMethod("""
+				METHOD TEST_METHOD2
+				VAR_INPUT
+					A: DINT;
+				END_VAR
+				VAR_IN_OUT
+					X: DINT;
+				END_VAR
+				X := X + A;
+				END_METHOD
+				""", "TEST_METHOD2")), List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+				newVarDeclaration("DO1", ElementaryTypes.DINT, false)).getVariables().get("DO1").getValue());
 	}
 
 	@ParameterizedTest
@@ -653,8 +668,8 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		assertEquals(toDIntValue(21),
 				evaluateSimpleFB(
 						List.of(newSTAlgorithm("DO1 := DI1[0] + DI1[1] + DI1[2] + DI1[3] + DI1[4] + DI1[5];", "REQ")),
-						"REQ", List.of(inputVarDecl, outputVarDecl), List.of(), List.of(internalConstVarDecl),
-						List.of()).getVariables().get("DO1").getValue());
+						List.of(inputVarDecl, outputVarDecl), List.of(), List.of(internalConstVarDecl), List.of())
+						.getVariables().get("DO1").getValue());
 	}
 
 	@Test
@@ -671,7 +686,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 				((StructValue) evaluateSimpleFB(List.of(newSTAlgorithm("""
 						DO1.a := DI1.a + DI1.b;
 						DO1.b := 42;
-						""", "REQ")), "REQ", List.of(inputVar), outputVarDecl).getVariables().get("DO1").getValue()));
+						""", "REQ")), List.of(inputVar), outputVarDecl).getVariables().get("DO1").getValue()));
 	}
 
 	@Test
@@ -682,7 +697,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						FB1(DI1 := DI1);
 						FB1(DI1 := DI2);
 						FB1.REQ(DI1 := FB1.DO1, DO1 => DO1);
-						""", "REQ")), "REQ",
+						""", "REQ")),
 						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
 								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
@@ -708,7 +723,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		assertEquals(toDIntValue(21),
 				evaluateSimpleFB(List.of(newSTAlgorithm("""
 						DO1 := FB1(DI1, DI2);
-						""", "REQ")), "REQ",
+						""", "REQ")),
 						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
 								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
@@ -734,7 +749,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		assertEquals(toDIntValue(21),
 				evaluateSimpleFB(List.of(newSTAlgorithm("""
 						DO1 := FB1(DI1 := 17, DI2 := 4);
-						""", "REQ")), "REQ",
+						""", "REQ")),
 						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
 								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
@@ -760,7 +775,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		assertEquals(toDIntValue(21),
 				evaluateSimpleFB(List.of(newSTAlgorithm("""
 						DO1 := FB1.REQ(DI1, DI2);
-						""", "REQ")), "REQ",
+						""", "REQ")),
 						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
 								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
@@ -786,7 +801,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		assertEquals(toDIntValue(21),
 				evaluateSimpleFB(List.of(newSTAlgorithm("""
 						DO1 := FB1.REQ(DI1 := DI1, DI2 := DI2);
-						""", "REQ")), "REQ",
+						""", "REQ")),
 						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
 								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
@@ -812,7 +827,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		assertEquals(toDIntValue(42),
 				evaluateSimpleFB(List.of(newSTAlgorithm("""
 						DO1 := FB1(DI1, DI2) * 2;
-						""", "REQ")), "REQ",
+						""", "REQ")),
 						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
 								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
@@ -838,7 +853,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		assertEquals(toDIntValue(42),
 				evaluateSimpleFB(List.of(newSTAlgorithm("""
 						DO1 := MUL(FB1(DI1, DI2), 2);
-						""", "REQ")), "REQ",
+						""", "REQ")),
 						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
 								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
@@ -866,7 +881,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						FB1.DI1 := DI1;
 						FB1.DI2 := DI2;
 						DO1 := MUL(FB1(), 2);
-						""", "REQ")), "REQ",
+						""", "REQ")),
 						Collections.<Variable<?>>unmodifiableList(CollectionLiterals.<Variable<?>>newArrayList(
 								newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2"))),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false), List.of(), List.of(),
@@ -874,64 +889,56 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 	}
 
 	FBType newTestSimpleFBType() {
-		final Event inputEvent = newEvent("REQ", true);
-		final Event outputEvent = newEvent("CNF", false);
-		final SimpleFBType simpleType = newSimpleFBType("TestSimple", List.of(inputEvent, outputEvent),
+		final SimpleFBType simpleType = newSimpleFBType("TestSimple",
 				List.of(newVarDeclaration("DI1", ElementaryTypes.DINT, true),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)));
 		simpleType.getCallables().add(newSTAlgorithm("DO1 := DO1 + DI1;", "REQ"));
 		return simpleType;
 	}
 
-	static SimpleFBEvaluator evaluateSimpleFB(final List<? extends ICallable> callables, final String inputEventName,
+	static SimpleFBEvaluator evaluateSimpleFB(final List<? extends ICallable> callables,
 			final List<Variable<?>> variables, final VarDeclaration output)
 			throws EvaluatorException, InterruptedException {
-		return evaluateSimpleFB(callables, inputEventName, variables, output, List.of(), List.of(), List.of());
+		return evaluateSimpleFB(callables, variables, output, List.of(), List.of(), List.of());
 	}
 
-	static SimpleFBEvaluator evaluateSimpleFB(final List<? extends ICallable> callables, final String inputEventName,
+	static SimpleFBEvaluator evaluateSimpleFB(final List<? extends ICallable> callables,
 			final List<Variable<?>> variables, final VarDeclaration output, final List<VarDeclaration> internalVars,
 			final List<VarDeclaration> internalConstVars, final List<FB> internalFBs)
 			throws EvaluatorException, InterruptedException {
-		final Event inputEvent = newEvent(inputEventName, true);
-		final Event outputEvent = newEvent("CNF", false);
-		final SimpleFBType fbType = LibraryElementFactory.eINSTANCE.createSimpleFBType();
-		fbType.setName("Test");
-		fbType.setInterfaceList(
-				newInterfaceList(List.of(inputEvent, outputEvent),
-						Stream.concat(variables.stream().map(
+		final SimpleFBType fbType = newSimpleFBType("Test",
+				Stream.concat(
+						variables.stream().map(
 								variable -> newVarDeclaration(variable.getName(), (DataType) variable.getType(), true)),
-								Stream.of(output)).toList()));
+						Stream.of(output)).toList());
 		ECollections.setEList(fbType.getCallables(), callables);
 		ECollections.setEList(fbType.getInternalVars(), internalVars);
 		ECollections.setEList(fbType.getInternalConstVars(), internalConstVars);
 		ECollections.setEList(fbType.getInternalFbs(), internalFBs);
-		final TracingFBEvaluatorEventQueue queue = new TracingFBEvaluatorEventQueue(List.of(inputEvent));
+		final TracingFBEvaluatorEventQueue queue = new TracingFBEvaluatorEventQueue(
+				fbType.getInterfaceList().getEventInputs());
 		final SimpleFBEvaluator eval = new SimpleFBEvaluator(fbType, null, variables, null);
 		eval.setEventQueue(queue);
 		eval.evaluate();
-		assertIterableEquals(List.of(outputEvent), queue.getOutputEvents());
+		assertIterableEquals(fbType.getInterfaceList().getEventOutputs(), queue.getOutputEvents());
 		return eval;
 	}
 
-	static SimpleFBEvaluator evaluateSimpleFB(final List<? extends ICallable> callables, final String inputEventName,
+	static SimpleFBEvaluator evaluateSimpleFB(final List<? extends ICallable> callables,
 			final List<VarDeclaration> variables, final List<VarDeclaration> internalVars,
 			final List<VarDeclaration> internalConstVars, final List<FB> internalFBs)
 			throws EvaluatorException, InterruptedException {
-		final Event inputEvent = newEvent(inputEventName, true);
-		final Event outputEvent = newEvent("CNF", false);
-		final SimpleFBType fbType = LibraryElementFactory.eINSTANCE.createSimpleFBType();
-		fbType.setName("Test");
-		fbType.setInterfaceList(newInterfaceList(List.of(inputEvent, outputEvent), variables));
+		final SimpleFBType fbType = newSimpleFBType("Test", variables);
 		ECollections.setEList(fbType.getCallables(), callables);
 		ECollections.setEList(fbType.getInternalVars(), internalVars);
 		ECollections.setEList(fbType.getInternalConstVars(), internalConstVars);
 		ECollections.setEList(fbType.getInternalFbs(), internalFBs);
-		final TracingFBEvaluatorEventQueue queue = new TracingFBEvaluatorEventQueue(List.of(inputEvent));
+		final TracingFBEvaluatorEventQueue queue = new TracingFBEvaluatorEventQueue(
+				fbType.getInterfaceList().getEventInputs());
 		final SimpleFBEvaluator eval = new SimpleFBEvaluator(fbType, null, List.of(), null);
 		eval.setEventQueue(queue);
 		eval.evaluate();
-		assertIterableEquals(List.of(outputEvent), queue.getOutputEvents());
+		assertIterableEquals(fbType.getInterfaceList().getEventOutputs(), queue.getOutputEvents());
 		return eval;
 	}
 }

@@ -17,6 +17,8 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
 public class SimpleFBEvaluator extends BaseFBEvaluator<SimpleFBType> {
@@ -27,18 +29,21 @@ public class SimpleFBEvaluator extends BaseFBEvaluator<SimpleFBType> {
 
 	@Override
 	public void evaluate(final Event event) throws EvaluatorException, InterruptedException {
-		final Algorithm algorithm;
-		if (event != null) {
-			algorithm = getType().getAlgorithmNamed(event.getName());
-		} else if (!getType().getAlgorithm().isEmpty()) {
-			algorithm = getType().getAlgorithm().getFirst();
-		} else {
-			algorithm = null;
+		evaluateState(getType().getSimpleECStates().stream().filter(state -> state.getInputEvent().equals(event))
+				.findAny().orElseThrow());
+	}
+
+	private void evaluateState(final SimpleECState state) throws EvaluatorException, InterruptedException {
+		for (final SimpleECAction action : state.getSimpleECActions()) {
+			final Algorithm algorithm = getType().getAlgorithmNamed(action.getAlgorithm());
+			if (algorithm != null) {
+				getAlgorithmEvaluators().get(algorithm).evaluate();
+			}
+			final Event output = action.getOutput();
+			if (output != null) {
+				sendOutputEvent(output);
+			}
+			update(getVariables().values());
 		}
-		if (algorithm != null) {
-			getAlgorithmEvaluators().get(algorithm).evaluate();
-		}
-		sendOutputEvents(getType().getInterfaceList().getEventOutputs());
-		update(getVariables().values());
 	}
 }

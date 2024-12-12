@@ -39,6 +39,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -201,16 +203,34 @@ public abstract class AbstractEvaluatorTest {
 		return new ElementaryVariable<>(name, value.getType(), value);
 	}
 
-	public static SimpleFBType newSimpleFBType(final String name, final Collection<Event> events,
-			final Collection<VarDeclaration> vars) {
+	public static SimpleFBType newSimpleFBType(final String name, final Collection<VarDeclaration> vars) {
 		final SimpleFBType simpleType = LibraryElementFactory.eINSTANCE.createSimpleFBType();
 		simpleType.setName(name);
-		simpleType.setInterfaceList(newInterfaceList(events, vars));
+		final Event inputEvent = newEvent("REQ", true);
+		final Event outputEvent = newEvent("CNF", false);
+		simpleType.setInterfaceList(newInterfaceList(List.of(inputEvent, outputEvent), vars));
+		final SimpleECState state = newSimpleECState(inputEvent);
+		state.getSimpleECActions().add(newSimpleECAction("REQ", outputEvent));
+		simpleType.getSimpleECStates().add(state);
 		final FBTypeEntryMock typeEntry = new FBTypeEntryMock(simpleType, typeLib, null);
 		simpleType.setTypeEntry(typeEntry);
 		typeLib.addTypeEntry(typeEntry);
 		new ResourceImpl().getContents().add(simpleType);
 		return simpleType;
+	}
+
+	public static SimpleECState newSimpleECState(final Event event) {
+		final SimpleECState state = LibraryElementFactory.eINSTANCE.createSimpleECState();
+		state.setName(event.getName());
+		state.setInputEvent(event);
+		return state;
+	}
+
+	public static SimpleECAction newSimpleECAction(final String algorithm, final Event output) {
+		final SimpleECAction action = LibraryElementFactory.eINSTANCE.createSimpleECAction();
+		action.setAlgorithm(algorithm);
+		action.setOutput(output);
+		return action;
 	}
 
 	public static FunctionFBType newFunctionFBType(final String name, final Collection<VarDeclaration> vars,

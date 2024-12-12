@@ -146,7 +146,6 @@ class SamplingFBEvaluatorTest extends AbstractFBEvaluatorTest {
 
 	SimpleFBType newTestSimpleFBType() {
 		final SimpleFBType simpleType = newSimpleFBType("TestSimple",
-				List.of(newEvent("REQ", true), newEvent("CNF", false)),
 				List.of(newVarDeclaration("DI1", ElementaryTypes.DINT, true, "17"),
 						newVarDeclaration("DI2", ElementaryTypes.DINT, true, "4"),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false),

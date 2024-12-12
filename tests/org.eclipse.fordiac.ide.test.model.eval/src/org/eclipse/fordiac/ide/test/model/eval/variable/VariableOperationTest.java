@@ -101,8 +101,7 @@ class VariableOperationTest extends AbstractEvaluatorTest {
 		typeVarDeclaration1 = newVarDeclaration("DI1", ElementaryTypes.DINT, true);
 		typeVarDeclaration2 = newVarDeclaration("DI2", ElementaryTypes.DINT, true, "17");
 		typeVarDeclaration3 = newVarDeclaration("DI3", ElementaryTypes.DINT, true, "4");
-		type = newSimpleFBType("TestSimple", List.of(),
-				List.of(typeVarDeclaration1, typeVarDeclaration2, typeVarDeclaration3));
+		type = newSimpleFBType("TestSimple", List.of(typeVarDeclaration1, typeVarDeclaration2, typeVarDeclaration3));
 
 		instance = newFB("TestSimpleInstance", type);
 		instanceVarDeclaration1 = instance.getInterface().getVariable("DI1");
