@@ -8,7 +8,7 @@
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="INIT" Type="Event" Comment="Service Initialization" >
+			<Event Name="INIT" Type="EInit" Comment="Service Initialization" >
 				<With Var="QI"/>
 				<With Var="PARAMS"/>
 			</Event>
@@ -17,7 +17,7 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="INITO" Type="Event" Comment="Initialization Confirm" >
+			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm" >
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
