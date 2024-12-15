@@ -258,28 +258,23 @@ public class ExpandedInterfacePositionMap {
 			final List<InterfaceEditPart> outputList) {
 		final var sizes = new HashMap<IFigure, Integer>();
 		for (final var pin : inputList) {
-			final var ep = (UntypedSubAppInterfaceElementEditPart) pin;
-			editPartMap.put(ep.getFigure(), ep);
-			if (ep.isOverflow()) {
-				ep.setOverflow(false);
-				ep.refresh();
-				sizes.put(ep.getFigure(), Integer.valueOf(ep.getUncollapsedFigureHeight()));
-			} else {
-				sizes.put(ep.getFigure(), Integer.valueOf(ep.getFigure().getBounds().height));
-			}
+			prozessInterfacEditPartSize(sizes, pin);
 		}
 		for (final var pin : outputList) {
-			final var ep = (UntypedSubAppInterfaceElementEditPart) pin;
-			editPartMap.put(ep.getFigure(), ep);
-			if (ep.isOverflow()) {
-				ep.setOverflow(false);
-				ep.refresh();
-				sizes.put(ep.getFigure(), Integer.valueOf(ep.getUncollapsedFigureHeight()));
-			} else {
-				sizes.put(ep.getFigure(), Integer.valueOf(ep.getFigure().getBounds().height));
-			}
+			prozessInterfacEditPartSize(sizes, pin);
 		}
 		return sizes;
+	}
+
+	protected void prozessInterfacEditPartSize(final HashMap<IFigure, Integer> sizes, final InterfaceEditPart pin) {
+		editPartMap.put(pin.getFigure(), pin);
+		if (pin instanceof final UntypedSubAppInterfaceElementEditPart subAppPinEP && subAppPinEP.isOverflow()) {
+			subAppPinEP.setOverflow(false);
+			subAppPinEP.refresh();
+			sizes.put(subAppPinEP.getFigure(), Integer.valueOf(subAppPinEP.getUncollapsedFigureHeight()));
+		} else {
+			sizes.put(pin.getFigure(), Integer.valueOf(pin.getFigure().getBounds().height));
+		}
 	}
 
 	private static Rectangle getClientArea(final List<InterfaceEditPart> inputList,
@@ -330,17 +325,24 @@ public class ExpandedInterfacePositionMap {
 		// find out when stacking is enough and collapse pins in the process
 		for (; i >= 0; i--) {
 			final var fig = entryList.get(i).getKey();
-			final var ep = (UntypedSubAppInterfaceElementEditPart) editPartMap.get(fig);
-			ep.setOverflow(true);
-			ep.refresh();
-			final int size = ep.getCollapsedFigureHeight();
-			sizes.put(fig, Integer.valueOf(size));
+			final var pinEp = editPartMap.get(fig);
 
+			int size = 0;
+			int collapsedSize = 0;
+			if (pinEp instanceof final UntypedSubAppInterfaceElementEditPart untypeSubappPinEP) {
+				untypeSubappPinEP.setOverflow(true);
+				untypeSubappPinEP.refresh();
+				size = untypeSubappPinEP.getCollapsedFigureHeight();
+				collapsedSize = untypeSubappPinEP.getUncollapsedFigureHeight();
+			} else {
+				collapsedSize = size = pinEp.getFigure().getBounds().height;
+			}
+
+			sizes.put(fig, Integer.valueOf(size));
 			totalSize += size;
 
 			final int y = entryList.get(i).getValue().intValue();
-
-			final int collapsedY = y + ((ep.getUncollapsedFigureHeight() - size) / 2);
+			final int collapsedY = y + ((collapsedSize - size) / 2);
 			if (totalSize + collapsedY < bottom) {
 				lastY = collapsedY;
 				break;
