@@ -9,13 +9,17 @@
  *
  * Contributors:
  *   Daniel Lindhuber
- *     - initial API and implementation and/or initial documentation
+ *               - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - added improved pin delete checks, especially need for
+ *                 VAR_IN_OUTs, stop deleting connections for fan out source pins
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
@@ -37,6 +41,7 @@ public class BorderCrossingReconnectCommand extends CompoundCommand {
 	final IInterfaceElement target;
 	final Connection connection;
 	final boolean isSourceReconnect;
+	final Set<IInterfaceElement> affectedPins = new HashSet<>();
 
 	public BorderCrossingReconnectCommand(final IInterfaceElement source, final IInterfaceElement target,
 			final Connection connection, final boolean isSourceReconnect) {
@@ -44,55 +49,87 @@ public class BorderCrossingReconnectCommand extends CompoundCommand {
 		this.target = target;
 		this.connection = connection;
 		this.isSourceReconnect = isSourceReconnect;
-
 		init();
+	}
+
+	@Override
+	public void execute() {
+		super.execute();
+
+		affectedPins.stream().filter(BorderCrossingReconnectCommand::hasNoConnections).forEach(inOutPin -> {
+			final DeleteInterfaceCommand cmd = new DeleteInterfaceCommand(inOutPin);
+			cmd.execute();
+			add(cmd); // add it for undo redo processing
+		});
+
+	}
+
+	private static boolean hasNoConnections(final IInterfaceElement pin) {
+		if (pin instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
+			return inOutHasNoConnections(varDecl);
+		}
+		return pin.getInputConnections().isEmpty() && pin.getOutputConnections().isEmpty();
+	}
+
+	private static boolean inOutHasNoConnections(final VarDeclaration inOutPin) {
+		final VarDeclaration opposite = inOutPin.getInOutVarOpposite();
+		return inOutPin.getInputConnections().isEmpty() && inOutPin.getOutputConnections().isEmpty()
+				&& opposite.getInputConnections().isEmpty() && opposite.getOutputConnections().isEmpty();
 	}
 
 	private void init() {
 		if (isSourceReconnect) {
 			final var sinks = new ArrayList<IInterfaceElement>();
-			collectSinksRec(connection, this, sinks);
+			collectSinksRec(connection, sinks);
 			for (final var sink : sinks) {
 				add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source, sink));
 			}
 		} else {
 			final var sources = new ArrayList<IInterfaceElement>();
-			collectSourcesRec(connection, this, sources);
+			collectSourcesRec(connection, sources, true);
 			for (final var src : sources) {
 				add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(src, target));
 			}
 		}
 	}
 
-	private static void collectSinksRec(final Connection conn, final CompoundCommand cmd,
-			final List<IInterfaceElement> sinks) {
-		cmd.add(new DeleteConnectionCommand(conn));
+	private void collectSinksRec(final Connection conn, final List<IInterfaceElement> sinks) {
+		add(new DeleteConnectionCommand(conn));
 		if (!conn.getDestination().getOutputConnections().isEmpty()) {
 			final var destination = conn.getDestination();
 			for (final var outConn : destination.getOutputConnections()) {
-				collectSinksRec(outConn, cmd, sinks);
+				collectSinksRec(outConn, sinks);
 			}
-			if (destination.getInputConnections().size() == 1) {
-				cmd.add(new DeleteInterfaceCommand(destination));
-			}
+			addPin(destination);
 		} else {
 			sinks.add(conn.getDestination());
 		}
 	}
 
-	private static void collectSourcesRec(final Connection conn, final CompoundCommand cmd,
-			final List<IInterfaceElement> sources) {
-		cmd.add(new DeleteConnectionCommand(conn));
-		if (!conn.getSource().getInputConnections().isEmpty()) {
-			final var src = conn.getSource();
-			for (final var outConn : src.getInputConnections()) {
-				collectSourcesRec(outConn, cmd, sources);
-			}
-			if (src.getOutputConnections().size() == 1) {
-				cmd.add(new DeleteInterfaceCommand(src));
-			}
+	private void addPin(final IInterfaceElement pin) {
+		if (pin instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
+			affectedPins.add((varDecl.isIsInput()) ? varDecl : varDecl.getInOutVarOpposite());
 		} else {
-			sources.add(conn.getSource());
+			affectedPins.add(pin);
+		}
+	}
+
+	private void collectSourcesRec(final Connection conn, final List<IInterfaceElement> sources, boolean deleteCon) {
+		final var src = conn.getSource();
+		if (deleteCon) {
+			add(new DeleteConnectionCommand(conn));
+			// if source has several outgoing connections we must not delete any further
+			// connections
+			deleteCon = src.getOutputConnections().size() == 1;
+		}
+
+		if (!src.getInputConnections().isEmpty()) {
+			for (final var outConn : src.getInputConnections()) {
+				collectSourcesRec(outConn, sources, deleteCon);
+			}
+			addPin(src);
+		} else {
+			sources.add(src);
 		}
 	}
 
@@ -125,48 +162,53 @@ public class BorderCrossingReconnectCommand extends CompoundCommand {
 		}
 
 		if (source instanceof VarDeclaration) {
-			if (!isSourceReconnect) {
-				return super.canExecute();
-			}
-
-			if (!(source.getType() instanceof StructuredType && target.getType() instanceof StructuredType)
-					&& (!LinkConstraints.typeCheck(source, target))) {
-				ErrorMessenger
-						.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
-								(null != source.getType()) ? source.getType().getName() : FordiacMessages.NA,
-								(null != target.getType()) ? target.getType().getName() : FordiacMessages.NA));
-				return false;
-
-			}
-
-			return LinkConstraints.isWithConstraintOK(source) && LinkConstraints.isWithConstraintOK(target);
+			return canExecuteDataCon();
 		}
 
 		if (source instanceof AdapterDeclaration) {
-			if (isSourceReconnect) {
-				if (!source.getOutputConnections().isEmpty()) {
-					ErrorMessenger.popUpErrorMessage(MessageFormat.format(
-							Messages.LinkConstraints_STATUSMessage_hasAlreadyOutputConnection, source.getName()));
-					return false;
-				}
-			} else if (!target.getInputConnections().isEmpty()) {
-				ErrorMessenger.popUpErrorMessage(MessageFormat
-						.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection, target.getName()));
-				return false;
-			}
-
-			if (!LinkConstraints.adapaterTypeCompatibilityCheck(source, target)) {
-				ErrorMessenger
-						.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
-								(null != source.getType()) ? source.getType().getName() : FordiacMessages.ND,
-								(null != target.getType()) ? target.getType().getName() : FordiacMessages.ND));
-				return false;
-			}
-
-			return true;
+			return canExecuteAdapterCon();
 		}
 
 		return false;
+	}
+
+	private boolean canExecuteDataCon() {
+		if (!isSourceReconnect) {
+			return super.canExecute();
+		}
+
+		if (!(source.getType() instanceof StructuredType && target.getType() instanceof StructuredType)
+				&& (!LinkConstraints.typeCheck(source, target))) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
+					(null != source.getType()) ? source.getType().getName() : FordiacMessages.NA,
+					(null != target.getType()) ? target.getType().getName() : FordiacMessages.NA));
+			return false;
+		}
+
+		return LinkConstraints.isWithConstraintOK(source) && LinkConstraints.isWithConstraintOK(target);
+	}
+
+	private boolean canExecuteAdapterCon() {
+		if (isSourceReconnect) {
+			if (!source.getOutputConnections().isEmpty()) {
+				ErrorMessenger.popUpErrorMessage(MessageFormat
+						.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyOutputConnection, source.getName()));
+				return false;
+			}
+		} else if (!target.getInputConnections().isEmpty()) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat
+					.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection, target.getName()));
+			return false;
+		}
+
+		if (!LinkConstraints.adapaterTypeCompatibilityCheck(source, target)) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
+					(null != source.getType()) ? source.getType().getName() : FordiacMessages.ND,
+					(null != target.getType()) ? target.getType().getName() : FordiacMessages.ND));
+			return false;
+		}
+
+		return true;
 	}
 
 }
