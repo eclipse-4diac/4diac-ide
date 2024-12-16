@@ -12,10 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 
+import java.text.MessageFormat;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
@@ -26,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.AttributeValueChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.DataTypeChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ImportChange;
@@ -46,14 +51,17 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.xtext.diagnostics.Diagnostic;
 import org.eclipse.xtext.ide.refactoring.RefactoringIssueAcceptor;
 import org.eclipse.xtext.ide.serializer.IEmfResourceChange;
 import org.eclipse.xtext.ide.serializer.ITextDocumentChange;
 import org.eclipse.xtext.resource.IGlobalServiceProvider;
+import org.eclipse.xtext.ui.MarkerTypes;
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider;
 import org.eclipse.xtext.ui.refactoring2.ChangeConverter;
 import org.eclipse.xtext.ui.refactoring2.ResourceURIConverter;
 import org.eclipse.xtext.ui.util.DisplayRunnableWithResult;
+import org.eclipse.xtext.validation.Issue;
 
 import com.google.common.base.Predicate;
 import com.google.inject.Inject;
@@ -79,6 +87,8 @@ public class STCoreChangeConverter extends ChangeConverter {
 					globalServiceProvider);
 		}
 	}
+
+	private static final Logger LOG = Logger.getLogger(ChangeConverter.class);
 
 	private final RefactoringIssueAcceptor issues;
 
@@ -117,9 +127,10 @@ public class STCoreChangeConverter extends ChangeConverter {
 		final IFile file = resourceUriConverter.toFile(change.getOldURI());
 		if (!canWrite(file)) {
 			issues.add(RefactoringIssueAcceptor.Severity.FATAL,
-					"Affected file '" + file.getFullPath() + "' is read-only"); //$NON-NLS-1$ //$NON-NLS-2$
+					MessageFormat.format(Messages.STCoreChangeConverter_ReadOnly, file.getFullPath()));
 		}
 		checkDerived(file);
+		checkErrors(file);
 		final List<ReplaceEdit> textEdits = change.getReplacements().stream()
 				.map(replacement -> new ReplaceEdit(replacement.getOffset(), replacement.getLength(),
 						replacement.getReplacementText()))
@@ -219,5 +230,41 @@ public class STCoreChangeConverter extends ChangeConverter {
 			return null;
 		}
 		return document.get();
+	}
+
+	protected void checkErrors(final IFile file) {
+		final IMarker[] markers = findMarkers(file);
+		boolean hasSyntaxErrors = false;
+		boolean hasLinkingErrors = false;
+		for (final IMarker marker : markers) {
+			final int severity = marker.getAttribute(IMarker.SEVERITY, -1);
+			if (severity != IMarker.SEVERITY_ERROR) {
+				continue;
+			}
+			final String code = marker.getAttribute(Issue.CODE_KEY, null);
+			switch (code) {
+			case Diagnostic.SYNTAX_DIAGNOSTIC, Diagnostic.SYNTAX_DIAGNOSTIC_WITH_RANGE -> hasSyntaxErrors = true;
+			case Diagnostic.LINKING_DIAGNOSTIC -> hasLinkingErrors = true;
+			default -> {// ignore
+			}
+			}
+		}
+		if (hasSyntaxErrors) {
+			issues.add(RefactoringIssueAcceptor.Severity.ERROR,
+					MessageFormat.format(Messages.STCoreChangeConverter_SyntaxErrors, file.getFullPath()));
+		} else if (hasLinkingErrors) {
+			issues.add(RefactoringIssueAcceptor.Severity.WARNING,
+					MessageFormat.format(Messages.STCoreChangeConverter_LinkingErrors, file.getFullPath()));
+		}
+	}
+
+	private IMarker[] findMarkers(final IFile file) {
+		try {
+			return file.findMarkers(MarkerTypes.ANY_VALIDATION, true, 0);
+		} catch (final CoreException e) {
+			issues.add(RefactoringIssueAcceptor.Severity.FATAL, "Cannot retrieve markers for " + file.getFullPath(), e, //$NON-NLS-1$
+					LOG);
+			return new IMarker[0];
+		}
 	}
 }
