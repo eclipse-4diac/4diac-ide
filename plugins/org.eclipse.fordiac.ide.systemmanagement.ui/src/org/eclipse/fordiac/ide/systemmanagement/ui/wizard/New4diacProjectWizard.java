@@ -121,6 +121,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 
 	private void createInitialApplication(final AutomationSystem system) {
 		final CreateApplicationCommand cmd = new CreateApplicationCommand(system, page.getInitialApplicationName());
+		cmd.execute();
 
 		final Application app = cmd.getCreatedElement();
 		if (page.getOpenApplication() && null != app) {
