@@ -18,15 +18,19 @@ import java.util.List;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.elk.alg.layered.options.ConstraintCalculationStrategy;
 import org.eclipse.elk.alg.layered.options.CrossingMinimizationStrategy;
+import org.eclipse.elk.alg.layered.options.CuttingStrategy;
 import org.eclipse.elk.alg.layered.options.EdgeStraighteningStrategy;
 import org.eclipse.elk.alg.layered.options.FixedAlignment;
+import org.eclipse.elk.alg.layered.options.GraphCompactionStrategy;
 import org.eclipse.elk.alg.layered.options.GreedySwitchType;
 import org.eclipse.elk.alg.layered.options.LayeredMetaDataProvider;
 import org.eclipse.elk.alg.layered.options.LayeringStrategy;
 import org.eclipse.elk.alg.layered.options.NodePlacementStrategy;
 import org.eclipse.elk.alg.layered.options.NodePromotionStrategy;
 import org.eclipse.elk.alg.layered.options.ValidifyStrategy;
+import org.eclipse.elk.alg.layered.options.WrappingStrategy;
 import org.eclipse.elk.alg.libavoid.options.LibavoidMetaDataProvider;
 import org.eclipse.elk.alg.libavoid.server.LibavoidServerException;
 import org.eclipse.elk.core.RecursiveGraphLayoutEngine;
@@ -159,10 +163,11 @@ public class FordiacLayout {
 		graph.setProperty(CoreOptions.INTERACTIVE, Boolean.FALSE)
 				.setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.layered") //$NON-NLS-1$
 				.setProperty(CoreOptions.DIRECTION, Direction.RIGHT)
+				.setProperty(CoreOptions.ASPECT_RATIO, Double.valueOf(1.0))
 				.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS)
 				.setProperty(CoreOptions.PADDING, new ElkPadding(5.0, 20.0, 20.0, 20.0))
 				.setProperty(CoreOptions.SPACING_NODE_NODE, Double.valueOf(50))
-				.setProperty(LayeredMetaDataProvider.SPACING_NODE_NODE_BETWEEN_LAYERS, Double.valueOf(80))
+				.setProperty(LayeredMetaDataProvider.SPACING_NODE_NODE_BETWEEN_LAYERS, Double.valueOf(40))
 				.setProperty(LayeredMetaDataProvider.THOROUGHNESS, Integer.valueOf(10))
 				.setProperty(LayeredMetaDataProvider.LAYERING_STRATEGY, LayeringStrategy.MIN_WIDTH)
 				.setProperty(LayeredMetaDataProvider.LAYERING_MIN_WIDTH_UPPER_BOUND_ON_WIDTH, Integer.valueOf(-1))
@@ -180,7 +185,12 @@ public class FordiacLayout {
 						GreedySwitchType.TWO_SIDED)
 				.setProperty(LayeredMetaDataProvider.COMPACTION_CONNECTED_COMPONENTS, Boolean.TRUE)
 				.setProperty(CoreOptions.SEPARATE_CONNECTED_COMPONENTS, Boolean.TRUE)
-				.setProperty(LayeredMetaDataProvider.WRAPPING_VALIDIFY_STRATEGY, ValidifyStrategy.LOOK_BACK);
+				.setProperty(LayeredMetaDataProvider.WRAPPING_VALIDIFY_STRATEGY, ValidifyStrategy.LOOK_BACK)
+				.setProperty(LayeredMetaDataProvider.WRAPPING_CUTTING_STRATEGY, CuttingStrategy.ARD)
+				.setProperty(LayeredMetaDataProvider.WRAPPING_STRATEGY, WrappingStrategy.MULTI_EDGE)
+				.setProperty(LayeredMetaDataProvider.COMPACTION_POST_COMPACTION_STRATEGY, GraphCompactionStrategy.LEFT)
+				.setProperty(LayeredMetaDataProvider.COMPACTION_POST_COMPACTION_CONSTRAINTS,
+						ConstraintCalculationStrategy.QUADRATIC);
 		// TODO layer unzipping is currently in elk develop, wait for next release
 	}
 
