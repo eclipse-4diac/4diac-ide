@@ -12,6 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement.provider;
 
+import java.util.Collection;
+
+import org.eclipse.fordiac.ide.model.data.InternalDataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 
 final class AttributeItemProviderAnnotation {
@@ -23,7 +27,7 @@ final class AttributeItemProviderAnnotation {
 			return provider.getString("_UI_Attribute_type"); //$NON-NLS-1$
 		}
 
-		if (attribute.getAttributeDeclaration() != null
+		if (attribute.getAttributeDeclaration() != null && attribute.getAttributeDeclaration().getTypeEntry() != null
 				&& attribute.getAttributeDeclaration().getTypeEntry().getPackageName() != null
 				&& !attribute.getAttributeDeclaration().getTypeEntry().getPackageName().isBlank()) {
 			label += " [" + attribute.getAttributeDeclaration().getTypeEntry().getPackageName() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
@@ -38,6 +42,18 @@ final class AttributeItemProviderAnnotation {
 		}
 
 		return label;
+	}
+
+	public static Collection<?> filterInternalAttributes(final Collection<?> children) {
+		return children.stream().filter(obj -> !isInternalAttribute(obj)).toList();
+	}
+
+	private static boolean isInternalAttribute(final Object obj) {
+		if (!(obj instanceof final Attribute att)) {
+			return false;
+		}
+		return (att.getType() instanceof InternalDataType)
+				|| InternalAttributeDeclarations.isInternalAttribue(att.getAttributeDeclaration());
 	}
 
 	private AttributeItemProviderAnnotation() {

@@ -176,4 +176,8 @@ public class ConfigurableObjectItemProvider
 		return FordiacEditPlugin.INSTANCE;
 	}
 
+	@Override
+	public Collection<?> getChildren(Object object) {
+		return AttributeItemProviderAnnotation.filterInternalAttributes(super.getChildren(object));
+	}
 }
