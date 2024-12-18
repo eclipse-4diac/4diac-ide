@@ -30,6 +30,7 @@ public final class Messages extends NLS {
 	public static String STCoreQuickfixProvider_AddExplicitTypecastLabel;
 	public static String STCoreQuickfixProvider_ChangeConversionDescription;
 	public static String STCoreQuickfixProvider_ChangeConversionLabel;
+	public static String STCoreQuickfixProvider_ChangePackage;
 	public static String STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredDescription;
 	public static String STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredLabel;
 	public static String STCoreQuickfixProvider_CreateImport;
@@ -65,6 +66,7 @@ public final class Messages extends NLS {
 	public static String STCoreCustomValidatorConfigurationBlock_ForControlVariableNonTemporary;
 	public static String STCoreCustomValidatorConfigurationBlock_LiteralImplicitConversion;
 	public static String STCoreCustomValidatorConfigurationBlock_Literals;
+	public static String STCoreCustomValidatorConfigurationBlock_PackageNameMismatch;
 	public static String STCoreCustomValidatorConfigurationBlock_PotentialProgrammingProblems;
 	public static String STCoreCustomValidatorConfigurationBlock_StringIndexOutOfBounds;
 	public static String STCoreCustomValidatorConfigurationBlock_TruncatedStringLiteral;

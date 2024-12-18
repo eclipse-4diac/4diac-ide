@@ -47,9 +47,11 @@ import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobal
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionScope;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
@@ -283,6 +285,18 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		}
 	}
 
+	@Fix(STCoreValidator.PACKAGE_NAME_MISMATCH)
+	public static void fixPackageNameMismatch(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		// multi resolutions need to have identical label, description, and image
+		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_ChangePackage,
+				Messages.STCoreQuickfixProvider_ChangePackage, null, (element, context) -> {
+					context.setUpdateCrossReferences(true);
+					context.setUpdateRelatedFiles(true);
+					context.addModification(element,
+							(final STSource source) -> setPackageName(source, issue.getData()[0]));
+				});
+	}
+
 	@Fix(STCoreValidator.INVALID_IMPORT)
 	public static void fixRemoveImport(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		// multi resolutions need to have identical label, description, and image
@@ -369,8 +383,8 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
 	protected QualifiedName getPackageName(final STSource source) {
 		if (source != null) {
-			final EStructuralFeature nameFeature = source.eClass().getEStructuralFeature("name"); //$NON-NLS-1$
-			if (nameFeature.getEType() == EcorePackage.eINSTANCE.getEString() && !nameFeature.isMany()) {
+			final EStructuralFeature nameFeature = getPackageNameFeature(source);
+			if (nameFeature != null) {
 				final String name = (String) source.eGet(nameFeature);
 				if (!Strings.isEmpty(name)) {
 					return nameConverter.toQualifiedName(name);
@@ -378,6 +392,30 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 			}
 		}
 		return QualifiedName.EMPTY;
+	}
+
+	protected static void setPackageName(final STSource source, final String newPackageName) {
+		final EStructuralFeature nameFeature = getPackageNameFeature(source);
+		if (nameFeature != null) {
+			if (newPackageName == null || newPackageName.isEmpty()) {
+				source.eUnset(nameFeature);
+			} else {
+				source.eSet(nameFeature, newPackageName);
+			}
+		}
+		if (source.eResource() instanceof final LibraryElementXtextResource libResource) {
+			PackageNameHelper.setPackageName(libResource.getInternalLibraryElement(), newPackageName);
+		}
+	}
+
+	protected static EStructuralFeature getPackageNameFeature(final STSource source) {
+		if (source != null) {
+			final EStructuralFeature nameFeature = source.eClass().getEStructuralFeature("name"); //$NON-NLS-1$
+			if (nameFeature.getEType() == EcorePackage.eINSTANCE.getEString() && !nameFeature.isMany()) {
+				return nameFeature;
+			}
+		}
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")

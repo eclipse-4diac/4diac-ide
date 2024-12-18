@@ -61,6 +61,11 @@ public class STFunctionValidator extends AbstractSTFunctionValidator {
 	public static final String MULTIPLE_FUNCTIONS = ISSUE_CODE_PREFIX + "multipleFunctions"; //$NON-NLS-1$
 
 	@Check
+	public void checkPackageDeclaration(final STFunctionSource source) {
+		checkPackageDeclaration(source, STFunctionPackage.Literals.ST_FUNCTION_SOURCE__NAME, source.getName());
+	}
+
+	@Check
 	public void checkImports(final STFunctionSource source) {
 		if (!source.getImports().isEmpty()) {
 			importValidator.validateImports(source.getName(), source.getImports(),

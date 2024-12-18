@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.globalconstantseditor.validation;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.Messages;
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGrammarAccess;
@@ -46,6 +47,12 @@ public class GlobalConstantsValidator extends AbstractGlobalConstantsValidator {
 
 	@Inject
 	private STCoreImportValidator importValidator;
+
+	@Check
+	public void checkPackageDeclaration(final STGlobalConstsSource source) {
+		checkPackageDeclaration(source, GlobalConstantsPackage.Literals.ST_GLOBAL_CONSTS_SOURCE__NAME,
+				source.getName());
+	}
 
 	@Check
 	public void checkImports(final STGlobalConstsSource source) {

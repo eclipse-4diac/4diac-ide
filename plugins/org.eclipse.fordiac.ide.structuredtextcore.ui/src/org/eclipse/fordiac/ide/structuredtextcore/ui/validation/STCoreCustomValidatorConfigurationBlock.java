@@ -42,6 +42,8 @@ public class STCoreCustomValidatorConfigurationBlock extends STCoreValidatorConf
 	protected void fillCodingStyleSection(final Composite composite, final int defaultIndent) {
 		addComboBox(STCoreValidator.WRONG_NAME_CASE, Messages.STCoreCustomValidatorConfigurationBlock_WrongNameCase,
 				composite, defaultIndent);
+		addComboBox(STCoreValidator.PACKAGE_NAME_MISMATCH,
+				Messages.STCoreCustomValidatorConfigurationBlock_PackageNameMismatch, composite, defaultIndent);
 	}
 
 	protected void fillPotentialProgrammingProblemsSection(final Composite composite, final int defaultIndent) {

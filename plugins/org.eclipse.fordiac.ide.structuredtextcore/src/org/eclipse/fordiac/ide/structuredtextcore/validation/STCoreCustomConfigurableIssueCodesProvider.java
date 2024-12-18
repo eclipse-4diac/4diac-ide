@@ -31,5 +31,6 @@ public class STCoreCustomConfigurableIssueCodesProvider extends STCoreConfigurab
 		acceptor.accept(create(STCoreValidator.UNNECESSARY_LITERAL_CONVERSION, SeverityConverter.SEVERITY_WARNING));
 		acceptor.accept(create(STCoreValidator.LITERAL_IMPLICIT_CONVERSION, SeverityConverter.SEVERITY_WARNING));
 		acceptor.accept(create(STCoreValidator.TRUNCATED_LITERAL, SeverityConverter.SEVERITY_WARNING));
+		acceptor.accept(create(STCoreValidator.PACKAGE_NAME_MISMATCH, SeverityConverter.SEVERITY_IGNORE));
 	}
 }

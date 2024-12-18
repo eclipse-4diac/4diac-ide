@@ -39,6 +39,7 @@ import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -47,6 +48,7 @@ import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
@@ -97,6 +99,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpres
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STPragma;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
@@ -185,6 +188,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String WILDCARD_IMPORT = ISSUE_CODE_PREFIX + "wildcardImport"; //$NON-NLS-1$
 	public static final String UNUSED_IMPORT = ISSUE_CODE_PREFIX + "unusedImport"; //$NON-NLS-1$
 	public static final String DUPLICATE_ATTRIBUTE = ISSUE_CODE_PREFIX + "duplicateAttribute"; //$NON-NLS-1$
+	public static final String PACKAGE_NAME_MISMATCH = ISSUE_CODE_PREFIX + "packageNameMismatch"; //$NON-NLS-1$
 
 	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
 	private static final Pattern IDENTIFIER_CONSECUTIVE_UNDERSCORES_PATTERN = Pattern.compile("_{2,}[^_]"); //$NON-NLS-1$
@@ -266,13 +270,11 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	@Check
 	public void checkArrayAccessExpression(final STArrayAccessExpression accessExpression) {
 		final INamedElement receiverType = accessExpression.getReceiver().getResultType();
-		if (receiverType instanceof final ArrayType arrayType) {
-			checkArrayAccessIndices(accessExpression, arrayType);
-		} else if (receiverType instanceof final AnyStringType stringType) {
-			checkStringAccessIndices(accessExpression, stringType);
-		} else {
-			error(Messages.STCoreValidator_ArrayAccessReceiverIsInvalid,
-					STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__RECEIVER, ARRAY_ACCESS_RECEIVER_INVALID);
+		switch (receiverType) {
+		case final ArrayType arrayType -> checkArrayAccessIndices(accessExpression, arrayType);
+		case final AnyStringType stringType -> checkStringAccessIndices(accessExpression, stringType);
+		default -> error(Messages.STCoreValidator_ArrayAccessReceiverIsInvalid,
+				STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__RECEIVER, ARRAY_ACCESS_RECEIVER_INVALID);
 		}
 	}
 
@@ -934,6 +936,18 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			}
 		}
 		return null;
+	}
+
+	protected void checkPackageDeclaration(final STSource source, final EStructuralFeature feature,
+			final String packageName) {
+		final Resource resource = source.eResource();
+		if (resource != null) {
+			final String expectedPackageName = PackageNameHelper.getPackageNameFromURI(resource.getURI());
+			if (!Objects.requireNonNullElse(packageName, "").equals(expectedPackageName)) { //$NON-NLS-1$
+				addIssue(MessageFormat.format(Messages.STCoreValidator_PackageNameMismatch, packageName,
+						expectedPackageName), source, feature, PACKAGE_NAME_MISMATCH, expectedPackageName);
+			}
+		}
 	}
 
 	protected void checkTypeCompatibility(final INamedElement destination, final INamedElement source,
