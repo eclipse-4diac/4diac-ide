@@ -53,7 +53,7 @@ final class AttributeItemProviderAnnotation {
 			return false;
 		}
 		return (att.getType() instanceof InternalDataType)
-				|| InternalAttributeDeclarations.isInternalAttribue(att.getAttributeDeclaration());
+				|| InternalAttributeDeclarations.isInternalAttribute(att.getAttributeDeclaration());
 	}
 
 	private AttributeItemProviderAnnotation() {

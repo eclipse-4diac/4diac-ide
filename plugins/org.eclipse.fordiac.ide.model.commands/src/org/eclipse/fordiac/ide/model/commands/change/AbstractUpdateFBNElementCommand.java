@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteErrorMarkerCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -45,9 +46,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -326,21 +329,52 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	// Ensure that connectionless pins with a value are saved as well
 	protected void handleParameters() {
-		for (final VarDeclaration input : oldElement.getInterface().getInputVars()) {
-			// No outside connections to a pin in oldElement and it has an initial value
-			if (input.getInputConnections().isEmpty()
-					&& (hasValue(input.getValue()) || !input.getAttributes().isEmpty())) {
+		processVars(oldElement.getInterface());
+		processEvents(oldElement.getInterface());
+
+		checkErrorMarkerPinParameters();
+	}
+
+	private void processEvents(final InterfaceList interfaceList) {
+		for (final Event input : interfaceList.getEventInputs()) {
+			if (input.getInputConnections().isEmpty() || (!input.getAttributes().isEmpty())) {
 				updateSelectedInterface(input, newElement);
 			}
 		}
-
-		for (final VarDeclaration output : oldElement.getInterface().getOutputVars()) {
-			if (output.getOutputConnections().isEmpty()
-					&& (hasValue(output.getValue()) || !output.getAttributes().isEmpty())) {
+		for (final Event output : interfaceList.getEventOutputs()) {
+			if (output.getOutputConnections().isEmpty() || (!output.getAttributes().isEmpty())) {
 				updateSelectedInterface(output, newElement);
 			}
 		}
-		checkErrorMarkerPinParameters();
+	}
+
+	private void processVars(final InterfaceList interfaceList) {
+		final List<VarDeclaration> inputs = new ArrayList<>();
+		inputs.addAll(interfaceList.getInputVars());
+		inputs.addAll(interfaceList.getInOutVars());
+
+		final List<VarDeclaration> outputs = new ArrayList<>();
+		inputs.addAll(interfaceList.getOutputVars());
+		inputs.addAll(interfaceList.getOutMappedInOutVars());
+
+		for (final VarDeclaration input : inputs) {
+			// No outside connections to a pin in oldElement and it has an initial value
+			if (input.getInputConnections().isEmpty() && (hasValue(input.getValue())
+					|| (!input.getAttributes().isEmpty() && varDeclHasNonInternalAttr(input)))) {
+				updateSelectedInterface(input, newElement);
+			}
+		}
+		for (final VarDeclaration output : outputs) {
+			if (output.getOutputConnections().isEmpty() && (hasValue(output.getValue())
+					|| (!output.getAttributes().isEmpty() && varDeclHasNonInternalAttr(output)))) {
+				updateSelectedInterface(output, newElement);
+			}
+		}
+	}
+
+	private static boolean varDeclHasNonInternalAttr(final VarDeclaration vd) {
+		return !vd.getAttributes().stream().filter(attr -> !InternalAttributeDeclarations.isInternalAttribute(attr))
+				.toList().isEmpty();
 	}
 
 	private void checkErrorMarkerPinParameters() {
@@ -389,8 +423,10 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		}
 
 		for (final Attribute attribute : oldInterface.getAttributes()) {
-			interfaceElement.setAttribute(attribute.getName(), attribute.getType(), attribute.getValue(),
-					attribute.getComment());
+			if (!InternalAttributeDeclarations.isInternalAttribute(attribute)) {
+				interfaceElement.setAttribute(attribute.getName(), attribute.getType(), attribute.getValue(),
+						attribute.getComment());
+			}
 		}
 
 		interfaceElement.setComment(oldInterface.getComment());

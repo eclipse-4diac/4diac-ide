@@ -164,7 +164,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		return confObject != null
 				? confObject.getAttributes().stream()
 						.filter(att -> !(att.getType() instanceof InternalDataType)
-								&& !InternalAttributeDeclarations.isInternalAttribue(att.getAttributeDeclaration()))
+								&& !InternalAttributeDeclarations.isInternalAttribute(att.getAttributeDeclaration()))
 						.toList()
 				: Collections.emptyList();
 	}

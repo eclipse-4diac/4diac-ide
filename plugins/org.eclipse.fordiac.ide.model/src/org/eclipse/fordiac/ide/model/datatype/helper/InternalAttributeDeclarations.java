@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -110,11 +111,15 @@ public final class InternalAttributeDeclarations {
 		return allAttributes;
 	}
 
-	public static boolean isInternalAttribue(final AttributeDeclaration declaration) {
+	public static boolean isInternalAttribute(final AttributeDeclaration declaration) {
 		if (declaration == null) {
 			return false;
 		}
 		return getAllInternalAttributes().contains(declaration);
+	}
+
+	public static boolean isInternalAttribute(final Attribute attribute) {
+		return getInternalAttributeByName(attribute.getName()) != null;
 	}
 
 	private InternalAttributeDeclarations() {

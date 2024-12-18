@@ -210,7 +210,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		final String value = getValue(attribute);
 		final List<Issue> issues = new ArrayList<>();
 		if (!value.isBlank() && attribute.getType() instanceof AnyType
-				&& !InternalAttributeDeclarations.isInternalAttribue(attribute.getAttributeDeclaration())) {
+				&& !InternalAttributeDeclarations.isInternalAttribute(attribute.getAttributeDeclaration())) {
 			final DataType featureType = getActualType(attribute);
 			try {
 				new TypedValueConverter(featureType, attribute.getAttributeDeclaration() != null).toValue(value);

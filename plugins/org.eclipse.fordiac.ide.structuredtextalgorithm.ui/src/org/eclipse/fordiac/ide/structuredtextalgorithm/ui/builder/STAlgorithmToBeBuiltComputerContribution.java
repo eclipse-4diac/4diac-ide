@@ -107,7 +107,7 @@ public class STAlgorithmToBeBuiltComputerContribution implements IToBeBuiltCompu
 
 	protected static void updateAttribute(final ToBeBuilt toBeBuilt, final Attribute attribute) {
 		if (attribute.getType() instanceof AnyType
-				&& !InternalAttributeDeclarations.isInternalAttribue(attribute.getAttributeDeclaration())
+				&& !InternalAttributeDeclarations.isInternalAttribute(attribute.getAttributeDeclaration())
 				&& !STCoreUtil.isSimpleAttributeValue(attribute, false)) {
 			updateElement(toBeBuilt, attribute);
 		}

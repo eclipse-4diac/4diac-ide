@@ -32,7 +32,7 @@ public final class AttributeAnnotations {
 
 	public static boolean validateName(final Attribute attribute, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (InternalAttributeDeclarations.isInternalAttribue(attribute.getAttributeDeclaration())) {
+		if (InternalAttributeDeclarations.isInternalAttribute(attribute.getAttributeDeclaration())) {
 			return true;// do not validate internal attributes
 		}
 		return (attribute.getAttributeDeclaration() != null // do not validate name when a declaration is set

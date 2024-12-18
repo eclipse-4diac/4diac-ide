@@ -49,7 +49,7 @@ public class VariableDiagnostician extends CancelableDiagnostician {
 			result &= validate(varDeclaration, VariableOperations::validateValue, diagnostics,
 					varDeclaration.getValue());
 		} else if (eObject instanceof final Attribute attribute && attribute.getType() instanceof AnyType
-				&& !InternalAttributeDeclarations.isInternalAttribue(attribute.getAttributeDeclaration())) {
+				&& !InternalAttributeDeclarations.isInternalAttribute(attribute.getAttributeDeclaration())) {
 			result &= validate(attribute, VariableOperations::validateValue, diagnostics, attribute,
 					LibraryElementPackage.Literals.ATTRIBUTE__VALUE);
 		}
