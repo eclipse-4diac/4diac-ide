@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -71,9 +72,16 @@ public class SystemLabelProvider extends LibraryElementLabelProvider implements 
 	}
 
 	private Image getImageForResource(final IResource resource) {
-		if (FordiacProjectSorter.isTypeLibFolder(resource)) {
-			return getDecoratedImage(resource, FordiacImage.ICON_TYPE_NAVIGATOR.getImageDescriptor());
+		if (resource instanceof IFolder) {
+			return switch (resource.getName()) {
+			case TypeLibraryTags.TYPE_LIB_FOLDER_NAME ->
+				getDecoratedImage(resource, FordiacImage.ICON_TYPE_NAVIGATOR.getImageDescriptor());
+			case TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME ->
+				getDecoratedImage(resource, FordiacImage.ICON_LINKED_LIBRARY.getImageDescriptor());
+			default -> null;
+			};
 		}
+
 		return null;
 	}
 
