@@ -15,4 +15,10 @@
          </run>
       </builder>
    </extension>   
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.fordiac.ide.export.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>

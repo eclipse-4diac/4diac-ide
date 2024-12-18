@@ -11,15 +11,21 @@
  *   Ernst Blecha
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model;
+package org.eclipse.fordiac.ide.model.preferences;
+
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * Constant definitions for plug-in preferences.
  *
  */
-public final class PreferenceConstants {
+public final class ModelPreferenceConstants {
 
-	public static final String QUALIFIER = "org.eclipse.fordiac.ide.model"; //$NON-NLS-1$
+	public static final String MODEL_PREFERENCES_ID = "org.eclipse.fordiac.ide.model"; //$NON-NLS-1$
+
+	public static final IPreferenceStore STORE = new ScopedPreferenceStore(InstanceScope.INSTANCE, MODEL_PREFERENCES_ID);
 
 	/** Allocation block size used during xml file export. */
 	public static final String P_ALLOCATION_SIZE = "allocationSize"; //$NON-NLS-1$
@@ -33,7 +39,7 @@ public final class PreferenceConstants {
 	// Additional constants defined in
 	// org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants
 
-	private PreferenceConstants() {
+	private ModelPreferenceConstants() {
 		throw new UnsupportedOperationException("PreferenceConstants utility class should not be instantiated!"); //$NON-NLS-1$
 	}
 

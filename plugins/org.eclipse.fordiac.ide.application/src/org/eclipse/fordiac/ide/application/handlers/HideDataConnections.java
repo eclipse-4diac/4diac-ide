@@ -20,17 +20,16 @@ import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.ui.UIPlugin;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class HideDataConnections extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		Command command = event.getCommand();
-		boolean oldValue = HandlerUtil.toggleCommandState(command);
-		UIPlugin.getDefault().getPreferenceStore().setValue(PreferenceConstants.P_HIDE_DATA_CON, !oldValue);
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final Command command = event.getCommand();
+		final boolean oldValue = HandlerUtil.toggleCommandState(command);
+		UIPreferenceConstants.STORE.setValue(UIPreferenceConstants.P_HIDE_DATA_CON, !oldValue);
 		return Status.OK_STATUS;
 	}
 

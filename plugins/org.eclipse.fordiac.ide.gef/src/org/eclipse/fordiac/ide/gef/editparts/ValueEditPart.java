@@ -28,7 +28,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
@@ -37,7 +36,8 @@ import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationBorder;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueRefreshJob;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -48,7 +48,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -57,7 +56,6 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.tools.DirectEditManager;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.ui.IEditorPart;
@@ -71,10 +69,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	public static int getMaxWidth() {
 		if (-1 == maxWidth) {
-			final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-			final int maxLabelSize = pf.getInt(DiagramPreferences.MAX_VALUE_LABEL_SIZE);
-			final FontMetrics fm = FigureUtilities
-					.getFontMetrics(JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
+			final int maxLabelSize = GefPreferenceConstants.STORE.getInt(GefPreferenceConstants.MAX_VALUE_LABEL_SIZE);
+			final FontMetrics fm = FigureUtilities.getFontMetrics(JFaceResources.getFontRegistry()
+					.get(org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants.DIAGRAM_FONT));
 			maxWidth = (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth());
 		}
 		return maxWidth;
@@ -225,7 +222,8 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 					if (valueRefresh != null) {
 						valueRefresh.refresh();
 					}
-					getFigure().setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
+					getFigure().setFont(JFaceResources.getFontRegistry()
+							.getItalic(org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants.DIAGRAM_FONT));
 					getFigure().setForegroundColor(ColorConstants.gray);
 				}
 			} else {
@@ -244,7 +242,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	protected void updateDefaultValue(final String value) {
 		if (isActive() && FordiacMessages.ComputingPlaceholderValue.equals(getFigure().getText())) {
-			if (value.length() <= DiagramPreferences.getMaxDefaultValueLength()) {
+			if (value.length() <= DiagramPreferencePage.getMaxDefaultValueLength()) {
 				getFigure().setText(value);
 			} else {
 				getFigure().setText(FordiacMessages.ValueTooLarge);

@@ -17,7 +17,6 @@
 package org.eclipse.fordiac.ide.fbrtlauncher.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.fordiac.ide.fbrtlauncher.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
@@ -33,9 +32,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(PreferenceConstants.P_PATH, ""); //$NON-NLS-1$
-		store.setDefault(PreferenceConstants.P_LIB,
+		final IPreferenceStore store = FbrtPreferenceConstants.STORE;
+		store.setDefault(FbrtPreferenceConstants.P_PATH, ""); //$NON-NLS-1$
+		store.setDefault(FbrtPreferenceConstants.P_LIB,
 				"convert;crypt;events;hmi;ita;mach;math;mva;net;plc;process;student;template;test;"); //$NON-NLS-1$
 	}
 

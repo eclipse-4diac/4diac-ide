@@ -18,7 +18,7 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.figures.AbstractShadowBorder;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.jface.resource.JFaceResources;
 
 public class InstanceNameFigure extends Label implements IFontUpdateListener {
@@ -33,7 +33,7 @@ public class InstanceNameFigure extends Label implements IFontUpdateListener {
 	}
 
 	private void setFont() {
-		setFont(JFaceResources.getFontRegistry().getBold(PreferenceConstants.DIAGRAM_FONT));
+		setFont(JFaceResources.getFontRegistry().getBold(UIPreferenceConstants.DIAGRAM_FONT));
 	}
 
 	@Override

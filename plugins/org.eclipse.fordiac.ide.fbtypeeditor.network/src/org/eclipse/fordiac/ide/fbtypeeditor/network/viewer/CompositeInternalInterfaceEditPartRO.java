@@ -14,16 +14,14 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IEditorPart;
 
 /** The Class CompositeInternalInterfaceEditPart. */
@@ -83,7 +81,6 @@ public class CompositeInternalInterfaceEditPartRO extends InterfaceEditPart {
 	}
 
 	private static synchronized void loadMaxWidth() {
-		final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-		interfaceBarPinMaxWidth = pf.getInt(DiagramPreferences.MAX_INTERFACE_BAR_SIZE);
+		interfaceBarPinMaxWidth = GefPreferenceConstants.STORE.getInt(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE);
 	}
 }

@@ -19,7 +19,7 @@ package org.eclipse.fordiac.ide.model;
 import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontMetrics;
@@ -64,7 +64,7 @@ public enum CoordinateConverter {
 
 		@Override
 		public void run() {
-			final Font diagramFont = JFaceResources.getFont(PreferenceConstants.DIAGRAM_FONT);
+			final Font diagramFont = JFaceResources.getFont(UIPreferenceConstants.DIAGRAM_FONT);
 			final FontMetrics fontMetrics = FigureUtilities.getFontMetrics(diagramFont);
 			lineHeight = fontMetrics.getHeight();
 			averageCharacterWidth = fontMetrics.getAverageCharacterWidth();

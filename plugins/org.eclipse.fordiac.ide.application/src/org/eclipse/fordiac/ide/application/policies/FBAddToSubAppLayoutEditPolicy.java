@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.application.commands.MoveAndReconnectCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
@@ -40,8 +40,8 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 /**
- * This policy creates an MoveAndReconnectCommand when user moves selected FBs over
- * a subapp. When this is possible the subapp is marked as selected.
+ * This policy creates an MoveAndReconnectCommand when user moves selected FBs
+ * over a subapp. When this is possible the subapp is marked as selected.
  */
 public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 
@@ -69,7 +69,7 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 		if (REQ_ADD.equals(request.getType()) && (null == moveHandle)) {
 
 			moveHandle = new ModifiedMoveHandle((GraphicalEditPart) getTargetEditPart(request), new Insets(1),
-					DiagramPreferences.CORNER_DIM_HALF);
+					GefPreferenceConstants.CORNER_DIM_HALF);
 			addFeedback(moveHandle);
 		}
 	}

@@ -16,8 +16,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
-import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.MARGIN_HORIZONTAL;
-import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.MARGIN_VERTICAL;
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants.MARGIN_HORIZONTAL;
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants.MARGIN_VERTICAL;
 
 import java.util.List;
 
@@ -36,8 +36,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECActionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECAlgorithmToolTipFigure;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
@@ -93,11 +92,11 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 
 	/** The property change listener. */
 	private final IPropertyChangeListener propertyChangeListener = event -> {
-		if (event.getProperty().equals(PreferenceConstants.P_ECC_ALGORITHM_COLOR)) {
-			getFigure().setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_ALGORITHM_COLOR));
+		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_COLOR)) {
+			getFigure().setBackgroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_COLOR));
 		}
-		if (event.getProperty().equals(PreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR)) {
-			getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR));
+		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR)) {
+			getFigure().setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR));
 		}
 	};
 
@@ -258,8 +257,8 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	@Override
 	protected IFigure createFigure() {
 		final Label algorithmLabel = new Label();
-		algorithmLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_ALGORITHM_COLOR));
-		algorithmLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR));
+		algorithmLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_COLOR));
+		algorithmLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR));
 		algorithmLabel.setOpaque(true);
 		algorithmLabel.setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm().getName() : ""); //$NON-NLS-1$
 		algorithmLabel.setBorder(new MarginBorder(ALG_INSETS));

@@ -19,6 +19,6 @@ public class FordiacDebugPreferenceInitializer extends AbstractPreferenceInitial
 
 	@Override
 	public void initializeDefaultPreferences() {
-		DefaultScope.INSTANCE.getNode(FordiacDebugPreferences.QUALIFIER).putInt(FordiacDebugPreferences.VALUE_MAX_DISPLAY_LENGTH, 20);
+		DefaultScope.INSTANCE.getNode(FordiacDebugPreferences.DEBUG_PREFERENCES_ID).putInt(FordiacDebugPreferences.VALUE_MAX_DISPLAY_LENGTH, 20);
 	}
 }

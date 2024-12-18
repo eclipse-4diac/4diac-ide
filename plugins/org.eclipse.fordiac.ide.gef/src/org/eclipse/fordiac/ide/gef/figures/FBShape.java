@@ -37,16 +37,13 @@ import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
 import org.eclipse.fordiac.ide.gef.draw2d.OverlayAlphaLabel;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.edit.providers.TypeImageProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 
@@ -210,8 +207,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 
 	private static int getMaxWidth() {
 		if (-1 == maxWidth) {
-			final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-			return pf.getInt(DiagramPreferences.MAX_TYPE_LABEL_SIZE);
+			return GefPreferenceConstants.STORE.getInt(GefPreferenceConstants.MAX_TYPE_LABEL_SIZE);
 		}
 		return maxWidth;
 	}
@@ -240,7 +236,8 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	}
 
 	private void setTypeLabelFont() {
-		typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
+		typeLabel.setFont(JFaceResources.getFontRegistry()
+				.getItalic(org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants.DIAGRAM_FONT));
 	}
 
 	private void configureMainFigure() {
@@ -256,9 +253,9 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 
 	private void createFBFigureShape(final FBType fbType) {
 		createFigureContainer();
-		createFBTop(DiagramPreferences.CORNER_DIM);
+		createFBTop(GefPreferenceConstants.CORNER_DIM);
 		configureFBMiddle(fbType);
-		createFBBottom(DiagramPreferences.CORNER_DIM);
+		createFBBottom(GefPreferenceConstants.CORNER_DIM);
 	}
 
 	private void createFBBottom(final int cornerDim) {

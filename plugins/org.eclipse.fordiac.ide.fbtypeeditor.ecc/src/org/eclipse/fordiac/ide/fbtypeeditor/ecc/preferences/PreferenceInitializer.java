@@ -15,7 +15,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.swt.graphics.RGB;
@@ -33,20 +32,27 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		final IPreferenceStore store = FBTypeEditorPreferenceConstants.STORE;
 
 		/* blue */
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_STATE_COLOR, new RGB(184, 182, 206));
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_STATE_TEXT_COLOR, new RGB(21, 17, 72));
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_TRANSITION_COLOR, new RGB(68, 64, 121));
+		PreferenceConverter.setDefault(store, FBTypeEditorPreferenceConstants.P_ECC_STATE_COLOR,
+				new RGB(184, 182, 206));
+		PreferenceConverter.setDefault(store, FBTypeEditorPreferenceConstants.P_ECC_STATE_TEXT_COLOR,
+				new RGB(21, 17, 72));
+		PreferenceConverter.setDefault(store, FBTypeEditorPreferenceConstants.P_ECC_TRANSITION_COLOR,
+				new RGB(68, 64, 121));
 
 		/* yellow */
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_ALGORITHM_COLOR, new RGB(235, 242, 179));
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR, new RGB(91, 101, 11));
+		PreferenceConverter.setDefault(store, FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_COLOR,
+				new RGB(235, 242, 179));
+		PreferenceConverter.setDefault(store, FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR,
+				new RGB(91, 101, 11));
 
 		/* red */
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_EVENT_COLOR, new RGB(245, 181, 183));
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ECC_EVENT_TEXT_COLOR, new RGB(141, 45, 47));
+		PreferenceConverter.setDefault(store, FBTypeEditorPreferenceConstants.P_ECC_EVENT_COLOR,
+				new RGB(245, 181, 183));
+		PreferenceConverter.setDefault(store, FBTypeEditorPreferenceConstants.P_ECC_EVENT_TEXT_COLOR,
+				new RGB(141, 45, 47));
 	}
 
 }

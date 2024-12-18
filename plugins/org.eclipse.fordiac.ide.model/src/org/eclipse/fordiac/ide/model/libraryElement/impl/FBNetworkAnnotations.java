@@ -29,7 +29,6 @@ import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.PreferenceConstants;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBShapeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
@@ -41,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
+import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
 import org.eclipse.fordiac.ide.model.util.SpatialHash;
 import org.eclipse.fordiac.ide.model.validation.ValidationPreferences;
 
@@ -82,9 +82,9 @@ final class FBNetworkAnnotations {
 			final List<FBNetworkElement> networkElements, final Predicate<FBNetworkElement> filter,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		boolean result = true;
-		final double marginLeftRight = getIntPreference(context, PreferenceConstants.MARGIN_LEFT_RIGHT)
+		final double marginLeftRight = getIntPreference(context, ModelPreferenceConstants.MARGIN_LEFT_RIGHT)
 				* FBShapeHelper.IEC61499_LINE_HEIGHT;
-		final double marginTopBottom = getIntPreference(context, PreferenceConstants.MARGIN_TOP_BOTTOM)
+		final double marginTopBottom = getIntPreference(context, ModelPreferenceConstants.MARGIN_TOP_BOTTOM)
 				* FBShapeHelper.IEC61499_LINE_HEIGHT;
 		final int gridSize = Math.clamp(networkElements.size(), GRID_SIZE_MIN, GRID_SIZE_MAX);
 		final SpatialHash<FBNetworkElement> spatialHash = new SpatialHash<>(CELL_SIZE, gridSize);
@@ -183,7 +183,7 @@ final class FBNetworkAnnotations {
 
 	private static Integer internalGetIntPreference(final Object key) {
 		return Integer
-				.valueOf(Platform.getPreferencesService().getInt(PreferenceConstants.QUALIFIER, (String) key, 0, null));
+				.valueOf(Platform.getPreferencesService().getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID, (String) key, 0, null));
 	}
 
 	private static boolean isUnfoldedSubapp(final FBNetworkElement parent) {

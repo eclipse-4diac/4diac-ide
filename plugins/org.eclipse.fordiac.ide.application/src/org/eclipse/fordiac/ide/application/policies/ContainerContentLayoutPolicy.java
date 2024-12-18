@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.EditPart;
@@ -48,7 +48,7 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 		if (REQ_ADD.equals(request.getType()) && (moveHandle == null)) {
 			// we want to show the handle for the parent which is the whole group
 			moveHandle = new ModifiedMoveHandle((GraphicalEditPart) getTargetEditPart(request).getParent(),
-					new Insets(1), DiagramPreferences.CORNER_DIM_HALF);
+					new Insets(1), GefPreferenceConstants.CORNER_DIM_HALF);
 			addFeedback(moveHandle);
 		}
 	}

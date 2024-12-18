@@ -17,14 +17,21 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.preferences;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
+
 /**
  * Constant definitions for plug-in preferences.
  *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
-public final class PreferenceConstants {
+public final class UIPreferenceConstants {
 
 	public static final String FORDIAC_UI_PREFERENCES_ID = "org.eclipse.fordiac.ide.ui"; //$NON-NLS-1$
+
+	public static final IPreferenceStore STORE = new ScopedPreferenceStore(InstanceScope.INSTANCE,
+			FORDIAC_UI_PREFERENCES_ID);
 
 	/** The Constant P_EVENT_CONNECTOR_COLOR. */
 	public static final String P_EVENT_CONNECTOR_COLOR = "EventConnectionConnectorColor"; //$NON-NLS-1$
@@ -80,7 +87,7 @@ public final class PreferenceConstants {
 	public static final String P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX = "DeactivateCommentsTransferringDemuxToMux"; //$NON-NLS-1$
 	public static final boolean P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX_DEFAULT_VALUE = false;
 
-	private PreferenceConstants() {
+	private UIPreferenceConstants() {
 		throw new UnsupportedOperationException();
 	}
 

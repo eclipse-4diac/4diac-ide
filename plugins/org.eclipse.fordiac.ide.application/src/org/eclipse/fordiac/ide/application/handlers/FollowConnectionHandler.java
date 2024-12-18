@@ -35,8 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
-import org.eclipse.fordiac.ide.ui.UIPlugin;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.ISelection;
@@ -92,8 +91,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		final IInterfaceElement ie = iep.getModel();
 		final EList<Connection> connList = getConnectionList(ie);
 
-		final boolean stepMode = UIPlugin.getDefault().getPreferenceStore()
-				.getBoolean(PreferenceConstants.P_TOGGLE_JUMP_STEP);
+		final boolean stepMode = UIPreferenceConstants.STORE.getBoolean(UIPreferenceConstants.P_TOGGLE_JUMP_STEP);
 
 		if (stepMode) {
 			if (isLeft()) {

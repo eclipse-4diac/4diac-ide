@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.application.handles.FBNConnectionEndPointHandle;
 import org.eclipse.fordiac.ide.application.handles.HiddenFBNConnectionEndPointHandle;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -156,7 +156,7 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 		newSelFeedbackFigure.setOutline(false);
 		newSelFeedbackFigure.setBounds(getSelectableFigureBounds(label));
 		newSelFeedbackFigure
-				.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
+				.setCornerDimensions(new Dimension(GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM));
 		newSelFeedbackFigure.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
 		newSelFeedbackFigure.setBackgroundColor(ModifiedMoveHandle.getSelectionColor());
 		return newSelFeedbackFigure;

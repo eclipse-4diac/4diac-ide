@@ -44,7 +44,7 @@ public class TypeManagementPreferencePage extends FieldEditorPreferencePage impl
 	public TypeManagementPreferencePage() {
 		super(GRID);
 		setPreferenceStore(
-				new ScopedPreferenceStore(InstanceScope.INSTANCE, PreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID));
+				new ScopedPreferenceStore(InstanceScope.INSTANCE, TypeManagementPreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID));
 		setDescription(Messages.typeManagementPreferencePageTitle);
 	}
 
@@ -64,23 +64,23 @@ public class TypeManagementPreferencePage extends FieldEditorPreferencePage impl
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.horizontalSpan = 2;
 
-		final StringFieldEditor standard = new StringFieldEditor(PreferenceConstants.P_STANDARD,
-				PreferenceConstants.P_STANDARD, identificationGroup);
+		final StringFieldEditor standard = new StringFieldEditor(TypeManagementPreferenceConstants.P_STANDARD,
+				TypeManagementPreferenceConstants.P_STANDARD, identificationGroup);
 		addField(standard);
-		final StringFieldEditor classification = new StringFieldEditor(PreferenceConstants.P_CLASSIFICATION,
-				PreferenceConstants.P_CLASSIFICATION, identificationGroup);
+		final StringFieldEditor classification = new StringFieldEditor(TypeManagementPreferenceConstants.P_CLASSIFICATION,
+				TypeManagementPreferenceConstants.P_CLASSIFICATION, identificationGroup);
 		addField(classification);
-		final StringFieldEditor applicationDomain = new StringFieldEditor(PreferenceConstants.P_APPLICATION_DOMAIN,
-				PreferenceConstants.P_APPLICATION_DOMAIN, identificationGroup);
+		final StringFieldEditor applicationDomain = new StringFieldEditor(TypeManagementPreferenceConstants.P_APPLICATION_DOMAIN,
+				TypeManagementPreferenceConstants.P_APPLICATION_DOMAIN, identificationGroup);
 		addField(applicationDomain);
-		final StringFieldEditor function = new StringFieldEditor(PreferenceConstants.P_FUNCTION,
-				PreferenceConstants.P_FUNCTION, identificationGroup);
+		final StringFieldEditor function = new StringFieldEditor(TypeManagementPreferenceConstants.P_FUNCTION,
+				TypeManagementPreferenceConstants.P_FUNCTION, identificationGroup);
 		addField(function);
-		final StringFieldEditor type = new StringFieldEditor(PreferenceConstants.P_TYPE, PreferenceConstants.P_TYPE,
+		final StringFieldEditor type = new StringFieldEditor(TypeManagementPreferenceConstants.P_TYPE, TypeManagementPreferenceConstants.P_TYPE,
 				identificationGroup);
 		addField(type);
-		final StringFieldEditor description = new StringFieldEditor(PreferenceConstants.P_DESCRIPTION,
-				PreferenceConstants.P_DESCRIPTION, identificationGroup);
+		final StringFieldEditor description = new StringFieldEditor(TypeManagementPreferenceConstants.P_DESCRIPTION,
+				TypeManagementPreferenceConstants.P_DESCRIPTION, identificationGroup);
 		addField(description);
 
 		identificationGroup.setLayoutData(gridData);
@@ -89,16 +89,16 @@ public class TypeManagementPreferencePage extends FieldEditorPreferencePage impl
 		final Group versionGroup = new Group(getFieldEditorParent(), SWT.NONE);
 		versionGroup.setText(Messages.typeManagementPreferencePageVersionTitle);
 
-		final StringFieldEditor version = new StringFieldEditor(PreferenceConstants.P_VERSION, PreferenceConstants.P_VERSION,
+		final StringFieldEditor version = new StringFieldEditor(TypeManagementPreferenceConstants.P_VERSION, TypeManagementPreferenceConstants.P_VERSION,
 				versionGroup);
 		addField(version);
-		final StringFieldEditor organization = new StringFieldEditor(PreferenceConstants.P_ORGANIZATION,
-				PreferenceConstants.P_ORGANIZATION, versionGroup);
+		final StringFieldEditor organization = new StringFieldEditor(TypeManagementPreferenceConstants.P_ORGANIZATION,
+				TypeManagementPreferenceConstants.P_ORGANIZATION, versionGroup);
 		addField(organization);
-		final StringFieldEditor author = new StringFieldEditor(PreferenceConstants.P_AUTHOR, PreferenceConstants.P_AUTHOR,
+		final StringFieldEditor author = new StringFieldEditor(TypeManagementPreferenceConstants.P_AUTHOR, TypeManagementPreferenceConstants.P_AUTHOR,
 				versionGroup);
 		addField(author);
-		final StringFieldEditor remarks = new StringFieldEditor(PreferenceConstants.P_REMARKS, PreferenceConstants.P_REMARKS,
+		final StringFieldEditor remarks = new StringFieldEditor(TypeManagementPreferenceConstants.P_REMARKS, TypeManagementPreferenceConstants.P_REMARKS,
 				versionGroup);
 		addField(remarks);
 

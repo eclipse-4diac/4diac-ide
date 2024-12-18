@@ -21,9 +21,8 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.policies.DeleteTargetInterfaceElementPolicy;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -33,7 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -46,8 +45,8 @@ import org.eclipse.ui.IEditorPart;
 public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 
 	public static final int LABEL_ALPHA = 120;
-	public static final int MAX_LABEL_LENGTH = Activator.getDefault().getPreferenceStore()
-			.getInt(DiagramPreferences.MAX_INTERFACE_BAR_SIZE);
+	public static final int MAX_LABEL_LENGTH = GefPreferenceConstants.STORE
+			.getInt(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE);
 
 	private final Adapter nameChangeAdapter = new AdapterImpl() {
 		@Override
@@ -164,11 +163,11 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 
 	private Color getModelColor() {
 		if (getRefElement() instanceof Event) {
-			return PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR);
+			return PreferenceGetter.getColor(UIPreferenceConstants.P_EVENT_CONNECTOR_COLOR);
 		}
 
 		if (getRefElement() instanceof AdapterDeclaration) {
-			return PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR);
+			return PreferenceGetter.getColor(UIPreferenceConstants.P_ADAPTER_CONNECTOR_COLOR);
 		}
 		return PreferenceGetter.getDataColor(getRefElement().getType().getName());
 	}

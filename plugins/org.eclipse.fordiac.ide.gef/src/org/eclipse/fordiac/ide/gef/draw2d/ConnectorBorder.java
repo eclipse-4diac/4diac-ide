@@ -26,7 +26,7 @@ import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.swt.graphics.Color;
 
@@ -61,9 +61,9 @@ public class ConnectorBorder extends AbstractBorder {
 
 	public final void updateColor() {
 		if (isEvent()) {
-			connectorColor = PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR);
+			connectorColor = PreferenceGetter.getColor(UIPreferenceConstants.P_EVENT_CONNECTOR_COLOR);
 		} else if (isAdapter()) {
-			connectorColor = PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR);
+			connectorColor = PreferenceGetter.getColor(UIPreferenceConstants.P_ADAPTER_CONNECTOR_COLOR);
 		} else {
 			connectorColor = PreferenceGetter.getDataColor(editPartModelOject.getType().getName());
 		}

@@ -63,7 +63,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -281,9 +281,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	public org.eclipse.jface.util.IPropertyChangeListener getPreferenceChangeListener() {
 		if (null == listener) {
 			listener = event -> {
-				if (event.getProperty().equals(PreferenceConstants.P_EVENT_CONNECTOR_COLOR)
-						|| PreferenceConstants.isDataConnectorProperty(event.getProperty())
-						|| event.getProperty().equals(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)) {
+				if (event.getProperty().equals(UIPreferenceConstants.P_EVENT_CONNECTOR_COLOR)
+						|| UIPreferenceConstants.isDataConnectorProperty(event.getProperty())
+						|| event.getProperty().equals(UIPreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)) {
 					getFigure().repaint();
 				}
 			};

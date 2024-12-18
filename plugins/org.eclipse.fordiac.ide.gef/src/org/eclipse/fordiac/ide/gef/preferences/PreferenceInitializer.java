@@ -17,7 +17,6 @@
 package org.eclipse.fordiac.ide.gef.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /** Class used to initialize default preference values. */
@@ -25,22 +24,22 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(DiagramPreferences.SNAP_TO_GRID, true);
-		store.setDefault(DiagramPreferences.SHOW_GRID, true);
+		final IPreferenceStore store = GefPreferenceConstants.STORE;
+		store.setDefault(GefPreferenceConstants.SNAP_TO_GRID, true);
+		store.setDefault(GefPreferenceConstants.SHOW_GRID, true);
 
-		store.setDefault(DiagramPreferences.PIN_LABEL_STYLE, DiagramPreferences.PIN_LABEL_STYLE_PIN_NAME);
+		store.setDefault(GefPreferenceConstants.PIN_LABEL_STYLE, GefPreferenceConstants.PIN_LABEL_STYLE_PIN_NAME);
 
-		store.setDefault(DiagramPreferences.MAX_VALUE_LABEL_SIZE, 25); // big enough to fully show an ip address and
-		store.setDefault(DiagramPreferences.MAX_DEFAULT_VALUE_LENGTH, 1000);
+		store.setDefault(GefPreferenceConstants.MAX_VALUE_LABEL_SIZE, 25); // big enough to fully show an ip address and
+		store.setDefault(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH, 1000);
 		// port
-		store.setDefault(DiagramPreferences.MAX_PIN_LABEL_SIZE, 12);
-		store.setDefault(DiagramPreferences.MAX_INTERFACE_BAR_SIZE, 40);
-		store.setDefault(DiagramPreferences.MIN_INTERFACE_BAR_SIZE, 40);
-		store.setDefault(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE, 60);
-		store.setDefault(DiagramPreferences.MAX_TYPE_LABEL_SIZE, 15);
+		store.setDefault(GefPreferenceConstants.MAX_PIN_LABEL_SIZE, 12);
+		store.setDefault(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE, 40);
+		store.setDefault(GefPreferenceConstants.MIN_INTERFACE_BAR_SIZE, 40);
+		store.setDefault(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE, 60);
+		store.setDefault(GefPreferenceConstants.MAX_TYPE_LABEL_SIZE, 15);
 
-		store.setDefault(DiagramPreferences.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR, true);
-		store.setDefault(DiagramPreferences.EXPANDED_INTERFACE_EVENTS_TOP, true);
+		store.setDefault(GefPreferenceConstants.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR, true);
+		store.setDefault(GefPreferenceConstants.EXPANDED_INTERFACE_EVENTS_TOP, true);
 	}
 }

@@ -23,11 +23,11 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -130,7 +130,7 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 			}
 			((Notifier) getModel()).eAdapters().add(getContentAdapter());
 			if (getPreferenceChangeListener() != null) {
-				Activator.getDefault().getPreferenceStore().addPropertyChangeListener(getPreferenceChangeListener());
+				GefPreferenceConstants.STORE.addPropertyChangeListener(getPreferenceChangeListener());
 			}
 		}
 	}
@@ -144,7 +144,7 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 			}
 			((Notifier) getModel()).eAdapters().remove(getContentAdapter());
 			if (getPreferenceChangeListener() != null) {
-				Activator.getDefault().getPreferenceStore().removePropertyChangeListener(getPreferenceChangeListener());
+				GefPreferenceConstants.STORE.removePropertyChangeListener(getPreferenceChangeListener());
 			}
 		}
 	}
@@ -201,8 +201,8 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	}
 
 	public void setTransparency(final int value) {
-		if (getFigure() instanceof ITransparencyFigure) {
-			((ITransparencyFigure) getFigure()).setTransparency(value);
+		if (getFigure() instanceof final ITransparencyFigure transparancyFigure) {
+			transparancyFigure.setTransparency(value);
 		}
 	}
 

@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.listeners;
 
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 
@@ -26,7 +26,7 @@ public class DiagramFontChangeListener implements IPropertyChangeListener {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		if (event.getProperty().equals(PreferenceConstants.DIAGRAM_FONT)) {
+		if (event.getProperty().equals(UIPreferenceConstants.DIAGRAM_FONT)) {
 			updateListener.updateFonts();
 		}
 	}

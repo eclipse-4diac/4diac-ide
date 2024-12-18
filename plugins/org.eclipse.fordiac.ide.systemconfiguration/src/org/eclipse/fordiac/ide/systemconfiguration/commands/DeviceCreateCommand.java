@@ -34,8 +34,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.systemconfiguration.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.UIPlugin;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.fordiac.ide.util.YUV;
 import org.eclipse.gef.commands.Command;
@@ -97,8 +96,7 @@ public class DeviceCreateCommand extends Command {
 		if ((null != device.getType().getProfile()) && !"".equals(device.getType().getProfile())) { //$NON-NLS-1$
 			profile = device.getType().getProfile();
 		} else {
-			profile = UIPlugin.getDefault().getPreferenceStore()
-					.getString(PreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE);
+			profile = UIPreferenceConstants.STORE.getString(UIPreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE);
 		}
 		device.setProfile(profile);
 	}

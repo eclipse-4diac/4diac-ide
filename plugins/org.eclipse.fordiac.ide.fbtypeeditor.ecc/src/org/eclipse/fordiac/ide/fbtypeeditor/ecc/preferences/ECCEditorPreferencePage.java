@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -29,7 +28,7 @@ public class ECCEditorPreferencePage extends FieldEditorPreferencePage implement
 
 	public ECCEditorPreferencePage() {
 		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(FBTypeEditorPreferenceConstants.STORE);
 	}
 
 	/**
@@ -39,19 +38,19 @@ public class ECCEditorPreferencePage extends FieldEditorPreferencePage implement
 	 */
 	@Override
 	public void createFieldEditors() {
-		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_STATE_COLOR,
+		addField(new ColorFieldEditor(FBTypeEditorPreferenceConstants.P_ECC_STATE_COLOR,
 				Messages.FordiacECCPreferencePage_LABEL_ECCStateColor, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR,
+		addField(new ColorFieldEditor(FBTypeEditorPreferenceConstants.P_ECC_STATE_TEXT_COLOR,
 				Messages.FordiacECCPreferencePage_LABEL_ECCStateTextColor, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_ALGORITHM_COLOR,
+		addField(new ColorFieldEditor(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_COLOR,
 				Messages.FordiacECCPreferencePage_LABEL_ECCAlgorithmColor, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR,
+		addField(new ColorFieldEditor(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR,
 				Messages.FordiacECCPreferencePage_LABEL_ECCAlgorithmTextColor, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_EVENT_COLOR,
+		addField(new ColorFieldEditor(FBTypeEditorPreferenceConstants.P_ECC_EVENT_COLOR,
 				Messages.FordiacECCPreferencePage_LABEL_ECCEventColor, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_EVENT_TEXT_COLOR,
+		addField(new ColorFieldEditor(FBTypeEditorPreferenceConstants.P_ECC_EVENT_TEXT_COLOR,
 				Messages.FordiacECCPreferencePage_LABEL_ECCEventTextColor, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_ECC_TRANSITION_COLOR,
+		addField(new ColorFieldEditor(FBTypeEditorPreferenceConstants.P_ECC_TRANSITION_COLOR,
 				Messages.FordiacECCPreferencePage_LABEL_ECCTransitionColor, getFieldEditorParent()));
 	}
 

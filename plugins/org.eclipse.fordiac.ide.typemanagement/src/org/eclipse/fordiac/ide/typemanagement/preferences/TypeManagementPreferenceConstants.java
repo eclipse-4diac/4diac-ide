@@ -16,11 +16,11 @@ package org.eclipse.fordiac.ide.typemanagement.preferences;
 /**
  * Constant definitions for plug-in preferences.
  */
-public final class PreferenceConstants {
+public final class TypeManagementPreferenceConstants {
 
 	public static final String TYPE_MANAGEMENT_PREFERENCES_ID = "org.eclipse.fordiac.ide.typemanagement"; //$NON-NLS-1$
 
-	private PreferenceConstants() {
+	private TypeManagementPreferenceConstants() {
 	}
 
 	public static final String P_STANDARD = "Standard"; //$NON-NLS-1$

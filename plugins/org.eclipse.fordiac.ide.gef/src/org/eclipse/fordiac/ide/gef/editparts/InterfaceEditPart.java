@@ -36,7 +36,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
@@ -48,7 +47,7 @@ import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.DataInterfaceLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.InterfaceElementSelectionPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -71,12 +70,12 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.widgets.Display;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart, AnnotableGraphicalEditPart {
+
 	private int mouseState;
 	private static int minWidth = -1;
 	private static int maxWidth = -1;
@@ -85,10 +84,9 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	private IInterfaceElement sourcePin = null;
 	private Adapter sourcePinAdapter = null;
 
-	private String pinLabelStyle = Activator.getDefault().getPreferenceStore()
-			.getString(DiagramPreferences.PIN_LABEL_STYLE);
+	private String pinLabelStyle = GefPreferenceConstants.STORE.getString(GefPreferenceConstants.PIN_LABEL_STYLE);
 	private final IPropertyChangeListener preferenceListener = event -> {
-		if (event.getProperty().equals(DiagramPreferences.PIN_LABEL_STYLE)) {
+		if (event.getProperty().equals(GefPreferenceConstants.PIN_LABEL_STYLE)) {
 			pinLabelStyle = ((String) event.getNewValue());
 			refreshLabelText();
 		}
@@ -100,8 +98,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	private static int getMinWidth() {
 		if (-1 == minWidth) {
-			final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-			minWidth = pf.getInt(DiagramPreferences.MIN_PIN_LABEL_SIZE);
+			minWidth = GefPreferenceConstants.STORE.getInt(GefPreferenceConstants.MIN_PIN_LABEL_SIZE);
 		}
 		return minWidth;
 	}
@@ -115,8 +112,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	private static synchronized void loadMaxWidth() {
-		final IPreferenceStore pf = Activator.getDefault().getPreferenceStore();
-		maxWidth = pf.getInt(DiagramPreferences.MAX_PIN_LABEL_SIZE);
+		maxWidth = GefPreferenceConstants.STORE.getInt(GefPreferenceConstants.MAX_PIN_LABEL_SIZE);
 	}
 
 	@Override
@@ -149,13 +145,13 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	private String getAlternativePinLabelText() {
 		switch (pinLabelStyle) {
-		case DiagramPreferences.PIN_LABEL_STYLE_PIN_COMMENT:
+		case GefPreferenceConstants.PIN_LABEL_STYLE_PIN_COMMENT:
 			if (getModel().getFBNetworkElement() != null) {
 				// only return the comment for instances and not for type editors
 				return getModel().getComment();
 			}
 			break;
-		case DiagramPreferences.PIN_LABEL_STYLE_SRC_PIN_NAME:
+		case GefPreferenceConstants.PIN_LABEL_STYLE_SRC_PIN_NAME:
 			if (isShowInput()) {
 				return getSourcePinInstanceName();
 			}
@@ -172,12 +168,12 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	private boolean isShowInput() {
-		return DiagramPreferences.PIN_LABEL_STYLE_SRC_PIN_NAME.equals(pinLabelStyle) && isInput()
+		return GefPreferenceConstants.PIN_LABEL_STYLE_SRC_PIN_NAME.equals(pinLabelStyle) && isInput()
 				&& !getModel().getInputConnections().isEmpty();
 	}
 
 	private void addPreferenceListener() {
-		Activator.getDefault().getPreferenceStore().addPropertyChangeListener(preferenceListener);
+		GefPreferenceConstants.STORE.addPropertyChangeListener(preferenceListener);
 	}
 
 	private String getSourcePinInstanceName() {
@@ -442,7 +438,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		if (isActive()) {
 			super.deactivate();
 			getModel().eAdapters().remove(getContentAdapter());
-			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(preferenceListener);
+			GefPreferenceConstants.STORE.removePropertyChangeListener(preferenceListener);
 			removeSourcePinAdapter();
 		}
 	}

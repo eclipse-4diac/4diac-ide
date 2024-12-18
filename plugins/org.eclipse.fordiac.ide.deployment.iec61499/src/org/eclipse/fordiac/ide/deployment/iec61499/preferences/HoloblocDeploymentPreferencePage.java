@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009, 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,43 +13,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499.preferences;
 
-import org.eclipse.fordiac.ide.deployment.iec61499.Activator;
 import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-/**
- * The Class HoloblocDeploymentPreferences.
- */
-public class HoloblocDeploymentPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-
-	/** The Constant CONNECTION_TIMEOUT. */
-	static final String CONNECTION_TIMEOUT = "Connection Timeout"; //$NON-NLS-1$
-
-	/* default conneciton timeout value in ms */
-	static final int CONNECTION_TIMEOUT_DEFAULT_VALUE = 3000;
-
-	/*
-	 * check if there is a conneciton timeout value set and if not return the
-	 * default value
-	 */
-	public static int getConnectionTimeout() {
-		int retVal = Activator.getDefault().getPreferenceStore()
-				.getInt(HoloblocDeploymentPreferences.CONNECTION_TIMEOUT);
-		if (0 == retVal) {
-			retVal = CONNECTION_TIMEOUT_DEFAULT_VALUE;
-		}
-		return retVal;
-	}
+public class HoloblocDeploymentPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	/**
 	 * Instantiates a new holobloc deployment preferences.
 	 */
-	public HoloblocDeploymentPreferences() {
+	public HoloblocDeploymentPreferencePage() {
 		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(IEC61499PreferenceConstants.STORE);
 		setDescription(Messages.HoloblocDeploymentPreferences_PreferencePageDescription);
 	}
 
@@ -61,7 +38,8 @@ public class HoloblocDeploymentPreferences extends FieldEditorPreferencePage imp
 	@Override
 	public void createFieldEditors() {
 
-		IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(CONNECTION_TIMEOUT,
+		final IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(
+				IEC61499PreferenceConstants.P_CONNECTION_TIMEOUT,
 				Messages.HoloblocDeploymentPreferences_ConnectionTimout, getFieldEditorParent(), 3000);
 		integerFieldEditor.setValidRange(1, 60000);
 
@@ -71,11 +49,11 @@ public class HoloblocDeploymentPreferences extends FieldEditorPreferencePage imp
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	@Override
-	public void init(IWorkbench workbench) {
+	public void init(final IWorkbench workbench) {
 		// nothing todo here
 	}
 

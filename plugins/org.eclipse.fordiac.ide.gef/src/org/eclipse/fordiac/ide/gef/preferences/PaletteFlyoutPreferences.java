@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018 Johannes Kepler Unversity
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.preferences;
 
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 
@@ -27,7 +26,7 @@ public class PaletteFlyoutPreferences implements FlyoutPreferences {
 	/** Preference ID used to persist the flyout palette's state. */
 	private final String paletteStateID;
 
-	public PaletteFlyoutPreferences(String paletteDockLocationID, final String paletteSizeID,
+	public PaletteFlyoutPreferences(final String paletteDockLocationID, final String paletteSizeID,
 			final String paletteStateID) {
 		this.paletteDockLocationID = paletteDockLocationID;
 		this.paletteSizeID = paletteSizeID;
@@ -37,37 +36,37 @@ public class PaletteFlyoutPreferences implements FlyoutPreferences {
 
 	@Override
 	public int getDockLocation() {
-		return Activator.getDefault().getPreferenceStore().getInt(paletteDockLocationID);
+		return GefPreferenceConstants.STORE.getInt(paletteDockLocationID);
 	}
 
 	@Override
 	public int getPaletteState() {
-		return Activator.getDefault().getPreferenceStore().getInt(paletteStateID);
+		return GefPreferenceConstants.STORE.getInt(paletteStateID);
 	}
 
 	@Override
 	public int getPaletteWidth() {
-		return Activator.getDefault().getPreferenceStore().getInt(paletteSizeID);
+		return GefPreferenceConstants.STORE.getInt(paletteSizeID);
 	}
 
 	@Override
 	public void setDockLocation(final int location) {
-		Activator.getDefault().getPreferenceStore().setValue(paletteDockLocationID, location);
+		GefPreferenceConstants.STORE.setValue(paletteDockLocationID, location);
 	}
 
 	@Override
 	public void setPaletteState(final int state) {
-		Activator.getDefault().getPreferenceStore().setValue(paletteStateID, state);
+		GefPreferenceConstants.STORE.setValue(paletteStateID, state);
 
 	}
 
 	@Override
 	public void setPaletteWidth(final int width) {
-		Activator.getDefault().getPreferenceStore().setValue(paletteSizeID, width);
+		GefPreferenceConstants.STORE.setValue(paletteSizeID, width);
 	}
 
 	private void checkPreferenceStoreStatus() {
-		if (!Activator.getDefault().getPreferenceStore().contains(paletteStateID)) {
+		if (!GefPreferenceConstants.STORE.contains(paletteStateID)) {
 			// there is no setting in the preference store. Set palette opend with a good
 			// initial size
 			setPaletteState(FlyoutPaletteComposite.STATE_PINNED_OPEN);

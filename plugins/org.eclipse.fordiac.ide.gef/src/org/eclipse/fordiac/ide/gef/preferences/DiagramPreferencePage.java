@@ -22,10 +22,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.preferences;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.model.PreferenceConstants;
+import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -43,54 +41,19 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /** The Class DiagramPreferences. */
-public class DiagramPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-
-	/** The Constant CORNER_DIM. */
-	public static final int CORNER_DIM = 6;
-	public static final int CORNER_DIM_HALF = CORNER_DIM / 2;
-
-	public static final String SNAP_TO_GRID = "SnapToGrid"; //$NON-NLS-1$
-
-	public static final String SHOW_GRID = "ShowGrid"; //$NON-NLS-1$
-
-	public static final String SHOW_RULERS = "ShowRulers"; //$NON-NLS-1$
-
-	public static final String PIN_LABEL_STYLE = "PinLabelStyle"; //$NON-NLS-1$
-	public static final String PIN_LABEL_STYLE_PIN_NAME = "PinLabelStyle_PinName"; //$NON-NLS-1$
-	public static final String PIN_LABEL_STYLE_PIN_COMMENT = "PinLabelStyle_PinComment"; //$NON-NLS-1$
-	public static final String PIN_LABEL_STYLE_SRC_PIN_NAME = "PinLabelStyle_SourcePinName"; //$NON-NLS-1$
-
-	public static final String MAX_VALUE_LABEL_SIZE = "MaxValueLabelSize"; //$NON-NLS-1$
-
-	public static final String MIN_PIN_LABEL_SIZE = "MinPinLabelSize"; //$NON-NLS-1$
-	public static final String MAX_PIN_LABEL_SIZE = "MaxPinLabelSize"; //$NON-NLS-1$
-
-	public static final String MAX_INTERFACE_BAR_SIZE = "MaxInterfaceBarSize"; //$NON-NLS-1$
-	public static final String MIN_INTERFACE_BAR_SIZE = "MinInterfaceBarSize"; //$NON-NLS-1$
-
-	public static final String MAX_HIDDEN_CONNECTION_LABEL_SIZE = "MaxHiddenConnectionLabelSize"; //$NON-NLS-1$
-
-	public static final String MAX_TYPE_LABEL_SIZE = "MaxTypeLabelSize"; //$NON-NLS-1$
-
-	public static final String MAX_DEFAULT_VALUE_LENGTH = "MaxDefaultValueLength"; //$NON-NLS-1$
-
-	public static final String CONNECTION_AUTO_LAYOUT = "ConnectionAutoLayout"; //$NON-NLS-1$
-
-	public static final String EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR = "ExpandedInterfaceOldDirectBehaviour"; //$NON-NLS-1$
-	public static final String EXPANDED_INTERFACE_EVENTS_TOP = "ExpandedInterfaceEventsTop"; //$NON-NLS-1$
+public class DiagramPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	private boolean changesOnLabelSize = false;
 
-	private static int maxDefaultValueLength = Activator.getDefault().getPreferenceStore()
-			.getInt(DiagramPreferences.MAX_DEFAULT_VALUE_LENGTH);
+	private static int maxDefaultValueLength = GefPreferenceConstants.STORE
+			.getInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH);
 
 	/** Instantiates a new diagram preferences. */
-	public DiagramPreferences() {
+	public DiagramPreferencePage() {
 		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(GefPreferenceConstants.STORE);
 	}
 
 	/*
@@ -146,17 +109,17 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	private static boolean matchPreferenceName(final PropertyChangeEvent event) {
 		final String sourcePrefName = ((FieldEditor) event.getSource()).getPreferenceName();
-		return sourcePrefName.equalsIgnoreCase(MIN_PIN_LABEL_SIZE)
-				|| sourcePrefName.equalsIgnoreCase(MAX_PIN_LABEL_SIZE)
-				|| sourcePrefName.equalsIgnoreCase(MAX_TYPE_LABEL_SIZE)
-				|| sourcePrefName.equalsIgnoreCase(MAX_VALUE_LABEL_SIZE)
-				|| sourcePrefName.equalsIgnoreCase(MAX_DEFAULT_VALUE_LENGTH)
-				|| sourcePrefName.equalsIgnoreCase(MAX_HIDDEN_CONNECTION_LABEL_SIZE)
-				|| sourcePrefName.equalsIgnoreCase(PIN_LABEL_STYLE)
-				|| sourcePrefName.equalsIgnoreCase(MAX_INTERFACE_BAR_SIZE)
-				|| sourcePrefName.equalsIgnoreCase(MIN_INTERFACE_BAR_SIZE)
-				|| sourcePrefName.equalsIgnoreCase(EXPANDED_INTERFACE_EVENTS_TOP)
-				|| sourcePrefName.equalsIgnoreCase(EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR);
+		return sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MIN_PIN_LABEL_SIZE)
+				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MAX_PIN_LABEL_SIZE)
+				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MAX_TYPE_LABEL_SIZE)
+				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MAX_VALUE_LABEL_SIZE)
+				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH)
+				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE)
+				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.PIN_LABEL_STYLE)
+				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE)
+				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MIN_INTERFACE_BAR_SIZE)
+				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.EXPANDED_INTERFACE_EVENTS_TOP)
+				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR);
 	}
 
 	@Override
@@ -190,42 +153,48 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	private void createGroupLabelSize() {
 
 		final Group labelSize = createGroup(Messages.DiagramPreferences_LabelSize);
-		final IntegerFieldEditor integerFieldEditorLabel = new IntegerFieldEditor(MAX_VALUE_LABEL_SIZE,
-				Messages.DiagramPreferences_MaximumValueLabelSize, labelSize);
+		final IntegerFieldEditor integerFieldEditorLabel = new IntegerFieldEditor(
+				GefPreferenceConstants.MAX_VALUE_LABEL_SIZE, Messages.DiagramPreferences_MaximumValueLabelSize,
+				labelSize);
 		integerFieldEditorLabel.setValidRange(0, 120);
 		addField(integerFieldEditorLabel);
 
-		final IntegerFieldEditor integerFieldEditorValue = new IntegerFieldEditor(MAX_DEFAULT_VALUE_LENGTH,
-				Messages.DiagramPreferences_MaximumDefaultValueSize, labelSize);
+		final IntegerFieldEditor integerFieldEditorValue = new IntegerFieldEditor(
+				GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH, Messages.DiagramPreferences_MaximumDefaultValueSize,
+				labelSize);
 		integerFieldEditorValue.setValidRange(120, 100000);
 		addField(integerFieldEditorValue);
 
-		final IntegerFieldEditor integerFieldEditorTypeLabel = new IntegerFieldEditor(MAX_TYPE_LABEL_SIZE,
-				Messages.DiagramPreferences_MaximumTypeLabelSize, labelSize);
+		final IntegerFieldEditor integerFieldEditorTypeLabel = new IntegerFieldEditor(
+				GefPreferenceConstants.MAX_TYPE_LABEL_SIZE, Messages.DiagramPreferences_MaximumTypeLabelSize,
+				labelSize);
 		integerFieldEditorTypeLabel.setValidRange(0, 120);
 		addField(integerFieldEditorTypeLabel);
 
-		final IntegerFieldEditor integerFieldEditorMinPin = new IntegerFieldEditor(MIN_PIN_LABEL_SIZE,
-				Messages.DiagramPreferences_MinimumPinLabelSize, labelSize);
+		final IntegerFieldEditor integerFieldEditorMinPin = new IntegerFieldEditor(
+				GefPreferenceConstants.MIN_PIN_LABEL_SIZE, Messages.DiagramPreferences_MinimumPinLabelSize, labelSize);
 		integerFieldEditorMinPin.setValidRange(0, 60);
 		addField(integerFieldEditorMinPin);
 
-		final IntegerFieldEditor integerFieldEditorMaxPin = new IntegerFieldEditor(MAX_PIN_LABEL_SIZE,
-				Messages.DiagramPreferences_MaximumPinLabelSize, labelSize);
+		final IntegerFieldEditor integerFieldEditorMaxPin = new IntegerFieldEditor(
+				GefPreferenceConstants.MAX_PIN_LABEL_SIZE, Messages.DiagramPreferences_MaximumPinLabelSize, labelSize);
 		integerFieldEditorMaxPin.setValidRange(0, 60);
 		addField(integerFieldEditorMaxPin);
 
-		final IntegerFieldEditor integerFieldEditorMinInterfaceBarWidth = new IntegerFieldEditor(MIN_INTERFACE_BAR_SIZE,
-				Messages.DiagramPreferences_MinimumInterfaceBarSize, labelSize);
+		final IntegerFieldEditor integerFieldEditorMinInterfaceBarWidth = new IntegerFieldEditor(
+				GefPreferenceConstants.MIN_INTERFACE_BAR_SIZE, Messages.DiagramPreferences_MinimumInterfaceBarSize,
+				labelSize);
 		integerFieldEditorMinInterfaceBarWidth.setValidRange(0, 100);
 		addField(integerFieldEditorMinInterfaceBarWidth);
 
-		final IntegerFieldEditor integerFieldEditorInterfaceBar = new IntegerFieldEditor(MAX_INTERFACE_BAR_SIZE,
-				Messages.DiagramPreferences_MaximumInterfaceBarSize, labelSize);
+		final IntegerFieldEditor integerFieldEditorInterfaceBar = new IntegerFieldEditor(
+				GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE, Messages.DiagramPreferences_MaximumInterfaceBarSize,
+				labelSize);
 		integerFieldEditorInterfaceBar.setValidRange(0, 100);
 		addField(integerFieldEditorInterfaceBar);
 
-		final IntegerFieldEditor integerFieldEditorConnection = new IntegerFieldEditor(MAX_HIDDEN_CONNECTION_LABEL_SIZE,
+		final IntegerFieldEditor integerFieldEditorConnection = new IntegerFieldEditor(
+				GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE,
 				Messages.DiagramPreferences_MaximumHiddenConnectionLabelSize, labelSize);
 		integerFieldEditorConnection.setValidRange(0, 100);
 		addField(integerFieldEditorConnection);
@@ -236,15 +205,15 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	private void createGroupRulerGrid() {
 		final Group group = createGroup(Messages.DiagramPreferences_FieldEditors_RulerAndGrid);
 		// Add the fields to the group
-		final BooleanFieldEditor showRulers = new BooleanFieldEditor(SHOW_RULERS,
+		final BooleanFieldEditor showRulers = new BooleanFieldEditor(GefPreferenceConstants.SHOW_RULERS,
 				Messages.DiagramPreferences_FieldEditors_ShowRuler, group);
 		addField(showRulers);
 
-		final BooleanFieldEditor showGrid = new BooleanFieldEditor(SHOW_GRID,
+		final BooleanFieldEditor showGrid = new BooleanFieldEditor(GefPreferenceConstants.SHOW_GRID,
 				Messages.DiagramPreferences_FieldEditors_ShowGrid, group);
 		addField(showGrid);
 
-		final BooleanFieldEditor snapToGrid = new BooleanFieldEditor(SNAP_TO_GRID,
+		final BooleanFieldEditor snapToGrid = new BooleanFieldEditor(GefPreferenceConstants.SNAP_TO_GRID,
 				Messages.DiagramPreferences_FieldEditors_SnapToGrid, group);
 		addField(snapToGrid);
 
@@ -253,33 +222,37 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	private void createGroupLayoutOptionsPins() {
 		final Group group = createGroup(Messages.DiagramPreferences_LayoutOptions);
-		final BooleanFieldEditor connectionAutoLayout = new BooleanFieldEditor(CONNECTION_AUTO_LAYOUT,
+		final BooleanFieldEditor connectionAutoLayout = new BooleanFieldEditor(
+				GefPreferenceConstants.CONNECTION_AUTO_LAYOUT,
 				Messages.DiagramPreferences_LayoutConnectionsAutomatically, group);
 		addField(connectionAutoLayout);
 		configGroup(group);
 	}
 
 	private void createGroupInterfacePins() {
-		addField(new RadioGroupFieldEditor(PIN_LABEL_STYLE, Messages.DiagramPreferences_PinLabelText, 1,
-				new String[][] { { Messages.DiagramPreferences_ShowPinName, PIN_LABEL_STYLE_PIN_NAME },
-						{ Messages.DiagramPreferences_ShowPinComment, PIN_LABEL_STYLE_PIN_COMMENT },
-						{ Messages.DiagramPreferences_ShowConnectedOutputPinName, PIN_LABEL_STYLE_SRC_PIN_NAME } },
+		addField(new RadioGroupFieldEditor(GefPreferenceConstants.PIN_LABEL_STYLE,
+				Messages.DiagramPreferences_PinLabelText, 1,
+				new String[][] {
+						{ Messages.DiagramPreferences_ShowPinName, GefPreferenceConstants.PIN_LABEL_STYLE_PIN_NAME },
+						{ Messages.DiagramPreferences_ShowPinComment,
+								GefPreferenceConstants.PIN_LABEL_STYLE_PIN_COMMENT },
+						{ Messages.DiagramPreferences_ShowConnectedOutputPinName,
+								GefPreferenceConstants.PIN_LABEL_STYLE_SRC_PIN_NAME } },
 				getFieldEditorParent(), true));
 	}
 
 	private void createGroupBlockMargins() {
 		final Group group = createGroup(Messages.DiagramPreferences_BlockMargins);
-		final IPreferenceStore modelStore = new ScopedPreferenceStore(InstanceScope.INSTANCE,
-				PreferenceConstants.QUALIFIER);
+		final IPreferenceStore modelStore = ModelPreferenceConstants.STORE;
 
 		final IntegerFieldEditor integerFieldEditorTopBottom = new IntegerFieldEditor(
-				PreferenceConstants.MARGIN_TOP_BOTTOM, Messages.DiagramPreferences_TopBottom, group);
+				ModelPreferenceConstants.MARGIN_TOP_BOTTOM, Messages.DiagramPreferences_TopBottom, group);
 		integerFieldEditorTopBottom.setValidRange(0, 1000);
 		integerFieldEditorTopBottom.setPreferenceStore(modelStore);
 		addField(integerFieldEditorTopBottom);
 
 		final IntegerFieldEditor integerFieldEditorLeftRight = new IntegerFieldEditor(
-				PreferenceConstants.MARGIN_LEFT_RIGHT, Messages.DiagramPreferences_LeftRight, group);
+				ModelPreferenceConstants.MARGIN_LEFT_RIGHT, Messages.DiagramPreferences_LeftRight, group);
 		integerFieldEditorLeftRight.setValidRange(0, 1000);
 		integerFieldEditorLeftRight.setPreferenceStore(modelStore);
 		addField(integerFieldEditorLeftRight);
@@ -289,16 +262,18 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	private void createExpandedInterfaceOptionsPins() {
 		final Group group = createGroup(Messages.DiagramPreferences_ExpandedInterfaceGroupText);
-		final BooleanFieldEditor direct = new BooleanFieldEditor(EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR,
+		final BooleanFieldEditor direct = new BooleanFieldEditor(
+				GefPreferenceConstants.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR,
 				Messages.DiagramPreferences_ExpandedInterfaceStackPins, group);
-		final BooleanFieldEditor events = new BooleanFieldEditor(EXPANDED_INTERFACE_EVENTS_TOP,
+		final BooleanFieldEditor events = new BooleanFieldEditor(GefPreferenceConstants.EXPANDED_INTERFACE_EVENTS_TOP,
 				Messages.DiagramPreferences_ExpandedInterfaceEvents, group);
 
 		addField(direct);
 		addField(events);
 		configGroup(group);
 
-		events.setEnabled(getPreferenceStore().getBoolean(EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR), group);
+		events.setEnabled(
+				getPreferenceStore().getBoolean(GefPreferenceConstants.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR), group);
 		direct.getDescriptionControl(group).addListener(SWT.Selection, event -> {
 			final var button = (Button) event.widget;
 			final boolean selection = button.getSelection();

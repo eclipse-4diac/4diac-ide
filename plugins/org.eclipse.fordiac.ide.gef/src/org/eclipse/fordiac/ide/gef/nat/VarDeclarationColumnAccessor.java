@@ -17,7 +17,7 @@ package org.eclipse.fordiac.ide.gef.nat;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
@@ -112,7 +112,7 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 
 	protected static String getInitialValue(final VarDeclaration rowObject) {
 		final String value = InitialValueHelper.getInitialOrDefaultValue(rowObject);
-		if (value.length() > DiagramPreferences.getMaxDefaultValueLength()) {
+		if (value.length() > DiagramPreferencePage.getMaxDefaultValueLength()) {
 			return FordiacMessages.ValueTooLarge;
 		}
 		return value;

@@ -20,7 +20,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.policies;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
@@ -34,33 +34,33 @@ import org.eclipse.gef.requests.CreateRequest;
 
 public class EventOutputContainerLayoutEditPolicy extends AbstractInterfaceContainerLayoutEditPolicy {
 	@Override
-	protected EditPolicy createChildEditPolicy(EditPart child) {
+	protected EditPolicy createChildEditPolicy(final EditPart child) {
 
-		return new AbstractInterfaceSelectionEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1)) {
+		return new AbstractInterfaceSelectionEditPolicy(GefPreferenceConstants.CORNER_DIM_HALF, new Insets(1)) {
 			@Override
 			protected List<? extends IInterfaceElement> getInterfaceElementList() {
 				return getFBType().getInterfaceList().getEventOutputs();
 			}
 
 			@Override
-			protected Command getIECreateCommand(DataType refElement, int ref) {
+			protected Command getIECreateCommand(final DataType refElement, final int ref) {
 				return new CreateInterfaceElementCommand(refElement, getFBType().getInterfaceList(), false, ref);
 			}
 		};
 	}
 
 	@Override
-	protected boolean canReorder(IInterfaceElement childEP, IInterfaceElement afterEP) {
+	protected boolean canReorder(final IInterfaceElement childEP, final IInterfaceElement afterEP) {
 		return childEP instanceof Event && !childEP.isIsInput()
 				&& (null == afterEP || (afterEP instanceof Event && !afterEP.isIsInput()));
 	}
 
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
-		Object childClass = request.getNewObjectType();
-		FBType type = getFBType();
+		final Object childClass = request.getNewObjectType();
+		final FBType type = getFBType();
 		int index = -1;
-		EditPart ref = getInsertionReference(request);
+		final EditPart ref = getInsertionReference(request);
 		if (null != ref) {
 			index = type.getInterfaceList().getEventOutputs().indexOf(ref.getModel());
 		}

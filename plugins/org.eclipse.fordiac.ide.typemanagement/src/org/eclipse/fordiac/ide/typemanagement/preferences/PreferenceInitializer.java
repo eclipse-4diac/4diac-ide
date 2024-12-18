@@ -32,17 +32,17 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	@Override
 	public void initializeDefaultPreferences() {
 		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
-				PreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID);
-		store.setDefault(PreferenceConstants.P_STANDARD, "");//$NON-NLS-1$
-		store.setDefault(PreferenceConstants.P_CLASSIFICATION, ""); //$NON-NLS-1$
-		store.setDefault(PreferenceConstants.P_APPLICATION_DOMAIN, ""); //$NON-NLS-1$
-		store.setDefault(PreferenceConstants.P_FUNCTION, ""); //$NON-NLS-1$
-		store.setDefault(PreferenceConstants.P_TYPE, ""); //$NON-NLS-1$
-		store.setDefault(PreferenceConstants.P_DESCRIPTION, ""); //$NON-NLS-1$
-		store.setDefault(PreferenceConstants.P_VERSION, "1.0"); //$NON-NLS-1$
-		store.setDefault(PreferenceConstants.P_ORGANIZATION, ""); //$NON-NLS-1$
-		store.setDefault(PreferenceConstants.P_AUTHOR, System.getProperty("user.name")); //$NON-NLS-1$
-		store.setDefault(PreferenceConstants.P_REMARKS, ""); //$NON-NLS-1$
+				TypeManagementPreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID);
+		store.setDefault(TypeManagementPreferenceConstants.P_STANDARD, "");//$NON-NLS-1$
+		store.setDefault(TypeManagementPreferenceConstants.P_CLASSIFICATION, ""); //$NON-NLS-1$
+		store.setDefault(TypeManagementPreferenceConstants.P_APPLICATION_DOMAIN, ""); //$NON-NLS-1$
+		store.setDefault(TypeManagementPreferenceConstants.P_FUNCTION, ""); //$NON-NLS-1$
+		store.setDefault(TypeManagementPreferenceConstants.P_TYPE, ""); //$NON-NLS-1$
+		store.setDefault(TypeManagementPreferenceConstants.P_DESCRIPTION, ""); //$NON-NLS-1$
+		store.setDefault(TypeManagementPreferenceConstants.P_VERSION, "1.0"); //$NON-NLS-1$
+		store.setDefault(TypeManagementPreferenceConstants.P_ORGANIZATION, ""); //$NON-NLS-1$
+		store.setDefault(TypeManagementPreferenceConstants.P_AUTHOR, System.getProperty("user.name")); //$NON-NLS-1$
+		store.setDefault(TypeManagementPreferenceConstants.P_REMARKS, ""); //$NON-NLS-1$
 	}
 
 }

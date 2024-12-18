@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -39,7 +39,7 @@ public class ModelPlugin extends AbstractUIPlugin {
 
 				@Override
 				public void propertyChange(final PropertyChangeEvent event) {
-					if (PreferenceConstants.DIAGRAM_FONT.equals(event.getProperty())) {
+					if (UIPreferenceConstants.DIAGRAM_FONT.equals(event.getProperty())) {
 						Display.getDefault().asyncExec(CoordinateConverter.INSTANCE::name);
 						// we need an anonymous class instead of a lambda to refer to 'this' here
 						JFaceResources.getFontRegistry().removeListener(this);

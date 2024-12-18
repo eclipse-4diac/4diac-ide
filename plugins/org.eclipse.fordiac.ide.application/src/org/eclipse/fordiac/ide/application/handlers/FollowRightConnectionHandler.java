@@ -30,8 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
-import org.eclipse.fordiac.ide.ui.UIPlugin;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
@@ -44,8 +43,7 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-		final boolean stepMode = UIPlugin.getDefault().getPreferenceStore()
-				.getBoolean(PreferenceConstants.P_TOGGLE_JUMP_STEP);
+		final boolean stepMode = UIPreferenceConstants.STORE.getBoolean(UIPreferenceConstants.P_TOGGLE_JUMP_STEP);
 
 		final IInterfaceElement originPin = ((InterfaceEditPart) selection.getFirstElement()).getModel();
 

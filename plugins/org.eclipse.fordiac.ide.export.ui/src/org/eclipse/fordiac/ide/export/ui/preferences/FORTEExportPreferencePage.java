@@ -16,11 +16,10 @@ package org.eclipse.fordiac.ide.export.ui.preferences;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.export.ICompareEditorOpener;
+import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.fordiac.ide.export.utils.CompareEditorOpenerUtil;
-import org.eclipse.fordiac.ide.export.utils.PreferenceConstants;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.swt.SWT;
@@ -29,19 +28,18 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * The Class FORTEExportPreferences.
  */
-public class FORTEExportPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class FORTEExportPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	/**
 	 * Instantiates a new fORTE export preferences.
 	 */
-	public FORTEExportPreferences() {
+	public FORTEExportPreferencePage() {
 		super(GRID);
-		setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.fordiac.ide.export")); //$NON-NLS-1$
+		setPreferenceStore(PreferenceConstants.STORE);
 	}
 
 	/**
@@ -57,7 +55,8 @@ public class FORTEExportPreferences extends FieldEditorPreferencePage implements
 		compare.setText(Messages.FORTEExportPreferences_CompareEditorForMerging);
 		final GridLayout compareLayout = new GridLayout(2, false);
 
-		final Map<String, ICompareEditorOpener> compareEditorOpeners = CompareEditorOpenerUtil.getCompareEditorOpeners();
+		final Map<String, ICompareEditorOpener> compareEditorOpeners = CompareEditorOpenerUtil
+				.getCompareEditorOpeners();
 
 		final Set<String> keySet = compareEditorOpeners.keySet();
 		final String[][] nameArray = new String[keySet.size()][2];

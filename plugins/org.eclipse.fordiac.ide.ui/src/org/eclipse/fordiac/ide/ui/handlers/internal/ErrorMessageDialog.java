@@ -13,9 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.handlers.internal;
 
-import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.fordiac.ide.ui.handlers.ErrorMessageHandler;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -142,8 +141,7 @@ public final class ErrorMessageDialog extends PopupDialog {
 	}
 
 	private static boolean isTableInput(final Control focused) {
-		if (focused instanceof Table) {
-			final Table table = (Table) focused;
+		if (focused instanceof final Table table) {
 			return table.getSelectionCount() != 0 && table.getItem(table.getSelectionIndex()) != null;
 		}
 		return false;
@@ -234,16 +232,14 @@ public final class ErrorMessageDialog extends PopupDialog {
 	};
 
 	private void clearPopupOnSelectionChange(final Control focused) {
-		if(focused instanceof Table) {
-			final Table table = (Table) focused;
+		if (focused instanceof final Table table) {
 			table.removeSelectionListener(selectionChangeListener);
 			table.addSelectionListener(selectionChangeListener);
 		}
 	}
 
 	private static boolean showErrorAtMouse() {
-		return UIPlugin.getDefault().getPreferenceStore()
-				.getBoolean(PreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR);
+		return UIPreferenceConstants.STORE.getBoolean(UIPreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR);
 	}
 
 }

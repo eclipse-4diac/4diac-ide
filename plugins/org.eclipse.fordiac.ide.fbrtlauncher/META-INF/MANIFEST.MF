@@ -11,7 +11,6 @@ Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.0.0.qualifier
 Bundle-Name: FBRT Launcher
-Bundle-Activator: org.eclipse.fordiac.ide.fbrtlauncher.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbrtlauncher;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21
