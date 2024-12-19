@@ -2,9 +2,17 @@
 <?eclipse version="3.4"?>
 <plugin>  
    <extension
+      point="org.eclipse.core.contenttype.contentTypes">
+   		<content-type
+         	base-type="org.eclipse.4diac.ide.iec61499Content"
+         	file-extensions="dtp,DTP"
+         	id="org.eclipse.4diac.ide.dataTypeContent"
+         	name="%IEC61499DataTypeFile" />
+   </extension>
+   <extension
          point="org.eclipse.ui.editors">
       <editor
-            name="Data Type Editor"
+            name="%DataTypeEditor"
             extensions="dtp"
             default="true"
             class="org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor"
@@ -12,6 +20,9 @@
             icon="fordiacimage://ICON_DATA_TYPE"
             matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy">
       </editor>
+      <editorContentTypeBinding
+            contentTypeId="org.eclipse.4diac.ide.dataTypeContent" 
+            editorId="org.eclipse.fordiac.ide.model.datatype.dtp"/>
    </extension>
    <extension
          point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">

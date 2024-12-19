@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Bundle-Localization: plugin
 Export-Package: org.eclipse.fordiac.ide.fbtypeeditor,
  org.eclipse.fordiac.ide.fbtypeeditor.actions,
  org.eclipse.fordiac.ide.fbtypeeditor.contentprovider,
@@ -34,7 +35,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.0.0.qualifier
-Bundle-Name: Function Block Type Editor
+Bundle-Name: %FunctionBlockTypeEditor.bundleName
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21

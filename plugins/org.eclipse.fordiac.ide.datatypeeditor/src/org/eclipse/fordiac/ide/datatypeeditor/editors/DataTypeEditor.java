@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.editors;
 
-import org.eclipse.fordiac.ide.datatypeedito.wizards.SaveAsStructTypeWizard;
+import org.eclipse.fordiac.ide.datatypeeditor.wizards.SaveAsStructTypeWizard;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.search.dialog.AbstractTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.search.dialog.StructuredDataTypeDataHandler;

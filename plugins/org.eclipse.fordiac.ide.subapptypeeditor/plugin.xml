@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
+   <extension
+   		point="org.eclipse.core.contenttype.contentTypes">
+	  <content-type
+         	base-type="org.eclipse.4diac.ide.iec61499Content"
+         	file-extensions="sub,SUB"
+         	id="org.eclipse.4diac.ide.subAppTypeContent"
+         	name="%IEC61499SubAppTypeFile" />
+   </extension>
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            name="Subapplication Type Editor"
+            name="%SubapplicationTypeEditor.name"
             extensions="sub"
+            default="true"
             icon="fordiacimage://ICON_SUB_APP_TYPE"
             contributorClass="org.eclipse.fordiac.ide.gef.editors.GraphicalMultipageEditorContributor"
             class="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor"
             id="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor"
-            matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy">
-      </editor>
+            matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy"/>
+      <editorContentTypeBinding
+            contentTypeId="org.eclipse.4diac.ide.subAppTypeContent" 
+            editorId="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor"/>
 	</extension>
 	<extension
          point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">

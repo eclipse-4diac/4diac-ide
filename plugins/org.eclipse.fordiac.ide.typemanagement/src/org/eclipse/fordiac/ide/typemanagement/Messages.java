@@ -1,7 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 fortiss GmbH
- *                          Andrea Zoitl
- *                          Martin Erich Jobst
+ * Copyright (c) 2017, 2024 fortiss GmbH, Andrea Zoitl, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,7 +22,7 @@ import org.eclipse.osgi.util.NLS;
 
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.typemanagement.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
 	public static String AbstractCommandChange_CannotExecuteCommand;
 

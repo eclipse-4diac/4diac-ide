@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.datatypeedito.wizards;
+package org.eclipse.fordiac.ide.datatypeeditor.wizards;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;

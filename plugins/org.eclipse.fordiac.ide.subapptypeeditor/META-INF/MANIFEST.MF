@@ -1,7 +1,8 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.subapptypeeditor.viewer
 Bundle-ManifestVersion: 2
-Bundle-Name: Subapplication Type Editor
+Bundle-Name: SubapplicationTypeEditor.bundleName
+Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.fordiac.ide.subapptypeeditor;singleton:=true
 Bundle-Version: 3.0.0.qualifier
 Require-Bundle: org.eclipse.ui,

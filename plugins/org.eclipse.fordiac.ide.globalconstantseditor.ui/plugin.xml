@@ -2,6 +2,14 @@
 <?eclipse version="3.0"?>
 <plugin>
 	<extension
+      point="org.eclipse.core.contenttype.contentTypes">
+   		<content-type
+         	base-type="org.eclipse.4diac.ide.iec61499Content"
+         	file-extensions="gcf,GCF"
+         	id="org.eclipse.4diac.ide.globalConstContent"
+         	name="%IEC61499GlobalConstantsFile" />
+   </extension>
+   <extension
 		point="org.eclipse.ui.editors">
 		<editor
 			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.GlobalConstantsEditor"
@@ -9,8 +17,11 @@
 			default="true"
 			extensions="globalconsts,gcf"
 			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
-			name="GlobalConstants Editor">
+			name="%GlobalConstantsEditor">
 		</editor>
+      <editorContentTypeBinding
+            contentTypeId="org.eclipse.4diac.ide.globalConstContent" 
+            editorId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"/>
 	</extension>
 	<extension
 		point="org.eclipse.ui.handlers">

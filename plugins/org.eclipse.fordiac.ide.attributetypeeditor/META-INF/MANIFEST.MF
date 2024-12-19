@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Attribute Type Editor
+Bundle-Localization: plugin
+Bundle-Name: %AttributeTypeEditor.bundleName
 Bundle-SymbolicName: org.eclipse.fordiac.ide.attributetypeeditor;singleton:=true
 Bundle-Version: 3.0.0.qualifier
 Require-Bundle: org.eclipse.ui,

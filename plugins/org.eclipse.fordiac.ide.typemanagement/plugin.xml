@@ -8,7 +8,7 @@
             fixed="false"
             icon="fordiacimage://ICON_TYPE_NAVIGATOR"
             id="org.eclipse.fordiac.ide.typemanagement.perspective"
-            name="Type Management">
+            name="%TypeManagement.perspectiveName">
       </perspective>
    </extension>
    <extension
@@ -34,8 +34,16 @@
             class="org.eclipse.fordiac.ide.typemanagement.navigator.TypeNavigator"
             icon="fordiacimage://ICON_TYPE_NAVIGATOR"
             id="org.eclipse.fordiac.ide.typemanagement.navigator.view"
-            name="Type Navigator">
+            name="%TypeNavigator">
       </view>
+   </extension>
+   <extension
+      point="org.eclipse.core.contenttype.contentTypes">
+   		<content-type
+         	base-type="org.eclipse.core.runtime.xml"
+         	file-extensions="adp,ADP,atp,ATP,dev,DEV,dtp,DTP,fbt,FBT,fct,FCT,gcf,GCF,res,RES,seg,SEG,sys,SYS,sub,SUB"
+         	id="org.eclipse.4diac.ide.iec61499Content"
+         	name="%IEC61499File" />
    </extension>
    <extension
          point="org.eclipse.ui.editors">
@@ -43,25 +51,28 @@
             class="org.eclipse.ui.editors.text.TextEditor"
             contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
             extensions="dev"
+            default="true"
             icon="fordiacimage://ICON_DEVICE"
             id="org.eclipse.fordiac.ide.fbtypeeditor.editors.DeviceTypeEditor"
-            name="Device Type Editor">
+            name="%DeviceTypeEditor">
       </editor>
       <editor
             class="org.eclipse.ui.editors.text.TextEditor"
             contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
             extensions="res"
+            default="true"
             icon="fordiacimage://ICON_RESOURCE"
             id="org.eclipse.fordiac.ide.fbtypeeditor.editors.ResourceTypeEditor"
-            name="Resource Type Editor">
+            name="%ResourceTypeEditor">
       </editor>
       <editor
             class="org.eclipse.ui.editors.text.TextEditor"
             contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
             extensions="seg"
+            default="true"
             icon="fordiacimage://ICON_SEGMENT"
             id="org.eclipse.fordiac.ide.fbtypeeditor.editors.SegmentTypeEditor"
-            name="Segment Type Editor">
+            name="%SegmentTypeEditor">
       </editor>
    </extension>
    <extension
@@ -71,7 +82,7 @@
             class="org.eclipse.fordiac.ide.typemanagement.wizards.NewTypeWizard"
             icon="fordiacimage://ICON_NEW_FUNCTIONBLOCK"
             id="org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard"
-            name="Type...">
+            name="%NewFBTypeWizardName">
       </wizard>
    </extension>
    <extension
@@ -115,19 +126,19 @@
    <extension point="org.eclipse.ui.commands">
     	<command
         	id="org.eclipse.fordiac.ide.typemanagement.openType"
-        	name="Open Type">
+        	name="%command.OpenType">
     	</command>
      <command
            id="org.eclipse.fordiac.ide.typemanagement.renameElement"
-           name="Rename Element">
+           name="%command.RenameElement">
      </command>
      <command
            id="org.eclipse.fordiac.ide.typemanagement.connectionstostruct"
-           name="Connections To Struct">
+           name="%command.ConnectionsToStruct">
      </command>
      <command
            id="org.eclipse.fordiac.ide.typemanagement.repairbrokenconnection"
-           name="Repair broken connection">
+           name="%command.RepairBrokenConnection">
      </command> 
 	</extension>
    <extension

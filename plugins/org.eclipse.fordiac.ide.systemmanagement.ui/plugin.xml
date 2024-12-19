@@ -57,6 +57,14 @@
 	  </perspectiveExtension> 
     </extension>     
    <extension
+   		point="org.eclipse.core.contenttype.contentTypes">
+	  <content-type
+         	base-type="org.eclipse.4diac.ide.iec61499Content"
+         	file-extensions="sys,SYS"
+         	id="org.eclipse.4diac.ide.SystemContent"
+         	name="%IEC61499SystemFile" />
+   </extension>
+   <extension
          point="org.eclipse.ui.editors">
       <editor
             class="org.eclipse.fordiac.ide.systemmanagement.ui.editors.AutomationSystemEditor"
@@ -68,6 +76,9 @@
             matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy"
             name="%SystemEditor.name">
       </editor>
+      <editorContentTypeBinding
+            contentTypeId="org.eclipse.4diac.ide.SystemContent" 
+            editorId="org.eclipse.fordiac.ide.editors.SystemEditor"/>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
