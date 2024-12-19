@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.data.WordType;
 import org.eclipse.fordiac.ide.model.data.WstringType;
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 
 public final class ValueConverterFactory {
 	public static ValueConverter<?> createValueConverter(final DataType type) {
@@ -56,9 +57,11 @@ public final class ValueConverterFactory {
 		case final LtodType unused -> TimeOfDayValueConverter.INSTANCE;
 		case final DateAndTimeType unused -> DateAndTimeValueConverter.INSTANCE;
 		case final LdtType unused -> DateAndTimeValueConverter.INSTANCE;
-		case final ArrayType arrayType -> new ArrayValueConverter<>(createValueConverter(getElementType(arrayType)));
+		case final ArrayType arrayType -> new ArrayValueConverter<>(
+				new TypedValueConverter(getElementType(arrayType), getDataTypeLibrary(arrayType)));
 		case final StructuredType structuredType ->
-			new StructValueConverter(name -> createValueConverter(getMemberType(structuredType, name)));
+			new StructValueConverter(name -> new TypedValueConverter(getMemberType(structuredType, name),
+					getDataTypeLibrary(structuredType)));
 		case null, default -> null;
 		};
 	}
@@ -79,6 +82,10 @@ public final class ValueConverterFactory {
 			return TypeDeclarationParser.parseTypeDeclaration(member.getType(), member.getArraySize().getValue());
 		}
 		return member.getType();
+	}
+
+	private static DataTypeLibrary getDataTypeLibrary(final DataType type) {
+		return type.getTypeLibrary() != null ? type.getTypeLibrary().getDataTypeLibrary() : null;
 	}
 
 	private ValueConverterFactory() {

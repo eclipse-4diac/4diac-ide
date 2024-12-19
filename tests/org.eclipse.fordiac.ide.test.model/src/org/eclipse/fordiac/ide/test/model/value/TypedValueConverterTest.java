@@ -132,8 +132,35 @@ class TypedValueConverterTest {
 		assertEquals(Map.of("a", BigInteger.valueOf(17), "b", "test"),
 				new TypedValueConverter(structType).toValue("(a:=17,b:='test')"));
 		assertEquals(Map.of("a", BigInteger.valueOf(17), "b", "test"),
+				new TypedValueConverter(structType).toValue("(a:=DINT#17,b:=STRING#'test')"));
+		assertEquals(Map.of("a", BigInteger.valueOf(17), "b", "test"),
 				new TypedValueConverter(GenericTypes.ANY, typeLibrary.getDataTypeLibrary())
 						.toValue("TestStruct#(a:=17,b:='test')"));
+	}
+
+	@Test
+	void toValueTimeStructTest() {
+		final StructuredType structType = DataFactory.eINSTANCE.createStructuredType();
+		structType.setName("TimeTestStruct");
+		structType.getMemberVariables().add(createVarDeclaration("a", ElementaryTypes.TIME));
+		structType.getMemberVariables().add(createVarDeclaration("b", ElementaryTypes.DATE));
+		structType.getMemberVariables().add(createVarDeclaration("c", ElementaryTypes.TIME_OF_DAY));
+		structType.getMemberVariables().add(createVarDeclaration("d", ElementaryTypes.DATE_AND_TIME));
+		typeLibrary.addTypeEntry(new DataTypeEntryMock(structType, typeLibrary, null));
+		assertEquals(Map.of(//
+				"a", Duration.ofDays(17).plusMinutes(4).plusSeconds(21), //
+				"b", LocalDate.of(2017, 04, 21), //
+				"c", LocalTime.of(21, 04, 17), //
+				"d", LocalDateTime.of(2017, 04, 21, 21, 04, 17)//
+		), new TypedValueConverter(structType)
+				.toValue("(a:=T#17d4m21s,b:=D#2017-04-21,c:=TOD#21:04:17,d:=DT#2017-04-21-21:04:17)"));
+		assertEquals(Map.of(//
+				"a", Duration.ofDays(17).plusMinutes(4).plusSeconds(21), //
+				"b", LocalDate.of(2017, 04, 21), //
+				"c", LocalTime.of(21, 04, 17), //
+				"d", LocalDateTime.of(2017, 04, 21, 21, 04, 17)//
+		), new TypedValueConverter(GenericTypes.ANY, typeLibrary.getDataTypeLibrary())
+				.toValue("TimeTestStruct#(a:=T#17d4m21s,b:=D#2017-04-21,c:=TOD#21:04:17,d:=DT#2017-04-21-21:04:17)"));
 	}
 
 	public static VarDeclaration createVarDeclaration(final String name, final DataType type) {

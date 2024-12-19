@@ -25,15 +25,18 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.value.ArrayValueConverter;
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter;
 import org.eclipse.fordiac.ide.model.value.StringValueConverter;
 import org.eclipse.fordiac.ide.model.value.StructValueConverter;
+import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 import org.eclipse.fordiac.ide.model.value.ValueConverter;
 import org.eclipse.fordiac.ide.model.value.WStringValueConverter;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -104,6 +107,9 @@ class ValueConverterTest {
 						"[2(1,2,3)]"), //
 				arguments(new ArrayValueConverter<>(StringValueConverter.INSTANCE), List.of("abc", "ab,xy", "ab,',xy"),
 						"['abc','ab,xy','ab,$',xy']"), //
+				arguments(new ArrayValueConverter<>(new TypedValueConverter(ElementaryTypes.TIME)),
+						List.of(Duration.ZERO, Duration.ofDays(17).plusMinutes(4).plusSeconds(21)),
+						"[T#0ns, T#17d4m21s]"), //
 				arguments(new ArrayValueConverter<>(NumericValueConverter.INSTANCE), IllegalArgumentException.class,
 						""), //
 				arguments(new ArrayValueConverter<>(NumericValueConverter.INSTANCE), IllegalArgumentException.class,
@@ -124,6 +130,12 @@ class ValueConverterTest {
 								new StructValueConverter(unused -> StringValueConverter.INSTANCE)),
 						named("{a=ab,xy, b=ab,',xy}", Map.of("a", "ab,xy", "b", "ab,',xy")),
 						"(a:='ab,xy',b:='ab,$',xy')"), //
+				arguments(
+						named("StructValueConverter [TimeValueConverter]",
+								new StructValueConverter(unused -> new TypedValueConverter(ElementaryTypes.TIME))),
+						named("{a=T#0ns, b=T#17d4m21.42s}",
+								Map.of("a", Duration.ZERO, "b", Duration.ofDays(17).plusMinutes(4).plusSeconds(21))),
+						"(a:=T#0ns, b:=T#17d4m21s)"), //
 				arguments(
 						named("StructValueConverter [ArrayValueConverter [StringValueConverter]]",
 								new StructValueConverter(
@@ -185,6 +197,9 @@ class ValueConverterTest {
 				arguments(new ArrayValueConverter<>(NumericValueConverter.INSTANCE), "[TRUE, 4, 21, 3.14159]",
 						List.of(Boolean.TRUE, BigInteger.valueOf(4), BigInteger.valueOf(21),
 								BigDecimal.valueOf(3.14159))), //
+				arguments(new ArrayValueConverter<>(new TypedValueConverter(ElementaryTypes.TIME)),
+						"[T#0s, T#17d4m21s]",
+						List.of(Duration.ZERO, Duration.ofDays(17).plusMinutes(4).plusSeconds(21))), //
 				arguments(
 						named("StructValueConverter [NumericValueConverter]",
 								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
@@ -195,6 +210,12 @@ class ValueConverterTest {
 								new StructValueConverter(unused -> StringValueConverter.INSTANCE)),
 						"(a := 'ab,xy', b := 'ab,$',xy')",
 						named("{a=ab,xy, b=ab,',xy}", Map.of("a", "ab,xy", "b", "ab,',xy"))), //
+				arguments(
+						named("StructValueConverter [TimeValueConverter]",
+								new StructValueConverter(unused -> new TypedValueConverter(ElementaryTypes.TIME))),
+						"(a := T#0s, b := T#17d4m21s)",
+						named("{a=T#0ns, b=T#17d4m21s}",
+								Map.of("a", Duration.ZERO, "b", Duration.ofDays(17).plusMinutes(4).plusSeconds(21)))), //
 				arguments(
 						named("StructValueConverter [ArrayValueConverter [StringValueConverter]]",
 								new StructValueConverter(
