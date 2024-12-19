@@ -46,7 +46,6 @@ public class Messages extends NLS {
 	public static String DeploymentLaunchConfigurationTab_SystemMessage;
 	public static String DeploymentDebugModelPresentation_WatchpointText;
 	public static String DeploymentDebugPreferencePage_Description;
-	public static String DeploymentDebugPreferencePage_MonitoringValueTransparency;
 	public static String DeploymentDebugPreferencePage_MonitoringValueWriteThrough;
 	public static String DeploymentWatchpointDetailPane_Description;
 	public static String DeploymentWatchpointDetailPane_Name;

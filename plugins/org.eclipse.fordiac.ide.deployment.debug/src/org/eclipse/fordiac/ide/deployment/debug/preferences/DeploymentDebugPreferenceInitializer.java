@@ -20,8 +20,6 @@ public class DeploymentDebugPreferenceInitializer extends AbstractPreferenceInit
 	@Override
 	public void initializeDefaultPreferences() {
 		DefaultScope.INSTANCE.getNode(DeploymentDebugPreferences.QUALIFIER)
-				.putInt(DeploymentDebugPreferences.MONITORING_VALUE_TRANSPARENCY, 190);
-		DefaultScope.INSTANCE.getNode(DeploymentDebugPreferences.QUALIFIER)
 				.putBoolean(DeploymentDebugPreferences.MONITORING_VALUE_WRITE_THROUGH, false);
 	}
 }

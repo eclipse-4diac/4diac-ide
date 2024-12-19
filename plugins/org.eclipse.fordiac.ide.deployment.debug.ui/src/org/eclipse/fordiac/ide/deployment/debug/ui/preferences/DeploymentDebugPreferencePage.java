@@ -17,7 +17,6 @@ import org.eclipse.fordiac.ide.deployment.debug.preferences.DeploymentDebugPrefe
 import org.eclipse.fordiac.ide.deployment.debug.ui.Messages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
@@ -38,10 +37,5 @@ public class DeploymentDebugPreferencePage extends FieldEditorPreferencePage imp
 	public void createFieldEditors() {
 		addField(new BooleanFieldEditor(DeploymentDebugPreferences.MONITORING_VALUE_WRITE_THROUGH,
 				Messages.DeploymentDebugPreferencePage_MonitoringValueWriteThrough, getFieldEditorParent()));
-		final IntegerFieldEditor monitoringValueTransparencyEditor = new IntegerFieldEditor(
-				DeploymentDebugPreferences.MONITORING_VALUE_TRANSPARENCY,
-				Messages.DeploymentDebugPreferencePage_MonitoringValueTransparency, getFieldEditorParent());
-		monitoringValueTransparencyEditor.setValidRange(0, 255);
-		addField(monitoringValueTransparencyEditor);
 	}
 }

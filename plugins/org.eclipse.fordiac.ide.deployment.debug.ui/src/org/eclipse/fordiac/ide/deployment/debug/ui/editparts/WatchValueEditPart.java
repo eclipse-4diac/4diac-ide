@@ -31,7 +31,6 @@ import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.deployment.debug.preferences.DeploymentDebugPreferences;
 import org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentDebugModelPresentation;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
@@ -67,7 +66,6 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 		figure.setBorder(new MarginBorder(0, MONITORING_VALUE_LR_MARGIN, 0, MONITORING_VALUE_LR_MARGIN));
 		figure.setText(Messages.MonitoringEditPart_Not_Available);
 		figure.setMinimumSize(new Dimension(50, 1));
-		figure.setAlpha(DeploymentDebugPreferences.getMonitoringValueTransparency());
 		return figure;
 	}
 
