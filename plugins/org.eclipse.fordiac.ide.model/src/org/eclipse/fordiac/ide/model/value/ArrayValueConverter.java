@@ -12,6 +12,7 @@
  */
 package org.eclipse.fordiac.ide.model.value;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -52,9 +53,9 @@ public class ArrayValueConverter<T> implements ValueConverter<List<T>> {
 		}
 		do {
 			if (scanner.findWithinHorizon(ARRAY_REPEAT_BEGIN_PATTERN, 0) != null) {
-				result.addAll(parseRepeatSyntax(scanner));
+				result.addAll(parseRepeatSyntax(scanner, result.size()));
 			} else {
-				result.add(elementValueConverter.toValue(scanner));
+				result.add(parseValue(scanner, result.size()));
 			}
 		} while (scanner.findWithinHorizon(ARRAY_SEPARATOR_PATTERN, 0) != null);
 		if (scanner.findWithinHorizon(ARRAY_END_PATTERN, 0) == null) {
@@ -63,20 +64,30 @@ public class ArrayValueConverter<T> implements ValueConverter<List<T>> {
 		return result;
 	}
 
-	private List<T> parseRepeatSyntax(final Scanner scanner) throws NumberFormatException, IllegalArgumentException {
+	private List<T> parseRepeatSyntax(final Scanner scanner, final int index)
+			throws NumberFormatException, IllegalArgumentException {
 		final int count = Integer.parseInt(scanner.match().group(1));
 		final List<T> result = new ArrayList<>();
 		do {
 			if (scanner.findWithinHorizon(ARRAY_REPEAT_BEGIN_PATTERN, 0) != null) {
-				parseRepeatSyntax(scanner);
+				parseRepeatSyntax(scanner, index + result.size());
 			} else {
-				result.add(elementValueConverter.toValue(scanner));
+				result.add(parseValue(scanner, index + result.size()));
 			}
 		} while (scanner.findWithinHorizon(ARRAY_SEPARATOR_PATTERN, 0) != null);
 		if (scanner.findWithinHorizon(ARRAY_REPEAT_END_PATTERN, 0) == null) {
 			throw new IllegalArgumentException(Messages.ArrayValueConverter_InvalidRepeatSyntax);
 		}
 		return IntStream.range(0, count).mapToObj(unused -> result).flatMap(List::stream).toList();
+	}
+
+	private T parseValue(final Scanner scanner, final int index) {
+		try {
+			return elementValueConverter.toValue(scanner);
+		} catch (final IllegalArgumentException e) {
+			throw new IllegalArgumentException(
+					MessageFormat.format(Messages.ArrayValueConverter_IllegalElementValue, Integer.valueOf(index)), e);
+		}
 	}
 
 	@Override

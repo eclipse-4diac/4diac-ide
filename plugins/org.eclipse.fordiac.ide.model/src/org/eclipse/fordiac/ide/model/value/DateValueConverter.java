@@ -42,7 +42,7 @@ public final class DateValueConverter implements ValueConverter<LocalDate> {
 
 	@Override
 	public LocalDate toValue(final Scanner scanner) throws IllegalArgumentException {
-		return toValue(scanner.findWithinHorizon(SCANNER_PATTERN, 0));
+		return toValue(scanner, SCANNER_PATTERN);
 	}
 
 	@Override

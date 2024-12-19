@@ -20,6 +20,8 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.messages"; //$NON-NLS-1$
 
+	public static String ArrayValueConverter_IllegalElementValue;
+
 	public static String ArrayValueConverter_InvalidRepeatSyntax;
 
 	public static String CommonElementImporter_ERROR_DeclarationNotSet;
@@ -104,7 +106,11 @@ public final class Messages extends NLS {
 	public static String LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed;
 	public static String LinkConstraints_STATUSMessage_NotCompatible;
 	public static String NameRepository_NameAlreadyExists;
+	public static String StructValueConverter_IllegalMemberValue;
+
 	public static String StructValueConverter_InvalidStructLiteral;
+
+	public static String StructValueConverter_NoValueConverter;
 	public static String TypedElementAnnotations_TypeNotFound;
 	public static String TypedElementAnnotations_TypeNotSet;
 	public static String TypeLibrary_TypeExists;

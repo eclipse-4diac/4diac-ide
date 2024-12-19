@@ -12,6 +12,7 @@
  */
 package org.eclipse.fordiac.ide.model.value;
 
+import java.text.MessageFormat;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +53,16 @@ public class StructValueConverter implements ValueConverter<Map<String, Object>>
 			}
 			final String name = scanner.match().group(1);
 			final ValueConverter<?> converter = memberValueConverter.apply(name);
-			result.put(name, converter.toValue(scanner));
+			if (converter == null) {
+				throw new IllegalArgumentException(
+						MessageFormat.format(Messages.StructValueConverter_NoValueConverter, name));
+			}
+			try {
+				result.put(name, converter.toValue(scanner));
+			} catch (final IllegalArgumentException e) {
+				throw new IllegalArgumentException(
+						MessageFormat.format(Messages.StructValueConverter_IllegalMemberValue, name), e);
+			}
 		} while (scanner.findWithinHorizon(STRUCT_SEPARATOR_PATTERN, 0) != null);
 		if (scanner.findWithinHorizon(STRUCT_END_PATTERN, 0) == null) {
 			throw new IllegalArgumentException(Messages.StructValueConverter_InvalidStructLiteral);

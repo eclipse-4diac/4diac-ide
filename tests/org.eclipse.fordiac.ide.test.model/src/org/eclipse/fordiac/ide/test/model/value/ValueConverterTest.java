@@ -142,7 +142,11 @@ class ValueConverterTest {
 										unused -> new ArrayValueConverter<>(StringValueConverter.INSTANCE))),
 						named("{a=[abc, ab,xy, ab,',xy], b=[test, value]}",
 								Map.of("a", List.of("abc", "ab,xy", "ab,',xy"), "b", List.of("test", "value"))),
-						"(a:=['abc','ab,xy','ab,$',xy'],b:=['test','value'])")//
+						"(a:=['abc','ab,xy','ab,$',xy'],b:=['test','value'])"), //
+				arguments(
+						named("StructValueConverter [NumericValueConverter]",
+								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
+						IllegalArgumentException.class, "(a:=invalid,b:=4)") //
 		);
 	}
 

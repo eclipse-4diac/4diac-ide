@@ -12,10 +12,14 @@
  */
 package org.eclipse.fordiac.ide.model.value;
 
+import java.text.MessageFormat;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public interface ValueConverter<T> {
+	Pattern ANY_PATTERN = Pattern.compile(".*", Pattern.DOTALL); //$NON-NLS-1$
+
 	default String toString(final T value) {
 		return Objects.toString(value).toUpperCase();
 	}
@@ -23,4 +27,13 @@ public interface ValueConverter<T> {
 	T toValue(String string) throws IllegalArgumentException;
 
 	T toValue(Scanner scanner) throws IllegalArgumentException;
+
+	default T toValue(final Scanner scanner, final Pattern pattern) throws IllegalArgumentException {
+		final String string = scanner.findWithinHorizon(pattern, 0);
+		if (string == null) {
+			throw new IllegalArgumentException(
+					MessageFormat.format("Invalid value: {0}", scanner.findWithinHorizon(ANY_PATTERN, 0))); //$NON-NLS-1$
+		}
+		return toValue(string);
+	}
 }
