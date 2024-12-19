@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import java.util.List;
-
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
@@ -24,7 +22,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 public final class MappingTargetCreator {
@@ -51,23 +48,6 @@ public final class MappingTargetCreator {
 			res.getFBNetwork().getNetworkElements().add(created);
 		}
 		return created;
-	}
-
-	public static void transferFBParams(final FBNetworkElement srcElement, final FBNetworkElement targetElement) {
-		final List<VarDeclaration> destInputs = targetElement.getInterface().getInputVars();
-		final List<VarDeclaration> srcInputs = srcElement.getInterface().getInputVars();
-
-		for (int i = 0; i < destInputs.size(); i++) {
-			final VarDeclaration srcVar = srcInputs.get(i);
-			final VarDeclaration dstVar = destInputs.get(i);
-
-			if ((srcVar.getValue() != null) && (!srcVar.getValue().getValue().isEmpty())) {
-				if (dstVar.getValue() == null) {
-					dstVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
-				}
-				dstVar.getValue().setValue(srcVar.getValue().getValue());
-			}
-		}
 	}
 
 	private static FBNetworkElement createFBNetworkElement(final FBNetworkElement srcElement) {

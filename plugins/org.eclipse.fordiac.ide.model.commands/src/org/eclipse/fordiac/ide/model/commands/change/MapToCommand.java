@@ -19,24 +19,19 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.dataimport.MappingTargetCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -45,12 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -157,48 +147,14 @@ public class MapToCommand extends Command implements ScopedCommand {
 		createdConnections.redo();
 	}
 
+	/**
+	 * Create the appropriate target element. Sub-classes may override this to
+	 * create different target elements.
+	 *
+	 * @return newly created element for mapping target
+	 */
 	protected FBNetworkElement createTargetElement() {
-		final FBNetworkElement created = switch (srcElement) {
-		case final ConfigurableFB confFB -> createConfigureableFB();
-		case final FB fb -> createTargetFB();
-		case final TypedSubApp typedSubapp -> createTargetTypedSubApp();
-		case final UntypedSubApp untypedSubapp -> createTargetUntypedSubApp();
-		default -> null;
-		};
-		if (created != null) {
-			created.setName(srcElement.getName());
-			MappingTargetCreator.transferFBParams(srcElement, created);
-		}
-		return created;
-	}
-
-	private FBNetworkElement createTargetFB() {
-		final FBCreateCommand targetCreateFB = new FBCreateCommand((FBTypeEntry) srcElement.getTypeEntry(),
-				getTargetFBNetwork(), srcElement.getPosition());
-		targetCreateFB.execute();
-		return targetCreateFB.getFB();
-	}
-
-	private FBNetworkElement createConfigureableFB() {
-		final ConfigurableFB configureableFB = (ConfigurableFB) createTargetFB();
-		configureableFB.setDataType(((ConfigurableFB) srcElement).getDataType());
-		configureableFB.updateConfiguration();
-		return configureableFB;
-	}
-
-	private FBNetworkElement createTargetTypedSubApp() {
-		final CreateSubAppInstanceCommand cmd = new CreateSubAppInstanceCommand(
-				(SubAppTypeEntry) srcElement.getTypeEntry(), getTargetFBNetwork(), srcElement.getPosition());
-		cmd.execute();
-		return cmd.getSubApp();
-	}
-
-	private FBNetworkElement createTargetUntypedSubApp() {
-		final SubApp element = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
-		element.setPosition(EcoreUtil.copy(srcElement.getPosition()));
-		element.setInterface(srcElement.getInterface().copy());
-		getTargetFBNetwork().getNetworkElements().add(element);
-		return element;
+		return MappingTargetCreator.createMappingTarget(((Resource) resource), srcElement, srcElement.getName());
 	}
 
 	private AutomationSystem getAutomationSystem() {
