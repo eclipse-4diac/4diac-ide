@@ -33,8 +33,20 @@ public class DeploymentDebugModelPresentation extends EvaluatorDebugModelPresent
 	public static final String WATCH_COLOR = "org.eclipse.fordiac.ide.deployment.debug.ui.watchColor"; //$NON-NLS-1$
 	public static final String WATCH_ERROR_COLOR = "org.eclipse.fordiac.ide.deployment.debug.ui.watchErrorColor"; //$NON-NLS-1$
 
+	public static final String FORCE_TEXT_COLOR = "org.eclipse.fordiac.ide.deployment.debug.ui.forceTextColor"; //$NON-NLS-1$
+	public static final String WATCH_TEXT_COLOR = "org.eclipse.fordiac.ide.deployment.debug.ui.watchTextColor"; //$NON-NLS-1$
+	public static final String WATCH_ERROR_TEXT_COLOR = "org.eclipse.fordiac.ide.deployment.debug.ui.watchErrorTextColor"; //$NON-NLS-1$
+
 	@Override
 	public Color getForeground(final Object element) {
+		if (element instanceof final IWatch watch) {
+			if (!watch.isAlive()) {
+				return getWatchErrorTextColor();
+			}
+			if (element instanceof final IVarDeclarationWatch variableWatch && variableWatch.isForced()) {
+				return getForceTextColor();
+			}
+		}
 		return null;
 	}
 
@@ -112,5 +124,17 @@ public class DeploymentDebugModelPresentation extends EvaluatorDebugModelPresent
 
 	public static Color getWatchErrorColor() {
 		return JFaceResources.getColorRegistry().get(WATCH_ERROR_COLOR);
+	}
+
+	public static Color getForceTextColor() {
+		return JFaceResources.getColorRegistry().get(FORCE_TEXT_COLOR);
+	}
+
+	public static Color getWatchTextColor() {
+		return JFaceResources.getColorRegistry().get(WATCH_TEXT_COLOR);
+	}
+
+	public static Color getWatchErrorTextColor() {
+		return JFaceResources.getColorRegistry().get(WATCH_ERROR_TEXT_COLOR);
 	}
 }

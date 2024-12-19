@@ -974,6 +974,24 @@
 			label="Watch error background"
 			value="192,28,40">
 		</colorDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.forceTextColor"
+			label="Force text color"
+			value="COLOR_BLACK">
+		</colorDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.watchTextColor"
+			label="Watch text color"
+			value="COLOR_BLACK">
+		</colorDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.watchErrorTextColor"
+			label="Watch error text color"
+			value="COLOR_BLACK">
+		</colorDefinition>
 	</extension>
 	<extension
 		point="org.eclipse.ui.editors.annotationTypes">

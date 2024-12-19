@@ -138,6 +138,7 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 		getFigure().setText(getModel().getText());
+		getFigure().setForegroundColor(getWatchTextColor());
 		getFigure().setBackgroundColor(getWatchColor());
 		showPinValues(false);
 	}
@@ -151,6 +152,17 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 			return DeploymentDebugModelPresentation.getForceColor();
 		}
 		return DeploymentDebugModelPresentation.getWatchColor();
+	}
+
+	protected Color getWatchTextColor() {
+		final IWatch watch = getModel().getWatch();
+		if (!watch.isAlive()) {
+			return DeploymentDebugModelPresentation.getWatchErrorTextColor();
+		}
+		if (watch instanceof final IVarDeclarationWatch variableWatch && variableWatch.isForced()) {
+			return DeploymentDebugModelPresentation.getForceTextColor();
+		}
+		return DeploymentDebugModelPresentation.getWatchTextColor();
 	}
 
 	private static int maxLabelWidth = -1;
