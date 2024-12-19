@@ -21,10 +21,11 @@ import java.util.function.Predicate;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.ui.widget.DataObjectTransfer;
+import org.eclipse.fordiac.ide.ui.widget.FordiacCopyDataCommandHandler;
 import org.eclipse.fordiac.ide.ui.widget.ImportTransfer;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
-import org.eclipse.nebula.widgets.nattable.copy.command.CopyDataCommandHandler;
 import org.eclipse.nebula.widgets.nattable.copy.command.CopyDataToClipboardCommand;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
@@ -35,7 +36,7 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Display;
 
-public class CopyDataImportCommandHandler extends CopyDataCommandHandler {
+public class CopyDataImportCommandHandler extends FordiacCopyDataCommandHandler {
 	private final NatTableColumnProvider<? extends NatTableColumn> columnProvider;
 	private final Map<? extends NatTableColumn, Function<EObject, LibraryElement>> colMapper;
 
@@ -54,9 +55,17 @@ public class CopyDataImportCommandHandler extends CopyDataCommandHandler {
 		final var imports = getImports(assembledCopiedDataStructure);
 
 		final Clipboard clipboard = new Clipboard(Display.getDefault());
+
+		final var objects = clipboard.getContents(DataObjectTransfer.getInstance());
 		final var textContent = clipboard.getContents(TextTransfer.getInstance());
-		clipboard.setContents(new Object[] { textContent, imports },
-				new Transfer[] { TextTransfer.getInstance(), ImportTransfer.getInstance() });
+		if (objects != null) {
+			clipboard.setContents(new Object[] { objects, imports },
+					new Transfer[] { DataObjectTransfer.getInstance(), ImportTransfer.getInstance() });
+		} else if (textContent != null) {
+			clipboard.setContents(new Object[] { textContent, imports },
+					new Transfer[] { TextTransfer.getInstance(), ImportTransfer.getInstance() });
+		}
+
 		clipboard.dispose();
 	}
 

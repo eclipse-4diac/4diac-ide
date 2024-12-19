@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,15 +14,15 @@ package org.eclipse.fordiac.ide.ui.widget;
 
 import org.eclipse.gef.dnd.SimpleObjectTransfer;
 
-public class ImportTransfer extends SimpleObjectTransfer {
-	private static final ImportTransfer INSTANCE = new ImportTransfer();
-	private static final String TYPE_NAME = "org.eclipse.4diac.clipboard.transfer.imports"; //$NON-NLS-1$
+public class DataObjectTransfer extends SimpleObjectTransfer {
+	private static final DataObjectTransfer INSTANCE = new DataObjectTransfer();
+	private static final String TYPE_NAME = "org.eclipse.4diac.clipboard.transfer.dataObject"; //$NON-NLS-1$
 	private static final int TYPE_ID = registerType(TYPE_NAME);
 
-	private ImportTransfer() {
+	private DataObjectTransfer() {
 	}
 
-	public static ImportTransfer getInstance() {
+	public static DataObjectTransfer getInstance() {
 		return INSTANCE;
 	}
 

@@ -23,8 +23,8 @@ import org.eclipse.nebula.widgets.nattable.config.CellConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.config.DefaultNatTableStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.copy.action.CopyDataAction;
 import org.eclipse.nebula.widgets.nattable.copy.action.PasteDataAction;
-import org.eclipse.nebula.widgets.nattable.copy.command.CopyDataCommandHandler;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.edit.action.KeyEditAction;
@@ -129,13 +129,12 @@ public final class NatTableWidgetFactory {
 		selectionLayer.addConfiguration(new DefaultSelectionBindings() {
 			@Override
 			public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
-				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'v'),
-						new PasteDataIntoTableAction());
+				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'v'), new PasteDataAction());
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'x'), new CutDataFromTableAction());
-				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'c'), new CopyDataFromTableAction());
+				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'c'), new CopyDataAction());
 			}
 		});
-		selectionLayer.registerCommandHandler(new CopyDataCommandHandler(selectionLayer));
+		selectionLayer.registerCommandHandler(new FordiacCopyDataCommandHandler(selectionLayer));
 		selectionLayer.registerCommandHandler(new PasteDataFromClipboardCommandHandler(selectionLayer));
 		selectionLayer.registerCommandHandler(new DeleteSelectionCommandHandler(selectionLayer));
 		final ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
@@ -174,15 +173,13 @@ public final class NatTableWidgetFactory {
 			public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
 				uiBindingRegistry.unregisterKeyBinding(new KeyEventMatcher(SWT.MOD1, 'c'));
 				uiBindingRegistry.unregisterKeyBinding(new KeyEventMatcher(SWT.MOD1, 'x'));
-				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'c'), new CopyDataFromTableAction());
-				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'v'),
-						new PasteDataIntoTableAction(section));
+				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'c'), new CopyDataAction());
+				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'v'), new PasteDataAction());
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'x'),
 						new CutDataFromTableAction(section));
 			}
 		});
-		selectionLayer.registerCommandHandler(new CopyDataCommandHandler(selectionLayer));
-		selectionLayer.registerCommandHandler(new PasteDataFromClipboardCommandHandler(selectionLayer));
+		selectionLayer.registerCommandHandler(new FordiacCopyDataCommandHandler(selectionLayer));
 		selectionLayer.registerCommandHandler(new DeleteSelectionCommandHandler(selectionLayer));
 		final ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
 
@@ -190,7 +187,10 @@ public final class NatTableWidgetFactory {
 		final ColumnHeaderLayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, viewportLayer,
 				selectionLayer);
 
-		final IDataProvider rowHeaderProvider = new RowHeaderDataProvider(bodyDataLayer.getDataProvider(), isInput);
+		final RowHeaderDataProvider rowHeaderProvider = new RowHeaderDataProvider(bodyDataLayer.getDataProvider(),
+				isInput);
+		selectionLayer.registerCommandHandler(
+				new PasteDataFromClipboardCommandHandler(selectionLayer, section, rowHeaderProvider));
 		final DataLayer rowHeaderDataLayer = new DataLayer(rowHeaderProvider, 25, DataLayer.DEFAULT_ROW_HEIGHT);
 		final RowHeaderLayer rowHeaderLayer = new RowHeaderLayer(rowHeaderDataLayer, viewportLayer, selectionLayer,
 				false);
