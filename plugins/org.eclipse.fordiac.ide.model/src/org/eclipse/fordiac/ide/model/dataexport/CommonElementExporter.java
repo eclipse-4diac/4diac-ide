@@ -280,7 +280,8 @@ public class CommonElementExporter {
 		} else {
 			addEmptyStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
 		}
-		getWriter().writeAttribute(LibraryElementTags.NAME_ATTRIBUTE, name);
+
+		addNameAttribute(name);
 		if (type != null && !(type.eContainer() instanceof AttributeDeclaration)) {
 			addTypeAttribute(type);
 		}
@@ -388,10 +389,13 @@ public class CommonElementExporter {
 
 	protected void addAttributes(final EList<Attribute> attributes) throws XMLStreamException {
 		for (final Attribute attribute : attributes) {
+			final String name;
 			if (attribute.getAttributeDeclaration() != null) {
-				addDependency(attribute.getAttributeDeclaration());
+				name = PackageNameHelper.getFullTypeName(addDependency(attribute.getAttributeDeclaration()));
+			} else {
+				name = attribute.getName();
 			}
-			addAttributeElement(attribute.getName(), attribute.getType(), attribute.getValue(), attribute.getComment());
+			addAttributeElement(name, attribute.getType(), attribute.getValue(), attribute.getComment());
 		}
 	}
 
