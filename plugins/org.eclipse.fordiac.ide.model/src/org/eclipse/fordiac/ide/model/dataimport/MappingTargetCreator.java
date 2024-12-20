@@ -45,7 +45,7 @@ public final class MappingTargetCreator {
 			created.setInterface(InterfaceListCopier.copy(srcElement.getInterface(), true, true));
 			created.setPosition(EcoreUtil.copy(srcElement.getPosition()));
 			if (srcElement instanceof final ConfigurableFB srcConfFB) {
-				setupConfigureableFB(srcConfFB, (ConfigurableFB) created);
+				((ConfigurableFB) created).setDataType(srcConfFB.getDataType());
 			}
 			created.setName(extractTargetFBName(targetFBName));
 			res.getFBNetwork().getNetworkElements().add(created);
@@ -77,11 +77,6 @@ public final class MappingTargetCreator {
 		case final UntypedSubApp untypedSubapp -> LibraryElementFactory.eINSTANCE.createUntypedSubApp();
 		default -> null;
 		};
-	}
-
-	private static void setupConfigureableFB(final ConfigurableFB srcConfFB, final ConfigurableFB targetConfFB) {
-		targetConfFB.setDataType(srcConfFB.getDataType());
-		targetConfFB.updateConfiguration();
 	}
 
 	private static String extractTargetFBName(final String targetFBName) {
