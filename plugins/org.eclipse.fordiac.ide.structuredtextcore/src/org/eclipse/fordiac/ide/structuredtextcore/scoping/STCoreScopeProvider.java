@@ -129,7 +129,7 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 			}
 			if (context instanceof final STFeatureExpression expression && expression.isCall()) {
 				final List<DataType> argumentTypes = expression.getParameters().stream()
-						.map(STCallArgument::getResultType).map(DataType.class::cast)
+						.map(STCallArgument::getDeclaredResultType).map(DataType.class::cast)
 						.map(type -> Objects.requireNonNullElse(type, GenericTypes.ANY)).toList();
 				return new STStandardFunctionScope(
 						filterScope(super.getScope(context, reference), this::isApplicableForFeatureReference),

@@ -42,7 +42,7 @@ public class STCoreLinkingDiagnosticMessageProvider extends LinkingDiagnosticMes
 			final var receiverType = getReceiverType(context);
 			if (context.getContext() instanceof final STFeatureExpression expression && expression.isCall()) {
 				final List<INamedElement> argumentTypes = expression.getParameters().stream()
-						.map(STCallArgument::getResultType).toList();
+						.map(STCallArgument::getDeclaredResultType).toList();
 				return createCallableDiagnosticMessage(context, argumentTypes, receiverType);
 			}
 			return createVariableDiagnosticMessage(context, receiverType);
@@ -77,32 +77,38 @@ public class STCoreLinkingDiagnosticMessageProvider extends LinkingDiagnosticMes
 	}
 
 	protected static DiagnosticMessage createDataTypeDiagnosticMessage(final ILinkingDiagnosticContext context) {
-		return new DiagnosticMessage(MessageFormat.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedDataType, context.getLinkText()),
+		return new DiagnosticMessage(MessageFormat
+				.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedDataType, context.getLinkText()),
 				Severity.ERROR, Diagnostic.LINKING_DIAGNOSTIC);
 	}
 
 	protected static DiagnosticMessage createVariableDiagnosticMessage(final ILinkingDiagnosticContext context,
 			final INamedElement type) {
 		if (type != null && !type.eIsProxy()) {
-			return new DiagnosticMessage(MessageFormat.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedVariableForType,
-					context.getLinkText(), type.getQualifiedName()), Severity.ERROR, Diagnostic.LINKING_DIAGNOSTIC);
+			return new DiagnosticMessage(
+					MessageFormat.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedVariableForType,
+							context.getLinkText(), type.getQualifiedName()),
+					Severity.ERROR, Diagnostic.LINKING_DIAGNOSTIC);
 		}
-		return new DiagnosticMessage(MessageFormat.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedVariable, context.getLinkText()),
+		return new DiagnosticMessage(MessageFormat
+				.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedVariable, context.getLinkText()),
 				Severity.ERROR, Diagnostic.LINKING_DIAGNOSTIC);
 	}
 
 	protected static DiagnosticMessage createCallableDiagnosticMessage(final ILinkingDiagnosticContext context,
 			final List<INamedElement> argumentTypes, final INamedElement type) {
-		final String argumentTypesString = argumentTypes.stream().map(t -> t != null ? t.getName() : Messages.STCoreLinkingDiagnosticMessageProvider_UnknownType)
+		final String argumentTypesString = argumentTypes.stream()
+				.map(t -> t != null ? t.getName() : Messages.STCoreLinkingDiagnosticMessageProvider_UnknownType)
 				.collect(Collectors.joining(", ")); //$NON-NLS-1$
 		if (type != null && !type.eIsProxy()) {
-			return new DiagnosticMessage(MessageFormat.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedCallableForType,
-					context.getLinkText(),
-					argumentTypesString, type.getQualifiedName()),
+			return new DiagnosticMessage(
+					MessageFormat.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedCallableForType,
+							context.getLinkText(), argumentTypesString, type.getQualifiedName()),
 					Severity.ERROR, Diagnostic.LINKING_DIAGNOSTIC);
 		}
 		return new DiagnosticMessage(
-				MessageFormat.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedCallable, context.getLinkText(), argumentTypesString),
+				MessageFormat.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedCallable,
+						context.getLinkText(), argumentTypesString),
 				Severity.ERROR, Diagnostic.LINKING_DIAGNOSTIC);
 	}
 
@@ -110,11 +116,12 @@ public class STCoreLinkingDiagnosticMessageProvider extends LinkingDiagnosticMes
 			final INamedElement feature) {
 		if (feature instanceof final ICallable callable && !callable.eIsProxy()) {
 			return new DiagnosticMessage(
-					MessageFormat.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedParameterForCallable, context.getLinkText(),
-							callable.getQualifiedName()),
+					MessageFormat.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedParameterForCallable,
+							context.getLinkText(), callable.getQualifiedName()),
 					Severity.ERROR, Diagnostic.LINKING_DIAGNOSTIC);
 		}
-		return new DiagnosticMessage(MessageFormat.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedParameter, context.getLinkText()),
+		return new DiagnosticMessage(MessageFormat
+				.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedParameter, context.getLinkText()),
 				Severity.ERROR, Diagnostic.LINKING_DIAGNOSTIC);
 	}
 }
