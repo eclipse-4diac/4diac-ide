@@ -338,11 +338,11 @@ final class STCoreUtil {
 			STUnaryExpression case op.logical:
 				expectedType.equivalentAnyBitType
 			STBinaryExpression case op.arithmetic || op.range:
-				(expression === left ? right?.declaredResultType : left?.declaredResultType).equivalentAnyNumType.
-					commonSubtype(expectedType.equivalentAnyNumType)
+				expectedType.equivalentAnyNumType.getCompatibleType(
+					(expression === left ? right?.declaredResultType : left?.declaredResultType).equivalentAnyNumType)
 			STBinaryExpression case op.logical:
-				(expression === left ? right?.declaredResultType : left?.declaredResultType).equivalentAnyBitType.
-					commonSubtype(expectedType.equivalentAnyBitType)
+				expectedType.equivalentAnyBitType.getCompatibleType(
+					(expression === left ? right?.declaredResultType : left?.declaredResultType).equivalentAnyBitType)
 			STBinaryExpression case op.comparison:
 				expression === left ? right?.declaredResultType : left?.declaredResultType
 			STAssignment:
@@ -573,18 +573,43 @@ final class STCoreUtil {
 		]
 	}
 
-	def static getEquivalentAnyNumType(INamedElement type) {
+	def static DataType getCompatibleType(DataType type, DataType other) {
+		if (type === null)
+			other
+		else if (other === null)
+			type
+		else if (type.isAssignableFrom(other) || other.isAssignableFrom(type))
+			type
+		else if (type instanceof AnyUnsignedType &&
+			(type.isAssignableFrom(other.equivalentAnyUnsignedType) ||
+				other.equivalentAnyUnsignedType.isAssignableFrom(type)))
+			type
+		else // fallback to other _only_ if type is not compatible
+			other
+	}
+
+	def static AnyNumType getEquivalentAnyNumType(INamedElement type) {
 		switch (type) {
 			BoolType: ElementaryTypes.SINT
 			ByteType: ElementaryTypes.USINT
 			WordType: ElementaryTypes.UINT
 			DwordType: ElementaryTypes.UDINT
 			LwordType: ElementaryTypes.ULINT
-			DataType: type
+			AnyNumType: type
 		}
 	}
 
-	def static getEquivalentAnyBitType(INamedElement type) {
+	def static AnyUnsignedType getEquivalentAnyUnsignedType(INamedElement type) {
+		switch (type) {
+			SintType: ElementaryTypes.USINT
+			IntType: ElementaryTypes.ULINT
+			DintType: ElementaryTypes.UDINT
+			LintType: ElementaryTypes.ULINT
+			AnyUnsignedType: type
+		}
+	}
+
+	def static AnyBitType getEquivalentAnyBitType(INamedElement type) {
 		switch (type) {
 			SintType,
 			UsintType: ElementaryTypes.BYTE
@@ -594,7 +619,7 @@ final class STCoreUtil {
 			UdintType: ElementaryTypes.DWORD
 			LintType,
 			UlintType: ElementaryTypes.LWORD
-			DataType: type
+			AnyBitType: type
 		}
 	}
 
