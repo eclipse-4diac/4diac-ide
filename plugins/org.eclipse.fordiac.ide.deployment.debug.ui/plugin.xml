@@ -994,6 +994,15 @@
 		</colorDefinition>
 	</extension>
 	<extension
+		point="org.eclipse.e4.ui.css.swt.theme">
+		<stylesheet
+			uri="css/e4-dark_fordiac_watches.css">
+			<themeid
+				refid="org.eclipse.e4.ui.css.theme.e4_dark">
+			</themeid>
+		</stylesheet>
+	</extension>
+	<extension
 		point="org.eclipse.ui.editors.annotationTypes">
 		<type
 			markerType="org.eclipse.fordiac.ide.deployment.debug.watchpointMarker"

@@ -1,0 +1,21 @@
+/*******************************************************************************
+ * Copyright (c) 2024 Martin Erich Jobst
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Martin Jobst - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+IEclipsePreferences#org-eclipse-ui-workbench:org-eclipse-fordiac-ide-deployment-debug-ui {
+	preferences:
+		'org.eclipse.fordiac.ide.deployment.debug.ui.forceColor=128,0,192'
+		'org.eclipse.fordiac.ide.deployment.debug.ui.forceTextColor=170,149,178'
+		'org.eclipse.fordiac.ide.deployment.debug.ui.watchColor=48,64,184'
+		'org.eclipse.fordiac.ide.deployment.debug.ui.watchTextColor=164,170,195'
+		'org.eclipse.fordiac.ide.deployment.debug.ui.watchErrorColor=196,0,64'
+		'org.eclipse.fordiac.ide.deployment.debug.ui.watchErrorTextColor=192,160,170'
+} 
