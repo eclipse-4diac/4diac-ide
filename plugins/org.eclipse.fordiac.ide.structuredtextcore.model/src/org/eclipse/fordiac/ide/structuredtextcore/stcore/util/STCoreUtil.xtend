@@ -87,7 +87,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgume
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
@@ -404,7 +403,7 @@ final class STCoreUtil {
 	def private static INamedElement computeExpectedType(STCallArgument argument) {
 		val featureExpression = argument.eContainer
 		if (featureExpression instanceof STFeatureExpression) {
-			val feature = featureExpression.featureNoresolve
+			val feature = featureExpression.feature
 			if (feature instanceof STStandardFunction) {
 				val expectedReturnType = switch (type: featureExpression.expectedType) { DataType: type }
 				val index = featureExpression.parameters.indexOf(argument)
@@ -414,29 +413,25 @@ final class STCoreUtil {
 						index)
 				}
 			} else {
-				argument.parameterNoresolve.featureType
+				argument.parameter.featureType
 			}
 		}
 	}
 
-	def package static dispatch getParameterNoresolve(STCallNamedInputArgument argument) {
-		switch (target : argument.eGet(STCorePackage.eINSTANCE.STCallNamedInputArgument_Parameter, false)) {
-			INamedElement case !target.eIsProxy: target
-		}
+	def package static dispatch getParameter(STCallNamedInputArgument argument) {
+		argument.parameter
 	}
 
-	def package static dispatch getParameterNoresolve(STCallNamedOutputArgument argument) {
-		switch (target : argument.eGet(STCorePackage.eINSTANCE.STCallNamedOutputArgument_Parameter, false)) {
-			INamedElement case !target.eIsProxy: target
-		}
+	def package static dispatch getParameter(STCallNamedOutputArgument argument) {
+		argument.parameter
 	}
 
-	def package static dispatch getParameterNoresolve(STCallUnnamedArgument argument) {
+	def package static dispatch getParameter(STCallUnnamedArgument argument) {
 		val featureExpression = argument.eContainer
 		if (featureExpression instanceof STFeatureExpression) {
 			val index = featureExpression.parameters.indexOf(argument)
 			if (index >= 0) {
-				val feature = featureExpression.featureNoresolve
+				val feature = featureExpression.feature
 				if (feature instanceof ICallable) {
 					val inputParameters = feature.inputParameters
 					val outputParameters = feature.outputParameters
@@ -451,12 +446,6 @@ final class STCoreUtil {
 						outputParameters.get(index - inputParameters.size - inOutParameters.size)
 				}
 			}
-		}
-	}
-
-	def package static getFeatureNoresolve(STFeatureExpression expr) {
-		switch (feature : expr.eGet(STCorePackage.eINSTANCE.STFeatureExpression_Feature, false)) {
-			INamedElement case !feature.eIsProxy: feature
 		}
 	}
 
