@@ -960,19 +960,19 @@
 			categoryId="org.eclipse.fordiac.ide.themeCategory"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.forceColor"
 			label="Force background"
-			value="97,53,131">
+			value="172,72,255">
 		</colorDefinition>
 		<colorDefinition
 			categoryId="org.eclipse.fordiac.ide.themeCategory"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.watchColor"
 			label="Watch background"
-			value="26,95,180">
+			value="72,148,255">
 		</colorDefinition>
 		<colorDefinition
 			categoryId="org.eclipse.fordiac.ide.themeCategory"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.watchErrorColor"
 			label="Watch error background"
-			value="192,28,40">
+			value="255,48,64">
 		</colorDefinition>
 		<colorDefinition
 			categoryId="org.eclipse.fordiac.ide.themeCategory"
