@@ -94,19 +94,14 @@ final package class ExpressionAnnotations {
 							ElementaryTypes.TIME
 						else if (left instanceof AnyDateType && right instanceof AnyDateType)
 							ElementaryTypes.LTIME
-						else if (left.isAssignableFrom(right))
-							left
-						else if (right.isAssignableFrom(left))
-							right
+						else if (left instanceof AnyDurationType && right instanceof AnyDurationType)
+							left.commonSupertype(right)
 						else
-							null
-					} else if (expr.op.logical || expr.op.range) {
-						if (left.isAssignableFrom(right))
-							left
-						else if (right.isAssignableFrom(left))
-							right
-						else
-							null
+							left.commonSupertype(right).equivalentAnyNumType
+					} else if (expr.op.logical) {
+						left.commonSupertype(right).equivalentAnyBitType
+					} else if (expr.op.range) {
+						left.commonSupertype(right)
 					} else
 						null
 				} else if (declared)
@@ -471,5 +466,18 @@ final package class ExpressionAnnotations {
 					second
 			}
 		}
+	}
+
+	def package static DataType commonSupertype(DataType first, DataType second) {
+		if (first === null)
+			second
+		else if (second === null)
+			first
+		else if (first.isAssignableFrom(second))
+			first
+		else if (second.isAssignableFrom(first))
+			second
+		else
+			null
 	}
 }
