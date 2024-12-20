@@ -65,7 +65,7 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 
 	def dispatch void createCodeMinings(STNumericLiteral literal, IDocument document,
 		IAcceptor<? super ICodeMining> acceptor) throws BadLocationException {
-		if (isEnableLiteralTypeCodeMinings && literal.declaredResultType === null &&
+		if (isEnableLiteralTypeCodeMinings && literal.type === null &&
 			literal.showLiteralTypeCodeMining) {
 			val inferredType = literal.resultType
 			if (inferredType !== null) {
@@ -82,7 +82,7 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 
 	def dispatch void createCodeMinings(STStringLiteral literal, IDocument document,
 		IAcceptor<? super ICodeMining> acceptor) throws BadLocationException {
-		if (isEnableLiteralTypeCodeMinings && literal.declaredResultType === null &&
+		if (isEnableLiteralTypeCodeMinings && literal.type === null &&
 			literal.showLiteralTypeCodeMining) {
 			val inferredType = literal.resultType
 			if (inferredType !== null) {

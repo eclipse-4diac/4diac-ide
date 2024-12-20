@@ -206,7 +206,7 @@ final package class ExpressionAnnotations {
 	}
 
 	def package static INamedElement getResultType(STNumericLiteral expr) {
-		getDeclaredResultType(expr) ?: switch (result : expr.expectedType) {
+		expr.type ?: switch (result : expr.expectedType) {
 			DataType case result.isNumericValueValid(expr.value):
 				result
 			AnyUnsignedType:
@@ -227,7 +227,13 @@ final package class ExpressionAnnotations {
 				}
 			default:
 				null
-		} ?: switch (it : expr.value) {
+		} ?: getValueType(expr)
+	}
+
+	def package static INamedElement getDeclaredResultType(STNumericLiteral expr) { expr.type ?: getValueType(expr) }
+
+	def package static INamedElement getValueType(STNumericLiteral expr) {
+		switch (it : expr.value) {
 			Boolean: ElementaryTypes.BOOL
 			BigDecimal: ElementaryTypes.LREAL
 			BigInteger case checkRange(Byte.MIN_VALUE, Byte.MAX_VALUE): ElementaryTypes.SINT
@@ -238,8 +244,6 @@ final package class ExpressionAnnotations {
 			default: null
 		}
 	}
-
-	def package static INamedElement getDeclaredResultType(STNumericLiteral expr) { expr.type }
 
 	def package static INamedElement getResultType(STDateLiteral expr) { getDeclaredResultType(expr) }
 
@@ -258,17 +262,21 @@ final package class ExpressionAnnotations {
 	def package static INamedElement getDeclaredResultType(STDateAndTimeLiteral expr) { expr.type }
 
 	def package static INamedElement getResultType(STStringLiteral expr) {
-		getDeclaredResultType(expr) ?: switch (result : expr.expectedType) {
+		expr.type ?: switch (result : expr.expectedType) {
 			DataType case result.isStringValueValid(expr.value): result
 			default: null
-		} ?: if (expr.value.length == 1) {
+		} ?: getValueType(expr)
+	}
+
+	def package static INamedElement getDeclaredResultType(STStringLiteral expr) { expr.type ?: getValueType(expr) }
+
+	def package static INamedElement getValueType(STStringLiteral expr) {
+		if (expr.value.length == 1) {
 			if(expr.value.wide) ElementaryTypes.WCHAR else ElementaryTypes.CHAR
 		} else {
 			if(expr.value.wide) ElementaryTypes.WSTRING else ElementaryTypes.STRING
 		}
 	}
-
-	def package static INamedElement getDeclaredResultType(STStringLiteral expr) { expr.type }
 
 	def package static INamedElement getResultType(STCallUnnamedArgument arg) { arg.argument?.resultType }
 
