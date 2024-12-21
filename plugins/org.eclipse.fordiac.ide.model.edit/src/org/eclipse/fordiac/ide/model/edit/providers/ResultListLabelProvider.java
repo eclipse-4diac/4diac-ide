@@ -35,15 +35,8 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 
 	@Override
 	public StyledString getStyledText(final Object element) {
-		StyledString styledString = null;
 		if (element instanceof final TypeEntry entry) {
-			styledString = new StyledString(entry.getTypeName());
-
-			final String packageName = entry.getPackageName();
-			if (!packageName.isEmpty()) {
-				styledString.append(" - " + packageName, StyledString.DECORATIONS_STYLER); //$NON-NLS-1$
-			}
-			styledString.append(" - " + entry.getComment(), StyledString.QUALIFIER_STYLER); //$NON-NLS-1$
+			final StyledString styledString = getTypeEntryStyledText(entry);
 
 			int lastIndex = 0;
 			for (final String searchStringElement : searchString) {
@@ -54,10 +47,22 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 					lastIndex = offset + searchStringElement.length();
 				}
 			}
-
-		} else {
-			styledString = new StyledString(element.toString());
+			return styledString;
 		}
+		if (element != null) {
+			return new StyledString(element.toString());
+		}
+		return new StyledString();
+	}
+
+	public static StyledString getTypeEntryStyledText(final TypeEntry entry) {
+		final StyledString styledString = new StyledString(entry.getTypeName());
+
+		final String packageName = entry.getPackageName();
+		if (!packageName.isEmpty()) {
+			styledString.append(" - " + packageName, StyledString.DECORATIONS_STYLER); //$NON-NLS-1$
+		}
+		styledString.append(" - " + entry.getComment(), StyledString.QUALIFIER_STYLER); //$NON-NLS-1$
 		return styledString;
 	}
 

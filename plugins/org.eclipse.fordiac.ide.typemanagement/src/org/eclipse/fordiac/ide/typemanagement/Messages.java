@@ -142,10 +142,10 @@ public final class Messages extends NLS {
 	public static String RenameType_Name;
 	public static String RenameType_TypeExists;
 	public static String OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE;
-	public static String OpenTypeHandler_NO_FILES_IN_WORKSPACE;
-	public static String OpenTypeHandler_NO_FILES_SELECTED;
 	public static String OpenTypeHandler_OPEN_TYPE_ERROR_TITLE;
 	public static String OpenTypeHandler_OPEN_TYPE_TITLE;
+	public static String OpenTypeHandler_DialogMessage;
+	public static String OpenTypeHandler_SearchInAllProjects;
 
 	public static String typeLibraryHasAlreadyBeenExtracted;
 	public static String typeManagementPreferencePageTitle;
