@@ -281,10 +281,10 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private void addConnectionCoordinates(final Connection connection) throws XMLStreamException {
 		final ConnectionRoutingData routingData = connection.getRoutingData();
-		if (routingData != null && 0 != routingData.getDx1()) {
+		if (routingData != null && !routingData.is1SegementData()) {
 			// only export connection routing information if not a straight line
 			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE, positionFormater.format(routingData.getDx1()));
-			if (0 != routingData.getDx2()) {
+			if (routingData.is5SegementData()) {
 				// only export the second two if a five segment connection
 				getWriter().writeAttribute(LibraryElementTags.DX2_ATTRIBUTE,
 						positionFormater.format(routingData.getDx2()));

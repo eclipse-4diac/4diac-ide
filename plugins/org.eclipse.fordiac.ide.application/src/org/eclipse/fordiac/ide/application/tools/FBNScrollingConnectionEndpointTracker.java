@@ -101,8 +101,7 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 			if (conn.getRoutingData().is3SegementData()
 					&& RequestConstants.REQ_RECONNECT_SOURCE.equals(getCommandName())) {
 				// if we have a 3 segment connection and we are dragging the destination we need
-				// to take the first
-				// segment into account for the border
+				// to take the first segment into account for the border
 				final Insets adjustedBorder = new Insets(super.getCanvasBorder());
 				adjustedBorder.right += toScreen(conn.getRoutingData().getDx1());
 				return adjustedBorder;

@@ -297,11 +297,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dy"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/needsValidation"/>
       <genOperations ecoreOperation="lib.ecore#//ConnectionRoutingData/is1SegementData"
-          body="return getDx1() == 0.0;"/>
+          body="return ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDx1());"/>
       <genOperations ecoreOperation="lib.ecore#//ConnectionRoutingData/is3SegementData"
-          body="return getDx1() != 0.0 &amp;&amp; getDy() == 0.0;"/>
+          body="return !ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDx1()) &amp;&amp; ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDy());"/>
       <genOperations ecoreOperation="lib.ecore#//ConnectionRoutingData/is5SegementData"
-          body="return getDx1() != 0.0 &amp;&amp; getDy() != 0.0;"/>
+          body="return  !ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDx1()) &amp;&amp; !ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDy());"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//DataConnection">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//DataConnection/fBNetwork"/>

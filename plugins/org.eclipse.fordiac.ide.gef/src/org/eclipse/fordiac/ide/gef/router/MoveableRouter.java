@@ -81,7 +81,7 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 	private static boolean invalidOneSegmentConnection(final ConnectionRoutingData routingData) {
 		// check if we have a 1 line that should be something else (e.g., after
 		// connection creation, problems with automatic layout generation)
-		return routingData.getDx1() == 0 && (START_POINT.y != END_POINT.y || (START_POINT.x > END_POINT.x));
+		return routingData.is1SegementData() && (START_POINT.y != END_POINT.y || (START_POINT.x > END_POINT.x));
 	}
 
 	private static boolean needsSwap(final Connection conn) {
@@ -113,9 +113,9 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 
 	private static void createBendPointList(final Point sourceP, final Point destP,
 			final ConnectionRoutingData routingData, final PointList points) {
-		if (0 != routingData.getDx1()) {
+		if (!routingData.is1SegementData()) {
 			points.addPoint(sourceP.x + toScreen(routingData.getDx1()), sourceP.y);
-			if (0 == routingData.getDy()) {
+			if (routingData.is3SegementData()) {
 				// we have a three segment connection
 				points.addPoint(sourceP.x + toScreen(routingData.getDx1()), destP.y);
 			} else {
@@ -129,12 +129,12 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 
 	private static void valdidateConnectionRoutingParams(final ConnectionRoutingData routingData, final Point sourceP,
 			final Point destP) {
-		if (0 == routingData.getDx1()) {
+		if (routingData.is1SegementData()) {
 			validate1SegmentConn(routingData, sourceP, destP);
 		} else if ((sourceP.y == destP.y) && !requires5SegementConnection(sourceP, destP)) {
 			// we now have a straight line
 			routingData.setDx1(0);
-		} else if (0 == routingData.getDx2()) {
+		} else if (routingData.is3SegementData()) {
 			validate3SegmentConn(routingData, sourceP, destP);
 		} else {
 			validate5SegmentConn(routingData, sourceP, destP);
@@ -184,7 +184,7 @@ public class MoveableRouter extends BendpointConnectionRouter implements Bendpoi
 		routingData.setDx1(MIN_CONNECTION_FB_DISTANCE_IEC61499); // move it of the side of the fb
 		routingData.setDx2(MIN_CONNECTION_FB_DISTANCE_IEC61499); // move it of the side of the fb
 		routingData.setDy(fromScreen((destP.y - sourceP.y) / 2));
-		if (0 == routingData.getDy()) {
+		if (Math.abs(routingData.getDy()) < 0.01) {
 			// if source and dest are on the same height add a bend to it to better show it
 			routingData.setDy(DOUBLE_MIN_CONNECTION_FB_DISTANCE_IEC61499);
 		}

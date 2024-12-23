@@ -241,7 +241,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 */
 	@Override
 	public boolean is1SegementData() {
-		return getDx1() == 0.0;
+		return ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDx1());
 	}
 
 	/**
@@ -251,7 +251,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 */
 	@Override
 	public boolean is3SegementData() {
-		return getDx1() != 0.0 && getDy() == 0.0;
+		return !ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDx1()) && ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDy());
 	}
 
 	/**
@@ -261,7 +261,7 @@ public class ConnectionRoutingDataImpl extends EObjectImpl implements Connection
 	 */
 	@Override
 	public boolean is5SegementData() {
-		return getDx1() != 0.0 && getDy() != 0.0;
+		return  !ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDx1()) && !ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDy());
 	}
 
 	/**

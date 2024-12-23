@@ -77,7 +77,7 @@ public class AdjustConnectionCommand extends Command {
 		switch (index) {
 		case 2:
 			int newDx1 = Math.max(point.x - sourceP.x, scaledMinDistance);
-			if (0 == newRoutingData.getDx2()) {
+			if (newRoutingData.is3SegementData()) {
 				// we have three segment connection check that we are not beyond the input
 				newDx1 = Math.min(newDx1, destP.x - sourceP.x - scaledMinDistance);
 			}
