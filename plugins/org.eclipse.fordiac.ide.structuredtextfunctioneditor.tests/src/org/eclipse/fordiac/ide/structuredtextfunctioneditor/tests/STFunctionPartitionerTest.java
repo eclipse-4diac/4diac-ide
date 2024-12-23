@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
@@ -203,7 +202,7 @@ class STFunctionPartitionerTest {
 				FUNCTION TEST2
 				END_FUNCTION
 				""";
-		assertFunctionsEquals(List.of(function.trim(), '\n' + function2), partition(function + function2));
+		assertFunctionsEquals(List.of(function, function2), partition(function + function2));
 	}
 
 	private static FunctionFBType createFunctionFBType() {
@@ -251,12 +250,11 @@ class STFunctionPartitionerTest {
 		assertTrue(partition.isPresent());
 		assertTrue(partition.get() instanceof STFunctionPartition);
 		assertEquals(text, partition.get().getOriginalSource());
-		assertEquals(text, ((STFunctionPartition) partition.get()).getFunctions().stream().map(STFunction::getText)
-				.collect(Collectors.joining()));
 		return (STFunctionPartition) partition.get();
 	}
 
 	private static void assertFunctionsEquals(final List<String> expected, final STFunctionPartition actual) {
-		assertIterableEquals(expected, actual.getFunctions().stream().map(STFunction::getText).toList());
+		assertIterableEquals(expected.stream().map(String::trim).toList(),
+				actual.getFunctions().stream().map(STFunction::getText).map(String::trim).toList());
 	}
 }

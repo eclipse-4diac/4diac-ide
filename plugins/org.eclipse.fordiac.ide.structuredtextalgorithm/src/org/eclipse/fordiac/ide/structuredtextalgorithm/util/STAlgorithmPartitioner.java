@@ -12,10 +12,8 @@
  */
 package org.eclipse.fordiac.ide.structuredtextalgorithm.util;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,13 +31,12 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSo
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STRecoveringPartitioner;
-import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.resource.XtextResource;
 
 import com.google.inject.Inject;
 
-public class STAlgorithmPartitioner extends STRecoveringPartitioner<ICallable> {
+public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmSourceElement, ICallable> {
 
 	@Inject
 	private STAlgorithmGrammarAccess grammarAccess;
@@ -57,7 +54,8 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<ICallable> {
 	}
 
 	public String combine(final List<? extends ICallable> callables) {
-		return callables.stream().map(this::toSTText).collect(Collectors.joining());
+		return callables.stream().map(this::toSTText).collect(Collectors.joining(
+				CommonElementExporter.LINE_END + CommonElementExporter.LINE_END, "", CommonElementExporter.LINE_END)); //$NON-NLS-1$
 	}
 
 	public String toSTText(final ICallable callable) {
@@ -72,26 +70,44 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<ICallable> {
 		final String text = algorithm.getText();
 		if (text.contains(grammarAccess.getSTAlgorithmAccess().getALGORITHMKeyword_0().getValue())
 				|| text.contains(grammarAccess.getSTAlgorithmAccess().getEND_ALGORITHMKeyword_3().getValue())) {
-			return text;
+			return text.trim();
 		}
 		return generateAlgorithmDefinition(algorithm);
 	}
 
 	protected static String generateAlgorithmDefinition(final STAlgorithm algorithm) {
 		final StringBuilder builder = new StringBuilder();
+		appendBlockComment(algorithm, builder);
 		builder.append("ALGORITHM "); //$NON-NLS-1$
 		builder.append(algorithm.getName());
-		builder.append(CommonElementExporter.LINE_END);
-		builder.append(algorithm.getText());
-		builder.append(CommonElementExporter.LINE_END);
+		appendText(algorithm.getText(), builder);
 		builder.append("END_ALGORITHM"); //$NON-NLS-1$
-		builder.append(CommonElementExporter.LINE_END);
-		builder.append(CommonElementExporter.LINE_END);
 		return builder.toString();
 	}
 
-	private static String toSTText(final STMethod method) {
-		return method.getText();
+	private String toSTText(final STMethod method) {
+		final String name = method.getName();
+		final String text = method.getText();
+		if ((name != null && name.startsWith(LOST_AND_FOUND_NAME))
+				|| text.contains(grammarAccess.getSTMethodAccess().getMETHODKeyword_0().getValue())
+				|| text.contains(grammarAccess.getSTMethodAccess().getEND_METHODKeyword_4().getValue())) {
+			return text.trim();
+		}
+		return generateMethodDefinition(method);
+	}
+
+	protected static String generateMethodDefinition(final STMethod method) {
+		final StringBuilder builder = new StringBuilder();
+		appendBlockComment(method, builder);
+		builder.append("METHOD "); //$NON-NLS-1$
+		builder.append(method.getName());
+		if (method.getReturnType() != null) {
+			builder.append(" : "); //$NON-NLS-1$
+			builder.append(method.getReturnType().getName());
+		}
+		appendText(method.getText(), builder);
+		builder.append("END_METHOD"); //$NON-NLS-1$
+		return builder.toString();
 	}
 
 	@Override
@@ -108,17 +124,15 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<ICallable> {
 
 	public Optional<STCorePartition> partition(final STAlgorithmSource source) {
 		try {
-			final ICompositeNode node = NodeModelUtils.getNode(source);
-			final List<ICallable> result = source.getElements().stream().map(this::convertSourceElement)
-					.filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
-			handleLostAndFound(node.getRootNode(), source.getElements(), result);
-			handleDuplicates(result);
+			final var node = NodeModelUtils.getNode(source);
+			final var result = convertSourceElements(node.getRootNode(), source.getElements());
 			return Optional.of(new STAlgorithmPartition(null, Collections.emptyList(), node.getText(), result));
 		} catch (final Exception e) {
 			return emergencyPartition(source);
 		}
 	}
 
+	@Override
 	protected ICallable convertSourceElement(final STAlgorithmSourceElement element) {
 		return switch (element) {
 		case final org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm algorithm ->
@@ -131,7 +145,7 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<ICallable> {
 
 	protected ICallable convertSourceElement(
 			final org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm algorithm) {
-		final var node = NodeModelUtils.findActualNodeFor(algorithm);
+		final var node = NodeModelUtils.getNode(algorithm.getBody());
 		if (node == null || algorithm.getName() == null) {
 			return null;
 		}
@@ -141,13 +155,13 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<ICallable> {
 		if (comment != null) {
 			result.setComment(comment);
 		}
-		result.setText(node.getText());
+		result.setText(getTotalText(node));
 		return result;
 	}
 
-	protected org.eclipse.fordiac.ide.model.libraryElement.STMethod convertSourceElement(
+	protected ICallable convertSourceElement(
 			final org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod method) {
-		final var node = NodeModelUtils.findActualNodeFor(method);
+		final var node = NodeModelUtils.getNode(method.getBody());
 		if (node == null || method.getName() == null) {
 			return null;
 		}
@@ -167,7 +181,7 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<ICallable> {
 				.filter(STAlgorithmPartitioner::isValidParameter).map(this::convertInOutParameter)
 				.forEachOrdered(result.getInOutParameters()::add);
 		result.setReturnType(resolveDataType(method.getReturnType(), method, null));
-		result.setText(node.getText());
+		result.setText(getTotalText(node));
 		return result;
 	}
 

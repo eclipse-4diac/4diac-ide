@@ -63,7 +63,7 @@ class STAlgorithmSearchSupportTest extends StructuredTextSearchSupportTest {
 				END_ALGORITHM
 				"""));
 		assertNoMatch(type.getCallables().getLast(), new NameMatcher("REQ"));
-		assertMatch(type.getCallables().getLast(), new NameMatcher("INIT"), 3, 49, 4);
+		assertMatch(type.getCallables().getLast(), new NameMatcher("INIT"), 4, 50, 4);
 	}
 
 }
