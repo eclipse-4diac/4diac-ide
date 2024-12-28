@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.debug.ui.view.editparts;
 import org.eclipse.draw2d.Button;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.fordiac.ide.debug.ui.DebugColorProvider;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorEventQueue;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorExternalEventQueue;
 import org.eclipse.gef.EditPart;
@@ -27,7 +28,8 @@ public class InputEventValueEditPart extends EventValueEditPart {
 		final Button bt = new Button(""); //$NON-NLS-1$
 		bt.setSize(50, -1);
 		bt.setOpaque(true);
-		bt.setBackgroundColor(org.eclipse.draw2d.ColorConstants.yellow);
+		bt.setBackgroundColor(DebugColorProvider.getWatchColor());
+		bt.setForegroundColor(DebugColorProvider.getWatchTextColor());
 		bt.addActionListener(e -> triggerEvent());
 		return bt;
 	}

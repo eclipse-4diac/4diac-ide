@@ -21,6 +21,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.debug.ui.DebugColorProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -78,7 +79,8 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 		};
 		l.setSize(100, -1);
 		l.setOpaque(true);
-		l.setBackgroundColor(org.eclipse.draw2d.ColorConstants.yellow);
+		l.setBackgroundColor(DebugColorProvider.getWatchColor());
+		l.setForegroundColor(DebugColorProvider.getWatchTextColor());
 		l.setPreferredSize(150, 20);
 		final LineBorder lb = new LineBorder() {
 			@Override
