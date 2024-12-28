@@ -108,11 +108,4 @@
             label="Systemconfiguration">
       </openListener>
    </extension>   
-<extension
-         point="org.eclipse.ui.elementFactories">
-      <factory
-            class="org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInputFactory"
-            id="org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInputFactory">
-      </factory>
-   </extension>
 </plugin>

@@ -1546,15 +1546,6 @@
     </markerTypeCategory>
   </extension>
   
-  <extension point="org.eclipse.ui.elementFactories">
-    <factory class="org.eclipse.fordiac.ide.application.editors.ApplicationEditorInputFactory"
-             id="org.eclipse.fordiac.ide.application.ApplicationEditorInputFactory">
-    </factory>
-    <factory class="org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInputFactory"
-             id="org.eclipse.fordiac.ide.application.SubApplicationEditorInputFactory">
-    </factory>
-  </extension>
-  
   <extension point="org.eclipse.ui.navigator.viewer">
     <viewer viewerId="org.eclipse.fordiac.ide.fbpaletteviewer">
     </viewer>

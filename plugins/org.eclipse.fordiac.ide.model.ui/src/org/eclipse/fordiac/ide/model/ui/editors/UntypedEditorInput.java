@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.ui.editors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IPersistableElement;
 
 /**
  * An EditorInput for opening IEC 61499 Editors with specified content. The
@@ -127,6 +128,12 @@ public abstract class UntypedEditorInput implements IContentEditorInput {
 	@Override
 	public int hashCode() {
 		return content.hashCode();
+	}
+
+	@Override
+	public IPersistableElement getPersistable() {
+		// per default our sub editors are not persistable, this is handled differently
+		return null;
 	}
 
 }

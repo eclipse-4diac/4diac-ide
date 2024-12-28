@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2015, 2016 fortiss GbmH, Profactor GmbH
- * 
+ * Copyright (c) 2013, 2024 fortiss GmbH, Profactor GmbH,
+ *                          Johannes Kepler University Linz
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -14,24 +15,12 @@
 package org.eclipse.fordiac.ide.resourceediting.editors;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.ui.editors.PersistableUntypedEditorInput;
-import org.eclipse.ui.IMemento;
+import org.eclipse.fordiac.ide.model.ui.editors.UntypedEditorInput;
 
-public class ResourceEditorInput extends PersistableUntypedEditorInput {
+public class ResourceEditorInput extends UntypedEditorInput {
 
-	public ResourceEditorInput(Resource res) {
+	public ResourceEditorInput(final Resource res) {
 		super(res, getResourceEditorName(res));
-	}
-
-	@Override
-	public void saveState(IMemento memento) {
-		ResourceEditorInputFactory.saveState(memento, this);
-
-	}
-
-	@Override
-	public String getFactoryId() {
-		return ResourceEditorInputFactory.getFactoryId();
 	}
 
 	@Override
@@ -39,7 +28,7 @@ public class ResourceEditorInput extends PersistableUntypedEditorInput {
 		return (Resource) super.getContent();
 	}
 
-	public static String getResourceEditorName(Resource res) {
+	public static String getResourceEditorName(final Resource res) {
 		return res.getDevice().getName() + "." + res.getName(); //$NON-NLS-1$
 	}
 
