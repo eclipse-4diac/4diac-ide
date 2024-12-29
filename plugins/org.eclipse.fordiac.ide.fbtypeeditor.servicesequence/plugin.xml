@@ -256,7 +256,6 @@
    	<menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
     <command
-    		categoryId="org.eclipse.fordiacpopup:org.eclipse.ui.popup.any"
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.expandSequence"
             label="Expand/Collapse"
             style="push">

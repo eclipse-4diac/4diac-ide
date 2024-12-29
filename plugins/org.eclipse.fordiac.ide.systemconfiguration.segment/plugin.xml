@@ -10,7 +10,7 @@
       <!-- @generated communication -->
       <package
             uri="http://Communication/1.0"
-            class="org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.CommunicationPackage"
+            class="org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage"
             genModel="model/communication.genmodel"/>
    </extension>
    <extension

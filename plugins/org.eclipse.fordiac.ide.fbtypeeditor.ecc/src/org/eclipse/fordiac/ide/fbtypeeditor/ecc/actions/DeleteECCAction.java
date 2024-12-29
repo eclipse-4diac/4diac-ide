@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2013 fortiss GmbH
- * 
+ * Copyright (c) 2013, 2024 fortiss GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,8 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions;
 
@@ -32,7 +31,7 @@ public class DeleteECCAction extends DeleteAction {
 	}
 
 	@Override
-	public Command createDeleteCommand(final List objects) {
+	public Command createDeleteCommand(final List<EditPart> objects) {
 		if (objects.isEmpty()) {
 			return null;
 		}
@@ -42,34 +41,30 @@ public class DeleteECCAction extends DeleteAction {
 		return super.createDeleteCommand(getDeleteList(objects));
 	}
 
-	@SuppressWarnings("rawtypes")
-	private static List<EditPart> getDeleteList(final List objects) {
+	private static List<EditPart> getDeleteList(final List<EditPart> objects) {
 		final List<EditPart> list = new ArrayList<>();
 
-		for (final Object object : objects) {
-			if (object instanceof ECTransitionEditPart) {
-				list.add(0, (EditPart) object); // add the transitions before anything else
-			} else if (object instanceof ECActionAlgorithmEditPart) {
-				if (!stateContainedInDeleteList(objects,
-						((ECActionAlgorithmEditPart) object).getCastedModel().getAction().getECState())) {
-					list.add((EditPart) object);
+		for (final EditPart ep : objects) {
+			if (ep instanceof ECTransitionEditPart) {
+				list.add(0, ep); // add the transitions before anything else
+			} else if (ep instanceof final ECActionAlgorithmEditPart ecActionAlgEP) {
+				if (!stateContainedInDeleteList(objects, ecActionAlgEP.getCastedModel().getAction().getECState())) {
+					list.add(ecActionAlgEP);
 				}
-			} else if (object instanceof ECActionOutputEventEditPart) {
-				if (!stateContainedInDeleteList(objects,
-						((ECActionOutputEventEditPart) object).getCastedModel().getAction().getECState())) {
-					list.add((EditPart) object);
+			} else if (ep instanceof final ECActionOutputEventEditPart ecActionEventEP) {
+				if (!stateContainedInDeleteList(objects, ecActionEventEP.getCastedModel().getAction().getECState())) {
+					list.add(ecActionEventEP);
 				}
-			} else if (object instanceof EditPart) {
-				list.add((EditPart) object);
+			} else {
+				list.add(ep);
 			}
 		}
 		return list;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private static boolean stateContainedInDeleteList(final List objects, final ECState eState) {
-		for (final Object object : objects) {
-			if (object instanceof EditPart && ((EditPart) object).getModel().equals(eState)) {
+	private static boolean stateContainedInDeleteList(final List<EditPart> objects, final ECState eState) {
+		for (final EditPart ep : objects) {
+			if (ep.getModel().equals(eState)) {
 				return true;
 			}
 		}

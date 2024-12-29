@@ -529,8 +529,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	 *
 	 * @return the sel actions
 	 */
-	@SuppressWarnings("rawtypes")
-	public List getSelActions() {
+	public List<String> getSelActions() {
 		return getSelectionActions();
 	}
 

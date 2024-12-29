@@ -114,7 +114,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	}
 
 	private final List<IFile> collectExportees() {
-		final List<Object> resources = page.getSelectedResources();
+		final List<?> resources = page.getSelectedResources();
 		return resources.parallelStream().filter(IFile.class::isInstance).map(IFile.class::cast).toList();
 	}
 

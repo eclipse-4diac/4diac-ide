@@ -153,7 +153,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	}
 
 	@Override
-	public List getSelectedResources() {
+	public List<?> getSelectedResources() {
 		return super.getSelectedResources();
 	}
 

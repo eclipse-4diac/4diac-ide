@@ -14,7 +14,7 @@
 	<extension point="org.eclipse.ui.handlers">
 		<handler class="org.eclipse.fordiac.ide.elk.handlers.LayoutHandler" commandId="org.eclipse.fordiac.ide.elk.layout"/>
 		<handler class="org.eclipse.fordiac.ide.elk.handlers.ConnectionLayoutHandler" commandId="org.eclipse.fordiac.ide.elk.connectionLayout"/>
-		<handler class="org.eclipse.fordiac.ide.elk.handlers.ConnectionLayoutMuleHandler" commandId="org.eclipse.fordiac.ide.elk.connectionLayoutMule"/>
+		<handler class="org.eclipse.fordiac.ide.elk.handlers.ConnectionLayoutHandlerMule" commandId="org.eclipse.fordiac.ide.elk.connectionLayoutMule"/>
 		<handler class="org.eclipse.fordiac.ide.elk.handlers.SystemLayoutHandler" commandId="org.eclipse.fordiac.ide.elk.systemExplorerLayout"/>
 	</extension>
 

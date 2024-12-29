@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
@@ -72,9 +71,9 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 		return Status.CANCEL_STATUS;
 	}
 
-	private static boolean checkVisibilityOfSelection(final List<? extends EditPart> selection) {
+	private static boolean checkVisibilityOfSelection(final List<?> selection) {
 		final Set<Boolean> visibility = new HashSet<>();
-		for (final EditPart obj : selection) {
+		for (final Object obj : selection) {
 			if (obj instanceof final ConnectionEditPart conep) {
 				visibility.add(Boolean.valueOf(!conep.getFigure().isHidden()));
 			} else if (obj instanceof final AbstractFBNElementEditPart fbEP) {

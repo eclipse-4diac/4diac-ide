@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 fortiss GmbH, Primetals Technologies GmbH
+ * Copyright (c) 2012, 2024 fortiss GmbH, Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -39,11 +39,8 @@ public class DeleteFBNetworkAction extends DeleteAction {
 	}
 
 	@Override
-	public Command createDeleteCommand(final List selObjects) {
+	public Command createDeleteCommand(final List<EditPart> selObjects) {
 		if (selObjects.isEmpty()) {
-			return null;
-		}
-		if (!(selObjects.get(0) instanceof EditPart)) {
 			return null;
 		}
 
@@ -54,15 +51,15 @@ public class DeleteFBNetworkAction extends DeleteAction {
 		final List<EditPart> list = new ArrayList<>();
 
 		// Resort list such that the connects are before any other edit parts
-		for (final Object object : selObjects) {
-			if (object instanceof ConnectionEditPart) {
-				list.add((EditPart) object);
+		for (final EditPart ep : selObjects) {
+			if (ep instanceof ConnectionEditPart) {
+				list.add(ep);
 			}
 		}
 
-		for (final Object object : selObjects) {
-			if (!(object instanceof ConnectionEditPart) && !isInGroupToBeDeleted(object, groups)) {
-				list.add((EditPart) object);
+		for (final EditPart ep : selObjects) {
+			if (!(ep instanceof ConnectionEditPart) && !isInGroupToBeDeleted(ep, groups)) {
+				list.add(ep);
 			}
 		}
 

@@ -49,6 +49,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteDeviceEditPolicy;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeviceViewLayoutEditPolicy;
@@ -377,10 +378,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	@Override
-	protected List<?> getModelTargetConnections() {
-		final List<Object> connections = new ArrayList<>();
-		connections.addAll(getModel().getInConnections());
-		connections.addAll(super.getModelTargetConnections());
-		return connections;
+	protected List<Link> getModelTargetConnections() {
+		return getModel().getInConnections();
 	}
 }

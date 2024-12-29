@@ -38,7 +38,6 @@ public abstract class AbstractCombinedCellEditor<T> extends TextCellEditor {
 	private T element;
 
 	protected AbstractCombinedCellEditor(final T element) {
-		super();
 		this.element = element;
 	}
 
@@ -58,6 +57,7 @@ public abstract class AbstractCombinedCellEditor<T> extends TextCellEditor {
 	protected CCombo getCombobox() {
 		return comboBox;
 	}
+
 	@Override
 	protected Control createControl(final Composite parent) {
 		container = createContainer(parent);

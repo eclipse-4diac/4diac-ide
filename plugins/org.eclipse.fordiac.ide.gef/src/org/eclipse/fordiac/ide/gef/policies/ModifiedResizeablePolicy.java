@@ -19,6 +19,7 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.gef.Handle;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 
@@ -35,7 +36,7 @@ public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 	}
 
 	@Override
-	protected void createMoveHandle(final List handles) {
+	protected void createMoveHandle(final List<Handle> handles) {
 		handles.add(new ModifiedMoveHandle(getHost(), insets, DiagramPreferences.CORNER_DIM));
 		removeSelectionFeedbackFigure();
 	}

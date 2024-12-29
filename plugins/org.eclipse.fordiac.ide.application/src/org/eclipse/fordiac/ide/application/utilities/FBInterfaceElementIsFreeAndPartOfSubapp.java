@@ -25,13 +25,13 @@ public class FBInterfaceElementIsFreeAndPartOfSubapp extends PropertyTester {
 
 	@Override
 	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
-		return receiver instanceof final List receiverList && checkList(receiverList)
+		return receiver instanceof final List<?> receiverList && checkList(receiverList)
 				&& receiverList.get(0) instanceof final InterfaceEditPartForFBNetwork ieEditPart
 				&& ieEditPart.getModel() instanceof final IInterfaceElement ie && isFromFBOrCFB(ie)
 				&& hasNoConnections(ie) && isNestedInSubApp(ie);
 	}
 
-	private static boolean checkList(final List reciverList) {
+	private static boolean checkList(final List<?> reciverList) {
 		return reciverList.size() == 1;
 	}
 

@@ -92,7 +92,7 @@ public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEdit
 	}
 
 	@Override
-	protected List createSelectionHandles() {
+	protected List<? extends ConnectionEndpointHandle> createSelectionHandles() {
 		final List<ConnectionEndpointHandle> list = new ArrayList<>();
 		list.add(createConnectionEndPointHandle((ConnectionEditPart) getHost(), ConnectionLocator.SOURCE));
 		list.add(createConnectionEndPointHandle((ConnectionEditPart) getHost(), ConnectionLocator.TARGET));
