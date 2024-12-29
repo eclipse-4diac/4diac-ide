@@ -54,10 +54,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.eclipse.ui.ide.workbench"
-            name="4diac IDE">
+            name="%product.name">
          <property
                name="appName"
-               value="4diac IDE">
+               value="4diac IDE">  <!-- This string shall not be exported! --> 
          </property>
          <property
                name="aboutImage"
@@ -69,11 +69,11 @@
          </property>
          <property
                name="windowImages"
-               value="icons/fordiac16.png,icons/fordiac32.png,icons/fordiac48.png,icons/fordiac256.png">
+               value="icons/4diac16.png,icons/4diac32.png,icons/4diac48.png,icons/4diac64.png,icons/4diac128.png,icons/4diac256.png">
          </property>
          <property
                name="introTitle"
-               value="Welcome to 4diac IDE">
+               value="%introTitle">
          </property>
          <property
                name="introBrandingImageText"
@@ -157,22 +157,22 @@
          point="org.eclipse.ui.intro.quicklinks">
        <command
             id="org.eclipse.ui.newWizard(newWizardId=org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard)"
-            description="Create a new 4diac IDE project with an Automation System"
-            label="Create New Project"
+            description="%introQuicklink.New4diacIDEProject.description"
+            label="%introQuicklink.New4diacIDEProject.label"
             importance="medium"
             resolution="launchbar">
       </command>
        <command
             id="org.eclipse.ui.file.import(importWizardId=org.eclipse.ui.wizards.import.ExternalProject)"
-            description="Import existing 4diac IDE projects from the filesystem or an archive"
+            description="%introQuicklink.ImportProject.description"
             icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/import-existing-project.png"
-            label="Import Existing Projects"
+            label="%introQuicklink.ImportProject.label"
             resolution="launchbar">
       </command> 
       <command
             id="org.eclipse.ui.file.import(importWizardId=org.eclipse.egit.ui.internal.clone.GitCloneWizard)"
-            label="Clone Project from GIT Repository"
-            description="Clone existing 4diac IDE projects from a GIT repository"
+            label="%introQuicklink.CloneFromGit.label"
+            description="%introQuicklink.CloneFromGit.description"
             icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/egit-checkout.png"
             resolution="launchbar">
       </command>  
@@ -183,8 +183,8 @@
       </override>
        <url
             location="http://org.eclipse.ui.intro/close"
-            label="Continue to 4diac IDE"
-            description="Close welcome page and work on your projects"
+            label="%introQuicklink.CloseIntro.label"
+            description="%introQuicklink.CloseIntro.description"
             icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/workbench.png"
             importance="medium">
        </url>  
