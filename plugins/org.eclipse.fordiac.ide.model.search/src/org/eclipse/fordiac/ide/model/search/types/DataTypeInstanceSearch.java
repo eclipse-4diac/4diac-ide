@@ -34,12 +34,12 @@ public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 
 	public DataTypeInstanceSearch(final DataTypeEntry dtEntry) {
 		super(new LiveSearchContext(dtEntry.getTypeLibrary()), createSearchFilter(dtEntry),
-				new DataTypeInstanceSearchChildrenProivder());
+				new DataTypeInstanceSearchChildrenProvider());
 	}
 
 	public DataTypeInstanceSearch(final ErrorTypeEntry dtEntry, final TypeLibrary library) {
 		super(new LiveSearchContext(library), createSearchFilter(dtEntry),
-				new DataTypeInstanceSearchChildrenProivder());
+				new DataTypeInstanceSearchChildrenProvider());
 	}
 
 	/*
@@ -48,7 +48,7 @@ public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 	 */
 	public DataTypeInstanceSearch(final LibraryElement typeEditable, final DataTypeEntry dtEntry) {
 		super(new LibraryElementSearchContext(typeEditable), createSearchFilter(dtEntry),
-				new DataTypeInstanceSearchChildrenProivder());
+				new DataTypeInstanceSearchChildrenProvider());
 	}
 
 	private static IEC61499SearchFilter createSearchFilter(final TypeEntry dtEntry) {
@@ -68,7 +68,7 @@ public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 		return dtEntry == confFB.getDataType().getTypeEntry();
 	}
 
-	private static final class DataTypeInstanceSearchChildrenProivder implements ISearchChildrenProvider {
+	private static final class DataTypeInstanceSearchChildrenProvider implements ISearchChildrenProvider {
 		@Override
 		public boolean hasChildren(final EObject obj) {
 			return (obj instanceof FBType) || (obj instanceof AutomationSystem) || (obj instanceof UntypedSubApp)
