@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -187,6 +188,9 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 					change.add(new RenameUpdateStructDataTypeMemberVariableChange(varDecl));
 					createStructChanges((DataTypeEntry) stElement.getTypeEntry(), change);
 					return change;
+				}
+				if (rootContainer instanceof AttributeDeclaration) {
+					return new RenameUpdateStructDataTypeMemberVariableChange(varDecl);
 				}
 				if (rootContainer instanceof final FBType fbType
 						&& dataTypeEntry.getType() instanceof final StructuredType type) {
