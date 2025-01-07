@@ -4,12 +4,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.systemmanagement
-Bundle-Vendor: Eclipse 4diac
+Bundle-Vendor: %Bundle-Vendor
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.0.0.qualifier
-Bundle-Name: Main
+Bundle-Name: %Bundle-Name
 Bundle-Activator: org.eclipse.fordiac.ide.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide
+Bundle-Localization: plugin

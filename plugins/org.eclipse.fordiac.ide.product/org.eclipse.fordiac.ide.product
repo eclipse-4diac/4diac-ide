@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="2.0.1.qualifier" type="features" includeLaunchers="true" autoIncludeRequirements="true">
+<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="3.0.0.qualifier" type="features" includeLaunchers="true" autoIncludeRequirements="true">
 
    <aboutInfo>
       <image path="/org.eclipse.fordiac.ide.images/images/dialog.png"/>
@@ -34,16 +34,16 @@
       </vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/org.eclipse.fordiac.ide/icons/fordiac16.png" i32="/org.eclipse.fordiac.ide/icons/fordiac32.png" i48="/org.eclipse.fordiac.ide/icons/fordiac48.png" i256="/org.eclipse.fordiac.ide/icons/fordiac256.png"/>
+   <windowImages i16="/org.eclipse.fordiac.ide/icons/4diac16.png" i32="/org.eclipse.fordiac.ide/icons/4diac32.png" i48="/org.eclipse.fordiac.ide/icons/4diac48.png" i64="/org.eclipse.fordiac.ide/icons/4diac64.png" i128="/org.eclipse.fordiac.ide/icons/4diac128.png" i256="/org.eclipse.fordiac.ide/icons/4diac256.png"/>
 
    <splash
       location="org.eclipse.fordiac.ide"
       startupProgressRect="375,375,172,4" />
    <launcher name="4diac-ide">
-      <linux icon="/icons/fordiac.xpm"/>
-      <macosx icon="/icons/fordiac.icns"/>
+      <linux icon="/icons/4diac.xpm"/>
+      <macosx icon="/icons/4diac.icns"/>
       <win useIco="true">
-         <ico path="icons/fordiac.ico"/>
+         <ico path="/icons/4diac.ico"/>
          <bmp/>
       </win>
    </launcher>
@@ -52,6 +52,7 @@
 
    <vm>
    </vm>
+
 
    <plugins>
    </plugins>

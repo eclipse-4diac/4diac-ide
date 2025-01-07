@@ -620,7 +620,7 @@ public enum LibraryManager {
 			init(project);
 		}
 		final Manifest manifest = ManifestHelper.getOrCreateProjectManifest(project);
-		if (manifest == null || !ManifestHelper.isProject(manifest) || manifest.getDependencies() == null) {
+		if (manifest == null || !ManifestHelper.isProject(manifest)) {
 			return;
 		}
 
@@ -762,7 +762,7 @@ public enum LibraryManager {
 
 		final Manifest projectManifest = ManifestHelper.getContainerManifest(project);
 
-		if (projectManifest == null || projectManifest.getDependencies() == null) {
+		if (projectManifest == null) {
 			return;
 		}
 
@@ -770,6 +770,10 @@ public enum LibraryManager {
 
 		// remove when no longer needed
 		moveLinksToVirtualFolders(project, typeLibrary);
+
+		if (projectManifest.getDependencies() == null) {
+			return;
+		}
 
 		findPreferred(project, preferred, linked);
 
