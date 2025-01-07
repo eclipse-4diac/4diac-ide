@@ -154,7 +154,7 @@ public final class ManifestHelper {
 	 * @return the manifest, or {@code null} if it couldn't be loaded
 	 */
 	public static Manifest getManifest(final IFile manifest) {
-		if (manifest == null || !manifest.exists()) {
+		if (manifest == null) {// don't use manifest.exists() as internal eclipse cache might be inconsistent
 			return null;
 		}
 		return getManifest(URI.createURI(manifest.getLocationURI().toString()));
@@ -472,10 +472,12 @@ public final class ManifestHelper {
 	 * @return {@code true} if it was saved successfully, else {@code false}
 	 */
 	public static boolean sortAndSaveManifest(final Manifest manifest) {
-		// ensure dependencies are sorted (can't use EList.sort())
-		final var dependencies = new LinkedList<>(manifest.getDependencies().getRequired());
-		manifest.getDependencies().getRequired().clear();
-		dependencies.forEach(d -> ManifestHelper.addDependency(manifest, d));
+		if (manifest.getDependencies() != null) {
+			// ensure dependencies are sorted (can't use EList.sort())
+			final var dependencies = new LinkedList<>(manifest.getDependencies().getRequired());
+			manifest.getDependencies().getRequired().clear();
+			dependencies.forEach(d -> ManifestHelper.addDependency(manifest, d));
+		}
 		return saveManifest(manifest);
 	}
 
