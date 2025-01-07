@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.library;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.nio.file.DirectoryStream.Filter;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -39,7 +40,6 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.core.internal.resources.ProjectPathVariableManager;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IPathVariableManager;
@@ -53,6 +53,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
@@ -93,15 +94,14 @@ public enum LibraryManager {
 	public static final String DOWNLOADER_EXTENSION = "org.eclipse.fordiac.ide.library.ArchiveDownloaderExtension"; //$NON-NLS-1$
 	public static final String MARKER_ATTRIBUTE = "LIB"; //$NON-NLS-1$
 
-	private static final java.net.URI STANDARD_LIBRARY_URI = java.net.URI
-			.create("ECLIPSE_HOME/" + TypeLibraryTags.TYPE_LIBRARY); //$NON-NLS-1$
-	private static final java.net.URI WORKSPACE_LIBRARY_URI = java.net.URI
-			.create("WORKSPACE_LOC/" + EXTRACTED_LIB_DIRECTORY); //$NON-NLS-1$
+	private final java.net.URI workspaceLibraryURI = java.net.URI.create("WORKSPACE_LOC/" + EXTRACTED_LIB_DIRECTORY); //$NON-NLS-1$
 
-	private static final Path WORKSPACE_PATH = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toPath();
-	private static final Path LIBRARY_PATH = WORKSPACE_PATH.resolve(EXTRACTED_LIB_DIRECTORY);
-	private static final Path ARCHIVE_PATH = WORKSPACE_PATH.resolve(PACKAGE_DOWNLOAD_DIRECTORY);
-	private Path standardLibraryPath;
+	private final Path workspacePath = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toPath();
+	private final Path libraryPath = workspacePath.resolve(EXTRACTED_LIB_DIRECTORY);
+	private final Path archivePath = workspacePath.resolve(PACKAGE_DOWNLOAD_DIRECTORY);
+
+	private final java.net.URI standardLibraryUri = java.net.URI.create("ECLIPSE_HOME/" + TypeLibraryTags.TYPE_LIBRARY); //$NON-NLS-1$
+	private final Path standardLibraryPath = getStandardLibPath();
 
 	public static final String ZIP_SUFFIX = ".zip"; //$NON-NLS-1$
 	public static final Set<String> TYPE_ENDINGS = Set.of(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING,
@@ -124,43 +124,27 @@ public enum LibraryManager {
 	public static final Object FAMILY_FORDIAC_LIBRARY = new Object();
 
 	private IEventBroker eventBroker;
-	private boolean uninitialised = true;
 	private final IResourceChangeListener libraryListener = new LibraryChangeListener();
 	private final Set<IProject> resolvingProjects = Collections.synchronizedSet(new HashSet<>());
 
-	/**
-	 * Initialise library maps and start the {@link WatchService}
-	 *
-	 * <p>
-	 * A project is needed to obtain a {@link ProjectPathVariableManager} which is
-	 * needed to properly resolve URIs that use environment variables such as
-	 * {@link #STANDARD_LIBRARY_URI}
-	 *
-	 * @param project project used to obtain the appropriate
-	 *                {@link IPathVariableManager}
-	 */
-	@SuppressWarnings("restriction")
-	private void init(final IProject project) {
-		final IPathVariableManager varMan = project.getPathVariableManager();
-		standardLibraryPath = Paths.get(varMan.resolveURI(STANDARD_LIBRARY_URI));
-		initLibraryMap(stdlibraries, standardLibraryPath, STANDARD_LIBRARY_URI);
-		if (!Files.exists(LIBRARY_PATH)) {
+	LibraryManager() {
+		initLibraryMap(stdlibraries, standardLibraryPath, standardLibraryUri);
+		if (!Files.exists(libraryPath)) {
 			try {
-				Files.createDirectory(LIBRARY_PATH);
+				Files.createDirectory(libraryPath);
 			} catch (final IOException e) {
-				// empty
+				FordiacLogHelper.logError("Cannot create lib path!", e); //$NON-NLS-1$
 			}
 		}
-		initLibraryMap(libraries, LIBRARY_PATH, WORKSPACE_LIBRARY_URI);
+		initLibraryMap(libraries, libraryPath, workspaceLibraryURI);
 		try {
 			watchService = FileSystems.getDefault().newWatchService();
-			LIBRARY_PATH.register(watchService, StandardWatchEventKinds.ENTRY_CREATE,
+			libraryPath.register(watchService, StandardWatchEventKinds.ENTRY_CREATE,
 					StandardWatchEventKinds.ENTRY_DELETE);
 		} catch (final IOException e) {
-			// empty
+			FordiacLogHelper.logError("Cannot register watch watch service!", e); //$NON-NLS-1$
 		}
 		addLibraryChangeListener();
-		uninitialised = false;
 	}
 
 	/**
@@ -179,11 +163,11 @@ public enum LibraryManager {
 		watchKey.pollEvents().forEach(event -> {
 			try {
 				if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
-					addLibrary(libraries, LIBRARY_PATH.resolve((Path) event.context()), WORKSPACE_LIBRARY_URI);
+					addLibrary(libraries, libraryPath.resolve((Path) event.context()), workspaceLibraryURI);
 				} else if (event.kind() == StandardWatchEventKinds.ENTRY_DELETE) {
-					removeLibrary(libraries, LIBRARY_PATH.resolve((Path) event.context()));
+					removeLibrary(libraries, libraryPath.resolve((Path) event.context()));
 				} else { // Overflow -> reinitialise libraries to ensure correct state
-					initLibraryMap(libraries, LIBRARY_PATH, WORKSPACE_LIBRARY_URI);
+					initLibraryMap(libraries, libraryPath, workspaceLibraryURI);
 					return;
 				}
 			} catch (final IOException e) {
@@ -293,7 +277,7 @@ public enum LibraryManager {
 			ZipEntry entry = zipInputStream.getNextEntry();
 			folderName = entry != null ? entry.getName() : ""; //$NON-NLS-1$
 			while (entry != null) {
-				final Path newFile = newPath(LIBRARY_PATH, entry);
+				final Path newFile = newPath(libraryPath, entry);
 				if (entry.isDirectory()) {
 					if (!Files.isDirectory(newFile)) {
 						Files.createDirectories(newFile);
@@ -315,7 +299,7 @@ public enum LibraryManager {
 		}
 		checkLibChanges();
 
-		final java.net.URI importURI = URIUtil.append(WORKSPACE_LIBRARY_URI, folderName);
+		final java.net.URI importURI = URIUtil.append(workspaceLibraryURI, folderName);
 
 		if (autoImport && project != null) {
 			// Parent's name because we want package-version name when importing
@@ -356,9 +340,7 @@ public enum LibraryManager {
 	public void importLibrary(final IProject project, final TypeLibrary typeLibrary, final java.net.URI uri,
 			final boolean update, final boolean resolve) {
 		boolean imported = false;
-		if (uninitialised) {
-			init(project);
-		}
+
 		FordiacLogHelper.logInfo("Importing library at " + uri + " into project " + project.getName() + " (update=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				+ update + ", resolve=" + resolve + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 		final TypeLibrary typeLib = typeLibrary != null ? typeLibrary
@@ -379,7 +361,7 @@ public enum LibraryManager {
 			return;
 		}
 		final IFolder libDirectory = project
-				.getFolder(uri.getPath().startsWith(STANDARD_LIBRARY_URI.getPath())
+				.getFolder(uri.getPath().startsWith(standardLibraryUri.getPath())
 						? TypeLibraryTags.STANDARD_LIB_FOLDER_NAME
 						: TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME)
 				.getFolder(libManifest.getProduct().getSymbolicName());
@@ -561,7 +543,7 @@ public enum LibraryManager {
 	 * @return array of paths
 	 */
 	public Path[] listDirectoriesContainingArchives() {
-		return listArchiveFolders(ARCHIVE_PATH);
+		return listArchiveFolders(archivePath);
 	}
 
 	/**
@@ -616,9 +598,6 @@ public enum LibraryManager {
 	 * @param typeLibrary {@link TypeLibrary} to use
 	 */
 	public void checkManifestFile(final IProject project, final TypeLibrary typeLibrary) {
-		if (uninitialised) {
-			init(project);
-		}
 		final Manifest manifest = ManifestHelper.getOrCreateProjectManifest(project);
 		if (manifest == null || !ManifestHelper.isProject(manifest)) {
 			return;
@@ -998,7 +977,7 @@ public enum LibraryManager {
 					final java.net.URI manifestURI = folder.getFile(MANIFEST).getRawLocationURI();
 
 					final IFolder libDirectory = project
-							.getFolder(libURI.getPath().startsWith(STANDARD_LIBRARY_URI.getPath())
+							.getFolder(libURI.getPath().startsWith(standardLibraryUri.getPath())
 									? TypeLibraryTags.STANDARD_LIB_FOLDER_NAME
 									: TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME)
 							.getFolder(folder.getName());
@@ -1143,5 +1122,15 @@ public enum LibraryManager {
 
 	public void addLibraryChangeListener() {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(libraryListener);
+	}
+
+	private static Path getStandardLibPath() {
+		try {
+			final Path fordiacInstallPath = Paths.get(Platform.getInstallLocation().getURL().toURI());
+			return fordiacInstallPath.resolve(TypeLibraryTags.TYPE_LIBRARY);
+		} catch (final URISyntaxException e) {
+			FordiacLogHelper.logError("Cannot resolve system lib path!", e); //$NON-NLS-1$
+		}
+		return null;
 	}
 }
