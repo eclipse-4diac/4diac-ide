@@ -299,6 +299,11 @@ public enum LibraryManager {
 		}
 		checkLibChanges();
 
+		// strip potential trailing slash
+		if (folderName.endsWith("/")) { //$NON-NLS-1$
+			folderName = folderName.substring(0, folderName.length() - 1);
+		}
+
 		final java.net.URI importURI = URIUtil.append(workspaceLibraryURI, folderName);
 
 		if (autoImport && project != null) {
