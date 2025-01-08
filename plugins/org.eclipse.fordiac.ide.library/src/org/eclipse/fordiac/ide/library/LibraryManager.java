@@ -12,10 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
 import java.nio.file.DirectoryStream.Filter;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -1130,12 +1130,10 @@ public enum LibraryManager {
 	}
 
 	private static Path getStandardLibPath() {
-		try {
-			final Path fordiacInstallPath = Paths.get(Platform.getInstallLocation().getURL().toURI());
-			return fordiacInstallPath.resolve(TypeLibraryTags.TYPE_LIBRARY);
-		} catch (final URISyntaxException e) {
-			FordiacLogHelper.logError("Cannot resolve system lib path!", e); //$NON-NLS-1$
-		}
-		return null;
+		// go why a java file to handle any special characters in the installation
+		// location URL
+		final File installLocationFile = new File(Platform.getInstallLocation().getURL().getPath());
+		final Path fordiacInstallPath = installLocationFile.toPath();
+		return fordiacInstallPath.resolve(TypeLibraryTags.TYPE_LIBRARY);
 	}
 }
