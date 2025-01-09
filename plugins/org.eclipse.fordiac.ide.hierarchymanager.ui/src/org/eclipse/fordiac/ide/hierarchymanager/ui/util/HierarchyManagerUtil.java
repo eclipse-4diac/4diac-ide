@@ -13,12 +13,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.hierarchymanager.ui.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -96,4 +101,31 @@ public class HierarchyManagerUtil {
 		}
 		return retVal;
 	}
+
+	@FunctionalInterface
+	public interface LeafMatcher {
+		boolean match(String s);
+	}
+
+	public static List<Leaf> searchLeaf(final RootLevel rootLevel, final LeafMatcher matcher) {
+		final List<Leaf> result = new ArrayList<>();
+
+		for (final Level level : rootLevel.getLevels()) {
+			searchLeaf(level, result, matcher);
+		}
+		return result;
+	}
+
+	public static List<Leaf> searchLeaf(final Level level, final List<Leaf> result, final LeafMatcher matcher) {
+		for (final Node node : level.getChildren()) {
+			if (node instanceof final Level l) {
+				searchLeaf(l, result, matcher);
+			}
+			if (node instanceof final Leaf leaf && matcher.match(leaf.getRef())) {
+				result.add(leaf);
+			}
+		}
+		return result;
+	}
+
 }

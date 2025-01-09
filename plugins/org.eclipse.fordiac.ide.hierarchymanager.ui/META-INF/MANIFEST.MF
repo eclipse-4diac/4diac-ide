@@ -19,7 +19,10 @@ Require-Bundle: org.eclipse.core.resources,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.ui.ide,
- org.eclipse.ui.views.properties.tabbed
+ org.eclipse.emf.mwe.core,
+ org.eclipse.ui.views.properties.tabbed,
+ org.eclipse.fordiac.ide.model.commands,
+ org.eclipse.gef
 Bundle-Vendor: Eclipse 4diac Project
 Automatic-Module-Name: org.eclipse.fordiac.ide.hierarchymanager.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-21
