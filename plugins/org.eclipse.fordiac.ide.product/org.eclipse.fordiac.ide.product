@@ -23,6 +23,7 @@
 -Dorg.eclipse.swt.graphics.Resource.reportNonDisposed=true
 -Declipse.e4.inject.javax.warning=false
 -Dorg.slf4j.simpleLogger.defaultLogLevel=off
+-Dswt.autoScale=exact
 -XX:+UseG1GC
 -XX:+UseStringDeduplication
 -Dosgi.dataAreaRequiresExplicitInit=true
