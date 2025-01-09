@@ -270,11 +270,11 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	}
 
 	@Fix(STCoreValidator.UNNECESSARY_LITERAL_CONVERSION)
-	public static void fixUnnecessaryLiteralConversion(final Issue issue, final IssueResolutionAcceptor acceptor) {
+	@Fix(STCoreValidator.TRUNCATING_LITERAL_CONVERSION)
+	public static void fixRemoveLiteralConversion(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		if (issue.getData()[2] != null) {
-			acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveUnnecessaryLiteralConversionLabel,
-					MessageFormat.format(Messages.STCoreQuickfixProvider_RemoveUnnecessaryLiteralConversionDescription,
-							issue.getData()[2]),
+			acceptor.accept(issue, Messages.STCoreQuickfixProvider_RemoveLiteralConversionLabel, MessageFormat
+					.format(Messages.STCoreQuickfixProvider_RemoveLiteralConversionDescription, issue.getData()[2]),
 					null, (IModification) context -> {
 						final IXtextDocument xtextDocument = context.getXtextDocument();
 						if (xtextDocument != null) {

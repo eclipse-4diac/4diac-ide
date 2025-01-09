@@ -36,6 +36,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_Invalid_Literal;
 	public static String STCoreValidator_InvalidWildcardImport;
 	public static String STCoreValidator_Trailing_Underscore_In_Identifier;
+	public static String STCoreValidator_TruncatingLiteralConversion;
 	public static String STCoreValidator_Argument_Not_Assignable;
 	public static String STCoreValidator_Assignment_Invalid_Left_Side;
 	public static String STCoreValidator_Attempting_To_Call_Standard_Function_With_Formal_Arguments;

@@ -51,6 +51,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
+import org.eclipse.fordiac.ide.model.data.AnyCharsType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
 import org.eclipse.fordiac.ide.model.data.AnyRealType;
 import org.eclipse.fordiac.ide.model.data.AnySignedType;
@@ -63,6 +64,7 @@ import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -175,6 +177,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String UNNECESSARY_WIDE_CONVERSION = ISSUE_CODE_PREFIX + "unnecessaryWideConversion"; //$NON-NLS-1$
 	public static final String UNNECESSARY_NARROW_CONVERSION = ISSUE_CODE_PREFIX + "unnecessaryNarrowConversion"; //$NON-NLS-1$
 	public static final String UNNECESSARY_LITERAL_CONVERSION = ISSUE_CODE_PREFIX + "unnecessaryLiteralConversion"; //$NON-NLS-1$
+	public static final String TRUNCATING_LITERAL_CONVERSION = ISSUE_CODE_PREFIX + "truncatingLiteralConversion"; //$NON-NLS-1$
 	public static final String NON_CONSTANT_DECLARATION = ISSUE_CODE_PREFIX + "nonConstantInInitializer"; //$NON-NLS-1$
 	public static final String MAYBE_NOT_INITIALIZED = ISSUE_CODE_PREFIX + "maybeNotInitialized"; //$NON-NLS-1$
 	public static final String FOR_CONTROL_VARIABLE_MODIFICATION = ISSUE_CODE_PREFIX + "forControlVariableModification"; //$NON-NLS-1$
@@ -461,33 +464,37 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					UNNECESSARY_NARROW_CONVERSION, returnDataType.getName(), argumentDataType.getName(),
 					expectedReturnDataType.getName());
 		} else if (argument.getArgument() instanceof final STNumericLiteral numericLiteral) {
-			try {
-				final String value = ValueOperations
-						.castValue(ValueOperations.wrapValue(numericLiteral.getValue(), argumentDataType),
-								expectedReturnDataType)
-						.toString();
-				addIssue(
-						MessageFormat.format(Messages.STCoreValidator_UnnecessaryLiteralConversion,
-								returnDataType.getName()),
-						getCurrentObject(), null, UNNECESSARY_LITERAL_CONVERSION, returnDataType.getName(),
-						expectedReturnDataType.getName(), value);
-			} catch (final ClassCastException e) {
-				// ignore (conversion is actually necessary)
-			}
+			checkUnnecessaryLiteralConversion(numericLiteral.getValue(), argumentDataType, returnDataType,
+					expectedReturnDataType);
 		} else if (argument.getArgument() instanceof final STStringLiteral stringLiteral) {
-			try {
-				final String value = ValueOperations
-						.castValue(ValueOperations.wrapValue(stringLiteral.getValue(), argumentDataType),
-								expectedReturnDataType)
-						.toString();
+			checkUnnecessaryLiteralConversion(stringLiteral.getValue(), argumentDataType, returnDataType,
+					expectedReturnDataType);
+		}
+	}
+
+	protected void checkUnnecessaryLiteralConversion(final Object value, final DataType argumentDataType,
+			final DataType returnDataType, final DataType expectedReturnDataType) {
+		if (isLiteralCastSemanticallyRelevant(argumentDataType, returnDataType)) {
+			return; // conversion is actually necessary
+		}
+		try {
+			final Value argumentValue = ValueOperations.wrapValue(value, argumentDataType);
+			final Value returnValue = ValueOperations.castValue(argumentValue, expectedReturnDataType);
+			if (ValueOperations.equals(argumentValue, returnValue)) {
 				addIssue(
 						MessageFormat.format(Messages.STCoreValidator_UnnecessaryLiteralConversion,
 								returnDataType.getName()),
 						getCurrentObject(), null, UNNECESSARY_LITERAL_CONVERSION, returnDataType.getName(),
-						expectedReturnDataType.getName(), value);
-			} catch (final ClassCastException e) {
-				// ignore (conversion is actually necessary)
+						expectedReturnDataType.getName(), returnValue.toString());
+			} else {
+				addIssue(
+						MessageFormat.format(Messages.STCoreValidator_TruncatingLiteralConversion,
+								returnDataType.getName()),
+						getCurrentObject(), null, TRUNCATING_LITERAL_CONVERSION, returnDataType.getName(),
+						expectedReturnDataType.getName(), returnValue.toString());
 			}
+		} catch (final ClassCastException e) {
+			// ignore (conversion is actually necessary)
 		}
 	}
 
@@ -499,6 +506,17 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		return (argumentDataType instanceof AnySignedType && returnDataType instanceof AnyUnsignedType)
 				|| (argumentDataType instanceof AnyIntType && returnDataType instanceof AnyRealType)
 				|| argumentDataType instanceof AnyBitType || returnDataType instanceof AnyBitType;
+	}
+
+	private static boolean isLiteralCastSemanticallyRelevant(final DataType argumentDataType,
+			final DataType returnDataType) {
+		// semantically relevant literal casts:
+		// - chars to non-chars
+		// - bit type to non-bit type
+		// - real to bit type
+		return (argumentDataType instanceof AnyCharsType && !(returnDataType instanceof AnyCharsType))
+				|| (argumentDataType instanceof AnyBitType && !(returnDataType instanceof AnyBitType))
+				|| (argumentDataType instanceof AnyRealType && returnDataType instanceof AnyBitType);
 	}
 
 	protected boolean isBetterCastPossible(final DataType argumentDataType, final DataType expectedReturnDataType) {
