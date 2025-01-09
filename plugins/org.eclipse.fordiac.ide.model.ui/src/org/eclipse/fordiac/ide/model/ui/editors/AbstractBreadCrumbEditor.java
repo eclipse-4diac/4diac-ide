@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
+import org.eclipse.fordiac.ide.model.commands.QualNameChangeListenerManager;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -258,6 +259,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 				layoutCommand.undo();
 			}
 		}
+
 	}
 
 	private static boolean isTagged(final CommandStackEvent event) {
@@ -269,6 +271,8 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	@Override
 	public void dispose() {
 		if (null != getCommandStack()) {
+			QualNameChangeListenerManager.INSTANCE.removeCommandStackEventListener(getCommandStack(),
+					getAdapter(LibraryElement.class).getTypeEntry());
 			getCommandStack().removeCommandStackEventListener(this);
 		}
 		super.dispose();

@@ -12,7 +12,8 @@ Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.ui.editors,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.ui.navigator,
- org.eclipse.fordiac.ide.ui
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.fordiac.ide.model.commands
 Automatic-Module-Name: org.eclipse.fordiac.ide.model.ui
 Bundle-Vendor: Eclipse 4diac
 Export-Package: org.eclipse.fordiac.ide.model.ui,
