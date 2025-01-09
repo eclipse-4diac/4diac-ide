@@ -584,6 +584,10 @@ final class STCoreUtil {
 			(type.isAssignableFrom(other.equivalentAnyUnsignedType) ||
 				other.equivalentAnyUnsignedType.isAssignableFrom(type)))
 			type
+		else if (type instanceof AnyBitType &&
+			(type.isAssignableFrom(other.equivalentAnyBitType) ||
+				other.equivalentAnyBitType.isAssignableFrom(type)))
+			type
 		else // fallback to other _only_ if type is not compatible
 			other
 	}
@@ -602,7 +606,7 @@ final class STCoreUtil {
 	def static AnyUnsignedType getEquivalentAnyUnsignedType(INamedElement type) {
 		switch (type) {
 			SintType: ElementaryTypes.USINT
-			IntType: ElementaryTypes.ULINT
+			IntType: ElementaryTypes.UINT
 			DintType: ElementaryTypes.UDINT
 			LintType: ElementaryTypes.ULINT
 			AnyUnsignedType: type
