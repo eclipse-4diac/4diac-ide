@@ -1144,9 +1144,8 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN    // Lorem ipsum dolor sit amet, consectetur adipiscing
-				// elit, sed do eiusmod tempor incididunt ut labore et
-				// dolore magna aliqua.
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+				                                                               // labore et dolore magna aliqua.
 					bol1 := TRUE;
 				END_IF;
 				
@@ -1170,12 +1169,9 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN    // Lorem ipsum dolor sit amet, consectetur adipiscing
-				// elit, sed do eiusmod tempor incididunt ut labore et
-				// dolore magna aliqua. Ut enim ad minim veniam, quis
-				// nostrud exercitation ullamco laboris nisi ut
-				// aliquip ex ea commodo consequat. Duis aute irure
-				// dolor in reprehenderit
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+				                                                               // labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+				                                                               // nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
 					bol1 := TRUE;
 				END_IF;
 				
@@ -1199,7 +1195,7 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN    // Lorem ipsum dolor sit amet , consectetur adipiscing
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet , consectetur adipiscing
 					bol1 := TRUE;
 				END_IF;
 				
@@ -1223,8 +1219,7 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN    // DasisteinlangesWortdasdiemaximaleZeilenlängeübersch
-				// reitensollohneLeerzeichen
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // DasisteinlangesWortdasdiemaximaleZeilenlängeüberschreitensollohneLeerzeichen
 					bol1 := TRUE;
 				END_IF;
 				
@@ -1278,7 +1273,8 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				bol1 := TRUE; (* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-				               * labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris *)
+				               * labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+				               * laboris *)
 				
 				bol1 := TRUE;
 				
@@ -1297,7 +1293,7 @@ class Formatter2Test {
 			'''
 			expectation = '''
 				FUNCTION hubert
-				int1 := 3;    // x
+				int1 := 3; // x
 				END_FUNCTION
 			'''
 		]
@@ -1320,13 +1316,15 @@ class Formatter2Test {
 			'''
 			expectation = '''
 				FUNCTION hubert
-				(* @brief This is an awesome piece of code
-				 * 
-				 * This demonstrates the need to keep newlines in case of auto-format, because my carefully crafted newline would be
-				 * gone otherwise
-				 * 
+				(*
+				 * @brief This is an awesome piece of code
+				 *
+				 * This demonstrates the need to keep newlines in case of auto-format, because my carefully crafted
+				 * newline would be gone otherwise
+				 *
 				 * @param awesomeIn - Some data
-				 * @return cool? *)
+				 * @return cool?
+				 *)
 				END_FUNCTION
 			'''
 		]
@@ -1339,10 +1337,8 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				IF int1 < int2 THEN (* This piece of code demonstrates the formatting of bulleted lists
-				
 										- While the preceding line does not reach the 120 character
 											limit, the linebreak persists
-				
 										-Though, indentation is ignored for now
 									*)
 					bol1 := TRUE;
@@ -1354,10 +1350,7 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				IF int1 < int2 THEN (* This piece of code demonstrates the formatting of bulleted lists
-				                     * 
-				                     * - While the preceding line does not reach the 120 character
-				                     * limit, the linebreak persists
-				                     * 
+				                     * - While the preceding line does not reach the 120 character limit, the linebreak persists
 				                     * -Though, indentation is ignored for now *)
 					bol1 := TRUE;
 				END_IF;
@@ -1384,13 +1377,173 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				
-				(*  *)
+				(*
+				 *
+				 *)
 				IF int1 < int2 THEN
 					bol1 := TRUE;
 				END_IF;
 				
 				END_FUNCTION
 			'''
+		]
+	}
+
+	@Test
+	def void commentMLBlockReformatTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR_TEMP
+					X : DINT; (*
+					end-of-line, wrapped comment because the comment is too long to fit in a single line so it is
+					           * wrapped at the end *)
+					Y : DINT; (* end-of-line, wrapped comment because the comment is too long to fit in a single line so it is
+					           * wrapped at the end
+					           *)
+				END_VAR
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR_TEMP
+					X : DINT;
+					(*
+					 * end-of-line, wrapped comment because the comment is too long to fit in a single line so it is
+					 * wrapped at the end
+					 *)
+					Y : DINT; (* end-of-line, wrapped comment because the comment is too long to fit in a single line so it is
+					           * wrapped at the end *)
+				END_VAR
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void commentStabilityTestSLUnwrapped() {
+		val text = '''
+			FUNCTION hubert
+			VAR_TEMP
+				X : DINT; // end-of-line, unwrapped comment
+			END_VAR
+			// unindented, unwrapped comment
+			IF int1 < int2 THEN
+				// indented, unwrapped comment
+				bol1 := TRUE;
+				// indented, unwrapped comment at end
+			END_IF;
+			// unindented, unwrapped comment after end
+			END_FUNCTION
+		'''
+		assertFormatted[
+			toBeFormatted = text
+			expectation = text
+		]
+	}
+
+	@Test
+	def void commentStabilityTestSLWrapped() {
+		val text = '''
+			FUNCTION hubert
+			VAR_TEMP
+				X : DINT; // end-of-line, wrapped comment because the comment is too long to fit in a single line so it is
+				          // wrapped at the end
+			END_VAR
+			IF int1 < int2 THEN
+				// indented, wrapped comment because the comment is too long to fit in a single line so it is
+				// wrapped at the end
+				bol1 := TRUE;
+				// indented, wrapped comment because the comment is too long to fit in a single line so it is
+				// wrapped at the end
+			END_IF;
+			// unindented, wrapped comment because the comment is too long to fit in a single line so it is
+			// wrapped at the end
+			END_FUNCTION
+		'''
+		assertFormatted[
+			toBeFormatted = text
+			expectation = text
+		]
+	}
+
+	@Test
+	def void commentStabilityTestMLUnwrapped() {
+		val text = '''
+			FUNCTION hubert
+			VAR_TEMP
+				X : DINT; (* end-of-line, unwrapped comment *)
+			END_VAR
+			(* unindented, unwrapped comment *)
+			IF int1 < int2 THEN
+				(* indented, unwrapped comment *)
+				bol1 := TRUE;
+				(* indented, unwrapped comment at end *)
+			END_IF;
+			(* unindented, unwrapped comment after end *)
+			END_FUNCTION
+		'''
+		assertFormatted[
+			toBeFormatted = text
+			expectation = text
+		]
+	}
+
+	@Test
+	def void commentStabilityTestMLWrapped() {
+		val text = '''
+			FUNCTION hubert
+			VAR_TEMP
+				X : DINT; (* end-of-line, wrapped comment because the comment is too long to fit in a single line so it is
+				           * wrapped at the end *)
+			END_VAR
+			(* unindented, wrapped comment because the comment is too long to fit in a single line so it is
+			 * wrapped at the end *)
+			IF int1 < int2 THEN
+				(* indented, wrapped comment because the comment is too long to fit in a single line so it is
+				 * wrapped at the end *)
+				bol1 := TRUE;
+				(* indented, wrapped comment because the comment is too long to fit in a single line so it is
+				 * wrapped at the end *)
+			END_IF;
+			(* unindented, wrapped comment because the comment is too long to fit in a single line so it is
+			 * wrapped at the end *)
+			END_FUNCTION
+		'''
+		assertFormatted[
+			toBeFormatted = text
+			expectation = text
+		]
+	}
+
+	@Test
+	def void commentStabilityTestMLBlock() {
+		val text = '''
+			FUNCTION hubert
+			(*
+			 * unindented, wrapped comment because the comment is too long to fit in a single line so it is
+			 * wrapped at the end
+			 *)
+			IF int1 < int2 THEN
+				(*
+				 * indented, wrapped comment because the comment is too long to fit in a single line so it is
+				 * wrapped at the end
+				 *)
+				bol1 := TRUE;
+				(*
+				 * indented, wrapped comment because the comment is too long to fit in a single line so it is
+				 * wrapped at the end
+				 *)
+			END_IF;
+			(*
+			 * unindented, wrapped comment because the comment is too long to fit in a single line so it is
+			 * wrapped at the end
+			 *)
+			END_FUNCTION
+		'''
+		assertFormatted[
+			toBeFormatted = text
+			expectation = text
 		]
 	}
 

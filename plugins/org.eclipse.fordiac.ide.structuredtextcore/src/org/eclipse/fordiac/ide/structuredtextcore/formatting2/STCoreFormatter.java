@@ -16,9 +16,6 @@
 package org.eclipse.fordiac.ide.structuredtextcore.formatting2;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.common.util.EList;
@@ -69,23 +66,14 @@ import org.eclipse.xtext.AbstractRule;
 import org.eclipse.xtext.Keyword;
 import org.eclipse.xtext.RuleCall;
 import org.eclipse.xtext.formatting2.AbstractFormatter2;
-import org.eclipse.xtext.formatting2.FormatterPreferenceKeys;
 import org.eclipse.xtext.formatting2.IFormattableDocument;
 import org.eclipse.xtext.formatting2.IHiddenRegionFormatter;
 import org.eclipse.xtext.formatting2.IHiddenRegionFormatting;
 import org.eclipse.xtext.formatting2.ITextReplacer;
 import org.eclipse.xtext.formatting2.ITextReplacerContext;
-import org.eclipse.xtext.formatting2.internal.MultilineCommentReplacer;
-import org.eclipse.xtext.formatting2.internal.SinglelineCodeCommentReplacer;
-import org.eclipse.xtext.formatting2.internal.SinglelineDocCommentReplacer;
-import org.eclipse.xtext.formatting2.internal.WhitespaceReplacer;
 import org.eclipse.xtext.formatting2.regionaccess.IComment;
-import org.eclipse.xtext.formatting2.regionaccess.IHiddenRegion;
-import org.eclipse.xtext.formatting2.regionaccess.IHiddenRegionPart;
 import org.eclipse.xtext.formatting2.regionaccess.ISemanticRegion;
-import org.eclipse.xtext.formatting2.regionaccess.ITextRegionAccess;
 import org.eclipse.xtext.formatting2.regionaccess.ITextSegment;
-import org.eclipse.xtext.grammaranalysis.impl.GrammarElementTitleSwitch;
 import org.eclipse.xtext.resource.XtextResource;
 
 import com.google.inject.Inject;
@@ -124,10 +112,6 @@ public class STCoreFormatter extends AbstractFormatter2 {
 		textRegionExtensions.allRegionsFor(source)
 				.keywords(grammarAccess.getSTPrimaryExpressionAccess().getRightParenthesisKeyword_0_2())
 				.forEach(it -> document.prepend(it, IHiddenRegionFormatter::noSpace));
-		textRegionExtensions.allRegionsFor(source).ruleCallsTo(grammarAccess.getML_COMMENTRule())
-				.forEach(it -> document.append(it, format -> format.setNewLines(1, 2, 2)));
-		textRegionExtensions.allRegionsFor(source).ruleCallsTo(grammarAccess.getSL_COMMENTRule())
-				.forEach(it -> document.append(it, format -> format.setNewLines(1, 2, 2)));
 	}
 
 	protected void formatPackage(final STSource source, final IFormattableDocument document) {
@@ -667,164 +651,29 @@ public class STCoreFormatter extends AbstractFormatter2 {
 	}
 
 	@Override
-	@SuppressWarnings("restriction")
-	public ITextReplacer createWhitespaceReplacer(final ITextSegment hiddens,
-			final IHiddenRegionFormatting formatting) {
-		return new WhitespaceReplacer(hiddens, formatting) {
-			@Override
-			public int computeNewLineCount(final ITextReplacerContext context) {
-				final Integer newLineDefault = getFormatting().getNewLineDefault();
-				final Integer newLineMin = getFormatting().getNewLineMin();
-				final Integer newLineMax = getFormatting().getNewLineMax();
-				if (newLineMin != null || newLineDefault != null || newLineMax != null) {
-					if (!(getRegion() instanceof final IHiddenRegion hiddenRegion) || !hiddenRegion.isUndefined()) {
-						int lineCount = 0;
-						if (getRegion() instanceof final IHiddenRegionPart hiddenRegionPart) {
-							if (hiddenRegionPart.getPreviousHiddenPart() instanceof IComment) {
-								lineCount = getRegion().getLineCount();
-							} else {
-								lineCount = getRegion().getLineCount() - 1;
-							}
-						} else {
-							lineCount = getRegion().getLineCount() - 1;
-						}
-						if (newLineMin != null && newLineMin.intValue() > lineCount) {
-							lineCount = newLineMin.intValue();
-						}
-						if (newLineMax != null && newLineMax.intValue() < lineCount) {
-							lineCount = newLineMax.intValue();
-						}
-						return lineCount;
-					}
-					if (newLineDefault != null) {
-						return newLineDefault.intValue();
-					}
-					if (newLineMin != null) {
-						return newLineMin.intValue();
-					}
-					return newLineMax.intValue();
-				}
-				return 0;
-			}
-		};
-	}
-
-	@Override
-	@SuppressWarnings("restriction")
 	public ITextReplacer createCommentReplacer(final IComment comment) {
-		final Integer tabWidth = getPreference(FormatterPreferenceKeys.tabWidth);
 		final EObject grammarElement = comment.getGrammarElement();
 		if (grammarElement instanceof final AbstractRule rule) {
 			final String ruleName = rule.getName();
 			if (ruleName.startsWith("ML")) { //$NON-NLS-1$
-				return new MultilineCommentReplacer(comment, '*') {
-					@Override
-					public ITextReplacerContext createReplacements(final ITextReplacerContext context) {
-						final ITextRegionAccess access = getComment().getTextRegionAccess();
-						final ITextSegment region = access.regionForOffset(getComment().getOffset(),
-								getComment().getLength());
-						return commentReplacementContext(context, region, ruleName);
-					}
-
-					@Override
-					public void configureWhitespace(final WhitespaceReplacer leading,
-							final WhitespaceReplacer trailing) {
-						if (!leading.getRegion().isMultiline()) {
-							enforceSingleSpace(leading);
-						}
-					}
-				};
+				return new STCoreMultilineCommentReplacer(comment, '*');
 			}
 			if (ruleName.startsWith("SL")) { //$NON-NLS-1$
-				if (comment.getLineRegions().get(0).getIndentation().getLength() > 0) {
-					return new SinglelineDocCommentReplacer(comment, "//") { //$NON-NLS-1$
-						@Override
-						public ITextReplacerContext createReplacements(final ITextReplacerContext context) {
-							final ITextRegionAccess access = getComment().getTextRegionAccess();
-							final ITextSegment region = access.regionForOffset(getComment().getOffset(),
-									getComment().getLength());
-							return commentReplacementContext(context, region, ruleName);
-						}
-
-						@Override
-						public void configureWhitespace(final WhitespaceReplacer leading,
-								final WhitespaceReplacer trailing) {
-							leading.getFormatting().setSpace(" ".repeat(tabWidth.intValue())); //$NON-NLS-1$
-							if (leading.getFormatting().getIndentationDecrease() != null) {
-								trailing.getFormatting()
-										.setIndentationDecrease(leading.getFormatting().getIndentationDecrease());
-								leading.getFormatting().setIndentationDecrease(null);
-							}
-						}
-					};
-				}
-				return new SinglelineCodeCommentReplacer(comment, "//") { //$NON-NLS-1$
-					@Override
-					public ITextReplacerContext createReplacements(final ITextReplacerContext context) {
-						final ITextRegionAccess access = getComment().getTextRegionAccess();
-						final ITextSegment region = access.regionForOffset(getComment().getOffset(),
-								getComment().getLength());
-						return commentReplacementContext(context, region, ruleName);
-					}
-
-					@Override
-					public void configureWhitespace(final WhitespaceReplacer leading,
-							final WhitespaceReplacer trailing) {
-						leading.getFormatting().setSpace(" ".repeat(tabWidth.intValue())); //$NON-NLS-1$
-						if (leading.getFormatting().getIndentationDecrease() != null) {
-							trailing.getFormatting()
-									.setIndentationDecrease(leading.getFormatting().getIndentationDecrease());
-							leading.getFormatting().setIndentationDecrease(null);
-						}
-					}
-				};
+				return new STCoreSinglelineCommentReplacer(comment, "//"); //$NON-NLS-1$
 			}
 		}
-		final String elementName = new GrammarElementTitleSwitch().showQualified().showRule().doSwitch(grammarElement);
-		throw new IllegalStateException("No ITextReplacer configured for " + elementName); //$NON-NLS-1$
-	}
-
-	private ITextReplacerContext commentReplacementContext(final ITextReplacerContext context,
-			final ITextSegment region, final String name) {
-		final String lineSeparator = context.getNewLinesString(1);
-		final Integer maxLineWidth = getPreference(FormatterPreferenceKeys.maxLineWidth);
-		final boolean isML = name.startsWith("ML"); //$NON-NLS-1$
-		final int lengthBeforeComment = context.getLeadingCharsInLineCount();
-		final String spaceBeforeComment = " ".repeat(lengthBeforeComment); //$NON-NLS-1$
-		final int commentLineLength = (((maxLineWidth).intValue() - lengthBeforeComment) - (isML ? 6 : 3));
-		if (commentLineLength < 1) {
-			return context;
-		}
-		final String commentString;
-		if (isML) {
-			commentString = region.getText().replaceFirst("^[(/]\\*", "").replaceFirst("\\*[)/]$", "") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					.replaceAll("(?m)^[\\s&&[^\r\n]]*\\* ", "").replaceAll("[\\s&&[^\r\n]]+", " ").trim(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		} else {
-			commentString = region.getText().replaceFirst("^//", "").replaceFirst("\n$", "").replaceAll("\\s+", " ") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-					.trim();
-		}
-		final Pattern pattern = Pattern.compile(
-				(((("[\\s&&[^\r\n]]*(?:(\\S{" + Integer.valueOf(commentLineLength)) + "})|([[\\s&&[^\r\n]]\\S]{1,") //$NON-NLS-1$ //$NON-NLS-2$
-						+ Integer.valueOf(commentLineLength)) + "}(?!\\S)[\r\n]*))")); //$NON-NLS-1$
-		final Matcher matcher = pattern.matcher(commentString.replace("$", "\\$")); //$NON-NLS-1$ //$NON-NLS-2$
-		String replacement = matcher.replaceAll(m -> {
-			final String g = Objects.requireNonNullElse(m.group(1), m.group(2));
-			return (isML ? spaceBeforeComment + " * " : "// ") + g //$NON-NLS-1$ //$NON-NLS-2$
-					+ (g.indexOf(lineSeparator) == -1 ? lineSeparator : ""); //$NON-NLS-1$
-		});
-		replacement = (isML ? "(* " : "") + replacement.trim() + (isML ? " *)" : lineSeparator); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		replacement = replacement.replaceFirst("^\\(\\*\\s*\\* ", "(* "); //$NON-NLS-1$ //$NON-NLS-2$
-		replacement = replacement.replaceAll(lineSeparator + "(?=" + lineSeparator + ")", //$NON-NLS-1$ //$NON-NLS-2$
-				lineSeparator + spaceBeforeComment + " * "); //$NON-NLS-1$
-		if (!Objects.equals(region.getText(), replacement)) {
-			context.addReplacement(region.replaceWith(replacement));
-		}
-		return context;
+		return super.createCommentReplacer(comment);
 	}
 
 	@Override
 	public ITextReplacerContext createTextReplacerContext(final IFormattableDocument document) {
 		return new STCoreTextReplacerContext(document);
+	}
+
+	@Override
+	public ITextReplacer createWhitespaceReplacer(final ITextSegment hiddens,
+			final IHiddenRegionFormatting formatting) {
+		return new STCoreWhitespaceReplacer(hiddens, formatting);
 	}
 
 	@Override
