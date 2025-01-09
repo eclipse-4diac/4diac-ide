@@ -23,6 +23,7 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -33,10 +34,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class ChangeNameCommand extends Command implements ConnectionLayoutTagger, ScopedCommand {
+public class ChangeNameCommand extends QualNameAffectedCommand implements ConnectionLayoutTagger, ScopedCommand {
 	private final INamedElement element;
 	private final String name;
 	private String oldName;
@@ -48,9 +48,11 @@ public class ChangeNameCommand extends Command implements ConnectionLayoutTagger
 	}
 
 	private ChangeNameCommand(final INamedElement element, final String name, final boolean validateName) {
+		super(element.getQualifiedName());
 		this.element = Objects.requireNonNull(element);
 		this.name = name;
 		this.validateName = validateName;
+		this.oldName = element.getQualifiedName();
 	}
 
 	public static ChangeNameCommand forName(final INamedElement element, final String name) {
@@ -168,4 +170,25 @@ public class ChangeNameCommand extends Command implements ConnectionLayoutTagger
 		} while (container != null);
 		return Set.of(element);
 	}
+
+	@Override
+	public INamedElement getNotifier() {
+		return element;
+	}
+
+	@Override
+	protected String getNewQualName() {
+		final String[] split = getOldQualName().split("\\."); //$NON-NLS-1$
+		final StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < split.length; i++) {
+			if (i == split.length - 1) {
+				sb.append(name);
+			} else {
+				sb.append(split[i]);
+				sb.append("."); //$NON-NLS-1$
+			}
+		}
+		return sb.toString();
+	}
+
 }
