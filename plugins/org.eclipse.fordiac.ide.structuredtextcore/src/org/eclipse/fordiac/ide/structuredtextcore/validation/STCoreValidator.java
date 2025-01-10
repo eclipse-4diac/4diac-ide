@@ -137,6 +137,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			+ "identiferEndsInUnderscoreError"; //$NON-NLS-1$
 	public static final String VALUE_NOT_ASSIGNABLE = ISSUE_CODE_PREFIX + "valueNotAssignable"; //$NON-NLS-1$
 	public static final String NON_COMPATIBLE_TYPES = ISSUE_CODE_PREFIX + "nonCompatibleTypes"; //$NON-NLS-1$
+	public static final String NON_COMPARABLE_TYPES = ISSUE_CODE_PREFIX + "nonComparableTypes"; //$NON-NLS-1$
 	public static final String WRONG_NAME_CASE = ISSUE_CODE_PREFIX + "wrongNameCase"; //$NON-NLS-1$
 	public static final String RESERVED_IDENTIFIER_ERROR = ISSUE_CODE_PREFIX + "reservedIdentifierError"; //$NON-NLS-1$
 	public static final String UNQUALIFIED_FB_CALL_ON_FB_WITH_INPUT_EVENT_SIZE_NOT_ONE = ISSUE_CODE_PREFIX
@@ -665,8 +666,15 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	@Check
 	public void checkCaseConditionType(final STCaseCases stmt) {
 		final var type = stmt.getStatement().getSelector().getResultType();
-		stmt.getConditions().forEach(condition -> checkTypeCompatibility(type, condition.getResultType(),
-				STCorePackage.Literals.ST_CASE_CASES__CONDITIONS, stmt.getConditions().indexOf(condition)));
+		IntStream.range(0, stmt.getConditions().size()).forEachOrdered(index -> {
+			final STExpression condition = stmt.getConditions().get(index);
+			final INamedElement resultType = condition.getResultType();
+			if (!STCoreUtil.hasCommonSupertype(type, resultType)) {
+				error(MessageFormat.format(Messages.STCoreValidator_NonComparableTypes, resultType.getName(),
+						type.getName()), STCorePackage.Literals.ST_CASE_CASES__CONDITIONS, index, NON_COMPARABLE_TYPES,
+						resultType.getName(), type.getName());
+			}
+		});
 	}
 
 	@Check

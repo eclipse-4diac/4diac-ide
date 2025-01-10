@@ -701,7 +701,7 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
-	def void testInvalidCaseConditionType() {
+	def void testValidCaseConditionType() {
 		'''
 			FUNCTION hubert
 			VAR
@@ -713,7 +713,24 @@ class STFunctionValidatorTest {
 				LINT#2: int1 := 17;
 			END_CASE;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STCaseCases, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidCaseConditionType() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			CASE int1 OF
+				1: int1 := 17;
+				'abc': int1 := 17;
+			END_CASE;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STCaseCases, STCoreValidator.NON_COMPARABLE_TYPES,
+			"Cannot compare STRING with INT")
 	}
 
 	@Test
@@ -1705,7 +1722,6 @@ class STFunctionValidatorTest {
 		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
 			STCoreValidator.UNNECESSARY_LITERAL_CONVERSION, "Unnecessary conversion of literal to CHAR")
 	}
-
 
 	@Test
 	def void testTruncatingLiteralConversions() {
