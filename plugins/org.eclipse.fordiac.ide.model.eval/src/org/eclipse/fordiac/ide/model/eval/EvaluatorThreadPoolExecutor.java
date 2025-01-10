@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model.eval;
 
 import java.io.Closeable;
-import java.io.IOException;
 import java.time.Clock;
 import java.util.Map;
 import java.util.Set;
@@ -175,7 +174,7 @@ public class EvaluatorThreadPoolExecutor extends ThreadPoolExecutor {
 		sharedResources.forEach((key, value) -> {
 			try {
 				value.close();
-			} catch (final IOException e) {
+			} catch (final Exception e) {
 				monitorSet.forEach(monitor -> monitor.error("Exception closing shared resource " + key, e)); //$NON-NLS-1$
 			}
 		});
