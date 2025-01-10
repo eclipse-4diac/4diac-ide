@@ -46,6 +46,13 @@ public class FBNetworkEditDomain extends DefaultEditDomain {
 	}
 
 	@Override
+	public void mouseHover(final MouseEvent me, final EditPartViewer viewer) {
+		final EditPartViewer actualViewer = findViewer(new Point(me.x, me.y), viewer);
+		final MouseEvent convertedEvent = convertMouseEventCoordinates(me, viewer, actualViewer);
+		super.mouseHover(convertedEvent, actualViewer);
+	}
+
+	@Override
 	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
 		final EditPartViewer actualViewer = findViewer(new Point(me.x, me.y), viewer);
 		final MouseEvent convertedEvent = convertMouseEventCoordinates(me, viewer, actualViewer);
