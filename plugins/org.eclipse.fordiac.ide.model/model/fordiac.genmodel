@@ -731,6 +731,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/rightInterface"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/leftInterface"/>
       <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/serviceSequence"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Service/comment"/>
       <genOperations ecoreOperation="lib.ecore#//Service/getFBType" body="return (FBType) this.eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceSequence">
