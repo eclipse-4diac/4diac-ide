@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="E_TRIG" Comment="Trigger FB for a specified Event Type" >
+<FBType Name="E_TRIG" Comment="Trigger unconnected input events of the specified type inside a resource" >
 	<Identification Standard="61499-2">
 	</Identification>
 	<VersionInfo Version="1.0" Author="Mario Kastner" Date="2025-01-08">
@@ -17,10 +17,10 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="EVENTTYPE" Type="STRING" Comment="Event type to be triggered" />
+			<VarDeclaration Name="EVENTTYPE" Type="STRING" Comment="Event type to be triggered"  InitialValue="'EInit'"/>
 		</InputVars>
 	</InterfaceList>
-	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type" >
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION">
 	</Service>
 	<Attribute Name="Documentation" Type="CDATA"><![CDATA[]]></Attribute>
 </FBType>
