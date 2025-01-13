@@ -55,6 +55,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.search2.internal.ui.SearchView;
@@ -103,8 +104,12 @@ public class ModelSearchQuery implements ISearchQuery {
 				final LibraryElement libraryElement = context.getLibraryElement(libraryElementURI);
 				if (libraryElement instanceof final AutomationSystem sys) {
 					searchSystem(sys, monitor);
-				} else if (matchTypeEntry(libraryElement, monitor)) {
-					searchResult.addResult(libraryElement);
+				} else if (libraryElement != null) {
+					if (matchTypeEntry(libraryElement, monitor)) {
+						searchResult.addResult(libraryElement);
+					}
+				} else {
+					FordiacLogHelper.logWarning("Could not load model for: " + libraryElementURI.toString()); ////$NON-NLS-1$
 				}
 			});
 		}
