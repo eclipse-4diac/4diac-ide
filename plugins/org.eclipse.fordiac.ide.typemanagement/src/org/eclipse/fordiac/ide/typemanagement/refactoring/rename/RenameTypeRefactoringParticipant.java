@@ -26,9 +26,12 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -39,6 +42,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ImportChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateTypeEntryChange;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -143,8 +147,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		return parentChange;
 	}
 
-	private static void createStructChanges(final DataTypeEntry dataTypeEntry,
-			final CompositeChange structUsageChanges) {
+	private void createStructChanges(final DataTypeEntry dataTypeEntry, final CompositeChange structUsageChanges) {
 		final DataTypeInstanceSearch dataTypeInstanceSearch = new DataTypeInstanceSearch(dataTypeEntry);
 		final Set<EObject> rootElements = new HashSet<>();
 		dataTypeInstanceSearch.performSearch().forEach(obj -> {
@@ -173,7 +176,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		return parentChange;
 	}
 
-	private static Change createSubChange(final VarDeclaration varDecl, final DataTypeEntry dataTypeEntry,
+	private Change createSubChange(final VarDeclaration varDecl, final DataTypeEntry dataTypeEntry,
 			final Set<EObject> rootElements) {
 		if (varDecl.getFBNetworkElement() != null) {
 			if (rootElements.add(varDecl.getFBNetworkElement())) {
@@ -181,23 +184,50 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 			}
 		} else {
 			final EObject rootContainer = EcoreUtil.getRootContainer(varDecl);
+			final String fullTypeName = dataTypeEntry.getFullTypeName();
 			if (rootElements.add(rootContainer)) {
+				final var packageName = PackageNameHelper.getPackageName(dataTypeEntry.getType());
 				if (rootContainer instanceof final StructuredType stElement) {
 					final CompositeChange change = new CompositeChange(MessageFormat.format(
 							Messages.Refactoring_AffectedStruct, stElement.getName(), dataTypeEntry.getTypeName()));
 					change.add(new RenameUpdateStructDataTypeMemberVariableChange(varDecl));
 					createStructChanges((DataTypeEntry) stElement.getTypeEntry(), change);
-					return change;
+
+					final var imports = ImportHelper.getImports(stElement);
+					return createImportChange(packageName, fullTypeName, change, imports);
 				}
-				if (rootContainer instanceof AttributeDeclaration) {
-					return new RenameUpdateStructDataTypeMemberVariableChange(varDecl);
+				if (rootContainer instanceof final AttributeDeclaration ad) {
+					final CompositeChange change = new CompositeChange(
+							MessageFormat.format(Messages.Refactoring_AffectedAttribute, oldName, newName));
+					change.add(new RenameUpdateStructDataTypeMemberVariableChange(varDecl));
+
+					final var imports = ImportHelper.getImports(ad);
+					return createImportChange(packageName, fullTypeName, change, imports);
+
 				}
 				if (rootContainer instanceof final FBType fbType
 						&& dataTypeEntry.getType() instanceof final StructuredType type) {
-					return new RenameUpdateFBTypeInterfaceChange(fbType, type);
+					final CompositeChange change = new CompositeChange(MessageFormat.format(
+							Messages.Refactoring_AffectedInstancesOfFB, type.getName(), dataTypeEntry.getTypeName()));
+					change.add(new RenameUpdateFBTypeInterfaceChange(fbType, type));
+					final var imports = ImportHelper.getImports(fbType);
+					return createImportChange(packageName, fullTypeName, change, imports);
 				}
 			}
 		}
 		return null;
+
+	}
+
+	private Change createImportChange(final String packageName, final String fullTypeName, final CompositeChange change,
+			final List<Import> imports) {
+		final String value = packageName + PackageNameHelper.PACKAGE_NAME_DELIMITER + newName;
+		for (final var imp : imports) {
+			if (imp.getImportedNamespace().equals(fullTypeName)) {
+				change.add(new ImportChange(oldName, EcoreUtil.getURI(imp), value));
+				break;
+			}
+		}
+		return change;
 	}
 }
