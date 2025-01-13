@@ -25,6 +25,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,10 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -72,6 +76,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -420,7 +425,7 @@ public abstract class CommonElementImporter {
 		final Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 		readNameCommentAttributes(attribute);
 
-		final AttributeDeclaration internalAttributeDecl = InternalAttributeDeclarations
+		AttributeDeclaration internalAttributeDecl = InternalAttributeDeclarations
 				.getInternalAttributeByName(attribute.getName());
 		if (internalAttributeDecl != null) {
 			// Internal Attributes
@@ -444,6 +449,16 @@ public abstract class CommonElementImporter {
 				if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
 					attribute.setAttributeDeclaration(attributeTypeEntry.getType());
 					attribute.setType(attributeTypeEntry.getType().getType());
+				} else {
+//					createErrorMarkerForAttribute(confObject, errorMessage);
+					final TypeEntry errorTypeEntry = getTypeLibrary().createErrorTypeEntry(attribute,
+							LibraryElementPackage.eINSTANCE.getAttribute());
+
+					internalAttributeDecl = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
+					internalAttributeDecl.setTypeEntry(errorTypeEntry);
+
+					// System.out.println("built: " + internalAttributeDecl.getTypeEntry() + ": " +
+					// errorTypeEntry);
 				}
 			}
 		}
@@ -459,6 +474,17 @@ public abstract class CommonElementImporter {
 		attribute.setValue(value);
 
 		confObject.getAttributes().add(attribute);
+	}
+
+	protected void createErrorMarkerForAttribute(final ConfigurableObject confObject, final String errorMessage) {
+		final IFile file = getFile();
+		if (file != null) {
+			FordiacMarkerHelper.updateMarkers(file, FordiacErrorMarker.VALIDATION_MARKER, Collections.EMPTY_LIST, true);
+			FordiacMarkerHelper.createMarkers(file,
+					List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage)
+							.setType(FordiacErrorMarker.TYPE_LIBRARY_MARKER).setLineNumber(getLineNumber())
+							.setTarget(confObject)));
+		}
 	}
 
 	protected VarDeclaration parseParameter() throws TypeImportException, XMLStreamException {

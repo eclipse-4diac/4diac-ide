@@ -58,11 +58,13 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorAdapterTypeEntryImpl;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorAttributeTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorFBTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorSubAppTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
@@ -261,6 +263,20 @@ public final class TypeLibrary {
 		});
 	}
 
+	public TypeEntry createErrorTypeEntry(final Attribute attr, final EClass typeClass) {
+		final String resolvedTypeName = attr.getName() != null ? attr.getName() : "Unknown Type";
+		return errorTypes.computeIfAbsent(resolvedTypeName.toLowerCase(), name -> {
+			final Attribute at = (Attribute) LibraryElementFactory.eINSTANCE.create(typeClass);
+			at.setName(resolvedTypeName);
+			at.setAttributeDeclaration(LibraryElementFactory.eINSTANCE.createAttributeDeclaration());
+			final TypeEntry errorEntry = new ErrorAttributeTypeEntryImpl();
+			errorEntry.setType(at.getType()); // missing attribute type
+			errorEntry.setTypeLibrary(this);
+
+			return errorEntry;
+		});
+	}
+
 	private static TypeEntry createErrorTypeEntry(final FBType fbType) {
 		if (fbType instanceof AdapterType) {
 			return new ErrorAdapterTypeEntryImpl();
@@ -268,6 +284,10 @@ public final class TypeLibrary {
 		if (fbType instanceof SubAppType) {
 			return new ErrorSubAppTypeEntryImpl();
 		}
+		if (fbType instanceof AttributeTypeEntry) {
+			return new ErrorAttributeTypeEntryImpl();
+		}
+		System.out.println("FBTYPE: " + fbType.eClass());
 		return new ErrorFBTypeEntryImpl();
 	}
 
