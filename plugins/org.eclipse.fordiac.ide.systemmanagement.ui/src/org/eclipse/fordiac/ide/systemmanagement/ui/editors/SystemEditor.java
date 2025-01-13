@@ -84,8 +84,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
@@ -100,7 +100,7 @@ public class SystemEditor extends EditorPart
 
 	private GraphicalAnnotationModel annotationModel;
 
-	private Form form;
+	private ScrolledForm form;
 
 	private PackageInfoWidget typeInfo;
 	private TableViewer appTableViewer;
@@ -237,7 +237,7 @@ public class SystemEditor extends EditorPart
 	public void createPartControl(final Composite parent) {
 		final FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 
-		form = toolkit.createForm(parent);
+		form = toolkit.createScrolledForm(parent);
 		GridLayoutFactory.fillDefaults().applyTo(form.getBody());
 
 		final Composite parentComposite = toolkit.createComposite(form.getBody());
@@ -245,16 +245,15 @@ public class SystemEditor extends EditorPart
 		parentComposite.setLayout(new GridLayout(1, false));
 		parentComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
+		final Composite appSysConfComp = toolkit.createComposite(parentComposite);
+		appSysConfComp.setLayout(new GridLayout(2, true));
+		appSysConfComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		createApplicationsSection(toolkit, appSysConfComp);
+
+		createSysconfSection(toolkit, appSysConfComp);
+
 		createInfoSection(toolkit, parentComposite);
-
-		final Composite bottomComp = toolkit.createComposite(parentComposite);
-		bottomComp.setLayout(new GridLayout(2, true));
-		bottomComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-		createApplicationsSection(toolkit, bottomComp);
-
-		createSysconfSection(toolkit, bottomComp);
-
 		getSite().setSelectionProvider(this);
 
 		if (null != system) {
