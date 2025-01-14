@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener.QualNameChangeState;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
@@ -64,16 +65,15 @@ public enum QualNameChangeListenerManager implements CommandStackEventListener {
 	public void stackChanged(final CommandStackEvent event) {
 
 		if (event.getCommand() instanceof final QualNameAffectedCommand cmd) {
-			final QualNameChange qualNameChange = cmd.getQualNameChange();
 			switch (event.getDetail()) {
 			case CommandStack.POST_EXECUTE:
-				notifyListenersExecute(qualNameChange);
+				notifyListenersExecute(cmd.getQualNameChange(QualNameChangeState.RENAME));
 				break;
 			case CommandStack.POST_UNDO:
-				notifyListenersUndo(qualNameChange);
+				notifyListenersUndo(cmd.getQualNameChange(QualNameChangeState.RENAME_UNDO));
 				break;
 			case CommandStack.POST_REDO:
-				notifyListenersRedo(qualNameChange);
+				notifyListenersRedo(cmd.getQualNameChange(QualNameChangeState.RENAME_REDO));
 				break;
 
 			default:

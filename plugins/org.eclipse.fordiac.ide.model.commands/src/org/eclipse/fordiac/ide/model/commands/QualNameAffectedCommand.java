@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.commands;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener.QualNameChangeState;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -39,8 +40,9 @@ public abstract class QualNameAffectedCommand extends Command implements ScopedC
 	/**
 	 * encapsulate the change to not provide the command to the receiver
 	 */
-	public QualNameChange getQualNameChange() {
-		return new QualNameChange(getOldQualName(), getNewQualName(), getNotifier(), getTypeEntry(getNotifier()));
+	public QualNameChange getQualNameChange(final QualNameChangeState state) {
+		return new QualNameChange(getOldQualName(), getNewQualName(), getNotifier(), getTypeEntry(getNotifier()),
+				state);
 	}
 
 	protected static TypeEntry getTypeEntry(final INamedElement notifier) {

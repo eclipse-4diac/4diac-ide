@@ -12,8 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands;
 
+import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener.QualNameChangeState;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
-public record QualNameChange(String oldQualName, String newQualName, INamedElement notifier, TypeEntry key) {
+public record QualNameChange(String oldQualName, String newQualName, INamedElement notifier, TypeEntry key,
+		QualNameChangeState state) {
 }
