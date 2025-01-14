@@ -118,13 +118,13 @@ public enum SystemManager {
 		project.create(description, monitor);
 		project.open(monitor);
 
-		ManifestHelper.createProjectManifest(project, includedLibraries.keySet());
-
 		project.getFolder(TypeLibraryTags.TYPE_LIB_FOLDER_NAME).create(true, true, monitor);
 		project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME).create(IResource.VIRTUAL | IResource.FORCE, true,
 				monitor);
 		project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME).create(IResource.VIRTUAL | IResource.FORCE, true,
 				monitor);
+
+		ManifestHelper.createProjectManifest(project, includedLibraries.keySet());
 
 		TypeLibraryManager.INSTANCE.getTypeLibrary(project); // insert the project into the project list
 

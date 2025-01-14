@@ -603,7 +603,7 @@ public enum LibraryManager {
 	 * @param typeLibrary {@link TypeLibrary} to use
 	 */
 	public void checkManifestFile(final IProject project, final TypeLibrary typeLibrary) {
-		final Manifest manifest = ManifestHelper.getOrCreateProjectManifest(project);
+		final Manifest manifest = ManifestHelper.getContainerManifest(project);
 		if (manifest == null || !ManifestHelper.isProject(manifest)) {
 			return;
 		}

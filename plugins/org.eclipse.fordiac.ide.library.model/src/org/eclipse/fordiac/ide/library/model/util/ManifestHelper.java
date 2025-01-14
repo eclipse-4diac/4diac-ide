@@ -154,7 +154,7 @@ public final class ManifestHelper {
 	 * @return the manifest, or {@code null} if it couldn't be loaded
 	 */
 	public static Manifest getManifest(final IFile manifest) {
-		if (manifest == null) {// don't use manifest.exists() as internal eclipse cache might be inconsistent
+		if (manifest == null || !manifest.exists()) {
 			return null;
 		}
 		return getManifest(URI.createURI(manifest.getLocationURI().toString()));
