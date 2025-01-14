@@ -24,7 +24,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
-import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -34,12 +33,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class ChangeNameCommand extends QualNameAffectedCommand implements ConnectionLayoutTagger, ScopedCommand {
+public class ChangeNameCommand extends Command implements ConnectionLayoutTagger, QualNameAffectedCommand {
 	private final INamedElement element;
 	private final String name;
 	private String oldName;
+	private final String oldQualName;
 	private final CompoundCommand additionalCommands = new CompoundCommand();
 	private boolean validateName;
 
@@ -48,11 +49,11 @@ public class ChangeNameCommand extends QualNameAffectedCommand implements Connec
 	}
 
 	private ChangeNameCommand(final INamedElement element, final String name, final boolean validateName) {
-		super(element.getQualifiedName());
+
 		this.element = Objects.requireNonNull(element);
 		this.name = name;
 		this.validateName = validateName;
-		this.oldName = element.getQualifiedName();
+		this.oldQualName = element.getQualifiedName();
 	}
 
 	public static ChangeNameCommand forName(final INamedElement element, final String name) {
@@ -142,10 +143,6 @@ public class ChangeNameCommand extends QualNameAffectedCommand implements Connec
 		return element;
 	}
 
-	public String getOldName() {
-		return oldName;
-	}
-
 	public CompoundCommand getAdditionalCommands() {
 		return additionalCommands;
 	}
@@ -172,23 +169,18 @@ public class ChangeNameCommand extends QualNameAffectedCommand implements Connec
 	}
 
 	@Override
-	public INamedElement getNotifier() {
-		return element;
+	public INamedElement getChangedElement() {
+		return getElement();
 	}
 
 	@Override
-	protected String getNewQualName() {
-		final String[] split = getOldQualName().split("\\."); //$NON-NLS-1$
-		final StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < split.length; i++) {
-			if (i == split.length - 1) {
-				sb.append(name);
-			} else {
-				sb.append(split[i]);
-				sb.append("."); //$NON-NLS-1$
-			}
-		}
-		return sb.toString();
+	public String getNewQualName() {
+		return getOldQualName().substring(0, getOldQualName().length() - oldName.length()) + name;
+	}
+
+	@Override
+	public String getOldQualName() {
+		return oldQualName;
 	}
 
 }

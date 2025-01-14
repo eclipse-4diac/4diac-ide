@@ -34,15 +34,6 @@ public class RenameElementChange extends AbstractCommandChange<INamedElement> {
 	private final String newName;
 	private String oldName;
 
-	// if c1.newname = c2.oldanme
-	// remove c1 & c2
-	// if c2.oldname != c1.newName
-	// add c3 (c1.oldname, c2.newname
-
-	// DELETE
-	// oldName = xy ; newName = null -> delete
-	// oldName = null ; newName xy
-
 	public RenameElementChange(final String name, final URI elementURI, final String newName) {
 		super(name, elementURI, INamedElement.class);
 		this.newName = newName;

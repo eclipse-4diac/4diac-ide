@@ -19,33 +19,24 @@ import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener.QualNameCha
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.gef.commands.Command;
 
-public abstract class QualNameAffectedCommand extends Command implements ScopedCommand {
+public interface QualNameAffectedCommand extends ScopedCommand {
 
-	private final String oldQualName;
+	String getOldQualName();
 
-	protected QualNameAffectedCommand(final String oldQualName) {
-		this.oldQualName = oldQualName;
-	}
+	String getNewQualName();
 
-	protected String getOldQualName() {
-		return oldQualName;
-	}
-
-	protected abstract String getNewQualName();
-
-	protected abstract INamedElement getNotifier();
+	INamedElement getChangedElement();
 
 	/**
 	 * encapsulate the change to not provide the command to the receiver
 	 */
-	public QualNameChange getQualNameChange(final QualNameChangeState state) {
-		return new QualNameChange(getOldQualName(), getNewQualName(), getNotifier(), getTypeEntry(getNotifier()),
+	default QualNameChange getQualNameChange(final QualNameChangeState state) {
+		return new QualNameChange(getOldQualName(), getNewQualName(), getChangedElement(), getTypeEntry(getChangedElement()),
 				state);
 	}
 
-	protected static TypeEntry getTypeEntry(final INamedElement notifier) {
+	static TypeEntry getTypeEntry(final INamedElement notifier) {
 		final EObject rootContainer = EcoreUtil.getRootContainer(notifier);
 		Assert.isTrue(rootContainer instanceof LibraryElement);
 		if (rootContainer instanceof final LibraryElement element) {
