@@ -76,7 +76,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -425,7 +424,7 @@ public abstract class CommonElementImporter {
 		final Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 		readNameCommentAttributes(attribute);
 
-		AttributeDeclaration internalAttributeDecl = InternalAttributeDeclarations
+		final AttributeDeclaration internalAttributeDecl = InternalAttributeDeclarations
 				.getInternalAttributeByName(attribute.getName());
 		if (internalAttributeDecl != null) {
 			// Internal Attributes
@@ -450,15 +449,12 @@ public abstract class CommonElementImporter {
 					attribute.setAttributeDeclaration(attributeTypeEntry.getType());
 					attribute.setType(attributeTypeEntry.getType().getType());
 				} else {
-//					createErrorMarkerForAttribute(confObject, errorMessage);
-					final TypeEntry errorTypeEntry = getTypeLibrary().createErrorTypeEntry(attribute,
-							LibraryElementPackage.eINSTANCE.getAttribute());
-
-					internalAttributeDecl = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
-					internalAttributeDecl.setTypeEntry(errorTypeEntry);
-
-					// System.out.println("built: " + internalAttributeDecl.getTypeEntry() + ": " +
-					// errorTypeEntry);
+					/**
+					 * TODO:
+					 * 	attributeDeclaration setzen
+					 * 	attribute Type setzen 
+					 * 		beide basierend auf Error TypeEntry
+					 */
 				}
 			}
 		}

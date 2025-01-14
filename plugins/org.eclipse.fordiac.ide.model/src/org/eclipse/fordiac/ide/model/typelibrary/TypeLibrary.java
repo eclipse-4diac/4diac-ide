@@ -263,14 +263,14 @@ public final class TypeLibrary {
 		});
 	}
 
-	public TypeEntry createErrorTypeEntry(final Attribute attr, final EClass typeClass) {
+	public TypeEntry createErrorTypeEntry(final Attribute attr, final EClass typeClass) { // neu
 		final String resolvedTypeName = attr.getName() != null ? attr.getName() : "Unknown Type";
 		return errorTypes.computeIfAbsent(resolvedTypeName.toLowerCase(), name -> {
 			final Attribute at = (Attribute) LibraryElementFactory.eINSTANCE.create(typeClass);
 			at.setName(resolvedTypeName);
 			at.setAttributeDeclaration(LibraryElementFactory.eINSTANCE.createAttributeDeclaration());
 			final TypeEntry errorEntry = new ErrorAttributeTypeEntryImpl();
-			errorEntry.setType(at.getType()); // missing attribute type
+			errorEntry.setType(at.getType()); // todo missing attr type
 			errorEntry.setTypeLibrary(this);
 
 			return errorEntry;
@@ -287,7 +287,6 @@ public final class TypeLibrary {
 		if (fbType instanceof AttributeTypeEntry) {
 			return new ErrorAttributeTypeEntryImpl();
 		}
-		System.out.println("FBTYPE: " + fbType.eClass());
 		return new ErrorFBTypeEntryImpl();
 	}
 
