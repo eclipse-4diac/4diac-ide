@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener.QualNameChangeState;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.ui.editors.EditorFilter;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -93,9 +94,10 @@ public enum QualNameChangeListenerManager implements CommandStackEventListener {
 	}
 
 	private static TypeEntry getTypeEntryKeyFromCommandStack(final CommandStack stack) {
-		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
+		final EditorFilter filter = ((final IEditorPart editor) -> editor.getAdapter(CommandStack.class) == stack);
+		final IEditorPart currentActiveEditor = EditorUtils.findEditor(filter);
 
-		if (currentActiveEditor.getAdapter(CommandStack.class) == stack) {
+		if (currentActiveEditor != null) {
 			final LibraryElement libraryElement = currentActiveEditor.getAdapter(LibraryElement.class);
 			return libraryElement.getTypeEntry();
 
