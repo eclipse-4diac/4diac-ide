@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener.QualNameChangeState;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorFilter;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.commands.CommandStack;
@@ -48,7 +49,7 @@ public enum QualNameChangeListenerManager implements CommandStackEventListener {
 					listeners.add((QualNameChangeListener) obj);
 				}
 			} catch (final Exception e) {
-				e.printStackTrace();
+				FordiacLogHelper.logError(EXTENSION_POINT_ID, e);
 			}
 		}
 	}
