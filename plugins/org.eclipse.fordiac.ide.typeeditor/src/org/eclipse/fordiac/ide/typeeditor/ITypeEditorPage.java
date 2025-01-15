@@ -25,6 +25,8 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ide.IGotoMarker;
+import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.part.MultiPageEditorSite;
 
 public interface ITypeEditorPage extends ISelectionListener, IReusableEditor, IGotoMarker {
 
@@ -86,6 +88,15 @@ public interface ITypeEditorPage extends ISelectionListener, IReusableEditor, IG
 		if (currentEditorInput != null && currentEditorInput.getContent() != typeEI.getContent()) {
 			throw new IllegalArgumentException(
 					"Editor input with new content given to type editor. This is currently not supported!"); //$NON-NLS-1$
+		}
+	}
+
+	default void revealEditor() {
+		if (getEditorSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
+			final MultiPageEditorPart multiPageEditor = multiPageEditorSite.getMultiPageEditor();
+			if (multiPageEditor.getSelectedPage() != this) {
+				multiPageEditor.setActiveEditor(this);
+			}
 		}
 	}
 

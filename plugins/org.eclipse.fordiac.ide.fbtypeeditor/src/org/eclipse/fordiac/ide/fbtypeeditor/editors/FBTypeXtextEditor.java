@@ -30,7 +30,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
@@ -82,15 +81,6 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 			revealEditor();
 		}
 		super.selectAndReveal(selectionStart, selectionLength, revealStart, revealLength);
-	}
-
-	protected void revealEditor() {
-		if (getEditorSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
-			final MultiPageEditorPart multiPageEditor = multiPageEditorSite.getMultiPageEditor();
-			if (multiPageEditor.getSelectedPage() != this) {
-				multiPageEditor.setActiveEditor(this);
-			}
-		}
 	}
 
 	@Override
