@@ -13,6 +13,8 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.xtext.ide.serializer.IEmfResourceChange;
 import org.eclipse.xtext.ide.serializer.impl.EObjectDescriptionDeltaProvider.Deltas;
@@ -32,6 +34,9 @@ public class STCoreRelatedEmfResourceUpdater extends RelatedEmfResourceUpdater {
 		final Resource resource = getResourceSet().getResource(getResource().getUri(), true);
 		if (resource instanceof final LibraryElementXtextResource libResource) {
 			importUpdater.updateImports(deltas, libResource.getInternalLibraryElement(),
+					(imp, value) -> changeAcceptor.accept(new ImportedNamespaceChange(imp, value)));
+		} else if (resource instanceof final FordiacTypeResource typeResource) {
+			importUpdater.updateImports(deltas, (LibraryElement) typeResource.getContents().getFirst(),
 					(imp, value) -> changeAcceptor.accept(new ImportedNamespaceChange(imp, value)));
 		}
 		super.applyChange(deltas, changeAcceptor);
