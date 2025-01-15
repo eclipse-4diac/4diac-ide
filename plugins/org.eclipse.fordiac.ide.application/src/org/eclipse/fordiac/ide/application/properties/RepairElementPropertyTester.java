@@ -26,6 +26,7 @@ public class RepairElementPropertyTester extends PropertyTester {
 	}
 
 	protected static boolean isSupported(final Object element) {
+		System.out.println("ELEMENT " + element.getClass());
 		if (element instanceof final EditPart editPart) {
 			return FordiacQuickFixHandler.hasMarker(editPart);
 		}

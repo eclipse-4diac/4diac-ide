@@ -59,6 +59,7 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -263,14 +264,13 @@ public final class TypeLibrary {
 		});
 	}
 
-	public TypeEntry createErrorTypeEntry(final Attribute attr, final EClass typeClass) { // neu
-		final String resolvedTypeName = attr.getName() != null ? attr.getName() : "Unknown Type";
+	public TypeEntry createErrorTypeEntry(final Attribute attr) { // neu
+		final String resolvedTypeName = attr.getName() != null ? attr.getName() : ""; //$NON-NLS-1$
 		return errorTypes.computeIfAbsent(resolvedTypeName.toLowerCase(), name -> {
-			final Attribute at = (Attribute) LibraryElementFactory.eINSTANCE.create(typeClass);
+			final AttributeDeclaration at = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
 			at.setName(resolvedTypeName);
-			at.setAttributeDeclaration(LibraryElementFactory.eINSTANCE.createAttributeDeclaration());
 			final TypeEntry errorEntry = new ErrorAttributeTypeEntryImpl();
-			errorEntry.setType(at.getType()); // todo missing attr type
+			errorEntry.setType(at);
 			errorEntry.setTypeLibrary(this);
 
 			return errorEntry;

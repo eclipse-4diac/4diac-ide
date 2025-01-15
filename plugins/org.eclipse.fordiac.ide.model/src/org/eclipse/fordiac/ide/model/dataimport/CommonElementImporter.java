@@ -25,7 +25,6 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -49,10 +48,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -449,12 +445,10 @@ public abstract class CommonElementImporter {
 					attribute.setAttributeDeclaration(attributeTypeEntry.getType());
 					attribute.setType(attributeTypeEntry.getType().getType());
 				} else {
-					/**
-					 * TODO:
-					 * 	attributeDeclaration setzen
-					 * 	attribute Type setzen 
-					 * 		beide basierend auf Error TypeEntry
-					 */
+					final TypeEntry tE = getTypeLibrary().createErrorTypeEntry(attribute);
+					final AttributeDeclaration at = (AttributeDeclaration) tE.getType();
+					attribute.setAttributeDeclaration(at);
+					attribute.setType(at.getType());
 				}
 			}
 		}
@@ -472,16 +466,16 @@ public abstract class CommonElementImporter {
 		confObject.getAttributes().add(attribute);
 	}
 
-	protected void createErrorMarkerForAttribute(final ConfigurableObject confObject, final String errorMessage) {
-		final IFile file = getFile();
-		if (file != null) {
-			FordiacMarkerHelper.updateMarkers(file, FordiacErrorMarker.VALIDATION_MARKER, Collections.EMPTY_LIST, true);
-			FordiacMarkerHelper.createMarkers(file,
-					List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage)
-							.setType(FordiacErrorMarker.TYPE_LIBRARY_MARKER).setLineNumber(getLineNumber())
-							.setTarget(confObject)));
-		}
-	}
+//	protected void createErrorMarkerForAttribute(final ConfigurableObject confObject, final String errorMessage) {
+//		final IFile file = getFile();
+//		if (file != null) {
+//			FordiacMarkerHelper.updateMarkers(file, FordiacErrorMarker.VALIDATION_MARKER, Collections.EMPTY_LIST, true);
+//			FordiacMarkerHelper.createMarkers(file,
+//					List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage)
+//							.setType(FordiacErrorMarker.TYPE_LIBRARY_MARKER).setLineNumber(getLineNumber())
+//							.setTarget(confObject)));
+//		}
+//	}
 
 	protected VarDeclaration parseParameter() throws TypeImportException, XMLStreamException {
 		final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
