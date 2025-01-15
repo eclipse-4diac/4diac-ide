@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.xtext.ide.refactoring.IResourceRelocationStrategy;
 import org.eclipse.xtext.ide.refactoring.ResourceRelocationChange;
 import org.eclipse.xtext.ide.refactoring.ResourceRelocationContext;
+import org.eclipse.xtext.ide.refactoring.ResourceRelocationContext.ChangeType;
 import org.eclipse.xtext.resource.FileExtensionProvider;
 
 import com.google.inject.Inject;
@@ -39,14 +40,17 @@ public class LibraryElementResourceRelocationStrategy implements IResourceReloca
 	}
 
 	protected void applyChange(final ResourceRelocationContext context, final ResourceRelocationChange change) {
-		context.addModification(change, resource -> modifyResource(resource, change));
+		context.addModification(change, resource -> modifyResource(resource, change, context.getChangeType()));
 	}
 
-	protected void modifyResource(final Resource resource, final ResourceRelocationChange change) {
+	protected void modifyResource(final Resource resource, final ResourceRelocationChange change,
+			final ChangeType changeType) {
 		if (resource instanceof final FordiacTypeResource typeResource && !typeResource.getContents().isEmpty()
 				&& typeResource.getContents().getFirst() instanceof final LibraryElement libraryElement) {
 			updateTypeName(libraryElement, change);
-			updatePackageName(libraryElement, change);
+			if (changeType != ChangeType.RENAME) {
+				updatePackageName(libraryElement, change);
+			}
 		}
 	}
 
