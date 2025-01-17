@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorCache;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class EvaluatorProcess extends AbstractLaunchProcess implements Callable<IStatus> {
 
@@ -74,6 +75,7 @@ public class EvaluatorProcess extends AbstractLaunchProcess implements Callable<
 			return Status.error("Terminated"); //$NON-NLS-1$
 		} catch (final Exception t) {
 			streamsProxy.getErrorStreamMonitor().error("Exception occurred", t); //$NON-NLS-1$
+			FordiacLogHelper.logWarning("Exception occurred while evaluating " + name, t); //$NON-NLS-1$
 			return Status.error("Exception occurred", t); //$NON-NLS-1$
 		} finally {
 			executor.shutdown();

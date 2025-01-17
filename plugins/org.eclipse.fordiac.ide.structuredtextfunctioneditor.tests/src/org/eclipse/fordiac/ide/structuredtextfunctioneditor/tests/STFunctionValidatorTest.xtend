@@ -701,7 +701,7 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
-	def void testInvalidCaseConditionType() {
+	def void testValidCaseConditionType() {
 		'''
 			FUNCTION hubert
 			VAR
@@ -713,7 +713,24 @@ class STFunctionValidatorTest {
 				LINT#2: int1 := 17;
 			END_CASE;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STCaseCases, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidCaseConditionType() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			CASE int1 OF
+				1: int1 := 17;
+				'abc': int1 := 17;
+			END_CASE;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STCaseCases, STCoreValidator.NON_COMPARABLE_TYPES,
+			"Cannot compare STRING with INT")
 	}
 
 	@Test
@@ -1657,15 +1674,6 @@ class STFunctionValidatorTest {
 		'''
 			FUNCTION test
 			VAR_TEMP
-				USINT_VAR: USINT;
-			END_VAR
-			USINT_VAR := INT_TO_USINT(INT#1024);
-			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
-			STCoreValidator.UNNECESSARY_LITERAL_CONVERSION, "Unnecessary conversion of literal to USINT")
-		'''
-			FUNCTION test
-			VAR_TEMP
 				INT_VAR: INT;
 				INT_VAR2: INT;
 				REAL_VAR: REAL;
@@ -1673,6 +1681,86 @@ class STFunctionValidatorTest {
 			REAL_VAR := INT_TO_REAL(INT_VAR) / INT_VAR2;
 			END_FUNCTION
 		'''.parse.assertNoIssues
+	}
+
+	@Test
+	def void testUnnecessaryLiteralConversions() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				USINT_VAR: USINT;
+			END_VAR
+			USINT_VAR := INT_TO_USINT(INT#128);
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.UNNECESSARY_LITERAL_CONVERSION, "Unnecessary conversion of literal to USINT")
+		'''
+			FUNCTION test
+			VAR_TEMP
+				INT_VAR: INT;
+			END_VAR
+			INT_VAR := UINT_TO_INT(UINT#16#800);
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.UNNECESSARY_LITERAL_CONVERSION, "Unnecessary conversion of literal to INT")
+		'''
+			FUNCTION test
+			VAR_TEMP
+				BYTE_VAR: BYTE;
+			END_VAR
+			BYTE_VAR := WORD_TO_BYTE(WORD#16#80);
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.UNNECESSARY_LITERAL_CONVERSION, "Unnecessary conversion of literal to BYTE")
+		'''
+			FUNCTION test
+			VAR_TEMP
+				CHAR_VAR: CHAR;
+			END_VAR
+			CHAR_VAR := STRING_TO_CHAR('a');
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.UNNECESSARY_LITERAL_CONVERSION, "Unnecessary conversion of literal to CHAR")
+	}
+
+	@Test
+	def void testTruncatingLiteralConversions() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				USINT_VAR: USINT;
+			END_VAR
+			USINT_VAR := INT_TO_USINT(INT#1024);
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.TRUNCATING_LITERAL_CONVERSION, "Truncating conversion of literal to USINT")
+		'''
+			FUNCTION test
+			VAR_TEMP
+				INT_VAR: INT;
+			END_VAR
+			INT_VAR := UINT_TO_INT(UINT#16#8000);
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.TRUNCATING_LITERAL_CONVERSION, "Truncating conversion of literal to INT")
+		'''
+			FUNCTION test
+			VAR_TEMP
+				BYTE_VAR: BYTE;
+			END_VAR
+			BYTE_VAR := WORD_TO_BYTE(WORD#16#8000);
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.TRUNCATING_LITERAL_CONVERSION, "Truncating conversion of literal to BYTE")
+		'''
+			FUNCTION test
+			VAR_TEMP
+				CHAR_VAR: CHAR;
+			END_VAR
+			CHAR_VAR := STRING_TO_CHAR('abc');
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.TRUNCATING_LITERAL_CONVERSION, "Truncating conversion of literal to CHAR")
 	}
 
 	@Test

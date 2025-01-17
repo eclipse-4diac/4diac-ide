@@ -167,18 +167,18 @@ class STAlgorithmFormattingTest {
 			toBeFormatted = '''
 				ALGORITHM REQ
 				
-				_sum := ADD_IN_ADD();    // returns sum via return value 
+				_sum := ADD_IN_ADD(); // returns sum via return value
 				
-				SUB_DIFF(Start := _sum, Result => _sum);    // Use the previous sum as start value and returns result via output
+				SUB_DIFF(Start := _sum, Result => _sum); // Use the previous sum as start value and returns result via output
 				END_ALGORITHM
 			'''
 
 			expectation = '''
 				ALGORITHM REQ
 				
-				_sum := ADD_IN_ADD();    // returns sum via return value
+				_sum := ADD_IN_ADD(); // returns sum via return value
 				
-				SUB_DIFF(Start := _sum, Result => _sum);    // Use the previous sum as start value and returns result via output
+				SUB_DIFF(Start := _sum, Result => _sum); // Use the previous sum as start value and returns result via output
 				END_ALGORITHM
 				
 			'''
@@ -194,11 +194,11 @@ class STAlgorithmFormattingTest {
 					_sum : INT;
 				END_VAR
 				
-				// METHODS share in and outputs of function block, as well as internal/static variables. temporary variables are NOT
-				// shared with METHODS.
-				_sum := ADD_IN_ADD();    // returns sum via return value
+				// METHODS share in and outputs of function block, as well as internal/static variables.
+				// temporary variables are NOT shared with METHODS.
+				_sum := ADD_IN_ADD(); // returns sum via return value
 				
-				SUB_DIFF(Start := _sum, Result => _sum);    // Use the previous sum as start value and returns result via output
+				SUB_DIFF(Start := _sum, Result => _sum); // Use the previous sum as start value and returns result via output
 				
 				// parameter
 				_sum := MUL_MUL(Sum := _sum);
@@ -216,11 +216,11 @@ class STAlgorithmFormattingTest {
 					_sum : INT;
 				END_VAR
 				
-				// METHODS share in and outputs of function block, as well as internal/static variables. temporary variables are NOT
-				// shared with METHODS.
-				_sum := ADD_IN_ADD();    // returns sum via return value
+				// METHODS share in and outputs of function block, as well as internal/static variables.
+				// temporary variables are NOT shared with METHODS.
+				_sum := ADD_IN_ADD(); // returns sum via return value
 				
-				SUB_DIFF(Start := _sum, Result => _sum);    // Use the previous sum as start value and returns result via output
+				SUB_DIFF(Start := _sum, Result => _sum); // Use the previous sum as start value and returns result via output
 				
 				// parameter
 				_sum := MUL_MUL(Sum := _sum);

@@ -14,16 +14,21 @@
 
 package org.eclipse.fordiac.ide.application.handlers;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.helpers.FBEndpointFinder;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
@@ -39,8 +44,19 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
+		final boolean stepMode = UIPlugin.getDefault().getPreferenceStore()
+				.getBoolean(PreferenceConstants.P_TOGGLE_JUMP_STEP);
 
 		final IInterfaceElement originPin = ((InterfaceEditPart) selection.getFirstElement()).getModel();
+
+		if (!stepMode && originPin instanceof final MemberVarDeclaration memberVarDecl && !memberVarDecl.isIsInput()) {
+			final Set<IInterfaceElement> connectedInt = new HashSet<>();
+			FBEndpointFinder.traceMembers(memberVarDecl, connectedInt);
+			if (!connectedInt.isEmpty()) {
+				selectOpposites(event, viewer, originPin, new ArrayList<>(connectedInt), editor);
+				return Status.OK_STATUS;
+			}
+		}
 
 		final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) selection.getFirstElement();
 		if (isEditorBorderPin(interfaceEditPart.getModel(), getFBNetwork(editor))
@@ -55,8 +71,6 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 		}
 
 		List<IInterfaceElement> opposites = getConnectionOposites(interfaceEditPart);
-		final boolean stepMode = UIPlugin.getDefault().getPreferenceStore()
-				.getBoolean(PreferenceConstants.P_TOGGLE_JUMP_STEP);
 		if (!stepMode) {
 			opposites = resolveTargetPins(opposites, viewer);
 		}

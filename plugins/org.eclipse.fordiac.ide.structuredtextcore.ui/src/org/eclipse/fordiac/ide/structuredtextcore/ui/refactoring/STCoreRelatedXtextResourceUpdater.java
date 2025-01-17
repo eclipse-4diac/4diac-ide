@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextRe
 import org.eclipse.xtext.ide.serializer.IEmfResourceChange;
 import org.eclipse.xtext.ide.serializer.impl.EObjectDescriptionDeltaProvider.Deltas;
 import org.eclipse.xtext.ide.serializer.impl.RelatedXtextResourceUpdater;
+import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.util.IAcceptor;
 
@@ -35,8 +36,13 @@ public class STCoreRelatedXtextResourceUpdater extends RelatedXtextResourceUpdat
 			importUpdater.updateImports(deltas, libResource.getInternalLibraryElement(),
 					(imp, value) -> changeAcceptor.accept(new ImportedNamespaceChange(imp, value)));
 		}
-		if (resource instanceof XtextResource) {
+		if (resource instanceof final XtextResource xtextResource && hasContents(xtextResource)) {
 			super.applyChange(deltas, changeAcceptor);
 		}
+	}
+
+	protected static boolean hasContents(final XtextResource xtextResource) {
+		final IParseResult parseResult = xtextResource.getParseResult();
+		return parseResult != null && !parseResult.getRootNode().getText().isBlank();
 	}
 }

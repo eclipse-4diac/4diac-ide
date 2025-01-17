@@ -145,4 +145,23 @@
 			</adapter>
 		</factory>
 	</extension>
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler
+			class="org.eclipse.fordiac.ide.debug.ui.handler.ToggleBoolVariableHandler"
+			commandId="org.eclipse.fordiac.ide.application.commands.toggleBoolValue">
+			<activeWhen>
+				<with
+					variable="selection">
+					<iterate
+						ifEmpty="false"
+						operator="and">
+						<instanceof
+							value="org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable">
+						</instanceof>
+					</iterate>
+				</with>
+			</activeWhen>
+		</handler>
+	</extension>
 </plugin>

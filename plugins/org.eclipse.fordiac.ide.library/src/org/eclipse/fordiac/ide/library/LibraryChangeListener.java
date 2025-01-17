@@ -47,10 +47,14 @@ public class LibraryChangeListener implements IResourceChangeListener {
 		case IResource.PROJECT:
 			return delta.getKind() != IResourceDelta.REMOVED; // ignore deleted projects
 		case IResource.FILE:
+			// check manifest files
 			// information on previous linked status is not available on delete
-			if (delta.getResource() instanceof final IFile file
-					&& (file.isLinked() || delta.getKind() == IResourceDelta.REMOVED)
-					&& LibraryManager.MANIFEST.equals(file.getName()) && (delta.getKind() & MASK) != 0) {
+			if (delta.getResource() instanceof final IFile file && LibraryManager.MANIFEST.equals(file.getName())
+			// project manifest:
+					&& ((file.getParent() instanceof IProject && (delta.getKind() & IResourceDelta.ADDED) != 0)
+							// library manifest:
+							|| ((file.isLinked() || delta.getKind() == IResourceDelta.REMOVED)
+									&& (delta.getKind() & MASK) != 0))) {
 				final IProject project = file.getProject();
 				LibraryManager.INSTANCE.startResolveJob(project, TypeLibraryManager.INSTANCE.getTypeLibrary(project));
 
@@ -58,11 +62,6 @@ public class LibraryChangeListener implements IResourceChangeListener {
 			return false;
 		case IResource.FOLDER:
 			if (delta.getResource() instanceof final IFolder folder) {
-				if (delta.getKind() == IResourceDelta.ADDED
-						&& TypeLibraryTags.STANDARD_LIB_FOLDER_NAME.equals(folder.getName())) {
-					LibraryManager.INSTANCE.startResolveJob(folder.getProject(),
-							TypeLibraryManager.INSTANCE.getTypeLibrary(folder.getProject()));
-				}
 				// only search inside linked folders inside the Type Library
 				return isTypeLibraryFolder(folder) || ((folder.isLinked() || delta.getKind() == IResourceDelta.REMOVED)
 						&& isTypeLibraryFolder(folder.getParent()));

@@ -603,7 +603,7 @@ public enum LibraryManager {
 	 * @param typeLibrary {@link TypeLibrary} to use
 	 */
 	public void checkManifestFile(final IProject project, final TypeLibrary typeLibrary) {
-		final Manifest manifest = ManifestHelper.getOrCreateProjectManifest(project);
+		final Manifest manifest = ManifestHelper.getContainerManifest(project);
 		if (manifest == null || !ManifestHelper.isProject(manifest)) {
 			return;
 		}
@@ -968,18 +968,21 @@ public enum LibraryManager {
 			return;
 		}
 		removeLibraryChangeListener();
-		SystemManager.INSTANCE.removeFordiacChangeListener();
 
+		IResource[] members = null;
 		try {
 			project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME).create(IResource.VIRTUAL | IResource.FORCE,
 					true, null);
 			project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME).create(IResource.VIRTUAL | IResource.FORCE,
 					true, null);
-
-			for (final IResource res : project.getFolder(TypeLibraryTags.TYPE_LIB_FOLDER_NAME).members()) {
+			members = project.getFolder(TypeLibraryTags.TYPE_LIB_FOLDER_NAME).members();
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
+		if (members != null) {
+			for (final IResource res : members) {
 				if (res instanceof final IFolder folder && folder.isLinked() && folder.getFile(MANIFEST).exists()) {
 					final java.net.URI libURI = folder.getRawLocationURI();
-					final java.net.URI manifestURI = folder.getFile(MANIFEST).getRawLocationURI();
 
 					final IFolder libDirectory = project
 							.getFolder(libURI.getPath().startsWith(standardLibraryUri.getPath())
@@ -987,33 +990,16 @@ public enum LibraryManager {
 									: TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME)
 							.getFolder(folder.getName());
 
-					libDirectory.createLink(libURI, IResource.NONE, null);
-					final IFile man = libDirectory.getFile(MANIFEST);
-					man.createLink(manifestURI, IResource.HIDDEN, null);
-
-					folder.accept(resource -> (switch (resource) {
-					case final IFolder f -> true;
-					case final IFile file -> {
-						final TypeEntry entry = typeLibrary.getTypeEntry(file);
-						if (entry != null) {
-							final IFile newFile = libDirectory
-									.getFile(file.getFullPath().makeRelativeTo(folder.getFullPath()));
-							FordiacResourceChangeListener.updateTypeEntry(newFile, entry);
-						}
-						yield false;
+					try {
+						folder.move(libDirectory.getFullPath(), IResource.FORCE | IResource.SHALLOW, null);
+						final IFile man = libDirectory.getFile(MANIFEST);
+						man.setHidden(true);
+					} catch (final CoreException e) {
+						FordiacLogHelper.logError(e.getMessage(), e);
 					}
-					default -> false;
-					}));
-
-					folder.delete(true, null);
 				}
 			}
-
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
 		}
-
-		SystemManager.INSTANCE.addFordiacChangeListener();
 		addLibraryChangeListener();
 	}
 

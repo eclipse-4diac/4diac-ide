@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.xtext.ide.refactoring.IResourceRelocationStrategy;
 import org.eclipse.xtext.ide.refactoring.ResourceRelocationChange;
 import org.eclipse.xtext.ide.refactoring.ResourceRelocationContext;
+import org.eclipse.xtext.ide.refactoring.ResourceRelocationContext.ChangeType;
 import org.eclipse.xtext.resource.FileExtensionProvider;
 import org.eclipse.xtext.util.SimpleAttributeResolver;
 
@@ -41,13 +42,16 @@ public class STCoreResourceRelocationStrategy implements IResourceRelocationStra
 	}
 
 	protected void applyChange(final ResourceRelocationContext context, final ResourceRelocationChange change) {
-		context.addModification(change, resource -> modifyResource(resource, change));
+		context.addModification(change, resource -> modifyResource(resource, change, context.getChangeType()));
 	}
 
-	protected void modifyResource(final Resource resource, final ResourceRelocationChange change) {
+	protected void modifyResource(final Resource resource, final ResourceRelocationChange change,
+			final ChangeType changeType) {
 		if (resource instanceof final STCoreResource coreResource && coreResource.getInternalLibraryElement() != null) {
 			updateTypeName(coreResource, change);
-			updatePackageName(coreResource, change);
+			if (changeType != ChangeType.RENAME) {
+				updatePackageName(coreResource, change);
+			}
 		}
 	}
 

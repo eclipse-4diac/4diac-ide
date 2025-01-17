@@ -44,8 +44,8 @@ public final class Messages extends NLS {
 	public static String STCoreQuickfixProvider_RemoveTrailingUnderscoreLabel;
 	public static String STCoreQuickfixProvider_RemoveUnnecessaryConversionDescription;
 	public static String STCoreQuickfixProvider_RemoveUnnecessaryConversionLabel;
-	public static String STCoreQuickfixProvider_RemoveUnnecessaryLiteralConversionDescription;
-	public static String STCoreQuickfixProvider_RemoveUnnecessaryLiteralConversionLabel;
+	public static String STCoreQuickfixProvider_RemoveLiteralConversionDescription;
+	public static String STCoreQuickfixProvider_RemoveLiteralConversionLabel;
 	public static String STCoreQuickfixProvider_RemoveImportDescription;
 	public static String STCoreQuickfixProvider_RemoveImportLabel;
 	public static String STCoreQuickfixProvider_RemoveInvalidExitStatementLabel;
@@ -70,6 +70,7 @@ public final class Messages extends NLS {
 	public static String STCoreCustomValidatorConfigurationBlock_PotentialProgrammingProblems;
 	public static String STCoreCustomValidatorConfigurationBlock_StringIndexOutOfBounds;
 	public static String STCoreCustomValidatorConfigurationBlock_TruncatedStringLiteral;
+	public static String STCoreCustomValidatorConfigurationBlock_TruncatingLiteralConversion;
 	public static String STCoreCustomValidatorConfigurationBlock_UnnecessaryCode;
 	public static String STCoreCustomValidatorConfigurationBlock_UnnecessaryConversion;
 	public static String STCoreCustomValidatorConfigurationBlock_UnnecessaryLiteralConversion;

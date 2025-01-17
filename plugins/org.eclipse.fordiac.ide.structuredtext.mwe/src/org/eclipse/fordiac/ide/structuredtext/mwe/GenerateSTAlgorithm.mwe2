@@ -94,7 +94,6 @@ Workflow {
 			fragment = ui.templates.CodetemplatesGeneratorFragment2 {}
 			fragment = formatting.Formatter2Fragment2 {
 				generateStub = true
-				generateXtendStub = true
 			}
 			fragment = ui.compare.CompareFragment2 {}
 			fragment = junit.JUnitFragment {
