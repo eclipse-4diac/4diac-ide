@@ -32,8 +32,9 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.part.MultiPageEditorSite;
 
 /**
  * Helper class for reducing the effort to implement open listeners
@@ -90,23 +91,15 @@ public abstract class OpenListener implements IOpenListener {
 	}
 
 	public static AbstractBreadCrumbEditor getBreadCrumbEditor(final IEditorPart openedEditor) {
-		AbstractBreadCrumbEditor breadCrumbEditor = openedEditor.getAdapter(AbstractBreadCrumbEditor.class);
-		if ((breadCrumbEditor == null) && (openedEditor instanceof final FormEditor formEditor)) {
-			breadCrumbEditor = getBreadCrumbFromMultiPageEditor(formEditor);
-		}
-		return breadCrumbEditor;
-	}
-
-	private static AbstractBreadCrumbEditor getBreadCrumbFromMultiPageEditor(final FormEditor openedEditor) {
-		final IEditorInput input = openedEditor.getActiveEditor().getEditorInput();
-
-		for (final IEditorPart subEditor : openedEditor.findEditors(input)) {
-			if (subEditor instanceof final AbstractBreadCrumbEditor bcEditor) {
-				openedEditor.setActiveEditor(subEditor);
-				return bcEditor;
+		final AbstractBreadCrumbEditor breadCrumbEditor = openedEditor.getAdapter(AbstractBreadCrumbEditor.class);
+		if ((breadCrumbEditor != null)
+				&& (breadCrumbEditor.getEditorSite() instanceof final MultiPageEditorSite multiPageEditorSite)) {
+			final MultiPageEditorPart multiPageEditor = multiPageEditorSite.getMultiPageEditor();
+			if (multiPageEditor.getSelectedPage() != breadCrumbEditor) {
+				multiPageEditor.setActiveEditor(breadCrumbEditor);
 			}
 		}
-		return null;
+		return breadCrumbEditor;
 	}
 
 	private static boolean sameLevelAsParent(final Object element) {

@@ -100,8 +100,8 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	protected void addPages() {
+		final TypeEditorInput ei = getTypeEditorInput();
 		editorPages = typeEditorPageFactory.getEditors(getType());
-		final TypeEditorInput ei = getEditorInput();
 		for (final ITypeEditorPage typeEditorPage : editorPages) {
 			try {
 				// set command stack has to be done before the page is added
@@ -121,10 +121,10 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		}
 
 		if (editorInput instanceof final IFileEditorInput fileEI) {
-			if (getEditorInput() != null) {
+			if (getTypeEditorInput() != null) {
 				// when we already had an input it means the file for our type has changed,
 				// provide a new TypeEditorInput with the new file
-				return new TypeEditorInput(getEditorInput().getContent(), getEditorInput().getTypeEntry(),
+				return new TypeEditorInput(getTypeEditorInput().getContent(), getTypeEditorInput().getTypeEntry(),
 						fileEI.getFile());
 			}
 
@@ -286,9 +286,8 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		return null;
 	}
 
-	@Override
-	public TypeEditorInput getEditorInput() {
-		return (TypeEditorInput) super.getEditorInput();
+	private TypeEditorInput getTypeEditorInput() {
+		return (super.getEditorInput() instanceof final TypeEditorInput typeEI) ? typeEI : null;
 	}
 
 	protected Collection<ITypeEditorPage> getEditorPages() {
@@ -302,12 +301,12 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	}
 
 	protected LibraryElement getType() {
-		final TypeEditorInput ei = getEditorInput();
+		final TypeEditorInput ei = getTypeEditorInput();
 		return (ei != null) ? ei.getContent() : null;
 	}
 
 	protected TypeEntry getTypeEntry() {
-		final TypeEditorInput ei = getEditorInput();
+		final TypeEditorInput ei = getTypeEditorInput();
 		return (ei != null) ? ei.getTypeEntry() : null;
 	}
 
@@ -387,7 +386,10 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 			if ((curType != null) && getTypeEntry().eAdapters().contains(adapter)) {
 				getTypeEntry().eAdapters().remove(adapter);
 			}
-			getEditorInput().setType(newFBType);
+			final TypeEditorInput typeEI = getTypeEditorInput();
+			if (typeEI != null) {
+				typeEI.setType(newFBType);
+			}
 			getEditorPages().stream().forEach(ITypeEditorPage::reloadType);
 			final IEditorPart activeEditor = getActiveEditor();
 			if (activeEditor instanceof final ITypeEditorPage editorPage) {
