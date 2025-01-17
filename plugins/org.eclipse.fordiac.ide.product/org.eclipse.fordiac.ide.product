@@ -26,10 +26,7 @@
 -Dswt.autoScale=exact
 -XX:+UseG1GC
 -XX:+UseStringDeduplication
--Dosgi.dataAreaRequiresExplicitInit=true
 -Xmn512m
--Xms1024m
--Xmx5120m
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
@@ -53,7 +50,6 @@
 
    <vm>
    </vm>
-
 
    <plugins>
    </plugins>
