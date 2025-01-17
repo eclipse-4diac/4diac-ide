@@ -33,13 +33,13 @@ public enum QualNameChangeListenerManager implements CommandStackEventListener {
 	INSTANCE;
 
 	QualNameChangeListenerManager() {
-		initialize();
+		initializeListeners();
 	}
 
 	private static final String EXTENSION_POINT_ID = "org.eclipse.fordiac.ide.model.commands.QualNameChangeListener";
 	private final List<QualNameChangeListener> listeners = new ArrayList<>();
 
-	public void initialize() {
+	private void initializeListeners() {
 		final IConfigurationElement[] config = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(EXTENSION_POINT_ID);
 		for (final IConfigurationElement element : config) {
