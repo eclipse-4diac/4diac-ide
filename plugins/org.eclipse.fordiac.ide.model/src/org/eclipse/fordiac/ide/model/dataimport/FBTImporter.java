@@ -199,7 +199,7 @@ public class FBTImporter extends TypeImporter {
 		type.getService().setLeftInterface(leftInter);
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
-			type.setComment(comment);
+			type.getService().setComment(comment);
 		}
 
 		processChildren(LibraryElementTags.SERVICE_ELEMENT, name -> {

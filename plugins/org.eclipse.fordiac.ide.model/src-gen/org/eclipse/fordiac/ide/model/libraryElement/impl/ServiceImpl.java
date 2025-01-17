@@ -49,6 +49,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getRightInterface <em>Right Interface</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getLeftInterface <em>Left Interface</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getServiceSequence <em>Service Sequence</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl#getComment <em>Comment</em>}</li>
  * </ul>
  *
  * @generated
@@ -83,6 +84,26 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	 * @ordered
 	 */
 	protected EList<ServiceSequence> serviceSequence;
+
+	/**
+	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
+
+	/**
+	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected String comment = COMMENT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -258,6 +279,29 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	 * @generated
 	 */
 	@Override
+	public String getComment() {
+		return comment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setComment(String newComment) {
+		String oldComment = comment;
+		comment = newComment;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE__COMMENT, oldComment, comment));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public FBType getFBType() {
 		return (FBType) this.eContainer();
 	}
@@ -297,6 +341,8 @@ public class ServiceImpl extends EObjectImpl implements Service {
 				return basicGetLeftInterface();
 			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
 				return getServiceSequence();
+			case LibraryElementPackage.SERVICE__COMMENT:
+				return getComment();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -321,6 +367,9 @@ public class ServiceImpl extends EObjectImpl implements Service {
 				getServiceSequence().clear();
 				getServiceSequence().addAll((Collection<? extends ServiceSequence>)newValue);
 				return;
+			case LibraryElementPackage.SERVICE__COMMENT:
+				setComment((String)newValue);
+				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -344,6 +393,9 @@ public class ServiceImpl extends EObjectImpl implements Service {
 			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
 				getServiceSequence().clear();
 				return;
+			case LibraryElementPackage.SERVICE__COMMENT:
+				setComment(COMMENT_EDEFAULT);
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -364,9 +416,27 @@ public class ServiceImpl extends EObjectImpl implements Service {
 				return leftInterface != null;
 			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
 				return serviceSequence != null && !serviceSequence.isEmpty();
+			case LibraryElementPackage.SERVICE__COMMENT:
+				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 			default:
 				return super.eIsSet(featureID);
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (comment: "); //$NON-NLS-1$
+		result.append(comment);
+		result.append(')');
+		return result.toString();
 	}
 
 } //ServiceImpl
