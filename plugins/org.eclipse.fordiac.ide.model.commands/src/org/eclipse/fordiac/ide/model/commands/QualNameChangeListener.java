@@ -45,7 +45,7 @@ public abstract class QualNameChangeListener {
 
 	protected void onCommandExecuted(final QualNameChange qualNameChange) {
 		if (isEnabled(qualNameChange.notifier())) {
-			addToPendingList(qualNameChange);
+			addChangeToPendingList(qualNameChange);
 		}
 	}
 
@@ -53,10 +53,6 @@ public abstract class QualNameChangeListener {
 		if (isEnabled(qualNameChange.notifier())) {
 			addChangeToPendingList(qualNameChange);
 		}
-	}
-
-	private void addToPendingList(final QualNameChange qualNameChange) {
-		addChangeToPendingList(qualNameChange);
 	}
 
 	void onCommandRedoExecuted(final QualNameChange qualNameChange) {

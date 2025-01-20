@@ -32,17 +32,14 @@ public interface QualNameAffectedCommand extends ScopedCommand {
 	 * encapsulate the change to not provide the command to the receiver
 	 */
 	default QualNameChange getQualNameChange(final QualNameChangeState state) {
-		return new QualNameChange(getOldQualName(), getNewQualName(), getChangedElement(), getTypeEntry(getChangedElement()),
-				state);
+		return new QualNameChange(getOldQualName(), getNewQualName(), getChangedElement(),
+				getTypeEntry(getChangedElement()), state);
 	}
 
 	static TypeEntry getTypeEntry(final INamedElement notifier) {
 		final EObject rootContainer = EcoreUtil.getRootContainer(notifier);
 		Assert.isTrue(rootContainer instanceof LibraryElement);
-		if (rootContainer instanceof final LibraryElement element) {
-			return element.getTypeEntry();
-		}
-		return null;
+		return ((LibraryElement) rootContainer).getTypeEntry();
 	}
 
 }
