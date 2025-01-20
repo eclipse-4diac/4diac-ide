@@ -148,17 +148,17 @@ public interface SubApp extends FBNetworkElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 * @generated
 	 */
-	int getVisibleWidth();
+	double getVisibleWidth();
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Int"
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 * @generated
 	 */
-	int getVisibleHeight();
+	double getVisibleHeight();
 
 } // SubApp

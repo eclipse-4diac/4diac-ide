@@ -534,8 +534,8 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @generated
 	 */
 	@Override
-	public int getVisibleWidth() {
-		return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getWidth());
+	public double getVisibleWidth() {
+		return getWidth();
 	}
 
 	/**
@@ -544,8 +544,8 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @generated
 	 */
 	@Override
-	public int getVisibleHeight() {
-		return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getHeight());
+	public double getVisibleHeight() {
+		return getHeight();
 	}
 
 	/**

@@ -363,9 +363,9 @@
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerDataType"/>
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerFBNElement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerFBNElement/repairedElement"/>
-      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerFBNElement/getWidth" body="return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.screenToIEC61499(org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this));"/>
+      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerFBNElement/getWidth" body="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
       <genOperations ecoreOperation="lib.ecore#//ErrorMarkerFBNElement/getHeight"
-          body="return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.screenToIEC61499(org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this));"/>
+          body="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerInterface">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerInterface/value"/>
@@ -401,8 +401,8 @@
       <genOperations ecoreOperation="lib.ecore#//FB/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FB/getInOutParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FB/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//FB/getWidth" body="return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.screenToIEC61499(org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this));"/>
-      <genOperations ecoreOperation="lib.ecore#//FB/getHeight" body="return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.screenToIEC61499(org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this));"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/getWidth" body="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/getHeight" body="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBNetwork">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBNetwork/networkElements"/>
@@ -475,9 +475,9 @@
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getWidth" body="throw new UnsupportedOperationException();"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getHeight" body="throw new UnsupportedOperationException();"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getVisibleWidth"
-          body="return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getWidth());"/>
+          body="return getWidth();"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getVisibleHeight"
-          body="return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getHeight());"/>
+          body="return getHeight();"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getInput" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getInput(this, name);">
         <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/getInput/name"/>
       </genOperations>
@@ -779,8 +779,8 @@
       <genOperations ecoreOperation="lib.ecore#//SubApp/isTyped"/>
       <genOperations ecoreOperation="lib.ecore#//SubApp/getSubAppNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//SubApp/loadSubAppNetwork"/>
-      <genOperations ecoreOperation="lib.ecore#//SubApp/getVisibleWidth" body="return isUnfolded() ? org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getWidth()) : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//SubApp/getVisibleHeight" body="return isUnfolded() ? org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getHeight()) : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/getVisibleWidth" body="return isUnfolded() ? getWidth() : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/getVisibleHeight" body="return isUnfolded() ? getHeight() : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//StructManipulator">
       <genOperations ecoreOperation="lib.ecore#//StructManipulator/updateConfiguration"/>

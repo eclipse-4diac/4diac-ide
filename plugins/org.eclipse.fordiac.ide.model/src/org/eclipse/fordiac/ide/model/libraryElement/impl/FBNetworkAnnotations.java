@@ -22,11 +22,12 @@ import java.util.function.Predicate;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PrecisionDimension;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.PreferenceConstants;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
@@ -37,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.util.SpatialHash;
@@ -48,7 +50,7 @@ final class FBNetworkAnnotations {
 	 *
 	 * @implNote Should be two times the average element size for optimal results
 	 */
-	private static final int CELL_SIZE = 10;
+	private static final int CELL_SIZE = 10 * 100;
 
 	/**
 	 * Minimum grid size
@@ -80,33 +82,31 @@ final class FBNetworkAnnotations {
 			final List<FBNetworkElement> networkElements, final Predicate<FBNetworkElement> filter,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		boolean result = true;
-		final double lineHeight = CoordinateConverter.INSTANCE.getLineHeight();
-		final int marginLeftRight = (int) (getIntPreference(context, PreferenceConstants.MARGIN_LEFT_RIGHT)
-				* lineHeight);
-		final int marginTopBottom = (int) (getIntPreference(context, PreferenceConstants.MARGIN_TOP_BOTTOM)
-				* lineHeight);
-		final int cellSize = (int) (CELL_SIZE * lineHeight);
+		final double marginLeftRight = getIntPreference(context, PreferenceConstants.MARGIN_LEFT_RIGHT)
+				* FBShapeHelper.IEC61499_LINE_HEIGHT;
+		final double marginTopBottom = getIntPreference(context, PreferenceConstants.MARGIN_TOP_BOTTOM)
+				* FBShapeHelper.IEC61499_LINE_HEIGHT;
 		final int gridSize = Math.clamp(networkElements.size(), GRID_SIZE_MIN, GRID_SIZE_MAX);
-		final SpatialHash<FBNetworkElement> spatialHash = new SpatialHash<>(cellSize, gridSize);
+		final SpatialHash<FBNetworkElement> spatialHash = new SpatialHash<>(CELL_SIZE, gridSize);
 
-		final Dimension parentSize = parent.map(FBNetworkAnnotations::getParentSize).orElse(null);
+		final PrecisionDimension parentSize = parent.map(FBNetworkAnnotations::getParentSize).orElse(null);
 
 		for (final FBNetworkElement element : networkElements) {
 			if (element instanceof ErrorMarkerFBNElement || !filter.test(element)) {
 				continue;
 			}
 			final Rectangle elementBounds = getElementBounds(element, marginLeftRight, marginTopBottom);
-			final int x2 = elementBounds.x + elementBounds.width;
-			final int y2 = elementBounds.y + elementBounds.height;
 
 			// check parent collision
-			if (parent.isPresent()) {
+			if (parent.isPresent() && parentSize != null) {
 				final boolean parentCollision = checkParentCollision(parent.get(), diagnostics, parentSize, element,
 						elementBounds);
 				result &= parentCollision;
 			}
 			// check sibling collision
-			final Set<FBNetworkElement> collisions = spatialHash.put(elementBounds.x, elementBounds.y, x2, y2, element);
+			final Point bottomRight = elementBounds.getBottomRight();
+			final Set<FBNetworkElement> collisions = spatialHash.put(elementBounds.x, elementBounds.y, bottomRight.x,
+					bottomRight.y, element);
 			if (diagnostics != null) {
 				collisions.forEach(other -> diagnostics.add(createCollisionDiagnostic(element, other)));
 			}
@@ -130,23 +130,23 @@ final class FBNetworkAnnotations {
 		return parentCollision;
 	}
 
-	private static Dimension getParentSize(final FBNetworkElement parent) {
+	private static PrecisionDimension getParentSize(final FBNetworkElement parent) {
 		int commentLines = 1;
 		if (parent.getComment() != null && !parent.getComment().isBlank()) {
 			commentLines += parent.getComment().chars().filter(c -> c == '\n').count();
 		}
 
 		// remove space needed for left and right interface bar, and the space needed
-		// for the comment lines
-		return new Dimension(parent.getVisibleWidth() - 2 * FBShapeHelper.getMaxInterfaceBarWidth(),
-				parent.getVisibleHeight() - (int) (commentLines * CoordinateConverter.INSTANCE.getLineHeight()));
+		// for the comment lines and the instance name
+		return new PrecisionDimension(parent.getVisibleWidth() - 2 * FBShapeHelper.getMaxInterfaceBarWidth(),
+				parent.getVisibleHeight() - (commentLines + 1) * FBShapeHelper.IEC61499_LINE_HEIGHT);
 	}
 
-	private static Rectangle getElementBounds(final FBNetworkElement element, final int marginLeftRight,
-			final int marginTopBottom) {
-		final Point position = element.getPosition().toScreenPoint();
-		final Rectangle bounds = new Rectangle(position.x, position.y, element.getVisibleWidth(),
-				element.getVisibleHeight());
+	private static Rectangle getElementBounds(final FBNetworkElement element, final double marginLeftRight,
+			final double marginTopBottom) {
+		final Position position = element.getPosition();
+		final PrecisionRectangle bounds = new PrecisionRectangle(position.getX(), position.getY(),
+				element.getVisibleWidth(), element.getVisibleHeight());
 
 		if (!(element instanceof Comment)) {
 			bounds.expand(marginLeftRight, marginTopBottom);

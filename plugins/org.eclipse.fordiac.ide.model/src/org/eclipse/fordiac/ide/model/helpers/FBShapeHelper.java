@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.model.helpers;
 
 import java.util.function.Predicate;
-import java.util.stream.IntStream;
+import java.util.stream.DoubleStream;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
@@ -36,19 +36,22 @@ public final class FBShapeHelper {
 	private static final int MAX_INTERFACE_BAR_SIZE = Platform.getPreferencesService()
 			.getInt(DIAGRAM_PREFERENCE_QUALIFIER, "MaxInterfaceBarSize", 0, null); //$NON-NLS-1$
 
-	private static int maxInterfaceBarWidth = -1;
+	private static double maxInterfaceBarWidth = -1;
+
+	public static final double IEC61499_LINE_HEIGHT = 100.0;
+	private static final double AVARAGE_CHAR_WIDTH = CoordinateConverter.INSTANCE
+			.screenToIEC61499((int) CoordinateConverter.INSTANCE.getAverageCharacterWidth());
 
 	/*
 	 * Constants for width and height adjustments to account for borders, padding,
 	 * and so on.
 	 */
-	private static final int WIDTH_ADJUST_NAME = 5;
-	private static final int WIDTH_ADJUST_TYPE_NAME = 47;
-	private static final int WIDTH_ADJUST_STRUCT_NAME = 48;
-	private static final int WIDTH_ADJUST_INTERFACE = 24;
-	private static final int HEIGHT_ADJUST = 14;
-	private static final int HEIGHT_ADJUST_STRUCT = 1; // additional padding for struct name
-	private static final int HEIGHT_ADJUST_HIDDEN = 15; // additional padding hidden pin indicator
+	private static final double WIDTH_ADJUST_NAME = CoordinateConverter.INSTANCE.screenToIEC61499(5);
+	private static final double WIDTH_ADJUST_TYPE_NAME = CoordinateConverter.INSTANCE.screenToIEC61499(47);
+	private static final double WIDTH_ADJUST_STRUCT_NAME = CoordinateConverter.INSTANCE.screenToIEC61499(48);
+	private static final double WIDTH_ADJUST_INTERFACE = CoordinateConverter.INSTANCE.screenToIEC61499(24);
+	// additional padding hidden pin indicator
+	private static final double HEIGHT_ADJUST_HIDDEN = CoordinateConverter.INSTANCE.screenToIEC61499(15);
 
 	/*
 	 * Note for debugging: Add a tracepoint with the following condition in
@@ -65,18 +68,16 @@ public final class FBShapeHelper {
 	 * @param element The element
 	 * @return The width in X coordinates
 	 */
-	public static int getWidth(final FBNetworkElement element) {
-		final double averageCharacterWidth = CoordinateConverter.INSTANCE.getAverageCharacterWidth();
-		final int nameWidth = (int) (element.getName().length() * averageCharacterWidth) + WIDTH_ADJUST_NAME;
-		final int typeNameWidth = (int) (getTypeNameCharacters(element) * averageCharacterWidth)
-				+ WIDTH_ADJUST_TYPE_NAME;
-		final int structNameWidth = (int) (getStructNameCharacters(element) * averageCharacterWidth)
+	public static double getWidth(final FBNetworkElement element) {
+		final double nameWidth = (element.getName().length() * AVARAGE_CHAR_WIDTH) + WIDTH_ADJUST_NAME;
+		final double typeNameWidth = (getTypeNameCharacters(element) * AVARAGE_CHAR_WIDTH) + WIDTH_ADJUST_TYPE_NAME;
+		final double structNameWidth = (getStructNameCharacters(element) * AVARAGE_CHAR_WIDTH)
 				+ WIDTH_ADJUST_STRUCT_NAME;
 		final int inputCharacters = getInterfaceCharacters(element, IInterfaceElement::isIsInput);
 		final int outputCharacters = getInterfaceCharacters(element, Predicate.not(IInterfaceElement::isIsInput));
-		final int interfaceWidth = (int) ((inputCharacters + outputCharacters) * averageCharacterWidth)
+		final double interfaceWidth = ((inputCharacters + outputCharacters) * AVARAGE_CHAR_WIDTH)
 				+ WIDTH_ADJUST_INTERFACE;
-		return IntStream.of(nameWidth, typeNameWidth, structNameWidth, interfaceWidth).max().orElse(0);
+		return DoubleStream.of(nameWidth, typeNameWidth, structNameWidth, interfaceWidth).max().orElse(0);
 	}
 
 	/**
@@ -85,20 +86,17 @@ public final class FBShapeHelper {
 	 * @param element The element
 	 * @return The height in Y coordinates
 	 */
-	public static int getHeight(final FBNetworkElement element) {
-		final double lineHeight = CoordinateConverter.INSTANCE.getLineHeight();
+	public static double getHeight(final FBNetworkElement element) {
 		final int fbLines = element instanceof StructManipulator ? 3 : 2;
 		final int inputLines = getInterfaceLines(element, IInterfaceElement::isIsInput);
 		final int outputLines = getInterfaceLines(element, Predicate.not(IInterfaceElement::isIsInput));
 		final int lines = fbLines + Math.max(inputLines, outputLines);
-		final int heightAdjust = getHeightAdjust(element);
-		return (int) (lines * lineHeight) + heightAdjust;
+		return lines * IEC61499_LINE_HEIGHT + getHeightAdjust(element);
 	}
 
-	public static int getMaxInterfaceBarWidth() {
+	public static double getMaxInterfaceBarWidth() {
 		if (maxInterfaceBarWidth == -1) {
-			maxInterfaceBarWidth = (int) (CoordinateConverter.INSTANCE.getAverageCharacterWidth()
-					* MAX_INTERFACE_BAR_SIZE + 2) + WIDTH_ADJUST_INTERFACE;
+			maxInterfaceBarWidth = (AVARAGE_CHAR_WIDTH * MAX_INTERFACE_BAR_SIZE + 2) + WIDTH_ADJUST_INTERFACE;
 		}
 		return maxInterfaceBarWidth;
 	}
@@ -127,16 +125,12 @@ public final class FBShapeHelper {
 		return 0;
 	}
 
-	protected static int getHeightAdjust(final FBNetworkElement element) {
-		int heightAdjust = HEIGHT_ADJUST;
-		if (element instanceof StructManipulator) {
-			heightAdjust += HEIGHT_ADJUST_STRUCT;
-		}
+	protected static double getHeightAdjust(final FBNetworkElement element) {
 		if (element.getInterface().getAllInterfaceElements().stream()
 				.anyMatch(Predicate.not(IInterfaceElement::isVisible))) {
-			heightAdjust += HEIGHT_ADJUST_HIDDEN;
+			return HEIGHT_ADJUST_HIDDEN;
 		}
-		return heightAdjust;
+		return 0.0;
 	}
 
 	private FBShapeHelper() {
