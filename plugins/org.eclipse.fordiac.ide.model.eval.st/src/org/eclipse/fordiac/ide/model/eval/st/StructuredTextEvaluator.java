@@ -668,6 +668,8 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			evaluateVariable(stBuiltinFeatureExpression);
 		case final STFeatureExpression stFeatureExpression -> evaluateVariable(stFeatureExpression);
 		case final STMemberAccessExpression stMemberAccessExpression -> evaluateVariable(stMemberAccessExpression);
+		case final STMultibitPartialExpression stMultiBitPartialExpression ->
+			evaluateVariable(stMultiBitPartialExpression);
 		case null, default -> throw createUnsupportedOperationException(expr);
 		};
 	}
