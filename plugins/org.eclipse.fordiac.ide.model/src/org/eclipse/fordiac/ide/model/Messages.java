@@ -68,6 +68,7 @@ public final class Messages extends NLS {
 
 	public static String ErrorMarkerInterfaceAnnotations_MissingVariableForValue;
 	public static String FBNetworkAnnotations_CollisionMessage;
+	public static String FBNetworkAnnotations_InterfaceBarCollisionMessage;
 
 	public static String FBTImporter_ADAPTER_DECLARATION_TYPE_EXCEPTION;
 	public static String FBTImporter_ECTRANASITION_CONDITION_EXCEPTION;

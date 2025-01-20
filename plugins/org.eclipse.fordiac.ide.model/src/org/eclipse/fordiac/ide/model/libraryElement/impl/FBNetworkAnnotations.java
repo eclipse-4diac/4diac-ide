@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.util.BasicDiagnostic;
@@ -29,6 +30,7 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.PreferenceConstants;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.helpers.FBShapeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -86,6 +88,9 @@ final class FBNetworkAnnotations {
 		final int cellSize = (int) (CELL_SIZE * lineHeight);
 		final int gridSize = Math.clamp(networkElements.size(), GRID_SIZE_MIN, GRID_SIZE_MAX);
 		final SpatialHash<FBNetworkElement> spatialHash = new SpatialHash<>(cellSize, gridSize);
+
+		final Dimension parentSize = parent.map(FBNetworkAnnotations::getParentSize).orElse(null);
+
 		for (final FBNetworkElement element : networkElements) {
 			if (element instanceof ErrorMarkerFBNElement || !filter.test(element)) {
 				continue;
@@ -95,12 +100,11 @@ final class FBNetworkAnnotations {
 			final int y2 = elementBounds.y + elementBounds.height;
 
 			// check parent collision
-			final Optional<FBNetworkElement> parentCollision = parent.filter(outer -> elementBounds.x < 0
-					|| elementBounds.y < 0 || x2 > outer.getVisibleWidth() || y2 > outer.getVisibleHeight());
-			if (diagnostics != null) {
-				parentCollision.ifPresent(other -> diagnostics.add(createCollisionDiagnostic(element, other)));
+			if (parent.isPresent()) {
+				final boolean parentCollision = checkParentCollision(parent.get(), diagnostics, parentSize, element,
+						elementBounds);
+				result &= parentCollision;
 			}
-			result &= parentCollision.isEmpty();
 			// check sibling collision
 			final Set<FBNetworkElement> collisions = spatialHash.put(elementBounds.x, elementBounds.y, x2, y2, element);
 			if (diagnostics != null) {
@@ -111,6 +115,33 @@ final class FBNetworkAnnotations {
 		return result;
 	}
 
+	private static boolean checkParentCollision(final FBNetworkElement parent, final DiagnosticChain diagnostics,
+			final Dimension parentSize, final FBNetworkElement element, final Rectangle elementBounds) {
+		final int elementRight = elementBounds.x + elementBounds.width;
+		final boolean parentCollision = elementBounds.x < 0 || elementBounds.y < 0 || elementRight > parentSize.width
+				|| elementBounds.y + elementBounds.height > parentSize.height;
+		if (diagnostics != null && parentCollision) {
+			if (elementRight > parentSize.width) {
+				diagnostics.add(createInterfaceBarCollisionDiagnostic(element, parent));
+			} else {
+				diagnostics.add(createCollisionDiagnostic(element, parent));
+			}
+		}
+		return parentCollision;
+	}
+
+	private static Dimension getParentSize(final FBNetworkElement parent) {
+		int commentLines = 1;
+		if (parent.getComment() != null && !parent.getComment().isBlank()) {
+			commentLines += parent.getComment().chars().filter(c -> c == '\n').count();
+		}
+
+		// remove space needed for left and right interface bar, and the space needed
+		// for the comment lines
+		return new Dimension(parent.getVisibleWidth() - 2 * FBShapeHelper.getMaxInterfaceBarWidth(),
+				parent.getVisibleHeight() - (int) (commentLines * CoordinateConverter.INSTANCE.getLineHeight()));
+	}
+
 	private static Rectangle getElementBounds(final FBNetworkElement element, final int marginLeftRight,
 			final int marginTopBottom) {
 		final Point position = element.getPosition().toScreenPoint();
@@ -118,21 +149,30 @@ final class FBNetworkAnnotations {
 				element.getVisibleHeight());
 
 		if (!(element instanceof Comment)) {
-			bounds.x -= marginLeftRight;
-			bounds.y -= marginTopBottom;
-			bounds.width += marginLeftRight;
-			bounds.height += marginTopBottom;
+			bounds.expand(marginLeftRight, marginTopBottom);
 		}
 		return bounds;
 	}
 
 	private static Diagnostic createCollisionDiagnostic(final FBNetworkElement element, final FBNetworkElement other) {
 		return new BasicDiagnostic(
-				ValidationPreferences.getDiagnosticSeverity(ValidationPreferences.COLLISION_SEVERITY, Diagnostic.WARNING,
-						element),
+				ValidationPreferences.getDiagnosticSeverity(ValidationPreferences.COLLISION_SEVERITY,
+						Diagnostic.WARNING, element),
 				LibraryElementValidator.DIAGNOSTIC_SOURCE, LibraryElementValidator.FB_NETWORK__VALIDATE_COLLISIONS,
 				MessageFormat.format(Messages.FBNetworkAnnotations_CollisionMessage, element.getQualifiedName(),
 						other.getQualifiedName()),
+				FordiacMarkerHelper.getDiagnosticData(element,
+						LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__POSITION));
+	}
+
+	private static Diagnostic createInterfaceBarCollisionDiagnostic(final FBNetworkElement element,
+			final FBNetworkElement other) {
+		return new BasicDiagnostic(
+				ValidationPreferences.getDiagnosticSeverity(ValidationPreferences.COLLISION_SEVERITY,
+						Diagnostic.WARNING, element),
+				LibraryElementValidator.DIAGNOSTIC_SOURCE, LibraryElementValidator.FB_NETWORK__VALIDATE_COLLISIONS,
+				MessageFormat.format(Messages.FBNetworkAnnotations_InterfaceBarCollisionMessage,
+						element.getQualifiedName(), other.getQualifiedName()),
 				FordiacMarkerHelper.getDiagnosticData(element,
 						LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__POSITION));
 	}

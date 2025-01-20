@@ -33,6 +33,10 @@ public final class FBShapeHelper {
 			"MaxPinLabelSize", 60, null); //$NON-NLS-1$
 	private static int maxTypeLabelSize = Platform.getPreferencesService().getInt(DIAGRAM_PREFERENCE_QUALIFIER,
 			"MaxTypeLabelSize", 120, null); //$NON-NLS-1$
+	private static final int MAX_INTERFACE_BAR_SIZE = Platform.getPreferencesService()
+			.getInt(DIAGRAM_PREFERENCE_QUALIFIER, "MaxInterfaceBarSize", 0, null); //$NON-NLS-1$
+
+	private static int maxInterfaceBarWidth = -1;
 
 	/*
 	 * Constants for width and height adjustments to account for borders, padding,
@@ -89,6 +93,14 @@ public final class FBShapeHelper {
 		final int lines = fbLines + Math.max(inputLines, outputLines);
 		final int heightAdjust = getHeightAdjust(element);
 		return (int) (lines * lineHeight) + heightAdjust;
+	}
+
+	public static int getMaxInterfaceBarWidth() {
+		if (maxInterfaceBarWidth == -1) {
+			maxInterfaceBarWidth = (int) (CoordinateConverter.INSTANCE.getAverageCharacterWidth()
+					* MAX_INTERFACE_BAR_SIZE + 2) + WIDTH_ADJUST_INTERFACE;
+		}
+		return maxInterfaceBarWidth;
 	}
 
 	private static int getInterfaceLines(final FBNetworkElement element, final Predicate<IInterfaceElement> filter) {
