@@ -19,6 +19,10 @@ public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
 	public static String EvaluatorDebugFindAction_Text;
 	public static String EvaluatorDebugFindDialog_Title;
+	public static String EvaluatorVariableValueEditor_Exception;
+	public static String EvaluatorVariableValueEditor_Invalid;
+	public static String EvaluatorVariableValueEditor_Message;
+	public static String EvaluatorVariableValueEditor_Title;
 	public static String EvaluatorWatchExpressionFactoryAdapter_NoExpressionForVariable;
 	public static String FordiacDebugPreferencePage_Description;
 	public static String FordiacDebugPreferencePage_ValueMaxDisplayLength;

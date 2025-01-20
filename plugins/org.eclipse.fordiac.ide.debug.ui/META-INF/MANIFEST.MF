@@ -31,4 +31,6 @@ Require-Bundle: org.eclipse.core.runtime,
 Export-Package: org.eclipse.fordiac.ide.debug.ui,
  org.eclipse.fordiac.ide.debug.ui.actions,
  org.eclipse.fordiac.ide.debug.ui.breakpoint,
- org.eclipse.fordiac.ide.debug.ui.fb
+ org.eclipse.fordiac.ide.debug.ui.editor,
+ org.eclipse.fordiac.ide.debug.ui.fb,
+ org.eclipse.fordiac.ide.debug.ui.handler

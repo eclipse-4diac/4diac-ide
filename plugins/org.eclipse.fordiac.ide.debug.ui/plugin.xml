@@ -146,6 +146,14 @@
 		</factory>
 	</extension>
 	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			categoryId="org.eclipse.fordiac.ide.commands.category"
+			id="org.eclipse.fordiac.ide.debug.ui.changeValue"
+			name="Change Value">
+		</command>
+	</extension>
+	<extension
 		point="org.eclipse.ui.handlers">
 		<handler
 			class="org.eclipse.fordiac.ide.debug.ui.handler.ToggleBoolVariableHandler"
@@ -163,5 +171,96 @@
 				</with>
 			</activeWhen>
 		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.debug.ui.handler.ChangeValueHandler"
+			commandId="org.eclipse.fordiac.ide.debug.ui.changeValue">
+			<activeWhen>
+				<and>
+					<with
+						variable="activePartId">
+						<equals
+							value="org.eclipse.debug.ui.VariableView">
+						</equals>
+					</with>
+					<with
+						variable="selection">
+						<count
+							value="1">
+						</count>
+						<iterate
+							ifEmpty="false"
+							operator="and">
+							<instanceof
+								value="org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable">
+							</instanceof>
+						</iterate>
+					</with>
+				</and>
+			</activeWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.debug.ui.handler.ChangeValuesHandler"
+			commandId="org.eclipse.fordiac.ide.debug.ui.changeValue">
+			<activeWhen>
+				<with
+					variable="selection">
+					<count
+						value="(1-">
+					</count>
+					<iterate
+						ifEmpty="false"
+						operator="and">
+						<instanceof
+							value="org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable">
+						</instanceof>
+					</iterate>
+				</with>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.bindings">
+		<key
+			commandId="org.eclipse.fordiac.ide.debug.ui.changeValue"
+			contextId="org.eclipse.debug.ui.debugging"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			sequence="M1+ENTER">
+		</key>
+	</extension>
+	<extension
+		point="org.eclipse.ui.menus">
+		<menuContribution
+			allPopups="false"
+			locationURI="popup:org.eclipse.debug.ui.VariableView?after=variableGroup">
+			<command
+				commandId="org.eclipse.fordiac.ide.debug.ui.changeValue"
+				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/elcl16/changevariablevalue_co.png"
+				label="Change Values..."
+				tooltip="Change variable values">
+				<visibleWhen
+					checkEnabled="false">
+					<with
+						variable="selection">
+						<count
+							value="(1-">
+						</count>
+						<iterate
+							ifEmpty="false"
+							operator="and">
+							<instanceof
+								value="org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable">
+							</instanceof>
+						</iterate>
+					</with>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension
+		point="org.eclipse.debug.ui.variableValueEditors">
+		<variableValueEditor
+			class="org.eclipse.fordiac.ide.debug.ui.editor.EvaluatorVariableValueEditor"
+			modelId="org.eclipse.fordiac.ide.debug.model">
+		</variableValueEditor>
 	</extension>
 </plugin>
