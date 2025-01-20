@@ -45,8 +45,8 @@ public enum QualNameChangeListenerManager implements CommandStackEventListener {
 		for (final IConfigurationElement element : config) {
 			try {
 				final Object obj = element.createExecutableExtension("class");
-				if (obj instanceof QualNameChangeListener) {
-					listeners.add((QualNameChangeListener) obj);
+				if (obj instanceof final QualNameChangeListener l) {
+					listeners.add(l);
 				}
 			} catch (final Exception e) {
 				FordiacLogHelper.logError(EXTENSION_POINT_ID, e);
@@ -85,10 +85,16 @@ public enum QualNameChangeListenerManager implements CommandStackEventListener {
 		}
 
 		if (event.getDetail() == CommandStack.POST_MARK_SAVE && event.getSource() instanceof final CommandStack stack) {
-
 			final TypeEntry typeEntry = getTypeEntryKeyFromCommandStack(stack);
 			if (typeEntry != null) {
 				notifiyCommit(typeEntry);
+			}
+		}
+
+		if (event.getDetail() == CommandStack.POST_FLUSH && event.getSource() instanceof final CommandStack stack) {
+			final TypeEntry typeEntry = getTypeEntryKeyFromCommandStack(stack);
+			if (typeEntry != null) {
+				listeners.forEach(l -> l.flush(typeEntry));
 			}
 		}
 
