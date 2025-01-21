@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -33,7 +34,9 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.fordiac.ide.model.buildpath.Attribute;
 import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
+import org.eclipse.fordiac.ide.model.buildpath.BuildpathAttributes;
 import org.eclipse.fordiac.ide.model.buildpath.BuildpathFactory;
 import org.eclipse.fordiac.ide.model.buildpath.DocumentRoot;
 import org.eclipse.fordiac.ide.model.buildpath.Pattern;
@@ -45,8 +48,8 @@ public final class BuildpathUtil {
 	/** The build path file name */
 	public static final String BUILDPATH_FILE_NAME = ".buildpath"; //$NON-NLS-1$
 
-	private static final List<String> DEFAULT_SOURCE_FOLDERS = List.of("Type Library", "Standard Libraries", //$NON-NLS-1$ //$NON-NLS-2$
-			"External Libraries"); //$NON-NLS-1$
+	private static final List<String> DEFAULT_SOURCE_FOLDERS = List.of("Type Library"); //$NON-NLS-1$
+	private static final List<String> EXTERNAL_SOURCE_FOLDERS = List.of("Standard Libraries", "External Libraries"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * Create a default build path configuration for project
@@ -61,8 +64,10 @@ public final class BuildpathUtil {
 		buildpath.getSourceFolders().add(projectFolder);
 		DEFAULT_SOURCE_FOLDERS.stream().map(BuildpathUtil::createSourceFolder)
 				.forEachOrdered(buildpath.getSourceFolders()::add);
-		DEFAULT_SOURCE_FOLDERS.stream().map(BuildpathUtil::createPattern)
-				.forEachOrdered(projectFolder.getExcludes()::add);
+		EXTERNAL_SOURCE_FOLDERS.stream().map(BuildpathUtil::createExternalSourceFolder)
+				.forEachOrdered(buildpath.getSourceFolders()::add);
+		Stream.of(DEFAULT_SOURCE_FOLDERS, EXTERNAL_SOURCE_FOLDERS).flatMap(List::stream)
+				.map(BuildpathUtil::createPattern).forEachOrdered(projectFolder.getExcludes()::add);
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		resourceSet.createResource(getBuildpathURI(project)).getContents().add(buildpath);
 		return buildpath;
@@ -306,6 +311,18 @@ public final class BuildpathUtil {
 		final SourceFolder sourceFolder = BuildpathFactory.eINSTANCE.createSourceFolder();
 		sourceFolder.setName(name);
 		return sourceFolder;
+	}
+
+	private static SourceFolder createExternalSourceFolder(final String name) {
+		final SourceFolder sourceFolder = createSourceFolder(name);
+		sourceFolder.getAttributes().add(createAttribute(BuildpathAttributes.IGNORE_WARNINGS, String.valueOf(true)));
+		return sourceFolder;
+	}
+
+	private static Attribute createAttribute(final String name, final String value) {
+		final Attribute attribute = BuildpathAttributes.createAttribute(name);
+		attribute.setValue(value);
+		return attribute;
 	}
 
 	private static Pattern createPattern(final String value) {
