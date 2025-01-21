@@ -14,17 +14,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.globalconstantseditor.validation;
 
+import java.text.MessageFormat;
+
 import org.eclipse.fordiac.ide.globalconstantseditor.Messages;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage;
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstants;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
+import org.eclipse.fordiac.ide.globalconstantseditor.resource.GlobalConstantsResource;
 import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGrammarAccess;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreImportValidator;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector;
 import org.eclipse.xtext.Keyword;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.validation.Check;
 
+import com.google.common.base.Objects;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
@@ -37,6 +44,7 @@ import com.google.inject.Provider;
 public class GlobalConstantsValidator extends AbstractGlobalConstantsValidator {
 
 	public static final String ISSUE_CODE_PREFIX = "org.eclipse.fordiac.ide.globalconstseditor."; //$NON-NLS-1$
+	public static final String GLOBAL_CONSTANTS_NAME_MISMATCH = ISSUE_CODE_PREFIX + "globalConstantsNameMismatch"; //$NON-NLS-1$
 	public static final String GLOBAL_VARS_NOT_MARKED_CONSTANT = ISSUE_CODE_PREFIX + "globalVarsNotMarkedConstant"; //$NON-NLS-1$
 
 	@Inject
@@ -59,6 +67,19 @@ public class GlobalConstantsValidator extends AbstractGlobalConstantsValidator {
 		if (!source.getImports().isEmpty()) {
 			importValidator.validateImports(source.getName(), source.getImports(),
 					typeUsageCollectorProvider.get().collectUsedTypes(source), this);
+		}
+	}
+
+	@Check
+	public void checkGlobalConstantsMatchesTypeName(final STGlobalConstants globalConstants) {
+		if (globalConstants.eResource() instanceof final GlobalConstantsResource resource
+				&& resource.getInternalLibraryElement() instanceof final GlobalConstants globalConstantsType
+				&& !Objects.equal(globalConstantsType.getName(), globalConstants.getName())) {
+			error(MessageFormat.format(Messages.GlobalConstValidator_GlobalConstantsNameMismatch,
+					globalConstants.getName(), globalConstantsType.getName()),
+					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, GLOBAL_CONSTANTS_NAME_MISMATCH,
+					globalConstants.getName(), globalConstantsType.getName());
+
 		}
 	}
 
