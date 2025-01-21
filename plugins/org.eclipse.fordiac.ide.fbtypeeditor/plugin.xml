@@ -14,7 +14,7 @@
          point="org.eclipse.ui.editors">
       <editor
             class="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor"
-            contributorClass="org.eclipse.fordiac.ide.gef.editors.GraphicalMultipageEditorContributor"
+            contributorClass="org.eclipse.fordiac.ide.typeeditor.TypeEditorContributor"
             extensions="fbt, fct, adp"
             icon="fordiacimage://ICON_FB_TYPE"
             id="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor"
