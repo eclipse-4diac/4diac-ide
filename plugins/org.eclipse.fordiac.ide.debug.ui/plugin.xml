@@ -111,7 +111,7 @@
 			<view
 				id="org.eclipse.fordiac.ide.debug.ui.view.FBDebugView"
 				minimized="false"
-				ratio="0.75f"
+				ratio="0.6f"
 				relationship="bottom"
 				relative="org.eclipse.ui.navigator.ProjectExplorer">
 			</view>

@@ -16,7 +16,19 @@ import org.eclipse.osgi.util.NLS;
 
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
-	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.debug.ui.messages"; //$NON-NLS-1$
+	public static String DebugClockWidget_ClockIntervalTextLabel;
+	public static String DebugClockWidget_FixedClock;
+	public static String DebugClockWidget_IntervalClock;
+	public static String DebugClockWidget_InvalidInterval;
+	public static String DebugClockWidget_InvalidMonotonicClockValue;
+	public static String DebugClockWidget_InvalidRealtimeClockValue;
+	public static String DebugClockWidget_MonotonicClock;
+	public static String DebugClockWidget_MonotonicClockTextLabel;
+	public static String DebugClockWidget_RealtimeClock;
+	public static String DebugClockWidget_RealtimeClockTextLabel;
+	public static String DebugClockWidget_SystemClock;
+	public static String DebugClockWidget_Title;
 	public static String EvaluatorDebugFindAction_Text;
 	public static String EvaluatorDebugFindDialog_Title;
 	public static String EvaluatorVariableValueEditor_Exception;
@@ -31,18 +43,11 @@ public final class Messages extends NLS {
 	public static String MainLaunchConfigurationTab_ErrorUpdatingArguments;
 	public static String MainLaunchConfigurationTab_InvalidValueMessage;
 	public static String MainLaunchConfigurationTab_InvalidValueTitle;
-
-	public static String FBLaunchConfigurationTab_ClockInterval;
-	public static String FBLaunchConfigurationTab_DebugTime;
-	public static String FBLaunchConfigurationTab_ERROR_InvalidDebugTime;
+	public static String FBDebugViewClockWidget_Apply;
+	public static String FBDebugViewClockWidget_InvalidValues;
 	public static String FBLaunchConfigurationTab_Event;
-	public static String FBLaunchConfigurationTab_IncrementClockAfterEachEventBySpecifiedAmount;
 	public static String FBLaunchConfigurationTab_KeepDebuggerRunningWhenIdle;
 	public static String FBLaunchConfigurationTab_RepeatEvent;
-
-	public static String FBLaunchConfigurationTab_UseFixedClockWithSpecifiedTime;
-	public static String FBLaunchConfigurationTab_UseSystemClock;
-
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

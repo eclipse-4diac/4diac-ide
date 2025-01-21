@@ -12,19 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.fb;
 
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-
 public enum FBDebugClockMode {
 
-	SYSTEM, INCREMENT, MANUAL;
-
-	public static FBDebugClockMode fromString(final String val) {
-		try {
-			return valueOf(val);
-		} catch (final IllegalArgumentException | NullPointerException ex) {
-			FordiacLogHelper.logWarning("Could not convert clock mode from string: " + val, ex); //$NON-NLS-1$
-		}
-		return SYSTEM;
-	}
-
+	SYSTEM, INTERVAL, FIXED;
 }
