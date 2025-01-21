@@ -9,7 +9,10 @@
     <genClasses ecoreClass="GlobalConstants.ecore#//STGlobalConstsSource">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GlobalConstants.ecore#//STGlobalConstsSource/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GlobalConstants.ecore#//STGlobalConstsSource/imports"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GlobalConstants.ecore#//STGlobalConstsSource/elements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GlobalConstants.ecore#//STGlobalConstsSource/constants"/>
+    </genClasses>
+    <genClasses ecoreClass="GlobalConstants.ecore#//STGlobalConstants">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GlobalConstants.ecore#//STGlobalConstants/elements"/>
     </genClasses>
     <genClasses ecoreClass="GlobalConstants.ecore#//STVarGlobalDeclarationBlock"/>
   </genPackages>

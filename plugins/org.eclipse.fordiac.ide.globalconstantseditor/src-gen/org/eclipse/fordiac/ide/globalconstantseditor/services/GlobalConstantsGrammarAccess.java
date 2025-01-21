@@ -45,20 +45,20 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 		private final Keyword cSemicolonKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
 		private final Assignment cImportsAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cImportsSTImportParserRuleCall_2_0 = (RuleCall)cImportsAssignment_2.eContents().get(0);
-		private final Assignment cElementsAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0 = (RuleCall)cElementsAssignment_3.eContents().get(0);
+		private final Assignment cConstantsAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cConstantsSTGlobalConstantsParserRuleCall_3_0 = (RuleCall)cConstantsAssignment_3.eContents().get(0);
 		
 		//STGlobalConstsSource returns stcore::STSource:
 		//    {STGlobalConstsSource}
 		//    ('PACKAGE' name=QualifiedName ';')? // package declaration (optional)
 		//    imports+=STImport* // imports (optional)
-		//    elements+=STVarGlobalDeclarationBlock*;
+		//    constants=STGlobalConstants?;
 		@Override public ParserRule getRule() { return rule; }
 		
 		//{STGlobalConstsSource}
 		//('PACKAGE' name=QualifiedName ';')? // package declaration (optional)
 		//imports+=STImport* // imports (optional)
-		//elements+=STVarGlobalDeclarationBlock*
+		//constants=STGlobalConstants?
 		public Group getGroup() { return cGroup; }
 		
 		//{STGlobalConstsSource}
@@ -87,11 +87,56 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 		public RuleCall getImportsSTImportParserRuleCall_2_0() { return cImportsSTImportParserRuleCall_2_0; }
 		
 		//// imports (optional)
-		//   elements+=STVarGlobalDeclarationBlock*
+		//   constants=STGlobalConstants?
+		public Assignment getConstantsAssignment_3() { return cConstantsAssignment_3; }
+		
+		//STGlobalConstants
+		public RuleCall getConstantsSTGlobalConstantsParserRuleCall_3_0() { return cConstantsSTGlobalConstantsParserRuleCall_3_0; }
+	}
+	public class STGlobalConstantsElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.STGlobalConstants");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cSTGlobalConstantsAction_0 = (Action)cGroup.eContents().get(0);
+		private final Keyword cGLOBALCONSTANTSKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cNameAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cNameIDTerminalRuleCall_2_0 = (RuleCall)cNameAssignment_2.eContents().get(0);
+		private final Assignment cElementsAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0 = (RuleCall)cElementsAssignment_3.eContents().get(0);
+		private final Keyword cEND_GLOBALCONSTANTSKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		
+		//STGlobalConstants returns STGlobalConstants:
+		//    {STGlobalConstants}
+		//    'GLOBALCONSTANTS' name=ID
+		//    elements+=STVarGlobalDeclarationBlock*
+		//    'END_GLOBALCONSTANTS';
+		@Override public ParserRule getRule() { return rule; }
+		
+		//{STGlobalConstants}
+		//'GLOBALCONSTANTS' name=ID
+		//elements+=STVarGlobalDeclarationBlock*
+		//'END_GLOBALCONSTANTS'
+		public Group getGroup() { return cGroup; }
+		
+		//{STGlobalConstants}
+		public Action getSTGlobalConstantsAction_0() { return cSTGlobalConstantsAction_0; }
+		
+		//'GLOBALCONSTANTS'
+		public Keyword getGLOBALCONSTANTSKeyword_1() { return cGLOBALCONSTANTSKeyword_1; }
+		
+		//name=ID
+		public Assignment getNameAssignment_2() { return cNameAssignment_2; }
+		
+		//ID
+		public RuleCall getNameIDTerminalRuleCall_2_0() { return cNameIDTerminalRuleCall_2_0; }
+		
+		//elements+=STVarGlobalDeclarationBlock*
 		public Assignment getElementsAssignment_3() { return cElementsAssignment_3; }
 		
 		//STVarGlobalDeclarationBlock
 		public RuleCall getElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0() { return cElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0; }
+		
+		//'END_GLOBALCONSTANTS'
+		public Keyword getEND_GLOBALCONSTANTSKeyword_4() { return cEND_GLOBALCONSTANTSKeyword_4; }
 	}
 	public class STVarGlobalDeclarationBlockElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.STVarGlobalDeclarationBlock");
@@ -141,6 +186,7 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 	
 	
 	private final STGlobalConstsSourceElements pSTGlobalConstsSource;
+	private final STGlobalConstantsElements pSTGlobalConstants;
 	private final STVarGlobalDeclarationBlockElements pSTVarGlobalDeclarationBlock;
 	
 	private final Grammar grammar;
@@ -153,6 +199,7 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 		this.grammar = internalFindGrammar(grammarProvider);
 		this.gaSTCore = gaSTCore;
 		this.pSTGlobalConstsSource = new STGlobalConstsSourceElements();
+		this.pSTGlobalConstants = new STGlobalConstantsElements();
 		this.pSTVarGlobalDeclarationBlock = new STVarGlobalDeclarationBlockElements();
 	}
 	
@@ -187,13 +234,26 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 	//    {STGlobalConstsSource}
 	//    ('PACKAGE' name=QualifiedName ';')? // package declaration (optional)
 	//    imports+=STImport* // imports (optional)
-	//    elements+=STVarGlobalDeclarationBlock*;
+	//    constants=STGlobalConstants?;
 	public STGlobalConstsSourceElements getSTGlobalConstsSourceAccess() {
 		return pSTGlobalConstsSource;
 	}
 	
 	public ParserRule getSTGlobalConstsSourceRule() {
 		return getSTGlobalConstsSourceAccess().getRule();
+	}
+	
+	//STGlobalConstants returns STGlobalConstants:
+	//    {STGlobalConstants}
+	//    'GLOBALCONSTANTS' name=ID
+	//    elements+=STVarGlobalDeclarationBlock*
+	//    'END_GLOBALCONSTANTS';
+	public STGlobalConstantsElements getSTGlobalConstantsAccess() {
+		return pSTGlobalConstants;
+	}
+	
+	public ParserRule getSTGlobalConstantsRule() {
+		return getSTGlobalConstantsAccess().getRule();
 	}
 	
 	//STVarGlobalDeclarationBlock returns STVarGlobalDeclarationBlock:

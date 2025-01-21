@@ -31,9 +31,11 @@ class GlobalConstantsParsingTest {
 	@Test
 	def void loadModel() {
 		val result = parseHelper.parse('''
-			VAR_GLOBAL
-				PI : LREAL := 3.14159265359;
-			END_VAR
+			GLOBALCONSTANTS TEST
+				VAR_GLOBAL
+					PI : LREAL := 3.14159265359;
+				END_VAR
+			END_GLOBALCONSTANTS
 		''')
 		Assertions.assertNotNull(result)
 		val errors = result.eResource.errors

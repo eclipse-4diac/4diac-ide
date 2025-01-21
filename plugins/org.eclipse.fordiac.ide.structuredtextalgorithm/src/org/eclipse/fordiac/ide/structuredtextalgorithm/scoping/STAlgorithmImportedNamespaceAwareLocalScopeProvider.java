@@ -27,18 +27,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
+import org.eclipse.fordiac.ide.structuredtextcore.scoping.STCoreImportedNamespaceAwareLocalScopeProvider;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.ISelectable;
 import org.eclipse.xtext.scoping.Scopes;
 import org.eclipse.xtext.scoping.impl.ImportNormalizer;
-import org.eclipse.xtext.scoping.impl.ImportedNamespaceAwareLocalScopeProvider;
 import org.eclipse.xtext.scoping.impl.MultimapBasedSelectable;
 
 import com.google.inject.Inject;
 
-public class STAlgorithmImportedNamespaceAwareLocalScopeProvider extends ImportedNamespaceAwareLocalScopeProvider {
+public class STAlgorithmImportedNamespaceAwareLocalScopeProvider
+		extends STCoreImportedNamespaceAwareLocalScopeProvider {
 
 	@Inject
 	private IQualifiedNameProvider qualifiedNameProvider;

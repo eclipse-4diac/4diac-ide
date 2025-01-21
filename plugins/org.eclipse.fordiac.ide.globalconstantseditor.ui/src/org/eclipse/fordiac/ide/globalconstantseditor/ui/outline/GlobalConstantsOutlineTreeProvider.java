@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -24,10 +24,12 @@ import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
 public class GlobalConstantsOutlineTreeProvider extends STCoreOutlineTreeProvider {
 
 	protected boolean _isLeaf(final STGlobalConstsSource modelElement) {
-		return modelElement.getElements().isEmpty();
+		return modelElement.getConstants() == null;
 	}
 
 	protected void _createChildren(final IOutlineNode parentNode, final STGlobalConstsSource modelElement) {
-		modelElement.getElements().forEach(function -> createNode(parentNode, function));
+		if (modelElement.getConstants() != null) {
+			createNode(parentNode, modelElement.getConstants());
+		}
 	}
 }

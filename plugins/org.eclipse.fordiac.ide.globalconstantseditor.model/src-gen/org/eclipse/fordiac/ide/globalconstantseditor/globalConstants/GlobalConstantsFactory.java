@@ -32,6 +32,15 @@ public interface GlobalConstantsFactory extends EFactory {
 	STGlobalConstsSource createSTGlobalConstsSource();
 
 	/**
+	 * Returns a new object of class '<em>ST Global Constants</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Global Constants</em>'.
+	 * @generated
+	 */
+	STGlobalConstants createSTGlobalConstants();
+
+	/**
 	 * Returns a new object of class '<em>ST Var Global Declaration Block</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

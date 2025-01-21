@@ -19,6 +19,7 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage;
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstants;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGrammarAccess;
@@ -91,6 +92,9 @@ public class GlobalConstantsSemanticSequencer extends STCoreSemanticSequencer {
 		Set<Parameter> parameters = context.getEnabledBooleanParameters();
 		if (epackage == GlobalConstantsPackage.eINSTANCE)
 			switch (semanticObject.eClass().getClassifierID()) {
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTANTS:
+				sequence_STGlobalConstants(context, (STGlobalConstants) semanticObject); 
+				return; 
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE:
 				sequence_STGlobalConstsSource(context, (STGlobalConstsSource) semanticObject); 
 				return; 
@@ -291,10 +295,24 @@ public class GlobalConstantsSemanticSequencer extends STCoreSemanticSequencer {
 	/**
 	 * <pre>
 	 * Contexts:
+	 *     STGlobalConstants returns STGlobalConstants
+	 *
+	 * Constraint:
+	 *     (name=ID elements+=STVarGlobalDeclarationBlock*)
+	 * </pre>
+	 */
+	protected void sequence_STGlobalConstants(ISerializationContext context, STGlobalConstants semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
 	 *     STGlobalConstsSource returns STGlobalConstsSource
 	 *
 	 * Constraint:
-	 *     (name=QualifiedName? imports+=STImport* elements+=STVarGlobalDeclarationBlock*)
+	 *     (name=QualifiedName? imports+=STImport* constants=STGlobalConstants?)
 	 * </pre>
 	 */
 	protected void sequence_STGlobalConstsSource(ISerializationContext context, STGlobalConstsSource semanticObject) {

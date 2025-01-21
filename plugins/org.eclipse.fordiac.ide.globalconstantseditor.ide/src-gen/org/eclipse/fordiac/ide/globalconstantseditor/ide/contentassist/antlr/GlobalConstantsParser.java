@@ -86,6 +86,7 @@ public class GlobalConstantsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTAccessSpecifierAccess().getAlternatives(), "rule__STAccessSpecifier__Alternatives");
 			builder.put(grammarAccess.getSTGlobalConstsSourceAccess().getGroup(), "rule__STGlobalConstsSource__Group__0");
 			builder.put(grammarAccess.getSTGlobalConstsSourceAccess().getGroup_1(), "rule__STGlobalConstsSource__Group_1__0");
+			builder.put(grammarAccess.getSTGlobalConstantsAccess().getGroup(), "rule__STGlobalConstants__Group__0");
 			builder.put(grammarAccess.getSTVarGlobalDeclarationBlockAccess().getGroup(), "rule__STVarGlobalDeclarationBlock__Group__0");
 			builder.put(grammarAccess.getSTCoreSourceAccess().getGroup(), "rule__STCoreSource__Group__0");
 			builder.put(grammarAccess.getSTExpressionSourceAccess().getGroup(), "rule__STExpressionSource__Group__0");
@@ -209,7 +210,9 @@ public class GlobalConstantsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getTimeOfDayAccess().getGroup_5(), "rule__TimeOfDay__Group_5__0");
 			builder.put(grammarAccess.getSTGlobalConstsSourceAccess().getNameAssignment_1_1(), "rule__STGlobalConstsSource__NameAssignment_1_1");
 			builder.put(grammarAccess.getSTGlobalConstsSourceAccess().getImportsAssignment_2(), "rule__STGlobalConstsSource__ImportsAssignment_2");
-			builder.put(grammarAccess.getSTGlobalConstsSourceAccess().getElementsAssignment_3(), "rule__STGlobalConstsSource__ElementsAssignment_3");
+			builder.put(grammarAccess.getSTGlobalConstsSourceAccess().getConstantsAssignment_3(), "rule__STGlobalConstsSource__ConstantsAssignment_3");
+			builder.put(grammarAccess.getSTGlobalConstantsAccess().getNameAssignment_2(), "rule__STGlobalConstants__NameAssignment_2");
+			builder.put(grammarAccess.getSTGlobalConstantsAccess().getElementsAssignment_3(), "rule__STGlobalConstants__ElementsAssignment_3");
 			builder.put(grammarAccess.getSTVarGlobalDeclarationBlockAccess().getConstantAssignment_2(), "rule__STVarGlobalDeclarationBlock__ConstantAssignment_2");
 			builder.put(grammarAccess.getSTVarGlobalDeclarationBlockAccess().getVarDeclarationsAssignment_3(), "rule__STVarGlobalDeclarationBlock__VarDeclarationsAssignment_3");
 			builder.put(grammarAccess.getSTCoreSourceAccess().getStatementsAssignment_1(), "rule__STCoreSource__StatementsAssignment_1");

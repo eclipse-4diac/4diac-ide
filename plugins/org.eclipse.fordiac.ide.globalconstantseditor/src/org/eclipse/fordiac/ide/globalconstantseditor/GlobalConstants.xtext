@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +14,7 @@
  *   Martin Jobst
  *       - add ST source as top-level element
  *       - add package declaration and imports
+ *       - update grammar for GLOBALCONSTANTS element
  *******************************************************************************/
 grammar org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants with org.eclipse.fordiac.ide.structuredtextcore.STCore
 
@@ -27,7 +28,13 @@ STGlobalConstsSource returns stcore::STSource:
 	{STGlobalConstsSource}
 	('PACKAGE' name=QualifiedName ';')? // package declaration (optional)
 	imports+=STImport* // imports (optional)
-	elements+=STVarGlobalDeclarationBlock*;
+	constants=STGlobalConstants?;
+
+STGlobalConstants returns STGlobalConstants:
+	{STGlobalConstants}
+	'GLOBALCONSTANTS' name=ID
+	elements+=STVarGlobalDeclarationBlock*
+	'END_GLOBALCONSTANTS';
 
 STVarGlobalDeclarationBlock returns STVarGlobalDeclarationBlock:
 	{STVarGlobalDeclarationBlock}

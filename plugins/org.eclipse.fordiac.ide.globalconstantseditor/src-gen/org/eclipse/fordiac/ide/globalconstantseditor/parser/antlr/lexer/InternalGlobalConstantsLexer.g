@@ -22,9 +22,13 @@ package org.eclipse.fordiac.ide.globalconstantseditor.parser.antlr.lexer;
 import org.eclipse.xtext.parser.antlr.Lexer;
 }
 
+END_GLOBALCONSTANTS : ('E'|'e')('N'|'n')('D'|'d')'_'('G'|'g')('L'|'l')('O'|'o')('B'|'b')('A'|'a')('L'|'l')('C'|'c')('O'|'o')('N'|'n')('S'|'s')('T'|'t')('A'|'a')('N'|'n')('T'|'t')('S'|'s');
+
 END_FUNCTION_BLOCK : ('E'|'e')('N'|'n')('D'|'d')'_'('F'|'f')('U'|'u')('N'|'n')('C'|'c')('T'|'t')('I'|'i')('O'|'o')('N'|'n')'_'('B'|'b')('L'|'l')('O'|'o')('C'|'c')('K'|'k');
 
 END_CONFIGURATION : ('E'|'e')('N'|'n')('D'|'d')'_'('C'|'c')('O'|'o')('N'|'n')('F'|'f')('I'|'i')('G'|'g')('U'|'u')('R'|'r')('A'|'a')('T'|'t')('I'|'i')('O'|'o')('N'|'n');
+
+GLOBALCONSTANTS : ('G'|'g')('L'|'l')('O'|'o')('B'|'b')('A'|'a')('L'|'l')('C'|'c')('O'|'o')('N'|'n')('S'|'s')('T'|'t')('A'|'a')('N'|'n')('T'|'t')('S'|'s');
 
 END_TRANSITION : ('E'|'e')('N'|'n')('D'|'d')'_'('T'|'t')('R'|'r')('A'|'a')('N'|'n')('S'|'s')('I'|'i')('T'|'t')('I'|'i')('O'|'o')('N'|'n');
 

@@ -197,6 +197,10 @@ public abstract class STAbstractCorePartitioner<E extends INamedElement> impleme
 			builder.append(varDeclaration.getValue().getValue());
 		}
 		builder.append(";"); //$NON-NLS-1$
+		if (varDeclaration.getComment() != null && !varDeclaration.getComment().isBlank()) {
+			builder.append(" // "); //$NON-NLS-1$
+			builder.append(varDeclaration.getComment());
+		}
 	}
 
 	protected static void handleDuplicates(final List<? extends INamedElement> result) {

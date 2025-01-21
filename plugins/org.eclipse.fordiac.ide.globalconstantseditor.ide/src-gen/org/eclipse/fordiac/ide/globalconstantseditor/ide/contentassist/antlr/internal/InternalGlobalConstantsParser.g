@@ -209,8 +209,10 @@ import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGra
 		tokenNameToValue.put("END_TRANSITION", "'END_TRANSITION'");
 		tokenNameToValue.put("FUNCTION_BLOCK", "'FUNCTION_BLOCK'");
 		tokenNameToValue.put("LDATE_AND_TIME", "'LDATE_AND_TIME'");
+		tokenNameToValue.put("GLOBALCONSTANTS", "'GLOBALCONSTANTS'");
 		tokenNameToValue.put("END_CONFIGURATION", "'END_CONFIGURATION'");
 		tokenNameToValue.put("END_FUNCTION_BLOCK", "'END_FUNCTION_BLOCK'");
+		tokenNameToValue.put("END_GLOBALCONSTANTS", "'END_GLOBALCONSTANTS'");
 	}
 
 	public void setGrammarAccess(GlobalConstantsGrammarAccess grammarAccess) {
@@ -250,6 +252,31 @@ ruleSTGlobalConstsSource
 		{ before(grammarAccess.getSTGlobalConstsSourceAccess().getGroup()); }
 		(rule__STGlobalConstsSource__Group__0)
 		{ after(grammarAccess.getSTGlobalConstsSourceAccess().getGroup()); }
+	)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+// Entry rule entryRuleSTGlobalConstants
+entryRuleSTGlobalConstants
+:
+{ before(grammarAccess.getSTGlobalConstantsRule()); }
+	 ruleSTGlobalConstants
+{ after(grammarAccess.getSTGlobalConstantsRule()); } 
+	 EOF 
+;
+
+// Rule STGlobalConstants
+ruleSTGlobalConstants 
+	@init {
+		int stackSize = keepStackSize();
+	}
+	:
+	(
+		{ before(grammarAccess.getSTGlobalConstantsAccess().getGroup()); }
+		(rule__STGlobalConstants__Group__0)
+		{ after(grammarAccess.getSTGlobalConstantsAccess().getGroup()); }
 	)
 ;
 finally {
@@ -3740,9 +3767,9 @@ rule__STGlobalConstsSource__Group__3__Impl
 	}
 :
 (
-	{ before(grammarAccess.getSTGlobalConstsSourceAccess().getElementsAssignment_3()); }
-	(rule__STGlobalConstsSource__ElementsAssignment_3)*
-	{ after(grammarAccess.getSTGlobalConstsSourceAccess().getElementsAssignment_3()); }
+	{ before(grammarAccess.getSTGlobalConstsSourceAccess().getConstantsAssignment_3()); }
+	(rule__STGlobalConstsSource__ConstantsAssignment_3)?
+	{ after(grammarAccess.getSTGlobalConstsSourceAccess().getConstantsAssignment_3()); }
 )
 ;
 finally {
@@ -3824,6 +3851,141 @@ rule__STGlobalConstsSource__Group_1__2__Impl
 	{ before(grammarAccess.getSTGlobalConstsSourceAccess().getSemicolonKeyword_1_2()); }
 	Semicolon
 	{ after(grammarAccess.getSTGlobalConstsSourceAccess().getSemicolonKeyword_1_2()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__STGlobalConstants__Group__0
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__STGlobalConstants__Group__0__Impl
+	rule__STGlobalConstants__Group__1
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STGlobalConstants__Group__0__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getSTGlobalConstantsAccess().getSTGlobalConstantsAction_0()); }
+	()
+	{ after(grammarAccess.getSTGlobalConstantsAccess().getSTGlobalConstantsAction_0()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STGlobalConstants__Group__1
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__STGlobalConstants__Group__1__Impl
+	rule__STGlobalConstants__Group__2
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STGlobalConstants__Group__1__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getSTGlobalConstantsAccess().getGLOBALCONSTANTSKeyword_1()); }
+	GLOBALCONSTANTS
+	{ after(grammarAccess.getSTGlobalConstantsAccess().getGLOBALCONSTANTSKeyword_1()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STGlobalConstants__Group__2
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__STGlobalConstants__Group__2__Impl
+	rule__STGlobalConstants__Group__3
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STGlobalConstants__Group__2__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getSTGlobalConstantsAccess().getNameAssignment_2()); }
+	(rule__STGlobalConstants__NameAssignment_2)
+	{ after(grammarAccess.getSTGlobalConstantsAccess().getNameAssignment_2()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STGlobalConstants__Group__3
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__STGlobalConstants__Group__3__Impl
+	rule__STGlobalConstants__Group__4
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STGlobalConstants__Group__3__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getSTGlobalConstantsAccess().getElementsAssignment_3()); }
+	(rule__STGlobalConstants__ElementsAssignment_3)*
+	{ after(grammarAccess.getSTGlobalConstantsAccess().getElementsAssignment_3()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STGlobalConstants__Group__4
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__STGlobalConstants__Group__4__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STGlobalConstants__Group__4__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getSTGlobalConstantsAccess().getEND_GLOBALCONSTANTSKeyword_4()); }
+	END_GLOBALCONSTANTS
+	{ after(grammarAccess.getSTGlobalConstantsAccess().getEND_GLOBALCONSTANTSKeyword_4()); }
 )
 ;
 finally {
@@ -12940,15 +13102,45 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__STGlobalConstsSource__ElementsAssignment_3
+rule__STGlobalConstsSource__ConstantsAssignment_3
 	@init {
 		int stackSize = keepStackSize();
 	}
 :
 	(
-		{ before(grammarAccess.getSTGlobalConstsSourceAccess().getElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0()); }
+		{ before(grammarAccess.getSTGlobalConstsSourceAccess().getConstantsSTGlobalConstantsParserRuleCall_3_0()); }
+		ruleSTGlobalConstants
+		{ after(grammarAccess.getSTGlobalConstsSourceAccess().getConstantsSTGlobalConstantsParserRuleCall_3_0()); }
+	)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STGlobalConstants__NameAssignment_2
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	(
+		{ before(grammarAccess.getSTGlobalConstantsAccess().getNameIDTerminalRuleCall_2_0()); }
+		RULE_ID
+		{ after(grammarAccess.getSTGlobalConstantsAccess().getNameIDTerminalRuleCall_2_0()); }
+	)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STGlobalConstants__ElementsAssignment_3
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	(
+		{ before(grammarAccess.getSTGlobalConstantsAccess().getElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0()); }
 		ruleSTVarGlobalDeclarationBlock
-		{ after(grammarAccess.getSTGlobalConstsSourceAccess().getElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0()); }
+		{ after(grammarAccess.getSTGlobalConstantsAccess().getElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0()); }
 	)
 ;
 finally {

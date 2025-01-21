@@ -139,22 +139,93 @@ ruleSTGlobalConstsSource returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTGlobalConstsSourceAccess().getElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0());
+					newCompositeNode(grammarAccess.getSTGlobalConstsSourceAccess().getConstantsSTGlobalConstantsParserRuleCall_3_0());
 				}
-				lv_elements_5_0=ruleSTVarGlobalDeclarationBlock
+				lv_constants_5_0=ruleSTGlobalConstants
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getSTGlobalConstsSourceRule());
 					}
+					set(
+						$current,
+						"constants",
+						lv_constants_5_0,
+						"org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.STGlobalConstants");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)?
+	)
+;
+
+// Entry rule entryRuleSTGlobalConstants
+entryRuleSTGlobalConstants returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTGlobalConstantsRule()); }
+	iv_ruleSTGlobalConstants=ruleSTGlobalConstants
+	{ $current=$iv_ruleSTGlobalConstants.current; }
+	EOF;
+
+// Rule STGlobalConstants
+ruleSTGlobalConstants returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			{
+				$current = forceCreateModelElement(
+					grammarAccess.getSTGlobalConstantsAccess().getSTGlobalConstantsAction_0(),
+					$current);
+			}
+		)
+		otherlv_1=GLOBALCONSTANTS
+		{
+			newLeafNode(otherlv_1, grammarAccess.getSTGlobalConstantsAccess().getGLOBALCONSTANTSKeyword_1());
+		}
+		(
+			(
+				lv_name_2_0=RULE_ID
+				{
+					newLeafNode(lv_name_2_0, grammarAccess.getSTGlobalConstantsAccess().getNameIDTerminalRuleCall_2_0());
+				}
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getSTGlobalConstantsRule());
+					}
+					setWithLastConsumed(
+						$current,
+						"name",
+						lv_name_2_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.ID");
+				}
+			)
+		)
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTGlobalConstantsAccess().getElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0());
+				}
+				lv_elements_3_0=ruleSTVarGlobalDeclarationBlock
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTGlobalConstantsRule());
+					}
 					add(
 						$current,
 						"elements",
-						lv_elements_5_0,
+						lv_elements_3_0,
 						"org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.STVarGlobalDeclarationBlock");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)*
+		otherlv_4=END_GLOBALCONSTANTS
+		{
+			newLeafNode(otherlv_4, grammarAccess.getSTGlobalConstantsAccess().getEND_GLOBALCONSTANTSKeyword_4());
+		}
 	)
 ;
 

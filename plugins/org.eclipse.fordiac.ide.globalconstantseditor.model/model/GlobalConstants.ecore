@@ -7,6 +7,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
         eType="ecore:EClass ../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.ecore#//STImport"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constants" eType="#//STGlobalConstants"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STGlobalConstants" eSuperTypes="../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
         eType="#//STVarGlobalDeclarationBlock" containment="true"/>
   </eClassifiers>
