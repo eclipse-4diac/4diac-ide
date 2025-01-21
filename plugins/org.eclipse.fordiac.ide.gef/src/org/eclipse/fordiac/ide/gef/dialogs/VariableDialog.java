@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.gef.Messages;
@@ -107,6 +108,27 @@ public class VariableDialog extends Dialog {
 			return Optional.of(variable.toString());
 		}
 		return Optional.empty();
+	}
+
+	public static Optional<String> open(final Shell shell, final Variable<?> variable) {
+		return open(shell, Messages.VariableDialog_DefaultTitle, variable);
+	}
+
+	public static Optional<String> open(final Shell shell, final String title, final Variable<?> variable) {
+		return open(shell, title, Stream.of(variable)).stream().findAny();
+	}
+
+	public static List<String> open(final Shell shell, final Stream<Variable<?>> variables) {
+		return open(shell, Messages.VariableDialog_DefaultTitle, variables);
+	}
+
+	public static List<String> open(final Shell shell, final String title, final Stream<Variable<?>> variables) {
+		final List<Variable<?>> copies = variables.<Variable<?>>map(VariableOperations::newVariable).toList();
+		final VariableDialog dialog = new VariableDialog(shell, title, copies);
+		if (dialog.open() == OK) {
+			return copies.stream().map(Variable::toString).toList();
+		}
+		return List.of();
 	}
 
 	public static Variable<?> computeInitialValue(final ITypedElement element, final String initialValue)

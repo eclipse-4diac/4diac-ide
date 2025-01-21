@@ -68,7 +68,7 @@
          point="org.eclipse.ui.editors">
       <editor
             class="org.eclipse.fordiac.ide.systemmanagement.ui.editors.AutomationSystemEditor"
-            contributorClass="org.eclipse.fordiac.ide.gef.editors.GraphicalMultipageEditorContributor"
+            contributorClass="org.eclipse.fordiac.ide.typeeditor.TypeEditorContributor"
             default="true"
             extensions="sys"
             icon="fordiacimage://ICON_SYSTEM_PERSPECTIVE"

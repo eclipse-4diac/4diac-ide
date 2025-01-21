@@ -156,7 +156,7 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 	 */
 	@Override
 	public double getWidth() {
-		return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.screenToIEC61499(org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this));
+		return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 	 */
 	@Override
 	public double getHeight() {
-		return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.screenToIEC61499(org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this));
+		return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);
 	}
 
 } //FBImpl

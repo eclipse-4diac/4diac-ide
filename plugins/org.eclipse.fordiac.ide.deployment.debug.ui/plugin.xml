@@ -1031,4 +1031,11 @@
 			name="Deployment">
 		</page>
 	</extension>
+	<extension
+		point="org.eclipse.debug.ui.variableValueEditors">
+		<variableValueEditor
+			class="org.eclipse.fordiac.ide.debug.ui.editor.EvaluatorVariableValueEditor"
+			modelId="org.eclipse.fordiac.ide.deployment.debug.model">
+		</variableValueEditor>
+	</extension>
 </plugin>

@@ -260,8 +260,8 @@ public abstract class SubAppImpl extends FBNetworkElementImpl implements SubApp 
 	 * @generated
 	 */
 	@Override
-	public int getVisibleWidth() {
-		return isUnfolded() ? org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getWidth()) : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);
+	public double getVisibleWidth() {
+		return isUnfolded() ? getWidth() : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);
 	}
 
 	/**
@@ -270,8 +270,8 @@ public abstract class SubAppImpl extends FBNetworkElementImpl implements SubApp 
 	 * @generated
 	 */
 	@Override
-	public int getVisibleHeight() {
-		return isUnfolded() ? org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getHeight()) : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);
+	public double getVisibleHeight() {
+		return isUnfolded() ? getHeight() : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);
 	}
 
 	/**

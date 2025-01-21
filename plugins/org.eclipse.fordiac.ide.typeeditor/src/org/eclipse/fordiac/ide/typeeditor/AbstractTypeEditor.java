@@ -149,6 +149,9 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	protected IEditorSite createSite(final IEditorPart editor) {
+		if (editor instanceof ITextEditor) {
+			return new TypeTextMultiPageEditorSite(this, editor);
+		}
 		return new TypeMultiPageEditorSite(this, editor);
 	}
 

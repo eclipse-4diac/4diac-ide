@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.gef.editors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.AlignmentRetargetAction;
@@ -37,16 +38,14 @@ public class GraphicalMultipageEditorContributor extends MultiPageEditorActionBa
 
 	@Override
 	public void setActiveEditor(final IEditorPart editor) {
-		setGlobalActionHandler(editor.getAdapter(ActionRegistry.class));
+		setGlobalActionHandler(Adapters.adapt(editor, ActionRegistry.class));
 		super.setActiveEditor(editor);
 
 	}
 
 	@Override
 	public void setActivePage(final IEditorPart activeEditor) {
-		if (null != activeEditor) {
-			setGlobalActionHandler(activeEditor.getAdapter(ActionRegistry.class));
-		}
+		setGlobalActionHandler(Adapters.adapt(activeEditor, ActionRegistry.class));
 	}
 
 	private void setGlobalActionHandler(final ActionRegistry editorRegistry) {

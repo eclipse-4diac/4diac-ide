@@ -13,17 +13,12 @@
 package org.eclipse.fordiac.ide.application.figures;
 
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.fordiac.ide.gef.figures.AbstractShadowBorder;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 
 public final class StructuredTypeFigure extends Label implements IFontUpdateListener {
 
-	public static final int INSTANCE_LABEL_MARGIN = AbstractShadowBorder.SHADOW_INSETS.top + 2;
-
 	public StructuredTypeFigure() {
-		setBorder(new MarginBorder(0, 0, INSTANCE_LABEL_MARGIN, 0));
 		setLabelAlignment(PositionConstants.CENTER);
 		setTextAlignment(PositionConstants.CENTER);
 	}
