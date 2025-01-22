@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +46,7 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 	private final Map<String, String> conflicts = new HashMap<>();
 	private final NatTableColumnProvider<? extends NatTableColumn> columnProvider;
 	private final List<? extends NatTableColumn> columns;
+	private Map<String, List<Integer>> importContent;
 
 	public PasteDataImportFromClipboardCommandHandler(final SelectionLayer selectionLayer,
 			final CommandExecutor commandExecutor, final BiFunction<TypeLibrary, String, TypeEntry> typeResolver,
@@ -64,8 +64,9 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 	protected boolean doCommand(final PasteDataCommand command) {
 		final LibraryElement rootElement = EditorUtils.getCurrentActiveEditor().getAdapter(LibraryElement.class);
 		if (rootElement != null) {
-			Arrays.stream(getClipboardImports()).map(imp -> getImportNamespace(rootElement, imp))
-					.filter(Objects::nonNull).forEach(namespace -> commandExecutor
+			importContent = getClipboardImports();
+			importContent.keySet().stream().map(imp -> getImportNamespace(rootElement, imp)).filter(Objects::nonNull)
+					.forEach(namespace -> commandExecutor
 							.executeCommand(new AddNewImportCommand(rootElement, namespace)));
 		}
 
@@ -86,8 +87,11 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 		for (final var column : columns) {
 			final int idx = columnProvider.getColumns().indexOf(column);
 			final int colIndex = idx - location.getColumnPosition();
-			for (final String[] row : content) {
-				if (colIndex >= 0 && colIndex < row.length && conflicts.containsKey(row[colIndex])) {
+			for (int i = 0; i < content.length; i++) {
+				final String[] row = content[i];
+				if (colIndex >= 0 && colIndex < row.length && conflicts.containsKey(row[colIndex])
+						&& this.importContent.containsKey(conflicts.get(row[colIndex]))
+						&& this.importContent.get(conflicts.get(row[colIndex])).contains(i)) {
 					row[colIndex] = conflicts.get(row[colIndex]);
 				}
 			}
@@ -115,27 +119,33 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 		return null;
 	}
 
-	protected static String[] getClipboardImports() {
+	@SuppressWarnings("unchecked")
+	protected static Map<String, List<Integer>> getClipboardImports() {
 		final Clipboard clipboard = new Clipboard(Display.getDefault());
 		try {
-			if (clipboard.getContents(ImportTransfer.getInstance()) instanceof final String[] stringArray) {
-				return stringArray;
+			final var content = clipboard.getContents(ImportTransfer.getInstance());
+			if (content instanceof final Map<?, ?> map) {
+				return (Map<String, List<Integer>>) map;
 			}
-			return new String[0];
+			return Map.of();
 		} finally {
 			clipboard.dispose();
 		}
 	}
 
 	@Override
-	protected void updateNewRow(final int rowIndex) {
-		if (selectionLayer.getUnderlyingLayerByPosition(0, 0) instanceof final DataLayer dataLayer) {
-			final IDataProvider dataProvider = dataLayer.getDataProvider();
-			for (final var column : columns) {
-				final int colIdx = columnProvider.getColumns().indexOf(column);
-				final var cellValue = dataProvider.getDataValue(colIdx, rowIndex);
-				if (conflicts.containsKey(cellValue)) {
-					dataProvider.setDataValue(colIdx, rowIndex, conflicts.get(cellValue));
+	protected void updateNewRow(final int[] rowIndices) {
+		for (int i = 0; i < rowIndices.length; i++) {
+			final int rowIndex = rowIndices[i];
+			if (selectionLayer.getUnderlyingLayerByPosition(0, 0) instanceof final DataLayer dataLayer) {
+				final IDataProvider dataProvider = dataLayer.getDataProvider();
+				for (final var column : columns) {
+					final int colIdx = columnProvider.getColumns().indexOf(column);
+					final var cellValue = dataProvider.getDataValue(colIdx, rowIndex);
+					if (conflicts.containsKey(cellValue) && this.importContent.containsKey(conflicts.get(cellValue))
+							&& this.importContent.get(conflicts.get(cellValue)).contains(i)) {
+						dataProvider.setDataValue(colIdx, rowIndex, conflicts.get(cellValue));
+					}
 				}
 			}
 		}
