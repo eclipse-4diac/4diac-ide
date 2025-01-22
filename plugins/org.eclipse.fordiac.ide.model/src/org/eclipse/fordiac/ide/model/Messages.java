@@ -133,6 +133,8 @@ public final class Messages extends NLS {
 	public static String VALIDATOR_UNKNOWN_LITERAL_TYPE;
 	public static String VarDeclarationAnnotations_MultipleInputConnections;
 
+	public static String VarDeclarationAnnotations_MustNotSpecifyValueForVariableWithVariableArrayBounds;
+
 	public static String VarDeclarationAnnotations_ShouldNotSpecifyValueForGenericVariableInType;
 
 	public static String VarDeclarationAnnotations_ShouldSpecifyValueForGenericVariableInInstance;

@@ -28,9 +28,9 @@ import org.eclipse.fordiac.ide.model.data.Subrange;
 public final class TypeDeclarationParser {
 
 	private static final Pattern SIMPLE_SUBRANGE_PATTERN = Pattern
-			.compile("([\\+\\-]?\\d+)\\s*\\.\\.\\s*([\\+\\-]?\\d+)"); //$NON-NLS-1$
+			.compile("([\\+\\-]?+\\d++)\\s*+\\.\\.\\s*+([\\+\\-]?+\\d++)"); //$NON-NLS-1$
 	private static final Pattern SIMPLE_ARRAY_SIZE_PATTERN = Pattern
-			.compile(SIMPLE_SUBRANGE_PATTERN + "(?:\\s*,\\s*" + SIMPLE_SUBRANGE_PATTERN + ")*"); //$NON-NLS-1$ //$NON-NLS-2$
+			.compile(SIMPLE_SUBRANGE_PATTERN + "(?:\\s*+,\\s*+" + SIMPLE_SUBRANGE_PATTERN + ")*+"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	public static DataType parseTypeDeclaration(final DataType baseType, final String arraySize) {
 		final DataType result = parseLegacyTypeDeclaration(baseType, arraySize);
@@ -65,6 +65,11 @@ public final class TypeDeclarationParser {
 	public static boolean isSimpleTypeDeclaration(final String arraySize) {
 		return arraySize == null || arraySize.isEmpty()
 				|| SIMPLE_ARRAY_SIZE_PATTERN.matcher(arraySize.trim()).matches();
+	}
+
+	public static boolean isVariableArrayBounds(final String arraySize) {
+		return arraySize != null && !arraySize.isBlank()
+				&& splitString(arraySize).stream().map(String::strip).anyMatch("*"::equals); //$NON-NLS-1$
 	}
 
 	private static Subrange parseSimpleSubrange(final String text) {

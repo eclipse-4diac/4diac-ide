@@ -885,6 +885,11 @@
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateNoValueForGenericTypeVariable/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateNoValueForGenericTypeVariable/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateNoValueForVariableLengthArrayVariable"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateNoValueForVariableLengthArrayVariable(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateNoValueForVariableLengthArrayVariable/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateNoValueForVariableLengthArrayVariable/context"/>
+      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateValueForGenericInstanceVariable"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateValueForGenericInstanceVariable(this, diagnostics, context);">
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateValueForGenericInstanceVariable/diagnostics"/>
