@@ -271,14 +271,21 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 		final ArrayValue value = (ArrayValue) variable.getValue();
 		int index = 0;
+		final int size = value.size();
 		for (final STArrayInitElement elem : expression.getValues()) {
 			if (elem instanceof final STSingleArrayInitElement singleArrayInitElement) {
+				if (index >= size) {
+					return variable; // ignore excess initializers
+				}
 				evaluateInitializerExpression(value.getRaw(index), singleArrayInitElement.getInitExpression());
 				index++;
 			} else if (elem instanceof final STRepeatArrayInitElement repeatArrayInitElement) {
 				final int count = repeatArrayInitElement.getRepetitions().intValueExact();
 				for (int i = 0; i < count; i++) {
 					for (final STInitializerExpression initElement : repeatArrayInitElement.getInitExpressions()) {
+						if (index >= size) {
+							return variable; // ignore excess initializers
+						}
 						evaluateInitializerExpression(value.getRaw(index), initElement);
 						index++;
 					}
