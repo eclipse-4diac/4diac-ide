@@ -33,6 +33,12 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		final IEclipsePreferences preferences = DefaultScope.INSTANCE
 				.getNode(PreferenceConstants.EXPORT_PREFERENCES_ID);
 		preferences.put(PreferenceConstants.P_COMPARE_EDITOR, "None"); //$NON-NLS-1$
+		final IPreferenceStore store = PreferenceConstants.STORE;
+		store.setDefault(PreferenceConstants.P_COMPARE_EDITOR, "None"); //$NON-NLS-1$
+		store.setDefault(PreferenceConstants.ENABLE_TYPE_EXPORT, false);
+
+		store.setDefault(PreferenceConstants.OUTPUT_FOLDER, ""); //$NON-NLS-1$
+		store.setDefault(PreferenceConstants.EXPORT_FILTER_ID, ""); //$NON-NLS-1$
 	}
 
 }

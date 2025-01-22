@@ -22,7 +22,7 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.export.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
 	public static String ExportTemplate_ExportTemplate;
 
@@ -55,6 +55,14 @@ public final class Messages extends NLS {
 	public static String TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME;
 
 	public static String TemplateExportFilter_OVERWRITE_ALL_LABEL_STRING;
+
+	public static String TypeExport_Enable;
+
+	public static String TypeExport_Exporter;
+
+	public static String TypeExport_OutputFolder;
+
+	public static String TypeExport_Settings;
 
 	static {
 		// initialize resource bundle
