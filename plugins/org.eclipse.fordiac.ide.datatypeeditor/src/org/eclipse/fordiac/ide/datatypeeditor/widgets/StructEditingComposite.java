@@ -232,6 +232,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 	@Override
 	public void executeCompoundCommand(final CompoundCommand cmd) {
 		executeCommand(cmd);
+		natTable.refresh();
 	}
 
 	public Object removeEntry(final int index, final CompoundCommand cmd) {

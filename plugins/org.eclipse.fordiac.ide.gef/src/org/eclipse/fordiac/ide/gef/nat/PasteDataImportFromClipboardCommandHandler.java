@@ -19,14 +19,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.providers.RowHeaderDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -36,7 +35,6 @@ import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.PasteDataFromClipboardCommandHandler;
 import org.eclipse.nebula.widgets.nattable.copy.command.PasteDataCommand;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.swt.dnd.Clipboard;
@@ -64,7 +62,7 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 
 	@Override
 	protected boolean doCommand(final PasteDataCommand command) {
-		final LibraryElement rootElement = getRootElement();
+		final LibraryElement rootElement = EditorUtils.getCurrentActiveEditor().getAdapter(LibraryElement.class);
 		if (rootElement != null) {
 			Arrays.stream(getClipboardImports()).map(imp -> getImportNamespace(rootElement, imp))
 					.filter(Objects::nonNull).forEach(namespace -> commandExecutor
@@ -114,18 +112,6 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 		}
 
 		conflicts.put(PackageNameHelper.extractPlainTypeName(imp), imp);
-		return null;
-	}
-
-	private LibraryElement getRootElement() {
-		if (selectionLayer.getUnderlyingLayerByPosition(0, 0) instanceof final DataLayer dataLayer) {
-			final ListDataProvider<?> provider = (ListDataProvider<?>) dataLayer.getDataProvider();
-			final var frow = provider.getRowObject(0);
-			if (frow instanceof final EObject eobj
-					&& EcoreUtil.getRootContainer(eobj) instanceof final LibraryElement libElement) {
-				return libElement;
-			}
-		}
 		return null;
 	}
 
