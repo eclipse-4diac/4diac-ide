@@ -120,12 +120,12 @@ public class PasteDataFromClipboardCommandHandler extends AbstractLayerCommandHa
 			section.executeCompoundCommand(cmpCommand);
 			for (final int ind : selectedIndices) {
 				selectionLayer.selectRow(0, ind, false, true);
-				updateNewRow(ind);
 			}
+			updateNewRow(selectedIndices);
 		}
 	}
 
-	protected void updateNewRow(final int rowIndex) {
+	protected void updateNewRow(final int[] rowIndices) {
 		// allow subclasses to provide additional functionality
 	}
 

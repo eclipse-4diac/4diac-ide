@@ -13,10 +13,11 @@
 package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
@@ -69,9 +70,12 @@ public class CopyDataImportCommandHandler extends FordiacCopyDataCommandHandler 
 		clipboard.dispose();
 	}
 
-	private String[] getImports(final ILayerCell[][] assembledCopiedDataStructure) {
+	private Map<Object, List<Object>> getImports(final ILayerCell[][] assembledCopiedDataStructure) {
 		if (selectionLayer.getUnderlyingLayerByPosition(0, 0) instanceof final DataLayer dataLayer) {
 			final ListDataProvider<?> provider = (ListDataProvider<?>) dataLayer.getDataProvider();
+
+			final var rowIndices = selectionLayer.getSelectedRowPositions().stream()
+					.flatMap(range -> range.getMembers().stream()).sorted().toList();
 			return Arrays.stream(assembledCopiedDataStructure).flatMap(Arrays::stream).filter(Objects::nonNull)
 					.filter(cell -> colMapper.containsKey(columnProvider.getColumns().get(cell.getColumnIndex())))
 					.map(cell -> {
@@ -81,12 +85,14 @@ public class CopyDataImportCommandHandler extends FordiacCopyDataCommandHandler 
 							if (PackageNameHelper.getPackageName(element).isEmpty()) {
 								return null;
 							}
-							return PackageNameHelper.getFullTypeName(element);
+							return Map.entry(PackageNameHelper.getFullTypeName(element),
+									rowIndices.indexOf(cell.getRowIndex()));
 						}
 						return null;
-					}).filter(Objects::nonNull).filter(Predicate.not(String::isEmpty)).distinct()
-					.toArray(String[]::new);
+					}).filter(Objects::nonNull).filter(entry -> !entry.getKey().isEmpty())
+					.collect(Collectors.groupingBy(Map.Entry::getKey,
+							Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
 		}
-		return new String[0];
+		return Map.of();
 	}
 }
