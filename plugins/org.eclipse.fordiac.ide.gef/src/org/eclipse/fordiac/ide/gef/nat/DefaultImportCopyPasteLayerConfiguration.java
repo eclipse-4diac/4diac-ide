@@ -18,22 +18,29 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.ui.providers.RowHeaderDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractLayerConfiguration;
+import org.eclipse.nebula.widgets.nattable.grid.layer.GridLayer;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 
 public class DefaultImportCopyPasteLayerConfiguration extends AbstractLayerConfiguration<NatTable> {
 
+	private static final String UNEXPECTED_VALUE = "Unexpected value: "; //$NON-NLS-1$
 	private final NatTableColumnProvider<? extends NatTableColumn> columnProvider;
 	private final CommandExecutor commandExecutor;
 
@@ -48,10 +55,17 @@ public class DefaultImportCopyPasteLayerConfiguration extends AbstractLayerConfi
 	public void configureTypedLayer(final NatTable layer) {
 		final SelectionLayer sel = NatTableWidgetFactory.getSelectionLayer(layer);
 		final NatTableColumn firstColumn = columnProvider.getColumns().get(0);
+
+		final RowHeaderDataProvider rowHeaderDataProvider = layer.getUnderlyingLayerByPosition(0,
+				0) instanceof final GridLayer gridLayer
+				&& gridLayer.getRowHeaderLayer().getUnderlyingLayerByPosition(0, 0) instanceof final DataLayer dataLayer
+				&& dataLayer.getDataProvider() instanceof final RowHeaderDataProvider rhdp ? rhdp : null;
+
 		sel.registerCommandHandler(
 				new CopyDataImportCommandHandler(sel, columnProvider, getMappersForColumn(firstColumn)));
-		sel.registerCommandHandler(new PasteDataImportFromClipboardCommandHandler(sel, commandExecutor,
-				getTypeResolver(firstColumn), columnProvider, getPasteableColumnList(firstColumn)));
+		sel.registerCommandHandler(
+				new PasteDataImportFromClipboardCommandHandler(sel, commandExecutor, getTypeResolver(firstColumn),
+						columnProvider, getPasteableColumnList(firstColumn), rowHeaderDataProvider));
 	}
 
 	private static BiFunction<TypeLibrary, String, TypeEntry> getTypeResolver(final NatTableColumn column) {
@@ -65,7 +79,8 @@ public class DefaultImportCopyPasteLayerConfiguration extends AbstractLayerConfi
 		};
 		case final VarDeclarationTableColumn col ->
 			(typeLib, name) -> typeLib.getDataTypeLibrary().getDerivedTypeEntry(name);
-		default -> throw new IllegalArgumentException("Unexpected value: " + column);
+		case final TypedElementTableColumn col -> TypeLibrary::find;
+		default -> throw new IllegalArgumentException(UNEXPECTED_VALUE + column);
 		};
 	}
 
@@ -73,7 +88,8 @@ public class DefaultImportCopyPasteLayerConfiguration extends AbstractLayerConfi
 		return switch (column) {
 		case final AttributeTableColumn col -> List.of(AttributeTableColumn.NAME, AttributeTableColumn.TYPE);
 		case final VarDeclarationTableColumn col -> List.of(VarDeclarationTableColumn.TYPE);
-		default -> throw new IllegalArgumentException("Unexpected value: " + column);
+		case final TypedElementTableColumn col -> List.of(TypedElementTableColumn.TYPE);
+		default -> throw new IllegalArgumentException(UNEXPECTED_VALUE + column);
 		};
 	}
 
@@ -85,7 +101,13 @@ public class DefaultImportCopyPasteLayerConfiguration extends AbstractLayerConfi
 					AttributeTableColumn.TYPE, eObject -> ((Attribute) eObject).getType());
 		case final VarDeclarationTableColumn col ->
 			Map.of(VarDeclarationTableColumn.TYPE, eObject -> ((VarDeclaration) eObject).getType());
-		default -> throw new IllegalArgumentException("Unexpected value: " + column);
+		case final TypedElementTableColumn col -> Map.of(TypedElementTableColumn.TYPE, eObject -> (switch (eObject) {
+		case final TypedConfigureableObject tco -> tco.getType();
+		case final AdapterDeclaration adapterDecl -> adapterDecl.getType();
+		case final Event event -> event.getType();
+		default -> null;
+		}));
+		default -> throw new IllegalArgumentException(UNEXPECTED_VALUE + column);
 		};
 	}
 }

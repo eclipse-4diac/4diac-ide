@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.providers.RowHeaderDataProvider;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.nebula.widgets.nattable.command.AbstractLayerCommandHandler;
 import org.eclipse.nebula.widgets.nattable.copy.command.PasteDataCommand;
@@ -31,18 +33,30 @@ import org.eclipse.swt.widgets.Display;
 public class PasteDataFromClipboardCommandHandler extends AbstractLayerCommandHandler<PasteDataCommand> {
 
 	protected final SelectionLayer selectionLayer;
+	protected final I4diacNatTableUtil section;
+	private final RowHeaderDataProvider rowHeaderDataProvider;
 
 	public PasteDataFromClipboardCommandHandler(final SelectionLayer selectionLayer) {
+		this(selectionLayer, null, null);
+	}
+
+	public PasteDataFromClipboardCommandHandler(final SelectionLayer selectionLayer, final I4diacNatTableUtil section,
+			final RowHeaderDataProvider rowHeaderDataProvider) {
 		this.selectionLayer = selectionLayer;
+		this.section = section;
+		this.rowHeaderDataProvider = rowHeaderDataProvider;
 	}
 
 	@Override
 	protected boolean doCommand(final PasteDataCommand command) {
 		final Clipboard clipboard = new Clipboard(Display.getDefault());
 		final Object clipboardCellsContents = clipboard.getContents(TextTransfer.getInstance());
+		final Object clipboardElementsContents = clipboard.getContents(DataObjectTransfer.getInstance());
 		clipboard.dispose();
 
-		if (clipboardCellsContents != null) {
+		if (clipboardElementsContents != null) {
+			pasteClipboardElementsContents(clipboardElementsContents);
+		} else if (clipboardCellsContents != null) {
 			pasteClipboardCellsContents(command, clipboardCellsContents);
 		}
 		return true;
@@ -76,6 +90,43 @@ public class PasteDataFromClipboardCommandHandler extends AbstractLayerCommandHa
 				}
 			}
 		}
+	}
+
+	private void pasteClipboardElementsContents(final Object contents) {
+		if (!(contents instanceof final Object[] contentsArray) || rowHeaderDataProvider == null || section == null
+				|| !section.isEditable()) {
+			return;
+		}
+
+		final CompoundCommand cmpCommand = new CompoundCommand();
+		if (selectionLayer == null) {
+			int i = 0;
+			for (final Object entry : contentsArray) {
+				section.addEntry(entry, rowHeaderDataProvider.isInput(), i, cmpCommand);
+				i++;
+			}
+			section.executeCompoundCommand(cmpCommand);
+		} else {
+			final int[] rows = selectionLayer.getFullySelectedRowPositions();
+			final int[] selectedIndices = new int[contentsArray.length];
+			int index = rows.length != 0 ? rows[rows.length - 1] + 1 : selectionLayer.getRowCount();
+			int i = 0;
+			for (final Object entry : contentsArray) {
+				selectedIndices[i] = index;
+				i++;
+				section.addEntry(entry, rowHeaderDataProvider.isInput(), index, cmpCommand);
+				index++;
+			}
+			section.executeCompoundCommand(cmpCommand);
+			for (final int ind : selectedIndices) {
+				selectionLayer.selectRow(0, ind, false, true);
+				updateNewRow(ind);
+			}
+		}
+	}
+
+	protected void updateNewRow(final int rowIndex) {
+		// allow subclasses to provide additional functionality
 	}
 
 	@SuppressWarnings("static-method") // allow subclasses to provide special versions
