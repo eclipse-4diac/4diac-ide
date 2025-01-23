@@ -921,26 +921,6 @@
   
   <extension point="org.eclipse.ui.menus">
     <menuContribution locationURI="menu:navigate?after=goTo">
-     <command commandId="org.eclipse.fordiac.ide.application.commands.openType">
-        <visibleWhen checkEnabled="true">
-	        <or>
-	          <with variable="selection" >
-	            <count value="1" />
-	            <iterate ifEmpty="false">
-	              <or>
-	                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
-	                <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
-	                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
-	                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
-	              </or>
-	            </iterate>
-	          </with>
-	          <with variable="activeEditor">
-	            <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
-	          </with>
-	        </or>
-        </visibleWhen>
-      </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotoparent"
                icon="platform:/plugin/org.eclipse.search/icons/full/elcl16/search_prev.png"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotochild"
@@ -1273,7 +1253,7 @@
             <with variable="activeEditor">
               <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
             </with>
-            <with variable="selection"> 
+            <with variable="selection">
               <iterate ifEmpty="true">
                 <or>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart" />
@@ -1495,14 +1475,15 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.openType"
                style="push">
-               <!-- Menu on System Explorer -->
         <visibleWhen checkEnabled="true">
           <with variable="selection" >
             <count value="1" />
             <iterate ifEmpty="false">
               <or>
-                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp" />
-                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.CFBInstance" />
+               	<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+                <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
+                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
               </or>
             </iterate>
           </with>
@@ -1523,7 +1504,7 @@
 	            <count value="1" />
 	            <iterate ifEmpty="false">
 	              <or>
-	                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+					<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
 	                <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
 	                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
 	                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
