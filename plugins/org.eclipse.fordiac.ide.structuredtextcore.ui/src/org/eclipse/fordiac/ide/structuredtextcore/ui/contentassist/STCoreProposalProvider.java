@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobal
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
@@ -148,15 +149,18 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 			final ICompletionProposalAcceptor acceptor) {
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(model);
 		if (typeLibrary != null) {
-			createSimpleProposals(typeLibrary.getPackages(), acceptor,
-					value -> createWildcardImportProposal(value, context));
+			createSimpleProposals(typeLibrary.getPackages(), acceptor, value -> createWildcardImportProposal(value,
+					PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER), context));
+			createSimpleProposals(typeLibrary.getGlobalConstants().stream().map(TypeEntry::getFullTypeName).toList(),
+					acceptor, value -> createWildcardImportProposal(value,
+							PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE), context));
 		}
 	}
 
-	protected ICompletionProposal createWildcardImportProposal(final String value, final ContentAssistContext context) {
+	protected ICompletionProposal createWildcardImportProposal(final String value, final Image image,
+			final ContentAssistContext context) {
 		final String proposal = value + ImportHelper.WILDCARD_IMPORT_SUFFIX;
-		return createCompletionProposal(proposal, new StyledString(proposal),
-				PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER), context);
+		return createCompletionProposal(proposal, new StyledString(proposal), image, context);
 	}
 
 	protected static void createSimpleProposals(final Iterable<String> values,
@@ -334,14 +338,17 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 		}
 
 		protected boolean isImportableDescription(final IEObjectDescription description) {
-			return description != null && description.getName().getSegmentCount() > 1 && description.getEClass() != null
-					&& (LibraryElementPackage.eINSTANCE.getLibraryElement().isSuperTypeOf(description.getEClass())
-							|| isGlobalVariable(description));
+			return description != null && description.getEClass() != null
+			// library element with package (more than one segment)
+					&& ((LibraryElementPackage.eINSTANCE.getLibraryElement().isSuperTypeOf(description.getEClass())
+							&& description.getName().getSegmentCount() > 1)
+							// global constant with package on enclosing type (more than two segments)
+							|| (isGlobalVariable(description) && description.getName().getSegmentCount() > 2));
 		}
 
 		@SuppressWarnings("static-method") // subclasses may override
 		protected boolean hasConflictingName(final IScope scope, final IEObjectDescription description) {
-			return scope.getSingleElement(getSimpleName(description)) != null;
+			return scope.getSingleElement(getAlias(description)) != null;
 		}
 
 		@SuppressWarnings("static-method") // subclasses may override
@@ -364,7 +371,7 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 		protected IReplacementTextApplier getImportReplacementTextApplier(final EObject model,
 				final IEObjectDescription candidate) {
 			return getImportReplacementTextApplier((XtextResource) model.eResource(),
-					qualifiedNameConverter.toString(candidate.getQualifiedName()));
+					qualifiedNameConverter.toString(getImportedNamespace(candidate)));
 		}
 
 		protected IReplacementTextApplier getImportReplacementTextApplier(final XtextResource resource,
@@ -373,11 +380,22 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 		}
 
 		protected static AliasedEObjectDescription createImportedDescription(final IEObjectDescription description) {
-			return new AliasedEObjectDescription(getSimpleName(description), description);
+			return new AliasedEObjectDescription(getAlias(description), description);
 		}
 
-		protected static QualifiedName getSimpleName(final IEObjectDescription description) {
-			return QualifiedName.create(description.getQualifiedName().getLastSegment());
+		protected static QualifiedName getAlias(final IEObjectDescription description) {
+			final QualifiedName qualifiedName = description.getQualifiedName();
+			if (isGlobalVariable(description)) {
+				return qualifiedName.skipFirst(qualifiedName.getSegmentCount() - 2);
+			}
+			return qualifiedName.skipFirst(qualifiedName.getSegmentCount() - 1);
+		}
+
+		private static QualifiedName getImportedNamespace(final IEObjectDescription description) {
+			if (isGlobalVariable(description)) {
+				return description.getQualifiedName().skipLast(1);
+			}
+			return description.getQualifiedName();
 		}
 
 		public IWhitespaceInformationProvider getWhitespaceInformationProvider() {
