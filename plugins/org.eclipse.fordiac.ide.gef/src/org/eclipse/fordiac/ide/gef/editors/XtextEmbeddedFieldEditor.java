@@ -81,11 +81,13 @@ public abstract class XtextEmbeddedFieldEditor {
 
 			@Override
 			public void focusLost(final FocusEvent e) {
-				commit();
+				if (!isProposalPopupOpen()) {
+					commit();
+				}
 			}
 		});
 		control.addVerifyKeyListener(event -> {
-			if (!isProposalPopupOpen()) {
+			if (event.doit && !isProposalPopupOpen()) {
 				if ((event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR) && event.stateMask != SWT.MOD3) {
 					parent.forceFocus();
 					event.doit = false;
