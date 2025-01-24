@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,11 +11,16 @@
  * Contributors:
  *   Hesam Rezaee
  *       - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *       - fix data type keywords
  */
 package org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.HighlightingStyles;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeIdMapper;
 
@@ -23,10 +29,8 @@ public class STCoreAntlrTokenToAttributeIdMapper extends DefaultAntlrTokenToAttr
 	private static final Set<String> VAR_DECLARATION_KEYWORDS = Set.of("\'VAR\'", "\'VAR_TEMP\'", "\'VAR_INPUT\'",
 			"\'VAR_OUTPUT\'", "\'VAR_IN_OUT\'", "\'END_VAR\'", "\'VAR_EXTERNAL\'", "\'VAR_GLOBAL\'", "\'VAR_ACCESS\'",
 			"\'RETAIN\'", "\'CONSTANT\'", "\'AT\'");
-	private static final Set<String> DATA_TYPES_KEYWORDS = Set.of("\'CHAR\'", "\'WCHAR\'", "\'SINT\'", "\'INT\'",
-			"\'DINT\'", "\'LINT\'", "\'LINT\'", "\'USINT\'", "\'UINT\'", "\'LDINT\'", "\'ULINT\'", "\'REAL\'",
-			"\'LREAL\'", "\'TIME\'", "\'DATE\'", "\'TIME_OF_DAY\'", "\'DATE_AND_TIME\'", "\'STRING\'", "\'WSTRING\'",
-			"\'BOOL\'", "\'BYTE\'", "\'WORD\'", "\'DWORD\'", "\'LWORD\'", "\'ARRAY\'");
+	private static final Set<String> DATA_TYPES_KEYWORDS = DataTypeLibrary.getNonUserDefinedDataTypes().stream()
+			.map(DataType::getName).map(name -> "'" + name + "'").collect(Collectors.toUnmodifiableSet());
 	private static final Set<String> FUNCTIONS_KEYWORDS = Set.of("\'FUNCTION\'", "\'END_FUNCTION\'");
 	private static final Set<String> FUNCTION_BLOCK_KEYWORDS = Set.of("\'FUNCTION_BLOCK\'", "\'END_FUNCTION_BLOCK\'");
 	private static final Set<String> METHOD_BLOCK_KEYWORDS = Set.of("\'METHOD\'", "\'END_METHOD\'");
