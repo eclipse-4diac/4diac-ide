@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Function Name="SPLIT_LWORD_INTO_QUARTERS" Comment="this Function extracts the 32 QUARTER BYTE from a lword">
+<Function Name="SPLIT_LWORD_INTO_QUARTERS" Comment="this Function extracts the 32 QUARTER BYTE from a lword" >
 	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Organization="HR Agrartechnik" Version="1.0" Author="Franz Höpfinger" Date="2024-02-22" Remarks="initial Implementation">
@@ -10,12 +10,12 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+			<Event Name="REQ" Type="Event">
 				<With Var="IN"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+			<Event Name="CNF" Type="Event">
 				<With Var="QUARTER_BYTE_00"/>
 				<With Var="QUARTER_BYTE_01"/>
 				<With Var="QUARTER_BYTE_02"/>
@@ -51,41 +51,41 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN" Type="LWORD" Comment=""/>
+			<VarDeclaration Name="IN" Type="LWORD"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="QUARTER_BYTE_00" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_01" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_02" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_03" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_04" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_05" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_06" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_07" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_08" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_09" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_10" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_11" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_12" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_13" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_14" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_15" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_16" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_17" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_18" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_19" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_20" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_21" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_22" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_23" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_24" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_25" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_26" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_27" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_28" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_29" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_30" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_31" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_00" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_01" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_02" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_03" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_04" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_05" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_06" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_07" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_08" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_09" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_10" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_11" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_12" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_13" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_14" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_15" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_16" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_17" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_18" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_19" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_20" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_21" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_22" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_23" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_24" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_25" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_26" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_27" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_28" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_29" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_30" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_31" Type="BYTE"/>
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
@@ -131,38 +131,38 @@ VAR_OUTPUT
 	QUARTER_BYTE_31 : BYTE;
 END_VAR
 
-QUARTER_BYTE_00 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_00, SHIFT_QUARTER_00));
-QUARTER_BYTE_01 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_01, SHIFT_QUARTER_01));
-QUARTER_BYTE_02 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_02, SHIFT_QUARTER_02));
-QUARTER_BYTE_03 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_03, SHIFT_QUARTER_03));
-QUARTER_BYTE_04 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_04, SHIFT_QUARTER_04));
-QUARTER_BYTE_05 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_05, SHIFT_QUARTER_05));
-QUARTER_BYTE_06 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_06, SHIFT_QUARTER_06));
-QUARTER_BYTE_07 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_07, SHIFT_QUARTER_07));
-QUARTER_BYTE_08 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_08, SHIFT_QUARTER_08));
-QUARTER_BYTE_09 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_09, SHIFT_QUARTER_09));
-QUARTER_BYTE_10 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_10, SHIFT_QUARTER_10));
-QUARTER_BYTE_11 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_11, SHIFT_QUARTER_11));
-QUARTER_BYTE_12 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_12, SHIFT_QUARTER_12));
-QUARTER_BYTE_13 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_13, SHIFT_QUARTER_13));
-QUARTER_BYTE_14 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_14, SHIFT_QUARTER_14));
-QUARTER_BYTE_15 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_15, SHIFT_QUARTER_15));
-QUARTER_BYTE_16 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_16, SHIFT_QUARTER_16));
-QUARTER_BYTE_17 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_17, SHIFT_QUARTER_17));
-QUARTER_BYTE_18 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_18, SHIFT_QUARTER_18));
-QUARTER_BYTE_19 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_19, SHIFT_QUARTER_19));
-QUARTER_BYTE_20 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_20, SHIFT_QUARTER_20));
-QUARTER_BYTE_21 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_21, SHIFT_QUARTER_21));
-QUARTER_BYTE_22 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_22, SHIFT_QUARTER_22));
-QUARTER_BYTE_23 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_23, SHIFT_QUARTER_23));
-QUARTER_BYTE_24 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_24, SHIFT_QUARTER_24));
-QUARTER_BYTE_25 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_25, SHIFT_QUARTER_25));
-QUARTER_BYTE_26 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_26, SHIFT_QUARTER_26));
-QUARTER_BYTE_27 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_27, SHIFT_QUARTER_27));
-QUARTER_BYTE_28 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_28, SHIFT_QUARTER_28));
-QUARTER_BYTE_29 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_29, SHIFT_QUARTER_29));
-QUARTER_BYTE_30 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_30, SHIFT_QUARTER_30));
-QUARTER_BYTE_31 := LWORD_TO_BYTE(SHR(IN AND LWORD_QUARTER_31, SHIFT_QUARTER_31));
+QUARTER_BYTE_00 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_00, quarterconst::SHIFT_QUARTER_00));
+QUARTER_BYTE_01 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_01, quarterconst::SHIFT_QUARTER_01));
+QUARTER_BYTE_02 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_02, quarterconst::SHIFT_QUARTER_02));
+QUARTER_BYTE_03 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_03, quarterconst::SHIFT_QUARTER_03));
+QUARTER_BYTE_04 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_04, quarterconst::SHIFT_QUARTER_04));
+QUARTER_BYTE_05 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_05, quarterconst::SHIFT_QUARTER_05));
+QUARTER_BYTE_06 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_06, quarterconst::SHIFT_QUARTER_06));
+QUARTER_BYTE_07 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_07, quarterconst::SHIFT_QUARTER_07));
+QUARTER_BYTE_08 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_08, quarterconst::SHIFT_QUARTER_08));
+QUARTER_BYTE_09 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_09, quarterconst::SHIFT_QUARTER_09));
+QUARTER_BYTE_10 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_10, quarterconst::SHIFT_QUARTER_10));
+QUARTER_BYTE_11 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_11, quarterconst::SHIFT_QUARTER_11));
+QUARTER_BYTE_12 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_12, quarterconst::SHIFT_QUARTER_12));
+QUARTER_BYTE_13 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_13, quarterconst::SHIFT_QUARTER_13));
+QUARTER_BYTE_14 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_14, quarterconst::SHIFT_QUARTER_14));
+QUARTER_BYTE_15 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_15, quarterconst::SHIFT_QUARTER_15));
+QUARTER_BYTE_16 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_16, quarterconst::SHIFT_QUARTER_16));
+QUARTER_BYTE_17 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_17, quarterconst::SHIFT_QUARTER_17));
+QUARTER_BYTE_18 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_18, quarterconst::SHIFT_QUARTER_18));
+QUARTER_BYTE_19 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_19, quarterconst::SHIFT_QUARTER_19));
+QUARTER_BYTE_20 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_20, quarterconst::SHIFT_QUARTER_20));
+QUARTER_BYTE_21 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_21, quarterconst::SHIFT_QUARTER_21));
+QUARTER_BYTE_22 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_22, quarterconst::SHIFT_QUARTER_22));
+QUARTER_BYTE_23 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_23, quarterconst::SHIFT_QUARTER_23));
+QUARTER_BYTE_24 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_24, quarterconst::SHIFT_QUARTER_24));
+QUARTER_BYTE_25 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_25, quarterconst::SHIFT_QUARTER_25));
+QUARTER_BYTE_26 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_26, quarterconst::SHIFT_QUARTER_26));
+QUARTER_BYTE_27 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_27, quarterconst::SHIFT_QUARTER_27));
+QUARTER_BYTE_28 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_28, quarterconst::SHIFT_QUARTER_28));
+QUARTER_BYTE_29 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_29, quarterconst::SHIFT_QUARTER_29));
+QUARTER_BYTE_30 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_30, quarterconst::SHIFT_QUARTER_30));
+QUARTER_BYTE_31 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_31, quarterconst::SHIFT_QUARTER_31));
 
 END_FUNCTION
 ]]></ST>
