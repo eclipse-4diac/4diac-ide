@@ -198,6 +198,13 @@ public class StyledTextCellEditor extends CellEditor {
 		return text;
 	}
 
+	@Override
+	protected void focusLost() {
+		if (!isProposalPopupOpen()) {
+			super.focusLost();
+		}
+	}
+
 	/**
 	 * Create the text control
 	 *
