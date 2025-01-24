@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="E_SPLIT" Comment="Template for an empty basic function block" >
-	<Identification Standard="61499-1 Annex A" Classification="event function block" Function="Split one event into two events" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+<FBType Name="E_SPLIT" Comment="Split one event into two events" >
+	<Identification Standard="61499-1 Annex A" Classification="event function block" Function="When EI is Triggered, A Event EO1 followed by a Event EO2 is issued." Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017" Remarks="initial API and implementation and/or initial documentation">
 	</VersionInfo>
