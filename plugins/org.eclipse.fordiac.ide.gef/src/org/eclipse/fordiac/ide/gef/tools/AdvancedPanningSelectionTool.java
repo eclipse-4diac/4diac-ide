@@ -81,8 +81,8 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 */
 	@Override
 	protected boolean handleButtonDown(final int which) {
-		if (getCurrentViewer().getControl() instanceof FigureCanvas) {
-			viewLocation = ((FigureCanvas) getCurrentViewer().getControl()).getViewport().getViewLocation();
+		if (getCurrentViewer().getControl() instanceof final FigureCanvas canvas) {
+			viewLocation = canvas.getViewport().getViewLocation();
 		}
 		switch (which) {
 		case MOUSE_LEFT:
@@ -133,10 +133,8 @@ public class AdvancedPanningSelectionTool extends SelectionTool {
 	 */
 	@Override
 	protected boolean handleDrag() {
-		if (isInState(PAN_IN_PROGRESS) && (getCurrentViewer().getControl() instanceof FigureCanvas)) {
-			final FigureCanvas canvas = (FigureCanvas) getCurrentViewer().getControl();
-			// canvas.scrollTo(viewLocation.x - getDragMoveDelta().width, viewLocation.y -
-			// getDragMoveDelta().height);
+		if (isInState(PAN_IN_PROGRESS) && (getCurrentViewer().getControl() instanceof final FigureCanvas canvas)) {
+			canvas.scrollTo(viewLocation.x - getDragMoveDelta().width, viewLocation.y - getDragMoveDelta().height);
 			return true;
 		}
 		return super.handleDrag();
