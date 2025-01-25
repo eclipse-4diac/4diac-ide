@@ -50,7 +50,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 	 * Instantiates a new new system wizard.
 	 */
 	public New4diacProjectWizard() {
-		setWindowTitle(Messages.New4diacProjectWizard_WizardName);
+		setWindowTitle(Messages.New4diacProjectWizard_WizardTitle);
 	}
 
 	/*
@@ -60,7 +60,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 	 */
 	@Override
 	public void addPages() {
-		page = new New4diacProjectPage(Messages.New4diacProjectWizard_WizardName);
+		page = new New4diacProjectPage(Messages.New4diacProjectWizard_WizardTitle);
 		page.setTitle(Messages.New4diacProjectWizard_WizardTitle);
 		page.setDescription(Messages.New4diacProjectWizard_WizardDesc);
 

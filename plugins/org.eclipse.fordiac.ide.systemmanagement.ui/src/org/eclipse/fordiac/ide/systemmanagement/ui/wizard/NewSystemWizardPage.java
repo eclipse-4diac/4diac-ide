@@ -51,8 +51,8 @@ public class NewSystemWizardPage extends WizardNewFileCreationPage {
 	}
 
 	public NewSystemWizardPage(final IStructuredSelection selection) {
-		super(Messages.NewSystemWizardPage_NewSystemName, selection);
-		this.setTitle(Messages.NewSystemWizardPage_Title);
+		super(Messages.NewSystemWizardPage_NewSystemTitle, selection);
+		this.setTitle(Messages.NewSystemWizardPage_NewSystemTitle);
 		this.setDescription(Messages.NewSystemWizardPage_CreateNewSystem);
 		this.setAllowExistingResources(true); // needed for correct duplicate type check
 	}

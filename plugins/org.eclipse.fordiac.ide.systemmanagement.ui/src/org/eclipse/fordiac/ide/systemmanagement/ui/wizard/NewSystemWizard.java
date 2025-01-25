@@ -43,13 +43,13 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 	private NewSystemWizardPage page;
 
 	public NewSystemWizard() {
-		setWindowTitle(Messages.NewSystemWizardPage_NewSystemName);
+		setWindowTitle(Messages.NewSystemWizardPage_NewSystemTitle);
 	}
 
 	@Override
 	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 		this.selection = selection;
-		setWindowTitle(Messages.NewSystemWizardPage_NewSystemName);
+		setWindowTitle(Messages.NewSystemWizardPage_NewSystemTitle);
 	}
 
 	@Override

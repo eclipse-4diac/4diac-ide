@@ -176,9 +176,21 @@
             icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/egit-checkout.png"
             resolution="launchbar">
       </command>  
+       <command
+            id="org.eclipse.ui.newWizard(newWizardId=org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacExampleWizard)"
+            description="%introQuicklink.New4diacIDEExampleProject.description"
+            label="%introQuicklink.New4diacIDEExampleProject.label"
+            importance="medium"
+            resolution="launchbar">
+      </command>
       <override
-            command="org.eclipse.ui.newWizard*"
+            command="org.eclipse.ui.newWizard(newWizardId=org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard)"
             icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/new-project.png"
+            theme="org.eclipse.ui.intro.universal.solstice">
+      </override>
+      <override
+            command="org.eclipse.ui.newWizard(newWizardId=org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacExampleWizard)"
+            icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/samples.png"
             theme="org.eclipse.ui.intro.universal.solstice">
       </override>
        <url
