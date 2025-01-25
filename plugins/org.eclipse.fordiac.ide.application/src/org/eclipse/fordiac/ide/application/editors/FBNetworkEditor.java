@@ -30,8 +30,6 @@ import org.eclipse.fordiac.ide.application.actions.DeleteFBNetworkAction;
 import org.eclipse.fordiac.ide.application.actions.FBNetworkSelectAllAction;
 import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
-import org.eclipse.fordiac.ide.application.dnd.CustomDragSourceListener;
-import org.eclipse.fordiac.ide.application.dnd.CustomDragTargetListener;
 import org.eclipse.fordiac.ide.application.editparts.ElementEditPartFactory;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkConnectionLayerClippingStrategy;
@@ -144,8 +142,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 		final Open4DIACElementAction openAction = (Open4DIACElementAction) registry
 				.getAction(Open4DIACElementAction.ID);
 		getGraphicalViewer().addSelectionChangedListener(openAction);
-		getGraphicalViewer().addDragSourceListener(new CustomDragSourceListener(getGraphicalViewer()));
-		getGraphicalViewer().addDropTargetListener(new CustomDragTargetListener(getGraphicalViewer()));
 
 		final ScalableFreeformRootEditPart rootEP = (ScalableFreeformRootEditPart) getGraphicalViewer()
 				.getRootEditPart();
