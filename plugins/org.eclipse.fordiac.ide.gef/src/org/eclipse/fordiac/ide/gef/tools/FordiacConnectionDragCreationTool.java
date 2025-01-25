@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Johannes Kepler University Linz,
+ * Copyright (c) 2019, 2025 Johannes Kepler University Linz,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -14,11 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.tools;
 
-import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
-import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.commands.Command;
@@ -29,12 +25,6 @@ import org.eclipse.swt.widgets.Display;
 
 public class FordiacConnectionDragCreationTool extends ConnectionDragCreationTool {
 
-	// Safety border around the canvas to ensure that during dragging connections
-	// the canvas is not growing
-	private static final Insets NEW_CONNECTION_CANVAS_BORDER = new Insets(1,
-			1 + MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN + HideableConnection.BEND_POINT_BEVEL_SIZE, 1,
-			1 + MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN + HideableConnection.BEND_POINT_BEVEL_SIZE);
-
 	public FordiacConnectionDragCreationTool() {
 		setDefaultCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_CROSS));
 		setDisabledCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_NO));
@@ -44,18 +34,6 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 	public void deactivate() {
 		stopHover();
 		super.deactivate();
-	}
-
-	@Override
-	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
-		if (isActive() && viewer instanceof final AdvancedScrollingGraphicalViewer advViewer) {
-//			advViewer.checkScrollPositionDuringDragBounded(me,
-//					new Point(MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN
-//							+ HideableConnection.BEND_POINT_BEVEL_SIZE + ConnectionPreferenceValues.HANDLE_SIZE,
-//							ConnectionPreferenceValues.HANDLE_SIZE));
-//			CanvasHelper.bindToContentPane(me, advViewer, NEW_CONNECTION_CANVAS_BORDER);
-		}
-		super.mouseDrag(me, viewer);
 	}
 
 	@Override
