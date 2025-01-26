@@ -188,6 +188,8 @@ public final class LibraryElementTags {
 	public static final String VARIABLE_SEPARATOR = ","; //$NON-NLS-1$
 
 	public static final String STRUCTURED_TYPE_ELEMENT = "StructuredType"; //$NON-NLS-1$
+	public static final String ENUMERATED_TYPE_ELEMENT = "EnumeratedType"; //$NON-NLS-1$
+	public static final String ENUMERATED_VALUE_ELEMENT = "EnumeratedValue"; //$NON-NLS-1$
 	public static final String ASN1_TAG = "ASN1Tag"; //$NON-NLS-1$
 
 	public static final String GLOBAL_CONSTANTS_ELEMENT = "GlobalConstants"; //$NON-NLS-1$

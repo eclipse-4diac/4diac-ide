@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2020 Johannes Keppler University
+ * Copyright (c) 2020, 2025 Johannes Keppler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *  Alois Zoitl, Bianca Wiesmayr - initial implementation
+ *  Alois Zoitl - added enumerated type export
  ********************************************************************************/
 
 package org.eclipse.fordiac.ide.model.dataexport;
@@ -20,6 +21,8 @@ import javax.xml.stream.XMLStreamException;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -43,11 +46,12 @@ public class DataTypeExporter extends AbstractTypeExporter {
 	protected void createTypeSpecificXMLEntries() throws XMLStreamException {
 		addCompilerInfo(getType().getCompilerInfo());
 
-		if (!(getType() instanceof StructuredType)) {
-			throw new XMLStreamException(
-					MessageFormat.format(Messages.DataTypeExporter_UNSUPPORTED_DATA_TYPE, getType()));
+		switch (getType()) {
+		case final StructuredType structuredType -> createStructContent(structuredType);
+		case final EnumeratedType enumeratedType -> createEnumeratedContent(enumeratedType);
+		default -> throw new XMLStreamException(
+				MessageFormat.format(Messages.DataTypeExporter_UNSUPPORTED_DATA_TYPE, getType()));
 		}
-		createStructContent((StructuredType) getType());
 
 		if (!getType().getAttributes().isEmpty()) {
 			addAttributes(getType().getAttributes());
@@ -60,6 +64,20 @@ public class DataTypeExporter extends AbstractTypeExporter {
 			addVarDeclaration(varDecl);
 		}
 		addEndElement();
+	}
+
+	private void createEnumeratedContent(final EnumeratedType type) throws XMLStreamException {
+		addStartElement(LibraryElementTags.ENUMERATED_TYPE_ELEMENT);
+		for (final EnumeratedValue enumValue : type.getEnumeratedValues()) {
+			addEnumeratedValue(enumValue);
+		}
+		addEndElement();
+	}
+
+	private void addEnumeratedValue(final EnumeratedValue enumValue) throws XMLStreamException {
+		addEmptyStartElement(LibraryElementTags.ENUMERATED_VALUE_ELEMENT);
+		addNameAttribute(enumValue.getName());
+		addCommentAttribute(enumValue.getComment());
 	}
 
 }
