@@ -27,26 +27,26 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValue <em>Enumerated Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValues <em>Enumerated Values</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedType()
  * @model
  * @generated
  */
-public interface EnumeratedType extends ValueType {
+public interface EnumeratedType extends AnyDerivedType {
 	/**
-	 * Returns the value of the '<em><b>Enumerated Value</b></em>' containment reference list.
+	 * Returns the value of the '<em><b>Enumerated Values</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.data.EnumeratedValue}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Enumerated Value</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedType_EnumeratedValue()
+	 * @return the value of the '<em>Enumerated Values</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedType_EnumeratedValues()
 	 * @model containment="true" required="true"
 	 *        extendedMetaData="kind='element' name='EnumeratedValue' namespace='##targetNamespace'"
 	 * @generated
 	 */
-	EList<EnumeratedValue> getEnumeratedValue();
+	EList<EnumeratedValue> getEnumeratedValues();
 
 	/**
 	 * <!-- begin-user-doc -->

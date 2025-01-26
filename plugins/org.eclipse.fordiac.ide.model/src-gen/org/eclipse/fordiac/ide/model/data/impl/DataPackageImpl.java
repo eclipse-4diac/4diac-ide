@@ -678,7 +678,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getEnumeratedType_EnumeratedValue() {
+	public EReference getEnumeratedType_EnumeratedValues() {
 		return (EReference)enumeratedTypeEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -690,26 +690,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	@Override
 	public EClass getEnumeratedValue() {
 		return enumeratedValueEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getEnumeratedValue_Comment() {
-		return (EAttribute)enumeratedValueEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getEnumeratedValue_Name() {
-		return (EAttribute)enumeratedValueEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1325,11 +1305,9 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		createEAttribute(directlyDerivedTypeEClass, DIRECTLY_DERIVED_TYPE__INITIAL_VALUE);
 
 		enumeratedTypeEClass = createEClass(ENUMERATED_TYPE);
-		createEReference(enumeratedTypeEClass, ENUMERATED_TYPE__ENUMERATED_VALUE);
+		createEReference(enumeratedTypeEClass, ENUMERATED_TYPE__ENUMERATED_VALUES);
 
 		enumeratedValueEClass = createEClass(ENUMERATED_VALUE);
-		createEAttribute(enumeratedValueEClass, ENUMERATED_VALUE__COMMENT);
-		createEAttribute(enumeratedValueEClass, ENUMERATED_VALUE__NAME);
 
 		structuredTypeEClass = createEClass(STRUCTURED_TYPE);
 		createEReference(structuredTypeEClass, STRUCTURED_TYPE__MEMBER_VARIABLES);
@@ -1477,7 +1455,8 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		arrayTypeEClass.getESuperTypes().add(this.getAnyDerivedType());
 		dataTypeEClass.getESuperTypes().add(theLibraryElementPackage.getLibraryElement());
 		directlyDerivedTypeEClass.getESuperTypes().add(this.getAnyDerivedType());
-		enumeratedTypeEClass.getESuperTypes().add(this.getValueType());
+		enumeratedTypeEClass.getESuperTypes().add(this.getAnyDerivedType());
+		enumeratedValueEClass.getESuperTypes().add(theLibraryElementPackage.getINamedElement());
 		structuredTypeEClass.getESuperTypes().add(this.getAnyDerivedType());
 		subrangeTypeEClass.getESuperTypes().add(this.getDerivedType());
 		valueTypeEClass.getESuperTypes().add(this.getDataType());
@@ -1559,14 +1538,12 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(enumeratedTypeEClass, EnumeratedType.class, "EnumeratedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getEnumeratedType_EnumeratedValue(), this.getEnumeratedValue(), null, "enumeratedValue", null, 1, -1, EnumeratedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getEnumeratedType_EnumeratedValues(), this.getEnumeratedValue(), null, "enumeratedValues", null, 1, -1, EnumeratedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(enumeratedTypeEClass, theXMLTypePackage.getBoolean(), "isAssignableFrom", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(enumeratedValueEClass, EnumeratedValue.class, "EnumeratedValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getEnumeratedValue_Comment(), theXMLTypePackage.getString(), "comment", null, 0, 1, EnumeratedValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getEnumeratedValue_Name(), theXMLTypePackage.getString(), "name", null, 1, 1, EnumeratedValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(structuredTypeEClass, StructuredType.class, "StructuredType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getStructuredType_MemberVariables(), theLibraryElementPackage.getVarDeclaration(), null, "memberVariables", null, 0, -1, StructuredType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -1889,26 +1866,12 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 			   "name", "InitialValues" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
-		  (getEnumeratedType_EnumeratedValue(),
+		  (getEnumeratedType_EnumeratedValues(),
 		   source,
 		   new String[] {
 			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
 			   "name", "EnumeratedValue", //$NON-NLS-1$ //$NON-NLS-2$
 			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
-		   });
-		addAnnotation
-		  (getEnumeratedValue_Comment(),
-		   source,
-		   new String[] {
-			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
-			   "name", "Comment" //$NON-NLS-1$ //$NON-NLS-2$
-		   });
-		addAnnotation
-		  (getEnumeratedValue_Name(),
-		   source,
-		   new String[] {
-			   "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
-			   "name", "Name" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
 		  (getStructuredType_MemberVariables(),

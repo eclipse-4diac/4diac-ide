@@ -981,16 +981,13 @@
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//EnumeratedType">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//EnumeratedType/enumeratedValue"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//EnumeratedType/enumeratedValues"/>
       <genOperations ecoreOperation="data.ecore#//EnumeratedType/isAssignableFrom"
           body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//EnumeratedType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
-    <genClasses ecoreClass="data.ecore#//EnumeratedValue">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//EnumeratedValue/comment"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//EnumeratedValue/name"/>
-    </genClasses>
+    <genClasses ecoreClass="data.ecore#//EnumeratedValue"/>
     <genClasses ecoreClass="data.ecore#//StructuredType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//StructuredType/memberVariables"/>
       <genOperations ecoreOperation="data.ecore#//StructuredType/isAssignableFrom"

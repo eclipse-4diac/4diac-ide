@@ -131,7 +131,8 @@ public class DataSwitch<T> extends Switch<T> {
 			case DataPackage.ENUMERATED_TYPE: {
 				EnumeratedType enumeratedType = (EnumeratedType)theEObject;
 				T result = caseEnumeratedType(enumeratedType);
-				if (result == null) result = caseValueType(enumeratedType);
+				if (result == null) result = caseAnyDerivedType(enumeratedType);
+				if (result == null) result = caseAnyType(enumeratedType);
 				if (result == null) result = caseDataType(enumeratedType);
 				if (result == null) result = caseLibraryElement(enumeratedType);
 				if (result == null) result = caseINamedElement(enumeratedType);
@@ -142,6 +143,7 @@ public class DataSwitch<T> extends Switch<T> {
 			case DataPackage.ENUMERATED_VALUE: {
 				EnumeratedValue enumeratedValue = (EnumeratedValue)theEObject;
 				T result = caseEnumeratedValue(enumeratedValue);
+				if (result == null) result = caseINamedElement(enumeratedValue);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

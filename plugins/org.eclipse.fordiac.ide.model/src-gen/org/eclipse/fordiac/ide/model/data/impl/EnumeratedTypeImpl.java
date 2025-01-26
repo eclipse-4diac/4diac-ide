@@ -41,22 +41,21 @@ import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedTypeImpl#getEnumeratedValue <em>Enumerated Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedTypeImpl#getEnumeratedValues <em>Enumerated Values</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType {
+public class EnumeratedTypeImpl extends AnyDerivedTypeImpl implements EnumeratedType {
 	/**
-	 * The cached value of the '{@link #getEnumeratedValue() <em>Enumerated Value</em>}' containment reference list.
+	 * The cached value of the '{@link #getEnumeratedValues() <em>Enumerated Values</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getEnumeratedValue()
+	 * @see #getEnumeratedValues()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<EnumeratedValue> enumeratedValue;
-
+	protected EList<EnumeratedValue> enumeratedValues;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -82,11 +81,11 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 	 * @generated
 	 */
 	@Override
-	public EList<EnumeratedValue> getEnumeratedValue() {
-		if (enumeratedValue == null) {
-			enumeratedValue = new EObjectContainmentEList<EnumeratedValue>(EnumeratedValue.class, this, DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE);
+	public EList<EnumeratedValue> getEnumeratedValues() {
+		if (enumeratedValues == null) {
+			enumeratedValues = new EObjectContainmentEList<EnumeratedValue>(EnumeratedValue.class, this, DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUES);
 		}
-		return enumeratedValue;
+		return enumeratedValues;
 	}
 
 	/**
@@ -107,8 +106,8 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
-				return ((InternalEList<?>)getEnumeratedValue()).basicRemove(otherEnd, msgs);
+			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUES:
+				return ((InternalEList<?>)getEnumeratedValues()).basicRemove(otherEnd, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -122,8 +121,8 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
-				return getEnumeratedValue();
+			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUES:
+				return getEnumeratedValues();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -138,9 +137,9 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
-				getEnumeratedValue().clear();
-				getEnumeratedValue().addAll((Collection<? extends EnumeratedValue>)newValue);
+			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUES:
+				getEnumeratedValues().clear();
+				getEnumeratedValues().addAll((Collection<? extends EnumeratedValue>)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -156,8 +155,8 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
-				getEnumeratedValue().clear();
+			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUES:
+				getEnumeratedValues().clear();
 				return;
 			default:
 				super.eUnset(featureID);
@@ -173,8 +172,8 @@ public class EnumeratedTypeImpl extends ValueTypeImpl implements EnumeratedType 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUE:
-				return enumeratedValue != null && !enumeratedValue.isEmpty();
+			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUES:
+				return enumeratedValues != null && !enumeratedValues.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}

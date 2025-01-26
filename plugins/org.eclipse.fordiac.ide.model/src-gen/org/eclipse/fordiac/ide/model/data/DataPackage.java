@@ -548,78 +548,6 @@ public interface DataPackage extends EPackage {
 	int DIRECTLY_DERIVED_TYPE_FEATURE_COUNT = ANY_DERIVED_TYPE_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VALUE_TYPE__NAME = DATA_TYPE__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VALUE_TYPE__COMMENT = DATA_TYPE__COMMENT;
-
-	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VALUE_TYPE__ATTRIBUTES = DATA_TYPE__ATTRIBUTES;
-
-	/**
-	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VALUE_TYPE__VERSION_INFO = DATA_TYPE__VERSION_INFO;
-
-	/**
-	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VALUE_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
-
-	/**
-	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VALUE_TYPE__COMPILER_INFO = DATA_TYPE__COMPILER_INFO;
-
-	/**
-	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VALUE_TYPE__TYPE_ENTRY = DATA_TYPE__TYPE_ENTRY;
-
-	/**
-	 * The number of structural features of the '<em>Value Type</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VALUE_TYPE_FEATURE_COUNT = DATA_TYPE_FEATURE_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedTypeImpl <em>Enumerated Type</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -636,7 +564,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENUMERATED_TYPE__NAME = VALUE_TYPE__NAME;
+	int ENUMERATED_TYPE__NAME = ANY_DERIVED_TYPE__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -645,7 +573,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENUMERATED_TYPE__COMMENT = VALUE_TYPE__COMMENT;
+	int ENUMERATED_TYPE__COMMENT = ANY_DERIVED_TYPE__COMMENT;
 
 	/**
 	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
@@ -654,7 +582,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENUMERATED_TYPE__ATTRIBUTES = VALUE_TYPE__ATTRIBUTES;
+	int ENUMERATED_TYPE__ATTRIBUTES = ANY_DERIVED_TYPE__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
@@ -663,7 +591,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENUMERATED_TYPE__VERSION_INFO = VALUE_TYPE__VERSION_INFO;
+	int ENUMERATED_TYPE__VERSION_INFO = ANY_DERIVED_TYPE__VERSION_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
@@ -672,7 +600,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENUMERATED_TYPE__IDENTIFICATION = VALUE_TYPE__IDENTIFICATION;
+	int ENUMERATED_TYPE__IDENTIFICATION = ANY_DERIVED_TYPE__IDENTIFICATION;
 
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
@@ -681,7 +609,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENUMERATED_TYPE__COMPILER_INFO = VALUE_TYPE__COMPILER_INFO;
+	int ENUMERATED_TYPE__COMPILER_INFO = ANY_DERIVED_TYPE__COMPILER_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -690,16 +618,16 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENUMERATED_TYPE__TYPE_ENTRY = VALUE_TYPE__TYPE_ENTRY;
+	int ENUMERATED_TYPE__TYPE_ENTRY = ANY_DERIVED_TYPE__TYPE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>Enumerated Value</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Enumerated Values</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENUMERATED_TYPE__ENUMERATED_VALUE = VALUE_TYPE_FEATURE_COUNT + 0;
+	int ENUMERATED_TYPE__ENUMERATED_VALUES = ANY_DERIVED_TYPE_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Enumerated Type</em>' class.
@@ -708,7 +636,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENUMERATED_TYPE_FEATURE_COUNT = VALUE_TYPE_FEATURE_COUNT + 1;
+	int ENUMERATED_TYPE_FEATURE_COUNT = ANY_DERIVED_TYPE_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedValueImpl <em>Enumerated Value</em>}' class.
@@ -721,22 +649,22 @@ public interface DataPackage extends EPackage {
 	int ENUMERATED_VALUE = 5;
 
 	/**
-	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENUMERATED_VALUE__COMMENT = 0;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENUMERATED_VALUE__NAME = 1;
+	int ENUMERATED_VALUE__NAME = LibraryElementPackage.INAMED_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENUMERATED_VALUE__COMMENT = LibraryElementPackage.INAMED_ELEMENT__COMMENT;
 
 	/**
 	 * The number of structural features of the '<em>Enumerated Value</em>' class.
@@ -745,7 +673,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENUMERATED_VALUE_FEATURE_COUNT = 2;
+	int ENUMERATED_VALUE_FEATURE_COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl <em>Structured Type</em>}' class.
@@ -874,6 +802,78 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int SUBRANGE_FEATURE_COUNT = 2;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_TYPE__NAME = DATA_TYPE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_TYPE__COMMENT = DATA_TYPE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_TYPE__ATTRIBUTES = DATA_TYPE__ATTRIBUTES;
+
+	/**
+	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_TYPE__VERSION_INFO = DATA_TYPE__VERSION_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
+
+	/**
+	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_TYPE__COMPILER_INFO = DATA_TYPE__COMPILER_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_TYPE__TYPE_ENTRY = DATA_TYPE__TYPE_ENTRY;
+
+	/**
+	 * The number of structural features of the '<em>Value Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_TYPE_FEATURE_COUNT = DATA_TYPE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -4808,15 +4808,15 @@ public interface DataPackage extends EPackage {
 	EClass getEnumeratedType();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValue <em>Enumerated Value</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValues <em>Enumerated Values</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Enumerated Value</em>'.
-	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValue()
+	 * @return the meta object for the containment reference list '<em>Enumerated Values</em>'.
+	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValues()
 	 * @see #getEnumeratedType()
 	 * @generated
 	 */
-	EReference getEnumeratedType_EnumeratedValue();
+	EReference getEnumeratedType_EnumeratedValues();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue <em>Enumerated Value</em>}'.
@@ -4827,28 +4827,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getEnumeratedValue();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getComment <em>Comment</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Comment</em>'.
-	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedValue#getComment()
-	 * @see #getEnumeratedValue()
-	 * @generated
-	 */
-	EAttribute getEnumeratedValue_Comment();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedValue#getName()
-	 * @see #getEnumeratedValue()
-	 * @generated
-	 */
-	EAttribute getEnumeratedValue_Name();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.StructuredType <em>Structured Type</em>}'.
@@ -5539,12 +5517,12 @@ public interface DataPackage extends EPackage {
 		EClass ENUMERATED_TYPE = eINSTANCE.getEnumeratedType();
 
 		/**
-		 * The meta object literal for the '<em><b>Enumerated Value</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Enumerated Values</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ENUMERATED_TYPE__ENUMERATED_VALUE = eINSTANCE.getEnumeratedType_EnumeratedValue();
+		EReference ENUMERATED_TYPE__ENUMERATED_VALUES = eINSTANCE.getEnumeratedType_EnumeratedValues();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedValueImpl <em>Enumerated Value</em>}' class.
@@ -5555,22 +5533,6 @@ public interface DataPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ENUMERATED_VALUE = eINSTANCE.getEnumeratedValue();
-
-		/**
-		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ENUMERATED_VALUE__COMMENT = eINSTANCE.getEnumeratedValue_Comment();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ENUMERATED_VALUE__NAME = eINSTANCE.getEnumeratedValue_Name();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl <em>Structured Type</em>}' class.
