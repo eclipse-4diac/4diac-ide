@@ -36,6 +36,7 @@ public final class ValidationPreferences {
 	public static final String SEVERITY_ERROR = "error"; //$NON-NLS-1$
 
 	public static final String COLLISION_SEVERITY = "collisionSeverity"; //$NON-NLS-1$
+	public static final String RIGHT_INTERFACE_BAR_COLLISION_SEVERITY = "rightInterfaceBarCollisionSeverity"; //$NON-NLS-1$
 
 	public static int getDiagnosticSeverity(final String key, final int defaultValue, final EObject context) {
 		final Resource resource = context != null ? context.eResource() : null;

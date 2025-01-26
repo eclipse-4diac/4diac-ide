@@ -168,8 +168,8 @@ final class FBNetworkAnnotations {
 	private static Diagnostic createInterfaceBarCollisionDiagnostic(final FBNetworkElement element,
 			final FBNetworkElement other) {
 		return new BasicDiagnostic(
-				ValidationPreferences.getDiagnosticSeverity(ValidationPreferences.COLLISION_SEVERITY,
-						Diagnostic.WARNING, element),
+				ValidationPreferences.getDiagnosticSeverity(
+						ValidationPreferences.RIGHT_INTERFACE_BAR_COLLISION_SEVERITY, Diagnostic.WARNING, element),
 				LibraryElementValidator.DIAGNOSTIC_SOURCE, LibraryElementValidator.FB_NETWORK__VALIDATE_COLLISIONS,
 				MessageFormat.format(Messages.FBNetworkAnnotations_InterfaceBarCollisionMessage,
 						element.getQualifiedName(), other.getQualifiedName()),
