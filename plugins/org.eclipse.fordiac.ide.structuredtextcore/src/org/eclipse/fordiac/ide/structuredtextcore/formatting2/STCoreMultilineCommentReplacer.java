@@ -67,7 +67,7 @@ public class STCoreMultilineCommentReplacer extends MultilineCommentReplacer {
 			commentLineLength = maxCommentWidth.intValue() - 3; // subtract 3 for " * "
 		} else {
 			indendationString = context.getIndentationString()
-					+ " ".repeat(lengthBeforeComment - FormatterUtil.getIndendationChars(context));
+					+ " ".repeat(Math.max(0, lengthBeforeComment - FormatterUtil.getIndendationChars(context)));
 			commentLineLength = maxCommentWidth.intValue() - 6; // subtract 6 for "(* " and " *)"
 		}
 		if (commentLineLength < 1) {

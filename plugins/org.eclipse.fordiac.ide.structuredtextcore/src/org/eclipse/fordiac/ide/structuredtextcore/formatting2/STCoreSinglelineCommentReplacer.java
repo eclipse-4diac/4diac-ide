@@ -39,11 +39,11 @@ public class STCoreSinglelineCommentReplacer extends SinglelineCommentReplacer {
 		final String lineSeparator = context.getFormatter().getPreference(FormatterPreferenceKeys.lineSeparator);
 		final Integer maxCommentWidth = context.getFormatter()
 				.getPreference(STCoreFormatterPreferenceKeys.maxCommentWidth);
-		final int consecutiveIndendationChars = getConsecutiveIndendationChars(context);
+		final int consecutiveIndendationChars = Math.max(0, getConsecutiveIndendationChars(context));
 		final String consecutiveIndendation = " ".repeat(consecutiveIndendationChars);
 		final int lengthBeforeComment = context.getLeadingCharsInLineCount() + consecutiveIndendationChars;
 		final String indendationString = context.getIndentationString()
-				+ " ".repeat(lengthBeforeComment - FormatterUtil.getIndendationChars(context));
+				+ " ".repeat(Math.max(0, lengthBeforeComment - FormatterUtil.getIndendationChars(context)));
 		final int commentLineLength = maxCommentWidth.intValue() - getPrefix().length() - 1;
 		if (commentLineLength < 1) {
 			return context;
