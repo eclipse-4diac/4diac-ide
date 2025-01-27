@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,10 +14,10 @@ package org.eclipse.fordiac.ide.application.tools;
 
 import java.util.List;
 
-import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.gef.tools.InlineConnectionCreationTool;
 import org.eclipse.fordiac.ide.gef.tools.ScrollingConnectionEndpointTracker;
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
@@ -25,10 +25,15 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.requests.ReconnectRequest;
 import org.eclipse.gef.requests.SelectionRequest;
+import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
 
 public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEndpointTracker {
+
+	EditPartViewer initialViewer;
 
 	private static final int MOUSE_LEFT = 1;
 
@@ -37,6 +42,12 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 	}
 
 	private ConnectionRoutingData originalRoutingData;
+
+	@Override
+	public void mouseDown(final MouseEvent me, final EditPartViewer viewer) {
+		initialViewer = viewer;
+		super.mouseDown(me, viewer);
+	}
 
 	@Override
 	protected boolean handleButtonDown(final int button) {
@@ -94,38 +105,27 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 	}
 
 	@Override
-	protected Insets getCanvasBorder() {
-		final org.eclipse.fordiac.ide.model.libraryElement.Connection conn = get4diacConnection();
-		if (null != conn) {
-			conn.getRoutingData().setNeedsValidation(true);
-			if (conn.getRoutingData().is3SegementData()
-					&& RequestConstants.REQ_RECONNECT_SOURCE.equals(getCommandName())) {
-				// if we have a 3 segment connection and we are dragging the destination we need
-				// to take the first segment into account for the border
-				final Insets adjustedBorder = new Insets(super.getCanvasBorder());
-				adjustedBorder.right += toScreen(conn.getRoutingData().getDx1());
-				return adjustedBorder;
-			}
-			if (conn.getRoutingData().is5SegementData()) {
-				return get5SegmentCanvasBorder(conn.getRoutingData());
-			}
+	protected void showSourceFeedback() {
+		if (differentTargetViewer()) {
+			final Point location = getLocation();
+			final Point converted = new Point(initialViewer.getControl()
+					.toControl(getCurrentViewer().getControl().toDisplay(location.x, location.y)));
+			((ReconnectRequest) getTargetRequest()).setLocation(converted);
 		}
-
-		return super.getCanvasBorder();
+		super.showSourceFeedback();
+		if (differentTargetViewer()) {
+			((ReconnectRequest) getTargetRequest()).setLocation(getLocation());
+		}
 	}
 
-	private Insets get5SegmentCanvasBorder(final ConnectionRoutingData routingData) {
-		final Insets adjustedBorder = new Insets(super.getCanvasBorder());
-		if (RequestConstants.REQ_RECONNECT_SOURCE.equals(getCommandName())) {
-			adjustedBorder.right += toScreen(routingData.getDx1());
-			if (routingData.getDy() < 0) {
-				adjustedBorder.top -= toScreen(routingData.getDy());
-			}
-		}
-		if (RequestConstants.REQ_RECONNECT_TARGET.equals(getCommandName())) {
-			adjustedBorder.left += toScreen(routingData.getDx2());
-		}
-		return adjustedBorder;
+	@Override
+	protected ConnectionDragCreationTool createConnectionCreationTool(final EditPart target) {
+		return InlineConnectionCreationTool.createInlineConnCreationTool(target, getDomain(),
+				differentTargetViewer() ? initialViewer : getCurrentViewer(), getLocation());
+	}
+
+	private boolean differentTargetViewer() {
+		return initialViewer != null && initialViewer != getCurrentViewer();
 	}
 
 	private boolean shouldRestoreRoutingData() {
@@ -156,10 +156,6 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 		request.setLocation(getLocation());
 		request.setType(RequestConstants.REQ_OPEN);
 		getConnectionEditPart().performRequest(request);
-	}
-
-	private static int toScreen(final double val) {
-		return CoordinateConverter.INSTANCE.iec61499ToScreen(val);
 	}
 
 }
