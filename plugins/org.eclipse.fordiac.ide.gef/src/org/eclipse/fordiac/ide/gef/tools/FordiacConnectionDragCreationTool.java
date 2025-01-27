@@ -14,16 +14,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.tools;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
 
 public class FordiacConnectionDragCreationTool extends ConnectionDragCreationTool {
+
+	EditPartViewer initialViewer;
 
 	public FordiacConnectionDragCreationTool() {
 		setDefaultCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_CROSS));
@@ -50,11 +54,36 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 	}
 
 	@Override
+	public void mouseDown(final MouseEvent me, final EditPartViewer viewer) {
+		// store the viewer to be used as the viewer for mouse cursor operations
+		initialViewer = viewer;
+		super.mouseDown(me, viewer);
+	}
+
+	@Override
 	public void mouseUp(final MouseEvent me, final EditPartViewer viewer) {
 		if (((me.stateMask & SWT.MOD2) != 0)) {
 			checkCurrentCommandforShiftMask();
 		}
 		super.mouseUp(me, viewer);
+	}
+
+	@Override
+	protected void showSourceFeedback() {
+		if (differentTargetViewer()) {
+			final Point location = getLocation();
+			final Point converted = new Point(initialViewer.getControl()
+					.toControl(getCurrentViewer().getControl().toDisplay(location.x, location.y)));
+			((CreateConnectionRequest) getTargetRequest()).setLocation(converted);
+		}
+		super.showSourceFeedback();
+		if (differentTargetViewer()) {
+			((CreateConnectionRequest) getTargetRequest()).setLocation(getLocation());
+		}
+	}
+
+	private boolean differentTargetViewer() {
+		return initialViewer != null && initialViewer != getCurrentViewer();
 	}
 
 	private void checkCurrentCommandforShiftMask() {
@@ -78,6 +107,10 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 			stopHover();
 		}
 		super.setCurrentCommand(c);
+	}
+
+	protected void setInitialViewer(final EditPartViewer initialViewer) {
+		this.initialViewer = initialViewer;
 	}
 
 	private static void startHover() {
