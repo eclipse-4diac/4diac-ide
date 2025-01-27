@@ -1499,19 +1499,25 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.openType">
         <visibleWhen checkEnabled="true">
-          <with variable="selection" >
-            <count value="1" />
-            <iterate ifEmpty="false">
-              <or>
-                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
-                <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
-                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
-                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
-              </or>
-            </iterate>
-          </with>
+	        <or>
+	          <with variable="selection" >
+	            <count value="1" />
+	            <iterate ifEmpty="false">
+	              <or>
+	                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+	                <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+	                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
+	                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
+	              </or>
+	            </iterate>
+	          </with>
+	          <with variable="activeEditor">
+	            <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+	          </with>
+	        </or>
         </visibleWhen>
-      </command>
+      </command>  
+                
       <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType">
         <visibleWhen checkEnabled="true">
         	<and>
