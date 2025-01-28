@@ -38,11 +38,13 @@ public interface EnumeratedType extends AnyDerivedType {
 	/**
 	 * Returns the value of the '<em><b>Enumerated Values</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.data.EnumeratedValue}.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Enumerated Values</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedType_EnumeratedValues()
-	 * @model containment="true" required="true"
+	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedValue#getType
+	 * @model opposite="type" containment="true" required="true"
 	 *        extendedMetaData="kind='element' name='EnumeratedValue' namespace='##targetNamespace'"
 	 * @generated
 	 */

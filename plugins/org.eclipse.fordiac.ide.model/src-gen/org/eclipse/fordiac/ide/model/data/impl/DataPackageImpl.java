@@ -698,6 +698,16 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getEnumeratedValue_Type() {
+		return (EReference)enumeratedValueEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getStructuredType() {
 		return structuredTypeEClass;
 	}
@@ -1308,6 +1318,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		createEReference(enumeratedTypeEClass, ENUMERATED_TYPE__ENUMERATED_VALUES);
 
 		enumeratedValueEClass = createEClass(ENUMERATED_VALUE);
+		createEReference(enumeratedValueEClass, ENUMERATED_VALUE__TYPE);
 
 		structuredTypeEClass = createEClass(STRUCTURED_TYPE);
 		createEReference(structuredTypeEClass, STRUCTURED_TYPE__MEMBER_VARIABLES);
@@ -1538,12 +1549,13 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(enumeratedTypeEClass, EnumeratedType.class, "EnumeratedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getEnumeratedType_EnumeratedValues(), this.getEnumeratedValue(), null, "enumeratedValues", null, 1, -1, EnumeratedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getEnumeratedType_EnumeratedValues(), this.getEnumeratedValue(), this.getEnumeratedValue_Type(), "enumeratedValues", null, 1, -1, EnumeratedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(enumeratedTypeEClass, theXMLTypePackage.getBoolean(), "isAssignableFrom", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(enumeratedValueEClass, EnumeratedValue.class, "EnumeratedValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getEnumeratedValue_Type(), this.getEnumeratedType(), this.getEnumeratedType_EnumeratedValues(), "type", null, 0, 1, EnumeratedValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(structuredTypeEClass, StructuredType.class, "StructuredType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getStructuredType_MemberVariables(), theLibraryElementPackage.getVarDeclaration(), null, "memberVariables", null, 0, -1, StructuredType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

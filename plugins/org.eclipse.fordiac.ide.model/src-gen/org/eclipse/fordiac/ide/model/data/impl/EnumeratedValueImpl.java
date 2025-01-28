@@ -20,13 +20,17 @@ import java.util.Map;
 import java.util.stream.Stream;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
@@ -40,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedValueImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedValueImpl#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedValueImpl#getType <em>Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -133,6 +138,59 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	 * @generated
 	 */
 	@Override
+	public EnumeratedType getType() {
+		if (eContainerFeatureID() != DataPackage.ENUMERATED_VALUE__TYPE) return null;
+		return (EnumeratedType)eContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EnumeratedType basicGetType() {
+		if (eContainerFeatureID() != DataPackage.ENUMERATED_VALUE__TYPE) return null;
+		return (EnumeratedType)eInternalContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetType(EnumeratedType newType, NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject)newType, DataPackage.ENUMERATED_VALUE__TYPE, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setType(EnumeratedType newType) {
+		if (newType != eInternalContainer() || (eContainerFeatureID() != DataPackage.ENUMERATED_VALUE__TYPE && newType != null)) {
+			if (EcoreUtil.isAncestor(this, newType))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
+			NotificationChain msgs = null;
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			if (newType != null)
+				msgs = ((InternalEObject)newType).eInverseAdd(this, DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUES, EnumeratedType.class, msgs);
+			msgs = basicSetType(newType, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.ENUMERATED_VALUE__TYPE, newType, newType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String getQualifiedName() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
 	}
@@ -173,6 +231,53 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case DataPackage.ENUMERATED_VALUE__TYPE:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return basicSetType((EnumeratedType)otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case DataPackage.ENUMERATED_VALUE__TYPE:
+				return basicSetType(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case DataPackage.ENUMERATED_VALUE__TYPE:
+				return eInternalContainer().eInverseRemove(this, DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUES, EnumeratedType.class, msgs);
+			default:
+				return super.eBasicRemoveFromContainerFeature(msgs);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -202,6 +307,9 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 				return getName();
 			case DataPackage.ENUMERATED_VALUE__COMMENT:
 				return getComment();
+			case DataPackage.ENUMERATED_VALUE__TYPE:
+				if (resolve) return getType();
+				return basicGetType();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -220,6 +328,9 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 				return;
 			case DataPackage.ENUMERATED_VALUE__COMMENT:
 				setComment((String)newValue);
+				return;
+			case DataPackage.ENUMERATED_VALUE__TYPE:
+				setType((EnumeratedType)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -241,6 +352,9 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 			case DataPackage.ENUMERATED_VALUE__COMMENT:
 				setComment(COMMENT_EDEFAULT);
 				return;
+			case DataPackage.ENUMERATED_VALUE__TYPE:
+				setType((EnumeratedType)null);
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -259,6 +373,8 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case DataPackage.ENUMERATED_VALUE__COMMENT:
 				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+			case DataPackage.ENUMERATED_VALUE__TYPE:
+				return basicGetType() != null;
 			default:
 				return super.eIsSet(featureID);
 		}

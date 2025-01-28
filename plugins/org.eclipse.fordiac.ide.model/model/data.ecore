@@ -83,7 +83,8 @@
       <eParameters name="other" eType="#//DataType"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="enumeratedValues" lowerBound="1"
-        upperBound="-1" eType="#//EnumeratedValue" containment="true" resolveProxies="false">
+        upperBound="-1" eType="#//EnumeratedValue" containment="true" resolveProxies="false"
+        eOpposite="#//EnumeratedValue/type">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="EnumeratedValue"/>
@@ -91,7 +92,10 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EnumeratedValue" eSuperTypes="lib.ecore#//INamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumeratedValue" eSuperTypes="lib.ecore#//INamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//EnumeratedType"
+        eOpposite="#//EnumeratedType/enumeratedValues"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StructuredType" eSuperTypes="#//AnyDerivedType">
     <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

@@ -987,7 +987,9 @@
         <genParameters ecoreParameter="data.ecore#//EnumeratedType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
-    <genClasses ecoreClass="data.ecore#//EnumeratedValue"/>
+    <genClasses ecoreClass="data.ecore#//EnumeratedValue">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference data.ecore#//EnumeratedValue/type"/>
+    </genClasses>
     <genClasses ecoreClass="data.ecore#//StructuredType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//StructuredType/memberVariables"/>
       <genOperations ecoreOperation="data.ecore#//StructuredType/isAssignableFrom"

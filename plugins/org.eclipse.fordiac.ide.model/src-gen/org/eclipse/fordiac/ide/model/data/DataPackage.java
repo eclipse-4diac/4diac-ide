@@ -667,13 +667,22 @@ public interface DataPackage extends EPackage {
 	int ENUMERATED_VALUE__COMMENT = LibraryElementPackage.INAMED_ELEMENT__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Type</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENUMERATED_VALUE__TYPE = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Enumerated Value</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENUMERATED_VALUE_FEATURE_COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 0;
+	int ENUMERATED_VALUE_FEATURE_COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl <em>Structured Type</em>}' class.
@@ -4829,6 +4838,17 @@ public interface DataPackage extends EPackage {
 	EClass getEnumeratedValue();
 
 	/**
+	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedValue#getType()
+	 * @see #getEnumeratedValue()
+	 * @generated
+	 */
+	EReference getEnumeratedValue_Type();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.StructuredType <em>Structured Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5533,6 +5553,14 @@ public interface DataPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ENUMERATED_VALUE = eINSTANCE.getEnumeratedValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ENUMERATED_VALUE__TYPE = eINSTANCE.getEnumeratedValue_Type();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl <em>Structured Type</em>}' class.

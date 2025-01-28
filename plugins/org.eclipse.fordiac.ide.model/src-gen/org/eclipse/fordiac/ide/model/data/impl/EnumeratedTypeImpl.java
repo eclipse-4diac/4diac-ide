@@ -24,8 +24,7 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.data.DataPackage;
@@ -83,7 +82,7 @@ public class EnumeratedTypeImpl extends AnyDerivedTypeImpl implements Enumerated
 	@Override
 	public EList<EnumeratedValue> getEnumeratedValues() {
 		if (enumeratedValues == null) {
-			enumeratedValues = new EObjectContainmentEList<EnumeratedValue>(EnumeratedValue.class, this, DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUES);
+			enumeratedValues = new EObjectContainmentWithInverseEList<EnumeratedValue>(EnumeratedValue.class, this, DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUES, DataPackage.ENUMERATED_VALUE__TYPE);
 		}
 		return enumeratedValues;
 	}
@@ -96,6 +95,22 @@ public class EnumeratedTypeImpl extends AnyDerivedTypeImpl implements Enumerated
 	@Override
 	public boolean isAssignableFrom(final DataType other) {
 		return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case DataPackage.ENUMERATED_TYPE__ENUMERATED_VALUES:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getEnumeratedValues()).basicAdd(otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
+		}
 	}
 
 	/**
