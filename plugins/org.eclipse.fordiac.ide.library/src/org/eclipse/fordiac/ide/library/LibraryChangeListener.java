@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,7 +22,6 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -45,7 +44,8 @@ public class LibraryChangeListener implements IResourceChangeListener {
 	private final IResourceDeltaVisitor visitor = delta -> {
 		switch (delta.getResource().getType()) {
 		case IResource.PROJECT:
-			return delta.getKind() != IResourceDelta.REMOVED; // ignore deleted projects
+			// ignore closed or deleted projects
+			return !(isProjectClosed(delta) || delta.getKind() == IResourceDelta.REMOVED);
 		case IResource.FILE:
 			// check manifest files
 			// information on previous linked status is not available on delete
@@ -56,7 +56,7 @@ public class LibraryChangeListener implements IResourceChangeListener {
 							|| ((file.isLinked() || delta.getKind() == IResourceDelta.REMOVED)
 									&& (delta.getKind() & MASK) != 0))) {
 				final IProject project = file.getProject();
-				LibraryManager.INSTANCE.startResolveJob(project, TypeLibraryManager.INSTANCE.getTypeLibrary(project));
+				LibraryManager.INSTANCE.startResolveJob(project);
 
 			}
 			return false;
@@ -72,6 +72,12 @@ public class LibraryChangeListener implements IResourceChangeListener {
 		}
 		return true;
 	};
+
+	private static boolean isProjectClosed(final IResourceDelta delta) {
+		return (delta.getKind() != IResourceDelta.CHANGED
+				&& (delta.getFlags() & IResourceDelta.OPEN) == IResourceDelta.OPEN
+				&& !delta.getResource().isAccessible());
+	}
 
 	private static boolean isTypeLibraryFolder(final IContainer container) {
 		return container instanceof IFolder && container.getParent() instanceof IProject

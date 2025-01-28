@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2024 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2012, 2025 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Austria GmbH,
  *                          Martin Erich Jobst
@@ -20,7 +20,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.changelistener;
 
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -147,12 +146,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			}
 			break;
 		case IResource.PROJECT:
-			if (testFlags(delta, IResourceDelta.OPEN)) {
-				if (delta.getResource().isAccessible()) {
-					handleProjectAdd(delta);
-				} else {
-					handleProjectRemove(delta);
-				}
+			if (testFlags(delta, IResourceDelta.OPEN) && !delta.getResource().isAccessible()) {
+				// this is the odd way of Eclipse Platform telling us a project was closed
+				handleProjectRemove(delta);
 				return false;
 			}
 			break;
@@ -220,17 +216,10 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			return false;
 		}
 
-		return switch (delta.getResource().getType()) {
-		case IResource.FILE -> {
+		if (delta.getResource().getType() == IResource.FILE) {
 			handleFileCopy(delta);
-			yield true;
 		}
-		case IResource.PROJECT -> {
-			handleProjectAdd(delta);
-			yield false;
-		}
-		default -> true;
-		};
+		return true;
 	}
 
 	private void handleFileDelete(final IResourceDelta delta) {
@@ -270,9 +259,8 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				final TypeEntry entry = typeLib.createTypeEntry(file);
 				if (null != entry && containedTypeNameIsDifferent(file)) {
 					// we only need to update the type entry if the file content is different from
-					// the file name
-					// this happens when a type is copied into a new project or when a project is
-					// opened or imported
+					// the file name this happens when a type is copied into a new project or when a
+					// project is opened or imported
 					updateTypeEntry(file, entry);
 					return;
 				}
@@ -284,9 +272,8 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				}
 			} else if (!file.equals(typeEntryForFile.getFile())) {
 				// After a file has been copied and the copied file is not the same as the
-				// founded type entry
-				// the file and the resulting type must be renamed with a unique name put it in
-				// the rename list
+				// founded type entry the file and the resulting type must be renamed with a
+				// unique name put it in the rename list
 				filesToRename.add(new FileToRenameEntry(file, typeEntryForFile));
 			}
 		}
@@ -507,31 +494,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 		final ISchedulingRule rule = (parent != null) ? parent : ResourcesPlugin.getWorkspace().getRoot();
 		job.setRule(rule);
-		job.schedule();
-	}
-
-	private void handleProjectAdd(final IResourceDelta delta) {
-		final IProject project = delta.getResource().getProject();
-		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
-
-		final WorkspaceJob job = new WorkspaceJob(MessageFormat
-				.format(Messages.FordiacResourceChangeListener_UpdateTypeLibForNewProject, project.getName())) {
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				try {
-					// ensure dirty workspaces are cleaned before any type library is loaded
-					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-				} catch (final CoreException e) {
-					FordiacLogHelper.logError(e.getMessage(), e);
-				}
-				ResourcesPlugin.getWorkspace().addResourceChangeListener(FordiacResourceChangeListener.this);
-				return Status.OK_STATUS;
-			}
-		};
-		job.setUser(false);
-		job.setSystem(true);
-		job.setPriority(Job.INTERACTIVE); // give this job the highest possible priority
-		job.setRule(project);
 		job.schedule();
 	}
 

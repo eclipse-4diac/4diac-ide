@@ -169,7 +169,7 @@ class LibraryImportTest {
 		ManifestHelper.addDependency(manifest, ManifestHelper.createRequired(TEST01, "[1.0.0-2.0.0)")); //$NON-NLS-1$
 		ManifestHelper.saveManifest(manifest);
 
-		LibraryManager.INSTANCE.checkManifestFile(project, TypeLibraryManager.INSTANCE.getTypeLibrary(project));
+		LibraryManager.INSTANCE.checkManifestFile(project);
 		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
 
 		manifest = ManifestHelper.getContainerManifest(project);

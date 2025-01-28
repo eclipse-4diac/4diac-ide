@@ -404,7 +404,7 @@ public enum LibraryManager {
 		addLibraryChangeListener();
 		// dependency resolution
 		if (resolve && imported) {
-			startResolveJob(project, typeLibrary);
+			startResolveJob(project);
 		}
 	}
 
@@ -599,10 +599,9 @@ public enum LibraryManager {
 	 * <p>
 	 * Will download/import libraries as needed through background jobs
 	 *
-	 * @param project     selected project
-	 * @param typeLibrary {@link TypeLibrary} to use
+	 * @param project selected project
 	 */
-	public void checkManifestFile(final IProject project, final TypeLibrary typeLibrary) {
+	public void checkManifestFile(final IProject project) {
 		final Manifest manifest = ManifestHelper.getContainerManifest(project);
 		if (manifest == null || !ManifestHelper.isProject(manifest)) {
 			return;
@@ -610,17 +609,16 @@ public enum LibraryManager {
 
 		ManifestHelper.sortAndSaveManifest(manifest);
 
-		startResolveJob(project, typeLibrary);
+		startResolveJob(project);
 	}
 
 	/**
 	 * Start background job that resolves transitive library dependencies of
 	 * {@link IProject}
 	 *
-	 * @param project     selected project
-	 * @param typeLibrary {@link TypeLibrary} to use
+	 * @param project selected project
 	 */
-	public void startResolveJob(final IProject project, final TypeLibrary typeLibrary) {
+	public void startResolveJob(final IProject project) {
 		if (resolvingProjects.contains(project)) {
 			return;
 		}
@@ -630,7 +628,10 @@ public enum LibraryManager {
 
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-				resolveDependencies(project, typeLibrary);
+				if (project.isAccessible()) {
+					// only resolve if we have an accessible project
+					resolveDependencies(project, TypeLibraryManager.INSTANCE.getTypeLibrary(project));
+				}
 				return Status.OK_STATUS;
 			}
 
@@ -752,8 +753,8 @@ public enum LibraryManager {
 
 		checkLibChanges();
 
-		// remove when no longer needed
-		moveLinksToVirtualFolders(project, typeLibrary);
+		// TODO this is for migrating old projects: remove when no longer needed
+		moveLinksToVirtualFolders(project);
 
 		if (projectManifest.getDependencies() == null) {
 			return;
@@ -963,7 +964,7 @@ public enum LibraryManager {
 	 * @param project     selected project
 	 * @param typeLibrary {@link TypeLibrary} to use
 	 */
-	private void moveLinksToVirtualFolders(final IProject project, final TypeLibrary typeLibrary) {
+	private void moveLinksToVirtualFolders(final IProject project) {
 		if (project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME).exists()) {
 			return;
 		}
@@ -1103,7 +1104,7 @@ public enum LibraryManager {
 	private final EventHandler handler = event -> {
 		final Object data = event.getProperty(IEventBroker.DATA);
 		if (data instanceof final TypeLibrary typeLibrary) {
-			checkManifestFile(typeLibrary.getProject(), typeLibrary);
+			checkManifestFile(typeLibrary.getProject());
 		}
 	};
 
