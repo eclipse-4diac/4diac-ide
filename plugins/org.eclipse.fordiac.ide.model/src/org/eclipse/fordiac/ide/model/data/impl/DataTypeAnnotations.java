@@ -340,6 +340,7 @@ final class DataTypeAnnotations {
 	}
 
 	static boolean isAssignableFrom(final EnumeratedType type, final DataType other) {
-		return type == other; // only strict equality for enums
+		// only strict name equality for enums
+		return PackageNameHelper.getFullTypeName(type).equalsIgnoreCase(PackageNameHelper.getFullTypeName(other));
 	}
 }
