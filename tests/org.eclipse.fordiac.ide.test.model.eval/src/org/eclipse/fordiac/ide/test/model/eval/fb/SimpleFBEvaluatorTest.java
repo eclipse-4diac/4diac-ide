@@ -22,13 +22,16 @@ import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.fb.SimpleFBEvaluator;
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue;
+import org.eclipse.fordiac.ide.model.eval.value.EnumValue;
 import org.eclipse.fordiac.ide.model.eval.value.StructValue;
 import org.eclipse.fordiac.ide.model.eval.value.WordValue;
+import org.eclipse.fordiac.ide.model.eval.variable.EnumVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
@@ -687,6 +690,18 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						DO1.a := DI1.a + DI1.b;
 						DO1.b := 42;
 						""", "REQ")), List.of(inputVar), outputVarDecl).getVariables().get("DO1").getValue()));
+	}
+
+	@Test
+	void testSimpleWithEnum() throws EvaluatorException, InterruptedException {
+		final EnumeratedType enumType = newEnumeratedType("TestEnum", List.of("red", "green", "blue"));
+		final VarDeclaration inputVarDecl = newVarDeclaration("DI1", enumType, true);
+		final EnumVariable inputVar = ((EnumVariable) VariableOperations.newVariable(inputVarDecl));
+		inputVar.setValue("TestEnum#green");
+		final VarDeclaration outputVarDecl = newVarDeclaration("DO1", enumType, false);
+		assertEquals(new EnumValue(enumType.getEnumeratedValues().get(1)), evaluateSimpleFB(List.of(newSTAlgorithm("""
+				DO1 := DI1;
+				""", "REQ")), List.of(inputVar), outputVarDecl).getVariables().get("DO1").getValue());
 	}
 
 	@Test

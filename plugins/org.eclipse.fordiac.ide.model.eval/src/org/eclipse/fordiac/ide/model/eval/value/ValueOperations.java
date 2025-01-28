@@ -76,6 +76,8 @@ import org.eclipse.fordiac.ide.model.data.DateAndTimeType;
 import org.eclipse.fordiac.ide.model.data.DateType;
 import org.eclipse.fordiac.ide.model.data.DintType;
 import org.eclipse.fordiac.ide.model.data.DwordType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 import org.eclipse.fordiac.ide.model.data.IntType;
 import org.eclipse.fordiac.ide.model.data.LdateType;
 import org.eclipse.fordiac.ide.model.data.LdtType;
@@ -1056,6 +1058,7 @@ public final class ValueOperations {
 		case final AnyElementaryType unused -> DIntValue.DEFAULT;
 		case final ArrayType arrayType -> new ArrayValue(arrayType);
 		case final StructuredType structType -> new StructValue(structType);
+		case final EnumeratedType enumeratedType -> new EnumValue(enumeratedType);
 		case final AnyType unused -> DIntValue.DEFAULT;
 		case final FBType fbType -> new FBValue(fbType);
 		default -> throw createUnsupportedTypeException(type);
@@ -1362,6 +1365,7 @@ public final class ValueOperations {
 		// AnyElementaryType
 		case final ArrayType arrayType -> new ArrayValue(arrayType, (List<?>) value);
 		case final StructuredType structType -> new StructValue(structType, castMemberMap((Map<?, ?>) value));
+		case final EnumeratedType enumeratedType -> new EnumValue((EnumeratedValue) value);
 		case final AnyType unused -> switch (value) {
 		case final Byte byteValue -> toSIntValue(byteValue);
 		case final Short shortValue -> toIntValue(shortValue);
@@ -1437,6 +1441,7 @@ public final class ValueOperations {
 		case final AnyElementaryType unused -> AnyElementaryValue.class;
 		case final ArrayType unused -> ArrayValue.class;
 		case final StructuredType unused -> StructValue.class;
+		case final EnumeratedType unused -> EnumValue.class;
 		case final AnyDerivedType unused -> AnyDerivedValue.class;
 		case final AnyType unused -> AnyValue.class;
 		case null, default -> null;
@@ -1492,6 +1497,7 @@ public final class ValueOperations {
 		case "AnyElementaryValue" -> GenericTypes.ANY_ELEMENTARY; //$NON-NLS-1$
 		case "ArrayValue" -> GenericTypes.ANY_DERIVED; //$NON-NLS-1$
 		case "StructValue" -> GenericTypes.ANY_STRUCT; //$NON-NLS-1$
+		case "EnumValue" -> GenericTypes.ANY_DERIVED; //$NON-NLS-1$
 		case "AnyDerivedValue" -> GenericTypes.ANY_DERIVED; //$NON-NLS-1$
 		case "AnyValue" -> GenericTypes.ANY; //$NON-NLS-1$
 		case null, default -> null;

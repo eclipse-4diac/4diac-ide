@@ -86,6 +86,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STEnumLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
@@ -480,6 +481,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		case final STTimeLiteral stTimeLiteral -> evaluateExpression(stTimeLiteral);
 		case final STTimeOfDayLiteral stTimeOfDayLiteral -> evaluateExpression(stTimeOfDayLiteral);
 		case final STDateAndTimeLiteral stDateAndTimeLiteral -> evaluateExpression(stDateAndTimeLiteral);
+		case final STEnumLiteral stEnumLiteral -> evaluateExpression(stEnumLiteral);
 		case final STFeatureExpression stFeatureExpression -> evaluateExpression(stFeatureExpression);
 		case final STBuiltinFeatureExpression stBuiltinExpression -> evaluateExpression(stBuiltinExpression);
 		case final STMemberAccessExpression stMemberAccessExpression -> evaluateExpression(stMemberAccessExpression);
@@ -558,6 +560,10 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	protected static Value evaluateExpression(final STDateAndTimeLiteral expr) {
+		return ValueOperations.wrapValue(expr.getValue(), expr.getResultType());
+	}
+
+	protected static Value evaluateExpression(final STEnumLiteral expr) {
 		return ValueOperations.wrapValue(expr.getValue(), expr.getResultType());
 	}
 

@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.variable;
 import org.eclipse.fordiac.ide.model.data.AnyDateType;
 import org.eclipse.fordiac.ide.model.data.AnyDurationType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
@@ -40,7 +41,8 @@ public abstract class AbstractVariable<T extends Value> implements Variable<T> {
 	@Override
 	public String toString(final boolean pretty) {
 		if (type instanceof final DataType dataType && IecTypes.GenericTypes.isAnyType(dataType)
-				&& !(getValue().getType() instanceof AnyDurationType || getValue().getType() instanceof AnyDateType)) {
+				&& !(getValue().getType() instanceof AnyDurationType || getValue().getType() instanceof AnyDateType
+						|| getValue().getType() instanceof EnumeratedType)) {
 			return getValue().getType().getName() + '#' + getValue().toString(pretty);
 		}
 		return getValue().toString(pretty);

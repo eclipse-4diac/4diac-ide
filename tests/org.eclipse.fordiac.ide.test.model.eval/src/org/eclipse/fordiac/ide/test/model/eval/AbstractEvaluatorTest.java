@@ -21,6 +21,8 @@ import org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsStandaloneSe
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory;
@@ -182,6 +184,24 @@ public abstract class AbstractEvaluatorTest {
 		typeLib.addTypeEntry(typeEntry);
 		new ResourceImpl().getContents().add(structType);
 		return structType;
+	}
+
+	protected static EnumeratedType newEnumeratedType(final String name, final Collection<String> values) {
+		final EnumeratedType enumType = DataFactory.eINSTANCE.createEnumeratedType();
+		enumType.setName(name);
+		values.stream().map(AbstractEvaluatorTest::newEnumeratedValue)
+				.forEachOrdered(enumType.getEnumeratedValues()::add);
+		final DataTypeEntryMock typeEntry = new DataTypeEntryMock(enumType, typeLib, null);
+		enumType.setTypeEntry(typeEntry);
+		typeLib.addTypeEntry(typeEntry);
+		new ResourceImpl().getContents().add(enumType);
+		return enumType;
+	}
+
+	protected static EnumeratedValue newEnumeratedValue(final String name) {
+		final EnumeratedValue value = DataFactory.eINSTANCE.createEnumeratedValue();
+		value.setName(name);
+		return value;
 	}
 
 	public static STAlgorithm newSTAlgorithm(final CharSequence text, final String name) {

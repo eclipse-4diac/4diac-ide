@@ -34,6 +34,7 @@ import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
@@ -41,6 +42,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorInitializerException;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorPrepareException;
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue;
+import org.eclipse.fordiac.ide.model.eval.value.EnumValue;
 import org.eclipse.fordiac.ide.model.eval.value.FBValue;
 import org.eclipse.fordiac.ide.model.eval.value.StructValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
@@ -63,6 +65,7 @@ class VariableOperationTest extends AbstractEvaluatorTest {
 
 	private ArrayType arrayType;
 	private StructuredType structType;
+	private EnumeratedType enumType;
 
 	private DirectlyDerivedType directlyDerivedType1;
 	private DirectlyDerivedType directlyDerivedType2;
@@ -92,6 +95,7 @@ class VariableOperationTest extends AbstractEvaluatorTest {
 		arrayType = newArrayType(ElementaryTypes.DINT, newSubrange(0, 1));
 		structType = newStructuredType("TestStruct", List.of(newVarDeclaration("a", ElementaryTypes.DINT, false),
 				newVarDeclaration("b", ElementaryTypes.DINT, false)));
+		enumType = newEnumeratedType("TestEnum", List.of("red", "green", "blue"));
 
 		directlyDerivedType1 = newDirectlyDerivedType("TestDerivedType1", ElementaryTypes.DINT, null);
 		directlyDerivedType2 = newDirectlyDerivedType("TestDerivedType2", ElementaryTypes.DINT, "17");
@@ -126,6 +130,7 @@ class VariableOperationTest extends AbstractEvaluatorTest {
 		assertVariableEquals("Test", toDIntValue(0), VariableOperations.newVariable("Test", GenericTypes.ANY));
 		assertVariableEquals("Test", new ArrayValue(arrayType), VariableOperations.newVariable("Test", arrayType));
 		assertVariableEquals("Test", new StructValue(structType), VariableOperations.newVariable("Test", structType));
+		assertVariableEquals("Test", new EnumValue(enumType), VariableOperations.newVariable("Test", enumType));
 		assertVariableEquals("Test", toDIntValue(0), VariableOperations.newVariable("Test", directlyDerivedType1));
 		assertVariableEquals("Test", toDIntValue(17), VariableOperations.newVariable("Test", directlyDerivedType2));
 		assertVariableEquals("Test", toDIntValue(21), VariableOperations.newVariable("Test", directlyDerivedType3));
@@ -148,6 +153,8 @@ class VariableOperationTest extends AbstractEvaluatorTest {
 				VariableOperations.newVariable("Test", arrayType, "[17,4]"));
 		assertVariableEquals("Test", new StructValue(structType, Map.of("a", toDIntValue(17), "b", toDIntValue(4))),
 				VariableOperations.newVariable("Test", structType, "(a:=17,b:=4)"));
+		assertVariableEquals("Test", new EnumValue(enumType.getEnumeratedValues().get(1)),
+				VariableOperations.newVariable("Test", enumType, "TestEnum#green"));
 		assertVariableEquals("Test", toDIntValue(42),
 				VariableOperations.newVariable("Test", directlyDerivedType1, "42"));
 		assertThrows(NullPointerException.class,
@@ -168,6 +175,8 @@ class VariableOperationTest extends AbstractEvaluatorTest {
 		assertVariableEquals("Test", new StructValue(structType, Map.of("a", toDIntValue(17), "b", toDIntValue(4))),
 				VariableOperations.newVariable("Test", structType,
 						new StructValue(structType, Map.of("a", toDIntValue(17), "b", toDIntValue(4)))));
+		assertVariableEquals("Test", new EnumValue(enumType.getEnumeratedValues().get(2)),
+				VariableOperations.newVariable("Test", new EnumValue(enumType.getEnumeratedValues().get(2))));
 		assertVariableEquals("Test", toDIntValue(42),
 				VariableOperations.newVariable("Test", directlyDerivedType1, toDIntValue(42)));
 		assertVariableEquals("Test",

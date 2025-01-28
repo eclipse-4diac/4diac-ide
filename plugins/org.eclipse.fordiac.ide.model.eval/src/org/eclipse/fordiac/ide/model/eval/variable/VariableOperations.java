@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
@@ -61,6 +62,7 @@ public final class VariableOperations {
 		case final AnyType anyType when GenericTypes.isAnyType(anyType) -> new GenericVariable(name, anyType);
 		case final ArrayType arrayType -> new ArrayVariable(name, arrayType);
 		case final StructuredType structuredType -> new StructVariable(name, structuredType);
+		case final EnumeratedType enumeratedType -> new EnumVariable(name, enumeratedType);
 		case final DirectlyDerivedType directlyDerivedType -> new DirectlyDerivedVariable(name, directlyDerivedType);
 		case final AnyElementaryType anyElementaryType -> new ElementaryVariable<>(name, anyElementaryType);
 		case final FBType fbType -> new FBVariable(name, fbType);
@@ -75,6 +77,7 @@ public final class VariableOperations {
 		case final AnyType anyType when GenericTypes.isAnyType(anyType) -> new GenericVariable(name, anyType, value);
 		case final ArrayType arrayType -> new ArrayVariable(name, arrayType, value);
 		case final StructuredType structuredType -> new StructVariable(name, structuredType, value);
+		case final EnumeratedType enumeratedType -> new EnumVariable(name, enumeratedType, value);
 		case final DirectlyDerivedType directlyDerivedType ->
 			new DirectlyDerivedVariable(name, directlyDerivedType, value);
 		case final AnyElementaryType anyElementaryType -> new ElementaryVariable<>(name, anyElementaryType, value);
@@ -90,6 +93,7 @@ public final class VariableOperations {
 		case final AnyType anyType when GenericTypes.isAnyType(anyType) -> new GenericVariable(name, anyType, value);
 		case final ArrayType arrayType -> new ArrayVariable(name, arrayType, value);
 		case final StructuredType structuredType -> new StructVariable(name, structuredType, value);
+		case final EnumeratedType enumeratedType -> new EnumVariable(name, enumeratedType, value);
 		case final DirectlyDerivedType directlyDerivedType ->
 			new DirectlyDerivedVariable(name, directlyDerivedType, value);
 		case final AnyElementaryType anyElementaryType -> new ElementaryVariable<>(name, anyElementaryType, value);

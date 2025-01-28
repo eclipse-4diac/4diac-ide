@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value;
 
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 
-public sealed interface AnyDerivedValue extends AnyValue permits ArrayValue, StructValue {
+public sealed interface AnyDerivedValue extends AnyValue permits ArrayValue, StructValue, EnumValue {
 	@Override
 	AnyDerivedType getType();
 }
