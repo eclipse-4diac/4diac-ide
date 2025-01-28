@@ -1881,6 +1881,56 @@ finally {
 	restoreStackSize(stackSize);
 }
 
+// Entry rule entryRuleSTEnumLiteral
+entryRuleSTEnumLiteral
+:
+{ before(grammarAccess.getSTEnumLiteralRule()); }
+	 ruleSTEnumLiteral
+{ after(grammarAccess.getSTEnumLiteralRule()); } 
+	 EOF 
+;
+
+// Rule STEnumLiteral
+ruleSTEnumLiteral 
+	@init {
+		int stackSize = keepStackSize();
+	}
+	:
+	(
+		{ before(grammarAccess.getSTEnumLiteralAccess().getValueAssignment()); }
+		(rule__STEnumLiteral__ValueAssignment)
+		{ after(grammarAccess.getSTEnumLiteralAccess().getValueAssignment()); }
+	)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+// Entry rule entryRuleEnumValue
+entryRuleEnumValue
+:
+{ before(grammarAccess.getEnumValueRule()); }
+	 ruleEnumValue
+{ after(grammarAccess.getEnumValueRule()); } 
+	 EOF 
+;
+
+// Rule EnumValue
+ruleEnumValue 
+	@init {
+		int stackSize = keepStackSize();
+	}
+	:
+	(
+		{ before(grammarAccess.getEnumValueAccess().getGroup()); }
+		(rule__EnumValue__Group__0)
+		{ after(grammarAccess.getEnumValueAccess().getGroup()); }
+	)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
 // Entry rule entryRuleSTAnyType
 entryRuleSTAnyType
 :
@@ -3062,6 +3112,12 @@ rule__STLiteralExpressions__Alternatives
 		{ before(grammarAccess.getSTLiteralExpressionsAccess().getSTStringLiteralParserRuleCall_5()); }
 		ruleSTStringLiteral
 		{ after(grammarAccess.getSTLiteralExpressionsAccess().getSTStringLiteralParserRuleCall_5()); }
+	)
+	|
+	(
+		{ before(grammarAccess.getSTLiteralExpressionsAccess().getSTEnumLiteralParserRuleCall_6()); }
+		ruleSTEnumLiteral
+		{ after(grammarAccess.getSTLiteralExpressionsAccess().getSTEnumLiteralParserRuleCall_6()); }
 	)
 ;
 finally {
@@ -12669,6 +12725,87 @@ finally {
 }
 
 
+rule__EnumValue__Group__0
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__EnumValue__Group__0__Impl
+	rule__EnumValue__Group__1
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__EnumValue__Group__0__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getEnumValueAccess().getQualifiedNameParserRuleCall_0()); }
+	ruleQualifiedName
+	{ after(grammarAccess.getEnumValueAccess().getQualifiedNameParserRuleCall_0()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__EnumValue__Group__1
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__EnumValue__Group__1__Impl
+	rule__EnumValue__Group__2
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__EnumValue__Group__1__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getEnumValueAccess().getNumberSignKeyword_1()); }
+	NumberSign
+	{ after(grammarAccess.getEnumValueAccess().getNumberSignKeyword_1()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__EnumValue__Group__2
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__EnumValue__Group__2__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__EnumValue__Group__2__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getEnumValueAccess().getIDTerminalRuleCall_2()); }
+	RULE_ID
+	{ after(grammarAccess.getEnumValueAccess().getIDTerminalRuleCall_2()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
 rule__QualifiedName__Group__0
 	@init {
 		int stackSize = keepStackSize();
@@ -15955,6 +16092,25 @@ rule__STStringLiteral__ValueAssignment_1
 		{ before(grammarAccess.getSTStringLiteralAccess().getValueSTRINGTerminalRuleCall_1_0()); }
 		RULE_STRING
 		{ after(grammarAccess.getSTStringLiteralAccess().getValueSTRINGTerminalRuleCall_1_0()); }
+	)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STEnumLiteral__ValueAssignment
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	(
+		{ before(grammarAccess.getSTEnumLiteralAccess().getValueEnumeratedValueCrossReference_0()); }
+		(
+			{ before(grammarAccess.getSTEnumLiteralAccess().getValueEnumeratedValueEnumValueParserRuleCall_0_1()); }
+			ruleEnumValue
+			{ after(grammarAccess.getSTEnumLiteralAccess().getValueEnumeratedValueEnumValueParserRuleCall_0_1()); }
+		)
+		{ after(grammarAccess.getSTEnumLiteralAccess().getValueEnumeratedValueCrossReference_0()); }
 	)
 ;
 finally {

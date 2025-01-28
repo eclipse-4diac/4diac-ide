@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2024 Primetals Technologies GmbH, 
+ * Copyright (c) 2021, 2025 Primetals Technologies GmbH, 
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -21,6 +21,7 @@
  *       - type declaration
  *       - add imports and full-qualified access
  *       - add pragmas
+ *       - add enumerated value literals
  *******************************************************************************/
 grammar org.eclipse.fordiac.ide.structuredtextcore.STCore hidden(WS, ML_COMMENT, SL_COMMENT)
 
@@ -109,7 +110,8 @@ STRepeatArrayInitElement:
 	initExpressions+=STInitializerExpression)* ')';
 
 STStructInitializerExpression:
-	(type=[datatype::StructuredType|QualifiedName] '#' )? '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
+	(type=[datatype::StructuredType|QualifiedName] '#')? '(' values+=STStructInitElement (','
+	values+=STStructInitElement)* ')';
 
 STStructInitElement:
 	variable=[libraryElement::INamedElement|STFeatureName] ':=' value=STInitializerExpression;
@@ -283,7 +285,8 @@ STLiteralExpressions returns STExpression:
 	STTimeLiteral |
 	STTimeOfDayLiteral |
 	STDateAndTimeLiteral |
-	STStringLiteral;
+	STStringLiteral |
+	STEnumLiteral;
 
 STSignedLiteralExpressions returns STExpression:
 	STSignedNumericLiteral;
@@ -323,6 +326,12 @@ STDateAndTimeLiteral:
 
 STStringLiteral:
 	(type=[datatype::DataType|STAnyCharsType] '#')? value=STRING;
+
+STEnumLiteral:
+	value=[datatype::EnumeratedValue|EnumValue];
+
+EnumValue:
+	QualifiedName '#' ID;
 
 STAnyType:
 	QualifiedName | STAnyBuiltinType;

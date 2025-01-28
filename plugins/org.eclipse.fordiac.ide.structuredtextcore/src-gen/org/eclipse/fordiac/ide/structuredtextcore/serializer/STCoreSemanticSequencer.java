@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STEnumLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
@@ -144,6 +145,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				return; 
 			case STCorePackage.ST_ELSE_PART:
 				sequence_STElsePart(context, (STElsePart) semanticObject); 
+				return; 
+			case STCorePackage.ST_ENUM_LITERAL:
+				sequence_STEnumLiteral(context, (STEnumLiteral) semanticObject); 
 				return; 
 			case STCorePackage.ST_EXIT:
 				sequence_STStatement(context, (STExit) semanticObject); 
@@ -763,6 +767,54 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 */
 	protected void sequence_STElsePart(ISerializationContext context, STElsePart semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     STStatement returns STEnumLiteral
+	 *     STAssignment returns STEnumLiteral
+	 *     STAssignment.STAssignment_1_0 returns STEnumLiteral
+	 *     STExpression returns STEnumLiteral
+	 *     STSubrangeExpression returns STEnumLiteral
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STEnumLiteral
+	 *     STOrExpression returns STEnumLiteral
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STEnumLiteral
+	 *     STXorExpression returns STEnumLiteral
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STEnumLiteral
+	 *     STAndExpression returns STEnumLiteral
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STEnumLiteral
+	 *     STEqualityExpression returns STEnumLiteral
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STEnumLiteral
+	 *     STComparisonExpression returns STEnumLiteral
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STEnumLiteral
+	 *     STAddSubExpression returns STEnumLiteral
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STEnumLiteral
+	 *     STMulDivModExpression returns STEnumLiteral
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STEnumLiteral
+	 *     STPowerExpression returns STEnumLiteral
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STEnumLiteral
+	 *     STUnaryExpression returns STEnumLiteral
+	 *     STAccessExpression returns STEnumLiteral
+	 *     STAccessExpression.STMemberAccessExpression_1_0_0 returns STEnumLiteral
+	 *     STAccessExpression.STArrayAccessExpression_1_1_0 returns STEnumLiteral
+	 *     STPrimaryExpression returns STEnumLiteral
+	 *     STLiteralExpressions returns STEnumLiteral
+	 *     STEnumLiteral returns STEnumLiteral
+	 *
+	 * Constraint:
+	 *     value=[EnumeratedValue|EnumValue]
+	 * </pre>
+	 */
+	protected void sequence_STEnumLiteral(ISerializationContext context, STEnumLiteral semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_ENUM_LITERAL__VALUE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_ENUM_LITERAL__VALUE));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTEnumLiteralAccess().getValueEnumeratedValueEnumValueParserRuleCall_0_1(), semanticObject.eGet(STCorePackage.Literals.ST_ENUM_LITERAL__VALUE, false));
+		feeder.finish();
 	}
 	
 	

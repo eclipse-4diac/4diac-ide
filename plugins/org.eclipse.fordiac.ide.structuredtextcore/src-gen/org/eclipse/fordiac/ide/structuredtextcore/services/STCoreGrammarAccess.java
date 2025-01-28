@@ -931,13 +931,15 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cRightParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
 		//STStructInitializerExpression:
-		//    (type=[datatype::StructuredType|QualifiedName] '#' )? '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
+		//    (type=[datatype::StructuredType|QualifiedName] '#')? '(' values+=STStructInitElement (','
+		//    values+=STStructInitElement)* ')';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//(type=[datatype::StructuredType|QualifiedName] '#' )? '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')'
+		//(type=[datatype::StructuredType|QualifiedName] '#')? '(' values+=STStructInitElement (','
+		//values+=STStructInitElement)* ')'
 		public Group getGroup() { return cGroup; }
 		
-		//(type=[datatype::StructuredType|QualifiedName] '#' )?
+		//(type=[datatype::StructuredType|QualifiedName] '#')?
 		public Group getGroup_0() { return cGroup_0; }
 		
 		//type=[datatype::StructuredType|QualifiedName]
@@ -961,7 +963,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//STStructInitElement
 		public RuleCall getValuesSTStructInitElementParserRuleCall_2_0() { return cValuesSTStructInitElementParserRuleCall_2_0; }
 		
-		//(',' values+=STStructInitElement)*
+		//(','
+		//   values+=STStructInitElement)*
 		public Group getGroup_3() { return cGroup_3; }
 		
 		//','
@@ -2609,6 +2612,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cSTTimeOfDayLiteralParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
 		private final RuleCall cSTDateAndTimeLiteralParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
 		private final RuleCall cSTStringLiteralParserRuleCall_5 = (RuleCall)cAlternatives.eContents().get(5);
+		private final RuleCall cSTEnumLiteralParserRuleCall_6 = (RuleCall)cAlternatives.eContents().get(6);
 		
 		//STLiteralExpressions returns STExpression:
 		//    STNumericLiteral |
@@ -2616,7 +2620,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//    STTimeLiteral |
 		//    STTimeOfDayLiteral |
 		//    STDateAndTimeLiteral |
-		//    STStringLiteral;
+		//    STStringLiteral |
+		//    STEnumLiteral;
 		@Override public ParserRule getRule() { return rule; }
 		
 		//STNumericLiteral |
@@ -2624,7 +2629,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//STTimeLiteral |
 		//STTimeOfDayLiteral |
 		//STDateAndTimeLiteral |
-		//STStringLiteral
+		//STStringLiteral |
+		//STEnumLiteral
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//STNumericLiteral
@@ -2644,6 +2650,9 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//STStringLiteral
 		public RuleCall getSTStringLiteralParserRuleCall_5() { return cSTStringLiteralParserRuleCall_5; }
+		
+		//STEnumLiteral
+		public RuleCall getSTEnumLiteralParserRuleCall_6() { return cSTEnumLiteralParserRuleCall_6; }
 	}
 	public class STSignedLiteralExpressionsElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STSignedLiteralExpressions");
@@ -2998,6 +3007,48 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//STRING
 		public RuleCall getValueSTRINGTerminalRuleCall_1_0() { return cValueSTRINGTerminalRuleCall_1_0; }
+	}
+	public class STEnumLiteralElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STEnumLiteral");
+		private final Assignment cValueAssignment = (Assignment)rule.eContents().get(1);
+		private final CrossReference cValueEnumeratedValueCrossReference_0 = (CrossReference)cValueAssignment.eContents().get(0);
+		private final RuleCall cValueEnumeratedValueEnumValueParserRuleCall_0_1 = (RuleCall)cValueEnumeratedValueCrossReference_0.eContents().get(1);
+		
+		//STEnumLiteral:
+		//    value=[datatype::EnumeratedValue|EnumValue];
+		@Override public ParserRule getRule() { return rule; }
+		
+		//value=[datatype::EnumeratedValue|EnumValue]
+		public Assignment getValueAssignment() { return cValueAssignment; }
+		
+		//[datatype::EnumeratedValue|EnumValue]
+		public CrossReference getValueEnumeratedValueCrossReference_0() { return cValueEnumeratedValueCrossReference_0; }
+		
+		//EnumValue
+		public RuleCall getValueEnumeratedValueEnumValueParserRuleCall_0_1() { return cValueEnumeratedValueEnumValueParserRuleCall_0_1; }
+	}
+	public class EnumValueElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.EnumValue");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final RuleCall cQualifiedNameParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
+		private final Keyword cNumberSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final RuleCall cIDTerminalRuleCall_2 = (RuleCall)cGroup.eContents().get(2);
+		
+		//EnumValue:
+		//    QualifiedName '#' ID;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//QualifiedName '#' ID
+		public Group getGroup() { return cGroup; }
+		
+		//QualifiedName
+		public RuleCall getQualifiedNameParserRuleCall_0() { return cQualifiedNameParserRuleCall_0; }
+		
+		//'#'
+		public Keyword getNumberSignKeyword_1() { return cNumberSignKeyword_1; }
+		
+		//ID
+		public RuleCall getIDTerminalRuleCall_2() { return cIDTerminalRuleCall_2; }
 	}
 	public class STAnyTypeElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STAnyType");
@@ -4324,6 +4375,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final STTimeOfDayLiteralElements pSTTimeOfDayLiteral;
 	private final STDateAndTimeLiteralElements pSTDateAndTimeLiteral;
 	private final STStringLiteralElements pSTStringLiteral;
+	private final STEnumLiteralElements pSTEnumLiteral;
+	private final EnumValueElements pEnumValue;
 	private final STAnyTypeElements pSTAnyType;
 	private final STAnyBuiltinTypeElements pSTAnyBuiltinType;
 	private final STAnyBitTypeElements pSTAnyBitType;
@@ -4451,6 +4504,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pSTTimeOfDayLiteral = new STTimeOfDayLiteralElements();
 		this.pSTDateAndTimeLiteral = new STDateAndTimeLiteralElements();
 		this.pSTStringLiteral = new STStringLiteralElements();
+		this.pSTEnumLiteral = new STEnumLiteralElements();
+		this.pEnumValue = new EnumValueElements();
 		this.pSTAnyType = new STAnyTypeElements();
 		this.pSTAnyBuiltinType = new STAnyBuiltinTypeElements();
 		this.pSTAnyBitType = new STAnyBitTypeElements();
@@ -4740,7 +4795,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STStructInitializerExpression:
-	//    (type=[datatype::StructuredType|QualifiedName] '#' )? '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
+	//    (type=[datatype::StructuredType|QualifiedName] '#')? '(' values+=STStructInitElement (','
+	//    values+=STStructInitElement)* ')';
 	public STStructInitializerExpressionElements getSTStructInitializerExpressionAccess() {
 		return pSTStructInitializerExpression;
 	}
@@ -5250,7 +5306,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	//    STTimeLiteral |
 	//    STTimeOfDayLiteral |
 	//    STDateAndTimeLiteral |
-	//    STStringLiteral;
+	//    STStringLiteral |
+	//    STEnumLiteral;
 	public STLiteralExpressionsElements getSTLiteralExpressionsAccess() {
 		return pSTLiteralExpressions;
 	}
@@ -5373,6 +5430,26 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	public ParserRule getSTStringLiteralRule() {
 		return getSTStringLiteralAccess().getRule();
+	}
+	
+	//STEnumLiteral:
+	//    value=[datatype::EnumeratedValue|EnumValue];
+	public STEnumLiteralElements getSTEnumLiteralAccess() {
+		return pSTEnumLiteral;
+	}
+	
+	public ParserRule getSTEnumLiteralRule() {
+		return getSTEnumLiteralAccess().getRule();
+	}
+	
+	//EnumValue:
+	//    QualifiedName '#' ID;
+	public EnumValueElements getEnumValueAccess() {
+		return pEnumValue;
+	}
+	
+	public ParserRule getEnumValueRule() {
+		return getEnumValueAccess().getRule();
 	}
 	
 	//STAnyType:

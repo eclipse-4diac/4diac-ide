@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STEnumLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
@@ -157,6 +158,9 @@ public class GlobalConstantsSemanticSequencer extends STCoreSemanticSequencer {
 				return; 
 			case STCorePackage.ST_ELSE_PART:
 				sequence_STElsePart(context, (STElsePart) semanticObject); 
+				return; 
+			case STCorePackage.ST_ENUM_LITERAL:
+				sequence_STEnumLiteral(context, (STEnumLiteral) semanticObject); 
 				return; 
 			case STCorePackage.ST_EXIT:
 				sequence_STStatement(context, (STExit) semanticObject); 

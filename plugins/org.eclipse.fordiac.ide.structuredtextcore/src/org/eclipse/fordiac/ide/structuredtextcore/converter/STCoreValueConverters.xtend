@@ -48,6 +48,9 @@ class STCoreValueConverters extends AbstractDeclarativeValueConverterService {
 	@Inject
 	STStringValueConverter stringValueConverter
 
+	@Inject
+	STEnumValueConverter enumValueConverter
+
 	@ValueConverter(rule="Numeric")
 	def IValueConverter<Object> Numeric() {
 		return numericValueConverter;
@@ -81,5 +84,10 @@ class STCoreValueConverters extends AbstractDeclarativeValueConverterService {
 	@ValueConverter(rule="STRING")
 	def IValueConverter<STString> STRING() {
 		return stringValueConverter;
+	}
+
+	@ValueConverter(rule="EnumValue")
+	def IValueConverter<String> EnumValue() {
+		return enumValueConverter;
 	}
 }

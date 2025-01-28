@@ -77,6 +77,7 @@ public abstract class AbstractSTAlgorithmSyntacticSequencer extends AbstractSynt
 	 *     (rule start) (ambiguity) value=Numeric
 	 *     (rule start) (ambiguity) value=STRING
 	 *     (rule start) (ambiguity) value=SignedNumeric
+	 *     (rule start) (ambiguity) value=[EnumeratedValue|EnumValue]
 	 *     (rule start) (ambiguity) {STArrayAccessExpression.receiver=}
 	 *     (rule start) (ambiguity) {STBinaryExpression.left=}
 	 *     (rule start) (ambiguity) {STMemberAccessExpression.receiver=}
@@ -103,6 +104,7 @@ public abstract class AbstractSTAlgorithmSyntacticSequencer extends AbstractSynt
 	 *     (rule start) (ambiguity) value=Numeric
 	 *     (rule start) (ambiguity) value=STRING
 	 *     (rule start) (ambiguity) value=SignedNumeric
+	 *     (rule start) (ambiguity) value=[EnumeratedValue|EnumValue]
 	 *     (rule start) (ambiguity) {STArrayAccessExpression.receiver=}
 	 *     (rule start) (ambiguity) {STBinaryExpression.left=}
 	 *     (rule start) (ambiguity) {STMemberAccessExpression.receiver=}

@@ -191,6 +191,7 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTDateAndTimeLiteralAccess().getGroup(), "rule__STDateAndTimeLiteral__Group__0");
 			builder.put(grammarAccess.getSTStringLiteralAccess().getGroup(), "rule__STStringLiteral__Group__0");
 			builder.put(grammarAccess.getSTStringLiteralAccess().getGroup_0(), "rule__STStringLiteral__Group_0__0");
+			builder.put(grammarAccess.getEnumValueAccess().getGroup(), "rule__EnumValue__Group__0");
 			builder.put(grammarAccess.getQualifiedNameAccess().getGroup(), "rule__QualifiedName__Group__0");
 			builder.put(grammarAccess.getQualifiedNameAccess().getGroup_1(), "rule__QualifiedName__Group_1__0");
 			builder.put(grammarAccess.getQualifiedNameWithWildcardAccess().getGroup(), "rule__QualifiedNameWithWildcard__Group__0");
@@ -330,6 +331,7 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTDateAndTimeLiteralAccess().getValueAssignment_2(), "rule__STDateAndTimeLiteral__ValueAssignment_2");
 			builder.put(grammarAccess.getSTStringLiteralAccess().getTypeAssignment_0_0(), "rule__STStringLiteral__TypeAssignment_0_0");
 			builder.put(grammarAccess.getSTStringLiteralAccess().getValueAssignment_1(), "rule__STStringLiteral__ValueAssignment_1");
+			builder.put(grammarAccess.getSTEnumLiteralAccess().getValueAssignment(), "rule__STEnumLiteral__ValueAssignment");
 		}
 	}
 	
