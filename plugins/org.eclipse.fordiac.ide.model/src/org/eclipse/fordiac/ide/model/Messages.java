@@ -62,6 +62,8 @@ public final class Messages extends NLS {
 	public static String DataTypeImporter_UNSUPPORTED_DATATYPE_IN_FILE;
 	public static String DataTypeLibrary_InvalidMaxLengthInStringType;
 	public static String DataTypeLibrary_MissingDatatype;
+	public static String EnumValueConverter_NoSuchValue;
+
 	public static String Error_RecursiveType;
 	public static String Error_SelfInsertion;
 	public static String ErrorMarkerInterfaceAnnotations_MissingVariableForAttribute;

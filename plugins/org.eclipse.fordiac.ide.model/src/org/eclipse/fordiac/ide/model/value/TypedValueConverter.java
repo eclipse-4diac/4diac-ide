@@ -52,6 +52,7 @@ import org.eclipse.fordiac.ide.model.data.UsintType;
 import org.eclipse.fordiac.ide.model.data.WordType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 
 public final class TypedValueConverter implements ValueConverter<Object> {
@@ -177,6 +178,9 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 		DataType result = SHORT_FORM_TRANSLATIONS.get(prefix);
 		if (result == null) {
 			result = ElementaryTypes.getTypeByName(prefix);
+		}
+		if (result == null && PackageNameHelper.getFullTypeName(type).equalsIgnoreCase(prefix)) {
+			result = type;
 		}
 		if (result == null && typeLibrary != null) {
 			result = typeLibrary.getTypeIfExists(prefix);
