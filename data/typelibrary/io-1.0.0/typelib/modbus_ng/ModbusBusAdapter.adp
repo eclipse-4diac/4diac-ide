@@ -8,7 +8,7 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="INIT0" Type="Event" Comment="">
+			<Event Name="INITO" Type="Event" Comment="">
 				<With Var="QO"/>
 			</Event>
 		</EventInputs>
