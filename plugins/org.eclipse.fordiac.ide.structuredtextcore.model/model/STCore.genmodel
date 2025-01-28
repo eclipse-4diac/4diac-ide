@@ -252,6 +252,12 @@
       <genOperations ecoreOperation="STCore.ecore#//STStringLiteral/getDeclaredResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
     </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STEnumLiteral">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STEnumLiteral/value"/>
+      <genOperations ecoreOperation="STCore.ecore#//STEnumLiteral/getResultType" body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STEnumLiteral/getDeclaredResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
+    </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STVarDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STVarDeclaration/locatedAt"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STVarDeclaration/array"/>

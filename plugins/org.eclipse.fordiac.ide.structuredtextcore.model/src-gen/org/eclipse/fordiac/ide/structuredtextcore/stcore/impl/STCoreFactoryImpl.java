@@ -113,6 +113,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 			case STCorePackage.ST_TIME_OF_DAY_LITERAL: return createSTTimeOfDayLiteral();
 			case STCorePackage.ST_DATE_AND_TIME_LITERAL: return createSTDateAndTimeLiteral();
 			case STCorePackage.ST_STRING_LITERAL: return createSTStringLiteral();
+			case STCorePackage.ST_ENUM_LITERAL: return createSTEnumLiteral();
 			case STCorePackage.ST_VAR_DECLARATION: return createSTVarDeclaration();
 			case STCorePackage.ST_TYPE_DECLARATION: return createSTTypeDeclaration();
 			case STCorePackage.ST_RETURN: return createSTReturn();
@@ -612,6 +613,17 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	public STStringLiteral createSTStringLiteral() {
 		STStringLiteralImpl stStringLiteral = new STStringLiteralImpl();
 		return stStringLiteral;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STEnumLiteral createSTEnumLiteral() {
+		STEnumLiteralImpl stEnumLiteral = new STEnumLiteralImpl();
+		return stEnumLiteral;
 	}
 
 	/**

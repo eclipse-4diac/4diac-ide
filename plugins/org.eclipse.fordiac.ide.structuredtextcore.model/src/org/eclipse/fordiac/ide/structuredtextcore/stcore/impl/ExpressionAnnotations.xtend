@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STEnumLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
@@ -272,6 +273,10 @@ final package class ExpressionAnnotations {
 			if(expr.value.wide) ElementaryTypes.WSTRING else ElementaryTypes.STRING
 		}
 	}
+
+	def package static INamedElement getResultType(STEnumLiteral expr) { getDeclaredResultType(expr) }
+
+	def package static INamedElement getDeclaredResultType(STEnumLiteral expr) { expr.value?.type }
 
 	def package static INamedElement getResultType(STCallUnnamedArgument arg) { arg.argument?.resultType }
 

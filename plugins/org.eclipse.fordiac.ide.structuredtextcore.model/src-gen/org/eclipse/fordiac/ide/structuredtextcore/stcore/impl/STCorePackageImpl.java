@@ -65,6 +65,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STEnumLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource;
@@ -377,6 +378,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	private EClass stStringLiteralEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stEnumLiteralEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1566,6 +1574,26 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getSTEnumLiteral() {
+		return stEnumLiteralEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTEnumLiteral_Value() {
+		return (EReference)stEnumLiteralEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSTVarDeclaration() {
 		return stVarDeclarationEClass;
 	}
@@ -2517,6 +2545,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		createEReference(stStringLiteralEClass, ST_STRING_LITERAL__TYPE);
 		createEAttribute(stStringLiteralEClass, ST_STRING_LITERAL__VALUE);
 
+		stEnumLiteralEClass = createEClass(ST_ENUM_LITERAL);
+		createEReference(stEnumLiteralEClass, ST_ENUM_LITERAL__VALUE);
+
 		stVarDeclarationEClass = createEClass(ST_VAR_DECLARATION);
 		createEReference(stVarDeclarationEClass, ST_VAR_DECLARATION__LOCATED_AT);
 		createEAttribute(stVarDeclarationEClass, ST_VAR_DECLARATION__ARRAY);
@@ -2680,6 +2711,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		stTimeOfDayLiteralEClass.getESuperTypes().add(this.getSTExpression());
 		stDateAndTimeLiteralEClass.getESuperTypes().add(this.getSTExpression());
 		stStringLiteralEClass.getESuperTypes().add(this.getSTExpression());
+		stEnumLiteralEClass.getESuperTypes().add(this.getSTExpression());
 		stVarDeclarationEClass.getESuperTypes().add(theLibraryElementPackage.getITypedElement());
 		stReturnEClass.getESuperTypes().add(this.getSTStatement());
 		stContinueEClass.getESuperTypes().add(this.getSTStatement());
@@ -2893,6 +2925,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		addEOperation(stStringLiteralEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(stStringLiteralEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(stEnumLiteralEClass, STEnumLiteral.class, "STEnumLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSTEnumLiteral_Value(), theDataPackage.getEnumeratedValue(), null, "value", null, 0, 1, STEnumLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stEnumLiteralEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stEnumLiteralEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stVarDeclarationEClass, STVarDeclaration.class, "STVarDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTVarDeclaration_LocatedAt(), theLibraryElementPackage.getINamedElement(), null, "locatedAt", null, 0, 1, STVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
