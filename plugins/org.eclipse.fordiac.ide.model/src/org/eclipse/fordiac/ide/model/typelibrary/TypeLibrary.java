@@ -272,7 +272,7 @@ public final class TypeLibrary {
 			final TypeEntry errorEntry = new ErrorAttributeTypeEntryImpl();
 			errorEntry.setType(at);
 			errorEntry.setTypeLibrary(this);
-
+			attr.setAttributeDeclaration(at);
 			return errorEntry;
 		});
 	}

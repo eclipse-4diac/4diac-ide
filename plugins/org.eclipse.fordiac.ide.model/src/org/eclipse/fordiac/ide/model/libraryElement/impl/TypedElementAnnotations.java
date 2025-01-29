@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -48,7 +49,22 @@ public final class TypedElementAnnotations {
 			}
 			return false;
 		}
+		if (element instanceof final Attribute attr
+				&& attr.getAttributeDeclaration().getTypeEntry() instanceof ErrorTypeEntry) {
+			if (null != diagnostics) {
+				diagnostics.add(createAttributeValidationDiagnostic(
+						MessageFormat.format(Messages.ErrorMarkerInterfaceAnnotations_MissingAttribute, attr.getName()),
+						element));
+			}
+			return false;
+		}
 		return true;
+	}
+
+	private static Diagnostic createAttributeValidationDiagnostic(final String message, final ITypedElement element) {
+		return new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+				LibraryElementValidator.ERROR_MARKER_INTERFACE__VALIDATE_ATTRIBUTES, message,
+				FordiacMarkerHelper.getDiagnosticData(element, getTypeFeature(element), getFullTypeName(element)));
 	}
 
 	private static Diagnostic createTypeValidationDiagnostic(final String message, final ITypedElement element) {

@@ -43,6 +43,7 @@ import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
@@ -445,10 +446,12 @@ public abstract class CommonElementImporter {
 					attribute.setAttributeDeclaration(attributeTypeEntry.getType());
 					attribute.setType(attributeTypeEntry.getType().getType());
 				} else {
-					final TypeEntry tE = getTypeLibrary().createErrorTypeEntry(attribute);
-					final AttributeDeclaration at = (AttributeDeclaration) tE.getType();
-					attribute.setAttributeDeclaration(at);
-					attribute.setType(at.getType());
+					final TypeEntry typeEntry = getTypeLibrary().createErrorTypeEntry(attribute);
+					final AttributeDeclaration aDecl = (AttributeDeclaration) typeEntry.getType();
+					aDecl.setType(DataFactory.eINSTANCE.createStructuredType()); // ADECL TYPE:
+					attribute.setAttributeDeclaration(aDecl);
+					attribute.setType(aDecl.getType());
+
 				}
 			}
 		}
@@ -465,17 +468,6 @@ public abstract class CommonElementImporter {
 
 		confObject.getAttributes().add(attribute);
 	}
-
-//	protected void createErrorMarkerForAttribute(final ConfigurableObject confObject, final String errorMessage) {
-//		final IFile file = getFile();
-//		if (file != null) {
-//			FordiacMarkerHelper.updateMarkers(file, FordiacErrorMarker.VALIDATION_MARKER, Collections.EMPTY_LIST, true);
-//			FordiacMarkerHelper.createMarkers(file,
-//					List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage)
-//							.setType(FordiacErrorMarker.TYPE_LIBRARY_MARKER).setLineNumber(getLineNumber())
-//							.setTarget(confObject)));
-//		}
-//	}
 
 	protected VarDeclaration parseParameter() throws TypeImportException, XMLStreamException {
 		final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
