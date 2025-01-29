@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022-2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
@@ -44,6 +45,7 @@ public class FBLaunchEventQueue implements FBEvaluatorCountingEventQueue, FBEval
 
 	private final BlockingQueue<Event> queue = new LinkedBlockingQueue<>();
 
+	private final AtomicLong totalInputEventCount = new AtomicLong();
 	private final ConcurrentMap<Event, AtomicInteger> eventCounts = new ConcurrentHashMap<>();
 
 	/**
@@ -91,11 +93,19 @@ public class FBLaunchEventQueue implements FBEvaluatorCountingEventQueue, FBEval
 	protected void incrementEventCount(final Event ev) {
 		final AtomicInteger count = getCount(ev);
 		count.incrementAndGet();
+		if (ev.isIsInput()) {
+			totalInputEventCount.incrementAndGet();
+		}
 	}
 
 	@Override
 	public AtomicInteger getCount(final Event ev) {
 		return eventCounts.computeIfAbsent(ev, e -> new AtomicInteger());
+	}
+
+	@Override
+	public AtomicLong getTotalInputCount() {
+		return totalInputEventCount;
 	}
 
 	/**
@@ -215,7 +225,7 @@ public class FBLaunchEventQueue implements FBEvaluatorCountingEventQueue, FBEval
 
 	private void updateEvaluatorClock() {
 		if (evaluator != null) {
-			evaluator.getExecutor().setClock(currentClock.get());
+			evaluator.getExecutor().setMonotonicClock(currentClock.get());
 		}
 	}
 }

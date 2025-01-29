@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Martin Erich Jobst,
+ * Copyright (c) 2022, 2025 Martin Erich Jobst,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -25,7 +25,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.function.BinaryOperator;
 import java.util.function.DoubleBinaryOperator;
@@ -2226,20 +2226,28 @@ public interface StandardFunctions extends Functions {
 
 	@Comment("Returns relative time stamp.")
 	static TimeValue NOW_MONOTONIC() {
-		return TimeValue.toTimeValue(Instant.EPOCH.until(AbstractEvaluator.currentClock().instant(), ChronoUnit.NANOS));
+		return TimeValue.toTimeValue(
+				Instant.EPOCH.until(AbstractEvaluator.currentMonotonicClock().instant(), ChronoUnit.NANOS));
 	}
 
 	static DateAndTimeValue NOW() {
-		return DateAndTimeValue
-				.toDateAndTimeValue(Instant.EPOCH.until(AbstractEvaluator.currentClock().instant(), ChronoUnit.NANOS));
+		return DateAndTimeValue.toDateAndTimeValue(
+				Instant.EPOCH.until(AbstractEvaluator.currentRealtimeClock().instant(), ChronoUnit.NANOS));
 	}
 
 	@OnlySupportedBy("4diac IDE")
-	@Comment("Returns relative time stamp.")
+	@Comment("Override the monotonic clock.")
 	static void OVERRIDE_NOW_MONOTONIC(final TimeValue value) {
 		final Duration duration = value.toDuration();
 		final Instant instant = Instant.ofEpochSecond(duration.getSeconds(), duration.getNano());
-		AbstractEvaluator.setClock(Clock.fixed(instant, ZoneId.systemDefault()));
+		AbstractEvaluator.setMonotonicClock(Clock.fixed(instant, ZoneOffset.UTC));
+	}
+
+	@OnlySupportedBy("4diac IDE")
+	@Comment("Override the real-time clock.")
+	static void OVERRIDE_NOW(final DateAndTimeValue value) {
+		final Instant instant = value.toLocalDateTime().toInstant(ZoneOffset.UTC);
+		AbstractEvaluator.setRealtimeClock(Clock.fixed(instant, ZoneOffset.UTC));
 	}
 
 	/* Date and Time conversions */

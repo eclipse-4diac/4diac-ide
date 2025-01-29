@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.eval;
 import java.io.Closeable;
 import java.time.Clock;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.SynchronousQueue;
@@ -35,7 +36,8 @@ public class EvaluatorThreadPoolExecutor extends ThreadPoolExecutor {
 	private final Set<EvaluatorMonitor> monitorSet = ConcurrentHashMap.<EvaluatorMonitor>newKeySet();
 	private final Map<String, Object> context = new ConcurrentHashMap<>();
 	private final Map<String, Closeable> sharedResources = new ConcurrentHashMap<>();
-	private Clock clock = AbstractEvaluator.MonotonicClock.UTC;
+	private Clock monotonicClock = AbstractEvaluator.MonotonicClock.UTC;
+	private Clock realtimeClock = Clock.systemUTC();
 
 	/**
 	 * Create a new evaluator thread pool executor with unlimited number of threads
@@ -142,21 +144,39 @@ public class EvaluatorThreadPoolExecutor extends ThreadPoolExecutor {
 	}
 
 	/**
-	 * Get the current clock for this executor
+	 * Get the current monotonic clock for this executor
 	 *
-	 * @return The clock
+	 * @return The monotonic clock
 	 */
-	public Clock getClock() {
-		return clock;
+	public Clock getMonotonicClock() {
+		return monotonicClock;
 	}
 
 	/**
-	 * Set the current clock for this executor
+	 * Set the current monotonic clock for this executor
 	 *
-	 * @param clock The clock
+	 * @param monotonicClock The monotonic clock or null to reset to system default
 	 */
-	public void setClock(final Clock clock) {
-		this.clock = clock;
+	public void setMonotonicClock(final Clock monotonicClock) {
+		this.monotonicClock = Objects.requireNonNullElse(monotonicClock, AbstractEvaluator.MonotonicClock.UTC);
+	}
+
+	/**
+	 * Get the current realtime clock for this executor
+	 *
+	 * @return The realtime clock
+	 */
+	public Clock getRealtimeClock() {
+		return realtimeClock;
+	}
+
+	/**
+	 * Set the current realtime clock for this executor
+	 *
+	 * @param realtimeClock The realtime clock or null to reset to system default
+	 */
+	public void setRealtimeClock(final Clock realtimeClock) {
+		this.realtimeClock = Objects.requireNonNullElseGet(realtimeClock, Clock::systemUTC);
 	}
 
 	@Override

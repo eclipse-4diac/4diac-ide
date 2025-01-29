@@ -157,7 +157,7 @@ public class DebugTimeComposite {
 
 	private void systemSelection() {
 		// time is set to default system time
-		evaluator.getExecutor().setClock(AbstractEvaluator.MonotonicClock.UTC);
+		evaluator.getExecutor().setMonotonicClock(AbstractEvaluator.MonotonicClock.UTC);
 		if (eventQueue != null) {
 			eventQueue.setEvaluatorProcess(evaluator);
 			eventQueue.setDebugTimeValue(FBDebugClockMode.SYSTEM, Duration.ZERO);
@@ -188,7 +188,7 @@ public class DebugTimeComposite {
 				eventQueue.setEvaluatorProcess(evaluator);
 				eventQueue.setDebugTimeValue(FBDebugClockMode.MANUAL, manualTime);
 			}
-			evaluator.getExecutor().setClock(Clock.fixed(instant, ZoneId.systemDefault()));
+			evaluator.getExecutor().setMonotonicClock(Clock.fixed(instant, ZoneId.systemDefault()));
 		} catch (final NumberFormatException | java.lang.ArithmeticException e) {
 			throw new IllegalStateException("Debug Time Value is not accepted!"); //$NON-NLS-1$
 		}
