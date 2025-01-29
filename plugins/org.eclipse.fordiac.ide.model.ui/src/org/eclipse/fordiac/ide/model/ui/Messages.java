@@ -24,6 +24,7 @@ public final class Messages extends NLS {
 	public static String DataTypeDropdown_Type_Selection;
 	public static String DataTypeDropdown_Select_Type;
 	public static String DataTypeDropdown_Elementary_Types;
+	public static String AttributeTypeDropdown_Attribute_Types;
 	public static String DataTypeDropdown_STRUCT_Types;
 	public static String OpenEditorAction_text;
 	public static String OpenEditorAction_viewertext;

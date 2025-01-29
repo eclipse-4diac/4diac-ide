@@ -134,13 +134,16 @@ public final class FordiacMessages extends NLS {
 
 	public static String Repair_Dialog_Delete_Elements; // NOSONAR
 	public static String Repair_Dialog_New_DataType;// NOSONAR
+	public static String Repair_Dialog_New_Attribute;// NOSONAR
 	public static String Repair_Dialog_Pin_Add;// NOSONAR
 	public static String Repair_Dialog_Pin_Remove;// NOSONAR
 	public static String Repair_Dialog_FB_Title;// NOSONAR
 	public static String Repair_Dialog_New_FB;// NOSONAR
 	public static String Repair_Dialog_ChangeDataType;// NOSONAR
+	public static String Repair_Dialog_ChangeAttribute;// NOSONAR
 	public static String Repair_Dialog_ChangeFBType;// NOSONAR
 	public static String Repair_Dialog_BestFitDataType;// NOSONAR
+	public static String Repair_Dialog_BestFitAttrType;// NOSONAR
 	public static String Repair_Dialog_BestFitFBType;// NOSONAR
 
 	public static String Subapp_Size_DisableAutoResize; // NOSONAR

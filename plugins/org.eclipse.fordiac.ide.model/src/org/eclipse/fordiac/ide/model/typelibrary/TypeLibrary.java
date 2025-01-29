@@ -53,16 +53,22 @@ import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
 import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
+import org.eclipse.fordiac.ide.model.data.DataFactory;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorAdapterTypeEntryImpl;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorAttributeTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorFBTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorSubAppTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
@@ -251,24 +257,43 @@ public final class TypeLibrary {
 	public TypeEntry createErrorTypeEntry(final String typeName, final EClass typeClass) {
 		final String resolvedTypeName = typeName == null ? "" : typeName; //$NON-NLS-1$
 		return errorTypes.computeIfAbsent(resolvedTypeName.toLowerCase(), name -> {
-			final FBType fbType = (FBType) LibraryElementFactory.eINSTANCE.create(typeClass);
-			PackageNameHelper.setFullTypeName(fbType, resolvedTypeName);
-			fbType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-			final TypeEntry entry = createErrorTypeEntry(fbType);
-			entry.setType(fbType);
+			final LibraryElement libraryElement = createErrorType(resolvedTypeName, typeClass);
+			final TypeEntry entry = createErrorTypeEntry(libraryElement);
+			entry.setType(libraryElement);
 			entry.setTypeLibrary(this);
 			return entry;
 		});
 	}
 
-	private static TypeEntry createErrorTypeEntry(final FBType fbType) {
-		if (fbType instanceof AdapterType) {
+	private static LibraryElement createErrorType(final String typeName, final EClass typeClass) {
+		final LibraryElement libraryElement = (LibraryElement) LibraryElementFactory.eINSTANCE.create(typeClass);
+		PackageNameHelper.setFullTypeName(libraryElement, typeName);
+		if (libraryElement instanceof final FBType fbType) {
+			fbType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		} else if (libraryElement instanceof final AttributeDeclaration attributeDeclaration) {
+			final DirectlyDerivedType type = DataFactory.eINSTANCE.createDirectlyDerivedType();
+			type.setName(libraryElement.getName());
+			type.setBaseType(ElementaryTypes.STRING);
+			attributeDeclaration.setType(type);
+		}
+		return libraryElement;
+	}
+
+	private static TypeEntry createErrorTypeEntry(final LibraryElement libraryElement) {
+		if (libraryElement instanceof AdapterType) {
 			return new ErrorAdapterTypeEntryImpl();
 		}
-		if (fbType instanceof SubAppType) {
+		if (libraryElement instanceof SubAppType) {
 			return new ErrorSubAppTypeEntryImpl();
 		}
-		return new ErrorFBTypeEntryImpl();
+		if (libraryElement instanceof FBType) {
+			return new ErrorFBTypeEntryImpl();
+		}
+		if (libraryElement instanceof AttributeDeclaration) {
+			return new ErrorAttributeTypeEntryImpl();
+		}
+		throw new UnsupportedOperationException(
+				"Cannot create error type entry for " + libraryElement.eClass().getName()); //$NON-NLS-1$
 	}
 
 	private void removeErrorTypeEntry(final String typeName) {

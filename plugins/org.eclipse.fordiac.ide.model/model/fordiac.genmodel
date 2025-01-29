@@ -79,6 +79,11 @@
         <genParameters ecoreParameter="lib.ecore#//Attribute/validateName/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//Attribute/validateName/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//Attribute/validateAttributeDeclaration"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeAnnotations.validateAttributeDeclaration(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//Attribute/validateAttributeDeclaration/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//Attribute/validateAttributeDeclaration/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AttributeDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AttributeDeclaration/type"/>
