@@ -1861,4 +1861,38 @@ class Formatter2Test {
 			'''
 		]
 	}
+
+	@Test
+	def void testSpecialCharactersInComment() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				int1 := 3;//$aa \ aa
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				int1 := 3; // $aa \ aa
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void testLongWordInComment() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				int1 := 3;//this is a veryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryverylongword that is not broken
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				int1 := 3; // this is a
+				           // veryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryverylongword
+				           // that is not broken
+				END_FUNCTION
+			'''
+		]
+	}
 }

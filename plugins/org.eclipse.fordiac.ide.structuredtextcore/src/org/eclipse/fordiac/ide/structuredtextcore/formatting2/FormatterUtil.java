@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.formatting2;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -33,15 +34,19 @@ public final class FormatterUtil {
 	}
 
 	public static String wrapLines(final String lines, final int wrapLength, final String lineSeparator) {
-		return Pattern.compile("(.{0," + wrapLength + "})(?:\\s|$)").matcher(lines).replaceAll(m -> { //$NON-NLS-1$ //$NON-NLS-2$
-			if (m.group().isEmpty()) { // empty match
-				return ""; //$NON-NLS-1$
+		final Matcher matcher = Pattern.compile("(.{0," + wrapLength + "})(?:\\s|$)").matcher(lines); //$NON-NLS-1$ //$NON-NLS-2$
+		final StringBuilder result = new StringBuilder(lines.length() + 4); // reserve some space for added line breaks
+		int last = 0;
+		while (matcher.find()) {
+			result.append(lines, last, matcher.start());
+			if (matcher.end() > matcher.start()) { // non-empty match
+				result.append(lines, matcher.start(1), matcher.end(1));
+				result.append(lineSeparator);
 			}
-			if (m.group(1).isEmpty()) { // empty line
-				return lineSeparator;
-			}
-			return m.group(1) + lineSeparator;
-		});
+			last = matcher.end();
+		}
+		result.append(lines, last, lines.length());
+		return result.toString();
 	}
 
 	public static String prefixLines(final String lines, final String prefix, final String lineSeparator) {
