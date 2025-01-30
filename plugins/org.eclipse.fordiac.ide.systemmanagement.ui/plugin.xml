@@ -217,38 +217,23 @@
                viewerId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer">
             <includes>
                <contentExtension isRoot="true"
-                    pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.rootcontent">
-               	</contentExtension>
-               <contentExtension
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.automationsystemcontent">
-               </contentExtension>
-               <contentExtension
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.sortOnly">
-               </contentExtension> 
+                    pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.rootcontent" />
+               <contentExtension isRoot="true"
+               		pattern="org.eclipse.ui.navigator.resources.workingSets" />
+               <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.automationsystemcontent"/>
+               <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.sortOnly"/> 
                <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.startsWithDot"/>
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.mux"/>
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.fb"/>
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.typedSubapp"/>
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.comment"/>
               <!-- <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.navigator.filters.showonly61499Types"/> -->
-               <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.fbTypeContent">
-               		</contentExtension> 
-               <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.typelib.systemexplorer">
-              		</contentExtension> 
-      		   <contentExtension
-                     pattern="org.eclipse.ui.navigator.resourceContent"/>             
-               <contentExtension
-                     pattern="org.eclipse.ui.navigator.resources.filters.*">
-               </contentExtension>
-               <contentExtension
-                     pattern="org.eclipse.ui.navigator.resources.workingSets">
-               </contentExtension>
-               <contentExtension
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemExplorerLinkHelper" >
-               </contentExtension>
-               <contentExtension
-                     pattern="org.eclipse.fordiac.ide.typemanagement.navigator.FBContentSorter" >
-               </contentExtension>
+               <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.fbTypeContent"/> 
+               <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.typelib.systemexplorer"/> 
+      		   <contentExtension pattern="org.eclipse.ui.navigator.resourceContent"/>             
+               <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.*"/>
+               <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemExplorerLinkHelper" />
+               <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.navigator.FBContentSorter" />
             </includes>
          </viewerContentBinding>
          <viewer
