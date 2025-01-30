@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.contentassist;
 
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.STAlgorithmEditorUtils;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreImportReplacementTextApplier;
@@ -32,7 +33,8 @@ public class STAlgorithmImportReplacementTextApplier extends STCoreImportReplace
 	@Override
 	protected void applyImport(final IDocument document, final ConfigurableCompletionProposal proposal)
 			throws BadLocationException {
-		if (getResource() instanceof final LibraryElementXtextResource libraryElementResource) {
+		if (getResource() instanceof final LibraryElementXtextResource libraryElementResource
+				&& !ImportHelper.matchesImports(getImportedNamespace(), libraryElementResource.getLibraryElement())) {
 			STAlgorithmEditorUtils.executeCommand(getResource().getURI(),
 					new AddNewImportCommand(libraryElementResource.getLibraryElement(), getImportedNamespace()));
 		}
