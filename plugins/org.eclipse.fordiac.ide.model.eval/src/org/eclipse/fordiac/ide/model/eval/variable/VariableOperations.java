@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorCache;
@@ -357,8 +358,8 @@ public final class VariableOperations {
 	}
 
 	public static Set<String> getDependencies(final VarDeclaration varDeclaration) {
-		if (varDeclaration.isArray()
-				&& !TypeDeclarationParser.isSimpleTypeDeclaration(varDeclaration.getArraySize().getValue())) {
+		if (!isSimpleInitialValue(varDeclaration) || (varDeclaration.isArray()
+				&& !TypeDeclarationParser.isSimpleTypeDeclaration(varDeclaration.getArraySize().getValue()))) {
 			final Evaluator evaluator = EvaluatorFactory.createEvaluator(varDeclaration, VarDeclaration.class, null,
 					Collections.emptySet(), null);
 			if (evaluator instanceof final VariableEvaluator variableEvaluator) {
@@ -370,7 +371,10 @@ public final class VariableOperations {
 	}
 
 	public static Set<String> getDependencies(final Attribute attribute) {
-		if (hasValue(attribute)) {
+		if (InternalAttributeDeclarations.isInternalAttribute(attribute)) {
+			return Set.of();
+		}
+		if (!isSimpleAttributeValue(attribute)) {
 			final Evaluator evaluator = EvaluatorFactory.createEvaluator(attribute, VarDeclaration.class, null,
 					Collections.emptySet(), null);
 			if (evaluator instanceof final VariableEvaluator variableEvaluator) {

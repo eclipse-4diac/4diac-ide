@@ -476,8 +476,7 @@ class VariableOperationTest extends AbstractEvaluatorTest {
 	@Test
 	void testGetDependenciesForAttribute() {
 		assertEquals(Set.of("TestStructAttribute"), VariableOperations.getDependencies(attribute1));
-		assertEquals(Set.of("TestStructAttribute", "TestStructAttribute::TestStructAttribute"),
-				VariableOperations.getDependencies(attribute2));
+		assertEquals(Set.of("TestStructAttribute"), VariableOperations.getDependencies(attribute2));
 		assertEquals(Set.of("TestDerivedAttribute"), VariableOperations.getDependencies(attribute3));
 		assertEquals(Set.of("TestDerivedAttribute"), VariableOperations.getDependencies(attribute4));
 	}
