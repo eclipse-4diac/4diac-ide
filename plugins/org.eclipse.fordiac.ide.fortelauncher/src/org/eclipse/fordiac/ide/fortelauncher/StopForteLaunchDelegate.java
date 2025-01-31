@@ -64,6 +64,7 @@ public class StopForteLaunchDelegate extends LaunchConfigurationDelegate {
 
 		private final Job job;
 		private final List<ILaunch> launchesToTerminate;
+		private boolean terminated;
 
 		public StopForteProcess(final String name, final List<ILaunch> launchesToTerminate, final ILaunch launch) {
 			super(name, launch);
@@ -101,6 +102,7 @@ public class StopForteLaunchDelegate extends LaunchConfigurationDelegate {
 		}
 
 		private void terminated(final IJobChangeEvent event) {
+			terminated = true;
 			fireTerminateEvent();
 		}
 
@@ -111,7 +113,7 @@ public class StopForteLaunchDelegate extends LaunchConfigurationDelegate {
 
 		@Override
 		public boolean isTerminated() {
-			return job.getState() == Job.NONE;
+			return terminated;
 		}
 
 		@Override

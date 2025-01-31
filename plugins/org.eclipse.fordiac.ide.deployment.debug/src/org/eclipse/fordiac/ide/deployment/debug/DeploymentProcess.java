@@ -36,6 +36,7 @@ public class DeploymentProcess extends AbstractLaunchProcess {
 	private final DeploymentStreamsProxy streamsProxy = new DeploymentStreamsProxy();
 	private final DownloadRunnable downloadRunnable;
 	private final Job job;
+	private boolean terminated;
 
 	public DeploymentProcess(final AutomationSystem system, final Set<INamedElement> selection, final ILaunch launch)
 			throws DeploymentException {
@@ -68,6 +69,7 @@ public class DeploymentProcess extends AbstractLaunchProcess {
 	}
 
 	protected void terminated(final IJobChangeEvent event) {
+		terminated = true;
 		fireTerminateEvent();
 	}
 
@@ -82,7 +84,7 @@ public class DeploymentProcess extends AbstractLaunchProcess {
 
 	@Override
 	public boolean isTerminated() {
-		return job.getState() == Job.NONE;
+		return terminated;
 	}
 
 	@Override
