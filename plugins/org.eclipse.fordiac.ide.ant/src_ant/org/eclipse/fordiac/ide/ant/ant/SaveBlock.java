@@ -82,15 +82,16 @@ public class SaveBlock extends AbstractBlockModelTask {
 			.getResourceServiceProvider(SYNTHETIC_URI_GCF);
 
 	private static ResourceSet getResourceSet(final TypeEntry te) {
-		XtextResourceSet resourceSet = null;
+		XtextResourceSet resourceSet;
 
 		if (te.getFile().getFullPath().getFileExtension().equalsIgnoreCase(TypeLibraryTags.FC_TYPE_FILE_ENDING)) {
 			resourceSet = SERVICE_PROVIDER_FCT.get(XtextResourceSet.class);
-		}
-		if (te.getFile().getFullPath().getFileExtension().equalsIgnoreCase(TypeLibraryTags.GLOBAL_CONST_FILE_ENDING)) {
+		} else if (te.getFile().getFullPath().getFileExtension()
+				.equalsIgnoreCase(TypeLibraryTags.GLOBAL_CONST_FILE_ENDING)) {
 			resourceSet = SERVICE_PROVIDER_GCF.get(XtextResourceSet.class);
+		} else {
+			resourceSet = SERVICE_PROVIDER_FBT.get(XtextResourceSet.class);
 		}
-		resourceSet = SERVICE_PROVIDER_FBT.get(XtextResourceSet.class);
 
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
 				TypeLibraryTags.FB_TYPE_FILE_ENDING.toLowerCase(), //
