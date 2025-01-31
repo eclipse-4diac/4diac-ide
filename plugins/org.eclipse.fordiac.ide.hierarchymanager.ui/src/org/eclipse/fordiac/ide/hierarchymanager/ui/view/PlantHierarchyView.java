@@ -59,8 +59,10 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class PlantHierarchyView extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 
 	private static final String PLANT_HIERARCHY_PROJECT = "PlantHierarchy.Project"; //$NON-NLS-1$
-	private static final String PLANT_HIERARCHY_FILE_NAME = ".plant.hier"; //$NON-NLS-1$
-	public static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION = "hier"; //$NON-NLS-1$
+	public static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION = "HIER"; //$NON-NLS-1$
+	public static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION_WITH_DOT = "." + PLANT_HIERARCHY_FILE_NAME_EXTENSION; //$NON-NLS-1$
+	private static final String PLANT_HIERARCHY_FILE_NAME = ".plant" //$NON-NLS-1$
+			+ PLANT_HIERARCHY_FILE_NAME_EXTENSION_WITH_DOT.toLowerCase();
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
 	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.hierarchymanager.ui.view"; //$NON-NLS-1$
@@ -235,8 +237,12 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 
 	private void setupEMFInfra() {
 		// add file extension to registry
-		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-				.put(PLANT_HIERARCHY_FILE_NAME_EXTENSION, new HierarchyResourceFactoryImpl());
+		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				PLANT_HIERARCHY_FILE_NAME_EXTENSION, //
+				new HierarchyResourceFactoryImpl());
+		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				PLANT_HIERARCHY_FILE_NAME_EXTENSION.toLowerCase(), //
+				new HierarchyResourceFactoryImpl());
 		setupLoadOptions();
 	}
 

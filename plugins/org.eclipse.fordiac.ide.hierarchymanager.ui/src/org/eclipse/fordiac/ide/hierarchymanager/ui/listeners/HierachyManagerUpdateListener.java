@@ -47,8 +47,12 @@ public class HierachyManagerUpdateListener extends QualNameChangeListener {
 	private static EObject loadPlantHierachy(final IProject project) {
 		final Map<String, Object> loadOptions = new HashMap<>();
 		final ResourceSet hierarchyResouceSet = new ResourceSetImpl();
-		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-				.put(PlantHierarchyView.PLANT_HIERARCHY_FILE_NAME_EXTENSION, new HierarchyResourceFactoryImpl());
+		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				PlantHierarchyView.PLANT_HIERARCHY_FILE_NAME_EXTENSION, //
+				new HierarchyResourceFactoryImpl());
+		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				PlantHierarchyView.PLANT_HIERARCHY_FILE_NAME_EXTENSION.toLowerCase(), //
+				new HierarchyResourceFactoryImpl());
 		loadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
 		final XMLMapImpl map = new XMLMapImpl();
 		map.setNoNamespacePackage(HierarchyPackage.eINSTANCE);

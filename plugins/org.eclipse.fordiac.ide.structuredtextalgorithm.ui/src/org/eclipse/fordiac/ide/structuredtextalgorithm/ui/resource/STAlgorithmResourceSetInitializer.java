@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.internal.StructuredtextalgorithmActivator;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.xtext.resource.IResourceFactory;
@@ -28,16 +29,36 @@ public class STAlgorithmResourceSetInitializer implements IResourceSetInitialize
 	public void initialize(final ResourceSet resourceSet, final IProject project) {
 		if (has4diacProjectNature(project)) {
 			final IResourceFactory resourceFactory = getInjector().getInstance(IResourceFactory.class);
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("fbt", resourceFactory); //$NON-NLS-1$
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("FBT", resourceFactory); //$NON-NLS-1$
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("sys", resourceFactory); //$NON-NLS-1$
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("SYS", resourceFactory); //$NON-NLS-1$
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("sub", resourceFactory); //$NON-NLS-1$
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("SUB", resourceFactory); //$NON-NLS-1$
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("atp", resourceFactory); //$NON-NLS-1$
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ATP", resourceFactory); //$NON-NLS-1$
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("dtp", resourceFactory); //$NON-NLS-1$
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("DTP", resourceFactory); //$NON-NLS-1$
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.FB_TYPE_FILE_ENDING.toLowerCase(), //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.FB_TYPE_FILE_ENDING, //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING.toLowerCase(), //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING, //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.toLowerCase(), //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING, //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.toLowerCase(), //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING, //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.DATA_TYPE_FILE_ENDING.toLowerCase(), //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.DATA_TYPE_FILE_ENDING, //
+					resourceFactory);
 		}
 	}
 

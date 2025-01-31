@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.xtext.resource.IResourceFactory;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.SaveOptions;
@@ -83,25 +84,31 @@ public class SaveBlock extends AbstractBlockModelTask {
 	private static ResourceSet getResourceSet(final TypeEntry te) {
 		XtextResourceSet resourceSet = null;
 
-		if (te.getFile().getFullPath().getFileExtension().equalsIgnoreCase("FCT")) { //$NON-NLS-1$
+		if (te.getFile().getFullPath().getFileExtension().equalsIgnoreCase(TypeLibraryTags.FC_TYPE_FILE_ENDING)) {
 			resourceSet = SERVICE_PROVIDER_FCT.get(XtextResourceSet.class);
 		}
-		if (te.getFile().getFullPath().getFileExtension().equalsIgnoreCase("GCF")) { //$NON-NLS-1$
+		if (te.getFile().getFullPath().getFileExtension().equalsIgnoreCase(TypeLibraryTags.GLOBAL_CONST_FILE_ENDING)) {
 			resourceSet = SERVICE_PROVIDER_GCF.get(XtextResourceSet.class);
 		}
 		resourceSet = SERVICE_PROVIDER_FBT.get(XtextResourceSet.class);
 
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("fbt", //$NON-NLS-1$
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.FB_TYPE_FILE_ENDING.toLowerCase(), //
 				SERVICE_PROVIDER_FBT.get(IResourceFactory.class));
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("FBT", //$NON-NLS-1$
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.FB_TYPE_FILE_ENDING, //
 				SERVICE_PROVIDER_FBT.get(IResourceFactory.class));
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("fct", //$NON-NLS-1$
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.FC_TYPE_FILE_ENDING.toLowerCase(), //
 				SERVICE_PROVIDER_FCT.get(IResourceFactory.class));
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("FCT", //$NON-NLS-1$
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.FC_TYPE_FILE_ENDING, //
 				SERVICE_PROVIDER_FCT.get(IResourceFactory.class));
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("gcf", //$NON-NLS-1$
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.GLOBAL_CONST_FILE_ENDING.toLowerCase(), //
 				SERVICE_PROVIDER_GCF.get(IResourceFactory.class));
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("GCF", //$NON-NLS-1$
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.GLOBAL_CONST_FILE_ENDING, //
 				SERVICE_PROVIDER_GCF.get(IResourceFactory.class));
 
 		return resourceSet;

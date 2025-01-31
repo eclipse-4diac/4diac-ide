@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.STAlgorithmParser;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource;
@@ -54,11 +55,23 @@ public abstract class STAlgorithmEditedResourceProvider implements IEditedResour
 	@Override
 	public STAlgorithmResource createResource() {
 		final XtextResourceSet resourceSet = (XtextResourceSet) SERVICE_PROVIDER_FBT.get(ResourceSet.class);
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("fbt", //$NON-NLS-1$
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.FB_TYPE_FILE_ENDING.toLowerCase(), //
 				SERVICE_PROVIDER_FBT.get(IResourceFactory.class));
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("fct", //$NON-NLS-1$
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.FB_TYPE_FILE_ENDING, //
+				SERVICE_PROVIDER_FBT.get(IResourceFactory.class));
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.FC_TYPE_FILE_ENDING.toLowerCase(), //
 				SERVICE_PROVIDER_FCT.get(IResourceFactory.class));
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("gcf", //$NON-NLS-1$
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.FC_TYPE_FILE_ENDING, //
+				SERVICE_PROVIDER_FCT.get(IResourceFactory.class));
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.GLOBAL_CONST_FILE_ENDING.toLowerCase(), //
+				SERVICE_PROVIDER_GCF.get(IResourceFactory.class));
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.GLOBAL_CONST_FILE_ENDING, //
 				SERVICE_PROVIDER_GCF.get(IResourceFactory.class));
 		resourceSet.getLoadOptions().putAll(Map.of(//
 				ResourceDescriptionsProvider.LIVE_SCOPE, Boolean.TRUE // use live scope

@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.resource;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.internal.StructuredtextfunctioneditorActivator;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.xtext.resource.IResourceFactory;
@@ -28,8 +29,12 @@ public class STFunctionResourceSetInitializer implements IResourceSetInitializer
 	public void initialize(final ResourceSet resourceSet, final IProject project) {
 		if (has4diacProjectNature(project)) {
 			final IResourceFactory resourceFactory = getInjector().getInstance(IResourceFactory.class);
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("fct", resourceFactory); //$NON-NLS-1$
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("FCT", resourceFactory); //$NON-NLS-1$
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.GLOBAL_CONST_FILE_ENDING.toLowerCase(), //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.GLOBAL_CONST_FILE_ENDING, //
+					resourceFactory);
 		}
 	}
 
