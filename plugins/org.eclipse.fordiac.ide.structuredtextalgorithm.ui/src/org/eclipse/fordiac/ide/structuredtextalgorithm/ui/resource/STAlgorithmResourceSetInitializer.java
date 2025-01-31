@@ -59,6 +59,12 @@ public class STAlgorithmResourceSetInitializer implements IResourceSetInitialize
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
 					TypeLibraryTags.DATA_TYPE_FILE_ENDING, //
 					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING.toLowerCase(), //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING, //
+					resourceFactory);
 		}
 	}
 
