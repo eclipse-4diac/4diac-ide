@@ -19,10 +19,10 @@ import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCom
 import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Display;
 
 public class FordiacConnectionDragCreationTool extends ConnectionDragCreationTool {
@@ -66,6 +66,18 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 			checkCurrentCommandforShiftMask();
 		}
 		super.mouseUp(me, viewer);
+		initialViewer = null;
+	}
+
+	@Override
+	protected void setCursor(final Cursor cursor) {
+		if (isInState(STATE_CONNECTION_STARTED | STATE_DRAG_IN_PROGRESS) && initialViewer != null
+				&& getCurrentViewer() != null && initialViewer != getCurrentViewer()) {
+			initialViewer.setCursor(cursor);
+		} else {
+			super.setCursor(cursor);
+		}
+
 	}
 
 	@Override
@@ -74,11 +86,11 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 			final Point location = getLocation();
 			final Point converted = new Point(initialViewer.getControl()
 					.toControl(getCurrentViewer().getControl().toDisplay(location.x, location.y)));
-			((CreateConnectionRequest) getTargetRequest()).setLocation(converted);
+			getTargetRequest().setLocation(converted);
 		}
 		super.showSourceFeedback();
 		if (differentTargetViewer()) {
-			((CreateConnectionRequest) getTargetRequest()).setLocation(getLocation());
+			getTargetRequest().setLocation(getLocation());
 		}
 	}
 
