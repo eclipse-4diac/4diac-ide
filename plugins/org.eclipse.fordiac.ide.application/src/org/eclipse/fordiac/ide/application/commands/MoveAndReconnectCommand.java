@@ -61,6 +61,7 @@ public class MoveAndReconnectCommand extends Command implements QualNameAffected
 	private final CompoundCommand removeFromGroup = new CompoundCommand();
 	private CompoundCommand reconnectConnectionsCommands = null;
 	private final Map<INamedElement, String> oldQualNames = new HashMap<>(); // store for plantHierchy update
+	private final Map<INamedElement, String> newQualNames = new HashMap<>(); // store for plant updat
 
 	public MoveAndReconnectCommand(final Collection<FBNetworkElement> elements, final Point destination) {
 		this(elements, destination, null);
@@ -114,6 +115,11 @@ public class MoveAndReconnectCommand extends Command implements QualNameAffected
 		removeElementsFromSubapp();
 		addElementsToDestination();
 		reconnectConnections();
+		storeNewQualNames();
+	}
+
+	private void storeNewQualNames() {
+		elements.forEach(e -> newQualNames.put(e, e.getQualifiedName()));
 	}
 
 	private void storeOldQualNames() {
@@ -288,16 +294,13 @@ public class MoveAndReconnectCommand extends Command implements QualNameAffected
 	}
 
 	@Override
-	public String getOldQualName(final INamedElement elemt) {
-		return oldQualNames.get(elemt);
+	public String getOldQualName(final INamedElement element) {
+		return oldQualNames.get(element);
 	}
 
 	@Override
 	public String getNewQualName(final INamedElement element) {
-		if (elements.indexOf(element) == -1) {
-			return null;
-		}
-		return element.getQualifiedName();
+		return newQualNames.get(element);
 	}
 
 	@Override
