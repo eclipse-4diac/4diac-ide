@@ -22,6 +22,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeDeclarationCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
@@ -192,6 +193,10 @@ public class TypeEntryAdapter extends AdapterImpl {
 		final DataTypeInstanceSearch search = new DataTypeInstanceSearch(editedElement, dtEntry);
 		final AnyDerivedType dataType = dtEntry.getType();
 		search.performSearch().stream().map(item -> {
+			if (item instanceof final Attribute attr) {
+				return ChangeAttributeTypeCommand.forDataType(attr, dataType);
+			}
+
 			if (item instanceof final VarDeclaration varDecl) {
 				return ChangeDataTypeCommand.forDataType(varDecl, dataType);
 			}

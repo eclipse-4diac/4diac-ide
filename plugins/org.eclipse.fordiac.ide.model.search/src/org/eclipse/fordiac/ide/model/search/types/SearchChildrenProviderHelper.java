@@ -39,13 +39,18 @@ public class SearchChildrenProviderHelper {
 		if (fbType instanceof final SubAppType subappType) {
 			// we may have untyped subapps inside
 			retval = Stream.concat(retval, subappType.getFBNetwork().getNetworkElements().stream());
+			retval = Stream.concat(retval, subappType.getFBNetwork().getAdapterConnections().stream());
+			retval = Stream.concat(retval, subappType.getFBNetwork().getDataConnections().stream());
+			retval = Stream.concat(retval, subappType.getFBNetwork().getEventConnections().stream());
 		}
+
 		return retval;
 	}
 
 	public static Stream<? extends EObject> getUntypedSubappChildren(final UntypedSubApp untypedSubapp) {
 		Stream<? extends EObject> retval = getInterfaceListChildren(untypedSubapp.getInterface());
 		retval = Stream.concat(retval, untypedSubapp.getSubAppNetwork().getNetworkElements().stream());
+		retval = Stream.concat(retval, untypedSubapp.getAttributes().stream());
 		return retval;
 	}
 
