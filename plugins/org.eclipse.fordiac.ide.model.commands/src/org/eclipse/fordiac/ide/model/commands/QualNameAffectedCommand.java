@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -22,18 +25,27 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public interface QualNameAffectedCommand extends ScopedCommand {
 
-	String getOldQualName();
+	String getOldQualName(INamedElement elemt);
 
-	String getNewQualName();
+	String getNewQualName(INamedElement element);
 
-	INamedElement getChangedElement();
+	List<INamedElement> getChangedElements();
+
+	// private
 
 	/**
 	 * encapsulate the change to not provide the command to the receiver
 	 */
-	default QualNameChange getQualNameChange(final QualNameChangeState state) {
-		return new QualNameChange(getOldQualName(), getNewQualName(), getChangedElement(),
-				getTypeEntry(getChangedElement()), state);
+	default List<QualNameChange> getQualNameChange(final QualNameChangeState state) {
+
+		final List<QualNameChange> qualNameChanges = new ArrayList<>();
+
+		for (final INamedElement element : getChangedElements()) {
+			qualNameChanges.add(new QualNameChange(getOldQualName(element), getNewQualName(element), element,
+					getTypeEntry(element), state));
+		}
+
+		return qualNameChanges;
 	}
 
 	static TypeEntry getTypeEntry(final INamedElement notifier) {

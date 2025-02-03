@@ -114,19 +114,19 @@ public enum QualNameChangeListenerManager implements CommandStackEventListener {
 
 	}
 
-	public void notifyListenersExecute(final QualNameChange qualNameChange) {
+	public void notifyListenersExecute(final List<QualNameChange> qualNameChange) {
 		for (final QualNameChangeListener listener : listeners) {
 			listener.onCommandExecuted(qualNameChange);
 		}
 	}
 
-	public void notifyListenersUndo(final QualNameChange qualNameChange) {
+	public void notifyListenersUndo(final List<QualNameChange> qualNameChange) {
 		for (final QualNameChangeListener listener : listeners) {
 			listener.onCommandUndoExecuted(qualNameChange);
 		}
 	}
 
-	public void notifyListenersRedo(final QualNameChange qualNameChange) {
+	public void notifyListenersRedo(final List<QualNameChange> qualNameChange) {
 		for (final QualNameChangeListener listener : listeners) {
 			listener.onCommandRedoExecuted(qualNameChange);
 		}

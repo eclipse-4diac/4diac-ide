@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 public abstract class QualNameChangeListener {
 
 	public enum QualNameChangeState {
-		RENAME, RENAME_UNDO, RENAME_REDO, DELETE, DELETE_UNDO, DELETE_REDO;
+		RENAME, RENAME_UNDO, RENAME_REDO, DELETE, DELETE_UNDO, DELETE_REDO, MOVE;
 	}
 
 	/**
@@ -42,6 +42,20 @@ public abstract class QualNameChangeListener {
 	protected abstract void executeOperation(AbstractOperation op);
 
 	protected abstract Object getReceiver(TypeEntry key);
+
+	public void onCommandExecuted(final List<QualNameChange> qualNameChange) {
+		qualNameChange.forEach(this::onCommandExecuted);
+
+	}
+
+	public void onCommandUndoExecuted(final List<QualNameChange> qualNameChange) {
+		qualNameChange.forEach(this::onCommandUndoExecuted);
+	}
+
+	public void onCommandRedoExecuted(final List<QualNameChange> qualNameChange) {
+		qualNameChange.forEach(this::onCommandRedoExecuted);
+
+	}
 
 	protected void onCommandExecuted(final QualNameChange qualNameChange) {
 		if (isEnabled(qualNameChange.notifier())) {
