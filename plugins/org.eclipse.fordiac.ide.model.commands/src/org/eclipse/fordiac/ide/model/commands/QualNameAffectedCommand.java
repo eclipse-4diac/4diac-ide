@@ -36,7 +36,7 @@ public interface QualNameAffectedCommand extends ScopedCommand {
 	/**
 	 * encapsulate the change to not provide the command to the receiver
 	 */
-	default List<QualNameChange> getQualNameChange(final QualNameChangeState state) {
+	default List<QualNameChange> getQualNameChanges(final QualNameChangeState state) {
 
 		final List<QualNameChange> qualNameChanges = new ArrayList<>();
 

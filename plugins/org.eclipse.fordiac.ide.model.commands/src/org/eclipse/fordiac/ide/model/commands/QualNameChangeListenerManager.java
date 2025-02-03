@@ -69,13 +69,13 @@ public enum QualNameChangeListenerManager implements CommandStackEventListener {
 		if (event.getCommand() instanceof final QualNameAffectedCommand cmd) {
 			switch (event.getDetail()) {
 			case CommandStack.POST_EXECUTE:
-				notifyListenersExecute(cmd.getQualNameChange(QualNameChangeState.RENAME));
+				notifyListenersExecute(cmd.getQualNameChanges(QualNameChangeState.RENAME));
 				break;
 			case CommandStack.POST_UNDO:
-				notifyListenersUndo(cmd.getQualNameChange(QualNameChangeState.RENAME_UNDO));
+				notifyListenersUndo(cmd.getQualNameChanges(QualNameChangeState.RENAME_UNDO));
 				break;
 			case CommandStack.POST_REDO:
-				notifyListenersRedo(cmd.getQualNameChange(QualNameChangeState.RENAME_REDO));
+				notifyListenersRedo(cmd.getQualNameChanges(QualNameChangeState.RENAME_REDO));
 				break;
 
 			default:

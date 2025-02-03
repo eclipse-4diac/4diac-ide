@@ -17,7 +17,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -172,16 +171,23 @@ public class ChangeNameCommand extends Command implements ConnectionLayoutTagger
 
 	@Override
 	public List<INamedElement> getChangedElements() {
-		return Arrays.asList(getElement());
+		return List.of(getElement());
 	}
 
 	@Override
 	public String getOldQualName(final INamedElement elemt) {
+		if (elemt != element) {
+			return null;
+		}
+
 		return oldQualName;
 	}
 
 	@Override
 	public String getNewQualName(final INamedElement element) {
+		if (element != this.element) {
+			return null;
+		}
 		return oldQualName.substring(0, oldQualName.length() - oldName.length()) + name;
 	}
 
