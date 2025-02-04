@@ -25,13 +25,11 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public interface QualNameAffectedCommand extends ScopedCommand {
 
-	String getOldQualName(INamedElement elemt);
+	String getOldQualName(INamedElement element);
 
 	String getNewQualName(INamedElement element);
 
 	List<INamedElement> getChangedElements();
-
-	// private
 
 	/**
 	 * encapsulate the change to not provide the command to the receiver

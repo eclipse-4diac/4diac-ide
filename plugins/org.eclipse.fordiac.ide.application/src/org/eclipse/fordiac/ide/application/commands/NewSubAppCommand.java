@@ -17,12 +17,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
@@ -31,11 +36,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 
-public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
+public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand implements QualNameAffectedCommand {
 	private final List<?> parts;
 	private final AddElementsToSubAppCommand addElements;
 	private Command mapSubappCmd; // can not be in the compound command as it needs to be performed when
 	// subapp interface is finished
+
+	private final Map<INamedElement, String> oldQualNames = new HashMap<>(); // store qualnames for plant hierchachy
+																				// update
+	private final Map<INamedElement, String> newQualNames = new HashMap<>();
 
 	public NewSubAppCommand(final FBNetwork fbNetwork, final List<?> selection, final Position pos) {
 		super(fbNetwork, LibraryElementFactory.eINSTANCE.createUntypedSubApp(), pos);
@@ -74,11 +83,13 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 
 	@Override
 	public void execute() {
+		addElements.getElements().forEach(e -> oldQualNames.put(e, e.getQualifiedName()));
 		super.execute();
 		addElements.execute();
 		if (null != mapSubappCmd) {
 			mapSubappCmd.execute();
 		}
+		addElements.getElements().forEach(e -> newQualNames.put(e, e.getQualifiedName()));
 	}
 
 	@Override
@@ -136,4 +147,20 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	public UntypedSubApp getElement() {
 		return (UntypedSubApp) super.getElement();
 	}
+
+	@Override
+	public String getOldQualName(final INamedElement elemt) {
+		return oldQualNames.get(elemt);
+	}
+
+	@Override
+	public String getNewQualName(final INamedElement element) {
+		return newQualNames.get(element);
+	}
+
+	@Override
+	public List<INamedElement> getChangedElements() {
+		return new ArrayList<>(addElements.getElements());
+	}
+
 }
