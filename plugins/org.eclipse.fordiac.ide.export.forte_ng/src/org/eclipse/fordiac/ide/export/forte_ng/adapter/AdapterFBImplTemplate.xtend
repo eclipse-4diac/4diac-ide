@@ -55,8 +55,8 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 
 	def generateFBInterfaceSpecSocket() '''
 		const SFBInterfaceSpec «FBClassName»::scmFBInterfaceSpecSocket = {
-		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventInputNames, scmEventInputTypeIds, «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
-		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, scmEventOutputTypeIds, «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
+		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventInputNames, «IF type.interfaceList.eventInputs.containsOnlyBasicEventType»nullptr«ELSE»scmEventInputTypeIds«ENDIF», «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
+		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, «IF type.interfaceList.eventOutputs.containsOnlyBasicEventType»nullptr«ELSE»scmEventOutputTypeIds«ENDIF», «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
 		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scmDataInputNames, scmDataInputTypeIds«ENDIF»,
 		  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scmDataOutputNames, scmDataOutputTypeIds«ENDIF»,
 		  «type.interfaceList.inOutVars.size», «IF type.interfaceList.inOutVars.empty»nullptr«ELSE»scmDataInOutNames«ENDIF»,
@@ -66,8 +66,8 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 
 	def generateFBInterfaceSpecPlug() '''
 		const SFBInterfaceSpec «FBClassName»::scmFBInterfaceSpecPlug = {
-		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, scmEventOutputTypeIds, «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
-		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventInputNames, scmEventInputTypeIds, «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
+		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, «IF type.interfaceList.eventOutputs.containsOnlyBasicEventType»nullptr«ELSE»scmEventOutputTypeIds«ENDIF», «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
+		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventInputNames, «IF type.interfaceList.eventInputs.containsOnlyBasicEventType»nullptr«ELSE»scmEventInputTypeIds«ENDIF», «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
 		  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scmDataOutputNames, scmDataOutputTypeIds«ENDIF»,
 		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scmDataInputNames, scmDataInputTypeIds«ENDIF»,
 		  «type.interfaceList.inOutVars.size», «IF type.interfaceList.inOutVars.empty»nullptr«ELSE»scmDataInOutNames«ENDIF»,
