@@ -127,7 +127,7 @@ public enum SystemManager {
 		ManifestHelper.createProjectManifest(project, includedLibraries.keySet());
 
 		TypeLibraryManager.INSTANCE.getTypeLibrary(project); // insert the project into the project list
-
+		project.refreshLocal(IResource.DEPTH_ONE, monitor);
 		return project;
 	}
 
