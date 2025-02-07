@@ -413,7 +413,7 @@ public class CommonElementExporter {
 			osWriter.write(attributeName);
 			osWriter.write("=\""); //$NON-NLS-1$
 			osWriter.write(fullyEscapeValue(attributeValue));
-			osWriter.write("\" "); //$NON-NLS-1$
+			osWriter.write("\""); //$NON-NLS-1$
 		} catch (final IOException e) {
 			throw new XMLStreamException("Could not write raw attribute", e); //$NON-NLS-1$
 		}
