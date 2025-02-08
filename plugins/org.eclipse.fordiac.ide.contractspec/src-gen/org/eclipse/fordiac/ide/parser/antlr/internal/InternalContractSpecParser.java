@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2024 Felix Schmid
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Felix Schmid
+ *     - initial implementation and/or documentation
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.parser.antlr.internal;
 
 import org.eclipse.xtext.*;
@@ -18,19 +31,6 @@ import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
 
-/*******************************************************************************
- * Copyright (c) 2024 Felix Schmid
- *
- * This program and the accompanying materials are made available under the
- * terms of the Eclipse Public License 2.0 which is available at
- * http://www.eclipse.org/legal/epl-2.0.
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * Contributors:
- *   Felix Schmid
- *     - initial commit of contract specification editor
- *******************************************************************************/
 @SuppressWarnings("all")
 public class InternalContractSpecParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {

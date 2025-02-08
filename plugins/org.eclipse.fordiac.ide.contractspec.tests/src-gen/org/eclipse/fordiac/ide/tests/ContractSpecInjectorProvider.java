@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   Felix Schmid
- *     - initial commit of contract specification editor
+ *     - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.tests;
 
