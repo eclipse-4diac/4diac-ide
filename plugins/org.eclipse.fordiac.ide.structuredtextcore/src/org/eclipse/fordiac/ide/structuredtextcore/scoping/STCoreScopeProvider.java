@@ -29,6 +29,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
@@ -36,11 +37,13 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
@@ -89,6 +92,19 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 			STCorePackage.Literals.ST_TIME_LITERAL__TYPE, STCorePackage.Literals.ST_TIME_OF_DAY_LITERAL__TYPE,
 			STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TYPE, STCorePackage.Literals.ST_STRING_LITERAL__TYPE);
 
+	private static final List<EReference> APPLICABLE_FB_OUTPUT_PARAMETERS = List
+			.of(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS);
+
+	private static final List<EReference> APPLICABLE_FB_INPUT_PARAMETERS = List.of(
+			LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
+			LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS);
+
+	private static final List<EReference> APPLICABLE_FB_FEATURES = List.of(
+			LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
+			LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
+			LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
+			LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_INPUTS);
+
 	@Inject
 	IQualifiedNameProvider qualifiedNameProvider;
 
@@ -120,9 +136,7 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 						return qualifiedScope(structuredVarType.getMemberVariables(), reference);
 					}
 					if (receiverType instanceof final FBType fbType) {
-						final var interfaceList = fbType.getInterfaceList();
-						return qualifiedScope(Iterables.concat(interfaceList.getInputVars(),
-								interfaceList.getOutputVars(), interfaceList.getEventInputs()), reference);
+						return typeScope(fbType, context, reference, this::isApplicableForFBFeatureReference);
 					}
 				}
 				return IScope.NULLSCOPE;
@@ -141,24 +155,37 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 		}
 		if (reference == STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER) {
 			final var feature = getFeature(context);
+			if (feature instanceof final FB fb) {
+				return typeScope(fb.getType(), context, reference, this::isApplicableForFBInputParameterReference);
+			}
 			if (feature instanceof final ICallable callable) {
 				return qualifiedScope(Iterables.concat(callable.getInputParameters(), callable.getInOutParameters()),
 						reference);
 			}
-		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_OUTPUT_ARGUMENT__PARAMETER) {
+			return IScope.NULLSCOPE;
+		}
+		if (reference == STCorePackage.Literals.ST_CALL_NAMED_OUTPUT_ARGUMENT__PARAMETER) {
 			final var feature = getFeature(context);
+			if (feature instanceof final FB fb) {
+				return typeScope(fb.getType(), context, reference, this::isApplicableForFBOutputParameterReference);
+			}
 			if (feature instanceof final ICallable callable) {
 				return qualifiedScope(callable.getOutputParameters(), reference);
 			}
-		} else if (reference == STCorePackage.Literals.ST_FOR_STATEMENT__VARIABLE) {
+			return IScope.NULLSCOPE;
+		}
+		if (reference == STCorePackage.Literals.ST_FOR_STATEMENT__VARIABLE) {
 			return filterScope(super.getScope(context, reference), this::isApplicableForVariableReference);
-		} else if (reference == STCorePackage.Literals.ST_STRUCT_INIT_ELEMENT__VARIABLE) {
+		}
+		if (reference == STCorePackage.Literals.ST_STRUCT_INIT_ELEMENT__VARIABLE) {
 			final var container = context.eContainer();
 			if (container instanceof final STStructInitializerExpression structInitializerExpression
 					&& structInitializerExpression.getResultType() instanceof final StructuredType structType) {
 				return qualifiedScope(structType.getMemberVariables(), reference);
 			}
-		} else if (reference == STCorePackage.Literals.ST_ATTRIBUTE__DECLARATION) {
+			return IScope.NULLSCOPE;
+		}
+		if (reference == STCorePackage.Literals.ST_ATTRIBUTE__DECLARATION) {
 			return super.getScope(context, reference);
 		}
 		return super.getScope(context, reference);
@@ -166,6 +193,13 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 
 	protected static IScope scopeForNonUserDefinedDataTypes(final IScope parent) {
 		return new SimpleScope(parent, NON_USER_DEFINED_TYPES_DESCRIPTIONS, true);
+	}
+
+	public ImportScope typeScope(final EObject type, final EObject context, final EReference reference,
+			final Predicate<IEObjectDescription> filter) {
+		return new ImportScope(List.of(createImportNormalizer(qualifiedNameProvider.getFullyQualifiedName(type))),
+				IScope.NULLSCOPE, new ScopeBasedSelectable(filterScope(delegateGetScope(context, reference), filter)),
+				reference.getEReferenceType(), true);
 	}
 
 	protected IScope qualifiedScope(final Iterable<? extends EObject> elements, final EReference reference) {
@@ -226,6 +260,32 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 						&& (!LibraryElementPackage.eINSTANCE.getFBType().isSuperTypeOf(clazz)
 								|| LibraryElementPackage.eINSTANCE.getFunctionFBType().isSuperTypeOf(clazz))
 						&& !LibraryElementPackage.eINSTANCE.getEvent().isSuperTypeOf(clazz));
+	}
+
+	protected boolean isApplicableForFBFeatureReference(final IEObjectDescription description) {
+		return isApplicable(description, LibraryElementPackage.Literals.INTERFACE_LIST, APPLICABLE_FB_FEATURES);
+	}
+
+	protected boolean isApplicableForFBInputParameterReference(final IEObjectDescription description) {
+		return isApplicable(description, LibraryElementPackage.Literals.INTERFACE_LIST, APPLICABLE_FB_INPUT_PARAMETERS);
+	}
+
+	protected boolean isApplicableForFBOutputParameterReference(final IEObjectDescription description) {
+		return isApplicable(description, LibraryElementPackage.Literals.INTERFACE_LIST,
+				APPLICABLE_FB_OUTPUT_PARAMETERS);
+	}
+
+	protected static boolean isApplicable(final IEObjectDescription description, final EClass containerClass,
+			final List<EReference> containmentFeatures) {
+		final String containerName = description.getUserData(STCoreResourceDescriptionStrategy.CONTAINER_ECLASS_NAME);
+		final String featureName = description.getUserData(STCoreResourceDescriptionStrategy.CONTAINMENT_FEATURE_NAME);
+		if (containerName != null && featureName != null) {
+			return containerClass.getName().equals(containerName)
+					&& containmentFeatures.stream().map(EReference::getName).anyMatch(featureName::equals);
+		}
+		final EReference feature = description.getEObjectOrProxy().eContainmentFeature();
+		return containerClass.isInstance(description.getEObjectOrProxy().eContainer())
+				&& containmentFeatures.contains(feature);
 	}
 
 	protected static boolean isAnyElementaryLiteral(final EReference reference) {
