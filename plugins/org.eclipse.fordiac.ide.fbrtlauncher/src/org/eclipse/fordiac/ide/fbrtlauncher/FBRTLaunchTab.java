@@ -186,7 +186,7 @@ public class FBRTLaunchTab extends RuntimeLaunchTab {
 			configuration.setAttribute(ATTR_TOOL_ARGUMENTS, arguments);
 			final File parentFile = runtimeFile.getParentFile();
 			if (parentFile != null) {
-				configuration.setAttribute(ATTR_WORKING_DIRECTORY, parentFile.getAbsolutePath());
+				configuration.setAttribute(ATTR_WORKING_DIRECTORY, parentFile.getPath());
 			}
 
 		} catch (final CoreException e) {
