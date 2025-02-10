@@ -1124,7 +1124,27 @@
       	icon="platform:/plugin/org.eclipse.egit.ui/icons/elcl16/skip.png"
       	style="toggle"/>
     </menuContribution>
-    <menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.edit">
+     <menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.edit">
+             <command commandId="org.eclipse.fordiac.ide.application.commands.openType">
+        <visibleWhen checkEnabled="true">
+	        <or>
+	          <with variable="selection" >
+	            <count value="1" />
+	            <iterate ifEmpty="false">
+	              <or>
+	                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+	                <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+	                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
+	                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
+	              </or>
+	            </iterate>
+	          </with>
+	          <with variable="activeEditor">
+	            <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+	          </with>
+	        </or>
+        </visibleWhen>
+      </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.insertFB" >
         <visibleWhen>
           <and>
@@ -1490,34 +1510,16 @@
         </visibleWhen>
       </command>
     </menuContribution>
+
     <menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=group.add">
+
       <command commandId="org.eclipse.fordiac.ide.application.commands.changeType"
                label="Change Type">
         <visibleWhen checkEnabled="false">
           <test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
         </visibleWhen>
       </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.openType">
-        <visibleWhen checkEnabled="true">
-	        <or>
-	          <with variable="selection" >
-	            <count value="1" />
-	            <iterate ifEmpty="false">
-	              <or>
-	                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
-	                <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
-	                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
-	                <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
-	              </or>
-	            </iterate>
-	          </with>
-	          <with variable="activeEditor">
-	            <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
-	          </with>
-	        </or>
-        </visibleWhen>
-      </command>  
-                
+   
       <command commandId="org.eclipse.fordiac.ide.application.commands.saveAsSubappType">
         <visibleWhen checkEnabled="true">
         	<and>
