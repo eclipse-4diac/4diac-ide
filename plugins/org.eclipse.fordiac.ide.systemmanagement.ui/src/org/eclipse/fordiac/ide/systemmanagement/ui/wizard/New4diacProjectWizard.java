@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferen
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
@@ -125,7 +126,16 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 
 		final Application app = cmd.getCreatedElement();
 		if (page.getOpenApplication() && null != app) {
-			OpenListenerManager.openEditor(app);
+			final IEditorPart openEditor = OpenListenerManager.openEditor(app);
+			if (openEditor != null) {
+				openEditor.doSave(new NullProgressMonitor());
+			}
+		} else {
+			try {
+				system.getTypeEntry().save(system);
+			} catch (final CoreException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
