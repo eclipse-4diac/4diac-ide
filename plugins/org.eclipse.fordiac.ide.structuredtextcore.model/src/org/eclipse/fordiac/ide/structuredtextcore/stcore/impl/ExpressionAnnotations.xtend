@@ -98,7 +98,8 @@ final package class ExpressionAnnotations {
 						else if (left instanceof AnyDurationType && right instanceof AnyDurationType)
 							left.commonSupertype(right)
 						else
-							commonSupertype(left.equivalentAnyNumType, right.equivalentAnyNumType)
+							commonSupertype(left.equivalentAnyNumType, right.equivalentAnyNumType) ?:
+								commonSupertype(left.equivalentAnyUnsignedType, right.equivalentAnyUnsignedType)
 					} else if (expr.op.logical) {
 						commonSupertype(left.equivalentAnyBitType, right.equivalentAnyBitType)
 					} else if (expr.op.range) {

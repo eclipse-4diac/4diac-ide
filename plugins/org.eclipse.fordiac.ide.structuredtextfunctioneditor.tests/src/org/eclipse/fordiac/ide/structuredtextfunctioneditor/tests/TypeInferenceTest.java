@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
 import org.eclipse.xtext.testing.InjectWith;
@@ -315,7 +316,6 @@ class TypeInferenceTest {
 						Y : DWORD;
 					END_VAR
 					X := X AND ((Y AND 16#0000_1000) <> 0);
-					END_IF;
 					END_FUNCTION
 				""");
 		final STAssignment assignment = (STAssignment) getFirstStatement(result);
@@ -339,6 +339,35 @@ class TypeInferenceTest {
 		assertEquals(ElementaryTypes.WORD, innermostRight.getResultType(), "innermost right result type");
 		assertEquals(ElementaryTypes.INT, innermostRight.getDeclaredResultType(),
 				"innermost right declared result type");
+	}
+
+	@Test
+	void testNestedCondition() throws Exception {
+		final var result = parseHelper.parse("""
+					FUNCTION test
+					VAR_TEMP
+						X : UINT;
+					END_VAR
+					IF (X MOD 2) = 0 THEN
+					END_IF;
+					END_FUNCTION
+				""");
+		final STIfStatement statement = (STIfStatement) getFirstStatement(result);
+		final STBinaryExpression outer = (STBinaryExpression) statement.getCondition();
+		assertEquals(ElementaryTypes.BOOL, outer.getResultType(), "outer result type");
+		assertEquals(ElementaryTypes.BOOL, outer.getDeclaredResultType(), "outer declared result type");
+
+		final STExpression outerRight = outer.getRight();
+		assertEquals(ElementaryTypes.UINT, outerRight.getResultType(), "outer right result type");
+		assertEquals(ElementaryTypes.SINT, outerRight.getDeclaredResultType(), "outer right declared result type");
+
+		final STBinaryExpression inner = (STBinaryExpression) outer.getLeft();
+		assertEquals(ElementaryTypes.UINT, inner.getResultType(), "inner result type");
+		assertEquals(ElementaryTypes.UINT, inner.getDeclaredResultType(), "inner declared result type");
+
+		final STExpression innerRight = inner.getRight();
+		assertEquals(ElementaryTypes.UINT, innerRight.getResultType(), "inner right result type");
+		assertEquals(ElementaryTypes.SINT, innerRight.getDeclaredResultType(), "inner right declared result type");
 	}
 
 	private static STStatement getFirstStatement(final STFunctionSource source) {
