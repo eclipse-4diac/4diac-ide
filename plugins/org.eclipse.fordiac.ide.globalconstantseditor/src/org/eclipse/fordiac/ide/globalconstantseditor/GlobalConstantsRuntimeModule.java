@@ -23,6 +23,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameConv
 import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.TypeLibraryAllContainersState;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.TypeLibraryResourceDescriptions;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STCoreLinkingDiagnosticMessageProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSerializer;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
@@ -37,7 +39,10 @@ import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater;
 import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy;
+import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.resource.containers.IAllContainersState;
+import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
 import org.eclipse.xtext.serializer.ISerializer;
@@ -89,6 +94,23 @@ public class GlobalConstantsRuntimeModule extends AbstractGlobalConstantsRuntime
 
 	public Class<? extends IDefaultResourceDescriptionStrategy> bindIDefaultResourceDescriptionStrategy() {
 		return STCoreResourceDescriptionStrategy.class;
+	}
+
+	@Override
+	public void configureIResourceDescriptions(final com.google.inject.Binder binder) {
+		binder.bind(IResourceDescriptions.class).to(TypeLibraryResourceDescriptions.class);
+	}
+
+	@Override
+	public void configureIResourceDescriptionsPersisted(final Binder binder) {
+		binder.bind(IResourceDescriptions.class)
+				.annotatedWith(Names.named(ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS))
+				.to(TypeLibraryResourceDescriptions.class);
+	}
+
+	@Override
+	public Class<? extends IAllContainersState.Provider> bindIAllContainersState$Provider() {
+		return TypeLibraryAllContainersState.ProviderImpl.class;
 	}
 
 	public Class<? extends ICommentAssociater> bindICommentAssociater() {

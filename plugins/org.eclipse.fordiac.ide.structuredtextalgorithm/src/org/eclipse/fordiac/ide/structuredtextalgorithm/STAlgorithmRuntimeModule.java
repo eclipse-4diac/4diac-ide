@@ -27,6 +27,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverter
 import org.eclipse.fordiac.ide.structuredtextcore.documentation.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.TypeLibraryAllContainersState;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.TypeLibraryResourceDescriptions;
 import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSerializer;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
@@ -41,8 +43,11 @@ import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater;
 import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy;
 import org.eclipse.xtext.resource.IResourceDescription;
+import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.resource.IResourceFactory;
 import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.resource.containers.IAllContainersState;
+import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
 import org.eclipse.xtext.serializer.ISerializer;
@@ -98,6 +103,23 @@ public class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 
 	public Class<? extends IResourceDescription.Manager> bindIResourceDescription$Manager() {
 		return STAlgorithmResourceDescriptionManager.class;
+	}
+
+	@Override
+	public void configureIResourceDescriptions(final com.google.inject.Binder binder) {
+		binder.bind(IResourceDescriptions.class).to(TypeLibraryResourceDescriptions.class);
+	}
+
+	@Override
+	public void configureIResourceDescriptionsPersisted(final Binder binder) {
+		binder.bind(IResourceDescriptions.class)
+				.annotatedWith(Names.named(ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS))
+				.to(TypeLibraryResourceDescriptions.class);
+	}
+
+	@Override
+	public Class<? extends IAllContainersState.Provider> bindIAllContainersState$Provider() {
+		return TypeLibraryAllContainersState.ProviderImpl.class;
 	}
 
 	public Class<? extends ILinkingDiagnosticMessageProvider> bindILinkingDiagnosticMessageProvider() {

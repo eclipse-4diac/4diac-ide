@@ -23,6 +23,8 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -72,19 +74,23 @@ public enum TypeLibraryManager {
 		// attempt to get from EMF resource through URI
 		final Resource resource = context.eResource();
 		if (resource != null) {
-			final URI uri = resource.getURI();
-			if (uri != null) {
-				final IFile file;
-				if (uri.isPlatformResource()) {
-					file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true)));
-				} else if (uri.isFile()) {
-					file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toFileString()));
-				} else {
-					return null;
-				}
-				if (file.getProject() != null) {
-					return getTypeLibrary(file.getProject());
-				}
+			return getTypeLibraryFromURI(resource.getURI());
+		}
+		return null;
+	}
+
+	public TypeLibrary getTypeLibraryFromURI(final URI uri) {
+		if (uri != null) {
+			final IFile file;
+			if (uri.isPlatformResource()) {
+				file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true)));
+			} else if (uri.isFile() && uri.segmentCount() >= 2) { // need at least two segments for a valid file path
+				file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toFileString()));
+			} else {
+				return null;
+			}
+			if (file.getProject() != null) {
+				return getTypeLibrary(file.getProject());
 			}
 		}
 		return null;
@@ -94,6 +100,10 @@ public enum TypeLibraryManager {
 		synchronized (typeLibraryList) {
 			return typeLibraryList.get(proj) != null;
 		}
+	}
+
+	public Collection<TypeLibrary> getTypeLibraries() {
+		return Collections.unmodifiableCollection(typeLibraryList.values());
 	}
 
 	public void removeProject(final IProject project) {
