@@ -29,12 +29,6 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.resource.STFunctionR
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
-import org.eclipse.xtext.EcoreUtil2;
-import org.eclipse.xtext.resource.IContainer;
-import org.eclipse.xtext.resource.IEObjectDescription;
-import org.eclipse.xtext.resource.IResourceDescription;
-import org.eclipse.xtext.resource.IResourceDescriptions;
-import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider;
 import org.eclipse.xtext.validation.Check;
 
 import com.google.common.base.Objects;
@@ -44,19 +38,12 @@ import com.google.inject.Provider;
 public class STFunctionValidator extends AbstractSTFunctionValidator {
 
 	@Inject
-	private ResourceDescriptionsProvider resourceDescriptionsProvider;
-
-	@Inject
-	private IContainer.Manager containerManager;
-
-	@Inject
 	private Provider<STCoreTypeUsageCollector> typeUsageCollectorProvider;
 
 	@Inject
 	private STCoreImportValidator importValidator;
 
 	public static final String ISSUE_CODE_PREFIX = "org.eclipse.fordiac.ide.structuredtextfunction."; //$NON-NLS-1$
-	public static final String DUPLICATE_FUNCTION_NAME = ISSUE_CODE_PREFIX + "duplicateFunctionName"; //$NON-NLS-1$
 	public static final String FUNCTION_NAME_MISMATCH = ISSUE_CODE_PREFIX + "functionNameMismatch"; //$NON-NLS-1$
 	public static final String MULTIPLE_FUNCTIONS = ISSUE_CODE_PREFIX + "multipleFunctions"; //$NON-NLS-1$
 
@@ -78,28 +65,6 @@ public class STFunctionValidator extends AbstractSTFunctionValidator {
 		final STCoreControlFlowValidator controlFlowValidator = new STCoreControlFlowValidator(this);
 		controlFlowValidator.validateVariableBlocks(function.getVarDeclarations());
 		controlFlowValidator.validateStatements(function.getCode());
-	}
-
-	/**
-	 * Check on duplicate names in self-defined functions. Standard functions are
-	 * already checked in STCore
-	 */
-	@Check
-	public void checkDuplicateFunctionNames(final STFunction function) {
-		final IResourceDescriptions resourceDescriptions = resourceDescriptionsProvider
-				.getResourceDescriptions(function.eResource());
-		final IResourceDescription resourceDescription = resourceDescriptions
-				.getResourceDescription(function.eResource().getURI());
-		for (final IContainer c : containerManager.getVisibleContainers(resourceDescription, resourceDescriptions)) {
-			for (final IEObjectDescription od : c.getExportedObjectsByType(STFunctionPackage.Literals.ST_FUNCTION)) {
-				if (function.getName().equalsIgnoreCase(od.getQualifiedName().toString())
-						&& !od.getEObjectURI().equals(EcoreUtil2.getNormalizedURI(function))) {
-					error(MessageFormat.format(Messages.STFunctionValidator_Duplicate_Function_Name, function.getName(),
-							od.getEObjectURI().toPlatformString(true)),
-							LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, DUPLICATE_FUNCTION_NAME);
-				}
-			}
-		}
 	}
 
 	@Check

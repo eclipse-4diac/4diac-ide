@@ -1285,17 +1285,6 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
-	def void testDuplicateFunctionNameIsForbidden() {
-		'''
-			FUNCTION duplicate
-			END_FUNCTION
-			FUNCTION duplicate
-			END_FUNCTION
-		'''.parse.assertError(STFunctionPackage.eINSTANCE.STFunction, STFunctionValidator.DUPLICATE_FUNCTION_NAME,
-			"FUNCTION with duplicate name 'duplicate' found in null")
-	}
-
-	@Test
 	def void testDuplicateVariableNameIsForbiddenInFunction_0() {
 		'''
 			FUNCTION hubert
