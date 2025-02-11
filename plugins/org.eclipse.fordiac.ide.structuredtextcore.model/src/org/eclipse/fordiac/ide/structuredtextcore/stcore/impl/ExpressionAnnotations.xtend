@@ -381,9 +381,9 @@ final package class ExpressionAnnotations {
 					index < arguments.size ? arguments.get(index) : null
 				].unmodifiableView
 			} else { // named arguments
-				val namedArguments = arguments.filter(STCallNamedInputArgument).toMap[parameter]
+				val namedArguments = arguments.filter(STCallNamedInputArgument).toMap[parameter.name]
 				parameters.toInvertedMap [ parameter |
-					namedArguments.get(parameter)
+					namedArguments.get(parameter.name)
 				].unmodifiableView
 			}
 		} else
@@ -402,9 +402,9 @@ final package class ExpressionAnnotations {
 					index < arguments.size ? arguments.get(index) : null
 				].unmodifiableView
 			} else { // named arguments
-				val namedArguments = arguments.filter(STCallNamedOutputArgument).toMap[parameter]
+				val namedArguments = arguments.filter(STCallNamedOutputArgument).toMap[parameter.name]
 				parameters.toInvertedMap [ parameter |
-					namedArguments.get(parameter)
+					namedArguments.get(parameter.name)
 				].unmodifiableView
 			}
 		} else
@@ -422,9 +422,9 @@ final package class ExpressionAnnotations {
 					index < arguments.size ? arguments.get(index) : null
 				].unmodifiableView
 			} else { // named arguments
-				val namedArguments = arguments.filter(STCallNamedInputArgument).toMap[parameter]
+				val namedArguments = arguments.filter(STCallNamedInputArgument).toMap[parameter.name]
 				parameters.toInvertedMap [ parameter |
-					namedArguments.get(parameter)
+					namedArguments.get(parameter.name)
 				].unmodifiableView
 			}
 		} else
