@@ -819,6 +819,12 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	protected Value evaluateFBCall(final FBVariable receiver, final Event event,
 			final Map<INamedElement, STCallArgument> inputs, final Map<INamedElement, STCallArgument> outputs,
 			final Map<INamedElement, STCallArgument> inouts) throws EvaluatorException, InterruptedException {
+		final Event typeEvent = receiver.getType().getInterfaceList().getEvent(event.getName());
+		if (typeEvent == null) {
+			throw new EvaluatorException(MessageFormat.format(
+					org.eclipse.fordiac.ide.model.eval.st.Messages.StructuredTextEvaluator_NoSuchTypeEvent,
+					event.getQualifiedName(), PackageNameHelper.getFullTypeName(receiver.getType())), this);
+		}
 		final FBEvaluator<?> eval = getEvaluator(receiver);
 		if (eval == null) {
 			throw new UnsupportedOperationException(MessageFormat.format(
@@ -826,7 +832,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 		writeArguments(eval, inputs);
 		writeArguments(eval, inouts);
-		eval.evaluate(event);
+		eval.evaluate(typeEvent);
 		readArguments(eval, inouts);
 		readArguments(eval, outputs);
 		final Variable<?> returnVariable = eval.getVariables().get(StructuredTextEvaluator.RETURN_VARIABLE_NAME);

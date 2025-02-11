@@ -23,6 +23,7 @@ public class Messages extends NLS {
 	public static String StructuredTextEvaluator_DeclarationNotAConstant;
 	public static String StructuredTextEvaluator_ElementNotSupported;
 	public static String StructuredTextEvaluator_FeatureNotSupported;
+	public static String StructuredTextEvaluator_NoSuchTypeEvent;
 	public static String StructuredTextEvaluator_RangeNotSupported;
 	static {
 		// initialize resource bundle
