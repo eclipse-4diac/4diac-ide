@@ -24,4 +24,5 @@ Require-Bundle: org.eclipse.search,
  org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.model.ui,
  org.eclipse.fordiac.ide.ui,
- org.eclipse.fordiac.ide.systemmanagement
+ org.eclipse.fordiac.ide.systemmanagement,
+ org.eclipse.fordiac.ide.structuredtextcore.model

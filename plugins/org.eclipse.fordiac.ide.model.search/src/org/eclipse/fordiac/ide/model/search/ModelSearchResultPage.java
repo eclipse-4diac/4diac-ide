@@ -13,6 +13,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -21,12 +25,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -34,7 +39,7 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
@@ -58,11 +63,16 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	private ModelSearchTableContentProvider contentProvider;
 	private String searchDescription;
 
-	private static final int TYPE_COLUMN_WIDTH = 100;
-	private static final int NAME_COMMENT_COLUMN_WIDTH = 200;
-	private static final int FULL_HIERARCHICAL_NAME_COLUMN_WIDTH = 300;
+	private static final int ELEMENT_KIND_COLUMN_WIDTH = 10;
+	private static final int NAME_COLUMN_WIDTH = 10;
+	private static final int COMMENT_COLUMN_WIDTH = 10;
+	private static final int TYPE_COLUMN_WIDTH = 20;
+	private static final int PATH_COLUMN_WIDTH = 20;
+	private static final int LOCATION_COLUMN_WIDTH = 20;
 
-	private static final String FULL_NAME_COLUMN = "Full Hierarchical Name"; //$NON-NLS-1$
+	private static final String PATH_COLUMN = "Path"; //$NON-NLS-1$
+	private static final String ELEMENT_KIND_COLUMN = "Element Kind"; //$NON-NLS-1$
+	private static final String LOCATION_COLUMN = "Location"; //$NON-NLS-1$
 
 	public ModelSearchResultPage() {
 		super(AbstractTextSearchViewPage.FLAG_LAYOUT_FLAT); // FLAG_LAYOUT_FLAT = table layout
@@ -132,10 +142,13 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		table.setLayout(createTableLayout());
 
 		final TableViewerColumn colKind = new TableViewerColumn(viewer, SWT.LEAD);
-		colKind.getColumn().setText("Element Kind"); //$NON-NLS-1$
+		colKind.getColumn().setText(ELEMENT_KIND_COLUMN);
 		colKind.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
+				if (element instanceof IInterfaceElement) {
+					return "Pin"; //$NON-NLS-1$
+				}
 				final String kind = element.getClass().getSimpleName();
 				return kind.substring(0, kind.length() - 4);
 			}
@@ -143,7 +156,6 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 		final TableViewerColumn colName = new TableViewerColumn(viewer, SWT.LEAD);
 		colName.getColumn().setText(FordiacMessages.Name);
-
 		colName.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
@@ -153,6 +165,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 				return super.getText(element);
 			}
 		});
+
 		final TableViewerColumn colComment = new TableViewerColumn(viewer, SWT.LEAD);
 		colComment.getColumn().setText(FordiacMessages.Comment);
 		colComment.setLabelProvider(new ColumnLabelProvider() {
@@ -164,45 +177,52 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 				return super.getText(element);
 			}
 		});
+
 		final TableViewerColumn colType = new TableViewerColumn(viewer, SWT.LEAD);
 		colType.getColumn().setText(FordiacMessages.Type);
-
 		colType.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof final FBType fbType) {
-					return fbType.getName();
-				}
-				if (element instanceof final TypedConfigureableObject to) {
-					final LibraryElement type = to.getType();
-					return type != null ? type.getName() : "untyped"; //$NON-NLS-1$
-				}
-				if (element instanceof final IInterfaceElement ie) {
-					final LibraryElement type = ie.getType();
-					return type != null ? type.getName() : "unknown"; //$NON-NLS-1$
-				}
-				if (element instanceof Algorithm) {
-					return "Algorithm"; //$NON-NLS-1$
-				}
-				if (element instanceof Method) {
-					return "Method"; //$NON-NLS-1$
-				}
-				if (element instanceof final INamedElement namedElement) {
-					return namedElement.getName();
+				if (element instanceof final EObject eobj) {
+					return eobj.eResource().getURI().lastSegment();
 				}
 				return super.getText(element);
 			}
 		});
 
-		final TableViewerColumn fullHierarchicalName = new TableViewerColumn(viewer, SWT.LEAD);
-		fullHierarchicalName.getColumn().setText(FULL_NAME_COLUMN);
-		fullHierarchicalName.setLabelProvider(new ColumnLabelProvider() {
+		final TableViewerColumn path = new TableViewerColumn(viewer, SWT.LEAD);
+		path.getColumn().setText(PATH_COLUMN);
+		path.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
+				if (element instanceof final EObject eobj) {
+					final var segments = eobj.eResource().getURI().segmentsList();
+					if (segments.size() > 2) {
+						return segments.stream().skip(1).limit(segments.size() - 2).map(URI::decode)
+								.collect(Collectors.joining("/")); //$NON-NLS-1$
+					}
+				}
+				return super.getText(element);
+			}
+		});
+
+		final TableViewerColumn location = new TableViewerColumn(viewer, SWT.LEAD);
+		location.getColumn().setText(LOCATION_COLUMN);
+		location.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				if (element instanceof TextAlgorithm || element instanceof TextMethod
+						|| element instanceof FunctionFBType) {
+					return Arrays.stream(contentProvider.getSearchResult().getMatches(element))
+							.map(match -> Integer.toString(match.getLength()))
+							.collect(Collectors.collectingAndThen(Collectors.joining(", "), //$NON-NLS-1$
+									result -> result.isEmpty() ? "" //$NON-NLS-1$
+											: (result.contains(", ") ? "Lines: " + result : "Line: " + result)));
+				}
+
 				final ModelSearchResult searchResult = (ModelSearchResult) contentProvider.getSearchResult();
 				return searchResult.getDictionary().hierarchicalName(element);
 			}
-
 		});
 	}
 
@@ -269,11 +289,12 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 	protected static TableLayout createTableLayout() {
 		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(TYPE_COLUMN_WIDTH));
-		layout.addColumnData(new ColumnPixelData(NAME_COMMENT_COLUMN_WIDTH));
-		layout.addColumnData(new ColumnPixelData(NAME_COMMENT_COLUMN_WIDTH));
-		layout.addColumnData(new ColumnPixelData(TYPE_COLUMN_WIDTH));
-		layout.addColumnData(new ColumnPixelData(FULL_HIERARCHICAL_NAME_COLUMN_WIDTH));
+		layout.addColumnData(new ColumnWeightData(ELEMENT_KIND_COLUMN_WIDTH));
+		layout.addColumnData(new ColumnWeightData(NAME_COLUMN_WIDTH));
+		layout.addColumnData(new ColumnWeightData(COMMENT_COLUMN_WIDTH));
+		layout.addColumnData(new ColumnWeightData(TYPE_COLUMN_WIDTH));
+		layout.addColumnData(new ColumnWeightData(PATH_COLUMN_WIDTH));
+		layout.addColumnData(new ColumnWeightData(LOCATION_COLUMN_WIDTH));
 		return layout;
 	}
 

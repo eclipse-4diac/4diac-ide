@@ -103,6 +103,7 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 	public void clear() {
 		final EObject first = (results.isEmpty()) ? null : results.get(0);
 		results.clear();
+		removeAll();
 		fireChange(getSearchResultEvent(first, ModelSearchResultEvent.REMOVED));
 	}
 
