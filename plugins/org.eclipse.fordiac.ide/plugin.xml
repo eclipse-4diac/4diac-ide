@@ -81,7 +81,7 @@
          </property>
          <property
                name="introBrandingImage"
-               value="product:intro/graphics/fordiac_logo.png">
+               value="product:intro/graphics/4diac_IDE_Logo.svg">
          </property>
          <property
     name="cssTheme"
