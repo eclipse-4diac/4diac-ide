@@ -571,6 +571,9 @@
                         value="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.renameProcessor2">
                   </equals>
                   <equals
+                        value="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.renameProcessor2">
+                  </equals>
+                  <equals
                         value="org.eclipse.fordiac.ide.model.datatype.dtp.renameProcessor2">
                   </equals>
                </or>

@@ -640,5 +640,37 @@
           </adapt>
        </enablement>
     </renameParticipant>
+    <renameParticipant
+          class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionRenameFunctionParameterRefactoringParticipant"
+          id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.renameFunctionParameterParticipant"
+          name="Rename Function Parameters">
+       <enablement>
+          <adapt
+                type="org.eclipse.xtext.ui.refactoring.ui.IRenameElementContext">
+             <with
+                   variable="processorIdentifier">
+                <equals
+                      value="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.renameProcessor2">
+                </equals>
+             </with>
+          </adapt>
+       </enablement>
+    </renameParticipant>
+    <renameParticipant
+          class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionRenameInterfaceParameterRefactoringParticipant"
+          id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.renameInterfaceParameterParticipant"
+          name="Rename Interface References">
+       <enablement>
+          <adapt
+                type="org.eclipse.xtext.ui.refactoring.ui.IRenameElementContext">
+             <with
+                   variable="processorIdentifier">
+                <equals
+                      value="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.renameProcessor2">
+                </equals>
+             </with>
+          </adapt>
+       </enablement>
+    </renameParticipant>
  </extension>
 </plugin>

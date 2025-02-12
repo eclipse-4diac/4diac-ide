@@ -19,6 +19,8 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.messages"; //$NON-NLS-1$
 	public static String STFunctionLabelProvider_FunctionText;
 	public static String STFunctionQuickfixProvider_RenameFunction;
+	public static String STFunctionRenameFunctionParameterRefactoringParticpant_Name;
+	public static String STFunctionRenameInterfaceParameterRefactoringParticipant_Name;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
