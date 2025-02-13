@@ -93,6 +93,9 @@ public class HierarchyManagerUtil {
 			retVal = network.getElementNamed(element);
 			if (retVal instanceof final SubApp subApp) {
 				network = subApp.getSubAppNetwork();
+				if (network == null) {
+					network = subApp.loadSubAppNetwork();
+				}
 			} else if (retVal instanceof final SubAppType subAppType) {
 				network = subAppType.getFBNetwork();
 			} else {
