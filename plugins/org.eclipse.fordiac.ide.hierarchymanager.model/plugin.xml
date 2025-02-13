@@ -29,7 +29,7 @@
    <extension point="org.eclipse.emf.ecore.extension_parser">
       <!-- @generated hierarchy -->
       <parser
-            type="hierarchy"
+            type="hier"
             class="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceFactoryImpl"/>
    </extension>
 </plugin>

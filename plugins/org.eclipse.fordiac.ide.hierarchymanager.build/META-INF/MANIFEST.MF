@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Hierarchy Manager Build
+Bundle-SymbolicName: org.eclipse.fordiac.ide.hierarchymanager.build;singleton:=true
+Bundle-Version: 3.0.0.qualifier
+Export-Package: org.eclipse.fordiac.ide.hierarchymanager.build
+Require-Bundle: org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.hierarchymanager.model,
+ org.eclipse.xtext,
+ org.eclipse.xtext.ui,
+ org.eclipse.xtext.builder,
+ org.eclipse.xtext.ui.shared
+Bundle-Vendor: Eclipse 4diac Project
+Automatic-Module-Name: org.eclipse.fordiac.ide.hierarchymanager.build
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.eclipse.fordiac.ide.hierarchymanager.build.HierarchyBuildPlugin
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Import-Package: org.apache.log4j;version="[1.2.0,2.0.0)"
