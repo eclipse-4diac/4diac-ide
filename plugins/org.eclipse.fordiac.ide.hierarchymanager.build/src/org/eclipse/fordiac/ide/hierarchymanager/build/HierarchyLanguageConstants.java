@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.hierarchymanager.build;
 public class HierarchyLanguageConstants {
 
 	public static final String ORG_ECLIPSE_FORDIAC_IDE_HIERARCHYMANAGER_HIERARCHY = "org.eclipse.fordiac.ide.hierarchymanager.hierarchy"; //$NON-NLS-1$
+	public static final String HIERARCHY_PROBLEM = "org.eclipse.fordiac.ide.hierarchymanager.model.problem"; //$NON-NLS-1$
 
 	private HierarchyLanguageConstants() {
 		throw new UnsupportedOperationException();

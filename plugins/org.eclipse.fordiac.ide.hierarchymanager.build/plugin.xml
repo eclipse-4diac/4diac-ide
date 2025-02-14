@@ -8,5 +8,12 @@
             uriExtension="hier">
       </resourceServiceProvider>
    </extension>
+   <extension
+         point="org.eclipse.xtext.builder.participant">
+      <participant
+            class="org.eclipse.fordiac.ide.hierarchymanager.build.HierarchyExecutableExtensionFactory:org.eclipse.fordiac.ide.hierarchymanager.build.HierarchyBuilderParticipant"
+            fileExtensions="hier">
+      </participant>
+   </extension>
 
 </plugin>
