@@ -13,10 +13,17 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.resource;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
@@ -27,13 +34,33 @@ public class STAlgorithmResourceDescriptionStrategy extends STCoreResourceDescri
 
 	@Override
 	public boolean createEObjectDescriptions(final EObject eObject, final IAcceptor<IEObjectDescription> acceptor) {
-		if (eObject instanceof LibraryElement && eObject.eResource().getURI().hasQuery()) {
-			return false; // do not export library element from resource with query
+		return switch (eObject) {
+		// do not export library element from resource with query:
+		case final LibraryElement libraryElement when libraryElement.eResource().getURI().hasQuery() -> false;
+		// do not export algorithms or methods:
+		case final STAlgorithm unused -> false;
+		case final STMethod unused -> false;
+		case final STAlgorithmBody unused -> false;
+		case final STMethodBody unused -> false;
+		// do not export anything inside an FB network,
+		// except for the subapp hierarchy (needed for plant hierarchy):
+		// - untyped subapps (incl. contents)
+		// - typed subapps (excl. contents)
+		// - no other FBNE inside FBNs
+		// - no attributes of subapp instances
+		// - no interface of subapp instances
+		// - no connections
+		case final UntypedSubApp untypedSubApp -> super.createEObjectDescriptions(untypedSubApp, acceptor);
+		case final TypedSubApp typedSubApp -> {
+			super.createEObjectDescriptions(typedSubApp, acceptor); // export subapp
+			yield false; // exclude contents
 		}
-		if (eObject instanceof STAlgorithm || eObject instanceof STMethod || eObject instanceof STAlgorithmBody
-				|| eObject instanceof STMethodBody || eObject instanceof FBNetwork) {
-			return false; // do not export anything inside of an algorithm, method, or FB network
-		}
-		return super.createEObjectDescriptions(eObject, acceptor);
+		case final FBNetworkElement fbne when fbne.eContainer() instanceof FBNetwork -> false;
+		case final Attribute attribute when attribute.eContainer() instanceof SubApp -> false;
+		case final InterfaceList interfaceList when interfaceList.eContainer() instanceof SubApp -> false;
+		case final Connection unused -> false;
+		// export by default:
+		default -> super.createEObjectDescriptions(eObject, acceptor);
+		};
 	}
 }

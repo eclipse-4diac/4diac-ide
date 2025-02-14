@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.hierarchymanager.build;
 
 import org.eclipse.xtext.naming.DefaultDeclarativeQualifiedNameProvider;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
+import org.eclipse.xtext.resource.IResourceDescription;
 import org.eclipse.xtext.resource.generic.AbstractGenericResourceRuntimeModule;
 
 public class HierarchyRuntimeModule extends AbstractGenericResourceRuntimeModule {
@@ -31,5 +32,10 @@ public class HierarchyRuntimeModule extends AbstractGenericResourceRuntimeModule
 	@Override
 	public Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
 		return DefaultDeclarativeQualifiedNameProvider.class;
+	}
+
+	@Override
+	public Class<? extends IResourceDescription.Manager> bindIResourceDescription$Manager() {
+		return HierarchyResourceDescriptionManager.class;
 	}
 }
