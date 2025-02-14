@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="sequence_E_04" Comment="Sequence with 4 Outputs, Transition by EVENT" >
+	<Identification Standard="61499-2" Description="Copyright (c) 2024 HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2024-03-02">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="START_S1" Type="Event" Comment="jump from START to State_01" >
+			</Event>
+			<Event Name="S1_S2" Type="Event" Comment="jump from State_01 to State_02" >
+			</Event>
+			<Event Name="S2_S3" Type="Event" Comment="jump from State_02 to State_03" >
+			</Event>
+			<Event Name="S3_S4" Type="Event" Comment="jump from State_03 to State_04" >
+			</Event>
+			<Event Name="S4_START" Type="Event" Comment="jump from State_04 to START" >
+			</Event>
+			<Event Name="RESET" Type="Event" Comment="Reset from any State to START" >
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation" >
+				<With Var="STATE_NR"/>
+			</Event>
+			<Event Name="EO_S1" Type="Event">
+				<With Var="DO_S1"/>
+			</Event>
+			<Event Name="EO_S2" Type="Event">
+				<With Var="DO_S2"/>
+			</Event>
+			<Event Name="EO_S3" Type="Event">
+				<With Var="DO_S3"/>
+			</Event>
+			<Event Name="EO_S4" Type="Event">
+				<With Var="DO_S4"/>
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="STATE_NR" Type="SINT" Comment="State Number, START = 0, State_01 = 1 and so on. " />
+			<VarDeclaration Name="DO_S1" Type="BOOL" Comment="Output if State_01 is active" />
+			<VarDeclaration Name="DO_S2" Type="BOOL" Comment="Output if State_02 is active" />
+			<VarDeclaration Name="DO_S3" Type="BOOL" Comment="Output if State_03 is active" />
+			<VarDeclaration Name="DO_S4" Type="BOOL" Comment="Output if State_04 is active" />
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="xSTART" Comment="Initial State"  x="800" y="800">
+			</ECState>
+			<ECState Name="sState_01" x="2666.67" y="1333.33">
+				<ECAction/>
+				<ECAction Algorithm="State_01_C" Output="CNF"/>
+				<ECAction Algorithm="State_01_E" Output="EO_S1"/>
+			</ECState>
+			<ECState Name="sState_02" x="2666.67" y="2000">
+				<ECAction Algorithm="State_01_X" Output="EO_S1"/>
+				<ECAction Algorithm="State_02_C" Output="CNF"/>
+				<ECAction Algorithm="State_02_E" Output="EO_S2"/>
+			</ECState>
+			<ECState Name="sState_03" x="2666.67" y="2666.67">
+				<ECAction Algorithm="State_02_X" Output="EO_S2"/>
+				<ECAction Algorithm="State_03_C" Output="CNF"/>
+				<ECAction Algorithm="State_03_E" Output="EO_S3"/>
+			</ECState>
+			<ECState Name="sState_04" x="2666.67" y="3333.33">
+				<ECAction Algorithm="State_03_X" Output="EO_S3"/>
+				<ECAction Algorithm="State_04_C" Output="CNF"/>
+				<ECAction Algorithm="State_04_E" Output="EO_S4"/>
+			</ECState>
+			<ECState Name="sState_00" x="2666.67" y="4000">
+				<ECAction Algorithm="State_04_X" Output="EO_S4"/>
+				<ECAction Algorithm="State_00_C" Output="CNF"/>
+				<ECAction/>
+			</ECState>
+			<ECState Name="sRESET" x="-666.67" y="2666.67">
+				<ECAction Algorithm="State_01_X" Output="EO_S1"/>
+				<ECAction Algorithm="State_02_X" Output="EO_S2"/>
+				<ECAction Algorithm="State_03_X" Output="EO_S3"/>
+				<ECAction Algorithm="State_04_X" Output="EO_S4"/>
+			</ECState>
+			<ECTransition Source="sState_01" Destination="sState_02" Condition="S1_S2" Comment="" x="2893.33" y="1686.67"/>
+			<ECTransition Source="sState_02" Destination="sState_03" Condition="S2_S3" Comment="" x="2900" y="2373.33"/>
+			<ECTransition Source="sState_03" Destination="sState_04" Condition="S3_S4" Comment="" x="2920" y="2986.67"/>
+			<ECTransition Source="sState_00" Destination="sState_01" Condition="START_S1" Comment="" x="1766.67" y="2573.33"/>
+			<ECTransition Source="sState_04" Destination="sState_00" Condition="S4_START" Comment="" x="2926.67" y="3686.67"/>
+			<ECTransition Source="xSTART" Destination="sState_01" Condition="START_S1" Comment="" x="2153.33" y="920"/>
+			<ECTransition Source="sState_01" Destination="sRESET" Condition="RESET" Comment="" x="586.67" y="1760"/>
+			<ECTransition Source="sState_04" Destination="sRESET" Condition="RESET" Comment="" x="606.67" y="2526.67"/>
+			<ECTransition Source="sState_02" Destination="sRESET" Condition="RESET" Comment="" x="640" y="1993.33"/>
+			<ECTransition Source="sState_03" Destination="sRESET" Condition="RESET" Comment="" x="580" y="2313.33"/>
+			<ECTransition Source="sRESET" Destination="sState_00" Condition="1" Comment="" x="-360" y="3400"/>
+		</ECC>
+		<Algorithm Name="State_00_C">
+			<ST><![CDATA[ // Confirmation STEPS
+ALGORITHM State_00_C // State_00 Confirmation Step
+STATE_NR := sequence::State_00;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="State_01_C">
+			<ST><![CDATA[
+
+ALGORITHM State_01_C // State_01 Confirmation Step
+STATE_NR := sequence::State_01;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="State_02_C">
+			<ST><![CDATA[
+
+ALGORITHM State_02_C // State_02 Confirmation Step
+STATE_NR := sequence::State_02;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="State_03_C">
+			<ST><![CDATA[
+
+ALGORITHM State_03_C // State_03 Confirmation Step
+STATE_NR := sequence::State_03;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="State_04_C">
+			<ST><![CDATA[
+
+ALGORITHM State_04_C // State_04 Confirmation Step
+STATE_NR := sequence::State_04;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="State_01_E">
+			<ST><![CDATA[
+
+ALGORITHM State_01_E // State_01 Entry Step
+DO_S1 := BOOL#TRUE; // ON
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="State_01_X">
+			<ST><![CDATA[
+
+ALGORITHM State_01_X // State_01 Exit Step
+DO_S1 := BOOL#FALSE;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="State_02_E">
+			<ST><![CDATA[
+
+ALGORITHM State_02_E // State_02 Entry Step
+DO_S2 := BOOL#TRUE; // ON
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="State_02_X">
+			<ST><![CDATA[
+
+ALGORITHM State_02_X // State_02 Exit Step
+DO_S2 := BOOL#FALSE;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="State_03_E">
+			<ST><![CDATA[
+
+ALGORITHM State_03_E // State_03 Entry Step
+DO_S3 := BOOL#TRUE; // ON
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="State_03_X">
+			<ST><![CDATA[
+
+ALGORITHM State_03_X // State_03 Exit Step
+DO_S3 := BOOL#FALSE;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="State_04_E">
+			<ST><![CDATA[
+
+ALGORITHM State_04_E // State_04 Entry Step
+DO_S4 := BOOL#TRUE; // ON
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="State_04_X">
+			<ST><![CDATA[
+
+ALGORITHM State_04_X // State_04 Exit Step
+DO_S4 := BOOL#FALSE;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>
