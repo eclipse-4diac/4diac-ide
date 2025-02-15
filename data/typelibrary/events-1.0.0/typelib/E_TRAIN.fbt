@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="E_TRAIN" Comment="Generate of a finite train of events seperated by the time DT" >
-	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017, 2025 fortiss GmbH,  HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<VersionInfo Organization=" HR Agrartechnik GmbH  " Version="1.1" Author="Franz Höpfinger" Date="2025-02-15" Remarks="Bugfix">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="START" Type="Event" Comment="Start event generation" >
 				<With Var="DT"/>
+				<With Var="N"/>
 			</Event>
 			<Event Name="STOP" Type="Event" Comment="Stop event generation" >
-				<With Var="DT"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
