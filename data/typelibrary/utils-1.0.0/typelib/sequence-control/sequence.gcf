@@ -19,7 +19,7 @@
 		<VarDeclaration Name="State_08" Type="SINT" Comment="" InitialValue="SINT#8"/>
 	</GlobalConstants>
 	<OriginalSource><![CDATA[VAR_GLOBAL CONSTANT
-	NO_TIME : TIME := TIME#49d17h2m47s295ms;
+	INF_TIME : TIME := TIME#-1ns;
 	State_00 : SINT := SINT#0;
 	State_01 : SINT := SINT#1;
 	State_02 : SINT := SINT#2;
