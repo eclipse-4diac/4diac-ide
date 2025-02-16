@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_MUX" Comment="Event multiplexor" >
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017, 2025 fortiss GmbH, HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Höpfinger" Date="2025-02-16" Remarks="Copy E_DEMUX and made E_MUX">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI0" Type="Event">
+			</Event>
+			<Event Name="EI1" Type="Event">
+			</Event>
+			<Event Name="EI2" Type="Event">
+			</Event>
+			<Event Name="EI3" Type="Event">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Event which was multiplexed" >
+				<With Var="K"/>
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="K" Type="UINT" Comment="Event index" />
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State"  x="-2320" y="1200">
+			</ECState>
+			<ECState Name="State_0" x="400" y="240">
+				<ECAction Algorithm="EI0" Output="EO"/>
+			</ECState>
+			<ECState Name="State_1" x="400" y="800">
+				<ECAction Algorithm="EI1" Output="EO"/>
+			</ECState>
+			<ECState Name="State_2" x="400" y="1280">
+				<ECAction Algorithm="EI2" Output="EO"/>
+			</ECState>
+			<ECState Name="State_3" x="400" y="1840">
+				<ECAction Algorithm="EI3" Output="EO"/>
+			</ECState>
+			<ECTransition Source="State_0" Destination="START" Condition="1" Comment="" x="-786.67" y="480"/>
+			<ECTransition Source="State_1" Destination="START" Condition="1" Comment="" x="-733.33" y="860"/>
+			<ECTransition Source="State_2" Destination="START" Condition="1" Comment="" x="-733.33" y="1340"/>
+			<ECTransition Source="State_3" Destination="START" Condition="1" Comment="" x="-946.67" y="1940"/>
+			<ECTransition Source="START" Destination="State_0" Condition="EI0" Comment="" x="-833.33" y="313.33"/>
+			<ECTransition Source="START" Destination="State_1" Condition="EI1" Comment="" x="-733.33" y="686.67"/>
+			<ECTransition Source="START" Destination="State_2" Condition="EI2" Comment="" x="-733.33" y="1146.67"/>
+			<ECTransition Source="START" Destination="State_3" Condition="EI3" Comment="" x="-953.33" y="1666.67"/>
+		</ECC>
+		<Algorithm Name="EI0">
+			<ST><![CDATA[ALGORITHM EI0
+K := 0;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="EI1">
+			<ST><![CDATA[
+
+ALGORITHM EI1
+K := 1;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="EI2">
+			<ST><![CDATA[
+
+ALGORITHM EI2
+K := 2;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="EI3">
+			<ST><![CDATA[
+
+ALGORITHM EI3
+K := 3;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>
