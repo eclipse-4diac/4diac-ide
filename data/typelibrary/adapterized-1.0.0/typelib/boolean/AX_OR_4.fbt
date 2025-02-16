@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="AX_OR_4" Comment="FB to calculate boolean OR" >
-	<Identification Standard="61499-2" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
+	<Identification Standard="61499-2" Description="Copyright (c) 2024 HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
-	<VersionInfo Version="1.0" Author="franz" Date="2024-10-23">
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2024-10-23">
 	</VersionInfo>
-	<CompilerInfo packageName="io::adp::boolean">
+	<CompilerInfo>
 	</CompilerInfo>
 	<InterfaceList>
 		<Plugs>
-			<AdapterDeclaration Name="OUT" Type="AX" Comment="OR result"  x="-17046.67" y="-366.67"/>
+			<AdapterDeclaration Name="OUT" Type="AX" Comment="OR result"  x="1666.67" y="1200"/>
 		</Plugs>
 		<Sockets>
-			<AdapterDeclaration Name="IN1" Type="AX" Comment="OR input 1"  x="-19046.67" y="-986.67"/>
-			<AdapterDeclaration Name="IN2" Type="AX" Comment="OR input 2"  x="-19046.67" y="-366.67"/>
-			<AdapterDeclaration Name="IN3" Type="AX" Comment="OR input 3"  x="-19046.67" y="253.33"/>
-			<AdapterDeclaration Name="IN4" Type="AX" Comment="OR input 4"  x="-19046.67" y="873.33"/>
+			<AdapterDeclaration Name="IN1" Type="AX" Comment="OR input 1"  x="133.33" y="33.33"/>
+			<AdapterDeclaration Name="IN2" Type="AX" Comment="OR input 2"  x="133.33" y="813.33"/>
+			<AdapterDeclaration Name="IN3" Type="AX" Comment="OR input 3"  x="133.33" y="1593.33"/>
+			<AdapterDeclaration Name="IN4" Type="AX" Comment="OR input 4"  x="133.33" y="2373.33"/>
 		</Sockets>
 	</InterfaceList>
 	<FBNetwork>
-		<FB Name="OR_4" Type="OR_4" x="-18093.33" y="-366.67">
+		<FB Name="OR_4" Type="OR_4" x="886.67" y="1200">
 		</FB>
 		<EventConnections>
-			<Connection Source="IN1.E1" Destination="OR_4.REQ" dx1="273.33"/>
-			<Connection Source="IN2.E1" Destination="OR_4.REQ"/>
+			<Connection Source="IN1.E1" Destination="OR_4.REQ" dx1="140"/>
+			<Connection Source="IN2.E1" Destination="OR_4.REQ" dx1="140"/>
 			<Connection Source="OR_4.CNF" Destination="OUT.E1"/>
-			<Connection Source="IN3.E1" Destination="OR_4.REQ" dx1="266.67"/>
-			<Connection Source="IN4.E1" Destination="OR_4.REQ" dx1="266.67"/>
+			<Connection Source="IN3.E1" Destination="OR_4.REQ" dx1="140"/>
+			<Connection Source="IN4.E1" Destination="OR_4.REQ" dx1="140"/>
 		</EventConnections>
 		<DataConnections>
-			<Connection Source="IN1.D1" Destination="OR_4.IN1" dx1="233.33"/>
-			<Connection Source="IN2.D1" Destination="OR_4.IN2" dx1="233.33"/>
+			<Connection Source="IN1.D1" Destination="OR_4.IN1" dx1="206.67"/>
+			<Connection Source="IN2.D1" Destination="OR_4.IN2" dx1="73.33"/>
 			<Connection Source="OR_4.OUT" Destination="OUT.D1"/>
-			<Connection Source="IN3.D1" Destination="OR_4.IN3" dx1="300"/>
-			<Connection Source="IN4.D1" Destination="OR_4.IN4" dx1="333.33"/>
+			<Connection Source="IN3.D1" Destination="OR_4.IN3" dx1="206.67"/>
+			<Connection Source="IN4.D1" Destination="OR_4.IN4" dx1="273.33"/>
 		</DataConnections>
 	</FBNetwork>
 </FBType>
