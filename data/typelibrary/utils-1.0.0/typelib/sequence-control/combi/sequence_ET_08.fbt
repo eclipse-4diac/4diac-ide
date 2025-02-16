@@ -123,24 +123,6 @@
 				<ECAction Algorithm="State_04_E" Output="EO_S4"/>
 				<ECAction Output="timeOut.START"/>
 			</ECState>
-			<ECState Name="sState_00" x="2400" y="8000">
-				<ECAction Output="timeOut.STOP"/>
-				<ECAction Algorithm="State_08_X" Output="EO_S8"/>
-				<ECAction Algorithm="State_00_C" Output="CNF"/>
-				<ECAction/>
-				<ECAction/>
-			</ECState>
-			<ECState Name="sRESET" x="-2400" y="8000">
-				<ECAction Output="timeOut.STOP"/>
-				<ECAction Algorithm="State_01_X" Output="EO_S1"/>
-				<ECAction Algorithm="State_02_X" Output="EO_S2"/>
-				<ECAction Algorithm="State_03_X" Output="EO_S3"/>
-				<ECAction Algorithm="State_04_X" Output="EO_S4"/>
-				<ECAction Algorithm="State_05_X" Output="EO_S5"/>
-				<ECAction Algorithm="State_06_X" Output="EO_S6"/>
-				<ECAction Algorithm="State_07_X" Output="EO_S7"/>
-				<ECAction Algorithm="State_08_X" Output="EO_S8"/>
-			</ECState>
 			<ECState Name="sState_05" x="2400" y="4800">
 				<ECAction Output="timeOut.STOP"/>
 				<ECAction Algorithm="State_04_X" Output="EO_S4"/>
@@ -168,6 +150,24 @@
 				<ECAction Algorithm="State_08_C" Output="CNF"/>
 				<ECAction Algorithm="State_08_E" Output="EO_S8"/>
 				<ECAction Output="timeOut.START"/>
+			</ECState>
+			<ECState Name="sState_00" x="2400" y="8000">
+				<ECAction Output="timeOut.STOP"/>
+				<ECAction Algorithm="State_08_X" Output="EO_S8"/>
+				<ECAction Algorithm="State_00_C" Output="CNF"/>
+				<ECAction/>
+				<ECAction/>
+			</ECState>
+			<ECState Name="sRESET" x="-2400" y="8000">
+				<ECAction Output="timeOut.STOP"/>
+				<ECAction Algorithm="State_01_X" Output="EO_S1"/>
+				<ECAction Algorithm="State_02_X" Output="EO_S2"/>
+				<ECAction Algorithm="State_03_X" Output="EO_S3"/>
+				<ECAction Algorithm="State_04_X" Output="EO_S4"/>
+				<ECAction Algorithm="State_05_X" Output="EO_S5"/>
+				<ECAction Algorithm="State_06_X" Output="EO_S6"/>
+				<ECAction Algorithm="State_07_X" Output="EO_S7"/>
+				<ECAction Algorithm="State_08_X" Output="EO_S8"/>
 			</ECState>
 			<ECTransition Source="sState_01" Destination="sState_02" Condition="S1_S2" Comment="" x="2466.67" y="2080"/>
 			<ECTransition Source="sState_02" Destination="sState_03" Condition="S2_S3" Comment="" x="2406.67" y="2946.67"/>

@@ -80,11 +80,12 @@
 				<ECAction Output="timeOut.START"/>
 			</ECState>
 			<ECState Name="sRESET" x="-666.67" y="2400">
+				<ECAction Output="timeOut.STOP"/>
 				<ECAction Algorithm="State_01_X" Output="EO_S1"/>
 				<ECAction Algorithm="State_02_X" Output="EO_S2"/>
 				<ECAction Algorithm="State_03_X" Output="EO_S3"/>
 				<ECAction Algorithm="State_04_X" Output="EO_S4"/>
-				<ECAction Output="timeOut.STOP"/>
+				<ECAction Algorithm="State_00_C" Output="CNF"/>
 			</ECState>
 			<ECTransition Source="sState_01" Destination="sState_02" Condition="timeOut.TimeOut" Comment="" x="2880" y="1653.33"/>
 			<ECTransition Source="sState_02" Destination="sState_03" Condition="timeOut.TimeOut" Comment="" x="2906.67" y="2360"/>

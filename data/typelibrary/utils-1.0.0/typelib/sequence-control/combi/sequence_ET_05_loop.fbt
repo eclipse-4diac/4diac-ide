@@ -99,6 +99,13 @@
 				<ECAction Algorithm="State_04_E" Output="EO_S4"/>
 				<ECAction Output="timeOut.START"/>
 			</ECState>
+			<ECState Name="sState_05" x="2400" y="4800">
+				<ECAction Output="timeOut.STOP"/>
+				<ECAction Algorithm="State_04_X" Output="EO_S4"/>
+				<ECAction Algorithm="State_05_C" Output="CNF"/>
+				<ECAction Algorithm="State_05_E" Output="EO_S5"/>
+				<ECAction Output="timeOut.START"/>
+			</ECState>
 			<ECState Name="sRESET" x="-800" y="4800">
 				<ECAction Output="timeOut.STOP"/>
 				<ECAction Algorithm="State_01_X" Output="EO_S1"/>
@@ -106,13 +113,7 @@
 				<ECAction Algorithm="State_03_X" Output="EO_S3"/>
 				<ECAction Algorithm="State_04_X" Output="EO_S4"/>
 				<ECAction Algorithm="State_05_X" Output="EO_S5"/>
-			</ECState>
-			<ECState Name="sState_05" x="2400" y="4800">
-				<ECAction Output="timeOut.STOP"/>
-				<ECAction Algorithm="State_04_X" Output="EO_S4"/>
-				<ECAction Algorithm="State_05_C" Output="CNF"/>
-				<ECAction Algorithm="State_05_E" Output="EO_S5"/>
-				<ECAction Output="timeOut.START"/>
+				<ECAction Algorithm="State_00_C" Output="CNF"/>
 			</ECState>
 			<ECTransition Source="sState_01" Destination="sState_02" Condition="S1_S2" Comment="" x="2406.67" y="2053.33"/>
 			<ECTransition Source="sState_02" Destination="sState_03" Condition="S2_S3" Comment="" x="2440" y="2893.33"/>

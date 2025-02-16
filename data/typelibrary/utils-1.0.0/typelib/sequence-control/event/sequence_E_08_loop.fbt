@@ -103,6 +103,7 @@
 				<ECAction Algorithm="State_06_X" Output="EO_S6"/>
 				<ECAction Algorithm="State_07_X" Output="EO_S7"/>
 				<ECAction Algorithm="State_08_X" Output="EO_S8"/>
+				<ECAction Algorithm="State_00_C" Output="CNF"/>
 			</ECState>
 			<ECState Name="sState_05" x="2666.67" y="4000">
 				<ECAction Algorithm="State_04_X" Output="EO_S4"/>

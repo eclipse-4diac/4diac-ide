@@ -97,6 +97,7 @@
 				<ECAction Algorithm="State_02_X" Output="EO_S2"/>
 				<ECAction Algorithm="State_03_X" Output="EO_S3"/>
 				<ECAction Algorithm="State_04_X" Output="EO_S4"/>
+				<ECAction Algorithm="State_00_C" Output="CNF"/>
 			</ECState>
 			<ECTransition Source="sState_01" Destination="sState_02" Condition="S1_S2" Comment="" x="2400" y="1373.33"/>
 			<ECTransition Source="sState_02" Destination="sState_03" Condition="S2_S3" Comment="" x="2426.67" y="2173.33"/>
