@@ -32,7 +32,7 @@ public final class FBTypeNavigationLocation extends NavigationLocation {
 		super(editorPart);
 		activeEditor = editorPart.getActiveEditor();
 		subNavigationLocation = createSubNavigationLocation(activeEditor);
-		if (subNavigationLocation == null) {
+		if (subNavigationLocation == null && activeEditor != null) {
 			// if we don't have a sub navigation location check if it is graphical viewer
 			// and capture this data
 			graphicalViewerLocationData = createGraphicalViewerLocationData(activeEditor);
@@ -42,8 +42,8 @@ public final class FBTypeNavigationLocation extends NavigationLocation {
 	}
 
 	private static INavigationLocation createSubNavigationLocation(final IEditorPart activeEditor) {
-		if (activeEditor instanceof INavigationLocationProvider) {
-			return ((INavigationLocationProvider) activeEditor).createNavigationLocation();
+		if (activeEditor instanceof final INavigationLocationProvider navLocProvider) {
+			return navLocProvider.createNavigationLocation();
 		}
 		return null;
 	}
@@ -58,7 +58,7 @@ public final class FBTypeNavigationLocation extends NavigationLocation {
 	protected FBTypeEditor getEditorPart() {
 		final IEditorPart part = super.getEditorPart();
 		// part may be null
-		return (part instanceof FBTypeEditor) ? (FBTypeEditor) part : null;
+		return (part instanceof final FBTypeEditor fbTypeEditor) ? fbTypeEditor : null;
 	}
 
 	@Override
