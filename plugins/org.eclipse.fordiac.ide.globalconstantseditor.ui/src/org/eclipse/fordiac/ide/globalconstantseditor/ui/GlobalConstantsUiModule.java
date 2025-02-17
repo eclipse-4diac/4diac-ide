@@ -17,7 +17,9 @@ package org.eclipse.fordiac.ide.globalconstantseditor.ui;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocument;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocumentPartitioner;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.outline.GlobalConstantsOutlinePage;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.refactoring.GlobalConstantsLinkedPositionGroupCalculator;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.refactoring.GlobalConstantsPartialSerializer;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.refactoring.GlobalConstantsRenameStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreCleanupEditorCallback;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
@@ -39,7 +41,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.OutlineTreeContribu
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreLinkedPositionGroupCalculator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRecordingXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreReferenceUpdater;
@@ -48,7 +49,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedEm
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameNameValidator;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreResourceLifecycleManager;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSimpleNameProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSyncUtil;
@@ -261,7 +261,7 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 
 	@Override
 	public Class<? extends ILinkedPositionGroupCalculator> bindILinkedPositionGroupCalculator() {
-		return STCoreLinkedPositionGroupCalculator.class;
+		return GlobalConstantsLinkedPositionGroupCalculator.class;
 	}
 
 	public Class<? extends ISimpleNameProvider> bindISimpleNameProvider() {
@@ -270,7 +270,7 @@ public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
 
 	@Override
 	public Class<? extends IRenameStrategy2> bindIRenameStrategy2() {
-		return STCoreRenameStrategy.class;
+		return GlobalConstantsRenameStrategy.class;
 	}
 
 	public Class<? extends IRenameNameValidator> bindIRenameNameValidator() {

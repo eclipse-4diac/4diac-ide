@@ -29,7 +29,7 @@ public class FordiacDebugPreferencePage extends FieldEditorPreferencePage implem
 
 	@Override
 	public void init(final IWorkbench workbench) {
-		setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, FordiacDebugPreferences.QUALIFIER));
+		setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, FordiacDebugPreferences.DEBUG_PREFERENCES_ID));
 		setDescription(Messages.FordiacDebugPreferencePage_Description);
 	}
 

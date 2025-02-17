@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,7 +22,6 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -45,24 +44,24 @@ public class LibraryChangeListener implements IResourceChangeListener {
 	private final IResourceDeltaVisitor visitor = delta -> {
 		switch (delta.getResource().getType()) {
 		case IResource.PROJECT:
-			return delta.getKind() != IResourceDelta.REMOVED; // ignore deleted projects
+			// ignore closed or deleted projects
+			return !(isProjectClosed(delta) || delta.getKind() == IResourceDelta.REMOVED);
 		case IResource.FILE:
+			// check manifest files
 			// information on previous linked status is not available on delete
-			if (delta.getResource() instanceof final IFile file
-					&& (file.isLinked() || delta.getKind() == IResourceDelta.REMOVED)
-					&& LibraryManager.MANIFEST.equals(file.getName()) && (delta.getKind() & MASK) != 0) {
+			if (delta.getResource() instanceof final IFile file && LibraryManager.MANIFEST.equals(file.getName())
+			// project manifest:
+					&& ((file.getParent() instanceof IProject && (delta.getKind() & IResourceDelta.ADDED) != 0)
+							// library manifest:
+							|| ((file.isLinked() || delta.getKind() == IResourceDelta.REMOVED)
+									&& (delta.getKind() & MASK) != 0))) {
 				final IProject project = file.getProject();
-				LibraryManager.INSTANCE.startResolveJob(project, TypeLibraryManager.INSTANCE.getTypeLibrary(project));
+				LibraryManager.INSTANCE.startResolveJob(project);
 
 			}
 			return false;
 		case IResource.FOLDER:
 			if (delta.getResource() instanceof final IFolder folder) {
-				if (delta.getKind() == IResourceDelta.ADDED
-						&& TypeLibraryTags.STANDARD_LIB_FOLDER_NAME.equals(folder.getName())) {
-					LibraryManager.INSTANCE.startResolveJob(folder.getProject(),
-							TypeLibraryManager.INSTANCE.getTypeLibrary(folder.getProject()));
-				}
 				// only search inside linked folders inside the Type Library
 				return isTypeLibraryFolder(folder) || ((folder.isLinked() || delta.getKind() == IResourceDelta.REMOVED)
 						&& isTypeLibraryFolder(folder.getParent()));
@@ -73,6 +72,12 @@ public class LibraryChangeListener implements IResourceChangeListener {
 		}
 		return true;
 	};
+
+	private static boolean isProjectClosed(final IResourceDelta delta) {
+		return (delta.getKind() != IResourceDelta.CHANGED
+				&& (delta.getFlags() & IResourceDelta.OPEN) == IResourceDelta.OPEN
+				&& !delta.getResource().isAccessible());
+	}
 
 	private static boolean isTypeLibraryFolder(final IContainer container) {
 		return container instanceof IFolder && container.getParent() instanceof IProject

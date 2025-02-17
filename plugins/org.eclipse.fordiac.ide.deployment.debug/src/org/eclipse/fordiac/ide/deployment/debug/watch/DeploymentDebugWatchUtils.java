@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.watch;
 
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -73,9 +74,11 @@ public final class DeploymentDebugWatchUtils {
 			subapp.loadSubAppNetwork(); // ensure network is loaded
 			if (element.isIsInput()) {
 				yield (Stream<T>) element.getOutputConnections().stream().map(Connection::getDestination)
+						.filter(IInterfaceElement::isIsInput) // skip inner connections to output
 						.flatMap(DeploymentDebugWatchUtils::resolveSubappInterfaceConnections);
 			}
 			yield (Stream<T>) element.getInputConnections().stream().map(Connection::getSource)
+					.filter(Predicate.not(IInterfaceElement::isIsInput)) // skip inner connections to input
 					.flatMap(DeploymentDebugWatchUtils::resolveSubappInterfaceConnections);
 		}
 		case final AdapterFB adapterFB -> (Stream<T>) resolveSubappInterfaceConnections(adapterFB.getAdapterDecl())

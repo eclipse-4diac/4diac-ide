@@ -36,7 +36,7 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.gef.EditPart;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -194,9 +194,9 @@ public final class GraphicalAnnotationStyles {
 			graphics.setXORMode(false);
 			graphics.setForegroundColor(getColor());
 			graphics.setBackgroundColor(getColor());
-			graphics.drawRoundRectangle(tempRect, DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM);
+			graphics.drawRoundRectangle(tempRect, GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM);
 			graphics.setAlpha(ANNOTATION_FILL_ALPHA);
-			graphics.fillRoundRectangle(tempRect, DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM);
+			graphics.fillRoundRectangle(tempRect, GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM);
 		}
 	}
 

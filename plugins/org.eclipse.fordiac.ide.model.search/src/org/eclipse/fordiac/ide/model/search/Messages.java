@@ -19,7 +19,7 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.search.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 	public static String InstanceName;
 	public static String SearchHeaderName;
 	public static String ProjectScope;
@@ -43,6 +43,8 @@ public final class Messages extends NLS {
 	public static String Element;
 	public static String Location;
 	public static String SearchForTypeReferences;
+	public static String STSearchErrorDialog_Title;
+	public static String STSearchErrorDialog_Body;
 
 	static {
 		// initialize resource bundle

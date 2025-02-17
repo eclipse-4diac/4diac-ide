@@ -16,7 +16,7 @@
  */
 package org.eclipse.fordiac.ide.model.data;
 
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -27,59 +27,37 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getComment <em>Comment</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getType <em>Type</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedValue()
  * @model
  * @generated
  */
-public interface EnumeratedValue extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Comment</em>' attribute.
-	 * @see #setComment(String)
-	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedValue_Comment()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
-	 *        extendedMetaData="kind='attribute' name='Comment'"
-	 * @generated
-	 */
-	String getComment();
+public interface EnumeratedValue extends INamedElement {
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getComment <em>Comment</em>}' attribute.
+	 * Returns the value of the '<em><b>Type</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValues <em>Enumerated Values</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Comment</em>' attribute.
-	 * @see #getComment()
+	 * @return the value of the '<em>Type</em>' container reference.
+	 * @see #setType(EnumeratedType)
+	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedValue_Type()
+	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValues
+	 * @model opposite="enumeratedValues" transient="false"
 	 * @generated
 	 */
-	void setComment(String value);
+	EnumeratedType getType();
 
 	/**
-	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getType <em>Type</em>}' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Name</em>' attribute.
-	 * @see #setName(String)
-	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedValue_Name()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
-	 *        extendedMetaData="kind='attribute' name='Name'"
+	 * @param value the new value of the '<em>Type</em>' container reference.
+	 * @see #getType()
 	 * @generated
 	 */
-	String getName();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getName <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
-	 * @see #getName()
-	 * @generated
-	 */
-	void setName(String value);
+	void setType(EnumeratedType value);
 
 } // EnumeratedValue

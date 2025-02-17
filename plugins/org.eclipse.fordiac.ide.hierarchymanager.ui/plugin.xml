@@ -274,4 +274,8 @@
             </description>
       </decorator>
    </extension>
+    <extension
+          point="org.eclipse.fordiac.ide.model.commands.QualNameChangeListener">
+          <listener class = "org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierachyManagerUpdateListener"/>
+    </extension>
 </plugin>

@@ -36,8 +36,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLab
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECTransitionFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECTransitionFeedbackEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionBendPointEditPolicy;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -92,8 +91,8 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 	/** The property change listener. */
 	private final IPropertyChangeListener propertyChangeListener = event -> {
-		if (event.getProperty().equals(PreferenceConstants.P_ECC_TRANSITION_COLOR)) {
-			getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_TRANSITION_COLOR));
+		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_TRANSITION_COLOR)) {
+			getFigure().setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_TRANSITION_COLOR));
 		}
 	};
 

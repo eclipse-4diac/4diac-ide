@@ -25,7 +25,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Handle;
@@ -38,7 +38,7 @@ import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
  */
 public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 
-	private int arc = DiagramPreferences.CORNER_DIM;
+	private int arc = GefPreferenceConstants.CORNER_DIM;
 
 	private Insets insets = new Insets(2);
 

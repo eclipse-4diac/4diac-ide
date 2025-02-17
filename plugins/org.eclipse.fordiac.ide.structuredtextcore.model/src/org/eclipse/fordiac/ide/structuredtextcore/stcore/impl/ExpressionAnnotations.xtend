@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STEnumLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
@@ -97,9 +98,10 @@ final package class ExpressionAnnotations {
 						else if (left instanceof AnyDurationType && right instanceof AnyDurationType)
 							left.commonSupertype(right)
 						else
-							left.commonSupertype(right).equivalentAnyNumType
+							commonSupertype(left.equivalentAnyNumType, right.equivalentAnyNumType) ?:
+								commonSupertype(left.equivalentAnyUnsignedType, right.equivalentAnyUnsignedType)
 					} else if (expr.op.logical) {
-						left.commonSupertype(right).equivalentAnyBitType
+						commonSupertype(left.equivalentAnyBitType, right.equivalentAnyBitType)
 					} else if (expr.op.range) {
 						left.commonSupertype(right)
 					} else
@@ -273,6 +275,10 @@ final package class ExpressionAnnotations {
 		}
 	}
 
+	def package static INamedElement getResultType(STEnumLiteral expr) { getDeclaredResultType(expr) }
+
+	def package static INamedElement getDeclaredResultType(STEnumLiteral expr) { expr.value?.type }
+
 	def package static INamedElement getResultType(STCallUnnamedArgument arg) { arg.argument?.resultType }
 
 	def package static INamedElement getDeclaredResultType(STCallUnnamedArgument arg) {
@@ -376,9 +382,9 @@ final package class ExpressionAnnotations {
 					index < arguments.size ? arguments.get(index) : null
 				].unmodifiableView
 			} else { // named arguments
-				val namedArguments = arguments.filter(STCallNamedInputArgument).toMap[parameter]
+				val namedArguments = arguments.filter(STCallNamedInputArgument).toMap[parameter.name]
 				parameters.toInvertedMap [ parameter |
-					namedArguments.get(parameter)
+					namedArguments.get(parameter.name)
 				].unmodifiableView
 			}
 		} else
@@ -397,9 +403,9 @@ final package class ExpressionAnnotations {
 					index < arguments.size ? arguments.get(index) : null
 				].unmodifiableView
 			} else { // named arguments
-				val namedArguments = arguments.filter(STCallNamedOutputArgument).toMap[parameter]
+				val namedArguments = arguments.filter(STCallNamedOutputArgument).toMap[parameter.name]
 				parameters.toInvertedMap [ parameter |
-					namedArguments.get(parameter)
+					namedArguments.get(parameter.name)
 				].unmodifiableView
 			}
 		} else
@@ -417,9 +423,9 @@ final package class ExpressionAnnotations {
 					index < arguments.size ? arguments.get(index) : null
 				].unmodifiableView
 			} else { // named arguments
-				val namedArguments = arguments.filter(STCallNamedInputArgument).toMap[parameter]
+				val namedArguments = arguments.filter(STCallNamedInputArgument).toMap[parameter.name]
 				parameters.toInvertedMap [ parameter |
-					namedArguments.get(parameter)
+					namedArguments.get(parameter.name)
 				].unmodifiableView
 			}
 		} else

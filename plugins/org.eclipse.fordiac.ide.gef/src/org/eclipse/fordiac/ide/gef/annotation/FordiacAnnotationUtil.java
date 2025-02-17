@@ -69,7 +69,8 @@ public final class FordiacAnnotationUtil {
 	}
 
 	public static GraphicalAnnotationModel getAnnotationModel(final EditPart editPart) {
-		if (editPart.getViewer().getEditPartFactory() instanceof final Abstract4diacEditPartFactory factory) {
+		if (editPart.getViewer().getEditPartFactory() instanceof final Abstract4diacEditPartFactory factory
+				&& factory.getEditor() != null) {
 			return factory.getEditor().getAdapter(GraphicalAnnotationModel.class);
 		}
 		return null;

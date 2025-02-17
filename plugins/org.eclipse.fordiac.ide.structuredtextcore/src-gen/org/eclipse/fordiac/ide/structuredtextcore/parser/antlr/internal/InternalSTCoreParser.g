@@ -3838,6 +3838,15 @@ ruleSTLiteralExpressions returns [EObject current=null]
 			$current = $this_STStringLiteral_5.current;
 			afterParserOrEnumRuleCall();
 		}
+		    |
+		{
+			newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getSTEnumLiteralParserRuleCall_6());
+		}
+		this_STEnumLiteral_6=ruleSTEnumLiteral
+		{
+			$current = $this_STEnumLiteral_6.current;
+			afterParserOrEnumRuleCall();
+		}
 	)
 ;
 
@@ -4416,6 +4425,80 @@ ruleSTStringLiteral returns [EObject current=null]
 				}
 			)
 		)
+	)
+;
+
+// Entry rule entryRuleSTEnumLiteral
+entryRuleSTEnumLiteral returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTEnumLiteralRule()); }
+	iv_ruleSTEnumLiteral=ruleSTEnumLiteral
+	{ $current=$iv_ruleSTEnumLiteral.current; }
+	EOF;
+
+// Rule STEnumLiteral
+ruleSTEnumLiteral returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			{
+				if ($current==null) {
+					$current = createModelElement(grammarAccess.getSTEnumLiteralRule());
+				}
+			}
+			{
+				newCompositeNode(grammarAccess.getSTEnumLiteralAccess().getValueEnumeratedValueCrossReference_0());
+			}
+			ruleEnumValue
+			{
+				afterParserOrEnumRuleCall();
+			}
+		)
+	)
+;
+
+// Entry rule entryRuleEnumValue
+entryRuleEnumValue returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getEnumValueRule()); }
+	iv_ruleEnumValue=ruleEnumValue
+	{ $current=$iv_ruleEnumValue.current.getText(); }
+	EOF;
+
+// Rule EnumValue
+ruleEnumValue returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		{
+			newCompositeNode(grammarAccess.getEnumValueAccess().getQualifiedNameParserRuleCall_0());
+		}
+		this_QualifiedName_0=ruleQualifiedName
+		{
+			$current.merge(this_QualifiedName_0);
+		}
+		{
+			afterParserOrEnumRuleCall();
+		}
+		kw=NumberSign
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getEnumValueAccess().getNumberSignKeyword_1());
+		}
+		this_ID_2=RULE_ID
+		{
+			$current.merge(this_ID_2);
+		}
+		{
+			newLeafNode(this_ID_2, grammarAccess.getEnumValueAccess().getIDTerminalRuleCall_2());
+		}
 	)
 ;
 

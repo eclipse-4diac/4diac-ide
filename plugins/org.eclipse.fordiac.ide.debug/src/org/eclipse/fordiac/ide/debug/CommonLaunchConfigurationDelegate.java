@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug;
 
+import java.time.Clock;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -25,15 +27,25 @@ import org.eclipse.fordiac.ide.model.eval.Evaluator;
 
 public abstract class CommonLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
 
-	@SuppressWarnings("static-method")
 	protected void launch(final Evaluator evaluator, final ILaunchConfiguration configuration, final String mode,
 			final ILaunch launch, final IResource resource, final IProgressMonitor monitor) throws CoreException {
+		launch(evaluator, null, null, configuration, mode, launch, resource, monitor);
+	}
+
+	@SuppressWarnings("static-method")
+	protected void launch(final Evaluator evaluator, final Clock realtimeClock, final Clock monotonicClock,
+			final ILaunchConfiguration configuration, final String mode, final ILaunch launch, final IResource resource,
+			final IProgressMonitor monitor) throws CoreException {
 		if (ILaunchManager.RUN_MODE.equals(mode)) {
 			final EvaluatorProcess process = new EvaluatorProcess(configuration.getName(), evaluator, launch);
+			process.getExecutor().setRealtimeClock(realtimeClock);
+			process.getExecutor().setMonotonicClock(monotonicClock);
 			process.start();
 		} else if (ILaunchManager.DEBUG_MODE.equals(mode)) {
 			final EvaluatorDebugTarget debugTarget = new EvaluatorDebugTarget(configuration.getName(), evaluator,
 					launch, resource);
+			debugTarget.getProcess().getExecutor().setRealtimeClock(realtimeClock);
+			debugTarget.getProcess().getExecutor().setMonotonicClock(monotonicClock);
 			if (LaunchConfigurationAttributes.isStopOnFirstLine(configuration)) {
 				debugTarget.getDebugger().setSuspendOnFirstLine(true);
 			}

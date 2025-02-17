@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editors;
 
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueRefreshJob;
@@ -81,7 +81,7 @@ public class InitialValueEditor extends XtextEmbeddedFieldEditor {
 				&& FordiacMessages.ComputingPlaceholderValue.equals(getModelAccess().getEditablePart())) {
 			final var commandExecutorCache = getCommandExecutor();
 			setCommandExecutor(null);
-			if (value.length() <= DiagramPreferences.getMaxDefaultValueLength()) {
+			if (value.length() <= DiagramPreferencePage.getMaxDefaultValueLength()) {
 				getModelAccess().updateModel(value);
 			} else {
 				getModelAccess().updateModel(FordiacMessages.ValueTooLarge);

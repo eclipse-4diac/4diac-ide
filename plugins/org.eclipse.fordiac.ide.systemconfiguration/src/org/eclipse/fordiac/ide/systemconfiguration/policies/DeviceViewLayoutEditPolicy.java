@@ -19,7 +19,7 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
@@ -41,7 +41,7 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
-		return new ModifiedNonResizeableEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1));
+		return new ModifiedNonResizeableEditPolicy(GefPreferenceConstants.CORNER_DIM_HALF, new Insets(1));
 	}
 
 	/*
@@ -94,7 +94,8 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 	}
 
 	@Override
-	protected Command createAddCommand(final ChangeBoundsRequest request, final EditPart child, final Object constraint) {
+	protected Command createAddCommand(final ChangeBoundsRequest request, final EditPart child,
+			final Object constraint) {
 		if (child.getModel() instanceof Resource) {
 			final Device targetDevice = (Device) getHost().getModel();
 			return new ResourceMoveCommand((Resource) child.getModel(), targetDevice,

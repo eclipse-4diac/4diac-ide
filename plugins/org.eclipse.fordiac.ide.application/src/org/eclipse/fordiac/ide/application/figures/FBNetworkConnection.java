@@ -29,10 +29,9 @@ import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -43,11 +42,11 @@ public class FBNetworkConnection extends HideableConnection {
 
 	private static final String THREE_DOTS = "\u2026"; //$NON-NLS-1$
 
-	private static int maxWidth = Activator.getDefault().getPreferenceStore()
-			.getInt(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
+	private static int maxWidth = GefPreferenceConstants.STORE
+			.getInt(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
 
-	private static String pinLabelStyle = Activator.getDefault().getPreferenceStore()
-			.getString(DiagramPreferences.PIN_LABEL_STYLE);
+	private static String pinLabelStyle = GefPreferenceConstants.STORE
+			.getString(GefPreferenceConstants.PIN_LABEL_STYLE);
 
 	private final ConnectionEditPart connEP;
 
@@ -194,7 +193,7 @@ public class FBNetworkConnection extends HideableConnection {
 		final StringBuilder builder = generateFullIEString(ie);
 		if (builder.length() > maxWidth) {
 			switch (pinLabelStyle) {
-			case DiagramPreferences.PIN_LABEL_STYLE_PIN_COMMENT: {
+			case GefPreferenceConstants.PIN_LABEL_STYLE_PIN_COMMENT: {
 				if (CommentHelper.hasComment(ie)) {
 					builder.delete(maxWidth, builder.length()); // start inclusive, end exclusive
 					builder.insert(maxWidth, THREE_DOTS);
@@ -205,7 +204,7 @@ public class FBNetworkConnection extends HideableConnection {
 
 				break;
 			}
-			case DiagramPreferences.PIN_LABEL_STYLE_PIN_NAME, DiagramPreferences.PIN_LABEL_STYLE_SRC_PIN_NAME: {
+			case GefPreferenceConstants.PIN_LABEL_STYLE_PIN_NAME, GefPreferenceConstants.PIN_LABEL_STYLE_SRC_PIN_NAME: {
 				builder.delete(0, builder.length() - maxWidth);
 				builder.insert(0, THREE_DOTS);
 				break;
@@ -282,7 +281,7 @@ public class FBNetworkConnection extends HideableConnection {
 
 	private StringBuilder generateFullIEString(final IInterfaceElement ie) {
 		final StringBuilder builder = new StringBuilder();
-		if (pinLabelStyle.equals(DiagramPreferences.PIN_LABEL_STYLE_PIN_COMMENT) && CommentHelper.hasComment(ie)) {
+		if (pinLabelStyle.equals(GefPreferenceConstants.PIN_LABEL_STYLE_PIN_COMMENT) && CommentHelper.hasComment(ie)) {
 			builder.append(ie.getComment());
 		} else {
 			if (ie.getFBNetworkElement() != null && !isInterfaceBarElement(ie)) {
@@ -298,8 +297,7 @@ public class FBNetworkConnection extends HideableConnection {
 		final InterfaceEditPart source = (InterfaceEditPart) connEP.getSource();
 		return ((List<ConnectionEditPart>) source.getSourceConnections()).stream()
 				.filter(conn -> !conn.getModel().isVisible())
-				.mapToInt(ep -> ep.getFigure().getSourceDecoration().getLabel().getBounds().width).max()
-				.orElse(0);
+				.mapToInt(ep -> ep.getFigure().getSourceDecoration().getLabel().getBounds().width).max().orElse(0);
 	}
 
 	private static class ConLabelToolTip extends Figure {

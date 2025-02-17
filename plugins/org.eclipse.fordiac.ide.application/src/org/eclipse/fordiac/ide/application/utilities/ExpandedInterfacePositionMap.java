@@ -33,7 +33,7 @@ import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -112,7 +112,7 @@ public class ExpandedInterfacePositionMap {
 		sizes = getPinSizes(inputList, outputList);
 
 		final boolean directFlag = Platform.getPreferencesService().getBoolean(PREFERENCE_STORE,
-				DiagramPreferences.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR, false, null);
+				GefPreferenceConstants.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR, false, null);
 		if (directFlag) {
 			directPositions = calculateDirectPositionsStack(inputList, outputList);
 		} else {
@@ -214,7 +214,7 @@ public class ExpandedInterfacePositionMap {
 		}
 
 		final boolean eventFlag = Platform.getPreferencesService().getBoolean(PREFERENCE_STORE,
-				DiagramPreferences.EXPANDED_INTERFACE_EVENTS_TOP, false, null);
+				GefPreferenceConstants.EXPANDED_INTERFACE_EVENTS_TOP, false, null);
 
 		int y = clientArea.top();
 		for (final var pin : input) {

@@ -23,8 +23,7 @@ import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.fordiac.ide.gef.Activator;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.SnapToGrid;
@@ -74,8 +73,8 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	}
 
 	private void updateRuler() {
-		getViewer().setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, Boolean
-				.valueOf(Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_RULERS)));
+		getViewer().setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY,
+				Boolean.valueOf(GefPreferenceConstants.STORE.getBoolean(GefPreferenceConstants.SHOW_RULERS)));
 	}
 
 	/*
@@ -88,7 +87,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		if (!isActive()) {
 			super.activate();
 			if (getPreferenceChangeListener() != null) {
-				Activator.getDefault().getPreferenceStore().addPropertyChangeListener(getPreferenceChangeListener());
+				GefPreferenceConstants.STORE.addPropertyChangeListener(getPreferenceChangeListener());
 			}
 		}
 	}
@@ -103,14 +102,14 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		if (isActive()) {
 			super.deactivate();
 			if (getPreferenceChangeListener() != null) {
-				Activator.getDefault().getPreferenceStore().removePropertyChangeListener(getPreferenceChangeListener());
+				GefPreferenceConstants.STORE.removePropertyChangeListener(getPreferenceChangeListener());
 			}
 		}
 	}
 
 	protected void showGrid() {
 		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE,
-				Boolean.valueOf(Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_GRID)));
+				Boolean.valueOf(GefPreferenceConstants.STORE.getBoolean(GefPreferenceConstants.SHOW_GRID)));
 	}
 
 	private IPropertyChangeListener listener;
@@ -123,10 +122,10 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	public IPropertyChangeListener getPreferenceChangeListener() {
 		if (listener == null) {
 			listener = event -> {
-				if (event.getProperty().equals(DiagramPreferences.SHOW_GRID)) {
+				if (event.getProperty().equals(GefPreferenceConstants.SHOW_GRID)) {
 					showGrid();
 				}
-				if (event.getProperty().equals(DiagramPreferences.SHOW_RULERS)) {
+				if (event.getProperty().equals(GefPreferenceConstants.SHOW_RULERS)) {
 					updateRuler();
 				}
 			};
@@ -149,7 +148,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	public <T> T getAdapter(final Class<T> key) {
 		if (key == SnapToHelper.class) {
 			final List<SnapToGrid> snapStrategies = new ArrayList<>();
-			if (Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SNAP_TO_GRID)) {
+			if (GefPreferenceConstants.STORE.getBoolean(GefPreferenceConstants.SNAP_TO_GRID)) {
 				snapStrategies.add(new SnapToGrid(this));
 			}
 

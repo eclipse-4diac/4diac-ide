@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval;
 
 import java.io.Closeable;
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorCountingEventQueue;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
 public abstract class AbstractEvaluator implements Evaluator {
@@ -101,18 +103,32 @@ public abstract class AbstractEvaluator implements Evaluator {
 		return evaluatorThread.getExecutor().getSharedResources();
 	}
 
-	public static Clock currentClock() {
+	public static Clock currentMonotonicClock() {
 		if (Thread.currentThread() instanceof final EvaluatorThread evaluatorThread) {
-			return evaluatorThread.getExecutor().getClock();
+			return evaluatorThread.getExecutor().getMonotonicClock();
 		}
 		return AbstractEvaluator.MonotonicClock.UTC;
 	}
 
-	public static void setClock(final Clock clock) {
+	public static void setMonotonicClock(final Clock clock) {
 		if (!(Thread.currentThread() instanceof final EvaluatorThread evaluatorThread)) {
 			throw new IllegalStateException("Cannot set clock without evaluator thread"); //$NON-NLS-1$
 		}
-		evaluatorThread.getExecutor().setClock(clock);
+		evaluatorThread.getExecutor().setMonotonicClock(clock);
+	}
+
+	public static Clock currentRealtimeClock() {
+		if (Thread.currentThread() instanceof final EvaluatorThread evaluatorThread) {
+			return evaluatorThread.getExecutor().getRealtimeClock();
+		}
+		return Clock.systemUTC();
+	}
+
+	public static void setRealtimeClock(final Clock clock) {
+		if (!(Thread.currentThread() instanceof final EvaluatorThread evaluatorThread)) {
+			throw new IllegalStateException("Cannot set clock without evaluator thread"); //$NON-NLS-1$
+		}
+		evaluatorThread.getExecutor().setRealtimeClock(clock);
 	}
 
 	public static class MonotonicClock extends Clock {
@@ -162,6 +178,94 @@ public abstract class AbstractEvaluator implements Evaluator {
 		@Override
 		public String toString() {
 			return String.format("%s [zone=%s]", getClass().getName(), zone); //$NON-NLS-1$
+		}
+	}
+
+	public static class IntervalClock extends Clock {
+		private final Instant offset;
+		private final Duration interval;
+		private final ZoneId zone;
+		private final FBEvaluatorCountingEventQueue queue;
+		private final long queueOffset;
+
+		public IntervalClock(final Instant offset, final Duration interval, final ZoneId zone,
+				final FBEvaluatorCountingEventQueue queue, final long queueOffset) {
+			this.offset = Objects.requireNonNull(offset);
+			this.interval = Objects.requireNonNull(interval);
+			this.zone = Objects.requireNonNull(zone);
+			this.queue = Objects.requireNonNull(queue);
+			this.queueOffset = queueOffset;
+		}
+
+		@Override
+		public Instant instant() {
+			return instant(queue.getTotalInputCount().get());
+		}
+
+		private Instant instant(final long totalCount) {
+			return offset.plus(interval.multipliedBy(totalCount - queueOffset));
+		}
+
+		@Override
+		public Clock withZone(final ZoneId zone) {
+			final long totalCount = queue.getTotalInputCount().get();
+			return new IntervalClock(instant(totalCount), interval, zone, queue, totalCount);
+		}
+
+		public static Clock startingAt(final Clock clock, final Duration interval,
+				final FBEvaluatorCountingEventQueue queue) {
+			final long totalCount = queue.getTotalInputCount().get();
+			return new IntervalClock(clock != null ? clock.instant() : Instant.EPOCH, interval,
+					clock != null ? clock.getZone() : ZoneOffset.UTC, queue, totalCount);
+		}
+
+		public Instant getStart() {
+			return offset;
+		}
+
+		public Duration getInterval() {
+			return interval;
+		}
+
+		@Override
+		public ZoneId getZone() {
+			return zone;
+		}
+
+		public FBEvaluatorCountingEventQueue getQueue() {
+			return queue;
+		}
+
+		public long getQueueOffset() {
+			return queueOffset;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(offset, interval, zone, queue, Long.valueOf(queueOffset));
+		}
+
+		@Override
+		public boolean equals(final Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (!super.equals(obj)) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			final IntervalClock other = (IntervalClock) obj;
+			return Objects.equals(offset, other.offset) && Objects.equals(interval, other.interval)
+					&& Objects.equals(zone, other.zone) && Objects.equals(queue, other.queue)
+					&& queueOffset == other.queueOffset;
+		}
+
+		@Override
+		public String toString() {
+			return String.format("%s [offset=%s, interval=%s, zone=%s]", getClass().getName(), offset, interval, //$NON-NLS-1$
+					zone);
 		}
 	}
 }

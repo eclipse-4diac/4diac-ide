@@ -19,16 +19,10 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
-            class="org.eclipse.fordiac.ide.export.ui.preferences.FORTEExportPreferences"
+            class="org.eclipse.fordiac.ide.export.ui.preferences.FORTEExportPreferencePage"
             id="org.eclipse.fordiac.ide.export.ui.preferences.FORTEExportPreferences"
             name="FORTE Export Preferences">
       </page>
-   </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.fordiac.ide.export.ui.preferences.PreferenceInitializer">
-      </initializer>
    </extension>
 
 </plugin>

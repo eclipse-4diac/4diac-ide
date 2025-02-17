@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.fortelauncher;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.fordiac.ide.fortelauncher.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.fortelauncher.preferences.FortePreferenceConstants;
 import org.eclipse.fordiac.ide.runtime.RuntimeLaunchTab;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.DirectoryChooserControl;
@@ -59,7 +59,7 @@ public class ForteLaunchTab extends RuntimeLaunchTab {
 	@Override
 	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
 		super.setDefaults(configuration);
-		final String fortePath = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH);
+		final String fortePath = FortePreferenceConstants.STORE.getString(FortePreferenceConstants.P_PATH);
 		if (fortePath != null && !fortePath.isBlank()) {
 			configuration.setAttribute(ATTR_LOCATION, fortePath);
 		} else {

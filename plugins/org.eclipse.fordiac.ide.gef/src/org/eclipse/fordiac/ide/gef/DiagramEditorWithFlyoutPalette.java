@@ -42,7 +42,7 @@ import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer
 import org.eclipse.fordiac.ide.model.ui.editors.IContentEditorInput;
 import org.eclipse.fordiac.ide.model.ui.editors.UntypedEditorInput;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
@@ -191,7 +191,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 		final IFontUpdateListener rootFigureListener = new FigureFontUpdateListener(
 				((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getFigure(),
-				PreferenceConstants.DIAGRAM_FONT);
+				UIPreferenceConstants.DIAGRAM_FONT);
 		final IPropertyChangeListener fontChangeListener = new DiagramFontChangeListener(rootFigureListener);
 
 		rootFigureListener.updateFonts(); // ensure that root figure has the right font set

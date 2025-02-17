@@ -24,12 +24,16 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
@@ -163,10 +167,31 @@ class TypedValueConverterTest {
 				.toValue("TimeTestStruct#(a:=T#17d4m21s,b:=D#2017-04-21,c:=TOD#21:04:17,d:=DT#2017-04-21-21:04:17)"));
 	}
 
+	@Test
+	void toValueEnumTest() {
+		final EnumeratedType enumType = DataFactory.eINSTANCE.createEnumeratedType();
+		enumType.setName("TestEnum");
+		final EnumeratedValue red = createEnumeratedValue("red");
+		final EnumeratedValue blue = createEnumeratedValue("blue");
+		final EnumeratedValue green = createEnumeratedValue("green");
+		ECollections.setEList(enumType.getEnumeratedValues(), List.of(red, blue, green));
+		typeLibrary.addTypeEntry(new DataTypeEntryMock(enumType, typeLibrary, null));
+		assertEquals(red, new TypedValueConverter(enumType).toValue("red"));
+		assertEquals(blue, new TypedValueConverter(enumType).toValue("TestEnum#blue"));
+		assertEquals(green,
+				new TypedValueConverter(GenericTypes.ANY, typeLibrary.getDataTypeLibrary()).toValue("TestEnum#green"));
+	}
+
 	public static VarDeclaration createVarDeclaration(final String name, final DataType type) {
 		final var result = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		result.setName(name);
 		result.setType(type);
+		return result;
+	}
+
+	public static EnumeratedValue createEnumeratedValue(final String name) {
+		final var result = DataFactory.eINSTANCE.createEnumeratedValue();
+		result.setName(name);
 		return result;
 	}
 }

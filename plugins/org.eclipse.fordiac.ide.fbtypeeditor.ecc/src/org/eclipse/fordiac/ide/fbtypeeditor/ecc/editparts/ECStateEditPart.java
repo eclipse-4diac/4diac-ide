@@ -35,8 +35,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECStateFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateSelectionPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionNodeEditPolicy;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -218,13 +217,13 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	/** The property change listener. */
 	private final IPropertyChangeListener propertyChangeListener = event -> {
-		if (event.getProperty().equals(PreferenceConstants.P_ECC_STATE_COLOR)) {
-			getNameLabel().setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_COLOR));
+		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_STATE_COLOR)) {
+			getNameLabel().setBackgroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_STATE_COLOR));
 		}
-		if (event.getProperty().equals(PreferenceConstants.P_ECC_STATE_TEXT_COLOR)) {
-			getNameLabel().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
+		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_STATE_TEXT_COLOR)) {
+			getNameLabel().setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_STATE_TEXT_COLOR));
 			getFigure().getLine()
-					.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
+					.setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_STATE_TEXT_COLOR));
 		}
 	};
 

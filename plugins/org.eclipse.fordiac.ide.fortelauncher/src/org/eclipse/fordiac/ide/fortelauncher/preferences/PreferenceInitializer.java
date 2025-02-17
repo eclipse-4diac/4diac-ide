@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.fortelauncher.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.fordiac.ide.fortelauncher.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
@@ -30,8 +29,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(PreferenceConstants.P_PATH, ""); //$NON-NLS-1$ //set as default an empty value
+		final IPreferenceStore store = FortePreferenceConstants.STORE;
+		store.setDefault(FortePreferenceConstants.P_PATH, ""); //$NON-NLS-1$ //set as default an empty value
 	}
 
 }

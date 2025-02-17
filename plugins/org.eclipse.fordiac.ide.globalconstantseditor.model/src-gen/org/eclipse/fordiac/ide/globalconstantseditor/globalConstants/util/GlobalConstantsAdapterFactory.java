@@ -11,6 +11,7 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.*;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
 
@@ -75,12 +76,20 @@ public class GlobalConstantsAdapterFactory extends AdapterFactoryImpl {
 				return createSTGlobalConstsSourceAdapter();
 			}
 			@Override
+			public Adapter caseSTGlobalConstants(STGlobalConstants object) {
+				return createSTGlobalConstantsAdapter();
+			}
+			@Override
 			public Adapter caseSTVarGlobalDeclarationBlock(STVarGlobalDeclarationBlock object) {
 				return createSTVarGlobalDeclarationBlockAdapter();
 			}
 			@Override
 			public Adapter caseSTSource(STSource object) {
 				return createSTSourceAdapter();
+			}
+			@Override
+			public Adapter caseINamedElement(INamedElement object) {
+				return createINamedElementAdapter();
 			}
 			@Override
 			public Adapter caseSTVarDeclarationBlock(STVarDeclarationBlock object) {
@@ -121,6 +130,20 @@ public class GlobalConstantsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstants <em>ST Global Constants</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstants
+	 * @generated
+	 */
+	public Adapter createSTGlobalConstantsAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock <em>ST Var Global Declaration Block</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -145,6 +168,20 @@ public class GlobalConstantsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTSourceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+	 * @generated
+	 */
+	public Adapter createINamedElementAdapter() {
 		return null;
 	}
 

@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.ui.actions.OpenListener;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.model.ui.widgets.GoIntoSubappSelectionEvent;
 import org.eclipse.gef.EditPart;
@@ -41,9 +42,11 @@ public class GotoChildHandler extends AbstractHandler {
 		if (editPart != null) {
 			if (editPart.getModel() instanceof final SubApp subapp && subapp.isUnfolded()) {
 				// with go to child we now want to open the subapp
-				if (HandlerUtil.getActiveEditor(event) instanceof final AbstractBreadCrumbEditor breadcrumbEditor) {
-					breadcrumbEditor.getBreadcrumb().setInput(editPart.getModel(),
-							new GoIntoSubappSelectionEvent(breadcrumbEditor.getBreadcrumb(), subapp));
+				final IEditorPart activeEditor = HandlerUtil.getActiveEditor(event);
+				final AbstractBreadCrumbEditor breadCrumbEditor = OpenListener.getBreadCrumbEditor(activeEditor);
+				if (breadCrumbEditor != null) {
+					breadCrumbEditor.getBreadcrumb().setInput(editPart.getModel(),
+							new GoIntoSubappSelectionEvent(breadCrumbEditor.getBreadcrumb(), subapp));
 				}
 			} else {
 				editPart.performRequest(new Request(RequestConstants.REQ_OPEN));

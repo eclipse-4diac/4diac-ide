@@ -27,11 +27,18 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.emf.common.util.ECollections;
+import org.eclipse.emf.common.util.EList;
+
 public final class BuildpathAttributes {
 
 	@AttributeType(Boolean.class)
 	@AttributeDefault("false")
 	public static final String IGNORE_WARNINGS = "ignore_warnings"; //$NON-NLS-1$
+
+	@AttributeType(Boolean.class)
+	@AttributeDefault("true")
+	public static final String EXPORT = "export"; //$NON-NLS-1$
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
@@ -54,7 +61,11 @@ public final class BuildpathAttributes {
 		ATTRIBUTES.entrySet().stream().filter(entry -> !names.contains(entry.getKey()))
 				.map(entry -> createAttribute(entry.getKey(), entry.getValue())).filter(Objects::nonNull)
 				.forEachOrdered(attributes::add);
-		attributes.sort(Comparator.comparing(Attribute::getName));
+		if (attributes instanceof final EList<Attribute> attributesEList) {
+			ECollections.sort(attributesEList, Comparator.comparing(Attribute::getName));
+		} else {
+			attributes.sort(Comparator.comparing(Attribute::getName));
+		}
 		return attributes;
 	}
 

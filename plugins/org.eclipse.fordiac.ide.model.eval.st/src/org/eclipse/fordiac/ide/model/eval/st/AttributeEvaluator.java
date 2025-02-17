@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.data.InternalDataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorPrepareException;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
@@ -59,7 +60,7 @@ public class AttributeEvaluator extends StructuredTextEvaluator implements Varia
 			warnings.forEach(warning -> error("Parse warning: " + warning)); //$NON-NLS-1$
 			infos.forEach(info -> error("Parse info: " + info)); //$NON-NLS-1$
 			if (parseResult == null) {
-				throw new IllegalArgumentException(errors.stream().collect(Collectors.joining(", "))); //$NON-NLS-1$
+				throw new EvaluatorPrepareException(errors.stream().collect(Collectors.joining(", ")), this); //$NON-NLS-1$
 			}
 		}
 	}

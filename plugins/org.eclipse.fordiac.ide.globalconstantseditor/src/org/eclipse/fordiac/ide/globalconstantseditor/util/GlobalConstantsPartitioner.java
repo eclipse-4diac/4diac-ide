@@ -13,16 +13,19 @@
 package org.eclipse.fordiac.ide.globalconstantseditor.util;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstants;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource;
 import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGrammarAccess;
 import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STAbstractCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
@@ -44,8 +47,11 @@ public class GlobalConstantsPartitioner extends STAbstractCorePartitioner<VarDec
 	}
 
 	public static String combine(final GlobalConstants globalConstants) {
-		if (globalConstants.getSource() != null && globalConstants.getSource().getText() != null) {
-			return globalConstants.getSource().getText();
+		if (globalConstants.getSource() != null) {
+			final String text = globalConstants.getSource().getText();
+			if (text != null && text.contains("GLOBALCONSTANTS")) { //$NON-NLS-1$
+				return text;
+			}
 		}
 		return generateGlobalConstantsText(globalConstants);
 	}
@@ -54,14 +60,18 @@ public class GlobalConstantsPartitioner extends STAbstractCorePartitioner<VarDec
 		final StringBuilder builder = new StringBuilder();
 		generatePackage(globalConstants, builder);
 		generateImports(globalConstants, builder);
-		builder.append("VAR_GLOBAL CONSTANT"); //$NON-NLS-1$
+		builder.append("GLOBALCONSTANTS ").append(globalConstants.getName()); //$NON-NLS-1$
+		builder.append(CommonElementExporter.LINE_END);
+		builder.append("    VAR_GLOBAL CONSTANT"); //$NON-NLS-1$
 		builder.append(CommonElementExporter.LINE_END);
 		globalConstants.getConstants().stream().forEach(constant -> {
-			builder.append("    "); //$NON-NLS-1$
+			builder.append("        "); //$NON-NLS-1$
 			generateVariable(constant, builder);
 			builder.append(CommonElementExporter.LINE_END);
 		});
-		builder.append("END_VAR"); //$NON-NLS-1$
+		builder.append("    END_VAR"); //$NON-NLS-1$
+		builder.append(CommonElementExporter.LINE_END);
+		builder.append("END_GLOBALCONSTANTS"); //$NON-NLS-1$
 		builder.append(CommonElementExporter.LINE_END);
 		return builder.toString();
 	}
@@ -85,9 +95,10 @@ public class GlobalConstantsPartitioner extends STAbstractCorePartitioner<VarDec
 			final var text = node != null ? node.getText() : null;
 			final var imports = source.getImports().stream().map(GlobalConstantsPartitioner::convertImport)
 					.filter(Objects::nonNull).toList();
-			final var constants = source.getElements().stream().flatMap(block -> block.getVarDeclarations().stream())
-					.map(this::convertVariable).filter(Objects::nonNull)
-					.collect(Collectors.toCollection(ArrayList::new));
+			final var constants = Optional.ofNullable(source.getConstants()).stream()
+					.map(STGlobalConstants::getElements).flatMap(List::stream)
+					.map(STVarDeclarationBlock::getVarDeclarations).flatMap(List::stream).map(this::convertVariable)
+					.filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
 			handleDuplicates(constants);
 			return Optional.of(new GlobalConstantsPartition(source.getName(), imports, text, constants));
 		} catch (final Exception e) {

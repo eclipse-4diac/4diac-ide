@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 - 2022  Primetals Technologies Austria GmbH
+ * Copyright (c) 2021 - 2022, 2025  Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * Contributors:
  *   Philipp Bauer - initial implementation, including developing the algorithm; and initial documentation
  *   Fabio Gandolfi - added find all elements connected to fb
+ *   Sebastian Hollersbacher - added tracing of struct members
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
@@ -29,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -47,6 +49,7 @@ public class FBEndpointFinder {
 		public final boolean inputSide;
 		public final IInterfaceElement ifElem;
 		public final Set<IInterfaceElement> connections;
+		public final boolean traceMember;
 
 		/**
 		 * @param plexStack   a stack of visited (De)Multiplexer-Interfaces (muxers
@@ -60,12 +63,26 @@ public class FBEndpointFinder {
 		 *                    point to that destinations
 		 */
 		public RecursionState(final Deque<String> plexStack, final boolean inputSide, final IInterfaceElement ifElem,
-				final Set<IInterfaceElement> connections) {
+				final Set<IInterfaceElement> connections, final boolean traceMember) {
 			this.plexStack = plexStack;
 			this.inputSide = inputSide;
 			this.ifElem = ifElem;
 			this.connections = connections;
+			this.traceMember = traceMember;
 		}
+	}
+
+	/**
+	 * find the opposite interfaces of a (De)Multiplexer's member variable
+	 *
+	 * @param startDecl    the interface to find the destinations/sources from
+	 * @param connectedIfs Set where the corresponding interfaces are stored
+	 */
+	public static void traceMembers(final MemberVarDeclaration startDecl, final Set<IInterfaceElement> connectedIfs) {
+		final ArrayDeque<String> queue = new ArrayDeque<>();
+		queue.add(startDecl.getName());
+
+		trace(new RecursionState(new ArrayDeque<>(), !startDecl.isIsInput(), startDecl, connectedIfs, true));
 	}
 
 	/**
@@ -112,7 +129,7 @@ public class FBEndpointFinder {
 		for (final Connection con : (ifElem.isIsInput()) ? ifElem.getInputConnections()
 				: ifElem.getOutputConnections()) {
 			trace(new RecursionState(new ArrayDeque<>(), ifElem.isIsInput(),
-					ifElem.isIsInput() ? con.getSource() : con.getDestination(), connectedInt));
+					ifElem.isIsInput() ? con.getSource() : con.getDestination(), connectedInt, false));
 		}
 		return connectedInt;
 	}
@@ -131,7 +148,7 @@ public class FBEndpointFinder {
 			final boolean traceThroughInput) {
 		final Set<IInterfaceElement> connectedInt = new HashSet<>();
 		trace(new RecursionState(new ArrayDeque<>(), traceThroughInput,
-				traceThroughInput ? connection.getSource() : connection.getDestination(), connectedInt));
+				traceThroughInput ? connection.getSource() : connection.getDestination(), connectedInt, false));
 		return connectedInt;
 	}
 
@@ -197,7 +214,7 @@ public class FBEndpointFinder {
 		ifs.stream()
 				.forEach(ifElem -> (ifElem.isIsInput() ? ifElem.getInputConnections() : ifElem.getOutputConnections())
 						.forEach(con -> trace(new RecursionState(new ArrayDeque<>(), ifElem.isIsInput(),
-								(ifElem.isIsInput() ? con.getSource() : con.getDestination()), connectedIfs))));
+								(ifElem.isIsInput() ? con.getSource() : con.getDestination()), connectedIfs, false))));
 
 		// count connections between blocks
 		final Map<FBNetworkElement, Integer> result = new HashMap<>();
@@ -305,7 +322,7 @@ public class FBEndpointFinder {
 
 		// trace an event interface -> handled differently to regular connections since
 		// (de)muxer just forward that event
-		if (state.ifElem instanceof Event) {
+		if (!state.traceMember && state.ifElem instanceof Event) {
 			traceEvent(state);
 			return;
 		}
@@ -325,7 +342,7 @@ public class FBEndpointFinder {
 			}
 		}
 		// FBs, CFBs, typed SubApps
-		else {
+		else if (!state.traceMember) {
 			state.connections.add(state.ifElem);
 		}
 	}
@@ -342,7 +359,7 @@ public class FBEndpointFinder {
 			final EList<Connection> subCons = state.inputSide ? state.ifElem.getInputConnections()
 					: state.ifElem.getOutputConnections();
 			subCons.forEach(subInt -> traceEvent(new RecursionState(null, state.inputSide,
-					state.inputSide ? subInt.getSource() : subInt.getDestination(), state.connections)));
+					state.inputSide ? subInt.getSource() : subInt.getDestination(), state.connections, false)));
 			return;
 		}
 		if (fb instanceof StructManipulator) {
@@ -351,7 +368,7 @@ public class FBEndpointFinder {
 					: fb.getInterface().getEventOutputs().get(0).getOutputConnections();
 
 			plexCons.forEach(nextInt -> traceEvent(new RecursionState(null, state.inputSide,
-					state.inputSide ? nextInt.getSource() : nextInt.getDestination(), state.connections)));
+					state.inputSide ? nextInt.getSource() : nextInt.getDestination(), state.connections, false)));
 			return;
 		}
 
@@ -368,7 +385,8 @@ public class FBEndpointFinder {
 				: state.ifElem.getOutputConnections();
 		for (final Connection subInt : subCons) {
 			trace(new RecursionState(state.plexStack, state.inputSide,
-					state.inputSide ? subInt.getSource() : subInt.getDestination(), state.connections));
+					state.inputSide ? subInt.getSource() : subInt.getDestination(), state.connections,
+					state.traceMember));
 		}
 	}
 
@@ -396,8 +414,17 @@ public class FBEndpointFinder {
 		// push interface onto the stack
 		state.plexStack.push(state.ifElem.getName());
 		// next item to skip through the only in/output of the plexer
-		trace(new RecursionState(state.plexStack, state.inputSide,
-				state.inputSide ? varCons.get(0).getSource() : varCons.get(0).getDestination(), state.connections));
+		if (state.traceMember) {
+			for (final var con : varCons) {
+				trace(new RecursionState(state.plexStack, state.inputSide,
+						state.inputSide ? con.getSource() : con.getDestination(), state.connections,
+						state.traceMember));
+			}
+		} else {
+			trace(new RecursionState(state.plexStack, state.inputSide,
+					state.inputSide ? varCons.get(0).getSource() : varCons.get(0).getDestination(), state.connections,
+					state.traceMember));
+		}
 	}
 
 	/**
@@ -430,6 +457,9 @@ public class FBEndpointFinder {
 			else if (structMem.getName().equals(state.plexStack.peek())) {
 				subStack = ((ArrayDeque<String>) state.plexStack).clone();
 				subStack.pop();
+				if (state.traceMember && subStack.isEmpty()) {
+					state.connections.add(realInt);
+				}
 			} else {
 				continue;
 			}
@@ -439,7 +469,8 @@ public class FBEndpointFinder {
 			for (final Connection next : (state.inputSide) ? realInt.getInputConnections()
 					: realInt.getOutputConnections()) {
 				trace(new RecursionState(subStack, state.inputSide,
-						state.inputSide ? next.getSource() : next.getDestination(), state.connections));
+						state.inputSide ? next.getSource() : next.getDestination(), state.connections,
+						state.traceMember));
 			}
 		}
 	}

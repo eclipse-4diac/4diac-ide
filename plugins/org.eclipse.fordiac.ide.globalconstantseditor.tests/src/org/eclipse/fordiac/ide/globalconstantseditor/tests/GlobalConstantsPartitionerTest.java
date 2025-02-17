@@ -70,9 +70,11 @@ class GlobalConstantsPartitionerTest {
 	void testCombine() {
 		final GlobalConstants globalConstants = createGlobalConstants();
 		final String text = """
-				VAR_GLOBAL CONSTANT
-				// content
-				END_VAR
+				GLOBALCONSTANTS TEST
+					VAR_GLOBAL CONSTANT
+					// content
+					END_VAR
+				END_GLOBALCONSTANTS
 				""";
 		globalConstants.setSource(createOriginalSource(text));
 		assertEquals(text, partitioner.combine(globalConstants));
@@ -82,14 +84,18 @@ class GlobalConstantsPartitionerTest {
 	void testCombineNoSource() {
 		final GlobalConstants globalConstants = createGlobalConstants();
 		assertEquals("""
-				VAR_GLOBAL CONSTANT
-				END_VAR
+				GLOBALCONSTANTS TEST
+				    VAR_GLOBAL CONSTANT
+				    END_VAR
+				END_GLOBALCONSTANTS
 				""", partitioner.combine(globalConstants));
 		globalConstants.getConstants().add(createVarDeclaration("PI", ElementaryTypes.REAL, null, "3.14159"));
 		assertEquals("""
-				VAR_GLOBAL CONSTANT
-				    PI : REAL := 3.14159;
-				END_VAR
+				GLOBALCONSTANTS TEST
+				    VAR_GLOBAL CONSTANT
+				        PI : REAL := 3.14159;
+				    END_VAR
+				END_GLOBALCONSTANTS
 				""", partitioner.combine(globalConstants));
 	}
 
@@ -98,17 +104,21 @@ class GlobalConstantsPartitionerTest {
 		assertConstantsEquals(List.of(), partition(""));
 		assertConstantsEquals(List.of(), partition("error"));
 		assertConstantsEquals(List.of(createVarDeclaration("PI", ElementaryTypes.REAL, null, "3.14159")), partition("""
-				VAR_GLOBAL CONSTANT
-				    PI : REAL := 3.14159;
-				END_VAR
+				GLOBALCONSTANTS TEST
+					VAR_GLOBAL CONSTANT
+					    PI : REAL := 3.14159;
+					END_VAR
+				END_GLOBALCONSTANTS
 				"""));
 		assertConstantsEquals(List.of(createVarDeclaration("PI", ElementaryTypes.REAL, null, "3.14159"),
 				createVarDeclaration("ONE", ElementaryTypes.INT, null, "1")), partition("""
-						VAR_GLOBAL CONSTANT
-						    PI : REAL := 3.14159;
-						    ONE : INT := 1;
-						END_VAR
-						"""));
+						GLOBALCONSTANTS TEST
+							VAR_GLOBAL CONSTANT
+							    PI : REAL := 3.14159;
+							    ONE : INT := 1;
+							END_VAR
+						END_GLOBALCONSTANTS
+								"""));
 	}
 
 	private static GlobalConstants createGlobalConstants() {

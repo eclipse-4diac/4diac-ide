@@ -21,6 +21,7 @@ public class Messages extends NLS {
 
 	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
 
+	public static String GlobalConstValidator_GlobalConstantsNameMismatch;
 	public static String GlobalConstValidator_GlobalConstBlockNotMarkedConstant;
 
 	static {

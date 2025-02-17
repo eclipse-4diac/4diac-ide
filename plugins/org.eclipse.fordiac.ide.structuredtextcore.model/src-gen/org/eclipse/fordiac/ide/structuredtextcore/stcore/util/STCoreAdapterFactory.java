@@ -239,6 +239,10 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTStringLiteralAdapter();
 			}
 			@Override
+			public Adapter caseSTEnumLiteral(STEnumLiteral object) {
+				return createSTEnumLiteralAdapter();
+			}
+			@Override
 			public Adapter caseSTVarDeclaration(STVarDeclaration object) {
 				return createSTVarDeclarationAdapter();
 			}
@@ -879,6 +883,20 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTStringLiteralAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STEnumLiteral <em>ST Enum Literal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STEnumLiteral
+	 * @generated
+	 */
+	public Adapter createSTEnumLiteralAdapter() {
 		return null;
 	}
 

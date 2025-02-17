@@ -295,6 +295,12 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>4d4d</id>
+			<properties>
+				<profile.name>4d4d</profile.name>
+			</properties>
+		</profile>
+		<profile>
 			<id>eclipse-sign</id>
 			<build>
 				<plugins>

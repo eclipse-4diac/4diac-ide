@@ -260,7 +260,10 @@ public class ResourceDeploymentData {
 		final ArrayList<ConDeploymentDest> retVal = new ArrayList<>();
 		if (destination.isIsInput()) {
 			// we are entering a subapplication
-			final String newPrefix = prefix + destination.getFBNetworkElement().getName() + "."; //$NON-NLS-1$
+
+			final String newPrefix = (prefix.isEmpty() ? // if the prefix is empty we need to add mapping info
+					getMappedParentName(destination.getFBNetworkElement()) : prefix)
+					+ destination.getFBNetworkElement().getName() + "."; //$NON-NLS-1$
 			subAppHierarchy.addLast((SubApp) destination.getFBNetworkElement());
 			final IInterfaceElement internalElement = getSubAppInteralElement(destination);
 			if (null != internalElement) {
@@ -271,8 +274,8 @@ public class ResourceDeploymentData {
 			subAppHierarchy.removeLast();
 		} else {
 			// we are leaving a subapp
-			final String newPrefix = removeLastEntry(prefix);
 			final SubApp currentSubApp = subAppHierarchy.removeLast();
+			final String newPrefix = subAppHierarchy.isEmpty() ? "" : removeLastEntry(prefix, currentSubApp.getName()); //$NON-NLS-1$
 			final IInterfaceElement internalElement = currentSubApp.getInterfaceElement(destination.getName());
 			for (final Connection con : internalElement.getOutputConnections()) {
 				retVal.addAll(getConnectionEndPoint(subAppHierarchy, newPrefix, con.getDestination()));
@@ -301,10 +304,10 @@ public class ResourceDeploymentData {
 		return null;
 	}
 
-	private static String removeLastEntry(final String prefix) {
-		final int index = prefix.lastIndexOf('.', prefix.length() - 2);
-		if (-1 != index) {
-			return prefix.substring(0, index + 1);
+	private static String removeLastEntry(final String prefix, final String lastEntryName) {
+		final int newEnd = prefix.length() - lastEntryName.length() - 1;
+		if (newEnd > 0) {
+			return prefix.substring(0, newEnd);
 		}
 		return ""; //$NON-NLS-1$
 	}

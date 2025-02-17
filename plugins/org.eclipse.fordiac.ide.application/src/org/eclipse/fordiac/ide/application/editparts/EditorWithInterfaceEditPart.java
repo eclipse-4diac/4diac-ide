@@ -52,7 +52,7 @@ import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -63,7 +63,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -80,10 +80,10 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	public static final Color INTERFACE_BAR_BG_COLOR = new Color(235, 245, 255);
 	public static final Color INTERFACE_BAR_BORDER_COLOR = new Color(190, 199, 225);
 
-	private static final int MIN_EXP_SUBAPP_BAR_WIDTH_CHARS = org.eclipse.fordiac.ide.gef.Activator.getDefault()
-			.getPreferenceStore().getInt(DiagramPreferences.MIN_INTERFACE_BAR_SIZE);
-	private static final int MAX_HIDDEN_CONNECTION_LABEL_SIZE_CHARS = org.eclipse.fordiac.ide.gef.Activator.getDefault()
-			.getPreferenceStore().getInt(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
+	private static final int MIN_EXP_SUBAPP_BAR_WIDTH_CHARS = GefPreferenceConstants.STORE
+			.getInt(GefPreferenceConstants.MIN_INTERFACE_BAR_SIZE);
+	private static final int MAX_HIDDEN_CONNECTION_LABEL_SIZE_CHARS = GefPreferenceConstants.STORE
+			.getInt(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
 	private static final int TOP_BOTTOM_MARGIN = 1;
 	private static final int LEFT_RIGHT_MARGIN = 5;
 	private static final Insets RIGHT_LIST_BORDER_INSET = new Insets(TOP_BOTTOM_MARGIN, 0, TOP_BOTTOM_MARGIN,
@@ -630,7 +630,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	public static int getMinInterfaceBarWidth() {
 		if (minSubappBarWidhtPixels == -1) {
 			final Dimension singleCharLength = FigureUtilities.getStringExtents(" ", //$NON-NLS-1$
-					JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
+					JFaceResources.getFontRegistry().get(UIPreferenceConstants.DIAGRAM_FONT));
 			minSubappBarWidhtPixels = singleCharLength.width * MIN_EXP_SUBAPP_BAR_WIDTH_CHARS
 					+ ConnectorBorder.LR_MARGIN + LEFT_RIGHT_MARGIN;
 		}
@@ -642,7 +642,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	public static int getMaxHiddenConnectionLabelSize() {
 		if (maxHiddenConnectionLabelSize == -1) {
 			final Dimension singleCharLength = FigureUtilities.getStringExtents(" ", //$NON-NLS-1$
-					JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
+					JFaceResources.getFontRegistry().get(UIPreferenceConstants.DIAGRAM_FONT));
 			maxHiddenConnectionLabelSize = singleCharLength.width * MAX_HIDDEN_CONNECTION_LABEL_SIZE_CHARS;
 		}
 		return maxHiddenConnectionLabelSize;

@@ -24,6 +24,7 @@ Require-Bundle: org.eclipse.fordiac.ide.globalconstantseditor,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.ui,
+ org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.ui,
  org.eclipse.ui.editors

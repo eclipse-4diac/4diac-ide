@@ -115,17 +115,18 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 
 	private GraphicalViewer viewer;
 	private ActionRegistry actionRegistry;
-	private static final int NUM_COLUMNS = 1;
 	private KeyHandler sharedKeyHandler;
 	private RepeatEventAction repeatEventAction;
-	private DebugTimeComposite debugTimeEditPart;
+	private final FBDebugViewClockWidget clockWidget = new FBDebugViewClockWidget();
 
 	@Override
 	public void createPartControl(final Composite parent) {
 		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);
-		GridLayoutFactory.fillDefaults().numColumns(NUM_COLUMNS).margins(0, 0).generateLayout(parent);
+		GridLayoutFactory.fillDefaults().applyTo(parent);
 		createGraphicalViewer(parent);
-		debugTimeEditPart = new DebugTimeComposite(parent);
+		final Composite clockControl = clockWidget.createControl(parent);
+		clockControl.setVisible(false);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(clockControl);
 		createToolBarEntries();
 		hookDebugListeners();
 	}
@@ -263,10 +264,10 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 			final Object source = structSel.getFirstElement();
 			if (source == null) {
 				setContents(null);
-				debugTimeEditPart.setEditPartVisible(false);
+				clockWidget.getControl().setVisible(false);
 			} else {
 				final EvaluatorProcess evaluator = getFBEvaluatorDebugContext(source);
-				debugTimeEditPart.setEditPartVisible(true);
+				clockWidget.getControl().setVisible(true);
 				if (!isViewerContent(evaluator)) {
 					setContents(evaluator);
 				}
@@ -277,8 +278,8 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 	private void setContents(final EvaluatorProcess evaluator) {
 		viewer.setContents(evaluator);
 		repeatEventAction.updateEvaluator(evaluator);
-		debugTimeEditPart.setContent(evaluator);
-		debugTimeEditPart.updateEditPartVisible();
+		clockWidget.setProcess(evaluator);
+		clockWidget.refresh(true);
 		setScrollPosition();
 	}
 

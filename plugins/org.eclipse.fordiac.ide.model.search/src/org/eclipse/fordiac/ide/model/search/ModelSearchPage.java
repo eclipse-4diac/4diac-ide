@@ -168,11 +168,18 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		// string exists
 		final boolean optionSelected = isCheckedInstanceName || isCheckedPinName || isCheckedType || isCheckedComment;
 		if (!"".equals(searchString) && optionSelected) { //$NON-NLS-1$
-
-			final ModelQuerySpec modelQuerySpec = new ModelQuerySpec(searchString, isCheckedInstanceName,
-					isCheckedPinName, isCheckedType, isCheckedComment, isCaseSensitive, isExactNameMatching, getScope(),
+			// @formatter:off
+			final ModelQuerySpec modelQuerySpec = new ModelQuerySpec(
+					searchString,
+					isCheckedInstanceName,
+					isCheckedPinName,
+					isCheckedType,
+					isCheckedComment,
+					isCaseSensitive,
+					isExactNameMatching,
+					getScope(),
 					curProject);
-
+			// @formatter:on
 			final ModelSearchQuery searchJob = new ModelSearchQuery(modelQuerySpec);
 			NewSearchUI.runQueryInBackground(searchJob, NewSearchUI.getSearchResultView());
 

@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.ui.widget;
 
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.copy.action.CopyDataAction;
 import org.eclipse.nebula.widgets.nattable.ui.action.IKeyAction;
 import org.eclipse.swt.events.KeyEvent;
 
@@ -31,7 +32,7 @@ public class CutDataFromTableAction implements IKeyAction {
 
 	@Override
 	public void run(final NatTable natTable, final KeyEvent event) {
-		new CopyDataFromTableAction().run(natTable, event);
+		new CopyDataAction().run(natTable, event);
 		new DeleteDataFromTableAction(section).run(natTable, event);
 	}
 }

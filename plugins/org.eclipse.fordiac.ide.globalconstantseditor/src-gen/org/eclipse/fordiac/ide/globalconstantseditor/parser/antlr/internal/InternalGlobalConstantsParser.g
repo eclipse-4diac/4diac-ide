@@ -139,22 +139,93 @@ ruleSTGlobalConstsSource returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTGlobalConstsSourceAccess().getElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0());
+					newCompositeNode(grammarAccess.getSTGlobalConstsSourceAccess().getConstantsSTGlobalConstantsParserRuleCall_3_0());
 				}
-				lv_elements_5_0=ruleSTVarGlobalDeclarationBlock
+				lv_constants_5_0=ruleSTGlobalConstants
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getSTGlobalConstsSourceRule());
 					}
+					set(
+						$current,
+						"constants",
+						lv_constants_5_0,
+						"org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.STGlobalConstants");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)?
+	)
+;
+
+// Entry rule entryRuleSTGlobalConstants
+entryRuleSTGlobalConstants returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTGlobalConstantsRule()); }
+	iv_ruleSTGlobalConstants=ruleSTGlobalConstants
+	{ $current=$iv_ruleSTGlobalConstants.current; }
+	EOF;
+
+// Rule STGlobalConstants
+ruleSTGlobalConstants returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			{
+				$current = forceCreateModelElement(
+					grammarAccess.getSTGlobalConstantsAccess().getSTGlobalConstantsAction_0(),
+					$current);
+			}
+		)
+		otherlv_1=GLOBALCONSTANTS
+		{
+			newLeafNode(otherlv_1, grammarAccess.getSTGlobalConstantsAccess().getGLOBALCONSTANTSKeyword_1());
+		}
+		(
+			(
+				lv_name_2_0=RULE_ID
+				{
+					newLeafNode(lv_name_2_0, grammarAccess.getSTGlobalConstantsAccess().getNameIDTerminalRuleCall_2_0());
+				}
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getSTGlobalConstantsRule());
+					}
+					setWithLastConsumed(
+						$current,
+						"name",
+						lv_name_2_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.ID");
+				}
+			)
+		)
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTGlobalConstantsAccess().getElementsSTVarGlobalDeclarationBlockParserRuleCall_3_0());
+				}
+				lv_elements_3_0=ruleSTVarGlobalDeclarationBlock
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTGlobalConstantsRule());
+					}
 					add(
 						$current,
 						"elements",
-						lv_elements_5_0,
+						lv_elements_3_0,
 						"org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.STVarGlobalDeclarationBlock");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)*
+		otherlv_4=END_GLOBALCONSTANTS
+		{
+			newLeafNode(otherlv_4, grammarAccess.getSTGlobalConstantsAccess().getEND_GLOBALCONSTANTSKeyword_4());
+		}
 	)
 ;
 
@@ -3999,6 +4070,15 @@ ruleSTLiteralExpressions returns [EObject current=null]
 			$current = $this_STStringLiteral_5.current;
 			afterParserOrEnumRuleCall();
 		}
+		    |
+		{
+			newCompositeNode(grammarAccess.getSTLiteralExpressionsAccess().getSTEnumLiteralParserRuleCall_6());
+		}
+		this_STEnumLiteral_6=ruleSTEnumLiteral
+		{
+			$current = $this_STEnumLiteral_6.current;
+			afterParserOrEnumRuleCall();
+		}
 	)
 ;
 
@@ -4577,6 +4657,80 @@ ruleSTStringLiteral returns [EObject current=null]
 				}
 			)
 		)
+	)
+;
+
+// Entry rule entryRuleSTEnumLiteral
+entryRuleSTEnumLiteral returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTEnumLiteralRule()); }
+	iv_ruleSTEnumLiteral=ruleSTEnumLiteral
+	{ $current=$iv_ruleSTEnumLiteral.current; }
+	EOF;
+
+// Rule STEnumLiteral
+ruleSTEnumLiteral returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			{
+				if ($current==null) {
+					$current = createModelElement(grammarAccess.getSTEnumLiteralRule());
+				}
+			}
+			{
+				newCompositeNode(grammarAccess.getSTEnumLiteralAccess().getValueEnumeratedValueCrossReference_0());
+			}
+			ruleEnumValue
+			{
+				afterParserOrEnumRuleCall();
+			}
+		)
+	)
+;
+
+// Entry rule entryRuleEnumValue
+entryRuleEnumValue returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getEnumValueRule()); }
+	iv_ruleEnumValue=ruleEnumValue
+	{ $current=$iv_ruleEnumValue.current.getText(); }
+	EOF;
+
+// Rule EnumValue
+ruleEnumValue returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		{
+			newCompositeNode(grammarAccess.getEnumValueAccess().getQualifiedNameParserRuleCall_0());
+		}
+		this_QualifiedName_0=ruleQualifiedName
+		{
+			$current.merge(this_QualifiedName_0);
+		}
+		{
+			afterParserOrEnumRuleCall();
+		}
+		kw=NumberSign
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getEnumValueAccess().getNumberSignKeyword_1());
+		}
+		this_ID_2=RULE_ID
+		{
+			$current.merge(this_ID_2);
+		}
+		{
+			newLeafNode(this_ID_2, grammarAccess.getEnumValueAccess().getIDTerminalRuleCall_2());
+		}
 	)
 ;
 

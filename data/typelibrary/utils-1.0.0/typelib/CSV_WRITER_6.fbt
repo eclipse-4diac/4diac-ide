@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="CSV_WRITER_6" Comment="Service Interface Function Block Type">
-	<Identification Description="Copyright (c) 2012 ACIN&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+<FBType Name="CSV_WRITER_6" Comment="Service Interface Function Block Type" >
+	<Identification Description="Copyright (c) 2012 ACIN&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0 " >
 	</Identification>
 	<VersionInfo Organization="ACIN" Version="1.0" Author="Alois Zoitl" Date="2012-06-16">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="INIT" Type="Event" Comment="Service Initialization">
+			<Event Name="INIT" Type="EInit" Comment="Service Initialization" >
 				<With Var="QI"/>
 				<With Var="FILE_NAME"/>
 			</Event>
-			<Event Name="REQ" Type="Event" Comment="Service Request">
+			<Event Name="REQ" Type="Event" Comment="Service Request" >
 				<With Var="QI"/>
 				<With Var="SD_1"/>
 				<With Var="SD_2"/>
@@ -21,28 +21,28 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm" >
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
-			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
+			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service" >
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
-			<VarDeclaration Name="FILE_NAME" Type="STRING" Comment="Service Parameters"/>
-			<VarDeclaration Name="SD_1" Type="ANY" Comment="Output data to resource"/>
-			<VarDeclaration Name="SD_2" Type="ANY" Comment=""/>
-			<VarDeclaration Name="SD_3" Type="ANY" Comment=""/>
-			<VarDeclaration Name="SD_4" Type="ANY" Comment=""/>
-			<VarDeclaration Name="SD_5" Type="ANY" Comment=""/>
-			<VarDeclaration Name="SD_6" Type="ANY" Comment=""/>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier" />
+			<VarDeclaration Name="FILE_NAME" Type="STRING" Comment="Service Parameters" />
+			<VarDeclaration Name="SD_1" Type="ANY" Comment="Output data to resource" />
+			<VarDeclaration Name="SD_2" Type="ANY"/>
+			<VarDeclaration Name="SD_3" Type="ANY"/>
+			<VarDeclaration Name="SD_4" Type="ANY"/>
+			<VarDeclaration Name="SD_5" Type="ANY"/>
+			<VarDeclaration Name="SD_6" Type="ANY"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
-			<VarDeclaration Name="STATUS" Type="STRING" Comment="File access status"/>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier" />
+			<VarDeclaration Name="STATUS" Type="STRING" Comment="File access status" />
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="GenericClassName" Value="'GEN_CSV_WRITER'"/>

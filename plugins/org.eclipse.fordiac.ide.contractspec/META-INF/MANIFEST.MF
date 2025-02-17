@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.fordiac.ide.contractspec
+Bundle-ManifestVersion: 2
+Bundle-Name: org.eclipse.fordiac.ide.contractspec
+Bundle-Vendor: Eclipse 4diac
+Bundle-Version: 3.0.0.qualifier
+Bundle-SymbolicName: org.eclipse.fordiac.ide.contractspec; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.16.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.37.0",
+ org.eclipse.emf.common,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Export-Package: org.eclipse.fordiac.ide.services,
+ org.eclipse.fordiac.ide.scoping,
+ org.eclipse.fordiac.ide.contractSpec.util,
+ org.eclipse.fordiac.ide.parser.antlr,
+ org.eclipse.fordiac.ide.validation,
+ org.eclipse.fordiac.ide,
+ org.eclipse.fordiac.ide.contractSpec,
+ org.eclipse.fordiac.ide.parser.antlr.internal,
+ org.eclipse.fordiac.ide.generator,
+ org.eclipse.fordiac.ide.contractSpec.impl,
+ org.eclipse.fordiac.ide.serializer
+Import-Package: org.apache.log4j

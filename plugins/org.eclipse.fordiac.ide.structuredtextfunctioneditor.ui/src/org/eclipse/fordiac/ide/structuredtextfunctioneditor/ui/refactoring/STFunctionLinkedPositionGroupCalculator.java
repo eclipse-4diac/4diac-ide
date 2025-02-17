@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreLinkedPositionGroupCalculator;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage;
 import org.eclipse.jface.text.link.LinkedPositionGroup;
@@ -26,7 +27,8 @@ public class STFunctionLinkedPositionGroupCalculator extends STCoreLinkedPositio
 	@Override
 	public Provider<LinkedPositionGroup> getLinkedPositionGroup(final IRenameElementContext renameElementContext,
 			final IProgressMonitor monitor) {
-		if (STFunctionPackage.Literals.ST_FUNCTION.equals(renameElementContext.getTargetElementEClass())) {
+		if (STFunctionPackage.Literals.ST_FUNCTION.equals(renameElementContext.getTargetElementEClass())
+				|| STCorePackage.Literals.ST_VAR_DECLARATION.equals(renameElementContext.getTargetElementEClass())) {
 			return LinkedPositionGroup::new; // do not use linked editing for function refactorings
 		}
 		return super.getLinkedPositionGroup(renameElementContext, monitor);

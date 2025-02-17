@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Function Name="ASSEMBLE_BYTE_FROM_QUARTERS" Comment="this Function combines the 4 QUARTER BYTES to a BYTE">
+<Function Name="ASSEMBLE_BYTE_FROM_QUARTERS" Comment="this Function combines the 4 QUARTER BYTES to a BYTE" >
 	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Organization="HR Agrartechnik" Version="1.0" Author="Franz Höpfinger" Date="2024-02-22" Remarks="initial Implementation">
@@ -10,7 +10,7 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ" Type="Event" Comment="">
+			<Event Name="REQ" Type="Event">
 				<With Var="QUARTER_BYTE_00"/>
 				<With Var="QUARTER_BYTE_01"/>
 				<With Var="QUARTER_BYTE_02"/>
@@ -18,18 +18,18 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="">
+			<Event Name="CNF" Type="Event">
 				<With Var=""/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="QUARTER_BYTE_00" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_01" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_02" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_03" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_00" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_01" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_02" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_03" Type="BYTE"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="" Type="BYTE"/>
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
@@ -43,11 +43,11 @@ VAR_INPUT
 	QUARTER_BYTE_03 : BYTE;
 END_VAR
 
-ASSEMBLE_BYTE_FROM_QUARTERS := BYTE_QUARTER_ZZ;
-ASSEMBLE_BYTE_FROM_QUARTERS := ASSEMBLE_BYTE_FROM_QUARTERS OR SHL(QUARTER_BYTE_03, SHIFT_QUARTER_03);
-ASSEMBLE_BYTE_FROM_QUARTERS := ASSEMBLE_BYTE_FROM_QUARTERS OR SHL(QUARTER_BYTE_02, SHIFT_QUARTER_02);
-ASSEMBLE_BYTE_FROM_QUARTERS := ASSEMBLE_BYTE_FROM_QUARTERS OR SHL(QUARTER_BYTE_01, SHIFT_QUARTER_01);
-ASSEMBLE_BYTE_FROM_QUARTERS := ASSEMBLE_BYTE_FROM_QUARTERS OR SHL(QUARTER_BYTE_00, SHIFT_QUARTER_00);
+ASSEMBLE_BYTE_FROM_QUARTERS := quarterconst::BYTE_QUARTER_ZZ;
+ASSEMBLE_BYTE_FROM_QUARTERS := ASSEMBLE_BYTE_FROM_QUARTERS OR SHL(QUARTER_BYTE_03, quarterconst::SHIFT_QUARTER_03);
+ASSEMBLE_BYTE_FROM_QUARTERS := ASSEMBLE_BYTE_FROM_QUARTERS OR SHL(QUARTER_BYTE_02, quarterconst::SHIFT_QUARTER_02);
+ASSEMBLE_BYTE_FROM_QUARTERS := ASSEMBLE_BYTE_FROM_QUARTERS OR SHL(QUARTER_BYTE_01, quarterconst::SHIFT_QUARTER_01);
+ASSEMBLE_BYTE_FROM_QUARTERS := ASSEMBLE_BYTE_FROM_QUARTERS OR SHL(QUARTER_BYTE_00, quarterconst::SHIFT_QUARTER_00);
 
 END_FUNCTION
 ]]></ST>

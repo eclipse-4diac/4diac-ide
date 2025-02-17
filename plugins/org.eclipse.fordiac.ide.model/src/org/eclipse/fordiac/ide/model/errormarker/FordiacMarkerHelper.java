@@ -38,10 +38,13 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -320,6 +323,15 @@ public final class FordiacMarkerHelper {
 		position.setY(0);
 		createErrorMarkerFBNElement.setPosition(position);
 		return createErrorMarkerFBNElement;
+	}
+
+	public static void createAttributeErrorMarker(final Attribute attribute, final TypeLibrary typeLib) {
+		final TypeEntry typeEntry = typeLib.createErrorTypeEntry(attribute.getName(),
+				LibraryElementPackage.eINSTANCE.getAttributeDeclaration());
+		final AttributeDeclaration aDecl = (AttributeDeclaration) typeEntry.getType();
+
+		attribute.setAttributeDeclaration(aDecl);
+		attribute.setType(aDecl.getType());
 	}
 
 	private static boolean errorMarkersNeedsUpdate(final IResource resource, final String type,

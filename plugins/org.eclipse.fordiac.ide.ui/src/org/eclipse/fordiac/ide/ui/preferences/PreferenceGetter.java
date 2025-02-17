@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.ui.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.swt.graphics.Color;
@@ -45,7 +44,7 @@ public final class PreferenceGetter {
 	 * @return the color
 	 */
 	public static Color getColor(final String pref) {
-		return getColor(UIPlugin.getDefault().getPreferenceStore(), pref);
+		return getColor(UIPreferenceConstants.STORE, pref);
 	}
 
 	/**
@@ -63,25 +62,25 @@ public final class PreferenceGetter {
 
 	public static Color getDataColor(final String dataType) {
 		if ("BOOL".equals(dataType)) { //$NON-NLS-1$
-			return getColor(PreferenceConstants.P_BOOL_CONNECTOR_COLOR);
+			return getColor(UIPreferenceConstants.P_BOOL_CONNECTOR_COLOR);
 		}
 		if (isAnyBit(dataType)) {
-			return getColor(PreferenceConstants.P_ANY_BIT_CONNECTOR_COLOR);
+			return getColor(UIPreferenceConstants.P_ANY_BIT_CONNECTOR_COLOR);
 		}
 		if (isAnyInt(dataType)) {
-			return getColor(PreferenceConstants.P_ANY_INT_CONNECTOR_COLOR);
+			return getColor(UIPreferenceConstants.P_ANY_INT_CONNECTOR_COLOR);
 		}
 		if (isAnyReal(dataType)) {
-			return getColor(PreferenceConstants.P_ANY_REAL_CONNECTOR_COLOR);
+			return getColor(UIPreferenceConstants.P_ANY_REAL_CONNECTOR_COLOR);
 		}
 		if (isAnyString(dataType)) {
-			return getColor(PreferenceConstants.P_ANY_STRING_CONNECTOR_COLOR);
+			return getColor(UIPreferenceConstants.P_ANY_STRING_CONNECTOR_COLOR);
 		}
 		return getDefaultDataColor();
 	}
 
 	public static Color getDefaultDataColor() {
-		return getColor(PreferenceConstants.P_REMAINING_DATA_CONNECTOR_COLOR);
+		return getColor(UIPreferenceConstants.P_REMAINING_DATA_CONNECTOR_COLOR);
 	}
 
 	private static boolean isAnyBit(final String dataType) {

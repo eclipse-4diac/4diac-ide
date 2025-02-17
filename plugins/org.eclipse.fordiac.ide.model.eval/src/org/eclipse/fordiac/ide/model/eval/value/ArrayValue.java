@@ -209,4 +209,8 @@ public final class ArrayValue implements AnyDerivedValue, Iterable<Value> {
 	public int getEnd() {
 		return end;
 	}
+
+	public int size() {
+		return elements.size();
+	}
 }

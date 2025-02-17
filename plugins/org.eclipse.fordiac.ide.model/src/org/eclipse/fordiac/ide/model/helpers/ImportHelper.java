@@ -178,15 +178,19 @@ public final class ImportHelper {
 		return null; // skip colliding names
 	}
 
+	public static boolean matchesImports(final String name, final LibraryElement libraryElement) {
+		return getImports(libraryElement).stream().anyMatch(imp -> matchesImport(name, imp));
+	}
+
 	public static boolean matchesImports(final String name, final List<Import> imports) {
 		return imports.stream().anyMatch(imp -> matchesImport(name, imp));
 	}
 
 	private static boolean matchesImport(final String name, final Import imp) {
 		final String importedNamespace = imp.getImportedNamespace();
-		return importedNamespace.equals(name)
-				|| (importedNamespace.endsWith(WILDCARD_IMPORT_SUFFIX) && PackageNameHelper
-						.extractPackageName(importedNamespace).equals(PackageNameHelper.extractPackageName(name)));
+		return importedNamespace.equalsIgnoreCase(name) || (importedNamespace.endsWith(WILDCARD_IMPORT_SUFFIX)
+				&& PackageNameHelper.extractPackageName(importedNamespace)
+						.equalsIgnoreCase(PackageNameHelper.extractPackageName(name)));
 	}
 
 	public static boolean isImplicitImport(final String imported, final String packageName) {

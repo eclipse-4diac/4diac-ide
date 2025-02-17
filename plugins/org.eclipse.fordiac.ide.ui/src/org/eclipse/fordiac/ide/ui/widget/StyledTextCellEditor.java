@@ -140,7 +140,7 @@ public class StyledTextCellEditor extends CellEditor {
 		text.addVerifyKeyListener(event -> {
 			// if the proposal popup is open we do not handle keystrokes
 			// ourself to ensure proposal handling is working correctly
-			if (!isProposalPopupOpen()) {
+			if (event.doit && !isProposalPopupOpen()) {
 				if (event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR) {
 
 					boolean commit = event.stateMask != SWT.MOD3;
@@ -196,6 +196,13 @@ public class StyledTextCellEditor extends CellEditor {
 		text.setText("");//$NON-NLS-1$
 		text.addModifyListener(getModifyListener());
 		return text;
+	}
+
+	@Override
+	protected void focusLost() {
+		if (!isProposalPopupOpen()) {
+			super.focusLost();
+		}
 	}
 
 	/**

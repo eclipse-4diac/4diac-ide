@@ -58,7 +58,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
-            class="org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences"
+            class="org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage"
             id="org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences"
             name="Diagram Preferences">
       </page>

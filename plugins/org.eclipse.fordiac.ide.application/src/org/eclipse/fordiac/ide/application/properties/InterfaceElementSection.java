@@ -26,7 +26,7 @@ import java.text.MessageFormat;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.editors.InitialValueEditor;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.gef.widgets.ConnectionDisplayWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -234,7 +234,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 
 	private void updateTypeInitialValue(final String value) {
 		if (!parameterText.isDisposed() && FordiacMessages.ComputingPlaceholderValue.equals(parameterText.getText())) {
-			if (value.length() <= DiagramPreferences.getMaxDefaultValueLength()) {
+			if (value.length() <= DiagramPreferencePage.getMaxDefaultValueLength()) {
 				parameterText.setText(value);
 			} else {
 				parameterText.setText(FordiacMessages.ValueTooLarge);

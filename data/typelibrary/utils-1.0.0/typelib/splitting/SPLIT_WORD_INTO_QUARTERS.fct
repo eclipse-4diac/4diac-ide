@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Function Name="SPLIT_WORD_INTO_QUARTERS" Comment="this Function extracts the 8 QUARTER BYTE from a word">
+<Function Name="SPLIT_WORD_INTO_QUARTERS" Comment="this Function extracts the 8 QUARTER BYTE from a word" >
 	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Organization="HR Agrartechnik" Version="1.0" Author="Franz Höpfinger" Date="2024-02-22" Remarks="initial Implementation">
@@ -10,12 +10,12 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+			<Event Name="REQ" Type="Event">
 				<With Var="IN"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+			<Event Name="CNF" Type="Event">
 				<With Var="QUARTER_BYTE_00"/>
 				<With Var="QUARTER_BYTE_01"/>
 				<With Var="QUARTER_BYTE_02"/>
@@ -27,17 +27,17 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN" Type="WORD" Comment=""/>
+			<VarDeclaration Name="IN" Type="WORD"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="QUARTER_BYTE_00" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_01" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_02" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_03" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_04" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_05" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_06" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="QUARTER_BYTE_07" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="QUARTER_BYTE_00" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_01" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_02" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_03" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_04" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_05" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_06" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_07" Type="BYTE"/>
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
@@ -59,14 +59,14 @@ VAR_OUTPUT
 	QUARTER_BYTE_07 : BYTE;
 END_VAR
 
-QUARTER_BYTE_00 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_00, SHIFT_QUARTER_00));
-QUARTER_BYTE_01 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_01, SHIFT_QUARTER_01));
-QUARTER_BYTE_02 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_02, SHIFT_QUARTER_02));
-QUARTER_BYTE_03 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_03, SHIFT_QUARTER_03));
-QUARTER_BYTE_04 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_04, SHIFT_QUARTER_04));
-QUARTER_BYTE_05 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_05, SHIFT_QUARTER_05));
-QUARTER_BYTE_06 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_06, SHIFT_QUARTER_06));
-QUARTER_BYTE_07 := WORD_TO_BYTE(SHR(IN AND WORD_QUARTER_07, SHIFT_QUARTER_07));
+QUARTER_BYTE_00 := WORD_TO_BYTE(SHR(IN AND quarterconst::WORD_QUARTER_00, quarterconst::SHIFT_QUARTER_00));
+QUARTER_BYTE_01 := WORD_TO_BYTE(SHR(IN AND quarterconst::WORD_QUARTER_01, quarterconst::SHIFT_QUARTER_01));
+QUARTER_BYTE_02 := WORD_TO_BYTE(SHR(IN AND quarterconst::WORD_QUARTER_02, quarterconst::SHIFT_QUARTER_02));
+QUARTER_BYTE_03 := WORD_TO_BYTE(SHR(IN AND quarterconst::WORD_QUARTER_03, quarterconst::SHIFT_QUARTER_03));
+QUARTER_BYTE_04 := WORD_TO_BYTE(SHR(IN AND quarterconst::WORD_QUARTER_04, quarterconst::SHIFT_QUARTER_04));
+QUARTER_BYTE_05 := WORD_TO_BYTE(SHR(IN AND quarterconst::WORD_QUARTER_05, quarterconst::SHIFT_QUARTER_05));
+QUARTER_BYTE_06 := WORD_TO_BYTE(SHR(IN AND quarterconst::WORD_QUARTER_06, quarterconst::SHIFT_QUARTER_06));
+QUARTER_BYTE_07 := WORD_TO_BYTE(SHR(IN AND quarterconst::WORD_QUARTER_07, quarterconst::SHIFT_QUARTER_07));
 
 END_FUNCTION
 ]]></ST>

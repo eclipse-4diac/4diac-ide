@@ -19,9 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.fordiac.ide.fmu.Messages;
-import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -29,6 +28,7 @@ import org.eclipse.fordiac.ide.ui.providers.DialogSettingsProvider;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -73,14 +73,11 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 
 		// Store the selection in the preferences
 		if (page.getStoreSelectedLibaries().getSelection()) {
-			Activator.getDefault().getPreferenceStore().setValue(PreferenceConstants.P_FMU_WIN32,
-					page.getWin32Field().getSelection());
-			Activator.getDefault().getPreferenceStore().setValue(PreferenceConstants.P_FMU_WIN64,
-					page.getWin64Field().getSelection());
-			Activator.getDefault().getPreferenceStore().setValue(PreferenceConstants.P_FMU_LIN32,
-					page.getLinux32Field().getSelection());
-			Activator.getDefault().getPreferenceStore().setValue(PreferenceConstants.P_FMU_LIN64,
-					page.getLinux64Field().getSelection());
+			final IPreferenceStore store = FMUPreferenceConstants.STORE;
+			store.setValue(FMUPreferenceConstants.P_FMU_WIN32, page.getWin32Field().getSelection());
+			store.setValue(FMUPreferenceConstants.P_FMU_WIN64, page.getWin64Field().getSelection());
+			store.setValue(FMUPreferenceConstants.P_FMU_LIN32, page.getLinux32Field().getSelection());
+			store.setValue(FMUPreferenceConstants.P_FMU_LIN64, page.getLinux64Field().getSelection());
 		}
 
 		final IRunnableWithProgress iop = monitor -> {
@@ -101,7 +98,7 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 		try {
 			new ProgressMonitorDialog(getShell()).run(false, false, iop);
 		} catch (final InterruptedException e) {
-			Thread.currentThread().interrupt();  // mark interruption
+			Thread.currentThread().interrupt(); // mark interruption
 			showCreationExceptionDialog(e);
 		} catch (final Exception e) {
 			showCreationExceptionDialog(e);
@@ -121,16 +118,16 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 
 		final List<String> libs = new ArrayList<>();
 		if (page.getWin32Field().isEnabled() && page.getWin32Field().getSelection()) {
-			libs.add(PreferenceConstants.P_FMU_WIN32);
+			libs.add(FMUPreferenceConstants.P_FMU_WIN32);
 		}
 		if (page.getWin64Field().isEnabled() && page.getWin64Field().getSelection()) {
-			libs.add(PreferenceConstants.P_FMU_WIN64);
+			libs.add(FMUPreferenceConstants.P_FMU_WIN64);
 		}
 		if (page.getLinux32Field().isEnabled() && page.getLinux32Field().getSelection()) {
-			libs.add(PreferenceConstants.P_FMU_LIN32);
+			libs.add(FMUPreferenceConstants.P_FMU_LIN32);
 		}
 		if (page.getLinux64Field().isEnabled() && page.getLinux64Field().getSelection()) {
-			libs.add(PreferenceConstants.P_FMU_LIN64);
+			libs.add(FMUPreferenceConstants.P_FMU_LIN64);
 		}
 		return libs;
 	}

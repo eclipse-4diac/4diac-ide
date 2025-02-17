@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +16,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -69,15 +70,13 @@ public class STCoreImportValidator {
 		}
 
 		if (WILDCARD.equals(qualifiedName.getLastSegment())) {
-			final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(imp);
 			if (qualifiedName.getSegmentCount() <= 1) {
 				acceptor.acceptError(
 						MessageFormat.format(Messages.STCoreValidator_InvalidWildcardImport, importedNamespace), imp,
 						LibraryElementPackage.eINSTANCE.getImport_ImportedNamespace(),
 						ValidationMessageAcceptor.INSIGNIFICANT_INDEX, STCoreValidator.INVALID_IMPORT,
 						importedNamespace);
-			} else if (typeLibrary != null
-					&& !typeLibrary.getPackages().contains(nameConverter.toString(qualifiedName.skipLast(1)))) {
+			} else if (!existsWildcardImport(qualifiedName, imp)) {
 				acceptor.acceptError(
 						MessageFormat.format(Messages.STCoreImportValidator_ImportNotFound, importedNamespace), imp,
 						LibraryElementPackage.eINSTANCE.getImport_ImportedNamespace(),
@@ -94,14 +93,26 @@ public class STCoreImportValidator {
 			acceptor.acceptError(MessageFormat.format(Messages.STCoreImportValidator_ImportNotFound, importedNamespace),
 					imp, LibraryElementPackage.eINSTANCE.getImport_ImportedNamespace(),
 					ValidationMessageAcceptor.INSIGNIFICANT_INDEX, STCoreValidator.INVALID_IMPORT, importedNamespace);
-		} else if (isImplicitImport(qualifiedName, packageName) || !usedTypes.contains(qualifiedName)) {
+		} else if (isImplicitImport(qualifiedName, packageName) || isUnusedImport(qualifiedName, usedTypes)) {
 			acceptor.acceptWarning(MessageFormat.format(Messages.STCoreValidator_UnusedImport, importedNamespace), imp,
 					LibraryElementPackage.eINSTANCE.getImport_ImportedNamespace(),
 					ValidationMessageAcceptor.INSIGNIFICANT_INDEX, STCoreValidator.UNUSED_IMPORT, importedNamespace);
 		}
 	}
 
+	protected boolean existsWildcardImport(final QualifiedName qualifiedName, final EObject context) {
+		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(context);
+		return typeLibrary == null
+				|| typeLibrary.getPackages().contains(nameConverter.toString(qualifiedName.skipLast(1)))
+				|| typeLibrary.getGlobalConstantsEntry(nameConverter.toString(qualifiedName.skipLast(1))) != null;
+	}
+
 	public static boolean isImplicitImport(final QualifiedName imported, final QualifiedName packageName) {
 		return imported.getSegmentCount() <= 1 || imported.skipLast(1).equals(packageName);
+	}
+
+	protected static boolean isUnusedImport(final QualifiedName imported, final Set<QualifiedName> usedTypes) {
+		return !usedTypes.contains(imported)
+				&& usedTypes.stream().noneMatch(usedType -> usedType.startsWithIgnoreCase(imported));
 	}
 }

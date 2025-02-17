@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage;
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstants;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 
@@ -34,7 +35,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STSourceImpl;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STGlobalConstsSourceImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STGlobalConstsSourceImpl#getImports <em>Imports</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STGlobalConstsSourceImpl#getElements <em>Elements</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STGlobalConstsSourceImpl#getConstants <em>Constants</em>}</li>
  * </ul>
  *
  * @generated
@@ -68,15 +69,14 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 	 */
 	protected EList<STImport> imports;
 	/**
-	 * The cached value of the '{@link #getElements() <em>Elements</em>}' containment reference list.
+	 * The cached value of the '{@link #getConstants() <em>Constants</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getElements()
+	 * @see #getConstants()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<STVarGlobalDeclarationBlock> elements;
-
+	protected STGlobalConstants constants;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -138,11 +138,43 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 	 * @generated
 	 */
 	@Override
-	public EList<STVarGlobalDeclarationBlock> getElements() {
-		if (elements == null) {
-			elements = new EObjectContainmentEList<STVarGlobalDeclarationBlock>(STVarGlobalDeclarationBlock.class, this, GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS);
+	public STGlobalConstants getConstants() {
+		return constants;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetConstants(STGlobalConstants newConstants, NotificationChain msgs) {
+		STGlobalConstants oldConstants = constants;
+		constants = newConstants;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__CONSTANTS, oldConstants, newConstants);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
-		return elements;
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setConstants(STGlobalConstants newConstants) {
+		if (newConstants != constants) {
+			NotificationChain msgs = null;
+			if (constants != null)
+				msgs = ((InternalEObject)constants).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__CONSTANTS, null, msgs);
+			if (newConstants != null)
+				msgs = ((InternalEObject)newConstants).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__CONSTANTS, null, msgs);
+			msgs = basicSetConstants(newConstants, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__CONSTANTS, newConstants, newConstants));
 	}
 
 	/**
@@ -155,8 +187,8 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 		switch (featureID) {
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__IMPORTS:
 				return ((InternalEList<?>)getImports()).basicRemove(otherEnd, msgs);
-			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS:
-				return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__CONSTANTS:
+				return basicSetConstants(null, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -174,8 +206,8 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 				return getName();
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__IMPORTS:
 				return getImports();
-			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS:
-				return getElements();
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__CONSTANTS:
+				return getConstants();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -197,9 +229,8 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 				getImports().clear();
 				getImports().addAll((Collection<? extends STImport>)newValue);
 				return;
-			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS:
-				getElements().clear();
-				getElements().addAll((Collection<? extends STVarGlobalDeclarationBlock>)newValue);
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__CONSTANTS:
+				setConstants((STGlobalConstants)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -221,8 +252,8 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__IMPORTS:
 				getImports().clear();
 				return;
-			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS:
-				getElements().clear();
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__CONSTANTS:
+				setConstants((STGlobalConstants)null);
 				return;
 			default:
 				super.eUnset(featureID);
@@ -242,8 +273,8 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__IMPORTS:
 				return imports != null && !imports.isEmpty();
-			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS:
-				return elements != null && !elements.isEmpty();
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__CONSTANTS:
+				return constants != null;
 			default:
 				return super.eIsSet(featureID);
 		}

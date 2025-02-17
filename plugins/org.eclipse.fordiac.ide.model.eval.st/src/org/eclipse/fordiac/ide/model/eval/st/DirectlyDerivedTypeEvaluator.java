@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorPrepareException;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableEvaluator;
@@ -55,7 +56,7 @@ public class DirectlyDerivedTypeEvaluator extends StructuredTextEvaluator implem
 			warnings.forEach(warning -> error("Parse warning: " + warning)); //$NON-NLS-1$
 			infos.forEach(info -> error("Parse info: " + info)); //$NON-NLS-1$
 			if (parseResult == null) {
-				throw new IllegalArgumentException(errors.stream().collect(Collectors.joining(", "))); //$NON-NLS-1$
+				throw new EvaluatorPrepareException(errors.stream().collect(Collectors.joining(", ")), this); //$NON-NLS-1$
 			}
 		}
 	}

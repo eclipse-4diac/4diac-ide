@@ -247,7 +247,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 					sfb.getService().getRightInterface().getName());
 			getWriter().writeAttribute(LibraryElementTags.LEFT_INTERFACE_ATTRIBUTE,
 					sfb.getService().getLeftInterface().getName());
-			addCommentAttribute(sfb.getComment());
+			addCommentAttribute(sfb.getService().getComment());
 
 			addServiceSequences(sfb.getService().getServiceSequence());
 

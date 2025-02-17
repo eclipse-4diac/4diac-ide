@@ -46,7 +46,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchSite;
-import org.eclipse.ui.part.FileEditorInput;
 
 public class DeploymentLaunchShortcut implements ILaunchShortcut2 {
 
@@ -146,7 +145,7 @@ public class DeploymentLaunchShortcut implements ILaunchShortcut2 {
 
 	@Override
 	public IResource getLaunchableResource(final IEditorPart editorpart) {
-		if (editorpart.getEditorInput() instanceof final FileEditorInput fileEditorInput) {
+		if (editorpart.getEditorInput() instanceof final IFileEditorInput fileEditorInput) {
 			return fileEditorInput.getFile();
 		}
 		return null;

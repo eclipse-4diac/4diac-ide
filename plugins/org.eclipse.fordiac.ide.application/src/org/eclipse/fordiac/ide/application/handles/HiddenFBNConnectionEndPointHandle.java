@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
 import org.eclipse.fordiac.ide.application.tools.FBNScrollingConnectionEndpointTracker;
 import org.eclipse.fordiac.ide.application.tools.MultiFBNScrollingconnectionEndpointTracker;
 import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.tools.ConnectionEndpointTracker;
 
@@ -69,7 +69,7 @@ public class HiddenFBNConnectionEndPointHandle extends ScrollingConnectionEndpoi
 
 	@Override
 	protected int getCornerRadius() {
-		return DiagramPreferences.CORNER_DIM;
+		return GefPreferenceConstants.CORNER_DIM;
 	}
 
 	@Override

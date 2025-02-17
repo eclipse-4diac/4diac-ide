@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementComma
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateVarInOutCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -151,7 +152,8 @@ public class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 	protected void createImportProposal(final Issue issue, final String label, final String importedNamespace,
 			final IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, label, label, null, (element, context) -> {
-			if (element.eResource() instanceof final STAlgorithmResource resource) {
+			if (element.eResource() instanceof final STAlgorithmResource resource
+					&& !ImportHelper.matchesImports(importedNamespace, resource.getLibraryElement())) {
 				STAlgorithmEditorUtils.executeCommand(resource.getURI(),
 						new AddNewImportCommand(resource.getLibraryElement(), importedNamespace));
 			}

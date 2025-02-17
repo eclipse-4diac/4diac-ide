@@ -26,6 +26,7 @@ public class Messages extends NLS {
 	public static String GlobalConstantsOutlineTreeProvider_VarGlobalDeclarationBlockText;
 
 	public static String GlobalConstQuickFix_AddConstantKeyword;
+	public static String GlobalConstQuickFix_RenameGlobalConstants;
 
 	static {
 		// initialize resource bundle

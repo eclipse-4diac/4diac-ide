@@ -746,11 +746,6 @@ public class ServiceSequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
-				 DataFactory.eINSTANCE.createValueType()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
 				 DataFactory.eINSTANCE.createEnumeratedType()));
 
 		newChildDescriptors.add
@@ -767,6 +762,11 @@ public class ServiceSequenceItemProvider
 			(createChildParameter
 				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
 				 DataFactory.eINSTANCE.createSubrange()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 DataFactory.eINSTANCE.createValueType()));
 
 		newChildDescriptors.add
 			(createChildParameter

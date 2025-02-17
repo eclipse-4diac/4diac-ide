@@ -369,6 +369,15 @@ public interface STCoreFactory extends EFactory {
 	STStringLiteral createSTStringLiteral();
 
 	/**
+	 * Returns a new object of class '<em>ST Enum Literal</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Enum Literal</em>'.
+	 * @generated
+	 */
+	STEnumLiteral createSTEnumLiteral();
+
+	/**
 	 * Returns a new object of class '<em>ST Var Declaration</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

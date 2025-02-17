@@ -67,6 +67,8 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 	public static final String SIGNATURE_HASH = STCoreResourceDescriptionStrategy.class.getName() + ".SIGNATURE_HASH"; //$NON-NLS-1$
 	public static final String CONTAINER_ECLASS_NAME = STCoreResourceDescriptionStrategy.class.getName()
 			+ ".containerEClassName"; //$NON-NLS-1$
+	public static final String CONTAINMENT_FEATURE_NAME = STCoreResourceDescriptionStrategy.class.getName()
+			+ ".containmentFeatureName"; //$NON-NLS-1$
 	public static final String DISPLAY_STRING = STCoreResourceDescriptionStrategy.class.getName() + ".DISPLAY_STRING"; //$NON-NLS-1$
 	public static final String PARAMETER_PROPOSAL = STCoreResourceDescriptionStrategy.class.getName()
 			+ ".PARAMETER_PROPOSAL"; //$NON-NLS-1$
@@ -110,6 +112,7 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 		final EObject container = eObject.eContainer();
 		if (container != null) {
 			userData.put(CONTAINER_ECLASS_NAME, container.eClass().getName());
+			userData.put(CONTAINMENT_FEATURE_NAME, eObject.eContainmentFeature().getName());
 		}
 		if (eObject instanceof final ICallable callable) {
 			userData.put(SIGNATURE_HASH, computeSignatureHash(callable));

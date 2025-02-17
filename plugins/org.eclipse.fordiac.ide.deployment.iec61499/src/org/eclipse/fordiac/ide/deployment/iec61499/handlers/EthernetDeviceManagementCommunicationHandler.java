@@ -27,7 +27,7 @@ import java.text.MessageFormat;
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
-import org.eclipse.fordiac.ide.deployment.iec61499.preferences.HoloblocDeploymentPreferences;
+import org.eclipse.fordiac.ide.deployment.iec61499.preferences.IEC61499PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class EthernetDeviceManagementCommunicationHandler implements IDeviceManagementCommunicationHandler {
@@ -59,7 +59,7 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 	public void connect(final String address) throws DeploymentException {
 		mgrInfo = getValidMgrInformation(address);
 		socket = new Socket();
-		final int timeout = HoloblocDeploymentPreferences.getConnectionTimeout();
+		final int timeout = IEC61499PreferenceConstants.getConnectionTimeout();
 		final SocketAddress sockaddr = new InetSocketAddress(mgrInfo.iP, mgrInfo.port);
 		try {
 			socket.connect(sockaddr, timeout); // 3s as timeout

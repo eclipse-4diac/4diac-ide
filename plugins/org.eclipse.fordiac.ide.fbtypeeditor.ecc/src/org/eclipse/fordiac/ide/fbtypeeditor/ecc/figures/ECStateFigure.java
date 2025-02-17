@@ -17,8 +17,8 @@
 
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
-import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.MARGIN_HORIZONTAL;
-import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.MARGIN_VERTICAL;
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants.MARGIN_HORIZONTAL;
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants.MARGIN_VERTICAL;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FlowLayout;
@@ -33,8 +33,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.figures.HorizontalLineFigure;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -65,7 +64,7 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 
 		Figure stateRect = createStateRectangle();
 		stateRect.add(createStateNameLabel(state));
-		stateActionConnector.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
+		stateActionConnector.setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_STATE_TEXT_COLOR));
 		stateRect.add(stateActionConnector);
 		add(stateRect);
 
@@ -123,12 +122,12 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 			}
 		};
 		nameLabel.setText(state.getName());
-		nameLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
+		nameLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_STATE_TEXT_COLOR));
 		nameLabel.setOpaque(true);
 		if (state.isStartState()) {
-			nameLabel.setBorder(new StartStateBorder(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_COLOR)));
+			nameLabel.setBorder(new StartStateBorder(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_STATE_COLOR)));
 		} else {
-			nameLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_COLOR));
+			nameLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_STATE_COLOR));
 		}
 		return nameLabel;
 	}

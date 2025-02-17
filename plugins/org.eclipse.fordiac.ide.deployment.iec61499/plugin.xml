@@ -23,7 +23,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
-            class="org.eclipse.fordiac.ide.deployment.iec61499.preferences.HoloblocDeploymentPreferences"
+            class="org.eclipse.fordiac.ide.deployment.iec61499.preferences.HoloblocDeploymentPreferencePage"
             id="org.eclipse.fordiac.ide.deployment.iec61499.preferences.HoloblocDeploymentPreferences"
             name="Deployment Preferences (HOLOBLOC Profile)">
       </page>

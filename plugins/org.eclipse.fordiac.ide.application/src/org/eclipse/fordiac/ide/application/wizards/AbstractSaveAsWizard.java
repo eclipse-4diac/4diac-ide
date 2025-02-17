@@ -16,7 +16,7 @@
 package org.eclipse.fordiac.ide.application.wizards;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.fordiac.ide.gef.Activator;
+import org.eclipse.fordiac.ide.ui.providers.DialogSettingsProvider;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.wizard.Wizard;
 
@@ -43,10 +43,8 @@ public abstract class AbstractSaveAsWizard extends Wizard {
 		return true;
 	}
 
-
 	private void setupDiagramSettings() {
-		final IDialogSettings settings = Activator.getDefault().getDialogSettings();
-
+		final IDialogSettings settings = DialogSettingsProvider.getDialogSettings(getClass());
 		if (null == settings.getSection(subappSection)) {
 			// section does not exist create a section
 			settings.addNewSection(subappSection);

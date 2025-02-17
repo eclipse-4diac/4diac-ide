@@ -33,7 +33,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
@@ -41,13 +41,14 @@ import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class MoveAndReconnectCommand extends Command implements ScopedCommand {
+public class MoveAndReconnectCommand extends Command implements QualNameAffectedCommand {
 
 	protected final FBNetwork sourceNetwork;
 	private Position destination;
@@ -59,6 +60,8 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 	private final CompoundCommand setUniqueName = new CompoundCommand();
 	private final CompoundCommand removeFromGroup = new CompoundCommand();
 	private CompoundCommand reconnectConnectionsCommands = null;
+	private final Map<INamedElement, String> oldQualNames = new HashMap<>(); // store for plantHierchy update
+	private final Map<INamedElement, String> newQualNames = new HashMap<>(); // store for plant updat
 
 	public MoveAndReconnectCommand(final Collection<FBNetworkElement> elements, final Point destination) {
 		this(elements, destination, null);
@@ -107,10 +110,20 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 
 	@Override
 	public void execute() {
+		storeOldQualNames();
 		removeElementsFromGroup();
 		removeElementsFromSubapp();
 		addElementsToDestination();
 		reconnectConnections();
+		storeNewQualNames();
+	}
+
+	private void storeNewQualNames() {
+		elements.forEach(e -> newQualNames.put(e, e.getQualifiedName()));
+	}
+
+	private void storeOldQualNames() {
+		elements.forEach(e -> oldQualNames.put(e, e.getQualifiedName()));
 	}
 
 	private void removeElementsFromGroup() {
@@ -279,4 +292,20 @@ public class MoveAndReconnectCommand extends Command implements ScopedCommand {
 		}
 		return Set.of();
 	}
+
+	@Override
+	public String getOldQualName(final INamedElement element) {
+		return oldQualNames.get(element);
+	}
+
+	@Override
+	public String getNewQualName(final INamedElement element) {
+		return newQualNames.get(element);
+	}
+
+	@Override
+	public List<INamedElement> getChangedElements() {
+		return new ArrayList<>(elements);
+	}
+
 }

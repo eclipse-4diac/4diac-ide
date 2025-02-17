@@ -347,6 +347,14 @@ public class STCoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case STCorePackage.ST_ENUM_LITERAL: {
+				STEnumLiteral stEnumLiteral = (STEnumLiteral)theEObject;
+				T result = caseSTEnumLiteral(stEnumLiteral);
+				if (result == null) result = caseSTExpression(stEnumLiteral);
+				if (result == null) result = caseSTStatement(stEnumLiteral);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case STCorePackage.ST_VAR_DECLARATION: {
 				STVarDeclaration stVarDeclaration = (STVarDeclaration)theEObject;
 				T result = caseSTVarDeclaration(stVarDeclaration);
@@ -1057,6 +1065,21 @@ public class STCoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSTStringLiteral(STStringLiteral object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Enum Literal</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Enum Literal</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTEnumLiteral(STEnumLiteral object) {
 		return null;
 	}
 

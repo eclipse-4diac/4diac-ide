@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType;
 import org.eclipse.fordiac.ide.model.data.DateType;
 import org.eclipse.fordiac.ide.model.data.DwordType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.data.LdateType;
 import org.eclipse.fordiac.ide.model.data.LdtType;
 import org.eclipse.fordiac.ide.model.data.LtodType;
@@ -62,6 +63,7 @@ public final class ValueConverterFactory {
 		case final StructuredType structuredType ->
 			new StructValueConverter(name -> new TypedValueConverter(getMemberType(structuredType, name),
 					getDataTypeLibrary(structuredType)));
+		case final EnumeratedType enumeratedType -> new EnumValueConverter(enumeratedType);
 		case null, default -> null;
 		};
 	}

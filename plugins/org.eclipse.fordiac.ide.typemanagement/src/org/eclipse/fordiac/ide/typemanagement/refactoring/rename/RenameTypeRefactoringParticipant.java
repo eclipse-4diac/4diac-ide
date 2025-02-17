@@ -123,7 +123,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 			if (type instanceof FBType) {
 				return createFBDataChange();
 			}
-			return null;
+			return new UpdateTypeEntryChange(file, typeEntry, newName, oldName);
 
 		} finally {
 			monitor.done();

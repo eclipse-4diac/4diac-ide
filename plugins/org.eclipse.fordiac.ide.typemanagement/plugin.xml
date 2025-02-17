@@ -550,6 +550,11 @@
                      property="org.eclipse.core.resources.extension"
                      value="sub">
                </test>
+               <test
+                     forcePluginActivation="true"
+                     property="org.eclipse.core.resources.extension"
+                     value="gcf">
+               </test>
                </or>
              </and>
          </enablement>
@@ -564,6 +569,9 @@
                <or>
                   <equals
                         value="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.renameProcessor2">
+                  </equals>
+                  <equals
+                        value="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.renameProcessor2">
                   </equals>
                   <equals
                         value="org.eclipse.fordiac.ide.model.datatype.dtp.renameProcessor2">

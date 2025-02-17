@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrim
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.TransactionEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeOutputPrimitiveOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeServiceSequenceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTransactionOrderCommand;
@@ -50,7 +50,7 @@ import org.eclipse.gef.requests.CreateRequest;
 public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
-		return new ModifiedNonResizeableEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1));
+		return new ModifiedNonResizeableEditPolicy(GefPreferenceConstants.CORNER_DIM_HALF, new Insets(1));
 	}
 
 	@Override
@@ -60,7 +60,8 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 
 		if (LEFT_OUTPUT_PRIMITIVE.equals(type)) {
 			return createLeftOutputPrimitive(refEP);
-		} else if (SERVICE_TRANSACTION.equals(type)) {
+		}
+		if (SERVICE_TRANSACTION.equals(type)) {
 			return createServiceTransaction(refEP);
 		} else if (SERVICE_SEQUENCE.equals(type)) {
 			return createServiceSequence(refEP);
@@ -74,8 +75,7 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 			final int index = transaction.getOutputPrimitive().indexOf(refEP.getModel());
 			return new CreateOutputPrimitiveCommand(transaction, index, true);
 		}
-
-		else if (refEP instanceof InputPrimitiveEditPart) {
+		if (refEP instanceof InputPrimitiveEditPart) {
 			final ServiceTransaction transaction = ((InputPrimitive) refEP.getModel()).getServiceTransaction();
 			return new CreateOutputPrimitiveCommand(transaction, 0, true);
 		}
@@ -92,8 +92,8 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 			if (sequenceBefore < 0) {
 				sequenceBefore = 0;
 			}
-			final ServiceSequence sequence = ((ServiceSequence)
-					refEP.getModel()).getService().getServiceSequence().get(sequenceBefore);
+			final ServiceSequence sequence = ((ServiceSequence) refEP.getModel()).getService().getServiceSequence()
+					.get(sequenceBefore);
 			final ServiceTransaction transaction = sequence.getServiceTransaction()
 					.get(sequence.getServiceTransaction().size() - 1);
 			final int index = transaction.getOutputPrimitive().size();
@@ -114,8 +114,7 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 			final ServiceTransaction refElement = ((Primitive) refEP.getModel()).getServiceTransaction();
 			return new CreateTransactionCommand(sequence, refElement);
 		}
-
-		else if (refEP instanceof TransactionEditPart) {
+		if (refEP instanceof TransactionEditPart) {
 			final ServiceSequence sequence = ((ServiceTransaction) refEP.getModel()).getServiceSequence();
 			final int indexLastTransaction = sequence.getServiceTransaction().size() - 1;
 			return new CreateTransactionCommand(sequence, sequence.getServiceTransaction().get(indexLastTransaction));
@@ -135,8 +134,7 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 			}
 			final ServiceTransaction transaction = sequenceBefore.getServiceTransaction().get(indexLastTransaction);
 			return new CreateTransactionCommand(sequenceBefore, transaction);
-		}
-		else if (refEP == null) { // insert at the end of the list
+		} else if (refEP == null) { // insert at the end of the list
 			final ServiceTransaction transaction = (ServiceTransaction) getHost().getModel();
 			return new CreateTransactionCommand(transaction.getServiceSequence(), transaction);
 		}
@@ -150,8 +148,7 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 					.getServiceSequence();
 			return new CreateServiceSequenceCommand(service, sequence);
 		}
-
-		else if (refEP instanceof TransactionEditPart) {
+		if (refEP instanceof TransactionEditPart) {
 			final Service service = ((ServiceTransaction) refEP.getModel()).getServiceSequence().getService();
 			return new CreateServiceSequenceCommand(service,
 					((ServiceTransaction) refEP.getModel()).getServiceSequence());
@@ -186,7 +183,6 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 		return null;
 	}
 
-
 	@Override
 	protected boolean isLayoutHorizontal() {
 		return false;
@@ -201,7 +197,8 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 	protected Command createMoveChildCommand(final EditPart child, final EditPart after) {
 		if (child instanceof OutputPrimitiveEditPart) {
 			return moveOutputPrimitive(child, after);
-		} else if (child instanceof TransactionEditPart) {
+		}
+		if (child instanceof TransactionEditPart) {
 			return moveTransaction(child, after);
 		} else if (child instanceof ServiceSequenceEditPart) {
 			return moveServiceSequence(child, after);
@@ -215,7 +212,7 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 		if (after instanceof InputPrimitiveEditPart) {
 			return new ChangeOutputPrimitiveOrderCommand(outputP, 0);
 		}
-		else if (after instanceof OutputPrimitiveEditPart) {
+		if (after instanceof OutputPrimitiveEditPart) {
 			final OutputPrimitive afterOutputP = (OutputPrimitive) after.getModel();
 			if (afterOutputP.getServiceTransaction().equals(outputP.getServiceTransaction())) {
 				return new ChangeOutputPrimitiveOrderCommand(outputP, afterOutputP, false);
@@ -230,8 +227,7 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 			final ServiceTransaction afterT = ((Primitive) after).getServiceTransaction();
 			return new ChangeTransactionOrderCommand(transaction, afterT, false);
 		}
-
-		else if (after instanceof TransactionEditPart) {
+		if (after instanceof TransactionEditPart) {
 			final ServiceTransaction afterT = (ServiceTransaction) after.getModel();
 			if (transaction.getServiceSequence().equals(afterT.getServiceSequence())) {
 				return new ChangeTransactionOrderCommand(transaction, afterT, false);

@@ -124,6 +124,21 @@
         </eGenericType>
       </eParameters>
     </eOperations>
+    <eOperations name="validateAttributeDeclaration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeAnnotations.validateAttributeDeclaration(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeDeclaration" eType="#//AttributeDeclaration"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass data.ecore#//DataType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
@@ -910,12 +925,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerFBNElement" eSuperTypes="#//FBNetworkElement">
     <eOperations name="getWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.screenToIEC61499(org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this));"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getHeight" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.screenToIEC61499(org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this));"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="repairedElement" eType="#//FBNetworkElement"/>
@@ -1036,12 +1051,12 @@
     </eOperations>
     <eOperations name="getWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.screenToIEC61499(org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this));"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getHeight" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.screenToIEC61499(org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this));"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
       </eAnnotations>
     </eOperations>
   </eClassifiers>
@@ -1248,14 +1263,14 @@
         <details key="body" value="throw new UnsupportedOperationException();"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getVisibleWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
+    <eOperations name="getVisibleWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getWidth());"/>
+        <details key="body" value="return getWidth();"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getVisibleHeight" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
+    <eOperations name="getVisibleHeight" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getHeight());"/>
+        <details key="body" value="return getHeight();"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getInput" eType="#//IInterfaceElement">
@@ -1955,6 +1970,8 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
+        defaultValueLiteral=""/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceSequence" eSuperTypes="#//INamedElement #//ConfigurableObject">
     <eOperations name="getService" lowerBound="1" eType="#//Service">
@@ -2060,14 +2077,14 @@
     <eOperations name="isTyped" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
     <eOperations name="getSubAppNetwork" eType="#//FBNetwork"/>
     <eOperations name="loadSubAppNetwork" eType="#//FBNetwork"/>
-    <eOperations name="getVisibleWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
+    <eOperations name="getVisibleWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return isUnfolded() ? org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getWidth()) : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
+        <details key="body" value="return isUnfolded() ? getWidth() : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getVisibleHeight" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
+    <eOperations name="getVisibleHeight" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return isUnfolded() ? org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.iec61499ToScreen(getHeight()) : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
+        <details key="body" value="return isUnfolded() ? getHeight() : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double"
@@ -2301,6 +2318,21 @@
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateNoValueForGenericTypeVariable(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="validateNoValueForVariableLengthArrayVariable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateNoValueForVariableLengthArrayVariable(this, diagnostics, context);"/>
       </eAnnotations>
       <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
       <eParameters name="context">

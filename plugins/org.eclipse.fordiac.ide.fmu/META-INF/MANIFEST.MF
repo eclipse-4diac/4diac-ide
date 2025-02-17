@@ -14,7 +14,6 @@ Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.0.0.qualifier
 Bundle-Name: FMU exporter
-Bundle-Activator: org.eclipse.fordiac.ide.fmu.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fmu;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21

@@ -512,22 +512,6 @@
 				</with>
 			</activeWhen>
 		</handler>
-		<handler
-			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.ToggleBoolWatchHandler"
-			commandId="org.eclipse.fordiac.ide.application.commands.toggleBoolValue">
-			<activeWhen>
-				<with
-					variable="selection">
-					<iterate
-						ifEmpty="false"
-						operator="and">
-						<instanceof
-							value="org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch">
-						</instanceof>
-					</iterate>
-				</with>
-			</activeWhen>
-		</handler>
 	</extension>
 	<extension
 		point="org.eclipse.ui.bindings">
@@ -1046,5 +1030,12 @@
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.preferences"
 			name="Deployment">
 		</page>
+	</extension>
+	<extension
+		point="org.eclipse.debug.ui.variableValueEditors">
+		<variableValueEditor
+			class="org.eclipse.fordiac.ide.debug.ui.editor.EvaluatorVariableValueEditor"
+			modelId="org.eclipse.fordiac.ide.deployment.debug.model">
+		</variableValueEditor>
 	</extension>
 </plugin>

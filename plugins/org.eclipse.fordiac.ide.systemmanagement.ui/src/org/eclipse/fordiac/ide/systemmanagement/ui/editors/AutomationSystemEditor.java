@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
+import org.eclipse.fordiac.ide.model.commands.QualNameChangeListenerManager;
 import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
 import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
@@ -437,6 +438,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 				if (system != null) {
 					getCommandStack().addCommandStackEventListener(this);
 					getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
+					QualNameChangeListenerManager.INSTANCE.addCommandStackEventListener(getCommandStack());
 					system.getTypeEntry().eAdapters().add(adapter);
 				}
 			}

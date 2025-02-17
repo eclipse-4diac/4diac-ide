@@ -16,7 +16,7 @@
             extensions="sub"
             default="true"
             icon="fordiacimage://ICON_SUB_APP_TYPE"
-            contributorClass="org.eclipse.fordiac.ide.gef.editors.GraphicalMultipageEditorContributor"
+            contributorClass="org.eclipse.fordiac.ide.typeeditor.TypeEditorContributor"
             class="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor"
             id="org.eclipse.fordiac.ide.subapptypeeditor.SubAppTypeEditor"
             matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy"/>

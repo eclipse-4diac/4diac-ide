@@ -17,13 +17,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -36,10 +37,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class ChangeNameCommand extends Command implements ConnectionLayoutTagger, ScopedCommand {
+public class ChangeNameCommand extends Command implements ConnectionLayoutTagger, QualNameAffectedCommand {
 	private final INamedElement element;
 	private final String name;
 	private String oldName;
+	private final String oldQualName;
 	private final CompoundCommand additionalCommands = new CompoundCommand();
 	private boolean validateName;
 
@@ -48,9 +50,11 @@ public class ChangeNameCommand extends Command implements ConnectionLayoutTagger
 	}
 
 	private ChangeNameCommand(final INamedElement element, final String name, final boolean validateName) {
+
 		this.element = Objects.requireNonNull(element);
 		this.name = name;
 		this.validateName = validateName;
+		this.oldQualName = element.getQualifiedName();
 	}
 
 	public static ChangeNameCommand forName(final INamedElement element, final String name) {
@@ -140,10 +144,6 @@ public class ChangeNameCommand extends Command implements ConnectionLayoutTagger
 		return element;
 	}
 
-	public String getOldName() {
-		return oldName;
-	}
-
 	public CompoundCommand getAdditionalCommands() {
 		return additionalCommands;
 	}
@@ -168,4 +168,27 @@ public class ChangeNameCommand extends Command implements ConnectionLayoutTagger
 		} while (container != null);
 		return Set.of(element);
 	}
+
+	@Override
+	public List<INamedElement> getChangedElements() {
+		return List.of(getElement());
+	}
+
+	@Override
+	public String getOldQualName(final INamedElement elemt) {
+		if (elemt != element) {
+			return null;
+		}
+
+		return oldQualName;
+	}
+
+	@Override
+	public String getNewQualName(final INamedElement element) {
+		if (element != this.element) {
+			return null;
+		}
+		return oldQualName.substring(0, oldQualName.length() - oldName.length()) + name;
+	}
+
 }

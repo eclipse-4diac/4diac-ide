@@ -48,9 +48,8 @@ import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPa
 import org.eclipse.fordiac.ide.application.utilities.GetEditPartFromGraficalViewerHelper;
 import org.eclipse.fordiac.ide.elk.commands.BlockLayoutCommand;
 import org.eclipse.fordiac.ide.elk.commands.ConnectionLayoutCommand;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.commands.Command;
@@ -133,7 +132,7 @@ public class FordiacLayout {
 	}
 
 	private static void applySnapToGridIfEnabled(final FordiacLayoutMapping mapping) {
-		if (Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SNAP_TO_GRID)) {
+		if (GefPreferenceConstants.STORE.getBoolean(GefPreferenceConstants.SNAP_TO_GRID)) {
 			snapToGrid(mapping);
 		}
 	}

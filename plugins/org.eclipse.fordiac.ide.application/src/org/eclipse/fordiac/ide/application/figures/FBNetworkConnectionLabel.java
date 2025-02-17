@@ -76,7 +76,7 @@ public class FBNetworkConnectionLabel extends Figure implements RotatableDecorat
 
 	private static Font getLabelFont() {
 		return JFaceResources.getFontRegistry()
-				.get(org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants.DIAGRAM_FONT);
+				.get(org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants.DIAGRAM_FONT);
 	}
 
 	@Override

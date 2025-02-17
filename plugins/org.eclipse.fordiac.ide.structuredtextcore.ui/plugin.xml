@@ -608,6 +608,10 @@
 			class="org.eclipse.fordiac.ide.structuredtextcore.ui.DTPExecutableExtensionFactory:org.eclipse.xtext.ui.resource.generic.EmfResourceUIServiceProvider"
 			uriExtension="dtp">
 		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextcore.ui.DTPExecutableExtensionFactory:org.eclipse.xtext.ui.resource.generic.EmfResourceUIServiceProvider"
+			uriExtension="DTP">
+		</resourceServiceProvider>
 	</extension>
  <extension
        point="org.eclipse.ui.preferencePages">

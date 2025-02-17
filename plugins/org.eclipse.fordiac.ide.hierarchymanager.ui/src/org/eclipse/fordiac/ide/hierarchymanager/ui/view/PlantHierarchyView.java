@@ -59,8 +59,10 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class PlantHierarchyView extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 
 	private static final String PLANT_HIERARCHY_PROJECT = "PlantHierarchy.Project"; //$NON-NLS-1$
-	private static final String PLANT_HIERARCHY_FILE_NAME = ".plant.hier"; //$NON-NLS-1$
-	private static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION = "hier"; //$NON-NLS-1$
+	public static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION = "HIER"; //$NON-NLS-1$
+	public static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION_WITH_DOT = "." + PLANT_HIERARCHY_FILE_NAME_EXTENSION; //$NON-NLS-1$
+	private static final String PLANT_HIERARCHY_FILE_NAME = ".plant" //$NON-NLS-1$
+			+ PLANT_HIERARCHY_FILE_NAME_EXTENSION_WITH_DOT.toLowerCase();
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
 	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.hierarchymanager.ui.view"; //$NON-NLS-1$
@@ -117,7 +119,7 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 					// we can not use setInput here as getInitialInput is interacting with the
 					// viewer in the base class
 					currentProject = project;
-					return loadHierachyForProject(currentProject);
+					return loadHierachyForProject(currentProject, hierarchyResouceSet, loadOptions);
 				}
 			}
 		}
@@ -141,11 +143,11 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 		return currentProject;
 	}
 
-	private void setInput(final IProject proj) {
+	public void setInput(final IProject proj) {
 		if (currentProject != proj) {
 			// the new project is different set
 			currentProject = proj;
-			getCommonViewer().setInput(loadHierachyForProject(proj));
+			getCommonViewer().setInput(loadHierachyForProject(proj, hierarchyResouceSet, loadOptions));
 			setPartName(getConfigurationElement().getAttribute("name")); //$NON-NLS-1$
 		}
 	}
@@ -171,12 +173,13 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 		return null;
 	}
 
-	private EObject loadHierachyForProject(final IProject proj) {
+	public static EObject loadHierachyForProject(final IProject proj, final ResourceSet hierarchyResouceSet,
+			final Map<String, Object> loadOptions) {
 		final IFile file = proj.getFile(PLANT_HIERARCHY_FILE_NAME);
 		final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 		if (!file.exists()) {
 			// try to create a new file
-			return createNewHierarchyFile(file, uri);
+			return createNewHierarchyFile(file, uri, hierarchyResouceSet);
 		}
 		// we don't want to load the resource content as we can not give the mapping
 		// options
@@ -194,7 +197,8 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 		return null;
 	}
 
-	public EObject createNewHierarchyFile(final IFile file, final URI uri) {
+	public static EObject createNewHierarchyFile(final IFile file, final URI uri,
+			final ResourceSet hierarchyResouceSet) {
 		Resource resource = hierarchyResouceSet.getResource(uri, false);
 		if (resource == null) {
 			resource = new HierarchyResourceImpl(uri);
@@ -233,8 +237,12 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 
 	private void setupEMFInfra() {
 		// add file extension to registry
-		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-				.put(PLANT_HIERARCHY_FILE_NAME_EXTENSION, new HierarchyResourceFactoryImpl());
+		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				PLANT_HIERARCHY_FILE_NAME_EXTENSION, //
+				new HierarchyResourceFactoryImpl());
+		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				PLANT_HIERARCHY_FILE_NAME_EXTENSION.toLowerCase(), //
+				new HierarchyResourceFactoryImpl());
 		setupLoadOptions();
 	}
 

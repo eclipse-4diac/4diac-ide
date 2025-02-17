@@ -14,19 +14,18 @@ package org.eclipse.fordiac.ide.application.utilities;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.fordiac.ide.application.editparts.DemultiplexerEditPart;
-import org.eclipse.fordiac.ide.ui.UIPlugin;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 public class IsTransferableStructCommentTester extends PropertyTester {
 
 	@Override
-	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if (property.equalsIgnoreCase("isTansferableStruct") && receiver instanceof IStructuredSelection) { //$NON-NLS-1$
-			IStructuredSelection selectedFB = (IStructuredSelection) receiver;
-			if (selectedFB.getFirstElement() instanceof DemultiplexerEditPart) {
-				return !UIPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX);
-			}
+	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
+		if ((property.equalsIgnoreCase("isTansferableStruct") //$NON-NLS-1$
+				&& receiver instanceof final IStructuredSelection selectedFB)
+				&& selectedFB.getFirstElement() instanceof DemultiplexerEditPart) {
+			return !UIPreferenceConstants.STORE
+					.getBoolean(UIPreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX);
 		}
 		return true;
 	}

@@ -26,18 +26,26 @@
             <dirset dir="${basedir}/..">
                <include name="org.eclipse.fordiac.ide.ant/bin"/>
                <include name="org.eclipse.fordiac.ide.model/bin"/>
+               <include name="org.eclipse.fordiac.ide.library/bin"/>
+               <include name="org.eclipse.fordiac.ide.hierarchymanager/bin"/>
+               <include name="org.eclipse.fordiac.ide.library.model/bin"/>
                <include name="org.eclipse.fordiac.ide.systemmanagement/bin"/>
+               <include name="org.eclipse.fordiac.ide.export/bin"/>
+               <include name="org.eclipse.fordiac.ide.export.forte_ng/bin"/>
+               <include name="org.eclipse.fordiac.ide.export.xmi/bin"/>
             </dirset>
             <fileset dir="${target.home}">
-				<include name="plugins/eclipse.fordiac.ide.ant*.jar"/>
-				<include name="plugins/eclipse.fordiac.ide.model*.jar"/>
-				<include name="plugins/org.eclipse.core.resources*.jar"/>
-				<include name="plugins/org.eclipse.core.runtime*.jar"/>
-				<include name="plugins/org.eclipse.equinox.common*.jar"/>
-				<include name="plugins/org.eclipse.core.jobs*.jar"/>
-				<include name="plugins/org.eclipse.osgi*.jar"/>
-				<include name="plugins/org.eclipse.ant.core*.jar"/>
-				<include name="plugins/org.apache.ant*/lib/*.jar"/>
+                <include name="plugins/org.eclipse.emf.common*.jar"/>
+                <include name="plugins/org.eclipse.emf.ecore*.jar"/>
+                <include name="plugins/org.eclipse.fordiac.ide.hierarchymanager*.jar"/>
+                <include name="plugins/org.eclipse.core.resources*.jar"/>
+                <include name="plugins/org.eclipse.core.runtime*.jar"/>
+                <include name="plugins/org.eclipse.equinox.common*.jar"/>
+                <include name="plugins/org.eclipse.core.jobs*.jar"/>
+                <include name="plugins/org.eclipse.osgi*.jar"/>
+                <include name="plugins/org.eclipse.ant.core*.jar"/>
+                <include name="plugins/org.apache.ant*/lib/*.jar"/>
+                <include name="plugins/org.eclipse.xtext*.jar"/>
             </fileset>
          </classpath>
          <src path="src_ant/"/>

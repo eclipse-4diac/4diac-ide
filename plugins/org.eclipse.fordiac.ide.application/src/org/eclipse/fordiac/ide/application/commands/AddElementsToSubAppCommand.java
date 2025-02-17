@@ -372,4 +372,9 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 	public Set<EObject> getAffectedObjects() {
 		return Set.of(targetSubApp);
 	}
+
+	public List<FBNetworkElement> getElements() {
+		return elementsToAdd;
+	}
+
 }

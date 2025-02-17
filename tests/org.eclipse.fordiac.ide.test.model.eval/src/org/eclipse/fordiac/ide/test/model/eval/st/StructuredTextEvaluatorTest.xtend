@@ -877,6 +877,24 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testArrayExcessInitializer() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(emptyList, '''
+			VAR_TEMP
+				test: ARRAY [ 0 .. 2 ] OF INT := [ 17, 4, 21, 42 ];
+			END_VAR
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArrayExcessRepeatInitializer() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(emptyList, '''
+			VAR_TEMP
+				test: ARRAY [ 0 .. 2 ] OF INT := [ 2(17, 4, 21) ];
+			END_VAR
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
 	def void testArrayIndexOutOfBounds() {
 		ArrayIndexOutOfBoundsException.assertThrows [
 			'''

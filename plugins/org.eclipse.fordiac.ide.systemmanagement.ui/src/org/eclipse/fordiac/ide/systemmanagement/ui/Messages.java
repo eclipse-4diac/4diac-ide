@@ -43,8 +43,14 @@ public final class Messages extends NLS {
 
 	/** The New system wizard_ wizard name. */
 	public static String New4diacProjectWizard_WizardName;
-
 	public static String New4diacProjectWizard_WizardTitle;
+
+	public static String New4diacExampleWizard_WizardTitle;
+	public static String New4diacExampleWizard_WizardDesc;
+	public static String New4diacExampleWizard_SelectExample;
+	public static String New4diacExampleWizard_NoExampleSelected;
+	public static String New4diacExampleWizard_CreatingExample;
+	public static String New4diacExampleWizard_CopyingContentIntoNewProject;
 
 	public static String New4diacProjectWizard_LibPageTitle;
 	public static String New4diacProjectWizard_LibPageName;
@@ -56,7 +62,7 @@ public final class Messages extends NLS {
 	public static String New4diacProjectWizard_DirectoryWithProjectNameAlreadyExistsInWorkspace;
 
 	public static String NewSystemWizardPage_NewSystemName;
-	public static String NewSystemWizardPage_Title;
+	public static String NewSystemWizardPage_NewSystemTitle;
 	public static String NewSystemWizardPage_CreateNewSystem;
 
 	public static String SystemEditor_Applications;

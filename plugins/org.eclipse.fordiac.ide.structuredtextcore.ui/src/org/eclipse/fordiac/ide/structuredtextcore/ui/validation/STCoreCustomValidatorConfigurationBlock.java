@@ -69,6 +69,8 @@ public class STCoreCustomValidatorConfigurationBlock extends STCoreValidatorConf
 	protected void fillLiteralsSection(final Composite composite, final int defaultIndent) {
 		addComboBox(STCoreValidator.LITERAL_IMPLICIT_CONVERSION,
 				Messages.STCoreCustomValidatorConfigurationBlock_LiteralImplicitConversion, composite, defaultIndent);
+		addComboBox(STCoreValidator.TRUNCATING_LITERAL_CONVERSION,
+				Messages.STCoreCustomValidatorConfigurationBlock_TruncatingLiteralConversion, composite, defaultIndent);
 		addComboBox(STCoreValidator.TRUNCATED_LITERAL,
 				Messages.STCoreCustomValidatorConfigurationBlock_TruncatedStringLiteral, composite, defaultIndent);
 	}

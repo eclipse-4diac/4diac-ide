@@ -58,6 +58,7 @@ public class GlobalConstantsFactoryImpl extends EFactoryImpl implements GlobalCo
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE: return createSTGlobalConstsSource();
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTANTS: return createSTGlobalConstants();
 			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK: return createSTVarGlobalDeclarationBlock();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -73,6 +74,17 @@ public class GlobalConstantsFactoryImpl extends EFactoryImpl implements GlobalCo
 	public STGlobalConstsSource createSTGlobalConstsSource() {
 		STGlobalConstsSourceImpl stGlobalConstsSource = new STGlobalConstsSourceImpl();
 		return stGlobalConstsSource;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STGlobalConstants createSTGlobalConstants() {
+		STGlobalConstantsImpl stGlobalConstants = new STGlobalConstantsImpl();
+		return stGlobalConstants;
 	}
 
 	/**

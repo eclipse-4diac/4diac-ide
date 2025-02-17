@@ -30,7 +30,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.figures.AbstractShadowBorder;
 import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 
 public class GroupFigure extends Figure {
@@ -65,7 +65,7 @@ public class GroupFigure extends Figure {
 
 	private void createMainFigure() {
 		mainFigure.setOutline(false);
-		mainFigure.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
+		mainFigure.setCornerDimensions(new Dimension(GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM));
 		mainFigure.setFillXOR(false);
 		mainFigure.setOpaque(false);
 
@@ -104,7 +104,7 @@ public class GroupFigure extends Figure {
 		nameLayout.horizontalSpacing = 0;
 		nameLayout.marginHeight = 0;
 		nameFigure = new BorderedRoundedRectangle();
-		nameFigure.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
+		nameFigure.setCornerDimensions(new Dimension(GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM));
 		nameFigure.setOutline(false);
 		nameFigure.setLayoutManager(nameLayout);
 	}

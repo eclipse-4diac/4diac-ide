@@ -52,7 +52,6 @@ Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.0.0.qualifier
 Bundle-Name: Graphical Utilites
-Bundle-Activator: org.eclipse.fordiac.ide.gef.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.gef;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21

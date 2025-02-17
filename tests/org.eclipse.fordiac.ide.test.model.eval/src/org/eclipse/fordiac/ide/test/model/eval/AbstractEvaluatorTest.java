@@ -16,11 +16,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsStandaloneSetup;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory;
@@ -46,6 +51,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup;
 import org.eclipse.fordiac.ide.test.model.typelibrary.AttributeTypeEntryMock;
@@ -56,11 +62,13 @@ import org.junit.jupiter.api.BeforeAll;
 @SuppressWarnings("nls")
 public abstract class AbstractEvaluatorTest {
 
+	protected static IProject project;
 	protected static TypeLibrary typeLib;
 
 	@BeforeAll
 	public static void setupXtext() {
-		typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(null);
+		project = ResourcesPlugin.getWorkspace().getRoot().getProject("test");
+		typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 		GlobalConstantsStandaloneSetup.doSetup();
 		STFunctionStandaloneSetup.doSetup();
 		STAlgorithmStandaloneSetup.doSetup();
@@ -184,6 +192,24 @@ public abstract class AbstractEvaluatorTest {
 		return structType;
 	}
 
+	protected static EnumeratedType newEnumeratedType(final String name, final Collection<String> values) {
+		final EnumeratedType enumType = DataFactory.eINSTANCE.createEnumeratedType();
+		enumType.setName(name);
+		values.stream().map(AbstractEvaluatorTest::newEnumeratedValue)
+				.forEachOrdered(enumType.getEnumeratedValues()::add);
+		final DataTypeEntryMock typeEntry = new DataTypeEntryMock(enumType, typeLib, null);
+		enumType.setTypeEntry(typeEntry);
+		typeLib.addTypeEntry(typeEntry);
+		new ResourceImpl().getContents().add(enumType);
+		return enumType;
+	}
+
+	protected static EnumeratedValue newEnumeratedValue(final String name) {
+		final EnumeratedValue value = DataFactory.eINSTANCE.createEnumeratedValue();
+		value.setName(name);
+		return value;
+	}
+
 	public static STAlgorithm newSTAlgorithm(final CharSequence text, final String name) {
 		final STAlgorithm alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		alg.setName(name);
@@ -212,10 +238,11 @@ public abstract class AbstractEvaluatorTest {
 		final SimpleECState state = newSimpleECState(inputEvent);
 		state.getSimpleECActions().add(newSimpleECAction("REQ", outputEvent));
 		simpleType.getSimpleECStates().add(state);
-		final FBTypeEntryMock typeEntry = new FBTypeEntryMock(simpleType, typeLib, null);
+		final IFile file = project.getFile(name + TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT);
+		final FBTypeEntryMock typeEntry = new FBTypeEntryMock(simpleType, typeLib, file);
 		simpleType.setTypeEntry(typeEntry);
 		typeLib.addTypeEntry(typeEntry);
-		new ResourceImpl().getContents().add(simpleType);
+		new ResourceImpl(typeEntry.getURI()).getContents().add(simpleType);
 		return simpleType;
 	}
 
@@ -241,10 +268,11 @@ public abstract class AbstractEvaluatorTest {
 		final STFunctionBody body = LibraryElementFactory.eINSTANCE.createSTFunctionBody();
 		body.setText(text);
 		functionType.setBody(body);
-		final FBTypeEntryMock typeEntry = new FBTypeEntryMock(functionType, typeLib, null);
+		final IFile file = project.getFile(name + TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT);
+		final FBTypeEntryMock typeEntry = new FBTypeEntryMock(functionType, typeLib, file);
 		functionType.setTypeEntry(typeEntry);
 		typeLib.addTypeEntry(typeEntry);
-		new ResourceImpl().getContents().add(functionType);
+		new ResourceImpl(typeEntry.getURI()).getContents().add(functionType);
 		return functionType;
 	}
 }

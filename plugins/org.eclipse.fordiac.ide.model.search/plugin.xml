@@ -80,7 +80,8 @@
                             <test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="sub" />
                             <test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="dtd" />
                             <test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="dtp" />
-                        </or>    
+                        	<test forcePluginActivation="false" property="org.eclipse.core.resources.extension" value="fct" />
+                        </or>
                         </adapt>
                   	</iterate>
                	</with>

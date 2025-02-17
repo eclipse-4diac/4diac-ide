@@ -22,7 +22,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.policies;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.commands.create.CreateVarInOutCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
@@ -39,7 +39,7 @@ public class VarInOutInputContainerLayoutEditPolicy extends AbstractInterfaceCon
 	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
 
-		return new AbstractInterfaceSelectionEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1)) {
+		return new AbstractInterfaceSelectionEditPolicy(GefPreferenceConstants.CORNER_DIM_HALF, new Insets(1)) {
 
 			@Override
 			protected List<? extends IInterfaceElement> getInterfaceElementList() {

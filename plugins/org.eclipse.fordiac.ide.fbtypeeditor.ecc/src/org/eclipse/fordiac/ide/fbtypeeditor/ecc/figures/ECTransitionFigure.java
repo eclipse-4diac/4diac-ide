@@ -31,8 +31,7 @@ import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.RotatableDecoration;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.jface.resource.JFaceResources;
@@ -52,7 +51,7 @@ public class ECTransitionFigure extends SplineConnection {
 			setLayoutManager(new StackLayout());
 			setFill(true);
 			setAntialias(1);
-			setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_TRANSITION_COLOR));
+			setBackgroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_TRANSITION_COLOR));
 			setOutline(false);
 
 			orderLabel = new Label();
@@ -64,7 +63,7 @@ public class ECTransitionFigure extends SplineConnection {
 
 		private static Font getOrderLabelFont() {
 			final FontData[] fontData = JFaceResources.getFontRegistry()
-					.getFontData(org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants.DIAGRAM_FONT).clone();
+					.getFontData(org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants.DIAGRAM_FONT).clone();
 			Arrays.stream(fontData).forEach(fd -> fd.setHeight(TRANSITON_ORDER_LABEL_FONT_SIZE));
 			JFaceResources.getFontRegistry().put(TRANSITION_ORDER_LABEL_FONT, fontData);
 			return JFaceResources.getFont(TRANSITION_ORDER_LABEL_FONT);
@@ -101,7 +100,7 @@ public class ECTransitionFigure extends SplineConnection {
 
 	public ECTransitionFigure(final ECTransition ecTransition) {
 		setAntialias(SWT.ON);
-		setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_TRANSITION_COLOR));
+		setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_TRANSITION_COLOR));
 
 		updateBendPoints(ecTransition);
 

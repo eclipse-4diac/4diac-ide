@@ -15,12 +15,12 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.scoping;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.structuredtextcore.scoping.STCoreImportedNamespaceAwareLocalScopeProvider;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.scoping.impl.ImportNormalizer;
-import org.eclipse.xtext.scoping.impl.ImportedNamespaceAwareLocalScopeProvider;
 
-public class STFunctionImportedNamespaceAwareLocalScopeProvider extends ImportedNamespaceAwareLocalScopeProvider {
+public class STFunctionImportedNamespaceAwareLocalScopeProvider extends STCoreImportedNamespaceAwareLocalScopeProvider {
 	@Override
 	protected List<ImportNormalizer> internalGetImportedNamespaceResolvers(final EObject context,
 			final boolean ignoreCase) {

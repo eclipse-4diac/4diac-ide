@@ -76,6 +76,8 @@ import org.eclipse.fordiac.ide.model.data.DateAndTimeType;
 import org.eclipse.fordiac.ide.model.data.DateType;
 import org.eclipse.fordiac.ide.model.data.DintType;
 import org.eclipse.fordiac.ide.model.data.DwordType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedType;
+import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
 import org.eclipse.fordiac.ide.model.data.IntType;
 import org.eclipse.fordiac.ide.model.data.LdateType;
 import org.eclipse.fordiac.ide.model.data.LdtType;
@@ -616,6 +618,14 @@ public final class ValueOperations {
 				&& second instanceof final AnyBitValue secondAnyBitValue) {
 			return equals(firstAnyBitValue, secondAnyBitValue);
 		}
+		if (first instanceof final AnyIntValue firstAnyIntValue
+				&& second instanceof final AnyBitValue secondAnyBitValue) {
+			return equals(firstAnyIntValue, secondAnyBitValue);
+		}
+		if (first instanceof final AnyBitValue firstAnyBitValue
+				&& second instanceof final AnyIntValue secondAnyIntValue) {
+			return equals(firstAnyBitValue, secondAnyIntValue);
+		}
 		if (first instanceof final AnyCharsValue firstAnyCharsValue
 				&& second instanceof final AnyCharsValue secondAnyCharsValue) {
 			return equals(firstAnyCharsValue, secondAnyCharsValue);
@@ -639,7 +649,7 @@ public final class ValueOperations {
 		case final UintType unused -> first.shortValue() == second.shortValue();
 		case final SintType unused -> first.byteValue() == second.byteValue();
 		case final UsintType unused -> first.byteValue() == second.byteValue();
-		case null, default -> false;
+		case null, default -> first.bigDecimalValue().equals(second.bigDecimalValue());
 		};
 	}
 
@@ -650,8 +660,16 @@ public final class ValueOperations {
 		case final WordType unused -> first.shortValue() == second.shortValue();
 		case final ByteType unused -> first.byteValue() == second.byteValue();
 		case final BoolType unused -> first.boolValue() == second.boolValue();
-		case null, default -> false;
+		case null, default -> first.bigIntegerValue().equals(second.bigIntegerValue());
 		};
+	}
+
+	private static boolean equals(final AnyIntValue first, final AnyBitValue second) {
+		return first.bigIntegerValue().equals(second.bigIntegerValue());
+	}
+
+	private static boolean equals(final AnyBitValue first, final AnyIntValue second) {
+		return first.bigIntegerValue().equals(second.bigIntegerValue());
 	}
 
 	private static boolean equals(final AnyDurationValue first, final AnyDurationValue second) {
@@ -1040,6 +1058,7 @@ public final class ValueOperations {
 		case final AnyElementaryType unused -> DIntValue.DEFAULT;
 		case final ArrayType arrayType -> new ArrayValue(arrayType);
 		case final StructuredType structType -> new StructValue(structType);
+		case final EnumeratedType enumeratedType -> new EnumValue(enumeratedType);
 		case final AnyType unused -> DIntValue.DEFAULT;
 		case final FBType fbType -> new FBValue(fbType);
 		default -> throw createUnsupportedTypeException(type);
@@ -1346,6 +1365,7 @@ public final class ValueOperations {
 		// AnyElementaryType
 		case final ArrayType arrayType -> new ArrayValue(arrayType, (List<?>) value);
 		case final StructuredType structType -> new StructValue(structType, castMemberMap((Map<?, ?>) value));
+		case final EnumeratedType enumeratedType -> new EnumValue((EnumeratedValue) value);
 		case final AnyType unused -> switch (value) {
 		case final Byte byteValue -> toSIntValue(byteValue);
 		case final Short shortValue -> toIntValue(shortValue);
@@ -1421,6 +1441,7 @@ public final class ValueOperations {
 		case final AnyElementaryType unused -> AnyElementaryValue.class;
 		case final ArrayType unused -> ArrayValue.class;
 		case final StructuredType unused -> StructValue.class;
+		case final EnumeratedType unused -> EnumValue.class;
 		case final AnyDerivedType unused -> AnyDerivedValue.class;
 		case final AnyType unused -> AnyValue.class;
 		case null, default -> null;
@@ -1476,6 +1497,7 @@ public final class ValueOperations {
 		case "AnyElementaryValue" -> GenericTypes.ANY_ELEMENTARY; //$NON-NLS-1$
 		case "ArrayValue" -> GenericTypes.ANY_DERIVED; //$NON-NLS-1$
 		case "StructValue" -> GenericTypes.ANY_STRUCT; //$NON-NLS-1$
+		case "EnumValue" -> GenericTypes.ANY_DERIVED; //$NON-NLS-1$
 		case "AnyDerivedValue" -> GenericTypes.ANY_DERIVED; //$NON-NLS-1$
 		case "AnyValue" -> GenericTypes.ANY; //$NON-NLS-1$
 		case null, default -> null;

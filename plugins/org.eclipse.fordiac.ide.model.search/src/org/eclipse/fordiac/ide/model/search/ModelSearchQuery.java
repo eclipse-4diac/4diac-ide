@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorPrepareException;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -43,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -55,16 +57,20 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.search2.internal.ui.SearchView;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 
 public class ModelSearchQuery implements ISearchQuery {
 
 	private final ModelQuerySpec modelQuerySpec;
 	private final ModelSearchPattern pattern;
 	private ModelSearchResult searchResult;
+	private boolean isIncompleteResult = false; // errors in resolved st code
 
 	public ModelSearchQuery(final ModelQuerySpec modelQuerySpec) {
 		this.modelQuerySpec = modelQuerySpec;
@@ -84,12 +90,19 @@ public class ModelSearchQuery implements ISearchQuery {
 		Display.getDefault()
 				.asyncExec(() -> ((SearchView) NewSearchUI.getSearchResultView()).showSearchResult(getSearchResult()));
 
+		if (isIncompleteResult) {
+			Display.getDefault()
+					.asyncExec(() -> MessageDialog.openWarning(
+							PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+							Messages.STSearchErrorDialog_Title, Messages.STSearchErrorDialog_Body));
+		}
+
 		return Status.OK_STATUS;
 	}
 
 	private List<ISearchContext> getSearchContexts() {
-		if (modelQuerySpec.getScope() == SearchScope.PROJECT && modelQuerySpec.getProject() != null) {
-			return Arrays.asList(new LiveSearchContext(modelQuerySpec.getProject()));
+		if (modelQuerySpec.scope() == SearchScope.PROJECT && modelQuerySpec.project() != null) {
+			return Arrays.asList(new LiveSearchContext(modelQuerySpec.project()));
 		}
 		// workspace scope
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
@@ -103,8 +116,12 @@ public class ModelSearchQuery implements ISearchQuery {
 				final LibraryElement libraryElement = context.getLibraryElement(libraryElementURI);
 				if (libraryElement instanceof final AutomationSystem sys) {
 					searchSystem(sys, monitor);
-				} else if (matchTypeEntry(libraryElement, monitor)) {
-					searchResult.addResult(libraryElement);
+				} else if (libraryElement != null) {
+					if (matchTypeEntry(libraryElement, monitor)) {
+						searchResult.addResult(libraryElement);
+					}
+				} else {
+					FordiacLogHelper.logWarning("Could not load model for: " + libraryElementURI.toString()); ////$NON-NLS-1$
 				}
 			});
 		}
@@ -164,7 +181,7 @@ public class ModelSearchQuery implements ISearchQuery {
 				searchFBNetwork(subApp.getSubAppNetwork(), path, monitor);
 			}
 			if (fbnetworkElement.getInterface() != null) {
-				if (modelQuerySpec.isCheckedPinName()) {
+				if (modelQuerySpec.checkPinName()) {
 					final List<IInterfaceElement> matchingPins = fbnetworkElement.getInterface()
 							.getAllInterfaceElements().stream()
 							.filter(pin -> pin.getName() != null && compareStrings(pin.getName())).toList();
@@ -175,7 +192,7 @@ public class ModelSearchQuery implements ISearchQuery {
 						searchResult.addResults(matchingPins);
 					}
 				}
-				if (modelQuerySpec.isCheckedType()) {
+				if (modelQuerySpec.checkType()) {
 					searchInterface(fbnetworkElement.getInterface(), monitor);
 				}
 			}
@@ -273,21 +290,24 @@ public class ModelSearchQuery implements ISearchQuery {
 
 	private boolean matchEObject(final INamedElement modelElement, final IProgressMonitor monitor) {
 		SearchCanceledException.throwIfCanceled(monitor);
-		if (modelQuerySpec.isCheckedInstanceName()) {
+		if (modelQuerySpec.checkInstanceName()) {
 			final String name = modelElement.getName();
 			final boolean matchInstanceName = name != null && compareStrings(name);
 			if (matchInstanceName) {
 				return true;
 			}
 		}
-		if (modelQuerySpec.isCheckedComment()) {
+		if (modelQuerySpec.checkComments()) {
 			final String comment = modelElement.getComment();
 			final boolean matchComment = comment != null && compareStrings(comment);
 			if (matchComment) {
 				return true;
 			}
 		}
-		if (modelQuerySpec.isCheckedType()) {
+		if (modelQuerySpec.checkType()) {
+			if (modelElement instanceof FunctionFBType) {
+				return matchInST(modelElement);
+			}
 			if (modelElement instanceof final TypedConfigureableObject config) {
 				return compareStrings(config.getTypeName())
 						|| (config.getTypeEntry() != null && compareStrings(config.getTypeEntry().getFullTypeName()));
@@ -311,10 +331,14 @@ public class ModelSearchQuery implements ISearchQuery {
 	private boolean matchInST(final INamedElement modelElement) {
 		final String text = getImplText(modelElement);
 		if (text == null || pattern.preScanST(text)) {
-			for (final String fqn : VariableOperations.getAllDependencies(modelElement)) {
-				if (compareStrings(fqn)) {
-					return true;
+			try {
+				for (final String fqn : VariableOperations.getAllDependencies(modelElement)) {
+					if (compareStrings(fqn)) {
+						return true;
+					}
 				}
+			} catch (final EvaluatorPrepareException e) {
+				isIncompleteResult = true;
 			}
 		}
 		return false;
@@ -340,18 +364,18 @@ public class ModelSearchQuery implements ISearchQuery {
 		if (pattern.matchSearchString(toTest)) {
 			return true;
 		}
-		if (modelQuerySpec.isCheckExactMatching()) {
-			return toTest.equals(modelQuerySpec.getSearchString());
+		if (modelQuerySpec.checkExactMatching()) {
+			return toTest.equals(modelQuerySpec.searchString());
 		}
-		if (modelQuerySpec.isCheckCaseSensitive()) {
-			return toTest.contains(modelQuerySpec.getSearchString());
+		if (modelQuerySpec.checkCaseSensitive()) {
+			return toTest.contains(modelQuerySpec.searchString());
 		}
-		return toTest.toLowerCase().contains(modelQuerySpec.getSearchString().toLowerCase());
+		return toTest.toLowerCase().contains(modelQuerySpec.searchString().toLowerCase());
 	}
 
 	@Override
 	public String getLabel() {
-		return modelQuerySpec.getSearchString();
+		return modelQuerySpec.searchString();
 	}
 
 	@Override

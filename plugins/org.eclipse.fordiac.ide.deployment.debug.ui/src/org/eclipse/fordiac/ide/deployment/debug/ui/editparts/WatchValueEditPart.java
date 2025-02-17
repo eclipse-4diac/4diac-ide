@@ -22,7 +22,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.ui.editparts;
 
-import static org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants.DIAGRAM_FONT;
+import static org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants.DIAGRAM_FONT;
 
 import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.IFigure;
@@ -38,12 +38,11 @@ import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.FontMetrics;
@@ -169,9 +168,7 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 
 	protected static int getMaxWidth() {
 		if (maxLabelWidth == -1) {
-			final IPreferenceStore preferenceStore = org.eclipse.fordiac.ide.gef.Activator.getDefault()
-					.getPreferenceStore();
-			final int maxLabelSize = preferenceStore.getInt(DiagramPreferences.MAX_VALUE_LABEL_SIZE);
+			final int maxLabelSize = GefPreferenceConstants.STORE.getInt(GefPreferenceConstants.MAX_VALUE_LABEL_SIZE);
 			final FontMetrics fm = FigureUtilities.getFontMetrics(JFaceResources.getFontRegistry().get(DIAGRAM_FONT));
 			maxLabelWidth = (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth()) + 2 * MONITORING_VALUE_LR_MARGIN;
 		}

@@ -19,6 +19,9 @@ public class ImportTransfer extends SimpleObjectTransfer {
 	private static final String TYPE_NAME = "org.eclipse.4diac.clipboard.transfer.imports"; //$NON-NLS-1$
 	private static final int TYPE_ID = registerType(TYPE_NAME);
 
+	private ImportTransfer() {
+	}
+
 	public static ImportTransfer getInstance() {
 		return INSTANCE;
 	}

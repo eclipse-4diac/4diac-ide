@@ -53,15 +53,55 @@ class STFunctionQuickfixTest extends AbstractQuickfixTest {
 				VAR_TEMP
 					X : INT;
 				END_VAR
-				X := DINT_TO_INT(12345678);
+				X := DINT_TO_INT(1234);
 				END_FUNCTION
 				""", STCoreValidator.UNNECESSARY_LITERAL_CONVERSION,
-				new Quickfix("Remove unnecessary literal conversion", "Replace with result '24910'", """
+				new Quickfix("Remove literal conversion", "Replace with result '1234'", """
+						FUNCTION TEST
+						VAR_TEMP
+							X : INT;
+						END_VAR
+						X := 1234;
+						END_FUNCTION
+								"""));
+	}
+
+	@Test
+	void fixTruncatingLiteralConversion() {
+		testQuickfixesOn("""
+				FUNCTION TEST
+				VAR_TEMP
+					X : INT;
+				END_VAR
+				X := DINT_TO_INT(12345678);
+				END_FUNCTION
+				""", STCoreValidator.TRUNCATING_LITERAL_CONVERSION,
+				new Quickfix("Remove literal conversion", "Replace with result '24910'", """
 						FUNCTION TEST
 						VAR_TEMP
 							X : INT;
 						END_VAR
 						X := 24910;
+						END_FUNCTION
+								"""));
+	}
+
+	@Test
+	void fixTruncatingUnsignedLiteralConversion() {
+		testQuickfixesOn("""
+				FUNCTION TEST
+				VAR_TEMP
+					X : INT;
+				END_VAR
+				X := UINT_TO_INT(16#8000);
+				END_FUNCTION
+				""", STCoreValidator.TRUNCATING_LITERAL_CONVERSION,
+				new Quickfix("Remove literal conversion", "Replace with result '-32768'", """
+						FUNCTION TEST
+						VAR_TEMP
+							X : INT;
+						END_VAR
+						X := -32768;
 						END_FUNCTION
 								"""));
 	}

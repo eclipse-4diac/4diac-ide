@@ -19,7 +19,9 @@ package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,7 +29,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
@@ -46,13 +48,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class FlattenSubAppCommand extends Command implements ScopedCommand {
+public class FlattenSubAppCommand extends Command implements QualNameAffectedCommand {
 	private final SubApp subapp;
 	private final FBNetwork parentNetwork;
 	private final List<FBNetworkElement> elements = new ArrayList<>();
@@ -66,6 +69,8 @@ public class FlattenSubAppCommand extends Command implements ScopedCommand {
 	private final CompoundCommand setUniqueName = new CompoundCommand();
 	private final Position fbnetworkPosInSubapp;
 	private boolean select = true;
+	private final Map<INamedElement, String> oldQualNames = new HashMap<>();
+	private final Map<INamedElement, String> newQualNames = new HashMap<>();
 
 	public FlattenSubAppCommand(final SubApp subapp) {
 		super(Messages.FlattenSubAppCommand_LABEL_FlattenSubAppCommand);
@@ -83,6 +88,7 @@ public class FlattenSubAppCommand extends Command implements ScopedCommand {
 	@Override
 	public void execute() {
 		elements.addAll(subapp.getSubAppNetwork().getNetworkElements());
+		elements.forEach(e -> oldQualNames.put(e, e.getQualifiedName()));
 		elementsToMove.addAll(elements.stream().filter(el -> !el.isInGroup()).toList());
 		// add elements to parent
 		FBNetworkHelper.moveFBNetworkByOffset(elementsToMove, -getOriginalPositionX(), -getOriginalPositionY());
@@ -116,6 +122,7 @@ public class FlattenSubAppCommand extends Command implements ScopedCommand {
 		if (select) {
 			ElementSelector.selectViewObjects(elementsToMove);
 		}
+		elements.forEach(e -> newQualNames.put(e, e.getQualifiedName()));
 	}
 
 	private void ensureUniqueName(final FBNetworkElement element) {
@@ -259,5 +266,20 @@ public class FlattenSubAppCommand extends Command implements ScopedCommand {
 	@Override
 	public Set<EObject> getAffectedObjects() {
 		return Set.of(parentNetwork);
+	}
+
+	@Override
+	public String getOldQualName(final INamedElement element) {
+		return oldQualNames.get(element);
+	}
+
+	@Override
+	public String getNewQualName(final INamedElement element) {
+		return newQualNames.get(element);
+	}
+
+	@Override
+	public List<INamedElement> getChangedElements() {
+		return new ArrayList<>(elements);
 	}
 }

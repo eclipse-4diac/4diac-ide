@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.IFileEditorInput;
 
 /** @author mjobst */
 public abstract class LaunchShortcut implements ILaunchShortcut2 {
@@ -43,6 +43,9 @@ public abstract class LaunchShortcut implements ILaunchShortcut2 {
 	}
 
 	public void launch(final IResource resource, final String mode) {
+		if (resource == null) {
+			return;
+		}
 		try {
 			final ILaunchConfiguration[] configurations = getLaunchConfgurations(resource);
 			if (configurations == null) {
@@ -120,7 +123,7 @@ public abstract class LaunchShortcut implements ILaunchShortcut2 {
 
 	@Override
 	public IResource getLaunchableResource(final IEditorPart editorpart) {
-		if (editorpart.getEditorInput() instanceof final FileEditorInput fileEditorInput) {
+		if (editorpart.getEditorInput() instanceof final IFileEditorInput fileEditorInput) {
 			return fileEditorInput.getFile();
 		}
 		return null;

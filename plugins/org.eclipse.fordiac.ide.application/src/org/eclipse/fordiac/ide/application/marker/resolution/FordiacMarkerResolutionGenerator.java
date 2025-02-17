@@ -13,6 +13,8 @@
  *    - initial API and implementation and/or initial documentation
  *   Martin Erich Jobst
  *    - add resolutions for configurable FBs
+ *   Paul Stemmer
+ *    - add resolutions for Attributes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.marker.resolution;
 
@@ -29,6 +31,9 @@ public class FordiacMarkerResolutionGenerator implements IMarkerResolutionGenera
 	@Override
 	public IMarkerResolution[] getResolutions(final IMarker marker) {
 		return switch (FordiacErrorMarker.getCode(marker)) {
+		case LibraryElementValidator.ATTRIBUTE__VALIDATE_ATTRIBUTE_DECLARATION -> Stream.concat(
+				Stream.of(new CreateAttributeMarkerResolution(marker), new ChangeAttributeMarkerResolution(marker)),
+				BestFitAttributeMarkerResolution.createResolutions(marker)).toArray(IMarkerResolution[]::new);
 		case LibraryElementValidator.ITYPED_ELEMENT__VALIDATE_TYPE,
 				LibraryElementValidator.CONFIGURABLE_FB__VALIDATE_DATA_TYPE ->
 			Stream.concat(
@@ -47,6 +52,7 @@ public class FordiacMarkerResolutionGenerator implements IMarkerResolutionGenera
 		return LibraryElementValidator.DIAGNOSTIC_SOURCE.equals(FordiacErrorMarker.getSource(marker))
 				&& (LibraryElementValidator.ITYPED_ELEMENT__VALIDATE_TYPE == code
 						|| LibraryElementValidator.TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE == code
-						|| LibraryElementValidator.CONFIGURABLE_FB__VALIDATE_DATA_TYPE == code);
+						|| LibraryElementValidator.CONFIGURABLE_FB__VALIDATE_DATA_TYPE == code
+						|| LibraryElementValidator.ATTRIBUTE__VALIDATE_ATTRIBUTE_DECLARATION == code);
 	}
 }

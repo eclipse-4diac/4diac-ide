@@ -1,0 +1,77 @@
+/*******************************************************************************
+ * Copyright (c) 2024 Felix Schmid
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Felix Schmid
+ *     - initial implementation and/or documentation
+ *******************************************************************************/
+module org.eclipse.fordiac.ide.GenerateContractSpec
+
+import org.eclipse.xtext.xtext.generator.*
+import org.eclipse.xtext.xtext.generator.model.project.*
+
+var rootPath = ".."
+
+Workflow {
+	
+	component = XtextGenerator {
+		configuration = {
+			project = StandardProjectConfig {
+				baseName = "org.eclipse.fordiac.ide.contractspec"
+				rootPath = rootPath
+				runtimeTest = {
+					enabled = true
+				}
+				eclipsePlugin = {
+					enabled = true
+				}
+				eclipsePluginTest = {
+					enabled = true
+				}
+				createEclipseMetaData = true
+			}
+			code = {
+				encoding = "UTF-8"
+				lineDelimiter = "\r\n"
+				fileHeader = "/*******************************************************************************
+ * Copyright (c) 2024 Felix Schmid
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Felix Schmid
+ *     - initial implementation and/or documentation
+ *******************************************************************************/"
+				preferXtendStubs = false
+			}
+		}
+		language = StandardLanguage {
+			name = "org.eclipse.fordiac.ide.ContractSpec"
+			fileExtensions = "contract"
+
+			serializer = {
+				generateStub = false
+			}
+			validator = {
+				// Generates checks for @Deprecated grammar annotations, an IssueProvider and a corresponding PropertyPage
+				generateDeprecationValidation = true
+			}
+			generator = {
+				generateXtendStub = true
+			}
+			junitSupport = {
+				junitVersion = "5"
+			}
+		}
+	}
+}

@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -66,6 +67,21 @@ public class VarDeclarationAnnotations {
 		return true;
 	}
 
+	public static boolean validateNoValueForVariableLengthArrayVariable(final VarDeclaration varDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (varDeclaration.isArray() && hasValue(varDeclaration)
+				&& TypeDeclarationParser.isVariableArrayBounds(varDeclaration.getArraySize().getValue())) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_VARIABLE_LENGTH_ARRAY_VARIABLE,
+						Messages.VarDeclarationAnnotations_MustNotSpecifyValueForVariableWithVariableArrayBounds,
+						FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
+			}
+			return false;
+		}
+		return true;
+	}
+
 	public static boolean validateValueForGenericInstanceVariable(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isIsInput() && varDeclaration.getInputConnections().isEmpty()
@@ -87,7 +103,8 @@ public class VarDeclarationAnnotations {
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isInOutVar() && varDeclaration.isIsInput() && varDeclaration.getFBNetworkElement() != null
 				&& varDeclaration.getInputConnections().isEmpty()
-				&& ((varDeclaration.isArray() && varDeclaration.getArraySize().getValue().contains("*")) //$NON-NLS-1$
+				&& ((varDeclaration.isArray()
+						&& TypeDeclarationParser.isVariableArrayBounds(varDeclaration.getArraySize().getValue()))
 						|| GenericTypes.isAnyType(varDeclaration.getType()))) {
 			// We have a VarInOut input on a FB instance which is an array of variable
 			// length or an ANY variable, so its not well defined

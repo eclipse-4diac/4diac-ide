@@ -125,6 +125,26 @@ class TypeDeclarationParserTest {
 		assertFalse(TypeDeclarationParser.isSimpleTypeDeclaration("(()))")); //$NON-NLS-1$
 	}
 
+	@Test
+	void testCheckVariableArrayBounds() {
+		assertFalse(TypeDeclarationParser.isVariableArrayBounds(null));
+		assertFalse(TypeDeclarationParser.isVariableArrayBounds("")); //$NON-NLS-1$
+		assertFalse(TypeDeclarationParser.isVariableArrayBounds("17")); //$NON-NLS-1$
+		assertFalse(TypeDeclarationParser.isVariableArrayBounds("17, 4")); //$NON-NLS-1$
+		assertFalse(TypeDeclarationParser.isVariableArrayBounds("17 + 4 * 2, 42")); //$NON-NLS-1$
+
+		assertFalse(TypeDeclarationParser.isVariableArrayBounds("0..17")); //$NON-NLS-1$
+		assertFalse(TypeDeclarationParser.isVariableArrayBounds("-10..10")); //$NON-NLS-1$
+		assertFalse(TypeDeclarationParser.isVariableArrayBounds("0..17,21..42")); //$NON-NLS-1$
+
+		assertFalse(TypeDeclarationParser.isVariableArrayBounds("0..17*4")); //$NON-NLS-1$
+		assertFalse(TypeDeclarationParser.isVariableArrayBounds("0..17*4, 1..VAR")); //$NON-NLS-1$
+
+		assertTrue(TypeDeclarationParser.isVariableArrayBounds("*")); //$NON-NLS-1$
+		assertTrue(TypeDeclarationParser.isVariableArrayBounds("*,*")); //$NON-NLS-1$
+		assertTrue(TypeDeclarationParser.isVariableArrayBounds("0..17, *")); //$NON-NLS-1$
+	}
+
 	protected void assertTypeNameEquals(final String expected, final DataType type) {
 		assertNotNull(type);
 		assertEquals(expected, type.getName());

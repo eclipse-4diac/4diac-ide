@@ -13,18 +13,22 @@
 package org.eclipse.fordiac.ide.debug.fb;
 
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.value.DateAndTimeValueConverter;
+import org.eclipse.fordiac.ide.model.value.TimeValueConverter;
 
 public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttributes {
 	String ID = "org.eclipse.fordiac.ide.debug.fbLaunch"; //$NON-NLS-1$
@@ -33,8 +37,9 @@ public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttr
 	String KEEP_RUNNING_WHEN_IDLE = "org.eclipse.fordiac.ide.debug.keepRunningWhenIdle"; //$NON-NLS-1$
 
 	String CLOCK_MODE = "org.eclipse.fordiac.ide.debug.clockMode"; //$NON-NLS-1$
-
-	String CLOCK_INTERVAL = "org.eclipse.fordiac.ide.debug.debugTime"; //$NON-NLS-1$
+	String CLOCK_INTERVAL = "org.eclipse.fordiac.ide.debug.clockInterval"; //$NON-NLS-1$
+	String CLOCK_REALTIME_OFFSET = "org.eclipse.fordiac.ide.debug.clockRealtimeOffset"; //$NON-NLS-1$
+	String CLOCK_MONOTONIC_OFFSET = "org.eclipse.fordiac.ide.debug.clockMonotonicOffset"; //$NON-NLS-1$
 
 	static Event getEvent(final ILaunchConfiguration configuration, final FBType type, final Event defaultEvent)
 			throws CoreException {
@@ -62,35 +67,63 @@ public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttr
 	}
 
 	static FBDebugClockMode getClockMode(final ILaunchConfiguration configuration) throws CoreException {
-		return FBDebugClockMode.fromString(configuration.getAttribute(CLOCK_MODE, (String) null));
-	}
-
-	static boolean isSystem(final ILaunchConfiguration configuration) throws CoreException {
-		return FBDebugClockMode.SYSTEM.equals(getClockMode(configuration));
-	}
-
-	static boolean isIncrement(final ILaunchConfiguration configuration) throws CoreException {
-		return FBDebugClockMode.INCREMENT.equals(getClockMode(configuration));
-	}
-
-	static boolean isManual(final ILaunchConfiguration configuration) throws CoreException {
-		return FBDebugClockMode.MANUAL.equals(getClockMode(configuration));
+		final String modeAttribute = configuration.getAttribute(CLOCK_MODE, (String) null);
+		if (modeAttribute != null) {
+			try {
+				return FBDebugClockMode.valueOf(modeAttribute);
+			} catch (final IllegalArgumentException e) {
+				throw new CoreException(Status.error("Invalid value for clock mode")); //$NON-NLS-1$
+			}
+		}
+		return FBDebugClockMode.SYSTEM;
 	}
 
 	static Duration getClockInterval(final ILaunchConfiguration configuration) throws CoreException {
-		final var debugtime = getClockIntervalText(configuration);
-		if (debugtime != null) {
+		final var value = configuration.getAttribute(CLOCK_INTERVAL, (String) null);
+		if (value != null) {
 			try {
-				final long value = Long.parseLong(debugtime);
-				return Duration.of(value, ChronoUnit.MILLIS);
-			} catch (final NumberFormatException | ArithmeticException e) {
-				throw new IllegalStateException("Debug clock interval is not accepted!"); //$NON-NLS-1$
+				return TimeValueConverter.INSTANCE.toValue(value);
+			} catch (final IllegalArgumentException e) {
+				throw new CoreException(Status.error("Invalid value for clock interval", e)); //$NON-NLS-1$
 			}
 		}
 		return Duration.ZERO;
 	}
 
+	static Instant getClockRealtimeOffset(final ILaunchConfiguration configuration) throws CoreException {
+		final var value = configuration.getAttribute(CLOCK_REALTIME_OFFSET, (String) null);
+		if (value != null) {
+			try {
+				return DateAndTimeValueConverter.INSTANCE.toValue(value).toInstant(ZoneOffset.UTC);
+			} catch (final IllegalArgumentException e) {
+				throw new CoreException(Status.error("Invalid value for clock monotonic offset", e)); //$NON-NLS-1$
+			}
+		}
+		return Instant.EPOCH;
+	}
+
+	static Instant getClockMonotonicOffset(final ILaunchConfiguration configuration) throws CoreException {
+		final var value = configuration.getAttribute(CLOCK_MONOTONIC_OFFSET, (String) null);
+		if (value != null) {
+			try {
+				final Duration duration = TimeValueConverter.INSTANCE.toValue(value);
+				return Instant.ofEpochSecond(duration.getSeconds(), duration.getNano());
+			} catch (final IllegalArgumentException e) {
+				throw new CoreException(Status.error("Invalid value for clock monotonic offset", e)); //$NON-NLS-1$
+			}
+		}
+		return Instant.EPOCH;
+	}
+
 	static String getClockIntervalText(final ILaunchConfiguration configuration) throws CoreException {
-		return configuration.getAttribute(CLOCK_INTERVAL, "0");
+		return configuration.getAttribute(CLOCK_INTERVAL, "1s"); //$NON-NLS-1$
+	}
+
+	static String getClockRealtimeOffsetText(final ILaunchConfiguration configuration) throws CoreException {
+		return configuration.getAttribute(CLOCK_REALTIME_OFFSET, "1970-01-01-00:00:00.000"); //$NON-NLS-1$
+	}
+
+	static String getClockMonotonicOffsetText(final ILaunchConfiguration configuration) throws CoreException {
+		return configuration.getAttribute(CLOCK_MONOTONIC_OFFSET, "0s"); //$NON-NLS-1$
 	}
 }

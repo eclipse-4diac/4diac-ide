@@ -62,12 +62,16 @@ public final class Messages extends NLS {
 	public static String DataTypeImporter_UNSUPPORTED_DATATYPE_IN_FILE;
 	public static String DataTypeLibrary_InvalidMaxLengthInStringType;
 	public static String DataTypeLibrary_MissingDatatype;
+	public static String EnumValueConverter_NoSuchValue;
+
 	public static String Error_RecursiveType;
 	public static String Error_SelfInsertion;
 	public static String ErrorMarkerInterfaceAnnotations_MissingVariableForAttribute;
+	public static String AttributeAnnotations_MissingAttributeDeclaration;
 
 	public static String ErrorMarkerInterfaceAnnotations_MissingVariableForValue;
 	public static String FBNetworkAnnotations_CollisionMessage;
+	public static String FBNetworkAnnotations_InterfaceBarCollisionMessage;
 
 	public static String FBTImporter_ADAPTER_DECLARATION_TYPE_EXCEPTION;
 	public static String FBTImporter_ECTRANASITION_CONDITION_EXCEPTION;
@@ -131,6 +135,8 @@ public final class Messages extends NLS {
 	public static String VALIDATOR_UnevenlyQuotedStringLiteral;
 	public static String VALIDATOR_UNKNOWN_LITERAL_TYPE;
 	public static String VarDeclarationAnnotations_MultipleInputConnections;
+
+	public static String VarDeclarationAnnotations_MustNotSpecifyValueForVariableWithVariableArrayBounds;
 
 	public static String VarDeclarationAnnotations_ShouldNotSpecifyValueForGenericVariableInType;
 

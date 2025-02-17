@@ -30,8 +30,8 @@ public class VariableEditorConfiguration extends AbstractRegistryConfiguration {
 
 	@Override
 	public void configureRegistry(final IConfigRegistry configRegistry) {
-		configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, new VariableCellEditor(dataProvider),
-				DisplayMode.EDIT, VARIABLE_VALUE_CELL);
+		configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR,
+				new VariableCellEditor(dataProvider, true), DisplayMode.EDIT, VARIABLE_VALUE_CELL);
 		configRegistry.registerConfigAttribute(EditConfigAttributes.DATA_VALIDATOR,
 				new VariableDataValidator(dataProvider), DisplayMode.EDIT, VARIABLE_VALUE_CELL);
 	}

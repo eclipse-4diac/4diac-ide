@@ -49,6 +49,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -444,6 +445,8 @@ public abstract class CommonElementImporter {
 				if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
 					attribute.setAttributeDeclaration(attributeTypeEntry.getType());
 					attribute.setType(attributeTypeEntry.getType().getType());
+				} else {
+					FordiacMarkerHelper.createAttributeErrorMarker(attribute, typeLibrary);
 				}
 			}
 		}

@@ -30,7 +30,10 @@ public class RefactorElementPropertyTester extends PropertyTester {
 		if (element instanceof final EditPart editPart) {
 			return isSupported(editPart.getModel());
 		}
-		return (element instanceof IInterfaceElement && !(element instanceof ErrorMarkerInterface))
-				|| (element instanceof final FB fb && fb.eContainer() instanceof BaseFBType);
+
+		return ((element instanceof final IInterfaceElement ie && !(element instanceof ErrorMarkerInterface))
+				&& (ie.getFBNetworkElement() instanceof final FB fb
+						&& !fb.getType().getTypeEntry().getFile().isReadOnly()))
+				|| (element instanceof final FB fbb && fbb.eContainer() instanceof BaseFBType);
 	}
 }

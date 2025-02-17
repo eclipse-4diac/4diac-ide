@@ -13,10 +13,13 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.xtext.ide.serializer.IEmfResourceChange;
 import org.eclipse.xtext.ide.serializer.impl.EObjectDescriptionDeltaProvider.Deltas;
 import org.eclipse.xtext.ide.serializer.impl.RelatedXtextResourceUpdater;
+import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.util.IAcceptor;
 
@@ -34,9 +37,17 @@ public class STCoreRelatedXtextResourceUpdater extends RelatedXtextResourceUpdat
 		if (resource instanceof final LibraryElementXtextResource libResource) {
 			importUpdater.updateImports(deltas, libResource.getInternalLibraryElement(),
 					(imp, value) -> changeAcceptor.accept(new ImportedNamespaceChange(imp, value)));
+		} else if (resource instanceof final FordiacTypeResource typeResource) {
+			importUpdater.updateImports(deltas, (LibraryElement) typeResource.getContents().getFirst(),
+					(imp, value) -> changeAcceptor.accept(new ImportedNamespaceChange(imp, value)));
 		}
-		if (resource instanceof XtextResource) {
+		if (resource instanceof final XtextResource xtextResource && hasContents(xtextResource)) {
 			super.applyChange(deltas, changeAcceptor);
 		}
+	}
+
+	protected static boolean hasContents(final XtextResource xtextResource) {
+		final IParseResult parseResult = xtextResource.getParseResult();
+		return parseResult != null && !parseResult.getRootNode().getText().isBlank();
 	}
 }

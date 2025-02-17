@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (c) 2024 Felix Schmid&#xD;&#xA;&#xD;&#xA;This program and the accompanying materials are made available under the&#xD;&#xA;terms of the Eclipse Public License 2.0 which is available at&#xD;&#xA;http://www.eclipse.org/legal/epl-2.0.&#xD;&#xA;&#xD;&#xA;SPDX-License-Identifier: EPL-2.0&#xD;&#xA;&#xD;&#xA;Contributors:&#xD;&#xA;  Felix Schmid&#xD;&#xA;    - initial implementation and/or documentation"
+    modelDirectory="/org.eclipse.fordiac.ide.contractspec/src-gen" modelPluginID="org.eclipse.fordiac.ide.contractspec"
+    forceOverwrite="true" modelName="ContractSpec" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    complianceLevel="11.0" copyrightFields="false" runtimeVersion="2.29">
+  <genPackages prefix="ContractSpec" basePackage="org.eclipse.fordiac.ide" disposableProviderFactory="true"
+      fileExtensions="contract" ecorePackage="ContractSpec.ecore#/">
+    <genClasses ecoreClass="ContractSpec.ecore#//Model">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Model/timeSpec"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

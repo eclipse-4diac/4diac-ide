@@ -36,7 +36,7 @@ import org.eclipse.fordiac.ide.debug.ui.view.figure.FBDebugViewFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor.NullEvaluatorMonitor;
@@ -141,7 +141,7 @@ public class FBDebugViewRootEditPart extends AbstractGraphicalEditPart {
 			protected EditPolicy createChildEditPolicy(final EditPart child) {
 				if (child instanceof AbstractDebugInterfaceValueEditPart) {
 					// we only want to provide selection feedback for debug values
-					return new ModifiedNonResizeableEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1));
+					return new ModifiedNonResizeableEditPolicy(GefPreferenceConstants.CORNER_DIM_HALF, new Insets(1));
 				}
 				return null;
 			}

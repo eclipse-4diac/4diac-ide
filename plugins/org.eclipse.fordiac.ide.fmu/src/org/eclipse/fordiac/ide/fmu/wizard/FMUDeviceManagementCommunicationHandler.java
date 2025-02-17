@@ -38,9 +38,8 @@ import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
-import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.fordiac.ide.fmu.Messages;
-import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferenceConstants;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -327,7 +326,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		try {
 			final String tempFolder = Files.createTempDirectory("temp").toString(); //$NON-NLS-1$
 			final File binariesDirectory = new File(
-					Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH));
+					FMUPreferenceConstants.STORE.getString(FMUPreferenceConstants.P_PATH));
 			if (binariesDirectory.exists() && binariesDirectory.isDirectory()) {
 				if (createTempFoldersAndFiles(tempFolder, outputName, librariesToAdd, shell)) {
 					return tempFolder;
@@ -396,10 +395,10 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 
 		final Map<String, String> librariesToNames = new HashMap<>();
 
-		librariesToNames.put(PreferenceConstants.P_FMU_WIN32, PreferenceConstants.P_FMU_WIN32_LIBRARY);
-		librariesToNames.put(PreferenceConstants.P_FMU_WIN64, PreferenceConstants.P_FMU_WIN64_LIBRARY);
-		librariesToNames.put(PreferenceConstants.P_FMU_LIN32, PreferenceConstants.P_FMU_LIN32_LIBRARY);
-		librariesToNames.put(PreferenceConstants.P_FMU_LIN64, PreferenceConstants.P_FMU_LIN64_LIBRARY);
+		librariesToNames.put(FMUPreferenceConstants.P_FMU_WIN32, FMUPreferenceConstants.P_FMU_WIN32_LIBRARY);
+		librariesToNames.put(FMUPreferenceConstants.P_FMU_WIN64, FMUPreferenceConstants.P_FMU_WIN64_LIBRARY);
+		librariesToNames.put(FMUPreferenceConstants.P_FMU_LIN32, FMUPreferenceConstants.P_FMU_LIN32_LIBRARY);
+		librariesToNames.put(FMUPreferenceConstants.P_FMU_LIN64, FMUPreferenceConstants.P_FMU_LIN64_LIBRARY);
 
 		if (!createNotBinaryFiles(root, shell)) {
 			return false;
@@ -408,8 +407,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		for (final String name : librariesToAdd) {
 			final String libraryName = librariesToNames.get(name);
 			if (!copyLibraries(root + File.separatorChar + BINARIES_FOLDER_NAME + File.separatorChar + name, outputName,
-					Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH)
-							+ File.separatorChar + libraryName,
+					FMUPreferenceConstants.STORE.getString(FMUPreferenceConstants.P_PATH) + File.separatorChar
+							+ libraryName,
 					libraryName.substring(libraryName.indexOf('.')), shell)) {
 				return false;
 			}

@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="CLIENT_1" Comment="Connect to a SERVER_1 Block">
-	<Identification Standard="61499-2" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+<FBType Name="CLIENT_1" Comment="Connect to a SERVER_1 Block" >
+	<Identification Standard="61499-2" Description="Copyright (c) 2017 fortiss GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0  " >
 	</Identification>
 	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-10-25" Remarks="initial API and implementation and/or initial documentation">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="INIT" Type="Event" Comment="Open new connection (QI = TRUE) / Close connection (QI = FALSE)">
+			<Event Name="INIT" Type="EInit" Comment="Open new connection (QI = TRUE) / Close connection (QI = FALSE)" >
 				<With Var="QI"/>
 				<With Var="ID"/>
 			</Event>
-			<Event Name="REQ" Type="Event" Comment="Send data to Server, Request Data from Server">
+			<Event Name="REQ" Type="Event" Comment="Send data to Server, Request Data from Server" >
 				<With Var="QI"/>
 				<With Var="SD_1"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="INITO" Type="Event" Comment="New connection established (QI = TRUE) / connection closed (QI = FALSE)">
+			<Event Name="INITO" Type="EInit" Comment="New connection established (QI = TRUE) / connection closed (QI = FALSE)" >
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
-			<Event Name="CNF" Type="Event" Comment="New data available from Server">
+			<Event Name="CNF" Type="Event" Comment="New data available from Server" >
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 				<With Var="RD_1"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="QI" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="ID" Type="WSTRING" Comment=""/>
-			<VarDeclaration Name="SD_1" Type="ANY" Comment=""/>
+			<VarDeclaration Name="QI" Type="BOOL"/>
+			<VarDeclaration Name="ID" Type="WSTRING"/>
+			<VarDeclaration Name="SD_1" Type="ANY"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="QO" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="STATUS" Type="WSTRING" Comment=""/>
-			<VarDeclaration Name="RD_1" Type="ANY" Comment=""/>
+			<VarDeclaration Name="QO" Type="BOOL"/>
+			<VarDeclaration Name="STATUS" Type="WSTRING"/>
+			<VarDeclaration Name="RD_1" Type="ANY"/>
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="GenericClassName" Value="'GEN_CLIENT'"/>

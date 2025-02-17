@@ -14,10 +14,9 @@
 package org.eclipse.fordiac.ide.fmu.wizard;
 
 import org.eclipse.fordiac.ide.deployment.bootfile.wizard.CreateBootFilesWizardPage;
-import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.fordiac.ide.fmu.Messages;
+import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferenceConstants;
 import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferencePage;
-import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -82,8 +81,8 @@ public class CreateFMUWizardPage extends CreateBootFilesWizardPage {
 		linux64Field = new Button(librariesGroup, SWT.CHECK);
 		storeSelectedLibaries = new Button(librariesGroup, SWT.CHECK);
 		final Button[] buttons = { win32Field, win64Field, linux32Field, linux64Field, storeSelectedLibaries };
-		final String[] preferences = { PreferenceConstants.P_FMU_WIN32, PreferenceConstants.P_FMU_WIN64,
-				PreferenceConstants.P_FMU_LIN32, PreferenceConstants.P_FMU_LIN64,
+		final String[] preferences = { FMUPreferenceConstants.P_FMU_WIN32, FMUPreferenceConstants.P_FMU_WIN64,
+				FMUPreferenceConstants.P_FMU_LIN32, FMUPreferenceConstants.P_FMU_LIN64,
 				Messages.CreateFMUWizardPage_SaveSelectedLibrariesForFutureFMUExports };
 
 		for (int i = 0; i < buttons.length; i++) {
@@ -96,20 +95,20 @@ public class CreateFMUWizardPage extends CreateBootFilesWizardPage {
 
 		// Enable the found libraries
 		for (final String found : FMUPreferencePage.getFoundLibraries()) {
-			if (found.equals(PreferenceConstants.P_FMU_WIN32)) {
+			if (found.equals(FMUPreferenceConstants.P_FMU_WIN32)) {
 				win32Field.setEnabled(true);
-			} else if (found.equals(PreferenceConstants.P_FMU_WIN64)) {
+			} else if (found.equals(FMUPreferenceConstants.P_FMU_WIN64)) {
 				win64Field.setEnabled(true);
-			} else if (found.equals(PreferenceConstants.P_FMU_LIN32)) {
+			} else if (found.equals(FMUPreferenceConstants.P_FMU_LIN32)) {
 				linux32Field.setEnabled(true);
-			} else if (found.equals(PreferenceConstants.P_FMU_LIN64)) {
+			} else if (found.equals(FMUPreferenceConstants.P_FMU_LIN64)) {
 				linux64Field.setEnabled(true);
 			}
 		}
 
 		// Check the selected libraries from preferences
 		for (int i = 0; i < buttons.length; i++) {
-			buttons[i].setSelection(Activator.getDefault().getPreferenceStore().getBoolean(preferences[i]));
+			buttons[i].setSelection(FMUPreferenceConstants.STORE.getBoolean(preferences[i]));
 			buttons[i].addListener(SWT.Selection, e -> updatePageCompletion());
 		}
 

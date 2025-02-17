@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteAttributeCommand;
 import org.eclipse.fordiac.ide.model.data.InternalDataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -244,7 +245,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 
 		protected void proposalAccepted(final IContentProposal proposal) {
 			if (proposal instanceof final ImportContentProposal importProposal
-					&& EcoreUtil.getRootContainer(getType()) instanceof final LibraryElement libraryElement) {
+					&& EcoreUtil.getRootContainer(getType()) instanceof final LibraryElement libraryElement
+					&& !ImportHelper.matchesImports(importProposal.getImportedNamespace(), libraryElement)) {
 				executeCommand(new AddNewImportCommand(libraryElement, importProposal.getImportedNamespace()));
 			}
 		}

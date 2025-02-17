@@ -34,7 +34,7 @@ public final class TypeManagementPreferencesHelper {
 	public static void setupVersionInfo(final LibraryElement type) {
 		final VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
 		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
-				PreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID);
+				TypeManagementPreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID);
 
 		// version
 		setupVersion(versionInfo, store);
@@ -56,15 +56,15 @@ public final class TypeManagementPreferencesHelper {
 	}
 
 	private static void setupVersion(final VersionInfo versionInfo, final IPreferenceStore store) {
-		versionInfo.setVersion(store.getString(PreferenceConstants.P_VERSION));
+		versionInfo.setVersion(store.getString(TypeManagementPreferenceConstants.P_VERSION));
 	}
 
 	private static void setupOrganization(final VersionInfo versionInfo, final IPreferenceStore store) {
-		versionInfo.setOrganization(store.getString(PreferenceConstants.P_ORGANIZATION));
+		versionInfo.setOrganization(store.getString(TypeManagementPreferenceConstants.P_ORGANIZATION));
 	}
 
 	private static void setupAuthor(final VersionInfo versionInfo, final IPreferenceStore store) {
-		versionInfo.setAuthor(store.getString(PreferenceConstants.P_AUTHOR));
+		versionInfo.setAuthor(store.getString(TypeManagementPreferenceConstants.P_AUTHOR));
 	}
 
 	private static void setupDate(final VersionInfo versionInfo) {
@@ -72,7 +72,7 @@ public final class TypeManagementPreferencesHelper {
 	}
 
 	private static void setupRemarks(final VersionInfo versionInfo, final IPreferenceStore store) {
-		versionInfo.setRemarks(store.getString(PreferenceConstants.P_REMARKS));
+		versionInfo.setRemarks(store.getString(TypeManagementPreferenceConstants.P_REMARKS));
 	}
 
 	public static void setupIdentification(final LibraryElement type) {
@@ -84,7 +84,7 @@ public final class TypeManagementPreferencesHelper {
 		}
 
 		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
-				PreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID);
+				TypeManagementPreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID);
 
 		// Standard.
 		setupStandard(identification, store);
@@ -109,29 +109,29 @@ public final class TypeManagementPreferencesHelper {
 
 	public static void setupStandard(final Identification identification, final IPreferenceStore store) {
 		// If the standard is defined and the preference is empty, don't load it
-		if (!(store.getString(PreferenceConstants.P_STANDARD).isEmpty())) {
-			identification.setStandard(store.getString(PreferenceConstants.P_STANDARD));
+		if (!(store.getString(TypeManagementPreferenceConstants.P_STANDARD).isEmpty())) {
+			identification.setStandard(store.getString(TypeManagementPreferenceConstants.P_STANDARD));
 		}
 	}
 
 	public static void setupClassification(final Identification identification, final IPreferenceStore store) {
-		identification.setClassification(store.getString(PreferenceConstants.P_CLASSIFICATION));
+		identification.setClassification(store.getString(TypeManagementPreferenceConstants.P_CLASSIFICATION));
 	}
 
 	public static void setupTypeDomain(final Identification identification, final IPreferenceStore store) {
-		identification.setApplicationDomain(store.getString(PreferenceConstants.P_APPLICATION_DOMAIN));
+		identification.setApplicationDomain(store.getString(TypeManagementPreferenceConstants.P_APPLICATION_DOMAIN));
 	}
 
 	public static void setupFunction(final Identification identification, final IPreferenceStore store) {
-		identification.setFunction(store.getString(PreferenceConstants.P_FUNCTION));
+		identification.setFunction(store.getString(TypeManagementPreferenceConstants.P_FUNCTION));
 	}
 
 	public static void setupType(final Identification identification, final IPreferenceStore store) {
-		identification.setType(store.getString(PreferenceConstants.P_TYPE));
+		identification.setType(store.getString(TypeManagementPreferenceConstants.P_TYPE));
 	}
 
 	public static void setupDescription(final Identification identification, final IPreferenceStore store) {
-		identification.setDescription(store.getString(PreferenceConstants.P_DESCRIPTION));
+		identification.setDescription(store.getString(TypeManagementPreferenceConstants.P_DESCRIPTION));
 	}
 
 }

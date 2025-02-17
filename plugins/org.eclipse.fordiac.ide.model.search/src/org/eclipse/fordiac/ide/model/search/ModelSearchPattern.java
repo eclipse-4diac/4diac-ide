@@ -22,9 +22,9 @@ public class ModelSearchPattern { // extends SearchPattern
 	private final String preScannSTStringPattern;
 
 	public ModelSearchPattern(final ModelQuerySpec modelQuerySpec) {
-		searchPattern = Pattern.compile(convertSearchStringToPattern(modelQuerySpec.getSearchString()));
+		searchPattern = Pattern.compile(convertSearchStringToPattern(modelQuerySpec.searchString()));
 
-		preScannSTStringPattern = generatePreScanSTStringPattern(modelQuerySpec.getSearchString());
+		preScannSTStringPattern = generatePreScanSTStringPattern(modelQuerySpec.searchString());
 		preScannSTPattern = (containsRegex(preScannSTStringPattern))
 				? Pattern.compile(preScannSTStringPattern, Pattern.CASE_INSENSITIVE)
 				: null;

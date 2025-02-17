@@ -106,13 +106,13 @@ public class DeploymentFBEvaluator<T extends FBType> extends FBEvaluator<T> {
 
 	@Override
 	public void evaluate(final Event event) throws EvaluatorException, InterruptedException {
+		prepare();
 		final Event instanceEvent = deploymentData.getFb().getInterface().getEvent(event.getName());
 		if (instanceEvent == null) {
 			throw new EvaluatorException(
 					MessageFormat.format(Messages.DeploymentFBEvaluator_NoSuchInstanceEvent, event.getQualifiedName()),
 					this);
 		}
-		prepare();
 		try {
 			writeVariables(getType().getInterfaceList().getInputVars());
 			writeVariables(getType().getInterfaceList().getInOutVars());

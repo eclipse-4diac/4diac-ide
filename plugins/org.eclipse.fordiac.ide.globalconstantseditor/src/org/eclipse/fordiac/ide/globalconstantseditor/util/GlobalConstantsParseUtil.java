@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource;
 import org.eclipse.fordiac.ide.globalconstantseditor.resource.GlobalConstantsResource;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreParseUtil;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.resource.IResourceFactory;
@@ -60,13 +61,17 @@ public final class GlobalConstantsParseUtil {
 	private static IParseResult parseInternal(final GlobalConstants type, final List<Issue> issues) {
 		final XtextResourceSet resourceSet = (XtextResourceSet) SERVICE_PROVIDER_GCF.get(ResourceSet.class);
 		resourceSet.getLoadOptions().put(ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS, Boolean.TRUE);
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("gcf", //$NON-NLS-1$
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.GLOBAL_CONST_FILE_ENDING.toLowerCase(), //
 				SERVICE_PROVIDER_GCF.get(IResourceFactory.class));
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("GCF", //$NON-NLS-1$
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.GLOBAL_CONST_FILE_ENDING, //
 				SERVICE_PROVIDER_GCF.get(IResourceFactory.class));
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("fct", //$NON-NLS-1$
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.FC_TYPE_FILE_ENDING.toLowerCase(), //
 				SERVICE_PROVIDER_FCT.get(IResourceFactory.class));
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("FCT", //$NON-NLS-1$
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.FC_TYPE_FILE_ENDING, //
 				SERVICE_PROVIDER_FCT.get(IResourceFactory.class));
 		final GlobalConstantsResource resource = (GlobalConstantsResource) SERVICE_PROVIDER_GCF
 				.get(XtextResource.class);

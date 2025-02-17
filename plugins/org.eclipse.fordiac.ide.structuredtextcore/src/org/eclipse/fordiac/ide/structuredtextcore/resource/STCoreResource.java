@@ -170,18 +170,20 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 		if (isSavePlainST(options)) {
 			super.doSave(outputStream, options);
 		} else { // outputStream shall contain full XML for library element
-			final LibraryElement libraryElement = getInternalLibraryElement();
+			final LibraryElement internalLibraryElement = getInternalLibraryElement();
 			// perform checks
-			if (getContents().isEmpty() || libraryElement == null) {
-				throw new IllegalStateException(
+			if (getContents().isEmpty() || !isIncludeInternalLibraryElement() || internalLibraryElement == null) {
+				throw new IOException(
 						"The ST core resource must contain at least one element and have an associated library element"); //$NON-NLS-1$
 			}
+			// copy the internal library element
+			final LibraryElement libraryElement = EcoreUtil.copy(internalLibraryElement);
 			// reconcile
 			reconcile(libraryElement, options);
 			// chain save library element to outputStream
 			try {
 				final FordiacTypeResource typeResource = new FordiacTypeResource(uri);
-				typeResource.getContents().add(EcoreUtil.copy(libraryElement));
+				typeResource.getContents().add(libraryElement);
 				typeResource.save(outputStream, options);
 			} catch (final Exception e) {
 				throw new IOException("Error saving to library element: " + e.getMessage(), e); //$NON-NLS-1$
@@ -203,7 +205,7 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 				}
 			} else {
 				// reparse
-				reparse(text);
+				super.doLoad(new LazyStringInputStream(text, getEncoding()), null);
 				// partition
 				final var partition = partitioner.partition(this);
 				if (partition.isEmpty()) {
@@ -212,6 +214,10 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 				// reconcile
 				reconciler.reconcile(libraryElement, partition);
 			}
+		} catch (final IOException e) {
+			throw e;
+		} catch (final Exception e) {
+			throw new IOException("Cannot reconcile source", e); //$NON-NLS-1$
 		}
 	}
 

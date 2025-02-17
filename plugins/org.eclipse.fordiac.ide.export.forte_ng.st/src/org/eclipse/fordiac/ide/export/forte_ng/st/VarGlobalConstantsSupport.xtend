@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,12 +11,14 @@
  * Contributors:
  *   Martin Melik Merkumians - initial API and implementation and/or initial documentation
  *   Martin Jobst - add ST source as top-level element
+ *                - add STGlobalConstants intermediate element
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstants
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
@@ -29,12 +31,12 @@ import static extension org.eclipse.fordiac.ide.globalconstantseditor.util.Globa
 class VarGlobalConstantsSupport extends StructuredTextSupport {
 	final GlobalConstants globalConstants
 	STGlobalConstsSource source
-	
+
 	new(STGlobalConstsSource source) {
 		this(null as GlobalConstants)
 		this.source = source
 	}
-	
+
 	override prepare() {
 		if (source === null && errors.empty) {
 			source = globalConstants.parse(errors, warnings, infos)
@@ -45,14 +47,14 @@ class VarGlobalConstantsSupport extends StructuredTextSupport {
 	override generate(Map<?, ?> options) throws ExportException {
 		prepare()
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
-			source.generateStructuredTextGlobalVariablesSourceHeader
+			source.constants?.generateStructuredTextGlobalVariablesSourceHeader
 		else
-			source.generateStructuredTextGlobalVariablesSourceImpl
+			source.constants?.generateStructuredTextGlobalVariablesSourceImpl
 	}
 
-	def CharSequence generateStructuredTextGlobalVariablesSourceImpl(STGlobalConstsSource source) {
+	def CharSequence generateStructuredTextGlobalVariablesSourceImpl(STGlobalConstants constants) {
 		val result = new StringBuilder
-		for (block : source.elements) {
+		for (block : constants.elements) {
 			result.append(block.generateStructuredTextGlobalVariablesSourceImpl)
 		}
 		result
@@ -70,9 +72,9 @@ class VarGlobalConstantsSupport extends StructuredTextSupport {
 		const «declaration.generateFeatureTypeName» «declaration.generateFeatureName» = «declaration.defaultValue.generateInitializerExpression»;
 	'''
 
-	def private CharSequence generateStructuredTextGlobalVariablesSourceHeader(STGlobalConstsSource source) {
+	def private CharSequence generateStructuredTextGlobalVariablesSourceHeader(STGlobalConstants constants) {
 		val result = new StringBuilder
-		for (block : source.elements) {
+		for (block : constants.elements) {
 			result.append(block.generateStructuredTextGlobalVariablesSourceHeader)
 		}
 		result
@@ -93,7 +95,10 @@ class VarGlobalConstantsSupport extends StructuredTextSupport {
 	override getDependencies(Map<?, ?> options) {
 		prepare()
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
-			source.elements.flatMap[varDeclarations].map[type].toSet
+			if (source.constants !== null)
+				source.constants.elements.flatMap[varDeclarations].map[type].toSet
+			else
+				emptySet
 		else
 			source.containedDependencies
 	}

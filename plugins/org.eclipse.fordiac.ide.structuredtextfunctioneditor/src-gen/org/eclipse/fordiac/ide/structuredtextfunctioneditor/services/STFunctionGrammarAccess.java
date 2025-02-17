@@ -490,7 +490,8 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STStructInitializerExpression:
-	//    (type=[datatype::StructuredType|QualifiedName] '#' )? '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
+	//    (type=[datatype::StructuredType|QualifiedName] '#')? '(' values+=STStructInitElement (','
+	//    values+=STStructInitElement)* ')';
 	public STCoreGrammarAccess.STStructInitializerExpressionElements getSTStructInitializerExpressionAccess() {
 		return gaSTCore.getSTStructInitializerExpressionAccess();
 	}
@@ -1000,7 +1001,8 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	//    STTimeLiteral |
 	//    STTimeOfDayLiteral |
 	//    STDateAndTimeLiteral |
-	//    STStringLiteral;
+	//    STStringLiteral |
+	//    STEnumLiteral;
 	public STCoreGrammarAccess.STLiteralExpressionsElements getSTLiteralExpressionsAccess() {
 		return gaSTCore.getSTLiteralExpressionsAccess();
 	}
@@ -1123,6 +1125,26 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	
 	public ParserRule getSTStringLiteralRule() {
 		return getSTStringLiteralAccess().getRule();
+	}
+	
+	//STEnumLiteral:
+	//    value=[datatype::EnumeratedValue|EnumValue];
+	public STCoreGrammarAccess.STEnumLiteralElements getSTEnumLiteralAccess() {
+		return gaSTCore.getSTEnumLiteralAccess();
+	}
+	
+	public ParserRule getSTEnumLiteralRule() {
+		return getSTEnumLiteralAccess().getRule();
+	}
+	
+	//EnumValue:
+	//    QualifiedName '#' ID;
+	public STCoreGrammarAccess.EnumValueElements getEnumValueAccess() {
+		return gaSTCore.getEnumValueAccess();
+	}
+	
+	public ParserRule getEnumValueRule() {
+		return getEnumValueAccess().getRule();
 	}
 	
 	//STAnyType:

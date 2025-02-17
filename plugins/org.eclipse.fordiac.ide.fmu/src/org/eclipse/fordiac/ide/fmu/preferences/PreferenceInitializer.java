@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.fmu.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
@@ -30,12 +29,12 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
-		final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(PreferenceConstants.P_PATH, ""); //$NON-NLS-1$
-		store.setDefault(PreferenceConstants.P_FMU_WIN32, false);
-		store.setDefault(PreferenceConstants.P_FMU_WIN64, false);
-		store.setDefault(PreferenceConstants.P_FMU_LIN32, false);
-		store.setDefault(PreferenceConstants.P_FMU_LIN64, false);
+		final IPreferenceStore store = FMUPreferenceConstants.STORE;
+		store.setDefault(FMUPreferenceConstants.P_PATH, ""); //$NON-NLS-1$
+		store.setDefault(FMUPreferenceConstants.P_FMU_WIN32, false);
+		store.setDefault(FMUPreferenceConstants.P_FMU_WIN64, false);
+		store.setDefault(FMUPreferenceConstants.P_FMU_LIN32, false);
+		store.setDefault(FMUPreferenceConstants.P_FMU_LIN64, false);
 	}
 
 }

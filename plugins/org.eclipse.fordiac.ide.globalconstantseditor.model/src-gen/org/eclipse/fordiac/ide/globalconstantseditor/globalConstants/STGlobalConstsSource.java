@@ -19,7 +19,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getImports <em>Imports</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getElements <em>Elements</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getConstants <em>Constants</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage#getSTGlobalConstsSource()
@@ -62,15 +62,25 @@ public interface STGlobalConstsSource extends STSource {
 	EList<STImport> getImports();
 
 	/**
-	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock}.
+	 * Returns the value of the '<em><b>Constants</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Elements</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage#getSTGlobalConstsSource_Elements()
+	 * @return the value of the '<em>Constants</em>' containment reference.
+	 * @see #setConstants(STGlobalConstants)
+	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage#getSTGlobalConstsSource_Constants()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<STVarGlobalDeclarationBlock> getElements();
+	STGlobalConstants getConstants();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getConstants <em>Constants</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Constants</em>' containment reference.
+	 * @see #getConstants()
+	 * @generated
+	 */
+	void setConstants(STGlobalConstants value);
 
 } // STGlobalConstsSource

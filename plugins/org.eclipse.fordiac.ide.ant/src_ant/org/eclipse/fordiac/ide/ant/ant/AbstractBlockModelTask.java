@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023 - 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,6 +19,8 @@ import org.apache.tools.ant.Task;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public abstract class AbstractBlockModelTask extends Task {
@@ -34,27 +36,44 @@ public abstract class AbstractBlockModelTask extends Task {
 	@Override
 	public final void execute() throws BuildException {
 
-		final IProject fordiacProject = ResourcesPlugin.getWorkspace().getRoot().getProject(projectname);
-		if (fordiacProject == null) {
-			throw new BuildException(MessageFormat.format("Project named {0} not in workspace", projectname));//$NON-NLS-1$
-		}
+		final var fordiacProject = getFordiacProject(projectname);
+		final var tl = getTypeLibrary(fordiacProject, projectname);
+		final var te = getTypeEntry(tl, blockname);
+		final FBType fb = getFBType(te, blockname);
 
-		final var tl = TypeLibraryManager.INSTANCE.getTypeLibrary(fordiacProject);
-		if (tl == null) {
-			throw new BuildException(MessageFormat.format("Can not get TypeLib for {0}", projectname)); //$NON-NLS-1$
-		}
+		modifyBlock(fb);
+	}
 
+	protected static FBType getFBType(final FBTypeEntry t, final String blockname) {
+		final var fb = t.copyType();
+		if (fb == null) {
+			throw new BuildException(MessageFormat.format("Can not get FBType for {0}", blockname)); //$NON-NLS-1$
+		}
+		return fb;
+	}
+
+	protected static FBTypeEntry getTypeEntry(final TypeLibrary tl, final String blockname) {
 		final var t = tl.getFBTypeEntry(blockname);
 		if (t == null) {
 			throw new BuildException(MessageFormat.format("Can not get FBTypeEntry for {0}", blockname)); //$NON-NLS-1$
 		}
+		return t;
+	}
 
-		final FBType fb = t.getTypeEditable();
-		if (fb == null) {
-			throw new BuildException(MessageFormat.format("Can not get FBType for {0}", blockname)); //$NON-NLS-1$
+	protected static TypeLibrary getTypeLibrary(final IProject fordiacProject, final String projectname) {
+		final var tl = TypeLibraryManager.INSTANCE.getTypeLibrary(fordiacProject);
+		if (tl == null) {
+			throw new BuildException(MessageFormat.format("Can not get TypeLib for {0}", projectname)); //$NON-NLS-1$
 		}
+		return tl;
+	}
 
-		modifyBlock(fb);
+	protected static IProject getFordiacProject(final String projectname) {
+		final var fordiacProject = ResourcesPlugin.getWorkspace().getRoot().getProject(projectname);
+		if (fordiacProject == null) {
+			throw new BuildException(MessageFormat.format("Project named {0} not in workspace", projectname));//$NON-NLS-1$
+		}
+		return fordiacProject;
 	}
 
 	protected abstract void modifyBlock(final FBType fb);

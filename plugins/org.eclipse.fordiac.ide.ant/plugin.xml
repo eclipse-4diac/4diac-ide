@@ -124,6 +124,14 @@
    <extension
          point="org.eclipse.ant.core.antTasks">
       <antTask
+            class="org.eclipse.fordiac.ide.ant.ant.ResaveTypelib"
+            library="ant_tasks/ant-ant.jar"
+            name="fordiac.resaveTypeLib">
+      </antTask>
+   </extension>
+   <extension
+         point="org.eclipse.ant.core.antTasks">
+      <antTask
             class="org.eclipse.fordiac.ide.ant.ant.ExportProjectLibrary"
             library="ant_tasks/ant-ant.jar"
             name="fordiac.exportProjectLibrary">
