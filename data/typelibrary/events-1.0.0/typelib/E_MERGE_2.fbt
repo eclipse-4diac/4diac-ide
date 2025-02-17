@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="E_MERGE3" Comment="Merge (OR) of three input events" >
-	<Identification Standard="61499-1 Annex A" Function="Output EO is triggered when either EI1 or EI2 is received" Description="Copyright (c) 2017, 2025 fortiss GmbH, HR Agrartechnik GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+<FBType Name="E_MERGE_2" Comment="Merge (OR) of two input events" >
+	<Identification Standard="61499-1 Annex A" Function="Output EO is triggered when either EI1 or EI2 is received" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017" Remarks="initial API and implementation and/or initial documentation">
-	</VersionInfo>
-	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2025-02-12" Remarks="copy from E_MERGE and make a E_MERGE3 in the same way">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="EI1" Type="Event" Comment="First input event" >
 			</Event>
 			<Event Name="EI2" Type="Event" Comment="Second input event" >
-			</Event>
-			<Event Name="EI3" Type="Event" Comment="Third input event" >
 			</Event>
 		</EventInputs>
 		<EventOutputs>
@@ -30,7 +26,6 @@
 			<ECTransition Source="EO" Destination="START" Condition="1" Comment="" x="690" y="805"/>
 			<ECTransition Source="START" Destination="EO" Condition="EI1" Comment="" x="405" y="765"/>
 			<ECTransition Source="START" Destination="EO" Condition="EI2" Comment="" x="910" y="785"/>
-			<ECTransition Source="START" Destination="EO" Condition="EI3" Comment="" x="1106.67" y="780"/>
 		</ECC>
 	</BasicFB>
 </FBType>
