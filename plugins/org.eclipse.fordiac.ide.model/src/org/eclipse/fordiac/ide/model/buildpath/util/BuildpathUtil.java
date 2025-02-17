@@ -316,6 +316,7 @@ public final class BuildpathUtil {
 	private static SourceFolder createExternalSourceFolder(final String name) {
 		final SourceFolder sourceFolder = createSourceFolder(name);
 		sourceFolder.getAttributes().add(createAttribute(BuildpathAttributes.IGNORE_WARNINGS, String.valueOf(true)));
+		sourceFolder.getAttributes().add(createAttribute(BuildpathAttributes.EXPORT, String.valueOf(false)));
 		return sourceFolder;
 	}
 
