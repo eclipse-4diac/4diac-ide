@@ -136,10 +136,14 @@ final class FBNetworkAnnotations {
 			commentLines += parent.getComment().chars().filter(c -> c == '\n').count();
 		}
 
-		// remove space needed for left and right interface bar, and the space needed
-		// for the comment lines and the instance name
-		return new PrecisionDimension(parent.getVisibleWidth() - 2 * FBShapeHelper.getMaxInterfaceBarWidth(),
+		// remove the space needed for the comment lines and the instance name
+		final PrecisionDimension parentSize = new PrecisionDimension(parent.getVisibleWidth(),
 				parent.getVisibleHeight() - (commentLines + 1) * FBShapeHelper.IEC61499_LINE_HEIGHT);
+		if (parent instanceof SubApp) {
+			// for subapps remove space needed for left and right interface bar
+			parentSize.setPreciseWidth(parentSize.preciseWidth() - 2 * FBShapeHelper.getMaxInterfaceBarWidth());
+		}
+		return parentSize;
 	}
 
 	private static Rectangle getElementBounds(final FBNetworkElement element, final double marginLeftRight,
@@ -182,8 +186,8 @@ final class FBNetworkAnnotations {
 	}
 
 	private static Integer internalGetIntPreference(final Object key) {
-		return Integer
-				.valueOf(Platform.getPreferencesService().getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID, (String) key, 0, null));
+		return Integer.valueOf(Platform.getPreferencesService().getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID,
+				(String) key, 0, null));
 	}
 
 	private static boolean isUnfoldedSubapp(final FBNetworkElement parent) {
