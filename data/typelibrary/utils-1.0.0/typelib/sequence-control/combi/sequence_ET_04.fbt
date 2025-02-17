@@ -26,27 +26,26 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="Execution Confirmation" >
+			<Event Name="EO" Type="Event" Comment="Any Event except Reset" >
 				<With Var="STATE_NR"/>
-			</Event>
-			<Event Name="EO_S1" Type="Event">
 				<With Var="DO_S1"/>
-			</Event>
-			<Event Name="EO_S2" Type="Event">
 				<With Var="DO_S2"/>
-			</Event>
-			<Event Name="EO_S3" Type="Event">
 				<With Var="DO_S3"/>
+				<With Var="DO_S4"/>
 			</Event>
-			<Event Name="EO_S4" Type="Event">
+			<Event Name="RO" Type="Event" Comment="Reset Output" >
+				<With Var="STATE_NR"/>
+				<With Var="DO_S1"/>
+				<With Var="DO_S2"/>
+				<With Var="DO_S3"/>
 				<With Var="DO_S4"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="DT_S1_S2" Type="TIME" Comment="State_01 to State_02 timed, set to NO_TIME to disable"  InitialValue="sequence::NO_TIME"/>
-			<VarDeclaration Name="DT_S2_S3" Type="TIME" Comment="State_02 to State_03 timed, set to NO_TIME to disable"  InitialValue="sequence::NO_TIME"/>
-			<VarDeclaration Name="DT_S3_S4" Type="TIME" Comment="State_03 to State_04 timed, set to NO_TIME to disable"  InitialValue="sequence::NO_TIME"/>
-			<VarDeclaration Name="DT_S4_START" Type="TIME" Comment="State_04 to START timed, set to NO_TIME to disable"  InitialValue="sequence::NO_TIME"/>
+			<VarDeclaration Name="DT_S1_S2" Type="TIME" Comment="State_01 to State_02 timed, set to INF_TIME to disable"  InitialValue="sequence::INF_TIME"/>
+			<VarDeclaration Name="DT_S2_S3" Type="TIME" Comment="State_02 to State_03 timed, set to INF_TIME to disable"  InitialValue="sequence::INF_TIME"/>
+			<VarDeclaration Name="DT_S3_S4" Type="TIME" Comment="State_03 to State_04 timed, set to INF_TIME to disable"  InitialValue="sequence::INF_TIME"/>
+			<VarDeclaration Name="DT_S4_START" Type="TIME" Comment="State_04 to START timed, set to INF_TIME to disable"  InitialValue="sequence::INF_TIME"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATE_NR" Type="SINT" Comment="State Number, START = 0, State_01 = 1 and so on. " />
@@ -66,44 +65,43 @@
 			<ECState Name="sState_01" x="2400" y="1600">
 				<ECAction Output="timeOut.STOP"/>
 				<ECAction/>
-				<ECAction Algorithm="State_01_C" Output="CNF"/>
-				<ECAction Algorithm="State_01_E" Output="EO_S1"/>
+				<ECAction Algorithm="State_01_C"/>
+				<ECAction Algorithm="State_01_E" Output="EO"/>
 				<ECAction Output="timeOut.START"/>
 			</ECState>
 			<ECState Name="sState_02" x="2400" y="2400">
 				<ECAction Output="timeOut.STOP"/>
-				<ECAction Algorithm="State_01_X" Output="EO_S1"/>
-				<ECAction Algorithm="State_02_C" Output="CNF"/>
-				<ECAction Algorithm="State_02_E" Output="EO_S2"/>
+				<ECAction Algorithm="State_01_X"/>
+				<ECAction Algorithm="State_02_C"/>
+				<ECAction Algorithm="State_02_E" Output="EO"/>
 				<ECAction Output="timeOut.START"/>
 			</ECState>
 			<ECState Name="sState_03" x="2400" y="3200">
 				<ECAction Output="timeOut.STOP"/>
-				<ECAction Algorithm="State_02_X" Output="EO_S2"/>
-				<ECAction Algorithm="State_03_C" Output="CNF"/>
-				<ECAction Algorithm="State_03_E" Output="EO_S3"/>
+				<ECAction Algorithm="State_02_X"/>
+				<ECAction Algorithm="State_03_C"/>
+				<ECAction Algorithm="State_03_E" Output="EO"/>
 				<ECAction Output="timeOut.START"/>
 			</ECState>
 			<ECState Name="sState_04" x="2400" y="4000">
 				<ECAction Output="timeOut.STOP"/>
-				<ECAction Algorithm="State_03_X" Output="EO_S3"/>
-				<ECAction Algorithm="State_04_C" Output="CNF"/>
-				<ECAction Algorithm="State_04_E" Output="EO_S4"/>
+				<ECAction Algorithm="State_03_X"/>
+				<ECAction Algorithm="State_04_C"/>
+				<ECAction Algorithm="State_04_E" Output="EO"/>
 				<ECAction Output="timeOut.START"/>
 			</ECState>
 			<ECState Name="sState_00" x="2400" y="4800">
 				<ECAction Output="timeOut.STOP"/>
-				<ECAction Algorithm="State_04_X" Output="EO_S4"/>
-				<ECAction Algorithm="State_00_C" Output="CNF"/>
-				<ECAction/>
-				<ECAction/>
+				<ECAction Algorithm="State_04_X"/>
+				<ECAction Algorithm="State_00_C"/>
+				<ECAction Output="EO"/>
 			</ECState>
 			<ECState Name="sRESET" x="-800" y="4800">
 				<ECAction Output="timeOut.STOP"/>
-				<ECAction Algorithm="State_01_X" Output="EO_S1"/>
-				<ECAction Algorithm="State_02_X" Output="EO_S2"/>
-				<ECAction Algorithm="State_03_X" Output="EO_S3"/>
-				<ECAction Algorithm="State_04_X" Output="EO_S4"/>
+				<ECAction Algorithm="State_01_X"/>
+				<ECAction Algorithm="State_02_X"/>
+				<ECAction Algorithm="State_03_X"/>
+				<ECAction Algorithm="State_04_X" Output="RO"/>
 			</ECState>
 			<ECTransition Source="sState_01" Destination="sState_02" Condition="S1_S2" Comment="" x="2373.33" y="2080"/>
 			<ECTransition Source="sState_02" Destination="sState_03" Condition="S2_S3" Comment="" x="2393.33" y="2906.67"/>
