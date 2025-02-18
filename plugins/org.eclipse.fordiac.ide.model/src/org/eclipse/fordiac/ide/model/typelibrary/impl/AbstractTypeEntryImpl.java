@@ -216,6 +216,9 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 			// load and set the type
 			type = loadType();
+			if (type == null) {
+				return null;
+			}
 			notifications = basicSetType(type, notifications);
 
 			// update the last modification stamp _after_ setting the type to ensure other
@@ -323,6 +326,9 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 				modificationStamp = fileCached.getModificationStamp();
 
 				typeEditable = loadType();
+				if (typeEditable == null) {
+					return null;
+				}
 			}
 
 			// set the type editable
