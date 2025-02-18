@@ -6,7 +6,7 @@
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="INIT" Type="EInit">
+			<Event Name="INIT" Type="Event">
 				<With Var="DT"/>
 				<With Var="N"/>
 			</Event>
