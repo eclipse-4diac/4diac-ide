@@ -46,7 +46,8 @@ public class InsertFBCommand extends Command implements ScopedCommand {
 		} else {
 			internalFB = LibraryElementFactory.eINSTANCE.createFB();
 		}
-		internalFB.setTypeEntry(fb.getType().getTypeEntry());
+		internalFB.setTypeEntry(fb.getTypeEntry());
+		internalFB.setInterface(fb.getInterface().copy());
 		internalFB.setComment(""); //$NON-NLS-1$
 		redo();
 		internalFB.setName(NameRepository.createUniqueName(internalFB, fb.getName()));
