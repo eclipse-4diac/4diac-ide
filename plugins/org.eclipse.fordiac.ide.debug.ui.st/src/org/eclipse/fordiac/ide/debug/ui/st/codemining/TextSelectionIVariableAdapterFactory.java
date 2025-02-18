@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.resource.EObjectAtOffsetHelper;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
 
@@ -44,10 +45,9 @@ public class TextSelectionIVariableAdapterFactory implements IAdapterFactory {
 		if (!adapterType.isAssignableFrom(IVariable.class)) {
 			return null;
 		}
-		if (!(adaptableObject instanceof TextSelection)) {
+		if (!(adaptableObject instanceof final TextSelection selection)) {
 			return null;
 		}
-		final TextSelection selection = (TextSelection) adaptableObject;
 		final IDocument document = getDocument(selection);
 		if (document == null) {
 			return null;
@@ -118,6 +118,9 @@ public class TextSelectionIVariableAdapterFactory implements IAdapterFactory {
 	}
 
 	protected static EvaluatorDebugStackFrame getFrame() {
+		if (PlatformUI.getWorkbench().getDisplay().isDisposed()) {
+			return null; // avoid flooding logs when display is disposed
+		}
 		try {
 			final IAdaptable adaptable = DebugUITools.getDebugContext();
 			if (adaptable != null) {
