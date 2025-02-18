@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConf
 import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.providers.TsnWindowLabelProvider;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.widget.MappedFbMenu;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
@@ -81,8 +82,14 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 		final Label msLbl = widgetFactory.createLabel(detailsComp, Messages.TsnDetails_MS);
 		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).applyTo(msLbl);
 
-		cycleTimeValue.addModifyListener(event -> executor
-				.executeCommand(new ChangeTsnCycleTimeCommand(tsnConfig, Integer.parseInt(cycleTimeValue.getText()))));
+		cycleTimeValue.addModifyListener(event -> {
+			try {
+				final int newCycleTimeValue = Integer.parseInt(cycleTimeValue.getText());
+				executor.executeCommand(new ChangeTsnCycleTimeCommand(tsnConfig, newCycleTimeValue));
+			} catch (final NumberFormatException e) {
+				FordiacLogHelper.logWarning("Could not parse cycle time value!", e); //$NON-NLS-1$
+			}
+		});
 	}
 
 	private static void createTsnWindowArea(final TabbedPropertySheetWidgetFactory widgetFactory,
@@ -91,7 +98,7 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 		buttons.createControls(detailsComp, widgetFactory);
 		final TableViewer windowViewer = TableWidgetFactory.createTableViewer(detailsComp);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).span(2, 1)
-		.applyTo(windowViewer.getTable());
+				.applyTo(windowViewer.getTable());
 
 		final Table table = windowViewer.getTable();
 		configureTableLayout(table);
@@ -152,18 +159,13 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 
 		@Override
 		public String getValue(final Object element, final String property) {
-			switch (property) {
-			case NAME_COL:
-				return ((TsnWindow) element).getName();
-			case VALUE_COL:
-				return String.valueOf(((TsnWindow) element).getDuration());
-			case TYPE_COL:
-				return "TIME"; //$NON-NLS-1$
-			case COMMENT_COL:
-				return ((TsnWindow) element).getComment();
-			default:
-				return null;
-			}
+			return switch (property) {
+			case NAME_COL -> ((TsnWindow) element).getName();
+			case VALUE_COL -> String.valueOf(((TsnWindow) element).getDuration());
+			case TYPE_COL -> "TIME"; //$NON-NLS-1$
+			case COMMENT_COL -> ((TsnWindow) element).getComment();
+			default -> null;
+			};
 		}
 
 		@Override
@@ -196,9 +198,8 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 				configuration.setCycleTime(Integer.parseInt(parameter.getValue().getValue()));
 			}
 		}
-		int sum;
-		if ((sum = configuration.getWindows().stream().mapToInt(TsnWindow::getDuration).sum()) > configuration
-				.getCycleTime()) {
+		final int sum = configuration.getWindows().stream().mapToInt(TsnWindow::getDuration).sum();
+		if (sum > configuration.getCycleTime()) {
 			configuration.setCycleTime(sum);
 		}
 		return configuration;
