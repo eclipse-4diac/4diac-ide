@@ -305,10 +305,14 @@ public final class FordiacMarkerHelper {
 		}
 	}
 
-	public static FBNetworkElement createTypeErrorMarkerFB(final String typeFbElement, final TypeLibrary typeLibrary,
+	public static FBNetworkElement createTypeErrorMarkerFB(final String typeName, final TypeLibrary typeLibrary,
 			final EClass typeClass) {
-		final ErrorMarkerFBNElement errorFb = createErrorMarkerFB(typeFbElement);
-		final TypeEntry entry = typeLibrary.createErrorTypeEntry(typeFbElement, typeClass);
+		final TypeEntry entry = typeLibrary.createErrorTypeEntry(typeName, typeClass);
+		return createErrorMarkerFB(typeName, entry);
+	}
+
+	public static FBNetworkElement createErrorMarkerFB(final String name, final TypeEntry entry) {
+		final ErrorMarkerFBNElement errorFb = createErrorMarkerFB(name);
 		errorFb.setTypeEntry(entry);
 		return errorFb;
 	}

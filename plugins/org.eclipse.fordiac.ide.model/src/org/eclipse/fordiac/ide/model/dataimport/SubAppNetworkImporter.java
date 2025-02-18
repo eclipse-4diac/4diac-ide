@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -96,15 +97,19 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 
 	}
 
-	public FBNetworkElement createTypedSubapp(final String type) {
-		final TypedSubApp subApp = LibraryElementFactory.eINSTANCE.createTypedSubApp();
-		final SubAppTypeEntry subEntry = addDependency(getTypeLibrary().getSubAppTypeEntry(type));
+	public FBNetworkElement createTypedSubapp(final String typeName) {
+		final SubAppTypeEntry subEntry = addDependency(getTypeLibrary().getSubAppTypeEntry(typeName));
 		if (subEntry == null) {
-			return addDependency(FordiacMarkerHelper.createTypeErrorMarkerFB(type, getTypeLibrary(),
+			return addDependency(FordiacMarkerHelper.createTypeErrorMarkerFB(typeName, getTypeLibrary(),
 					LibraryElementPackage.eINSTANCE.getSubAppType()));
 		}
+		final SubAppType type = subEntry.getType();
+		if (type == null) {
+			return FordiacMarkerHelper.createErrorMarkerFB(typeName, subEntry);
+		}
+		final TypedSubApp subApp = LibraryElementFactory.eINSTANCE.createTypedSubApp();
 		subApp.setTypeEntry(subEntry);
-		subApp.setInterface(subEntry.getType().getInterfaceList().copy());
+		subApp.setInterface(type.getInterfaceList().copy());
 		return subApp;
 	}
 
