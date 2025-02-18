@@ -217,7 +217,11 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	}
 
 	protected void setInterface() {
-		newElement.setInterface(newElement.getType().getInterfaceList().copy());
+		if (newElement.getType() != null) {
+			newElement.setInterface(newElement.getType().getInterfaceList().copy());
+		} else {
+			newElement.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		}
 	}
 
 	private void transferVisibleAndVarConfigAttributes(final EList<VarDeclaration> varDeclList) {
