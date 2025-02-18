@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.Figure;
@@ -29,6 +30,8 @@ import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkConnectionLabel;
 import org.eclipse.fordiac.ide.application.handles.FBNConnectionEndPointHandle;
 import org.eclipse.fordiac.ide.application.handles.HiddenFBNConnectionEndPointHandle;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationBorder;
 import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
@@ -141,9 +144,16 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 
 		final Label lab = new Label(label.getLabel().getText());
 		lab.setBackgroundColor(org.eclipse.draw2d.ColorConstants.white);
-		lab.setForegroundColor(label.getForegroundColor());
 		lab.setBounds(bounds);
-		lab.setBorder(new LineBorder(label.getForegroundColor(), 2));
+
+		final Optional<AnnotationBorder> annotationBorder = GraphicalAnnotationStyles.findAnnotationBorder(label,
+				AnnotationBorder.class);
+		if (annotationBorder.isPresent()) {
+			lab.setBorder(annotationBorder.get());
+		} else {
+			lab.setForegroundColor(label.getForegroundColor());
+			lab.setBorder(new LineBorder(label.getForegroundColor(), 2));
+		}
 		lab.setOpaque(true);
 
 		fig.add(lab);
@@ -155,8 +165,8 @@ public class FBNConnectionEndpointPolicy extends FeedbackConnectionEndpointEditP
 		newSelFeedbackFigure.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
 		newSelFeedbackFigure.setOutline(false);
 		newSelFeedbackFigure.setBounds(getSelectableFigureBounds(label));
-		newSelFeedbackFigure
-				.setCornerDimensions(new Dimension(GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM));
+		newSelFeedbackFigure.setCornerDimensions(
+				new Dimension(GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM));
 		newSelFeedbackFigure.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
 		newSelFeedbackFigure.setBackgroundColor(ModifiedMoveHandle.getSelectionColor());
 		return newSelFeedbackFigure;

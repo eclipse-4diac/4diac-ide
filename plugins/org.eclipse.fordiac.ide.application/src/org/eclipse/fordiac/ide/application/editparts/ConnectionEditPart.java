@@ -475,6 +475,13 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 	@Override
 	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
 		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel(), event);
+		if (getFigure().getSourceDecoration() != null) {
+			GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure().getSourceDecoration(), getModel(), event);
+		}
+
+		if (getFigure().getTargetDecoration() != null) {
+			GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure().getTargetDecoration(), getModel(), event);
+		}
 		refreshTooltip();
 	}
 
