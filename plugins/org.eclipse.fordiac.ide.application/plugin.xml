@@ -1426,14 +1426,20 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotoparent">
         <visibleWhen checkEnabled="true">
           <with variable="activeEditor">
-            <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+          	<or>
+            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+            </or>	
           </with>
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotochild">
         <visibleWhen checkEnabled="true">
           <with variable="activeEditor">
-            <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+          	<or>
+            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+            </or>	
           </with>
         </visibleWhen>
       </command>
