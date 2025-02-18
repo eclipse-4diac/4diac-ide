@@ -89,7 +89,7 @@ public class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 	public void configureFileExtensions(final Binder binder) {
 		if (((this.properties == null) || (this.properties.getProperty(Constants.FILE_EXTENSIONS) == null))) {
 			binder.<String>bind(String.class).annotatedWith(Names.named(Constants.FILE_EXTENSIONS))
-					.toInstance("stalg,fbt,sys,sub,atp"); //$NON-NLS-1$
+					.toInstance("stalg,fbt,sys,sub,atp,adp"); //$NON-NLS-1$
 		}
 	}
 
