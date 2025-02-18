@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
@@ -105,6 +106,11 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 			LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
 			LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_INPUTS);
 
+	private static final List<EReference> APPLICABLE_ADAPTER_FEATURES = List.of(
+			LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
+			LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
+			LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS);
+
 	@Inject
 	IQualifiedNameProvider qualifiedNameProvider;
 
@@ -134,6 +140,13 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 				if (receiverType != null) {
 					if (receiverType instanceof final StructuredType structuredVarType) {
 						return qualifiedScope(structuredVarType.getMemberVariables(), reference);
+					}
+					if (receiverType instanceof final AdapterType adapterType) {
+						if (adapterType.eContainer() instanceof final AdapterType primaryAdapterType) {
+							return typeScope(primaryAdapterType, context, reference,
+									this::isApplicableForAdapterFeatureReference);
+						}
+						return typeScope(adapterType, context, reference, this::isApplicableForAdapterFeatureReference);
 					}
 					if (receiverType instanceof final FBType fbType) {
 						return typeScope(fbType, context, reference, this::isApplicableForFBFeatureReference);
@@ -273,6 +286,10 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 	protected boolean isApplicableForFBOutputParameterReference(final IEObjectDescription description) {
 		return isApplicable(description, LibraryElementPackage.Literals.INTERFACE_LIST,
 				APPLICABLE_FB_OUTPUT_PARAMETERS);
+	}
+
+	protected boolean isApplicableForAdapterFeatureReference(final IEObjectDescription description) {
+		return isApplicable(description, LibraryElementPackage.Literals.INTERFACE_LIST, APPLICABLE_ADAPTER_FEATURES);
 	}
 
 	protected static boolean isApplicable(final IEObjectDescription description, final EClass containerClass,
