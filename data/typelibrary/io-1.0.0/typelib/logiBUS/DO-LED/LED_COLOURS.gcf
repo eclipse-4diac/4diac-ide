@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalConstants Name="LED_COLOURS" Comment="Global constants" >
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2024-01-25">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<GlobalConstants>
+		<VarDeclaration Name="LED_RED" Type="UINT" InitialValue="1"/>
+		<VarDeclaration Name="LED_YELLOW" Type="UINT" InitialValue="2"/>
+		<VarDeclaration Name="LED_ORANGE" Type="UINT" InitialValue="3"/>
+		<VarDeclaration Name="LED_GREEN" Type="UINT" InitialValue="4"/>
+		<VarDeclaration Name="LED_BLUE" Type="UINT" InitialValue="5"/>
+		<VarDeclaration Name="LED_WHITE" Type="UINT" InitialValue="6"/>
+		<VarDeclaration Name="LED_MAGENTA" Type="UINT" InitialValue="7"/>
+		<VarDeclaration Name="LED_CYAN" Type="UINT" InitialValue="8"/>
+	</GlobalConstants>
+	<OriginalSource><![CDATA[GLOBALCONSTANTS LED_COLOURS
+    VAR_GLOBAL CONSTANT
+        LED_RED : UINT := 1;
+        LED_YELLOW : UINT := 2;
+        LED_ORANGE : UINT := 3;
+        LED_GREEN : UINT := 4;
+        LED_BLUE : UINT := 5;
+        LED_WHITE : UINT := 6;
+        LED_MAGENTA : UINT := 7;
+        LED_CYAN : UINT := 8;
+    END_VAR
+END_GLOBALCONSTANTS
+]]></OriginalSource>
+</GlobalConstants>

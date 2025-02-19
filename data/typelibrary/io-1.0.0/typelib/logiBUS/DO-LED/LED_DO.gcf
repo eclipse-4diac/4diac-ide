@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalConstants Name="LED_DO" Comment="Global constants" >
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2024-01-25">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<GlobalConstants>
+		<VarDeclaration Name="Output_Q1" Type="USINT" InitialValue="1"/>
+		<VarDeclaration Name="Output_Q2" Type="USINT" InitialValue="2"/>
+		<VarDeclaration Name="Output_Q3" Type="USINT" InitialValue="3"/>
+		<VarDeclaration Name="Output_Q4" Type="USINT" InitialValue="4"/>
+		<VarDeclaration Name="Output_Q5" Type="USINT" InitialValue="5"/>
+		<VarDeclaration Name="Output_Q6" Type="USINT" InitialValue="6"/>
+		<VarDeclaration Name="Output_Q7" Type="USINT" InitialValue="7"/>
+		<VarDeclaration Name="Output_Q8" Type="USINT" InitialValue="8"/>
+		<VarDeclaration Name="Output_Q9" Type="USINT" InitialValue="9"/>
+	</GlobalConstants>
+	<OriginalSource><![CDATA[GLOBALCONSTANTS LED_DO
+	VAR_GLOBAL CONSTANT
+		Output_Q1 : USINT := 1;
+		Output_Q2 : USINT := 2;
+		Output_Q3 : USINT := 3;
+		Output_Q4 : USINT := 4;
+		Output_Q5 : USINT := 5;
+		Output_Q6 : USINT := 6;
+		Output_Q7 : USINT := 7;
+		Output_Q8 : USINT := 8;
+		Output_Q9 : USINT := 9;
+	END_VAR
+END_GLOBALCONSTANTS
+]]></OriginalSource>
+</GlobalConstants>
