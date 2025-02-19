@@ -75,6 +75,8 @@ public class Messages extends NLS {
 	public static String RuntimeLaunchConfigurationTab_ResourceTypeMessage;
 	public static String RuntimeLaunchConfigurationTab_RuntimeGroup;
 	public static String RuntimeLaunchConfigurationTab_RuntimeTabName;
+	public static String TogglePinnedHandler_PinWatch;
+	public static String TogglePinnedHandler_UnpinWatch;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

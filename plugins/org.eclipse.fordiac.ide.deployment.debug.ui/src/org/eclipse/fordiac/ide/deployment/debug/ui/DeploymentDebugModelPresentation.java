@@ -22,8 +22,10 @@ import org.eclipse.fordiac.ide.deployment.debug.IDeploymentDebugTarget;
 import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
@@ -36,6 +38,8 @@ public class DeploymentDebugModelPresentation extends EvaluatorDebugModelPresent
 	public static final String FORCE_TEXT_COLOR = "org.eclipse.fordiac.ide.deployment.debug.ui.forceTextColor"; //$NON-NLS-1$
 	public static final String WATCH_TEXT_COLOR = "org.eclipse.fordiac.ide.deployment.debug.ui.watchTextColor"; //$NON-NLS-1$
 	public static final String WATCH_ERROR_TEXT_COLOR = "org.eclipse.fordiac.ide.deployment.debug.ui.watchErrorTextColor"; //$NON-NLS-1$
+
+	private Image watchPinnedImage;
 
 	@Override
 	public Color getForeground(final Object element) {
@@ -65,10 +69,20 @@ public class DeploymentDebugModelPresentation extends EvaluatorDebugModelPresent
 
 	@Override
 	public Image getImage(final Object element) {
+		if (element instanceof final IWatch watch) {
+			return getWatchImage(watch);
+		}
 		if (element instanceof final DeploymentWatchpoint watchpoint) {
 			return DebugUITools.getImage(getWatchpointImageKey(watchpoint));
 		}
 		return super.getImage(element);
+	}
+
+	private Image getWatchImage(final IWatch watch) {
+		if (watch.isPinned()) {
+			return getWatchPinnedImage();
+		}
+		return DebugUITools.getImage(IDebugUIConstants.IMG_OBJS_VARIABLE);
 	}
 
 	private static String getWatchpointImageKey(final DeploymentWatchpoint watchpoint) {
@@ -136,5 +150,24 @@ public class DeploymentDebugModelPresentation extends EvaluatorDebugModelPresent
 
 	public static Color getWatchErrorTextColor() {
 		return JFaceResources.getColorRegistry().get(WATCH_ERROR_TEXT_COLOR);
+	}
+
+	private Image getWatchPinnedImage() {
+		if (watchPinnedImage == null) {
+			final Image baseImage = DebugUITools.getImage(IDebugUIConstants.IMG_OBJS_VARIABLE);
+			if (baseImage != null) {
+				watchPinnedImage = FordiacImage.createOverlayImage(baseImage,
+						FordiacImage.ICON_PINNED.getImageDescriptor(), IDecoration.BOTTOM_RIGHT).createImage();
+			}
+		}
+		return watchPinnedImage;
+	}
+
+	@Override
+	public void dispose() {
+		if (watchPinnedImage != null) {
+			watchPinnedImage.dispose();
+		}
+		super.dispose();
 	}
 }

@@ -33,7 +33,7 @@ public class DeploymentWatchpointDetailPane implements IDetailPane3 {
 
 	private final ListenerList<IPropertyListener> listeners = new ListenerList<>();
 	private Composite comp;
-	private DeploymentWatchpointForceEditor editor;
+	private DeploymentWatchpointEditor editor;
 
 	@Override
 	public void init(final IWorkbenchPartSite partSite) {
@@ -46,9 +46,10 @@ public class DeploymentWatchpointDetailPane implements IDetailPane3 {
 		GridLayoutFactory.fillDefaults().applyTo(comp);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(comp);
 
-		editor = new DeploymentWatchpointForceEditor();
+		editor = new DeploymentWatchpointEditor();
 		editor.addPropertyListener((source, propId) -> {
-			if (propId == DeploymentWatchpointForceEditor.PROP_FORCE_ENABLED) {
+			if (propId == DeploymentWatchpointEditor.PROP_FORCE_ENABLED
+					|| propId == DeploymentWatchpointEditor.PROP_PINNED) {
 				editor.doSave(); // autosave only for condition enabled changes
 			}
 			firePropertyChange(IWorkbenchPartConstants.PROP_DIRTY);

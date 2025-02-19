@@ -300,6 +300,11 @@
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.togglePinned"
+			name="Toggle Pinned">
+		</command>
+		<command
+			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.force"
 			name="Force Value">
 		</command>
@@ -416,6 +421,22 @@
 			</enabledWhen>
 		</handler>
 		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.TogglePinnedHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.togglePinned">
+			<activeWhen>
+				<with
+					variable="selection">
+					<iterate
+						ifEmpty="false"
+						operator="and">
+						<instanceof
+							value="org.eclipse.fordiac.ide.deployment.debug.watch.IWatch">
+						</instanceof>
+					</iterate>
+				</with>
+			</activeWhen>
+		</handler>
+		<handler
 			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.ForceHandler"
 			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.force">
 			<activeWhen>
@@ -515,6 +536,12 @@
 	</extension>
 	<extension
 		point="org.eclipse.ui.bindings">
+		<key
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.togglePinned"
+			contextId="org.eclipse.debug.ui.debugging"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			sequence="M1+M2+P">
+		</key>
 		<key
 			commandId="org.eclipse.fordiac.ide.application.commands.toggleBoolValue"
 			contextId="org.eclipse.debug.ui.debugging"
@@ -635,6 +662,16 @@
 				label="Toggle Watch"
 				style="push"
 				tooltip="Toggle watch for selected elements">
+				<visibleWhen
+					checkEnabled="true">
+				</visibleWhen>
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.togglePinned"
+				icon="fordiacimage://ICON_PIN"
+				label="Toggle Pinned"
+				style="push"
+				tooltip="Pin/unpin selected watch">
 				<visibleWhen
 					checkEnabled="true">
 				</visibleWhen>
