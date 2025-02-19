@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
@@ -101,7 +101,7 @@ public final class HandlerHelper {
 		EObject obj = subApp;
 		while (obj.eContainer() != null) {
 			obj = obj.eContainer();
-			if (obj instanceof SubAppType) {
+			if (obj instanceof TypedSubApp) {
 				return false;
 			}
 		}
