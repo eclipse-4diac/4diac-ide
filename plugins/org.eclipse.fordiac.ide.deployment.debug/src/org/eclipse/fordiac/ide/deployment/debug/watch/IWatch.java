@@ -90,6 +90,20 @@ public interface IWatch extends IVariable, IDeploymentDebugElement {
 	boolean isAlive();
 
 	/**
+	 * Check if the watch is pinned
+	 *
+	 * @return true if pinned, false otherwise
+	 */
+	boolean isPinned();
+
+	/**
+	 * Set if the watch is pinned
+	 *
+	 * @param pinned if the watch is pinned
+	 */
+	void setPinned(boolean pinned);
+
+	/**
 	 * Create a new watch for an element
 	 *
 	 * @param name        The name of the watch

@@ -45,6 +45,7 @@ public class DeploymentWatchpoint extends Breakpoint {
 	public static final String INSTALLED = "org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.installed"; //$NON-NLS-1$
 	public static final String FORCE_VALUE = "org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.forceValue"; //$NON-NLS-1$
 	public static final String FORCE_ENABLED = "org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.forceEnabled"; //$NON-NLS-1$
+	public static final String PINNED = "org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.pinned"; //$NON-NLS-1$
 
 	public DeploymentWatchpoint() {
 	}
@@ -169,6 +170,22 @@ public class DeploymentWatchpoint extends Breakpoint {
 		return delta.getKind() == IResourceDelta.CHANGED
 				&& (isForceEnabled() != delta.getAttribute(FORCE_ENABLED, false)
 						|| !getForceValue().equals(delta.getAttribute(FORCE_VALUE, ""))); //$NON-NLS-1$
+	}
+
+	public boolean isPinned() {
+		final IMarker m = getMarker();
+		if (m != null) {
+			return m.getAttribute(PINNED, false);
+		}
+		return false;
+	}
+
+	public void setPinned(final boolean pinned) throws CoreException {
+		setAttribute(PINNED, pinned);
+	}
+
+	public boolean isPinnedChanged(final IMarkerDelta delta) {
+		return delta.getKind() == IResourceDelta.CHANGED && (isPinned() != delta.getAttribute(PINNED, false));
 	}
 
 	@Override

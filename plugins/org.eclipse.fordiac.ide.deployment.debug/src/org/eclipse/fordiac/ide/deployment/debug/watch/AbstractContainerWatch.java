@@ -28,6 +28,7 @@ public abstract class AbstractContainerWatch extends DeploymentDebugElement impl
 	protected final ITypedElement element;
 	protected final String qualifiedName;
 	protected final Resource resource;
+	private boolean pinned;
 
 	protected AbstractContainerWatch(final String name, final ITypedElement element,
 			final IDeploymentDebugTarget target) {
@@ -62,6 +63,16 @@ public abstract class AbstractContainerWatch extends DeploymentDebugElement impl
 	@Override
 	public boolean isAlive() {
 		return getSubWatches().stream().allMatch(IWatch::isAlive);
+	}
+
+	@Override
+	public boolean isPinned() {
+		return pinned;
+	}
+
+	@Override
+	public void setPinned(final boolean pinned) {
+		this.pinned = pinned;
 	}
 
 	@Override

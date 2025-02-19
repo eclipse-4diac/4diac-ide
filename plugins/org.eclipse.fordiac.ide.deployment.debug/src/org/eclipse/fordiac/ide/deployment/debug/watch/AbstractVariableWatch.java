@@ -32,6 +32,7 @@ public abstract class AbstractVariableWatch extends DeploymentDebugVariable impl
 	private final Resource resource;
 	private final ITypedElement element;
 	private long aliveCount;
+	private boolean pinned;
 
 	protected AbstractVariableWatch(final Variable<?> variable, final ITypedElement element,
 			final DeploymentDebugDevice debugTarget) throws EvaluatorException {
@@ -66,6 +67,16 @@ public abstract class AbstractVariableWatch extends DeploymentDebugVariable impl
 	@Override
 	public boolean isAlive() {
 		return aliveCount == getDebugTarget().getVariableUpdateCount();
+	}
+
+	@Override
+	public boolean isPinned() {
+		return pinned;
+	}
+
+	@Override
+	public void setPinned(final boolean pinned) {
+		this.pinned = pinned;
 	}
 
 	@Override

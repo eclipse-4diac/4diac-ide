@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug;
 
+import java.util.Objects;
+
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IDisconnect;
 import org.eclipse.debug.core.model.IRegisterGroup;
@@ -21,6 +23,7 @@ import org.eclipse.debug.core.model.IVariable;
 public class DeploymentDebugStackFrame extends DeploymentDebugElement implements IStackFrame, IDisconnect {
 
 	private final DeploymentDebugThread thread;
+	private IVariable[] variables = new IVariable[0];
 
 	public DeploymentDebugStackFrame(final DeploymentDebugThread thread) {
 		super(thread.getDebugTarget());
@@ -124,12 +127,16 @@ public class DeploymentDebugStackFrame extends DeploymentDebugElement implements
 
 	@Override
 	public IVariable[] getVariables() {
-		return getDebugTarget().getWatches().values().toArray(IVariable[]::new);
+		return variables;
+	}
+
+	public void setVariables(final IVariable[] variables) {
+		this.variables = Objects.requireNonNull(variables);
 	}
 
 	@Override
 	public boolean hasVariables() {
-		return !getDebugTarget().getWatches().isEmpty();
+		return variables.length != 0;
 	}
 
 	@Override

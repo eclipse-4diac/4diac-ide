@@ -241,8 +241,13 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 				} else {
 					removeWatch(watchpoint);
 				}
-			} else if (watchpoint.isForceChanged(delta)) {
-				updateForce(watchpoint);
+			} else {
+				if (watchpoint.isForceChanged(delta)) {
+					updateForce(watchpoint);
+				}
+				if (watchpoint.isPinnedChanged(delta)) {
+					updatePinned(watchpoint);
+				}
 			}
 		}
 	}
@@ -253,6 +258,7 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 			try {
 				final IWatch watch = watches.computeIfAbsent(element.get().getQualifiedName(),
 						name -> IWatch.watchFor(name, element.get(), this));
+				watch.setPinned(watchpoint.isPinned());
 				getPrimaryDebugTarget().updateWatches(true);
 				watch.addWatch();
 				if (watchpoint.isForceEnabled() && watch instanceof final IVarDeclarationWatch variableWatch) {
@@ -293,6 +299,14 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 			} catch (final DebugException e) {
 				FordiacLogHelper.logWarning("Cannot update watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
 			}
+		}
+	}
+
+	protected void updatePinned(final DeploymentWatchpoint watchpoint) {
+		final IWatch watch = watches.get(watchpoint.getLocation());
+		if (watch != null) {
+			watch.setPinned(watchpoint.isPinned());
+			getPrimaryDebugTarget().updateWatches(true);
 		}
 	}
 
