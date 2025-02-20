@@ -14,19 +14,32 @@ package org.eclipse.fordiac.ide.deployment.debug;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
+import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
@@ -38,6 +51,10 @@ public final class DeploymentLaunchConfigurationAttributes {
 	public static final int POLLING_INTERVAL_DEFAULT = 300;
 	public static final String ALLOW_TERMINATE = "org.eclipse.fordiac.ide.deployment.debug.allowTerminate"; //$NON-NLS-1$
 	public static final String ALLOW_TERMINATE_DEFAULT = AllowTerminate.DEBUG_ONLY.name();
+
+	public static final String WATCH_TARGET_NAME = "org.eclipse.fordiac.ide.deployment.debug.watch.targetName"; //$NON-NLS-1$
+	public static final String WATCH_TARGET_TYPE = "org.eclipse.fordiac.ide.deployment.debug.watch.targetType"; //$NON-NLS-1$
+	public static final String WATCH_FORCE_VALUE = "org.eclipse.fordiac.ide.deployment.debug.watch.forceValue"; //$NON-NLS-1$
 
 	public static IResource getSystemResource(final ILaunchConfiguration configuration) throws CoreException {
 		final String systemAttribute = configuration.getAttribute(SYSTEM, ""); //$NON-NLS-1$
@@ -98,6 +115,37 @@ public final class DeploymentLaunchConfigurationAttributes {
 		return AllowTerminate.valueOf(allowTerminate);
 	}
 
+	public static List<DeploymentLaunchWatchpoint> getWatches(final ILaunchConfiguration configuration)
+			throws CoreException {
+		final List<String> targetNames = configuration.getAttribute(WATCH_TARGET_NAME, List.of());
+		final List<String> targetTypes = configuration.getAttribute(WATCH_TARGET_TYPE, List.of());
+		final List<String> forceValues = configuration.getAttribute(WATCH_FORCE_VALUE, List.of());
+		if (targetNames.size() != targetTypes.size() || targetNames.size() != forceValues.size()) {
+			throw new CoreException(
+					Status.error("Invalid watches in launch configuration: Lists must have the same size")); //$NON-NLS-1$
+		}
+		return IntStream.range(0, targetNames.size())
+				.mapToObj(index -> new DeploymentLaunchWatchpoint(targetNames.get(index), targetTypes.get(index),
+						forceValues.get(index)))
+				.toList();
+	}
+
+	public static void setWatches(final ILaunchConfigurationWorkingCopy configuration,
+			final List<DeploymentLaunchWatchpoint> watches) {
+		if (watches == null || watches.isEmpty()) {
+			configuration.removeAttribute(WATCH_TARGET_NAME);
+			configuration.removeAttribute(WATCH_TARGET_TYPE);
+			configuration.removeAttribute(WATCH_FORCE_VALUE);
+			return;
+		}
+		configuration.setAttribute(WATCH_TARGET_NAME,
+				watches.stream().map(DeploymentLaunchWatchpoint::targetName).toList());
+		configuration.setAttribute(WATCH_TARGET_TYPE, watches.stream().map(DeploymentLaunchWatchpoint::targetType)
+				.map(EcoreUtil::getURI).map(URI::toString).toList());
+		configuration.setAttribute(WATCH_FORCE_VALUE,
+				watches.stream().map(DeploymentLaunchWatchpoint::forceValue).toList());
+	}
+
 	private DeploymentLaunchConfigurationAttributes() {
 		throw new UnsupportedOperationException();
 	}
@@ -115,6 +163,57 @@ public final class DeploymentLaunchConfigurationAttributes {
 
 		public String getDisplayString() {
 			return displayString;
+		}
+	}
+
+	public record DeploymentLaunchWatchpoint(String targetName, EClass targetType, String forceValue) {
+		public DeploymentLaunchWatchpoint {
+			Objects.requireNonNull(targetName);
+			Objects.requireNonNull(targetType);
+			Objects.requireNonNull(forceValue);
+		}
+
+		public DeploymentLaunchWatchpoint(final String targetName, final String targetTypeUri,
+				final String forceValue) {
+			this(targetName, URI.createURI(targetTypeUri), forceValue);
+		}
+
+		public DeploymentLaunchWatchpoint(final String targetName, final URI targetTypeUri, final String forceValue) {
+			this(targetName, getTargetType(targetTypeUri), forceValue);
+		}
+
+		public DeploymentLaunchWatchpoint(final DeploymentWatchpoint watchpoint) {
+			this(watchpoint.getLocation(),
+					watchpoint.getTargetType().orElse(LibraryElementPackage.Literals.INAMED_ELEMENT),
+					watchpoint.isForceSupported() && watchpoint.isForceEnabled() ? watchpoint.getForceValue() : ""); //$NON-NLS-1$
+		}
+
+		public Optional<INamedElement> getTarget(final Device device) {
+			return getTargets(device.getAutomationSystem())
+					.filter(target -> device.equals(DeploymentDebugWatchUtils.getDevice(target))).findFirst();
+		}
+
+		public Optional<INamedElement> getTarget(final AutomationSystem system) {
+			return getTargets(system).findFirst();
+		}
+
+		public Stream<INamedElement> getTargets(final AutomationSystem system) {
+			if (targetName == null || targetName.isEmpty() || targetType == null) {
+				return Stream.empty();
+			}
+			return system.findByQualifiedName(targetName).filter(element -> targetType.equals(element.eClass()));
+		}
+
+		public boolean isForceEnabled() {
+			return !forceValue.isEmpty();
+		}
+
+		private static EClass getTargetType(final URI targetTypeUri) {
+			final EPackage ePackage = EPackage.Registry.INSTANCE.getEPackage(targetTypeUri.trimFragment().toString());
+			if (ePackage == null) {
+				throw new IllegalArgumentException("Not a valid package: " + targetTypeUri); //$NON-NLS-1$
+			}
+			return (EClass) ePackage.eResource().getEObject(targetTypeUri.fragment());
 		}
 	}
 }
