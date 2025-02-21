@@ -40,6 +40,7 @@ public class DeploymentDebugModelPresentation extends EvaluatorDebugModelPresent
 	public static final String WATCH_ERROR_TEXT_COLOR = "org.eclipse.fordiac.ide.deployment.debug.ui.watchErrorTextColor"; //$NON-NLS-1$
 
 	private Image watchPinnedImage;
+	private Image watchLaunchImage;
 
 	@Override
 	public Color getForeground(final Object element) {
@@ -79,6 +80,9 @@ public class DeploymentDebugModelPresentation extends EvaluatorDebugModelPresent
 	}
 
 	private Image getWatchImage(final IWatch watch) {
+		if (watch.getSource() == IWatch.Source.LAUNCH) {
+			return getWatchLaunchImage();
+		}
 		if (watch.isPinned()) {
 			return getWatchPinnedImage();
 		}
@@ -163,10 +167,25 @@ public class DeploymentDebugModelPresentation extends EvaluatorDebugModelPresent
 		return watchPinnedImage;
 	}
 
+	private Image getWatchLaunchImage() {
+		if (watchLaunchImage == null) {
+			final Image baseImage = DebugUITools.getImage(IDebugUIConstants.IMG_OBJS_VARIABLE);
+			if (baseImage != null) {
+				watchLaunchImage = FordiacImage.createOverlayImage(baseImage,
+						FordiacImage.ICON_LAUNCH_CONFIG_OVERLAY.getImageDescriptor(), IDecoration.BOTTOM_RIGHT)
+						.createImage();
+			}
+		}
+		return watchLaunchImage;
+	}
+
 	@Override
 	public void dispose() {
 		if (watchPinnedImage != null) {
 			watchPinnedImage.dispose();
+		}
+		if (watchLaunchImage != null) {
+			watchLaunchImage.dispose();
 		}
 		super.dispose();
 	}

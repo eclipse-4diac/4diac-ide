@@ -29,6 +29,7 @@ public abstract class AbstractContainerWatch extends DeploymentDebugElement impl
 	protected final String qualifiedName;
 	protected final Resource resource;
 	private boolean pinned;
+	private Source source = Source.BREAKPOINT;
 
 	protected AbstractContainerWatch(final String name, final ITypedElement element,
 			final IDeploymentDebugTarget target) {
@@ -73,6 +74,16 @@ public abstract class AbstractContainerWatch extends DeploymentDebugElement impl
 	@Override
 	public void setPinned(final boolean pinned) {
 		this.pinned = pinned;
+	}
+
+	@Override
+	public Source getSource() {
+		return source;
+	}
+
+	@Override
+	public void setSource(final Source source) {
+		this.source = Objects.requireNonNull(source);
 	}
 
 	@Override

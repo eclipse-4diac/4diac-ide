@@ -28,6 +28,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public interface IWatch extends IVariable, IDeploymentDebugElement {
 
+	enum Source {
+		BREAKPOINT, LAUNCH;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -102,6 +106,20 @@ public interface IWatch extends IVariable, IDeploymentDebugElement {
 	 * @param pinned if the watch is pinned
 	 */
 	void setPinned(boolean pinned);
+
+	/**
+	 * Get the source of the watch
+	 *
+	 * @return The source
+	 */
+	Source getSource();
+
+	/**
+	 * Set the source of the watch
+	 *
+	 * @param source The source
+	 */
+	void setSource(Source source);
 
 	/**
 	 * Create a new watch for an element

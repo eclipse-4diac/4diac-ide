@@ -37,10 +37,12 @@ import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
+import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAttributes.DeploymentLaunchWatchpoint;
 import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
 import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchData;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
+import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch.Source;
 import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
@@ -61,6 +63,7 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 	private final Device device;
 	private final boolean allowTerminate;
 	private final Duration pollingInterval;
+	private final List<DeploymentLaunchWatchpoint> launchWatches;
 	private final IDeviceManagementExecutorService deviceManagementExecutor;
 	private final Map<String, DeploymentDebugResource> resources = new ConcurrentSkipListMap<>();
 	private final Map<String, IWatch> watches = new ConcurrentSkipListMap<>();
@@ -69,11 +72,13 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 	private boolean terminate;
 
 	public DeploymentDebugDevice(final Device device, final DeploymentDebugTarget debugTarget,
-			final boolean allowTerminate, final Duration pollingInterval) {
+			final boolean allowTerminate, final Duration pollingInterval,
+			final List<DeploymentLaunchWatchpoint> launchWatches) {
 		super(debugTarget);
 		this.device = Objects.requireNonNull(device);
 		this.allowTerminate = allowTerminate;
 		this.pollingInterval = pollingInterval;
+		this.launchWatches = launchWatches;
 
 		deviceManagementExecutor = IDeviceManagementExecutorService.of(new SharedWatchDeviceManagementInteractor(
 				DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device)));
@@ -125,6 +130,7 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 			deviceManagementExecutor.readWatchesPeriodically(this::updateWatches, this::handleDeviceError,
 					pollingInterval.toMillis(), TimeUnit.MILLISECONDS);
 			try (EvaluatorCache cache = EvaluatorCache.open()) {
+				launchWatches.forEach(this::addWatch);
 				Stream.of(DebugPlugin.getDefault().getBreakpointManager().getBreakpoints())
 						.forEachOrdered(this::breakpointAdded);
 			}
@@ -252,12 +258,31 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 		}
 	}
 
+	protected void addWatch(final DeploymentLaunchWatchpoint watchpoint) {
+		final Optional<INamedElement> element = watchpoint.getTarget(device);
+		if (element.isPresent()) {
+			try {
+				final IWatch watch = watches.computeIfAbsent(element.get().getQualifiedName(),
+						name -> IWatch.watchFor(name, element.get(), this));
+				watch.setSource(Source.LAUNCH);
+				getPrimaryDebugTarget().updateWatches(true);
+				watch.addWatch();
+				if (watchpoint.isForceEnabled() && watch instanceof final IVarDeclarationWatch variableWatch) {
+					variableWatch.forceValue(watchpoint.forceValue());
+				}
+			} catch (CoreException | EvaluatorException e) {
+				FordiacLogHelper.logWarning("Cannot create watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
+			}
+		}
+	}
+
 	protected void addWatch(final DeploymentWatchpoint watchpoint) {
 		final Optional<INamedElement> element = watchpoint.getTarget(device);
 		if (element.isPresent()) {
 			try {
 				final IWatch watch = watches.computeIfAbsent(element.get().getQualifiedName(),
 						name -> IWatch.watchFor(name, element.get(), this));
+				watch.setSource(Source.BREAKPOINT);
 				watch.setPinned(watchpoint.isPinned());
 				getPrimaryDebugTarget().updateWatches(true);
 				watch.addWatch();

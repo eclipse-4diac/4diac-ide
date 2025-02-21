@@ -33,6 +33,7 @@ public abstract class AbstractVariableWatch extends DeploymentDebugVariable impl
 	private final ITypedElement element;
 	private long aliveCount;
 	private boolean pinned;
+	private Source source = Source.BREAKPOINT;
 
 	protected AbstractVariableWatch(final Variable<?> variable, final ITypedElement element,
 			final DeploymentDebugDevice debugTarget) throws EvaluatorException {
@@ -77,6 +78,16 @@ public abstract class AbstractVariableWatch extends DeploymentDebugVariable impl
 	@Override
 	public void setPinned(final boolean pinned) {
 		this.pinned = pinned;
+	}
+
+	@Override
+	public Source getSource() {
+		return source;
+	}
+
+	@Override
+	public void setSource(final Source source) {
+		this.source = Objects.requireNonNull(source);
 	}
 
 	@Override

@@ -43,6 +43,7 @@ import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
+import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAttributes.DeploymentLaunchWatchpoint;
 import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
@@ -58,6 +59,7 @@ public class DeploymentDebugTarget extends DeploymentDebugElement implements IDe
 	private final AutomationSystem system;
 	private final boolean allowTerminate;
 	private final Duration pollingInterval;
+	private final List<DeploymentLaunchWatchpoint> launchWatches;
 
 	private final DeploymentProcess process;
 	private final DeploymentDebugThread thread;
@@ -68,13 +70,14 @@ public class DeploymentDebugTarget extends DeploymentDebugElement implements IDe
 	private boolean disconnected;
 
 	public DeploymentDebugTarget(final AutomationSystem system, final Set<INamedElement> selection,
-			final ILaunch launch, final boolean allowTerminate, final Duration pollingInterval)
-			throws DeploymentException {
+			final ILaunch launch, final boolean allowTerminate, final Duration pollingInterval,
+			final List<DeploymentLaunchWatchpoint> launchWatches) throws DeploymentException {
 		super(null);
 		this.launch = launch;
 		this.system = system;
 		this.allowTerminate = allowTerminate;
 		this.pollingInterval = pollingInterval;
+		this.launchWatches = launchWatches;
 		process = new DeploymentProcess(system, selection, launch);
 		process.getJob().addJobChangeListener(IJobChangeListener.onDone(this::deploymentDone));
 		thread = new DeploymentDebugThread(this);
@@ -122,7 +125,7 @@ public class DeploymentDebugTarget extends DeploymentDebugElement implements IDe
 
 	protected void doConnect(final Device device) throws DebugException {
 		final DeploymentDebugDevice deploymentDevice = new DeploymentDebugDevice(device, this, allowTerminate,
-				pollingInterval);
+				pollingInterval, launchWatches);
 		try {
 			deploymentDevice.connect();
 		} catch (final DebugException e) {
@@ -215,6 +218,7 @@ public class DeploymentDebugTarget extends DeploymentDebugElement implements IDe
 			thread.getTopStackFrame()
 					.setVariables(combinedWatches.values().stream()
 							.sorted(Comparator.comparing(IWatch::isPinned, Comparator.reverseOrder())
+									.thenComparing(IWatch::getSource, Comparator.reverseOrder())
 									.thenComparing(IWatch::getQualifiedName))
 							.toArray(IVariable[]::new));
 		}

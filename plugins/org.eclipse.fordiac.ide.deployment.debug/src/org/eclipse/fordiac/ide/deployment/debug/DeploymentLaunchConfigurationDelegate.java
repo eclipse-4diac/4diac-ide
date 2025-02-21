@@ -32,6 +32,7 @@ import org.eclipse.debug.core.IStatusHandler;
 import org.eclipse.debug.core.model.IDisconnect;
 import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAttributes.AllowTerminate;
+import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAttributes.DeploymentLaunchWatchpoint;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -58,6 +59,8 @@ public class DeploymentLaunchConfigurationDelegate extends LaunchConfigurationDe
 				system);
 		final Duration pollingInterval = DeploymentLaunchConfigurationAttributes.getPollingInterval(configuration);
 		final AllowTerminate allowTerminate = DeploymentLaunchConfigurationAttributes.getAllowTerminate(configuration);
+		final List<DeploymentLaunchWatchpoint> launchWatches = DeploymentLaunchConfigurationAttributes
+				.getWatches(configuration);
 
 		launch.setAttribute(SYSTEM_FILE_ATTRIBUTE, resource.getFullPath().toString());
 
@@ -67,11 +70,11 @@ public class DeploymentLaunchConfigurationDelegate extends LaunchConfigurationDe
 				process.start();
 			} else if (ILaunchManager.DEBUG_MODE.equals(mode)) {
 				final DeploymentDebugTarget debugTarget = new DeploymentDebugTarget(system, selection, launch,
-						allowTerminate != AllowTerminate.NEVER, pollingInterval);
+						allowTerminate != AllowTerminate.NEVER, pollingInterval, launchWatches);
 				debugTarget.start();
 			} else if (MONITOR_MODE.equals(mode)) {
 				final DeploymentDebugTarget debugTarget = new DeploymentDebugTarget(system, Set.of(), launch,
-						allowTerminate == AllowTerminate.ALWAYS, pollingInterval);
+						allowTerminate == AllowTerminate.ALWAYS, pollingInterval, launchWatches);
 				debugTarget.start();
 			} else {
 				throw new CoreException(Status.error(
