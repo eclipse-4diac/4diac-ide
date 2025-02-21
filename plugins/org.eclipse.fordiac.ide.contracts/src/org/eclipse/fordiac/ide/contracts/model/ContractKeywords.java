@@ -37,7 +37,7 @@ public final class ContractKeywords {
 	public static final String THEN = "then"; //$NON-NLS-1$
 	public static final String TRUE = " TRUE"; //$NON-NLS-1$
 	public static final String UNIT_OF_TIME = "ms"; //$NON-NLS-1$
-	public static final String WHENEVER = "Whenever"; //$NON-NLS-1$
+	public static final String WHENEVER = "whenever"; //$NON-NLS-1$
 	public static final String WITH = "with"; //$NON-NLS-1$
 	public static final String WITHIN = "within"; //$NON-NLS-1$
 

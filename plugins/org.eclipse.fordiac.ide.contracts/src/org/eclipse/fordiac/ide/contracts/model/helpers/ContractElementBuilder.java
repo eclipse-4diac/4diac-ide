@@ -30,6 +30,7 @@ public class ContractElementBuilder {
 
 	public ContractElementBuilder addComma() {
 		contractElement.append(ContractKeywords.COMMA);
+		contractElement.append(" "); //$NON-NLS-1$
 		return this;
 	}
 
@@ -100,6 +101,7 @@ public class ContractElementBuilder {
 
 	public ContractElementBuilder addOffet() {
 		contractElement.append(ContractKeywords.OFFSET);
+		contractElement.append(" "); //$NON-NLS-1$
 		return this;
 	}
 

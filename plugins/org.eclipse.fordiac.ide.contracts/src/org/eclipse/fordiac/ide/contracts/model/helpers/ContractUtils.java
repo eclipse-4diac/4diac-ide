@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public final class ContractUtils {
+
 	private ContractUtils() {
 
 	}
@@ -48,39 +49,36 @@ public final class ContractUtils {
 
 	public static String createAssumptionString(final String event, final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
-		elementStr.addAssumption().addEventSpace(event).addOccurs().addEvery().addTime(time).addTimeUnit();
+		elementStr.addEventSpace(event).addOccurs().addEvery().addTime(time).addTimeUnit();
 		return elementStr.getString();
 	}
 
 	public static String createOffsetString(final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
-		elementStr.addWith().addTime(time).addTimeUnit().addSpace().addOffet();
+		elementStr.addWith().addOffet().addTime(time).addTimeUnit();
 		return elementStr.getString();
 	}
 
 	public static String createReactionString(final String inputEvent, final String outputEvent, final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
-		elementStr.addGuarantee().addReaction().addEOpen().addEvent(inputEvent).addComma().addEvent(outputEvent)
-				.addEClose();
+		elementStr.addReaction().addEOpen().addEvent(inputEvent).addComma().addEvent(outputEvent).addEClose();
 		elementStr.addWithin().addTime(time).addTimeUnit();
 		return elementStr.getString();
 	}
 
 	public static String createGuaranteeString(final String inputEvent, final String outputEvent, final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
-		elementStr.addGuarantee().addWhenever().addEvent().addEventSpace(inputEvent).addOccursComma();
-		elementStr.addThen().addEvent().addEventSpace(outputEvent).addOccurs().addWithin().addTime(time).addTimeUnit();
+		elementStr.addWhenever().addEventSpace(inputEvent).addOccurs();
+		elementStr.addThen().addEventSpace(outputEvent).addOccurs().addWithin().addTime(time).addTimeUnit();
 		return elementStr.getString();
 	}
 
 	public static String createGuaranteeTwoEvents(final String inputEvent, final String outputEvent,
 			final String secondOutputEvent, final String time) {
 		final ContractElementBuilder elementStr = new ContractElementBuilder();
-		elementStr.addGuarantee().addWhenever().addEvent().addEventSpace(inputEvent).addOccursComma();
-		elementStr.addThen().addEvents().addEOpen().addEvent(outputEvent).addComma().addEvent(secondOutputEvent);
-		elementStr.addEClose().addOccur().addWithin().addTime(time).addTimeUnit();
+		elementStr.addWhenever().addEventSpace(inputEvent).addOccurs();
+		elementStr.addThen().addEOpen().addEvent(outputEvent).addComma().addEvent(secondOutputEvent);
+		elementStr.addEClose().addOccurs().addWithin().addTime(time).addTimeUnit();
 		return elementStr.getString();
-
 	}
-
 }

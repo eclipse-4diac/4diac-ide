@@ -16,19 +16,16 @@
 package org.eclipse.fordiac.ide.contracts;
 
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorModelAccess;
 
+@SuppressWarnings("restriction")
 public class ContractElementDialog extends MessageDialog {
 
 	private String input;
-	private Text inputText;
+	private EmbeddedEditorModelAccess editor;
 
 	public ContractElementDialog(final Shell parentShell, final String suggestion) {
 		super(parentShell, Messages.ContractElementDialog_Title, null, Messages.ContractElementDialog_Info,
@@ -52,32 +49,23 @@ public class ContractElementDialog extends MessageDialog {
 
 	@Override
 	protected Control createCustomArea(final Composite parent) {
-		parent.setLayout(new GridLayout(1, false));
-
-		final Group group = new Group(parent, SWT.FILL);
-		group.setText(Messages.ContractElementDialog_Define);
-		group.setLayout(new GridLayout(1, false));
-		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-
-		inputText = new Text(group, SWT.SINGLE);
-		inputText.setText(input);
-		inputText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		final var handle = ContractspecResourceProvider.getEmbeddedEditorBuilder().showLineNumbers().withParent(parent);
+		editor = handle.createPartialEditor();
+		editor.updateModel(input);
 
 		// select the time for easy editing if possible
 		final String sel = String.valueOf(DefineFbInterfaceConstraintHandler.DEFAULT_TIME);
 		final int startIdx = input.indexOf(sel);
 
 		if (startIdx > 0) {
-			final int endIdx = startIdx + sel.length();
-			inputText.setSelection(startIdx, endIdx);
+			handle.getViewer().setSelectedRange(startIdx, sel.length());
 		}
-
-		return parent;
+		return dialogArea;
 	}
 
 	@Override
 	protected void buttonPressed(final int buttonId) {
-		input = inputText.getText();
+		input = editor.getEditablePart();
 		super.buttonPressed(buttonId);
 	}
 }
