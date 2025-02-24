@@ -20,6 +20,12 @@
             id="org.eclipse.fordiac.ide.fbtypeeditor.network.actions.OpenCompositeInstanceViewerOpenListener"
             label="Open CFB Instance Viewer">
       </openListener>
+      <openListener
+            class="org.eclipse.fordiac.ide.fbtypeeditor.network.actions.OpenTypedFBNetworkEditorAction"
+            icon="fordiacimage://ICON_FB_NETWORK"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.network.OpenTypedFBNetworkEditorAction"
+            label="Open CFB Instance Viewer">
+      </openListener>
    </extension>
    <extension
          point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">

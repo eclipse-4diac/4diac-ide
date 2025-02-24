@@ -18,12 +18,14 @@ import org.eclipse.osgi.util.NLS;
 /**
  * The Class Messages.
  */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.fbtypeeditor.network.messages"; //$NON-NLS-1$
 
 	/** The Composite network editor_ labe l_ composite editor. */
 	public static String CompositeNetworkEditor_LABEL_CompositeEditor;
+
+	public static String OpenTypedFBNetwork_ActionText;
 
 	static {
 		// initialize resource bundle

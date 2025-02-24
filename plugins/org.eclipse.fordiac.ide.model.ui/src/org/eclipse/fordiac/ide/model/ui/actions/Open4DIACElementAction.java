@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
@@ -77,6 +78,9 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 				if (selected instanceof FB || selected instanceof Group) {
 					refObject = selected;
 					selected = fbnElement.eContainer().eContainer();
+					if (selected instanceof FBType) {
+						selected = fbnElement.eContainer();
+					}
 				} else if (isExpandedSubapp(selected)) {
 					refObject = selected;
 				}
