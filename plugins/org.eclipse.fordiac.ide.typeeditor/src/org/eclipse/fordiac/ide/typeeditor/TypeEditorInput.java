@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.typeeditor;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.ui.editors.ITypeEditorInput;
@@ -31,7 +32,7 @@ import org.eclipse.ui.part.FileEditorInputFactory;
  * method is adapted that EditorInput is equal to another EditorInput if the
  * content is equal.
  */
-public class TypeEditorInput implements ITypeEditorInput, IPersistableElement {
+public class TypeEditorInput extends PlatformObject implements ITypeEditorInput, IPersistableElement {
 	private LibraryElement type;
 	private final TypeEntry entry;
 	private final IFile file;
@@ -73,11 +74,6 @@ public class TypeEditorInput implements ITypeEditorInput, IPersistableElement {
 	}
 
 	@Override
-	public <T> T getAdapter(final Class<T> adapter) {
-		return null;
-	}
-
-	@Override
 	public LibraryElement getContent() {
 		return type;
 	}
@@ -105,6 +101,11 @@ public class TypeEditorInput implements ITypeEditorInput, IPersistableElement {
 		// must yield the same result as FileEditorInput#hashCode()
 		// to be compatible with different editing contexts (e.g., refactoring)
 		return getFile().hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getName() + "(" + getFile().getFullPath() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
