@@ -22,10 +22,12 @@ import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
@@ -34,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -347,5 +350,22 @@ public class ConnectionAnnotations {
 
 	private ConnectionAnnotations() {
 		throw new UnsupportedOperationException("Helper class must not be instantiated"); //$NON-NLS-1$
+	}
+
+	public static void setNegated(final HiddenElement connection, final boolean negated) {
+		if (!negated) {
+			connection.deleteAttribute(LibraryElementTags.CONNECTION_NEGATED);
+		} else {
+			setNegated(connection, Boolean.toString(negated));
+		}
+	}
+
+	private static void setNegated(final HiddenElement connection, final String negated) {
+		connection.setAttribute(InternalAttributeDeclarations.NEGATED, negated, "");
+	}
+
+	public static boolean isNegated(final HiddenElement connection) {
+		final String negatedAttribute = connection.getAttributeValue(LibraryElementTags.CONNECTION_NEGATED);
+		return "true".equalsIgnoreCase(negatedAttribute); //$NON-NLS-1$
 	}
 }

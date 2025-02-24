@@ -292,4 +292,20 @@ public interface Connection extends ConfigurableObject, HiddenElement {
 	 */
 	boolean validateVarInOutConnectionsFormsNoLoop(DiagnosticChain diagnostics, Map<Object, Object> context);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model negatedDataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated
+	 */
+	void setNegated(boolean negated);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated
+	 */
+	boolean isNegated();
+
 } // Connection

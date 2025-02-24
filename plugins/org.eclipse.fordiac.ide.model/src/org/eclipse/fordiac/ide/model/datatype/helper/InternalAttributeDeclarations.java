@@ -57,9 +57,11 @@ public final class InternalAttributeDeclarations {
 	public static final AttributeDeclaration RETAIN = createAttributeDeclaration(LibraryElementTags.RETAIN_ATTRIBUTE,
 			ElementaryTypes.USINT);
 	public static final AttributeDeclaration TARGET = createTargetAttributeDeclaration();
+	public static final AttributeDeclaration NEGATED = createAttributeDeclaration(LibraryElementTags.CONNECTION_NEGATED,
+			ElementaryTypes.BOOL);
 
 	private static final List<AttributeDeclaration> allAttributes = List.of(VAR_CONFIG, VISIBLE, INOUT_VISIBLE_OUT,
-			UNFOLDED, RETAIN, TARGET);
+			UNFOLDED, RETAIN, TARGET, NEGATED);
 
 	private static AttributeDeclaration createAttributeDeclaration(final String name, final DataType type) {
 		final AttributeDeclaration declaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();

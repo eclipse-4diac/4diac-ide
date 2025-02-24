@@ -56,6 +56,7 @@ public final class LibraryElementTags {
 
 	public static final String CONNECTION_ELEMENT = "Connection"; //$NON-NLS-1$
 	public static final String ELEMENT_VISIBLE = "Visible"; //$NON-NLS-1$
+	public static final String CONNECTION_NEGATED = "Connection Negated"; //$NON-NLS-1$
 	public static final String VAR_CONFIG = "VarConfig"; //$NON-NLS-1$
 	public static final String DESTINATION_ATTRIBUTE = "Destination"; //$NON-NLS-1$
 	public static final String SOURCE_ATTRIBUTE = "Source"; //$NON-NLS-1$
