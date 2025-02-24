@@ -11,7 +11,7 @@
  *   Felix Schmid
  *     - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.contracts;
+package org.eclipse.fordiac.ide.application.widgets;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -42,7 +42,7 @@ public class ContractspecResourceProvider implements IEditedResourceProvider {
 		return resource;
 	}
 
-	public static EmbeddedEditorFactory.Builder getEmbeddedEditorBuilder() {
+	static EmbeddedEditorFactory.Builder getEmbeddedEditorBuilder() {
 		if (injector == null) {
 			final ContractspecActivator activator = ContractspecActivator.getInstance();
 			injector = activator.getInjector(ContractspecActivator.ORG_ECLIPSE_FORDIAC_IDE_CONTRACTSPEC);

@@ -9,6 +9,7 @@ Export-Package: org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.application.policies,
  org.eclipse.fordiac.ide.application.properties,
  org.eclipse.fordiac.ide.application.utilities,
+ org.eclipse.fordiac.ide.application.widgets,
  org.eclipse.fordiac.ide.application.wizards
 Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.model,
@@ -27,7 +28,9 @@ Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.core.expressions,
  org.eclipse.fordiac.ide.ui.errormessages,
  org.eclipse.fordiac.ide.model.search,
- org.eclipse.jface
+ org.eclipse.jface,
+ org.eclipse.xtext.ui,
+ org.eclipse.fordiac.ide.contractspec.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.0.0.qualifier

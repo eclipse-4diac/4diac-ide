@@ -71,7 +71,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart implements IContainerEditPart {
+
 	private final ExpandedInterfacePositionMap positionMap = new ExpandedInterfacePositionMap(this);
+	private InstanceContract instanceContract;
 
 	@Override
 	public Adapter createContentAdapter() {
@@ -209,6 +211,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	@Override
 	protected List<Object> getModelChildren() {
 		final List<Object> children = super.getModelChildren();
+		if (getModel().isUnfolded() && getModel().getAttribute(InstanceContract.CONTRACT_ATTRIBUTE_NAME) != null) {
+			children.add(getInstanceContract());
+		}
 		if (getModel().isUnfolded()) {
 			children.add(getModel().getSubAppNetwork());
 		}
@@ -217,6 +222,13 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 
 	public SubAppForFBNetworkEditPart() {
 		// nothing to do here
+	}
+
+	public InstanceContract getInstanceContract() {
+		if (instanceContract == null) {
+			instanceContract = new InstanceContract(getModel());
+		}
+		return instanceContract;
 	}
 
 	@Override

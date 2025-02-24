@@ -24,13 +24,16 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.application.widgets.ContractEditorDialog;
 import org.eclipse.fordiac.ide.contracts.model.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
@@ -53,74 +56,75 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 				oPins.add(pin);
 			}
 		}
+		final Shell shell = HandlerUtil.getActiveShell(event);
 
 		// check if exactly 1 input pin and optionally up to 2 output pins
 		if (iPins.size() != 1 || oPins.size() > 2) {
-			MessageDialog.openError(HandlerUtil.getActiveShell(event),
-					Messages.DefineFbInterfaceConstraintHandler_Title,
+			MessageDialog.openError(shell, Messages.DefineFbInterfaceConstraintHandler_Title,
 					Messages.DefineFbInterfaceConstraintHandler_Info);
 			return Status.CANCEL_STATUS;
 		}
 		// create new contract rule based on selected pins
 		final Event iPin = iPins.get(0);
-		final Shell shell = HandlerUtil.getActiveShell(event);
 
 		if (oPins.size() == 2) {
-			makeThreePinReaction(shell, iPin, oPins);
+			makeThreePinReaction(event, iPin, oPins);
 		} else if (oPins.size() == 1) {
 			final DefineFBDecisionTwoPinDialog dialog = new DefineFBDecisionTwoPinDialog(shell);
 			dialog.open();
 
 			if (dialog.isReaction()) {
-				makeTwoPinReaction(shell, iPin, oPins.get(0));
+				makeTwoPinReaction(event, iPin, oPins.get(0));
 			} else if (dialog.isGuarantee()) {
-				makeTwoPinGuarantee(shell, iPin, oPins.get(0));
+				makeTwoPinGuarantee(event, iPin, oPins.get(0));
 			}
 		} else {
-			makeOnePinConstraint(shell, iPin);
+			makeOnePinConstraint(event, iPin);
 		}
 
 		return Status.OK_STATUS;
 	}
 
-	private static void makeThreePinReaction(final Shell shell, final Event iPin, final List<Event> oPins) {
+	private static void makeThreePinReaction(final ExecutionEvent event, final Event iPin, final List<Event> oPins) {
 		final String suggestion = ContractUtils.createGuaranteeTwoEvents(iPin.getName(), oPins.get(0).getName(),
 				oPins.get(1).getName(), String.valueOf(DEFAULT_TIME));
-		openDialog(shell, iPin, suggestion);
+		openDialog(event, iPin, suggestion);
 	}
 
-	private static void makeTwoPinReaction(final Shell shell, final Event iPin, final Event oPin) {
+	private static void makeTwoPinReaction(final ExecutionEvent event, final Event iPin, final Event oPin) {
 		final String suggestion = ContractUtils.createReactionString(iPin.getName(), oPin.getName(),
 				String.valueOf(DEFAULT_TIME));
-		openDialog(shell, iPin, suggestion);
+		openDialog(event, iPin, suggestion);
 	}
 
-	private static void makeTwoPinGuarantee(final Shell shell, final Event iPin, final Event oPin) {
+	private static void makeTwoPinGuarantee(final ExecutionEvent event, final Event iPin, final Event oPin) {
 		final String suggestion = ContractUtils.createGuaranteeString(iPin.getName(), oPin.getName(),
 				String.valueOf(DEFAULT_TIME));
-		openDialog(shell, iPin, suggestion);
+		openDialog(event, iPin, suggestion);
 	}
 
-	private static void makeOnePinConstraint(final Shell shell, final Event iPin) {
+	private static void makeOnePinConstraint(final ExecutionEvent event, final Event iPin) {
 		final StringBuilder suggestion = new StringBuilder();
 		suggestion.append(ContractUtils.createAssumptionString(iPin.getName(), String.valueOf(DEFAULT_TIME)));
 		suggestion.append(" "); //$NON-NLS-1$
 		suggestion.append(ContractUtils.createOffsetString(String.valueOf(DEFAULT_OFFSET)));
 
-		openDialog(shell, iPin, suggestion.toString());
+		openDialog(event, iPin, suggestion.toString());
 	}
 
-	private static void openDialog(final Shell shell, final Event pin, final String suggestion) {
-		final ContractElementDialog dialog = new ContractElementDialog(shell, suggestion);
+	private static void openDialog(final ExecutionEvent event, final Event pin, final String suggestion) {
+		final Shell shell = HandlerUtil.getActiveShell(event);
+		final ContractEditorDialog dialog = new ContractEditorDialog(shell, suggestion,
+				Messages.ContractElementDialog_Info, String.valueOf(DefineFbInterfaceConstraintHandler.DEFAULT_TIME));
 
 		if (dialog.open() != CANCEL) {
-			final String rule = dialog.getContractRule();
+			final String rule = dialog.getSimplifiedContractRule();
 			final FBNetworkElement element = pin.getFBNetworkElement();
-			final UpdateContractCommand uccmd = new UpdateContractCommand(element, rule);
 
-			if (uccmd.canExecute()) {
-				uccmd.execute();
-			}
+			final IEditorPart editor = HandlerUtil.getActiveEditor(event);
+			final CommandStack cmdStack = editor.getAdapter(CommandStack.class);
+
+			cmdStack.execute(new UpdateContractCommand(element, rule));
 		}
 	}
 

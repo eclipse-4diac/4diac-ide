@@ -17,10 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
-import org.eclipse.fordiac.ide.contracts.model.ContractKeywords;
-import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.application.editparts.InstanceContract;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeContractCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -30,58 +29,61 @@ import org.eclipse.gef.commands.Command;
 
 public class UpdateContractCommand extends Command {
 
-	private ChangeCommentCommand cccmd;
-	private NewSubAppCommand subappcmd;
-	private ToggleSubAppRepresentationCommand toggle;
-	private ChangeNameCommand cncmd;
-	private final String comment;
-	private final FBNetworkElement fbNetworkElement;
+	private static final String ATTRIBUTE_NAME = InstanceContract.CONTRACT_ATTRIBUTE_NAME;
+	private static final int NEW_SUBAPP_WIDTH = 900;
+	private static final int NEW_SUBAPP_HEIGHT = 400;
 
-	public UpdateContractCommand(final FBNetworkElement fbNetworkElement, final String comment) {
-		this.comment = comment;
+	private final FBNetworkElement fbNetworkElement;
+	private NewSubAppCommand subappcmd;
+	private ChangeContractCommand ccc;
+	private ToggleSubAppRepresentationCommand toggle;
+	private String contract;
+	private SubApp subapp;
+
+	public UpdateContractCommand(final FBNetworkElement fbNetworkElement, final String contract) {
+		this.contract = contract;
 		this.fbNetworkElement = fbNetworkElement;
 	}
 
 	@Override
 	public void execute() {
-		if (cccmd == null) {
+		subapp = createNewSubapp();
 
-			final SubApp subapp = createNewSubapp();
-			final StringBuilder finalcomment = new StringBuilder();
-			final String oldcomment = subapp.getComment();
-			if (oldcomment.indexOf(ContractKeywords.ASSUMPTION) == 0) {
-				finalcomment.append(oldcomment);
-				finalcomment.append(System.lineSeparator());
-			}
-			finalcomment.append(this.comment);
-			cccmd = new ChangeCommentCommand(subapp, finalcomment.toString());
-			if (cccmd.canExecute()) {
-				cccmd.execute();
-			}
+		final String oldContract = subapp.getAttributeValue(ATTRIBUTE_NAME);
 
+		if (oldContract != null && !oldContract.isEmpty()) {
+			final StringBuilder sb = new StringBuilder(oldContract);
+			sb.append(System.lineSeparator());
+			sb.append(contract);
+			contract = sb.toString();
+		}
+
+		ccc = new ChangeContractCommand(subapp, contract);
+		if (ccc.canExecute()) {
+			ccc.execute();
 		}
 	}
 
 	@Override
 	public void undo() {
-		cccmd.undo();
+		ccc.undo();
 		if (toggle != null) {
 			toggle.undo();
 		}
-		cncmd.undo();
-		subappcmd.undo();
-		super.undo();
+		if (subappcmd != null) {
+			subappcmd.undo();
+		}
 	}
 
 	@Override
 	public void redo() {
-		subappcmd.redo();
-		cncmd.redo();
+		if (subappcmd != null) {
+			subappcmd.redo();
+		}
 		if (toggle != null) {
 			toggle.redo();
 		}
-		cccmd.redo();
-		super.redo();
+		ccc.redo();
 	}
 
 	private SubApp createNewSubapp() {
@@ -104,11 +106,8 @@ public class UpdateContractCommand extends Command {
 			subappcmd.execute();
 		}
 		final SubApp subapp = subappcmd.getElement();
-		cncmd = ChangeNameCommand.forName(subapp, NameRepository.createUniqueName(subapp,
-				ContractKeywords.CONTRACT_KEYWORD + fbNetworkElement.getName()));
-		if (cncmd.canExecute()) {
-			cncmd.execute();
-		}
+		subapp.setWidth(CoordinateConverter.INSTANCE.screenToIEC61499(NEW_SUBAPP_WIDTH));
+		subapp.setHeight(CoordinateConverter.INSTANCE.screenToIEC61499(NEW_SUBAPP_HEIGHT));
 		toggle = new ToggleSubAppRepresentationCommand(subapp);
 		if (toggle.canExecute()) {
 			toggle.execute();

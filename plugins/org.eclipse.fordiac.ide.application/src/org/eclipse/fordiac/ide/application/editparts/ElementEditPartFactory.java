@@ -80,6 +80,9 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		if (modelElement instanceof InstanceComment) {
 			return new InstanceCommentEditPart();
 		}
+		if (modelElement instanceof InstanceContract) {
+			return new InstanceContractEditPart();
+		}
 		if (modelElement instanceof Connection) {
 			return new ConnectionEditPart();
 		}
