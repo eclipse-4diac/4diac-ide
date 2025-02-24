@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,10 +11,12 @@
  * Contributors:
  *   Ulzii Jargalsaikhan - initial API and implementation and/or initial documentation
  *   Martin Melik Merkumians - adds test for partial access
+ *   Martin Erich Jobst - add tests for comment formatting
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests
 
 import com.google.inject.Inject
+import org.eclipse.xtext.formatting2.FormatterPreferenceKeys
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.extensions.InjectionExtension
 import org.eclipse.xtext.testing.formatter.FormatterTestHelper
@@ -1468,6 +1471,32 @@ class Formatter2Test {
 	}
 
 	@Test
+	def void commentStabilityTestSLWrappedSpaces() {
+		val text = '''
+			FUNCTION hubert
+			VAR_TEMP
+			    X : DINT; // end-of-line, wrapped comment because the comment is too long to fit in a single line so it is
+			              // wrapped at the end
+			END_VAR
+			IF int1 < int2 THEN
+			    // indented, wrapped comment because the comment is too long to fit in a single line so it is
+			    // wrapped at the end
+			    bol1 := TRUE;
+			    // indented, wrapped comment because the comment is too long to fit in a single line so it is
+			    // wrapped at the end
+			END_IF;
+			// unindented, wrapped comment because the comment is too long to fit in a single line so it is
+			// wrapped at the end
+			END_FUNCTION
+		'''
+		assertFormatted[
+			toBeFormatted = text
+			expectation = text
+			getOrCreateMapBasedPreferences.put(FormatterPreferenceKeys.indentation, "    ")
+		]
+	}
+
+	@Test
 	def void commentStabilityTestMLUnwrapped() {
 		val text = '''
 			FUNCTION hubert
@@ -1513,6 +1542,34 @@ class Formatter2Test {
 		assertFormatted[
 			toBeFormatted = text
 			expectation = text
+		]
+	}
+
+	@Test
+	def void commentStabilityTestMLWrappedSpaces() {
+		val text = '''
+			FUNCTION hubert
+			VAR_TEMP
+			    X : DINT; (* end-of-line, wrapped comment because the comment is too long to fit in a single line so it is
+			               * wrapped at the end *)
+			END_VAR
+			(* unindented, wrapped comment because the comment is too long to fit in a single line so it is
+			 * wrapped at the end *)
+			IF int1 < int2 THEN
+			    (* indented, wrapped comment because the comment is too long to fit in a single line so it is
+			     * wrapped at the end *)
+			    bol1 := TRUE;
+			    (* indented, wrapped comment because the comment is too long to fit in a single line so it is
+			     * wrapped at the end *)
+			END_IF;
+			(* unindented, wrapped comment because the comment is too long to fit in a single line so it is
+			 * wrapped at the end *)
+			END_FUNCTION
+		'''
+		assertFormatted[
+			toBeFormatted = text
+			expectation = text
+			getOrCreateMapBasedPreferences.put(FormatterPreferenceKeys.indentation, "    ")
 		]
 	}
 

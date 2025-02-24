@@ -30,7 +30,7 @@ public final class FormatterUtil {
 			return context.getFormatter().getPreference(FormatterPreferenceKeys.tabWidth).intValue()
 					* context.getIndentation();
 		}
-		return context.getIndentation();
+		return indentation.length() * context.getIndentation();
 	}
 
 	public static String wrapLines(final String lines, final int wrapLength, final String lineSeparator) {
