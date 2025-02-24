@@ -18,13 +18,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.Messages;
-import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -32,13 +33,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public class DeleteFBNetworkElementCommand extends Command implements ScopedCommand {
+public class DeleteFBNetworkElementCommand extends Command implements QualNameAffectedCommand {
 	private final FBNetwork fbParent;
 	private final FBNetworkElement element;
 	private final CompoundCommand cmds = new CompoundCommand();
@@ -129,5 +131,20 @@ public class DeleteFBNetworkElementCommand extends Command implements ScopedComm
 			return Set.of(fbParent);
 		}
 		return Set.of(element);
+	}
+
+	@Override
+	public String getOldQualName(final INamedElement element) {
+		return element.getQualifiedName();
+	}
+
+	@Override
+	public String getNewQualName(final INamedElement element) {
+		return null;
+	}
+
+	@Override
+	public List<INamedElement> getChangedElements() {
+		return List.of(element);
 	}
 }

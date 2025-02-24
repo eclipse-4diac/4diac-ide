@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class DeleteNodeOperation extends AbstractChangeHierarchyOperation {
 
@@ -43,28 +44,6 @@ public class DeleteNodeOperation extends AbstractChangeHierarchyOperation {
 		return Status.OK_STATUS;
 	}
 
-	private int getParentIndex() {
-		final EList<? extends Node> parentContainer = getParentContainer();
-		if (parentContainer != null) {
-			return parentContainer.indexOf(node);
-		}
-		return -1;
-	}
-
-	@Override
-	public IStatus redo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
-		removeFromParent();
-		saveHierarchy(parent, monitor);
-		return Status.OK_STATUS;
-	}
-
-	private void removeFromParent() {
-		final EList<? extends Node> parentContainer = getParentContainer();
-		if (parentContainer != null && index != -1) {
-			parentContainer.remove(index);
-		}
-	}
-
 	@Override
 	public IStatus undo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		// for adding we can not use getParentContainer as the root node has levels and not nodes
@@ -76,6 +55,32 @@ public class DeleteNodeOperation extends AbstractChangeHierarchyOperation {
 		}
 		saveHierarchy(parent, monitor);
 		return Status.OK_STATUS;
+	}
+
+	@Override
+	public IStatus redo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
+		removeFromParent();
+		saveHierarchy(parent, monitor);
+		return Status.OK_STATUS;
+	}
+
+	public CreateLeafOperation createUndoOperation(final SubApp subApp) {
+		return new CreateLeafOperation((Level) parent, subApp);
+	}
+
+	private int getParentIndex() {
+		final EList<? extends Node> parentContainer = getParentContainer();
+		if (parentContainer != null) {
+			return parentContainer.indexOf(node);
+		}
+		return -1;
+	}
+
+	private void removeFromParent() {
+		final EList<? extends Node> parentContainer = getParentContainer();
+		if (parentContainer != null && index != -1) {
+			parentContainer.remove(index);
+		}
 	}
 
 	private EList<? extends Node> getParentContainer() {

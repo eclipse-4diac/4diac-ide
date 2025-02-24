@@ -26,6 +26,9 @@ public abstract class QualNameChangeListener {
 		RENAME, RENAME_UNDO, RENAME_REDO, DELETE, DELETE_UNDO, DELETE_REDO, MOVE;
 	}
 
+	private final List<QualNameChangeState> UNDO_STATES = List.of(QualNameChangeState.DELETE_UNDO,
+			QualNameChangeState.RENAME_UNDO);
+
 	/**
 	 * A list of changes which are chached by the receiving object. This changes
 	 * need to be applied to the receiver after an editor is saved. The editor is
@@ -91,22 +94,22 @@ public abstract class QualNameChangeListener {
 		}
 
 		for (final QualNameChange change : list) {
-			List<AbstractOperation> operation = null;
+			List<AbstractOperation> operations = null;
 
-			if (change.state() == QualNameChangeState.RENAME_UNDO) {
-				operation = constructExecutableUndoOperations(change, getReceiver(key));
+			if (UNDO_STATES.contains(change.state())) {
+				operations = constructExecutableUndoOperations(change, getReceiver(key));
 			} else {
-				operation = constructExecutableOperations(change, getReceiver(key));
+				operations = constructExecutableOperations(change, getReceiver(key));
 			}
 
-			if (operation == null || operation.isEmpty()) {
+			if (operations == null || operations.isEmpty()) {
 				continue;
 				// the receiving object might have change in the meantime
 				// TODO add to Plant hier a warning that we have umcomited change -> save all
 				// editors before editing plant hierachy
 			}
 
-			operation.stream().forEach(this::executeOperation);
+			operations.stream().forEach(this::executeOperation);
 		}
 
 		pendingChanges.remove(key);

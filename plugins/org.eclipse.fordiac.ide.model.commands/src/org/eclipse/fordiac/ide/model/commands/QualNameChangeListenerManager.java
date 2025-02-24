@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener.QualNameChangeState;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -76,7 +77,21 @@ public enum QualNameChangeListenerManager implements CommandStackEventListener {
 			return;
 		}
 
-		if (event.getCommand() instanceof final QualNameAffectedCommand cmd) {
+		if (event.getCommand() instanceof final DeleteFBNetworkElementCommand cmd) {
+			switch (event.getDetail()) {
+			case CommandStack.PRE_EXECUTE:
+				notifyListenersExecute(cmd.getQualNameChanges(QualNameChangeState.DELETE));
+				break;
+			case CommandStack.POST_UNDO:
+				notifyListenersExecute(cmd.getQualNameChanges(QualNameChangeState.DELETE_UNDO));
+				break;
+			case CommandStack.PRE_REDO:
+				notifyListenersExecute(cmd.getQualNameChanges(QualNameChangeState.DELETE_REDO));
+				break;
+			default:
+				break;
+			}
+		} else if (event.getCommand() instanceof final QualNameAffectedCommand cmd) {
 			switch (event.getDetail()) {
 			case CommandStack.POST_EXECUTE:
 				notifyListenersExecute(cmd.getQualNameChanges(QualNameChangeState.RENAME));

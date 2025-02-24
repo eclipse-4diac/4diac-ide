@@ -31,12 +31,14 @@ import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceFactoryImpl;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.AbstractHierarchyHandler;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.AbstractChangeHierarchyOperation;
+import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.DeleteNodeOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.UpdateLeafRefOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.util.HierarchyManagerUtil;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.view.PlantHierarchyView;
 import org.eclipse.fordiac.ide.model.commands.QualNameChange;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.ui.IWorkbenchPage;
@@ -61,6 +63,8 @@ public class HierachyManagerUpdateListener extends QualNameChangeListener {
 		return PlantHierarchyView.loadHierachyForProject(project, hierarchyResouceSet, loadOptions);
 	}
 
+	private final HashMap<String, DeleteNodeOperation> deleteNodeOperations = new HashMap<>();
+
 	@Override
 	public List<AbstractOperation> constructExecutableUndoOperations(final QualNameChange change, final Object o) {
 		return constructOperation(change, o, true);
@@ -73,24 +77,39 @@ public class HierachyManagerUpdateListener extends QualNameChangeListener {
 		return constructOperation(qualNameChange, rootLevel, false);
 	}
 
-	protected static List<AbstractOperation> constructOperation(final QualNameChange qualNameChange,
-			final Object rootLevel, final boolean isUndo) {
+	protected List<AbstractOperation> constructOperation(final QualNameChange qualNameChange, final Object rootLevel,
+			final boolean isUndo) {
+
 		final String identifier = isUndo ? qualNameChange.newQualName() : qualNameChange.oldQualName();
 
 		final List<AbstractOperation> result = new ArrayList<>();
 
-		final List<Leaf> leafs = HierarchyManagerUtil.searchLeaf((RootLevel) rootLevel,
-				leaf -> leaf.getRef().contains(identifier));
-		if (leafs == null || leafs.isEmpty()) {
-			return Collections.emptyList(); // leaf may have been deleted in the meantime
+		if ((qualNameChange.state() == QualNameChangeState.DELETE_UNDO)
+				&& qualNameChange.notifier() instanceof final SubApp sub) {
+
+			final DeleteNodeOperation op = deleteNodeOperations.get(qualNameChange.oldQualName());
+			result.add(op.createUndoOperation(sub));
+		} else {
+			final List<Leaf> leafs = HierarchyManagerUtil.searchLeaf((RootLevel) rootLevel,
+					leaf -> leaf.getRef().contains(identifier));
+
+			if (leafs == null || leafs.isEmpty()) {
+				return Collections.emptyList(); // leaf may have been deleted in the meantime
+			}
+
+			final String newRef = isUndo ? qualNameChange.oldQualName() : qualNameChange.newQualName();
+
+			for (final Leaf leaf : leafs) {
+				if (qualNameChange.state() == QualNameChangeState.DELETE
+						|| qualNameChange.state() == QualNameChangeState.DELETE_REDO) {
+					final DeleteNodeOperation operation = new DeleteNodeOperation(leaf);
+					deleteNodeOperations.put(qualNameChange.oldQualName(), operation);
+					result.add(operation);
+				} else {
+					result.add(new UpdateLeafRefOperation(leaf, newRef, identifier));
+				}
+			}
 		}
-
-		final String newRef = isUndo ? qualNameChange.oldQualName() : qualNameChange.newQualName();
-
-		for (final Leaf leaf : leafs) {
-			result.add(new UpdateLeafRefOperation(leaf, newRef, identifier));
-		}
-
 		return result;
 	}
 
