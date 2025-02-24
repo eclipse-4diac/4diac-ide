@@ -129,6 +129,7 @@
         	name="%command.OpenType">
     	</command>
      <command
+           categoryId="org.eclipse.ltk.ui.category.refactoring"
            id="org.eclipse.fordiac.ide.typemanagement.renameElement"
            name="%command.RenameElement">
      </command>
@@ -148,6 +149,12 @@
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="CTRL+SHIFT+T">
+      </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.typemanagement.renameElement"
+            contextId="org.eclipse.fordiac.ide.gef"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="SHIFT+ALT+R">
       </key>
    </extension>
    <extension point="org.eclipse.ui.handlers">
