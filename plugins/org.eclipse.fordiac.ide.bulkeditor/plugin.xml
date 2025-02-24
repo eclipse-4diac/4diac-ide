@@ -16,7 +16,7 @@
     <menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=group.openWith">
         <command
             commandId="org.eclipse.fordiac.ide.bulkeditor.editors.openEditor"
-            label="Open Bulk Editor">
+            label="Open in Bulk Editor">
             <visibleWhen>
                 <with variable="selection">
                     <iterate operator="or">

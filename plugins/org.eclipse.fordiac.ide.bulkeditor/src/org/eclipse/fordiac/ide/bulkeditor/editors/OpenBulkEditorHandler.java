@@ -20,7 +20,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.ui.internal.part.NullEditorInput;
+import org.eclipse.ui.part.FileEditorInput;
 
 public class OpenBulkEditorHandler extends AbstractHandler {
 	@Override
@@ -28,11 +28,10 @@ public class OpenBulkEditorHandler extends AbstractHandler {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final Object firstElement = selection.getFirstElement();
 
-		if (firstElement instanceof final IProject project) {
+		if (firstElement instanceof final IProject project && project.isOpen()) {
 			final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-
 			try {
-				window.getActivePage().openEditor(new NullEditorInput(), // new BulkEditorInput(project),
+				window.getActivePage().openEditor(new FileEditorInput(project.getFile(project.getFullPath())),
 						"org.eclipse.fordiac.ide.bulkeditor.BulkEditor"); //$NON-NLS-1$
 			} catch (final Exception e) {
 				e.printStackTrace();
@@ -40,4 +39,6 @@ public class OpenBulkEditorHandler extends AbstractHandler {
 		}
 		return null;
 	}
+
+	// TODO: disable for closed Projects
 }
