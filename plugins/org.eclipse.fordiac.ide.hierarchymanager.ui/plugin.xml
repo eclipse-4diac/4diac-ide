@@ -278,4 +278,13 @@
           point="org.eclipse.fordiac.ide.model.commands.QualNameChangeListener">
           <listener class = "org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierachyManagerUpdateListener"/>
     </extension>
+    <extension
+          point="org.eclipse.ltk.core.refactoring.deleteParticipants">
+       <deleteParticipant
+             class="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.DeleteLibraryElementParticipant"
+             id="org.eclipse.fordiac.ide.hierarchymanager.ui.deleteLibraryElementParticipant"
+             name="deletePlantElement">
+          <enablement></enablement>
+       </deleteParticipant>
+    </extension>
 </plugin>

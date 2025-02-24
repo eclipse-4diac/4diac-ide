@@ -107,7 +107,7 @@ public class HierarchyManagerUtil {
 
 	@FunctionalInterface
 	public interface LeafMatcher {
-		boolean match(String s);
+		boolean match(Leaf leaf);
 	}
 
 	public static List<Leaf> searchLeaf(final RootLevel rootLevel, final LeafMatcher matcher) {
@@ -124,7 +124,7 @@ public class HierarchyManagerUtil {
 			if (node instanceof final Level l) {
 				searchLeaf(l, result, matcher);
 			}
-			if (node instanceof final Leaf leaf && matcher.match(leaf.getRef())) {
+			if (node instanceof final Leaf leaf && matcher.match(leaf)) {
 				result.add(leaf);
 			}
 		}
