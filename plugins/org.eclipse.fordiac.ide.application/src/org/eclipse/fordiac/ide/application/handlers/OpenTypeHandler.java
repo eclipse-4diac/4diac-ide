@@ -19,6 +19,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -42,7 +43,6 @@ public class OpenTypeHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-
 		final IStructuredSelection sel = HandlerUtil.getCurrentStructuredSelection(event);
 		final EObject object = getSelectedObject(sel);
 
@@ -71,7 +71,6 @@ public class OpenTypeHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final ISelection sel = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-
 		setBaseEnabled(getSelectedObject(sel) != null);
 	}
 
@@ -99,7 +98,6 @@ public class OpenTypeHandler extends AbstractHandler {
 	}
 
 	private static EObject getEObjectForOpening(final FBNetwork fbn) {
-
 		if (fbn.eContainer() instanceof final UntypedSubApp usa) {
 			EObject element = usa;
 
@@ -121,7 +119,11 @@ public class OpenTypeHandler extends AbstractHandler {
 		}
 
 		if (fbn.eContainer() instanceof final TypedSubApp tsa) {
-			return tsa.getType();
+			return tsa.getType().getFBNetwork();
+		}
+
+		if (fbn.eContainer() instanceof final CFBInstance cfb) {
+			return cfb.getType().getFBNetwork();
 		}
 
 		return null;
