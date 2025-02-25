@@ -27,10 +27,12 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceFactoryImpl;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.AbstractHierarchyHandler;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.AbstractChangeHierarchyOperation;
+import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.AddLeafOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.DeleteNodeOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.UpdateLeafRefOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.util.HierarchyManagerUtil;
@@ -63,7 +65,7 @@ public class HierachyManagerUpdateListener extends QualNameChangeListener {
 		return PlantHierarchyView.loadHierachyForProject(project, hierarchyResouceSet, loadOptions);
 	}
 
-	private final HashMap<String, DeleteNodeOperation> deleteNodeOperations = new HashMap<>();
+	private final HashMap<String, List<AbstractOperation>> undoDeleteOperations = new HashMap<>();
 
 	@Override
 	public List<AbstractOperation> constructExecutableUndoOperations(final QualNameChange change, final Object o) {
@@ -80,36 +82,36 @@ public class HierachyManagerUpdateListener extends QualNameChangeListener {
 	protected List<AbstractOperation> constructOperation(final QualNameChange qualNameChange, final Object rootLevel,
 			final boolean isUndo) {
 
+		if (qualNameChange.state() == QualNameChangeState.DELETE_UNDO
+				&& qualNameChange.notifier() instanceof final SubApp sub) {
+
+			return undoDeleteOperations.remove(qualNameChange.oldQualName());
+		}
+
 		final String identifier = isUndo ? qualNameChange.newQualName() : qualNameChange.oldQualName();
 
 		final List<AbstractOperation> result = new ArrayList<>();
+		final List<Leaf> leafs = HierarchyManagerUtil.searchLeaf((RootLevel) rootLevel,
+				leaf -> leaf.getRef().contains(identifier));
 
-		if ((qualNameChange.state() == QualNameChangeState.DELETE_UNDO)
-				&& qualNameChange.notifier() instanceof final SubApp sub) {
+		if (leafs == null || leafs.isEmpty()) {
+			return Collections.emptyList(); // leaf may have been deleted in the meantime
+		}
 
-			final DeleteNodeOperation op = deleteNodeOperations.get(qualNameChange.oldQualName());
-			result.add(op.createUndoOperation(sub));
-		} else {
-			final List<Leaf> leafs = HierarchyManagerUtil.searchLeaf((RootLevel) rootLevel,
-					leaf -> leaf.getRef().contains(identifier));
+		final String newRef = isUndo ? qualNameChange.oldQualName() : qualNameChange.newQualName();
 
-			if (leafs == null || leafs.isEmpty()) {
-				return Collections.emptyList(); // leaf may have been deleted in the meantime
-			}
+		for (final Leaf leaf : leafs) {
+			if (qualNameChange.state() == QualNameChangeState.DELETE
+					|| qualNameChange.state() == QualNameChangeState.DELETE_REDO) {
 
-			final String newRef = isUndo ? qualNameChange.oldQualName() : qualNameChange.newQualName();
+				result.add(new DeleteNodeOperation(leaf));
 
-			for (final Leaf leaf : leafs) {
-				if (qualNameChange.state() == QualNameChangeState.DELETE
-						|| qualNameChange.state() == QualNameChangeState.DELETE_REDO) {
-					final DeleteNodeOperation operation = new DeleteNodeOperation(leaf);
-					deleteNodeOperations.put(qualNameChange.oldQualName(), operation);
-					result.add(operation);
-				} else {
-					result.add(new UpdateLeafRefOperation(leaf, newRef, identifier));
-				}
+				storeUndoDeleteOperations(qualNameChange.oldQualName(), leaf);
+			} else {
+				result.add(new UpdateLeafRefOperation(leaf, newRef, identifier));
 			}
 		}
+
 		return result;
 	}
 
@@ -139,6 +141,12 @@ public class HierachyManagerUpdateListener extends QualNameChangeListener {
 	@Override
 	protected boolean isEnabled(final INamedElement element) {
 		return element instanceof UntypedSubApp;
+	}
+
+	protected void storeUndoDeleteOperations(final String qualName, final Leaf leaf) {
+		final AddLeafOperation op = new AddLeafOperation((Level) leaf.eContainer(), leaf);
+
+		undoDeleteOperations.computeIfAbsent(qualName, k -> new ArrayList<>()).add(op);
 	}
 
 }
