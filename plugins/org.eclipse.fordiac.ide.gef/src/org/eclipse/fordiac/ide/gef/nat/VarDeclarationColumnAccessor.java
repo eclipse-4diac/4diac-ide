@@ -32,6 +32,8 @@ import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -61,7 +63,7 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case TYPE -> rowObject.getFullTypeName();
 		case COMMENT -> CommentHelper.getInstanceComment(rowObject);
 		case INITIAL_VALUE -> getInitialValue(rowObject);
-		case VAR_CONFIG -> Boolean.valueOf(rowObject.isVarConfig());
+		case VAR_CONFIG -> getVarConfString(rowObject);
 		case VISIBLE -> Boolean.valueOf(rowObject.isVisible());
 		case RETAIN -> getAttributeValueAsString(rowObject);
 		case VISIBLEIN, VISIBLEOUT -> Boolean.valueOf(handleInOutCheck(rowObject, column));
@@ -69,6 +71,15 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case PATH -> FordiacMarkerHelper.getLocation(rowObject);
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
+	}
+
+	private static boolean getVarConfString(final VarDeclaration rowObject) {
+		return isCompositeFBType(rowObject) ? null : Boolean.valueOf(rowObject.isVarConfig());
+	}
+
+	private static boolean isCompositeFBType(final VarDeclaration rowObject) {
+		final FBNetworkElement fbElement = rowObject.getFBNetworkElement();
+		return fbElement instanceof CFBInstance;
 	}
 
 	private static boolean handleInOutCheck(final VarDeclaration rowObject, final VarDeclarationTableColumn column) {

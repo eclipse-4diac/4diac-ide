@@ -24,6 +24,7 @@ package org.eclipse.fordiac.ide.application.properties;
 import java.text.MessageFormat;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.editors.InitialValueEditor;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
@@ -38,6 +39,8 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueRefreshJob;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -191,8 +194,26 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		}
 
 		if (fb != null) {
-			setEditable(!fb.isContainedInTypedInstance());
+			setEditable(!fb.isContainedInTypedInstance() && !containsCFB(getType().eContainer()));
 		}
+	}
+
+	static boolean containsCFB(EObject container) {
+		if (container == null) {
+			return false;
+		}
+		if (container instanceof CFBInstance) {
+			return true;
+		}
+
+		while (container != null) {
+			if (container instanceof CFBInstance || container instanceof CompositeFBType) {
+				return true;
+			}
+			container = container.eContainer();
+		}
+
+		return false;
 	}
 
 	private void configureOpenEditorButton() {
