@@ -20,6 +20,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.fordiac.ide.gef.editors.InitialValueEditor;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -96,6 +97,6 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 	protected void checkFieldEnablements() {
 		super.checkFieldEnablements();
 		initialValueEditor.setEditable(isTypeChangeable());
-		varConfigCheckBox.setEnabled(isEditable());
+		varConfigCheckBox.setEnabled(isEditable() && !(getType().eContainer().eContainer() instanceof CompositeFBType));
 	}
 }
