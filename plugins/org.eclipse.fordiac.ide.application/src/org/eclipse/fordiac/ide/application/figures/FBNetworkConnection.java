@@ -24,6 +24,8 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RotatableDecoration;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
@@ -41,6 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 public class FBNetworkConnection extends HideableConnection {
 
 	private static final String THREE_DOTS = "\u2026"; //$NON-NLS-1$
+	private static final String NOT_SIGN = "\u00AC"; //$NON-NLS-1$
 
 	private static int maxWidth = GefPreferenceConstants.STORE
 			.getInt(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
@@ -103,6 +106,23 @@ public class FBNetworkConnection extends HideableConnection {
 			}
 			paintFigure(graphics);
 			paintBorder(graphics);
+			if (getModel().isNegated()) {
+				addNegationPoint(graphics);
+			}
+		}
+	}
+
+	public void addNegationPoint(final Graphics graphics) {
+		graphics.setBackgroundColor(getLocalForegroundColor());
+		final int diameter = 12;
+		final PointList points = getPoints();
+
+		if (points != null && points.size() > 1) {
+			final Point targetPoint = points.getPoint(points.size() - 1);
+			final int x = targetPoint.x - diameter - 1;
+			final int y = targetPoint.y - (diameter / 2);
+
+			graphics.fillOval(x, y, diameter, diameter);
 		}
 	}
 
@@ -123,8 +143,16 @@ public class FBNetworkConnection extends HideableConnection {
 			getSourceDecoration().getLabel().setText(createDestinationLabelText());
 			updateSourceTooltip();
 		}
+		if (getTargetDecoration() == null && getModel().isNegated()) {
+			setTargetDecoration(createTargetLabel());
+		}
 		if (getTargetDecoration() != null) {
-			getTargetDecoration().getLabel().setText(createSourceLabelText());
+			String labelText = createSourceLabelText();
+
+			if (isHidden() && getModel().isNegated()) {
+				labelText = NOT_SIGN + labelText;
+			}
+			getTargetDecoration().getLabel().setText(labelText);
 			updateTargetTooltip();
 		}
 	}

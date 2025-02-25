@@ -14,7 +14,7 @@
  *   Bianca Wiesmayr
  *     - merged the ConnectionSection classes
  *   Alois Zoitl - cleaned command stack handling for property sections
- *   Michael Oberlehner - addd show connection section
+ *   Michael Oberlehner - added show connection section
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -22,12 +22,15 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeConnectionCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.HideConnectionCommand;
+import org.eclipse.fordiac.ide.model.commands.change.NegateConnectionCommand;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -42,6 +45,8 @@ public class ConnectionSection extends AbstractSection {
 	private Text sourceText;
 	private Text targetText;
 	private Button showConnectionButton;
+	private Button negateConnectionButton;
+	private CLabel negateConnectionLabel;
 
 	@Override
 	protected Connection getType() {
@@ -78,9 +83,21 @@ public class ConnectionSection extends AbstractSection {
 				final Button btn = (Button) e.getSource();
 				final boolean visible = btn.getSelection();
 				executeCommand(new HideConnectionCommand(getConnection(), visible));
-
 			}
 		});
+
+		negateConnectionLabel = getWidgetFactory().createCLabel(composite, Messages.ConnectionSection_NegateConnection);
+		negateConnectionButton = getWidgetFactory().createButton(composite, "", SWT.CHECK);
+		negateConnectionButton.setEnabled(false);
+
+		negateConnectionButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final boolean negated = negateConnectionButton.getSelection();
+				executeCommand(new NegateConnectionCommand(getConnection(), negated));
+			}
+		});
+
 	}
 
 	@Override
@@ -101,8 +118,14 @@ public class ConnectionSection extends AbstractSection {
 			targetText.setText(getFBNameFromIInterfaceElement(getType().getDestination()) + "." //$NON-NLS-1$
 					+ getType().getDestination().getName());
 		}
-
 		showConnectionButton.setSelection(getConnection().isVisible());
+
+		final boolean isBooleanConnection = getConnection().getSource().getType() == IecTypes.ElementaryTypes.BOOL
+				&& getConnection().getDestination().getType() == IecTypes.ElementaryTypes.BOOL;
+		negateConnectionLabel.setVisible(isBooleanConnection);
+		negateConnectionButton.setVisible(isBooleanConnection);
+		negateConnectionButton.setSelection(getConnection().isNegated());
+		negateConnectionButton.setEnabled(isBooleanConnection);
 	}
 
 	private boolean isViewer() {

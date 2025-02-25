@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.application.policies.DeleteTargetInterfaceElement
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -32,8 +33,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
-import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -47,13 +48,17 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	public static final int LABEL_ALPHA = 120;
 	public static final int MAX_LABEL_LENGTH = GefPreferenceConstants.STORE
 			.getInt(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE);
+	private static final String NOT_SIGN = "\u00AC"; //$NON-NLS-1$
 
 	private final Adapter nameChangeAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
+			System.out.println(getModel().getRefElement().getName());
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
+					|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
+					|| !getModel().getRefElement().getOutputConnections().stream().map(Connection::isNegated).toList()
+							.isEmpty()) {
 				refreshVisuals();
 			}
 			super.notifyChanged(notification);
@@ -132,8 +137,11 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	}
 
 	private String getLabelText() {
-		return labelTruncate(getModel().getRefPinFullName()) + "\n" //$NON-NLS-1$
-				+ labelTruncate(getRefElement().getComment());
+		String labelText = labelTruncate(getModel().getRefPinFullName());
+		if (getRefElement().getOutputConnections().stream().anyMatch(con -> !con.isVisible() && con.isNegated())) {
+			labelText = NOT_SIGN + labelText;
+		}
+		return labelText + "\n" + labelTruncate(getRefElement().getComment());
 	}
 
 	@Override
