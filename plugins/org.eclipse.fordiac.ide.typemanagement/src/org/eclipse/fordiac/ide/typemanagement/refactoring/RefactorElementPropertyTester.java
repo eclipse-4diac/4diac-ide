@@ -13,10 +13,13 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import org.eclipse.core.expressions.PropertyTester;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.gef.EditPart;
 
 public class RefactorElementPropertyTester extends PropertyTester {
@@ -31,9 +34,20 @@ public class RefactorElementPropertyTester extends PropertyTester {
 			return isSupported(editPart.getModel());
 		}
 
-		return ((element instanceof final IInterfaceElement ie && !(element instanceof ErrorMarkerInterface))
-				&& (ie.getFBNetworkElement() instanceof final FB fb
-						&& !fb.getType().getTypeEntry().getFile().isReadOnly()))
-				|| (element instanceof final FB fbb && fbb.eContainer() instanceof BaseFBType);
+		if (element instanceof final EObject eObject
+				&& EcoreUtil.getRootContainer(eObject) instanceof final LibraryElement libraryElement
+				&& libraryElement.getTypeEntry().getFile().isReadOnly()) {
+			return false;
+		}
+
+		if (element instanceof final IInterfaceElement ie && !(ie instanceof ErrorMarkerInterface)) {
+			if (ie.getFBNetworkElement() != null && ie.getFBNetworkElement().getTypeEntry() != null
+					&& ie.getFBNetworkElement().getTypeEntry().getFile() != null) {
+				return !ie.getFBNetworkElement().getTypeEntry().getFile().isReadOnly();
+			}
+			return true;
+		}
+
+		return element instanceof final FB fbb && fbb.eContainer() instanceof BaseFBType;
 	}
 }
