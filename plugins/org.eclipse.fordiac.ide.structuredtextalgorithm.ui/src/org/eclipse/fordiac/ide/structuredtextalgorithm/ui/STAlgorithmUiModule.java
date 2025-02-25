@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDo
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorActions;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.hyperlinking.STAlgorithmHyperlinkHelper;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.refactoring.ExtractMethodRefactoring;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.refactoring.STAlgorithmLinkedPositionGroupCalculator;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.validation.STAlgorithmCustomValidatorConfigurationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreCleanupEditorCallback;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferences;
@@ -49,7 +50,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSim
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallableRefactoring;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreLinkedPositionGroupCalculator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRecordingXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreReferenceUpdater;
@@ -304,7 +304,7 @@ public class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	@Override
 	public Class<? extends ILinkedPositionGroupCalculator> bindILinkedPositionGroupCalculator() {
-		return STCoreLinkedPositionGroupCalculator.class;
+		return STAlgorithmLinkedPositionGroupCalculator.class;
 	}
 
 	public Class<? extends ISimpleNameProvider> bindISimpleNameProvider() {
