@@ -12,15 +12,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierachyManagerUpdateListener;
+import org.eclipse.fordiac.ide.hierarchymanager.ui.util.HierarchyManagerRefactoringUtil;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.util.HierarchyManagerUtil;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.view.PlantHierarchyView;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -35,13 +38,17 @@ public class DeleteLibraryElementParticipant extends DeleteParticipant {
 
 	private RootLevel plantHierarchy;
 
-	private IFile file;
+	private List<IFile> files;
 
 	@Override
 	protected boolean initialize(final Object element) {
 
-		if (element instanceof final IFile file) {
-			this.file = file;
+		if (element instanceof final IResource resource) {
+			try {
+				this.files = HierarchyManagerRefactoringUtil.getFilesFromResource(resource);
+			} catch (final CoreException e) {
+				return false;
+			}
 		}
 
 		Display.getDefault().syncExec(() -> {
@@ -57,8 +64,8 @@ public class DeleteLibraryElementParticipant extends DeleteParticipant {
 				if (input instanceof final RootLevel rootLevel) {
 					plantHierarchy = rootLevel;
 				}
-			} else if (element instanceof final IFile file) {
-				plantHierarchy = (RootLevel) HierachyManagerUpdateListener.loadPlantHierachy(file.getProject());
+			} else if (element instanceof final IResource resource) {
+				plantHierarchy = (RootLevel) HierachyManagerUpdateListener.loadPlantHierachy(resource.getProject());
 			}
 		});
 
@@ -82,8 +89,14 @@ public class DeleteLibraryElementParticipant extends DeleteParticipant {
 		try {
 			pm.beginTask("Creating change...", 1); //$NON-NLS-1$
 
-			final List<Leaf> leaves = HierarchyManagerUtil.searchLeaf(plantHierarchy,
-					leaf -> leaf.getContainerFileName().contains(file.getName()));
+			final List<Leaf> leaves = new ArrayList<>();
+
+			for (final IFile file : files) {
+				final List<Leaf> matches = HierarchyManagerUtil.searchLeaf(plantHierarchy,
+						leaf -> leaf.getContainerFileName().contains(file.getName()));
+
+				leaves.addAll(matches);
+			}
 
 			if (!leaves.isEmpty()) {
 				return new SafePlantElementDeletionChange(plantHierarchy, leaves);

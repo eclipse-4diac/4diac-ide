@@ -278,27 +278,30 @@
           point="org.eclipse.fordiac.ide.model.commands.QualNameChangeListener">
           <listener class = "org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierachyManagerUpdateListener"/>
     </extension>
-    <extension
-          point="org.eclipse.ltk.core.refactoring.deleteParticipants">
-       <deleteParticipant
-             class="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.DeleteLibraryElementParticipant"
-             id="org.eclipse.fordiac.ide.hierarchymanager.ui.deleteLibraryElementParticipant"
-             name="deletePlantElement">
-          <enablement>
-          	<and>
-                <instanceof value="org.eclipse.core.resources.IFile"/>
-                <or>
-                	<test
-	                    forcePluginActivation="true"
-	                    property="org.eclipse.core.resources.extension"
-	                    value="sys"/>
-                	<test
-	                    forcePluginActivation="true"
-	                    property="org.eclipse.core.resources.extension"
-	                    value="sub"/>
-                </or>
-            </and>
-          </enablement>
-       </deleteParticipant>
-    </extension>
+	<extension
+			point="org.eclipse.ltk.core.refactoring.deleteParticipants">
+		<deleteParticipant
+				class="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.DeleteLibraryElementParticipant"
+				id="org.eclipse.fordiac.ide.hierarchymanager.ui.deleteLibraryElementParticipant"
+				name="deletePlantElement">
+			<enablement>
+				<or>
+					<instanceof value="org.eclipse.core.resources.IFolder"/>
+					<and>
+						<instanceof value="org.eclipse.core.resources.IFile"/>
+						<or>
+							<test
+									forcePluginActivation="true"
+									property="org.eclipse.core.resources.extension"
+									value="sys"/>
+							<test
+									forcePluginActivation="true"
+									property="org.eclipse.core.resources.extension"
+									value="sub"/>
+						</or>
+					</and>
+				</or>
+			</enablement>
+		</deleteParticipant>
+	</extension>
 </plugin>
