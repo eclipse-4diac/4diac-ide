@@ -12,11 +12,21 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
+import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.AttributeTableColumn;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
@@ -24,22 +34,15 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.search.LiveSearchContext;
+import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
+import org.eclipse.fordiac.ide.model.search.ISearchContext;
 import org.eclipse.fordiac.ide.model.search.types.IEC61499ElementSearch;
 import org.eclipse.fordiac.ide.model.search.types.IEC61499SearchFilter;
-import org.eclipse.fordiac.ide.model.search.types.ISearchChildrenProvider;
-import org.eclipse.fordiac.ide.model.search.types.SearchChildrenProviderHelper;
+import org.eclipse.fordiac.ide.model.search.types.ProjectInstanceSearchChildrenProvider;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
@@ -63,11 +66,12 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
+// TODO: remove SuppressWarning and move Strings to plugin.properties
+@SuppressWarnings("nls")
 public class BulkEditor extends EditorPart implements CommandExecutor {
 
-	// TODO: move Strings to plugin.properties
-
 	private IProject project;
+	private Combo modeSelectionDropDown;
 
 	private Button nameButton;
 	private Text nameField;
@@ -75,9 +79,19 @@ public class BulkEditor extends EditorPart implements CommandExecutor {
 	private Text typeField;
 	private Button commentButton;
 	private Text commentField;
+	private Button initialValueButton;
+	private Text initialValueField;
+
+	private Button fbSubappTypesButton;
+	private Button dataTypesButton;
+	private Button attributeTypesButton;
+
+	private Button workspaceScopeButton;
+	private Button projectScopeButton;
 
 	private NatTable natTable;
-	private ChangeableListDataProvider provider;
+	private ChangeableListDataProvider<Attribute> attributeProvider;
+	private ChangeableListDataProvider<VarDeclaration> varDeclProvider;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -90,50 +104,79 @@ public class BulkEditor extends EditorPart implements CommandExecutor {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void createPartControl(final Composite parent) {
 		final Composite composite = WidgetFactory.composite(SWT.NONE).create(parent);
 		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(composite);
 
-		final Combo mode = new Combo(composite, SWT.DROP_DOWN | SWT.READ_ONLY);
-		mode.setItems("Variable");
-		mode.select(0);
+		final Composite buttonComposite = new Composite(composite, SWT.NONE);
+		GridLayoutFactory.fillDefaults().numColumns(2).margins(0, 0).generateLayout(buttonComposite);
+
+		modeSelectionDropDown = new Combo(buttonComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
+		modeSelectionDropDown.setItems("Variable", "Attribute");
+		modeSelectionDropDown.select(0);
+		modeSelectionDropDown.addListener(SWT.Selection, event -> {
+			changeNatTable(composite, modeSelectionDropDown.getSelectionIndex());
+			composite.layout();
+		});
+
+		WidgetFactory.button(SWT.PUSH).text("Search").onSelect(event -> {
+			final List<ISearchContext> contexts = createSearchContextList();
+
+			final var result = contexts.stream().flatMap(context -> new IEC61499ElementSearch(context,
+					createSearchFilter(), new ProjectInstanceSearchChildrenProvider()).performSearch().stream())
+					.toList();
+
+			if (modeSelectionDropDown.getSelectionIndex() == 0
+					&& (result.isEmpty() || result.getFirst() instanceof VarDeclaration)) {
+				varDeclProvider.setInput((List<VarDeclaration>) result);
+			} else if (modeSelectionDropDown.getSelectionIndex() == 1
+					&& (result.isEmpty() || result.getFirst() instanceof Attribute)) {
+				attributeProvider.setInput((List<Attribute>) result);
+			}
+			natTable.refresh();
+		}).create(buttonComposite);
 
 		createSearchForGroup(composite);
 		createSearchInGroup(composite);
 		createScopeGroup(composite);
 		createTable(composite);
-
-		final Button button = WidgetFactory.button(SWT.PUSH).text("Search").create(composite);
-		button.addListener(SWT.Selection, event -> {
-			final var search = new IEC61499ElementSearch(new LiveSearchContext(project), new SearchFilter(),
-					new InstanceSearchChildrenProvider());
-
-			final var result = search.performSearch();
-			provider.setInput(result);
-			natTable.refresh();
-		});
 	}
 
-	private class SearchFilter implements IEC61499SearchFilter {
-		@Override
-		public boolean apply(final EObject searchCandidate) {
-			boolean state = false;
-			if (searchCandidate instanceof final VarDeclaration decl) {
-				state = true;
-				if (nameButton.getSelection() && !decl.getName().equals(nameField.getText())) {
-					state = false;
-				}
-				if (typeButton.getSelection() && !decl.getTypeName().equals(typeField.getText())) {
-					state = false;
-				}
-				if (commentButton.getSelection() && !decl.getComment().equals(commentField.getText())) {
-					state = false;
-				}
-			}
-
-			return state;
+	private void changeNatTable(final Composite parent, final int selectionIndex) {
+		if (natTable != null) {
+			natTable.dispose();
 		}
+		if (selectionIndex == 0) {
+			varDeclProvider = new ChangeableListDataProvider<>(
+					new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
+			final DataLayer inputDataLayer = new VarDeclarationDataLayer(varDeclProvider,
+					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+			inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(varDeclProvider,
+					() -> null, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
+			final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
+					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+			natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
+					IEditableRule.ALWAYS_EDITABLE, null, null, false);
+			natTable.addConfiguration(new InitialValueEditorConfiguration(varDeclProvider));
+			natTable.addConfiguration(new TypeDeclarationEditorConfiguration(varDeclProvider));
+			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
+		} else {
+			// TODO: refine Attribute Table
+			attributeProvider = new ChangeableListDataProvider<>(
+					new AttributeColumnAccessor(this, AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
+			final DataLayer dataLayer = new DataLayer(attributeProvider);
+			dataLayer.setConfigLabelAccumulator(new AttributeConfigLabelAccumulator(attributeProvider, () -> null,
+					AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
+			final NatTableColumnProvider<AttributeTableColumn> columnProvider = new NatTableColumnProvider<>(
+					AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+			natTable = NatTableWidgetFactory.createRowNatTable(parent, dataLayer, columnProvider,
+					IEditableRule.ALWAYS_EDITABLE, null, null, false);
+			natTable.addConfiguration(new InitialValueEditorConfiguration(attributeProvider));
+			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
+		}
+		natTable.configure();
 	}
 
 	private void createSearchForGroup(final Composite parent) {
@@ -154,59 +197,49 @@ public class BulkEditor extends EditorPart implements CommandExecutor {
 		commentButton = WidgetFactory.button(SWT.CHECK).text("Comment").create(searchGroup);
 		commentField = WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.FILL, true, false))
 				.create(searchGroup);
+
+		initialValueButton = WidgetFactory.button(SWT.CHECK).text("Initial Value").create(searchGroup);
+		initialValueField = WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.FILL, true, false))
+				.create(searchGroup);
 	}
 
-	private static void createSearchInGroup(final Composite parent) {
+	private void createSearchInGroup(final Composite parent) {
 		final Group searchGroup = new Group(parent, SWT.NONE);
 		searchGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		searchGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(3).create());
 		searchGroup.setText("Search In");
 
-		WidgetFactory.button(SWT.CHECK).text("FB and SubApp Types").create(searchGroup);
+		fbSubappTypesButton = WidgetFactory.button(SWT.CHECK).text("FB and SubApp Types").create(searchGroup);
+		fbSubappTypesButton.setSelection(true);
 		WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.FILL, true, false)).create(searchGroup);
 		WidgetFactory.button(SWT.NONE).text("Filter...").create(searchGroup);
 
-		WidgetFactory.button(SWT.CHECK).text("FB and Typed SubApp Instances").create(searchGroup);
+		dataTypesButton = WidgetFactory.button(SWT.CHECK).text("Data Types").create(searchGroup);
+		dataTypesButton.setSelection(true);
 		WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.FILL, true, false)).create(searchGroup);
 		WidgetFactory.button(SWT.NONE).text("Filter...").create(searchGroup);
 
-		WidgetFactory.button(SWT.CHECK).text("Untyped SubApps").create(searchGroup);
+		attributeTypesButton = WidgetFactory.button(SWT.CHECK).text("Attribute Types").create(searchGroup);
+		attributeTypesButton.setSelection(true);
 		WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.FILL, true, false)).create(searchGroup);
 		WidgetFactory.button(SWT.NONE).text("Filter...").create(searchGroup);
 	}
 
-	private static void createScopeGroup(final Composite parent) {
-		final Group searchGroup = new Group(parent, SWT.NONE);
-		searchGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+	private void createScopeGroup(final Composite parent) {
+		final Group scopeGroup = new Group(parent, SWT.NONE);
+		scopeGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-		searchGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
-		searchGroup.setText("Scope");
+		scopeGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
+		scopeGroup.setText("Scope");
 
-		WidgetFactory.button(SWT.RADIO).text("Workspace").create(searchGroup);
-		WidgetFactory.button(SWT.RADIO).text("Resource in active editor").create(searchGroup);
-		WidgetFactory.button(SWT.RADIO).text("Enclosing project").create(searchGroup);
-		WidgetFactory.button(SWT.RADIO).text("Files opened in editor").create(searchGroup);
-
-		WidgetFactory.button(SWT.RADIO).text("Resources").create(searchGroup);
-		WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.FILL, true, false)).create(searchGroup);
-		WidgetFactory.button(SWT.NONE).text("Choose...").create(searchGroup);
+		projectScopeButton = WidgetFactory.button(SWT.RADIO).text("Project: " + project.getName()).create(scopeGroup);
+		projectScopeButton.setSelection(true);
+		workspaceScopeButton = WidgetFactory.button(SWT.RADIO).text("Workspace").create(scopeGroup);
 	}
 
 	private void createTable(final Composite parent) {
-		// TODO add path of items
-		provider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
-		final DataLayer inputDataLayer = new VarDeclarationDataLayer(provider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS);
-		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(provider));
-		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-				VarDeclarationTableColumn.DEFAULT_COLUMNS);
-		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
-				IEditableRule.ALWAYS_EDITABLE, null, null, false);
-		natTable.addConfiguration(new InitialValueEditorConfiguration(provider));
-		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(provider));
-		natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
-		natTable.configure();
+		changeNatTable(parent, 0);
 	}
 
 	@Override
@@ -239,61 +272,77 @@ public class BulkEditor extends EditorPart implements CommandExecutor {
 		// TODO
 	}
 
-	private static final class InstanceSearchChildrenProvider implements ISearchChildrenProvider {
-		// TODO: see if correct and merge with other provider
-		@Override
-		public boolean hasChildren(final EObject obj) {
-			return (obj instanceof FBType) || (obj instanceof AutomationSystem) || (obj instanceof UntypedSubApp)
-					|| (obj instanceof final StructuredType) || (obj instanceof final AttributeDeclaration)
-					|| (obj instanceof final Application) || (obj instanceof Attribute)
-					|| (obj instanceof FBNetworkElement) || (obj instanceof IInterfaceElement);
+	private List<ISearchContext> createSearchContextList() {
+		if (workspaceScopeButton.getSelection()) {
+			final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+			return Arrays.stream(root.getProjects()).filter(IProject::isOpen).map(this::createSearchContext)
+					.map(ISearchContext.class::cast).toList();
 		}
-
-		@Override
-		public Stream<? extends EObject> getChildren(final EObject obj) {
-			if (obj instanceof final FBType fbType) {
-				return SearchChildrenProviderHelper.getFBTypeChildren(fbType);
-			}
-			if (obj instanceof final AutomationSystem system) {
-				return Stream.concat(system.getAttributes().stream(), system.getApplication().stream());
-			}
-
-			if (obj instanceof final Application application) {
-				Stream<? extends EObject> stream = application.getFBNetwork().getNetworkElements().stream();
-				stream = Stream.concat(stream, application.getFBNetwork().getAdapterConnections().stream());
-				stream = Stream.concat(stream, application.getFBNetwork().getDataConnections().stream());
-				stream = Stream.concat(stream, application.getFBNetwork().getEventConnections().stream());
-				return Stream.concat(stream, application.getAttributes().stream());
-			}
-
-			if (obj instanceof final UntypedSubApp untypedSubapp) {
-				return SearchChildrenProviderHelper.getUntypedSubappChildren(untypedSubapp);
-			}
-			if (obj instanceof final StructuredType structType) {
-				return SearchChildrenProviderHelper.getStructChildren(structType);
-			}
-			if (obj instanceof final AttributeDeclaration attrdecl) {
-				return SearchChildrenProviderHelper.getAttributeDeclChildren(attrdecl);
-			}
-
-			if (obj instanceof final FBNetworkElement elem) {
-				return Stream.concat(elem.getAttributes().stream(),
-						SearchChildrenProviderHelper.getInterfaceListChildren(elem.getInterface()));
-			}
-
-			if (obj instanceof final IInterfaceElement interfaceElement) {
-				return interfaceElement.getAttributes().stream();
-			}
-
-			if (obj instanceof final Attribute atrr) {
-				return Stream.of(atrr.getType());
-			}
-
-			if (obj instanceof final ConfigurableObject object) {
-				return object.getAttributes().stream();
-			}
-
-			return null;
+		if (projectScopeButton.getSelection()) {
+			return List.of(createSearchContext(project));
 		}
+		return List.of();
+	}
+
+	private ISearchContext createSearchContext(final IProject project) {
+		return new AbstractLiveSearchContext(project) {
+			@Override
+			public Stream<URI> getTypes() {
+				Stream<URI> s = Stream.empty();
+				if (fbSubappTypesButton.getSelection()) {
+					s = Stream.concat(s, Stream.concat(getTypelib().getFbTypes().stream().map(TypeEntry::getURI),
+							getTypelib().getSubAppTypes().stream().map(TypeEntry::getURI)));
+				}
+				if (dataTypesButton.getSelection()) {
+					s = Stream.concat(s,
+							getTypelib().getDataTypeLibrary().getDerivedDataTypes().stream().map(TypeEntry::getURI));
+				}
+				if (attributeTypesButton.getSelection()) {
+					s = Stream.concat(s, getTypelib().getAttributeTypes().stream().map(TypeEntry::getURI));
+				}
+				return s.filter(Objects::nonNull);
+			}
+
+			@Override
+			public Collection<URI> getSubappTypes() {
+				return Collections.emptyList();
+			}
+
+			@Override
+			public Collection<URI> getFBTypes() {
+				return Collections.emptyList();
+			}
+
+			@Override
+			public Collection<URI> getAllTypes() {
+				return Collections.emptyList();
+			}
+		};
+	}
+
+	private IEC61499SearchFilter createSearchFilter() {
+		return searchCandidate -> {
+			boolean state = false;
+			if ((searchCandidate instanceof VarDeclaration && modeSelectionDropDown.getSelectionIndex() == 0)
+					|| (searchCandidate instanceof Attribute && modeSelectionDropDown.getSelectionIndex() == 1)) {
+				final ITypedElement typedElement = (ITypedElement) searchCandidate;
+				state = true;
+				if (nameButton.getSelection() && !typedElement.getName().equals(nameField.getText())) {
+					state = false;
+				}
+				if (typeButton.getSelection() && !typedElement.getTypeName().equals(typeField.getText())) {
+					state = false;
+				}
+				if (commentButton.getSelection() && !typedElement.getComment().equals(commentField.getText())) {
+					state = false;
+				}
+				if (initialValueButton.getSelection()
+						&& !typedElement.getComment().equals(initialValueField.getText())) {
+					state = false;
+				}
+			}
+
+			return state;
+		};
 	}
 }

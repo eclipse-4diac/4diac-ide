@@ -22,7 +22,7 @@ public enum VarDeclarationTableColumn implements NatTableColumn {
 	NAME(FordiacMessages.Name), TYPE(FordiacMessages.Type), COMMENT(FordiacMessages.Comment),
 	INITIAL_VALUE(FordiacMessages.InitialValue), VAR_CONFIG(FordiacMessages.VarConfig),
 	VISIBLE(FordiacMessages.Visible), RETAIN(FordiacMessages.Retain), VISIBLEIN(FordiacMessages.Visible_IN),
-	VISIBLEOUT(FordiacMessages.Visible_OUT);
+	VISIBLEOUT(FordiacMessages.Visible_OUT), LOCATION(FordiacMessages.Location);
 
 	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS = List.of(NAME, TYPE, COMMENT, INITIAL_VALUE);
 	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_VISIBLE = List.of(NAME, TYPE, COMMENT,
@@ -37,6 +37,8 @@ public enum VarDeclarationTableColumn implements NatTableColumn {
 			.of(NAME, TYPE, COMMENT, INITIAL_VALUE, VISIBLE, VAR_CONFIG, RETAIN);
 	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_RETAIN = List.of(NAME, TYPE, COMMENT,
 			INITIAL_VALUE, RETAIN);
+	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_LOCATION = List.of(LOCATION, NAME, TYPE, COMMENT,
+			INITIAL_VALUE);
 
 	public static final Set<VarDeclarationTableColumn> DEFAULT_EDITABLE = Set.of(VarDeclarationTableColumn.COMMENT,
 			VarDeclarationTableColumn.INITIAL_VALUE, VarDeclarationTableColumn.VISIBLE,

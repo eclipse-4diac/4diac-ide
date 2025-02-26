@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.gef.nat;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -62,6 +63,7 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case VISIBLE -> Boolean.valueOf(rowObject.isVisible());
 		case RETAIN -> getAttributeValueAsString(rowObject);
 		case VISIBLEIN, VISIBLEOUT -> Boolean.valueOf(handleInOutCheck(rowObject, column));
+		case LOCATION -> EcoreUtil.getURI(rowObject).toPlatformString(true);
 
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};

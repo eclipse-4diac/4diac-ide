@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.gef.nat;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -56,6 +57,8 @@ public class AttributeColumnAccessor extends AbstractColumnAccessor<Attribute, A
 		}
 		case VALUE -> InitialValueHelper.getInitialOrDefaultValue(rowObject);
 		case COMMENT -> CommentHelper.getInstanceComment(rowObject);
+		case LOCATION -> EcoreUtil.getURI(rowObject).toPlatformString(true);
+		
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
 	}

@@ -62,13 +62,13 @@ public class SearchChildrenProviderHelper {
 	}
 
 	public static Stream<? extends EObject> getAttributeDeclChildren(final AttributeDeclaration attrdecl) {
+		Stream<? extends EObject> retval = attrdecl.getAttributes().stream();
 		if (attrdecl.getType() instanceof final StructuredType structType) {
-			return getStructChildren(structType);
+			retval = Stream.concat(retval, getStructChildren(structType));
+		} else if (attrdecl.getType() instanceof final DirectlyDerivedType directType) {
+			retval = Stream.concat(retval, Stream.of(directType.getBaseType()));
 		}
-		if (attrdecl.getType() instanceof final DirectlyDerivedType directType) {
-			return Stream.of(directType.getBaseType());
-		}
-		return null;
+		return retval;
 	}
 
 	public static Stream<VarDeclaration> getStructChildren(final StructuredType structType) {
