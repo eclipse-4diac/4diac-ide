@@ -50,22 +50,24 @@ public class DeleteLibraryElementParticipant extends DeleteParticipant {
 
 			if (page != null) {
 				view = (PlantHierarchyView) page.findView("org.eclipse.fordiac.ide.hierarchymanager.view"); //$NON-NLS-1$
-
 			}
 
 			if (view != null) {
-				plantHierarchy = (RootLevel) view.getCommonViewer().getInput();
+				final Object input = view.getCommonViewer().getInput();
+				if (input instanceof final RootLevel rootLevel) {
+					plantHierarchy = rootLevel;
+				}
 			} else if (element instanceof final IFile file) {
 				plantHierarchy = (RootLevel) HierachyManagerUpdateListener.loadPlantHierachy(file.getProject());
 			}
 		});
 
-		return true;
+		return plantHierarchy != null;
 	}
 
 	@Override
 	public String getName() {
-		return "Delete element of plant hierarchy";
+		return "Delete element of plant hierarchy"; //$NON-NLS-1$
 	}
 
 	@Override
