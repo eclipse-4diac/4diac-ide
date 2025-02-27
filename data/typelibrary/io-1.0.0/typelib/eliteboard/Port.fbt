@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="Port" Comment="Service Interface Function Block Type">
+<FBType Name="Port" Comment="Service Interface Function Block Type" >
 	<Identification Standard="61499-2" Description="Copyright (c) 2021, 2022 Jonathan Lainer&#10;&#10; This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
 	</Identification>
 	<VersionInfo Version="1.0" Author="Jonathan Lainer" Date="2021-02-22" Remarks="Initial Contribution">
 	</VersionInfo>
 	<InterfaceList>
 		<InputVars>
-			<VarDeclaration Name="Pin0" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin1" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin2" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin3" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin4" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin5" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin6" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin7" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin8" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin9" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin10" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin11" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin12" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin13" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin14" Type="WSTRING" Comment="Name of the Pin"/>
-			<VarDeclaration Name="Pin15" Type="WSTRING" Comment="Name of the Pin"/>
+			<VarDeclaration Name="Pin0" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin1" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin2" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin3" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin4" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin5" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin6" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin7" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin8" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin9" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin10" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin11" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin12" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin13" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin14" Type="STRING" Comment="Name of the Pin" />
+			<VarDeclaration Name="Pin15" Type="STRING" Comment="Name of the Pin" />
 		</InputVars>
 		<Sockets>
-			<AdapterDeclaration Name="PortInAdapter" Type="PortAdapter" Comment=""/>
+			<AdapterDeclaration Name="PortInAdapter" Type="PortAdapter"/>
 		</Sockets>
 	</InterfaceList>
 </FBType>
