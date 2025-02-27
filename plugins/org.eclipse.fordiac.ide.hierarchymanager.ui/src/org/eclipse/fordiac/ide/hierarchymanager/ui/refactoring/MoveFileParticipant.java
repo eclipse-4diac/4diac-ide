@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -27,18 +28,22 @@ import org.eclipse.fordiac.ide.hierarchymanager.ui.util.HierarchyManagerUtil;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
-import org.eclipse.ltk.core.refactoring.participants.DeleteParticipant;
+import org.eclipse.ltk.core.refactoring.participants.MoveParticipant;
 
-public class DeleteLibraryElementParticipant extends DeleteParticipant {
+public class MoveFileParticipant extends MoveParticipant {
+
+	private List<IFile> files = new ArrayList<>();
+
+	private IResource element;
 
 	private RootLevel plantHierarchy;
-
-	private List<IFile> files;
 
 	@Override
 	protected boolean initialize(final Object element) {
 
 		if (element instanceof final IResource resource) {
+
+			this.element = resource;
 
 			plantHierarchy = HierarchyManagerRefactoringUtil.getPlantHierarchy(resource.getProject());
 
@@ -49,12 +54,12 @@ public class DeleteLibraryElementParticipant extends DeleteParticipant {
 			}
 		}
 
-		return plantHierarchy != null;
+		return !(plantHierarchy == null || files.isEmpty());
 	}
 
 	@Override
 	public String getName() {
-		return "Delete element of plant hierarchy"; //$NON-NLS-1$
+		return "Fix references on plant hierarchy"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -79,13 +84,18 @@ public class DeleteLibraryElementParticipant extends DeleteParticipant {
 			}
 
 			if (!leaves.isEmpty()) {
-				return new SafePlantElementDeletionChange(plantHierarchy, leaves);
+				final IFolder destination = (IFolder) this.getArguments().getDestination();
+
+				return new SafeResourceRefactoringChange(plantHierarchy, leaves,
+						HierarchyManagerRefactoringUtil.getOldPath(element),
+						HierarchyManagerRefactoringUtil.getDestinationPath(element, destination));
 			}
 
-			return null;
 		} finally {
 			pm.done();
 		}
+
+		return null;
 	}
 
 }

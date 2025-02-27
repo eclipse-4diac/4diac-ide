@@ -14,11 +14,19 @@ package org.eclipse.fordiac.ide.hierarchymanager.ui.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
+import org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierachyManagerUpdateListener;
+import org.eclipse.fordiac.ide.hierarchymanager.ui.view.PlantHierarchyView;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 
 public class HierarchyManagerRefactoringUtil {
 
@@ -36,5 +44,42 @@ public class HierarchyManagerRefactoringUtil {
 		}
 
 		return files;
+	}
+
+	public static RootLevel getPlantHierarchy(final IProject project) {
+		final AtomicReference<RootLevel> plantHierarchyRef = new AtomicReference<>();
+
+		Display.getDefault().syncExec(() -> {
+			final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			PlantHierarchyView view = null;
+
+			if (page != null) {
+				view = (PlantHierarchyView) page.findView("org.eclipse.fordiac.ide.hierarchymanager.view"); //$NON-NLS-1$
+			}
+
+			if (view != null) {
+				final Object input = view.getCommonViewer().getInput();
+				if (input instanceof final RootLevel rootLevel) {
+					plantHierarchyRef.set(rootLevel);
+				}
+			} else {
+				plantHierarchyRef.set((RootLevel) HierachyManagerUpdateListener.loadPlantHierachy(project));
+			}
+		});
+
+		return plantHierarchyRef.get();
+	}
+
+	public static String getOldPath(final IResource element) {
+		return element.getProjectRelativePath().toPortableString();
+	}
+
+	public static String getNewPath(final IResource element, final String newName) {
+		return element.getProjectRelativePath().removeLastSegments(1).append(newName).toPortableString();
+	}
+
+	public static String getDestinationPath(final IResource element, final IFolder destination) {
+
+		return destination.getProjectRelativePath().append(element.getName()).toPortableString();
 	}
 }
