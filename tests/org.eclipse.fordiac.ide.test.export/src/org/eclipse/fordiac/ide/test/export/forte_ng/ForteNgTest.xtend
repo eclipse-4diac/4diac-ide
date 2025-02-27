@@ -240,12 +240,12 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						
 						#pragma once
 						
-						#include "basicfb.h"
-						#include "iec61131_functions.h"
-						#include "forte_array_common.h"
-						#include "forte_array.h"
-						#include "forte_array_fixed.h"
-						#include "forte_array_variable.h"
+						#include "core/basicfb.h"
+						#include "core/iec61131_functions.h"
+						#include "core/datatypes/forte_array_common.h"
+						#include "core/datatypes/forte_array.h"
+						#include "core/datatypes/forte_array_fixed.h"
+						#include "core/datatypes/forte_array_variable.h"
 						
 						class «EXPORTED_FUNCTIONBLOCK_NAME» final : public CBasicFB {
 						  DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
@@ -301,11 +301,11 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt_gen.cpp"
 						#endif
 						
-						#include "iec61131_functions.h"
-						#include "forte_array_common.h"
-						#include "forte_array.h"
-						#include "forte_array_fixed.h"
-						#include "forte_array_variable.h"
+						#include "core/iec61131_functions.h"
+						#include "core/datatypes/forte_array_common.h"
+						#include "core/datatypes/forte_array.h"
+						#include "core/datatypes/forte_array_fixed.h"
+						#include "core/datatypes/forte_array_variable.h"
 						
 						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringIdfunctionblock)
 						

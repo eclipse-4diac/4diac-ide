@@ -58,7 +58,7 @@ class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 	'''
 
 	override protected generateHeaderIncludes() '''
-		«generateDependencyInclude("funcbloc.h")»
+		«generateDependencyInclude("core/funcbloc.h")»
 		«super.generateHeaderIncludes»
 	'''
 

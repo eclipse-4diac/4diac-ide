@@ -37,11 +37,11 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 		«FOR include : types.map[generateDefiningInclude].toSet.sort»
 			«include.generateDependencyInclude»
 		«ENDFOR»
-		«generateDependencyInclude("iec61131_functions.h")»
-		«generateDependencyInclude("forte_array_common.h")»
-		«generateDependencyInclude("forte_array.h")»
-		«generateDependencyInclude("forte_array_fixed.h")»
-		«generateDependencyInclude("forte_array_variable.h")»
+		«generateDependencyInclude("core/iec61131_functions.h")»
+		«generateDependencyInclude("core/datatypes/forte_array_common.h")»
+		«generateDependencyInclude("core/datatypes/forte_array.h")»
+		«generateDependencyInclude("core/datatypes/forte_array_fixed.h")»
+		«generateDependencyInclude("core/datatypes/forte_array_variable.h")»
 	'''
 
 	def protected generateDependencyInclude(String path) {

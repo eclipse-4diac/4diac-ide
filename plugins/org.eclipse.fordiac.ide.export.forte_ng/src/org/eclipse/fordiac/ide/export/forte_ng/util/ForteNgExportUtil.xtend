@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType
+import org.eclipse.fordiac.ide.model.data.AnyType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType
@@ -120,7 +121,7 @@ final class ForteNgExportUtil {
 	def static String generateDefiningInclude(Resource resource) {
 		resource.contents.filter(LibraryElement)?.head?.generateTypeIncludePath ?:
 			'''«resource.URI.trimFileExtension.lastSegment».h'''
-	}
+	}	
 
 	def static String generateTypeIncludePath(INamedElement type) {
 		switch (path : type.generateTypePath) {
@@ -189,6 +190,8 @@ final class ForteNgExportUtil {
 
 	def static String generateTypePath(INamedElement type) {
 		switch (type) {
+			AnyType case type.typeEntry === null: 
+				"core/datatypes"
 			LibraryElement:
 				type.compilerInfo?.packageName?.replace("::", "/") ?: ""
 			default:
