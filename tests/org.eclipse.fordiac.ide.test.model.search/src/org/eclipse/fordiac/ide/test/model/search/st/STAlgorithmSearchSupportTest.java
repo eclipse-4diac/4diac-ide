@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -48,4 +48,22 @@ class STAlgorithmSearchSupportTest extends StructuredTextSearchSupportTest {
 		assertNoMatch(type.getCallables().getFirst(), new CrossReferenceMatcher(varDeclaration));
 		assertMatch(type.getCallables().getFirst(), new CrossReferenceMatcher(varDeclaration2), 1, 14, 3);
 	}
+
+	@Test
+	void testMultiSearch() {
+		final SimpleFBType type = createSimpleFBType("Test");
+		type.getCallables().add(createAlgorithm("REQ", """
+				ALGORITHM REQ
+				DO2 := 17;
+				END_ALGORITHM
+				"""));
+		type.getCallables().add(createAlgorithm("INIT", """
+				ALGORITHM INIT
+				DO2 := 4;
+				END_ALGORITHM
+				"""));
+		assertNoMatch(type.getCallables().getLast(), new NameMatcher("REQ"));
+		assertMatch(type.getCallables().getLast(), new NameMatcher("INIT"), 3, 49, 4);
+	}
+
 }

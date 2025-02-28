@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,46 +12,54 @@
  */
 package org.eclipse.fordiac.ide.model.search.st;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.AnyType;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource;
-import org.eclipse.xtext.EcoreUtil2;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmParseUtil;
+import org.eclipse.xtext.parser.IParseResult;
 
 public class AttributeSearchSupport extends StructuredTextSearchSupport {
 	private final Attribute attribute;
-	private STInitializerExpressionSource parseResult;
+	private IParseResult parseResult;
 
 	public AttributeSearchSupport(final Attribute attribute) {
 		this.attribute = attribute;
 	}
 
 	@Override
-	public Stream<EObject> prepare() throws CoreException {
-		return Stream.<EObject>of(prepareInitialValue()).filter(Objects::nonNull);
+	public Set<String> getImportedNamespaces() {
+		final Set<String> result = super.getImportedNamespaces();
+		if (attribute.getAttributeDeclaration() != null) {
+			if (!PackageNameHelper.getPackageName(attribute.getAttributeDeclaration()).isEmpty()) {
+				result.add(PackageNameHelper.getFullTypeName(attribute.getAttributeDeclaration()));
+			}
+		} else if (!PackageNameHelper.getPackageName(attribute.getType()).isEmpty()) {
+			result.add(PackageNameHelper.getFullTypeName(attribute.getType()));
+		}
+		return result;
 	}
 
-	protected STInitializerExpressionSource prepareInitialValue() throws CoreException {
+	@Override
+	public Stream<EObject> prepare() {
+		return Optional.ofNullable(prepareValue()).map(IParseResult::getRootASTElement).stream();
+	}
+
+	protected IParseResult prepareValue() {
 		if (parseResult == null && attribute.getType() instanceof AnyType && attribute.getValue() != null
 				&& !attribute.getValue().isBlank()) {
-			final List<String> errors = new ArrayList<>();
-			parseResult = StructuredTextParseUtil.parse(attribute.getValue(),
-					attribute.eResource() != null ? attribute.eResource().getURI() : null, attribute.getType(),
-					EcoreUtil2.getContainerOfType(attribute, LibraryElement.class), null, errors, null, null);
-			if (parseResult == null) {
-				throw new CoreException(Status.error(errors.stream().collect(Collectors.joining(", ")))); //$NON-NLS-1$
-			}
+			parseResult = STAlgorithmParseUtil.parseInitializerExpression(attribute.getValue(), attribute.getType(),
+					attribute);
 		}
 		return parseResult;
+	}
+
+	@Override
+	public boolean isIncompleteResult() {
+		return parseResult != null && parseResult.hasSyntaxErrors();
 	}
 }

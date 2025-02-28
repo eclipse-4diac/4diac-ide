@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -47,5 +47,22 @@ class STMethodSearchSupportTest extends StructuredTextSearchSupportTest {
 				"""));
 		assertNoMatch(type.getCallables().getFirst(), new CrossReferenceMatcher(varDeclaration));
 		assertMatch(type.getCallables().getFirst(), new CrossReferenceMatcher(varDeclaration2), 1, 12, 3);
+	}
+
+	@Test
+	void testMultiSearch() {
+		final SimpleFBType type = createSimpleFBType("Test");
+		type.getCallables().add(createMethod("TEST1", """
+				METHOD TEST1
+				DO2 := 17;
+				END_METHOD
+				"""));
+		type.getCallables().add(createMethod("TEST2", """
+				METHOD TEST2
+				DO2 := 4;
+				END_METHOD
+				"""));
+		assertNoMatch(type.getCallables().getLast(), new NameMatcher("TEST1"));
+		assertMatch(type.getCallables().getLast(), new NameMatcher("TEST2"), 3, 42, 5);
 	}
 }
