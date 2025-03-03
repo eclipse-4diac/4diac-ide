@@ -15,15 +15,11 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.ResourceTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
@@ -32,15 +28,6 @@ public class ResourceTypeEntryImpl extends AbstractCheckedTypeEntryImpl<Resource
 
 	public ResourceTypeEntryImpl() {
 		super(ResourceType.class);
-	}
-
-	@Override
-	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
-		if (!(toSave instanceof final ResourceType resourceType)) {
-			throw new CoreException(Status.error("Invalid type for ResourceTypeEntry"));
-		}
-		final ResourceTypeExporter exporter = new ResourceTypeExporter(resourceType);
-		exporter.export(getFile(), monitor);
 	}
 
 	@Override

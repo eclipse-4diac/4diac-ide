@@ -1,29 +1,29 @@
-package org.eclipse.fordiac.ide.model.dataexport;
+/*******************************************************************************
+ * Copyright (c) 2025 ANURAG SISODIYA
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   ANURAG SISODIYA - Initial implementation of ResourceTypeExporter
+ *******************************************************************************/
 
-import java.io.IOException;
-import java.io.InputStream;
+package org.eclipse.fordiac.ide.model.dataexport;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class ResourceTypeExporter extends AbstractTypeExporter {
 
-	private final ResourceType resourceType;
-
 	public ResourceTypeExporter(final ResourceType type) {
 		super(type);
-		this.resourceType = type;
 	}
 
 	@Override
@@ -41,41 +41,25 @@ public class ResourceTypeExporter extends AbstractTypeExporter {
 	@Override
 	protected void createTypeSpecificXMLEntries() throws XMLStreamException {
 
-		for (final VarDeclaration varDecl : resourceType.getVarDeclaration()) {
+		addCompilerInfo(getType().getCompilerInfo());
+
+		for (final VarDeclaration varDecl : getType().getVarDeclaration()) {
 			addVarDeclaration(varDecl);
 		}
 
 		exportFBNetwork();
 
-		final CompilerInfo compilerInfo = resourceType.getCompilerInfo();
-		if (compilerInfo != null) {
-			addCompilerInfo(compilerInfo);
-		}
 	}
 
 	private void exportFBNetwork() throws XMLStreamException {
-		final FBNetwork network = resourceType.getFBNetwork();
+		final FBNetwork network = getType().getFBNetwork();
 		if (network != null && !network.getNetworkElements().isEmpty()) {
 			new FBNetworkExporter(this).createFBNetworkElement(network);
 		}
 	}
 
-	public void export(final IFile file, final IProgressMonitor monitor) throws CoreException {
-		final IProgressMonitor progressMonitor = monitor != null ? monitor : new NullProgressMonitor();
-		try (InputStream content = getFileContent()) {
-			if (file.exists()) {
-				file.setContents(content, true, true, progressMonitor);
-			} else {
-				file.create(content, true, progressMonitor);
-			}
-		} catch (final IOException e) {
-			FordiacLogHelper.logError("Error during resource type export", e);
-			throw new CoreException(Status.error("Error exporting ResourceType", e));
-		}
-	}
-
 	@Override
 	public ResourceType getType() {
-		return resourceType;
+		return (ResourceType) super.getType();
 	}
 }
