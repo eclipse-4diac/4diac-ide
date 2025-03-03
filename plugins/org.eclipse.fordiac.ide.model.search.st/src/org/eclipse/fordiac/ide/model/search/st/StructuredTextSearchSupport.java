@@ -68,7 +68,7 @@ public abstract class StructuredTextSearchSupport implements ISearchSupport {
 			final IResourceServiceProvider provider = xtextResource.getResourceServiceProvider();
 			final var converter = provider.get(IQualifiedNameConverter.class);
 			final var collector = provider.get(STCoreTypeUsageCollector.class);
-			final var usedTypes = collector.collectUsedTypes(object);
+			final var usedTypes = collector.includeUnresolvedReferences().collectUsedTypes(object);
 			return usedTypes.stream().map(converter::toString);
 		}
 		return Stream.empty();

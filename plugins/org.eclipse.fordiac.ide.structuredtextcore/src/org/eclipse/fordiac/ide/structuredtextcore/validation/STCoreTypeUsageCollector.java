@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -27,6 +27,7 @@ import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.resource.IEObjectDescription;
+import org.eclipse.xtext.resource.impl.AliasedEObjectDescription;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.IScopeProvider;
 
@@ -59,6 +60,7 @@ public class STCoreTypeUsageCollector {
 
 	private final Set<QualifiedName> usedTypes = new HashSet<>();
 	private boolean includeFullyQualifiedReferences;
+	private boolean includeUnresolvedReferences;
 
 	public Set<QualifiedName> collectUsedTypes(final EObject object) {
 		for (final EReference reference : object.eClass().getEAllReferences()) {
@@ -105,9 +107,13 @@ public class STCoreTypeUsageCollector {
 
 	protected void handleCrossReference(final EObject source, final EReference reference, final int index,
 			final EObject target) {
-		if (isExternalReference(source, target) && !target.eIsProxy()) {
+		if (isExternalReference(source, target)) {
 			final QualifiedName name = getCrossReferenceName(source, reference, index);
-			handleExternalReference(source, reference, name, target);
+			if (target.eIsProxy()) {
+				handleUnresolvedReference(source, reference, name);
+			} else {
+				handleExternalReference(source, reference, name, target);
+			}
 		}
 	}
 
@@ -125,6 +131,41 @@ public class STCoreTypeUsageCollector {
 				addUsedType(description);
 			}
 		}
+	}
+
+	protected void handleUnresolvedReference(final EObject source, final EReference reference,
+			final QualifiedName name) {
+		if (name == null || !includeUnresolvedReferences) {
+			return;
+		}
+		final IScope scope = scopeProvider.getScope(source, reference);
+		IEObjectDescription result = null;
+		for (final IEObjectDescription candidate : scope.getAllElements()) {
+			final QualifiedName candidateName = candidate.getName();
+			if (endsWith(candidateName, name)) {
+				if (result == null) {
+					result = new AliasedEObjectDescription(name, candidate);
+				} else if (!result.getQualifiedName().equals(candidate.getQualifiedName())) {
+					return; // ambiguous
+				}
+			}
+		}
+		if (result != null) {
+			addUsedType(result);
+		}
+	}
+
+	protected static boolean endsWith(final QualifiedName name, final QualifiedName suffix) {
+		if (suffix.getSegmentCount() > name.getSegmentCount()) {
+			return false;
+		}
+		final int offset = name.getSegmentCount() - suffix.getSegmentCount();
+		for (int i = 0; i < suffix.getSegmentCount(); ++i) {
+			if (!name.getSegment(i + offset).equalsIgnoreCase(suffix.getSegment(i))) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	protected QualifiedName getCrossReferenceName(final EObject source, final EReference reference, final int index) {
@@ -162,6 +203,11 @@ public class STCoreTypeUsageCollector {
 
 	public STCoreTypeUsageCollector includeFullyQualifiedReferences() {
 		includeFullyQualifiedReferences = true;
+		return this;
+	}
+
+	public STCoreTypeUsageCollector includeUnresolvedReferences() {
+		includeUnresolvedReferences = true;
 		return this;
 	}
 
