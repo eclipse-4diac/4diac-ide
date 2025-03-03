@@ -276,7 +276,7 @@
    </extension>
     <extension
           point="org.eclipse.fordiac.ide.model.commands.QualNameChangeListener">
-          <listener class = "org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierachyManagerUpdateListener"/>
+          <listener class = "org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerUpdateListener"/>
     </extension>
 	<extension
 			point="org.eclipse.ltk.core.refactoring.deleteParticipants">

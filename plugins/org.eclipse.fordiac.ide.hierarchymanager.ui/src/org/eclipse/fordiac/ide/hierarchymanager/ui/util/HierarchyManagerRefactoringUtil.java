@@ -13,7 +13,9 @@
 package org.eclipse.fordiac.ide.hierarchymanager.ui.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.resources.IFile;
@@ -21,8 +23,13 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
-import org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierachyManagerUpdateListener;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceFactoryImpl;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.view.PlantHierarchyView;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
@@ -35,7 +42,8 @@ public class HierarchyManagerRefactoringUtil {
 	public static List<IFile> getFilesFromResource(final IResource resource) throws CoreException {
 		final List<IFile> files = new ArrayList<>();
 
-		if (resource instanceof final IFile file && ALLOWED_FILE_EXTENSIONS.contains(resource.getFileExtension())) {
+		if (resource instanceof final IFile file && resource.getFileExtension() != null
+				&& ALLOWED_FILE_EXTENSIONS.contains(resource.getFileExtension().toLowerCase())) {
 			files.add(file);
 		} else if (resource instanceof final IFolder folder) {
 			for (final IResource member : folder.members()) {
@@ -63,7 +71,7 @@ public class HierarchyManagerRefactoringUtil {
 					plantHierarchyRef.set(rootLevel);
 				}
 			} else {
-				plantHierarchyRef.set((RootLevel) HierachyManagerUpdateListener.loadPlantHierachy(project));
+				plantHierarchyRef.set(loadPlantHierarchy(project));
 			}
 		});
 
@@ -81,5 +89,28 @@ public class HierarchyManagerRefactoringUtil {
 	public static String getDestinationPath(final IResource element, final IFolder destination) {
 
 		return destination.getProjectRelativePath().append(element.getName()).toPortableString();
+	}
+
+	public static RootLevel loadPlantHierarchy(final IProject project) {
+
+		final Map<String, Object> loadOptions = new HashMap<>();
+		final ResourceSet hierarchyResouceSet = new ResourceSetImpl();
+
+		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				PlantHierarchyView.PLANT_HIERARCHY_FILE_NAME_EXTENSION, //
+				new HierarchyResourceFactoryImpl());
+
+		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				PlantHierarchyView.PLANT_HIERARCHY_FILE_NAME_EXTENSION.toLowerCase(), //
+				new HierarchyResourceFactoryImpl());
+		loadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
+
+		final XMLMapImpl map = new XMLMapImpl();
+
+		map.setNoNamespacePackage(HierarchyPackage.eINSTANCE);
+		loadOptions.put(XMLResource.OPTION_XML_MAP, map);
+		hierarchyResouceSet.getLoadOptions().put(XMLResource.OPTION_XML_MAP, map);
+
+		return (RootLevel) PlantHierarchyView.loadHierachyForProject(project, hierarchyResouceSet, loadOptions);
 	}
 }
