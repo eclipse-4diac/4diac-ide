@@ -15,16 +15,12 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.ResourceTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -40,24 +36,11 @@ public class ResourceTypeEntryImpl extends AbstractCheckedTypeEntryImpl<Resource
 
 	@Override
 	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
-		// currently we can not save resources, but we also have no editor for it
-
-		// Read the existing XML file
-		final Path filePath = getFile().getLocation().toFile().toPath();
-		try {
-			// Read the entire file as a string
-			String xmlContent = new String(Files.readAllBytes(filePath));
-
-			// Update the Name attribute using a regular expression
-			xmlContent = xmlContent.replaceFirst("(<ResourceType[^>]* Name=\")[^\"]*(\"[^>]*>)",
-					"$1" + toSave.getName() + "$2");
-
-			// Write the updated XML back to the file
-			Files.write(filePath, xmlContent.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
-		} catch (final Exception e) {
-			throw new CoreException(
-					new Status(IStatus.ERROR, "org.eclipse.fordiac.ide.model", "Error saving LibraryElement", e));
+		if (!(toSave instanceof final ResourceType resourceType)) {
+			throw new CoreException(Status.error("Invalid type for ResourceTypeEntry"));
 		}
+		final ResourceTypeExporter exporter = new ResourceTypeExporter(resourceType);
+		exporter.export(getFile(), monitor);
 	}
 
 	@Override
@@ -67,12 +50,12 @@ public class ResourceTypeEntryImpl extends AbstractCheckedTypeEntryImpl<Resource
 
 	@Override
 	protected AbstractTypeExporter getTypeExporter(final ResourceType type) {
-		// currently we can not save resources, but we also have no editor for it
-		return null;
+		return new ResourceTypeExporter(type);
 	}
 
 	@Override
 	public EClass getTypeEClass() {
 		return LibraryElementPackage.Literals.RESOURCE_TYPE;
 	}
+
 }
