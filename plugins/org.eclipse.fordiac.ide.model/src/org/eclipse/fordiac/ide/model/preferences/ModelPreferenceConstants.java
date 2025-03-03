@@ -13,10 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.preferences;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
-
 /**
  * Constant definitions for plug-in preferences.
  *
@@ -24,8 +20,6 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 public final class ModelPreferenceConstants {
 
 	public static final String MODEL_PREFERENCES_ID = "org.eclipse.fordiac.ide.model"; //$NON-NLS-1$
-
-	public static final IPreferenceStore STORE = new ScopedPreferenceStore(InstanceScope.INSTANCE, MODEL_PREFERENCES_ID);
 
 	/** Allocation block size used during xml file export. */
 	public static final String P_ALLOCATION_SIZE = "allocationSize"; //$NON-NLS-1$

@@ -38,8 +38,8 @@ import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
-import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -50,6 +50,8 @@ import org.eclipse.swt.graphics.FontMetrics;
 public class WatchValueEditPart extends AbstractWatchValueEditPart {
 
 	public static final int MONITORING_VALUE_LR_MARGIN = 5;
+
+	private int maxWidth;
 
 	@Override
 	protected IFigure createFigure() {
@@ -85,6 +87,10 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 	@Override
 	public void activate() {
 		super.activate();
+		final int maxLabelSize = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
+				.getMaxValueLabelSize();
+		final FontMetrics fm = FigureUtilities.getFontMetrics(JFaceResources.getFontRegistry().get(DIAGRAM_FONT));
+		maxWidth = (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth()) + 2 * MONITORING_VALUE_LR_MARGIN;
 		showPinValues(false);
 	}
 
@@ -164,14 +170,7 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 		return DeploymentDebugModelPresentation.getWatchTextColor();
 	}
 
-	private static int maxLabelWidth = -1;
-
-	protected static int getMaxWidth() {
-		if (maxLabelWidth == -1) {
-			final int maxLabelSize = GefPreferenceConstants.STORE.getInt(GefPreferenceConstants.MAX_VALUE_LABEL_SIZE);
-			final FontMetrics fm = FigureUtilities.getFontMetrics(JFaceResources.getFontRegistry().get(DIAGRAM_FONT));
-			maxLabelWidth = (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth()) + 2 * MONITORING_VALUE_LR_MARGIN;
-		}
-		return maxLabelWidth;
+	protected int getMaxWidth() {
+		return maxWidth;
 	}
 }

@@ -15,11 +15,11 @@ package org.eclipse.fordiac.ide.debug.ui.preferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.debug.preferences.FordiacDebugPreferences;
 import org.eclipse.fordiac.ide.debug.ui.Messages;
+import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class FordiacDebugPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -29,7 +29,8 @@ public class FordiacDebugPreferencePage extends FieldEditorPreferencePage implem
 
 	@Override
 	public void init(final IWorkbench workbench) {
-		setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, FordiacDebugPreferences.DEBUG_PREFERENCES_ID));
+		setPreferenceStore(
+				new FixedScopedPreferenceStore(InstanceScope.INSTANCE, FordiacDebugPreferences.DEBUG_PREFERENCES_ID));
 		setDescription(Messages.FordiacDebugPreferencePage_Description);
 	}
 

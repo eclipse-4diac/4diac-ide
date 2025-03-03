@@ -67,7 +67,7 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 					final IProgressMonitor monitorToUse = (null == monitor) ? new NullProgressMonitor() : monitor;
 					final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(getSystemLocation(),
 							page.getSystemName(), monitorToUse);
-					TypeManagementPreferencesHelper.setupVersionInfo(system);
+					TypeManagementPreferencesHelper.setupVersionInfo(system, system.getTypeLibrary().getProject());
 					createInitialApplication(system);
 				}
 			};

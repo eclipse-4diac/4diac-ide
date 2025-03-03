@@ -12,17 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.preferences;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
-
 public final class DeploymentDebugPreferences {
 
 	public static final String QUALIFIER = "org.eclipse.fordiac.ide.deployment.debug"; //$NON-NLS-1$
 	public static final String MONITORING_VALUE_WRITE_THROUGH = "monitoringValueWriteThrough"; //$NON-NLS-1$
-
-	public static boolean isMonitoringValueWriteThrough() {
-		return InstanceScope.INSTANCE.getNode(QUALIFIER).getBoolean(MONITORING_VALUE_WRITE_THROUGH, false);
-	}
-
+	
 	private DeploymentDebugPreferences() {
 		throw new UnsupportedOperationException();
 	}

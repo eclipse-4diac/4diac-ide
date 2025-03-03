@@ -14,7 +14,8 @@
 package org.eclipse.fordiac.ide.fmu.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 /**
  * Class used to initialize default preference values.
@@ -29,12 +30,13 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
-		final IPreferenceStore store = FMUPreferenceConstants.STORE;
-		store.setDefault(FMUPreferenceConstants.P_PATH, ""); //$NON-NLS-1$
-		store.setDefault(FMUPreferenceConstants.P_FMU_WIN32, false);
-		store.setDefault(FMUPreferenceConstants.P_FMU_WIN64, false);
-		store.setDefault(FMUPreferenceConstants.P_FMU_LIN32, false);
-		store.setDefault(FMUPreferenceConstants.P_FMU_LIN64, false);
+		final IEclipsePreferences preferences = DefaultScope.INSTANCE
+				.getNode(FMUPreferenceConstants.FMU_PREFERENCES_ID);
+		preferences.put(FMUPreferenceConstants.P_PATH, ""); //$NON-NLS-1$
+		preferences.putBoolean(FMUPreferenceConstants.P_FMU_WIN32, false);
+		preferences.putBoolean(FMUPreferenceConstants.P_FMU_WIN64, false);
+		preferences.putBoolean(FMUPreferenceConstants.P_FMU_LIN32, false);
+		preferences.putBoolean(FMUPreferenceConstants.P_FMU_LIN64, false);
 	}
 
 }

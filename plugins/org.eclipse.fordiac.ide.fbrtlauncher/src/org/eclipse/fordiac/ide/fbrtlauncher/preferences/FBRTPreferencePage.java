@@ -16,7 +16,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbrtlauncher.preferences;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.fbrtlauncher.Messages;
+import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
@@ -41,7 +43,8 @@ public class FBRTPreferencePage extends FieldEditorPreferencePage implements IWo
 	 */
 	public FBRTPreferencePage() {
 		super(GRID);
-		setPreferenceStore(FbrtPreferenceConstants.STORE);
+		setPreferenceStore(new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+				FbrtPreferenceConstants.FBRTLAUNCHER_PREFERENCES_ID));
 		setDescription(Messages.FBRTPreferencePage_FBRTPreferencePage);
 	}
 

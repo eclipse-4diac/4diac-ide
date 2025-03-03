@@ -13,18 +13,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fmu.preferences;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
-
 /**
  * Constant definitions for plug-in preferences.
  */
 public final class FMUPreferenceConstants {
 
 	public static final String FMU_PREFERENCES_ID = "org.eclipse.fordiac.ide.fmu"; //$NON-NLS-1$
-
-	public static final IPreferenceStore STORE = new ScopedPreferenceStore(InstanceScope.INSTANCE, FMU_PREFERENCES_ID);
 
 	private FMUPreferenceConstants() {
 	}

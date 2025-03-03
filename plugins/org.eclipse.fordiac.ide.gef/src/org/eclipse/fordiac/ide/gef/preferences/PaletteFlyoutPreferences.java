@@ -11,8 +11,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.preferences;
 
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.fordiac.ide.gef.Messages;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
+import org.osgi.service.prefs.BackingStoreException;
 
 public class PaletteFlyoutPreferences implements FlyoutPreferences {
 	private static final int INITIAL_PALETTE_SIZE = 200;
@@ -36,37 +41,49 @@ public class PaletteFlyoutPreferences implements FlyoutPreferences {
 
 	@Override
 	public int getDockLocation() {
-		return GefPreferenceConstants.STORE.getInt(paletteDockLocationID);
+		return InstanceScope.INSTANCE.getNode(GefPreferenceConstants.GEF_PREFERENCES_ID).getInt(paletteDockLocationID,
+				0);
 	}
 
 	@Override
 	public int getPaletteState() {
-		return GefPreferenceConstants.STORE.getInt(paletteStateID);
+		return InstanceScope.INSTANCE.getNode(GefPreferenceConstants.GEF_PREFERENCES_ID).getInt(paletteStateID, 0);
 	}
 
 	@Override
 	public int getPaletteWidth() {
-		return GefPreferenceConstants.STORE.getInt(paletteSizeID);
+		return InstanceScope.INSTANCE.getNode(GefPreferenceConstants.GEF_PREFERENCES_ID).getInt(paletteSizeID, 0);
 	}
 
 	@Override
 	public void setDockLocation(final int location) {
-		GefPreferenceConstants.STORE.setValue(paletteDockLocationID, location);
+		setValue(paletteDockLocationID, location);
 	}
 
 	@Override
 	public void setPaletteState(final int state) {
-		GefPreferenceConstants.STORE.setValue(paletteStateID, state);
+		setValue(paletteStateID, state);
 
 	}
 
 	@Override
 	public void setPaletteWidth(final int width) {
-		GefPreferenceConstants.STORE.setValue(paletteSizeID, width);
+		setValue(paletteSizeID, width);
+	}
+
+	private static void setValue(final String valueID, final int value) {
+		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(GefPreferenceConstants.GEF_PREFERENCES_ID);
+		prefs.putInt(valueID, value);
+		try {
+			prefs.flush();
+		} catch (final BackingStoreException e) {
+			FordiacLogHelper.logError(Messages.HandlerPreferenceSafeError, e);
+		}
 	}
 
 	private void checkPreferenceStoreStatus() {
-		if (!GefPreferenceConstants.STORE.contains(paletteStateID)) {
+		if (InstanceScope.INSTANCE.getNode(GefPreferenceConstants.GEF_PREFERENCES_ID).get(paletteStateID,
+				null) == null) {
 			// there is no setting in the preference store. Set palette opend with a good
 			// initial size
 			setPaletteState(FlyoutPaletteComposite.STATE_PINNED_OPEN);

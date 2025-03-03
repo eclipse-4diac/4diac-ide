@@ -13,12 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * Constant definitions for plug-in preferences
@@ -26,9 +22,6 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 public final class FBTypeEditorPreferenceConstants {
 
 	public static final String FBTYPEEDITOR_ECC_PREFERENCES_ID = "org.eclipse.fordiac.ide.fbtypeeditor.ecc"; //$NON-NLS-1$
-
-	public static final IPreferenceStore STORE = new ScopedPreferenceStore(InstanceScope.INSTANCE,
-			FBTYPEEDITOR_ECC_PREFERENCES_ID);
 
 	/** The Constant P_ECC_STATE_COLOR. */
 	public static final String P_ECC_STATE_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateColor"; //$NON-NLS-1$
@@ -57,17 +50,6 @@ public final class FBTypeEditorPreferenceConstants {
 
 	private FBTypeEditorPreferenceConstants() {
 		throw new UnsupportedOperationException("PreferenceConstants utility class should not be instantiated!"); //$NON-NLS-1$
-	}
-
-	/**
-	 * Returns the color for the specified preference.
-	 *
-	 * @param pref The preference.
-	 *
-	 * @return the color
-	 */
-	public static Color getColor(final String pref) {
-		return PreferenceGetter.getColor(STORE, pref);
 	}
 
 	public static Color getEccStateColor() {

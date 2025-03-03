@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.application.policies.StructuredManipulatorLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -36,7 +37,8 @@ public abstract class AbstractStructManipulatorEditPart extends AbstractFBNEleme
 
 	@Override
 	protected IFigure createFigureForModel() {
-		return new FBNetworkElementFigure(getModel());
+		return new FBNetworkElementFigure(getModel(),
+				((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMaxTypeLabelSize());
 	}
 
 	@Override

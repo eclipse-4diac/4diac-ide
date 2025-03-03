@@ -1136,4 +1136,22 @@
 			modelId="org.eclipse.fordiac.ide.deployment.debug.model">
 		</variableValueEditor>
 	</extension>
+ <extension
+       point="org.eclipse.ui.propertyPages">
+    <page
+		category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
+		class="org.eclipse.fordiac.ide.deployment.debug.ui.preferences.DeploymentDebugPreferencePage"
+		id="org.eclipse.fordiac.ide.deployment.debug.ui.properties"
+		name="Deployment">
+		<enabledWhen>
+	        <adapt
+	              type="org.eclipse.core.resources.IProject">
+	           <test
+	                 property="org.eclipse.core.resources.projectNature"
+	                 value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+	           </test>
+	        </adapt>
+	    </enabledWhen>
+	</page>
+ </extension>
 </plugin>

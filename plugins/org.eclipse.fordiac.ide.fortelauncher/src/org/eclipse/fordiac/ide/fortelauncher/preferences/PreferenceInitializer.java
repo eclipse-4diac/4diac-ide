@@ -14,7 +14,8 @@
 package org.eclipse.fordiac.ide.fortelauncher.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 /**
  * Class used to initialize default preference values.
@@ -29,8 +30,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
-		final IPreferenceStore store = FortePreferenceConstants.STORE;
-		store.setDefault(FortePreferenceConstants.P_PATH, ""); //$NON-NLS-1$ //set as default an empty value
+		final IEclipsePreferences preferences = DefaultScope.INSTANCE
+				.getNode(FortePreferenceConstants.FORTELAUNCHER_PREFERENCES_ID);
+		preferences.put(FortePreferenceConstants.P_PATH, ""); //$NON-NLS-1$ //set as default an empty value
 	}
 
 }

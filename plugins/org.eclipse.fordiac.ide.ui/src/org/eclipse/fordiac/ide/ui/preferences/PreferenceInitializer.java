@@ -18,24 +18,22 @@
 package org.eclipse.fordiac.ide.ui.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		final IPreferenceStore store = UIPreferenceConstants.STORE;
+		final IEclipsePreferences preferences = DefaultScope.INSTANCE
+				.getNode(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID);
 
-		store.setDefault(UIPreferenceConstants.P_HIDE_EVENT_CON, false);
-		store.setDefault(UIPreferenceConstants.P_HIDE_DATA_CON, false);
+		preferences.putBoolean(UIPreferenceConstants.P_HIDE_EVENT_CON, false);
+		preferences.putBoolean(UIPreferenceConstants.P_HIDE_DATA_CON, false);
 
-		store.setDefault(UIPreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE, "HOLOBLOC"); //$NON-NLS-1$
+		preferences.put(UIPreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE, "HOLOBLOC"); //$NON-NLS-1$
 
-		store.setDefault(UIPreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR,
+		preferences.putBoolean(UIPreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR,
 				UIPreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR_DEFAULT_VALUE);
-
-		store.setDefault(UIPreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX,
-				UIPreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX_DEFAULT_VALUE);
-
 	}
 }

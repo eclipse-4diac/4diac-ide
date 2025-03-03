@@ -25,12 +25,9 @@ public final class Messages extends NLS {
 	public static String GET;
 	public static String GitLab_Available_Packages;
 	public static String GitLab_Import;
-	public static String GitLab_Token;
 	public static String GitLab_Token_Title;
-	public static String GitLab_Url;
 	public static String GitLab_Url_Title;
 	public static String GitLab_Packages_And_Projects;
-	public static String GitLab_PreferenceId;
 	public static String Library_Not_Found;
 	public static String No_Config;
 	public static String Private_Token;

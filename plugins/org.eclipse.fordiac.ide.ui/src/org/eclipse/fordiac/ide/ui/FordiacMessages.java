@@ -148,6 +148,12 @@ public final class FordiacMessages extends NLS {
 
 	public static String Subapp_Size_DisableAutoResize; // NOSONAR
 
+	public static String PropertyAndPreferencePage_useprojectsettings_label; // NOSONAR
+	public static String PropertyAndPreferencePage_showprojectspecificsettings_label; // NOSONAR
+	public static String PropertyAndPreferencePage_useworkspacesettings_change; // NOSONAR
+	public static String PropertyAndPreferencePage_ChooseProjectDialog_title; // NOSONAR
+	public static String PropertyAndPreferencePage_ChooseProjectDialog_description; // NOSONAR
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, FordiacMessages.class);

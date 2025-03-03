@@ -15,13 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 
 /**
  * This class implements some static methods for returning different preference
@@ -32,33 +26,6 @@ import org.eclipse.swt.graphics.RGB;
  */
 
 public final class PreferenceGetter {
-
-	/** The used colors. */
-	private static final Map<RGB, Color> usedColors = new HashMap<>();
-
-	/**
-	 * Returns the color for the specified preference.
-	 *
-	 * @param pref The preference.
-	 *
-	 * @return the color
-	 */
-	public static Color getColor(final String pref) {
-		return getColor(UIPreferenceConstants.STORE, pref);
-	}
-
-	/**
-	 * Returns the color for the specified preference.
-	 *
-	 * @param pref  The preference.
-	 * @param store the store
-	 *
-	 * @return the color
-	 */
-	public static Color getColor(final IPreferenceStore store, final String pref) {
-		final RGB rgb = PreferenceConverter.getColor(store, pref);
-		return usedColors.computeIfAbsent(rgb, rgbCol -> new Color(null, rgbCol));
-	}
 
 	public static Color getDataColor(final String dataType) {
 		if ("BOOL".equals(dataType)) { //$NON-NLS-1$

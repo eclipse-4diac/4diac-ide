@@ -56,7 +56,6 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.jface.util.IPropertyChangeListener;
 
 /**
  * This class implements an EditPart for an "VirtualInOutput". It is required if
@@ -287,11 +286,6 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 
 	@Override
 	public Label getNameLabel() {
-		return null;
-	}
-
-	@Override
-	public IPropertyChangeListener getPreferenceChangeListener() {
 		return null;
 	}
 

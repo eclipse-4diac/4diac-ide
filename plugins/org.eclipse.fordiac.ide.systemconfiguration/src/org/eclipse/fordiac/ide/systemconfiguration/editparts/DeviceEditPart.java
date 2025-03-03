@@ -188,11 +188,6 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	@Override
-	public IPropertyChangeListener getPreferenceChangeListener() {
-		return null;
-	}
-
-	@Override
 	protected IFigure createFigureForModel() {
 		return new DeviceFigure();
 	}

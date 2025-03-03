@@ -13,10 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fmu.wizard;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.deployment.bootfile.wizard.CreateBootFilesWizardPage;
 import org.eclipse.fordiac.ide.fmu.Messages;
 import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferenceConstants;
 import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferencePage;
+import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -106,9 +109,12 @@ public class CreateFMUWizardPage extends CreateBootFilesWizardPage {
 			}
 		}
 
+		final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+				FMUPreferenceConstants.FMU_PREFERENCES_ID);
+
 		// Check the selected libraries from preferences
 		for (int i = 0; i < buttons.length; i++) {
-			buttons[i].setSelection(FMUPreferenceConstants.STORE.getBoolean(preferences[i]));
+			buttons[i].setSelection(store.getBoolean(preferences[i]));
 			buttons[i].addListener(SWT.Selection, e -> updatePageCompletion());
 		}
 

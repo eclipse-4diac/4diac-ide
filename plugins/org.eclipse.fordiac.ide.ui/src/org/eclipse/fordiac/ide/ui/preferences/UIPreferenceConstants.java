@@ -17,11 +17,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.preferences;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * Constant definitions for plug-in preferences.
@@ -31,9 +28,6 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 public final class UIPreferenceConstants {
 
 	public static final String FORDIAC_UI_PREFERENCES_ID = "org.eclipse.fordiac.ide.ui"; //$NON-NLS-1$
-
-	public static final IPreferenceStore STORE = new ScopedPreferenceStore(InstanceScope.INSTANCE,
-			FORDIAC_UI_PREFERENCES_ID);
 
 	/** The Constant P_EVENT_CONNECTOR_COLOR. */
 	public static final String P_EVENT_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.EventConnectionConnectorColor"; //$NON-NLS-1$
@@ -85,9 +79,6 @@ public final class UIPreferenceConstants {
 
 	public static final String P_SHOW_ERRORS_AT_MOUSE_CURSOR = "ShowErrorsAtMouseCursor"; //$NON-NLS-1$
 	public static final boolean P_SHOW_ERRORS_AT_MOUSE_CURSOR_DEFAULT_VALUE = true;
-
-	public static final String P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX = "DeactivateCommentsTransferringDemuxToMux"; //$NON-NLS-1$
-	public static final boolean P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX_DEFAULT_VALUE = false;
 
 	private UIPreferenceConstants() {
 		throw new UnsupportedOperationException();

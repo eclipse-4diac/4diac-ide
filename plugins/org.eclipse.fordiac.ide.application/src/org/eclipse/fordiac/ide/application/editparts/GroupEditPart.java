@@ -55,7 +55,6 @@ import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.requests.SelectionRequest;
-import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
@@ -168,12 +167,6 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 				}
 			}
 		};
-	}
-
-	@Override
-	protected IPropertyChangeListener getPreferenceChangeListener() {
-		// for now we don't need a preference change listener
-		return null;
 	}
 
 	@Override

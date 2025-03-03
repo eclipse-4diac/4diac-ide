@@ -275,11 +275,6 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	private HiddenPinIndicator inputPinIndicator;
 	private HiddenPinIndicator outputPinIndicator;
 
-	@Override
-	public IPropertyChangeListener getPreferenceChangeListener() {
-		return null;
-	}
-
 	/**
 	 * Returns an <code>IPropertyChangeListener</code> with implemented
 	 * <code>propertyChange()</code>. e.g. a color change event repaints the

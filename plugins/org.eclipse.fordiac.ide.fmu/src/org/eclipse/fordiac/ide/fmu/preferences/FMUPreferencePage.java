@@ -17,10 +17,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.fmu.Messages;
+import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -53,7 +56,8 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 	 */
 	public FMUPreferencePage() {
 		super(GRID);
-		setPreferenceStore(FMUPreferenceConstants.STORE);
+		setPreferenceStore(
+				new FixedScopedPreferenceStore(InstanceScope.INSTANCE, FMUPreferenceConstants.FMU_PREFERENCES_ID));
 		setDescription(Messages.FMUPreferencePage_FMUPreferencesPage);
 	}
 
@@ -100,7 +104,7 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 		librariesGroup.setLayoutData(gridData);
 		librariesGroup.setLayout(gridLayout);
 
-		updateEnabledLibraries(true, FMUPreferenceConstants.STORE.getString(FMUPreferenceConstants.P_PATH));
+		updateEnabledLibraries(true, getPreferenceStore().getString(FMUPreferenceConstants.P_PATH));
 	}
 
 	@Override
@@ -150,7 +154,9 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 
 	public static List<String> getFoundLibraries() {
 		final List<String> found = new ArrayList<>();
-		final String pathString = FMUPreferenceConstants.STORE.getString(FMUPreferenceConstants.P_PATH);
+		final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+				FMUPreferenceConstants.FMU_PREFERENCES_ID);
+		final String pathString = store.getString(FMUPreferenceConstants.P_PATH);
 		if ((new File(pathString + File.separatorChar + "win32Forte.dll").exists())) { //$NON-NLS-1$
 			found.add(FMUPreferenceConstants.P_FMU_WIN32);
 		}

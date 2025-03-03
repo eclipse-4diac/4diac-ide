@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 
@@ -43,7 +44,8 @@ public class FBEditPart extends AbstractFBNElementEditPart {
 		if (getModel() == null) {
 			throw new IllegalArgumentException(Messages.FBEditPart_ERROR_UnsupportedFBType);
 		}
-		f = new FBNetworkElementFigure(getModel());
+		f = new FBNetworkElementFigure(getModel(),
+				((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMaxTypeLabelSize());
 		return f;
 	}
 

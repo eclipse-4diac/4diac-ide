@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
@@ -34,7 +35,8 @@ public class AdapterWatchValueEditPart extends AbstractWatchValueEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		return new FBNetworkElementFigure(getFB());
+		return new FBNetworkElementFigure(getFB(),
+				((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMaxTypeLabelSize());
 	}
 
 	@Override

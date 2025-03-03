@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.handlers.AdvancedGraphicalViewerKeyHandler;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstantsCache;
 import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
@@ -172,7 +173,9 @@ public abstract class DiagramEditor extends GraphicalEditor
 	protected void createGraphicalViewer(final Composite parent) {
 		final RulerComposite rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
 
-		final GraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
+		final var prefCache = new GefPreferenceConstantsCache(getSystem().getTypeLibrary().getProject());
+
+		final GraphicalViewer viewer = new AdvancedScrollingGraphicalViewer(prefCache);
 		viewer.createControl(rulerComp);
 		setGraphicalViewer(viewer);
 		configureGraphicalViewer();

@@ -17,7 +17,7 @@ package org.eclipse.fordiac.ide.gef.nat;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 
@@ -114,7 +115,10 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 
 	protected static String getInitialValue(final VarDeclaration rowObject) {
 		final String value = InitialValueHelper.getInitialOrDefaultValue(rowObject);
-		if (value.length() > DiagramPreferencePage.getMaxDefaultValueLength()) {
+
+		if (value.length() > PreferenceStoreProvider
+				.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID, rowObject.getType().getTypeLibrary().getProject())
+				.getInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH)) {
 			return FordiacMessages.ValueTooLarge;
 		}
 		return value;

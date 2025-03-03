@@ -22,7 +22,6 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.policies.DeleteTargetInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -46,15 +45,12 @@ import org.eclipse.ui.IEditorPart;
 public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 
 	public static final int LABEL_ALPHA = 120;
-	public static final int MAX_LABEL_LENGTH = GefPreferenceConstants.STORE
-			.getInt(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE);
 	private static final String NOT_SIGN = "\u00AC"; //$NON-NLS-1$
 
 	private final Adapter nameChangeAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
-			System.out.println(getModel().getRefElement().getName());
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
 					|| !getModel().getRefElement().getOutputConnections().stream().map(Connection::isNegated).toList()
@@ -180,11 +176,13 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		return PreferenceGetter.getDataColor(getRefElement().getType().getName());
 	}
 
-	private static String labelTruncate(final String label) {
-		if (label.length() <= MAX_LABEL_LENGTH) {
+	private String labelTruncate(final String label) {
+		final int maxLabelLength = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
+				.getMaxInterfaceBarSize();
+		if (label.length() <= maxLabelLength) {
 			return label;
 		}
-		return label.substring(0, MAX_LABEL_LENGTH) + "\u2026"; //$NON-NLS-1$
+		return label.substring(0, maxLabelLength) + "\u2026"; //$NON-NLS-1$
 	}
 
 	public static void openInBreadCrumb(final IInterfaceElement target) {

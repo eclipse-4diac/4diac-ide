@@ -30,7 +30,6 @@ import java.util.List;
 import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.GridLayout;
@@ -48,11 +47,9 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.policies.AbstractCreateInstanceDirectEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkCreateInstanceDirectEditPolicy;
-import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -63,7 +60,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -72,7 +69,6 @@ import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.requests.SelectionRequest;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Color;
 
@@ -80,10 +76,6 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	public static final Color INTERFACE_BAR_BG_COLOR = new Color(235, 245, 255);
 	public static final Color INTERFACE_BAR_BORDER_COLOR = new Color(190, 199, 225);
 
-	private static final int MIN_EXP_SUBAPP_BAR_WIDTH_CHARS = GefPreferenceConstants.STORE
-			.getInt(GefPreferenceConstants.MIN_INTERFACE_BAR_SIZE);
-	private static final int MAX_HIDDEN_CONNECTION_LABEL_SIZE_CHARS = GefPreferenceConstants.STORE
-			.getInt(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
 	private static final int TOP_BOTTOM_MARGIN = 1;
 	private static final int LEFT_RIGHT_MARGIN = 5;
 	private static final Insets RIGHT_LIST_BORDER_INSET = new Insets(TOP_BOTTOM_MARGIN, 0, TOP_BOTTOM_MARGIN,
@@ -336,7 +328,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		((ToolbarLayout) container.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
 	}
 
-	private static Figure createInnerContainer(final IFigure parent, final Insets borderInset) {
+	private Figure createInnerContainer(final IFigure parent, final Insets borderInset) {
 		final Figure innerContainer = new MinSizeFigure();
 		innerContainer.setMinimumSize(new Dimension(getMinInterfaceBarWidth(), -1));
 		final ToolbarLayout innerLayout = new ToolbarLayout(false);
@@ -625,27 +617,12 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 				});
 	}
 
-	private static int minSubappBarWidhtPixels = -1;
-
-	public static int getMinInterfaceBarWidth() {
-		if (minSubappBarWidhtPixels == -1) {
-			final Dimension singleCharLength = FigureUtilities.getStringExtents(" ", //$NON-NLS-1$
-					JFaceResources.getFontRegistry().get(UIPreferenceConstants.DIAGRAM_FONT));
-			minSubappBarWidhtPixels = singleCharLength.width * MIN_EXP_SUBAPP_BAR_WIDTH_CHARS
-					+ ConnectorBorder.LR_MARGIN + LEFT_RIGHT_MARGIN;
-		}
-		return minSubappBarWidhtPixels;
+	public int getMinInterfaceBarWidth() {
+		return ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMinInterfaceBarSize();
 	}
 
-	private static int maxHiddenConnectionLabelSize = -1;
-
-	public static int getMaxHiddenConnectionLabelSize() {
-		if (maxHiddenConnectionLabelSize == -1) {
-			final Dimension singleCharLength = FigureUtilities.getStringExtents(" ", //$NON-NLS-1$
-					JFaceResources.getFontRegistry().get(UIPreferenceConstants.DIAGRAM_FONT));
-			maxHiddenConnectionLabelSize = singleCharLength.width * MAX_HIDDEN_CONNECTION_LABEL_SIZE_CHARS;
-		}
-		return maxHiddenConnectionLabelSize;
+	public int getMaxHiddenConnectionLabelSize() {
+		return ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMaxHiddenConnectionLabelSize();
 	}
 
 }

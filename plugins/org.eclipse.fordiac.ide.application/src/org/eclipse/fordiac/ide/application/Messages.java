@@ -99,6 +99,8 @@ public final class Messages extends NLS {
 
 	public static String FunctionBlock;
 
+	public static String HandlerPreferenceSafeError;
+
 	public static String InstanceCommentEditPart_EMPTY_COMMENT;
 
 	public static String InterfaceElementSection_ConnectionGroup;
@@ -275,6 +277,10 @@ public final class Messages extends NLS {
 	public static String QuickFixDialog_Problems_List_Location;
 
 	public static String QuickFixDialog_Problems_List_Resource;
+
+	public static String ContractEditor_Title;
+
+	public static String ContractEditor_OK;
 
 	public static String Connection_Negate;
 

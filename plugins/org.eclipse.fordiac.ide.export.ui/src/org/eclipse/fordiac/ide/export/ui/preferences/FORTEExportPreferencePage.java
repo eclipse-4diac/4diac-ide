@@ -16,10 +16,12 @@ package org.eclipse.fordiac.ide.export.ui.preferences;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.export.ICompareEditorOpener;
 import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.fordiac.ide.export.utils.CompareEditorOpenerUtil;
+import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.swt.SWT;
@@ -39,7 +41,8 @@ public class FORTEExportPreferencePage extends FieldEditorPreferencePage impleme
 	 */
 	public FORTEExportPreferencePage() {
 		super(GRID);
-		setPreferenceStore(PreferenceConstants.STORE);
+		setPreferenceStore(
+				new FixedScopedPreferenceStore(InstanceScope.INSTANCE, PreferenceConstants.EXPORT_PREFERENCES_ID));
 	}
 
 	/**

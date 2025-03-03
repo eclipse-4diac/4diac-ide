@@ -49,7 +49,7 @@ import org.eclipse.fordiac.ide.application.utilities.GetEditPartFromGraficalView
 import org.eclipse.fordiac.ide.elk.commands.BlockLayoutCommand;
 import org.eclipse.fordiac.ide.elk.commands.ConnectionLayoutCommand;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
-import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.commands.Command;
@@ -132,21 +132,19 @@ public class FordiacLayout {
 	}
 
 	private static void applySnapToGridIfEnabled(final FordiacLayoutMapping mapping) {
-		if (GefPreferenceConstants.STORE.getBoolean(GefPreferenceConstants.SNAP_TO_GRID)) {
-			snapToGrid(mapping);
+		final AdvancedScrollingGraphicalViewer viewer = (AdvancedScrollingGraphicalViewer) mapping.getWorkbenchPart()
+				.getAdapter(GraphicalViewer.class);
+
+		if (viewer.getPreferencesCache().isSnapToGrid()) {
+			final Dimension gridSpacing = (Dimension) viewer.getProperty(SnapToGrid.PROPERTY_GRID_SPACING);
+			final double gridSize = gridSpacing.preciseHeight();
+
+			mapping.getLayoutGraph().getChildren().forEach(node -> {
+				final double x = Math.round(node.getX() / gridSize) * gridSize;
+				final double y = Math.round(node.getY() / gridSize) * gridSize;
+				node.setLocation(x, y);
+			});
 		}
-	}
-
-	private static void snapToGrid(final FordiacLayoutMapping mapping) {
-		final GraphicalViewer viewer = mapping.getWorkbenchPart().getAdapter(GraphicalViewer.class);
-		final Dimension gridSpacing = (Dimension) viewer.getProperty(SnapToGrid.PROPERTY_GRID_SPACING);
-		final double gridSize = gridSpacing.preciseHeight();
-
-		mapping.getLayoutGraph().getChildren().forEach(node -> {
-			final double x = Math.round(node.getX() / gridSize) * gridSize;
-			final double y = Math.round(node.getY() / gridSize) * gridSize;
-			node.setLocation(x, y);
-		});
 	}
 
 	private static Command createCompoundCommand(final FordiacLayoutMapping mapping, final boolean isBlockLayout) {

@@ -17,9 +17,13 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.osgi.service.prefs.BackingStoreException;
 
 public class ToggleJumpStepHandler extends AbstractHandler {
 
@@ -27,7 +31,14 @@ public class ToggleJumpStepHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final Command command = event.getCommand();
 		final boolean oldValue = HandlerUtil.toggleCommandState(command);
-		UIPreferenceConstants.STORE.setValue(UIPreferenceConstants.P_TOGGLE_JUMP_STEP, !oldValue);
-		return Status.OK_STATUS;
+		final IEclipsePreferences prefs = InstanceScope.INSTANCE
+				.getNode(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID);
+		prefs.putBoolean(UIPreferenceConstants.P_TOGGLE_JUMP_STEP, !oldValue);
+		try {
+			prefs.flush();
+		} catch (final BackingStoreException e) {
+			FordiacLogHelper.logError(Messages.HandlerPreferenceSafeError, e);
+		}
+		return null;
 	}
 }

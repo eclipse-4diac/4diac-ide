@@ -26,11 +26,11 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
 public class FBTypeFigure extends FBShape {
 
-	private Label versionInfoLabel;
-	private FBType type;
+	private final Label versionInfoLabel;
+	private final FBType type;
 
-	public FBTypeFigure(final FBType type) {
-		super(type);
+	public FBTypeFigure(final FBType type, final int maxTypeLabelSize) {
+		super(type, maxTypeLabelSize);
 		this.type = type;
 
 		versionInfoLabel = new Label();

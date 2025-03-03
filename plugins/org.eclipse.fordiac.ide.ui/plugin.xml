@@ -19,6 +19,23 @@
       </page>
    </extension>
    <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="org.eclipse.fordiac.ide.ui.preferences.EmptyPropertyPage"
+            id="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
+            name="4diac IDE">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+               </test>
+            </adapt>
+         </enabledWhen>
+      </page>
+   </extension>
+   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="org.eclipse.fordiac.ide.ui.preferences.PreferenceInitializer">

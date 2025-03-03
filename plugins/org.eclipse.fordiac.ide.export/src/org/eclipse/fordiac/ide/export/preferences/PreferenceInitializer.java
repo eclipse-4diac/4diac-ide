@@ -14,7 +14,8 @@
 package org.eclipse.fordiac.ide.export.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 /**
  * Class used to initialize default preference values.
@@ -29,8 +30,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
-		final IPreferenceStore store = PreferenceConstants.STORE;
-		store.setDefault(PreferenceConstants.P_COMPARE_EDITOR, "None"); //$NON-NLS-1$
+		final IEclipsePreferences preferences = DefaultScope.INSTANCE
+				.getNode(PreferenceConstants.EXPORT_PREFERENCES_ID);
+		preferences.put(PreferenceConstants.P_COMPARE_EDITOR, "None"); //$NON-NLS-1$
 	}
 
 }

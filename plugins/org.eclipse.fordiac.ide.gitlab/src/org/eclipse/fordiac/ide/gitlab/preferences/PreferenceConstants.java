@@ -13,26 +13,24 @@
 package org.eclipse.fordiac.ide.gitlab.preferences;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.fordiac.ide.gitlab.Messages;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public final class PreferenceConstants {
-	
-	private PreferenceConstants() {
-		// Shall not be instantiated 
-	}
-	
-	public static final String P_GITLAB_TOKEN = Messages.GitLab_Token; 
 
-	public static final String P_GITLAB_URL = Messages.GitLab_Url; 
-	
-	public static final String P_GITLAB_PREFERENCE_ID = Messages.GitLab_PreferenceId;
-	
+	private PreferenceConstants() {
+		// Shall not be instantiated
+	}
+
+	public static final String P_GITLAB_TOKEN = "gitLabToken"; //$NON-NLS-1$
+
+	public static final String P_GITLAB_URL = "gitLabURL"; //$NON-NLS-1$
+
+	public static final String P_GITLAB_PREFERENCE_ID = "org.eclipse.fordiac.ide.gitlab"; //$NON-NLS-1$
+
 	public static String getURL() {
-		return new ScopedPreferenceStore(InstanceScope.INSTANCE, P_GITLAB_PREFERENCE_ID).getString(P_GITLAB_URL);
+		return InstanceScope.INSTANCE.getNode(P_GITLAB_PREFERENCE_ID).get(P_GITLAB_URL, ""); //$NON-NLS-1$
 	}
 
 	public static String getToken() {
-		return new ScopedPreferenceStore(InstanceScope.INSTANCE, P_GITLAB_PREFERENCE_ID).getString(P_GITLAB_TOKEN);
+		return InstanceScope.INSTANCE.getNode(P_GITLAB_PREFERENCE_ID).get(P_GITLAB_TOKEN, ""); //$NON-NLS-1$
 	}
 }

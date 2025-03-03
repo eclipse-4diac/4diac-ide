@@ -14,7 +14,8 @@
 package org.eclipse.fordiac.ide.deployment.iec61499.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 /**
  * Class used to initialize default preference values.
@@ -23,8 +24,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		final IPreferenceStore store = IEC61499PreferenceConstants.STORE;
-		store.setDefault(IEC61499PreferenceConstants.P_CONNECTION_TIMEOUT,
+		final IEclipsePreferences preferences = DefaultScope.INSTANCE
+				.getNode(IEC61499PreferenceConstants.DEPLOYMENT_IEC61499_PREFERENCES_ID);
+		preferences.putInt(IEC61499PreferenceConstants.P_CONNECTION_TIMEOUT,
 				IEC61499PreferenceConstants.P_CONNECTION_TIMEOUT_DEFAULT);
 
 	}

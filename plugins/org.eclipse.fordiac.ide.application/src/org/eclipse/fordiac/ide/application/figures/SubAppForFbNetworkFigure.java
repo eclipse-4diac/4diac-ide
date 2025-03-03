@@ -65,11 +65,15 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	private Shape expandedInputFigure;
 	private IFigure expandedContentArea;
 	private Shape expandedOutputFigure;
+	private final int minExpandedInterfaceBarWidth;
 
 	private final ExpandedInterfacePositionMap interfacePositions;
 
-	public SubAppForFbNetworkFigure(final SubApp model, final SubAppForFBNetworkEditPart editPart) {
-		super(model);
+	public SubAppForFbNetworkFigure(final SubApp model, final SubAppForFBNetworkEditPart editPart,
+			final int minExpandedInterfaceBarWidth, final int maxTypeLabelSize) {
+		super(model, maxTypeLabelSize);
+		// we have connectors on both sides
+		this.minExpandedInterfaceBarWidth = minExpandedInterfaceBarWidth + ConnectorBorder.LR_MARGIN;
 		interfacePositions = editPart.getInterfacePositionMap();
 		updateTypeLabel(model);
 		updateExpandedFigure();
@@ -185,8 +189,8 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure = new BorderedRoundedRectangle();
 		expandedMainFigure.setOutline(false);
 		expandedMainFigure.setOpaque(false);
-		expandedMainFigure
-				.setCornerDimensions(new Dimension(GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM));
+		expandedMainFigure.setCornerDimensions(
+				new Dimension(GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM));
 		expandedMainFigure.setBorder(new RoundedRectangleShadowBorder());
 		expandedMainFigure.setLayoutManager(createExpandedMainFigureLayout());
 		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
@@ -217,7 +221,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 				return prefSize;
 			}
 		};
-		interfaceBar.setMinimumSize(new Dimension(getMinExpandedInterfaceBarWidth(), -1));
+		interfaceBar.setMinimumSize(new Dimension(minExpandedInterfaceBarWidth, -1));
 		interfaceBar.setOutline(false);
 		interfaceBar.setBackgroundColor(EditorWithInterfaceEditPart.INTERFACE_BAR_BG_COLOR);
 
@@ -301,16 +305,6 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 
 	protected static GridData createInterfaceBarGroupLayoutData() {
 		return new GridData(SWT.FILL, SWT.TOP, true, false);
-	}
-
-	private static int minExpSubappBarWidhtPixels = -1;
-
-	private static int getMinExpandedInterfaceBarWidth() {
-		if (minExpSubappBarWidhtPixels == -1) {
-			minExpSubappBarWidhtPixels = EditorWithInterfaceEditPart.getMinInterfaceBarWidth()
-					+ ConnectorBorder.LR_MARGIN; // we have connectors on both sides
-		}
-		return minExpSubappBarWidhtPixels;
 	}
 
 	private static class ExpandedInterfaceScrollPaneLayout extends ScrollPaneLayout {

@@ -22,6 +22,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.ui.editparts;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -31,6 +32,8 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
@@ -54,7 +57,10 @@ public class WatchValueDirectEditPolicy extends DirectEditPolicy {
 				ErrorDialog.openError(null, null, null, Status.error(e.getLocalizedMessage(), e));
 			}
 		}
-		if (DeploymentDebugPreferences.isMonitoringValueWriteThrough()
+		final IProject project = ((AdvancedScrollingGraphicalViewer) editPart.getViewer()).getPreferencesCache()
+				.getProject();
+		if (PreferenceStoreProvider.getStore(DeploymentDebugPreferences.QUALIFIER, project)
+				.getBoolean(DeploymentDebugPreferences.MONITORING_VALUE_WRITE_THROUGH)
 				&& editPart.getInterfaceElement() instanceof final VarDeclaration varDeclaration
 				&& varDeclaration.isIsInput()
 				&& !FBNetworkElementHelper.isContainedInTypedInstance(varDeclaration.getFBNetworkElement())

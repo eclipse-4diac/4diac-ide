@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.ConnectionRouter;
@@ -24,6 +25,8 @@ import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.SnapToGrid;
@@ -31,6 +34,7 @@ import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 import org.eclipse.gef.rulers.RulerProvider;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 /**
@@ -39,6 +43,12 @@ import org.eclipse.jface.util.IPropertyChangeListener;
  * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
  */
 public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart {
+	private final IPreferenceStore preferenceStore;
+
+	protected AbstractDiagramEditPart() {
+		preferenceStore = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+				GefPreferenceConstants.GEF_PREFERENCES_ID);
+	}
 
 	/**
 	 * Creates the <code>Figure</code> to be used as this part's <i>visuals</i>.
@@ -74,7 +84,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 
 	private void updateRuler() {
 		getViewer().setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY,
-				Boolean.valueOf(GefPreferenceConstants.STORE.getBoolean(GefPreferenceConstants.SHOW_RULERS)));
+				Boolean.valueOf(preferenceStore.getBoolean(GefPreferenceConstants.SHOW_RULERS)));
 	}
 
 	/*
@@ -87,7 +97,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		if (!isActive()) {
 			super.activate();
 			if (getPreferenceChangeListener() != null) {
-				GefPreferenceConstants.STORE.addPropertyChangeListener(getPreferenceChangeListener());
+				preferenceStore.addPropertyChangeListener(getPreferenceChangeListener());
 			}
 		}
 	}
@@ -102,14 +112,14 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		if (isActive()) {
 			super.deactivate();
 			if (getPreferenceChangeListener() != null) {
-				GefPreferenceConstants.STORE.removePropertyChangeListener(getPreferenceChangeListener());
+				preferenceStore.removePropertyChangeListener(getPreferenceChangeListener());
 			}
 		}
 	}
 
 	protected void showGrid() {
 		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE,
-				Boolean.valueOf(GefPreferenceConstants.STORE.getBoolean(GefPreferenceConstants.SHOW_GRID)));
+				Boolean.valueOf(preferenceStore.getBoolean(GefPreferenceConstants.SHOW_GRID)));
 	}
 
 	private IPropertyChangeListener listener;
@@ -148,7 +158,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	public <T> T getAdapter(final Class<T> key) {
 		if (key == SnapToHelper.class) {
 			final List<SnapToGrid> snapStrategies = new ArrayList<>();
-			if (GefPreferenceConstants.STORE.getBoolean(GefPreferenceConstants.SNAP_TO_GRID)) {
+			if (((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().isSnapToGrid()) {
 				snapStrategies.add(new SnapToGrid(this));
 			}
 

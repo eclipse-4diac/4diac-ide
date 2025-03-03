@@ -18,11 +18,13 @@ import java.util.Arrays;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.fordiac.ide.fbrtlauncher.preferences.FbrtPreferenceConstants;
 import org.eclipse.fordiac.ide.runtime.RuntimeLaunchTab;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.fordiac.ide.ui.widget.FileChooserControl;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -74,7 +76,8 @@ public class FBRTLaunchTab extends RuntimeLaunchTab {
 		super.setDefaults(configuration);
 
 		configuration.setAttribute(ATTR_LOCATION, getJavaRte());
-		final IPreferenceStore store = FbrtPreferenceConstants.STORE;
+		final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+				FbrtPreferenceConstants.FBRTLAUNCHER_PREFERENCES_ID);
 
 		final String fbrtPath = store.getString(FbrtPreferenceConstants.P_PATH);
 		configuration.setAttribute(ATTR_FBRT_LOCATION, (fbrtPath != null && !fbrtPath.isBlank()) ? fbrtPath : ""); //$NON-NLS-1$

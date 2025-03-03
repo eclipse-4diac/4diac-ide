@@ -32,6 +32,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.deployment.AbstractFileManagementHandler;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
@@ -56,6 +57,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -325,8 +328,9 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			final Shell shell) {
 		try {
 			final String tempFolder = Files.createTempDirectory("temp").toString(); //$NON-NLS-1$
-			final File binariesDirectory = new File(
-					FMUPreferenceConstants.STORE.getString(FMUPreferenceConstants.P_PATH));
+			final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+					FMUPreferenceConstants.FMU_PREFERENCES_ID);
+			final File binariesDirectory = new File(store.getString(FMUPreferenceConstants.P_PATH));
 			if (binariesDirectory.exists() && binariesDirectory.isDirectory()) {
 				if (createTempFoldersAndFiles(tempFolder, outputName, librariesToAdd, shell)) {
 					return tempFolder;
@@ -403,12 +407,13 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		if (!createNotBinaryFiles(root, shell)) {
 			return false;
 		}
+		final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+				FMUPreferenceConstants.FMU_PREFERENCES_ID);
 		// copy libraries
 		for (final String name : librariesToAdd) {
 			final String libraryName = librariesToNames.get(name);
 			if (!copyLibraries(root + File.separatorChar + BINARIES_FOLDER_NAME + File.separatorChar + name, outputName,
-					FMUPreferenceConstants.STORE.getString(FMUPreferenceConstants.P_PATH) + File.separatorChar
-							+ libraryName,
+					store.getString(FMUPreferenceConstants.P_PATH) + File.separatorChar + libraryName,
 					libraryName.substring(libraryName.indexOf('.')), shell)) {
 				return false;
 			}

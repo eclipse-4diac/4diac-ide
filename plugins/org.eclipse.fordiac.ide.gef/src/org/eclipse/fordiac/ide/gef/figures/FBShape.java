@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.edit.providers.TypeImageProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 
@@ -104,9 +105,10 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 
 	private OverlayAlphaLabel typeLabel;
 
-	private static int maxWidth = -1;
+	private final int maxTypeLabelSize;
 
-	public FBShape(final FBType fbType) {
+	public FBShape(final FBType fbType, final int maxTypeLabelSize) {
+		this.maxTypeLabelSize = maxTypeLabelSize;
 		configureMainFigure();
 		createFBFigureShape(fbType);
 		setTypeLabelFont();
@@ -205,13 +207,6 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		return fbFigureContainer;
 	}
 
-	private static int getMaxWidth() {
-		if (-1 == maxWidth) {
-			return GefPreferenceConstants.STORE.getInt(GefPreferenceConstants.MAX_TYPE_LABEL_SIZE);
-		}
-		return maxWidth;
-	}
-
 	@Override
 	public void setTransparency(final int value) {
 		bottom.setAlpha(value);
@@ -236,8 +231,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	}
 
 	private void setTypeLabelFont() {
-		typeLabel.setFont(JFaceResources.getFontRegistry()
-				.getItalic(org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants.DIAGRAM_FONT));
+		typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(UIPreferenceConstants.DIAGRAM_FONT));
 	}
 
 	private void configureMainFigure() {
@@ -442,8 +436,8 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	}
 
 	protected void changeTypeLabelText(String text) {
-		if (text.length() > getMaxWidth()) {
-			text = text.substring(0, getMaxWidth()) + TYPE_TRUNCATION_STRING;
+		if (text.length() > maxTypeLabelSize) {
+			text = text.substring(0, maxTypeLabelSize) + TYPE_TRUNCATION_STRING;
 		}
 		typeLabel.setText(text);
 	}

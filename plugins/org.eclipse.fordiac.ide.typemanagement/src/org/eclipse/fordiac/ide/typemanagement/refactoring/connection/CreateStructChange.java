@@ -80,7 +80,7 @@ public class CreateStructChange extends Change {
 		final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
 
 		InterfaceListCopier.copyVarList(type.getMemberVariables(), vars, true);
-		TypeManagementPreferencesHelper.setupVersionInfo(type);
+		TypeManagementPreferencesHelper.setupVersionInfo(type, file.getProject());
 		final String datatypeName = TypeEntry.getTypeNameFromFile(file);
 		type.setName(datatypeName);
 		entry.save(type);

@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
@@ -90,7 +91,7 @@ public class TypeFromTemplateCreator {
 					final LibraryElement type = importer.getElement();
 					type.setName(TypeEntry.getTypeNameFromFile(targetTypeFile));
 					PackageNameHelper.setPackageName(type, packageName);
-					setupIdentifcationAndVersionInfo(type);
+					setupIdentifcationAndVersionInfo(type, targetTypeFile.getProject());
 					performTypeSpecificSetup(type);
 					entry.save(type, monitor);
 				}
@@ -203,9 +204,9 @@ public class TypeFromTemplateCreator {
 		return null;
 	}
 
-	private static void setupIdentifcationAndVersionInfo(final LibraryElement type) {
-		TypeManagementPreferencesHelper.setupIdentification(type);
-		TypeManagementPreferencesHelper.setupVersionInfo(type);
+	private static void setupIdentifcationAndVersionInfo(final LibraryElement type, final IProject project) {
+		TypeManagementPreferencesHelper.setupIdentification(type, project);
+		TypeManagementPreferencesHelper.setupVersionInfo(type, project);
 	}
 
 	public TypeEntry getTypeEntry() {

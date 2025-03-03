@@ -23,8 +23,8 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.debug.ui.DebugColorProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.graphics.Font;
@@ -122,9 +122,12 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 		int width = DEBUG_VALUE_MIN_WIDTH;
 		if (font != null) {
 			width = getFigure().getPreferredSize().width;
-			width = Math.clamp(width, DEBUG_VALUE_MIN_WIDTH, ValueEditPart.getMaxWidth());
+			width = Math.clamp(width, DEBUG_VALUE_MIN_WIDTH, getMaxWidth());
 		}
 		return width;
 	}
 
+	private int getMaxWidth() {
+		return ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMaxValueLabelSize();
+	}
 }

@@ -39,13 +39,13 @@ import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -60,7 +60,6 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 
 	private final TargetPinManager targetPinManager = new TargetPinManager(this);
 	protected TargetInterfaceAdapter targetInteraceAdapter = null;
-	protected static int subappInterfaceBarMaxWidth = -1;
 
 	private boolean isOverflow = false;
 
@@ -299,12 +298,8 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		return super.getMaxWidth();
 	}
 
-	protected static int getInterfaceBarMaxWidth() {
-		if (-1 == subappInterfaceBarMaxWidth) {
-			subappInterfaceBarMaxWidth = GefPreferenceConstants.STORE
-					.getInt(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE);
-		}
-		return subappInterfaceBarMaxWidth;
+	protected int getInterfaceBarMaxWidth() {
+		return ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMaxInterfaceBarSize();
 	}
 
 }

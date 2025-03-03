@@ -45,16 +45,16 @@ public class FBNetworkConnection extends HideableConnection {
 	private static final String THREE_DOTS = "\u2026"; //$NON-NLS-1$
 	private static final String NOT_SIGN = "\u00AC"; //$NON-NLS-1$
 
-	private static int maxWidth = GefPreferenceConstants.STORE
-			.getInt(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
+	private final int maxHiddenConnectionLabelSize;
 
-	private static String pinLabelStyle = GefPreferenceConstants.STORE
-			.getString(GefPreferenceConstants.PIN_LABEL_STYLE);
+	private final String pinLabelStyle;
 
 	private final ConnectionEditPart connEP;
 
-	public FBNetworkConnection(final ConnectionEditPart connEP) {
+	public FBNetworkConnection(final ConnectionEditPart connEP, final int maxWidth, final String pinLabelStyle) {
 		this.connEP = connEP;
+		this.maxHiddenConnectionLabelSize = maxWidth;
+		this.pinLabelStyle = pinLabelStyle;
 		super.setModel(connEP.getModel());
 	}
 
@@ -219,21 +219,21 @@ public class FBNetworkConnection extends HideableConnection {
 
 	private String generateIEString(final IInterfaceElement ie) {
 		final StringBuilder builder = generateFullIEString(ie);
-		if (builder.length() > maxWidth) {
+		if (builder.length() > maxHiddenConnectionLabelSize) {
 			switch (pinLabelStyle) {
 			case GefPreferenceConstants.PIN_LABEL_STYLE_PIN_COMMENT: {
 				if (CommentHelper.hasComment(ie)) {
-					builder.delete(maxWidth, builder.length()); // start inclusive, end exclusive
-					builder.insert(maxWidth, THREE_DOTS);
+					builder.delete(maxHiddenConnectionLabelSize, builder.length()); // start inclusive, end exclusive
+					builder.insert(maxHiddenConnectionLabelSize, THREE_DOTS);
 				} else {
-					builder.delete(0, builder.length() - maxWidth);
+					builder.delete(0, builder.length() - maxHiddenConnectionLabelSize);
 					builder.insert(0, THREE_DOTS);
 				}
 
 				break;
 			}
 			case GefPreferenceConstants.PIN_LABEL_STYLE_PIN_NAME, GefPreferenceConstants.PIN_LABEL_STYLE_SRC_PIN_NAME: {
-				builder.delete(0, builder.length() - maxWidth);
+				builder.delete(0, builder.length() - maxHiddenConnectionLabelSize);
 				builder.insert(0, THREE_DOTS);
 				break;
 			}

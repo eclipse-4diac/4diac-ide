@@ -111,7 +111,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 					page.getLocationPath(), libPage.getChosenLibraries(), monitor);
 			final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(newProject,
 					page.getInitialSystemName(), monitor);
-			TypeManagementPreferencesHelper.setupVersionInfo(system);
+			TypeManagementPreferencesHelper.setupVersionInfo(system, newProject);
 			createInitialApplication(system);
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);

@@ -18,8 +18,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 
 public class ErrorMarkerFBNeworkElementFigure extends FBNetworkElementFigure {
 
-	public ErrorMarkerFBNeworkElementFigure(final FBNetworkElement model) {
-		super(model);
+	public ErrorMarkerFBNeworkElementFigure(final FBNetworkElement model, final int maxTypeLabelSize) {
+		super(model, maxTypeLabelSize);
 		getFbFigureContainer()
 				.setBorder(new AnnotationFeedbackBorder(ProblemAnnotationStyler.getErrorAnnotationColor()));
 	}

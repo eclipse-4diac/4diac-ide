@@ -17,29 +17,35 @@
 package org.eclipse.fordiac.ide.gef.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 /** Class used to initialize default preference values. */
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		final IPreferenceStore store = GefPreferenceConstants.STORE;
-		store.setDefault(GefPreferenceConstants.SNAP_TO_GRID, true);
-		store.setDefault(GefPreferenceConstants.SHOW_GRID, true);
+		final IEclipsePreferences preferences = DefaultScope.INSTANCE
+				.getNode(GefPreferenceConstants.GEF_PREFERENCES_ID);
+		preferences.putBoolean(GefPreferenceConstants.SNAP_TO_GRID, true);
+		preferences.putBoolean(GefPreferenceConstants.SHOW_GRID, true);
 
-		store.setDefault(GefPreferenceConstants.PIN_LABEL_STYLE, GefPreferenceConstants.PIN_LABEL_STYLE_PIN_NAME);
+		preferences.put(GefPreferenceConstants.PIN_LABEL_STYLE, GefPreferenceConstants.PIN_LABEL_STYLE_PIN_NAME);
 
-		store.setDefault(GefPreferenceConstants.MAX_VALUE_LABEL_SIZE, 25); // big enough to fully show an ip address and
-		store.setDefault(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH, 1000);
-		// port
-		store.setDefault(GefPreferenceConstants.MAX_PIN_LABEL_SIZE, 12);
-		store.setDefault(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE, 40);
-		store.setDefault(GefPreferenceConstants.MIN_INTERFACE_BAR_SIZE, 40);
-		store.setDefault(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE, 60);
-		store.setDefault(GefPreferenceConstants.MAX_TYPE_LABEL_SIZE, 15);
+		preferences.putInt(GefPreferenceConstants.MAX_VALUE_LABEL_SIZE, 25); // big enough to fully show an IP address
+																				// and port
+		preferences.putInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH, 1000);
 
-		store.setDefault(GefPreferenceConstants.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR, true);
-		store.setDefault(GefPreferenceConstants.EXPANDED_INTERFACE_EVENTS_TOP, true);
+		preferences.putInt(GefPreferenceConstants.MAX_PIN_LABEL_SIZE, 12);
+		preferences.putInt(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE, 40);
+		preferences.putInt(GefPreferenceConstants.MIN_INTERFACE_BAR_SIZE, 40);
+		preferences.putInt(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE, 60);
+		preferences.putInt(GefPreferenceConstants.MAX_TYPE_LABEL_SIZE, 15);
+
+		preferences.putBoolean(GefPreferenceConstants.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR, true);
+		preferences.putBoolean(GefPreferenceConstants.EXPANDED_INTERFACE_EVENTS_TOP, true);
+
+		preferences.putBoolean(GefPreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX,
+				GefPreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX_DEFAULT_VALUE);
 	}
 }

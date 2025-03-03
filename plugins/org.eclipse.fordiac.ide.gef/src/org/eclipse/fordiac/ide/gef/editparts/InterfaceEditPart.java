@@ -61,6 +61,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -77,42 +79,33 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart, AnnotableGraphicalEditPart {
 
 	private int mouseState;
-	private static int minWidth = -1;
-	private static int maxWidth = -1;
 
 	private Adapter contentAdapter = null;
 	private IInterfaceElement sourcePin = null;
 	private Adapter sourcePinAdapter = null;
 
-	private String pinLabelStyle = GefPreferenceConstants.STORE.getString(GefPreferenceConstants.PIN_LABEL_STYLE);
+	private String pinLabelStyle;
+
 	private final IPropertyChangeListener preferenceListener = event -> {
-		if (event.getProperty().equals(GefPreferenceConstants.PIN_LABEL_STYLE)) {
-			pinLabelStyle = ((String) event.getNewValue());
+		if (event.getProperty().equals(GefPreferenceConstants.PIN_LABEL_STYLE)
+				|| event.getProperty().equals(PreferenceStoreProvider.PROJECT_STORE_ACTIVE)) {
+			pinLabelStyle = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getStoreProvider()
+					.getStore().getString(GefPreferenceConstants.PIN_LABEL_STYLE);
 			refreshLabelText();
 		}
 	};
 
 	protected InterfaceEditPart() {
-		addPreferenceListener();
+		pinLabelStyle = ""; //$NON-NLS-1$
 	}
 
-	private static int getMinWidth() {
-		if (-1 == minWidth) {
-			minWidth = GefPreferenceConstants.STORE.getInt(GefPreferenceConstants.MIN_PIN_LABEL_SIZE);
-		}
-		return minWidth;
+	protected int getMinWidth() {
+		return ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMinPinLabelSize();
 	}
 
-	@SuppressWarnings("static-method") // allow subclasses to overload and provide different max widths
+	// allow subclasses to overload and provide different max widths
 	protected int getMaxWidth() {
-		if (-1 == maxWidth) {
-			loadMaxWidth();
-		}
-		return maxWidth;
-	}
-
-	private static synchronized void loadMaxWidth() {
-		maxWidth = GefPreferenceConstants.STORE.getInt(GefPreferenceConstants.MAX_PIN_LABEL_SIZE);
+		return ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMaxPinLabelSize();
 	}
 
 	@Override
@@ -170,10 +163,6 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	private boolean isShowInput() {
 		return GefPreferenceConstants.PIN_LABEL_STYLE_SRC_PIN_NAME.equals(pinLabelStyle) && isInput()
 				&& !getModel().getInputConnections().isEmpty();
-	}
-
-	private void addPreferenceListener() {
-		GefPreferenceConstants.STORE.addPropertyChangeListener(preferenceListener);
 	}
 
 	private String getSourcePinInstanceName() {
@@ -428,6 +417,10 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
+			final var storeProvider = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
+					.getStoreProvider();
+			storeProvider.addPropertyChangeListener(preferenceListener);
+			pinLabelStyle = storeProvider.getStore().getString(GefPreferenceConstants.PIN_LABEL_STYLE);
 			getModel().eAdapters().add(getContentAdapter());
 			addSourcePinAdapter();
 		}
@@ -438,7 +431,9 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		if (isActive()) {
 			super.deactivate();
 			getModel().eAdapters().remove(getContentAdapter());
-			GefPreferenceConstants.STORE.removePropertyChangeListener(preferenceListener);
+			((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getStoreProvider()
+					.removePropertyChangeListener(preferenceListener);
+			getModel().eAdapters().remove(getContentAdapter());
 			removeSourcePinAdapter();
 		}
 	}

@@ -26,7 +26,7 @@ import java.text.MessageFormat;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.editors.InitialValueEditor;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.gef.widgets.ConnectionDisplayWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -235,7 +236,9 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 
 	private void updateTypeInitialValue(final String value) {
 		if (!parameterText.isDisposed() && FordiacMessages.ComputingPlaceholderValue.equals(parameterText.getText())) {
-			if (value.length() <= DiagramPreferencePage.getMaxDefaultValueLength()) {
+			if (value.length() <= PreferenceStoreProvider
+					.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID, getTypeLibrary().getProject())
+					.getInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH)) {
 				parameterText.setText(value);
 			} else {
 				parameterText.setText(FordiacMessages.ValueTooLarge);

@@ -25,6 +25,7 @@ import org.eclipse.draw2d.RangeModel;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.model.ui.preferences.IGraphicalPreferencesCache;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -35,6 +36,12 @@ import org.eclipse.swt.events.MouseEvent;
  * The Class AdvancedScrollingGraphicalViewer.
  */
 public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
+	private final IGraphicalPreferencesCache cache;
+
+	// reference to GefPreferences
+	public AdvancedScrollingGraphicalViewer(final IGraphicalPreferencesCache cache) {
+		this.cache = cache;
+	}
 
 	/**
 	 * Extends the superclass implementation to scroll the native Canvas control
@@ -188,5 +195,9 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 
 	public org.eclipse.swt.graphics.Point getFigureCanvasSize() {
 		return getFigureCanvas().getSize();
+	}
+
+	public IGraphicalPreferencesCache getPreferencesCache() {
+		return cache;
 	}
 }

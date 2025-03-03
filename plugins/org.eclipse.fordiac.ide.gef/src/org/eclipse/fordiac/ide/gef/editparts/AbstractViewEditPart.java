@@ -27,21 +27,22 @@ import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.tools.DirectEditManager;
-import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.RGB;
 
 public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	private static final String ERROR_IN_CREATE_FIGURE = Messages.AbstractViewEditPart_ERROR_createFigure;
+
+	private PreferenceStoreProvider storeProvider;
 
 	private Adapter adapter;
 
@@ -108,19 +109,6 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	 */
 	protected abstract Adapter createContentAdapter();
 
-	/**
-	 * If an View needs to be informed for changes in the PreferencePage (e.g.
-	 * change of a Color) the derived class have to return an
-	 * IPropertyChangeListener with implemented <code>propertyChange()</code> method
-	 * if notification on changes are required otherwise it can return
-	 * <code>null</code>.
-	 *
-	 * @return IPropertyChangeListener the IPropertyChangeListener of the derived
-	 *         class or <code>null</code> if derived class should not be added to
-	 *         the listeners.
-	 */
-	protected abstract IPropertyChangeListener getPreferenceChangeListener();
-
 	@Override
 	public void activate() {
 		if (!isActive()) {
@@ -129,9 +117,6 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 				getINamedElement().eAdapters().add(iNamedElementContentAdapter);
 			}
 			((Notifier) getModel()).eAdapters().add(getContentAdapter());
-			if (getPreferenceChangeListener() != null) {
-				GefPreferenceConstants.STORE.addPropertyChangeListener(getPreferenceChangeListener());
-			}
 		}
 	}
 
@@ -143,9 +128,6 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 				getINamedElement().eAdapters().remove(iNamedElementContentAdapter);
 			}
 			((Notifier) getModel()).eAdapters().remove(getContentAdapter());
-			if (getPreferenceChangeListener() != null) {
-				GefPreferenceConstants.STORE.removePropertyChangeListener(getPreferenceChangeListener());
-			}
 		}
 	}
 

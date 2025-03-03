@@ -56,6 +56,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -237,7 +238,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 
 	@Override
 	protected IFigure createFigureForModel() {
-		return new SubAppForFbNetworkFigure(getModel(), this);
+		final var prefCache = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache();
+		return new SubAppForFbNetworkFigure(getModel(), this, prefCache.getMinInterfaceBarSize(),
+				prefCache.getMaxTypeLabelSize());
 	}
 
 	@Override

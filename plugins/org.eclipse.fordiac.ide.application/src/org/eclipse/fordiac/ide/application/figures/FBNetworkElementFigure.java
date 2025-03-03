@@ -40,8 +40,8 @@ public class FBNetworkElementFigure extends FBShape {
 	 *
 	 * @param model the model
 	 */
-	public FBNetworkElementFigure(final FBNetworkElement model) {
-		super(model.getType());
+	public FBNetworkElementFigure(final FBNetworkElement model, final int maxTypeLabelSize) {
+		super(model.getType(), maxTypeLabelSize);
 		this.model = model;
 		refreshToolTips();
 	}

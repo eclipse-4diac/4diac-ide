@@ -13,17 +13,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.preferences;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.fordiac.ide.ui.preferences.FordiacPropertyPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * This class represents a preference page that is contributed to the
@@ -36,16 +33,13 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
  * preferences can be accessed directly via the preference store.
  */
 
-public class TypeManagementPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class TypeManagementPreferencePage extends FordiacPropertyPreferencePage {
 
 	/**
 	 * Instantiates a new forte preference page.
 	 */
 	public TypeManagementPreferencePage() {
-		super(GRID);
-		setPreferenceStore(
-				new ScopedPreferenceStore(InstanceScope.INSTANCE, TypeManagementPreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID));
-		setDescription(Messages.typeManagementPreferencePageTitle);
+		super(GRID, TypeManagementPreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID);
 	}
 
 	/**
@@ -67,17 +61,19 @@ public class TypeManagementPreferencePage extends FieldEditorPreferencePage impl
 		final StringFieldEditor standard = new StringFieldEditor(TypeManagementPreferenceConstants.P_STANDARD,
 				TypeManagementPreferenceConstants.P_STANDARD, identificationGroup);
 		addField(standard);
-		final StringFieldEditor classification = new StringFieldEditor(TypeManagementPreferenceConstants.P_CLASSIFICATION,
-				TypeManagementPreferenceConstants.P_CLASSIFICATION, identificationGroup);
+		final StringFieldEditor classification = new StringFieldEditor(
+				TypeManagementPreferenceConstants.P_CLASSIFICATION, TypeManagementPreferenceConstants.P_CLASSIFICATION,
+				identificationGroup);
 		addField(classification);
-		final StringFieldEditor applicationDomain = new StringFieldEditor(TypeManagementPreferenceConstants.P_APPLICATION_DOMAIN,
+		final StringFieldEditor applicationDomain = new StringFieldEditor(
+				TypeManagementPreferenceConstants.P_APPLICATION_DOMAIN,
 				TypeManagementPreferenceConstants.P_APPLICATION_DOMAIN, identificationGroup);
 		addField(applicationDomain);
 		final StringFieldEditor function = new StringFieldEditor(TypeManagementPreferenceConstants.P_FUNCTION,
 				TypeManagementPreferenceConstants.P_FUNCTION, identificationGroup);
 		addField(function);
-		final StringFieldEditor type = new StringFieldEditor(TypeManagementPreferenceConstants.P_TYPE, TypeManagementPreferenceConstants.P_TYPE,
-				identificationGroup);
+		final StringFieldEditor type = new StringFieldEditor(TypeManagementPreferenceConstants.P_TYPE,
+				TypeManagementPreferenceConstants.P_TYPE, identificationGroup);
 		addField(type);
 		final StringFieldEditor description = new StringFieldEditor(TypeManagementPreferenceConstants.P_DESCRIPTION,
 				TypeManagementPreferenceConstants.P_DESCRIPTION, identificationGroup);
@@ -89,17 +85,17 @@ public class TypeManagementPreferencePage extends FieldEditorPreferencePage impl
 		final Group versionGroup = new Group(getFieldEditorParent(), SWT.NONE);
 		versionGroup.setText(Messages.typeManagementPreferencePageVersionTitle);
 
-		final StringFieldEditor version = new StringFieldEditor(TypeManagementPreferenceConstants.P_VERSION, TypeManagementPreferenceConstants.P_VERSION,
-				versionGroup);
+		final StringFieldEditor version = new StringFieldEditor(TypeManagementPreferenceConstants.P_VERSION,
+				TypeManagementPreferenceConstants.P_VERSION, versionGroup);
 		addField(version);
 		final StringFieldEditor organization = new StringFieldEditor(TypeManagementPreferenceConstants.P_ORGANIZATION,
 				TypeManagementPreferenceConstants.P_ORGANIZATION, versionGroup);
 		addField(organization);
-		final StringFieldEditor author = new StringFieldEditor(TypeManagementPreferenceConstants.P_AUTHOR, TypeManagementPreferenceConstants.P_AUTHOR,
-				versionGroup);
+		final StringFieldEditor author = new StringFieldEditor(TypeManagementPreferenceConstants.P_AUTHOR,
+				TypeManagementPreferenceConstants.P_AUTHOR, versionGroup);
 		addField(author);
-		final StringFieldEditor remarks = new StringFieldEditor(TypeManagementPreferenceConstants.P_REMARKS, TypeManagementPreferenceConstants.P_REMARKS,
-				versionGroup);
+		final StringFieldEditor remarks = new StringFieldEditor(TypeManagementPreferenceConstants.P_REMARKS,
+				TypeManagementPreferenceConstants.P_REMARKS, versionGroup);
 		addField(remarks);
 
 		versionGroup.setLayoutData(gridData);
@@ -113,7 +109,17 @@ public class TypeManagementPreferencePage extends FieldEditorPreferencePage impl
 	 */
 	@Override
 	public void init(final IWorkbench workbench) {
+		super.init(workbench);
 		setDescription(Messages.typeManagementPreferencePageDescription);
 	}
 
+	@Override
+	protected String getPreferencePageID() {
+		return "org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencePage"; //$NON-NLS-1$
+	}
+
+	@Override
+	protected String getPropertyPageID() {
+		return "org.eclipse.fordiac.ide.typemanagement.properties.TypeManagementPreferencePage"; //$NON-NLS-1$
+	}
 }

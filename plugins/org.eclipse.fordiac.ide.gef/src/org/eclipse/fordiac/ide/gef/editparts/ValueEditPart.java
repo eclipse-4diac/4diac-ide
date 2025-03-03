@@ -36,8 +36,6 @@ import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationBorder;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage;
-import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueRefreshJob;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -46,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.ConnectionEditPart;
@@ -65,16 +64,12 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	private InterfaceEditPart parentPart;
 	private InitialValueRefreshJob refreshJob;
 
-	private static int maxWidth = -1;
-
-	public static int getMaxWidth() {
-		if (-1 == maxWidth) {
-			final int maxLabelSize = GefPreferenceConstants.STORE.getInt(GefPreferenceConstants.MAX_VALUE_LABEL_SIZE);
-			final FontMetrics fm = FigureUtilities.getFontMetrics(JFaceResources.getFontRegistry()
-					.get(org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants.DIAGRAM_FONT));
-			maxWidth = (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth());
-		}
-		return maxWidth;
+	public int getMaxWidth() {
+		final int maxLabelSize = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
+				.getMaxValueLabelSize();
+		final FontMetrics fm = FigureUtilities.getFontMetrics(JFaceResources.getFontRegistry()
+				.get(org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants.DIAGRAM_FONT));
+		return (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth());
 	}
 
 	/*
@@ -242,7 +237,8 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	protected void updateDefaultValue(final String value) {
 		if (isActive() && FordiacMessages.ComputingPlaceholderValue.equals(getFigure().getText())) {
-			if (value.length() <= DiagramPreferencePage.getMaxDefaultValueLength()) {
+			if (value.length() <= ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
+					.getMaxDefaultValueLength()) {
 				getFigure().setText(value);
 			} else {
 				getFigure().setText(FordiacMessages.ValueTooLarge);

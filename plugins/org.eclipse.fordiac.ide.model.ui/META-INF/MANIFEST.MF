@@ -21,4 +21,5 @@ Export-Package: org.eclipse.fordiac.ide.model.ui,
  org.eclipse.fordiac.ide.model.ui.editors,
  org.eclipse.fordiac.ide.model.ui.listeners,
  org.eclipse.fordiac.ide.model.ui.nat,
+ org.eclipse.fordiac.ide.model.ui.preferences,
  org.eclipse.fordiac.ide.model.ui.widgets

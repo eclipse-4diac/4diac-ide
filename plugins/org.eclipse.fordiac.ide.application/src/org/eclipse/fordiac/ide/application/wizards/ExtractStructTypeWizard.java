@@ -69,7 +69,7 @@ public class ExtractStructTypeWizard extends AbstractSaveAsWizard {
 					final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
 					InterfaceListCopier.copyVarList(type.getMemberVariables(), varDecl, true);
 
-					TypeManagementPreferencesHelper.setupVersionInfo(type);
+					TypeManagementPreferencesHelper.setupVersionInfo(type, targetFile.getProject());
 
 					datatypeName = TypeEntry.getTypeNameFromFile(targetFile);
 					type.setName(datatypeName);

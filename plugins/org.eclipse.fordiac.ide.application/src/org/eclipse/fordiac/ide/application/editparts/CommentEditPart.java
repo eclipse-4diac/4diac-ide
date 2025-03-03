@@ -50,7 +50,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
-import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
@@ -192,12 +191,6 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 	@Override
 	protected void refreshName() {
 		// as we don't have a name label we don't want to do anything here
-	}
-
-	@Override
-	protected IPropertyChangeListener getPreferenceChangeListener() {
-		// for now we don't need a preference change listener
-		return null;
 	}
 
 	@Override

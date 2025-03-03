@@ -22,6 +22,7 @@ import java.util.Set;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.helpers.FBEndpointFinder;
@@ -43,7 +44,8 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-		final boolean stepMode = UIPreferenceConstants.STORE.getBoolean(UIPreferenceConstants.P_TOGGLE_JUMP_STEP);
+		final boolean stepMode = InstanceScope.INSTANCE.getNode(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID)
+				.getBoolean(UIPreferenceConstants.P_TOGGLE_JUMP_STEP, false);
 
 		final IInterfaceElement originPin = ((InterfaceEditPart) selection.getFirstElement()).getModel();
 

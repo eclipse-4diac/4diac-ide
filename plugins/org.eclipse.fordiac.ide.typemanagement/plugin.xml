@@ -701,6 +701,21 @@
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
+            category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
+            class="org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencePage"
+            id="org.eclipse.fordiac.ide.typemanagement.properties.TypeManagementPreferencePage"
+            name="Type Management Preferences">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+               </test>
+            </adapt>
+         </enabledWhen>
+      </page>
+      <page
             class="org.eclipse.fordiac.ide.typemanagement.properties.BuildPathPropertyPage"
             id="org.eclipse.fordiac.ide.typemanagement.properties.buildPathPropertyPage"
             name="4diac Build Path">

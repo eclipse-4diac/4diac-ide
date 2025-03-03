@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.preferences;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -47,15 +48,12 @@ public class FordiacPreferencePage extends FieldEditorPreferencePage implements 
 	private void createCheckBoxFields() {
 		addField(new BooleanFieldEditor(UIPreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR,
 				FordiacMessages.FordiacPreferencePage_LABEL_ShowErrorsAtMouseCursor, getFieldEditorParent()));
-
-		addField(new BooleanFieldEditor(UIPreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX,
-				FordiacMessages.FordiacPreferencePage_LABEL_DeactivateTransferingComments_DEMUX_to_MUX,
-				getFieldEditorParent()));
 	}
 
 	@Override
 	public void init(final IWorkbench workbench) {
-		setPreferenceStore(UIPreferenceConstants.STORE);
+		setPreferenceStore(new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+				UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID));
 		setDescription(FordiacMessages.FordiacPreferencePage_LABEL_PreferencePageDescription);
 	}
 

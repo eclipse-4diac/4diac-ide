@@ -13,19 +13,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbrtlauncher.preferences;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
-
 /**
  * Constant definitions for plug-in preferences.
  */
 public final class FbrtPreferenceConstants {
 
 	public static final String FBRTLAUNCHER_PREFERENCES_ID = "org.eclipse.fordiac.ide.fbrtlauncher"; //$NON-NLS-1$
-
-	public static final IPreferenceStore STORE = new ScopedPreferenceStore(InstanceScope.INSTANCE,
-			FBRTLAUNCHER_PREFERENCES_ID);
 
 	/** The Constant P_PATH. */
 	public static final String P_PATH = "pathPreference"; //$NON-NLS-1$

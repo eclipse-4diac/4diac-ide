@@ -12,17 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.preferences;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
-
 public class GefPreferenceConstants {
 	public static final String GEF_PREFERENCES_ID = "org.eclipse.fordiac.ide.gef"; //$NON-NLS-1$
-
-	public static final IPreferenceStore STORE = new ScopedPreferenceStore(InstanceScope.INSTANCE, GEF_PREFERENCES_ID);
-
-	private GefPreferenceConstants() {
-	}
 
 	/** The Constant CORNER_DIM. */
 	public static final int CORNER_DIM = 6;
@@ -57,4 +48,11 @@ public class GefPreferenceConstants {
 
 	public static final String EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR = "ExpandedInterfaceOldDirectBehaviour"; //$NON-NLS-1$
 	public static final String EXPANDED_INTERFACE_EVENTS_TOP = "ExpandedInterfaceEventsTop"; //$NON-NLS-1$
+
+	public static final String P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX = "DeactivateCommentsTransferringDemuxToMux"; //$NON-NLS-1$
+	public static final boolean P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX_DEFAULT_VALUE = false;
+
+	private GefPreferenceConstants() {
+
+	}
 }

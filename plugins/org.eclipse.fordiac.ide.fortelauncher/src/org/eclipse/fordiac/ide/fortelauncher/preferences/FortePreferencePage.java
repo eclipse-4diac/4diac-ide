@@ -13,7 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fortelauncher.preferences;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.fortelauncher.Messages;
+import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.ui.IWorkbench;
@@ -37,7 +39,8 @@ public class FortePreferencePage extends FieldEditorPreferencePage implements IW
 	 */
 	public FortePreferencePage() {
 		super(GRID);
-		setPreferenceStore(FortePreferenceConstants.STORE);
+		setPreferenceStore(new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+				FortePreferenceConstants.FORTELAUNCHER_PREFERENCES_ID));
 		setDescription(Messages.FortePreferencePage_FORTEPreferencesPage);
 	}
 

@@ -17,13 +17,13 @@ package org.eclipse.fordiac.ide.typemanagement.preferences;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public final class TypeManagementPreferencesHelper {
 
@@ -31,10 +31,10 @@ public final class TypeManagementPreferencesHelper {
 		// do nothing
 	}
 
-	public static void setupVersionInfo(final LibraryElement type) {
+	public static void setupVersionInfo(final LibraryElement type, final IProject project) {
 		final VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
-		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
-				TypeManagementPreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID);
+		final IPreferenceStore store = PreferenceStoreProvider
+				.getStore(TypeManagementPreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID, project);
 
 		// version
 		setupVersion(versionInfo, store);
@@ -75,7 +75,7 @@ public final class TypeManagementPreferencesHelper {
 		versionInfo.setRemarks(store.getString(TypeManagementPreferenceConstants.P_REMARKS));
 	}
 
-	public static void setupIdentification(final LibraryElement type) {
+	public static void setupIdentification(final LibraryElement type, final IProject project) {
 
 		Identification identification = type.getIdentification();
 
@@ -83,8 +83,8 @@ public final class TypeManagementPreferencesHelper {
 			identification = LibraryElementFactory.eINSTANCE.createIdentification();
 		}
 
-		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
-				TypeManagementPreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID);
+		final IPreferenceStore store = PreferenceStoreProvider
+				.getStore(TypeManagementPreferenceConstants.TYPE_MANAGEMENT_PREFERENCES_ID, project);
 
 		// Standard.
 		setupStandard(identification, store);

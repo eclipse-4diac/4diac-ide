@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.jface.resource.JFaceResources;
@@ -101,7 +102,8 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		return new FBTypeFigure(getModel());
+		return new FBTypeFigure(getModel(),
+				((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMaxTypeLabelSize());
 	}
 
 	@Override

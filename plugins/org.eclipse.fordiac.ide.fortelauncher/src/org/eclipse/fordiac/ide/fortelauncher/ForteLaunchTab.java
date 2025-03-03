@@ -13,15 +13,18 @@
 package org.eclipse.fordiac.ide.fortelauncher;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.fordiac.ide.fortelauncher.preferences.FortePreferenceConstants;
 import org.eclipse.fordiac.ide.runtime.RuntimeLaunchTab;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.fordiac.ide.ui.widget.DirectoryChooserControl;
 import org.eclipse.fordiac.ide.ui.widget.FileChooserControl;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -59,7 +62,9 @@ public class ForteLaunchTab extends RuntimeLaunchTab {
 	@Override
 	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
 		super.setDefaults(configuration);
-		final String fortePath = FortePreferenceConstants.STORE.getString(FortePreferenceConstants.P_PATH);
+		final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+				FortePreferenceConstants.FORTELAUNCHER_PREFERENCES_ID);
+		final String fortePath = store.getString(FortePreferenceConstants.P_PATH);
 		if (fortePath != null && !fortePath.isBlank()) {
 			configuration.setAttribute(ATTR_LOCATION, fortePath);
 		} else {

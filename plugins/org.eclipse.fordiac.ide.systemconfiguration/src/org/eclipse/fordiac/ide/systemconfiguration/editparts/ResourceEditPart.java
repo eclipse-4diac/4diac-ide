@@ -169,11 +169,6 @@ public class ResourceEditPart extends AbstractViewEditPart {
 	}
 
 	@Override
-	public IPropertyChangeListener getPreferenceChangeListener() {
-		return null;
-	}
-
-	@Override
 	protected void backgroundColorChanged(final IFigure figure) {
 		// currently nothing to be done here
 	}

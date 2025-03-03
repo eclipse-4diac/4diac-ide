@@ -14,19 +14,23 @@
 package org.eclipse.fordiac.ide.model.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		final IPreferenceStore store = ModelPreferenceConstants.STORE;
-		store.setDefault(ModelPreferenceConstants.P_ALLOCATION_SIZE,
-				ModelPreferenceConstants.P_ALLOCATION_SIZE_DEFAULT_VALUE);
+		final IEclipsePreferences preferences = DefaultScope.INSTANCE
+				.getNode(ModelPreferenceConstants.MODEL_PREFERENCES_ID);
 
-		store.setDefault(ModelPreferenceConstants.MARGIN_TOP_BOTTOM,
+		preferences.putInt(ModelPreferenceConstants.P_ALLOCATION_SIZE,
+				ModelPreferenceConstants.P_ALLOCATION_SIZE_DEFAULT_VALUE);
+		preferences.putInt(ModelPreferenceConstants.P_ALLOCATION_SIZE,
+				ModelPreferenceConstants.P_ALLOCATION_SIZE_DEFAULT_VALUE);
+		preferences.putInt(ModelPreferenceConstants.MARGIN_TOP_BOTTOM,
 				ModelPreferenceConstants.MARGIN_TOP_BOTTOM_DEFAULT_VALUE);
-		store.setDefault(ModelPreferenceConstants.MARGIN_LEFT_RIGHT,
+		preferences.putInt(ModelPreferenceConstants.MARGIN_LEFT_RIGHT,
 				ModelPreferenceConstants.MARGIN_LEFT_RIGHT_DEFAULT_VALUE);
 	}
 }

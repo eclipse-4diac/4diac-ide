@@ -22,11 +22,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.preferences;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
+import org.eclipse.fordiac.ide.ui.preferences.FordiacPropertyPreferencePage;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
@@ -38,22 +40,16 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
 /** The Class DiagramPreferences. */
-public class DiagramPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class DiagramPreferencePage extends FordiacPropertyPreferencePage {
 
 	private boolean changesOnLabelSize = false;
 
-	private static int maxDefaultValueLength = GefPreferenceConstants.STORE
-			.getInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH);
-
 	/** Instantiates a new diagram preferences. */
 	public DiagramPreferencePage() {
-		super(GRID);
-		setPreferenceStore(GefPreferenceConstants.STORE);
+		super(GRID, GefPreferenceConstants.GEF_PREFERENCES_ID);
 	}
 
 	/*
@@ -205,13 +201,6 @@ public class DiagramPreferencePage extends FieldEditorPreferencePage implements 
 	private void createGroupRulerGrid() {
 		final Group group = createGroup(Messages.DiagramPreferences_FieldEditors_RulerAndGrid);
 		// Add the fields to the group
-		final BooleanFieldEditor showRulers = new BooleanFieldEditor(GefPreferenceConstants.SHOW_RULERS,
-				Messages.DiagramPreferences_FieldEditors_ShowRuler, group);
-		addField(showRulers);
-
-		final BooleanFieldEditor showGrid = new BooleanFieldEditor(GefPreferenceConstants.SHOW_GRID,
-				Messages.DiagramPreferences_FieldEditors_ShowGrid, group);
-		addField(showGrid);
 
 		final BooleanFieldEditor snapToGrid = new BooleanFieldEditor(GefPreferenceConstants.SNAP_TO_GRID,
 				Messages.DiagramPreferences_FieldEditors_SnapToGrid, group);
@@ -243,7 +232,8 @@ public class DiagramPreferencePage extends FieldEditorPreferencePage implements 
 
 	private void createGroupBlockMargins() {
 		final Group group = createGroup(Messages.DiagramPreferences_BlockMargins);
-		final IPreferenceStore modelStore = ModelPreferenceConstants.STORE;
+		final IPreferenceStore modelStore = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+				ModelPreferenceConstants.MODEL_PREFERENCES_ID);
 
 		final IntegerFieldEditor integerFieldEditorTopBottom = new IntegerFieldEditor(
 				ModelPreferenceConstants.MARGIN_TOP_BOTTOM, Messages.DiagramPreferences_TopBottom, group);
@@ -267,9 +257,13 @@ public class DiagramPreferencePage extends FieldEditorPreferencePage implements 
 				Messages.DiagramPreferences_ExpandedInterfaceStackPins, group);
 		final BooleanFieldEditor events = new BooleanFieldEditor(GefPreferenceConstants.EXPANDED_INTERFACE_EVENTS_TOP,
 				Messages.DiagramPreferences_ExpandedInterfaceEvents, group);
+		final BooleanFieldEditor transfer = new BooleanFieldEditor(
+				GefPreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX,
+				Messages.DiagramPreferences_DeactivateTransferingComments_DEMUX_to_MUX, group);
 
 		addField(direct);
 		addField(events);
+		addField(transfer);
 		configGroup(group);
 
 		events.setEnabled(
@@ -284,11 +278,12 @@ public class DiagramPreferencePage extends FieldEditorPreferencePage implements 
 	}
 
 	@Override
-	public void init(final IWorkbench workbench) {
-		// nothing to do here
+	protected String getPreferencePageID() {
+		return "org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences"; //$NON-NLS-1$
 	}
 
-	public static int getMaxDefaultValueLength() {
-		return maxDefaultValueLength;
+	@Override
+	protected String getPropertyPageID() {
+		return "org.eclipse.fordiac.ide.gef.properties.DiagramPreferences"; //$NON-NLS-1$
 	}
 }

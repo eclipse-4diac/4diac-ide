@@ -13,19 +13,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.preferences;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
-
 /**
  * Constant definitions.
  */
 public final class PreferenceConstants {
 
 	public static final String EXPORT_PREFERENCES_ID = "org.eclipse.fordiac.ide.export"; //$NON-NLS-1$
-
-	public static final IPreferenceStore STORE = new ScopedPreferenceStore(InstanceScope.INSTANCE,
-			EXPORT_PREFERENCES_ID);
 
 	private PreferenceConstants() {
 		/* Util class shall not have a public ctor */

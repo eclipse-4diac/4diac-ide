@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.figures.ErrorMarkerFBNeworkElementFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 
 public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 
@@ -31,7 +32,8 @@ public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 
 	@Override
 	protected IFigure createFigureForModel() {
-		errorMarkerFBNeworkElementFigure = new ErrorMarkerFBNeworkElementFigure(getModel());
+		errorMarkerFBNeworkElementFigure = new ErrorMarkerFBNeworkElementFigure(getModel(),
+				((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMaxTypeLabelSize());
 		updateErrorText();
 		return errorMarkerFBNeworkElementFigure;
 	}
