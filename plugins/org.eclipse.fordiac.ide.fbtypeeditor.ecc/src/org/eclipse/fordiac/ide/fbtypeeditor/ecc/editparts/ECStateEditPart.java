@@ -29,7 +29,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECStateCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECStateFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateLayoutEditPolicy;
@@ -52,6 +51,7 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 public class ECStateEditPart extends AbstractDirectEditableEditPart implements NodeEditPart {
@@ -84,7 +84,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if (!isActive()) {
 			super.activate();
 			getModel().eAdapters().add(adapter);
-			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().addListener(colorChangeListener);
 		}
 	}
 
@@ -93,7 +93,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if (isActive()) {
 			super.deactivate();
 			getModel().eAdapters().remove(adapter);
-			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().removeListener(colorChangeListener);
 		}
 	}
 
@@ -216,14 +216,13 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	}
 
 	/** The property change listener. */
-	private final IPropertyChangeListener propertyChangeListener = event -> {
+	private final IPropertyChangeListener colorChangeListener = event -> {
 		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_STATE_COLOR)) {
-			getNameLabel().setBackgroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_STATE_COLOR));
+			getNameLabel().setBackgroundColor(FBTypeEditorPreferenceConstants.getEccStateColor());
 		}
 		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_STATE_TEXT_COLOR)) {
-			getNameLabel().setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_STATE_TEXT_COLOR));
-			getFigure().getLine()
-					.setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_STATE_TEXT_COLOR));
+			getNameLabel().setForegroundColor(FBTypeEditorPreferenceConstants.getEccStateTextColor());
+			getFigure().getLine().setForegroundColor(FBTypeEditorPreferenceConstants.getEccStateTextColor());
 		}
 	};
 

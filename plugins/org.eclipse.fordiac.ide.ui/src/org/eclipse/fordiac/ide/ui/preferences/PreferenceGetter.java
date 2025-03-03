@@ -62,25 +62,25 @@ public final class PreferenceGetter {
 
 	public static Color getDataColor(final String dataType) {
 		if ("BOOL".equals(dataType)) { //$NON-NLS-1$
-			return getColor(UIPreferenceConstants.P_BOOL_CONNECTOR_COLOR);
+			return UIPreferenceConstants.getBoolConnectorColor();
 		}
 		if (isAnyBit(dataType)) {
-			return getColor(UIPreferenceConstants.P_ANY_BIT_CONNECTOR_COLOR);
+			return UIPreferenceConstants.getAnyBitConnectorColor();
 		}
 		if (isAnyInt(dataType)) {
-			return getColor(UIPreferenceConstants.P_ANY_INT_CONNECTOR_COLOR);
+			return UIPreferenceConstants.getAnyIntConnectorColor();
 		}
 		if (isAnyReal(dataType)) {
-			return getColor(UIPreferenceConstants.P_ANY_REAL_CONNECTOR_COLOR);
+			return UIPreferenceConstants.getAnyRealConnectorColor();
 		}
 		if (isAnyString(dataType)) {
-			return getColor(UIPreferenceConstants.P_ANY_STRING_CONNECTOR_COLOR);
+			return UIPreferenceConstants.getAnyStringConnectorColor();
 		}
 		return getDefaultDataColor();
 	}
 
 	public static Color getDefaultDataColor() {
-		return getColor(UIPreferenceConstants.P_REMAINING_DATA_CONNECTOR_COLOR);
+		return UIPreferenceConstants.getRemainingDataConnectorColor();
 	}
 
 	private static boolean isAnyBit(final String dataType) {

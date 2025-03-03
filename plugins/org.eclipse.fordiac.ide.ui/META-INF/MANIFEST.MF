@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Bundle-Localization: plugin
 Export-Package: org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.ui.contentoutline,
  org.eclipse.fordiac.ide.ui.editors,

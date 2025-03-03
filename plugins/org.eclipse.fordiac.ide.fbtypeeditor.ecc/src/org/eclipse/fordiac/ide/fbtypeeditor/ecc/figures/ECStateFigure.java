@@ -50,21 +50,21 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 	private final Figure stateActionConnector = new HorizontalLineFigure(STATE_ACTION_CONNECTOR_LENGTH);
 	private final Figure actionContainer = new Figure() {
 		@Override
-		public void add(IFigure figure, Object constraint, int index) {
+		public void add(final IFigure figure, final Object constraint, final int index) {
 			super.add(figure, constraint, index);
 			setConstraint(figure, new GridData(SWT.FILL, SWT.BEGINNING, true, false));
 		}
 	};
 
-	public ECStateFigure(ECState state) {
-		ToolbarLayout tbLayout = new ToolbarLayout();
+	public ECStateFigure(final ECState state) {
+		final ToolbarLayout tbLayout = new ToolbarLayout();
 		tbLayout.setStretchMinorAxis(false);
 		tbLayout.setHorizontal(true);
 		setLayoutManager(tbLayout);
 
-		Figure stateRect = createStateRectangle();
+		final Figure stateRect = createStateRectangle();
 		stateRect.add(createStateNameLabel(state));
-		stateActionConnector.setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_STATE_TEXT_COLOR));
+		stateActionConnector.setForegroundColor(FBTypeEditorPreferenceConstants.getEccStateTextColor());
 		stateRect.add(stateActionConnector);
 		add(stateRect);
 
@@ -73,8 +73,8 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 	}
 
 	private static Figure createStateRectangle() {
-		Figure stateRect = new Figure();
-		FlowLayout layout = new FlowLayout();
+		final Figure stateRect = new Figure();
+		final FlowLayout layout = new FlowLayout();
 		layout.setStretchMinorAxis(true);
 		layout.setMajorSpacing(0);
 		layout.setMinorSpacing(0);
@@ -85,7 +85,7 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 	}
 
 	private void createStateCommentToolTip() {
-		ECStateToolTipFigure stateTooltip = new ECStateToolTipFigure();
+		final ECStateToolTipFigure stateTooltip = new ECStateToolTipFigure();
 		stateTooltip.setVisible(true);
 		setToolTip(stateTooltip);
 	}
@@ -93,7 +93,7 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 	private void createActionContainerFigure() {
 		add(actionContainer);
 
-		GridLayout gl = new GridLayout(2, false);
+		final GridLayout gl = new GridLayout(2, false);
 		gl.horizontalSpacing = -1;
 		gl.verticalSpacing = 1;
 		gl.marginWidth = 0;
@@ -102,7 +102,7 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 		actionContainer.setLayoutManager(gl);
 	}
 
-	private Label createStateNameLabel(ECState state) {
+	private Label createStateNameLabel(final ECState state) {
 		nameLabel = new Label() {
 			@Override
 			public Insets getInsets() {
@@ -113,21 +113,21 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 			}
 
 			@Override
-			public void setBackgroundColor(Color bg) {
-				if (getBorder() instanceof StartStateBorder) {
-					((StartStateBorder) getBorder()).setColor(bg);
+			public void setBackgroundColor(final Color bg) {
+				if (getBorder() instanceof final StartStateBorder startStateBorder) {
+					startStateBorder.setColor(bg);
 				} else {
 					super.setBackgroundColor(bg);
 				}
 			}
 		};
 		nameLabel.setText(state.getName());
-		nameLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_STATE_TEXT_COLOR));
+		nameLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getEccStateTextColor());
 		nameLabel.setOpaque(true);
 		if (state.isStartState()) {
-			nameLabel.setBorder(new StartStateBorder(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_STATE_COLOR)));
+			nameLabel.setBorder(new StartStateBorder(FBTypeEditorPreferenceConstants.getEccStateColor()));
 		} else {
-			nameLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_STATE_COLOR));
+			nameLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getEccStateColor());
 		}
 		return nameLabel;
 	}
@@ -154,8 +154,8 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 	}
 
 	@Override
-	public int getIntersectionStyle(Point location) {
-		Rectangle bounds = nameLabel.getBounds().getCopy();
+	public int getIntersectionStyle(final Point location) {
+		final Rectangle bounds = nameLabel.getBounds().getCopy();
 		bounds.x = bounds.x + 3;
 		bounds.y = bounds.y + 3;
 		bounds.width = bounds.width - 6;
@@ -173,8 +173,7 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 		private static final Insets START_STATE_INSET = new Insets(START_STATE_INSET_SIZE);
 		private static final Insets DOUBLE_BORDER_INSET = new Insets(DOUBLE_BORDER_WIDTH).add(START_STATE_INSET);
 
-		public StartStateBorder(Color color) {
-			super();
+		public StartStateBorder(final Color color) {
 			setWidth(DOUBLE_BORDER_WIDTH);
 			setColor(color);
 		}

@@ -79,6 +79,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.gef.requests.SelectionRequest;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -196,18 +197,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 	}
 
 	private final IPropertyChangeListener propertyChangeListener = event -> {
-		if (event.getProperty().equals(UIPreferenceConstants.P_EVENT_CONNECTOR_COLOR)
-				&& (getModel() instanceof EventConnection)) {
-			getFigure().setForegroundColor(PreferenceGetter.getColor(UIPreferenceConstants.P_EVENT_CONNECTOR_COLOR));
-		}
-		if (event.getProperty().equals(UIPreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)
-				&& (getModel() instanceof AdapterConnection)) {
-			getFigure().setForegroundColor(PreferenceGetter.getColor(UIPreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
-		}
-		if (UIPreferenceConstants.isDataConnectorProperty(event.getProperty())
-				&& (getModel() instanceof DataConnection)) {
-			getFigure().setForegroundColor(getDataConnectioncolor());
-		}
 		if (event.getProperty().equals(UIPreferenceConstants.P_HIDE_DATA_CON)
 				&& (getModel() instanceof DataConnection)) {
 			getFigure().setVisible(!((Boolean) event.getNewValue()).booleanValue());
@@ -218,6 +207,21 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 		}
 		if (event.getProperty().equals(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE)) {
 			getFigure().updateConLabels();
+		}
+	};
+
+	private final IPropertyChangeListener colorChangeListener = event -> {
+		if (event.getProperty().equals(UIPreferenceConstants.P_EVENT_CONNECTOR_COLOR)
+				&& (getModel() instanceof EventConnection)) {
+			getFigure().setForegroundColor(UIPreferenceConstants.getEventConnectorColor());
+		}
+		if (event.getProperty().equals(UIPreferenceConstants.P_ADAPTER_CONNECTOR_COLOR)
+				&& (getModel() instanceof AdapterConnection)) {
+			getFigure().setForegroundColor(UIPreferenceConstants.getAdapterConnectorColor());
+		}
+		if (UIPreferenceConstants.isDataConnectorProperty(event.getProperty())
+				&& (getModel() instanceof DataConnection)) {
+			getFigure().setForegroundColor(getDataConnectioncolor());
 		}
 	};
 
@@ -270,11 +274,11 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 
 	private void setConnectionColor(final PolylineConnection connection) {
 		if (getModel() instanceof EventConnection) {
-			connection.setForegroundColor(PreferenceGetter.getColor(UIPreferenceConstants.P_EVENT_CONNECTOR_COLOR));
+			connection.setForegroundColor(UIPreferenceConstants.getEventConnectorColor());
 		}
 
 		if (getModel() instanceof AdapterConnection) {
-			connection.setForegroundColor(PreferenceGetter.getColor(UIPreferenceConstants.P_ADAPTER_CONNECTOR_COLOR));
+			connection.setForegroundColor(UIPreferenceConstants.getAdapterConnectorColor());
 		}
 
 		if (getModel() instanceof DataConnection) {
@@ -338,6 +342,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 		if (!isActive()) {
 			super.activate();
 			UIPreferenceConstants.STORE.addPropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().addListener(colorChangeListener);
 			getModel().eAdapters().add(getContentAdapter());
 			addSourceAdapters();
 			addDestinationAdapters();
@@ -432,6 +437,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 		if (isActive()) {
 			super.deactivate();
 			UIPreferenceConstants.STORE.removePropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().removeListener(colorChangeListener);
 			getModel().eAdapters().remove(getContentAdapter());
 
 			if (srcPinAdapter.getTarget() != null) {

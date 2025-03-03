@@ -30,7 +30,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECActionCommand;
@@ -56,6 +55,7 @@ import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
@@ -91,12 +91,12 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	};
 
 	/** The property change listener. */
-	private final IPropertyChangeListener propertyChangeListener = event -> {
+	private final IPropertyChangeListener colorChangeListener = event -> {
 		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_COLOR)) {
-			getFigure().setBackgroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_COLOR));
+			getFigure().setBackgroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmColor());
 		}
 		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR)) {
-			getFigure().setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR));
+			getFigure().setForegroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmTextColor());
 		}
 	};
 
@@ -117,7 +117,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 			}
 			// addapt to the fbtype so that we get informed on alg name changes
 			ECCContentAndLabelProvider.getFBType(getAction()).eAdapters().add(fbAdapter);
-			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().addListener(colorChangeListener);
 		}
 	}
 
@@ -135,7 +135,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 			if (fbtype != null) {
 				fbtype.eAdapters().remove(fbAdapter);
 			}
-			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().removeListener(colorChangeListener);
 		}
 	}
 
@@ -223,7 +223,8 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		final List<String> algNames = ECCContentAndLabelProvider
 				.getAlgorithmNames(ECCContentAndLabelProvider.getFBType(getAction()));
 
-		final int selected = (getAction().getAlgorithm() != null) ? algNames.indexOf(getAction().getAlgorithm().getName())
+		final int selected = (getAction().getAlgorithm() != null)
+				? algNames.indexOf(getAction().getAlgorithm().getName())
 				: algNames.size() - 1;
 
 		final ComboDirectEditManager editManager = createDirectEditManager();
@@ -257,8 +258,8 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	@Override
 	protected IFigure createFigure() {
 		final Label algorithmLabel = new Label();
-		algorithmLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_COLOR));
-		algorithmLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR));
+		algorithmLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmColor());
+		algorithmLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmTextColor());
 		algorithmLabel.setOpaque(true);
 		algorithmLabel.setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm().getName() : ""); //$NON-NLS-1$
 		algorithmLabel.setBorder(new MarginBorder(ALG_INSETS));

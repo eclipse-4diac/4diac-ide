@@ -163,11 +163,11 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 
 	private Color getModelColor() {
 		if (getRefElement() instanceof Event) {
-			return PreferenceGetter.getColor(UIPreferenceConstants.P_EVENT_CONNECTOR_COLOR);
+			return UIPreferenceConstants.getEventConnectorColor();
 		}
 
 		if (getRefElement() instanceof AdapterDeclaration) {
-			return PreferenceGetter.getColor(UIPreferenceConstants.P_ADAPTER_CONNECTOR_COLOR);
+			return UIPreferenceConstants.getAdapterConnectorColor();
 		}
 		return PreferenceGetter.getDataColor(getRefElement().getType().getName());
 	}

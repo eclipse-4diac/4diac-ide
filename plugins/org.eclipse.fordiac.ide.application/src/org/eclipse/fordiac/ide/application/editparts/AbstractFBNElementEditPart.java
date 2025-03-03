@@ -186,6 +186,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		super.activate();
 		updateDeviceListener();
 		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
+		if (getColorChangeListener() != null) {
+			JFaceResources.getColorRegistry().addListener(getColorChangeListener());
+		}
 		if ((null != getModel()) && !getModel().getInterface().eAdapters().contains(getInterfaceAdapter())) {
 			getModel().getInterface().eAdapters().add(getInterfaceAdapter());
 		}
@@ -198,7 +201,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			referencedDevice.eAdapters().remove(colorChangeListener);
 		}
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
-
+		if (getColorChangeListener() != null) {
+			JFaceResources.getColorRegistry().removeListener(getColorChangeListener());
+		}
 		if (null != getModel()) {
 			getModel().getInterface().eAdapters().remove(getInterfaceAdapter());
 		}
@@ -270,6 +275,11 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	private HiddenPinIndicator inputPinIndicator;
 	private HiddenPinIndicator outputPinIndicator;
 
+	@Override
+	public IPropertyChangeListener getPreferenceChangeListener() {
+		return null;
+	}
+
 	/**
 	 * Returns an <code>IPropertyChangeListener</code> with implemented
 	 * <code>propertyChange()</code>. e.g. a color change event repaints the
@@ -277,8 +287,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	 *
 	 * @return the preference change listener
 	 */
-	@Override
-	public org.eclipse.jface.util.IPropertyChangeListener getPreferenceChangeListener() {
+	public IPropertyChangeListener getColorChangeListener() {
 		if (null == listener) {
 			listener = event -> {
 				if (event.getProperty().equals(UIPreferenceConstants.P_EVENT_CONNECTOR_COLOR)

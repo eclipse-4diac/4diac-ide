@@ -22,7 +22,6 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 public class HiddenPinIndicatorEditPart extends AbstractGraphicalEditPart {
@@ -88,7 +87,7 @@ public class HiddenPinIndicatorEditPart extends AbstractGraphicalEditPart {
 		final FordiacTriangle triangle = new FordiacTriangle(((HiddenPinIndicator) super.getModel()).isInput());
 		triangle.setBorder(new MarginBorder(3));
 		triangle.setBounds(new Rectangle(0, 0, 15, 15));
-		triangle.setBackgroundColor(PreferenceGetter.getColor(UIPreferenceConstants.P_ANY_INT_CONNECTOR_COLOR));
+		triangle.setBackgroundColor(UIPreferenceConstants.getAnyIntConnectorColor());
 		triangle.setOutline(false);
 		return triangle;
 	}

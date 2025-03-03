@@ -30,7 +30,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeOutputCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECActionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
@@ -53,6 +52,7 @@ import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
@@ -110,19 +110,18 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 	public static boolean isAdapterNotification(final Object change, final Event ev) {
 		if (ev != null) {
 			final FBNetworkElement fbNetworkElement = ev.getFBNetworkElement();
-			return (fbNetworkElement instanceof AdapterFB)
-					&& ((((AdapterFB) fbNetworkElement).getAdapterDecl() == change)
-							|| (fbNetworkElement.getName().equals(change)));
+			return (fbNetworkElement instanceof final AdapterFB adapterFB)
+					&& ((adapterFB.getAdapterDecl() == change) || (fbNetworkElement.getName().equals(change)));
 		}
 		return false;
 	}
 
-	private final IPropertyChangeListener propertyChangeListener = event -> {
+	private final IPropertyChangeListener colorChangeListener = event -> {
 		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_EVENT_COLOR)) {
-			getFigure().setBackgroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_EVENT_COLOR));
+			getFigure().setBackgroundColor(FBTypeEditorPreferenceConstants.getEccEventColor());
 		}
 		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_EVENT_TEXT_COLOR)) {
-			getFigure().setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_EVENT_TEXT_COLOR));
+			getFigure().setForegroundColor(FBTypeEditorPreferenceConstants.getEccEventTextColor());
 		}
 	};
 
@@ -134,7 +133,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 			// Adapt to the fbtype so that we get informed on interface changes
 			ECCContentAndLabelProvider.getFBType(getAction()).getInterfaceList().eAdapters().add(interfaceAdapter);
 
-			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().addListener(colorChangeListener);
 		}
 	}
 
@@ -147,7 +146,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 			if (fbType != null) {
 				fbType.getInterfaceList().eAdapters().remove(interfaceAdapter);
 			}
-			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().removeListener(colorChangeListener);
 		}
 	}
 
@@ -236,8 +235,8 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 	@Override
 	protected IFigure createFigure() {
 		final Label eventLabel = new Label();
-		eventLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_EVENT_COLOR));
-		eventLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_EVENT_TEXT_COLOR));
+		eventLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getEccEventColor());
+		eventLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getEccEventTextColor());
 		eventLabel.setOpaque(true);
 		refreshEventLabel(eventLabel);
 		eventLabel.setBorder(new MarginBorder(OUTPUT_EVENT_INSETS));

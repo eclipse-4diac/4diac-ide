@@ -15,21 +15,6 @@
       </editorPage>
    </extension>
    <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
-            class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.ECCEditorPreferencePage"
-            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.ECCEditorPreferencePage"
-            name="ECC Editor Preferences">
-      </page>
-   </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
-   <extension
          point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
       <propertyTabs
             contributorId="property.contributor.fb">
@@ -103,5 +88,50 @@
                tab="property.tab.transition">            
          </propertySection> 
       </propertySections>
+   </extension>
+   <extension
+         point="org.eclipse.ui.themes">
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateColor"
+            label="%FordiacECCPreferencePage_LABEL_ECCStateColor"
+            value="184, 182, 206">
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateTextColor"
+            label="%FordiacECCPreferencePage_LABEL_ECCStateTextColor"
+            value="21, 17, 72">
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorAlgorithmColor"
+            label="%FordiacECCPreferencePage_LABEL_ECCAlgorithmColor"
+            value="235, 242, 179">
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorAlgorithmTextColor"
+            label="%FordiacECCPreferencePage_LABEL_ECCAlgorithmTextColor"
+            value="91, 101, 11">
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorEventColor"
+            label="%FordiacECCPreferencePage_LABEL_ECCEventColor"
+            value="245, 181, 183">
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorEventTextColor"
+            label="%FordiacECCPreferencePage_LABEL_ECCEventTextColor"
+            value="141, 45, 47">
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorTransitionColor"
+            label="%FordiacECCPreferencePage_LABEL_ECCTransitionColor"
+            value="68, 64, 121">
+      </colorDefinition>
    </extension>
 </plugin>

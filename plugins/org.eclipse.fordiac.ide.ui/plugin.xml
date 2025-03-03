@@ -119,4 +119,55 @@
             icon="platform:/plugin/org.eclipse.ui.ide/icons/full/elcl16/smartmode_co.png">
       </image>
    </extension>
+    <extension
+          point="org.eclipse.ui.themes">
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.EventConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_DefaultEventConnectorColor"
+             value="99, 179, 31">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.BoolConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_BoolConnectorColor"
+             value="159, 164, 138">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.AnyBitConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_AnyBitConnectorColor"
+             value="130, 163, 169">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.AnyIntConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_AnyIntConnectorColor"
+             value="24, 81, 158">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.AnyRealConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_AnyRealConnectorColor"
+             value="219, 180, 24">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.AnyStringConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_AnyStringConnectorColor"
+             value="189, 134, 99">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.DataConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_DataConnectorColor"
+             value="0, 0, 255">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.AdapterConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_DefaultAdapterConnectorColor"
+             value="132, 93, 175">
+       </colorDefinition>
+    </extension>
 </plugin>

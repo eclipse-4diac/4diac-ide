@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
@@ -30,25 +31,25 @@ public final class FBTypeEditorPreferenceConstants {
 			FBTYPEEDITOR_ECC_PREFERENCES_ID);
 
 	/** The Constant P_ECC_STATE_COLOR. */
-	public static final String P_ECC_STATE_COLOR = "ECCEditorStateColor"; //$NON-NLS-1$
+	public static final String P_ECC_STATE_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateColor"; //$NON-NLS-1$
 
 	/** The Constant P_ECC_STATE_BORDER_COLOR. */
-	public static final String P_ECC_STATE_TEXT_COLOR = "ECCEditorStateTextColor"; //$NON-NLS-1$
+	public static final String P_ECC_STATE_TEXT_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateTextColor"; //$NON-NLS-1$
 
 	/** The Constant P_ECC_TRANSITION_COLOR. */
-	public static final String P_ECC_TRANSITION_COLOR = "ECCEditorTransitionColor"; //$NON-NLS-1$
+	public static final String P_ECC_TRANSITION_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorTransitionColor"; //$NON-NLS-1$
 
 	/** The Constant P_ECC_ALGORITHM_COLOR. */
-	public static final String P_ECC_ALGORITHM_COLOR = "ECCEditorAlgorithmColor"; //$NON-NLS-1$
+	public static final String P_ECC_ALGORITHM_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorAlgorithmColor"; //$NON-NLS-1$
 
 	/** The Constant P_ECC_ALGORITHM_BORDER_COLOR. */
-	public static final String P_ECC_ALGORITHM_TEXT_COLOR = "ECCEditorAlgorithmTextColor"; //$NON-NLS-1$
+	public static final String P_ECC_ALGORITHM_TEXT_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorAlgorithmTextColor"; //$NON-NLS-1$
 
 	/** The Constant P_ECC_EVENT_COLOR. */
-	public static final String P_ECC_EVENT_COLOR = "ECCEditorEventColor"; //$NON-NLS-1$
+	public static final String P_ECC_EVENT_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorEventColor"; //$NON-NLS-1$
 
 	/** The Constant P_ECC_EVENT_BORDER_COLOR. */
-	public static final String P_ECC_EVENT_TEXT_COLOR = "ECCEditorEventTextColor"; //$NON-NLS-1$
+	public static final String P_ECC_EVENT_TEXT_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorEventTextColor"; //$NON-NLS-1$
 
 	/** The margin of state/action labels to create rectangles */
 	public static final int MARGIN_VERTICAL = 3;
@@ -67,5 +68,33 @@ public final class FBTypeEditorPreferenceConstants {
 	 */
 	public static Color getColor(final String pref) {
 		return PreferenceGetter.getColor(STORE, pref);
+	}
+
+	public static Color getEccStateColor() {
+		return JFaceResources.getColorRegistry().get(P_ECC_STATE_COLOR);
+	}
+
+	public static Color getEccStateTextColor() {
+		return JFaceResources.getColorRegistry().get(P_ECC_STATE_TEXT_COLOR);
+	}
+
+	public static Color getEccTransitionColor() {
+		return JFaceResources.getColorRegistry().get(P_ECC_TRANSITION_COLOR);
+	}
+
+	public static Color getEccAlgorithmColor() {
+		return JFaceResources.getColorRegistry().get(P_ECC_ALGORITHM_COLOR);
+	}
+
+	public static Color getEccAlgorithmTextColor() {
+		return JFaceResources.getColorRegistry().get(P_ECC_ALGORITHM_TEXT_COLOR);
+	}
+
+	public static Color getEccEventColor() {
+		return JFaceResources.getColorRegistry().get(P_ECC_EVENT_COLOR);
+	}
+
+	public static Color getEccEventTextColor() {
+		return JFaceResources.getColorRegistry().get(P_ECC_EVENT_TEXT_COLOR);
 	}
 }

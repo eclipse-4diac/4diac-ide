@@ -51,7 +51,7 @@ public class ECTransitionFigure extends SplineConnection {
 			setLayoutManager(new StackLayout());
 			setFill(true);
 			setAntialias(1);
-			setBackgroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_TRANSITION_COLOR));
+			setBackgroundColor(FBTypeEditorPreferenceConstants.getEccTransitionColor());
 			setOutline(false);
 
 			orderLabel = new Label();
@@ -100,7 +100,7 @@ public class ECTransitionFigure extends SplineConnection {
 
 	public ECTransitionFigure(final ECTransition ecTransition) {
 		setAntialias(SWT.ON);
-		setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_TRANSITION_COLOR));
+		setForegroundColor(FBTypeEditorPreferenceConstants.getEccTransitionColor());
 
 		updateBendPoints(ecTransition);
 

@@ -27,7 +27,6 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteTransitionCommand;
@@ -63,6 +62,7 @@ import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 public class ECTransitionEditPart extends AbstractConnectionEditPart {
@@ -90,9 +90,9 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	};
 
 	/** The property change listener. */
-	private final IPropertyChangeListener propertyChangeListener = event -> {
+	private final IPropertyChangeListener colorChangeListener = event -> {
 		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_TRANSITION_COLOR)) {
-			getFigure().setForegroundColor(FBTypeEditorPreferenceConstants.getColor(FBTypeEditorPreferenceConstants.P_ECC_TRANSITION_COLOR));
+			getFigure().setForegroundColor(FBTypeEditorPreferenceConstants.getEccTransitionColor());
 		}
 	};
 
@@ -321,7 +321,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			// Adapt to the fbtype so that we get informed on interface changes
 			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().add(interfaceAdapter);
 
-			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().addListener(colorChangeListener);
 		}
 	}
 
@@ -333,7 +333,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			getModel().getECC().eAdapters().remove(adapter);
 			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().remove(interfaceAdapter);
 
-			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().removeListener(colorChangeListener);
 		}
 	}
 
