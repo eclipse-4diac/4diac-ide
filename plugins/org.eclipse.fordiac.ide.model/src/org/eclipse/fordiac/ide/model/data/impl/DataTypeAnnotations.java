@@ -65,6 +65,7 @@ import org.eclipse.fordiac.ide.model.data.WordType;
 import org.eclipse.fordiac.ide.model.data.WstringType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 
 final class DataTypeAnnotations {
 
@@ -72,7 +73,15 @@ final class DataTypeAnnotations {
 	}
 
 	static boolean isAssignableFrom(final EventType type, final DataType other) {
-		return other instanceof EventType && type != null && type.getName().equals(other.getName());
+		if (type == other) {
+			return true;
+		}
+		if (other instanceof EventType) {
+			// type is generic or strict name equality
+			return EventTypeLibrary.isGenericEventType(type) || PackageNameHelper.getFullTypeName(type)
+					.equalsIgnoreCase(PackageNameHelper.getFullTypeName(other));
+		}
+		return false;
 	}
 
 	static boolean isAssignableFrom(final DataType type, final DataType other) {
