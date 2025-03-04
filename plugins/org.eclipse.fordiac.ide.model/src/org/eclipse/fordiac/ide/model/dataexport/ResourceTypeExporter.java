@@ -32,13 +32,6 @@ public class ResourceTypeExporter extends AbstractTypeExporter {
 	}
 
 	@Override
-	protected void createXMLEntries() throws XMLStreamException {
-		getWriter().writeDTD(LINE_END
-				+ "<!DOCTYPE ResourceType SYSTEM \"http://www.holobloc.com/xml/LibraryElement.dtd\">" + LINE_END);
-		super.createXMLEntries();
-	}
-
-	@Override
 	protected void createTypeSpecificXMLEntries() throws XMLStreamException {
 
 		addCompilerInfo(getType().getCompilerInfo());
