@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="AND_2_BOOL" Comment="FB to calculate boolean AND (generic FB)">
+	<Identification Standard="61131-3" Classification="standard boolean function" Description="Copyright (c) 2014, 2024 Profactor GmbH, HR Agrartechnik GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="Profactor GmbH" Version="1.0" Author="Matthias Plasch" Date="2014-10-11">
+	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Höpfinger" Date="2025-03-04" Remarks="copy AND_2 and made AND_2_BOOL">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN1"/>
+				<With Var="IN2"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN1" Type="BOOL" Comment="AND input 1"/>
+			<VarDeclaration Name="IN2" Type="BOOL" Comment="AND input 2"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="BOOL" Comment="AND result"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="GenericClassName" Value="'GEN_AND'"/>
+</FBType>
