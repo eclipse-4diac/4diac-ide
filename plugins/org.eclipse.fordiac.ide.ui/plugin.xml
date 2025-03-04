@@ -170,4 +170,42 @@
              value="132, 93, 175">
        </colorDefinition>
     </extension>
+ <extension
+       point="org.eclipse.ui.preferenceTransfer">
+    <transfer
+          icon="fordiacimage://ICON_4DIAC_16"
+          id="org.eclipse.fordiac.ide.model.projectTransfer"
+          name="%Export_Name">
+       <mapping
+             scope="instance">
+          <entry node="org.eclipse.fordiac.ide.debug"/>
+          <entry node="org.eclipse.fordiac.ide.deployment.debug"/>
+          <entry node="org.eclipse.fordiac.ide.deployment.iec61499"/>
+          <entry node="org.eclipse.fordiac.ide.export"/>
+          <entry node="org.eclipse.fordiac.ide.fbrtlauncher"/>
+          <entry node="org.eclipse.fordiac.ide.fmu"/>
+          <entry node="org.eclipse.fordiac.ide.fortelauncher"/>
+          <entry node="org.eclipse.fordiac.ide.gef"/>
+          <entry node="org.eclipse.fordiac.ide.gitlab"/>
+          <entry node="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"/>
+          <entry node="org.eclipse.fordiac.ide.globalconstantseditor.ui"/>
+          <entry node="org.eclipse.fordiac.ide.model"/>
+          <entry node="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"/>
+          <entry node="org.eclipse.fordiac.ide.structuredtextalgorithm.ui"/>
+          <entry node="org.eclipse.fordiac.ide.structuredtextcore.STCore"/>
+          <entry node="org.eclipse.fordiac.ide.structuredtextcore.ui"/>
+          <entry node="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"/>
+          <entry node="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui"/>
+          <entry node="org.eclipse.fordiac.ide.typemanagement"/>
+          <entry node="org.eclipse.fordiac.ide.ui"/>
+          <entry
+                node="org.eclipse.ui.workbench">
+             <key
+                   match="prefix"
+                   name="org.eclipse.fordiac.ide.">
+             </key>
+          </entry>
+       </mapping>
+    </transfer>
+ </extension>
 </plugin>
