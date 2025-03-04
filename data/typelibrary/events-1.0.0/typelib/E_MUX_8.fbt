@@ -34,4 +34,5 @@
 			<VarDeclaration Name="K" Type="UINT" Comment="Event index"/>
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="GenericClassName" Value="'GEN_E_MUX'"/>
 </FBType>
