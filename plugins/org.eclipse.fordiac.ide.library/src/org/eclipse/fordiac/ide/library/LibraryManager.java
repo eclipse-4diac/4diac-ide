@@ -18,12 +18,18 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.DirectoryStream.Filter;
 import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermission;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -145,6 +151,8 @@ public enum LibraryManager {
 			FordiacLogHelper.logError("Cannot register watch watch service!", e); //$NON-NLS-1$
 		}
 		addLibraryChangeListener();
+
+		setStandardLibsReadOnly();
 	}
 
 	/**
@@ -293,6 +301,7 @@ public enum LibraryManager {
 							fileOutputStream.write(buffer, 0, len);
 						}
 					}
+					setPathReadOnly(newFile);
 				}
 				entry = zipInputStream.getNextEntry();
 			}
@@ -329,6 +338,77 @@ public enum LibraryManager {
 			throw new IOException("Entry is outside of the target dir: " + zipEntry.getName()); //$NON-NLS-1$
 		}
 		return destPath;
+	}
+
+	private static void setPathReadOnly(final Path path) {
+		final DosFileAttributeView dosView = Files.getFileAttributeView(path, DosFileAttributeView.class);
+		if (dosView != null) {
+			try {
+				dosView.setReadOnly(true);
+			} catch (final IOException e) {
+				// empty
+			}
+		}
+		final PosixFileAttributeView posixView = Files.getFileAttributeView(path, PosixFileAttributeView.class);
+		if (posixView != null) {
+			final Set<PosixFilePermission> permissions = Set.of(PosixFilePermission.OWNER_READ,
+					PosixFilePermission.GROUP_READ, PosixFilePermission.OTHERS_READ);
+			try {
+				posixView.setPermissions(permissions);
+			} catch (final IOException e) {
+				// empty
+			}
+		}
+	}
+
+	private void setStandardLibsReadOnly() {
+		final WorkspaceJob job = new WorkspaceJob("Set standard libraries read only") { //$NON-NLS-1$
+
+			@Override
+			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+
+				try {
+					Files.walkFileTree(standardLibraryPath, new FileVisitor<Path>() {
+
+						@Override
+						public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs)
+								throws IOException {
+							return FileVisitResult.CONTINUE;
+						}
+
+						@Override
+						public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
+								throws IOException {
+							setPathReadOnly(file);
+							return FileVisitResult.CONTINUE;
+						}
+
+						@Override
+						public FileVisitResult visitFileFailed(final Path file, final IOException exc)
+								throws IOException {
+							return FileVisitResult.CONTINUE;
+						}
+
+						@Override
+						public FileVisitResult postVisitDirectory(final Path dir, final IOException exc)
+								throws IOException {
+							return FileVisitResult.CONTINUE;
+						}
+					});
+				} catch (final IOException e) {
+					// empty
+				}
+				return Status.OK_STATUS;
+			}
+
+			@Override
+			public boolean belongsTo(final Object family) {
+				return family == FAMILY_FORDIAC_LIBRARY;
+			}
+		};
+		job.setRule(null);
+		job.setPriority(Job.DECORATE);
+		job.schedule();
 	}
 
 	/**
