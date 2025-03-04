@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
@@ -141,8 +142,10 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 			}
 		}
 		// check if template is generic
-		if (IecTypes.GenericTypes.isAnyType(template.getType())
-				&& !IecTypes.GenericTypes.isAnyType(opposite.getType())) {
+		if ((IecTypes.GenericTypes.isAnyType(template.getType())
+				|| EventTypeLibrary.isGenericEventType(template.getType()))
+				&& !(IecTypes.GenericTypes.isAnyType(opposite.getType())
+						|| EventTypeLibrary.isGenericEventType(opposite.getType()))) {
 			return opposite; // use opposite if template is generic and opposite is not
 		}
 		return template;
