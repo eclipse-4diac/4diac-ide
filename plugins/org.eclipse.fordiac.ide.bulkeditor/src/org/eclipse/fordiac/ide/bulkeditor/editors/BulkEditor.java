@@ -12,18 +12,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.AttributeTableColumn;
@@ -34,8 +40,11 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.search.ISearchContext;
@@ -43,11 +52,15 @@ import org.eclipse.fordiac.ide.model.search.types.IEC61499ElementSearch;
 import org.eclipse.fordiac.ide.model.search.types.IEC61499SearchFilter;
 import org.eclipse.fordiac.ide.model.search.types.ProjectInstanceSearchChildrenProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CommandStackEvent;
+import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -61,6 +74,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
@@ -68,10 +82,12 @@ import org.eclipse.ui.part.EditorPart;
 
 // TODO: remove SuppressWarning and move Strings to plugin.properties
 @SuppressWarnings("nls")
-public class BulkEditor extends EditorPart implements CommandExecutor {
+public class BulkEditor extends EditorPart implements CommandExecutor, CommandStackEventListener {
 
 	private IProject project;
 	private Combo modeSelectionDropDown;
+	private final CommandStack commandStack = new CommandStack();
+	private final Map<TypeEntry, CopyElementRecord> map = new HashMap<>();
 
 	private Button nameButton;
 	private Text nameField;
@@ -97,6 +113,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor {
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setSite(site);
 		setInput(input);
+		commandStack.addCommandStackEventListener(this);
 
 		if (input instanceof final IFileEditorInput fileInput) {
 			project = fileInput.getFile().getProject();
@@ -104,7 +121,6 @@ public class BulkEditor extends EditorPart implements CommandExecutor {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void createPartControl(final Composite parent) {
 		final Composite composite = WidgetFactory.composite(SWT.NONE).create(parent);
@@ -124,16 +140,32 @@ public class BulkEditor extends EditorPart implements CommandExecutor {
 		WidgetFactory.button(SWT.PUSH).text("Search").onSelect(event -> {
 			final List<ISearchContext> contexts = createSearchContextList();
 
+			map.clear();
 			final var result = contexts.stream().flatMap(context -> new IEC61499ElementSearch(context,
 					createSearchFilter(), new ProjectInstanceSearchChildrenProvider()).performSearch().stream())
 					.toList();
 
+			final List<EObject> mappedList = new ArrayList<>();
+			for (final EObject libE : result) {
+				if (EcoreUtil.getRootContainer(libE) instanceof final LibraryElement rootLibE) {
+					final TypeEntry entry = rootLibE.getTypeEntry();
+					if (!map.containsKey(entry)) {
+						final LibraryElement copyRoot = entry.copyType(); // dont copy if entry already has copy
+						map.put(entry, new CopyElementRecord(copyRoot, new ArrayList<>()));
+					}
+					final EObject copyLibE = EcoreUtil.getEObject(map.get(entry).copy(),
+							EcoreUtil.getRelativeURIFragmentPath(rootLibE, libE));
+					map.get(entry).addToList(copyLibE);
+					mappedList.add(copyLibE);
+				}
+			}
+
 			if (modeSelectionDropDown.getSelectionIndex() == 0
-					&& (result.isEmpty() || result.getFirst() instanceof VarDeclaration)) {
-				varDeclProvider.setInput((List<VarDeclaration>) result);
+					&& (mappedList.isEmpty() || mappedList.getFirst() instanceof VarDeclaration)) {
+				varDeclProvider.setInput(mapList(mappedList, VarDeclaration.class));
 			} else if (modeSelectionDropDown.getSelectionIndex() == 1
-					&& (result.isEmpty() || result.getFirst() instanceof Attribute)) {
-				attributeProvider.setInput((List<Attribute>) result);
+					&& (mappedList.isEmpty() || mappedList.getFirst() instanceof Attribute)) {
+				attributeProvider.setInput(mapList(mappedList, Attribute.class));
 			}
 			natTable.refresh();
 		}).create(buttonComposite);
@@ -142,6 +174,16 @@ public class BulkEditor extends EditorPart implements CommandExecutor {
 		createSearchInGroup(composite);
 		createScopeGroup(composite);
 		createTable(composite);
+	}
+
+	private static <T> List<T> mapList(final List<EObject> ori, final Class<T> clazz) {
+		final List<T> result = new ArrayList<>();
+		for (final EObject obj : ori) {
+			if (clazz.isInstance(obj)) {
+				result.add(clazz.cast(obj));
+			}
+		}
+		return result;
 	}
 
 	private void changeNatTable(final Composite parent, final int selectionIndex) {
@@ -244,32 +286,49 @@ public class BulkEditor extends EditorPart implements CommandExecutor {
 
 	@Override
 	public boolean isDirty() {
-		return false;
+		return commandStack.isDirty();
 	}
 
 	@Override
 	public boolean isSaveAsAllowed() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public void setFocus() {
-		// TODO
+		// nothing done here
 	}
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		// TODO
+		final var affect = Arrays.stream(commandStack.getCommands()).filter(ScopedCommand.class::isInstance)
+				.flatMap(cmd -> ((ScopedCommand) cmd).getAffectedObjects().stream()).map(eobj -> {
+					if (EcoreUtil.getRootContainer(eobj) instanceof final LibraryElement rootLibE) {
+						return rootLibE.getTypeEntry();
+					}
+					return null;
+				}).filter(Objects::nonNull).distinct().toList();
+
+		affect.forEach(entry -> {
+			try {
+				if (map.containsKey(entry)) {
+					entry.save(map.get(entry).copy());
+				}
+			} catch (final CoreException e) {
+				e.printStackTrace();
+			}
+		});
+		commandStack.markSaveLocation();
 	}
 
 	@Override
 	public void doSaveAs() {
-		// TODO
+		// should not be used with this editor
 	}
 
 	@Override
 	public void executeCommand(final Command cmd) {
-		// TODO
+		commandStack.execute(cmd);
 	}
 
 	private List<ISearchContext> createSearchContextList() {
@@ -304,6 +363,12 @@ public class BulkEditor extends EditorPart implements CommandExecutor {
 			}
 
 			@Override
+			public LibraryElement getLibraryElement(final URI uri) {
+				final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
+				return typeEntry.getType(); // use original for search
+			}
+
+			@Override
 			public Collection<URI> getSubappTypes() {
 				return Collections.emptyList();
 			}
@@ -321,28 +386,45 @@ public class BulkEditor extends EditorPart implements CommandExecutor {
 	}
 
 	private IEC61499SearchFilter createSearchFilter() {
-		return searchCandidate -> {
-			boolean state = false;
-			if ((searchCandidate instanceof VarDeclaration && modeSelectionDropDown.getSelectionIndex() == 0)
-					|| (searchCandidate instanceof Attribute && modeSelectionDropDown.getSelectionIndex() == 1)) {
+		return new IEC61499SearchFilter() {
+			@Override
+			public boolean apply(final EObject searchCandidate) {
+				if (!isValidCandidate(searchCandidate)) {
+					return false;
+				}
+
 				final ITypedElement typedElement = (ITypedElement) searchCandidate;
-				state = true;
-				if (nameButton.getSelection() && !typedElement.getName().equals(nameField.getText())) {
-					state = false;
-				}
-				if (typeButton.getSelection() && !typedElement.getTypeName().equals(typeField.getText())) {
-					state = false;
-				}
-				if (commentButton.getSelection() && !typedElement.getComment().equals(commentField.getText())) {
-					state = false;
-				}
-				if (initialValueButton.getSelection()
-						&& !typedElement.getComment().equals(initialValueField.getText())) {
-					state = false;
-				}
+
+				return matchesName(typedElement) && matchesType(typedElement) && matchesComment(typedElement)
+						&& matchesInitialValue(typedElement);
 			}
 
-			return state;
+			private boolean isValidCandidate(final Object searchCandidate) {
+				return (searchCandidate instanceof VarDeclaration && modeSelectionDropDown.getSelectionIndex() == 0)
+						|| (searchCandidate instanceof Attribute && modeSelectionDropDown.getSelectionIndex() == 1);
+			}
+
+			private boolean matchesName(final ITypedElement element) {
+				return !nameButton.getSelection() || element.getName().equals(nameField.getText());
+			}
+
+			private boolean matchesType(final ITypedElement element) {
+				return !typeButton.getSelection() || element.getTypeName().equals(typeField.getText());
+			}
+
+			private boolean matchesComment(final ITypedElement element) {
+				return !commentButton.getSelection() || element.getComment().equals(commentField.getText());
+			}
+
+			private boolean matchesInitialValue(final ITypedElement element) {
+				return !initialValueButton.getSelection()
+						|| InitialValueHelper.getInitialOrDefaultValue(element).equals(initialValueField.getText());
+			}
 		};
+	}
+
+	@Override
+	public void stackChanged(final CommandStackEvent event) {
+		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 }
