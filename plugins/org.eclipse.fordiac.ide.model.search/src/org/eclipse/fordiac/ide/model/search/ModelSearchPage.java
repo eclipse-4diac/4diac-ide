@@ -141,7 +141,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 
 		final Button workspaceScope = new Button(radioButtonScope, SWT.RADIO);
 		workspaceScope.setText(Messages.WorkspaceScope);
-		workspaceScope.setSelection(true); // This is the default
+		workspaceScope.setSelection(!projectScope.getSelection());
 
 		setControl(composite);
 	}
@@ -150,6 +150,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		projectScope = new Button(radioButtonScope, SWT.RADIO);
 		curProject = getCurrentProject();
 		projectScope.setEnabled(curProject != null); // only if we have a project allow to select it.
+		projectScope.setSelection(curProject != null);
 		projectScope.setText(
 				MessageFormat.format(Messages.ProjectScope, (curProject != null) ? curProject.getName() : "[none]"));
 	}
