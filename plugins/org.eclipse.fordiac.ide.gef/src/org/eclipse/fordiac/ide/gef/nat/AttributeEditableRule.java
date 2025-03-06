@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
@@ -25,7 +26,12 @@ public class AttributeEditableRule extends NatTableColumnEditableRule<AttributeT
 
 	public AttributeEditableRule(final IEditableRule parent, final List<AttributeTableColumn> columns,
 			final IRowDataProvider<Attribute> dataProvider) {
-		super(parent, columns, AttributeTableColumn.ALL_EDITABLE);
+		this(parent, columns, AttributeTableColumn.ALL_EDITABLE, dataProvider);
+	}
+
+	public AttributeEditableRule(final IEditableRule parent, final List<AttributeTableColumn> columns,
+			final Set<AttributeTableColumn> editableColumns, final IRowDataProvider<Attribute> dataProvider) {
+		super(parent, columns, editableColumns);
 		this.dataProvider = dataProvider;
 	}
 

@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
@@ -32,6 +34,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.AttributeEditableRule;
 import org.eclipse.fordiac.ide.gef.nat.AttributeTableColumn;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
@@ -53,8 +56,12 @@ import org.eclipse.fordiac.ide.model.search.types.IEC61499SearchFilter;
 import org.eclipse.fordiac.ide.model.search.types.ProjectInstanceSearchChildrenProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
@@ -85,9 +92,13 @@ import org.eclipse.ui.part.EditorPart;
 public class BulkEditor extends EditorPart implements CommandExecutor, CommandStackEventListener {
 
 	private IProject project;
-	private Combo modeSelectionDropDown;
 	private final CommandStack commandStack = new CommandStack();
 	private final Map<TypeEntry, CopyElementRecord> map = new HashMap<>();
+
+	private Combo modeSelectionDropDown;
+	private Button caseSensitive;
+	private Button wholeWord;
+	private Button regularExpression;
 
 	private Button nameButton;
 	private Text nameField;
@@ -127,7 +138,8 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(composite);
 
 		final Composite buttonComposite = new Composite(composite, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(2).margins(0, 0).generateLayout(buttonComposite);
+		GridLayoutFactory.swtDefaults().numColumns(6).margins(0, 0).generateLayout(buttonComposite);
+		buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		modeSelectionDropDown = new Combo(buttonComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
 		modeSelectionDropDown.setItems("Variable", "Attribute");
@@ -170,6 +182,13 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			natTable.refresh();
 		}).create(buttonComposite);
 
+		WidgetFactory.label(SWT.NONE).layoutData(new GridData(SWT.END, SWT.CENTER, true, false))
+				.create(buttonComposite);
+
+		caseSensitive = WidgetFactory.button(SWT.CHECK).text("Case Sensitive").create(buttonComposite);
+		wholeWord = WidgetFactory.button(SWT.CHECK).text("Whole Word").create(buttonComposite);
+		regularExpression = WidgetFactory.button(SWT.CHECK).text("Regular Expression").create(buttonComposite);
+
 		createSearchForGroup(composite);
 		createSearchInGroup(composite);
 		createScopeGroup(composite);
@@ -190,6 +209,9 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		if (natTable != null) {
 			natTable.dispose();
 		}
+		// TODO: TypeSelectionButton (use correct TypeLibrary (more Projects))
+		// add AttributeTypeSelection
+		// improve Location Column (Not showing where Attributes of Struct-members are)
 		if (selectionIndex == 0) {
 			varDeclProvider = new ChangeableListDataProvider<>(
 					new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
@@ -200,12 +222,14 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
 					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
 			natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
-					IEditableRule.ALWAYS_EDITABLE, null, null, false);
+					new NatTableColumnEditableRule<>(IEditableRule.ALWAYS_EDITABLE,
+							VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
+							VarDeclarationTableColumn.EDITABLE_NO_LOCATION),
+					null, null, false);
 			natTable.addConfiguration(new InitialValueEditorConfiguration(varDeclProvider));
 			natTable.addConfiguration(new TypeDeclarationEditorConfiguration(varDeclProvider));
 			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		} else {
-			// TODO: refine Attribute Table
 			attributeProvider = new ChangeableListDataProvider<>(
 					new AttributeColumnAccessor(this, AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
 			final DataLayer dataLayer = new DataLayer(attributeProvider);
@@ -214,7 +238,12 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			final NatTableColumnProvider<AttributeTableColumn> columnProvider = new NatTableColumnProvider<>(
 					AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
 			natTable = NatTableWidgetFactory.createRowNatTable(parent, dataLayer, columnProvider,
-					IEditableRule.ALWAYS_EDITABLE, null, null, false);
+					new AttributeEditableRule(IEditableRule.ALWAYS_EDITABLE,
+							AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
+							AttributeTableColumn.EDITABLE_NO_LOCATION, attributeProvider),
+					new TypeSelectionButton(() -> TypeLibraryManager.INSTANCE.getTypeLibrary(project),
+							DataTypeSelectionContentProvider.INSTANCE, DataTypeSelectionTreeContentProvider.INSTANCE),
+					null, false);
 			natTable.addConfiguration(new InitialValueEditorConfiguration(attributeProvider));
 			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		}
@@ -387,6 +416,11 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	private IEC61499SearchFilter createSearchFilter() {
 		return new IEC61499SearchFilter() {
+			private final Pattern namePattern = createPattern(nameField.getText());
+			private final Pattern typePattern = createPattern(typeField.getText());
+			private final Pattern commentPattern = createPattern(commentField.getText());
+			private final Pattern valuePattern = createPattern(initialValueField.getText());
+
 			@Override
 			public boolean apply(final EObject searchCandidate) {
 				if (!isValidCandidate(searchCandidate)) {
@@ -405,20 +439,59 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			}
 
 			private boolean matchesName(final ITypedElement element) {
-				return !nameButton.getSelection() || element.getName().equals(nameField.getText());
+				return !nameButton.getSelection()
+						|| compareStrings(nameField.getText(), element.getName(), namePattern);
 			}
 
 			private boolean matchesType(final ITypedElement element) {
-				return !typeButton.getSelection() || element.getTypeName().equals(typeField.getText());
+				return !typeButton.getSelection()
+						|| compareStrings(typeField.getText(), element.getTypeName(), typePattern);
 			}
 
 			private boolean matchesComment(final ITypedElement element) {
-				return !commentButton.getSelection() || element.getComment().equals(commentField.getText());
+				return !commentButton.getSelection()
+						|| compareStrings(commentField.getText(), element.getComment(), commentPattern);
 			}
 
 			private boolean matchesInitialValue(final ITypedElement element) {
-				return !initialValueButton.getSelection()
-						|| InitialValueHelper.getInitialOrDefaultValue(element).equals(initialValueField.getText());
+				return !initialValueButton.getSelection() || compareStrings(initialValueField.getText(),
+						InitialValueHelper.getInitialOrDefaultValue(element), valuePattern);
+			}
+
+			private boolean compareStrings(String search, String element, final Pattern pattern) {
+				if (search == null || element == null) {
+					return false;
+				}
+
+				if (!caseSensitive.getSelection()) {
+					element = element.toLowerCase();
+					search = search.toLowerCase();
+				}
+				if (regularExpression.getSelection() && pattern != null) {
+					return pattern.matcher(element).find();
+				}
+				if (wholeWord.getSelection()) {
+					return element.equals(search);
+				}
+				return element.contains(search);
+			}
+
+			private Pattern createPattern(String query) {
+				if (!regularExpression.getSelection()) {
+					return null;
+				}
+				if (!caseSensitive.getSelection()) {
+					query = query.toLowerCase();
+				}
+				if (wholeWord.getSelection()) {
+					query = "\\b" + query + "\\b";
+				}
+				try {
+					// TODO: handle this better
+					return Pattern.compile(query);
+				} catch (final PatternSyntaxException exception) {
+					return null;
+				}
 			}
 		};
 	}

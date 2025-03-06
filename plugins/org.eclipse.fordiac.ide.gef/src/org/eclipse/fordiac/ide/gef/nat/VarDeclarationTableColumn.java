@@ -37,8 +37,8 @@ public enum VarDeclarationTableColumn implements NatTableColumn {
 			.of(NAME, TYPE, COMMENT, INITIAL_VALUE, VISIBLE, VAR_CONFIG, RETAIN);
 	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_RETAIN = List.of(NAME, TYPE, COMMENT,
 			INITIAL_VALUE, RETAIN);
-	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_LOCATION = List.of(LOCATION, NAME, TYPE, COMMENT,
-			INITIAL_VALUE);
+	public static final List<VarDeclarationTableColumn> DEFAULT_COLUMNS_WITH_LOCATION = List.of(LOCATION, NAME, TYPE,
+			COMMENT, INITIAL_VALUE);
 
 	public static final Set<VarDeclarationTableColumn> DEFAULT_EDITABLE = Set.of(VarDeclarationTableColumn.COMMENT,
 			VarDeclarationTableColumn.INITIAL_VALUE, VarDeclarationTableColumn.VISIBLE,
@@ -48,6 +48,9 @@ public enum VarDeclarationTableColumn implements NatTableColumn {
 	public static final Set<VarDeclarationTableColumn> DEFAULT_EDITABLE_NO_INITIAL_VALUE = Set.of(
 			VarDeclarationTableColumn.COMMENT, VarDeclarationTableColumn.VISIBLE, VarDeclarationTableColumn.VAR_CONFIG,
 			VarDeclarationTableColumn.VISIBLEIN, VarDeclarationTableColumn.VISIBLEOUT);
+
+	public static final Set<VarDeclarationTableColumn> EDITABLE_NO_LOCATION = Set.of(NAME, TYPE, COMMENT,
+			INITIAL_VALUE);
 
 	public static final Set<VarDeclarationTableColumn> ALL_EDITABLE = Set.of(VarDeclarationTableColumn.values());
 
