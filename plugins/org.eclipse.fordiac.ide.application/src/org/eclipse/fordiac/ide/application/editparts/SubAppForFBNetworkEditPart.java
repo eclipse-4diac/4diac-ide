@@ -212,7 +212,11 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	protected List<Object> getModelChildren() {
 		final List<Object> children = super.getModelChildren();
 		if (getModel().isUnfolded() && getModel().getAttribute(InstanceContract.CONTRACT_ATTRIBUTE_NAME) != null) {
-			children.add(getInstanceContract());
+			if (children.size() > 1) { // always add contract as second element (after name)
+				children.add(1, getInstanceContract());
+			} else {
+				children.add(getInstanceContract());
+			}
 		}
 		if (getModel().isUnfolded()) {
 			children.add(getModel().getSubAppNetwork());

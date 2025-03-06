@@ -18,16 +18,13 @@ import java.io.StringReader;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.GridData;
-import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.StackLayout;
-import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.TextFlow;
+import org.eclipse.fordiac.ide.application.editparts.InstanceContract;
 import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
@@ -39,32 +36,20 @@ public class InstanceContractFigure extends Figure {
 	private static final Color normal = new Color(0, 0, 0);
 	private static final Color highlight = new Color(127, 0, 85);
 	private static final Color comment = new Color(63, 127, 95);
+	private static final int PADDING = 4;
+
 	private final FlowPage flowPage;
 	private String currentText;
+	private final InstanceContract instanceContract;
 
-	public InstanceContractFigure(final String initialText) {
+	public InstanceContractFigure(final InstanceContract instanceContract) {
 		final var main = new BorderedRoundedRectangle();
 		main.setOutline(false);
-		main.setOpaque(false);
 		main.setCornerDimensions(new Dimension(GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM));
 		main.setBorder(new RoundedRectangleShadowBorder());
-		final GridLayout topLayout = new GridLayout(3, false);
-		topLayout.marginHeight = 0;
-		topLayout.marginWidth = 0;
-		topLayout.verticalSpacing = 0;
-		topLayout.horizontalSpacing = 0;
-		main.setLayoutManager(topLayout);
-
-		final Figure contractContainer = new Figure();
-		contractContainer.setLayoutManager(new ToolbarLayout());
-		final GridData gridData2 = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		gridData2.horizontalSpan = 3;
-		main.add(contractContainer, gridData2, 0);
-
-		setCursor(Cursors.SIZEALL);
+		main.setLayoutManager(new StackLayout());
 
 		flowPage = new FlowPage();
-		contractContainer.add(flowPage);
 
 		final int lineHeight = (int) CoordinateConverter.INSTANCE.getLineHeight();
 		int top = lineHeight / 2;
@@ -73,13 +58,13 @@ public class InstanceContractFigure extends Figure {
 			// we have a rounding error
 			top += lineHeight - (top + bottom);
 		}
-		contractContainer.setBorder(new MarginBorder(top, 5, bottom, 5));
+		flowPage.setBorder(new MarginBorder(top, PADDING, bottom, PADDING));
+		main.add(flowPage);
 
 		setLayoutManager(new StackLayout());
-		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
-				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
-		add(main, gridData);
-		setText(initialText);
+		add(main);
+		setText(instanceContract.getContract());
+		this.instanceContract = instanceContract;
 	}
 
 	public void setText(final String text) {
@@ -114,17 +99,10 @@ public class InstanceContractFigure extends Figure {
 	}
 
 	@Override
-	protected void layout() {
-		final var parentBounds = getParent().getBounds();
-		final var bounds = getBounds();
-		final int minWidth = Math.min(bounds.width, parentBounds.width);
-		bounds.width = parentBounds.width;
-		setBounds(bounds);
-		final var loc = getLocation();
-		loc.x -= (bounds.width - minWidth) / 2;
-
-		setLocation(loc);
-		super.layout();
+	public Dimension getPreferredSize(final int wHint, final int hHint) {
+		final int w = CoordinateConverter.INSTANCE.iec61499ToScreen(instanceContract.getSubApp().getWidth());
+		final int h = flowPage.getPreferredSize(w, -1).height;
+		return new Dimension(w, h + PADDING * 2);
 	}
 
 	private static class Scanner implements Iterable<Scanner.Token> {
