@@ -87,8 +87,14 @@ public class UpdateContractCommand extends Command {
 	}
 
 	private SubApp createNewSubapp() {
-		if (fbNetworkElement.isNestedInSubApp()) {
-			final SubApp subapp = (SubApp) fbNetworkElement.eContainer().eContainer();
+		SubApp subapp = null;
+
+		if (fbNetworkElement instanceof final SubApp s) {
+			subapp = s;
+		} else if (fbNetworkElement.isNestedInSubApp()) {
+			subapp = (SubApp) fbNetworkElement.eContainer().eContainer();
+		}
+		if (subapp != null) {
 			if (!subapp.isUnfolded()) {
 				toggle = new ToggleSubAppRepresentationCommand(subapp);
 				if (toggle.canExecute()) {
@@ -97,6 +103,7 @@ public class UpdateContractCommand extends Command {
 			}
 			return subapp;
 		}
+
 		final FBNetwork network = fbNetworkElement.getFbNetwork();
 		final Position pos = fbNetworkElement.getPosition();
 		final List<FBNetworkElement> list = new ArrayList<>();
@@ -105,7 +112,7 @@ public class UpdateContractCommand extends Command {
 		if (subappcmd.canExecute()) {
 			subappcmd.execute();
 		}
-		final SubApp subapp = subappcmd.getElement();
+		subapp = subappcmd.getElement();
 		subapp.setWidth(CoordinateConverter.INSTANCE.screenToIEC61499(NEW_SUBAPP_WIDTH));
 		subapp.setHeight(CoordinateConverter.INSTANCE.screenToIEC61499(NEW_SUBAPP_HEIGHT));
 		toggle = new ToggleSubAppRepresentationCommand(subapp);
