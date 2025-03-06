@@ -13,7 +13,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.quickfix;
 
+import org.eclipse.fordiac.ide.Messages;
+import org.eclipse.fordiac.ide.contractSpec.ContractSpecFactory;
 import org.eclipse.fordiac.ide.contractSpec.Interval;
+import org.eclipse.fordiac.ide.contractSpec.TimeExpr;
 import org.eclipse.fordiac.ide.contractSpec.Value;
 import org.eclipse.fordiac.ide.validation.ContractSpecValidator;
 import org.eclipse.xtext.ui.editor.quickfix.DefaultQuickfixProvider;
@@ -31,12 +34,34 @@ public class ContractSpecQuickfixProvider extends DefaultQuickfixProvider {
 
 	@Fix(ContractSpecValidator.EMPTY_INTERVAL)
 	public static void swapIntervalValues(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue, "Swap values", "Swaps the two values of the interval.", "", (element, context) -> {
-			if (element instanceof final Interval inter) {
-				final Value tmp = inter.getV1();
-				inter.setV1(inter.getV2());
-				inter.setV2(tmp);
-			}
-		});
+		acceptor.accept(issue, Messages.EmptyIntervalQuickfixLabel, Messages.EmptyIntervalQuickfixDescription, "", //$NON-NLS-1$
+				(element, context) -> {
+					if (element instanceof final Interval inter) {
+						final Value tmp = inter.getV1();
+						inter.setV1(inter.getV2());
+						inter.setV2(tmp);
+					}
+				});
+	}
+
+	@Fix(ContractSpecValidator.DEGENERATE_INTERVAL)
+	public static void simplifyInterval(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		acceptor.accept(issue, Messages.DegenerateIntervalQuickfixLabel, Messages.DegenerateIntervalQuickfixDescription,
+				"", //$NON-NLS-1$
+				(element, context) -> {
+					if (element instanceof final Interval inter) {
+						// create single time
+						final TimeExpr te = ContractSpecFactory.eINSTANCE.createTimeExpr();
+						te.setValue(inter.getV1());
+						te.setUnit(inter.getUnit());
+						inter.setTime(te);
+						// remove interval
+						inter.setB1(null);
+						inter.setV1(null);
+						inter.setV2(null);
+						inter.setB2(null);
+						inter.setUnit(null);
+					}
+				});
 	}
 }

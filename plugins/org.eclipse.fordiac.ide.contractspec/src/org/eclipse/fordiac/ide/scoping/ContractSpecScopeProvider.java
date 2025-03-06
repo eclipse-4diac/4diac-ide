@@ -34,8 +34,8 @@ public class ContractSpecScopeProvider extends AbstractContractSpecScopeProvider
 
 	@Override
 	public IScope getScope(final EObject context, final EReference reference) {
-		if (reference == pack.getEventSpec_Port() || reference == pack.getCausalFuncDecl_P1()
-				|| reference == pack.getCausalFuncDecl_P2()) {
+		if (interfaceURI != null && (reference == pack.getEventSpec_Port() || reference == pack.getCausalFuncDecl_P1()
+				|| reference == pack.getCausalFuncDecl_P2())) {
 
 			final var res = context.eResource().getResourceSet().getResource(interfaceURI, false);
 			if (res != null) {
