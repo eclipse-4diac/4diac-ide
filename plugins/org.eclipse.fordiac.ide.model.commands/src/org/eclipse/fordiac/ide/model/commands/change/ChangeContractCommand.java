@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.Objects;
 
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 
@@ -50,7 +50,7 @@ public class ChangeContractCommand extends Command {
 		// delete and add again to trigger refresh
 		subApp.deleteAttribute(CONTRACT_ATTRIBUTE_NAME);
 		if (contract != null) {
-			subApp.setAttribute(CONTRACT_ATTRIBUTE_NAME, ElementaryTypes.STRING, contract, ""); //$NON-NLS-1$
+			subApp.setAttribute(CONTRACT_ATTRIBUTE_NAME, HelperTypes.CDATA, contract, ""); //$NON-NLS-1$
 		}
 	}
 
@@ -63,7 +63,7 @@ public class ChangeContractCommand extends Command {
 	public void undo() {
 		subApp.deleteAttribute(CONTRACT_ATTRIBUTE_NAME);
 		if (oldContract != null) {
-			subApp.setAttribute(CONTRACT_ATTRIBUTE_NAME, ElementaryTypes.STRING, oldContract, ""); //$NON-NLS-1$
+			subApp.setAttribute(CONTRACT_ATTRIBUTE_NAME, HelperTypes.CDATA, oldContract, ""); //$NON-NLS-1$
 		}
 	}
 
@@ -76,7 +76,7 @@ public class ChangeContractCommand extends Command {
 	public void redo() {
 		subApp.deleteAttribute(CONTRACT_ATTRIBUTE_NAME);
 		if (contract != null) {
-			subApp.setAttribute(CONTRACT_ATTRIBUTE_NAME, ElementaryTypes.STRING, contract, ""); //$NON-NLS-1$
+			subApp.setAttribute(CONTRACT_ATTRIBUTE_NAME, HelperTypes.CDATA, contract, ""); //$NON-NLS-1$
 		}
 	}
 }
