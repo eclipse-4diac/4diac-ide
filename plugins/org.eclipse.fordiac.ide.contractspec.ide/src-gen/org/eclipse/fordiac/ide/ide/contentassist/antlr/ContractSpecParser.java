@@ -100,7 +100,7 @@ public class ContractSpecParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getRepetitionOptionsAccess().getOffsetAssignment_1_0(), "rule__RepetitionOptions__OffsetAssignment_1_0");
 			builder.put(grammarAccess.getRepetitionOptionsAccess().getJitterAssignment_1_1_1(), "rule__RepetitionOptions__JitterAssignment_1_1_1");
 			builder.put(grammarAccess.getJitterAccess().getTimeAssignment_1(), "rule__Jitter__TimeAssignment_1");
-			builder.put(grammarAccess.getOffsetAccess().getTimeAssignment_1(), "rule__Offset__TimeAssignment_1");
+			builder.put(grammarAccess.getOffsetAccess().getIntervalAssignment_1(), "rule__Offset__IntervalAssignment_1");
 			builder.put(grammarAccess.getReactionAccess().getTriggerAssignment_1(), "rule__Reaction__TriggerAssignment_1");
 			builder.put(grammarAccess.getReactionAccess().getReactionAssignment_4(), "rule__Reaction__ReactionAssignment_4");
 			builder.put(grammarAccess.getReactionAccess().getIntervalAssignment_7(), "rule__Reaction__IntervalAssignment_7");

@@ -29,7 +29,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Jitter/time"/>
     </genClasses>
     <genClasses ecoreClass="ContractSpec.ecore#//Offset">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Offset/time"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Offset/interval"/>
     </genClasses>
     <genClasses ecoreClass="ContractSpec.ecore#//Reaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Reaction/trigger"/>

@@ -457,7 +457,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EReference getOffset_Time()
+  public EReference getOffset_Interval()
   {
     return (EReference)offsetEClass.getEStructuralFeatures().get(0);
   }
@@ -1166,7 +1166,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
     createEReference(jitterEClass, JITTER__TIME);
 
     offsetEClass = createEClass(OFFSET);
-    createEReference(offsetEClass, OFFSET__TIME);
+    createEReference(offsetEClass, OFFSET__INTERVAL);
 
     reactionEClass = createEClass(REACTION);
     createEReference(reactionEClass, REACTION__TRIGGER);
@@ -1304,7 +1304,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
     initEReference(getJitter_Time(), this.getTimeExpr(), null, "time", null, 0, 1, Jitter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(offsetEClass, Offset.class, "Offset", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getOffset_Time(), this.getTimeExpr(), null, "time", null, 0, 1, Offset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getOffset_Interval(), this.getInterval(), null, "interval", null, 0, 1, Offset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(reactionEClass, Reaction.class, "Reaction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getReaction_Trigger(), this.getEventExpr(), null, "trigger", null, 0, 1, Reaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

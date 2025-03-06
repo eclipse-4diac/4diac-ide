@@ -34,7 +34,7 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Offset">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="time" eType="#//TimeExpr"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interval" eType="#//Interval"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Reaction" eSuperTypes="#//TimeSpec">

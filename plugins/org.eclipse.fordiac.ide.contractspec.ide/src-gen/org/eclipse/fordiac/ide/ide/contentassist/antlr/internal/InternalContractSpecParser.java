@@ -5111,7 +5111,7 @@ public class InternalContractSpecParser extends AbstractInternalContentAssistPar
             // InternalContractSpec.g:1652:1: ( rule__Offset__Group__0__Impl rule__Offset__Group__1 )
             // InternalContractSpec.g:1653:2: rule__Offset__Group__0__Impl rule__Offset__Group__1
             {
-            pushFollow(FOLLOW_15);
+            pushFollow(FOLLOW_6);
             rule__Offset__Group__0__Impl();
 
             state._fsp--;
@@ -5210,31 +5210,31 @@ public class InternalContractSpecParser extends AbstractInternalContentAssistPar
 
 
     // $ANTLR start "rule__Offset__Group__1__Impl"
-    // InternalContractSpec.g:1686:1: rule__Offset__Group__1__Impl : ( ( rule__Offset__TimeAssignment_1 ) ) ;
+    // InternalContractSpec.g:1686:1: rule__Offset__Group__1__Impl : ( ( rule__Offset__IntervalAssignment_1 ) ) ;
     public final void rule__Offset__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalContractSpec.g:1690:1: ( ( ( rule__Offset__TimeAssignment_1 ) ) )
-            // InternalContractSpec.g:1691:1: ( ( rule__Offset__TimeAssignment_1 ) )
+            // InternalContractSpec.g:1690:1: ( ( ( rule__Offset__IntervalAssignment_1 ) ) )
+            // InternalContractSpec.g:1691:1: ( ( rule__Offset__IntervalAssignment_1 ) )
             {
-            // InternalContractSpec.g:1691:1: ( ( rule__Offset__TimeAssignment_1 ) )
-            // InternalContractSpec.g:1692:2: ( rule__Offset__TimeAssignment_1 )
+            // InternalContractSpec.g:1691:1: ( ( rule__Offset__IntervalAssignment_1 ) )
+            // InternalContractSpec.g:1692:2: ( rule__Offset__IntervalAssignment_1 )
             {
-             before(grammarAccess.getOffsetAccess().getTimeAssignment_1()); 
-            // InternalContractSpec.g:1693:2: ( rule__Offset__TimeAssignment_1 )
-            // InternalContractSpec.g:1693:3: rule__Offset__TimeAssignment_1
+             before(grammarAccess.getOffsetAccess().getIntervalAssignment_1()); 
+            // InternalContractSpec.g:1693:2: ( rule__Offset__IntervalAssignment_1 )
+            // InternalContractSpec.g:1693:3: rule__Offset__IntervalAssignment_1
             {
             pushFollow(FOLLOW_2);
-            rule__Offset__TimeAssignment_1();
+            rule__Offset__IntervalAssignment_1();
 
             state._fsp--;
 
 
             }
 
-             after(grammarAccess.getOffsetAccess().getTimeAssignment_1()); 
+             after(grammarAccess.getOffsetAccess().getIntervalAssignment_1()); 
 
             }
 
@@ -14821,26 +14821,26 @@ public class InternalContractSpecParser extends AbstractInternalContentAssistPar
     // $ANTLR end "rule__Jitter__TimeAssignment_1"
 
 
-    // $ANTLR start "rule__Offset__TimeAssignment_1"
-    // InternalContractSpec.g:4929:1: rule__Offset__TimeAssignment_1 : ( ruleTimeExpr ) ;
-    public final void rule__Offset__TimeAssignment_1() throws RecognitionException {
+    // $ANTLR start "rule__Offset__IntervalAssignment_1"
+    // InternalContractSpec.g:4929:1: rule__Offset__IntervalAssignment_1 : ( ruleInterval ) ;
+    public final void rule__Offset__IntervalAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalContractSpec.g:4933:1: ( ( ruleTimeExpr ) )
-            // InternalContractSpec.g:4934:2: ( ruleTimeExpr )
+            // InternalContractSpec.g:4933:1: ( ( ruleInterval ) )
+            // InternalContractSpec.g:4934:2: ( ruleInterval )
             {
-            // InternalContractSpec.g:4934:2: ( ruleTimeExpr )
-            // InternalContractSpec.g:4935:3: ruleTimeExpr
+            // InternalContractSpec.g:4934:2: ( ruleInterval )
+            // InternalContractSpec.g:4935:3: ruleInterval
             {
-             before(grammarAccess.getOffsetAccess().getTimeTimeExprParserRuleCall_1_0()); 
+             before(grammarAccess.getOffsetAccess().getIntervalIntervalParserRuleCall_1_0()); 
             pushFollow(FOLLOW_2);
-            ruleTimeExpr();
+            ruleInterval();
 
             state._fsp--;
 
-             after(grammarAccess.getOffsetAccess().getTimeTimeExprParserRuleCall_1_0()); 
+             after(grammarAccess.getOffsetAccess().getIntervalIntervalParserRuleCall_1_0()); 
 
             }
 
@@ -14859,7 +14859,7 @@ public class InternalContractSpecParser extends AbstractInternalContentAssistPar
         }
         return ;
     }
-    // $ANTLR end "rule__Offset__TimeAssignment_1"
+    // $ANTLR end "rule__Offset__IntervalAssignment_1"
 
 
     // $ANTLR start "rule__Reaction__TriggerAssignment_1"

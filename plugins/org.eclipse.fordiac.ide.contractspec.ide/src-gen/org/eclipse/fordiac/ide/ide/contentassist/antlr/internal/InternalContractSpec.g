@@ -1689,9 +1689,9 @@ rule__Offset__Group__1__Impl
 	}
 :
 (
-	{ before(grammarAccess.getOffsetAccess().getTimeAssignment_1()); }
-	(rule__Offset__TimeAssignment_1)
-	{ after(grammarAccess.getOffsetAccess().getTimeAssignment_1()); }
+	{ before(grammarAccess.getOffsetAccess().getIntervalAssignment_1()); }
+	(rule__Offset__IntervalAssignment_1)
+	{ after(grammarAccess.getOffsetAccess().getIntervalAssignment_1()); }
 )
 ;
 finally {
@@ -4926,15 +4926,15 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__Offset__TimeAssignment_1
+rule__Offset__IntervalAssignment_1
 	@init {
 		int stackSize = keepStackSize();
 	}
 :
 	(
-		{ before(grammarAccess.getOffsetAccess().getTimeTimeExprParserRuleCall_1_0()); }
-		ruleTimeExpr
-		{ after(grammarAccess.getOffsetAccess().getTimeTimeExprParserRuleCall_1_0()); }
+		{ before(grammarAccess.getOffsetAccess().getIntervalIntervalParserRuleCall_1_0()); }
+		ruleInterval
+		{ after(grammarAccess.getOffsetAccess().getIntervalIntervalParserRuleCall_1_0()); }
 	)
 ;
 finally {

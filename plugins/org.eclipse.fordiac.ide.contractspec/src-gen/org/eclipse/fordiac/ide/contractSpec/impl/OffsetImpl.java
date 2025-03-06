@@ -23,8 +23,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage;
+import org.eclipse.fordiac.ide.contractSpec.Interval;
 import org.eclipse.fordiac.ide.contractSpec.Offset;
-import org.eclipse.fordiac.ide.contractSpec.TimeExpr;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.contractSpec.TimeExpr;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.OffsetImpl#getTime <em>Time</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.OffsetImpl#getInterval <em>Interval</em>}</li>
  * </ul>
  *
  * @generated
@@ -42,14 +42,14 @@ import org.eclipse.fordiac.ide.contractSpec.TimeExpr;
 public class OffsetImpl extends MinimalEObjectImpl.Container implements Offset
 {
   /**
-   * The cached value of the '{@link #getTime() <em>Time</em>}' containment reference.
+   * The cached value of the '{@link #getInterval() <em>Interval</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getTime()
+   * @see #getInterval()
    * @generated
    * @ordered
    */
-  protected TimeExpr time;
+  protected Interval interval;
 
   /**
    * <!-- begin-user-doc -->
@@ -78,9 +78,9 @@ public class OffsetImpl extends MinimalEObjectImpl.Container implements Offset
    * @generated
    */
   @Override
-  public TimeExpr getTime()
+  public Interval getInterval()
   {
-    return time;
+    return interval;
   }
 
   /**
@@ -88,13 +88,13 @@ public class OffsetImpl extends MinimalEObjectImpl.Container implements Offset
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetTime(TimeExpr newTime, NotificationChain msgs)
+  public NotificationChain basicSetInterval(Interval newInterval, NotificationChain msgs)
   {
-    TimeExpr oldTime = time;
-    time = newTime;
+    Interval oldInterval = interval;
+    interval = newInterval;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.OFFSET__TIME, oldTime, newTime);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.OFFSET__INTERVAL, oldInterval, newInterval);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -106,20 +106,20 @@ public class OffsetImpl extends MinimalEObjectImpl.Container implements Offset
    * @generated
    */
   @Override
-  public void setTime(TimeExpr newTime)
+  public void setInterval(Interval newInterval)
   {
-    if (newTime != time)
+    if (newInterval != interval)
     {
       NotificationChain msgs = null;
-      if (time != null)
-        msgs = ((InternalEObject)time).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.OFFSET__TIME, null, msgs);
-      if (newTime != null)
-        msgs = ((InternalEObject)newTime).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.OFFSET__TIME, null, msgs);
-      msgs = basicSetTime(newTime, msgs);
+      if (interval != null)
+        msgs = ((InternalEObject)interval).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.OFFSET__INTERVAL, null, msgs);
+      if (newInterval != null)
+        msgs = ((InternalEObject)newInterval).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.OFFSET__INTERVAL, null, msgs);
+      msgs = basicSetInterval(newInterval, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.OFFSET__TIME, newTime, newTime));
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.OFFSET__INTERVAL, newInterval, newInterval));
   }
 
   /**
@@ -132,8 +132,8 @@ public class OffsetImpl extends MinimalEObjectImpl.Container implements Offset
   {
     switch (featureID)
     {
-      case ContractSpecPackage.OFFSET__TIME:
-        return basicSetTime(null, msgs);
+      case ContractSpecPackage.OFFSET__INTERVAL:
+        return basicSetInterval(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -148,8 +148,8 @@ public class OffsetImpl extends MinimalEObjectImpl.Container implements Offset
   {
     switch (featureID)
     {
-      case ContractSpecPackage.OFFSET__TIME:
-        return getTime();
+      case ContractSpecPackage.OFFSET__INTERVAL:
+        return getInterval();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -164,8 +164,8 @@ public class OffsetImpl extends MinimalEObjectImpl.Container implements Offset
   {
     switch (featureID)
     {
-      case ContractSpecPackage.OFFSET__TIME:
-        setTime((TimeExpr)newValue);
+      case ContractSpecPackage.OFFSET__INTERVAL:
+        setInterval((Interval)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -181,8 +181,8 @@ public class OffsetImpl extends MinimalEObjectImpl.Container implements Offset
   {
     switch (featureID)
     {
-      case ContractSpecPackage.OFFSET__TIME:
-        setTime((TimeExpr)null);
+      case ContractSpecPackage.OFFSET__INTERVAL:
+        setInterval((Interval)null);
         return;
     }
     super.eUnset(featureID);
@@ -198,8 +198,8 @@ public class OffsetImpl extends MinimalEObjectImpl.Container implements Offset
   {
     switch (featureID)
     {
-      case ContractSpecPackage.OFFSET__TIME:
-        return time != null;
+      case ContractSpecPackage.OFFSET__INTERVAL:
+        return interval != null;
     }
     return super.eIsSet(featureID);
   }

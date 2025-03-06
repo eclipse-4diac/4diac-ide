@@ -1369,39 +1369,39 @@ public class InternalContractSpecParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleOffset"
-    // InternalContractSpec.g:562:1: ruleOffset returns [EObject current=null] : (otherlv_0= 'offset' ( (lv_time_1_0= ruleTimeExpr ) ) ) ;
+    // InternalContractSpec.g:562:1: ruleOffset returns [EObject current=null] : (otherlv_0= 'offset' ( (lv_interval_1_0= ruleInterval ) ) ) ;
     public final EObject ruleOffset() throws RecognitionException {
         EObject current = null;
 
         Token otherlv_0=null;
-        EObject lv_time_1_0 = null;
+        EObject lv_interval_1_0 = null;
 
 
 
         	enterRule();
 
         try {
-            // InternalContractSpec.g:568:2: ( (otherlv_0= 'offset' ( (lv_time_1_0= ruleTimeExpr ) ) ) )
-            // InternalContractSpec.g:569:2: (otherlv_0= 'offset' ( (lv_time_1_0= ruleTimeExpr ) ) )
+            // InternalContractSpec.g:568:2: ( (otherlv_0= 'offset' ( (lv_interval_1_0= ruleInterval ) ) ) )
+            // InternalContractSpec.g:569:2: (otherlv_0= 'offset' ( (lv_interval_1_0= ruleInterval ) ) )
             {
-            // InternalContractSpec.g:569:2: (otherlv_0= 'offset' ( (lv_time_1_0= ruleTimeExpr ) ) )
-            // InternalContractSpec.g:570:3: otherlv_0= 'offset' ( (lv_time_1_0= ruleTimeExpr ) )
+            // InternalContractSpec.g:569:2: (otherlv_0= 'offset' ( (lv_interval_1_0= ruleInterval ) ) )
+            // InternalContractSpec.g:570:3: otherlv_0= 'offset' ( (lv_interval_1_0= ruleInterval ) )
             {
-            otherlv_0=(Token)match(input,19,FOLLOW_15); 
+            otherlv_0=(Token)match(input,19,FOLLOW_6); 
 
             			newLeafNode(otherlv_0, grammarAccess.getOffsetAccess().getOffsetKeyword_0());
             		
-            // InternalContractSpec.g:574:3: ( (lv_time_1_0= ruleTimeExpr ) )
-            // InternalContractSpec.g:575:4: (lv_time_1_0= ruleTimeExpr )
+            // InternalContractSpec.g:574:3: ( (lv_interval_1_0= ruleInterval ) )
+            // InternalContractSpec.g:575:4: (lv_interval_1_0= ruleInterval )
             {
-            // InternalContractSpec.g:575:4: (lv_time_1_0= ruleTimeExpr )
-            // InternalContractSpec.g:576:5: lv_time_1_0= ruleTimeExpr
+            // InternalContractSpec.g:575:4: (lv_interval_1_0= ruleInterval )
+            // InternalContractSpec.g:576:5: lv_interval_1_0= ruleInterval
             {
 
-            					newCompositeNode(grammarAccess.getOffsetAccess().getTimeTimeExprParserRuleCall_1_0());
+            					newCompositeNode(grammarAccess.getOffsetAccess().getIntervalIntervalParserRuleCall_1_0());
             				
             pushFollow(FOLLOW_2);
-            lv_time_1_0=ruleTimeExpr();
+            lv_interval_1_0=ruleInterval();
 
             state._fsp--;
 
@@ -1411,9 +1411,9 @@ public class InternalContractSpecParser extends AbstractInternalAntlrParser {
             					}
             					set(
             						current,
-            						"time",
-            						lv_time_1_0,
-            						"org.eclipse.fordiac.ide.ContractSpec.TimeExpr");
+            						"interval",
+            						lv_interval_1_0,
+            						"org.eclipse.fordiac.ide.ContractSpec.Interval");
             					afterParserOrEnumRuleCall();
             				
 
