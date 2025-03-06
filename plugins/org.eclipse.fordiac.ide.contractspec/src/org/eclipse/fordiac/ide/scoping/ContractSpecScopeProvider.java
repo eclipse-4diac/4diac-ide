@@ -13,6 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.scoping;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage;
+import org.eclipse.xtext.scoping.IScope;
+import org.eclipse.xtext.scoping.Scopes;
+
 /**
  * This class contains custom scoping description.
  *
@@ -21,5 +28,20 @@ package org.eclipse.fordiac.ide.scoping;
  * on how and when to use it.
  */
 public class ContractSpecScopeProvider extends AbstractContractSpecScopeProvider {
-	// TODO
+
+	public static URI interfaceURI;
+	private static final ContractSpecPackage pack = ContractSpecPackage.eINSTANCE;
+
+	@Override
+	public IScope getScope(final EObject context, final EReference reference) {
+		if (reference == pack.getEventSpec_Port() || reference == pack.getCausalFuncDecl_P1()
+				|| reference == pack.getCausalFuncDecl_P2()) {
+
+			final var res = context.eResource().getResourceSet().getResource(interfaceURI, false);
+			if (res != null) {
+				return Scopes.scopeFor(res.getContents());
+			}
+		}
+		return super.getScope(context, reference);
+	}
 }

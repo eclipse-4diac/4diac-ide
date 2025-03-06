@@ -14,8 +14,13 @@
 package org.eclipse.fordiac.ide.application.widgets;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.fordiac.ide.contractSpec.ContractSpecFactory;
+import org.eclipse.fordiac.ide.contractSpec.Port;
 import org.eclipse.fordiac.ide.contractspec.ui.internal.ContractspecActivator;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.scoping.ContractSpecScopeProvider;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.XtextResourceSet;
@@ -27,27 +32,53 @@ import com.google.inject.Injector;
 @SuppressWarnings("restriction")
 public class ContractspecResourceProvider implements IEditedResourceProvider {
 
-	private static final URI DUMMY_URI = URI.createURI("__dummy.contract"); //$NON-NLS-1$
+	private static final URI SYNTHETIC_URI = URI.createURI("__synthetic.contract"); //$NON-NLS-1$
+	private static final URI SYNTHETIC_URI_INTERFACE = URI.createURI("__synthetic_interface.contract"); //$NON-NLS-1$
 	private static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE
-			.getResourceServiceProvider(DUMMY_URI);
+			.getResourceServiceProvider(SYNTHETIC_URI);
 
 	private static Injector injector;
+
+	private final FBNetworkElement fbElem;
+
+	public ContractspecResourceProvider(final FBNetworkElement fbElem) {
+		this.fbElem = fbElem;
+	}
 
 	@Override
 	public XtextResource createResource() {
 		final XtextResourceSet resourceSet = (XtextResourceSet) SERVICE_PROVIDER.get(ResourceSet.class);
 		final XtextResource resource = SERVICE_PROVIDER.get(XtextResource.class);
-		resource.setURI(DUMMY_URI);
+		resource.setURI(SYNTHETIC_URI);
 		resourceSet.getResources().add(resource);
+		addFBInterface(resourceSet, fbElem);
 		return resource;
 	}
 
-	static EmbeddedEditorFactory.Builder getEmbeddedEditorBuilder() {
+	static EmbeddedEditorFactory.Builder getEmbeddedEditorBuilder(final FBNetworkElement fbElem) {
 		if (injector == null) {
 			final ContractspecActivator activator = ContractspecActivator.getInstance();
 			injector = activator.getInjector(ContractspecActivator.ORG_ECLIPSE_FORDIAC_IDE_CONTRACTSPEC);
 		}
-		final IEditedResourceProvider resourceProvider = new ContractspecResourceProvider();
+		final IEditedResourceProvider resourceProvider = new ContractspecResourceProvider(fbElem);
 		return injector.getInstance(EmbeddedEditorFactory.class).newEditor(resourceProvider);
+	}
+
+	private static void addFBInterface(final ResourceSet set, final FBNetworkElement fbElem) {
+		final Resource r = set.createResource(SYNTHETIC_URI_INTERFACE);
+		ContractSpecScopeProvider.interfaceURI = SYNTHETIC_URI_INTERFACE;
+
+		fbElem.getInterface().getInputs().forEach(ie -> {
+			final Port p = ContractSpecFactory.eINSTANCE.createPort();
+			p.setName(ie.getName());
+			p.setIsInput(1);
+			r.getContents().add(p);
+		});
+		fbElem.getInterface().getOutputs().forEach(ie -> {
+			final Port p = ContractSpecFactory.eINSTANCE.createPort();
+			p.setName(ie.getName());
+			p.setIsInput(0);
+			r.getContents().add(p);
+		});
 	}
 }

@@ -66,7 +66,7 @@ public class InstanceContractEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		return new InstanceContractFigure(getModel().getContract());
+		return new InstanceContractFigure(getModel());
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class InstanceContractEditPart extends AbstractGraphicalEditPart {
 
 	private void performDirectEdit(final CommandStack cmdStack) {
 		final var shell = Display.getCurrent().getActiveShell();
-		final var editor = new ContractEditorDialog(shell, getModel().getContract());
+		final var editor = new ContractEditorDialog(shell, getModel().getSubApp(), getModel().getContract());
 
 		if (editor.open() != CANCEL) {
 			cmdStack.execute(new ChangeContractCommand(getModel().getSubApp(), editor.getContractRule()));

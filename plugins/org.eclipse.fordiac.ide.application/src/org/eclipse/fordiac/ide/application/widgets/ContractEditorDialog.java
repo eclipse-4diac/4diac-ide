@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.application.widgets;
 
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -24,19 +25,23 @@ import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorModelAccess;
 public class ContractEditorDialog extends MessageDialog {
 
 	private String contract;
+	private final FBNetworkElement fbElem;
 	private EmbeddedEditorModelAccess editor;
 	private final String select;
 
-	public ContractEditorDialog(final Shell shell, final String contract) {
+	public ContractEditorDialog(final Shell shell, final FBNetworkElement fbElem, final String contract) {
 		super(shell, Messages.ContractEditor_Title, null, "", MessageDialog.CONFIRM, 0, Messages.ContractEditor_OK); //$NON-NLS-1$
 		this.contract = contract;
+		this.fbElem = fbElem;
 		select = null;
 	}
 
-	public ContractEditorDialog(final Shell shell, final String contract, final String info, final String select) {
+	public ContractEditorDialog(final Shell shell, final FBNetworkElement fbElem, final String contract,
+			final String info, final String select) {
 		super(shell, Messages.ContractEditor_Title, null, info, MessageDialog.INFORMATION, 0,
 				Messages.ContractEditor_OK);
 		this.contract = contract;
+		this.fbElem = fbElem;
 		this.select = select;
 	}
 
@@ -60,7 +65,8 @@ public class ContractEditorDialog extends MessageDialog {
 
 	@Override
 	protected Control createCustomArea(final Composite parent) {
-		final var handle = ContractspecResourceProvider.getEmbeddedEditorBuilder().showLineNumbers().withParent(parent);
+		final var handle = ContractspecResourceProvider.getEmbeddedEditorBuilder(fbElem).showLineNumbers()
+				.withParent(parent);
 		editor = handle.createPartialEditor();
 		editor.updateModel(contract);
 

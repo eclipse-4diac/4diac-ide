@@ -114,12 +114,12 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 
 	private static void openDialog(final ExecutionEvent event, final Event pin, final String suggestion) {
 		final Shell shell = HandlerUtil.getActiveShell(event);
-		final ContractEditorDialog dialog = new ContractEditorDialog(shell, suggestion,
+		final FBNetworkElement element = pin.getFBNetworkElement();
+		final ContractEditorDialog dialog = new ContractEditorDialog(shell, element, suggestion,
 				Messages.ContractElementDialog_Info, String.valueOf(DefineFbInterfaceConstraintHandler.DEFAULT_TIME));
 
 		if (dialog.open() != CANCEL) {
 			final String rule = dialog.getSimplifiedContractRule();
-			final FBNetworkElement element = pin.getFBNetworkElement();
 
 			final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 			final CommandStack cmdStack = editor.getAdapter(CommandStack.class);

@@ -30,7 +30,8 @@ Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.model.search,
  org.eclipse.jface,
  org.eclipse.xtext.ui,
- org.eclipse.fordiac.ide.contractspec.ui
+ org.eclipse.fordiac.ide.contractspec.ui,
+ org.eclipse.fordiac.ide.contractspec
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.0.0.qualifier
