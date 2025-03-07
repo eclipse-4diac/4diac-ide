@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public abstract class AbstractStructTreeNode {
@@ -97,9 +96,16 @@ public abstract class AbstractStructTreeNode {
 		if ((null == parent) || (null == parent.pinName)) {
 			return getVariableName(variable);
 		}
-		return (parent.pinName + "." + getVariableName(variable)); //$NON-NLS-1$
+		return (parent.pinName + getChildSeparator() + getVariableName(variable));
 	}
 
-	public abstract AbstractStructTreeNode addChild(final EObject obj);
+	public AbstractStructTreeNode addChild(final VarDeclaration memberVariable) {
+		final AbstractStructTreeNode treeNode = createChild(memberVariable);
+		getChildren().add(treeNode);
+		return treeNode;
+	}
 
+	protected abstract AbstractStructTreeNode createChild(VarDeclaration vardeclaration);
+
+	protected abstract String getChildSeparator();
 }

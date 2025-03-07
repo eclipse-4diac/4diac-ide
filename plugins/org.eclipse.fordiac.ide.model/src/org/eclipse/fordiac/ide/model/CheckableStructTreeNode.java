@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,9 +16,9 @@ package org.eclipse.fordiac.ide.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 
 public class CheckableStructTreeNode extends AbstractStructTreeNode {
@@ -42,13 +42,8 @@ public class CheckableStructTreeNode extends AbstractStructTreeNode {
 	}
 
 	@Override
-	public CheckableStructTreeNode addChild(final EObject memberVariable) {
-		if (memberVariable instanceof final VarDeclaration vardeclaration) {
-			final CheckableStructTreeNode treeNode = new CheckableStructTreeNode(vardeclaration, this, getTree());
-			getChildren().add(treeNode);
-			return treeNode;
-		}
-		return null;
+	public CheckableStructTreeNode addChild(final VarDeclaration memberVariable) {
+		return (CheckableStructTreeNode) super.addChild(memberVariable);
 	}
 
 	public void updateNode(final boolean check) {
@@ -236,6 +231,16 @@ public class CheckableStructTreeNode extends AbstractStructTreeNode {
 		}
 
 		return super.equals(obj);
+	}
+
+	@Override
+	protected AbstractStructTreeNode createChild(final VarDeclaration vardeclaration) {
+		return new CheckableStructTreeNode(vardeclaration, this, getTree());
+	}
+
+	@Override
+	protected String getChildSeparator() {
+		return ConfigurableFBManagement.MEMBER_VAR_SEPARATOR;
 	}
 
 }

@@ -661,9 +661,14 @@
     <genClasses ecoreClass="lib.ecore#//MappingTarget"/>
     <genClasses ecoreClass="lib.ecore#//MemberVarDeclaration">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//MemberVarDeclaration/parentNames"/>
-      <genOperations ecoreOperation="lib.ecore#//MemberVarDeclaration/getName" body="return ConfigurableFBManagement.getMemberVarName(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//MemberVarDeclaration/getName" body="return ConfigurableFBManagement.getMemberVarName(this, ConfigurableFBManagement.MEMBER_VAR_SEPARATOR);"/>
+      <genOperations ecoreOperation="lib.ecore#//MemberVarDeclaration/getDisplayName"
+          body="return ConfigurableFBManagement.getMemberVarName(this, &quot;.&quot;);   //$NON-NLS-1$"/>
       <genOperations ecoreOperation="lib.ecore#//MemberVarDeclaration/getVarName"
           body="return super.getName();"/>
+      <genOperations ecoreOperation="lib.ecore#//MemberVarDeclaration/setName" body="// ensure that we are always only setting the last segment as name&#xA;final String[] subNames = ConfigurableFBManagement.splitMemberVarName(name);&#xA;super.setName(subNames[subNames.length - 1]);">
+        <genParameters ecoreParameter="lib.ecore#//MemberVarDeclaration/setName/name"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Method"/>
     <genClasses ecoreClass="lib.ecore#//Multiplexer">

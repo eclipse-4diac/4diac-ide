@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Austria GmbH
  *
@@ -192,7 +192,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	private static String getPinName(final IInterfaceElement pin) {
 		if (pin instanceof final MemberVarDeclaration memberVarDecl) {
-			return memberVarDecl.getName();
+			return memberVarDecl.getDisplayName();
 		}
 		return pin.getName();
 	}

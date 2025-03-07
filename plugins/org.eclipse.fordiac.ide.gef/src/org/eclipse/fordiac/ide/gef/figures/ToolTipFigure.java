@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2011, 2014, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2025 Profactor GbmH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -47,7 +48,7 @@ public class ToolTipFigure extends Figure {
 		setLayoutManager(mainLayout);
 		mainLayout.setStretchMinorAxis(true);
 
-		String nameLine = element.getName();
+		String nameLine = getName(element);
 
 		if (element instanceof final ITypedElement typedElement && typedElement.getFullTypeName() != null) {
 			nameLine += " - " + typedElement.getFullTypeName(); //$NON-NLS-1$
@@ -72,6 +73,13 @@ public class ToolTipFigure extends Figure {
 			annotationModel.getAnnotations(element).stream().forEach(annotation -> line
 					.add(new Label(annotation.getText(), GraphicalAnnotationStyles.getAnnotationImage(annotation))));
 		}
+	}
+
+	private static String getName(final INamedElement element) {
+		if (element instanceof final MemberVarDeclaration memberVarDecl) {
+			return memberVarDecl.getDisplayName();
+		}
+		return element.getName();
 	}
 
 	public final VerticalLineCompartmentFigure getLine() {
