@@ -18,7 +18,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.fordiac.ide.contractSpec.ContractSpecFactory;
 import org.eclipse.fordiac.ide.contractSpec.Port;
-import org.eclipse.fordiac.ide.contractspec.ui.internal.ContractspecActivator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.scoping.ContractSpecScopeProvider;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
@@ -27,8 +26,6 @@ import org.eclipse.xtext.resource.XtextResourceSet;
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorFactory;
 import org.eclipse.xtext.ui.editor.embedded.IEditedResourceProvider;
 
-import com.google.inject.Injector;
-
 @SuppressWarnings("restriction")
 public class ContractspecResourceProvider implements IEditedResourceProvider {
 
@@ -36,8 +33,6 @@ public class ContractspecResourceProvider implements IEditedResourceProvider {
 	private static final URI SYNTHETIC_URI_INTERFACE = URI.createURI("__synthetic_interface.contract"); //$NON-NLS-1$
 	private static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE
 			.getResourceServiceProvider(SYNTHETIC_URI);
-
-	private static Injector injector;
 
 	private final FBNetworkElement fbElem;
 
@@ -56,12 +51,8 @@ public class ContractspecResourceProvider implements IEditedResourceProvider {
 	}
 
 	static EmbeddedEditorFactory.Builder getEmbeddedEditorBuilder(final FBNetworkElement fbElem) {
-		if (injector == null) {
-			final ContractspecActivator activator = ContractspecActivator.getInstance();
-			injector = activator.getInjector(ContractspecActivator.ORG_ECLIPSE_FORDIAC_IDE_CONTRACTSPEC);
-		}
 		final IEditedResourceProvider resourceProvider = new ContractspecResourceProvider(fbElem);
-		return injector.getInstance(EmbeddedEditorFactory.class).newEditor(resourceProvider);
+		return SERVICE_PROVIDER.get(EmbeddedEditorFactory.class).newEditor(resourceProvider);
 	}
 
 	private static void addFBInterface(final ResourceSet set, final FBNetworkElement fbElem) {
