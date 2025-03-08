@@ -384,8 +384,12 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 
 	private Dimension getSubappSize() {
 		if (getModel().isUnfolded()) {
-			return new Dimension(CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getWidth()),
+			final int minWidth = 100;
+			final int minHeight = 60;
+			final int width = Math.max(minWidth, CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getWidth()));
+			final int height = Math.max(minHeight,
 					CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getHeight()));
+			return new Dimension(width, height);
 		}
 		return new Dimension(-1, -1);
 	}

@@ -185,8 +185,8 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure = new BorderedRoundedRectangle();
 		expandedMainFigure.setOutline(false);
 		expandedMainFigure.setOpaque(false);
-		expandedMainFigure
-				.setCornerDimensions(new Dimension(GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM));
+		expandedMainFigure.setCornerDimensions(
+				new Dimension(GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM));
 		expandedMainFigure.setBorder(new RoundedRectangleShadowBorder());
 		expandedMainFigure.setLayoutManager(createExpandedMainFigureLayout());
 		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
@@ -308,7 +308,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	private static int getMinExpandedInterfaceBarWidth() {
 		if (minExpSubappBarWidhtPixels == -1) {
 			minExpSubappBarWidhtPixels = EditorWithInterfaceEditPart.getMinInterfaceBarWidth()
-					+ ConnectorBorder.LR_MARGIN; // we have connectors on both sides
+					+ ConnectorBorder.LR_MARGIN - 50; // we have connectors on both sides
 		}
 		return minExpSubappBarWidhtPixels;
 	}
