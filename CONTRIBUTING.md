@@ -10,7 +10,7 @@ Its distribution functionality and the inherent support for dynamic reconfigurat
 
 ### What is 4diac IDE
 
-[4diac IDE](https://eclipse.dev/4diac/en_ide.php) is an extensible, IEC 61499 compliant engineering environment for distributed control applications. The modeled applications can be downloaded to distributed field devices according the means defined by the IEC 61499 standard. The hardware capability definition allows to model the control hardware and its interconnections through networks.
+[4diac IDE](https://eclipse.dev/4diac/4diac_ide) is an extensible, IEC 61499 compliant engineering environment for distributed control applications. The modeled applications can be downloaded to distributed field devices according the means defined by the IEC 61499 standard. The hardware capability definition allows to model the control hardware and its interconnections through networks.
 screenshot of the 4diac IDE engineering environment for distributed control systems showing the system explorer, the function block nework editor for applications, subapplications, and composite FBs, and an ECC editor modeling the state machine of basic function blocks
 The 4diac IDE is based on the Eclipse framework, which allows an easy integration of other plug-ins to the 4diac IDE providing new or extended functionality.
 
@@ -50,7 +50,7 @@ In order for all dependencies to resolve correctly, the following additional Ecl
 
 You can install these packages using your Eclipse IDE by selecting Help -> Install New Software (Eclipse Repository).
 
-A detailed description on how to setup your build environment and build 4diac IDE for the different platforms can be found in our [Building and Running 4diac IDE from Source](https://eclipse.dev/4diac/en_help.php?helppage=html/development/building4diac.html#buildFromSource).
+A detailed description on how to setup your build environment and build 4diac IDE for the different platforms can be found in our [Building and Running 4diac IDE from Source](https://github.com/eclipse-4diac/4diac-documentation/blob/main/src/index.adoc).
 
 ## Recommended Workflow
 

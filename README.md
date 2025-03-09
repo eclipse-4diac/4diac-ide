@@ -1,6 +1,6 @@
 # Eclipse 4diac's 4diac IDE
 
-[4diac IDE](https://eclipse.dev/4diac/en_ide.php) is an integrated development environment for developing distributed Industrial Process Measurement and Control Systems (IPMCS) utilizing the IEC 61499 standard. 
+[4diac IDE](https://eclipse.dev/4diac/4diac_ide) is an integrated development environment for developing distributed Industrial Process Measurement and Control Systems (IPMCS) utilizing the IEC 61499 standard. 
 
 ## License
 
@@ -22,13 +22,13 @@ in the root directory of 4diac IDE source code. After the build completes you ca
     
    `plugins/org.eclipse.fordiac.ide.product/target` 
 
-More information on how to build, run and extend 4diac IDE can be found in our [Building 4diac IDE Documentation](https://www.eclipse.org/4diac/en_help.php?helppage=html/development/building4diac.html)
+More information on how to build, run and extend 4diac IDE can be found in our [Building 4diac IDE Documentation](https://github.com/eclipse-4diac/4diac-documentation/blob/main/src/index.adoc)
 
 
 ## Links
 
 * [Home page](https://www.eclipse.org/4diac)
-* [Documentation](https://www.eclipse.org/4diac/en_help.php) 
+* [Documentation](https://github.com/eclipse-4diac/4diac-documentation/blob/main/src/index.adoc) 
 * [Mailing list](https://dev.eclipse.org/mailman/listinfo/4diac-dev)
 * [Wiki](https://wiki.eclipse.org/Eclipse_4diac_Wiki)
 * [Examples](https://github.com/eclipse-4diac/4diac-examples)
