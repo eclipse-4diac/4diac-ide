@@ -13,8 +13,11 @@
 package org.eclipse.fordiac.ide.typeeditor;
 
 import java.util.Map;
+import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.gef.editors.GraphicalMultipageEditorContributor;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorActionBarContributor;
@@ -29,6 +32,7 @@ public class TypeEditorContributor extends GraphicalMultipageEditorContributor {
 
 	@Override
 	public void init(final IActionBars bars) {
+		trace("init()"); //$NON-NLS-1$
 		super.init(bars);
 		textActionBars = new SubActionBars(bars);
 		textContributor.init(textActionBars);
@@ -39,10 +43,18 @@ public class TypeEditorContributor extends GraphicalMultipageEditorContributor {
 		textActionBars.dispose();
 		textContributor.dispose();
 		super.dispose();
+		trace("dispose()"); //$NON-NLS-1$
+	}
+
+	@Override
+	public void setActiveEditor(final IEditorPart editor) {
+		trace("setActiveEditor()", editor); //$NON-NLS-1$
+		super.setActiveEditor(editor);
 	}
 
 	@Override
 	public void setActivePage(final IEditorPart newEditor) {
+		trace("setActivePage()", newEditor); //$NON-NLS-1$
 		if (newEditor instanceof final ITextEditor newTextEditor) {
 			super.setActivePage(null);
 			textContributor.setActiveEditor(newTextEditor);
@@ -73,5 +85,24 @@ public class TypeEditorContributor extends GraphicalMultipageEditorContributor {
 
 	public IEditorActionBarContributor getTextContributor() {
 		return textContributor;
+	}
+
+	private static boolean traceEnabled;
+	static {
+		traceEnabled = Stream.of(Platform.getCommandLineArgs()).anyMatch("-traceTypeEditorContributor"::equals); //$NON-NLS-1$
+	}
+
+	private void trace(final String message) {
+		if (traceEnabled) {
+			FordiacLogHelper.logWarning(toString() + " " + message + " in page " + getPage(), new RuntimeException()); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+	}
+
+	private void trace(final String message, final IEditorPart editorPart) {
+		if (traceEnabled) {
+			FordiacLogHelper.logWarning(toString() + " " + message + " with editor " + editorPart //$NON-NLS-1$ //$NON-NLS-2$
+					+ (editorPart != null ? " (input " + editorPart.getEditorInput() + ")" : "") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					+ " in page " + getPage(), new RuntimeException()); //$NON-NLS-1$
+		}
 	}
 }
