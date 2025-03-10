@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.value;
 
-import org.eclipse.debug.core.model.IValue;
-import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugElement;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
@@ -22,7 +20,7 @@ import org.eclipse.fordiac.ide.model.eval.value.FBValue;
 import org.eclipse.fordiac.ide.model.eval.value.StructValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 
-public abstract class EvaluatorDebugValue extends EvaluatorDebugElement implements IValue {
+public abstract class EvaluatorDebugValue extends EvaluatorDebugElement implements IEvaluatorDebugValue {
 	private final Value value;
 
 	protected EvaluatorDebugValue(final Value value, final IEvaluatorDebugTarget target) {
@@ -67,20 +65,6 @@ public abstract class EvaluatorDebugValue extends EvaluatorDebugElement implemen
 	public final boolean isAllocated() {
 		return true;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public abstract IVariable[] getVariables();
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public abstract boolean hasVariables();
-
-	public abstract EvaluatorDebugVariable getVariable(final String name);
 
 	@Override
 	public final IEvaluatorDebugTarget getDebugTarget() {
