@@ -45,7 +45,7 @@ public class DeploymentDebugModelPresentation extends EvaluatorDebugModelPresent
 	@Override
 	public Color getForeground(final Object element) {
 		if (element instanceof final IWatch watch) {
-			if (!watch.isAlive()) {
+			if (watch.hasError()) {
 				return getWatchErrorTextColor();
 			}
 			if (element instanceof final IVarDeclarationWatch variableWatch && variableWatch.isForced()) {
@@ -58,7 +58,7 @@ public class DeploymentDebugModelPresentation extends EvaluatorDebugModelPresent
 	@Override
 	public Color getBackground(final Object element) {
 		if (element instanceof final IWatch watch) {
-			if (!watch.isAlive()) {
+			if (watch.hasError()) {
 				return getWatchErrorColor();
 			}
 			if (element instanceof final IVarDeclarationWatch variableWatch && variableWatch.isForced()) {

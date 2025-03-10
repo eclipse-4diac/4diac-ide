@@ -144,7 +144,7 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 
 	protected Color getWatchColor() {
 		final IWatch watch = getModel().getWatch();
-		if (!watch.isAlive()) {
+		if (watch.hasError()) {
 			return DeploymentDebugModelPresentation.getWatchErrorColor();
 		}
 		if (watch instanceof final IVarDeclarationWatch variableWatch && variableWatch.isForced()) {
@@ -155,7 +155,7 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 
 	protected Color getWatchTextColor() {
 		final IWatch watch = getModel().getWatch();
-		if (!watch.isAlive()) {
+		if (watch.hasError()) {
 			return DeploymentDebugModelPresentation.getWatchErrorTextColor();
 		}
 		if (watch instanceof final IVarDeclarationWatch variableWatch && variableWatch.isForced()) {
