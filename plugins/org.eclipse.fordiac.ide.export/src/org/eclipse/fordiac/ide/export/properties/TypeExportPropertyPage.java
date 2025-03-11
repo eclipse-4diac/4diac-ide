@@ -14,11 +14,15 @@
 
 package org.eclipse.fordiac.ide.export.properties;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.export.Messages;
 import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.export.utils.ExportFilterUtil;
@@ -27,21 +31,23 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
-import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.StringButtonFieldEditor;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.dialogs.PropertyPage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class TypeExportPropertyPage extends PropertyPage {
 
-	private DirectoryFieldEditor directoryEditor;
+	private OutputDirectoryFieldEditor directoryEditor;
 	private BooleanFieldEditor checkboxEditor;
 	private ComboFieldEditor exporterEditor;
 
@@ -104,18 +110,17 @@ public class TypeExportPropertyPage extends PropertyPage {
 	private void createDirectoryEditor(final Composite parent) {
 		directoryEditorContainer = new Composite(parent, SWT.NONE);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(directoryEditorContainer);
-		directoryEditor = new DirectoryFieldEditor(PreferenceConstants.OUTPUT_FOLDER, Messages.TypeExport_OutputFolder,
-				directoryEditorContainer);
+		directoryEditor = new OutputDirectoryFieldEditor(PreferenceConstants.OUTPUT_FOLDER,
+				Messages.TypeExport_OutputFolder, directoryEditorContainer);
 		directoryEditor.setPreferenceStore(getPreferenceStore());
 		directoryEditor.setPage(this);
-		directoryEditor.getTextControl(directoryEditorContainer).addModifyListener(e -> {
-			directoryEditor.getTextControl(directoryEditorContainer).requestLayout();
-		});
+		directoryEditor.getTextControl(directoryEditorContainer)
+				.addModifyListener(e -> directoryEditor.getTextControl(directoryEditorContainer).requestLayout());
 	}
 
 	private String getOutputFolder() {
 		if (getProject().getFolder(OUTPUT_FOLDER_NAME).exists()) {
-			return getProject().getFolder(OUTPUT_FOLDER_NAME).getRawLocation().toOSString();
+			return getProject().getFolder(OUTPUT_FOLDER_NAME).getFullPath().toPortableString();
 		}
 
 		return ""; //$NON-NLS-1$
@@ -155,6 +160,7 @@ public class TypeExportPropertyPage extends PropertyPage {
 	}
 
 	private void refreshEditors() {
+		checkboxEditor.load();
 		directoryEditor.load();
 		exporterEditor.load();
 		enableSettings(checkboxEditor.getBooleanValue());
@@ -166,4 +172,58 @@ public class TypeExportPropertyPage extends PropertyPage {
 		exporterEditor.setEnabled(enable, exporterEditorContainer);
 	}
 
+	/*
+	 * Helper class partly copied from @see DirectoryFieldEditor editor to handle
+	 * relative paths
+	 */
+	class OutputDirectoryFieldEditor extends StringButtonFieldEditor {
+
+		public OutputDirectoryFieldEditor(final String name, final String labelText, final Composite parent) {
+			init(name, labelText);
+			setErrorMessage(JFaceResources.getString("DirectoryFieldEditor.errorMessage"));//$NON-NLS-1$
+			setChangeButtonText(JFaceResources.getString("openBrowse"));//$NON-NLS-1$
+			setValidateStrategy(VALIDATE_ON_FOCUS_LOST);
+			createControl(parent);
+		}
+
+		@Override
+		protected String changePressed() {
+			final IPath projectRelativePath = new Path(getTextControl().getText())
+					.makeRelativeTo(getProject().getFullPath());
+			final IFolder startDirectory = getProject().getFolder(projectRelativePath);
+			final Optional<IFolder> selectedDirectory = getDirectory(startDirectory);
+
+			if (selectedDirectory.isPresent() && selectedDirectory.get().exists()) {
+				return selectedDirectory.get().getFullPath().toPortableString();
+			}
+			// keep old value
+			return null;
+		}
+
+		@Override
+		protected boolean doCheckState() {
+			String fileName = getTextControl().getText();
+			fileName = fileName.trim();
+			if (fileName.isEmpty() && isEmptyStringAllowed()) {
+				return true;
+			}
+			return getProject().getFolder(new Path(fileName).lastSegment()).exists();
+		}
+
+		private Optional<IFolder> getDirectory(final IFolder startingDirectory) {
+			final DirectoryDialog fileDialog = new DirectoryDialog(getShell(), SWT.OPEN | SWT.SHEET);
+			if (startingDirectory.exists()) {
+				fileDialog.setFilterPath(startingDirectory.getFullPath().toPortableString());
+			}
+			String dir = fileDialog.open();
+			if (dir != null) {
+				dir = dir.trim();
+				if (!dir.isEmpty()) {
+					return Optional
+							.of(getProject().getFolder(new Path(dir).makeRelativeTo(getProject().getLocation())));
+				}
+			}
+			return Optional.empty();
+		}
+	}
 }
