@@ -34,5 +34,11 @@
 	        id="org.eclipse.fordiac.ide.bulkeditor.editors.openEditor"
 	        defaultHandler="org.eclipse.fordiac.ide.bulkeditor.editors.OpenBulkEditorHandler"/>
 	</extension>
+	
+	<extension point="org.eclipse.ui.elementFactories">
+    	<factory class="org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorInputFactory"
+             id="org.eclipse.fordiac.ide.bulkeditor.BulkEditorInputFactory">
+    	</factory>
+  	</extension>
 		
 </plugin>

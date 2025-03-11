@@ -83,7 +83,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
@@ -94,6 +93,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private IProject project;
 	private final CommandStack commandStack = new CommandStack();
 	private final Map<TypeEntry, CopyElementRecord> map = new HashMap<>();
+	private BulkEditorSettings settings;
 
 	private Combo modeSelectionDropDown;
 	private Button caseSensitive;
@@ -126,8 +126,9 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		setInput(input);
 		commandStack.addCommandStackEventListener(this);
 
-		if (input instanceof final IFileEditorInput fileInput) {
-			project = fileInput.getFile().getProject();
+		if (input instanceof final BulkEditorInput bulkEditorInput) {
+			this.settings = bulkEditorInput.getSettings();
+			project = bulkEditorInput.getProject();
 			setPartName(getPartName() + ": " + project.getName());
 		}
 	}
@@ -143,9 +144,10 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 		modeSelectionDropDown = new Combo(buttonComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
 		modeSelectionDropDown.setItems("Variable", "Attribute");
-		modeSelectionDropDown.select(0);
+		modeSelectionDropDown.select(settings.modeSelection);
 		modeSelectionDropDown.addListener(SWT.Selection, event -> {
 			changeNatTable(composite, modeSelectionDropDown.getSelectionIndex());
+			settings.modeSelection = modeSelectionDropDown.getSelectionIndex();
 			composite.layout();
 		});
 
@@ -185,14 +187,23 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		WidgetFactory.label(SWT.NONE).layoutData(new GridData(SWT.END, SWT.CENTER, true, false))
 				.create(buttonComposite);
 
-		caseSensitive = WidgetFactory.button(SWT.CHECK).text("Case Sensitive").create(buttonComposite);
-		wholeWord = WidgetFactory.button(SWT.CHECK).text("Whole Word").create(buttonComposite);
-		regularExpression = WidgetFactory.button(SWT.CHECK).text("Regular Expression").create(buttonComposite);
+		caseSensitive = WidgetFactory.button(SWT.CHECK).text("Case Sensitive")
+				.onSelect(event -> settings.nameSubSettings.caseSensitve = caseSensitive.getSelection())
+				.create(buttonComposite);
+		caseSensitive.setSelection(settings.nameSubSettings.caseSensitve);
+		wholeWord = WidgetFactory.button(SWT.CHECK).text("Whole Word")
+				.onSelect(event -> settings.nameSubSettings.caseSensitve = wholeWord.getSelection())
+				.create(buttonComposite);
+		wholeWord.setSelection(settings.nameSubSettings.caseSensitve);
+		regularExpression = WidgetFactory.button(SWT.CHECK).text("Regular Expression")
+				.onSelect(event -> settings.nameSubSettings.caseSensitve = regularExpression.getSelection())
+				.create(buttonComposite);
+		regularExpression.setSelection(settings.nameSubSettings.caseSensitve);
 
 		createSearchForGroup(composite);
 		createSearchInGroup(composite);
 		createScopeGroup(composite);
-		createTable(composite);
+		changeNatTable(composite, settings.modeSelection);
 	}
 
 	private static <T> List<T> mapList(final List<EObject> ori, final Class<T> clazz) {
@@ -259,7 +270,8 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 		nameButton = WidgetFactory.button(SWT.CHECK).text("Name").create(searchGroup);
 		nameField = WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.FILL, true, false))
-				.create(searchGroup);
+				.text(settings.nameSubSettings.textField)
+				.onModify(event -> settings.nameSubSettings.textField = nameField.getText()).create(searchGroup);
 
 		typeButton = WidgetFactory.button(SWT.CHECK).text("Type").create(searchGroup);
 		typeField = WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.FILL, true, false))
@@ -307,10 +319,6 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		projectScopeButton = WidgetFactory.button(SWT.RADIO).text("Project: " + project.getName()).create(scopeGroup);
 		projectScopeButton.setSelection(true);
 		workspaceScopeButton = WidgetFactory.button(SWT.RADIO).text("Workspace").create(scopeGroup);
-	}
-
-	private void createTable(final Composite parent) {
-		changeNatTable(parent, 0);
 	}
 
 	@Override
