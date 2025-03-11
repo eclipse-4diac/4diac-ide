@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -35,9 +34,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
-public class HierarchyManagerRefactoringUtil {
+public final class HierarchyManagerRefactoringUtil {
 
-	private static List<String> ALLOWED_FILE_EXTENSIONS = List.of("sys", "sub"); //$NON-NLS-1$ //$NON-NLS-2$
+	private static final List<String> ALLOWED_FILE_EXTENSIONS = List.of("sys", "sub"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	public static List<IFile> getFilesFromResource(final IResource resource) throws CoreException {
 		final List<IFile> files = new ArrayList<>();
@@ -55,27 +54,26 @@ public class HierarchyManagerRefactoringUtil {
 	}
 
 	public static RootLevel getPlantHierarchy(final IProject project) {
-		final AtomicReference<RootLevel> plantHierarchyRef = new AtomicReference<>();
-
-		Display.getDefault().syncExec(() -> {
+		final PlantHierarchyView phView = Display.getDefault().syncCall(() -> {
 			final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			PlantHierarchyView view = null;
-
-			if (page != null) {
-				view = (PlantHierarchyView) page.findView("org.eclipse.fordiac.ide.hierarchymanager.view"); //$NON-NLS-1$
+			if (page != null && page.findView(
+					"org.eclipse.fordiac.ide.hierarchymanager.view") instanceof final PlantHierarchyView view) { //$NON-NLS-1$
+				return view;
 			}
-
-			if (view != null) {
-				final Object input = view.getCommonViewer().getInput();
-				if (input instanceof final RootLevel rootLevel) {
-					plantHierarchyRef.set(rootLevel);
-				}
-			} else {
-				plantHierarchyRef.set(loadPlantHierarchy(project));
-			}
+			return null;
 		});
 
-		return plantHierarchyRef.get();
+		if (phView != null && project.equals(phView.getCurrentProject()) // only use the viewer if the viewer's project
+																			// is the one we are changing.
+				&& phView.getCommonViewer().getInput() instanceof final RootLevel rootLevel) {
+			return rootLevel;
+		}
+
+		return loadPlantHierarchy(project);
+	}
+
+	public static boolean plantHierachyExists(final IProject project) {
+		return project.getFile(PlantHierarchyView.PLANT_HIERARCHY_FILE_NAME).exists();
 	}
 
 	public static String getOldPath(final IResource element) {
@@ -112,5 +110,9 @@ public class HierarchyManagerRefactoringUtil {
 		hierarchyResouceSet.getLoadOptions().put(XMLResource.OPTION_XML_MAP, map);
 
 		return (RootLevel) PlantHierarchyView.loadHierachyForProject(project, hierarchyResouceSet, loadOptions);
+	}
+
+	private HierarchyManagerRefactoringUtil() {
+		throw new UnsupportedOperationException("Utility class can not be instantiated!"); //$NON-NLS-1$
 	}
 }

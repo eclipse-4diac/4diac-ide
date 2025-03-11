@@ -37,18 +37,18 @@ public class DeleteLibraryElementParticipant extends DeleteParticipant {
 
 	@Override
 	protected boolean initialize(final Object element) {
-
 		if (element instanceof final IResource resource) {
-
-			plantHierarchy = HierarchyManagerRefactoringUtil.getPlantHierarchy(resource.getProject());
-
-			try {
-				this.files = HierarchyManagerRefactoringUtil.getFilesFromResource(resource);
-			} catch (final CoreException e) {
-				return false;
+			if (!HierarchyManagerRefactoringUtil.plantHierachyExists(resource.getProject())) {
+				plantHierarchy = null;
+			} else {
+				plantHierarchy = HierarchyManagerRefactoringUtil.getPlantHierarchy(resource.getProject());
+				try {
+					this.files = HierarchyManagerRefactoringUtil.getFilesFromResource(resource);
+				} catch (final CoreException e) {
+					return false;
+				}
 			}
 		}
-
 		return plantHierarchy != null;
 	}
 
@@ -60,7 +60,6 @@ public class DeleteLibraryElementParticipant extends DeleteParticipant {
 	@Override
 	public RefactoringStatus checkConditions(final IProgressMonitor pm, final CheckConditionsContext context)
 			throws OperationCanceledException {
-
 		return new RefactoringStatus();
 	}
 
@@ -74,7 +73,6 @@ public class DeleteLibraryElementParticipant extends DeleteParticipant {
 			for (final IFile file : files) {
 				final List<Leaf> matches = HierarchyManagerUtil.searchLeaf(plantHierarchy,
 						leaf -> leaf.getContainerFileName().contains(file.getName()));
-
 				leaves.addAll(matches);
 			}
 

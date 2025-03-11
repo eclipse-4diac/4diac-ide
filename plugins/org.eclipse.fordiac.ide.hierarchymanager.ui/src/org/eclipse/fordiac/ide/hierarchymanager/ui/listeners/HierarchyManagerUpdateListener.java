@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.commands.operations.AbstractOperation;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
@@ -46,7 +47,6 @@ public class HierarchyManagerUpdateListener extends QualNameChangeListener {
 	@Override
 	protected List<AbstractOperation> constructExecutableOperations(final QualNameChange qualNameChange,
 			final Object rootLevel) {
-
 		return constructOperation(qualNameChange, rootLevel, false);
 	}
 
@@ -54,7 +54,6 @@ public class HierarchyManagerUpdateListener extends QualNameChangeListener {
 			final boolean isUndo) {
 
 		if (qualNameChange.state() == QualNameChangeState.DELETE_UNDO) {
-
 			return undoDeleteOperations.remove(qualNameChange.oldQualName());
 		}
 
@@ -73,9 +72,7 @@ public class HierarchyManagerUpdateListener extends QualNameChangeListener {
 		for (final Leaf leaf : leafs) {
 			if (qualNameChange.state() == QualNameChangeState.DELETE
 					|| qualNameChange.state() == QualNameChangeState.DELETE_REDO) {
-
 				result.add(new DeleteNodeOperation(leaf));
-
 				storeUndoDeleteOperations(qualNameChange.oldQualName(), leaf);
 			} else {
 				result.add(new UpdateLeafRefOperation(leaf, newRef, identifier));
@@ -87,7 +84,12 @@ public class HierarchyManagerUpdateListener extends QualNameChangeListener {
 
 	@Override
 	protected Object getReceiver(final TypeEntry key) {
-		return HierarchyManagerRefactoringUtil.getPlantHierarchy(key.getFile().getProject());
+		final IProject project = key.getFile().getProject();
+		if (!HierarchyManagerRefactoringUtil.plantHierachyExists(project)) {
+			return null;
+		}
+
+		return HierarchyManagerRefactoringUtil.getPlantHierarchy(project);
 	}
 
 	@Override
@@ -102,7 +104,6 @@ public class HierarchyManagerUpdateListener extends QualNameChangeListener {
 
 	protected void storeUndoDeleteOperations(final String qualName, final Leaf leaf) {
 		final AddLeafOperation op = new AddLeafOperation((Level) leaf.eContainer(), leaf);
-
 		undoDeleteOperations.computeIfAbsent(qualName, k -> new ArrayList<>()).add(op);
 	}
 

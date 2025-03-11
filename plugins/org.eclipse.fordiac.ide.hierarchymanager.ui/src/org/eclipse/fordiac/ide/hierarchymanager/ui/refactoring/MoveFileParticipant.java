@@ -40,20 +40,21 @@ public class MoveFileParticipant extends MoveParticipant {
 
 	@Override
 	protected boolean initialize(final Object element) {
-
 		if (element instanceof final IResource resource) {
-
 			this.element = resource;
 
-			plantHierarchy = HierarchyManagerRefactoringUtil.getPlantHierarchy(resource.getProject());
+			if (!HierarchyManagerRefactoringUtil.plantHierachyExists(resource.getProject())) {
+				plantHierarchy = null;
+			} else {
+				plantHierarchy = HierarchyManagerRefactoringUtil.getPlantHierarchy(resource.getProject());
 
-			try {
-				this.files = HierarchyManagerRefactoringUtil.getFilesFromResource(resource);
-			} catch (final CoreException e) {
-				return false;
+				try {
+					this.files = HierarchyManagerRefactoringUtil.getFilesFromResource(resource);
+				} catch (final CoreException e) {
+					return false;
+				}
 			}
 		}
-
 		return !(plantHierarchy == null || files.isEmpty());
 	}
 
@@ -65,7 +66,6 @@ public class MoveFileParticipant extends MoveParticipant {
 	@Override
 	public RefactoringStatus checkConditions(final IProgressMonitor pm, final CheckConditionsContext context)
 			throws OperationCanceledException {
-
 		return new RefactoringStatus();
 	}
 
@@ -79,7 +79,6 @@ public class MoveFileParticipant extends MoveParticipant {
 			for (final IFile file : files) {
 				final List<Leaf> matches = HierarchyManagerUtil.searchLeaf(plantHierarchy,
 						leaf -> leaf.getContainerFileName().contains(file.getName()));
-
 				leaves.addAll(matches);
 			}
 
