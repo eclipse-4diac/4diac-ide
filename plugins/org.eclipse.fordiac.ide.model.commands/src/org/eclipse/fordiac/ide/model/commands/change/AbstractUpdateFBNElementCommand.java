@@ -478,6 +478,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 			final AbstractConnectionCreateCommand cmd = createConnectionCreateCommand(fbn, source.getType());
 			cmd.setSource(source);
 			cmd.setDestination(dest);
+			cmd.setNegated(oldConn.isNegated());
 			cmd.setVisible(oldConn.isVisible());
 			cmd.setArrangementConstraints(oldConn.getRoutingData());
 			cmd.setElementIndex(fbn.getConnectionIndex(oldConn));

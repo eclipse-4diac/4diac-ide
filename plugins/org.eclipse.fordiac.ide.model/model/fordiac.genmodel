@@ -299,6 +299,11 @@
         <genParameters ecoreParameter="lib.ecore#//Connection/setNegated/negated"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//Connection/isNegated" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.isNegated(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Connection/validateNegatedConnection"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateNegatedConnection(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//Connection/validateNegatedConnection/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//Connection/validateNegatedConnection/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ConnectionRoutingData">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dx1"/>

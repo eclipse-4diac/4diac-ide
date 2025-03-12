@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
@@ -129,8 +130,8 @@ public class ConnectionAnnotations {
 			final Map<Object, Object> context) {
 		final IInterfaceElement src = connection.getSource();
 		final IInterfaceElement dest = connection.getDestination();
-		if (src == null || dest == null) {
-			return true; // ignore incomplete connections
+		if (src == null || dest == null || connection.isNegated()) {
+			return true; // ignore incomplete or negated connections
 		}
 		// basic type check
 		if (!LinkConstraints.typeCheck(src, dest)) {
@@ -350,6 +351,31 @@ public class ConnectionAnnotations {
 
 	private ConnectionAnnotations() {
 		throw new UnsupportedOperationException("Helper class must not be instantiated"); //$NON-NLS-1$
+	}
+
+	public static boolean validateNegatedConnection(final Connection connection, final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
+		if (connection == null || connection.getSource() == null || connection.getDestination() == null) {
+			return false;
+		}
+
+		if (connection.isNegated() && (!connection.getSource().getType().equals(IecTypes.ElementaryTypes.BOOL)
+				|| !connection.getDestination().getType().equals(IecTypes.ElementaryTypes.BOOL)
+				|| hasInOutVar(connection))) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.CONNECTION__VALIDATE_NEGATED_CONNECTION,
+						Messages.ConnectionValidator_NegatedConnectionIsNotValid,
+						FordiacMarkerHelper.getDiagnosticData(connection)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	private static boolean hasInOutVar(final Connection connection) {
+		return (connection.getSource() instanceof final VarDeclaration vd && vd.isInOutVar())
+				|| (connection.getDestination() instanceof final VarDeclaration vd2 && vd2.isInOutVar());
 	}
 
 	public static void setNegated(final HiddenElement connection, final boolean negated) {

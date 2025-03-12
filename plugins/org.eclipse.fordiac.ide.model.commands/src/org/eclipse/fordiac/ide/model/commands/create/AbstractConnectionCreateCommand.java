@@ -70,6 +70,8 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 
 	private boolean visible = true;
 
+	private boolean negated = false;
+
 	private int elementIndex = -1;
 
 	protected AbstractConnectionCreateCommand(final FBNetwork parent) {
@@ -131,6 +133,7 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 		// visible needs to be setup after the connection is added to correctly update
 		// ui
 		connection.setVisible(visible);
+		connection.setNegated(negated);
 
 		if (performMappingCheck) {
 			mirroredConnection = checkAndCreateMirroredConnection();
@@ -261,6 +264,13 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 		this.visible = visible;
 		if (null != mirroredConnection) {
 			mirroredConnection.setVisible(visible);
+		}
+	}
+
+	public void setNegated(final boolean negated) {
+		this.negated = negated;
+		if (null != mirroredConnection) {
+			mirroredConnection.setNegated(negated);
 		}
 	}
 

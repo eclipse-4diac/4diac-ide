@@ -58,6 +58,7 @@ public final class Messages extends NLS {
 	public static String ConnectionValidator_VarInOutOutputSideHasNoWith;
 	public static String ConnectionValidator_VarInOutSourceNotWellDefined;
 	public static String ConnectionValidator_VarInOutStringSizeMismatch;
+	public static String ConnectionValidator_NegatedConnectionIsNotValid;
 	public static String DataTypeExporter_UNSUPPORTED_DATA_TYPE;
 	public static String DataTypeImporter_UNSUPPORTED_DATATYPE_IN_FILE;
 	public static String DataTypeLibrary_InvalidMaxLengthInStringType;

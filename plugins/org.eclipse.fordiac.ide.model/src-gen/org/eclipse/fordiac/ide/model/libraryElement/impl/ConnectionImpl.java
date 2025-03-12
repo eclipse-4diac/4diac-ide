@@ -613,6 +613,16 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	@Override
+	public boolean validateNegatedConnection(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateNegatedConnection(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryElementPackage.CONNECTION__SOURCE:

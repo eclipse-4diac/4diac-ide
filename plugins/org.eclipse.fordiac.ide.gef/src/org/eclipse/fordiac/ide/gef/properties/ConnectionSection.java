@@ -120,8 +120,11 @@ public class ConnectionSection extends AbstractSection {
 		}
 		showConnectionButton.setSelection(getConnection().isVisible());
 
-		final boolean isBooleanConnection = getConnection().getSource().getType() == IecTypes.ElementaryTypes.BOOL
-				&& getConnection().getDestination().getType() == IecTypes.ElementaryTypes.BOOL;
+		boolean isBooleanConnection = false;
+		if (getConnection().getSource() != null && getConnection().getDestination() != null) {
+			isBooleanConnection = getConnection().getSource().getType() == IecTypes.ElementaryTypes.BOOL
+					&& getConnection().getDestination().getType() == IecTypes.ElementaryTypes.BOOL;
+		}
 		negateConnectionLabel.setVisible(isBooleanConnection);
 		negateConnectionButton.setVisible(isBooleanConnection);
 		negateConnectionButton.setSelection(getConnection().isNegated());
