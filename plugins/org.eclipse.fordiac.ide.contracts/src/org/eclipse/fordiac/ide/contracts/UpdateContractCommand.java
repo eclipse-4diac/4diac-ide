@@ -95,7 +95,7 @@ public class UpdateContractCommand extends Command {
 	}
 
 	private SubApp createNewSubapp() {
-		final var resource = fbNetworkElement.getResource();
+		final var resource = fbNetworkElement.isMapped() ? fbNetworkElement.getResource() : null;
 		SubApp subapp = null;
 
 		if (fbNetworkElement instanceof final SubApp s) {
