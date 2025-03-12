@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2020, 2025 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -55,7 +55,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 	private static final String VARIABLE6 = "VAR6"; //$NON-NLS-1$
 	private static final String INNER_STRUCT_OBJECT1 = "innerstruct1"; //$NON-NLS-1$
 	private static final String INNER_STRUCT_OBJECT2 = "innerstruct2"; //$NON-NLS-1$
-	private static final String SEP = "."; //$NON-NLS-1$
+	private static final String SEP = "%"; //$NON-NLS-1$
 
 	protected static class State extends CommandTestBase.StateBase {
 

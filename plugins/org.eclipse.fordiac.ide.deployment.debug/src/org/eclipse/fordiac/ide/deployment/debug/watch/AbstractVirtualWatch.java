@@ -52,7 +52,7 @@ public abstract class AbstractVirtualWatch extends AbstractVariableWatch {
 		}
 		for (final IWatch watch : watches) {
 			watch.updateValue(watchData);
-			if (!watch.isAlive()) {
+			if (watch.hasError()) {
 				return;
 			}
 		}

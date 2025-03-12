@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2024 fortiss GmbH, Johannes Kepler University Linz,
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Kepler University Linz,
  * 							Primetals Technologies Austria GmbH,
  *                          Martin Erich Jobst
  *
@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -249,8 +250,10 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		return null;
 	}
 
-	private Object getPinName() {
-		return getType().getName() != null ? getType().getName() : ""; //$NON-NLS-1$
+	private String getPinName() {
+		final String pinName = (getType() instanceof final MemberVarDeclaration memVar) ? memVar.getDisplayName()
+				: getType().getName();
+		return pinName != null ? pinName : ""; //$NON-NLS-1$
 	}
 
 	private void refreshParameterVisibility() {

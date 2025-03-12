@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -42,6 +42,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  * Helper class for methods that will be - accessed from the model
  */
 public final class ConfigurableFBManagement {
+
+	public static final String MEMBER_VAR_SEPARATOR = "%"; //$NON-NLS-1$
 
 	static void updateFbConfiguration(final ConfigurableFB fb) {
 		if (fb instanceof ConfigurableMoveFB) {
@@ -175,11 +177,17 @@ public final class ConfigurableFBManagement {
 		return sb.substring(0, sb.length() - 1); // avoid adding "," in the end
 	}
 
-	static String getMemberVarName(final MemberVarDeclaration varDecl) {
+	static String getMemberVarName(final MemberVarDeclaration varDecl, final String separator) {
 		final StringBuilder sb = new StringBuilder();
-		varDecl.getParentNames().forEach(name -> sb.append(name + ".")); //$NON-NLS-1$
+		varDecl.getParentNames().forEach(name -> sb.append(name).append(separator));
 		sb.append(varDecl.getVarName());
 		return sb.toString();
+	}
+
+	static void setMemberVarName(final MemberVarDeclaration varDecl, final String name) {
+		// ensure that we are always only setting the last segment as name
+		final String[] subNames = ConfigurableFBManagement.splitMemberVarName(name);
+		varDecl.setName(subNames[subNames.length - 1]);
 	}
 
 	static void updateStructManipulatorConfiguration(final StructManipulator muxer) {
@@ -251,7 +259,7 @@ public final class ConfigurableFBManagement {
 				final StructuredType structType = (StructuredType) demux.getDataType();
 				final String[] memberVarNames = visibleChildren.trim().split(","); //$NON-NLS-1$
 				for (final String memberVarName : memberVarNames) {
-					final String[] subnames = memberVarName.trim().split("\\."); //$NON-NLS-1$
+					final String[] subnames = splitMemberVarName(memberVarName);
 					final VarDeclaration varInStruct = findVarDeclarationInStruct(structType, subnames);
 					if (varInStruct != null) {
 						final MemberVarDeclaration pin = copyVarAsMember(varInStruct, false);
@@ -269,6 +277,16 @@ public final class ConfigurableFBManagement {
 			// configure pin
 			getStructuredTypePin(demux).setType(demux.getDataType());
 		}
+	}
+
+	static String[] splitMemberVarName(final String memberVarName) {
+		final String trimmedMemberVarName = memberVarName.trim();
+		String[] subnames = trimmedMemberVarName.split(MEMBER_VAR_SEPARATOR);
+		if (subnames.length == 1) {
+			// check if it is an old style member var name
+			subnames = trimmedMemberVarName.split("\\."); //$NON-NLS-1$
+		}
+		return subnames;
 	}
 
 	private static VarDeclaration findVarDeclarationInStruct(final StructuredType struct, final String[] subnames) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +17,7 @@ import java.util.Objects;
 
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.fordiac.ide.debug.value.IEvaluatorDebugValue;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugVariable;
 import org.eclipse.fordiac.ide.deployment.debug.Messages;
@@ -25,13 +26,14 @@ import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractVariableWatch extends DeploymentDebugVariable implements IVariableWatch {
 
 	private final Resource resource;
 	private final ITypedElement element;
 	private long aliveCount;
+	private String invalidValue;
+	private DeploymentDebugErrorValue cachedErrorValue;
 	private boolean pinned;
 	private Source source = Source.BREAKPOINT;
 
@@ -47,27 +49,63 @@ public abstract class AbstractVariableWatch extends DeploymentDebugVariable impl
 		this.element = element;
 	}
 
+	@Override
+	public IEvaluatorDebugValue getValue() {
+		if (hasError()) {
+			return getErrorValue();
+		}
+		return super.getValue();
+	}
+
 	protected void updateValue(final String value) {
+		aliveCount = getDebugTarget().getVariableUpdateCount();
 		try {
 			getInternalVariable().setValue(value, getDebugTarget().getTypeLibrary());
-			aliveCount = getDebugTarget().getVariableUpdateCount();
+			invalidValue = null;
 		} catch (final Exception e) {
-			FordiacLogHelper.logWarning("Invalid watch value for " + getQualifiedName() + ": " + value, e); //$NON-NLS-1$ //$NON-NLS-2$
+			invalidValue = value;
 		}
 	}
 
 	protected void updateValue(final Value value) {
+		aliveCount = getDebugTarget().getVariableUpdateCount();
 		try {
 			getInternalVariable().setValue(value);
-			aliveCount = getDebugTarget().getVariableUpdateCount();
+			invalidValue = null;
 		} catch (final Exception e) {
-			FordiacLogHelper.logWarning("Invalid watch value for " + getQualifiedName() + ": " + value, e); //$NON-NLS-1$ //$NON-NLS-2$
+			invalidValue = value.toString();
 		}
 	}
 
 	@Override
 	public boolean isAlive() {
 		return aliveCount == getDebugTarget().getVariableUpdateCount();
+	}
+
+	@Override
+	public boolean hasError() {
+		return !isAlive() || invalidValue != null;
+	}
+
+	protected IEvaluatorDebugValue getErrorValue() {
+		final String errorMessage = getErrorMessage();
+		if (cachedErrorValue == null || !cachedErrorValue.getMessage().equals(errorMessage)) {
+			cachedErrorValue = new DeploymentDebugErrorValue(errorMessage, getDebugTarget());
+		}
+		return cachedErrorValue;
+	}
+
+	protected String getErrorMessage() {
+		if (!isAlive()) {
+			if (!getDebugTarget().isAlive()) {
+				return Messages.AbstractVariableWatch_Disconnected;
+			}
+			return Messages.AbstractVariableWatch_NoValue;
+		}
+		if (invalidValue != null) {
+			return MessageFormat.format(Messages.AbstractVariableWatch_InvalidValue, invalidValue);
+		}
+		return Messages.AbstractVariableWatch_UnknownError;
 	}
 
 	@Override

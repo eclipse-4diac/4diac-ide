@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,46 +12,49 @@
  */
 package org.eclipse.fordiac.ide.model.search.st;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource;
-import org.eclipse.xtext.EcoreUtil2;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmParseUtil;
+import org.eclipse.xtext.parser.IParseResult;
 
 public class DirectlyDerivedTypeSearchSupport extends StructuredTextSearchSupport {
 	private final DirectlyDerivedType directlyDerivedType;
-	private STInitializerExpressionSource parseResult;
+	private IParseResult parseResult;
 
 	public DirectlyDerivedTypeSearchSupport(final DirectlyDerivedType directlyDerivedType) {
 		this.directlyDerivedType = directlyDerivedType;
 	}
 
 	@Override
-	public Stream<EObject> prepare() throws CoreException {
-		return Stream.<EObject>of(prepareInitialValue()).filter(Objects::nonNull);
+	public Set<String> getImportedNamespaces() {
+		final Set<String> result = super.getImportedNamespaces();
+		if (!PackageNameHelper.getPackageName(directlyDerivedType.getBaseType()).isEmpty()) {
+			result.add(PackageNameHelper.getFullTypeName(directlyDerivedType.getBaseType()));
+		}
+		return result;
 	}
 
-	protected STInitializerExpressionSource prepareInitialValue() throws CoreException {
+	@Override
+	public Stream<EObject> prepare() {
+		return Optional.ofNullable(prepareInitialValue()).map(IParseResult::getRootASTElement).stream();
+	}
+
+	protected IParseResult prepareInitialValue() {
 		if (parseResult == null && directlyDerivedType.getInitialValue() != null
 				&& !directlyDerivedType.getInitialValue().isBlank()) {
-			final List<String> errors = new ArrayList<>();
-			parseResult = StructuredTextParseUtil.parse(directlyDerivedType.getInitialValue(),
-					directlyDerivedType.eResource() != null ? directlyDerivedType.eResource().getURI() : null,
-					directlyDerivedType.getBaseType(),
-					EcoreUtil2.getContainerOfType(directlyDerivedType, LibraryElement.class), null, errors, null, null);
-			if (parseResult == null) {
-				throw new CoreException(Status.error(errors.stream().collect(Collectors.joining(", ")))); //$NON-NLS-1$
-			}
+			parseResult = STAlgorithmParseUtil.parseInitializerExpression(directlyDerivedType.getInitialValue(),
+					directlyDerivedType.getBaseType(), directlyDerivedType);
 		}
 		return parseResult;
+	}
+
+	@Override
+	public boolean isIncompleteResult() {
+		return parseResult != null && parseResult.hasSyntaxErrors();
 	}
 }

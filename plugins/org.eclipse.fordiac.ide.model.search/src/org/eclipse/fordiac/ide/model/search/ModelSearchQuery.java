@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -381,14 +380,11 @@ public class ModelSearchQuery implements ISearchQuery {
 		}
 
 		if (searchSupport != null) {
-			try {
-				final IModelMatcher matcher = new STMatcher(this::compareStrings);
-				searchSupport.search(matcher).filter(TextMatch.class::isInstance).map(TextMatch.class::cast)
-						.map(match -> new Match(modelElement, Match.UNIT_LINE, match.getOffset(), match.getLine() + 1))
-						.forEach(match -> searchResult.addMatch(match));
-			} catch (final CoreException e) {
-				isIncompleteResult = true;
-			}
+			final IModelMatcher matcher = new STMatcher(this::compareStrings);
+			searchSupport.search(matcher).filter(TextMatch.class::isInstance).map(TextMatch.class::cast)
+					.map(match -> new Match(modelElement, Match.UNIT_LINE, match.getOffset(), match.getLine() + 1))
+					.forEach(match -> searchResult.addMatch(match));
+			isIncompleteResult |= searchSupport.isIncompleteResult();
 		}
 	}
 

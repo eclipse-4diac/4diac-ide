@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
 import org.eclipse.fordiac.ide.application.editparts.InstanceContract;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeContractCommand;
+import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -37,6 +38,7 @@ public class UpdateContractCommand extends Command {
 	private NewSubAppCommand subappcmd;
 	private ChangeContractCommand ccc;
 	private ToggleSubAppRepresentationCommand toggle;
+	private Command mappingcmd;
 	private String contract;
 	private SubApp subapp;
 
@@ -67,6 +69,9 @@ public class UpdateContractCommand extends Command {
 	@Override
 	public void undo() {
 		ccc.undo();
+		if (mappingcmd != null) {
+			mappingcmd.undo();
+		}
 		if (toggle != null) {
 			toggle.undo();
 		}
@@ -83,10 +88,14 @@ public class UpdateContractCommand extends Command {
 		if (toggle != null) {
 			toggle.redo();
 		}
+		if (mappingcmd != null) {
+			mappingcmd.redo();
+		}
 		ccc.redo();
 	}
 
 	private SubApp createNewSubapp() {
+		final var resource = fbNetworkElement.getResource();
 		SubApp subapp = null;
 
 		if (fbNetworkElement instanceof final SubApp s) {
@@ -119,6 +128,14 @@ public class UpdateContractCommand extends Command {
 		if (toggle.canExecute()) {
 			toggle.execute();
 		}
+
+		if (resource != null) {
+			mappingcmd = MapToCommand.createMapToCommand(subapp, resource);
+			if (mappingcmd.canExecute()) {
+				mappingcmd.execute();
+			}
+		}
+
 		return subapp;
 	}
 }

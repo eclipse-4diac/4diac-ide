@@ -276,7 +276,7 @@
    </extension>
     <extension
           point="org.eclipse.fordiac.ide.model.commands.QualNameChangeListener">
-          <listener class = "org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierachyManagerUpdateListener"/>
+          <listener class = "org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerUpdateListener"/>
     </extension>
 	<extension
 			point="org.eclipse.ltk.core.refactoring.deleteParticipants">
@@ -303,5 +303,57 @@
 				</or>
 			</enablement>
 		</deleteParticipant>
-	</extension>
+    </extension>
+    <extension point="org.eclipse.ltk.core.refactoring.moveParticipants">
+    	<moveParticipant
+    		class="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.MoveFileParticipant"
+    		id="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.moveFileParticipant"
+    		name="moveFileRefactor"
+    		>
+		<enablement>
+			<or>
+				<instanceof value="org.eclipse.core.resources.IFolder"/>
+				<and>
+					<instanceof value="org.eclipse.core.resources.IFile"/>
+					<or>
+						<test
+								forcePluginActivation="true"
+								property="org.eclipse.core.resources.extension"
+								value="sys"/>
+						<test
+								forcePluginActivation="true"
+								property="org.eclipse.core.resources.extension"
+								value="sub"/>
+					</or>
+				</and>
+			</or>
+          </enablement>
+    	</moveParticipant>
+    </extension>
+    <extension point="org.eclipse.ltk.core.refactoring.renameParticipants">
+    	<renameParticipant
+    		class="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.RenameFileParticipant"
+    		id="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.renameFileParticipant"
+    		name="renameFileRefactor"
+    		>
+		<enablement>
+			<or>
+				<instanceof value="org.eclipse.core.resources.IFolder"/>
+				<and>
+					<instanceof value="org.eclipse.core.resources.IFile"/>
+					<or>
+						<test
+								forcePluginActivation="true"
+								property="org.eclipse.core.resources.extension"
+								value="sys"/>
+						<test
+								forcePluginActivation="true"
+								property="org.eclipse.core.resources.extension"
+								value="sub"/>
+					</or>
+				</and>
+			</or>
+          </enablement>
+    	</renameParticipant>
+    </extension>
 </plugin>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search;
 
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.CoreException;
@@ -28,5 +29,19 @@ public interface ISearchSupport {
 	 * @return The matches
 	 * @throws CoreException if there are any exception during the search
 	 */
-	Stream<Match> search(IModelMatcher matcher) throws CoreException;
+	Stream<Match> search(IModelMatcher matcher);
+
+	/**
+	 * Get the (actually used) imported namespaces of the target element
+	 *
+	 * @return The imported namespaces
+	 */
+	Set<String> getImportedNamespaces();
+
+	/**
+	 * Check if there were any errors that may lead to an incomplete result
+	 *
+	 * @return true if the result may be incomplete, false otherwise
+	 */
+	boolean isIncompleteResult();
 }

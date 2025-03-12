@@ -329,24 +329,24 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.Offset");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cOffsetKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Assignment cTimeAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cTimeTimeExprParserRuleCall_1_0 = (RuleCall)cTimeAssignment_1.eContents().get(0);
+		private final Assignment cIntervalAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cIntervalIntervalParserRuleCall_1_0 = (RuleCall)cIntervalAssignment_1.eContents().get(0);
 		
 		//Offset:
-		//    "offset" time=TimeExpr;
+		//    "offset" interval=Interval;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//"offset" time=TimeExpr
+		//"offset" interval=Interval
 		public Group getGroup() { return cGroup; }
 		
 		//"offset"
 		public Keyword getOffsetKeyword_0() { return cOffsetKeyword_0; }
 		
-		//time=TimeExpr
-		public Assignment getTimeAssignment_1() { return cTimeAssignment_1; }
+		//interval=Interval
+		public Assignment getIntervalAssignment_1() { return cIntervalAssignment_1; }
 		
-		//TimeExpr
-		public RuleCall getTimeTimeExprParserRuleCall_1_0() { return cTimeTimeExprParserRuleCall_1_0; }
+		//Interval
+		public RuleCall getIntervalIntervalParserRuleCall_1_0() { return cIntervalIntervalParserRuleCall_1_0; }
 	}
 	public class ReactionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.Reaction");
@@ -934,7 +934,7 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		private final Assignment cUnitAssignment_1_5 = (Assignment)cGroup_1.eContents().get(5);
 		private final RuleCall cUnitUnitParserRuleCall_1_5_0 = (RuleCall)cUnitAssignment_1_5.eContents().get(0);
 		
-		// // component name implicit, isInput used as bool
+		// // component name implicit, isInput used as boolean
 		//Interval:
 		//    time=TimeExpr |
 		//    (b1=Boundary v1=Value "," v2=Value b2=Boundary unit=Unit);
@@ -1457,7 +1457,7 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 	}
 	
 	//Offset:
-	//    "offset" time=TimeExpr;
+	//    "offset" interval=Interval;
 	public OffsetElements getOffsetAccess() {
 		return pOffset;
 	}
@@ -1554,7 +1554,7 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		return getPortAccess().getRule();
 	}
 	
-	// // component name implicit, isInput used as bool
+	// // component name implicit, isInput used as boolean
 	//Interval:
 	//    time=TimeExpr |
 	//    (b1=Boundary v1=Value "," v2=Value b2=Boundary unit=Unit);

@@ -90,7 +90,17 @@ public class MemberVarDeclarationImpl extends VarDeclarationImpl implements Memb
 	 */
 	@Override
 	public String getName() {
-		return ConfigurableFBManagement.getMemberVarName(this);
+		return ConfigurableFBManagement.getMemberVarName(this, ConfigurableFBManagement.MEMBER_VAR_SEPARATOR);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getDisplayName() {
+		return ConfigurableFBManagement.getMemberVarName(this, ".");   //$NON-NLS-1$
 	}
 
 	/**
@@ -101,6 +111,18 @@ public class MemberVarDeclarationImpl extends VarDeclarationImpl implements Memb
 	@Override
 	public String getVarName() {
 		return super.getName();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setName(final String name) {
+		// ensure that we are always only setting the last segment as name
+		final String[] subNames = ConfigurableFBManagement.splitMemberVarName(name);
+		super.setName(subNames[subNames.length - 1]);
 	}
 
 	/**

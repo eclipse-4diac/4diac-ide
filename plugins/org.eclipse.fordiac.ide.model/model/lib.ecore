@@ -1773,13 +1773,24 @@
   <eClassifiers xsi:type="ecore:EClass" name="MemberVarDeclaration" eSuperTypes="#//VarDeclaration">
     <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return ConfigurableFBManagement.getMemberVarName(this);"/>
+        <details key="body" value="return ConfigurableFBManagement.getMemberVarName(this, ConfigurableFBManagement.MEMBER_VAR_SEPARATOR);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getDisplayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return ConfigurableFBManagement.getMemberVarName(this, &quot;.&quot;);   //$NON-NLS-1$"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getVarName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return super.getName();"/>
       </eAnnotations>
+    </eOperations>
+    <eOperations name="setName">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// ensure that we are always only setting the last segment as name&#xA;final String[] subNames = ConfigurableFBManagement.splitMemberVarName(name);&#xA;super.setName(subNames[subNames.length - 1]);"/>
+      </eAnnotations>
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="parentNames" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

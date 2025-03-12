@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,60 +12,60 @@
  */
 package org.eclipse.fordiac.ide.model.search.st;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Set;
 import java.util.stream.Stream;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration;
-import org.eclipse.xtext.EcoreUtil2;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmParseUtil;
+import org.eclipse.xtext.parser.IParseResult;
 
 public class VarDeclarationSearchSupport extends StructuredTextSearchSupport {
 	private final VarDeclaration varDeclaration;
-	private STTypeDeclaration parseResultType;
-	private STInitializerExpressionSource parseResult;
+	private IParseResult parseResultType;
+	private IParseResult parseResult;
 
 	public VarDeclarationSearchSupport(final VarDeclaration varDeclaration) {
 		this.varDeclaration = varDeclaration;
 	}
 
 	@Override
-	public Stream<EObject> prepare() throws CoreException {
-		return Stream.of(prepareResultType(), prepareInitialValue()).filter(Objects::nonNull);
+	public Set<String> getImportedNamespaces() {
+		final Set<String> result = super.getImportedNamespaces();
+		if (!PackageNameHelper.getPackageName(varDeclaration.getType()).isEmpty()) {
+			result.add(PackageNameHelper.getFullTypeName(varDeclaration.getType()));
+		}
+		return result;
 	}
 
-	protected STTypeDeclaration prepareResultType() throws CoreException {
+	@Override
+	public Stream<EObject> prepare() {
+		return Stream.of(prepareResultType(), prepareInitialValue()).filter(Objects::nonNull)
+				.map(IParseResult::getRootASTElement);
+	}
+
+	protected IParseResult prepareResultType() {
 		if (parseResultType == null && varDeclaration.isArray()) {
-			final List<String> errors = new ArrayList<>();
-			parseResultType = StructuredTextParseUtil.parseType(varDeclaration, errors, null, null);
-			if (parseResultType == null) {
-				throw new CoreException(Status.error(errors.stream().collect(Collectors.joining(", ")))); //$NON-NLS-1$
-			}
+			parseResultType = STAlgorithmParseUtil.parseTypeDeclaration(varDeclaration.getFullTypeName(),
+					varDeclaration);
 		}
 		return parseResultType;
 	}
 
-	protected STInitializerExpressionSource prepareInitialValue() throws CoreException {
+	protected IParseResult prepareInitialValue() {
 		if (parseResult == null && varDeclaration.getValue() != null && varDeclaration.getValue().getValue() != null
 				&& !varDeclaration.getValue().getValue().isBlank()) {
-			final List<String> errors = new ArrayList<>();
-			parseResult = StructuredTextParseUtil.parse(varDeclaration.getValue().getValue(),
-					varDeclaration.eResource() != null ? varDeclaration.eResource().getURI() : null,
-					VariableOperations.evaluateResultType(varDeclaration),
-					EcoreUtil2.getContainerOfType(varDeclaration, LibraryElement.class), null, errors, null, null);
-			if (parseResult == null) {
-				throw new CoreException(Status.error(errors.stream().collect(Collectors.joining(", ")))); //$NON-NLS-1$
-			}
+			parseResult = STAlgorithmParseUtil.parseInitializerExpression(varDeclaration.getValue().getValue(), null,
+					varDeclaration);
 		}
 		return parseResult;
+	}
+
+	@Override
+	public boolean isIncompleteResult() {
+		return (parseResultType != null && parseResultType.hasSyntaxErrors())
+				|| (parseResult != null && parseResult.hasSyntaxErrors());
 	}
 }

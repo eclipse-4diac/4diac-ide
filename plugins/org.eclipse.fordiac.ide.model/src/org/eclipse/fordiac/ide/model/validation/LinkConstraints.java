@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 
@@ -172,7 +173,8 @@ public final class LinkConstraints {
 		}
 		// if source has generic type, it adapts to the target, which must fall into the
 		// generic type category
-		if (GenericTypes.isAnyType(sourceType) && sourceType.isAssignableFrom(targetType)) {
+		if ((GenericTypes.isAnyType(sourceType) || EventTypeLibrary.isGenericEventType(sourceType))
+				&& sourceType.isAssignableFrom(targetType)) {
 			return true;
 		}
 		return targetType.isAssignableFrom(sourceType);

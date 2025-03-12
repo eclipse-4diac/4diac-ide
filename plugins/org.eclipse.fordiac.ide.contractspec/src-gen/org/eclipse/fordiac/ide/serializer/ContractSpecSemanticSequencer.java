@@ -308,16 +308,16 @@ public class ContractSpecSemanticSequencer extends AbstractDelegatingSemanticSeq
 	 *     Offset returns Offset
 	 *
 	 * Constraint:
-	 *     time=TimeExpr
+	 *     interval=Interval
 	 * </pre>
 	 */
 	protected void sequence_Offset(ISerializationContext context, Offset semanticObject) {
 		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, ContractSpecPackage.Literals.OFFSET__TIME) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ContractSpecPackage.Literals.OFFSET__TIME));
+			if (transientValues.isValueTransient(semanticObject, ContractSpecPackage.Literals.OFFSET__INTERVAL) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ContractSpecPackage.Literals.OFFSET__INTERVAL));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getOffsetAccess().getTimeTimeExprParserRuleCall_1_0(), semanticObject.getTime());
+		feeder.accept(grammarAccess.getOffsetAccess().getIntervalIntervalParserRuleCall_1_0(), semanticObject.getInterval());
 		feeder.finish();
 	}
 	

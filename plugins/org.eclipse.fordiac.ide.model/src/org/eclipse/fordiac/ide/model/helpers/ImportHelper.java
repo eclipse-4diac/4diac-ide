@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -147,7 +147,8 @@ public final class ImportHelper {
 		return importedName;
 	}
 
-	public static void organizeImports(final LibraryElement libraryElement, final Set<String> usedTypes) {
+	public static void organizeImports(final LibraryElement libraryElement, final Set<String> usedTypes,
+			final boolean remove) {
 		final String packageName = PackageNameHelper.getPackageName(libraryElement);
 		final EList<Import> imports = getMutableImports(libraryElement);
 
@@ -161,7 +162,11 @@ public final class ImportHelper {
 				// construct new set from values
 				.values());
 		// remove unnecessary imports (and existing imports from imported)
-		imports.removeIf(imp -> !imported.remove(imp.getImportedNamespace()));
+		if (remove) {
+			imports.removeIf(imp -> !imported.remove(imp.getImportedNamespace()));
+		} else {
+			imports.forEach(imp -> imported.remove(imp.getImportedNamespace()));
+		}
 		// create and add new imports based on imported
 		imported.stream().map(ImportHelper::createImport).forEachOrdered(imports::add);
 		// sort imports

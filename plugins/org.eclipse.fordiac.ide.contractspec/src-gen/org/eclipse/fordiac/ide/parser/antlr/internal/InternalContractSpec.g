@@ -574,18 +574,18 @@ ruleOffset returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getOffsetAccess().getTimeTimeExprParserRuleCall_1_0());
+					newCompositeNode(grammarAccess.getOffsetAccess().getIntervalIntervalParserRuleCall_1_0());
 				}
-				lv_time_1_0=ruleTimeExpr
+				lv_interval_1_0=ruleInterval
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getOffsetRule());
 					}
 					set(
 						$current,
-						"time",
-						lv_time_1_0,
-						"org.eclipse.fordiac.ide.ContractSpec.TimeExpr");
+						"interval",
+						lv_interval_1_0,
+						"org.eclipse.fordiac.ide.ContractSpec.Interval");
 					afterParserOrEnumRuleCall();
 				}
 			)

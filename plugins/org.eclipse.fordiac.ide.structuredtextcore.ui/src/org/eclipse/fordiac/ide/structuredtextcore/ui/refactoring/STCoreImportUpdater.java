@@ -78,7 +78,7 @@ public class STCoreImportUpdater {
 	}
 
 	protected static boolean matchesImport(final Delta delta, final QualifiedName imported) {
-		return delta.getSnapshot().getDescriptions().stream()
+		return delta.getSnapshot() != null && delta.getSnapshot().getDescriptions().stream()
 				.anyMatch(desc -> desc.getQualifiedName().equals(imported));
 	}
 

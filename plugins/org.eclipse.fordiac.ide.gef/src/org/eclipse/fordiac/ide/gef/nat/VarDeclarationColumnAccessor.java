@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -50,7 +51,8 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 	@Override
 	public Object getDataValue(final VarDeclaration rowObject, final VarDeclarationTableColumn column) {
 		return switch (column) {
-		case NAME -> rowObject.getName();
+		case NAME ->
+			(rowObject instanceof final MemberVarDeclaration memVar) ? memVar.getDisplayName() : rowObject.getName();
 		case TYPE -> rowObject.getFullTypeName();
 		case COMMENT -> CommentHelper.getInstanceComment(rowObject);
 		case INITIAL_VALUE -> getInitialValue(rowObject);

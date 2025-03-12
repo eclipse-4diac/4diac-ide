@@ -103,9 +103,11 @@ final class STFunctionParseUtil {
 			STCoreResource.OPTION_PLAIN_ST -> Boolean.TRUE
 		})
 	}
-	
+
 	def static Set<String> collectUsedTypes(EObject object) {
 		val qualifiedNameConverter = SERVICE_PROVIDER_FCT.get(IQualifiedNameConverter)
-		SERVICE_PROVIDER_FCT.get(STCoreTypeUsageCollector).collectUsedTypes(object).map[qualifiedNameConverter.toString(it)].toSet
+		SERVICE_PROVIDER_FCT.get(STCoreTypeUsageCollector).includeFullyQualifiedReferences.collectUsedTypes(object).map [
+			qualifiedNameConverter.toString(it)
+		].toSet
 	}
 }

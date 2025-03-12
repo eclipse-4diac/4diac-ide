@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Offset#getTime <em>Time</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Offset#getInterval <em>Interval</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getOffset()
@@ -34,25 +34,25 @@ import org.eclipse.emf.ecore.EObject;
 public interface Offset extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Time</b></em>' containment reference.
+   * Returns the value of the '<em><b>Interval</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Time</em>' containment reference.
-   * @see #setTime(TimeExpr)
-   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getOffset_Time()
+   * @return the value of the '<em>Interval</em>' containment reference.
+   * @see #setInterval(Interval)
+   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getOffset_Interval()
    * @model containment="true"
    * @generated
    */
-  TimeExpr getTime();
+  Interval getInterval();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Offset#getTime <em>Time</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Offset#getInterval <em>Interval</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Time</em>' containment reference.
-   * @see #getTime()
+   * @param value the new value of the '<em>Interval</em>' containment reference.
+   * @see #getInterval()
    * @generated
    */
-  void setTime(TimeExpr value);
+  void setInterval(Interval value);
 
 } // Offset

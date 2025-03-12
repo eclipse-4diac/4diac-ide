@@ -61,7 +61,7 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 	private static final String PLANT_HIERARCHY_PROJECT = "PlantHierarchy.Project"; //$NON-NLS-1$
 	public static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION = "HIER"; //$NON-NLS-1$
 	public static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION_WITH_DOT = "." + PLANT_HIERARCHY_FILE_NAME_EXTENSION; //$NON-NLS-1$
-	private static final String PLANT_HIERARCHY_FILE_NAME = ".plant" //$NON-NLS-1$
+	public static final String PLANT_HIERARCHY_FILE_NAME = ".plant" //$NON-NLS-1$
 			+ PLANT_HIERARCHY_FILE_NAME_EXTENSION_WITH_DOT.toLowerCase();
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
@@ -197,7 +197,7 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 		return null;
 	}
 
-	public static EObject createNewHierarchyFile(final IFile file, final URI uri,
+	private static EObject createNewHierarchyFile(final IFile file, final URI uri,
 			final ResourceSet hierarchyResouceSet) {
 		Resource resource = hierarchyResouceSet.getResource(uri, false);
 		if (resource == null) {

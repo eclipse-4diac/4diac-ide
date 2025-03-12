@@ -103,8 +103,8 @@ class StructuredTextParseUtil {
 			rootASTElement as STAlgorithmSource
 	}
 
-	def static STInitializerExpressionSource validate(String expression, URI uri, INamedElement expectedType, LibraryElement type,
-		Collection<? extends EObject> additionalContent, List<Issue> issues) {
+	def static STInitializerExpressionSource validate(String expression, URI uri, INamedElement expectedType,
+		LibraryElement type, Collection<? extends EObject> additionalContent, List<Issue> issues) {
 		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
 		expression.parse(parser.grammarAccess.STInitializerExpressionSourceRule, uri, expectedType, type,
 			additionalContent, issues).rootASTElement as STInitializerExpressionSource
@@ -144,10 +144,11 @@ class StructuredTextParseUtil {
 		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
 		// use context from FB type since the type declaration is in the context of the FB type (and not an instance)
 		val typeVariable = decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name) ?: decl
-		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, typeVariable?.eResource?.URI, null, decl.name,
-			typeVariable.getContainerOfType(LibraryElement), null, errors, warnings, infos)?.rootASTElement as STTypeDeclaration
+		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, typeVariable?.eResource?.URI, null,
+			decl.name, typeVariable.getContainerOfType(LibraryElement), null, errors, warnings, infos)?.
+			rootASTElement as STTypeDeclaration
 	}
-	
+
 	def private static IParseResult parse(String text, ParserRule entryPoint, String name, LibraryElement type,
 		List<String> errors, List<String> warnings, List<String> infos) {
 		text.parse(entryPoint, type?.eResource?.URI, null, name, type, null, errors, warnings, infos)
@@ -185,9 +186,11 @@ class StructuredTextParseUtil {
 				STResource.OPTION_EXPECTED_TYPE -> expectedType
 			})
 	}
-	
+
 	def static Set<String> collectUsedTypes(EObject object) {
 		val qualifiedNameConverter = SERVICE_PROVIDER_FBT.get(IQualifiedNameConverter)
-		SERVICE_PROVIDER_FBT.get(STCoreTypeUsageCollector).collectUsedTypes(object).map[qualifiedNameConverter.toString(it)].toSet
+		SERVICE_PROVIDER_FBT.get(STCoreTypeUsageCollector).includeFullyQualifiedReferences.collectUsedTypes(object).map [
+			qualifiedNameConverter.toString(it)
+		].toSet
 	}
 }

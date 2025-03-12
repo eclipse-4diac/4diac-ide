@@ -16,54 +16,26 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
-import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
-import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceFactoryImpl;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.AbstractHierarchyHandler;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.AbstractChangeHierarchyOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.AddLeafOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.DeleteNodeOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.UpdateLeafRefOperation;
+import org.eclipse.fordiac.ide.hierarchymanager.ui.util.HierarchyManagerRefactoringUtil;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.util.HierarchyManagerUtil;
-import org.eclipse.fordiac.ide.hierarchymanager.ui.view.PlantHierarchyView;
 import org.eclipse.fordiac.ide.model.commands.QualNameChange;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 
-public class HierachyManagerUpdateListener extends QualNameChangeListener {
-
-	public static EObject loadPlantHierachy(final IProject project) {
-		final Map<String, Object> loadOptions = new HashMap<>();
-		final ResourceSet hierarchyResouceSet = new ResourceSetImpl();
-		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
-				PlantHierarchyView.PLANT_HIERARCHY_FILE_NAME_EXTENSION, //
-				new HierarchyResourceFactoryImpl());
-		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
-				PlantHierarchyView.PLANT_HIERARCHY_FILE_NAME_EXTENSION.toLowerCase(), //
-				new HierarchyResourceFactoryImpl());
-		loadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
-		final XMLMapImpl map = new XMLMapImpl();
-		map.setNoNamespacePackage(HierarchyPackage.eINSTANCE);
-		loadOptions.put(XMLResource.OPTION_XML_MAP, map);
-		hierarchyResouceSet.getLoadOptions().put(XMLResource.OPTION_XML_MAP, map);
-		return PlantHierarchyView.loadHierachyForProject(project, hierarchyResouceSet, loadOptions);
-	}
+public class HierarchyManagerUpdateListener extends QualNameChangeListener {
 
 	private final HashMap<String, List<AbstractOperation>> undoDeleteOperations = new HashMap<>();
 
@@ -75,16 +47,13 @@ public class HierachyManagerUpdateListener extends QualNameChangeListener {
 	@Override
 	protected List<AbstractOperation> constructExecutableOperations(final QualNameChange qualNameChange,
 			final Object rootLevel) {
-
 		return constructOperation(qualNameChange, rootLevel, false);
 	}
 
 	protected List<AbstractOperation> constructOperation(final QualNameChange qualNameChange, final Object rootLevel,
 			final boolean isUndo) {
 
-		if (qualNameChange.state() == QualNameChangeState.DELETE_UNDO
-				&& qualNameChange.notifier() instanceof final SubApp sub) {
-
+		if (qualNameChange.state() == QualNameChangeState.DELETE_UNDO) {
 			return undoDeleteOperations.remove(qualNameChange.oldQualName());
 		}
 
@@ -103,9 +72,7 @@ public class HierachyManagerUpdateListener extends QualNameChangeListener {
 		for (final Leaf leaf : leafs) {
 			if (qualNameChange.state() == QualNameChangeState.DELETE
 					|| qualNameChange.state() == QualNameChangeState.DELETE_REDO) {
-
 				result.add(new DeleteNodeOperation(leaf));
-
 				storeUndoDeleteOperations(qualNameChange.oldQualName(), leaf);
 			} else {
 				result.add(new UpdateLeafRefOperation(leaf, newRef, identifier));
@@ -117,25 +84,17 @@ public class HierachyManagerUpdateListener extends QualNameChangeListener {
 
 	@Override
 	protected Object getReceiver(final TypeEntry key) {
-		return getPlantHierachy(key);
+		final IProject project = key.getFile().getProject();
+		if (!HierarchyManagerRefactoringUtil.plantHierachyExists(project)) {
+			return null;
+		}
+
+		return HierarchyManagerRefactoringUtil.getPlantHierarchy(project);
 	}
 
 	@Override
 	protected void executeOperation(final AbstractOperation op) {
 		AbstractHierarchyHandler.executeOperation((AbstractChangeHierarchyOperation) op);
-	}
-
-	public static RootLevel getPlantHierachy(final TypeEntry key) {
-		final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		if (page != null) {
-			final PlantHierarchyView view = (PlantHierarchyView) page
-					.findView("org.eclipse.fordiac.ide.hierarchymanager.view"); //$NON-NLS-1$
-			if (view != null) {
-				return (RootLevel) view.getCommonViewer().getInput();
-			}
-		}
-		final IProject project = key.getFile().getProject();
-		return (RootLevel) loadPlantHierachy(project);
 	}
 
 	@Override
@@ -145,7 +104,6 @@ public class HierachyManagerUpdateListener extends QualNameChangeListener {
 
 	protected void storeUndoDeleteOperations(final String qualName, final Leaf leaf) {
 		final AddLeafOperation op = new AddLeafOperation((Level) leaf.eContainer(), leaf);
-
 		undoDeleteOperations.computeIfAbsent(qualName, k -> new ArrayList<>()).add(op);
 	}
 

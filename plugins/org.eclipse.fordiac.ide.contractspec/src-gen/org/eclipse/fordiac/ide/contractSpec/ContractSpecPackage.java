@@ -291,13 +291,13 @@ public interface ContractSpecPackage extends EPackage
   int OFFSET = 6;
 
   /**
-   * The feature id for the '<em><b>Time</b></em>' containment reference.
+   * The feature id for the '<em><b>Interval</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int OFFSET__TIME = 0;
+  int OFFSET__INTERVAL = 0;
 
   /**
    * The number of structural features of the '<em>Offset</em>' class.
@@ -1162,15 +1162,15 @@ public interface ContractSpecPackage extends EPackage
   EClass getOffset();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.Offset#getTime <em>Time</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.Offset#getInterval <em>Interval</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Time</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.Offset#getTime()
+   * @return the meta object for the containment reference '<em>Interval</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.Offset#getInterval()
    * @see #getOffset()
    * @generated
    */
-  EReference getOffset_Time();
+  EReference getOffset_Interval();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.contractSpec.Reaction <em>Reaction</em>}'.
@@ -1990,12 +1990,12 @@ public interface ContractSpecPackage extends EPackage
     EClass OFFSET = eINSTANCE.getOffset();
 
     /**
-     * The meta object literal for the '<em><b>Time</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Interval</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference OFFSET__TIME = eINSTANCE.getOffset_Time();
+    EReference OFFSET__INTERVAL = eINSTANCE.getOffset_Interval();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.contractSpec.impl.ReactionImpl <em>Reaction</em>}' class.

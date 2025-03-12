@@ -52,15 +52,15 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<ICallable> {
 		return ""; //$NON-NLS-1$
 	}
 
-	protected String combine(final BaseFBType baseFBType) {
+	public String combine(final BaseFBType baseFBType) {
 		return combine(baseFBType.getCallables());
 	}
 
-	protected String combine(final List<? extends ICallable> callables) {
+	public String combine(final List<? extends ICallable> callables) {
 		return callables.stream().map(this::toSTText).collect(Collectors.joining());
 	}
 
-	protected String toSTText(final ICallable callable) {
+	public String toSTText(final ICallable callable) {
 		return switch (callable) {
 		case final STAlgorithm algorithm -> toSTText(algorithm);
 		case final STMethod method -> toSTText(method);
@@ -68,7 +68,7 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<ICallable> {
 		};
 	}
 
-	protected String toSTText(final STAlgorithm algorithm) {
+	private String toSTText(final STAlgorithm algorithm) {
 		final String text = algorithm.getText();
 		if (text.contains(grammarAccess.getSTAlgorithmAccess().getALGORITHMKeyword_0().getValue())
 				|| text.contains(grammarAccess.getSTAlgorithmAccess().getEND_ALGORITHMKeyword_3().getValue())) {
@@ -90,7 +90,7 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<ICallable> {
 		return builder.toString();
 	}
 
-	protected static String toSTText(final STMethod method) {
+	private static String toSTText(final STMethod method) {
 		return method.getText();
 	}
 

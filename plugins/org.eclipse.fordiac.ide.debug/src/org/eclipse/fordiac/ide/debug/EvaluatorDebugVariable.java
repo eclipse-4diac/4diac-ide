@@ -23,6 +23,7 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.fordiac.ide.debug.value.EvaluatorDebugValue;
+import org.eclipse.fordiac.ide.debug.value.IEvaluatorDebugValue;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
@@ -107,7 +108,7 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 	}
 
 	@Override
-	public EvaluatorDebugValue getValue() {
+	public IEvaluatorDebugValue getValue() {
 		final Value value = variable.getValue();
 		if (value != cachedValue.getInternalValue()) {
 			final IEvaluatorDebugTarget debugTarget = getDebugTarget();

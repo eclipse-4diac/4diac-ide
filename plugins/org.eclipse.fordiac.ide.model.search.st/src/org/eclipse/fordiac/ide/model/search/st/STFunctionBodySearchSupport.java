@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,35 +12,36 @@
  */
 package org.eclipse.fordiac.ide.model.search.st;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionParseUtil;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionParseUtil2;
+import org.eclipse.xtext.parser.IParseResult;
 
 public class STFunctionBodySearchSupport extends StructuredTextSearchSupport {
 	private final STFunctionBody body;
-	private STFunctionSource parseResult;
+	private IParseResult parseResult;
 
 	public STFunctionBodySearchSupport(final STFunctionBody body) {
 		this.body = body;
 	}
 
 	@Override
-	public Stream<EObject> prepare() throws CoreException {
-		if (parseResult == null) {
-			final List<String> errors = new ArrayList<>();
-			parseResult = STFunctionParseUtil.parse(body, errors, null, null);
-			if (parseResult == null) {
-				throw new CoreException(Status.error(errors.stream().collect(Collectors.joining(", ")))); //$NON-NLS-1$
-			}
+	public Stream<EObject> prepare() {
+		return Optional.ofNullable(prepareAlgorithm()).map(IParseResult::getRootASTElement).stream();
+	}
+
+	protected IParseResult prepareAlgorithm() {
+		if (parseResult == null && body.getText() != null && !body.getText().isBlank()) {
+			parseResult = STFunctionParseUtil2.parseFunctionBody(body);
 		}
-		return Stream.of(parseResult);
+		return parseResult;
+	}
+
+	@Override
+	public boolean isIncompleteResult() {
+		return parseResult != null && parseResult.hasSyntaxErrors();
 	}
 }

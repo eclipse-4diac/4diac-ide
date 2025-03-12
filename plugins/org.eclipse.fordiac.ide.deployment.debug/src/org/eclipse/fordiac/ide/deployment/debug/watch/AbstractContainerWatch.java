@@ -67,6 +67,11 @@ public abstract class AbstractContainerWatch extends DeploymentDebugElement impl
 	}
 
 	@Override
+	public boolean hasError() {
+		return getSubWatches().stream().anyMatch(IWatch::hasError);
+	}
+
+	@Override
 	public boolean isPinned() {
 		return pinned;
 	}

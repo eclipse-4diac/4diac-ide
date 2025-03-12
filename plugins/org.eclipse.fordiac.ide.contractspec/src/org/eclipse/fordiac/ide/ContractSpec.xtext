@@ -39,7 +39,7 @@ Jitter:
 	"jitter" time=TimeExpr;
 
 Offset:
-	"offset" time=TimeExpr;
+	"offset" interval=Interval;
 
 Reaction:
 	"whenever" trigger=EventExpr "occurs" "then" reaction=EventExpr "occurs" "within" interval=Interval

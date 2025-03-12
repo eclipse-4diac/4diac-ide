@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 
 public final class EventTypeLibrary {
@@ -46,6 +47,10 @@ public final class EventTypeLibrary {
 
 	public Collection<EventType> getEventTypes() {
 		return Collections.unmodifiableCollection(typeMap.values());
+	}
+
+	public static boolean isGenericEventType(final DataType type) {
+		return type instanceof EventType && EventTypeLibrary.EVENT.equalsIgnoreCase(type.getName());
 	}
 
 	public EventType getType(final String name) {

@@ -94,6 +94,13 @@ public interface IWatch extends IVariable, IDeploymentDebugElement {
 	boolean isAlive();
 
 	/**
+	 * Check if the watch is in an error state
+	 *
+	 * @return true on error, false otherwise
+	 */
+	boolean hasError();
+
+	/**
 	 * Check if the watch is pinned
 	 *
 	 * @return true if pinned, false otherwise
