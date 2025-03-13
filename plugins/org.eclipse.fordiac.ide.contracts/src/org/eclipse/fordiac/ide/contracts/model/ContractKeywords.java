@@ -34,12 +34,15 @@ public final class ContractKeywords {
 	public static final String OCCURS = "occurs"; //$NON-NLS-1$
 	public static final String OFFSET = "offset"; //$NON-NLS-1$
 	public static final String REACTION = "Reaction"; //$NON-NLS-1$
+	public static final String AGE = "Age"; //$NON-NLS-1$
 	public static final String THEN = "then"; //$NON-NLS-1$
 	public static final String TRUE = " TRUE"; //$NON-NLS-1$
 	public static final String UNIT_OF_TIME = "ms"; //$NON-NLS-1$
 	public static final String WHENEVER = "whenever"; //$NON-NLS-1$
 	public static final String WITH = "with"; //$NON-NLS-1$
 	public static final String WITHIN = "within"; //$NON-NLS-1$
+	public static final String HAS = "has"; //$NON-NLS-1$
+	public static final String OCCURRED = "occurred"; //$NON-NLS-1$
 
 	private ContractKeywords() {
 

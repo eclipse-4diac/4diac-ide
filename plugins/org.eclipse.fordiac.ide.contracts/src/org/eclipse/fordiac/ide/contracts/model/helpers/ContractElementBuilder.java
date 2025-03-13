@@ -13,13 +13,38 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.model.helpers;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.contracts.model.ContractKeywords;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 
 public class ContractElementBuilder {
 	private final StringBuilder contractElement;
 
 	public ContractElementBuilder() {
 		contractElement = new StringBuilder();
+	}
+
+	public ContractElementBuilder add(final String s) {
+		contractElement.append(s);
+		return this;
+	}
+
+	public ContractElementBuilder addEventList(final List<Event> pins) {
+		contractElement.append(String.join(", ", pins.stream().map(Event::getName).toList())); //$NON-NLS-1$
+		return this;
+	}
+
+	public ContractElementBuilder addEventExpr(final List<Event> pins) {
+		if (pins.size() == 1) {
+			contractElement.append(pins.get(0).getName());
+			contractElement.append(" "); //$NON-NLS-1$
+			return this;
+		}
+		contractElement.append("("); //$NON-NLS-1$
+		addEventList(pins);
+		contractElement.append(") "); //$NON-NLS-1$
+		return this;
 	}
 
 	public ContractElementBuilder addAssumption() {
@@ -92,6 +117,14 @@ public class ContractElementBuilder {
 		return this;
 	}
 
+	public ContractElementBuilder addHasOccurred() {
+		contractElement.append(ContractKeywords.HAS);
+		contractElement.append(" "); //$NON-NLS-1$
+		contractElement.append(ContractKeywords.OCCURRED);
+		contractElement.append(" "); //$NON-NLS-1$
+		return this;
+	}
+
 	public ContractElementBuilder addOccursComma() {
 		contractElement.append(ContractKeywords.OCCURS);
 		contractElement.append(ContractKeywords.COMMA);
@@ -107,6 +140,12 @@ public class ContractElementBuilder {
 
 	public ContractElementBuilder addReaction() {
 		contractElement.append(ContractKeywords.REACTION);
+		contractElement.append(" "); //$NON-NLS-1$
+		return this;
+	}
+
+	public ContractElementBuilder addAge() {
+		contractElement.append(ContractKeywords.AGE);
 		contractElement.append(" "); //$NON-NLS-1$
 		return this;
 	}
@@ -128,6 +167,11 @@ public class ContractElementBuilder {
 	}
 
 	public ContractElementBuilder addTimeUnit() {
+		contractElement.append(ContractKeywords.UNIT_OF_TIME);
+		return this;
+	}
+
+	public ContractElementBuilder addMs() {
 		contractElement.append(ContractKeywords.UNIT_OF_TIME);
 		return this;
 	}

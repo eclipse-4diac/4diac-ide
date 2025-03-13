@@ -16,10 +16,12 @@ Require-Bundle: org.eclipse.fordiac.ide.contractspec,
  org.eclipse.ui,
  org.eclipse.compare,
  org.eclipse.xtext.builder,
- org.eclipse.fordiac.ide.structuredtextcore.ui
+ org.eclipse.fordiac.ide.structuredtextcore.ui,
+ org.eclipse.fordiac.ide.model
 Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.contractspec.ui.internal,
+ org.eclipse.fordiac.ide.contractspec.ui.utils,
  org.eclipse.fordiac.ide.ui.contentassist,
  org.eclipse.fordiac.ide.ui.quickfix
 Bundle-Activator: org.eclipse.fordiac.ide.contractspec.ui.internal.ContractspecActivator

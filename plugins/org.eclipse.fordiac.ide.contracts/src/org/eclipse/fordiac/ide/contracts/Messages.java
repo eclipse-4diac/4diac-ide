@@ -17,8 +17,6 @@ package org.eclipse.fordiac.ide.contracts;
 
 import org.eclipse.osgi.util.NLS;
 
-/** The Class Messages. */
-@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.contracts.messages"; //$NON-NLS-1$
 
@@ -36,17 +34,29 @@ public final class Messages extends NLS {
 
 	public static String Contract_ErrorName;
 
-	public static String DefineFbInterfaceConstraintHandler_Title;
+	public static String NoPinSelectedErrorDialog_Title;
 
-	public static String DefineFbInterfaceConstraintHandler_Info;
+	public static String NoPinSelectedErrorDialog_Info;
 
-	public static String DefineFBDecisionTwoPinDialog_Title;
+	public static String DefineContractDecisionDialog_Title;
 
-	public static String DefineFBDecisionTwoPinDialog_Info;
+	public static String DefineContractDecisionDialog_Info;
 
-	public static String DefineFBDecisionTwoPinDialog_CreateReaction;
+	public static String DefineContractDecisionDialog_Section;
 
-	public static String DefineFBDecisionTwoPinDialog_CreateGuarantee;
+	public static String ContractRuleSingleEvent;
+
+	public static String ContractRuleRepetition;
+
+	public static String ContractRuleReaction;
+
+	public static String ContractRuleAge;
+
+	public static String ContractRuleCausalReaction;
+
+	public static String ContractRuleCausalAge;
+
+	public static String ContractRuleEmpty;
 
 	public static String ContractElementDialog_Title;
 
