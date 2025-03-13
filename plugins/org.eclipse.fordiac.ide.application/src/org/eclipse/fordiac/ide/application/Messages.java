@@ -276,10 +276,6 @@ public final class Messages extends NLS {
 
 	public static String QuickFixDialog_Problems_List_Resource;
 
-	public static String ContractEditor_Title;
-
-	public static String ContractEditor_OK;
-
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

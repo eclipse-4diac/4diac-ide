@@ -15,26 +15,47 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.application.figures.InstanceContractFigure;
-import org.eclipse.fordiac.ide.application.widgets.ContractEditorDialog;
+import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
+import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
+import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeContractCommand;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.swt.widgets.Composite;
 
 public class InstanceContractEditPart extends AbstractGraphicalEditPart {
-
-	private static final int CANCEL = -1;
 
 	private class DeleteContractEditPolicy extends org.eclipse.gef.editpolicies.ComponentEditPolicy {
 		@Override
 		protected Command createDeleteCommand(final GroupRequest request) {
 			return new ChangeContractCommand(getModel().getSubApp(), null);
+		}
+	}
+
+	private class ContractRenameEditPolicy extends AbstractViewRenameEditPolicy {
+		@Override
+		protected Command getDirectEditCommand(final DirectEditRequest request) {
+			if (request.getCellEditor().getValue() instanceof final String s) {
+				return new ChangeContractCommand(getModel().getSubApp(), s);
+			}
+			return null;
+		}
+
+		@Override
+		protected void showCurrentEditValue(final DirectEditRequest request) {
+			final String value = (String) request.getCellEditor().getValue();
+			getFigure().setText(value);
+		}
+
+		@Override
+		protected void revertOldEditValue(final DirectEditRequest request) {
+			refreshValue();
 		}
 	}
 
@@ -57,6 +78,9 @@ public class InstanceContractEditPart extends AbstractGraphicalEditPart {
 	protected void createEditPolicies() {
 		// for deleting a contract
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteContractEditPolicy());
+		// remove standard direct edit policy and add custom one
+		removeEditPolicy(EditPolicy.DIRECT_EDIT_ROLE);
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new ContractRenameEditPolicy());
 	}
 
 	@Override
@@ -74,22 +98,25 @@ public class InstanceContractEditPart extends AbstractGraphicalEditPart {
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		final CommandStack cmdStack = EditorUtils.getCurrentActiveEditor().getAdapter(CommandStack.class);
-
-		if (((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
-				|| (request.getType() == RequestConstants.REQ_OPEN)) && cmdStack != null) {
-			performDirectEdit(cmdStack);
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
+			performDirectEdit();
 		} else {
 			super.performRequest(request);
 		}
 	}
 
-	private void performDirectEdit(final CommandStack cmdStack) {
-		final var shell = Display.getCurrent().getActiveShell();
-		final var editor = new ContractEditorDialog(shell, getModel().getSubApp(), getModel().getContract());
+	private void performDirectEdit() {
+		new TextDirectEditManager(this, new FigureCellEditorLocator(getFigure())) {
+			@Override
+			protected CellEditor createCellEditorOn(final Composite composite) {
+				return new ContractCellEditor(composite, getModel());
+			}
 
-		if (editor.open() != CANCEL) {
-			cmdStack.execute(new ChangeContractCommand(getModel().getSubApp(), editor.getContractRule()));
-		}
+			@Override
+			protected void initCellEditor() {
+				super.initCellEditor();
+				getCellEditor().setValue(getModel().getContract());
+			}
+		}.show();
 	}
 }
