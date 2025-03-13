@@ -11,7 +11,7 @@
  *   Felix Schmid
  *     - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.contractspec.ui.utils;
+package org.eclipse.fordiac.ide.ui.utils;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;

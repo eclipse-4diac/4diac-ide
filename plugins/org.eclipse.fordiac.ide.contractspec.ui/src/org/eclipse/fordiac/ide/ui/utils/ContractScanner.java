@@ -1,4 +1,4 @@
-package org.eclipse.fordiac.ide.contractspec.ui.utils;
+package org.eclipse.fordiac.ide.ui.utils;
 
 import java.io.IOException;
 import java.io.StringReader;

@@ -20,11 +20,11 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.fordiac.ide.application.editparts.InstanceContract;
-import org.eclipse.fordiac.ide.contractspec.ui.utils.ContractScanner;
 import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
+import org.eclipse.fordiac.ide.ui.utils.ContractScanner;
 
 public class InstanceContractFigure extends Figure {
 

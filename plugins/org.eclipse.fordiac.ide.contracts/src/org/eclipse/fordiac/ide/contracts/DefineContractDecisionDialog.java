@@ -16,7 +16,7 @@ package org.eclipse.fordiac.ide.contracts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.contractspec.ui.utils.ContractScanner;
+import org.eclipse.fordiac.ide.ui.utils.ContractScanner;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;

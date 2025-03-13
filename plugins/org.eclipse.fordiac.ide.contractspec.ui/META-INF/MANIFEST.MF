@@ -21,7 +21,7 @@ Require-Bundle: org.eclipse.fordiac.ide.contractspec,
 Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.contractspec.ui.internal,
- org.eclipse.fordiac.ide.contractspec.ui.utils,
  org.eclipse.fordiac.ide.ui.contentassist,
- org.eclipse.fordiac.ide.ui.quickfix
+ org.eclipse.fordiac.ide.ui.quickfix,
+ org.eclipse.fordiac.ide.ui.utils
 Bundle-Activator: org.eclipse.fordiac.ide.contractspec.ui.internal.ContractspecActivator

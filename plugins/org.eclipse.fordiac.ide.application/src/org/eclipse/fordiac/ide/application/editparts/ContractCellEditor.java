@@ -1,7 +1,7 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.fordiac.ide.contractspec.ui.utils.ContractspecResourceProvider;
+import org.eclipse.fordiac.ide.ui.utils.ContractspecResourceProvider;
 import org.eclipse.jface.text.contentassist.ContentAssistEvent;
 import org.eclipse.jface.text.contentassist.ICompletionListener;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
