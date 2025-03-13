@@ -52,6 +52,8 @@ public class STCoreCustomValidatorConfigurationBlock extends STCoreValidatorConf
 		addComboBox(STCoreValidator.FOR_CONTROL_VARIABLE_NON_TEMPORARY,
 				Messages.STCoreCustomValidatorConfigurationBlock_ForControlVariableNonTemporary, composite,
 				defaultIndent);
+		addComboBox(STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED,
+				Messages.STCoreCustomValidatorConfigurationBlock_UndefinedVariable, composite, defaultIndent);
 	}
 
 	protected void fillUnnecessaryCodeSection(final Composite composite, final int defaultIndent) {
@@ -64,6 +66,12 @@ public class STCoreCustomValidatorConfigurationBlock extends STCoreValidatorConf
 		addComboBox(STCoreValidator.UNNECESSARY_LITERAL_CONVERSION,
 				Messages.STCoreCustomValidatorConfigurationBlock_UnnecessaryLiteralConversion, composite,
 				defaultIndent);
+		addComboBox(STCoreValidator.UNUSED_VARIABLE, Messages.STCoreCustomValidatorConfigurationBlock_UnusedVariable,
+				composite, defaultIndent);
+		addComboBox(STCoreValidator.UNREAD_VARIABLE, Messages.STCoreCustomValidatorConfigurationBlock_UnreadVariable,
+				composite, defaultIndent);
+		addComboBox(STCoreValidator.UNWRITTEN_VARIABLE,
+				Messages.STCoreCustomValidatorConfigurationBlock_UnwrittenVariable, composite, defaultIndent);
 	}
 
 	protected void fillLiteralsSection(final Composite composite, final int defaultIndent) {

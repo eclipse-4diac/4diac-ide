@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
@@ -40,16 +41,19 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.AccessMode;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.xtext.EcoreUtil2;
+import org.eclipse.xtext.validation.IssueSeverities;
 import org.eclipse.xtext.validation.ValidationMessageAcceptor;
 
 public class STCoreControlFlowValidator {
 
 	private final ValidationMessageAcceptor acceptor;
+	private final IssueSeverities severities;
 
 	private Map<STVarDeclaration, VariableState> variables = new HashMap<>();
 
-	public STCoreControlFlowValidator(final ValidationMessageAcceptor acceptor) {
+	public STCoreControlFlowValidator(final ValidationMessageAcceptor acceptor, final IssueSeverities severities) {
 		this.acceptor = acceptor;
+		this.severities = severities;
 	}
 
 	public void validateVariableBlocks(final List<? extends STVarDeclarationBlock> blocks) {
@@ -85,20 +89,14 @@ public class STCoreControlFlowValidator {
 	}
 
 	public void validateStatement(final STStatement statement) {
-		if (statement instanceof final STAssignment assignment) {
-			validateStatement(assignment);
-		} else if (statement instanceof final STIfStatement ifStatement) {
-			validateStatement(ifStatement);
-		} else if (statement instanceof final STCaseStatement caseStatement) {
-			validateStatement(caseStatement);
-		} else if (statement instanceof final STForStatement forStatement) {
-			validateStatement(forStatement);
-		} else if (statement instanceof final STWhileStatement whileStatement) {
-			validateStatement(whileStatement);
-		} else if (statement instanceof final STRepeatStatement repeatStatement) {
-			validateStatement(repeatStatement);
-		} else {
-			validateFeatureReferences(statement);
+		switch (statement) {
+		case final STAssignment assignment -> validateStatement(assignment);
+		case final STIfStatement ifStatement -> validateStatement(ifStatement);
+		case final STCaseStatement caseStatement -> validateStatement(caseStatement);
+		case final STForStatement forStatement -> validateStatement(forStatement);
+		case final STWhileStatement whileStatement -> validateStatement(whileStatement);
+		case final STRepeatStatement repeatStatement -> validateStatement(repeatStatement);
+		default -> validateFeatureReferences(statement);
 		}
 	}
 
@@ -198,9 +196,8 @@ public class STCoreControlFlowValidator {
 
 	protected void validateReadAccess(final INamedElement feature, final EObject context) {
 		if (variables.get(feature) == VariableState.UNDEFINED_AFTER_FOR) {
-			acceptor.acceptWarning(MessageFormat
-					.format(Messages.STCoreControlFlowValidator_VariableUndefinedAfterForLoop, feature.getName()),
-					context, null, -1, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED);
+			addIssue(MessageFormat.format(Messages.STCoreControlFlowValidator_VariableUndefinedAfterForLoop,
+					feature.getName()), context, null, -1, STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED);
 		}
 	}
 
@@ -208,6 +205,11 @@ public class STCoreControlFlowValidator {
 		if (feature instanceof final STVarDeclaration stVarDeclaration) {
 			variables.put(stVarDeclaration, VariableState.DEFINED);
 		}
+	}
+
+	protected void addIssue(final String message, final EObject source, final EStructuralFeature feature,
+			final int index, final String issueCode, final String... issueData) {
+		STCoreValidator.addIssue(acceptor, severities, message, source, feature, index, issueCode, issueData);
 	}
 
 	public enum VariableState {

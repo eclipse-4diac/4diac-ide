@@ -118,6 +118,7 @@ import org.eclipse.xtext.diagnostics.Severity;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.validation.Check;
+import org.eclipse.xtext.validation.IssueSeverities;
 import org.eclipse.xtext.validation.ValidationMessageAcceptor;
 
 import com.google.inject.Inject;
@@ -1153,6 +1154,27 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			break;
 		default:
 			break;
+		}
+	}
+
+	public static void addIssue(final ValidationMessageAcceptor acceptor, final IssueSeverities severities,
+			final String message, final EObject source, final EStructuralFeature feature, final int index,
+			final String issueCode, final String... issueData) {
+		final Severity severity = severities.getSeverity(issueCode);
+		if (severity != null) {
+			switch (severity) {
+			case WARNING:
+				acceptor.acceptWarning(message, source, feature, index, issueCode, issueData);
+				break;
+			case INFO:
+				acceptor.acceptInfo(message, source, feature, index, issueCode, issueData);
+				break;
+			case ERROR:
+				acceptor.acceptError(message, source, feature, index, issueCode, issueData);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }

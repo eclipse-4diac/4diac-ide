@@ -71,21 +71,24 @@ public class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 
 	@Check
 	public void checkControlFlow(final STAlgorithm algorithm) {
-		final STCoreControlFlowValidator controlFlowValidator = new STCoreControlFlowValidator(this);
+		final STCoreControlFlowValidator controlFlowValidator = new STCoreControlFlowValidator(this,
+				getIssueSeverities(getContext(), algorithm));
 		controlFlowValidator.validateVariableBlocks(algorithm.getBody().getVarTempDeclarations());
 		controlFlowValidator.validateStatements(algorithm.getBody().getStatements());
 	}
 
 	@Check
 	public void checkControlFlow(final STMethod method) {
-		final STCoreControlFlowValidator controlFlowValidator = new STCoreControlFlowValidator(this);
+		final STCoreControlFlowValidator controlFlowValidator = new STCoreControlFlowValidator(this,
+				getIssueSeverities(getContext(), method));
 		controlFlowValidator.validateVariableBlocks(method.getBody().getVarDeclarations());
 		controlFlowValidator.validateStatements(method.getBody().getStatements());
 	}
 
 	@Check
 	public void checkUnusedVariables(final STAlgorithm algorithm) {
-		final STCoreVariableUsageValidator variableUsageValidator = new STCoreVariableUsageValidator(this);
+		final STCoreVariableUsageValidator variableUsageValidator = new STCoreVariableUsageValidator(this,
+				getIssueSeverities(getContext(), algorithm));
 		variableUsageValidator.addVariableBlocks(algorithm.getBody().getVarTempDeclarations());
 		variableUsageValidator.addReferences(algorithm);
 		variableUsageValidator.validateUnused();
@@ -93,7 +96,8 @@ public class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 
 	@Check
 	public void checkUnusedVariables(final STMethod method) {
-		final STCoreVariableUsageValidator variableUsageValidator = new STCoreVariableUsageValidator(this);
+		final STCoreVariableUsageValidator variableUsageValidator = new STCoreVariableUsageValidator(this,
+				getIssueSeverities(getContext(), method));
 		variableUsageValidator.addVariableBlocks(method.getBody().getVarDeclarations());
 		variableUsageValidator.addReturnVariable(method);
 		variableUsageValidator.addReferences(method);

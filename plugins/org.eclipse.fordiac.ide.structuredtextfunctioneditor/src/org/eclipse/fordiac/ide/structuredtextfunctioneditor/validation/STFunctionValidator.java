@@ -63,14 +63,16 @@ public class STFunctionValidator extends AbstractSTFunctionValidator {
 
 	@Check
 	public void checkControlFlow(final STFunction function) {
-		final STCoreControlFlowValidator controlFlowValidator = new STCoreControlFlowValidator(this);
+		final STCoreControlFlowValidator controlFlowValidator = new STCoreControlFlowValidator(this,
+				getIssueSeverities(getContext(), function));
 		controlFlowValidator.validateVariableBlocks(function.getVarDeclarations());
 		controlFlowValidator.validateStatements(function.getCode());
 	}
 
 	@Check
 	public void checkUnusedVariables(final STFunction function) {
-		final STCoreVariableUsageValidator variableUsageValidator = new STCoreVariableUsageValidator(this);
+		final STCoreVariableUsageValidator variableUsageValidator = new STCoreVariableUsageValidator(this,
+				getIssueSeverities(getContext(), function));
 		variableUsageValidator.addVariableBlocks(function.getVarDeclarations());
 		variableUsageValidator.addReturnVariable(function);
 		variableUsageValidator.addReferences(function);

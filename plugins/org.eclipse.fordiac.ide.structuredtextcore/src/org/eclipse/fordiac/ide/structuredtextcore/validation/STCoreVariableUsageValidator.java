@@ -23,6 +23,7 @@ import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -38,6 +39,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBl
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.AccessMode;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
+import org.eclipse.xtext.validation.IssueSeverities;
 import org.eclipse.xtext.validation.ValidationMessageAcceptor;
 
 public class STCoreVariableUsageValidator {
@@ -47,12 +49,14 @@ public class STCoreVariableUsageValidator {
 	}
 
 	private final ValidationMessageAcceptor acceptor;
+	private final IssueSeverities severities;
 
 	private final Map<INamedElement, EnumSet<VariableState>> variables = new HashMap<>();
 	private final Map<URI, EnumSet<VariableState>> variableUris = new HashMap<>();
 
-	public STCoreVariableUsageValidator(final ValidationMessageAcceptor acceptor) {
+	public STCoreVariableUsageValidator(final ValidationMessageAcceptor acceptor, final IssueSeverities severities) {
 		this.acceptor = acceptor;
+		this.severities = severities;
 	}
 
 	public void addVariableBlocks(final List<? extends STVarDeclarationBlock> blocks) {
@@ -151,19 +155,21 @@ public class STCoreVariableUsageValidator {
 
 	protected void validateUnused(final INamedElement feature, final EnumSet<VariableState> state) {
 		if (state.contains(VariableState.UNUSED)) {
-			acceptor.acceptWarning(
-					MessageFormat.format(Messages.STCoreVariableUsageValidator_UnusedVariable, feature.getName()),
+			addIssue(MessageFormat.format(Messages.STCoreVariableUsageValidator_UnusedVariable, feature.getName()),
 					feature, LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, -1, STCoreValidator.UNUSED_VARIABLE);
 		} else if (state.contains(VariableState.UNREAD)) {
-			acceptor.acceptWarning(
-					MessageFormat.format(Messages.STCoreVariableUsageValidator_UnreadVariable, feature.getName()),
+			addIssue(MessageFormat.format(Messages.STCoreVariableUsageValidator_UnreadVariable, feature.getName()),
 					feature, LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, -1, STCoreValidator.UNREAD_VARIABLE);
 		} else if (state.contains(VariableState.UNWRITTEN)) {
-			acceptor.acceptWarning(
-					MessageFormat.format(Messages.STCoreVariableUsageValidator_UnwrittenVariable, feature.getName()),
+			addIssue(MessageFormat.format(Messages.STCoreVariableUsageValidator_UnwrittenVariable, feature.getName()),
 					feature, LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, -1,
 					STCoreValidator.UNWRITTEN_VARIABLE);
 		}
+	}
+
+	protected void addIssue(final String message, final EObject source, final EStructuralFeature feature,
+			final int index, final String issueCode, final String... issueData) {
+		STCoreValidator.addIssue(acceptor, severities, message, source, feature, index, issueCode, issueData);
 	}
 
 	protected static EnumSet<VariableState> merge(final EnumSet<VariableState> first,
