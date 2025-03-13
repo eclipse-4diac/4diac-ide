@@ -42,7 +42,7 @@ public final class Messages extends NLS {
 
 	public static String DefineContractDecisionDialog_Info;
 
-	public static String DefineContractDecisionDialog_Section;
+	public static String DefineContractDecisionDialog_Create;
 
 	public static String ContractRuleSingleEvent;
 

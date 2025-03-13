@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 public class DefineContractDecisionDialog extends MessageDialog {
@@ -60,28 +61,15 @@ public class DefineContractDecisionDialog extends MessageDialog {
 	@Override
 	protected Control createCustomArea(final Composite parent) {
 		final Group group = new Group(parent, 0);
-		group.setLayout(new GridLayout(2, false));
-		group.setText(Messages.DefineContractDecisionDialog_Section);
+		group.setLayout(new GridLayout(3, false));
 
 		for (int i = 0; i < names.size(); i++) {
-			final int fi = i;
-			final Button btn = new Button(group, 0);
-			btn.setText(names.get(i));
-			btn.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-			btn.addSelectionListener(new SelectionListener() {
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-					selectedIdx = fi;
-					close();
-				}
+			final Label lbl = new Label(group, 0);
+			lbl.setText(names.get(i) + ":"); //$NON-NLS-1$
+			lbl.setAlignment(SWT.RIGHT);
+			lbl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-				@Override
-				public void widgetDefaultSelected(final SelectionEvent e) {
-					// nothing to do
-				}
-			});
-
-			final StyledText txt = new StyledText(group, SWT.READ_ONLY);
+			final StyledText txt = new StyledText(group, SWT.READ_ONLY | SWT.SINGLE);
 			txt.setText(templates.get(i));
 			txt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 			txt.setBackground(new Color(255, 255, 255));
@@ -106,6 +94,23 @@ public class DefineContractDecisionDialog extends MessageDialog {
 			}
 			txt.setStyleRanges(ranges.toArray(StyleRange[]::new));
 			txt.setEnabled(false);
+
+			final int fi = i;
+			final Button btn = new Button(group, 0);
+			btn.setText(Messages.DefineContractDecisionDialog_Create);
+			btn.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+			btn.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					selectedIdx = fi;
+					close();
+				}
+
+				@Override
+				public void widgetDefaultSelected(final SelectionEvent e) {
+					// nothing to do
+				}
+			});
 		}
 		return dialogArea;
 	}
