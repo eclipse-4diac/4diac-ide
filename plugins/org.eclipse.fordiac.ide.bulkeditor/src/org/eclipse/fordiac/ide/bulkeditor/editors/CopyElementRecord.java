@@ -17,8 +17,8 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
-public record CopyElementRecord(LibraryElement copy, List<EObject> mappedElements) {
-	public void addToList(final EObject eobj) {
-		mappedElements.add(eobj);
+public record CopyElementRecord(LibraryElement copiedElement, List<EObject> mappedElements) {
+	public void addToList(final EObject eObject) {
+		mappedElements.add(eObject);
 	}
 }
