@@ -1,6 +1,6 @@
 # Eclipse 4diac's 4diac IDE
 
-[4diac IDE](https://eclipse.dev/4diac/en_ide.php) is an integrated development environment for developing distributed Industrial Process Measurement and Control Systems (IPMCS) utilizing the IEC 61499 standard. 
+[4diac IDE](https://eclipse.dev/4diac/4diac_ide) is an integrated development environment for developing distributed Industrial Process Measurement and Control Systems (IPMCS) utilizing the IEC 61499 standard. 
 
 ## License
 
