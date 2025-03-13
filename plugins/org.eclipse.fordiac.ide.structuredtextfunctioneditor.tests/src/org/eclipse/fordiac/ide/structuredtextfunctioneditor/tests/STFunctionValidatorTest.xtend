@@ -701,6 +701,58 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
+	def void testUnusedVariable() {
+		'''
+			FUNCTION TEST : INT
+			VAR_INPUT
+				DI1 : INT;
+			END_VAR
+			VAR_OUTPUT
+				DO1 : INT;
+			END_VAR
+			VAR_IN_OUT
+				DIO1 : INT;
+			END_VAR
+			VAR_TEMP
+				TEMP1 : INT;
+			END_VAR
+			
+			DO1 := DI1 + 4; // output written, input read
+			DIO1 := DIO1 + 4; // in/out used
+			TEMP1 := DI1 + 4; // temp written
+			TEST := TEMP1 * 2; // temp read, return written
+			END_FUNCTION
+		'''.parse.assertNoIssues
+		'''
+			FUNCTION TEST
+			VAR_TEMP
+				TEMP1 : INT;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.UNUSED_VARIABLE)
+		'''
+			FUNCTION TEST
+			VAR_TEMP
+				TEMP1 : INT;
+			END_VAR
+			TEMP1 := 17;
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.UNREAD_VARIABLE)
+		'''
+			FUNCTION TEST : INT
+			VAR_TEMP
+				TEMP1 : INT;
+			END_VAR
+			TEST := TEMP1 + 4;
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.UNWRITTEN_VARIABLE)
+		'''
+			FUNCTION TEST : INT
+			END_FUNCTION
+		'''.parse.assertWarning(STFunctionPackage.eINSTANCE.STFunction, STCoreValidator.UNUSED_VARIABLE)
+	}
+
+	@Test
 	def void testValidCaseConditionType() {
 		'''
 			FUNCTION hubert
@@ -1669,7 +1721,7 @@ class STFunctionValidatorTest {
 			END_VAR
 			REAL_VAR := INT_TO_REAL(INT_VAR) / INT_VAR2;
 			END_FUNCTION
-		'''.parse.assertNoIssues
+		'''.parse.assertNoIssues(STCorePackage.eINSTANCE.STFeatureExpression)
 	}
 
 	@Test

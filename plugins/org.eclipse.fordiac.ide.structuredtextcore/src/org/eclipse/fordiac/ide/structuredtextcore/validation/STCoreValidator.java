@@ -193,6 +193,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String UNUSED_IMPORT = ISSUE_CODE_PREFIX + "unusedImport"; //$NON-NLS-1$
 	public static final String DUPLICATE_ATTRIBUTE = ISSUE_CODE_PREFIX + "duplicateAttribute"; //$NON-NLS-1$
 	public static final String PACKAGE_NAME_MISMATCH = ISSUE_CODE_PREFIX + "packageNameMismatch"; //$NON-NLS-1$
+	public static final String UNUSED_VARIABLE = ISSUE_CODE_PREFIX + "unusedVariable"; //$NON-NLS-1$
+	public static final String UNREAD_VARIABLE = ISSUE_CODE_PREFIX + "unreadVariable"; //$NON-NLS-1$
+	public static final String UNWRITTEN_VARIABLE = ISSUE_CODE_PREFIX + "unwrittenVariable"; //$NON-NLS-1$
 
 	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
 	private static final Pattern IDENTIFIER_CONSECUTIVE_UNDERSCORES_PATTERN = Pattern.compile("_{2,}[^_]"); //$NON-NLS-1$

@@ -87,6 +87,10 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_ArrayAccessReceiverIsInvalid;
 	public static String STCoreValidator_PackageNameMismatch;
 
+	public static String STCoreVariableUsageValidator_UnreadVariable;
+	public static String STCoreVariableUsageValidator_UnusedVariable;
+	public static String STCoreVariableUsageValidator_UnwrittenVariable;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -29,15 +29,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.Messages;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSourceElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreControlFlowValidator;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreVariableUsageValidator;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage;
 import org.eclipse.xtext.resource.IContainer;
 import org.eclipse.xtext.resource.IEObjectDescription;
@@ -71,17 +70,34 @@ public class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 	public static final String SHADOWING_FUNCTION = STAlgorithmValidator.ISSUE_CODE_PREFIX + "shadowingFunction"; //$NON-NLS-1$
 
 	@Check
-	public void checkControlFlow(final STAlgorithmBody body) {
+	public void checkControlFlow(final STAlgorithm algorithm) {
 		final STCoreControlFlowValidator controlFlowValidator = new STCoreControlFlowValidator(this);
-		controlFlowValidator.validateVariableBlocks(body.getVarTempDeclarations());
-		controlFlowValidator.validateStatements(body.getStatements());
+		controlFlowValidator.validateVariableBlocks(algorithm.getBody().getVarTempDeclarations());
+		controlFlowValidator.validateStatements(algorithm.getBody().getStatements());
 	}
 
 	@Check
-	public void checkControlFlow(final STMethodBody body) {
+	public void checkControlFlow(final STMethod method) {
 		final STCoreControlFlowValidator controlFlowValidator = new STCoreControlFlowValidator(this);
-		controlFlowValidator.validateVariableBlocks(body.getVarDeclarations());
-		controlFlowValidator.validateStatements(body.getStatements());
+		controlFlowValidator.validateVariableBlocks(method.getBody().getVarDeclarations());
+		controlFlowValidator.validateStatements(method.getBody().getStatements());
+	}
+
+	@Check
+	public void checkUnusedVariables(final STAlgorithm algorithm) {
+		final STCoreVariableUsageValidator variableUsageValidator = new STCoreVariableUsageValidator(this);
+		variableUsageValidator.addVariableBlocks(algorithm.getBody().getVarTempDeclarations());
+		variableUsageValidator.addReferences(algorithm);
+		variableUsageValidator.validateUnused();
+	}
+
+	@Check
+	public void checkUnusedVariables(final STMethod method) {
+		final STCoreVariableUsageValidator variableUsageValidator = new STCoreVariableUsageValidator(this);
+		variableUsageValidator.addVariableBlocks(method.getBody().getVarDeclarations());
+		variableUsageValidator.addReturnVariable(method);
+		variableUsageValidator.addReferences(method);
+		variableUsageValidator.validateUnused();
 	}
 
 	@Check
