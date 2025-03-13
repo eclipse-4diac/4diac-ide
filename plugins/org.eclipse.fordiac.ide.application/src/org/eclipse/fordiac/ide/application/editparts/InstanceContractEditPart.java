@@ -17,13 +17,13 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.application.figures.InstanceContractFigure;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
-import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeContractCommand;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.jface.viewers.CellEditor;
@@ -38,7 +38,7 @@ public class InstanceContractEditPart extends AbstractGraphicalEditPart {
 		}
 	}
 
-	private class ContractRenameEditPolicy extends AbstractViewRenameEditPolicy {
+	private class ContractRenameEditPolicy extends DirectEditPolicy {
 		@Override
 		protected Command getDirectEditCommand(final DirectEditRequest request) {
 			if (request.getCellEditor().getValue() instanceof final String s) {
@@ -107,6 +107,8 @@ public class InstanceContractEditPart extends AbstractGraphicalEditPart {
 
 	private void performDirectEdit() {
 		new TextDirectEditManager(this, new FigureCellEditorLocator(getFigure())) {
+			private boolean bringDownCalled = false;
+
 			@Override
 			protected CellEditor createCellEditorOn(final Composite composite) {
 				return new ContractCellEditor(composite, getModel());
@@ -116,6 +118,17 @@ public class InstanceContractEditPart extends AbstractGraphicalEditPart {
 			protected void initCellEditor() {
 				super.initCellEditor();
 				getCellEditor().setValue(getModel().getContract());
+			}
+
+			@Override
+			protected void bringDown() {
+				// closing the editor with changes would call bringDown twice, throwing an
+				// exception - the 2nd call happens because changing a contract first deletes
+				// the old one, which in turn removes the edit part and its cell editor
+				if (!bringDownCalled) {
+					bringDownCalled = true;
+					super.bringDown();
+				}
 			}
 		}.show();
 	}

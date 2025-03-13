@@ -35,7 +35,6 @@ public class ContractCellEditor extends CellEditor {
 		create(composite);
 	}
 
-
 	@Override
 	protected Control createControl(final Composite parent) {
 		editor = ContractspecResourceProvider.getEmbeddedEditorBuilder(contract.getSubApp()).showLineNumbers()
@@ -45,25 +44,28 @@ public class ContractCellEditor extends CellEditor {
 		editor.getViewer().getTextWidget().addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(final FocusEvent e) {
-				if (!contract.getContract().equals(modelAccess.getEditablePart())) {
-					valueChanged(true, true);
+				if (popupOpen) {
+					return;
 				}
-				System.out.println("popup open? " + popupOpen);
-
 				// if a quickfix is applied, we also loose focus but regain it right after
 				// so we wait for 100ms and check if we are still not focused before closing
+				// if someone knows a better way, please rewrite this...
 				Display.getCurrent().timerExec(100, () -> {
 					if (!editor.getViewer().getTextWidget().isFocusControl()) {
+						if (!contract.getContract().equals(modelAccess.getEditablePart())) {
+							valueChanged(true, true);
+						}
 						ContractCellEditor.this.focusLost();
 					}
 				});
 			}
 		});
 
-		editor.getViewer().getQuickAssistAssistant().addCompletionListener(new ICompletionListener() {
+		// don't loose focus when clicking on auto complete popup
+		editor.getViewer().getContentAssistantFacade().addCompletionListener(new ICompletionListener() {
 			@Override
 			public void selectionChanged(final ICompletionProposal proposal, final boolean smartToggle) {
-				// ignore
+				// not relevant
 			}
 
 			@Override
@@ -73,6 +75,7 @@ public class ContractCellEditor extends CellEditor {
 
 			@Override
 			public void assistSessionEnded(final ContentAssistEvent event) {
+				doSetFocus();
 				popupOpen = false;
 			}
 		});
