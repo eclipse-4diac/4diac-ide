@@ -73,6 +73,7 @@ public interface ECTransition extends PositionableElement {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECTransition_ConditionExpression()
 	 * @model default="1" dataType="org.eclipse.emf.ecore.xml.type.String"
 	 *        extendedMetaData="kind='attribute' name='Condition'"
+	 *        annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData transformer='org.eclipse.fordiac.ide.model.util.StringTransformer'"
 	 * @generated
 	 */
 	String getConditionExpression();

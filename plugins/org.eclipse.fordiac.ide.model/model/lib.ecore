@@ -735,6 +735,9 @@
         defaultValueLiteral=""/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConnectionRoutingData">
+    <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+      <details key="ignored" value="true"/>
+    </eAnnotations>
     <eOperations name="is1SegementData" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDx1());"/>
@@ -937,6 +940,9 @@
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="Condition"/>
+      </eAnnotations>
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="transformer" value="org.eclipse.fordiac.ide.model.util.StringTransformer"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
@@ -1551,7 +1557,11 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
         defaultValueLiteral=""/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
-        defaultValueLiteral=""/>
+        defaultValueLiteral="">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="ignored" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InputPrimitive" eSuperTypes="#//Primitive"/>
   <eClassifiers xsi:type="ecore:EClass" name="InterfaceList">
@@ -1842,6 +1852,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OutputPrimitive" eSuperTypes="#//Primitive"/>
   <eClassifiers xsi:type="ecore:EClass" name="Position">
+    <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+      <details key="ignored" value="true"/>
+    </eAnnotations>
     <eOperations name="toScreenPoint" lowerBound="1" eType="#//Point">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return PositionAnnotation.toScreenPoint(this);"/>
@@ -2008,7 +2021,11 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
-        defaultValueLiteral=""/>
+        defaultValueLiteral="">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="ignored" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceSequence" eSuperTypes="#//INamedElement #//ConfigurableObject">
     <eOperations name="getService" lowerBound="1" eType="#//Service">
@@ -2180,7 +2197,11 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TextAlgorithm" abstract="true" eSuperTypes="#//Algorithm">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="transformer" value="org.eclipse.fordiac.ide.model.util.StringTransformer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TextFunction" abstract="true" eSuperTypes="#//Function">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputParameters" upperBound="-1"
@@ -2191,10 +2212,18 @@
         eType="#//ITypedElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass data.ecore#//DataType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="varargs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="transformer" value="org.eclipse.fordiac.ide.model.util.StringTransformer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TextFunctionBody" abstract="true" eSuperTypes="#//FunctionBody">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="transformer" value="org.eclipse.fordiac.ide.model.util.StringTransformer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TextMethod" abstract="true" eSuperTypes="#//Method">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputParameters" upperBound="-1"
@@ -2205,7 +2234,11 @@
         eType="#//ITypedElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass data.ecore#//DataType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="varargs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="transformer" value="org.eclipse.fordiac.ide.model.util.StringTransformer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TypedConfigureableObject" eSuperTypes="#//ITypedElement #//ConfigurableObject">
     <eOperations name="getTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
