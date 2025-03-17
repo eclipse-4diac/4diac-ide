@@ -73,10 +73,10 @@ public class InstanceContractFigure extends Figure {
 				final TextFlow tf = new TextFlow(t.value());
 
 				switch (t.type()) {
-				case comment:
+				case COMMENT:
 					tf.setForegroundColor(ContractScanner.COMMENT);
 					break;
-				case keyword:
+				case KEYWORD:
 					tf.setForegroundColor(ContractScanner.HIGHLIGHT);
 					break;
 				default:

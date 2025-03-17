@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2025 Johannes Kepler Universität Linz
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Felix Schmid
+ *     - initial API and implementation and/or initial documentation
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.utils;
 
 import java.io.IOException;
@@ -8,7 +21,7 @@ import java.util.Set;
 import org.eclipse.swt.graphics.Color;
 
 public class ContractScanner implements Iterable<ContractScanner.Token> {
-	public static record Token(TokenType type, String value) {
+	public record Token(TokenType type, String value) {
 	}
 
 	public static final Color NORMAL = new Color(0, 0, 0);
@@ -16,19 +29,19 @@ public class ContractScanner implements Iterable<ContractScanner.Token> {
 	public static final Color COMMENT = new Color(63, 127, 95);
 
 	public enum TokenType {
-		normal, keyword, comment
+		NORMAL, KEYWORD, COMMENT
 	}
 
 	@SuppressWarnings("nls")
-	private static final Set<String> keywords = Set.of("Age", "Clock", "FIFO", "ID", "LIFO", "Reaction", "and", "clock",
+	private static final Set<String> KEYWORDS = Set.of("Age", "Clock", "FIFO", "ID", "LIFO", "Reaction", "and", "clock",
 			"drift", "every", "has", "jitter", "maxdiff", "ms", "ns", "occurred", "occurs", "of", "offset", "once",
 			"out", "resolution", "s", "skew", "then", "times", "us", "using", "whenever", "with", "within");
 
-	StringReader reader;
-	StringBuilder sb;
-	int ch;
-	TokenType tt;
-	boolean hasNext = true;
+	private final StringReader reader;
+	private final StringBuilder sb;
+	private int ch;
+	private TokenType tt;
+	private boolean hasNext = true;
 
 	public ContractScanner(final String string) {
 		reader = new StringReader(string);
@@ -97,7 +110,7 @@ public class ContractScanner implements Iterable<ContractScanner.Token> {
 			nextChar();
 		}
 		final String v = sb.toString();
-		tt = keywords.contains(v) ? TokenType.keyword : TokenType.normal;
+		tt = KEYWORDS.contains(v) ? TokenType.KEYWORD : TokenType.NORMAL;
 	}
 
 	private void readOther() {
@@ -105,7 +118,7 @@ public class ContractScanner implements Iterable<ContractScanner.Token> {
 			sb.append((char) ch);
 			nextChar();
 		}
-		tt = TokenType.normal;
+		tt = TokenType.NORMAL;
 	}
 
 	private void readSingleLineComment() {
@@ -113,7 +126,7 @@ public class ContractScanner implements Iterable<ContractScanner.Token> {
 			sb.append((char) ch);
 			nextChar();
 		}
-		tt = TokenType.comment;
+		tt = TokenType.COMMENT;
 	}
 
 	private void readMultiLineComment() {
@@ -126,6 +139,6 @@ public class ContractScanner implements Iterable<ContractScanner.Token> {
 		}
 		sb.append((char) ch);
 		nextChar();
-		tt = TokenType.comment;
+		tt = TokenType.COMMENT;
 	}
 }

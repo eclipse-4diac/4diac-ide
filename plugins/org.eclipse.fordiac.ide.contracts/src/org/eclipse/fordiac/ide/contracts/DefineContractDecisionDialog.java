@@ -83,11 +83,11 @@ public class DefineContractDecisionDialog extends MessageDialog {
 				final StyleRange range = new StyleRange(idx, len, null, null);
 				idx += len;
 				range.foreground = switch (t.type()) {
-				case comment -> ContractScanner.COMMENT;
-				case keyword -> ContractScanner.HIGHLIGHT;
+				case COMMENT -> ContractScanner.COMMENT;
+				case KEYWORD -> ContractScanner.HIGHLIGHT;
 				default -> ContractScanner.NORMAL;
 				};
-				if (t.type() == ContractScanner.TokenType.keyword) {
+				if (t.type() == ContractScanner.TokenType.KEYWORD) {
 					range.fontStyle = SWT.BOLD;
 				}
 				ranges.add(range);
