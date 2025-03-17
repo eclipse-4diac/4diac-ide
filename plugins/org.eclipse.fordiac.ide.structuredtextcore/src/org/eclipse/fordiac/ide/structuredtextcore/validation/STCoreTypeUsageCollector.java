@@ -18,7 +18,11 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage;
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.xtext.linking.impl.LinkingHelper;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
@@ -142,7 +146,7 @@ public class STCoreTypeUsageCollector {
 		IEObjectDescription result = null;
 		for (final IEObjectDescription candidate : scope.getAllElements()) {
 			final QualifiedName candidateName = candidate.getName();
-			if (endsWith(candidateName, name)) {
+			if (isVisible(candidate) && endsWith(candidateName, name)) {
 				if (result == null) {
 					result = new AliasedEObjectDescription(name, candidate);
 				} else if (!result.getQualifiedName().equals(candidate.getQualifiedName())) {
@@ -153,6 +157,23 @@ public class STCoreTypeUsageCollector {
 		if (result != null) {
 			addUsedType(result);
 		}
+	}
+
+	protected static boolean isVisible(final IEObjectDescription description) {
+		return description.getQualifiedName().getSegmentCount() == 1
+				|| LibraryElementPackage.eINSTANCE.getLibraryElement().isSuperTypeOf(description.getEClass())
+				|| (STCorePackage.eINSTANCE.getSTVarDeclaration().equals(description.getEClass())
+						&& isGlobalVariable(description));
+	}
+
+	protected static boolean isGlobalVariable(final IEObjectDescription description) {
+		final String containerEClassName = description
+				.getUserData(STCoreResourceDescriptionStrategy.CONTAINER_ECLASS_NAME);
+		if (containerEClassName != null) {
+			return GlobalConstantsPackage.Literals.ST_VAR_GLOBAL_DECLARATION_BLOCK.getName()
+					.equals(containerEClassName);
+		}
+		return description.getEObjectOrProxy().eContainer() instanceof STVarGlobalDeclarationBlock;
 	}
 
 	protected static boolean endsWith(final QualifiedName name, final QualifiedName suffix) {
