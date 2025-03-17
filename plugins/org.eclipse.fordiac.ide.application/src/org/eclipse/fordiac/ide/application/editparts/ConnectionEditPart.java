@@ -326,7 +326,6 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 			if (getModel().isBrokenConnection()) {
 				getConnectionFigure().setLineStyle(SWT.LINE_CUSTOM);
 				getConnectionFigure().setLineDash(BROKEN_CONNECTION_DASH_PATTERN);
-
 			} else {
 				getConnectionFigure().setLineStyle(SWT.LINE_SOLID);
 				getConnectionFigure().setLineDash(null);

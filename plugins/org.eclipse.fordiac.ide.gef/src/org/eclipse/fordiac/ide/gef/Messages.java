@@ -37,6 +37,7 @@ public final class Messages extends NLS {
 	public static String ChangeCommentCommand_LABEL_ChangeComment;
 	public static String ConnectionSection_Comment;
 	public static String ConnectionSection_ShowConnection;
+	public static String ConnectionSection_NegateConnection;
 
 	public static String ConnectionSection_Source;
 	public static String ConnectionSection_Target;

@@ -234,7 +234,7 @@ final class ForteNgExportUtil {
 		}
 	}
 
-	def static CharSequence getFORTEStringId(String s) '''g_nStringId«s»'''
+	def static CharSequence getFORTEStringId(String s) '''STRID(«s»)'''
 
 	def static int getInterfaceElementIndex(IInterfaceElement element) {
 		if (element.eContainer !== null && element.eContainingFeature.many) {

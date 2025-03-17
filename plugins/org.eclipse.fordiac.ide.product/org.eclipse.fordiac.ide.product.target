@@ -36,22 +36,22 @@
 			<unit id="org.eclipse.emf.compare.source.feature.group" version="3.3.25.202406060900"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/nattable/releases/2.4.0/repository/"/>
-			<unit id="org.eclipse.nebula.widgets.nattable.core.feature.feature.group" version="2.4.0.202405230453"/>
-			<unit id="org.eclipse.nebula.widgets.nattable.core.feature.source.feature.group" version="2.4.0.202405230453"/>
+			<repository location="https://download.eclipse.org/nattable/releases/2.5.0/repository/"/>
+			<unit id="org.eclipse.nebula.widgets.nattable.core.feature.feature.group" version="2.5.0.202411280718"/>
+			<unit id="org.eclipse.nebula.widgets.nattable.core.feature.source.feature.group" version="2.5.0.202411280718"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/releases/2024-12"/>
+			<repository location="https://download.eclipse.org/releases/2025-03"/>
 			<unit id="javax.activation" version="1.2.2.v20221203-1659"/>
-			<unit id="org.eclipse.platform.feature.group" version="4.34.0.v20241120-1800"/>
-			<unit id="org.eclipse.egit.feature.group" version="7.1.0.202411261347-r"/>
-			<unit id="org.eclipse.emf.sdk.feature.group" version="2.40.0.v20241018-1213"/>
+			<unit id="org.eclipse.platform.feature.group" version="4.35.0.v20250228-0640"/>
+			<unit id="org.eclipse.egit.feature.group" version="7.2.0.202503040940-r"/>
+			<unit id="org.eclipse.emf.sdk.feature.group" version="2.41.0.v20241204-1554"/>
 			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.22.0.v20240902-1518"/>			
-			<unit id="org.eclipse.sirius.properties.feature.feature.group" version="7.4.4.202410041328"/>
-			<unit id="org.eclipse.sirius.samples.feature.group" version="7.4.4.202410041328"/>
-			<unit id="org.eclipse.sirius.specifier.feature.group" version="7.4.4.202410041328"/>
-			<unit id="org.eclipse.sirius.specifier.properties.feature.feature.group" version="7.4.4.202410041328"/>
-			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.37.0.v20241119-0857"/>
+			<unit id="org.eclipse.sirius.properties.feature.feature.group" version="7.4.7.202501291808"/>
+			<unit id="org.eclipse.sirius.samples.feature.group" version="7.4.7.202501291808"/>
+			<unit id="org.eclipse.sirius.specifier.feature.group" version="7.4.7.202501291808"/>
+			<unit id="org.eclipse.sirius.specifier.properties.feature.feature.group" version="7.4.7.202501291808"/>
+			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.38.0.v20250226-0658"/>
       		<unit id="org.eclipse.swtbot.eclipse.feature.group" version="4.2.1.202406141605"/>
       		<unit id="org.eclipse.swtbot.eclipse.gef.feature.group" version="4.2.1.202406141605"/>
       		<unit id="org.eclipse.swtbot.feature.group" version="4.2.1.202406141605"/>
@@ -88,7 +88,7 @@
 				<dependency>
 					<groupId>org.eclipse.milo</groupId>
 					<artifactId>sdk-client</artifactId>
-					<version>0.6.14</version>
+					<version>0.6.15</version>
 					<type>jar</type>
 				</dependency>
 				<dependency>
