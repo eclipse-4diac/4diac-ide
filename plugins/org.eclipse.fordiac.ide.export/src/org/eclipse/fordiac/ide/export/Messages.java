@@ -64,6 +64,8 @@ public final class Messages extends NLS {
 
 	public static String TypeExport_Settings;
 
+	public static String TypeExport_FileDialogMessage;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
