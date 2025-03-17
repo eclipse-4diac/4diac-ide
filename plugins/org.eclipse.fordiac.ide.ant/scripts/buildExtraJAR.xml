@@ -28,6 +28,8 @@
                <include name="org.eclipse.fordiac.ide.model/bin"/>
                <include name="org.eclipse.fordiac.ide.library/bin"/>
                <include name="org.eclipse.fordiac.ide.hierarchymanager/bin"/>
+               <include name="org.eclipse.fordiac.ide.hierarchymanager.model/bin"/>
+               <include name="org.eclipse.fordiac.ide.hierarchymanager.ui/bin"/>
                <include name="org.eclipse.fordiac.ide.library.model/bin"/>
                <include name="org.eclipse.fordiac.ide.systemmanagement/bin"/>
                <include name="org.eclipse.fordiac.ide.export/bin"/>
