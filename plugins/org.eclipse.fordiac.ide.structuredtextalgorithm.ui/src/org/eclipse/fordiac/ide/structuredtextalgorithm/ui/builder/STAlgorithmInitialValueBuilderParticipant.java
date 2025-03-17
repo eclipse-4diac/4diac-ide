@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.builder;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -37,6 +38,7 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -52,6 +54,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.ModelIssueListVa
 import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.ValidationUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreImportValidator;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreVariableUsageValidator;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreVariableUsageValidator.VariableState;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IResourceDescription;
@@ -61,6 +65,7 @@ import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.validation.CheckMode;
 import org.eclipse.xtext.validation.IResourceValidator;
 import org.eclipse.xtext.validation.Issue;
+import org.eclipse.xtext.validation.IssueSeveritiesProvider;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -75,6 +80,9 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 
 	@Inject
 	private STCoreImportValidator importValidator;
+
+	@Inject
+	private IssueSeveritiesProvider severitiesProvider;
 
 	@Override
 	public void build(final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
@@ -99,29 +107,14 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			final STCoreTypeUsageCollector typeUsageCollector = typeUsageCollectorProvider.get();
 			final boolean ignoreWarnings = ValidationUtil.isIgnoreWarnings(file);
 			final Resource resource = context.getResourceSet().getResource(delta.getUri(), true);
-			final TreeIterator<EObject> allContents = EcoreUtil.getAllContents(resource, true);
-			while (allContents.hasNext()) {
-				if (monitor.isCanceled()) {
-					throw new OperationCanceledException();
-				}
-				final EObject target = allContents.next();
-				if (target instanceof SystemConfiguration) {
-					allContents.prune();
-				} else if (target instanceof final Attribute attribute) {
-					validateType(attribute, delta, typeUsageCollector, ignoreWarnings, context, monitor);
-					validateValue(attribute, delta, typeUsageCollector, ignoreWarnings, context, monitor);
-				} else if (target instanceof final VarDeclaration varDeclaration) {
-					validateType(varDeclaration, delta, typeUsageCollector, ignoreWarnings, context, monitor);
-					validateValue(varDeclaration, delta, typeUsageCollector, ignoreWarnings, context, monitor);
-				} else if (target instanceof STSource) {
-					typeUsageCollector.collectUsedTypes(target);
-				}
-			}
-			for (final EObject object : resource.getContents()) {
-				if (object instanceof final LibraryElement libraryElement) {
-					validateImports(libraryElement, delta, typeUsageCollector.getUsedTypes(), ignoreWarnings, monitor);
-				}
-			}
+			final ModelIssueListValidationMesageAcceptor acceptor = new ModelIssueListValidationMesageAcceptor();
+			final STCoreVariableUsageValidator variableUsageValidator = new STCoreVariableUsageValidator(acceptor,
+					severitiesProvider.getIssueSeverities(resource));
+			prepare(resource, variableUsageValidator);
+			validateContents(resource, delta, typeUsageCollector, variableUsageValidator, ignoreWarnings, context,
+					monitor);
+			validateImports(resource, delta, typeUsageCollector, ignoreWarnings, monitor);
+			validateUnused(variableUsageValidator, acceptor, delta, ignoreWarnings, monitor);
 		} catch (final OperationCanceledException e) {
 			throw e;
 		} catch (final RuntimeException e) {
@@ -136,11 +129,53 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			file.deleteMarkers(FordiacErrorMarker.INITIAL_VALUE_MARKER, true, IResource.DEPTH_INFINITE);
 			file.deleteMarkers(FordiacErrorMarker.TYPE_DECLARATION_MARKER, true, IResource.DEPTH_INFINITE);
 			file.deleteMarkers(FordiacErrorMarker.IMPORT_MARKER, true, IResource.DEPTH_INFINITE);
+			file.deleteMarkers(FordiacErrorMarker.UNUSED_MARKER, true, IResource.DEPTH_INFINITE);
+		}
+	}
+
+	protected static void prepare(final Resource resource, final STCoreVariableUsageValidator variableUsageValidator) {
+		for (final EObject object : resource.getContents()) {
+			if (object instanceof final BaseFBType baseFBType) {
+				variableUsageValidator.addVariables(baseFBType);
+				variableUsageValidator.addVariables(baseFBType.getInternalVars());
+				variableUsageValidator.addVariables(baseFBType.getInternalConstVars(),
+						EnumSet.of(VariableState.UNUSED, VariableState.UNREAD));
+			}
+		}
+	}
+
+	protected void validateContents(final Resource resource, final IResourceDescription.Delta delta,
+			final STCoreTypeUsageCollector typeUsageCollector,
+			final STCoreVariableUsageValidator variableUsageValidator, final boolean ignoreWarnings,
+			final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
+		final TreeIterator<EObject> allContents = EcoreUtil.getAllContents(resource, true);
+		while (allContents.hasNext()) {
+			if (monitor.isCanceled()) {
+				throw new OperationCanceledException();
+			}
+			final EObject target = allContents.next();
+			if (target instanceof SystemConfiguration) {
+				allContents.prune();
+			} else if (target instanceof final Attribute attribute) {
+				validateType(attribute, delta, typeUsageCollector, ignoreWarnings, context, monitor);
+				validateValue(attribute, delta, typeUsageCollector, variableUsageValidator, ignoreWarnings, context,
+						monitor);
+			} else if (target instanceof final VarDeclaration varDeclaration) {
+				validateType(varDeclaration, delta, typeUsageCollector, variableUsageValidator, ignoreWarnings, context,
+						monitor);
+				validateValue(varDeclaration, delta, typeUsageCollector, variableUsageValidator, ignoreWarnings,
+						context, monitor);
+			} else if (target instanceof STSource) {
+				typeUsageCollector.collectUsedTypes(target);
+				variableUsageValidator.addReferences(target);
+				allContents.prune();
+			}
 		}
 	}
 
 	protected void validateType(final VarDeclaration varDeclaration, final IResourceDescription.Delta delta,
-			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
+			final STCoreTypeUsageCollector typeUsageCollector,
+			final STCoreVariableUsageValidator variableUsageValidator, final boolean ignoreWarnings,
 			final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
 		if (ValidationUtil.isContainedInTypedInstance(varDeclaration)) {
 			// do not validate type declarations inside typed instances, since those are
@@ -150,7 +185,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		final List<Issue> issues = new ArrayList<>();
 		if (varDeclaration.getType() instanceof AnyType) {
 			if (varDeclaration.isArray()) {
-				validate(varDeclaration.getArraySize(), delta, typeUsageCollector, issues, context);
+				validate(varDeclaration.getArraySize(), delta, typeUsageCollector, variableUsageValidator, issues,
+						context);
 				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getArraySize()));
 			} else {
 				typeUsageCollector.addUsedType(varDeclaration.getType());
@@ -168,7 +204,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	}
 
 	protected void validateValue(final VarDeclaration varDeclaration, final IResourceDescription.Delta delta,
-			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
+			final STCoreTypeUsageCollector typeUsageCollector,
+			final STCoreVariableUsageValidator variableUsageValidator, final boolean ignoreWarnings,
 			final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
 		final String value = getValue(varDeclaration);
 		final List<Issue> issues = new ArrayList<>();
@@ -178,7 +215,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			try {
 				new TypedValueConverter((DataType) featureType, true).toValue(value);
 			} catch (final Exception e) {
-				validate(varDeclaration.getValue(), delta, typeUsageCollector, issues, context);
+				validate(varDeclaration.getValue(), delta, typeUsageCollector, variableUsageValidator, issues, context);
 				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getValue()));
 			}
 		}
@@ -205,7 +242,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	}
 
 	protected void validateValue(final Attribute attribute, final IResourceDescription.Delta delta,
-			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
+			final STCoreTypeUsageCollector typeUsageCollector,
+			final STCoreVariableUsageValidator variableUsageValidator, final boolean ignoreWarnings,
 			final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
 		final String value = getValue(attribute);
 		final List<Issue> issues = new ArrayList<>();
@@ -215,7 +253,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			try {
 				new TypedValueConverter(featureType, attribute.getAttributeDeclaration() != null).toValue(value);
 			} catch (final Exception e) {
-				validate(attribute, delta, typeUsageCollector, issues, context);
+				validate(attribute, delta, typeUsageCollector, variableUsageValidator, issues, context);
 				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, attribute,
 						LibraryElementPackage.Literals.ATTRIBUTE__VALUE));
 			}
@@ -227,6 +265,16 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			final IFile file = getFile(delta.getUri());
 			if (file != null && file.exists()) {
 				createMarkers(file, FordiacErrorMarker.INITIAL_VALUE_MARKER, issues, ignoreWarnings, monitor);
+			}
+		}
+	}
+
+	protected void validateImports(final Resource resource, final IResourceDescription.Delta delta,
+			final STCoreTypeUsageCollector typeUsageCollector, final boolean ignoreWarnings,
+			final IProgressMonitor monitor) throws CoreException {
+		for (final EObject object : resource.getContents()) {
+			if (object instanceof final LibraryElement libraryElement) {
+				validateImports(libraryElement, delta, typeUsageCollector.getUsedTypes(), ignoreWarnings, monitor);
 			}
 		}
 	}
@@ -250,8 +298,22 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		}
 	}
 
+	protected void validateUnused(final STCoreVariableUsageValidator variableUsageValidator,
+			final ModelIssueListValidationMesageAcceptor acceptor, final IResourceDescription.Delta delta,
+			final boolean ignoreWarnings, final IProgressMonitor monitor) throws CoreException {
+		variableUsageValidator.validateUnused();
+		if (!acceptor.isEmpty()) {
+			final IFile file = getFile(delta.getUri());
+			if (file != null && file.exists()) {
+				createMarkers(file, FordiacErrorMarker.UNUSED_MARKER, acceptor.getIssues(), ignoreWarnings, monitor);
+			}
+		}
+	}
+
 	protected static void validate(final EObject element, final IResourceDescription.Delta delta,
-			final STCoreTypeUsageCollector typeUsageCollector, final List<Issue> issues, final IBuildContext context) {
+			final STCoreTypeUsageCollector typeUsageCollector,
+			final STCoreVariableUsageValidator variableUsageValidator, final List<Issue> issues,
+			final IBuildContext context) {
 		final String fragment = LibraryElementXtextResource
 				.toExternalFragment(element.eResource().getURIFragment(element));
 		final URI uri = delta.getUri().appendQuery(fragment);
@@ -262,7 +324,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			issues.addAll(validator.validate(xtextResource, CheckMode.FAST_ONLY, CancelIndicator.NullImpl));
 		}
 		if (!resource.getContents().isEmpty()) {
-			typeUsageCollector.collectUsedTypes(resource.getContents().get(0));
+			typeUsageCollector.collectUsedTypes(resource.getContents().getFirst());
+			variableUsageValidator.addReferences(resource.getContents().getFirst());
 		}
 		resource.unload();
 		context.getResourceSet().getResources().remove(resource);

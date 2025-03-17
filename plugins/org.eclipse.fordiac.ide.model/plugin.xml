@@ -254,6 +254,17 @@
     <persistent
           value="true">
     </persistent>
+ </extension>
+ <extension
+       id="unused"
+       name="4diac IDE Unused Declaration Problem"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.model.problem">
+    </super>
+    <persistent
+          value="true">
+    </persistent>
  </extension> 
  <extension
        id="typeLibrary"

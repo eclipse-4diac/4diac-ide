@@ -59,6 +59,13 @@ public class STCoreVariableUsageValidator {
 		this.severities = severities;
 	}
 
+	public void addVariables(final ICallable callable) {
+		addVariables(callable.getInputParameters(), EnumSet.of(VariableState.UNUSED, VariableState.UNREAD));
+		addVariables(callable.getOutputParameters(), EnumSet.of(VariableState.UNUSED, VariableState.UNWRITTEN));
+		addVariables(callable.getInOutParameters(), EnumSet.of(VariableState.UNUSED));
+		addReturnVariable(callable);
+	}
+
 	public void addVariableBlocks(final List<? extends STVarDeclarationBlock> blocks) {
 		blocks.forEach(this::addVariableBlock);
 	}
@@ -80,6 +87,11 @@ public class STCoreVariableUsageValidator {
 		if (callable.getReturnType() != null) {
 			setState(callable, EnumSet.of(VariableState.UNUSED, VariableState.UNWRITTEN));
 		}
+	}
+
+	public void addVariables(final List<? extends INamedElement> declarations) {
+		declarations.forEach(declaration -> addVariable(declaration,
+				EnumSet.of(VariableState.UNUSED, VariableState.UNREAD, VariableState.UNWRITTEN)));
 	}
 
 	public void addVariables(final List<? extends INamedElement> declarations, final Set<VariableState> initialState) {
