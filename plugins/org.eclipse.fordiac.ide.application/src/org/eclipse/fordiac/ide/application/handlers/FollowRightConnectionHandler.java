@@ -128,7 +128,8 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 			return false;
 		}
 		final InterfaceList il = (InterfaceList) pin.getModel().eContainer();
-		return !(il.getEventOutputs().isEmpty() && il.getOutputVars().isEmpty() && il.getPlugs().isEmpty());
+		return !(il.getEventOutputs().isEmpty() && il.getOutputVars().isEmpty() && il.getPlugs().isEmpty()
+				&& il.getInOutVars().isEmpty());
 	}
 
 	@Override
