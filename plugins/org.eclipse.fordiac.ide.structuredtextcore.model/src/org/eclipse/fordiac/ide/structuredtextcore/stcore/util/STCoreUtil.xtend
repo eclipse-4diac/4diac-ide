@@ -227,7 +227,7 @@ final class STCoreUtil {
 		switch (container : expression.eContainer) {
 			STAssignment case container.left == expression: AccessMode.WRITE
 			STForStatement case container.variable == expression: AccessMode.WRITE
-			STMemberAccessExpression case container.member == expression: container.accessMode
+			STMemberAccessExpression: container.accessMode
 			STArrayAccessExpression case container.receiver == expression: container.accessMode
 			STCallArgument: container.accessMode
 			STForStatement case container.statements.contains(expression),
