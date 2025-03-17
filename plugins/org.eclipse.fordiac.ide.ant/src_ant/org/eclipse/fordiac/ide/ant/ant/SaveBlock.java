@@ -20,10 +20,12 @@ import java.util.function.Consumer;
 import org.apache.tools.ant.BuildException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.xtext.resource.IResourceFactory;
@@ -40,14 +42,39 @@ public class SaveBlock extends AbstractBlockModelTask {
 	@Override
 	protected void modifyBlock(final FBType fb) {
 		log(MessageFormat.format("Save {0}/{1}", projectname, blockname)); //$NON-NLS-1$
-		saveBlock(fb.getTypeEntry(), autoformat, this::log);
+		saveType(fb, this::log);
+		saveTypeEntry(fb.getTypeEntry(), autoformat, this::log);
 	}
 
 	private boolean autoformat = false;
 
-	public static void saveBlock(final TypeEntry te, final boolean autoformat, final Consumer<String> logger) {
+	public static void saveType(final LibraryElement le, final Consumer<String> logger) {
+		final IFile file = le.getTypeEntry().getFile();
+
+		if (file == null) {
+			logger.accept("Type file is null: " + le.getName()); //$NON-NLS-1$
+			return;
+		}
+
+		if (file.isLinked(IResource.CHECK_ANCESTORS)) {
+			// do not modify files stored outside the project that are only linked in
+			return;
+		}
+		try {
+			le.getTypeEntry().save(le);
+		} catch (final CoreException e) {
+			logger.accept(e.toString());
+		}
+	}
+
+	public static void saveTypeEntry(final TypeEntry te, final boolean autoformat, final Consumer<String> logger) {
 		try {
 			final IFile typeFile = te.getFile();
+
+			if (typeFile == null) {
+				logger.accept("Type Entry file is null: " + te.getFullTypeName()); //$NON-NLS-1$
+				return;
+			}
 
 			if (typeFile.isLinked(IResource.CHECK_ANCESTORS)) {
 				// do not modify files stored outside the project that are only linked in

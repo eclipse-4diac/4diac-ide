@@ -33,7 +33,7 @@ public class ResaveTypelib extends Task {
 		final var tl = AbstractBlockModelTask.getTypeLibrary(fordiacProject, projectname);
 
 		log(MessageFormat.format("Save {0}", projectname)); //$NON-NLS-1$
-		tl.getAllTypes().forEach(te -> SaveBlock.saveBlock(te, autoformat, this::log));
+		tl.getAllTypes().forEach(te -> SaveBlock.saveTypeEntry(te, autoformat, this::log));
 	}
 
 	protected String projectname = AbstractBlockModelTask.EMPTY_STRING;
