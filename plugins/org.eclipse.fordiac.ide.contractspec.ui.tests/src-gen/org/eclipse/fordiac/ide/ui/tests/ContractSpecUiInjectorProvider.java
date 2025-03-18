@@ -13,15 +13,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.tests;
 
-import com.google.inject.Injector;
 import org.eclipse.fordiac.ide.contractspec.ui.internal.ContractspecActivator;
 import org.eclipse.xtext.testing.IInjectorProvider;
+
+import com.google.inject.Injector;
 
 public class ContractSpecUiInjectorProvider implements IInjectorProvider {
 
 	@Override
 	public Injector getInjector() {
-		return ContractspecActivator.getInstance().getInjector("org.eclipse.fordiac.ide.ContractSpec");
+		return ContractspecActivator.getInstance().getInjector("org.eclipse.fordiac.ide.ContractSpec"); //$NON-NLS-1$
 	}
 
 }
