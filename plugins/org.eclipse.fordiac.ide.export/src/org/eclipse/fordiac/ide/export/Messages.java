@@ -56,16 +56,6 @@ public final class Messages extends NLS {
 
 	public static String TemplateExportFilter_OVERWRITE_ALL_LABEL_STRING;
 
-	public static String TypeExport_Enable;
-
-	public static String TypeExport_Exporter;
-
-	public static String TypeExport_OutputFolder;
-
-	public static String TypeExport_Settings;
-
-	public static String TypeExport_FileDialogMessage;
-
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
