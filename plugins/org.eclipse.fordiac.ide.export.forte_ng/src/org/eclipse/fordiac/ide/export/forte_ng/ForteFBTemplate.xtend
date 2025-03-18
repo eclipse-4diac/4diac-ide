@@ -509,10 +509,13 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def protected CharSequence generateNameAsConnectionVariable(INamedElement element) '''var_conn_«element.name»'''
 
 	def protected generateEventAccessorDefinitions() '''
-		«FOR event : type.interfaceList.eventInputs BEFORE '\n'»
+		«FOR event : type.interfaceList.eventInputs BEFORE '\n' SEPARATOR '\n'»
 			«event.generateEventAccessorDefinition»
 		«ENDFOR»
-		«type.interfaceList.eventInputs.head?.generateEventAccessorCallOperator»
+		«IF type.interfaceList.eventInputs.size == 1»
+			
+			«type.interfaceList.eventInputs.first.generateEventAccessorCallOperator»
+		«ENDIF»
 	'''
 
 	def protected generateEventAccessorDefinition(Event event) '''
@@ -529,7 +532,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		  	«ENDIF»
 		  «ENDFOR»
 		}
-		
 	'''
 
 	def protected generateEventAccessorCallOperator(Event event) '''
