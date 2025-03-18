@@ -229,9 +229,8 @@ public class TypeExportPropertyPage extends PropertyPage {
 			fileDialog.addFilter(new ViewerFilter() {
 				@Override
 				public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-					// include hidden folders? .settings still appears using !isHidden()
 					return (element instanceof final IFolder folder) && !folder.isVirtual() && !folder.isLinked()
-							&& !(element instanceof SourceFolder);
+							&& !folder.getName().startsWith(".") && !(element instanceof SourceFolder); //$NON-NLS-1$
 				}
 			});
 
