@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.bulkeditor.editors.FilterComposite.Filter;
 import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.AttributeEditableRule;
@@ -89,6 +90,9 @@ import org.eclipse.ui.part.EditorPart;
 // TODO: remove SuppressWarning and move Strings to plugin.properties
 @SuppressWarnings("nls")
 public class BulkEditor extends EditorPart implements CommandExecutor, CommandStackEventListener {
+
+	private static final List<String> DEFAULT_LIST = List.of("Name", "Type", "Comment", "Initial Value");
+	private static final List<String> LIST_WITHOUT_VALUE = List.of("Name", "Type", "Comment");
 
 	private IProject project;
 	private final CommandStack commandStack = new CommandStack();
@@ -161,7 +165,9 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		final Group searchGroup = WidgetFactory.group(SWT.NONE).text("Where").create(composite);
 		searchGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		searchGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
-		searchFilter = new FilterComposite(searchGroup, SWT.NONE, true);
+
+		searchFilter = new FilterComposite(searchGroup, SWT.NONE, DEFAULT_LIST, settings,
+				BulkEditorSettings.whereSearchList);
 
 		createSearchInGroup(composite);
 		createScopeGroup(composite);
@@ -195,78 +201,80 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		fbSubappTypesComposite.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
 		fbSubappTypesButton = WidgetFactory.button(SWT.CHECK).text("FB and SubApp Types")
 				.create(fbSubappTypesComposite);
-		fbSubappTypesFilter = new FilterComposite(fbSubappTypesComposite, SWT.NONE, false);
+		fbSubappTypesFilter = new FilterComposite(fbSubappTypesComposite, SWT.NONE, LIST_WITHOUT_VALUE, settings,
+				BulkEditorSettings.inFBTypesSearchList);
 
 		fbSubappTypesButton.addListener(SWT.Selection, event -> {
-			fbSubappTypesFilter.setVisible(fbSubappTypesButton.getSelection());
-			((GridData) fbSubappTypesFilter.getLayoutData()).exclude = !fbSubappTypesButton.getSelection();
-
-			fbSubappTypesComposite.layout();
-			updateLayout(searchGroup);
+			updateVisibility(fbSubappTypesButton, fbSubappTypesFilter);
+			settings.fbSubappTypes = fbSubappTypesButton.getSelection();
 		});
-		fbSubappTypesButton.setSelection(true);
+		fbSubappTypesButton.setSelection(settings.fbSubappTypes);
+		updateVisibility(fbSubappTypesButton, fbSubappTypesFilter);
 
 		final Composite fbTypedSubappInstanceComposite = new Composite(searchGroup, SWT.NONE);
 		fbTypedSubappInstanceComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		fbTypedSubappInstanceComposite.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
 		fbTypedSubappInstanceButton = WidgetFactory.button(SWT.CHECK).text("FB and Typed Subapp Instances")
 				.create(fbTypedSubappInstanceComposite);
-		fbTypedSubappInstanceFilter = new FilterComposite(fbTypedSubappInstanceComposite, SWT.NONE, false);
+		fbTypedSubappInstanceFilter = new FilterComposite(fbTypedSubappInstanceComposite, SWT.NONE, LIST_WITHOUT_VALUE,
+				settings, BulkEditorSettings.inFBInstanceSearchList);
 
 		fbTypedSubappInstanceButton.addListener(SWT.Selection, event -> {
-			fbTypedSubappInstanceFilter.setVisible(fbTypedSubappInstanceButton.getSelection());
-			((GridData) fbTypedSubappInstanceFilter.getLayoutData()).exclude = !fbTypedSubappInstanceButton
-					.getSelection();
-
-			fbTypedSubappInstanceComposite.layout();
-			updateLayout(searchGroup);
+			updateVisibility(fbTypedSubappInstanceButton, fbTypedSubappInstanceFilter);
+			settings.fbTypedSubappInstance = fbTypedSubappInstanceButton.getSelection();
 		});
-		fbTypedSubappInstanceButton.setSelection(true);
+		fbTypedSubappInstanceButton.setSelection(settings.fbTypedSubappInstance);
+		updateVisibility(fbTypedSubappInstanceButton, fbTypedSubappInstanceFilter);
 
 		final Composite untypedSubappComposite = new Composite(searchGroup, SWT.NONE);
 		untypedSubappComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		untypedSubappComposite.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
 		untypedSubappButton = WidgetFactory.button(SWT.CHECK).text("Untyped Subapps").create(untypedSubappComposite);
-		untypedSubappFilter = new FilterComposite(untypedSubappComposite, SWT.NONE, false);
+		untypedSubappFilter = new FilterComposite(untypedSubappComposite, SWT.NONE, LIST_WITHOUT_VALUE, settings,
+				BulkEditorSettings.inUntypedSubAppSearchList);
 
 		untypedSubappButton.addListener(SWT.Selection, event -> {
-			untypedSubappFilter.setVisible(untypedSubappButton.getSelection());
-			((GridData) untypedSubappFilter.getLayoutData()).exclude = !untypedSubappButton.getSelection();
-
-			untypedSubappComposite.layout();
-			updateLayout(searchGroup);
+			updateVisibility(untypedSubappButton, untypedSubappFilter);
+			settings.untypedSubapp = untypedSubappButton.getSelection();
 		});
-		untypedSubappButton.setSelection(true);
+		untypedSubappButton.setSelection(settings.untypedSubapp);
+		updateVisibility(untypedSubappButton, untypedSubappFilter);
 
 		final Composite dataTypesComposite = new Composite(searchGroup, SWT.NONE);
 		dataTypesComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		dataTypesComposite.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
 		dataTypesButton = WidgetFactory.button(SWT.CHECK).text("Data Types").create(dataTypesComposite);
-		dataTypesFilter = new FilterComposite(dataTypesComposite, SWT.NONE, false);
+		dataTypesFilter = new FilterComposite(dataTypesComposite, SWT.NONE, LIST_WITHOUT_VALUE, settings,
+				BulkEditorSettings.inDataTypesSearchList);
 
 		dataTypesButton.addListener(SWT.Selection, event -> {
-			dataTypesFilter.setVisible(dataTypesButton.getSelection());
-			((GridData) dataTypesFilter.getLayoutData()).exclude = !dataTypesButton.getSelection();
-
-			dataTypesComposite.layout();
-			updateLayout(searchGroup);
+			updateVisibility(dataTypesButton, dataTypesFilter);
+			settings.dataTypes = dataTypesButton.getSelection();
 		});
-		dataTypesButton.setSelection(true);
+		dataTypesButton.setSelection(settings.dataTypes);
+		updateVisibility(dataTypesButton, dataTypesFilter);
 
 		final Composite attributeTypesComposite = new Composite(searchGroup, SWT.NONE);
 		attributeTypesComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		attributeTypesComposite.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
 		attributeTypesButton = WidgetFactory.button(SWT.CHECK).text("Attribute Types").create(attributeTypesComposite);
-		attributeTypesFilter = new FilterComposite(attributeTypesComposite, SWT.NONE, false);
+		attributeTypesFilter = new FilterComposite(attributeTypesComposite, SWT.NONE, LIST_WITHOUT_VALUE, settings,
+				BulkEditorSettings.inAttributeTypesSearchList);
 
 		attributeTypesButton.addListener(SWT.Selection, event -> {
-			attributeTypesFilter.setVisible(attributeTypesButton.getSelection());
-			((GridData) attributeTypesFilter.getLayoutData()).exclude = !attributeTypesButton.getSelection();
-
-			attributeTypesComposite.layout();
-			updateLayout(searchGroup);
+			updateVisibility(attributeTypesButton, attributeTypesFilter);
+			settings.attributeTypes = attributeTypesButton.getSelection();
 		});
-		attributeTypesButton.setSelection(true);
+		attributeTypesButton.setSelection(settings.attributeTypes);
+		updateVisibility(attributeTypesButton, attributeTypesFilter);
+	}
+
+	private static void updateVisibility(final Button button, final FilterComposite filter) {
+		filter.setVisible(button.getSelection());
+		((GridData) filter.getLayoutData()).exclude = !button.getSelection();
+
+		filter.layout();
+		updateLayout(filter.getParent().getParent());
 	}
 
 	private static void updateLayout(final Composite composite) {
@@ -285,8 +293,12 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		scopeGroup.setText("Scope");
 
 		projectScopeButton = WidgetFactory.button(SWT.RADIO).text("Project: " + project.getName()).create(scopeGroup);
-		projectScopeButton.setSelection(true);
+		projectScopeButton.setSelection(settings.projectScope);
+		projectScopeButton.addListener(SWT.Selection, event -> {
+			settings.projectScope = projectScopeButton.getSelection();
+		});
 		workspaceScopeButton = WidgetFactory.button(SWT.RADIO).text("Workspace").create(scopeGroup);
+		workspaceScopeButton.setSelection(!projectScopeButton.getSelection());
 	}
 
 	private void createSearchButton(final Composite parent) {
@@ -306,7 +318,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 						final LibraryElement copyRoot = entry.copyType(); // dont copy if entry already has copy
 						map.put(entry, new CopyElementRecord(copyRoot, new ArrayList<>()));
 					}
-					final EObject copyLibE = EcoreUtil.getEObject(map.get(entry).copy(),
+					final EObject copyLibE = EcoreUtil.getEObject(map.get(entry).copiedElement(),
 							EcoreUtil.getRelativeURIFragmentPath(rootLibE, libE));
 					map.get(entry).addToList(copyLibE);
 					mappedList.add(copyLibE);
@@ -409,7 +421,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		affect.forEach(entry -> {
 			try {
 				if (map.containsKey(entry)) {
-					entry.save(map.get(entry).copy());
+					entry.save(map.get(entry).copiedElement());
 				}
 			} catch (final CoreException e) {
 				e.printStackTrace();
@@ -484,10 +496,10 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	private IEC61499SearchFilter createSearchFilter() {
 		return new IEC61499SearchFilter() {
-			private final Pattern namePattern = createPattern(searchFilter.nameFilter.textField.getText());
-			private final Pattern typePattern = createPattern(searchFilter.typeFilter.textField.getText());
-			private final Pattern commentPattern = createPattern(searchFilter.commentFilter.textField.getText());
-			private final Pattern valuePattern = createPattern(searchFilter.valueFilter.textField.getText());
+			private final Pattern namePattern = createPattern(searchFilter.getFilter(DEFAULT_LIST.get(0)));
+			private final Pattern typePattern = createPattern(searchFilter.getFilter(DEFAULT_LIST.get(1)));
+			private final Pattern commentPattern = createPattern(searchFilter.getFilter(DEFAULT_LIST.get(2)));
+			private final Pattern valuePattern = createPattern(searchFilter.getFilter(DEFAULT_LIST.get(3)));
 
 			@Override
 			public boolean apply(final EObject searchCandidate) {
@@ -507,23 +519,27 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			}
 
 			private boolean matchesName(final ITypedElement element) {
-				return !searchFilter.nameFilter.selected.getSelection()
-						|| compareStrings(searchFilter.nameFilter, namePattern, element.getName());
+				final Filter nameFilter = searchFilter.getFilter(DEFAULT_LIST.get(0));
+				return !nameFilter.selected.getSelection()
+						|| compareStrings(nameFilter, namePattern, element.getName());
 			}
 
 			private boolean matchesType(final ITypedElement element) {
-				return !searchFilter.typeFilter.selected.getSelection()
-						|| compareStrings(searchFilter.typeFilter, typePattern, element.getTypeName());
+				final Filter typeFilter = searchFilter.getFilter(DEFAULT_LIST.get(1));
+				return !typeFilter.selected.getSelection()
+						|| compareStrings(typeFilter, typePattern, element.getTypeName());
 			}
 
 			private boolean matchesComment(final ITypedElement element) {
-				return !searchFilter.commentFilter.selected.getSelection()
-						|| compareStrings(searchFilter.commentFilter, commentPattern, element.getComment());
+				final Filter commentFilter = searchFilter.getFilter(DEFAULT_LIST.get(2));
+				return !commentFilter.selected.getSelection()
+						|| compareStrings(commentFilter, commentPattern, element.getComment());
 			}
 
 			private boolean matchesInitialValue(final ITypedElement element) {
-				return !searchFilter.valueFilter.selected.getSelection() || compareStrings(searchFilter.valueFilter,
-						valuePattern, InitialValueHelper.getInitialOrDefaultValue(element));
+				final Filter valueFilter = searchFilter.getFilter(DEFAULT_LIST.get(3));
+				return !valueFilter.selected.getSelection() || compareStrings(valueFilter, valuePattern,
+						InitialValueHelper.getInitialOrDefaultValue(element));
 			}
 
 			private static boolean compareStrings(final FilterComposite.Filter filter, final Pattern pattern,
@@ -546,14 +562,15 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 				return element.contains(search);
 			}
 
-			private Pattern createPattern(String query) {
-				if (!searchFilter.nameFilter.regularExpression.getSelection()) {
+			private Pattern createPattern(final Filter filter) {
+				String query = filter.textField.getText();
+				if (!filter.regularExpression.getSelection()) {
 					return null;
 				}
-				if (!searchFilter.nameFilter.caseSensitive.getSelection()) {
+				if (!filter.caseSensitive.getSelection()) {
 					query = query.toLowerCase();
 				}
-				if (searchFilter.nameFilter.wholeWord.getSelection()) {
+				if (filter.wholeWord.getSelection()) {
 					query = "\\b" + query + "\\b";
 				}
 				try {

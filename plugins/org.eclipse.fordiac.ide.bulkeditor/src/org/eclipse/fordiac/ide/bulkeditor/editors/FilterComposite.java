@@ -12,6 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorSettings.BulkEditorSubSettings;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.widgets.WidgetFactory;
@@ -22,30 +26,44 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 public class FilterComposite extends Composite {
-	public final Filter nameFilter;
-	public final Filter typeFilter;
-	public final Filter commentFilter;
-	public final Filter valueFilter;
+	private final List<Filter> filterList = new ArrayList<>();
+	private final List<String> filterNames;
 
-	public FilterComposite(final Composite parent, final int style, final boolean initialValue) {
+	public FilterComposite(final Composite parent, final int style, final List<String> filterNames) {
 		super(parent, style);
 
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		this.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
 
-		nameFilter = new Filter(this, style, "Name");
-		typeFilter = new Filter(this, style, "Type");
-		commentFilter = new Filter(this, style, "Comment");
-		if (initialValue) {
-			valueFilter = new Filter(this, style, "Initial Value");
-		} else {
-			valueFilter = null;
+		this.filterNames = filterNames;
+		for (final String filterName : filterNames) {
+			filterList.add(new Filter(this, style, filterName));
 		}
+	}
 
-//		caseSensitive = WidgetFactory.button(SWT.CHECK).text("Case Sensitive")
-//				.onSelect(event -> settings.nameSubSettings.caseSensitve = caseSensitive.getSelection())
-//				.create(buttonComposite);
-//		caseSensitive.setSelection(settings.nameSubSettings.caseSensitve);
+	public FilterComposite(final Composite parent, final int style, final List<String> filterNames,
+			final BulkEditorSettings settings, final List<String> subSettingsReferencesNames) {
+		super(parent, style);
+
+		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		this.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
+
+		this.filterNames = filterNames;
+		for (int i = 0; i < filterNames.size(); i++) {
+			final Filter filter = new Filter(this, style, filterNames.get(i));
+			filterList.add(filter);
+			if (i < subSettingsReferencesNames.size()) {
+				filter.addListenerSubSetting(settings.getSubSettings(subSettingsReferencesNames.get(i)));
+			}
+		}
+	}
+
+	public Filter getFilter(final String filterName) {
+		final int index = filterNames.indexOf(filterName);
+		if (index >= 0 && index < filterList.size()) {
+			return filterList.get(index);
+		}
+		return null;
 	}
 
 	public class Filter extends Composite {
@@ -66,11 +84,10 @@ public class FilterComposite extends Composite {
 			selected.setLayoutData(GridDataFactory.swtDefaults().hint(80, SWT.DEFAULT).create());
 
 			textField = WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.FILL, true, false))
-					.enabled(selected.getSelection()).create(this);
-			caseSensitive = WidgetFactory.button(SWT.CHECK).text("CS").enabled(selected.getSelection()).create(this);
-			wholeWord = WidgetFactory.button(SWT.CHECK).text("WW").enabled(selected.getSelection()).create(this);
-			regularExpression = WidgetFactory.button(SWT.CHECK).text("RE").enabled(selected.getSelection())
 					.create(this);
+			caseSensitive = WidgetFactory.button(SWT.CHECK).text("CS").create(this);
+			wholeWord = WidgetFactory.button(SWT.CHECK).text("WW").create(this);
+			regularExpression = WidgetFactory.button(SWT.CHECK).text("RE").create(this);
 
 			selected.addListener(SWT.Selection, event -> {
 				textField.setEnabled(selected.getSelection());
@@ -78,6 +95,29 @@ public class FilterComposite extends Composite {
 				wholeWord.setEnabled(selected.getSelection());
 				regularExpression.setEnabled(selected.getSelection());
 			});
+		}
+
+		private void addListenerSubSetting(final BulkEditorSubSettings subSetting) {
+			final boolean isSelected = subSetting.selected;
+			selected.setSelection(isSelected);
+			selected.addListener(SWT.Selection, event -> subSetting.selected = selected.getSelection());
+
+			textField.setText(subSetting.textField);
+			textField.setEnabled(isSelected);
+			textField.addModifyListener(event -> subSetting.textField = textField.getText());
+
+			caseSensitive.setSelection(subSetting.caseSensitive);
+			caseSensitive.setEnabled(isSelected);
+			caseSensitive.addListener(SWT.Selection, event -> subSetting.caseSensitive = caseSensitive.getSelection());
+
+			wholeWord.setSelection(subSetting.wholeWord);
+			wholeWord.setEnabled(isSelected);
+			wholeWord.addListener(SWT.Selection, event -> subSetting.wholeWord = wholeWord.getSelection());
+
+			regularExpression.setSelection(subSetting.regularExpression);
+			regularExpression.setEnabled(isSelected);
+			regularExpression.addListener(SWT.Selection,
+					event -> subSetting.regularExpression = regularExpression.getSelection());
 		}
 	}
 }

@@ -24,13 +24,13 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class OpenBulkEditorHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
+		final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
 		final Object firstElement = selection.getFirstElement();
 
 		if (firstElement instanceof final IProject project && project.isOpen()) {
 			final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 			try {
-				window.getActivePage().openEditor(new BulkEditorInput(project.getFile(project.getFullPath())),
+				window.getActivePage().openEditor(new BulkEditorInput(project),
 						"org.eclipse.fordiac.ide.bulkeditor.BulkEditor"); //$NON-NLS-1$
 			} catch (final Exception e) {
 				e.printStackTrace();

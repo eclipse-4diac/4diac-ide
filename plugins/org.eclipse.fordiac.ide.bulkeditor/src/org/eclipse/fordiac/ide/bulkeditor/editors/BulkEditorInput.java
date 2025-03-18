@@ -12,22 +12,32 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IMemento;
-import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.IPersistableElement;
 
-public class BulkEditorInput extends FileEditorInput {
+public class BulkEditorInput implements IEditorInput, IPersistableElement {
 
+	private final IProject project;
 	private final BulkEditorSettings settings;
 
-	public BulkEditorInput(final IFile file) {
-		this(file, new BulkEditorSettings());
+	public BulkEditorInput(final IProject project) {
+		this(project, new BulkEditorSettings());
 	}
 
-	public BulkEditorInput(final IFile file, final BulkEditorSettings settings) {
-		super(file);
+	public BulkEditorInput(final IProject project, final BulkEditorSettings settings) {
+		this.project = project;
 		this.settings = settings;
+	}
+
+	public IProject getProject() {
+		return project;
+	}
+
+	public BulkEditorSettings getSettings() {
+		return settings;
 	}
 
 	@Override
@@ -40,11 +50,49 @@ public class BulkEditorInput extends FileEditorInput {
 		return BulkEditorInputFactory.getFactoryId();
 	}
 
-	public IProject getProject() {
-		return getFile().getProject();
+	@Override
+	public boolean exists() {
+		return project.exists();
 	}
 
-	public BulkEditorSettings getSettings() {
-		return settings;
+	@Override
+	public ImageDescriptor getImageDescriptor() {
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		return project.getName();
+	}
+
+	@Override
+	public IPersistableElement getPersistable() {
+		return this;
+	}
+
+	@Override
+	public String getToolTipText() {
+		return project.getName();
+	}
+
+	@Override
+	public int hashCode() {
+		return project.hashCode();
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj instanceof final BulkEditorInput bei) {
+			return project.equals(bei.getProject());
+		}
+		return false;
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+		return null;
 	}
 }
