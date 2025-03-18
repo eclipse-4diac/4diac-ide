@@ -159,7 +159,9 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	'''
 	
 	def generateUseStringIdDecls(Set<String> strings) '''
-		«FOR str : strings.sort»USE_STRING_ID(«str»);«ENDFOR»
+		«FOR str : strings.sort»
+			USE_STRING_ID(«str»);
+		«ENDFOR»
 	'''
 
 	def protected getFORTENameList(List<? extends INamedElement> elements) {
