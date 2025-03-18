@@ -19,17 +19,35 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator;
 import org.eclipse.fordiac.ide.test.model.typelibrary.FBTypeEntryMock;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.xtext.testing.InjectWith;
 import org.eclipse.xtext.testing.extensions.InjectionExtension;
+import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreAccess;
 import org.eclipse.xtext.ui.testing.AbstractMultiQuickfixTest;
+import org.eclipse.xtext.validation.SeverityConverter;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import com.google.inject.Inject;
 
 @SuppressWarnings("nls")
 @ExtendWith(InjectionExtension.class)
 @InjectWith(STFunctionUiInjectorProvider.class)
 class STFunctionMultiQuickfixTest extends AbstractMultiQuickfixTest {
+
+	@Inject
+	IPreferenceStoreAccess preferenceStoreAccess;
+
+	@BeforeEach
+	void setupSeverities() {
+		final IPreferenceStore store = preferenceStoreAccess.getWritablePreferenceStore();
+		store.putValue(STCoreValidator.UNUSED_VARIABLE, SeverityConverter.SEVERITY_IGNORE);
+		store.putValue(STCoreValidator.UNREAD_VARIABLE, SeverityConverter.SEVERITY_IGNORE);
+		store.putValue(STCoreValidator.UNWRITTEN_VARIABLE, SeverityConverter.SEVERITY_IGNORE);
+	}
 
 	@Test
 	void fixExitNotInLoopSingle() {
