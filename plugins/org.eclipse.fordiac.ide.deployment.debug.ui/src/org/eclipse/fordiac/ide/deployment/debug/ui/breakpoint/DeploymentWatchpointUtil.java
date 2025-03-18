@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,10 +18,19 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.model.IBreakpoint;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public final class DeploymentWatchpointUtil {
+
+	public static Optional<DeploymentWatchpoint> findExistingWatchpoint(final INamedElement element) {
+		if (EcoreUtil.getRootContainer(element) instanceof final AutomationSystem system) {
+			return DeploymentWatchpointUtil.findExistingWatchpoint(system.getTypeEntry().getFile(), element);
+		}
+		return Optional.empty();
+	}
 
 	public static Optional<DeploymentWatchpoint> findExistingWatchpoint(final IResource resource,
 			final INamedElement element) {

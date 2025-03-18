@@ -310,6 +310,11 @@
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.clearForce"
+			name="Clear Force">
+		</command>
+		<command
+			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.triggerEvent"
 			name="Trigger Event">
 		</command>
@@ -468,6 +473,45 @@
 					<iterate
 						ifEmpty="false"
 						operator="and">
+						<adapt
+							type="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement">
+							<instanceof
+								value="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
+							</instanceof>
+						</adapt>
+					</iterate>
+				</with>
+			</enabledWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.ClearForceHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.clearForce">
+			<activeWhen>
+				<or>
+					<with
+						variable="activePartId">
+						<equals
+							value="org.eclipse.fordiac.ide.editors.SystemEditor">
+						</equals>
+					</with>
+					<with
+						variable="selection">
+						<iterate
+							ifEmpty="false"
+							operator="or">
+								<instanceof
+									value="org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch">
+								</instanceof>
+						</iterate>
+					</with>
+				</or>
+			</activeWhen>
+			<enabledWhen>
+				<with
+					variable="selection">
+					<iterate
+						ifEmpty="false"
+						operator="or">
 						<adapt
 							type="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement">
 							<instanceof
@@ -687,6 +731,16 @@
 				</visibleWhen>
 			</command>
 			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.clearForce"
+				disabledIcon="fordiacimage://ICON_CLEAR_FORCE_DISABLED"
+				icon="fordiacimage://ICON_CLEAR_FORCE"
+				label="Clear Force Value"
+				tooltip="Clear the force for the watch value">
+				<visibleWhen
+					checkEnabled="true">
+				</visibleWhen>
+			</command>
+			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.triggerEvent"
 				icon="fordiacimage://ICON_TRIGGER_EVENT"
 				label="Trigger Event"
@@ -758,6 +812,13 @@
 				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_obj.png"
 				label="Force Value"
 				tooltip="Force the watch value">
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.clearForce"
+				disabledIcon="fordiacimage://ICON_CLEAR_FORCE_DISABLED"
+				icon="fordiacimage://ICON_CLEAR_FORCE"
+				label="Clear Force"
+				tooltip="Clear the force for the watch value">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.triggerEvent"
