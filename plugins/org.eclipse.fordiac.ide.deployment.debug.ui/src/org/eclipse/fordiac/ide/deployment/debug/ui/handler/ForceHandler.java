@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -44,10 +45,11 @@ public class ForceHandler extends AbstractHandler {
 		if (DeploymentHandlerUtil.getInterfaceElement(event) instanceof final VarDeclaration varDeclaration
 				&& EcoreUtil.getRootContainer(varDeclaration) instanceof final AutomationSystem system) {
 			final IFile file = system.getTypeEntry().getFile();
-			final Optional<String> newValue = openForceDialog(HandlerUtil.getActiveShell(event), varDeclaration);
+			final Optional<DeploymentWatchpoint> watchpoint = DeploymentWatchpointUtil.findExistingWatchpoint(file,
+					varDeclaration);
+			final Optional<String> newValue = openForceDialog(HandlerUtil.getActiveShell(event), varDeclaration,
+					watchpoint);
 			if (newValue.isPresent()) {
-				final Optional<DeploymentWatchpoint> watchpoint = DeploymentWatchpointUtil.findExistingWatchpoint(file,
-						varDeclaration);
 				if (watchpoint.isEmpty()) {
 					createWatchpoint(file, varDeclaration, newValue.get(), event);
 				} else {
@@ -84,8 +86,11 @@ public class ForceHandler extends AbstractHandler {
 		}
 	}
 
-	private static Optional<String> openForceDialog(final Shell shell, final VarDeclaration varDeclaration) {
-		final String initialValue = InitialValueHelper.getInitialOrDefaultValue(varDeclaration);
+	private static Optional<String> openForceDialog(final Shell shell, final VarDeclaration varDeclaration,
+			final Optional<DeploymentWatchpoint> watchpoint) {
+		final String initialValue = watchpoint.map(DeploymentWatchpoint::getForceValue)
+				.filter(Predicate.not(String::isBlank))
+				.orElseGet(() -> InitialValueHelper.getInitialOrDefaultValue(varDeclaration));
 		if (varDeclaration.getType() instanceof StructuredType || varDeclaration.isArray()) {
 			return VariableDialog.open(shell, Messages.ForceHandler_ForceDialogTitle, varDeclaration, initialValue);
 		}
