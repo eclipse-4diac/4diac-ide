@@ -22,10 +22,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.fordiac.ide.export.Messages;
 import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.fordiac.ide.export.utils.ExportFilterUtil;
-import org.eclipse.fordiac.ide.model.buildpath.SourceFolder;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -183,8 +182,8 @@ public class TypeExportPropertyPage extends PropertyPage {
 	}
 
 	/*
-	 * Helper class partly copied from @see DirectoryFieldEditor editor to handle
-	 * relative paths
+	 * Class partly copied from @see DirectoryFieldEditor editor to handle relative
+	 * paths
 	 */
 	class OutputDirectoryFieldEditor extends StringButtonFieldEditor {
 
@@ -198,10 +197,10 @@ public class TypeExportPropertyPage extends PropertyPage {
 
 		@Override
 		protected String changePressed() {
-			final Optional<IFolder> selectedDirectory = getDirectory();
+			final Optional<IFolder> selectedDirectory = chooseOutputFolder();
 
 			if (selectedDirectory.isPresent() && selectedDirectory.get().exists()) {
-				return selectedDirectory.get().getFullPath().toPortableString();
+				return selectedDirectory.get().getProjectRelativePath().toString();
 			}
 			// keep old value
 			return null;
@@ -217,7 +216,7 @@ public class TypeExportPropertyPage extends PropertyPage {
 			return getProject().getFolder(new Path(fileName).lastSegment()).exists();
 		}
 
-		private Optional<IFolder> getDirectory() {
+		private Optional<IFolder> chooseOutputFolder() {
 			final ElementTreeSelectionDialog fileDialog = new ElementTreeSelectionDialog(getShell(),
 					new WorkbenchLabelProvider(), new WorkbenchContentProvider());
 
@@ -230,7 +229,7 @@ public class TypeExportPropertyPage extends PropertyPage {
 				@Override
 				public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 					return (element instanceof final IFolder folder) && !folder.isVirtual() && !folder.isLinked()
-							&& !folder.getName().startsWith(".") && !(element instanceof SourceFolder); //$NON-NLS-1$
+							&& !folder.getName().startsWith("."); //$NON-NLS-1$
 				}
 			});
 
