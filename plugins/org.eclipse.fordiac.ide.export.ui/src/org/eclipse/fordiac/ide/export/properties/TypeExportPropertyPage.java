@@ -224,6 +224,12 @@ public class TypeExportPropertyPage extends PropertyPage {
 			fileDialog.setAllowMultiple(false);
 			fileDialog.setTitle(Messages.TypeExport_OutputFolder);
 			fileDialog.setMessage(Messages.TypeExport_FileDialogMessage);
+			if (!getTextControl().getText().isEmpty()) {
+				final IFolder selectedElement = getProject().getFolder(new Path(getTextControl().getText()));
+				if (selectedElement.exists()) {
+					fileDialog.setInitialSelection(selectedElement);
+				}
+			}
 
 			fileDialog.addFilter(new ViewerFilter() {
 				@Override
