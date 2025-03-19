@@ -140,6 +140,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				variableUsageValidator.addVariables(baseFBType.getInternalVars());
 				variableUsageValidator.addVariables(baseFBType.getInternalConstVars(),
 						EnumSet.of(VariableState.UNUSED, VariableState.UNREAD));
+				variableUsageValidator.addVariables(baseFBType.getInternalFbs(), EnumSet.of(VariableState.UNUSED));
 			}
 		}
 	}
