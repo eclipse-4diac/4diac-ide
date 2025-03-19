@@ -881,8 +881,10 @@ public enum LibraryManager {
 					preferred.put(libFolder.getName(),
 							new Version(libManifest.getProduct().getVersionInfo().getVersion()));
 				} else {
-					final IPath path = libFolder.getLocation();
-					final String segment = (path.segmentCount() >= 2) ? path.segment(path.segmentCount() - 2) : ""; //$NON-NLS-1$
+					final IPath path = libFolder.getRawLocation();
+					final String segment = (path != null && path.segmentCount() >= 2)
+							? path.segment(path.segmentCount() - 2)
+							: ""; //$NON-NLS-1$
 					final int index = segment.lastIndexOf('-');
 					if (index > 0) {
 						preferred.put(libFolder.getName(), new Version(segment.substring(index + 1)));
