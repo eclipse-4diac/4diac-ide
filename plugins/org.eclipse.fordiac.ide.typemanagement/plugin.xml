@@ -512,58 +512,7 @@
             id="org.eclipse.fordiac.ide.typemanagement.renameType"
             name="Rename Type handler">
          <enablement>
-         	<and>
-               <instanceof 
-                     value="org.eclipse.core.resources.IFile">
-               </instanceof>               
-               <or>
-               <test
-               		 forcePluginActivation="true"	
-                     property="org.eclipse.core.resources.extension"
-                     value="fbt">
-               </test>
-               <test
-               		 forcePluginActivation="true"	
-                     property="org.eclipse.core.resources.extension"
-                     value="fct">
-               </test>
-                      <test
-               		 forcePluginActivation="true"	
-                     property="org.eclipse.core.resources.extension"
-                     value="dtp">
-               </test>
-               <test
-               		 forcePluginActivation="true"	
-                     property="org.eclipse.core.resources.extension"
-                     value="adp">
-               </test>
-               <test
-               		 forcePluginActivation="true"	
-                     property="org.eclipse.core.resources.extension"
-                     value="res">
-               </test>
-               <test
-               		 forcePluginActivation="true"	
-                     property="org.eclipse.core.resources.extension"
-                     value="dev">
-               </test>
-               <test
-               		 forcePluginActivation="true"	
-                     property="org.eclipse.core.resources.extension"
-                     value="seg">
-               </test>
-               <test
-               		 forcePluginActivation="true"	
-                     property="org.eclipse.core.resources.extension"
-                     value="sub">
-               </test>
-               <test
-                     forcePluginActivation="true"
-                     property="org.eclipse.core.resources.extension"
-                     value="gcf">
-               </test>
-               </or>
-             </and>
+         	<reference definitionId="org.eclipse.fordiac.ide.typemanagement.typeFile" />
          </enablement>
       </renameParticipant>
       <renameParticipant
@@ -807,20 +756,36 @@
         </command>
       </menuContribution>
    </extension>
-       <extension
-             point="org.eclipse.ltk.core.refactoring.refactoringContributions">
-       </extension>
-       <extension
-             point="org.eclipse.ltk.core.refactoring.moveParticipants">
-          <moveParticipant
-                class="org.eclipse.fordiac.ide.typemanagement.refactoring.move.MoveTypeRefactoringParticipant"
-                id="org.eclipse.fordiac.ide.typemanagement.moveParticipant1"
-                name="Move To Package Handler">
-             <enablement>
-             	<adapt
-             		type="org.eclipse.core.resources.IFile">
-             	</adapt>
-             </enablement>
-          </moveParticipant>
-       </extension>   
+   <extension
+     point="org.eclipse.ltk.core.refactoring.refactoringContributions">
+   </extension>
+   <extension
+     point="org.eclipse.ltk.core.refactoring.moveParticipants">
+	  <moveParticipant
+	        class="org.eclipse.fordiac.ide.typemanagement.refactoring.move.MoveTypeRefactoringParticipant"
+	        id="org.eclipse.fordiac.ide.typemanagement.moveParticipant1"
+	        name="Move To Package Handler">
+	     <enablement>
+	     	<reference definitionId="org.eclipse.fordiac.ide.typemanagement.typeFile" />
+	     </enablement>
+	  </moveParticipant>
+   </extension>   
+   <extension point="org.eclipse.core.expressions.definitions">
+		<definition id="org.eclipse.fordiac.ide.typemanagement.typeFile">
+      		<adapt type="org.eclipse.core.resources.IFile">
+	     		<or>
+					<test property="org.eclipse.core.resources.extension" value="adp" />
+					<test property="org.eclipse.core.resources.extension" value="atp" />
+					<test property="org.eclipse.core.resources.extension" value="dev" />
+					<test property="org.eclipse.core.resources.extension" value="dtp" />
+					<test property="org.eclipse.core.resources.extension" value="fbt" />
+					<test property="org.eclipse.core.resources.extension" value="fct" />
+					<test property="org.eclipse.core.resources.extension" value="gcf" />
+					<test property="org.eclipse.core.resources.extension" value="res" />
+					<test property="org.eclipse.core.resources.extension" value="seg" />
+					<test property="org.eclipse.core.resources.extension" value="sub" />
+				</or>
+	     	</adapt>
+    	</definition>
+   </extension>   
 </plugin>
