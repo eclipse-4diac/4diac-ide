@@ -12,7 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.export.properties;
+package org.eclipse.fordiac.ide.export.ui.properties;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.fordiac.ide.export.utils.ExportFilterUtil;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -129,7 +128,7 @@ public class TypeExportPropertyPage extends PropertyPage {
 
 	private String getOutputFolder() {
 		if (getProject().getFolder(OUTPUT_FOLDER_NAME).exists()) {
-			return getProject().getFolder(OUTPUT_FOLDER_NAME).getFullPath().toPortableString();
+			return getProject().getFolder(OUTPUT_FOLDER_NAME).getProjectRelativePath().toPortableString();
 		}
 
 		return ""; //$NON-NLS-1$
@@ -147,14 +146,15 @@ public class TypeExportPropertyPage extends PropertyPage {
 	@Override
 	public boolean performOk() {
 		checkboxEditor.store();
-		exporterEditor.store();
 
-		if (!directoryEditor.isValid()) {
-			directoryEditor.showErrorMessage();
-			FordiacLogHelper.logError(directoryEditor.getErrorMessage());
-			return false;
+		if (checkboxEditor.getBooleanValue()) {
+			exporterEditor.store();
+			if (!directoryEditor.isValid()) {
+				directoryEditor.showErrorMessage();
+				return false;
+			}
+			directoryEditor.store();
 		}
-		directoryEditor.store();
 		return super.performOk();
 	}
 
@@ -213,7 +213,7 @@ public class TypeExportPropertyPage extends PropertyPage {
 			if (fileName.isEmpty() && isEmptyStringAllowed()) {
 				return true;
 			}
-			return getProject().getFolder(new Path(fileName).lastSegment()).exists();
+			return getProject().getFolder(fileName).exists();
 		}
 
 		private Optional<IFolder> chooseOutputFolder() {

@@ -27,7 +27,7 @@
    <extension
    		point="org.eclipse.ui.propertyPages">
 	  <page
-	        class="org.eclipse.fordiac.ide.export.properties.TypeExportPropertyPage"
+	        class="org.eclipse.fordiac.ide.export.ui.properties.TypeExportPropertyPage"
 	        id="org.eclipse.fordiac.ide.export.settingspage"
 	        name="Type Export">
 	    <enabledWhen>
