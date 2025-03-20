@@ -29,7 +29,7 @@
 	  <page
 	        class="org.eclipse.fordiac.ide.export.ui.properties.TypeExportPropertyPage"
 	        id="org.eclipse.fordiac.ide.export.settingspage"
-	        name="Type Export">
+	        name="%TypeExport">
 	    <enabledWhen>
 	        <adapt
 	              type="org.eclipse.core.resources.IProject">
