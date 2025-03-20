@@ -14,25 +14,16 @@ package org.eclipse.fordiac.ide.bulkeditor.editors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.bulkeditor.editors.FilterComposite.Filter;
 import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.AttributeEditableRule;
@@ -45,16 +36,11 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
-import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.search.ISearchContext;
 import org.eclipse.fordiac.ide.model.search.types.IEC61499ElementSearch;
-import org.eclipse.fordiac.ide.model.search.types.IEC61499SearchFilter;
-import org.eclipse.fordiac.ide.model.search.types.ProjectInstanceSearchChildrenProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
@@ -303,11 +289,37 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	private void createSearchButton(final Composite parent) {
 		WidgetFactory.button(SWT.PUSH).text("Search").onSelect(event -> {
-			final List<ISearchContext> contexts = createSearchContextList();
+			final SearchHelper helper = new SearchHelper(
+					new SearchHelper.FilterRecord(fbSubappTypesButton.getSelection(),
+							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+					new SearchHelper.FilterRecord(fbTypedSubappInstanceButton.getSelection(),
+							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+					new SearchHelper.FilterRecord(untypedSubappButton.getSelection(),
+							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+					new SearchHelper.FilterRecord(dataTypesButton.getSelection(),
+							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+					new SearchHelper.FilterRecord(attributeTypesButton.getSelection(),
+							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))));
+
+			final List<ISearchContext> contexts = helper.createSearchContextList(workspaceScopeButton.getSelection(),
+					projectScopeButton.getSelection(), project);
 
 			map.clear();
-			final var result = contexts.stream().flatMap(context -> new IEC61499ElementSearch(context,
-					createSearchFilter(), new ProjectInstanceSearchChildrenProvider()).performSearch().stream())
+			final var result = contexts.stream()
+					.flatMap(context -> new IEC61499ElementSearch(context,
+							SearchHelper.createSearchFilter(modeSelectionDropDown.getSelectionIndex(),
+									DEFAULT_LIST.stream().map(searchFilter::getFilter).toList()),
+							helper.createChildrenSearchProvider()).performSearch().stream())
 					.toList();
 
 			final List<EObject> mappedList = new ArrayList<>();
@@ -315,7 +327,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 				if (EcoreUtil.getRootContainer(libE) instanceof final LibraryElement rootLibE) {
 					final TypeEntry entry = rootLibE.getTypeEntry();
 					if (!map.containsKey(entry)) {
-						final LibraryElement copyRoot = entry.copyType(); // dont copy if entry already has copy
+						final LibraryElement copyRoot = entry.copyType(); // don't copy if entry already has copy
 						map.put(entry, new CopyElementRecord(copyRoot, new ArrayList<>()));
 					}
 					final EObject copyLibE = EcoreUtil.getEObject(map.get(entry).copiedElement(),
@@ -438,149 +450,6 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	@Override
 	public void executeCommand(final Command cmd) {
 		commandStack.execute(cmd);
-	}
-
-	private List<ISearchContext> createSearchContextList() {
-		if (workspaceScopeButton.getSelection()) {
-			final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			return Arrays.stream(root.getProjects()).filter(IProject::isOpen).map(this::createSearchContext)
-					.map(ISearchContext.class::cast).toList();
-		}
-		if (projectScopeButton.getSelection()) {
-			return List.of(createSearchContext(project));
-		}
-		return List.of();
-	}
-
-	private ISearchContext createSearchContext(final IProject project) {
-		return new AbstractLiveSearchContext(project) {
-			@Override
-			public Stream<URI> getTypes() {
-				Stream<URI> s = Stream.empty();
-				if (fbSubappTypesButton.getSelection()) {
-					s = Stream.concat(s, Stream.concat(getTypelib().getFbTypes().stream().map(TypeEntry::getURI),
-							getTypelib().getSubAppTypes().stream().map(TypeEntry::getURI)));
-				}
-				if (dataTypesButton.getSelection()) {
-					s = Stream.concat(s,
-							getTypelib().getDataTypeLibrary().getDerivedDataTypes().stream().map(TypeEntry::getURI));
-				}
-				if (attributeTypesButton.getSelection()) {
-					s = Stream.concat(s, getTypelib().getAttributeTypes().stream().map(TypeEntry::getURI));
-				}
-				return s.filter(Objects::nonNull);
-			}
-
-			@Override
-			public LibraryElement getLibraryElement(final URI uri) {
-				final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
-				return typeEntry.getType(); // use original for search
-			}
-
-			@Override
-			public Collection<URI> getSubappTypes() {
-				return Collections.emptyList();
-			}
-
-			@Override
-			public Collection<URI> getFBTypes() {
-				return Collections.emptyList();
-			}
-
-			@Override
-			public Collection<URI> getAllTypes() {
-				return Collections.emptyList();
-			}
-		};
-	}
-
-	private IEC61499SearchFilter createSearchFilter() {
-		return new IEC61499SearchFilter() {
-			private final Pattern namePattern = createPattern(searchFilter.getFilter(DEFAULT_LIST.get(0)));
-			private final Pattern typePattern = createPattern(searchFilter.getFilter(DEFAULT_LIST.get(1)));
-			private final Pattern commentPattern = createPattern(searchFilter.getFilter(DEFAULT_LIST.get(2)));
-			private final Pattern valuePattern = createPattern(searchFilter.getFilter(DEFAULT_LIST.get(3)));
-
-			@Override
-			public boolean apply(final EObject searchCandidate) {
-				if (!isValidCandidate(searchCandidate)) {
-					return false;
-				}
-
-				final ITypedElement typedElement = (ITypedElement) searchCandidate;
-
-				return matchesName(typedElement) && matchesType(typedElement) && matchesComment(typedElement)
-						&& matchesInitialValue(typedElement);
-			}
-
-			private boolean isValidCandidate(final Object searchCandidate) {
-				return (searchCandidate instanceof VarDeclaration && modeSelectionDropDown.getSelectionIndex() == 0)
-						|| (searchCandidate instanceof Attribute && modeSelectionDropDown.getSelectionIndex() == 1);
-			}
-
-			private boolean matchesName(final ITypedElement element) {
-				final Filter nameFilter = searchFilter.getFilter(DEFAULT_LIST.get(0));
-				return !nameFilter.selected.getSelection()
-						|| compareStrings(nameFilter, namePattern, element.getName());
-			}
-
-			private boolean matchesType(final ITypedElement element) {
-				final Filter typeFilter = searchFilter.getFilter(DEFAULT_LIST.get(1));
-				return !typeFilter.selected.getSelection()
-						|| compareStrings(typeFilter, typePattern, element.getTypeName());
-			}
-
-			private boolean matchesComment(final ITypedElement element) {
-				final Filter commentFilter = searchFilter.getFilter(DEFAULT_LIST.get(2));
-				return !commentFilter.selected.getSelection()
-						|| compareStrings(commentFilter, commentPattern, element.getComment());
-			}
-
-			private boolean matchesInitialValue(final ITypedElement element) {
-				final Filter valueFilter = searchFilter.getFilter(DEFAULT_LIST.get(3));
-				return !valueFilter.selected.getSelection() || compareStrings(valueFilter, valuePattern,
-						InitialValueHelper.getInitialOrDefaultValue(element));
-			}
-
-			private static boolean compareStrings(final FilterComposite.Filter filter, final Pattern pattern,
-					String element) {
-				String search = filter.textField.getText();
-				if (search == null || element == null) {
-					return false;
-				}
-
-				if (!filter.caseSensitive.getSelection()) {
-					element = element.toLowerCase();
-					search = search.toLowerCase();
-				}
-				if (filter.regularExpression.getSelection() && pattern != null) {
-					return pattern.matcher(element).find();
-				}
-				if (filter.wholeWord.getSelection()) {
-					return element.equals(search);
-				}
-				return element.contains(search);
-			}
-
-			private Pattern createPattern(final Filter filter) {
-				String query = filter.textField.getText();
-				if (!filter.regularExpression.getSelection()) {
-					return null;
-				}
-				if (!filter.caseSensitive.getSelection()) {
-					query = query.toLowerCase();
-				}
-				if (filter.wholeWord.getSelection()) {
-					query = "\\b" + query + "\\b";
-				}
-				try {
-					// TODO: handle this better
-					return Pattern.compile(query);
-				} catch (final PatternSyntaxException exception) {
-					return null;
-				}
-			}
-		};
 	}
 
 	@Override
