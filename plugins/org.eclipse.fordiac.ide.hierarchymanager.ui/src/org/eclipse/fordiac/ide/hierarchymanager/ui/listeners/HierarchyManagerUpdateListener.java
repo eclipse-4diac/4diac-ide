@@ -60,6 +60,9 @@ public class HierarchyManagerUpdateListener extends QualNameChangeListener {
 		final String identifier = isUndo ? qualNameChange.newQualName() : qualNameChange.oldQualName();
 
 		final List<AbstractOperation> result = new ArrayList<>();
+		if (rootLevel == null) {
+			return Collections.emptyList(); // project does not have a plant hierchachy
+		}
 		final List<Leaf> leafs = HierarchyManagerUtil.searchLeaf((RootLevel) rootLevel,
 				leaf -> leaf.getRef().contains(identifier));
 
