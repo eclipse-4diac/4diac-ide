@@ -96,6 +96,7 @@ public class BulkEditorSettings {
 		private static final String NAME_TAG = "_name"; //$NON-NLS-1$
 		private static final String CASE_SENSITIVE_TAG = "_caseSensitve"; //$NON-NLS-1$
 		private static final String WHOLE_WORD_TAG = "_wholeWord"; //$NON-NLS-1$
+		private static final String EXACT_MATCH_TAG = "_exactMatch"; //$NON-NLS-1$
 		private static final String REGULAR_EXPRESSION_TAG = "_regularExpression"; //$NON-NLS-1$
 
 		private final String tagBulkEditorSubSettings;
@@ -104,6 +105,7 @@ public class BulkEditorSettings {
 		public String textField = ""; //$NON-NLS-1$
 		public boolean caseSensitive = false;
 		public boolean wholeWord = false;
+		public boolean exactMatch = false;
 		public boolean regularExpression = false;
 
 		public BulkEditorSubSettings(final String nameAddition) {
@@ -116,6 +118,7 @@ public class BulkEditorSettings {
 			childMemento.putString(NAME_TAG, textField);
 			childMemento.putBoolean(CASE_SENSITIVE_TAG, caseSensitive);
 			childMemento.putBoolean(WHOLE_WORD_TAG, wholeWord);
+			childMemento.putBoolean(EXACT_MATCH_TAG, exactMatch);
 			childMemento.putBoolean(REGULAR_EXPRESSION_TAG, regularExpression);
 		}
 
@@ -125,6 +128,7 @@ public class BulkEditorSettings {
 			textField = childMemento.getString(NAME_TAG);
 			caseSensitive = childMemento.getBoolean(CASE_SENSITIVE_TAG);
 			wholeWord = childMemento.getBoolean(WHOLE_WORD_TAG);
+			exactMatch = childMemento.getBoolean(EXACT_MATCH_TAG);
 			regularExpression = childMemento.getBoolean(REGULAR_EXPRESSION_TAG);
 		}
 	}

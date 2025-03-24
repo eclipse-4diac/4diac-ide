@@ -295,6 +295,10 @@ public class SearchHelper {
 			return pattern.matcher(element).find();
 		}
 		if (filter.wholeWord.getSelection()) {
+			final String searchString = search;
+			return Arrays.stream(element.split("\\W+")).anyMatch(word -> word.equals(searchString)); //$NON-NLS-1$
+		}
+		if (filter.exactMatch.getSelection()) {
 			return element.equals(search);
 		}
 		return element.contains(search);
@@ -308,8 +312,8 @@ public class SearchHelper {
 		if (!filter.caseSensitive.getSelection()) {
 			query = query.toLowerCase();
 		}
-		if (filter.wholeWord.getSelection()) {
-			query = "\\b" + query + "\\b";
+		if (filter.exactMatch.getSelection()) {
+			query = "^" + query + "$"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		try {
 			return Pattern.compile(query);

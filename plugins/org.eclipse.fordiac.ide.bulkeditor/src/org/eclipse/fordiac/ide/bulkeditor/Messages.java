@@ -20,6 +20,11 @@ public final class Messages extends NLS {
 
 	public static String BulkEditor;
 
+	public static String CaseSensitve;
+	public static String WholeWord;
+	public static String ExactMatch;
+	public static String RegularExpression;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
