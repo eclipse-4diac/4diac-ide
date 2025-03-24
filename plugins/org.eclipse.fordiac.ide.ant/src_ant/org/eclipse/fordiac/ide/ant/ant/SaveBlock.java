@@ -24,7 +24,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -40,7 +39,7 @@ public class SaveBlock extends AbstractBlockModelTask {
 	}
 
 	@Override
-	protected void modifyBlock(final FBType fb) {
+	protected void modifyBlock(final LibraryElement fb) {
 		log(MessageFormat.format("Save {0}/{1}", projectname, blockname)); //$NON-NLS-1$
 		saveType(fb, this::log);
 		saveTypeEntry(fb.getTypeEntry(), autoformat, this::log);

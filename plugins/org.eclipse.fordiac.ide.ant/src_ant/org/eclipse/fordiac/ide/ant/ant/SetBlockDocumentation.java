@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.ant.ant;
 
 import java.text.MessageFormat;
 
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public class SetBlockDocumentation extends AbstractBlockModelTask {
 
@@ -27,7 +27,7 @@ public class SetBlockDocumentation extends AbstractBlockModelTask {
 	}
 
 	@Override
-	protected void modifyBlock(final FBType fb) {
+	protected void modifyBlock(final LibraryElement fb) {
 		fb.setDocumentation(documentation);
 
 		log(MessageFormat.format("Adding documentation to {0}/{1}", //$NON-NLS-1$

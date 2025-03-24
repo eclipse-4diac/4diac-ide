@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.ant.ant;
 import java.text.MessageFormat;
 
 import org.apache.tools.ant.BuildException;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 public class AddBlockVersionEntry extends AbstractBlockModelTask {
@@ -45,7 +45,7 @@ public class AddBlockVersionEntry extends AbstractBlockModelTask {
 	}
 
 	@Override
-	protected void modifyBlock(final FBType fb) {
+	protected void modifyBlock(final LibraryElement fb) {
 		final var info = LibraryElementFactory.eINSTANCE.createVersionInfo();
 		info.setDate(date);
 		info.setAuthor(author);
@@ -59,7 +59,7 @@ public class AddBlockVersionEntry extends AbstractBlockModelTask {
 		}
 
 		position = position < 0 ? position + vi.size() + 1 : position; // add from the "bottom" if negative value is
-																		 // passed
+																		// passed
 		vi.add(limit(position, vi.size()), info);
 
 		log(MessageFormat.format("Adding version {2} to {0}/{1}", // //$NON-NLS-1$
