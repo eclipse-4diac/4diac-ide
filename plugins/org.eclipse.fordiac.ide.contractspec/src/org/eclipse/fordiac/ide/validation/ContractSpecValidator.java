@@ -22,10 +22,13 @@ import org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl;
 import org.eclipse.fordiac.ide.contractSpec.CausalReaction;
 import org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage;
 import org.eclipse.fordiac.ide.contractSpec.EventExpr;
+import org.eclipse.fordiac.ide.contractSpec.EventList;
 import org.eclipse.fordiac.ide.contractSpec.EventSpec;
 import org.eclipse.fordiac.ide.contractSpec.Interval;
 import org.eclipse.fordiac.ide.contractSpec.Port;
 import org.eclipse.fordiac.ide.contractSpec.Reaction;
+import org.eclipse.fordiac.ide.contractSpec.Repetition;
+import org.eclipse.fordiac.ide.contractSpec.SingleEvent;
 import org.eclipse.fordiac.ide.contractSpec.Value;
 import org.eclipse.xtext.validation.Check;
 
@@ -64,7 +67,15 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 		}
 	}
 
-	// TODO: SingleEvent, Repetition still unclear regarding input/output ports...
+	@Check
+	public void checkSingleEvent(final SingleEvent singleEvent) {
+		checkPortsOfSameType(singleEvent.getEvents(), ContractSpecPackage.Literals.SINGLE_EVENT__EVENTS);
+	}
+
+	@Check
+	public void checkRepetition(final Repetition repetition) {
+		checkPortsOfSameType(repetition.getEvents(), ContractSpecPackage.Literals.REPETITION__EVENTS);
+	}
 
 	@Check
 	public void checkReaction(final Reaction reaction) {
@@ -94,6 +105,13 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 	public void checkCausalFuncDecl(final CausalFuncDecl causalFuncDecl) {
 		checkPortOfType(causalFuncDecl.getP1(), INPUT, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__P1);
 		checkPortOfType(causalFuncDecl.getP2(), OUTPUT, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__P2);
+	}
+
+	private void checkPortsOfSameType(final EventList list, final EStructuralFeature feature) {
+		if (list != null && list.getEvents() != null && list.getEvents().size() > 0) {
+			final int firstType = list.getEvents().get(0).getPort().getIsInput();
+			checkPortsOfType(list.getEvents(), firstType, feature);
+		}
 	}
 
 	private void checkPortsOfType(final EventExpr expr, final int type, final EStructuralFeature feature) {
