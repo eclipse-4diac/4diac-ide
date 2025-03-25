@@ -49,7 +49,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 	var fannedOutDataConns = 0
 	final Map<VarDeclaration, ILanguageSupport> fbNetworkInitialVariableLanguageSupport
 
-	new(CompositeFBType type, String name, Path prefix, Map<?,?> options) {
+	new(CompositeFBType type, String name, Path prefix, Map<?, ?> options) {
 		super(type, name, prefix, "CCompositeFB", options)
 		fbs = type.FBNetwork.networkElements.filter(FB).reject(AdapterFB).toList
 		fbNetworkInitialVariableLanguageSupport = fbs.flatMap[interface.inputVars].filter[!value?.value.nullOrEmpty].
@@ -72,7 +72,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
 		    «baseClass»(paContainer, scmFBInterfaceSpec, paInstanceNameId, scmFBNData)«//no newline
 		    »«fbs.generateInternalFBInitializer»«// no newline
-		    »«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
+		    »«type.interfaceList.outputVars.filter[inputConnections.empty].generateVariableInitializer»«// no newline
 		    »«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterInitializer»«generateConnectionInitializer» {
 		};
 		«generateInitializeDefinition»
@@ -80,39 +80,14 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
 		«generateSetFBNetworkInitialValuesDefinition»
 		«generateFBNetwork»
-		«generateReadInternal2InterfaceOutputDataDefinition»
 		«generateInterfaceDefinitions»
 	'''
 
 	override protected generateInterfaceDefinitions() '''
 		«super.generateInterfaceDefinitions»
+		«type.interfaceList.inputVars.generateConnectionAccessorsDefinition("getIf2InConUnchecked", "CDataConnection *", true)»
 		«IF (!type.interfaceList.inOutVars.empty)»
 			«type.interfaceList.outMappedInOutVars.generateConnectionAccessorsDefinition("getDIOOutConInternalUnchecked", "CInOutDataConnection *", true)»
-		«ENDIF»
-	'''
-
-	def protected generateReadInternal2InterfaceOutputDataDefinition() '''
-		void «FBClassName»::readInternal2InterfaceOutputData(«IF type.interfaceList.eventOutputs.exists[!with.empty]»const TEventID paEOID«ELSE»TEventID«ENDIF») {
-		  «type.interfaceList.eventOutputs.generateReadInternal2InterfaceOutputDataBody»
-		}
-	'''
-
-	def protected generateReadInternal2InterfaceOutputDataBody(List<Event> events) '''
-		«IF events.exists[!with.empty]»
-			switch(paEOID) {
-			  «FOR event : events.filter[!with.empty]»
-			  	case «event.generateEventID»: {
-			  	  «FOR variable : event.with.map[withVariable].filter[!it.inOutVar]»
-			  	  	if(CDataConnection *conn = getIn2IfConUnchecked(«variable.interfaceElementIndex»); conn) { conn->readData(«variable.generateName»); }
-			  	  «ENDFOR»
-			  	  break;
-			  	}
-			  «ENDFOR»
-			  default:
-			    break;
-			}
-		«ELSE»
-			// nothing to do
 		«ENDIF»
 	'''
 
@@ -262,7 +237,8 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
 	override protected generateConnectionInitializer() //
 	'''«super.generateConnectionInitializer»«// no newline
-	   »«type.interfaceList.outMappedInOutVars.generateDataConnectionInitializer(true)»'''
+		   »«type.interfaceList.inputVars.generateDataConnectionInitializer(true)»«// no newline
+		   »«type.interfaceList.outMappedInOutVars.generateDataConnectionInitializer(true)»'''
 
 	def private getPrimaryDataConn(DataConnection dataConn) {
 		// if from the source one connection is target to the interface of the CFB we have to take this first
@@ -277,6 +253,9 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 	def private hasCFBInterfaceDestination(Connection conn) {
 		conn?.getDestination()?.eContainer()?.eContainer() instanceof CompositeFBType
 	}
+
+	override protected generateDataConnectionInitializer(List<VarDeclaration> variables, boolean internal) //
+	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateNameAsConnection(internal)»(this, «variables.indexOf(variable)», «variable.generateVariableDefaultValue»)«ENDFOR»'''
 
 	def generateSetFBNetworkInitialValuesDefinition() '''
 		«IF fbs.flatMap[interface.inputVars].exists[!value?.value.nullOrEmpty]»
@@ -317,29 +296,33 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 			getDependencies(options)
 		]).toSet
 	}
-	
+
 	override Set<String> getUsedStrings(Map<?, ?> options) {
 		val strings = super.getUsedStrings(options)
-		type.FBNetwork.networkElements.forEach[{ getUsedFBStrings(it, strings) getUsedInitialFBVarStrings(it, strings)}]		
-		type.FBNetwork.eventConnections.forEach[getUsedConStrings(it, strings)]		
-		type.FBNetwork.dataConnections.forEach[getUsedConStrings(it, strings)]		
-		type.FBNetwork.adapterConnections.forEach[getUsedConStrings(it, strings)]		
-		return strings	
+		type.FBNetwork.networkElements.forEach [
+			{
+				getUsedFBStrings(it, strings)
+				getUsedInitialFBVarStrings(it, strings)
+			}
+		]
+		type.FBNetwork.eventConnections.forEach[getUsedConStrings(it, strings)]
+		type.FBNetwork.dataConnections.forEach[getUsedConStrings(it, strings)]
+		type.FBNetwork.adapterConnections.forEach[getUsedConStrings(it, strings)]
+		return strings
 	}
-	
-	def protected void getUsedConStrings(Connection con, Set<String> strings){
-		//fb instances names are already added when the network elements are added so we can ignore them here
+
+	def protected void getUsedConStrings(Connection con, Set<String> strings) {
+		// fb instances names are already added when the network elements are added so we can ignore them here
 		strings.add(con.source.name)
 		strings.add(con.destination.name)
 	}
-	
-	
-	def protected void getUsedInitialFBVarStrings(FBNetworkElement fbe, Set<String> strings){
-		if(fbe.type.genericType){
-		  	for (variable : fbe.interface.inputVars.filter[!value?.value.nullOrEmpty]) {
-		  		strings.add(variable.name)
-	  		}
-  		}
+
+	def protected void getUsedInitialFBVarStrings(FBNetworkElement fbe, Set<String> strings) {
+		if (fbe.type.genericType) {
+			for (variable : fbe.interface.inputVars.filter[!value?.value.nullOrEmpty]) {
+				strings.add(variable.name)
+			}
+		}
 	}
-	
+
 }

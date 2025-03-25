@@ -57,7 +57,6 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		    «generateReadInputDataDeclaration»
 		    «generateWriteOutputDataDeclaration»
-		    «generateReadInternal2InterfaceOutputDataDeclaration»
 		    «(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		    «generateSetFBNetworkInitialValuesDeclaration»
 		
@@ -84,10 +83,6 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		«super.generateHeaderIncludes»
 	'''
 
-	def protected generateReadInternal2InterfaceOutputDataDeclaration() '''
-		void readInternal2InterfaceOutputData(TEventID paEOID) override;
-	'''
-
 	def protected generateFBNetwork() '''
 		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterType)]»
 			static const SCFB_FBInstanceData scmInternalFBs[];
@@ -107,16 +102,27 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 	'''
 
 	override generateInterfaceVariableAndConnectionDeclarations() '''
-		«super.generateInterfaceVariableAndConnectionDeclarations»
+		«type.interfaceList.outputVars.filter[inputConnections.empty].toList.generateVariableDeclarations(false)»
+		«type.interfaceList.sockets.generateAdapterDeclarations»
+		«type.interfaceList.plugs.generateAdapterDeclarations»
+		«type.interfaceList.eventOutputs.generateEventConnectionDeclarations»
+		«type.interfaceList.inputVars.generateDataConnectionDeclarations(true)»
+		«type.interfaceList.outputVars.generateDataConnectionDeclarations(false)»
+		«type.interfaceList.inOutVars.generateDataConnectionDeclarations(true)»
+		«type.interfaceList.outMappedInOutVars.generateDataConnectionDeclarations(false)»
+		«type.interfaceList.inputVars.generateDataConnectionDeclarations(false, true)»
 		«type.interfaceList.outMappedInOutVars.generateDataConnectionDeclarations(false, true)»
 	'''
 
 	override generateAccessorDeclarations() '''
 		«super.generateAccessorDeclarations»
+		«generateConnectionAccessorsDeclaration("getIf2InConUnchecked", "CDataConnection *")»
 		«IF (!type.interfaceList.inOutVars.empty)»
 			«generateConnectionAccessorsDeclaration("getDIOOutConInternalUnchecked", "CInOutDataConnection *")»
 		«ENDIF»
 	'''
+	
+	override generateEventAccessorDefinitions() ''''''
 
 	override Set<INamedElement> getDependencies(Map<?, ?> options) {
 		(super.getDependencies(options) + type.FBNetwork.networkElements.map[getType]).toSet
