@@ -40,7 +40,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.ui.PlatformUI;
 
 /** The Class DiagramPreferences. */
 public class DiagramPreferencePage extends FordiacPropertyPreferencePage {
@@ -130,20 +129,12 @@ public class DiagramPreferencePage extends FordiacPropertyPreferencePage {
 
 	private static void showMessageBox() {
 
-		final MessageBox msgBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.YES | SWT.NO);
+		final MessageBox msgBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.OK);
 		Display.getDefault().getActiveShell();
 		msgBox.setText("4diac IDE"); //$NON-NLS-1$
 		msgBox.setMessage(Messages.DiagramPreferences_Restart);
 
-		switch (msgBox.open()) {
-		case SWT.NO:
-			break;
-		case SWT.YES:
-			PlatformUI.getWorkbench().restart();
-			break;
-		default:
-			break;
-		}
+		msgBox.open();
 	}
 
 	private void createGroupLabelSize() {
