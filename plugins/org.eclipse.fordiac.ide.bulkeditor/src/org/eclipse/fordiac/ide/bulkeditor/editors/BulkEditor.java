@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -36,15 +37,22 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.ISearchContext;
 import org.eclipse.fordiac.ide.model.search.types.IEC61499ElementSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.AttributeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.ImportContentProposal;
+import org.eclipse.fordiac.ide.model.ui.widgets.ImportTypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -55,11 +63,20 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
+import org.eclipse.jface.bindings.keys.KeyStroke;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.IContentProposal;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
+import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
+import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
@@ -363,8 +380,6 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		if (natTable != null) {
 			natTable.dispose();
 		}
-		// TODO: TypeSelectionButton (use correct TypeLibrary (more Projects))
-		// add AttributeTypeSelection
 		// improve Location Column (Not showing where Attributes of Struct-members are)
 		if (selectionIndex == 0) {
 			varDeclProvider = new ChangeableListDataProvider<>(
@@ -395,11 +410,46 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 					new AttributeEditableRule(IEditableRule.ALWAYS_EDITABLE,
 							AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
 							AttributeTableColumn.EDITABLE_NO_LOCATION, attributeProvider),
-					new TypeSelectionButton(() -> TypeLibraryManager.INSTANCE.getTypeLibrary(project),
-							DataTypeSelectionContentProvider.INSTANCE, DataTypeSelectionTreeContentProvider.INSTANCE),
-					null, false);
+					new TypeSelectionButton(() -> {
+						final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
+								.getLastSelectedCellPosition().getRowPosition();
+						if (EcoreUtil.getRootContainer(attributeProvider
+								.getRowObject(relevantRowIndex)) instanceof final LibraryElement libElement) {
+							return libElement.getTypeLibrary();
+						}
+						return null;
+					}, DataTypeSelectionContentProvider.INSTANCE, DataTypeSelectionTreeContentProvider.INSTANCE), null,
+					false);
 			natTable.addConfiguration(new InitialValueEditorConfiguration(attributeProvider));
 			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
+
+			final Predicate<TypeEntry> targetFilter = entry -> {
+				if (entry.getType() instanceof final AttributeDeclaration decl) {
+					final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
+							.getLastSelectedCellPosition().getRowPosition();
+					if (attributeProvider.getRowObject(relevantRowIndex)
+							.eContainer() instanceof final ConfigurableObject configurableObject) {
+						return decl.isValidObject(configurableObject);
+					}
+				}
+				return true;
+			};
+
+			final AttributeNameCellEditor attributeNameCellEditor = new AttributeNameCellEditor();
+			attributeNameCellEditor.enableContentProposal(new TextContentAdapter(),
+					new ImportTypeSelectionProposalProvider(() -> {
+						final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
+								.getLastSelectedCellPosition().getRowPosition();
+						return attributeProvider.getRowObject(relevantRowIndex).eContainer();
+					}, TypeLibrary::getAttributeTypeEntry, AttributeSelectionContentProvider.INSTANCE, targetFilter),
+					KeyStroke.getInstance(SWT.CTRL, SWT.SPACE), null);
+			natTable.addConfiguration(new AbstractRegistryConfiguration() {
+				@Override
+				public void configureRegistry(final IConfigRegistry configRegistry) {
+					configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, attributeNameCellEditor,
+							DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
+				}
+			});
 		}
 
 		natTable.configure();
@@ -455,5 +505,22 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
+	}
+
+	protected class AttributeNameCellEditor extends TextCellEditor {
+		@Override
+		protected void configureContentProposalAdapter(final ContentProposalAdapter contentProposalAdapter) {
+			contentProposalAdapter.addContentProposalListener(this::proposalAccepted);
+			super.configureContentProposalAdapter(contentProposalAdapter);
+		}
+
+		protected void proposalAccepted(final IContentProposal proposal) {
+			if (proposal instanceof final ImportContentProposal importProposal
+					&& EcoreUtil.getRootContainer(attributeProvider.getRowObject(this.getRowIndex())
+							.eContainer()) instanceof final LibraryElement libraryElement
+					&& !ImportHelper.matchesImports(importProposal.getImportedNamespace(), libraryElement)) {
+				executeCommand(new AddNewImportCommand(libraryElement, importProposal.getImportedNamespace()));
+			}
+		}
 	}
 }
