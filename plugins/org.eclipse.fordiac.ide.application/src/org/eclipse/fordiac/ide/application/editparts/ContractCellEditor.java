@@ -35,6 +35,7 @@ public class ContractCellEditor extends CellEditor {
 	private EmbeddedEditor editor;
 	private EmbeddedEditorModelAccess modelAccess;
 	private boolean popupOpen = false;
+	private boolean closing = false;
 
 	public ContractCellEditor(final Composite composite, final InstanceContract contract) {
 		this.contract = contract;
@@ -57,7 +58,7 @@ public class ContractCellEditor extends CellEditor {
 		editor.getViewer().getTextWidget().addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(final FocusEvent e) {
-				if (popupOpen) {
+				if (popupOpen || closing) {
 					return;
 				}
 				// if a quickfix is applied, we also loose focus but regain it right after
@@ -71,6 +72,13 @@ public class ContractCellEditor extends CellEditor {
 						ContractCellEditor.this.focusLost();
 					}
 				});
+			}
+		});
+
+		editor.getViewer().getTextWidget().addTraverseListener(e -> {
+			if (!popupOpen && e.keyCode == SWT.ESC) { // close when pressing ESC key
+				closing = true;
+				ContractCellEditor.this.focusLost();
 			}
 		});
 

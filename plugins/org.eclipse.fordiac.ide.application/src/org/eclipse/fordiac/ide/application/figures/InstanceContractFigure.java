@@ -24,7 +24,10 @@ import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.fordiac.ide.ui.utils.ContractScanner;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.swt.graphics.Font;
 
 public class InstanceContractFigure extends Figure {
 
@@ -65,6 +68,7 @@ public class InstanceContractFigure extends Figure {
 		}
 		currentText = text;
 
+		final Font boldFont = JFaceResources.getFontRegistry().getBold(UIPreferenceConstants.DIAGRAM_FONT);
 		flowPage.removeAll();
 		if (text != null) {
 			final ContractScanner scan = new ContractScanner(text);
@@ -77,7 +81,8 @@ public class InstanceContractFigure extends Figure {
 					tf.setForegroundColor(ContractScanner.COMMENT);
 					break;
 				case KEYWORD:
-					tf.setForegroundColor(ContractScanner.HIGHLIGHT);
+					tf.setForegroundColor(ContractScanner.KEYWORD);
+					tf.setFont(boldFont);
 					break;
 				default:
 					tf.setForegroundColor(ContractScanner.NORMAL);

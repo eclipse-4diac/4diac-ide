@@ -84,7 +84,7 @@ public class DefineContractDecisionDialog extends MessageDialog {
 				idx += len;
 				range.foreground = switch (t.type()) {
 				case COMMENT -> ContractScanner.COMMENT;
-				case KEYWORD -> ContractScanner.HIGHLIGHT;
+				case KEYWORD -> ContractScanner.KEYWORD;
 				default -> ContractScanner.NORMAL;
 				};
 				if (t.type() == ContractScanner.TokenType.KEYWORD) {

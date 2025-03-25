@@ -25,7 +25,7 @@ public class ContractScanner implements Iterable<ContractScanner.Token> {
 	}
 
 	public static final Color NORMAL = new Color(0, 0, 0);
-	public static final Color HIGHLIGHT = new Color(127, 0, 85);
+	public static final Color KEYWORD = new Color(127, 0, 85);
 	public static final Color COMMENT = new Color(63, 127, 95);
 
 	public enum TokenType {
