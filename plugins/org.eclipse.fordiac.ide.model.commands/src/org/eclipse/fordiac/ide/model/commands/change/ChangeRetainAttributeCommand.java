@@ -50,7 +50,7 @@ public class ChangeRetainAttributeCommand extends Command implements ScopedComma
 		}
 
 		if (isTagged(newValue)) {
-			pin.setAttribute(InternalAttributeDeclarations.RETAIN, newValue.getString(), "");
+			pin.setAttribute(InternalAttributeDeclarations.RETAIN, newValue.getString(), ""); //$NON-NLS-1$
 		}
 	}
 
@@ -61,11 +61,11 @@ public class ChangeRetainAttributeCommand extends Command implements ScopedComma
 
 	@Override
 	public void undo() {
-		if (!isTagged(oldValue)) {
-			pin.setAttribute(InternalAttributeDeclarations.RETAIN, oldValue.getString(), "");
-		} else if (null != pin.getAttribute(LibraryElementTags.RETAIN_ATTRIBUTE)) {
+		if (!isTagged(oldValue) && pin.getAttribute(LibraryElementTags.RETAIN_ATTRIBUTE) != null) {
 			pin.deleteAttribute(LibraryElementTags.RETAIN_ATTRIBUTE);
+			return;
 		}
+		pin.setAttribute(InternalAttributeDeclarations.RETAIN, oldValue.getString(), ""); //$NON-NLS-1$
 	}
 
 	private static boolean isTagged(final RetainTag tag) {
