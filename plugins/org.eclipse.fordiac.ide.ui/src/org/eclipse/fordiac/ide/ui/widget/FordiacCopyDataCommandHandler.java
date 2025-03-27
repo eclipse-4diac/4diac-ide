@@ -33,7 +33,7 @@ public class FordiacCopyDataCommandHandler extends CopyDataCommandHandler {
 		super.internalDoCommand(command, assembledCopiedDataStructure);
 
 		final Clipboard clipboard = new Clipboard(Display.getDefault());
-		final int[] rows = selectionLayer.getFullySelectedRowPositions();
+		final int[] rows = selectionLayer.getSelectionModel().getFullySelectedRowPositions(Integer.MAX_VALUE);
 		if (rows.length > 0) {
 			final ListDataProvider<?> provider = (ListDataProvider<?>) ((DataLayer) selectionLayer
 					.getUnderlyingLayerByPosition(0, 0)).getDataProvider();
