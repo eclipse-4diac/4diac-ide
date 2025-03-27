@@ -14,11 +14,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
 
 public class ForteTypeNameCreator {
@@ -44,13 +46,21 @@ public class ForteTypeNameCreator {
 			// The _1 is needed for 4diac FORTE to separate type name from configuration
 			// part
 			typeName += "_1" + convertFullTypeNameToFORTE(PackageNameHelper.getFullTypeName(dt)); //$NON-NLS-1$
-			if (confFB instanceof final Demultiplexer demux) {
+			if (confFB instanceof final Demultiplexer demux && isConfigured(demux)) {
 				// The ____ is needed for 4diac FORTE to separate the configured name from the
 				// visible children part
 				typeName += "____" + ConfigurableFBManagement.buildVisibleChildrenString(demux.getMemberVars()); //$NON-NLS-1$
 			}
 		}
 		return typeName;
+	}
+
+	private static boolean isConfigured(final Demultiplexer demux) {
+		final EObject eObj = demux.eContainer().eContainer();
+		if (eObj instanceof Resource) {
+			return ((Demultiplexer) demux.getOpposite()).isIsConfigured();
+		}
+		return demux.isIsConfigured();
 	}
 
 	private static String convertFullTypeNameToFORTE(final String fullTypeName) {
