@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
@@ -35,22 +36,31 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.provider.OperationalSemanticsEditPlugin;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
-/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction} object.
- * <!-- begin-user-doc --> <!-- end-user-doc -->
+/**
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction} object. <!--
+ * begin-user-doc --> <!-- end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class TransactionItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
 		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
-	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public TransactionItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
 		if (itemPropertyDescriptors == null) {
@@ -61,24 +71,46 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 		return itemPropertyDescriptors;
 	}
 
-	/** This adds a property descriptor for the Parent EO feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Parent EO feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected void addParentEOPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
 				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_Transaction_parentEO_feature"), //$NON-NLS-1$
 				getString("_UI_PropertyDescriptor_description", "_UI_Transaction_parentEO_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_Transaction_type"),  //$NON-NLS-1$
+						"_UI_Transaction_type"), //$NON-NLS-1$
 				OperationalSemanticsPackage.Literals.TRANSACTION__PARENT_EO, true, false, true, null, null, null));
 	}
 
-	/** This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Duration feature. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
+	protected void addDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Transaction_duration_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Transaction_duration_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Transaction_type"), //$NON-NLS-1$
+						OperationalSemanticsPackage.Literals.TRANSACTION__DURATION, true, false, false,
+						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an
+	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
+	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@Override
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
 		if (childrenFeatures == null) {
@@ -88,38 +120,48 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 		return childrenFeatures;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
+		// Check the type of the specified child object and return the proper feature to
+		// use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
 
-	/** This returns Transaction.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns Transaction.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated NOT */
+	 * @generated NOT
+	 */
 	@Override
 	public Object getImage(final Object object) {
 		return overlayImage(object, FordiacImage.ICON_TRANSACTION.getImage());
 	}
 
-	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getText(final Object object) {
 		return getString("_UI_Transaction_type"); //$NON-NLS-1$
 	}
 
-	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
-	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
@@ -134,10 +176,13 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 		}
 	}
 
-	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
-	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
@@ -147,9 +192,12 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 						OperationalSemanticsFactory.eINSTANCE.createEventOccurrence()));
 	}
 
-	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Return the resource locator for this item provider's resources. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
 		return OperationalSemanticsEditPlugin.INSTANCE;

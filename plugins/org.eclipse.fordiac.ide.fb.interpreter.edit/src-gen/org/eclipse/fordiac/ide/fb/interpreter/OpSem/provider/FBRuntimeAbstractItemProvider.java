@@ -30,22 +30,31 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.provider.OperationalSemanticsEditPlugin;
 
-/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract}
+/**
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract}
  * object. <!-- begin-user-doc --> <!-- end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class FBRuntimeAbstractItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
 		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
-	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public FBRuntimeAbstractItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
 		if (itemPropertyDescriptors == null) {
@@ -55,17 +64,23 @@ public class FBRuntimeAbstractItemProvider extends ItemProviderAdapter implement
 		return itemPropertyDescriptors;
 	}
 
-	/** This returns FBRuntimeAbstract.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns FBRuntimeAbstract.gif. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object getImage(final Object object) {
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/FBRuntimeAbstract")); //$NON-NLS-1$
 	}
 
-	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 *
-	 * @generated NOT */
+	 * @generated NOT
+	 */
 	@Override
 	public String getText(final Object object) {
 		if (object instanceof final EObject eObj) {
@@ -78,29 +93,37 @@ public class FBRuntimeAbstractItemProvider extends ItemProviderAdapter implement
 		return getString("_UI_FBRuntimeAbstract_type"); //$NON-NLS-1$
 	}
 
-	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
-	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
 		super.notifyChanged(notification);
 	}
 
-	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
-	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 
-	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Return the resource locator for this item provider's resources. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
 		return OperationalSemanticsEditPlugin.INSTANCE;

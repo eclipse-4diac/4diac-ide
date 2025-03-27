@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
@@ -35,22 +36,31 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.provider.OperationalSemanticsEditPlugin;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
-/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager} object.
+/**
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class EventManagerItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
 		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
-	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public EventManagerItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
 		if (itemPropertyDescriptors == null) {
@@ -61,24 +71,46 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 		return itemPropertyDescriptors;
 	}
 
-	/** This adds a property descriptor for the Ready Queue feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Ready Queue feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected void addReadyQueuePropertyDescriptor(final Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
 				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_EventManager_readyQueue_feature"), //$NON-NLS-1$
 				getString("_UI_PropertyDescriptor_description", "_UI_EventManager_readyQueue_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_EventManager_type"),  //$NON-NLS-1$
+						"_UI_EventManager_type"), //$NON-NLS-1$
 				OperationalSemanticsPackage.Literals.EVENT_MANAGER__READY_QUEUE, true, false, true, null, null, null));
 	}
 
-	/** This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Start Time feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
+	protected void addStartTimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_EventManager_startTime_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_EventManager_startTime_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_EventManager_type"), //$NON-NLS-1$
+						OperationalSemanticsPackage.Literals.EVENT_MANAGER__START_TIME, true, false, false,
+						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an
+	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
+	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@Override
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
 		if (childrenFeatures == null) {
@@ -88,28 +120,36 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 		return childrenFeatures;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
+		// Check the type of the specified child object and return the proper feature to
+		// use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
 
-	/** This returns EventManager.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns EventManager.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object getImage(final Object object) {
 		return overlayImage(object, FordiacImage.ICON_SERVICE.getImage()); // $NON-NLS-1$
 	}
 
-	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 *
-	 * @generated NOT */
+	 * @generated NOT
+	 */
 	@Override
 	public String getText(final Object object) {
 		if (object instanceof final EventManager em) {
@@ -118,11 +158,13 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 		return getString("_UI_EventManager_type"); //$NON-NLS-1$
 	}
 
-	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
-	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
@@ -137,10 +179,13 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 		}
 	}
 
-	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
-	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
@@ -149,9 +194,12 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 				OperationalSemanticsFactory.eINSTANCE.createFBTransaction()));
 	}
 
-	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Return the resource locator for this item provider's resources. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
 		return OperationalSemanticsEditPlugin.INSTANCE;

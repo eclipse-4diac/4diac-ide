@@ -70,65 +70,94 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.ISetSelectionTarget;
 
-/** This is a simple wizard for creating a new model file. <!-- begin-user-doc --> <!-- end-user-doc -->
+/**
+ * This is a simple wizard for creating a new model file. <!-- begin-user-doc
+ * --> <!-- end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class OperationalSemanticsModelWizard extends Wizard implements INewWizard {
-	/** The supported extensions for created files. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The supported extensions for created files. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public static final List<String> FILE_EXTENSIONS = Collections
 			.unmodifiableList(Arrays.asList(OperationalSemanticsEditorPlugin.INSTANCE
 					.getString("_UI_OperationalSemanticsEditorFilenameExtensions").split("\\s*,\\s*"))); //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** A formatted list of supported file extensions, suitable for display. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * A formatted list of supported file extensions, suitable for display. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public static final String FORMATTED_FILE_EXTENSIONS = OperationalSemanticsEditorPlugin.INSTANCE
 			.getString("_UI_OperationalSemanticsEditorFilenameExtensions").replaceAll("\\s*,\\s*", ", "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-	/** This caches an instance of the model package. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This caches an instance of the model package. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected OperationalSemanticsPackage operationalSemanticsPackage = OperationalSemanticsPackage.eINSTANCE;
 
-	/** This caches an instance of the model factory. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This caches an instance of the model factory. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected OperationalSemanticsFactory operationalSemanticsFactory = operationalSemanticsPackage
 			.getOperationalSemanticsFactory();
 
-	/** This is the file creation page. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This is the file creation page. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected OperationalSemanticsModelWizardNewFileCreationPage newFileCreationPage;
 
-	/** This is the initial object creation page. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	protected OperationalSemanticsModelWizardInitialObjectCreationPage initialObjectCreationPage;
-
-	/** Remember the selection during initialization for populating the default container. <!-- begin-user-doc --> <!--
+	/**
+	 * This is the initial object creation page. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
+	protected OperationalSemanticsModelWizardInitialObjectCreationPage initialObjectCreationPage;
+
+	/**
+	 * Remember the selection during initialization for populating the default
+	 * container. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	protected IStructuredSelection selection;
 
-	/** Remember the workbench during initialization. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Remember the workbench during initialization. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected IWorkbench workbench;
 
-	/** Caches the names of the types that can be created as the root object. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * Caches the names of the types that can be created as the root object. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected List<String> initialObjectNames;
 
-	/** This just records the information. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This just records the information. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.workbench = workbench;
@@ -138,10 +167,12 @@ public class OperationalSemanticsModelWizard extends Wizard implements INewWizar
 				OperationalSemanticsEditorPlugin.INSTANCE.getImage("full/wizban/NewOperationalSemantics"))); //$NON-NLS-1$
 	}
 
-	/** Returns the names of the types that can be created as the root object. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * Returns the names of the types that can be created as the root object. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected Collection<String> getInitialObjectNames() {
 		if (initialObjectNames == null) {
 			initialObjectNames = new ArrayList<>();
@@ -158,9 +189,11 @@ public class OperationalSemanticsModelWizard extends Wizard implements INewWizar
 		return initialObjectNames;
 	}
 
-	/** Create a new model. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Create a new model. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected EObject createInitialModel() {
 		EClass eClass = (EClass) operationalSemanticsPackage
 				.getEClassifier(initialObjectCreationPage.getInitialObjectName());
@@ -168,9 +201,12 @@ public class OperationalSemanticsModelWizard extends Wizard implements INewWizar
 		return rootObject;
 	}
 
-	/** Do the work after everything is specified. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Do the work after everything is specified. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean performFinish() {
 		try {
@@ -252,20 +288,28 @@ public class OperationalSemanticsModelWizard extends Wizard implements INewWizar
 		}
 	}
 
-	/** This is the one page of the wizard. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This is the one page of the wizard. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public class OperationalSemanticsModelWizardNewFileCreationPage extends WizardNewFileCreationPage {
-		/** Pass in the selection. <!-- begin-user-doc --> <!-- end-user-doc -->
+		/**
+		 * Pass in the selection. <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @generated */
+		 * @generated
+		 */
 		public OperationalSemanticsModelWizardNewFileCreationPage(String pageId, IStructuredSelection selection) {
 			super(pageId, selection);
 		}
 
-		/** The framework calls this to see if the file is correct. <!-- begin-user-doc --> <!-- end-user-doc -->
+		/**
+		 * The framework calls this to see if the file is correct. <!-- begin-user-doc
+		 * --> <!-- end-user-doc -->
 		 *
-		 * @generated */
+		 * @generated
+		 */
 		@Override
 		protected boolean validatePage() {
 			if (super.validatePage()) {
@@ -281,41 +325,54 @@ public class OperationalSemanticsModelWizard extends Wizard implements INewWizar
 			return false;
 		}
 
-		/** <!-- begin-user-doc --> <!-- end-user-doc -->
+		/**
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @generated */
+		 * @generated
+		 */
 		public IFile getModelFile() {
 			return ResourcesPlugin.getWorkspace().getRoot().getFile(getContainerFullPath().append(getFileName()));
 		}
 	}
 
-	/** This is the page where the type of object to create is selected. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This is the page where the type of object to create is selected. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public class OperationalSemanticsModelWizardInitialObjectCreationPage extends WizardPage {
-		/** <!-- begin-user-doc --> <!-- end-user-doc -->
+		/**
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @generated */
+		 * @generated
+		 */
 		protected Combo initialObjectField;
 
 		/** @generated <!-- begin-user-doc --> <!-- end-user-doc --> */
 		protected List<String> encodings;
 
-		/** <!-- begin-user-doc --> <!-- end-user-doc -->
+		/**
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @generated */
+		 * @generated
+		 */
 		protected Combo encodingField;
 
-		/** Pass in the selection. <!-- begin-user-doc --> <!-- end-user-doc -->
+		/**
+		 * Pass in the selection. <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @generated */
+		 * @generated
+		 */
 		public OperationalSemanticsModelWizardInitialObjectCreationPage(String pageId) {
 			super(pageId);
 		}
 
-		/** <!-- begin-user-doc --> <!-- end-user-doc -->
+		/**
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @generated */
+		 * @generated
+		 */
 		@Override
 		public void createControl(Composite parent) {
 			Composite composite = new Composite(parent, SWT.NONE);
@@ -385,9 +442,11 @@ public class OperationalSemanticsModelWizard extends Wizard implements INewWizar
 			setControl(composite);
 		}
 
-		/** <!-- begin-user-doc --> <!-- end-user-doc -->
+		/**
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @generated */
+		 * @generated
+		 */
 		protected ModifyListener validator = new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -395,16 +454,20 @@ public class OperationalSemanticsModelWizard extends Wizard implements INewWizar
 			}
 		};
 
-		/** <!-- begin-user-doc --> <!-- end-user-doc -->
+		/**
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @generated */
+		 * @generated
+		 */
 		protected boolean validatePage() {
 			return getInitialObjectName() != null && getEncodings().contains(encodingField.getText());
 		}
 
-		/** <!-- begin-user-doc --> <!-- end-user-doc -->
+		/**
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @generated */
+		 * @generated
+		 */
 		@Override
 		public void setVisible(boolean visible) {
 			super.setVisible(visible);
@@ -419,9 +482,11 @@ public class OperationalSemanticsModelWizard extends Wizard implements INewWizar
 			}
 		}
 
-		/** <!-- begin-user-doc --> <!-- end-user-doc -->
+		/**
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @generated */
+		 * @generated
+		 */
 		public String getInitialObjectName() {
 			String label = initialObjectField.getText();
 
@@ -433,16 +498,21 @@ public class OperationalSemanticsModelWizard extends Wizard implements INewWizar
 			return null;
 		}
 
-		/** <!-- begin-user-doc --> <!-- end-user-doc -->
+		/**
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @generated */
+		 * @generated
+		 */
 		public String getEncoding() {
 			return encodingField.getText();
 		}
 
-		/** Returns the label for the specified type name. <!-- begin-user-doc --> <!-- end-user-doc -->
+		/**
+		 * Returns the label for the specified type name. <!-- begin-user-doc --> <!--
+		 * end-user-doc -->
 		 *
-		 * @generated */
+		 * @generated
+		 */
 		protected String getLabel(String typeName) {
 			try {
 				return OperationalSemanticsEditPlugin.INSTANCE.getString("_UI_" + typeName + "_type"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -452,9 +522,11 @@ public class OperationalSemanticsModelWizard extends Wizard implements INewWizar
 			return typeName;
 		}
 
-		/** <!-- begin-user-doc --> <!-- end-user-doc -->
+		/**
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @generated */
+		 * @generated
+		 */
 		protected Collection<String> getEncodings() {
 			if (encodings == null) {
 				encodings = new ArrayList<>();
@@ -468,9 +540,12 @@ public class OperationalSemanticsModelWizard extends Wizard implements INewWizar
 		}
 	}
 
-	/** The framework calls this to create the contents of the wizard. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The framework calls this to create the contents of the wizard. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void addPages() {
 		// Create a page, set the title, and the initial model file name.
@@ -482,10 +557,11 @@ public class OperationalSemanticsModelWizard extends Wizard implements INewWizar
 				OperationalSemanticsEditorPlugin.INSTANCE.getString("_UI_OperationalSemanticsModelWizard_description")); //$NON-NLS-1$
 		newFileCreationPage.setFileName(
 				OperationalSemanticsEditorPlugin.INSTANCE.getString("_UI_OperationalSemanticsEditorFilenameDefaultBase") //$NON-NLS-1$
-						+ "." + FILE_EXTENSIONS.get(0));  //$NON-NLS-1$
+						+ "." + FILE_EXTENSIONS.get(0)); //$NON-NLS-1$
 		addPage(newFileCreationPage);
 
-		// Try and get the resource selection to determine a current directory for the file dialog.
+		// Try and get the resource selection to determine a current directory for the
+		// file dialog.
 		//
 		if (selection != null && !selection.isEmpty()) {
 			// Get the resource...
@@ -527,9 +603,11 @@ public class OperationalSemanticsModelWizard extends Wizard implements INewWizar
 		addPage(initialObjectCreationPage);
 	}
 
-	/** Get the file from the page. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Get the file from the page. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public IFile getModelFile() {
 		return newFileCreationPage.getModelFile();
 	}
