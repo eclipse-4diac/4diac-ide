@@ -13,6 +13,8 @@
 
 package org.eclipse.fordiac.ide.ui.widget;
 
+import java.util.Arrays;
+
 import org.eclipse.fordiac.ide.ui.providers.RowHeaderDataProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -46,6 +48,7 @@ import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.ILayer;
 import org.eclipse.nebula.widgets.nattable.layer.IUniqueIndexLayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
+import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.nebula.widgets.nattable.layer.config.DefaultColumnHeaderStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.layer.config.DefaultRowHeaderLayerConfiguration;
 import org.eclipse.nebula.widgets.nattable.layer.config.DefaultRowHeaderStyleConfiguration;
@@ -78,6 +81,7 @@ import org.eclipse.nebula.widgets.nattable.ui.matcher.MouseEventMatcher;
 import org.eclipse.nebula.widgets.nattable.util.GUIHelper;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
@@ -372,7 +376,7 @@ public final class NatTableWidgetFactory {
 		tableStyle.bgColor = GUIHelper.COLOR_WHITE;
 		tableStyle.cellPainter = new TextPainter();
 
-		selectionStyle.fullySelectedHeaderBgColor = GUIHelper.COLOR_WHITE;
+		selectionStyle.fullySelectedHeaderBgColor = GUIHelper.COLOR_TITLE_INACTIVE_BACKGROUND;
 		selectionStyle.selectedHeaderBgColor = GUIHelper.COLOR_WHITE;
 		selectionStyle.selectedHeaderFgColor = GUIHelper.COLOR_BLACK;
 		selectionStyle.selectedHeaderFont = GUIHelper.DEFAULT_FONT;
@@ -385,8 +389,22 @@ public final class NatTableWidgetFactory {
 
 		rowHeaderStyle.font = GUIHelper.DEFAULT_FONT;
 		rowHeaderStyle.bgColor = GUIHelper.COLOR_WHITE;
-		rowHeaderStyle.cellPainter = new TextPainter();
-
+		rowHeaderStyle.cellPainter = new TextPainter() {
+			@Override
+			protected Color getBackgroundColour(final ILayerCell cell, final IConfigRegistry configRegistry) {
+				if (cell.getDisplayMode() == DisplayMode.SELECT) {
+					final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
+					if (selectionLayer != null && selectionLayer.getSelectionModel() != null && Arrays
+							.stream(selectionLayer.getSelectionModel().getFullySelectedRowPositions(Integer.MAX_VALUE))
+							.anyMatch(i -> i == cell.getRowIndex())) {
+						return selectionStyle.fullySelectedHeaderBgColor;
+					}
+					return selectionStyle.selectedHeaderBgColor;
+				}
+				return super.getBackgroundColour(cell, configRegistry);
+			}
+		};
+		
 		table.setBackground(GUIHelper.COLOR_WHITE);
 		table.addOverlayPainter(new NatTableBorderOverlayPainter());
 
@@ -429,6 +447,7 @@ public final class NatTableWidgetFactory {
 
 				cellStyle = new Style();
 				final Font font = GUIHelper.getFont(new FontData(GUIHelper.DEFAULT_FONT.toString(), 10, SWT.BOLD));
+				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_WHITE);
 				cellStyle.setAttributeValue(CellStyleAttributes.FONT, font);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
 						GridRegion.COLUMN_HEADER);
@@ -451,7 +470,6 @@ public final class NatTableWidgetFactory {
 
 				configRegistry.unregisterConfigAttribute(CellConfigAttributes.CELL_STYLE, DisplayMode.SELECT,
 						SelectionStyleLabels.SELECTION_ANCHOR_STYLE);
-
 			}
 		});
 
