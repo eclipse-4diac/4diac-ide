@@ -564,8 +564,8 @@ public interface OperationalSemanticsPackage extends EPackage {
 	int ECC_TRACE = 11;
 
 	/**
-	 * The feature id for the '<em><b>Transitions</b></em>' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Transition Traces</b></em>' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered

@@ -35,7 +35,6 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.ConnectionToValueMapImp
 import org.eclipse.fordiac.ide.fb.interpreter.provider.OperationalSemanticsEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
@@ -52,7 +51,7 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 *
 	 * @generated
 	 */
-	public ConnectionToValueMapItemProvider(final AdapterFactory adapterFactory) {
+	public ConnectionToValueMapItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -63,7 +62,7 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -78,7 +77,7 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 *
 	 * @generated
 	 */
-	protected void addKeyPropertyDescriptor(final Object object) {
+	protected void addKeyPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_ConnectionToValueMap_key_feature"), //$NON-NLS-1$
@@ -98,7 +97,7 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 * @generated
 	 */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(OperationalSemanticsPackage.Literals.CONNECTION_TO_VALUE_MAP__VALUE);
@@ -112,7 +111,7 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 * @generated
 	 */
 	@Override
-	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
 		// Check the type of the specified child object and return the proper feature to
 		// use for
 		// adding (see {@link AddCommand}) it as a child.
@@ -144,13 +143,8 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 * @generated
 	 */
 	@Override
-	public String getText(final Object object) {
-		final Map.Entry<?, ?> connectionToValueMap = (Map.Entry<?, ?>) object;
-		if (connectionToValueMap.getKey() instanceof final Connection conn
-				&& connectionToValueMap.getValue() instanceof final Value value) {
-			return "Conn " + conn.getSource().getName() + "->" + conn.getDestination().getName() + ": " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					+ value.getValue();
-		}
+	public String getText(Object object) {
+		Map.Entry<?, ?> connectionToValueMap = (Map.Entry<?, ?>) object;
 		return "" + connectionToValueMap.getKey() + " -> " + connectionToValueMap.getValue(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -162,7 +156,7 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Map.Entry.class)) {
@@ -183,7 +177,7 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors

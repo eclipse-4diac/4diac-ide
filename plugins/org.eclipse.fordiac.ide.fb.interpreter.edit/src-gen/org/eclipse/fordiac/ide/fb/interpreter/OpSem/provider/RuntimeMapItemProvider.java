@@ -51,7 +51,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	 *
 	 * @generated
 	 */
-	public RuntimeMapItemProvider(final AdapterFactory adapterFactory) {
+	public RuntimeMapItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -62,7 +62,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -77,7 +77,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	 *
 	 * @generated
 	 */
-	protected void addKeyPropertyDescriptor(final Object object) {
+	protected void addKeyPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_RuntimeMap_key_feature"), //$NON-NLS-1$
@@ -96,7 +96,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	 * @generated
 	 */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(OperationalSemanticsPackage.Literals.RUNTIME_MAP__VALUE);
@@ -110,7 +110,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	 * @generated
 	 */
 	@Override
-	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
 		// Check the type of the specified child object and return the proper feature to
 		// use for
 		// adding (see {@link AddCommand}) it as a child.
@@ -152,7 +152,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Map.Entry.class)) {
@@ -173,7 +173,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors.add(createChildParameter(OperationalSemanticsPackage.Literals.RUNTIME_MAP__VALUE,

@@ -34,7 +34,6 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.provider.OperationalSemanticsEditPlugin;
-import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a
@@ -51,7 +50,7 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 	 *
 	 * @generated
 	 */
-	public EventManagerItemProvider(final AdapterFactory adapterFactory) {
+	public EventManagerItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -62,11 +61,12 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
 			addReadyQueuePropertyDescriptor(object);
+			addStartTimePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -77,7 +77,7 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 	 *
 	 * @generated
 	 */
-	protected void addReadyQueuePropertyDescriptor(final Object object) {
+	protected void addReadyQueuePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
 				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_EventManager_readyQueue_feature"), //$NON-NLS-1$
@@ -112,7 +112,7 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 	 * @generated
 	 */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(OperationalSemanticsPackage.Literals.EVENT_MANAGER__TRANSACTIONS);
@@ -126,7 +126,7 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 	 * @generated
 	 */
 	@Override
-	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
 		// Check the type of the specified child object and return the proper feature to
 		// use for
 		// adding (see {@link AddCommand}) it as a child.
@@ -140,8 +140,8 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 	 * @generated
 	 */
 	@Override
-	public Object getImage(final Object object) {
-		return overlayImage(object, FordiacImage.ICON_SERVICE.getImage()); // $NON-NLS-1$
+	public Object getImage(Object object) {
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/EventManager")); //$NON-NLS-1$
 	}
 
 	/**
@@ -166,10 +166,13 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(EventManager.class)) {
+		case OperationalSemanticsPackage.EVENT_MANAGER__START_TIME:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+			return;
 		case OperationalSemanticsPackage.EVENT_MANAGER__TRANSACTIONS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
@@ -187,7 +190,7 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors.add(createChildParameter(OperationalSemanticsPackage.Literals.EVENT_MANAGER__TRANSACTIONS,

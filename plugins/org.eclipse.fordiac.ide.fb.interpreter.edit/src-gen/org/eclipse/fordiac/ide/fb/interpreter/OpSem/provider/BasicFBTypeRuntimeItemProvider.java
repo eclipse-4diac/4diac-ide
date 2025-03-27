@@ -20,6 +20,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -38,7 +39,7 @@ public class BasicFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvide
 	 *
 	 * @generated
 	 */
-	public BasicFBTypeRuntimeItemProvider(final AdapterFactory adapterFactory) {
+	public BasicFBTypeRuntimeItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -49,7 +50,7 @@ public class BasicFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvide
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -65,7 +66,7 @@ public class BasicFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvide
 	 *
 	 * @generated
 	 */
-	protected void addBasicfbtypePropertyDescriptor(final Object object) {
+	protected void addBasicfbtypePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_BasicFBTypeRuntime_basicfbtype_feature"), //$NON-NLS-1$
@@ -81,14 +82,14 @@ public class BasicFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvide
 	 *
 	 * @generated
 	 */
-	protected void addActiveStatePropertyDescriptor(final Object object) {
+	protected void addActiveStatePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_BasicFBTypeRuntime_activeState_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_BasicFBTypeRuntime_activeState_feature", //$NON-NLS-1$ //$NON-NLS-2$
 								"_UI_BasicFBTypeRuntime_type"), //$NON-NLS-1$
 						OperationalSemanticsPackage.Literals.BASIC_FB_TYPE_RUNTIME__ACTIVE_STATE, true, false, true,
-						null, null, null));
+						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -129,7 +130,7 @@ public class BasicFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvide
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 		super.notifyChanged(notification);
 	}
@@ -142,7 +143,7 @@ public class BasicFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvide
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

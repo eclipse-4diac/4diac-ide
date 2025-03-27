@@ -27,6 +27,8 @@ import org.eclipse.emf.ecore.EObject;
  * <em>Input Event Occurrence</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getParentEO
  * <em>Parent EO</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getDuration
+ * <em>Duration</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getTransaction()

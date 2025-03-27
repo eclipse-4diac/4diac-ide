@@ -672,8 +672,7 @@ public class OperationalSemanticsEditor extends MultiPageEditorPart
 		BasicCommandStack commandStack = new BasicCommandStack();
 
 		// Add a listener to set the most recent command's affected objects to be the
-		// selection of the viewer with
-		// focus.
+		// selection of the viewer with focus.
 		//
 		commandStack.addCommandStackListener(new CommandStackListener() {
 			@Override

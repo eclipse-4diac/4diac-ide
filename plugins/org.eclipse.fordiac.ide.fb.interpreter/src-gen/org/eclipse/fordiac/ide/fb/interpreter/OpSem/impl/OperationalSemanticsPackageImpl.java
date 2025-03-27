@@ -694,6 +694,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		eventManagerEClass = createEClass(EVENT_MANAGER);
 		createEReference(eventManagerEClass, EVENT_MANAGER__TRANSACTIONS);
 		createEReference(eventManagerEClass, EVENT_MANAGER__READY_QUEUE);
+		createEAttribute(eventManagerEClass, EVENT_MANAGER__START_TIME);
 
 		fbRuntimeAbstractEClass = createEClass(FB_RUNTIME_ABSTRACT);
 
@@ -707,6 +708,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		transactionEClass = createEClass(TRANSACTION);
 		createEReference(transactionEClass, TRANSACTION__INPUT_EVENT_OCCURRENCE);
 		createEReference(transactionEClass, TRANSACTION__PARENT_EO);
+		createEAttribute(transactionEClass, TRANSACTION__DURATION);
 
 		fbNetworkRuntimeEClass = createEClass(FB_NETWORK_RUNTIME);
 		createEReference(fbNetworkRuntimeEClass, FB_NETWORK_RUNTIME__FBNETWORK);
@@ -813,6 +815,9 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEReference(getEventManager_ReadyQueue(), this.getTransaction(), null, "readyQueue", null, 0, -1, //$NON-NLS-1$
 				EventManager.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEventManager_StartTime(), theXMLTypePackage.getLong(), "startTime", null, 0, 1, //$NON-NLS-1$
+				EventManager.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
 
 		addEOperation(eventManagerEClass, null, "process", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -859,6 +864,9 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 				this.getEventOccurrence_CreatedTransactions(), "parentEO", null, 0, 1, Transaction.class, !IS_TRANSIENT, //$NON-NLS-1$
 				!IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
 				IS_ORDERED);
+		initEAttribute(getTransaction_Duration(), theXMLTypePackage.getLong(), "duration", null, 0, 1, //$NON-NLS-1$
+				Transaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
 
 		initEClass(fbNetworkRuntimeEClass, FBNetworkRuntime.class, "FBNetworkRuntime", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);

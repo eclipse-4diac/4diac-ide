@@ -41,6 +41,8 @@ import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
  * <em>Transactions</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventManagerImpl#getReadyQueue
  * <em>Ready Queue</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventManagerImpl#getStartTime
+ * <em>Start Time</em>}</li>
  * </ul>
  *
  * @generated
@@ -205,6 +207,8 @@ public class EventManagerImpl extends MinimalEObjectImpl.Container implements Ev
 			return getTransactions();
 		case OperationalSemanticsPackage.EVENT_MANAGER__READY_QUEUE:
 			return getReadyQueue();
+		case OperationalSemanticsPackage.EVENT_MANAGER__START_TIME:
+			return getStartTime();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -227,6 +231,9 @@ public class EventManagerImpl extends MinimalEObjectImpl.Container implements Ev
 			getReadyQueue().clear();
 			getReadyQueue().addAll((Collection<? extends Transaction>) newValue);
 			return;
+		case OperationalSemanticsPackage.EVENT_MANAGER__START_TIME:
+			setStartTime((Long) newValue);
+			return;
 		default:
 			super.eSet(featureID, newValue);
 			return;
@@ -247,6 +254,9 @@ public class EventManagerImpl extends MinimalEObjectImpl.Container implements Ev
 		case OperationalSemanticsPackage.EVENT_MANAGER__READY_QUEUE:
 			getReadyQueue().clear();
 			return;
+		case OperationalSemanticsPackage.EVENT_MANAGER__START_TIME:
+			setStartTime(START_TIME_EDEFAULT);
+			return;
 		default:
 			super.eUnset(featureID);
 			return;
@@ -265,6 +275,8 @@ public class EventManagerImpl extends MinimalEObjectImpl.Container implements Ev
 			return transactions != null && !transactions.isEmpty();
 		case OperationalSemanticsPackage.EVENT_MANAGER__READY_QUEUE:
 			return readyQueue != null && !readyQueue.isEmpty();
+		case OperationalSemanticsPackage.EVENT_MANAGER__START_TIME:
+			return startTime != START_TIME_EDEFAULT;
 		default:
 			return super.eIsSet(featureID);
 		}

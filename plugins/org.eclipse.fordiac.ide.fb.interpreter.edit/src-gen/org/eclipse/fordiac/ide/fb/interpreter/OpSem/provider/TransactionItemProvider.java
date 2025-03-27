@@ -51,7 +51,7 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 	 *
 	 * @generated
 	 */
-	public TransactionItemProvider(final AdapterFactory adapterFactory) {
+	public TransactionItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -62,11 +62,12 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
 			addParentEOPropertyDescriptor(object);
+			addDurationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -77,7 +78,7 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 	 *
 	 * @generated
 	 */
-	protected void addParentEOPropertyDescriptor(final Object object) {
+	protected void addParentEOPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
 				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_Transaction_parentEO_feature"), //$NON-NLS-1$
@@ -112,7 +113,7 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 	 * @generated
 	 */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(OperationalSemanticsPackage.Literals.TRANSACTION__INPUT_EVENT_OCCURRENCE);
@@ -126,7 +127,7 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 	 * @generated
 	 */
 	@Override
-	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
 		// Check the type of the specified child object and return the proper feature to
 		// use for
 		// adding (see {@link AddCommand}) it as a child.
@@ -151,8 +152,9 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 	 * @generated
 	 */
 	@Override
-	public String getText(final Object object) {
-		return getString("_UI_Transaction_type"); //$NON-NLS-1$
+	public String getText(Object object) {
+		Transaction transaction = (Transaction) object;
+		return getString("_UI_Transaction_type") + " " + transaction.getDuration(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -163,10 +165,13 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Transaction.class)) {
+		case OperationalSemanticsPackage.TRANSACTION__DURATION:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+			return;
 		case OperationalSemanticsPackage.TRANSACTION__INPUT_EVENT_OCCURRENCE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
@@ -184,7 +189,7 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors

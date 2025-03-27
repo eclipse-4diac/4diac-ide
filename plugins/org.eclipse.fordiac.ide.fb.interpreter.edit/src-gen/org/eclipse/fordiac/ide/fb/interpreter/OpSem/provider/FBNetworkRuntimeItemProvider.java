@@ -41,7 +41,7 @@ public class FBNetworkRuntimeItemProvider extends FBRuntimeAbstractItemProvider 
 	 *
 	 * @generated
 	 */
-	public FBNetworkRuntimeItemProvider(final AdapterFactory adapterFactory) {
+	public FBNetworkRuntimeItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -52,7 +52,7 @@ public class FBNetworkRuntimeItemProvider extends FBRuntimeAbstractItemProvider 
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -67,7 +67,7 @@ public class FBNetworkRuntimeItemProvider extends FBRuntimeAbstractItemProvider 
 	 *
 	 * @generated
 	 */
-	protected void addFbnetworkPropertyDescriptor(final Object object) {
+	protected void addFbnetworkPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_FBNetworkRuntime_fbnetwork_feature"), //$NON-NLS-1$
@@ -103,7 +103,7 @@ public class FBNetworkRuntimeItemProvider extends FBRuntimeAbstractItemProvider 
 	 * @generated
 	 */
 	@Override
-	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
 		// Check the type of the specified child object and return the proper feature to
 		// use for
 		// adding (see {@link AddCommand}) it as a child.
@@ -141,7 +141,7 @@ public class FBNetworkRuntimeItemProvider extends FBRuntimeAbstractItemProvider 
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(FBNetworkRuntime.class)) {
@@ -163,7 +163,7 @@ public class FBNetworkRuntimeItemProvider extends FBRuntimeAbstractItemProvider 
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors

@@ -57,7 +57,7 @@
     </eOperations>
     <eOperations name="getActiveState" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ECState">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return ECStateAnnotations.getActiveState(activeState,(BasicFBType)this);"/>
+        <details key="body" value="return ECStateAnnotations.getActiveState(activeState, this.getModel());"/>
       </eAnnotations>
       <eParameters name="activeStateString" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     </eOperations>

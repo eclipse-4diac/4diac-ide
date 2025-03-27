@@ -34,6 +34,8 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
  * <em>Input Event Occurrence</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransactionImpl#getParentEO
  * <em>Parent EO</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransactionImpl#getDuration
+ * <em>Duration</em>}</li>
  * </ul>
  *
  * @generated
@@ -351,6 +353,8 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 				return getParentEO();
 			}
 			return basicGetParentEO();
+		case OperationalSemanticsPackage.TRANSACTION__DURATION:
+			return getDuration();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -369,6 +373,9 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 			return;
 		case OperationalSemanticsPackage.TRANSACTION__PARENT_EO:
 			setParentEO((EventOccurrence) newValue);
+			return;
+		case OperationalSemanticsPackage.TRANSACTION__DURATION:
+			setDuration((Long) newValue);
 			return;
 		default:
 			super.eSet(featureID, newValue);
@@ -390,6 +397,9 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 		case OperationalSemanticsPackage.TRANSACTION__PARENT_EO:
 			setParentEO((EventOccurrence) null);
 			return;
+		case OperationalSemanticsPackage.TRANSACTION__DURATION:
+			setDuration(DURATION_EDEFAULT);
+			return;
 		default:
 			super.eUnset(featureID);
 			return;
@@ -408,6 +418,8 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 			return inputEventOccurrence != null;
 		case OperationalSemanticsPackage.TRANSACTION__PARENT_EO:
 			return parentEO != null;
+		case OperationalSemanticsPackage.TRANSACTION__DURATION:
+			return duration != DURATION_EDEFAULT;
 		default:
 			return super.eIsSet(featureID);
 		}

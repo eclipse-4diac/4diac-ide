@@ -45,7 +45,7 @@ public class FBRuntimeAbstractItemProvider extends ItemProviderAdapter implement
 	 *
 	 * @generated
 	 */
-	public FBRuntimeAbstractItemProvider(final AdapterFactory adapterFactory) {
+	public FBRuntimeAbstractItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -56,7 +56,7 @@ public class FBRuntimeAbstractItemProvider extends ItemProviderAdapter implement
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -71,7 +71,7 @@ public class FBRuntimeAbstractItemProvider extends ItemProviderAdapter implement
 	 * @generated
 	 */
 	@Override
-	public Object getImage(final Object object) {
+	public Object getImage(Object object) {
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/FBRuntimeAbstract")); //$NON-NLS-1$
 	}
 
@@ -101,7 +101,7 @@ public class FBRuntimeAbstractItemProvider extends ItemProviderAdapter implement
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 		super.notifyChanged(notification);
 	}
@@ -114,7 +114,7 @@ public class FBRuntimeAbstractItemProvider extends ItemProviderAdapter implement
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

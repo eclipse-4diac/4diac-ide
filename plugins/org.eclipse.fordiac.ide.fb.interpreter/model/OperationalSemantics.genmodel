@@ -47,7 +47,7 @@
       <genOperations ecoreOperation="OperationalSemantics.ecore#//BasicFBTypeRuntime/getModel"
           body="return this.getBasicfbtype();"/>
       <genOperations ecoreOperation="OperationalSemantics.ecore#//BasicFBTypeRuntime/getActiveState"
-          body="return ECStateAnnotations.getActiveState(activeState,(BasicFBType)this);">
+          body="return ECStateAnnotations.getActiveState(activeState, this.getModel());">
         <genParameters ecoreParameter="OperationalSemantics.ecore#//BasicFBTypeRuntime/getActiveState/activeStateString"/>
       </genOperations>
     </genClasses>

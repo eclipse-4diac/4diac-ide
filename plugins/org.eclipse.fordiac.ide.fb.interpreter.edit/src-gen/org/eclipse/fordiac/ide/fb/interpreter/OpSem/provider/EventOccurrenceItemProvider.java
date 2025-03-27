@@ -52,7 +52,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	public EventOccurrenceItemProvider(final AdapterFactory adapterFactory) {
+	public EventOccurrenceItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -63,7 +63,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -83,7 +83,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	protected void addEventPropertyDescriptor(final Object object) {
+	protected void addEventPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
 				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_EventOccurrence_event_feature"), //$NON-NLS-1$
@@ -98,7 +98,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	protected void addActivePropertyDescriptor(final Object object) {
+	protected void addActivePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EventOccurrence_active_feature"), //$NON-NLS-1$
@@ -114,7 +114,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	protected void addIgnoredPropertyDescriptor(final Object object) {
+	protected void addIgnoredPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EventOccurrence_ignored_feature"), //$NON-NLS-1$
@@ -130,7 +130,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	protected void addFbRuntimePropertyDescriptor(final Object object) {
+	protected void addFbRuntimePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EventOccurrence_fbRuntime_feature"), //$NON-NLS-1$
@@ -146,7 +146,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	protected void addCreatedTransactionsPropertyDescriptor(final Object object) {
+	protected void addCreatedTransactionsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EventOccurrence_createdTransactions_feature"), //$NON-NLS-1$
@@ -162,7 +162,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	protected void addParentFBPropertyDescriptor(final Object object) {
+	protected void addParentFBPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
 				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_EventOccurrence_parentFB_feature"), //$NON-NLS-1$
@@ -196,7 +196,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 * @generated
 	 */
 	@Override
-	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
 		// Check the type of the specified child object and return the proper feature to
 		// use for
 		// adding (see {@link AddCommand}) it as a child.

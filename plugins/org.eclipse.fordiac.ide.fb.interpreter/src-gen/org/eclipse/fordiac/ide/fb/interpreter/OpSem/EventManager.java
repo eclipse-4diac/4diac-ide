@@ -28,6 +28,8 @@ import org.eclipse.emf.ecore.EObject;
  * <em>Transactions</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager#getReadyQueue
  * <em>Ready Queue</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager#getStartTime
+ * <em>Start Time</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getEventManager()
