@@ -31,192 +31,242 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Event Occurrence</b></em>'. <!-- end-user-doc
- * -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Event
+ * Occurrence</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getEvent <em>Event</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#isActive <em>Active</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#isIgnored <em>Ignored</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getFbRuntime <em>Fb
- * Runtime</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getCreatedTransactions <em>Created
- * Transactions</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getParentFB <em>Parent FB</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getResultFBRuntime <em>Result FB
- * Runtime</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getEvent
+ * <em>Event</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#isActive
+ * <em>Active</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#isIgnored
+ * <em>Ignored</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getFbRuntime
+ * <em>Fb Runtime</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getCreatedTransactions
+ * <em>Created Transactions</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getParentFB
+ * <em>Parent FB</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getResultFBRuntime
+ * <em>Result FB Runtime</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements EventOccurrence {
-	/** The cached value of the '{@link #getEvent() <em>Event</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getEvent() <em>Event</em>}' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getEvent()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Event event;
 
-	/** The default value of the '{@link #isActive() <em>Active</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #isActive() <em>Active</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #isActive()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final boolean ACTIVE_EDEFAULT = true;
 
-	/** The cached value of the '{@link #isActive() <em>Active</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #isActive() <em>Active</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #isActive()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected boolean active = ACTIVE_EDEFAULT;
 
-	/** The default value of the '{@link #isIgnored() <em>Ignored</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #isIgnored() <em>Ignored</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #isIgnored()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final boolean IGNORED_EDEFAULT = false;
 
-	/** The cached value of the '{@link #isIgnored() <em>Ignored</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #isIgnored() <em>Ignored</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #isIgnored()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected boolean ignored = IGNORED_EDEFAULT;
 
-	/** The cached value of the '{@link #getFbRuntime() <em>Fb Runtime</em>}' containment reference. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getFbRuntime() <em>Fb Runtime</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getFbRuntime()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected FBRuntimeAbstract fbRuntime;
 
-	/** The cached value of the '{@link #getCreatedTransactions() <em>Created Transactions</em>}' reference list. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getCreatedTransactions() <em>Created
+	 * Transactions</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #getCreatedTransactions()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<Transaction> createdTransactions;
 
-	/** The cached value of the '{@link #getParentFB() <em>Parent FB</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getParentFB() <em>Parent FB</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getParentFB()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected FBNetworkElement parentFB;
 
-	/** The cached value of the '{@link #getResultFBRuntime() <em>Result FB Runtime</em>}' containment reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getResultFBRuntime() <em>Result FB
+	 * Runtime</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
 	 * @see #getResultFBRuntime()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected FBRuntimeAbstract resultFBRuntime;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected EventOccurrenceImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return OperationalSemanticsPackage.Literals.EVENT_OCCURRENCE;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Event getEvent() {
 		if (event != null && event.eIsProxy()) {
 			InternalEObject oldEvent = (InternalEObject) event;
 			event = (Event) eResolveProxy(oldEvent);
 			if (event != oldEvent) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							OperationalSemanticsPackage.EVENT_OCCURRENCE__EVENT, oldEvent, event));
+				}
 			}
 		}
 		return event;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public Event basicGetEvent() {
 		return event;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setEvent(Event newEvent) {
 		Event oldEvent = event;
 		event = newEvent;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationalSemanticsPackage.EVENT_OCCURRENCE__EVENT,
 					oldEvent, event));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean isActive() {
 		return active;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setActive(boolean newActive) {
 		boolean oldActive = active;
 		active = newActive;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationalSemanticsPackage.EVENT_OCCURRENCE__ACTIVE,
 					oldActive, active));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean isIgnored() {
 		return ignored;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setIgnored(boolean newIgnored) {
 		boolean oldIgnored = ignored;
 		ignored = newIgnored;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationalSemanticsPackage.EVENT_OCCURRENCE__IGNORED,
 					oldIgnored, ignored));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public FBRuntimeAbstract getFbRuntime() {
 		if (fbRuntime != null && fbRuntime.eIsProxy()) {
@@ -231,64 +281,79 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 							EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.EVENT_OCCURRENCE__FB_RUNTIME, null,
 							msgs);
 				}
-				if (msgs != null)
+				if (msgs != null) {
 					msgs.dispatch();
-				if (eNotificationRequired())
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							OperationalSemanticsPackage.EVENT_OCCURRENCE__FB_RUNTIME, oldFbRuntime, fbRuntime));
+				}
 			}
 		}
 		return fbRuntime;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public FBRuntimeAbstract basicGetFbRuntime() {
 		return fbRuntime;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetFbRuntime(FBRuntimeAbstract newFbRuntime, NotificationChain msgs) {
 		FBRuntimeAbstract oldFbRuntime = fbRuntime;
 		fbRuntime = newFbRuntime;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.EVENT_OCCURRENCE__FB_RUNTIME, oldFbRuntime, newFbRuntime);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setFbRuntime(FBRuntimeAbstract newFbRuntime) {
 		if (newFbRuntime != fbRuntime) {
 			NotificationChain msgs = null;
-			if (fbRuntime != null)
+			if (fbRuntime != null) {
 				msgs = ((InternalEObject) fbRuntime).eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.EVENT_OCCURRENCE__FB_RUNTIME, null, msgs);
-			if (newFbRuntime != null)
+			}
+			if (newFbRuntime != null) {
 				msgs = ((InternalEObject) newFbRuntime).eInverseAdd(this,
 						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.EVENT_OCCURRENCE__FB_RUNTIME, null, msgs);
+			}
 			msgs = basicSetFbRuntime(newFbRuntime, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.EVENT_OCCURRENCE__FB_RUNTIME, newFbRuntime, newFbRuntime));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<Transaction> getCreatedTransactions() {
 		if (createdTransactions == null) {
@@ -299,45 +364,55 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 		return createdTransactions;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public FBNetworkElement getParentFB() {
 		if (parentFB != null && parentFB.eIsProxy()) {
 			InternalEObject oldParentFB = (InternalEObject) parentFB;
 			parentFB = (FBNetworkElement) eResolveProxy(oldParentFB);
 			if (parentFB != oldParentFB) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							OperationalSemanticsPackage.EVENT_OCCURRENCE__PARENT_FB, oldParentFB, parentFB));
+				}
 			}
 		}
 		return parentFB;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public FBNetworkElement basicGetParentFB() {
 		return parentFB;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setParentFB(FBNetworkElement newParentFB) {
 		FBNetworkElement oldParentFB = parentFB;
 		parentFB = newParentFB;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.EVENT_OCCURRENCE__PARENT_FB, oldParentFB, parentFB));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public FBRuntimeAbstract getResultFBRuntime() {
 		if (resultFBRuntime != null && resultFBRuntime.eIsProxy()) {
@@ -353,27 +428,33 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 							EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME,
 							null, msgs);
 				}
-				if (msgs != null)
+				if (msgs != null) {
 					msgs.dispatch();
-				if (eNotificationRequired())
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME, oldResultFBRuntime,
 							resultFBRuntime));
+				}
 			}
 		}
 		return resultFBRuntime;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public FBRuntimeAbstract basicGetResultFBRuntime() {
 		return resultFBRuntime;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetResultFBRuntime(FBRuntimeAbstract newResultFBRuntime, NotificationChain msgs) {
 		FBRuntimeAbstract oldResultFBRuntime = resultFBRuntime;
 		resultFBRuntime = newResultFBRuntime;
@@ -381,41 +462,50 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME, oldResultFBRuntime,
 					newResultFBRuntime);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setResultFBRuntime(FBRuntimeAbstract newResultFBRuntime) {
 		if (newResultFBRuntime != resultFBRuntime) {
 			NotificationChain msgs = null;
-			if (resultFBRuntime != null)
+			if (resultFBRuntime != null) {
 				msgs = ((InternalEObject) resultFBRuntime).eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME, null,
 						msgs);
-			if (newResultFBRuntime != null)
+			}
+			if (newResultFBRuntime != null) {
 				msgs = ((InternalEObject) newResultFBRuntime).eInverseAdd(this,
 						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME, null,
 						msgs);
+			}
 			msgs = basicSetResultFBRuntime(newResultFBRuntime, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME, newResultFBRuntime,
 					newResultFBRuntime));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -428,9 +518,11 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -445,42 +537,50 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__EVENT:
-			if (resolve)
+			if (resolve) {
 				return getEvent();
+			}
 			return basicGetEvent();
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__ACTIVE:
 			return isActive();
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__IGNORED:
 			return isIgnored();
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__FB_RUNTIME:
-			if (resolve)
+			if (resolve) {
 				return getFbRuntime();
+			}
 			return basicGetFbRuntime();
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__CREATED_TRANSACTIONS:
 			return getCreatedTransactions();
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__PARENT_FB:
-			if (resolve)
+			if (resolve) {
 				return getParentFB();
+			}
 			return basicGetParentFB();
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME:
-			if (resolve)
+			if (resolve) {
 				return getResultFBRuntime();
+			}
 			return basicGetResultFBRuntime();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -513,9 +613,11 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -546,9 +648,11 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -571,13 +675,16 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (active: "); //$NON-NLS-1$

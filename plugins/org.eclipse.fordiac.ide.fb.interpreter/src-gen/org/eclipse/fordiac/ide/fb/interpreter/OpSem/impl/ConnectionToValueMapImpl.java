@@ -26,88 +26,109 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Connection To Value Map</b></em>'. <!--
- * end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Connection To Value Map</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.ConnectionToValueMapImpl#getTypedKey <em>Key</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.ConnectionToValueMapImpl#getTypedKey
+ * <em>Key</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.ConnectionToValueMapImpl#getTypedValue
  * <em>Value</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class ConnectionToValueMapImpl extends MinimalEObjectImpl.Container
 		implements BasicEMap.Entry<Connection, Value> {
-	/** The cached value of the '{@link #getTypedKey() <em>Key</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getTypedKey()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Connection key;
 
-	/** The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getTypedValue()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected Value value;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected ConnectionToValueMapImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return OperationalSemanticsPackage.Literals.CONNECTION_TO_VALUE_MAP;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public Connection getTypedKey() {
 		if (key != null && key.eIsProxy()) {
 			InternalEObject oldKey = (InternalEObject) key;
 			key = (Connection) eResolveProxy(oldKey);
 			if (key != oldKey) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							OperationalSemanticsPackage.CONNECTION_TO_VALUE_MAP__KEY, oldKey, key));
+				}
 			}
 		}
 		return key;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public Connection basicGetTypedKey() {
 		return key;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public void setTypedKey(Connection newKey) {
 		Connection oldKey = key;
 		key = newKey;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.CONNECTION_TO_VALUE_MAP__KEY, oldKey, key));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public Value getTypedValue() {
 		if (value != null && value.eIsProxy()) {
 			InternalEObject oldValue = (InternalEObject) value;
@@ -122,65 +143,80 @@ public class ConnectionToValueMapImpl extends MinimalEObjectImpl.Container
 							EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.CONNECTION_TO_VALUE_MAP__VALUE, null,
 							msgs);
 				}
-				if (msgs != null)
+				if (msgs != null) {
 					msgs.dispatch();
-				if (eNotificationRequired())
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							OperationalSemanticsPackage.CONNECTION_TO_VALUE_MAP__VALUE, oldValue, value));
+				}
 			}
 		}
 		return value;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public Value basicGetTypedValue() {
 		return value;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetTypedValue(Value newValue, NotificationChain msgs) {
 		Value oldValue = value;
 		value = newValue;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.CONNECTION_TO_VALUE_MAP__VALUE, oldValue, newValue);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public void setTypedValue(Value newValue) {
 		if (newValue != value) {
 			NotificationChain msgs = null;
-			if (value != null)
+			if (value != null) {
 				msgs = ((InternalEObject) value).eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.CONNECTION_TO_VALUE_MAP__VALUE, null,
 						msgs);
-			if (newValue != null)
+			}
+			if (newValue != null) {
 				msgs = ((InternalEObject) newValue).eInverseAdd(this,
 						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.CONNECTION_TO_VALUE_MAP__VALUE, null,
 						msgs);
+			}
 			msgs = basicSetTypedValue(newValue, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.CONNECTION_TO_VALUE_MAP__VALUE, newValue, newValue));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -191,28 +227,34 @@ public class ConnectionToValueMapImpl extends MinimalEObjectImpl.Container
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.CONNECTION_TO_VALUE_MAP__KEY:
-			if (resolve)
+			if (resolve) {
 				return getTypedKey();
+			}
 			return basicGetTypedKey();
 		case OperationalSemanticsPackage.CONNECTION_TO_VALUE_MAP__VALUE:
-			if (resolve)
+			if (resolve) {
 				return getTypedValue();
+			}
 			return basicGetTypedValue();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -228,9 +270,11 @@ public class ConnectionToValueMapImpl extends MinimalEObjectImpl.Container
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -246,9 +290,11 @@ public class ConnectionToValueMapImpl extends MinimalEObjectImpl.Container
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -261,14 +307,18 @@ public class ConnectionToValueMapImpl extends MinimalEObjectImpl.Container
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected int hash = -1;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public int getHash() {
 		if (hash == -1) {
@@ -278,41 +328,51 @@ public class ConnectionToValueMapImpl extends MinimalEObjectImpl.Container
 		return hash;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setHash(int hash) {
 		this.hash = hash;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Connection getKey() {
 		return getTypedKey();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setKey(Connection key) {
 		setTypedKey(key);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Value getValue() {
 		return getTypedValue();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Value setValue(Value value) {
 		Value oldValue = getValue();
@@ -320,9 +380,11 @@ public class ConnectionToValueMapImpl extends MinimalEObjectImpl.Container
 		return oldValue;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	public EMap<Connection, Value> getEMap() {
 		EObject container = eContainer();

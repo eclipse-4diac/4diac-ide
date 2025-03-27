@@ -15,11 +15,14 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 
 import org.eclipse.emf.ecore.EObject;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>Trace</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> A representation of the model object
+ * '<em><b>Trace</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getTrace()
  * @model
- * @generated */
+ * @generated
+ */
 public interface Trace extends EObject {
 } // Trace

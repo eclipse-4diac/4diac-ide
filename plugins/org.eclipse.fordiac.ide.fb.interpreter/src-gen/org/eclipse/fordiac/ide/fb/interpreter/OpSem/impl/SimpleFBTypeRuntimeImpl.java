@@ -22,44 +22,54 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Simple FB Type Runtime</b></em>'. <!--
- * end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Simple
+ * FB Type Runtime</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.SimpleFBTypeRuntimeImpl#getSimpleFBType <em>Simple FB
- * Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.SimpleFBTypeRuntimeImpl#getSimpleFBType
+ * <em>Simple FB Type</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class SimpleFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements SimpleFBTypeRuntime {
-	/** The cached value of the '{@link #getSimpleFBType() <em>Simple FB Type</em>}' containment reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getSimpleFBType() <em>Simple FB Type</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getSimpleFBType()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected SimpleFBType simpleFBType;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected SimpleFBTypeRuntimeImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return OperationalSemanticsPackage.Literals.SIMPLE_FB_TYPE_RUNTIME;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public SimpleFBType getSimpleFBType() {
 		if (simpleFBType != null && simpleFBType.eIsProxy()) {
@@ -75,27 +85,33 @@ public class SimpleFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Si
 							EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME__SIMPLE_FB_TYPE,
 							null, msgs);
 				}
-				if (msgs != null)
+				if (msgs != null) {
 					msgs.dispatch();
-				if (eNotificationRequired())
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME__SIMPLE_FB_TYPE, oldSimpleFBType,
 							simpleFBType));
+				}
 			}
 		}
 		return simpleFBType;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public SimpleFBType basicGetSimpleFBType() {
 		return simpleFBType;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetSimpleFBType(SimpleFBType newSimpleFBType, NotificationChain msgs) {
 		SimpleFBType oldSimpleFBType = simpleFBType;
 		simpleFBType = newSimpleFBType;
@@ -103,49 +119,60 @@ public class SimpleFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Si
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME__SIMPLE_FB_TYPE, oldSimpleFBType,
 					newSimpleFBType);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setSimpleFBType(SimpleFBType newSimpleFBType) {
 		if (newSimpleFBType != simpleFBType) {
 			NotificationChain msgs = null;
-			if (simpleFBType != null)
+			if (simpleFBType != null) {
 				msgs = ((InternalEObject) simpleFBType).eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME__SIMPLE_FB_TYPE,
 						null, msgs);
-			if (newSimpleFBType != null)
+			}
+			if (newSimpleFBType != null) {
 				msgs = ((InternalEObject) newSimpleFBType).eInverseAdd(this,
 						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME__SIMPLE_FB_TYPE,
 						null, msgs);
+			}
 			msgs = basicSetSimpleFBType(newSimpleFBType, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME__SIMPLE_FB_TYPE, newSimpleFBType,
 					newSimpleFBType));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public SimpleFBType getModel() {
 		return simpleFBType;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -156,24 +183,29 @@ public class SimpleFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Si
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME__SIMPLE_FB_TYPE:
-			if (resolve)
+			if (resolve) {
 				return getSimpleFBType();
+			}
 			return basicGetSimpleFBType();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -186,9 +218,11 @@ public class SimpleFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Si
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -201,9 +235,11 @@ public class SimpleFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Si
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

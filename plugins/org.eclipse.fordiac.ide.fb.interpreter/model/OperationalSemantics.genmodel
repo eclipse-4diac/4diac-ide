@@ -29,6 +29,7 @@
     <genClasses ecoreClass="OperationalSemantics.ecore#//EventManager">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EventManager/transactions"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EventManager/readyQueue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute OperationalSemantics.ecore#//EventManager/startTime"/>
       <genOperations ecoreOperation="OperationalSemantics.ecore#//EventManager/process"
           body="EventManagerUtils.process(this);"/>
       <genOperations ecoreOperation="OperationalSemantics.ecore#//EventManager/processNetwork"
@@ -58,6 +59,7 @@
     <genClasses ecoreClass="OperationalSemantics.ecore#//Transaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//Transaction/inputEventOccurrence"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//Transaction/parentEO"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute OperationalSemantics.ecore#//Transaction/duration"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//FBNetworkRuntime">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBNetworkRuntime/fbnetwork"/>

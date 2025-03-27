@@ -23,52 +23,87 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Transaction</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Transaction</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransactionImpl#getInputEventOccurrence <em>Input Event
- * Occurrence</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransactionImpl#getParentEO <em>Parent EO</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransactionImpl#getInputEventOccurrence
+ * <em>Input Event Occurrence</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransactionImpl#getParentEO
+ * <em>Parent EO</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public abstract class TransactionImpl extends MinimalEObjectImpl.Container implements Transaction {
-	/** The cached value of the '{@link #getInputEventOccurrence() <em>Input Event Occurrence</em>}' containment
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getInputEventOccurrence() <em>Input Event
+	 * Occurrence</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
 	 * @see #getInputEventOccurrence()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EventOccurrence inputEventOccurrence;
 
-	/** The cached value of the '{@link #getParentEO() <em>Parent EO</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getParentEO() <em>Parent EO</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getParentEO()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EventOccurrence parentEO;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The default value of the '{@link #getDuration() <em>Duration</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @see #getDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final long DURATION_EDEFAULT = 0L;
+
+	/**
+	 * The cached value of the '{@link #getDuration() <em>Duration</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see #getDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected long duration = DURATION_EDEFAULT;
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	protected TransactionImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return OperationalSemanticsPackage.Literals.TRANSACTION;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EventOccurrence getInputEventOccurrence() {
 		if (inputEventOccurrence != null && inputEventOccurrence.eIsProxy()) {
@@ -84,27 +119,33 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 							EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.TRANSACTION__INPUT_EVENT_OCCURRENCE,
 							null, msgs);
 				}
-				if (msgs != null)
+				if (msgs != null) {
 					msgs.dispatch();
-				if (eNotificationRequired())
+				}
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							OperationalSemanticsPackage.TRANSACTION__INPUT_EVENT_OCCURRENCE, oldInputEventOccurrence,
 							inputEventOccurrence));
+				}
 			}
 		}
 		return inputEventOccurrence;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public EventOccurrence basicGetInputEventOccurrence() {
 		return inputEventOccurrence;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetInputEventOccurrence(EventOccurrence newInputEventOccurrence,
 			NotificationChain msgs) {
 		EventOccurrence oldInputEventOccurrence = inputEventOccurrence;
@@ -113,122 +154,173 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.TRANSACTION__INPUT_EVENT_OCCURRENCE, oldInputEventOccurrence,
 					newInputEventOccurrence);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setInputEventOccurrence(EventOccurrence newInputEventOccurrence) {
 		if (newInputEventOccurrence != inputEventOccurrence) {
 			NotificationChain msgs = null;
-			if (inputEventOccurrence != null)
+			if (inputEventOccurrence != null) {
 				msgs = ((InternalEObject) inputEventOccurrence).eInverseRemove(this,
 						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.TRANSACTION__INPUT_EVENT_OCCURRENCE, null,
 						msgs);
-			if (newInputEventOccurrence != null)
+			}
+			if (newInputEventOccurrence != null) {
 				msgs = ((InternalEObject) newInputEventOccurrence).eInverseAdd(this,
 						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.TRANSACTION__INPUT_EVENT_OCCURRENCE, null,
 						msgs);
+			}
 			msgs = basicSetInputEventOccurrence(newInputEventOccurrence, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.TRANSACTION__INPUT_EVENT_OCCURRENCE, newInputEventOccurrence,
 					newInputEventOccurrence));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EventOccurrence getParentEO() {
 		if (parentEO != null && parentEO.eIsProxy()) {
 			InternalEObject oldParentEO = (InternalEObject) parentEO;
 			parentEO = (EventOccurrence) eResolveProxy(oldParentEO);
 			if (parentEO != oldParentEO) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							OperationalSemanticsPackage.TRANSACTION__PARENT_EO, oldParentEO, parentEO));
+				}
 			}
 		}
 		return parentEO;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public EventOccurrence basicGetParentEO() {
 		return parentEO;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetParentEO(EventOccurrence newParentEO, NotificationChain msgs) {
 		EventOccurrence oldParentEO = parentEO;
 		parentEO = newParentEO;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.TRANSACTION__PARENT_EO, oldParentEO, newParentEO);
-			if (msgs == null)
+			if (msgs == null) {
 				msgs = notification;
-			else
+			} else {
 				msgs.add(notification);
+			}
 		}
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setParentEO(EventOccurrence newParentEO) {
 		if (newParentEO != parentEO) {
 			NotificationChain msgs = null;
-			if (parentEO != null)
+			if (parentEO != null) {
 				msgs = ((InternalEObject) parentEO).eInverseRemove(this,
 						OperationalSemanticsPackage.EVENT_OCCURRENCE__CREATED_TRANSACTIONS, EventOccurrence.class,
 						msgs);
-			if (newParentEO != null)
+			}
+			if (newParentEO != null) {
 				msgs = ((InternalEObject) newParentEO).eInverseAdd(this,
 						OperationalSemanticsPackage.EVENT_OCCURRENCE__CREATED_TRANSACTIONS, EventOccurrence.class,
 						msgs);
+			}
 			msgs = basicSetParentEO(newParentEO, msgs);
-			if (msgs != null)
+			if (msgs != null) {
 				msgs.dispatch();
-		} else if (eNotificationRequired())
+			}
+		} else if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, OperationalSemanticsPackage.TRANSACTION__PARENT_EO,
 					newParentEO, newParentEO));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
+	@Override
+	public long getDuration() {
+		return duration;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public void setDuration(long newDuration) {
+		long oldDuration = duration;
+		duration = newDuration;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, OperationalSemanticsPackage.TRANSACTION__DURATION,
+					oldDuration, duration));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.TRANSACTION__PARENT_EO:
-			if (parentEO != null)
+			if (parentEO != null) {
 				msgs = ((InternalEObject) parentEO).eInverseRemove(this,
 						OperationalSemanticsPackage.EVENT_OCCURRENCE__CREATED_TRANSACTIONS, EventOccurrence.class,
 						msgs);
+			}
 			return basicSetParentEO((EventOccurrence) otherEnd, msgs);
 		default:
 			return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -241,28 +333,34 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.TRANSACTION__INPUT_EVENT_OCCURRENCE:
-			if (resolve)
+			if (resolve) {
 				return getInputEventOccurrence();
+			}
 			return basicGetInputEventOccurrence();
 		case OperationalSemanticsPackage.TRANSACTION__PARENT_EO:
-			if (resolve)
+			if (resolve) {
 				return getParentEO();
+			}
 			return basicGetParentEO();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -278,9 +376,11 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -296,9 +396,11 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -309,6 +411,24 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 		default:
 			return super.eIsSet(featureID);
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) {
+			return super.toString();
+		}
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (duration: "); //$NON-NLS-1$
+		result.append(duration);
+		result.append(')');
+		return result.toString();
 	}
 
 } // TransactionImpl
