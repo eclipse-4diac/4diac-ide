@@ -94,6 +94,15 @@ public final class EventManagerUtils {
 		}
 	}
 
+	/**
+	 * sets the duration of all transactions of the event manager to the given value
+	 */
+	public static void setCyclicDuration(final EventManager eventManager, final long duration) {
+		for (final Transaction t : eventManager.getTransactions()) {
+			t.setDuration(duration);
+		}
+	}
+
 	public static void processNetwork(final EventManager eventManager) {
 		final var transactions = eventManager.getTransactions();
 		for (var i = 0; i < transactions.size(); i++) {
@@ -122,7 +131,7 @@ public final class EventManagerUtils {
 		final ResourceSet reset = new ResourceSetImpl();
 		return reset.getResource(uri, true);
 	}
-	
+
 	public static Resource loadResourceNotOnDemand(final URI uri) {
 		final ResourceSet reset = new ResourceSetImpl();
 		return reset.getResource(uri, false);
