@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IProject;
@@ -84,10 +85,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.widgets.Twistie;
 import org.eclipse.ui.part.EditorPart;
 
 // TODO: remove SuppressWarning and move Strings to plugin.properties
@@ -107,19 +110,10 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private FilterComposite searchFilter;
 
 	// Search In
-	private Button fbSubappTypesButton;
 	private FilterComposite fbSubappTypesFilter;
-
-	private Button fbTypedSubappInstanceButton;
 	private FilterComposite fbTypedSubappInstanceFilter;
-
-	private Button untypedSubappButton;
 	private FilterComposite untypedSubappFilter;
-
-	private Button dataTypesButton;
 	private FilterComposite dataTypesFilter;
-
-	private Button attributeTypesButton;
 	private FilterComposite attributeTypesFilter;
 
 	// Scope
@@ -192,95 +186,63 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	}
 
 	private void createSearchInGroup(final Composite parent) {
-		// TODO: cleanup
 		final Group searchGroup = new Group(parent, SWT.NONE);
 		searchGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		searchGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
 		searchGroup.setText("In");
 
-		final Composite fbSubappTypesComposite = new Composite(searchGroup, SWT.NONE);
-		fbSubappTypesComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		fbSubappTypesComposite.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
-		fbSubappTypesButton = WidgetFactory.button(SWT.CHECK).text("FB and SubApp Types")
-				.create(fbSubappTypesComposite);
-		fbSubappTypesFilter = new FilterComposite(fbSubappTypesComposite, SWT.NONE, LIST_WITHOUT_VALUE, settings,
-				BulkEditorSettings.inFBTypesSearchList);
-
-		fbSubappTypesButton.addListener(SWT.Selection, event -> {
-			updateVisibility(fbSubappTypesButton, fbSubappTypesFilter);
-			settings.fbSubappTypes = fbSubappTypesButton.getSelection();
-		});
-		fbSubappTypesButton.setSelection(settings.fbSubappTypes);
-		updateVisibility(fbSubappTypesButton, fbSubappTypesFilter);
-
-		final Composite fbTypedSubappInstanceComposite = new Composite(searchGroup, SWT.NONE);
-		fbTypedSubappInstanceComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		fbTypedSubappInstanceComposite.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
-		fbTypedSubappInstanceButton = WidgetFactory.button(SWT.CHECK).text("FB and Typed Subapp Instances")
-				.create(fbTypedSubappInstanceComposite);
-		fbTypedSubappInstanceFilter = new FilterComposite(fbTypedSubappInstanceComposite, SWT.NONE, LIST_WITHOUT_VALUE,
-				settings, BulkEditorSettings.inFBInstanceSearchList);
-
-		fbTypedSubappInstanceButton.addListener(SWT.Selection, event -> {
-			updateVisibility(fbTypedSubappInstanceButton, fbTypedSubappInstanceFilter);
-			settings.fbTypedSubappInstance = fbTypedSubappInstanceButton.getSelection();
-		});
-		fbTypedSubappInstanceButton.setSelection(settings.fbTypedSubappInstance);
-		updateVisibility(fbTypedSubappInstanceButton, fbTypedSubappInstanceFilter);
-
-		final Composite untypedSubappComposite = new Composite(searchGroup, SWT.NONE);
-		untypedSubappComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		untypedSubappComposite.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
-		untypedSubappButton = WidgetFactory.button(SWT.CHECK).text("Untyped Subapps").create(untypedSubappComposite);
-		untypedSubappFilter = new FilterComposite(untypedSubappComposite, SWT.NONE, LIST_WITHOUT_VALUE, settings,
-				BulkEditorSettings.inUntypedSubAppSearchList);
-
-		untypedSubappButton.addListener(SWT.Selection, event -> {
-			updateVisibility(untypedSubappButton, untypedSubappFilter);
-			settings.untypedSubapp = untypedSubappButton.getSelection();
-		});
-		untypedSubappButton.setSelection(settings.untypedSubapp);
-		updateVisibility(untypedSubappButton, untypedSubappFilter);
-
-		final Composite dataTypesComposite = new Composite(searchGroup, SWT.NONE);
-		dataTypesComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		dataTypesComposite.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
-		dataTypesButton = WidgetFactory.button(SWT.CHECK).text("Data Types").create(dataTypesComposite);
-		dataTypesFilter = new FilterComposite(dataTypesComposite, SWT.NONE, LIST_WITHOUT_VALUE, settings,
-				BulkEditorSettings.inDataTypesSearchList);
-
-		dataTypesButton.addListener(SWT.Selection, event -> {
-			updateVisibility(dataTypesButton, dataTypesFilter);
-			settings.dataTypes = dataTypesButton.getSelection();
-		});
-		dataTypesButton.setSelection(settings.dataTypes);
-		updateVisibility(dataTypesButton, dataTypesFilter);
-
-		final Composite attributeTypesComposite = new Composite(searchGroup, SWT.NONE);
-		attributeTypesComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		attributeTypesComposite.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
-		attributeTypesButton = WidgetFactory.button(SWT.CHECK).text("Attribute Types").create(attributeTypesComposite);
-		attributeTypesFilter = new FilterComposite(attributeTypesComposite, SWT.NONE, LIST_WITHOUT_VALUE, settings,
-				BulkEditorSettings.inAttributeTypesSearchList);
-
-		attributeTypesButton.addListener(SWT.Selection, event -> {
-			updateVisibility(attributeTypesButton, attributeTypesFilter);
-			settings.attributeTypes = attributeTypesButton.getSelection();
-		});
-		attributeTypesButton.setSelection(settings.attributeTypes);
-		updateVisibility(attributeTypesButton, attributeTypesFilter);
+		fbSubappTypesFilter = createSearchFilterInGroup(searchGroup, "FB and SubApp Types",
+				BulkEditorSettings.inFBTypesSearchList, settings.fbSubappTypes, b -> settings.fbSubappTypes = b);
+		fbTypedSubappInstanceFilter = createSearchFilterInGroup(searchGroup, "FB and Typed Subapp Instances",
+				BulkEditorSettings.inFBInstanceSearchList, settings.fbTypedSubappInstance,
+				b -> settings.fbTypedSubappInstance = b);
+		untypedSubappFilter = createSearchFilterInGroup(searchGroup, "Untyped Subapps",
+				BulkEditorSettings.inUntypedSubAppSearchList, settings.untypedSubapp, b -> settings.untypedSubapp = b);
+		dataTypesFilter = createSearchFilterInGroup(searchGroup, "Data Types", BulkEditorSettings.inDataTypesSearchList,
+				settings.dataTypes, b -> settings.dataTypes = b);
+		attributeTypesFilter = createSearchFilterInGroup(searchGroup, "Attribute Types",
+				BulkEditorSettings.inAttributeTypesSearchList, settings.attributeTypes,
+				b -> settings.attributeTypes = b);
 	}
 
-	private static void updateVisibility(final Button button, final FilterComposite filter) {
-		filter.setVisible(button.getSelection());
-		((GridData) filter.getLayoutData()).exclude = !button.getSelection();
+	private FilterComposite createSearchFilterInGroup(final Composite parent, final String name,
+			final List<String> subSettingsReferencesNames, final boolean initalSelection,
+			final Consumer<Boolean> buttonListener) {
+		final Composite searchInCategoryComposite = new Composite(parent, SWT.NONE);
+		searchInCategoryComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		searchInCategoryComposite.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
+
+		final Composite searchInCategorySubComposite = new Composite(searchInCategoryComposite, SWT.NONE);
+		searchInCategorySubComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		searchInCategorySubComposite.setLayout(GridLayoutFactory.swtDefaults().margins(0, 0).numColumns(3).create());
+
+		final Button categorySelectionButton = WidgetFactory.button(SWT.CHECK).text(name)
+				.create(searchInCategorySubComposite);
+		categorySelectionButton.addListener(SWT.Selection,
+				event -> buttonListener.accept(categorySelectionButton.getSelection()));
+		categorySelectionButton.setSelection(initalSelection);
+
+		final FilterComposite filterComposite = new FilterComposite(searchInCategoryComposite, SWT.NONE,
+				LIST_WITHOUT_VALUE, settings, subSettingsReferencesNames);
+
+		final Twistie expandFilterCompositeTwistie = new Twistie(searchInCategorySubComposite, SWT.NONE);
+		expandFilterCompositeTwistie.addListener(SWT.MouseUp, event -> updateVisibility(expandFilterCompositeTwistie.isExpanded(), filterComposite));
+		updateVisibility(false, filterComposite);
+
+		final Label stateLabel = new Label(searchInCategorySubComposite, SWT.LEAD);
+		stateLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		filterComposite.addTextChangedListener(stateLabel::setText);
+
+		return filterComposite;
+	}
+
+	private static void updateVisibility(final boolean visible, final FilterComposite filter) {
+		filter.setVisible(visible);
+		((GridData) filter.getLayoutData()).exclude = !visible;
 
 		filter.layout();
-		updateLayout(filter.getParent().getParent());
-	}
-
-	private static void updateLayout(final Composite composite) {
+		final Composite composite = filter.getParent().getParent();
 		composite.layout();
 		if (composite.getParent().getParent() instanceof final ScrolledComposite sc) {
 			sc.setMinSize(composite.getParent().computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -307,23 +269,23 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private void createSearchButton(final Composite parent) {
 		WidgetFactory.button(SWT.PUSH).text("Search").onSelect(event -> {
 			final SearchHelper helper = new SearchHelper(
-					new SearchHelper.FilterRecord(fbSubappTypesButton.getSelection(),
+					new SearchHelper.FilterRecord(settings.fbSubappTypes,
 							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
 							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
 							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecord(fbTypedSubappInstanceButton.getSelection(),
+					new SearchHelper.FilterRecord(settings.fbTypedSubappInstance,
 							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
 							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
 							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecord(untypedSubappButton.getSelection(),
+					new SearchHelper.FilterRecord(settings.untypedSubapp,
 							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
 							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
 							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecord(dataTypesButton.getSelection(),
+					new SearchHelper.FilterRecord(settings.dataTypes,
 							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
 							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
 							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecord(attributeTypesButton.getSelection(),
+					new SearchHelper.FilterRecord(settings.attributeTypes,
 							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
 							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
 							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))));

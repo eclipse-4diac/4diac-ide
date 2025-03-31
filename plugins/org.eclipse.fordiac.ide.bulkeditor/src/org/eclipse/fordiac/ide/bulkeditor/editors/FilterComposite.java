@@ -14,6 +14,8 @@ package org.eclipse.fordiac.ide.bulkeditor.editors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
@@ -26,6 +28,7 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -34,18 +37,9 @@ import org.eclipse.swt.widgets.Text;
 public class FilterComposite extends Composite {
 	private final List<Filter> filterList = new ArrayList<>();
 	private final List<String> filterNames;
+	private final int firstItemWidth;
 
-	public FilterComposite(final Composite parent, final int style, final List<String> filterNames) {
-		super(parent, style);
-
-		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		this.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
-
-		this.filterNames = filterNames;
-		for (final String filterName : filterNames) {
-			filterList.add(new Filter(this, style, filterName));
-		}
-	}
+	private final List<Consumer<String>> textChangedListeners = new ArrayList<>();
 
 	public FilterComposite(final Composite parent, final int style, final List<String> filterNames,
 			final BulkEditorSettings settings, final List<String> subSettingsReferencesNames) {
@@ -53,6 +47,8 @@ public class FilterComposite extends Composite {
 
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		this.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
+
+		firstItemWidth = calculateMaxCheckboxWidth(parent, filterNames);
 
 		this.filterNames = filterNames;
 		for (int i = 0; i < filterNames.size(); i++) {
@@ -62,6 +58,33 @@ public class FilterComposite extends Composite {
 				filter.addListenerSubSetting(settings.getSubSettings(subSettingsReferencesNames.get(i)));
 			}
 		}
+	}
+
+	private static int calculateMaxCheckboxWidth(final Composite parent, final List<String> names) {
+		int maxWidth = 0;
+		final GC gc = new GC(parent);
+		for (final String name : names) {
+			final int textWidth = gc.textExtent(name).x + 20;
+			if (textWidth > maxWidth) {
+				maxWidth = textWidth;
+			}
+		}
+		gc.dispose();
+		return maxWidth;
+	}
+
+	public void addTextChangedListener(final Consumer<String> listener) {
+		textChangedListeners.add(listener);
+		listener.accept(createFiltersText());
+	}
+
+	private String createFiltersText() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append('(');
+		sb.append(filterList.stream().filter(filter -> filter.selected.getSelection())
+				.map(filter -> filter.name + ": " + filter.textField.getText()).collect(Collectors.joining(", "))); //$NON-NLS-1$ //$NON-NLS-2$
+		sb.append(')');
+		return sb.toString();
 	}
 
 	public Filter getFilter(final String filterName) {
@@ -78,6 +101,8 @@ public class FilterComposite extends Composite {
 		private static final String EXACT_MATCH_IMAGE = "icons/full/elcl16/whole_word.png"; //$NON-NLS-1$
 		private static final String REGULAR_EXPRESSION_IMAGE = "icons/full/elcl16/regex.png"; //$NON-NLS-1$
 
+		public final String name;
+
 		public final Button selected;
 		public final Text textField;
 
@@ -88,12 +113,13 @@ public class FilterComposite extends Composite {
 
 		public Filter(final Composite parent, final int style, final String name) {
 			super(parent, style);
+			this.name = name;
 
 			this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			this.setLayout(GridLayoutFactory.swtDefaults().margins(0, 0).numColumns(6).create());
 
 			selected = WidgetFactory.button(SWT.CHECK).text(name).create(this);
-			selected.setLayoutData(GridDataFactory.swtDefaults().hint(80, SWT.DEFAULT).create());
+			selected.setLayoutData(GridDataFactory.swtDefaults().hint(firstItemWidth, SWT.DEFAULT).create());
 
 			textField = WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.FILL, true, false))
 					.create(this);
@@ -130,11 +156,17 @@ public class FilterComposite extends Composite {
 		private void addListenerSubSetting(final BulkEditorSubSettings subSetting) {
 			final boolean isSelected = subSetting.selected;
 			selected.setSelection(isSelected);
-			selected.addListener(SWT.Selection, event -> subSetting.selected = selected.getSelection());
+			selected.addListener(SWT.Selection, event -> {
+				subSetting.selected = selected.getSelection();
+				fireTextChanged();
+			});
 
 			textField.setText(subSetting.textField);
 			textField.setEnabled(isSelected);
-			textField.addModifyListener(event -> subSetting.textField = textField.getText());
+			textField.addModifyListener(event -> {
+				subSetting.textField = textField.getText();
+				fireTextChanged();
+			});
 
 			caseSensitive.setSelection(subSetting.caseSensitive);
 			caseSensitive.setEnabled(isSelected);
@@ -161,6 +193,11 @@ public class FilterComposite extends Composite {
 				subSetting.regularExpression = regularExpression.getSelection();
 				wholeWord.setEnabled(!exactMatch.getSelection() && !regularExpression.getSelection());
 			});
+		}
+
+		private void fireTextChanged() {
+			final String newText = createFiltersText();
+			textChangedListeners.forEach(listener -> listener.accept(newText));
 		}
 	}
 }
