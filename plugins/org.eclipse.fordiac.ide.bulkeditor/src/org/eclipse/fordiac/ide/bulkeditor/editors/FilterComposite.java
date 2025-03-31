@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorSettings.BulkEditorSubSettings;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -74,8 +75,6 @@ public class FilterComposite extends Composite {
 	public class Filter extends Composite {
 		private static final String IMAGE_BUNDLE = "org.eclipse.ui.workbench.texteditor"; //$NON-NLS-1$
 		private static final String CASE_SENSITVE_IMAGE = "icons/full/elcl16/case_sensitive.png"; //$NON-NLS-1$
-		// TODO: Change to a correct icon
-		private static final String WHOLE_WORD_IMAGE = "icons/full/elcl16/delete_template.png"; //$NON-NLS-1$
 		private static final String EXACT_MATCH_IMAGE = "icons/full/elcl16/whole_word.png"; //$NON-NLS-1$
 		private static final String REGULAR_EXPRESSION_IMAGE = "icons/full/elcl16/regex.png"; //$NON-NLS-1$
 
@@ -104,8 +103,7 @@ public class FilterComposite extends Composite {
 			caseSensitive = WidgetFactory.button(SWT.TOGGLE).image(descriptor.createImage())
 					.tooltip(Messages.CaseSensitve).create(this);
 
-			descriptor = ImageDescriptor
-					.createFromURL(FileLocator.find(Platform.getBundle(IMAGE_BUNDLE), new Path(WHOLE_WORD_IMAGE)));
+			descriptor = FordiacImage.ICON_WHOLE_WORD.getImageDescriptor();
 			wholeWord = WidgetFactory.button(SWT.TOGGLE).image(descriptor.createImage()).tooltip(Messages.WholeWord)
 					.create(this);
 
