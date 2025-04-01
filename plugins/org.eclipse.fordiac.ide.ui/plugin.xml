@@ -186,6 +186,12 @@
              label="%FordiacPreferencePage_LABEL_DefaultAdapterConnectorColor"
              value="132, 93, 175">
        </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.PredecessorMarkerColor"
+             label="%FordiacPreferencePage_LABEL_PredecessorMarkerColor"
+             value="99, 179, 31">
+       </colorDefinition>
     </extension>
  <extension
        point="org.eclipse.ui.preferenceTransfer">

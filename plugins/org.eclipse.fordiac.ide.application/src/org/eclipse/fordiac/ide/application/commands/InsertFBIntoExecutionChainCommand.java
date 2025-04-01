@@ -19,15 +19,22 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
+import org.eclipse.fordiac.ide.application.handlers.MarkPredecessorHandler;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.ui.IEditorPart;
 
 public class InsertFBIntoExecutionChainCommand extends Command implements ScopedCommand {
 
@@ -36,10 +43,11 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 	private final IInterfaceElement predecessorOutputPin;
 	private final CompoundCommand commands = new CompoundCommand();
 
-	public InsertFBIntoExecutionChainCommand(final SubApp subApp, final FB insertedFB) {
+	public InsertFBIntoExecutionChainCommand(final SubApp subApp, final FB insertedFB,
+			final FBNetworkRootEditPart rootEP) {
 		this.subApp = subApp;
 		this.insertedFB = insertedFB;
-		this.predecessorOutputPin = getExecutionChainEnd();
+		this.predecessorOutputPin = getPredecessorEventOutput(MarkPredecessorHandler.getPredecessor(rootEP));
 	}
 
 	@Override
@@ -67,6 +75,7 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 		commands.add(getCreateConnectionCommand(insertedFB.getFbNetwork(), outputInsertedFB.get(),
 				predecessorOutputPin.getOutputConnections().getFirst().getDestination()));
 		commands.add(new DeleteConnectionCommand(predecessorOutputPin.getOutputConnections().getFirst()));
+		commands.add(new SetPredecessorCommand(getEP(insertedFB)));
 
 		if (commands.canExecute()) {
 			commands.execute();
@@ -102,6 +111,16 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 		return createConnectionCommand;
 	}
 
+	private IInterfaceElement getPredecessorEventOutput(final AbstractFBNElementEditPart predecessor) {
+		if (predecessor == null) {
+			return getExecutionChainEnd();
+		}
+		if (!predecessor.getModel().getInterface().getEventOutputs().isEmpty()) {
+			return predecessor.getModel().getInterface().getEventOutputs().getFirst();
+		}
+		return null;
+	}
+
 	private IInterfaceElement getExecutionChainEnd() {
 		final Optional<IInterfaceElement> saEventOutput = subApp.getInterface().getOutputs()
 				.filter(ie -> !ie.getInputConnections().isEmpty()).findFirst();
@@ -109,6 +128,55 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 			return saEventOutput.get().getInputConnections().getFirst().getSource();
 		}
 		return null;
+	}
+
+	private static AbstractFBNElementEditPart getEP(final FBNetworkElement elem) {
+		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
+		if (currentActiveEditor != null) {
+			final GraphicalViewer viewer = currentActiveEditor.getAdapter(GraphicalViewer.class);
+			if (viewer.getEditPartRegistry().get(elem) instanceof final AbstractFBNElementEditPart ep) {
+				return ep;
+			}
+		}
+		return null;
+	}
+
+	public class SetPredecessorCommand extends Command {
+
+		private AbstractFBNElementEditPart predecessor;
+		private AbstractFBNElementEditPart oldPredecessor;
+
+		public SetPredecessorCommand(final AbstractFBNElementEditPart predecessor) {
+			this.predecessor = predecessor;
+		}
+
+		@Override
+		public boolean canExecute() {
+			return predecessor != null;
+		}
+
+		@Override
+		public void execute() {
+			if (predecessor.getRoot() instanceof final FBNetworkRootEditPart root) {
+				oldPredecessor = MarkPredecessorHandler.getPredecessor(root);
+				if (oldPredecessor != null) {
+					MarkPredecessorHandler.setPredecessor(root, predecessor);
+				}
+			}
+		}
+
+		@Override
+		public void undo() {
+			if (predecessor != null && predecessor.getRoot() instanceof final FBNetworkRootEditPart root) {
+				predecessor = MarkPredecessorHandler.getPredecessor(root);
+				MarkPredecessorHandler.setPredecessor(root, oldPredecessor);
+			}
+		}
+
+		@Override
+		public void redo() {
+			execute();
+		}
 	}
 
 }
