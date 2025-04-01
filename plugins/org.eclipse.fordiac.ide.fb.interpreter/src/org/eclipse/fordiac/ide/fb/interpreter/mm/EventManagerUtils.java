@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
 import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -39,17 +38,32 @@ public final class EventManagerUtils {
 	}
 
 	public static void process(final EventManager eventManager) {
+		processInternal(eventManager, false);
+	}
+
+	public static void processNetwork(final EventManager eventManager) {
+		processInternal(eventManager, true);
+	}
+
+	private static void processInternal(final EventManager eventManager, final boolean network) {
 		final var transactions = eventManager.getTransactions();
+		long time = eventManager.getStartTime();
+
 		for (var i = 0; i < transactions.size(); i++) {
 			final var transaction = transactions.get(i);
 			if (transaction instanceof final FBTransaction fbtransaction) {
-				fbtransaction.process();
-				if (moreTransactionsLeft(transactions, i)) {
+				processFbTransaction(fbtransaction, time);
+				if (network) {
+					fbtransaction.getOutputEventOccurrences().forEach(
+							outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
+				}
+				if ((i + 1) < transactions.size()) {
 					final FBRuntimeAbstract newfbRuntime = getLatestFbRuntime(fbtransaction);
 					// use fb runtime in the next transaction
 					transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(EcoreUtil.copy(newfbRuntime));
 				}
 			}
+			time += transaction.getDuration();
 		}
 	}
 
@@ -57,11 +71,11 @@ public final class EventManagerUtils {
 		return transaction.getInputEventOccurrence().getResultFBRuntime();
 	}
 
-	private static boolean moreTransactionsLeft(final EList<Transaction> transactions, final int i) {
-		return (i + 1) < transactions.size();
+	public static void processFbTransaction(final FBTransaction transaction) {
+		processFbTransaction(transaction, 0);
 	}
 
-	public static void processFbTransaction(final FBTransaction transaction) {
+	public static void processFbTransaction(final FBTransaction transaction, final long startTime) {
 		// set the input vars
 		for (final var inputVar : transaction.getInputVariables()) {
 			final var element = transaction.getInputEventOccurrence().getFbRuntime().getModel();
@@ -69,6 +83,7 @@ public final class EventManagerUtils {
 				setInputVariable(inputVar, fbtype);
 			}
 		}
+		transaction.getInputEventOccurrence().setStartTime(startTime);
 		final var result = processEventOccurrence(transaction.getInputEventOccurrence());
 		transaction.getOutputEventOccurrences().addAll(result);
 	}
@@ -100,23 +115,6 @@ public final class EventManagerUtils {
 	public static void setCyclicDuration(final EventManager eventManager, final long duration) {
 		for (final Transaction t : eventManager.getTransactions()) {
 			t.setDuration(duration);
-		}
-	}
-
-	public static void processNetwork(final EventManager eventManager) {
-		final var transactions = eventManager.getTransactions();
-		for (var i = 0; i < transactions.size(); i++) {
-			final var transaction = transactions.get(i);
-			if (transaction instanceof final FBTransaction fbtransaction) {
-				fbtransaction.process();
-				fbtransaction.getOutputEventOccurrences()
-						.forEach(outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
-				if (moreTransactionsLeft(transactions, i)) {
-					final FBRuntimeAbstract newfbRuntime = getLatestFbRuntime(fbtransaction);
-					// use fb network runtime in the next transaction
-					transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(EcoreUtil.copy(newfbRuntime));
-				}
-			}
 		}
 	}
 
