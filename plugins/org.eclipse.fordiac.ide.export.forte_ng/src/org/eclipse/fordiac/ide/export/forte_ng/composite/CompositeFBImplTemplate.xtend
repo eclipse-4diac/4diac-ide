@@ -166,7 +166,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		   »«type.interfaceList.outMappedInOutVars.generateDataConnectionInitializer(true)»'''
 
 	override protected generateDataConnectionInitializer(List<VarDeclaration> variables, boolean internal) //
-	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateNameAsConnection(internal)»(this, «variables.indexOf(variable)», «variable.generateVariableDefaultValue»)«ENDFOR»'''
+	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateNameAsConnection(internal)»(*this, «variables.indexOf(variable)», «variable.generateVariableDefaultValue»)«ENDFOR»'''
 
 	def generateSetFBNetworkInitialValuesDefinition() '''
 		«IF fbs.flatMap[interface.inputVars].exists[!value?.value.nullOrEmpty]»

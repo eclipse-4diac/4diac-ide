@@ -446,14 +446,14 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	   »«type.interfaceList.outMappedInOutVars.generateDataConnectionInitializer»'''
 
 	def protected generateEventConnectionInitializer(List<Event> events) //
-	'''«FOR event : events BEFORE ",\n" SEPARATOR ",\n"»«event.generateNameAsConnection»(this, «events.indexOf(event)»)«ENDFOR»'''
+	'''«FOR event : events BEFORE ",\n" SEPARATOR ",\n"»«event.generateNameAsConnection»(*this, «events.indexOf(event)»)«ENDFOR»'''
 
 	def protected generateDataConnectionInitializer(List<VarDeclaration> variables) {
 		generateDataConnectionInitializer(variables, false);
 	}
 
 	def protected generateDataConnectionInitializer(List<VarDeclaration> variables, boolean internal) //
-	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateNameAsConnection(internal)»(this, «variables.indexOf(variable)», «variable.generateName»)«ENDFOR»'''
+	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateNameAsConnection(internal)»(*this, «variables.indexOf(variable)», «variable.generateName»)«ENDFOR»'''
 
 	def protected generateDataConnectionPointerInitializer(List<VarDeclaration> variables) //
 	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateNameAsConnection»(nullptr)«ENDFOR»'''
