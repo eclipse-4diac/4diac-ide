@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
@@ -64,7 +65,7 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case RETAIN -> getAttributeValueAsString(rowObject);
 		case VISIBLEIN, VISIBLEOUT -> Boolean.valueOf(handleInOutCheck(rowObject, column));
 		case LOCATION -> EcoreUtil.getURI(rowObject).toPlatformString(true);
-
+		case PATH -> FordiacMarkerHelper.getLocation(rowObject);
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
 	}

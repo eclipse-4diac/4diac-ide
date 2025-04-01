@@ -90,6 +90,12 @@ public class VarDeclarationConfigLabelAccumulator extends AbstractAnnotatedConfi
 		case RETAIN:
 			configLabels.addLabelOnTop(NatTableWidgetFactory.RETAIN_CONFIG_CELL);
 			break;
+		case LOCATION:
+			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			break;
+		case PATH:
+			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			break;
 		default:
 			break;
 		}

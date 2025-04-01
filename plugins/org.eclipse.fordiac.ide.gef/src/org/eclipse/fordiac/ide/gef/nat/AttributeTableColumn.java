@@ -20,11 +20,11 @@ import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
 
 public enum AttributeTableColumn implements NatTableColumn {
 	NAME(FordiacMessages.Name), TYPE(FordiacMessages.Type), VALUE(FordiacMessages.Value),
-	COMMENT(FordiacMessages.Comment), LOCATION(FordiacMessages.Location);
+	COMMENT(FordiacMessages.Comment), LOCATION(FordiacMessages.Location), PATH(FordiacMessages.Path);
 
 	public static final List<AttributeTableColumn> DEFAULT_COLUMNS = List.of(NAME, TYPE, VALUE, COMMENT);
-	public static final List<AttributeTableColumn> DEFAULT_COLUMNS_WITH_LOCATION = List.of(LOCATION, NAME, TYPE, VALUE,
-			COMMENT);
+	public static final List<AttributeTableColumn> DEFAULT_COLUMNS_WITH_LOCATION = List.of(LOCATION, PATH, NAME, TYPE,
+			VALUE, COMMENT);
 
 	public static final Set<AttributeTableColumn> ALL_EDITABLE = Set.of(AttributeTableColumn.values());
 	public static final Set<AttributeTableColumn> EDITABLE_NO_LOCATION = Set.of(NAME, TYPE, VALUE, COMMENT);
