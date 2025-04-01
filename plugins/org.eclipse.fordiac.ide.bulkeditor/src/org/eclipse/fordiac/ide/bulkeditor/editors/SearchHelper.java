@@ -54,56 +54,45 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 // TODO cleanup, rename class and record, better way to handle paramters
 public class SearchHelper {
-	public record FilterRecord(boolean selected, Filter nameFilter, Filter typeFilter, Filter commentFilter) {
+	public static class FilterRecordClass {
+		private final boolean selected;
+
+		private final Filter nameFilter;
+		private final Filter typeFilter;
+		private final Filter commentFilter;
+
+		private final Pattern namePattern;
+		private final Pattern typePattern;
+		private final Pattern commentPattern;
+
+		public FilterRecordClass(final boolean selected, final Filter nameFilter, final Filter typeFilter,
+				final Filter commentFilter) {
+			this.selected = selected;
+			this.nameFilter = nameFilter;
+			this.typeFilter = typeFilter;
+			this.commentFilter = commentFilter;
+
+			this.namePattern = createPattern(nameFilter);
+			this.typePattern = createPattern(typeFilter);
+			this.commentPattern = createPattern(commentFilter);
+		}
 	}
 
-	private final Pattern fbSubappTypesNamePattern;
-	private final Pattern fbSubappTypesTypePattern;
-	private final Pattern fbSubappTypesCommentPattern;
-	private final Pattern fbTypedSubappInstanceNamePattern;
-	private final Pattern fbTypedSubappInstanceTypePattern;
-	private final Pattern fbTypedSubappInstanceCommentPattern;
-	private final Pattern untypedSubappNamePattern;
-	private final Pattern untypedSubappTypePattern;
-	private final Pattern untypedSubappCommentPattern;
-	private final Pattern dataTypeNamePattern;
-	private final Pattern dataTypeTypePattern;
-	private final Pattern dataTypeCommentPattern;
-	private final Pattern attributeDeclNamePattern;
-	private final Pattern attributeDeclTypePattern;
-	private final Pattern attributeDeclCommentPattern;
+	final FilterRecordClass fbSubappTypesRecord;
+	final FilterRecordClass fbTypedSubappInstanceRecord;
+	final FilterRecordClass untypedSubappRecord;
+	final FilterRecordClass dataTypesRecord;
+	final FilterRecordClass attributeTypesRecord;
 
-	final FilterRecord fbSubappTypesRecord;
-	final FilterRecord fbTypedSubappInstanceRecord;
-	final FilterRecord untypedSubappRecord;
-	final FilterRecord dataTypesRecord;
-	final FilterRecord attributeTypesRecord;
-
-	public SearchHelper(final FilterRecord fbSubappTypesRecord, final FilterRecord fbTypedSubappInstanceRecord,
-			final FilterRecord untypedSubappRecord, final FilterRecord dataTypesRecord,
-			final FilterRecord attributeTypesRecord) {
+	public SearchHelper(final FilterRecordClass fbSubappTypesRecord,
+			final FilterRecordClass fbTypedSubappInstanceRecord, final FilterRecordClass untypedSubappRecord,
+			final FilterRecordClass dataTypesRecord, final FilterRecordClass attributeTypesRecord) {
 
 		this.fbSubappTypesRecord = fbSubappTypesRecord;
 		this.fbTypedSubappInstanceRecord = fbTypedSubappInstanceRecord;
 		this.untypedSubappRecord = untypedSubappRecord;
 		this.dataTypesRecord = dataTypesRecord;
 		this.attributeTypesRecord = attributeTypesRecord;
-
-		fbSubappTypesNamePattern = createPattern(fbSubappTypesRecord.nameFilter());
-		fbSubappTypesTypePattern = createPattern(fbSubappTypesRecord.typeFilter());
-		fbSubappTypesCommentPattern = createPattern(fbSubappTypesRecord.commentFilter());
-		fbTypedSubappInstanceNamePattern = createPattern(fbTypedSubappInstanceRecord.nameFilter());
-		fbTypedSubappInstanceTypePattern = createPattern(fbTypedSubappInstanceRecord.typeFilter());
-		fbTypedSubappInstanceCommentPattern = createPattern(fbTypedSubappInstanceRecord.commentFilter());
-		untypedSubappNamePattern = createPattern(untypedSubappRecord.nameFilter());
-		untypedSubappTypePattern = createPattern(untypedSubappRecord.typeFilter());
-		untypedSubappCommentPattern = createPattern(untypedSubappRecord.commentFilter());
-		dataTypeNamePattern = createPattern(dataTypesRecord.nameFilter());
-		dataTypeTypePattern = createPattern(dataTypesRecord.typeFilter());
-		dataTypeCommentPattern = createPattern(dataTypesRecord.commentFilter());
-		attributeDeclNamePattern = createPattern(attributeTypesRecord.nameFilter());
-		attributeDeclTypePattern = createPattern(attributeTypesRecord.typeFilter());
-		attributeDeclCommentPattern = createPattern(attributeTypesRecord.commentFilter());
 	}
 
 	public List<ISearchContext> createSearchContextList(final boolean workspace, final boolean project,
@@ -125,40 +114,40 @@ public class SearchHelper {
 			@Override
 			public Stream<URI> getTypes() {
 				Stream<URI> s = Stream.empty();
-				if (fbSubappTypesRecord.selected()) {
+				if (fbSubappTypesRecord.selected) {
 					final Predicate<TypeEntry> filter = entry -> (matchesString(entry.getFullTypeName(),
-							fbSubappTypesRecord.nameFilter(), fbSubappTypesNamePattern)
-							&& matchesString(entry.getTypeName(), fbSubappTypesRecord.typeFilter(),
-									fbSubappTypesTypePattern)
-							&& matchesString(entry.getComment(), fbSubappTypesRecord.commentFilter(),
-									fbSubappTypesCommentPattern));
+							fbSubappTypesRecord.nameFilter, fbSubappTypesRecord.namePattern)
+							&& matchesString(entry.getTypeName(), fbSubappTypesRecord.typeFilter,
+									fbSubappTypesRecord.typePattern)
+							&& matchesString(entry.getComment(), fbSubappTypesRecord.commentFilter,
+									fbSubappTypesRecord.commentPattern));
 					s = Stream.concat(s,
 							Stream.concat(getTypelib().getFbTypes().stream().filter(filter).map(TypeEntry::getURI),
 									getTypelib().getSubAppTypes().stream().filter(filter).map(TypeEntry::getURI)));
 				}
-				if (fbTypedSubappInstanceRecord.selected() || untypedSubappRecord.selected()) {
+				if (fbTypedSubappInstanceRecord.selected || untypedSubappRecord.selected) {
 					s = Stream.concat(s, getTypelib().getSystems().stream().map(TypeEntry::getURI));
 				}
-				if (dataTypesRecord.selected()) {
+				if (dataTypesRecord.selected) {
 					s = Stream.concat(s,
 							getTypelib().getDataTypeLibrary().getDerivedDataTypes().stream()
 									.filter(dtEntry -> (matchesString(dtEntry.getFullTypeName(),
-											dataTypesRecord.nameFilter(), dataTypeNamePattern)
-											&& matchesString(dtEntry.getTypeName(), dataTypesRecord.typeFilter(),
-													dataTypeTypePattern)
-											&& matchesString(dtEntry.getComment(), dataTypesRecord.commentFilter(),
-													dataTypeCommentPattern)))
+											dataTypesRecord.nameFilter, dataTypesRecord.namePattern)
+											&& matchesString(dtEntry.getTypeName(), dataTypesRecord.typeFilter,
+													dataTypesRecord.typePattern)
+											&& matchesString(dtEntry.getComment(), dataTypesRecord.commentFilter,
+													dataTypesRecord.commentPattern)))
 									.map(TypeEntry::getURI));
 				}
-				if (attributeTypesRecord.selected()) {
+				if (attributeTypesRecord.selected) {
 					s = Stream.concat(s,
 							getTypelib().getAttributeTypes().stream()
 									.filter(atEntry -> (matchesString(atEntry.getFullTypeName(),
-											attributeTypesRecord.nameFilter(), attributeDeclNamePattern)
-											&& matchesString(atEntry.getTypeName(), attributeTypesRecord.typeFilter(),
-													attributeDeclTypePattern)
-											&& matchesString(atEntry.getComment(), attributeTypesRecord.commentFilter(),
-													attributeDeclCommentPattern)))
+											attributeTypesRecord.nameFilter, attributeTypesRecord.namePattern)
+											&& matchesString(atEntry.getTypeName(), attributeTypesRecord.typeFilter,
+													attributeTypesRecord.typePattern)
+											&& matchesString(atEntry.getComment(), attributeTypesRecord.commentFilter,
+													attributeTypesRecord.commentPattern)))
 									.map(TypeEntry::getURI));
 				}
 				return s.filter(Objects::nonNull);
@@ -221,11 +210,11 @@ public class SearchHelper {
 			@Override
 			public boolean hasChildren(final EObject obj) {
 				return (obj instanceof FBType) || (obj instanceof AutomationSystem)
-						|| (untypedSubappRecord.selected() && obj instanceof UntypedSubApp)
-						|| (dataTypesRecord.selected() && obj instanceof StructuredType)
-						|| (attributeTypesRecord.selected() && obj instanceof AttributeDeclaration)
+						|| (untypedSubappRecord.selected && obj instanceof UntypedSubApp)
+						|| (dataTypesRecord.selected && obj instanceof StructuredType)
+						|| (attributeTypesRecord.selected && obj instanceof AttributeDeclaration)
 						|| (obj instanceof final Application)
-						|| (fbTypedSubappInstanceRecord.selected() && obj instanceof FBNetworkElement)
+						|| (fbTypedSubappInstanceRecord.selected && obj instanceof FBNetworkElement)
 						|| (obj instanceof IInterfaceElement);
 			}
 
@@ -236,25 +225,25 @@ public class SearchHelper {
 				case final AutomationSystem system ->
 					Stream.concat(system.getAttributes().stream(), system.getApplication().stream());
 				case final Application application -> {
-					if (untypedSubappRecord.selected()) {
+					if (untypedSubappRecord.selected) {
 						yield application.getFBNetwork().getNetworkElements().stream()
 								.filter(fbne -> (fbne instanceof UntypedSubApp
-										&& matchesString(fbne.getName(), untypedSubappRecord.nameFilter(),
-												untypedSubappNamePattern)
-										&& matchesString(fbne.getTypeName(), untypedSubappRecord.typeFilter(),
-												untypedSubappTypePattern)
-										&& matchesString(fbne.getComment(), untypedSubappRecord.commentFilter(),
-												untypedSubappCommentPattern)));
+										&& matchesString(fbne.getName(), untypedSubappRecord.nameFilter,
+												untypedSubappRecord.namePattern)
+										&& matchesString(fbne.getTypeName(), untypedSubappRecord.typeFilter,
+												untypedSubappRecord.typePattern)
+										&& matchesString(fbne.getComment(), untypedSubappRecord.commentFilter,
+												untypedSubappRecord.commentPattern)));
 					}
-					if (fbTypedSubappInstanceRecord.selected()) {
+					if (fbTypedSubappInstanceRecord.selected) {
 						yield application.getFBNetwork().getNetworkElements().stream()
 								.filter(fbne -> (fbne instanceof TypedSubApp || fbne instanceof FB)
-										&& matchesString(fbne.getName(), fbTypedSubappInstanceRecord.nameFilter(),
-												fbTypedSubappInstanceNamePattern)
-										&& matchesString(fbne.getTypeName(), fbTypedSubappInstanceRecord.typeFilter(),
-												fbTypedSubappInstanceTypePattern)
-										&& matchesString(fbne.getComment(), fbTypedSubappInstanceRecord.commentFilter(),
-												fbTypedSubappInstanceCommentPattern));
+										&& matchesString(fbne.getName(), fbTypedSubappInstanceRecord.nameFilter,
+												fbTypedSubappInstanceRecord.namePattern)
+										&& matchesString(fbne.getTypeName(), fbTypedSubappInstanceRecord.typeFilter,
+												fbTypedSubappInstanceRecord.typePattern)
+										&& matchesString(fbne.getComment(), fbTypedSubappInstanceRecord.commentFilter,
+												fbTypedSubappInstanceRecord.commentPattern));
 					}
 					Stream<? extends EObject> stream = application.getFBNetwork().getNetworkElements().stream();
 					stream = Stream.concat(stream, application.getFBNetwork().getAdapterConnections().stream());

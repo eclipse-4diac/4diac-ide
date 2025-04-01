@@ -80,10 +80,13 @@ public class FilterComposite extends Composite {
 
 	private String createFiltersText() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append('(');
-		sb.append(filterList.stream().filter(filter -> filter.selected.getSelection())
+		final String text = (filterList.stream().filter(filter -> filter.selected.getSelection())
 				.map(filter -> filter.name + ": " + filter.textField.getText()).collect(Collectors.joining(", "))); //$NON-NLS-1$ //$NON-NLS-2$
-		sb.append(')');
+		if (!text.isEmpty()) {
+			sb.append('(');
+			sb.append(text);
+			sb.append(')');
+		}
 		return sb.toString();
 	}
 

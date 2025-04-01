@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.AttributeEditableRule;
@@ -93,12 +95,11 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.widgets.Twistie;
 import org.eclipse.ui.part.EditorPart;
 
-// TODO: remove SuppressWarning and move Strings to plugin.properties
-@SuppressWarnings("nls")
 public class BulkEditor extends EditorPart implements CommandExecutor, CommandStackEventListener {
 
-	private static final List<String> DEFAULT_LIST = List.of("Name", "Type", "Comment", "Initial Value");
-	private static final List<String> LIST_WITHOUT_VALUE = List.of("Name", "Type", "Comment");
+	private static final List<String> DEFAULT_LIST = List.of(Messages.Name, Messages.Type, Messages.Comment,
+			Messages.InitialValue);
+	private static final List<String> LIST_WITHOUT_VALUE = List.of(Messages.Name, Messages.Type, Messages.Comment);
 
 	private IProject project;
 	private final CommandStack commandStack = new CommandStack();
@@ -134,7 +135,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		if (input instanceof final BulkEditorInput bulkEditorInput) {
 			this.settings = bulkEditorInput.getSettings();
 			project = bulkEditorInput.getProject();
-			setPartName(getPartName() + ": " + project.getName());
+			setPartName(getPartName() + ": " + project.getName()); //$NON-NLS-1$
 		}
 	}
 
@@ -149,9 +150,9 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		scrolledComposite.setContent(composite);
 		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(composite);
 
-		WidgetFactory.label(SWT.NONE).text("Search For").create(composite);
+		WidgetFactory.label(SWT.NONE).text(Messages.SearchFor).create(composite);
 		modeSelectionDropDown = new Combo(composite, SWT.DROP_DOWN | SWT.READ_ONLY);
-		modeSelectionDropDown.setItems("Variable", "Attribute");
+		modeSelectionDropDown.setItems(Messages.Variable, Messages.Attribute);
 		modeSelectionDropDown.select(settings.modeSelection);
 		modeSelectionDropDown.addListener(SWT.Selection, event -> {
 			changeNatTable(natTable.getParent(), modeSelectionDropDown.getSelectionIndex());
@@ -159,7 +160,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			natTable.getParent().layout();
 		});
 
-		final Group searchGroup = WidgetFactory.group(SWT.NONE).text("Where").create(composite);
+		final Group searchGroup = WidgetFactory.group(SWT.NONE).text(Messages.SearchWhere).create(composite);
 		searchGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		searchGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
 
@@ -190,20 +191,23 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		searchGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		searchGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
-		searchGroup.setText("In");
+		searchGroup.setText(Messages.SearchIn);
 
-		fbSubappTypesFilter = createSearchFilterInGroup(searchGroup, "FB and SubApp Types",
-				BulkEditorSettings.inFBTypesSearchList, settings.fbSubappTypes, b -> settings.fbSubappTypes = b);
-		fbTypedSubappInstanceFilter = createSearchFilterInGroup(searchGroup, "FB and Typed Subapp Instances",
+		fbSubappTypesFilter = createSearchFilterInGroup(searchGroup, Messages.FBandSubappTypes,
+				BulkEditorSettings.inFBTypesSearchList, settings.fbSubappTypes,
+				b -> settings.fbSubappTypes = b.booleanValue());
+		fbTypedSubappInstanceFilter = createSearchFilterInGroup(searchGroup, Messages.FBandSubappInstances,
 				BulkEditorSettings.inFBInstanceSearchList, settings.fbTypedSubappInstance,
-				b -> settings.fbTypedSubappInstance = b);
-		untypedSubappFilter = createSearchFilterInGroup(searchGroup, "Untyped Subapps",
-				BulkEditorSettings.inUntypedSubAppSearchList, settings.untypedSubapp, b -> settings.untypedSubapp = b);
-		dataTypesFilter = createSearchFilterInGroup(searchGroup, "Data Types", BulkEditorSettings.inDataTypesSearchList,
-				settings.dataTypes, b -> settings.dataTypes = b);
-		attributeTypesFilter = createSearchFilterInGroup(searchGroup, "Attribute Types",
+				b -> settings.fbTypedSubappInstance = b.booleanValue());
+		untypedSubappFilter = createSearchFilterInGroup(searchGroup, Messages.UntypedSubapps,
+				BulkEditorSettings.inUntypedSubAppSearchList, settings.untypedSubapp,
+				b -> settings.untypedSubapp = b.booleanValue());
+		dataTypesFilter = createSearchFilterInGroup(searchGroup, Messages.DataTypes,
+				BulkEditorSettings.inDataTypesSearchList, settings.dataTypes,
+				b -> settings.dataTypes = b.booleanValue());
+		attributeTypesFilter = createSearchFilterInGroup(searchGroup, Messages.AttributeTypes,
 				BulkEditorSettings.inAttributeTypesSearchList, settings.attributeTypes,
-				b -> settings.attributeTypes = b);
+				b -> settings.attributeTypes = b.booleanValue());
 	}
 
 	private FilterComposite createSearchFilterInGroup(final Composite parent, final String name,
@@ -220,14 +224,15 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		final Button categorySelectionButton = WidgetFactory.button(SWT.CHECK).text(name)
 				.create(searchInCategorySubComposite);
 		categorySelectionButton.addListener(SWT.Selection,
-				event -> buttonListener.accept(categorySelectionButton.getSelection()));
+				event -> buttonListener.accept(Boolean.valueOf(categorySelectionButton.getSelection())));
 		categorySelectionButton.setSelection(initalSelection);
 
 		final FilterComposite filterComposite = new FilterComposite(searchInCategoryComposite, SWT.NONE,
 				LIST_WITHOUT_VALUE, settings, subSettingsReferencesNames);
 
 		final Twistie expandFilterCompositeTwistie = new Twistie(searchInCategorySubComposite, SWT.NONE);
-		expandFilterCompositeTwistie.addListener(SWT.MouseUp, event -> updateVisibility(expandFilterCompositeTwistie.isExpanded(), filterComposite));
+		expandFilterCompositeTwistie.addListener(SWT.MouseUp,
+				event -> updateVisibility(expandFilterCompositeTwistie.isExpanded(), filterComposite));
 		updateVisibility(false, filterComposite);
 
 		final Label stateLabel = new Label(searchInCategorySubComposite, SWT.LEAD);
@@ -255,37 +260,37 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		scopeGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		scopeGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
-		scopeGroup.setText("Scope");
+		scopeGroup.setText(Messages.Scope);
 
-		projectScopeButton = WidgetFactory.button(SWT.RADIO).text("Project: " + project.getName()).create(scopeGroup);
+		projectScopeButton = WidgetFactory.button(SWT.RADIO)
+				.text(MessageFormat.format(Messages.Project, project.getName())).create(scopeGroup);
 		projectScopeButton.setSelection(settings.projectScope);
-		projectScopeButton.addListener(SWT.Selection, event -> {
-			settings.projectScope = projectScopeButton.getSelection();
-		});
-		workspaceScopeButton = WidgetFactory.button(SWT.RADIO).text("Workspace").create(scopeGroup);
+		projectScopeButton.addListener(SWT.Selection,
+				event -> settings.projectScope = projectScopeButton.getSelection());
+		workspaceScopeButton = WidgetFactory.button(SWT.RADIO).text(Messages.Workspace).create(scopeGroup);
 		workspaceScopeButton.setSelection(!projectScopeButton.getSelection());
 	}
 
 	private void createSearchButton(final Composite parent) {
-		WidgetFactory.button(SWT.PUSH).text("Search").onSelect(event -> {
+		WidgetFactory.button(SWT.PUSH).text(Messages.Search).onSelect(event -> {
 			final SearchHelper helper = new SearchHelper(
-					new SearchHelper.FilterRecord(settings.fbSubappTypes,
+					new SearchHelper.FilterRecordClass(settings.fbSubappTypes,
 							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
 							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
 							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecord(settings.fbTypedSubappInstance,
+					new SearchHelper.FilterRecordClass(settings.fbTypedSubappInstance,
 							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
 							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
 							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecord(settings.untypedSubapp,
+					new SearchHelper.FilterRecordClass(settings.untypedSubapp,
 							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
 							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
 							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecord(settings.dataTypes,
+					new SearchHelper.FilterRecordClass(settings.dataTypes,
 							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
 							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
 							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecord(settings.attributeTypes,
+					new SearchHelper.FilterRecordClass(settings.attributeTypes,
 							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
 							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
 							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))));
@@ -293,7 +298,6 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			final List<ISearchContext> contexts = helper.createSearchContextList(workspaceScopeButton.getSelection(),
 					projectScopeButton.getSelection(), project);
 
-			map.clear();
 			final var result = contexts.stream()
 					.flatMap(context -> new IEC61499ElementSearch(context,
 							SearchHelper.createSearchFilter(modeSelectionDropDown.getSelectionIndex(),
@@ -301,20 +305,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 							helper.createChildrenSearchProvider()).performSearch().stream())
 					.toList();
 
-			final List<EObject> mappedList = new ArrayList<>();
-			for (final EObject libE : result) {
-				if (EcoreUtil.getRootContainer(libE) instanceof final LibraryElement rootLibE) {
-					final TypeEntry entry = rootLibE.getTypeEntry();
-					if (!map.containsKey(entry)) {
-						final LibraryElement copyRoot = entry.copyType(); // don't copy if entry already has copy
-						map.put(entry, new CopyElementRecord(copyRoot, new ArrayList<>()));
-					}
-					final EObject copyLibE = EcoreUtil.getEObject(map.get(entry).copiedElement(),
-							EcoreUtil.getRelativeURIFragmentPath(rootLibE, libE));
-					map.get(entry).addToList(copyLibE);
-					mappedList.add(copyLibE);
-				}
-			}
+			final List<EObject> mappedList = createMappedList(result);
 
 			if (modeSelectionDropDown.getSelectionIndex() == 0
 					&& (mappedList.isEmpty() || mappedList.getFirst() instanceof VarDeclaration)) {
@@ -325,6 +316,22 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			}
 			natTable.refresh();
 		}).create(parent);
+	}
+
+	private List<EObject> createMappedList(final List<? extends EObject> list) {
+		final List<EObject> mappedList = new ArrayList<>();
+		map.clear();
+		for (final EObject libE : list) {
+			if (EcoreUtil.getRootContainer(libE) instanceof final LibraryElement rootLibE) {
+				final TypeEntry entry = rootLibE.getTypeEntry();
+				map.computeIfAbsent(entry, e -> new CopyElementRecord(e.copyType(), new ArrayList<>()));
+				final EObject copyLibE = EcoreUtil.getEObject(map.get(entry).copiedElement(),
+						EcoreUtil.getRelativeURIFragmentPath(rootLibE, libE));
+				map.get(entry).addToList(copyLibE);
+				mappedList.add(copyLibE);
+			}
+		}
+		return mappedList;
 	}
 
 	private void createNatTable(final Composite parent, final int selectionIndex) {
@@ -342,7 +349,6 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		if (natTable != null) {
 			natTable.dispose();
 		}
-		// improve Location Column (Not showing where Attributes of Struct-members are)
 		if (selectionIndex == 0) {
 			varDeclProvider = new ChangeableListDataProvider<>(
 					new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));

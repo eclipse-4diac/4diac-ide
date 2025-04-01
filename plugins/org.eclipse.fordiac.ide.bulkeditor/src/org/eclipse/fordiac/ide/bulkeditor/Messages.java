@@ -20,10 +20,34 @@ public final class Messages extends NLS {
 
 	public static String BulkEditor;
 
+	public static String Variable;
+	public static String Attribute;
+
+	public static String Name;
+	public static String Type;
+	public static String Comment;
+	public static String InitialValue;
+
 	public static String CaseSensitve;
 	public static String WholeWord;
 	public static String ExactMatch;
 	public static String RegularExpression;
+
+	public static String SearchFor;
+	public static String SearchWhere;
+	public static String SearchIn;
+
+	public static String FBandSubappTypes;
+	public static String FBandSubappInstances;
+	public static String UntypedSubapps;
+	public static String DataTypes;
+	public static String AttributeTypes;
+
+	public static String Scope;
+	public static String Project;
+	public static String Workspace;
+
+	public static String Search;
 
 	static {
 		// initialize resource bundle
