@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.export.forte_ng.struct
 
 import java.nio.file.Path
 import java.util.Map
-import java.util.Set
 import org.eclipse.fordiac.ide.model.data.StructuredType
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
@@ -32,8 +31,6 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		«generateHeader»
 		
 		«generateImplIncludes»
-		
-		«generateUseStringId»
 		
 		DEFINE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain», «type.generateTypeSpec»);
 		
@@ -59,6 +56,14 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		«type.memberVariables.generateAccessorDefinition("getMember", true)»
 	'''
 
+	def protected generateImplIncludes() '''
+		#include "«fileBasename».h"
+		#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
+		#include "«fileBasename»_gen.cpp"
+		#endif
+		
+		«getDependencies(emptyMap).generateDependencyIncludes»
+	'''
 	
 	def protected generateSetValue() '''
 		void «className»::setValue(const CIEC_ANY &paValue) {
@@ -70,9 +75,5 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		  }
 		}
 	'''
-	
-	override Set<String> getUsedStrings(Map<?, ?> options) {
-		(super.getUsedStrings(options) + type.memberVariables.map[name]).toSet
-	}
 
 }

@@ -70,13 +70,6 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 
 	def protected generateIncludeGuardEnd() '''
 	'''
-	
-	def protected generateImplIncludes() '''
-		#include "«fileBasename».h"
-		
-		«getDependencies(emptyMap).generateDependencyIncludes»
-		«type.compilerInfo?.header»
-	'''
 
 	def protected generateVariableDeclarations(List<VarDeclaration> variables, boolean const) '''
 		«FOR variable : variables AFTER '\n'»
@@ -153,16 +146,6 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	def CharSequence generateVariableTypeSpec(VarDeclaration decl) {
 		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_SPEC -> Boolean.TRUE})
 	}
-	
-	def protected generateUseStringId() '''
-		«getUsedStrings(emptyMap).generateUseStringIdDecls»
-	'''
-	
-	def generateUseStringIdDecls(Set<String> strings) '''
-		«FOR str : strings.sort»
-			USE_STRING_ID(«str»);
-		«ENDFOR»
-	'''
 
 	def protected getFORTENameList(List<? extends INamedElement> elements) {
 		elements.map[name.FORTEStringId].join(", ")
@@ -190,9 +173,5 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 
 	def Set<INamedElement> getDependencies(Map<?, ?> options) {
 		variableLanguageSupport.values.filterNull.flatMap[getDependencies(options)].toSet
-	}
-	
-	def protected Set<String> getUsedStrings(Map<?, ?> options) {
-		newHashSet(type.generateTypeNamePlain)
 	}
 }

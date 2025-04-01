@@ -46,8 +46,6 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 		
 		«generateImplIncludes»
 		
-		«generateUseStringId»
-		
 		«generateFBDefinition»
 		«generateFBInterfaceDefinition»
 		«generateFBInterfaceSpecDefinition»
@@ -141,12 +139,5 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 				getDependencies(options)
 			]
 		).toSet
-	}
-	
-	override Set<String> getUsedStrings(Map<?, ?> options) {
-		val strings = super.getUsedStrings(options)
-		type.internalVars.forEach[getUsedIEStrings(it, strings)]
-		type.internalFbs.forEach[getUsedFBStrings(it, strings)]		
-		return strings	
 	}
 }

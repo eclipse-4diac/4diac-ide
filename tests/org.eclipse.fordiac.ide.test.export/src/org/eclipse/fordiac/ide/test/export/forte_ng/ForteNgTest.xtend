@@ -295,6 +295,9 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						 *************************************************************************/
 						
 						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h"
+						#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
+						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt_gen.cpp"
+						#endif
 						
 						#include "core/iec61131_functions.h"
 						#include "core/datatypes/forte_array_common.h"
@@ -302,9 +305,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						#include "core/datatypes/forte_array_fixed.h"
 						#include "core/datatypes/forte_array_variable.h"
 						
-						USE_STRING_ID(functionblock);
-						
-						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», STRID(functionblock))
+						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringIdfunctionblock)
 						
 						const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scmFBInterfaceSpec = {
 						  0, nullptr, nullptr, nullptr, nullptr,

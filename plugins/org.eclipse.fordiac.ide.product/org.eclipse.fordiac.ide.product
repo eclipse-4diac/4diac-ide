@@ -83,8 +83,10 @@
       <feature id="org.eclipse.emf.common.ui"/>
       <feature id="org.eclipse.emf.ecore.editor"/>
       <feature id="org.eclipse.ecf.core.feature"/>
+      <feature id="org.eclipse.ecf.core.ssl.feature"/>
       <feature id="org.eclipse.ecf.filetransfer.feature"/>
       <feature id="org.eclipse.ecf.filetransfer.httpclient5.feature"/>
+      <feature id="org.eclipse.ecf.filetransfer.ssl.feature"/>
       <feature id="org.eclipse.emf.databinding"/>
       <feature id="org.eclipse.egit" installMode="root"/>
       <feature id="org.eclipse.jgit" installMode="root"/>
@@ -101,8 +103,6 @@
       <feature id="org.eclipse.emf.compare.rcp.ui"/>
       <feature id="org.eclipse.nebula.widgets.nattable.core.feature"/>
       <feature id="org.eclipse.emf.compare.egit" installMode="root"/>
-      <feature id="org.eclipse.ecf.filetransfer.httpclientjava.feature" installMode="root"/>
-      <feature id="org.eclipse.fordiac.ide.milo" installMode="root"/>
    </features>
 
    <configurations>

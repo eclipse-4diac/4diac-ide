@@ -38,8 +38,6 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 		
 		«generateImplIncludes»
 		
-		«generateUseStringId»
-		
 		«generateFBDefinition»
 		
 		«generateFBInterfaceDefinition»
