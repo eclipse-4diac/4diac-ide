@@ -6,7 +6,7 @@
     point = "org.eclipse.ui.editors">
       <editor
             class="org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor"
-            icon="fordiacimage://ICON_APPLICATION"
+            icon="fordiacimage://ICON_BULK_EDITOR"
             id="org.eclipse.fordiac.ide.bulkeditor.BulkEditor"
             name="Bulk Editor">
       </editor>
