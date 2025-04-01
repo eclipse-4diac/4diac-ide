@@ -14,6 +14,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="parentFB" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FBNetworkElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resultFBRuntime" eType="#//FBRuntimeAbstract"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Long"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventManager">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"/>

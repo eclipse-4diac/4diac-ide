@@ -73,6 +73,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 			addFbRuntimePropertyDescriptor(object);
 			addCreatedTransactionsPropertyDescriptor(object);
 			addParentFBPropertyDescriptor(object);
+			addStartTimePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -172,6 +173,22 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	}
 
 	/**
+	 * This adds a property descriptor for the Start Time feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	protected void addStartTimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_EventOccurrence_startTime_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_EventOccurrence_startTime_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_EventOccurrence_type"), //$NON-NLS-1$
+						OperationalSemanticsPackage.Literals.EVENT_OCCURRENCE__START_TIME, true, false, false,
+						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an
 	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
 	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
@@ -252,6 +269,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 		switch (notification.getFeatureID(EventOccurrence.class)) {
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__ACTIVE:
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__IGNORED:
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__START_TIME:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME:

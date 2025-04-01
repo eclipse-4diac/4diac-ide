@@ -140,13 +140,22 @@ public interface OperationalSemanticsPackage extends EPackage {
 	int EVENT_OCCURRENCE__RESULT_FB_RUNTIME = 6;
 
 	/**
+	 * The feature id for the '<em><b>Start Time</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT_OCCURRENCE__START_TIME = 7;
+
+	/**
 	 * The number of structural features of the '<em>Event Occurrence</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT_OCCURRENCE_FEATURE_COUNT = 7;
+	int EVENT_OCCURRENCE_FEATURE_COUNT = 8;
 
 	/**
 	 * The meta object id for the
@@ -737,6 +746,18 @@ public interface OperationalSemanticsPackage extends EPackage {
 	EReference getEventOccurrence_ResultFBRuntime();
 
 	/**
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getStartTime
+	 * <em>Start Time</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the attribute '<em>Start Time</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getStartTime()
+	 * @see #getEventOccurrence()
+	 * @generated
+	 */
+	EAttribute getEventOccurrence_StartTime();
+
+	/**
 	 * Returns the meta object for class
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager <em>Event
 	 * Manager</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1257,6 +1278,14 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference EVENT_OCCURRENCE__RESULT_FB_RUNTIME = eINSTANCE.getEventOccurrence_ResultFBRuntime();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Time</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EAttribute EVENT_OCCURRENCE__START_TIME = eINSTANCE.getEventOccurrence_StartTime();
 
 		/**
 		 * The meta object literal for the

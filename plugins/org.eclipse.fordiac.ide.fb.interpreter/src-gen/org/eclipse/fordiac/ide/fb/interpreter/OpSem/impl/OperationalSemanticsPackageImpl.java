@@ -297,6 +297,16 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 * @generated
 	 */
 	@Override
+	public EAttribute getEventOccurrence_StartTime() {
+		return (EAttribute) eventOccurrenceEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
 	public EClass getEventManager() {
 		return eventManagerEClass;
 	}
@@ -690,6 +700,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		createEReference(eventOccurrenceEClass, EVENT_OCCURRENCE__CREATED_TRANSACTIONS);
 		createEReference(eventOccurrenceEClass, EVENT_OCCURRENCE__PARENT_FB);
 		createEReference(eventOccurrenceEClass, EVENT_OCCURRENCE__RESULT_FB_RUNTIME);
+		createEAttribute(eventOccurrenceEClass, EVENT_OCCURRENCE__START_TIME);
 
 		eventManagerEClass = createEClass(EVENT_MANAGER);
 		createEReference(eventManagerEClass, EVENT_MANAGER__TRANSACTIONS);
@@ -806,6 +817,9 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEReference(getEventOccurrence_ResultFBRuntime(), this.getFBRuntimeAbstract(), null, "resultFBRuntime", null, //$NON-NLS-1$
 				0, 1, EventOccurrence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEventOccurrence_StartTime(), theXMLTypePackage.getLong(), "startTime", null, 0, 1, //$NON-NLS-1$
+				EventOccurrence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
 
 		initEClass(eventManagerEClass, EventManager.class, "EventManager", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);

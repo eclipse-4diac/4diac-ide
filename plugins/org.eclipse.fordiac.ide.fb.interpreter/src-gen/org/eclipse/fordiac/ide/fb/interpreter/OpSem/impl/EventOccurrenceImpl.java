@@ -52,6 +52,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
  * <em>Parent FB</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getResultFBRuntime
  * <em>Result FB Runtime</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getStartTime
+ * <em>Start Time</em>}</li>
  * </ul>
  *
  * @generated
@@ -148,6 +150,26 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 	 * @ordered
 	 */
 	protected FBRuntimeAbstract resultFBRuntime;
+
+	/**
+	 * The default value of the '{@link #getStartTime() <em>Start Time</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see #getStartTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final long START_TIME_EDEFAULT = 0L;
+
+	/**
+	 * The cached value of the '{@link #getStartTime() <em>Start Time</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see #getStartTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected long startTime = START_TIME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -506,6 +528,31 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 	 *
 	 * @generated
 	 */
+	@Override
+	public long getStartTime() {
+		return startTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public void setStartTime(long newStartTime) {
+		long oldStartTime = startTime;
+		startTime = newStartTime;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					OperationalSemanticsPackage.EVENT_OCCURRENCE__START_TIME, oldStartTime, startTime));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -571,6 +618,8 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 				return getResultFBRuntime();
 			}
 			return basicGetResultFBRuntime();
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__START_TIME:
+			return getStartTime();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -607,6 +656,9 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME:
 			setResultFBRuntime((FBRuntimeAbstract) newValue);
 			return;
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__START_TIME:
+			setStartTime((Long) newValue);
+			return;
 		default:
 			super.eSet(featureID, newValue);
 			return;
@@ -642,6 +694,9 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME:
 			setResultFBRuntime((FBRuntimeAbstract) null);
 			return;
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__START_TIME:
+			setStartTime(START_TIME_EDEFAULT);
+			return;
 		default:
 			super.eUnset(featureID);
 			return;
@@ -670,6 +725,8 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 			return parentFB != null;
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME:
 			return resultFBRuntime != null;
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__START_TIME:
+			return startTime != START_TIME_EDEFAULT;
 		default:
 			return super.eIsSet(featureID);
 		}
@@ -691,6 +748,8 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 		result.append(active);
 		result.append(", ignored: "); //$NON-NLS-1$
 		result.append(ignored);
+		result.append(", startTime: "); //$NON-NLS-1$
+		result.append(startTime);
 		result.append(')');
 		return result.toString();
 	}

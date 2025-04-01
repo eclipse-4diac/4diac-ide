@@ -40,6 +40,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
  * <em>Parent FB</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getResultFBRuntime
  * <em>Result FB Runtime</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getStartTime
+ * <em>Start Time</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getEventOccurrence()
@@ -204,5 +206,29 @@ public interface EventOccurrence extends EObject {
 	 * @generated
 	 */
 	void setResultFBRuntime(FBRuntimeAbstract value);
+
+	/**
+	 * Returns the value of the '<em><b>Start Time</b></em>' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the value of the '<em>Start Time</em>' attribute.
+	 * @see #setStartTime(long)
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getEventOccurrence_StartTime()
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.Long"
+	 * @generated
+	 */
+	long getStartTime();
+
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getStartTime
+	 * <em>Start Time</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 *
+	 * @param value the new value of the '<em>Start Time</em>' attribute.
+	 * @see #getStartTime()
+	 * @generated
+	 */
+	void setStartTime(long value);
 
 } // EventOccurrence
