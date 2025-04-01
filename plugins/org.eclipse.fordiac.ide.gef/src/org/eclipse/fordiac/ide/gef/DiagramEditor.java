@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.gef;
 
 import java.util.EventObject;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.IContentEditorInput;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
@@ -64,6 +66,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -173,7 +176,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 	protected void createGraphicalViewer(final Composite parent) {
 		final RulerComposite rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
 
-		final var prefCache = new GefPreferenceConstantsCache(getSystem().getTypeLibrary().getProject());
+		final var prefCache = getPreferenceConstantsCache();
 
 		final GraphicalViewer viewer = new AdvancedScrollingGraphicalViewer(prefCache);
 		viewer.createControl(rulerComp);
@@ -183,6 +186,18 @@ public abstract class DiagramEditor extends GraphicalEditor
 		initializeGraphicalViewer();
 
 		rulerComp.setGraphicalViewer(getGraphicalViewer());
+	}
+
+	private GefPreferenceConstantsCache getPreferenceConstantsCache() {
+		IProject project = null;
+		final IEditorInput input = getEditorInput();
+		if (input instanceof final IContentEditorInput contentInput) {
+			project = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(contentInput.getContent()).getProject();
+		} else if (input instanceof final IFileEditorInput fileInput) {
+			project = fileInput.getFile().getProject();
+		}
+
+		return new GefPreferenceConstantsCache(project);
 	}
 
 	/**
