@@ -13,23 +13,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.fbnetwork;
 
-import static org.eclipse.fordiac.ide.fb.interpreter.mm.FBNetworkTestRunner.runFBNetworkTest;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.FBNetworkTestRunner;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 
 /* small fb network consisting of e_sr, e_switch, and e_ctud */
 
-/*
- * @deprecated This test case will be added in the ReferenceExamplesTest
- */
- 
-@Deprecated
 public class CounterNetworkTest extends AbstractInterpreterTest {
 
 	@Override
@@ -37,16 +33,17 @@ public class CounterNetworkTest extends AbstractInterpreterTest {
 		final FBNetwork network = loadFbNetwork("ExampleFbNetwork", "CounterNetwork"); //$NON-NLS-1$ //$NON-NLS-2$
 		assertNotNull(network);
 
-		final EList<Transaction> returnedTransactions = runFBNetworkTest(network, "E_SPLIT", "EI"); //$NON-NLS-1$ //$NON-NLS-2$
-
+		final EventManager em = FBNetworkTestRunner.runFBNetworkTestManager(network, "E_SPLIT", "EI"); //$NON-NLS-1$ //$NON-NLS-2$
+		final var returnedTransactions = em.getTransactions();
+		assert (9 == returnedTransactions.size());
 		final Transaction finalResult = returnedTransactions.get(returnedTransactions.size() - 1);
-		assertTrue("CU".equals(finalResult.getInputEventOccurrence().getEvent().getName())); //$NON-NLS-1$
-		final VarDeclaration quPin = (VarDeclaration) finalResult.getInputEventOccurrence().getParentFB()
-				.getInterfaceElement("QU"); //$NON-NLS-1$
-		assertTrue("TRUE".equals(quPin.getValue().getValue())); //$NON-NLS-1$
-		final VarDeclaration cvPin = (VarDeclaration) finalResult.getInputEventOccurrence().getParentFB()
-				.getInterfaceElement("CV"); //$NON-NLS-1$
-		assertTrue("1".equals(cvPin.getValue().getValue())); //$NON-NLS-1$
-
+		final EventOccurrence finalProcessedEO = finalResult.getInputEventOccurrence();
+		final var rt = finalProcessedEO.getResultFBRuntime();
+		final var counterFBresult = ((FBNetwork) rt.getModel()).getFBNamed("E_CTUD"); //$NON-NLS-1$
+		assertEquals("CU", finalProcessedEO.getEvent().getName()); //$NON-NLS-1$
+		final VarDeclaration quPin = (VarDeclaration) (counterFBresult.getInterfaceElement("QU")); //$NON-NLS-1$
+		assertEquals("TRUE", quPin.getValue().getValue()); //$NON-NLS-1$
+		final VarDeclaration cvPin = (VarDeclaration) counterFBresult.getInterfaceElement("CV"); //$NON-NLS-1$
+		assertEquals("2", cvPin.getValue().getValue()); //$NON-NLS-1$
 	}
 }

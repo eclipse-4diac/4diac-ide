@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
 import java.util.Optional;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
@@ -29,24 +28,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 public final class FBNetworkTestRunner {
-
-	@Deprecated
-	public static EList<Transaction> runFBNetworkTest(final FBNetwork network, final String fbInstanceName,
-			final String pinName) {
-		final FB initialFb = network.getFBNamed(fbInstanceName);
-		if (initialFb == null) {
-			throw new IllegalArgumentException("FB to trigger does not exist"); //$NON-NLS-1$
-		}
-
-		final Event event = (Event) initialFb.getInterfaceElement(pinName);
-		if (event == null) {
-			throw new IllegalArgumentException("Event pin does not exist"); //$NON-NLS-1$
-		}
-
-		final EventManager eventManager = runFBNetworkTestManager(network, event);
-
-		return eventManager.getTransactions();
-	}
 
 	public static EventManager runFBNetworkTestManager(final FBNetwork network, final String fbInstanceName,
 			final String pinName) {
