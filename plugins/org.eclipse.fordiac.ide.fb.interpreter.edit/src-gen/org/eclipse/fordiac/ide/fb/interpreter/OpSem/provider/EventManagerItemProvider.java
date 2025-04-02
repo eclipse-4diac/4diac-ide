@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.provider.OperationalSemanticsEditPlugin;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a
@@ -137,11 +138,11 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 	/**
 	 * This returns EventManager.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/EventManager")); //$NON-NLS-1$
+		return overlayImage(object, FordiacImage.ICON_SERVICE); //$NON-NLS-1$
 	}
 
 	/**

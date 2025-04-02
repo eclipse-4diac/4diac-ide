@@ -21,9 +21,11 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a
@@ -94,21 +96,25 @@ public class SimpleFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvid
 	 * This returns SimpleFBTypeRuntime.gif. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SimpleFBTypeRuntime")); //$NON-NLS-1$
+		return overlayImage(object, FordiacImage.ICON_RESOURCE.getImage());
 	}
 
 	/**
 	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
+		if (object instanceof final BasicFBTypeRuntime rt && (rt.getBasicfbtype() != null)) {
+			return super.getText(object) + getString("_UI_SimpleFBTypeRuntime_type") + " for type " //$NON-NLS-1$ //$NON-NLS-2$
+					+ rt.getBasicfbtype().getName();
+		}
 		return getString("_UI_SimpleFBTypeRuntime_type"); //$NON-NLS-1$
 	}
 

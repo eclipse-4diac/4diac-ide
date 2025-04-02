@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.ConnectionToValueMapImp
 import org.eclipse.fordiac.ide.fb.interpreter.provider.OperationalSemanticsEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
@@ -140,11 +141,16 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		Map.Entry<?, ?> connectionToValueMap = (Map.Entry<?, ?>) object;
+		if (connectionToValueMap.getKey() instanceof final Connection conn
+				&& connectionToValueMap.getValue() instanceof final Value value) {
+			return "Conn " + conn.getSource().getName() + "->" + conn.getDestination().getName() + ": " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					+ value.getValue();
+		}
 		return "" + connectionToValueMap.getKey() + " -> " + connectionToValueMap.getValue(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
