@@ -97,6 +97,9 @@
       <initializer
             class="org.eclipse.fordiac.ide.model.preferences.PreferenceInitializer">
       </initializer>
+      <initializer
+            class="org.eclipse.fordiac.ide.model.validation.PreferenceInitializer">
+      </initializer>
    </extension>
 	<extension
 			point="org.eclipse.emf.ecore.extension_parser">

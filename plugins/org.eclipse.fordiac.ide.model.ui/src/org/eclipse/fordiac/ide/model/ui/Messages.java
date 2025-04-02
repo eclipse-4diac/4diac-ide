@@ -32,6 +32,13 @@ public final class Messages extends NLS {
 	public static String DataTypeDropdown_FB_Types;
 	public static String DeviceTypeSelectionTreeContentProvider_DeviceTypes;
 	public static String ResourceTypeSelectionTreeContentProvider_ResourceTypes;
+	public static String Validation_CollisionSeverityLabel;
+	public static String Validation_ErrorLabel;
+	public static String Validation_IgnoreLabel;
+	public static String Validation_InterfaceCollisionSeverityLabel;
+	public static String Validation_InfoLabel;
+	public static String Validation_SeverityLabel;
+	public static String Validation_WarningLabel;
 
 	static {
 		// initialize resource bundle

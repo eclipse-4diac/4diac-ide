@@ -14,21 +14,16 @@ package org.eclipse.fordiac.ide.model.validation;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.fordiac.ide.model.preferences.PreferenceProvider;
 
 public final class ValidationPreferences {
 
-	public static final String QUALIFIER = "org.eclipse.fordiac.ide.model.validation"; //$NON-NLS-1$
-
-	public static final String HAS_PROJECT_SPECIFIC_OPTIONS = "hasProjectSpecificOptions"; //$NON-NLS-1$
+	public static final String QUALIFIER = "org.eclipse.fordiac.ide.model/validation"; //$NON-NLS-1$
 
 	public static final String SEVERITY_IGNORE = "ignore"; //$NON-NLS-1$
 	public static final String SEVERITY_INFO = "info"; //$NON-NLS-1$
@@ -61,14 +56,10 @@ public final class ValidationPreferences {
 	}
 
 	public static int getDiagnosticSeverity(final String key, final int defaultValue, final IProject project) {
-		final IScopeContext[] contexts = project != null
-				? new IScopeContext[] { new ProjectScope(project), InstanceScope.INSTANCE }
-				: new IScopeContext[] { InstanceScope.INSTANCE };
-		return getDiagnsoticSeverity(Platform.getPreferencesService().getString(QUALIFIER, key, null, contexts),
-				defaultValue);
+		return getDiagnosticSeverity(PreferenceProvider.getString(QUALIFIER, key, null, project), defaultValue);
 	}
 
-	private static int getDiagnsoticSeverity(final String value, final int defaultValue) {
+	private static int getDiagnosticSeverity(final String value, final int defaultValue) {
 		return switch (value) {
 		case SEVERITY_IGNORE -> Diagnostic.OK;
 		case SEVERITY_INFO -> Diagnostic.INFO;
