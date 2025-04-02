@@ -190,6 +190,8 @@ final class ForteNgExportUtil {
 
 	def static String generateTypePath(INamedElement type) {
 		switch (type) {
+			ArrayType:
+				type.baseType.generateTypePath
 			AnyType case type.typeEntry === null: 
 				"core/datatypes"
 			LibraryElement:
