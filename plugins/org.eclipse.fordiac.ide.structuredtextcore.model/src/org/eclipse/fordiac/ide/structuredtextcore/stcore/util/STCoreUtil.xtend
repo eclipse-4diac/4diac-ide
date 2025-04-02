@@ -86,7 +86,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgumen
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
@@ -99,10 +101,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
@@ -225,16 +227,21 @@ final class STCoreUtil {
 
 	def static AccessMode getAccessMode(STExpression expression) {
 		switch (container : expression.eContainer) {
-			STAssignment case container.left == expression: AccessMode.WRITE
+			STIfStatement case container.condition == expression,
+			STElseIfPart case container.condition == expression,
+			STCaseStatement case container.selector == expression,
+			STCaseCases case container.conditions.contains(expression): AccessMode.READ
 			STForStatement case container.variable == expression: AccessMode.WRITE
+			STForStatement case container.from == expression || container.to == expression || container.by == expression,
+			STRepeatStatement case container.condition == expression,
+			STWhileStatement case container.condition == expression: AccessMode.READ
+			STAssignment case container.left == expression: AccessMode.WRITE
+			STCallArgument: container.accessMode
 			STMemberAccessExpression: container.accessMode
 			STArrayAccessExpression case container.receiver == expression: container.accessMode
-			STCallArgument: container.accessMode
-			STForStatement case container.statements.contains(expression),
-			STIfStatement case container.statements.contains(expression),
-			STRepeatStatement case container.statements.contains(expression),
-			STWhileStatement case container.statements.contains(expression): AccessMode.NONE
-			STStatement,
+			STExpression,
+			STVarDeclaration,
+			STTypeDeclaration,
 			STExpressionSource,
 			STInitializerExpression,
 			STInitializerExpressionSource: AccessMode.READ

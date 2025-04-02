@@ -703,27 +703,6 @@ class STFunctionValidatorTest {
 	@Test
 	def void testUnusedVariable() {
 		'''
-			FUNCTION TEST : INT
-			VAR_INPUT
-				DI1 : INT;
-			END_VAR
-			VAR_OUTPUT
-				DO1 : INT;
-			END_VAR
-			VAR_IN_OUT
-				DIO1 : INT;
-			END_VAR
-			VAR_TEMP
-				TEMP1 : INT;
-			END_VAR
-			
-			DO1 := DI1 + 4; // output written, input read
-			DIO1 := DIO1 + 4; // in/out used
-			TEMP1 := DI1 + 4; // temp written
-			TEST := TEMP1 * 2; // temp read, return written
-			END_FUNCTION
-		'''.parse.assertNoIssues
-		'''
 			FUNCTION TEST
 			VAR_TEMP
 				TEMP1 : INT;
@@ -750,6 +729,75 @@ class STFunctionValidatorTest {
 			FUNCTION TEST : INT
 			END_FUNCTION
 		'''.parse.assertWarning(STFunctionPackage.eINSTANCE.STFunction, STCoreValidator.UNUSED_VARIABLE)
+	}
+
+	@Test
+	def void testUsedVariable() {
+		'''
+			FUNCTION TEST : INT
+			VAR_INPUT
+				DI1 : INT;
+			END_VAR
+			VAR_OUTPUT
+				DO1 : INT;
+			END_VAR
+			VAR_IN_OUT
+				DIO1 : INT;
+			END_VAR
+			VAR_TEMP
+				TEMP1 : INT;
+			END_VAR
+			
+			DO1 := DI1 + 4; // output written, input read
+			DIO1 := DIO1 + 4; // in/out used
+			TEMP1 := DI1 + 4; // temp written
+			TEST := TEMP1 * 2; // temp read, return written
+			END_FUNCTION
+		'''.parse.assertNoIssues
+		'''
+			FUNCTION TEST
+			VAR_TEMP
+				TEMP1 : BOOL;
+				TEMP2 : BOOL;
+				TEMP3 : INT;
+				TEMP4 : INT;
+				TEMP5 : BOOL;
+				TEMP6 : BOOL;
+				TEMP7 : INT;
+			END_VAR
+			VAR_TEMP CONSTANT
+				CONST1 : INT := 0;
+				CONST2 : INT := 0;
+				CONST3 : INT := 0;
+				CONST4 : INT := 0;
+			END_VAR
+
+			IF TEMP1 THEN
+				TEMP1 := TRUE;
+			ELSIF TEMP2 THEN
+				TEMP2 := TRUE;
+			END_IF;
+			
+			FOR TEMP3 := CONST1 TO CONST2 BY CONST3 DO
+				TEMP4 := TEMP4 + TEMP3 * 2;
+			END_FOR;
+			
+			WHILE TEMP5 DO
+				TEMP5 := TRUE;
+			END_WHILE;
+			
+			REPEAT
+				TEMP6 := TRUE;
+			UNTIL TEMP6
+			END_REPEAT;
+			
+			CASE TEMP7 OF
+				CONST4:
+					TEMP7 := 1;
+			END_CASE;
+			
+			END_FUNCTION
+		'''.parse.assertNoIssues
 	}
 
 	@Test
