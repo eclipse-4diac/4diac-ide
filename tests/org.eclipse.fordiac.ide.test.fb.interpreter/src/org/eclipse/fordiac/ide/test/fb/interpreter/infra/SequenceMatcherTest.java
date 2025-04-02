@@ -26,7 +26,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.junit.Test;
 
 public class SequenceMatcherTest {
+
 	private static final String TEST_FB_NAME = "E_CTD"; //$NON-NLS-1$
+	private static final String TEST_FB_INPUT = "LD"; //$NON-NLS-1$
 
 	@SuppressWarnings("static-method")
 	@Test
@@ -35,7 +37,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LDO", "Q:=FALSE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT, "LDO", "Q:=FALSE;CV:=1")); //$NON-NLS-1$ //$NON-NLS-2$
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(result.isEmpty());
 	}
@@ -59,7 +61,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LDO", "Q:=TRUE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT, "LDO", "Q:=TRUE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(!result.isEmpty());
 	}
@@ -71,7 +73,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LDO", "Q:=1;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT, "LDO", "Q:=1;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(!result.isEmpty());
 	}
@@ -83,7 +85,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LDO", "Q:=0;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT, "LDO", "Q:=0;CV:=1")); //$NON-NLS-1$ //$NON-NLS-2$
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(result.isEmpty());
 	}
@@ -95,7 +97,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LDO", "Qq:=0;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT, "LDO", "Qq:=0;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(!result.isEmpty());
 	}
@@ -107,7 +109,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LDO", "Q:=BOOL#FALSE;CV:=UINT#0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT, "LDO", "Q:=BOOL#FALSE;CV:=UINT#1")); //$NON-NLS-1$ //$NON-NLS-2$
 		final Optional<String> res = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(res.isEmpty());
 	}
@@ -119,7 +121,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LDO", "Q:=BOOL#FALSE;CV:=INT#0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT, "LDO", "Q:=BOOL#FALSE;CV:=INT#0")); //$NON-NLS-1$ //$NON-NLS-2$
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(!result.isEmpty());
 	}
@@ -131,7 +133,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LDO", "Q:=BOOL#FALSE;CV:=BOOL#0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT, "LDO", "Q:=BOOL#FALSE;CV:=BOOL#0")); //$NON-NLS-1$ //$NON-NLS-2$
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(!result.isEmpty());
 	}
@@ -143,7 +145,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LD", "Q:=0;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT, "LD", "Q:=0;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(!result.isEmpty());
 	}
@@ -155,7 +157,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "CDO", "Q:=0;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT, "CDO", "Q:=0;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(!result.isEmpty());
 	}
@@ -167,7 +169,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LDO", "Q:=0; CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT, "LDO", "Q:=0; CV:=1")); //$NON-NLS-1$ //$NON-NLS-2$
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(result.isEmpty());
 	}
@@ -179,7 +181,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LDO", "Q:=0;CV:=0;")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT, "LDO", "Q:=0;CV:=1;")); //$NON-NLS-1$ //$NON-NLS-2$
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(result.isEmpty());
 	}
@@ -191,7 +193,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LDO", ";Q:=0;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT, "LDO", ";Q:=0;CV:=1")); //$NON-NLS-1$ //$NON-NLS-2$
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(result.isEmpty());
 	}
@@ -203,7 +205,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", List.of("LDO", "LDO"))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT, List.of("LDO", "LDO"))); //$NON-NLS-1$ //$NON-NLS-2$
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(!result.isEmpty());
 	}
@@ -215,7 +217,7 @@ public class SequenceMatcherTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder(TEST_FB_INPUT));
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(!result.isEmpty());
 	}
