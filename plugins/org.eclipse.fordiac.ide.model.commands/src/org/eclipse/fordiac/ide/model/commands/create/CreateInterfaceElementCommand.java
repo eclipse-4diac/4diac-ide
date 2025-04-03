@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -158,11 +159,13 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 			varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			varDecl.getValue().setValue(value);
 		}
-
 	}
 
 	private void finalizeCopyInterfaceElement() {
 		newInterfaceElement.setIsInput(isInput);
+		if (newInterfaceElement instanceof final Event event) {
+			event.getWith().clear();
+		}
 	}
 
 	private void createNewInterfaceElement() {
