@@ -56,14 +56,16 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 		final double begin = value2Double(interval.getV1());
 		final double end = value2Double(interval.getV2());
 
-		final boolean isOpen = interval.getB1().equals("]") || interval.getB2().equals("["); //$NON-NLS-1$ //$NON-NLS-2$
-
 		if (begin > end) { // e.g. [10, 5]
 			warning(Messages.EmptyIntervalWarning, ContractSpecPackage.Literals.INTERVAL__V1, EMPTY_INTERVAL);
-		} else if (begin == end && isOpen) { // e.g. ]10, 10] or [10, 10[ or ]10, 10[
-			warning(Messages.EmptyIntervalWarning, ContractSpecPackage.Literals.INTERVAL__V1, SPECIAL_EMPTY_INTERVAL);
-		} else if (begin == end && !isOpen) { // e.g. [10, 10]
-			warning(Messages.DegenerateIntervalWarning, ContractSpecPackage.Literals.INTERVAL__V1, DEGENERATE_INTERVAL);
+		} else if (begin == end) {
+			if (interval.getB1().equals("]") || interval.getB2().equals("[")) { //$NON-NLS-1$ //$NON-NLS-2$
+				warning(Messages.EmptyIntervalWarning, ContractSpecPackage.Literals.INTERVAL__V1,
+						SPECIAL_EMPTY_INTERVAL); // e.g. ]10, 10] or [10, 10[ or ]10, 10[
+			} else {
+				warning(Messages.DegenerateIntervalWarning, ContractSpecPackage.Literals.INTERVAL__V1,
+						DEGENERATE_INTERVAL); // e.g. [10, 10]
+			}
 		}
 	}
 
@@ -108,7 +110,7 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 	}
 
 	private void checkPortsOfSameType(final EventList list, final EStructuralFeature feature) {
-		if (list != null && list.getEvents() != null && list.getEvents().size() > 0) {
+		if (list != null && list.getEvents() != null && !list.getEvents().isEmpty()) {
 			final int firstType = list.getEvents().get(0).getPort().getIsInput();
 			checkPortsOfType(list.getEvents(), firstType, feature);
 		}

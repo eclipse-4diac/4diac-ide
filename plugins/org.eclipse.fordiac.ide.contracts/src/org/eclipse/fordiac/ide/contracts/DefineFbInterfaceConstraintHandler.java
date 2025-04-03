@@ -37,8 +37,8 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 
-	public static final String DEFAULT_TIME = "10"; //$NON-NLS-1$
-	private static final String DEFAULT_OFFSET = "0"; //$NON-NLS-1$
+	public static final String DEFAULT_TIME = "10ms"; //$NON-NLS-1$
+	private static final String DEFAULT_OFFSET = "0ms"; //$NON-NLS-1$
 	private static final int CANCEL = -1;
 
 	@Override
@@ -58,7 +58,7 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 
 		// error when no pins selected
 		final Shell shell = HandlerUtil.getActiveShell(event);
-		if (iPins.size() == 0 && oPins.size() == 0) {
+		if (iPins.isEmpty() && oPins.isEmpty()) {
 			MessageDialog.openError(shell, Messages.NoPinSelectedErrorDialog_Title,
 					Messages.NoPinSelectedErrorDialog_Info);
 			return Status.CANCEL_STATUS;
@@ -67,7 +67,7 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 		// create suggested contract templates based on selected pins
 		final List<String> names = new ArrayList<>();
 		final List<String> templates = new ArrayList<>();
-		final List<Event> pins = iPins.size() == 0 ? oPins : iPins;
+		final List<Event> pins = iPins.isEmpty() ? oPins : iPins;
 
 		if (iPins.size() == 1 && oPins.size() == 1) {
 			names.add(Messages.ContractRuleCausalReaction);
@@ -75,14 +75,14 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 
 			names.add(Messages.ContractRuleCausalAge);
 			templates.add(ContractUtils.createCausalAge(iPins.get(0), oPins.get(0), DEFAULT_TIME));
-		} else if (iPins.size() == 0 || oPins.size() == 0) {
+		} else if (iPins.isEmpty() || oPins.isEmpty()) {
 			names.add(Messages.ContractRuleSingleEvent);
 			templates.add(ContractUtils.createSingleEvent(pins, DEFAULT_TIME));
 
 			names.add(Messages.ContractRuleRepetition);
 			templates.add(ContractUtils.createRepetition(pins, DEFAULT_TIME, DEFAULT_OFFSET));
 		}
-		if (iPins.size() >= 1 && oPins.size() >= 1) {
+		if (!iPins.isEmpty() && !oPins.isEmpty()) {
 			names.add(Messages.ContractRuleReaction);
 			templates.add(ContractUtils.createReaction(iPins, oPins, DEFAULT_TIME));
 

@@ -173,11 +173,6 @@ public class ContractElementBuilder {
 		return this;
 	}
 
-	public ContractElementBuilder addMs() {
-		contractElement.append(ContractKeywords.UNIT_OF_TIME);
-		return this;
-	}
-
 	public ContractElementBuilder addWhenever() {
 		contractElement.append(ContractKeywords.WHENEVER);
 		contractElement.append(" "); //$NON-NLS-1$

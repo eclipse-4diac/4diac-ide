@@ -50,44 +50,44 @@ public final class ContractUtils {
 		return parts[posTime].length() - ContractKeywords.UNIT_OF_TIME.length();
 	}
 
-	public static String createSingleEvent(final List<Event> pins, final String time) {
+	public static String createSingleEvent(final List<Event> pins, final String timeExpr) {
 		final ContractElementBuilder cb = new ContractElementBuilder();
-		cb.addEventList(pins).addSpace().addOccurs().addWithin().add(time).addMs();
+		cb.addEventList(pins).addSpace().addOccurs().addWithin().add(timeExpr);
 		return cb.getString();
 	}
 
-	public static String createRepetition(final List<Event> pins, final String time, final String offset) {
+	public static String createRepetition(final List<Event> pins, final String timeExpr, final String offsetExpr) {
 		final ContractElementBuilder cb = new ContractElementBuilder();
-		cb.addEventList(pins).addSpace().addOccurs().addEvery().add(time).addMs();
-		cb.addSpace().addWith().addOffet().add(offset).addMs();
+		cb.addEventList(pins).addSpace().addOccurs().addEvery().add(timeExpr);
+		cb.addSpace().addWith().addOffet().add(offsetExpr);
 		return cb.getString();
 	}
 
-	public static String createReaction(final List<Event> iPins, final List<Event> oPins, final String time) {
+	public static String createReaction(final List<Event> iPins, final List<Event> oPins, final String timeExpr) {
 		final ContractElementBuilder cb = new ContractElementBuilder();
 		cb.addWhenever().addEventExpr(iPins).addOccurs().addThen();
-		cb.addEventExpr(oPins).addOccurs().addWithin().add(time).addMs();
+		cb.addEventExpr(oPins).addOccurs().addWithin().add(timeExpr);
 		return cb.getString();
 	}
 
-	public static String createAge(final List<Event> iPins, final List<Event> oPins, final String time) {
+	public static String createAge(final List<Event> iPins, final List<Event> oPins, final String timeExpr) {
 		final ContractElementBuilder cb = new ContractElementBuilder();
 		cb.addWhenever().addEventExpr(oPins).addOccurs().addThen();
-		cb.addEventExpr(iPins).addHasOccurred().addWithin().add(time).addMs();
+		cb.addEventExpr(iPins).addHasOccurred().addWithin().add(timeExpr);
 		return cb.getString();
 	}
 
-	public static String createCausalReaction(final Event iPin, final Event oPin, final String time) {
+	public static String createCausalReaction(final Event iPin, final Event oPin, final String timeExpr) {
 		final ContractElementBuilder cb = new ContractElementBuilder();
 		cb.addReaction().addEOpen().add(iPin.getName()).addComma().add(oPin.getName()).addEClose();
-		cb.addWithin().add(time).addMs();
+		cb.addWithin().add(timeExpr);
 		return cb.getString();
 	}
 
-	public static String createCausalAge(final Event iPin, final Event oPin, final String time) {
+	public static String createCausalAge(final Event iPin, final Event oPin, final String timeExpr) {
 		final ContractElementBuilder cb = new ContractElementBuilder();
 		cb.addAge().addEOpen().add(oPin.getName()).addComma().add(iPin.getName()).addEClose();
-		cb.addWithin().add(time).addMs();
+		cb.addWithin().add(timeExpr);
 		return cb.getString();
 	}
 

@@ -29,7 +29,7 @@ import org.eclipse.xtext.scoping.Scopes;
  */
 public class ContractSpecScopeProvider extends AbstractContractSpecScopeProvider {
 
-	public static URI interfaceURI;
+	private static URI interfaceURI;
 	private static final ContractSpecPackage pack = ContractSpecPackage.eINSTANCE;
 
 	@Override
@@ -43,5 +43,9 @@ public class ContractSpecScopeProvider extends AbstractContractSpecScopeProvider
 			}
 		}
 		return super.getScope(context, reference);
+	}
+
+	public static void setInterfaceURI(final URI uri) {
+		interfaceURI = uri;
 	}
 }
