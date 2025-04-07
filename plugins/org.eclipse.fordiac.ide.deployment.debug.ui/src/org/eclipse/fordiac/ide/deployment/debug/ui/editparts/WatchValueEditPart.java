@@ -51,7 +51,7 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 
 	public static final int MONITORING_VALUE_LR_MARGIN = 5;
 
-	private int maxWidth;
+	private int maxWidth = Integer.MAX_VALUE;
 
 	@Override
 	protected IFigure createFigure() {
@@ -86,11 +86,10 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 
 	@Override
 	public void activate() {
+		// initialize maxWidth before super.activate(), since that indirectly calls
+		// calculateSize() above, which in turn uses the maxWidth
+		initializeMaxWidth();
 		super.activate();
-		final int maxLabelSize = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
-				.getMaxValueLabelSize();
-		final FontMetrics fm = FigureUtilities.getFontMetrics(JFaceResources.getFontRegistry().get(DIAGRAM_FONT));
-		maxWidth = (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth()) + 2 * MONITORING_VALUE_LR_MARGIN;
 		showPinValues(false);
 	}
 
@@ -172,5 +171,12 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 
 	protected int getMaxWidth() {
 		return maxWidth;
+	}
+
+	private void initializeMaxWidth() {
+		final int maxLabelSize = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
+				.getMaxValueLabelSize();
+		final FontMetrics fm = FigureUtilities.getFontMetrics(JFaceResources.getFontRegistry().get(DIAGRAM_FONT));
+		maxWidth = (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth()) + 2 * MONITORING_VALUE_LR_MARGIN;
 	}
 }
