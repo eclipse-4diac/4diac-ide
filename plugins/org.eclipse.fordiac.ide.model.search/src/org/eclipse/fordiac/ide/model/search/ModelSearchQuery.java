@@ -384,7 +384,8 @@ public class ModelSearchQuery implements ISearchQuery {
 			final IModelMatcher matcher = new STMatcher(this::compareStrings);
 			final URI target = EcoreUtil.getURI(modelElement);
 			searchSupport.search(matcher).filter(TextMatch.class::isInstance).map(TextMatch.class::cast)
-					.map(match -> new TextMatch(target, match.getLine() + 1, match.getOffset(), match.getLength()))
+					.map(match -> new TextMatch(target, match.getLine() + 1, match.getOffset(), match.getLength(),
+							match.getType()))
 					.forEach(match -> searchResult.addFordiacMatch(match));
 			isIncompleteResult |= searchSupport.isIncompleteResult();
 		}
