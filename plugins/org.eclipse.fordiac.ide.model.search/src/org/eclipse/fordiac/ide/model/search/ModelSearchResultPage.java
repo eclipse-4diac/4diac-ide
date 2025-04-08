@@ -213,14 +213,17 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 			public String getText(final Object element) {
 				if (element instanceof TextAlgorithm || element instanceof TextMethod
 						|| element instanceof FunctionFBType) {
-					return Arrays.stream(contentProvider.getSearchResult().getMatches(element))
-							.map(match -> Integer.toString(match.getLength()))
+					return Arrays
+							.stream(contentProvider.getSearchResult()
+									.getFordiacMatches(EcoreUtil.getURI((EObject) element)))
+							.filter(TextMatch.class::isInstance).map(TextMatch.class::cast)
+							.map(match -> Integer.toString(match.getLine()))
 							.collect(Collectors.collectingAndThen(Collectors.joining(", "), //$NON-NLS-1$
 									result -> result.isEmpty() ? "" //$NON-NLS-1$
 											: (result.contains(", ") ? "Lines: " + result : "Line: " + result)));
 				}
 
-				final ModelSearchResult searchResult = (ModelSearchResult) contentProvider.getSearchResult();
+				final ModelSearchResult searchResult = contentProvider.getSearchResult();
 				return searchResult.getDictionary().hierarchicalName(element);
 			}
 		});

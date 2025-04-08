@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.model.search;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.search.ui.text.AbstractTextSearchResult;
 
 // Content provider supplies the data which should be displayed in the TableViewer
 public class ModelSearchTableContentProvider implements IStructuredContentProvider, IModelSearchContentProvider {
@@ -61,7 +60,7 @@ public class ModelSearchTableContentProvider implements IStructuredContentProvid
 		result = (ModelSearchResult) newInput;
 	}
 
-	AbstractTextSearchResult getSearchResult() {
+	ModelSearchResult getSearchResult() {
 		return result;
 	}
 }
