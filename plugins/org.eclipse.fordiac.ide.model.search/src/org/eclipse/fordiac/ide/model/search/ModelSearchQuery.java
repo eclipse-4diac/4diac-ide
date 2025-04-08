@@ -28,6 +28,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -61,7 +63,6 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;
-import org.eclipse.search.ui.text.Match;
 import org.eclipse.search2.internal.ui.SearchView;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
@@ -346,7 +347,7 @@ public class ModelSearchQuery implements ISearchQuery {
 			if (modelElement instanceof Algorithm || modelElement instanceof Method
 					|| modelElement instanceof FunctionFBType) {
 				addMatchesForSTOccurance(modelElement);
-				return searchResult.getMatchCount(modelElement) > 0;
+				return searchResult.hasFordiacMatch(EcoreUtil.getURI(modelElement));
 			}
 			if (modelElement instanceof final TypedConfigureableObject config) {
 				return compareStrings(config.getTypeName())
@@ -381,9 +382,10 @@ public class ModelSearchQuery implements ISearchQuery {
 
 		if (searchSupport != null) {
 			final IModelMatcher matcher = new STMatcher(this::compareStrings);
+			final URI target = EcoreUtil.getURI(modelElement);
 			searchSupport.search(matcher).filter(TextMatch.class::isInstance).map(TextMatch.class::cast)
-					.map(match -> new Match(modelElement, Match.UNIT_LINE, match.getOffset(), match.getLine() + 1))
-					.forEach(match -> searchResult.addMatch(match));
+					.map(match -> new TextMatch(target, match.getLine() + 1, match.getOffset(), match.getLength()))
+					.forEach(match -> searchResult.addFordiacMatch(match));
 			isIncompleteResult |= searchSupport.isIncompleteResult();
 		}
 	}
