@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -115,7 +116,6 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	public boolean outlineSelectionChanged(final Object selectedElement) {
-
 		final EditPart editPart = getEditPartForSelection(selectedElement);
 		if (null != editPart) {
 			getGraphicalViewer().select(editPart);
@@ -125,10 +125,9 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	EditPart getEditPartForSelection(final Object selectedElement) {
-
 		for (final Entry<Object, EditPart> entry : getGraphicalViewer().getEditPartRegistry().entrySet()) {
-			if (((entry.getKey() instanceof final FB fb) && (fb == selectedElement)) || //
-					((entry.getKey() instanceof final Connection con) && (con == selectedElement))) {
+			if (entry.getKey() == selectedElement && (entry.getKey() instanceof FB
+					|| entry.getKey() instanceof Connection || entry.getKey() instanceof IInterfaceElement)) {
 				return entry.getValue();
 			}
 		}
