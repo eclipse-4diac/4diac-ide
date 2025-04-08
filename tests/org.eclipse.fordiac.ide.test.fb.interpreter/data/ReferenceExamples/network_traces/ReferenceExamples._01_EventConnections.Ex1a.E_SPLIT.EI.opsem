@@ -1,25 +1,39 @@
 <?xml version="1.0" encoding="ASCII"?>
-<opsem:EventManager xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:libraryElement="org.eclipse.fordiac.ide.model.libraryElement" xmlns:opsem="http://OperationalSemantics/1.0">
+<opsem:EventManager xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:data="org.eclipse.fordiac.ide.model.datatype" xmlns:libraryElement="org.eclipse.fordiac.ide.model.libraryElement" xmlns:opsem="http://OperationalSemantics/1.0">
   <transactions xsi:type="opsem:FBTransaction">
     <inputEventOccurrence active="false">
       <event href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0/@interface/@eventInputs.0"/>
       <fbRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork>
           <networkElements xsi:type="libraryElement:FB" name="E_SPLIT">
-            <position x="14" y="6"/>
+            <position x="93.33333333333334" y="40.0"/>
             <interface>
-              <eventInputs name="EI" isInput="true"/>
-              <eventOutputs name="EO1" outputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0"/>
-              <eventOutputs name="EO2" outputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1"/>
+              <eventInputs name="EI" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventOutputs name="EO1" outputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
+              <eventOutputs name="EO2" outputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="E_REND">
-            <position x="167" y="6"/>
+            <position x="1113.3333333333335" y="40.0"/>
             <interface>
-              <eventInputs name="EI1" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0"/>
-              <eventInputs name="EI2" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1"/>
-              <eventInputs name="R" isInput="true"/>
-              <eventOutputs name="EO"/>
+              <eventInputs name="EI1" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventInputs name="EI2" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventInputs name="R" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventOutputs name="EO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
             </interface>
           </networkElements>
           <eventConnections source="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0" destination="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0">
@@ -30,24 +44,38 @@
           </eventConnections>
         </fbnetwork>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
       <resultFBRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork>
           <networkElements xsi:type="libraryElement:FB" name="E_SPLIT">
-            <position x="14" y="6"/>
+            <position x="93.33333333333334" y="40.0"/>
             <interface>
-              <eventInputs name="EI" isInput="true"/>
-              <eventOutputs name="EO1" outputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0"/>
-              <eventOutputs name="EO2" outputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1"/>
+              <eventInputs name="EI" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventOutputs name="EO1" outputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
+              <eventOutputs name="EO2" outputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="E_REND">
-            <position x="167" y="6"/>
+            <position x="1113.3333333333335" y="40.0"/>
             <interface>
-              <eventInputs name="EI1" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0"/>
-              <eventInputs name="EI2" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1"/>
-              <eventInputs name="R" isInput="true"/>
-              <eventOutputs name="EO"/>
+              <eventInputs name="EI1" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventInputs name="EI2" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventInputs name="R" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventOutputs name="EO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
             </interface>
           </networkElements>
           <eventConnections source="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0" destination="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0">
@@ -58,34 +86,41 @@
           </eventConnections>
         </fbnetwork>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
-          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
+          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="START">
             <basicfbtype name="E_SPLIT" comment="Template for an empty basic function block">
               <versionInfo author="Alois Zoitl" date="2017" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
               <identification classification="event function block" description="Copyright (c) 2017 fortiss GmbH &#xA;  &#xA;This program and the accompanying materials are made &#xA;available under the terms of the Eclipse Public License 2.0 &#xA;which is available at https://www.eclipse.org/legal/epl-2.0/ &#xA; &#xA;SPDX-License-Identifier: EPL-2.0" function="Split one event into two events" standard="61499-1 Annex A"/>
               <interfaceList>
-                <eventInputs name="EI" isInput="true"/>
-                <eventOutputs name="EO1"/>
-                <eventOutputs name="EO2"/>
+                <eventInputs name="EI" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
+                <eventOutputs name="EO1">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventOutputs>
+                <eventOutputs name="EO2">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventOutputs>
               </interfaceList>
               <service/>
-              <internalVars name="Sx" typeName="BOOL" arraySize="-1">
+              <internalVars name="Sx">
+                <type xsi:type="data:BoolType" href="data.lib#/12"/>
                 <value value="FALSE"/>
               </internalVars>
               <eCC start="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
                 <eCState name="START" comment="Initial State" outTransitions="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.0" inTransitions="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.1">
-                  <position x="82" y="63"/>
+                  <position x="546.6666666666667" y="420.0"/>
                 </eCState>
                 <eCState name="SE" comment="&quot;&quot;" outTransitions="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.0">
-                  <position x="263" y="42"/>
+                  <position x="1753.3333333333335" y="280.0"/>
                   <eCAction output="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.0"/>
                   <eCAction output="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.1"/>
                 </eCState>
                 <eCTransition conditionExpression="" source="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventInputs.0">
-                  <position x="190" y="59"/>
+                  <position x="1266.6666666666667" y="393.33333333333337"/>
                 </eCTransition>
                 <eCTransition source="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
-                  <position x="189" y="90"/>
+                  <position x="1260.0" y="600.0"/>
                 </eCTransition>
               </eCC>
             </basicfbtype>
@@ -94,72 +129,86 @@
       </resultFBRuntime>
     </inputEventOccurrence>
     <outputEventOccurrences event="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.0" createdTransactions="//@transactions.1">
-      <fbRuntime xsi:type="opsem:BasicFBTypeRuntime">
+      <fbRuntime xsi:type="opsem:BasicFBTypeRuntime" activeState="SE">
         <basicfbtype name="E_SPLIT" comment="Template for an empty basic function block">
           <versionInfo author="Alois Zoitl" date="2017" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
           <identification classification="event function block" description="Copyright (c) 2017 fortiss GmbH &#xA;  &#xA;This program and the accompanying materials are made &#xA;available under the terms of the Eclipse Public License 2.0 &#xA;which is available at https://www.eclipse.org/legal/epl-2.0/ &#xA; &#xA;SPDX-License-Identifier: EPL-2.0" function="Split one event into two events" standard="61499-1 Annex A"/>
           <interfaceList>
-            <eventInputs name="EI" isInput="true"/>
-            <eventOutputs name="EO1"/>
-            <eventOutputs name="EO2"/>
+            <eventInputs name="EI" isInput="true">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+            </eventInputs>
+            <eventOutputs name="EO1">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+            </eventOutputs>
+            <eventOutputs name="EO2">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+            </eventOutputs>
           </interfaceList>
           <service/>
-          <internalVars name="Sx" typeName="BOOL" arraySize="-1">
+          <internalVars name="Sx">
+            <type xsi:type="data:BoolType" href="data.lib#/12"/>
             <value value="FALSE"/>
           </internalVars>
           <eCC start="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.0">
             <eCState name="START" comment="Initial State" outTransitions="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.0" inTransitions="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.1">
-              <position x="82" y="63"/>
+              <position x="546.6666666666667" y="420.0"/>
             </eCState>
             <eCState name="SE" comment="&quot;&quot;" outTransitions="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.0">
-              <position x="263" y="42"/>
+              <position x="1753.3333333333335" y="280.0"/>
               <eCAction output="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.0"/>
               <eCAction output="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.1"/>
             </eCState>
             <eCTransition conditionExpression="" source="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventInputs.0">
-              <position x="190" y="59"/>
+              <position x="1266.6666666666667" y="393.33333333333337"/>
             </eCTransition>
             <eCTransition source="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.0">
-              <position x="189" y="90"/>
+              <position x="1260.0" y="600.0"/>
             </eCTransition>
           </eCC>
         </basicfbtype>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
     </outputEventOccurrences>
     <outputEventOccurrences event="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.1" createdTransactions="//@transactions.2">
-      <fbRuntime xsi:type="opsem:BasicFBTypeRuntime">
+      <fbRuntime xsi:type="opsem:BasicFBTypeRuntime" activeState="SE">
         <basicfbtype name="E_SPLIT" comment="Template for an empty basic function block">
           <versionInfo author="Alois Zoitl" date="2017" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
           <identification classification="event function block" description="Copyright (c) 2017 fortiss GmbH &#xA;  &#xA;This program and the accompanying materials are made &#xA;available under the terms of the Eclipse Public License 2.0 &#xA;which is available at https://www.eclipse.org/legal/epl-2.0/ &#xA; &#xA;SPDX-License-Identifier: EPL-2.0" function="Split one event into two events" standard="61499-1 Annex A"/>
           <interfaceList>
-            <eventInputs name="EI" isInput="true"/>
-            <eventOutputs name="EO1"/>
-            <eventOutputs name="EO2"/>
+            <eventInputs name="EI" isInput="true">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+            </eventInputs>
+            <eventOutputs name="EO1">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+            </eventOutputs>
+            <eventOutputs name="EO2">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+            </eventOutputs>
           </interfaceList>
           <service/>
-          <internalVars name="Sx" typeName="BOOL" arraySize="-1">
+          <internalVars name="Sx">
+            <type xsi:type="data:BoolType" href="data.lib#/12"/>
             <value value="FALSE"/>
           </internalVars>
           <eCC start="//@transactions.0/@outputEventOccurrences.1/@fbRuntime/@basicfbtype/@eCC/@eCState.0">
             <eCState name="START" comment="Initial State" outTransitions="//@transactions.0/@outputEventOccurrences.1/@fbRuntime/@basicfbtype/@eCC/@eCTransition.0" inTransitions="//@transactions.0/@outputEventOccurrences.1/@fbRuntime/@basicfbtype/@eCC/@eCTransition.1">
-              <position x="82" y="63"/>
+              <position x="546.6666666666667" y="420.0"/>
             </eCState>
             <eCState name="SE" comment="&quot;&quot;" outTransitions="//@transactions.0/@outputEventOccurrences.1/@fbRuntime/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.0/@outputEventOccurrences.1/@fbRuntime/@basicfbtype/@eCC/@eCTransition.0">
-              <position x="263" y="42"/>
+              <position x="1753.3333333333335" y="280.0"/>
               <eCAction output="//@transactions.0/@outputEventOccurrences.1/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.0"/>
               <eCAction output="//@transactions.0/@outputEventOccurrences.1/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.1"/>
             </eCState>
             <eCTransition conditionExpression="" source="//@transactions.0/@outputEventOccurrences.1/@fbRuntime/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.0/@outputEventOccurrences.1/@fbRuntime/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.0/@outputEventOccurrences.1/@fbRuntime/@basicfbtype/@interfaceList/@eventInputs.0">
-              <position x="190" y="59"/>
+              <position x="1266.6666666666667" y="393.33333333333337"/>
             </eCTransition>
             <eCTransition source="//@transactions.0/@outputEventOccurrences.1/@fbRuntime/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.0/@outputEventOccurrences.1/@fbRuntime/@basicfbtype/@eCC/@eCState.0">
-              <position x="189" y="90"/>
+              <position x="1260.0" y="600.0"/>
             </eCTransition>
           </eCC>
         </basicfbtype>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
     </outputEventOccurrences>
   </transactions>
   <transactions xsi:type="opsem:FBTransaction" parentEO="//@transactions.0/@outputEventOccurrences.0">
@@ -168,20 +217,34 @@
       <fbRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork>
           <networkElements xsi:type="libraryElement:FB" name="E_SPLIT">
-            <position x="14" y="6"/>
+            <position x="93.33333333333334" y="40.0"/>
             <interface>
-              <eventInputs name="EI" isInput="true"/>
-              <eventOutputs name="EO1" outputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0"/>
-              <eventOutputs name="EO2" outputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1"/>
+              <eventInputs name="EI" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventOutputs name="EO1" outputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
+              <eventOutputs name="EO2" outputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="E_REND">
-            <position x="167" y="6"/>
+            <position x="1113.3333333333335" y="40.0"/>
             <interface>
-              <eventInputs name="EI1" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0"/>
-              <eventInputs name="EI2" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1"/>
-              <eventInputs name="R" isInput="true"/>
-              <eventOutputs name="EO"/>
+              <eventInputs name="EI1" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventInputs name="EI2" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventInputs name="R" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventOutputs name="EO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
             </interface>
           </networkElements>
           <eventConnections source="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0" destination="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0">
@@ -192,58 +255,79 @@
           </eventConnections>
         </fbnetwork>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
-          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
+          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="START">
             <basicfbtype name="E_SPLIT" comment="Template for an empty basic function block">
               <versionInfo author="Alois Zoitl" date="2017" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
               <identification classification="event function block" description="Copyright (c) 2017 fortiss GmbH &#xA;  &#xA;This program and the accompanying materials are made &#xA;available under the terms of the Eclipse Public License 2.0 &#xA;which is available at https://www.eclipse.org/legal/epl-2.0/ &#xA; &#xA;SPDX-License-Identifier: EPL-2.0" function="Split one event into two events" standard="61499-1 Annex A"/>
               <interfaceList>
-                <eventInputs name="EI" isInput="true"/>
-                <eventOutputs name="EO1"/>
-                <eventOutputs name="EO2"/>
+                <eventInputs name="EI" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
+                <eventOutputs name="EO1">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventOutputs>
+                <eventOutputs name="EO2">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventOutputs>
               </interfaceList>
               <service/>
-              <internalVars name="Sx" typeName="BOOL" arraySize="-1">
+              <internalVars name="Sx">
+                <type xsi:type="data:BoolType" href="data.lib#/12"/>
                 <value value="FALSE"/>
               </internalVars>
               <eCC start="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
                 <eCState name="START" comment="Initial State" outTransitions="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.0" inTransitions="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.1">
-                  <position x="82" y="63"/>
+                  <position x="546.6666666666667" y="420.0"/>
                 </eCState>
                 <eCState name="SE" comment="&quot;&quot;" outTransitions="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.0">
-                  <position x="263" y="42"/>
+                  <position x="1753.3333333333335" y="280.0"/>
                   <eCAction output="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.0"/>
                   <eCAction output="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.1"/>
                 </eCState>
                 <eCTransition conditionExpression="" source="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventInputs.0">
-                  <position x="190" y="59"/>
+                  <position x="1266.6666666666667" y="393.33333333333337"/>
                 </eCTransition>
                 <eCTransition source="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
-                  <position x="189" y="90"/>
+                  <position x="1260.0" y="600.0"/>
                 </eCTransition>
               </eCC>
             </basicfbtype>
           </value>
         </typeRuntimes>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.1"/>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.1"/>
       <resultFBRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork>
           <networkElements xsi:type="libraryElement:FB" name="E_SPLIT">
-            <position x="14" y="6"/>
+            <position x="93.33333333333334" y="40.0"/>
             <interface>
-              <eventInputs name="EI" isInput="true"/>
-              <eventOutputs name="EO1" outputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0"/>
-              <eventOutputs name="EO2" outputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1"/>
+              <eventInputs name="EI" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventOutputs name="EO1" outputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
+              <eventOutputs name="EO2" outputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="E_REND">
-            <position x="167" y="6"/>
+            <position x="1113.3333333333335" y="40.0"/>
             <interface>
-              <eventInputs name="EI1" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0"/>
-              <eventInputs name="EI2" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1"/>
-              <eventInputs name="R" isInput="true"/>
-              <eventOutputs name="EO"/>
+              <eventInputs name="EI1" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventInputs name="EI2" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventInputs name="R" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventOutputs name="EO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
             </interface>
           </networkElements>
           <eventConnections source="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0" destination="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0">
@@ -254,86 +338,101 @@
           </eventConnections>
         </fbnetwork>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
-          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
+          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="START">
             <basicfbtype name="E_SPLIT" comment="Template for an empty basic function block">
               <versionInfo author="Alois Zoitl" date="2017" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
               <identification classification="event function block" description="Copyright (c) 2017 fortiss GmbH &#xA;  &#xA;This program and the accompanying materials are made &#xA;available under the terms of the Eclipse Public License 2.0 &#xA;which is available at https://www.eclipse.org/legal/epl-2.0/ &#xA; &#xA;SPDX-License-Identifier: EPL-2.0" function="Split one event into two events" standard="61499-1 Annex A"/>
               <interfaceList>
-                <eventInputs name="EI" isInput="true"/>
-                <eventOutputs name="EO1"/>
-                <eventOutputs name="EO2"/>
+                <eventInputs name="EI" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
+                <eventOutputs name="EO1">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventOutputs>
+                <eventOutputs name="EO2">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventOutputs>
               </interfaceList>
               <service/>
-              <internalVars name="Sx" typeName="BOOL" arraySize="-1">
+              <internalVars name="Sx">
+                <type xsi:type="data:BoolType" href="data.lib#/12"/>
                 <value value="FALSE"/>
               </internalVars>
               <eCC start="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
                 <eCState name="START" comment="Initial State" outTransitions="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.0" inTransitions="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.1">
-                  <position x="82" y="63"/>
+                  <position x="546.6666666666667" y="420.0"/>
                 </eCState>
                 <eCState name="SE" comment="&quot;&quot;" outTransitions="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.0">
-                  <position x="263" y="42"/>
+                  <position x="1753.3333333333335" y="280.0"/>
                   <eCAction output="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.0"/>
                   <eCAction output="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.1"/>
                 </eCState>
                 <eCTransition conditionExpression="" source="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventInputs.0">
-                  <position x="190" y="59"/>
+                  <position x="1266.6666666666667" y="393.33333333333337"/>
                 </eCTransition>
                 <eCTransition source="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
-                  <position x="189" y="90"/>
+                  <position x="1260.0" y="600.0"/>
                 </eCTransition>
               </eCC>
             </basicfbtype>
           </value>
         </typeRuntimes>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.1"/>
-          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.1">
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.1"/>
+          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="EI1">
             <basicfbtype name="E_REND" comment="Rendezvous (AND) of two events">
               <versionInfo author="Alois Zoitl" date="2017-09-20" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
               <identification description="Copyright (c) 2017 fortiss GmbH&#xD;&#xA; &#xD;&#xA;This program and the accompanying materials are made&#xD;&#xA;available under the terms of the Eclipse Public License 2.0&#xD;&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xD;&#xA;&#xD;&#xA;SPDX-License-Identifier: EPL-2.0" standard="61499-1 Annex A"/>
               <interfaceList>
-                <eventInputs name="EI1" comment="first event to wait for" isInput="true"/>
-                <eventInputs name="EI2" comment="second event to wait for" isInput="true"/>
-                <eventInputs name="R" comment="reset the FB to inital state (i.e., wait again for both events)" isInput="true"/>
-                <eventOutputs name="EO" comment="triggered when both EI1 and EI2 occured at least once"/>
+                <eventInputs name="EI1" comment="first event to wait for" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
+                <eventInputs name="EI2" comment="second event to wait for" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
+                <eventInputs name="R" comment="reset the FB to inital state (i.e., wait again for both events)" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
+                <eventOutputs name="EO" comment="triggered when both EI1 and EI2 occured at least once">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventOutputs>
               </interfaceList>
               <service/>
               <eCC start="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0">
                 <eCState name="START" comment="Initial State" outTransitions="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.0 //@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.2 //@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.3 //@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.6">
-                  <position x="60" y="150"/>
+                  <position x="400.0" y="1000.0"/>
                 </eCState>
                 <eCState name="EI1" comment="EI1 occured at least once" outTransitions="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.3 //@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.4" inTransitions="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.1">
-                  <position x="173" y="51"/>
+                  <position x="1155.0" y="340.0"/>
                 </eCState>
                 <eCState name="EO" comment="Both input events occured at least once send output event" outTransitions="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.6" inTransitions="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.4 //@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.5">
-                  <position x="252" y="151"/>
+                  <position x="1685.0" y="1010.0"/>
                   <eCAction output="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventOutputs.0"/>
                 </eCState>
                 <eCState name="EI2" comment="EI2 occured at least once" outTransitions="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.2 //@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.5" inTransitions="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.0">
-                  <position x="171" y="237"/>
+                  <position x="1145.0" y="1585.0"/>
                 </eCState>
                 <eCTransition conditionExpression="" source="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.3" conditionEvent="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.1">
-                  <position x="153" y="177"/>
+                  <position x="1020.0" y="1180.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.0">
-                  <position x="156" y="129"/>
+                  <position x="1040.0" y="865.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.3" destination="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0" conditionEvent="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.2">
-                  <position x="98" y="222"/>
+                  <position x="655.0" y="1485.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0" conditionEvent="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.2">
-                  <position x="120" y="104"/>
+                  <position x="800.0" y="695.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.2" conditionEvent="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.1">
-                  <position x="219" y="105"/>
+                  <position x="1465.0" y="705.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.3" destination="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.2" conditionEvent="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.0">
-                  <position x="216" y="198"/>
+                  <position x="1440.0" y="1325.0"/>
                 </eCTransition>
                 <eCTransition source="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.2" destination="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0">
-                  <position x="174" y="159"/>
+                  <position x="1165.0" y="1065.0"/>
                 </eCTransition>
               </eCC>
             </basicfbtype>
@@ -348,20 +447,34 @@
       <fbRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork>
           <networkElements xsi:type="libraryElement:FB" name="E_SPLIT">
-            <position x="14" y="6"/>
+            <position x="93.33333333333334" y="40.0"/>
             <interface>
-              <eventInputs name="EI" isInput="true"/>
-              <eventOutputs name="EO1" outputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0"/>
-              <eventOutputs name="EO2" outputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1"/>
+              <eventInputs name="EI" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventOutputs name="EO1" outputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
+              <eventOutputs name="EO2" outputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="E_REND">
-            <position x="167" y="6"/>
+            <position x="1113.3333333333335" y="40.0"/>
             <interface>
-              <eventInputs name="EI1" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0"/>
-              <eventInputs name="EI2" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1"/>
-              <eventInputs name="R" isInput="true"/>
-              <eventOutputs name="EO"/>
+              <eventInputs name="EI1" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventInputs name="EI2" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventInputs name="R" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventOutputs name="EO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
             </interface>
           </networkElements>
           <eventConnections source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0">
@@ -372,110 +485,139 @@
           </eventConnections>
         </fbnetwork>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
-          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
+          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="START">
             <basicfbtype name="E_SPLIT" comment="Template for an empty basic function block">
               <versionInfo author="Alois Zoitl" date="2017" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
               <identification classification="event function block" description="Copyright (c) 2017 fortiss GmbH &#xA;  &#xA;This program and the accompanying materials are made &#xA;available under the terms of the Eclipse Public License 2.0 &#xA;which is available at https://www.eclipse.org/legal/epl-2.0/ &#xA; &#xA;SPDX-License-Identifier: EPL-2.0" function="Split one event into two events" standard="61499-1 Annex A"/>
               <interfaceList>
-                <eventInputs name="EI" isInput="true"/>
-                <eventOutputs name="EO1"/>
-                <eventOutputs name="EO2"/>
+                <eventInputs name="EI" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
+                <eventOutputs name="EO1">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventOutputs>
+                <eventOutputs name="EO2">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventOutputs>
               </interfaceList>
               <service/>
-              <internalVars name="Sx" typeName="BOOL" arraySize="-1">
+              <internalVars name="Sx">
+                <type xsi:type="data:BoolType" href="data.lib#/12"/>
                 <value value="FALSE"/>
               </internalVars>
               <eCC start="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
                 <eCState name="START" comment="Initial State" outTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.0" inTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.1">
-                  <position x="82" y="63"/>
+                  <position x="546.6666666666667" y="420.0"/>
                 </eCState>
                 <eCState name="SE" comment="&quot;&quot;" outTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.0">
-                  <position x="263" y="42"/>
+                  <position x="1753.3333333333335" y="280.0"/>
                   <eCAction output="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.0"/>
                   <eCAction output="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.1"/>
                 </eCState>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventInputs.0">
-                  <position x="190" y="59"/>
+                  <position x="1266.6666666666667" y="393.33333333333337"/>
                 </eCTransition>
                 <eCTransition source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
-                  <position x="189" y="90"/>
+                  <position x="1260.0" y="600.0"/>
                 </eCTransition>
               </eCC>
             </basicfbtype>
           </value>
         </typeRuntimes>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.1"/>
-          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.1">
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.1"/>
+          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="EI1">
             <basicfbtype name="E_REND" comment="Rendezvous (AND) of two events">
               <versionInfo author="Alois Zoitl" date="2017-09-20" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
               <identification description="Copyright (c) 2017 fortiss GmbH&#xD;&#xA; &#xD;&#xA;This program and the accompanying materials are made&#xD;&#xA;available under the terms of the Eclipse Public License 2.0&#xD;&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xD;&#xA;&#xD;&#xA;SPDX-License-Identifier: EPL-2.0" standard="61499-1 Annex A"/>
               <interfaceList>
-                <eventInputs name="EI1" comment="first event to wait for" isInput="true"/>
-                <eventInputs name="EI2" comment="second event to wait for" isInput="true"/>
-                <eventInputs name="R" comment="reset the FB to inital state (i.e., wait again for both events)" isInput="true"/>
-                <eventOutputs name="EO" comment="triggered when both EI1 and EI2 occured at least once"/>
+                <eventInputs name="EI1" comment="first event to wait for" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
+                <eventInputs name="EI2" comment="second event to wait for" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
+                <eventInputs name="R" comment="reset the FB to inital state (i.e., wait again for both events)" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
+                <eventOutputs name="EO" comment="triggered when both EI1 and EI2 occured at least once">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventOutputs>
               </interfaceList>
               <service/>
               <eCC start="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0">
                 <eCState name="START" comment="Initial State" outTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.0 //@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.2 //@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.3 //@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.6">
-                  <position x="60" y="150"/>
+                  <position x="400.0" y="1000.0"/>
                 </eCState>
                 <eCState name="EI1" comment="EI1 occured at least once" outTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.3 //@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.4" inTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.1">
-                  <position x="173" y="51"/>
+                  <position x="1155.0" y="340.0"/>
                 </eCState>
                 <eCState name="EO" comment="Both input events occured at least once send output event" outTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.6" inTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.4 //@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.5">
-                  <position x="252" y="151"/>
+                  <position x="1685.0" y="1010.0"/>
                   <eCAction output="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventOutputs.0"/>
                 </eCState>
                 <eCState name="EI2" comment="EI2 occured at least once" outTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.2 //@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.5" inTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.0">
-                  <position x="171" y="237"/>
+                  <position x="1145.0" y="1585.0"/>
                 </eCState>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.3" conditionEvent="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.1">
-                  <position x="153" y="177"/>
+                  <position x="1020.0" y="1180.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.0">
-                  <position x="156" y="129"/>
+                  <position x="1040.0" y="865.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.3" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0" conditionEvent="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.2">
-                  <position x="98" y="222"/>
+                  <position x="655.0" y="1485.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0" conditionEvent="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.2">
-                  <position x="120" y="104"/>
+                  <position x="800.0" y="695.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.2" conditionEvent="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.1">
-                  <position x="219" y="105"/>
+                  <position x="1465.0" y="705.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.3" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.2" conditionEvent="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.0">
-                  <position x="216" y="198"/>
+                  <position x="1440.0" y="1325.0"/>
                 </eCTransition>
                 <eCTransition source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.2" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0">
-                  <position x="174" y="159"/>
+                  <position x="1165.0" y="1065.0"/>
                 </eCTransition>
               </eCC>
             </basicfbtype>
           </value>
         </typeRuntimes>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.1"/>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.1"/>
       <resultFBRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork>
           <networkElements xsi:type="libraryElement:FB" name="E_SPLIT">
-            <position x="14" y="6"/>
+            <position x="93.33333333333334" y="40.0"/>
             <interface>
-              <eventInputs name="EI" isInput="true"/>
-              <eventOutputs name="EO1" outputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0"/>
-              <eventOutputs name="EO2" outputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1"/>
+              <eventInputs name="EI" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventOutputs name="EO1" outputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
+              <eventOutputs name="EO2" outputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="E_REND">
-            <position x="167" y="6"/>
+            <position x="1113.3333333333335" y="40.0"/>
             <interface>
-              <eventInputs name="EI1" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0"/>
-              <eventInputs name="EI2" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1"/>
-              <eventInputs name="R" isInput="true"/>
-              <eventOutputs name="EO"/>
+              <eventInputs name="EI1" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventInputs name="EI2" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventInputs name="R" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
+              <eventOutputs name="EO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
             </interface>
           </networkElements>
           <eventConnections source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0">
@@ -486,86 +628,101 @@
           </eventConnections>
         </fbnetwork>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
-          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.0"/>
+          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="START">
             <basicfbtype name="E_SPLIT" comment="Template for an empty basic function block">
               <versionInfo author="Alois Zoitl" date="2017" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
               <identification classification="event function block" description="Copyright (c) 2017 fortiss GmbH &#xA;  &#xA;This program and the accompanying materials are made &#xA;available under the terms of the Eclipse Public License 2.0 &#xA;which is available at https://www.eclipse.org/legal/epl-2.0/ &#xA; &#xA;SPDX-License-Identifier: EPL-2.0" function="Split one event into two events" standard="61499-1 Annex A"/>
               <interfaceList>
-                <eventInputs name="EI" isInput="true"/>
-                <eventOutputs name="EO1"/>
-                <eventOutputs name="EO2"/>
+                <eventInputs name="EI" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
+                <eventOutputs name="EO1">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventOutputs>
+                <eventOutputs name="EO2">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventOutputs>
               </interfaceList>
               <service/>
-              <internalVars name="Sx" typeName="BOOL" arraySize="-1">
+              <internalVars name="Sx">
+                <type xsi:type="data:BoolType" href="data.lib#/12"/>
                 <value value="FALSE"/>
               </internalVars>
               <eCC start="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
                 <eCState name="START" comment="Initial State" outTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.0" inTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.1">
-                  <position x="82" y="63"/>
+                  <position x="546.6666666666667" y="420.0"/>
                 </eCState>
                 <eCState name="SE" comment="&quot;&quot;" outTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.0">
-                  <position x="263" y="42"/>
+                  <position x="1753.3333333333335" y="280.0"/>
                   <eCAction output="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.0"/>
                   <eCAction output="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.1"/>
                 </eCState>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventInputs.0">
-                  <position x="190" y="59"/>
+                  <position x="1266.6666666666667" y="393.33333333333337"/>
                 </eCTransition>
                 <eCTransition source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
-                  <position x="189" y="90"/>
+                  <position x="1260.0" y="600.0"/>
                 </eCTransition>
               </eCC>
             </basicfbtype>
           </value>
         </typeRuntimes>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.1"/>
-          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0">
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.1"/>
+          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="START">
             <basicfbtype name="E_REND" comment="Rendezvous (AND) of two events">
               <versionInfo author="Alois Zoitl" date="2017-09-20" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
               <identification description="Copyright (c) 2017 fortiss GmbH&#xD;&#xA; &#xD;&#xA;This program and the accompanying materials are made&#xD;&#xA;available under the terms of the Eclipse Public License 2.0&#xD;&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xD;&#xA;&#xD;&#xA;SPDX-License-Identifier: EPL-2.0" standard="61499-1 Annex A"/>
               <interfaceList>
-                <eventInputs name="EI1" comment="first event to wait for" isInput="true"/>
-                <eventInputs name="EI2" comment="second event to wait for" isInput="true"/>
-                <eventInputs name="R" comment="reset the FB to inital state (i.e., wait again for both events)" isInput="true"/>
-                <eventOutputs name="EO" comment="triggered when both EI1 and EI2 occured at least once"/>
+                <eventInputs name="EI1" comment="first event to wait for" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
+                <eventInputs name="EI2" comment="second event to wait for" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
+                <eventInputs name="R" comment="reset the FB to inital state (i.e., wait again for both events)" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
+                <eventOutputs name="EO" comment="triggered when both EI1 and EI2 occured at least once">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventOutputs>
               </interfaceList>
               <service/>
               <eCC start="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0">
                 <eCState name="START" comment="Initial State" outTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.0 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.2 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.3 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.6">
-                  <position x="60" y="150"/>
+                  <position x="400.0" y="1000.0"/>
                 </eCState>
                 <eCState name="EI1" comment="EI1 occured at least once" outTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.3 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.4" inTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.1">
-                  <position x="173" y="51"/>
+                  <position x="1155.0" y="340.0"/>
                 </eCState>
                 <eCState name="EO" comment="Both input events occured at least once send output event" outTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.6" inTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.4 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.5">
-                  <position x="252" y="151"/>
+                  <position x="1685.0" y="1010.0"/>
                   <eCAction output="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventOutputs.0"/>
                 </eCState>
                 <eCState name="EI2" comment="EI2 occured at least once" outTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.2 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.5" inTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCTransition.0">
-                  <position x="171" y="237"/>
+                  <position x="1145.0" y="1585.0"/>
                 </eCState>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.3" conditionEvent="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.1">
-                  <position x="153" y="177"/>
+                  <position x="1020.0" y="1180.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.0">
-                  <position x="156" y="129"/>
+                  <position x="1040.0" y="865.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.3" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0" conditionEvent="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.2">
-                  <position x="98" y="222"/>
+                  <position x="655.0" y="1485.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0" conditionEvent="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.2">
-                  <position x="120" y="104"/>
+                  <position x="800.0" y="695.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.2" conditionEvent="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.1">
-                  <position x="219" y="105"/>
+                  <position x="1465.0" y="705.0"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.3" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.2" conditionEvent="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventInputs.0">
-                  <position x="216" y="198"/>
+                  <position x="1440.0" y="1325.0"/>
                 </eCTransition>
                 <eCTransition source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.2" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@eCC/@eCState.0">
-                  <position x="174" y="159"/>
+                  <position x="1165.0" y="1065.0"/>
                 </eCTransition>
               </eCC>
             </basicfbtype>
@@ -574,56 +731,64 @@
       </resultFBRuntime>
     </inputEventOccurrence>
     <outputEventOccurrences event="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@basicfbtype/@interfaceList/@eventOutputs.0">
-      <fbRuntime xsi:type="opsem:BasicFBTypeRuntime">
+      <fbRuntime xsi:type="opsem:BasicFBTypeRuntime" activeState="EO">
         <basicfbtype name="E_REND" comment="Rendezvous (AND) of two events">
           <versionInfo author="Alois Zoitl" date="2017-09-20" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
           <identification description="Copyright (c) 2017 fortiss GmbH&#xD;&#xA; &#xD;&#xA;This program and the accompanying materials are made&#xD;&#xA;available under the terms of the Eclipse Public License 2.0&#xD;&#xA;which is available at https://www.eclipse.org/legal/epl-2.0/&#xD;&#xA;&#xD;&#xA;SPDX-License-Identifier: EPL-2.0" standard="61499-1 Annex A"/>
           <interfaceList>
-            <eventInputs name="EI1" comment="first event to wait for" isInput="true"/>
-            <eventInputs name="EI2" comment="second event to wait for" isInput="true"/>
-            <eventInputs name="R" comment="reset the FB to inital state (i.e., wait again for both events)" isInput="true"/>
-            <eventOutputs name="EO" comment="triggered when both EI1 and EI2 occured at least once"/>
+            <eventInputs name="EI1" comment="first event to wait for" isInput="true">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+            </eventInputs>
+            <eventInputs name="EI2" comment="second event to wait for" isInput="true">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+            </eventInputs>
+            <eventInputs name="R" comment="reset the FB to inital state (i.e., wait again for both events)" isInput="true">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+            </eventInputs>
+            <eventOutputs name="EO" comment="triggered when both EI1 and EI2 occured at least once">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+            </eventOutputs>
           </interfaceList>
           <service/>
           <eCC start="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.0">
             <eCState name="START" comment="Initial State" outTransitions="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.0 //@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.2 //@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.3 //@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.6">
-              <position x="60" y="150"/>
+              <position x="400.0" y="1000.0"/>
             </eCState>
             <eCState name="EI1" comment="EI1 occured at least once" outTransitions="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.3 //@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.4" inTransitions="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.1">
-              <position x="173" y="51"/>
+              <position x="1155.0" y="340.0"/>
             </eCState>
             <eCState name="EO" comment="Both input events occured at least once send output event" outTransitions="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.6" inTransitions="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.4 //@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.5">
-              <position x="252" y="151"/>
+              <position x="1685.0" y="1010.0"/>
               <eCAction output="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.0"/>
             </eCState>
             <eCState name="EI2" comment="EI2 occured at least once" outTransitions="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.2 //@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.5" inTransitions="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.0">
-              <position x="171" y="237"/>
+              <position x="1145.0" y="1585.0"/>
             </eCState>
             <eCTransition conditionExpression="" source="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.3" conditionEvent="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventInputs.1">
-              <position x="153" y="177"/>
+              <position x="1020.0" y="1180.0"/>
             </eCTransition>
             <eCTransition conditionExpression="" source="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventInputs.0">
-              <position x="156" y="129"/>
+              <position x="1040.0" y="865.0"/>
             </eCTransition>
             <eCTransition conditionExpression="" source="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.3" destination="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.0" conditionEvent="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventInputs.2">
-              <position x="98" y="222"/>
+              <position x="655.0" y="1485.0"/>
             </eCTransition>
             <eCTransition conditionExpression="" source="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.0" conditionEvent="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventInputs.2">
-              <position x="120" y="104"/>
+              <position x="800.0" y="695.0"/>
             </eCTransition>
             <eCTransition conditionExpression="" source="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.2" conditionEvent="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventInputs.1">
-              <position x="219" y="105"/>
+              <position x="1465.0" y="705.0"/>
             </eCTransition>
             <eCTransition conditionExpression="" source="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.3" destination="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.2" conditionEvent="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventInputs.0">
-              <position x="216" y="198"/>
+              <position x="1440.0" y="1325.0"/>
             </eCTransition>
             <eCTransition source="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.2" destination="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.0">
-              <position x="174" y="159"/>
+              <position x="1165.0" y="1065.0"/>
             </eCTransition>
           </eCC>
         </basicfbtype>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.1"/>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.0/@subAppNetwork/@networkElements.1"/>
     </outputEventOccurrences>
   </transactions>
 </opsem:EventManager>
