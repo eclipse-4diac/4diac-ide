@@ -22,6 +22,7 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.policies.DeleteTargetInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
+import org.eclipse.fordiac.ide.gef.preferences.PreferenceInitializer;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -47,6 +48,8 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	public static final int LABEL_ALPHA = 120;
 	private static final String NOT_SIGN = "\u00AC"; //$NON-NLS-1$
 
+	private int maxLabelLength = PreferenceInitializer.DEFAULT_MAX_INTERFACE_BAR_SIZE;
+
 	private final Adapter nameChangeAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
@@ -64,6 +67,7 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	@Override
 	public void activate() {
 		if (!isActive()) {
+			initializeMaxLabelLength();
 			super.activate();
 			getRefElement().eAdapters().add(nameChangeAdapter);
 			final FBNetworkElement parent = getRefElement().getFBNetworkElement();
@@ -137,7 +141,7 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		if (getRefElement().getOutputConnections().stream().anyMatch(con -> !con.isVisible() && con.isNegated())) {
 			labelText = NOT_SIGN + labelText;
 		}
-		return labelText + "\n" + labelTruncate(getRefElement().getComment());
+		return labelText + "\n" + labelTruncate(getRefElement().getComment()); //$NON-NLS-1$
 	}
 
 	@Override
@@ -177,8 +181,6 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	}
 
 	private String labelTruncate(final String label) {
-		final int maxLabelLength = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
-				.getMaxInterfaceBarSize();
 		if (label.length() <= maxLabelLength) {
 			return label;
 		}
@@ -222,4 +224,12 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		}
 		return super.getAdapter(key);
 	}
+
+	private void initializeMaxLabelLength() {
+		final AdvancedScrollingGraphicalViewer viewer = (AdvancedScrollingGraphicalViewer) getViewer();
+		if (viewer != null) {
+			maxLabelLength = viewer.getPreferencesCache().getMaxInterfaceBarSize();
+		}
+	}
+
 }

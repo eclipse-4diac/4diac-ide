@@ -23,6 +23,8 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 /** Class used to initialize default preference values. */
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
+	public static final int DEFAULT_MAX_INTERFACE_BAR_SIZE = 40;
+
 	@Override
 	public void initializeDefaultPreferences() {
 		final IEclipsePreferences preferences = DefaultScope.INSTANCE
@@ -37,7 +39,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		preferences.putInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH, 1000);
 
 		preferences.putInt(GefPreferenceConstants.MAX_PIN_LABEL_SIZE, 12);
-		preferences.putInt(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE, 40);
+		preferences.putInt(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE, DEFAULT_MAX_INTERFACE_BAR_SIZE);
 		preferences.putInt(GefPreferenceConstants.MIN_INTERFACE_BAR_SIZE, 40);
 		preferences.putInt(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE, 60);
 		preferences.putInt(GefPreferenceConstants.MAX_TYPE_LABEL_SIZE, 15);

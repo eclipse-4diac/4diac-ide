@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -157,12 +158,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		if (children.isEmpty()) {
 			return getFigure().getBounds().height;
 		}
-		int height = -(children.size() - 1) * 2;
-		for (final TargetInterfaceElement modelObject : children) {
-			final IFigure child = ((GraphicalEditPart) createChild(modelObject)).getFigure();
-			height += child.getPreferredSize().height;
-		}
-		return height;
+		return -(children.size() - 1) * 2 + getTargetInterfaceLabelHeight() * children.size();
 	}
 
 	public int getCollapsedFigureHeight() {
@@ -170,12 +166,11 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		if (children.isEmpty()) {
 			return getFigure().getBounds().height;
 		}
-		int height = -(children.size() - 1) * 2;
-		for (final TargetInterfaceElement modelObject : children) {
-			final IFigure child = ((GraphicalEditPart) createChild(modelObject)).getFigure();
-			height += child.getPreferredSize().height;
-		}
-		return height;
+		return -(children.size() - 1) * 2 + getTargetInterfaceLabelHeight() * children.size();
+	}
+
+	private static int getTargetInterfaceLabelHeight() {
+		return 2 * (int) CoordinateConverter.INSTANCE.getLineHeight();
 	}
 
 	public Label getNameLabel() {
@@ -211,7 +206,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		final InterfaceFigure figure = new InterfaceFigure() {
 			@Override
 			public String getSubStringText() {
-				return (getChildren().isEmpty()) ? super.getSubStringText() : "";
+				return (getChildren().isEmpty()) ? super.getSubStringText() : ""; //$NON-NLS-1$
 			}
 
 			@Override
