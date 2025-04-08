@@ -101,9 +101,9 @@ public class ReferenceExamplesTest {
 				.loadResourceNotOnDemand(URI.createPlatformResourceURI(res.getFullPath().toString(), true));
 
 		final Comparison eventComparison = EventManagerComparisonUtils.compareEventManager(resLeft, resRight);
+		// printed table stays empty, because elements do not inherit ENamedElement
 		EMFComparePrettyPrinter.printComparison(eventComparison, System.out);
 		assertTrue(eventComparison.getDifferences().isEmpty());
-
 	}
 
 	static FordiacProjectLoader getProject() {
