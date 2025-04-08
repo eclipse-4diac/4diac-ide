@@ -49,7 +49,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 	var fannedOutDataConns = 0
 	final Map<VarDeclaration, ILanguageSupport> fbNetworkInitialVariableLanguageSupport
 
-	new(CompositeFBType type, String name, Path prefix, Map<?,?> options) {
+	new(CompositeFBType type, String name, Path prefix, Map<?, ?> options) {
 		super(type, name, prefix, "CCompositeFB", options)
 		fbs = type.FBNetwork.networkElements.filter(FB).reject(AdapterFB).toList
 		fbNetworkInitialVariableLanguageSupport = fbs.flatMap[interface.inputVars].filter[!value?.value.nullOrEmpty].
@@ -69,12 +69,12 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		«generateFBInterfaceDefinition»
 		«generateFBInterfaceSpecDefinition»
 		
-		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
+		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId,
+		«" ".repeat(FBClassName.length * 2)»   forte::core::CFBContainer &paContainer) :
 		    «baseClass»(paContainer, scmFBInterfaceSpec, paInstanceNameId, scmFBNData)«//no newline
 		    »«fbs.generateInternalFBInitializer»«// no newline
 		    »«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
-		    »«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterInitializer»«generateConnectionInitializer» {
-		};
+		    »«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterInitializer»«generateConnectionInitializer» {};
 		«generateInitializeDefinition»
 		
 		«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
@@ -99,17 +99,18 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
 	def protected generateReadInternal2InterfaceOutputDataBody(List<Event> events) '''
 		«IF events.exists[!with.empty]»
-			switch(paEOID) {
+			switch (paEOID) {
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
 			  	  «FOR variable : event.with.map[withVariable].filter[!it.inOutVar]»
-			  	  	if(CDataConnection *conn = getIn2IfConUnchecked(«variable.interfaceElementIndex»); conn) { conn->readData(«variable.generateName»); }
+			  	  	if (CDataConnection *conn = getIn2IfConUnchecked(«variable.interfaceElementIndex»); conn) {
+			  	  	  conn->readData(«variable.generateName»);
+			  	  	}
 			  	  «ENDFOR»
 			  	  break;
 			  	}
 			  «ENDFOR»
-			  default:
-			    break;
+			  default: break;
 			}
 		«ELSE»
 			// nothing to do
@@ -119,7 +120,9 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 	def protected generateFBNetwork() '''
 		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterType)]»
 			const SCFB_FBInstanceData «FBClassName»::scmInternalFBs[] = {
-			  «FOR elem : fbs SEPARATOR ",\n"»{«elem.name.FORTEStringId», «elem.type.generateTypeSpec»}«ENDFOR»
+			    «FOR elem : fbs»
+			    	{«elem.name.FORTEStringId», «elem.type.generateTypeSpec»},
+			    «ENDFOR»
 			};
 		«ENDIF»
 		
@@ -140,21 +143,27 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
 	protected def generateFBNDataStruct() '''
 		const SCFB_FBNData «FBClassName»::scmFBNData = {
-		  «fbs.size», «IF !fbs.isEmpty»scmInternalFBs«ELSE»nullptr«ENDIF»,
-		  «eConnNumber», «IF 0 != eConnNumber»scmEventConnections«ELSE»nullptr«ENDIF»,
-		  «fannedOutEventConns», «IF 0 != fannedOutEventConns»scmFannedOutEventConnections«ELSE»nullptr«ENDIF»,
-		  «dataConnNumber», «IF 0 != dataConnNumber»scmDataConnections«ELSE»nullptr«ENDIF»,
-		  «fannedOutDataConns», «IF 0 != fannedOutDataConns»scmFannedOutDataConnections«ELSE»nullptr«ENDIF»,
-		  «type.FBNetwork.adapterConnections.size», «IF !type.FBNetwork.adapterConnections.empty»scmAdapterConnections«ELSE»nullptr«ENDIF»
+		    «fbs.size», «IF !fbs.isEmpty»scmInternalFBs«ELSE»nullptr«ENDIF»,«// no newline
+		    » «eConnNumber», «IF 0 != eConnNumber»scmEventConnections«ELSE»nullptr«ENDIF»,«// no newline
+		    » «fannedOutEventConns», «IF 0 != fannedOutEventConns»scmFannedOutEventConnections«ELSE»nullptr«ENDIF»,«// no newline
+		    » «dataConnNumber», «IF 0 != dataConnNumber»scmDataConnections«ELSE»nullptr«ENDIF»,«// no newline
+		    » «fannedOutDataConns», «IF 0 != fannedOutDataConns»scmFannedOutDataConnections«ELSE»nullptr«ENDIF»,«// no newline
+		    » «type.FBNetwork.adapterConnections.size», «IF !type.FBNetwork.adapterConnections.empty»scmAdapterConnections«ELSE»nullptr«ENDIF»,
 		};
 		
 	'''
 
 	def protected generateConnectionPortID(IInterfaceElement iface, FBNetworkElement elem) {
 		return if (type.FBNetwork.networkElements.contains(elem))
-			'''GENERATE_CONNECTION_PORT_ID_2_ARG(«elem.name.FORTEStringId», «iface.name.FORTEStringId»), «elem.fbId»'''
+			'''
+				GENERATE_CONNECTION_PORT_ID_2_ARG(«elem.name.FORTEStringId», «iface.name.FORTEStringId»),
+				«elem.fbId»,
+			'''
 		else
-			'''GENERATE_CONNECTION_PORT_ID_1_ARG(«iface.name.FORTEStringId»), -1'''
+			'''
+				GENERATE_CONNECTION_PORT_ID_1_ARG(«iface.name.FORTEStringId»),
+				-1,
+			'''
 	}
 
 	def protected dispatch fbId(FBNetworkElement elem) '''«fbs.indexOf(elem)»'''
@@ -177,13 +186,13 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 			if (!conSet.contains(eConn)) {
 				conSet.add(eConn)
 
-				retVal.append(eConn.getConnListEntry)
+				retVal.append(eConn.getConnListEntry.toString.indent(4))
 
 				if (eConn.source.getOutputConnections.size > 1) {
 					// we have fan out
 					for (Connection fannedConn : eConn.source.getOutputConnections().filter[!(it == eConn)]) {
 						conSet.add(fannedConn)
-						fannedOutConns.append(fannedConn.genFannedOutConnString(eConnNumber))
+						fannedOutConns.append(fannedConn.genFannedOutConnString(eConnNumber).toString.indent(4))
 						fannedOutEventConns++
 					}
 				}
@@ -214,7 +223,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 				val primConn = getPrimaryDataConn(dConn)
 				conSet.add(primConn);
 
-				retVal.append(primConn.getConnListEntry)
+				retVal.append(primConn.getConnListEntry.toString.indent(4))
 
 				if (primConn.source.getOutputConnections.size > 1) {
 					// we have fan out
@@ -226,7 +235,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 							errors.add(" - " + name +
 								" FORTE does currently not allow that a data a composite's data connection may be connected to several data outputs of the composite FB."); // $NON-NLS-1$
 						}
-						fannedOutConns.append(fannedConn.genFannedOutConnString(dataConnNumber))
+						fannedOutConns.append(fannedConn.genFannedOutConnString(dataConnNumber).toString.indent(4))
 						fannedOutDataConns++
 					}
 				}
@@ -247,18 +256,25 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
 	def protected exportAdapterConns(EList<AdapterConnection> adapterConns) '''
 		const SCFB_FBConnectionData «FBClassName»::scmAdapterConnections[] = {
-		  «FOR aConn : adapterConns»«aConn.getConnListEntry»«ENDFOR»
+		    «FOR aConn : adapterConns»
+		    	«aConn.getConnListEntry»
+		    «ENDFOR»
 		};
 	'''
 
-	def protected getConnListEntry(
-		Connection con) '''  {«con.source.generateConnectionPortID(con.sourceElement)», «con.destination.generateConnectionPortID(con.destinationElement)»},
+	def protected getConnListEntry(Connection con) '''
+		{
+		    «con.source.generateConnectionPortID(con.sourceElement)»
+		    «con.destination.generateConnectionPortID(con.destinationElement)»
+		},
 	'''
 
-	def protected genFannedOutConnString(Connection con, int connNum) {
-		'''  {«connNum», «con.destination.generateConnectionPortID(con.destinationElement)»},
-		'''
-	}
+	def protected genFannedOutConnString(Connection con, int connNum) '''
+		{
+		    «connNum»,
+		    «con.destination.generateConnectionPortID(con.destinationElement)»
+		},
+	'''
 
 	override protected generateConnectionInitializer() //
 	'''«super.generateConnectionInitializer»«// no newline
@@ -284,7 +300,9 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 			  «FOR fb : fbs»
 			  	«FOR variable : fb.interface.inputVars.filter[!value?.value.nullOrEmpty]»
 			  		«IF fb.type.genericType»
-			  			if (auto v = «fb.generateName»->getDataInput(«variable.name.FORTEStringId»)) { v->setValue(«variable.generateFBNetworkInitialValue»); }
+			  			if (auto v = «fb.generateName»->getDataInput(«variable.name.FORTEStringId»)) {
+			  			  v->setValue(«variable.generateFBNetworkInitialValue»);
+			  			}
 			  		«ELSE»
 			  			«fb.generateName»->«variable.generateName» = «variable.generateFBNetworkInitialValue»;
 			  		«ENDIF»
@@ -317,29 +335,33 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 			getDependencies(options)
 		]).toSet
 	}
-	
+
 	override Set<String> getUsedStrings(Map<?, ?> options) {
 		val strings = super.getUsedStrings(options)
-		type.FBNetwork.networkElements.forEach[{ getUsedFBStrings(it, strings) getUsedInitialFBVarStrings(it, strings)}]		
-		type.FBNetwork.eventConnections.forEach[getUsedConStrings(it, strings)]		
-		type.FBNetwork.dataConnections.forEach[getUsedConStrings(it, strings)]		
-		type.FBNetwork.adapterConnections.forEach[getUsedConStrings(it, strings)]		
-		return strings	
+		type.FBNetwork.networkElements.forEach [
+			{
+				getUsedFBStrings(it, strings)
+				getUsedInitialFBVarStrings(it, strings)
+			}
+		]
+		type.FBNetwork.eventConnections.forEach[getUsedConStrings(it, strings)]
+		type.FBNetwork.dataConnections.forEach[getUsedConStrings(it, strings)]
+		type.FBNetwork.adapterConnections.forEach[getUsedConStrings(it, strings)]
+		return strings
 	}
-	
-	def protected void getUsedConStrings(Connection con, Set<String> strings){
-		//fb instances names are already added when the network elements are added so we can ignore them here
+
+	def protected void getUsedConStrings(Connection con, Set<String> strings) {
+		// fb instances names are already added when the network elements are added so we can ignore them here
 		strings.add(con.source.name)
 		strings.add(con.destination.name)
 	}
-	
-	
-	def protected void getUsedInitialFBVarStrings(FBNetworkElement fbe, Set<String> strings){
-		if(fbe.type.genericType){
-		  	for (variable : fbe.interface.inputVars.filter[!value?.value.nullOrEmpty]) {
-		  		strings.add(variable.name)
-	  		}
-  		}
+
+	def protected void getUsedInitialFBVarStrings(FBNetworkElement fbe, Set<String> strings) {
+		if (fbe.type.genericType) {
+			for (variable : fbe.interface.inputVars.filter[!value?.value.nullOrEmpty]) {
+				strings.add(variable.name)
+			}
+		}
 	}
-	
+
 }

@@ -31,7 +31,7 @@ class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 		«generateHeaderIncludes»
 		
 		«generateFBClassHeader»
-		  «generateFBDeclaration»
+		    «generateFBDeclaration»
 		
 		  private:
 		    «generateFBInterfaceDeclaration»
@@ -54,11 +54,11 @@ class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 		«generateBody»
 		
 		«generateIncludeGuardEnd»
-		
 	'''
 
 	override protected generateHeaderIncludes() '''
 		«generateDependencyInclude("core/funcbloc.h")»
+		
 		«super.generateHeaderIncludes»
 	'''
 

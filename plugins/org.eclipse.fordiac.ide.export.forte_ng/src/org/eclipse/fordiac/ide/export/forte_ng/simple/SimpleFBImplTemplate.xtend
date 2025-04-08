@@ -36,14 +36,11 @@ class SimpleFBImplTemplate extends BaseFBImplTemplate<SimpleFBType> {
 	
 	override generateExecuteEvent() '''
 		void «FBClassName»::executeEvent(const TEventID paEIID, CEventChainExecutionThread *const paECET) {
-		  switch(paEIID) {
+		  switch (paEIID) {
 		    «FOR state : type.simpleECStates»
-		     	case «state.inputEvent.generateEventID»:
-		     	  enterState«state.name»(paECET);
-		     	  break;
+		     	case «state.inputEvent.generateEventID»: enterState«state.name»(paECET); break;
 		    «ENDFOR»
-		    default:
-		      break;
+		    default: break;
 		  }
 		}
 		

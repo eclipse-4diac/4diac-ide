@@ -45,7 +45,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		«generateHeaderIncludes»
 		
 		«generateFBClassHeader»
-		  «generateFBDeclaration»
+		    «generateFBDeclaration»
 		
 		  private:
 		    «generateFBInterfaceDeclaration»
@@ -75,13 +75,13 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		};
 		
 		«generateIncludeGuardEnd»
-		
 	'''
 
 	def abstract CharSequence generateAdditionalDeclarations()
 
 	override protected generateHeaderIncludes() '''
 		«generateClassInclude»
+		
 		«super.generateHeaderIncludes»
 	'''
 

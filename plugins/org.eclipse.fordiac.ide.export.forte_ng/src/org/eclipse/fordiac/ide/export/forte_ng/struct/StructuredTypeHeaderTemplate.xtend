@@ -36,13 +36,13 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 		«generateHeaderIncludes»
 		
 		class «className» final : public CIEC_STRUCT {
-		  DECLARE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain»)
+		    DECLARE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain»)
 		
 		  public:
 		    «className»();
 		«IF !type.memberVariables.empty»
 		
-		    «className»(«generateConstructorParameters»);
+		    «className»(«generateConstructorParameters(className.length + 1)»);
 		
 		    «type.memberVariables.generateVariableDeclarations(false)»
 		«ENDIF»
@@ -50,7 +50,7 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 		      return «type.memberVariables.size»;
 		    }
 		
-		    const CStringDictionary::TStringId* elementNames() const override {
+		    const CStringDictionary::TStringId *elementNames() const override {
 		      return scmElementNames;
 		    }
 		
@@ -63,18 +63,18 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 		
 		  private:
 		    static const CStringDictionary::TStringId scmElementNames[];
-		
 		};
 		
 		«generateIncludeGuardEnd»
-		
 	'''
 
 	def protected generateHeaderIncludes() '''
 		«generateDependencyInclude("core/datatypes/forte_struct.h")»
 		
 		«getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE}).generateDependencyIncludes»
-		
-		«type.compilerInfo?.header»
+		«IF !type.compilerInfo?.header.nullOrEmpty»
+			
+			«type.compilerInfo?.header»
+		«ENDIF»
 	'''
 }

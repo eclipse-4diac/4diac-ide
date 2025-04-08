@@ -71,7 +71,10 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateHeaderIncludes() '''
 		«getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE}).generateDependencyIncludes»
-		«type.compilerInfo?.header»
+		«IF !type.compilerInfo?.header.nullOrEmpty»
+			
+			«type.compilerInfo?.header»
+		«ENDIF»
 	'''
 
 
@@ -226,12 +229,74 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	// as there this code is duplicated
 	def protected generateFBInterfaceSpecDefinition() '''
 		const SFBInterfaceSpec «FBClassName»::scmFBInterfaceSpec = {
-		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventInputNames, «IF type.interfaceList.eventInputs.containsOnlyBasicEventType»nullptr«ELSE»scmEventInputTypeIds«ENDIF», «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
-		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, «IF type.interfaceList.eventOutputs.containsOnlyBasicEventType»nullptr«ELSE»scmEventOutputTypeIds«ENDIF», «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
-		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scmDataInputNames, scmDataInputTypeIds«ENDIF»,
-		  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scmDataOutputNames, scmDataOutputTypeIds«ENDIF»,
-		  «type.interfaceList.inOutVars.size», «IF type.interfaceList.inOutVars.empty»nullptr«ELSE»scmDataInOutNames«ENDIF»,
-		  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», «IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»scmAdapterInstances«ELSE»nullptr«ENDIF»
+		    «type.interfaceList.eventInputs.size»,
+		    «IF type.interfaceList.eventInputs.empty»
+		    	nullptr,
+		    	nullptr,
+		    	nullptr,
+		    	nullptr,
+		    «ELSE»
+		    	scmEventInputNames,
+		    	«IF type.interfaceList.eventInputs.containsOnlyBasicEventType»
+		    		nullptr,
+		    	«ELSE»
+		    		scmEventInputTypeIds,
+		    	«ENDIF»
+		    	«IF hasInputWith»
+		    		scmEIWith,
+		    	«ELSE»
+		    		nullptr,
+		    	«ENDIF»
+		    	scmEIWithIndexes,
+		    «ENDIF»
+		    «type.interfaceList.eventOutputs.size»,
+		    «IF type.interfaceList.eventOutputs.empty»
+		    	nullptr,
+		    	nullptr,
+		    	nullptr,
+		    	nullptr,
+		    «ELSE»
+		    	scmEventOutputNames,
+		    	«IF type.interfaceList.eventOutputs.containsOnlyBasicEventType»
+		    		nullptr,
+		    	«ELSE»
+		    		scmEventOutputTypeIds,
+		    	«ENDIF»
+		    	«IF hasOutputWith»
+		    		scmEOWith,
+		    	«ELSE»
+		    		nullptr,
+		    	«ENDIF»
+		    	scmEOWithIndexes,
+		    «ENDIF»
+		    «type.interfaceList.inputVars.size»,
+		    «IF type.interfaceList.inputVars.empty»
+		    	nullptr,
+		    	nullptr,
+		    «ELSE»
+		    	scmDataInputNames,
+		    	scmDataInputTypeIds,
+		    «ENDIF»
+		    «type.interfaceList.outputVars.size»,
+		    «IF type.interfaceList.outputVars.empty»
+		    	nullptr,
+		    	nullptr,
+		    «ELSE»
+		    	scmDataOutputNames,
+		    	scmDataOutputTypeIds,
+		    «ENDIF»
+		    «type.interfaceList.inOutVars.size»,
+		    «IF type.interfaceList.inOutVars.empty»
+		    	nullptr,
+		    «ELSE»
+		    	scmDataInOutNames,
+		    «ENDIF»
+		    «type.interfaceList.plugs.size + type.interfaceList.sockets.size»,
+		    «IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
+		    	scmAdapterInstances,
+		    «ELSE»
+		    	nullptr,
+		    «ENDIF»
 		};
 	'''
 
@@ -264,7 +329,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateReadInputDataBody(List<Event> events) '''
 		«IF events.exists[!with.empty]»
-			switch(paEIID) {
+			switch (paEIID) {
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
 			  	  «FOR variable : event.with.map[withVariable]»
@@ -273,8 +338,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			  	  break;
 			  	}
 			  «ENDFOR»
-			  default:
-			    break;
+			  default: break;
 			}
 		«ELSE»
 			// nothing to do
@@ -293,7 +357,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateWriteOutputDataBody(List<Event> events) '''
 		«IF events.exists[!with.empty]»
-			switch(paEIID) {
+			switch (paEIID) {
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
 			  	  «FOR variable : event.with.map[withVariable]»
@@ -302,8 +366,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			  	  break;
 			  	}
 			  «ENDFOR»
-			  default:
-			    break;
+			  default: break;
 			}
 		«ELSE»
 			// nothing to do
@@ -477,7 +540,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			
 		«ELSE»
 			«type»«className»::«function»(const TPortId paIndex) {
-			  switch(paIndex) {
+			  switch (paIndex) {
 			    «FOR element : elements»
 			    	case «elements.indexOf(element)»: return &«element.generateNameAsConnection(internal)»;
 			    «ENDFOR»

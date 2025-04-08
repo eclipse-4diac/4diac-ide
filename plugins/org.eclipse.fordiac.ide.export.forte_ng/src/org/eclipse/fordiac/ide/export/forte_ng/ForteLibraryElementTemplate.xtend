@@ -75,7 +75,10 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		#include "«fileBasename».h"
 		
 		«getDependencies(emptyMap).generateDependencyIncludes»
-		«type.compilerInfo?.header»
+		«IF !type.compilerInfo?.header.nullOrEmpty»
+			
+			«type.compilerInfo?.header»
+		«ENDIF»
 	'''
 
 	def protected generateVariableDeclarations(List<VarDeclaration> variables, boolean const) '''
@@ -125,7 +128,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 			
 		«ELSE»
 			«IF const»const «ENDIF»«type»«className»::«function»(const size_t paIndex)«IF const» const«ENDIF» {
-			  switch(paIndex) {
+			  switch (paIndex) {
 			    «FOR variable : variables»
 			    	case «variables.indexOf(variable)»: return &«variable.generateName»;
 			    «ENDFOR»

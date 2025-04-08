@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022, 2025 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,37 +13,33 @@
 package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Path
+import java.util.Set
 import org.eclipse.fordiac.ide.export.ExportTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportOptions
-import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
 abstract class ForteNgExportTemplate extends ExportTemplate {
 
+	static Set<String> DEFAULT_INCLUDES = #{
+		"core/datatypes/forte_array.h",
+		"core/datatypes/forte_array_common.h",
+		"core/datatypes/forte_array_fixed.h",
+		"core/datatypes/forte_array_variable.h",
+		"core/iec61131_functions.h"
+	}
+
 	protected new(String name, Path prefix) {
 		super(name, prefix)
 	}
 
 	def protected generateDependencyIncludes(Iterable<? extends INamedElement> dependencies) '''
-		«dependencies.filter(DataType).generateTypeIncludes»
-		«FOR include : dependencies.reject(DataType).map[generateDefiningInclude].toSet.sort»
+		«FOR include : (dependencies.map[generateDefiningInclude] + DEFAULT_INCLUDES).toSet.sort»
 			«include.generateDependencyInclude»
 		«ENDFOR»
 	'''
-
-	def protected generateTypeIncludes(Iterable<DataType> types) '''
-		«FOR include : types.map[generateDefiningInclude].toSet.sort»
-			«include.generateDependencyInclude»
-		«ENDFOR»
-		«generateDependencyInclude("core/iec61131_functions.h")»
-		«generateDependencyInclude("core/datatypes/forte_array_common.h")»
-		«generateDependencyInclude("core/datatypes/forte_array.h")»
-		«generateDependencyInclude("core/datatypes/forte_array_fixed.h")»
-		«generateDependencyInclude("core/datatypes/forte_array_variable.h")»
-	'''
-
+	
 	def protected generateDependencyInclude(String path) {
 		if (ForteNgExportOptions.useSystemIncludes)
 			'''#include <«path»>'''

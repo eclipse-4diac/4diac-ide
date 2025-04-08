@@ -73,7 +73,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	override generateExecuteEvent() '''
 		void «FBClassName»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {
 		  do {
-		    switch(mECCState) {
+		    switch (mECCState) {
 		      «FOR state : type.ECC.ECState»
 		      	case «state.generateStateName»:
 		      	  «FOR transition : state.outTransitions SEPARATOR "\nelse"»

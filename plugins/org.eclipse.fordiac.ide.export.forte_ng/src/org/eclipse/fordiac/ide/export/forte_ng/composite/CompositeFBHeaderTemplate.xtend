@@ -44,7 +44,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		«generateHeaderIncludes»
 		
 		«generateFBClassHeader»
-		  «generateFBDeclaration»
+		    «generateFBDeclaration»
 		
 		  private:
 		    «generateFBInterfaceDeclaration»
@@ -69,7 +69,6 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		};
 		
 		«generateIncludeGuardEnd»
-		
 	'''
 	
 	def generateSetFBNetworkInitialValuesDeclaration() '''
@@ -81,6 +80,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 	override protected CharSequence generateHeaderIncludes() '''
 		«generateDependencyInclude("core/cfb.h")»
 		«generateDependencyInclude("core/typelib.h")»
+		
 		«super.generateHeaderIncludes»
 	'''
 

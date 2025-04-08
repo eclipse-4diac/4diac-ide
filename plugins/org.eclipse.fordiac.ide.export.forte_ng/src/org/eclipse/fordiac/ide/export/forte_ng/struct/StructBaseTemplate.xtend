@@ -26,6 +26,6 @@ abstract class StructBaseTemplate extends ForteLibraryElementTemplate<Structured
 		super(type, name, prefix, options)
 	}
 
-	def protected CharSequence generateConstructorParameters() //
-	'''«FOR param : type.memberVariables SEPARATOR ", "»const «param.generateVariableTypeNameAsParameter» &«param.generateNameAsParameter»«ENDFOR»'''
+	def protected CharSequence generateConstructorParameters(int indent) //
+	'''«FOR param : type.memberVariables SEPARATOR ",\n" + " ".repeat(indent)»const «param.generateVariableTypeNameAsParameter» &«param.generateNameAsParameter»«ENDFOR»'''
 }

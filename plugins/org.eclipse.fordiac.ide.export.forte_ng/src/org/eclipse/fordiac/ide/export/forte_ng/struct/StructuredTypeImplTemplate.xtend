@@ -44,7 +44,7 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		}
 		«IF !type.memberVariables.empty»
 		
-		«className»::«className»(«generateConstructorParameters») :
+		«className»::«className»(«generateConstructorParameters(className.length * 2 + 3)») :
 		    CIEC_STRUCT()«type.memberVariables.generateVariableInitializerFromParameters» {
 		}
 		«ENDIF»
