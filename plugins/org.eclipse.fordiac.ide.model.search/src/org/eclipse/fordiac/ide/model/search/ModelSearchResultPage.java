@@ -14,8 +14,12 @@
 package org.eclipse.fordiac.ide.model.search;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -28,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
@@ -56,6 +61,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.ide.IDE;
 
 public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
@@ -230,7 +236,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	}
 
 	// Double click to access the element we looked for
-	private static void jumpToBlock(final OpenEvent doubleClick) {
+	private void jumpToBlock(final OpenEvent doubleClick) {
 		final StructuredSelection selectionList = (StructuredSelection) doubleClick.getSelection();
 		if (!selectionList.isEmpty()) {
 			final Object selection = selectionList.getFirstElement();
@@ -240,14 +246,47 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		}
 	}
 
-	private static void jumpHelper(final EObject jumpingTo) {
+	private void jumpHelper(final EObject jumpingTo) {
 		final IEditorPart editor = OpenListenerManager.openEditor(getParent(jumpingTo));
 		if (editor instanceof final ISelectionListener listener) {
 			// fb type editor
-			listener.selectionChanged(editor, new StructuredSelection(EcoreUtil.getURI(jumpingTo)));
+			if ((jumpingTo instanceof Algorithm || jumpingTo instanceof Method || jumpingTo instanceof FunctionFBType)
+					&& EcoreUtil.getRootContainer(jumpingTo) instanceof final LibraryElement rootElement) {
+				final var file = rootElement.getTypeEntry().getFile();
+
+				final var matches = contentProvider.getSearchResult().getFordiacMatches(EcoreUtil.getURI(jumpingTo));
+				final Optional<TextMatch> firstMatch = Arrays.stream(matches).filter(TextMatch.class::isInstance)
+						.map(TextMatch.class::cast).findFirst();
+
+				if (firstMatch.isPresent()) {
+					showWithMarker(editor, file, firstMatch.get());
+				}
+			} else {
+				listener.selectionChanged(editor, new StructuredSelection(EcoreUtil.getURI(jumpingTo)));
+			}
 		} else {
 			final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
 			HandlerHelper.selectElement(jumpingTo, viewer);
+		}
+	}
+
+	private static void showWithMarker(final IEditorPart editor, final IFile file, final TextMatch match) {
+		IMarker marker = null;
+		try {
+			marker = file.createMarker(match.getType());
+			marker.setAttribute(IMarker.CHAR_START, match.getOffset());
+			marker.setAttribute(IMarker.CHAR_END, match.getOffset() + match.getLength());
+			IDE.gotoMarker(editor, marker);
+		} catch (final CoreException e) {
+			// ignore
+		} finally {
+			if (marker != null) {
+				try {
+					marker.delete();
+				} catch (final CoreException e) {
+					// ignore
+				}
+			}
 		}
 	}
 
@@ -309,7 +348,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 	@Override
 	protected void handleOpen(final OpenEvent event) {
-		ModelSearchResultPage.jumpToBlock(event);
+		jumpToBlock(event);
 	}
 
 	public static void showResult(final EObject obj) {
