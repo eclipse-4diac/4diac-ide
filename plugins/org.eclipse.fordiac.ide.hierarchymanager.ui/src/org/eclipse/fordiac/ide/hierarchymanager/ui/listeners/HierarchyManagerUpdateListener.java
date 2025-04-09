@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.hierarchymanager.ui.util.HierarchyManagerUtil;
 import org.eclipse.fordiac.ide.model.commands.QualNameChange;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
@@ -102,7 +103,7 @@ public class HierarchyManagerUpdateListener extends QualNameChangeListener {
 
 	@Override
 	protected boolean isEnabled(final INamedElement element) {
-		return element instanceof UntypedSubApp;
+		return element instanceof UntypedSubApp || element instanceof TypedSubApp;
 	}
 
 	protected void storeUndoDeleteOperations(final String qualName, final Leaf leaf) {
