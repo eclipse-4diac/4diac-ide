@@ -37,7 +37,8 @@ public final class Messages extends NLS {
 	public static String EvaluatorVariableValueEditor_Title;
 	public static String EvaluatorWatchExpressionFactoryAdapter_NoExpressionForVariable;
 	public static String FordiacDebugPreferencePage_Description;
-	public static String FordiacDebugPreferencePage_ValueMaxDisplayLength;
+	public static String FordiacDebugPreferencePage_CodeMiningMaxDisplayLength;
+	public static String FordiacDebugPreferencePage_DebugViewValueMaxDisplayLength;
 	public static String MainLaunchConfigurationTab_ConfigurationError;
 	public static String MainLaunchConfigurationTab_ErrorInitializingArguments;
 	public static String MainLaunchConfigurationTab_ErrorUpdatingArguments;

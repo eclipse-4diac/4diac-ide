@@ -37,6 +37,9 @@ public class FordiacDebugPreferencePage extends FieldEditorPreferencePage implem
 	@Override
 	public void createFieldEditors() {
 		addField(new IntegerFieldEditor(FordiacDebugPreferences.VALUE_MAX_DISPLAY_LENGTH,
-				Messages.FordiacDebugPreferencePage_ValueMaxDisplayLength, getFieldEditorParent()));
+				Messages.FordiacDebugPreferencePage_CodeMiningMaxDisplayLength, getFieldEditorParent()));
+
+		addField(new IntegerFieldEditor(FordiacDebugPreferences.DEBUG_VIEW_VALUE_MAX_DISPLAY_LENGTH,
+				Messages.FordiacDebugPreferencePage_DebugViewValueMaxDisplayLength, getFieldEditorParent()));
 	}
 }

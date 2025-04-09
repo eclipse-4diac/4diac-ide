@@ -29,8 +29,8 @@ public class FBTypeFigure extends FBShape {
 	private final Label versionInfoLabel;
 	private final FBType type;
 
-	public FBTypeFigure(final FBType type, final int maxTypeLabelSize) {
-		super(type, maxTypeLabelSize);
+	public FBTypeFigure(final FBType type) {
+		super(type, Integer.MAX_VALUE);
 		this.type = type;
 
 		versionInfoLabel = new Label();

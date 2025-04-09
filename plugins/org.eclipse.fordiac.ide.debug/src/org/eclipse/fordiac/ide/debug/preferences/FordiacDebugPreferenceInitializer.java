@@ -14,11 +14,20 @@ package org.eclipse.fordiac.ide.debug.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 public class FordiacDebugPreferenceInitializer extends AbstractPreferenceInitializer {
 
+	public static final int VALUE_MAX_DISPLAY_LENGTH_DEFAULT_VALUE = 20;
+	public static final int DEBUG_VIEW_VALUE_MAX_DISPLAY_LENGTH_DEFAULT_VALUE = 25;
+
 	@Override
 	public void initializeDefaultPreferences() {
-		DefaultScope.INSTANCE.getNode(FordiacDebugPreferences.DEBUG_PREFERENCES_ID).putInt(FordiacDebugPreferences.VALUE_MAX_DISPLAY_LENGTH, 20);
+		final IEclipsePreferences debugPreferencesNode = DefaultScope.INSTANCE
+				.getNode(FordiacDebugPreferences.DEBUG_PREFERENCES_ID);
+		debugPreferencesNode.putInt(FordiacDebugPreferences.VALUE_MAX_DISPLAY_LENGTH,
+				VALUE_MAX_DISPLAY_LENGTH_DEFAULT_VALUE);
+		debugPreferencesNode.putInt(FordiacDebugPreferences.DEBUG_VIEW_VALUE_MAX_DISPLAY_LENGTH,
+				DEBUG_VIEW_VALUE_MAX_DISPLAY_LENGTH_DEFAULT_VALUE);
 	}
 }

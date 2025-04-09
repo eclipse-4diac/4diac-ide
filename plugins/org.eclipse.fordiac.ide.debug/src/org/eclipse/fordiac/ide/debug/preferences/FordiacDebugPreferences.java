@@ -18,12 +18,19 @@ public final class FordiacDebugPreferences {
 
 	public static final String DEBUG_PREFERENCES_ID = "org.eclipse.fordiac.ide.debug"; //$NON-NLS-1$
 	public static final String VALUE_MAX_DISPLAY_LENGTH = "valueMaxDisplayLength"; //$NON-NLS-1$
+	public static final String DEBUG_VIEW_VALUE_MAX_DISPLAY_LENGTH = "debugViewValueMaxDisplayLength"; //$NON-NLS-1$
 
 	private FordiacDebugPreferences() {
 		throw new UnsupportedOperationException();
 	}
 
 	public static int getValueMaxDisplayLength() {
-		return InstanceScope.INSTANCE.getNode(DEBUG_PREFERENCES_ID).getInt(VALUE_MAX_DISPLAY_LENGTH, 20);
+		return InstanceScope.INSTANCE.getNode(DEBUG_PREFERENCES_ID).getInt(VALUE_MAX_DISPLAY_LENGTH,
+				FordiacDebugPreferenceInitializer.VALUE_MAX_DISPLAY_LENGTH_DEFAULT_VALUE);
+	}
+
+	public static int getDebugViewValueMaxDisplayLength() {
+		return InstanceScope.INSTANCE.getNode(DEBUG_PREFERENCES_ID).getInt(DEBUG_VIEW_VALUE_MAX_DISPLAY_LENGTH,
+				FordiacDebugPreferenceInitializer.DEBUG_VIEW_VALUE_MAX_DISPLAY_LENGTH_DEFAULT_VALUE);
 	}
 }
