@@ -48,8 +48,6 @@ public final class Messages extends NLS {
 	public static String DiagramPreferences_LabelSize;
 	public static String DiagramPreferences_LayoutConnectionsAutomatically;
 
-	public static String DiagramPreferences_LayoutOptions;
-
 	public static String DiagramPreferences_MaximumDefaultValueSize;
 
 	public static String DiagramPreferences_MaximumValueLabelSize;
@@ -58,7 +56,6 @@ public final class Messages extends NLS {
 	public static String DiagramPreferences_MaximumHiddenConnectionLabelSize;
 	public static String DiagramPreferences_MaximumTypeLabelSize;
 	public static String DiagramPreferences_FieldEditors_GridSpacingInPixels;
-	public static String DiagramPreferences_FieldEditors_RulerAndGrid;
 	public static String DiagramPreferences_FieldEditors_ShowGrid;
 	public static String DiagramPreferences_FieldEditors_ShowRuler;
 	public static String DiagramPreferences_FieldEditors_SnapToGrid;

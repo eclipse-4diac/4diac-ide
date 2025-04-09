@@ -17,10 +17,6 @@ import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -34,24 +30,13 @@ public class GridPreferencePage extends FieldEditorPreferencePage implements IWo
 
 	@Override
 	protected void createFieldEditors() {
-		final Group group = new Group(getFieldEditorParent(), SWT.NONE);
-		group.setText(Messages.DiagramPreferences_FieldEditors_RulerAndGrid);
-
 		final BooleanFieldEditor showRulers = new BooleanFieldEditor(GefPreferenceConstants.SHOW_RULERS,
-				Messages.DiagramPreferences_FieldEditors_ShowRuler, group);
+				Messages.DiagramPreferences_FieldEditors_ShowRuler, getFieldEditorParent());
 		addField(showRulers);
 
 		final BooleanFieldEditor showGrid = new BooleanFieldEditor(GefPreferenceConstants.SHOW_GRID,
-				Messages.DiagramPreferences_FieldEditors_ShowGrid, group);
+				Messages.DiagramPreferences_FieldEditors_ShowGrid, getFieldEditorParent());
 		addField(showGrid);
-
-		final GridLayout gridLayout = new GridLayout(1, false);
-		final GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.grabExcessHorizontalSpace = true;
-
-		gridData.horizontalSpan = 2;
-		group.setLayout(gridLayout);
-		group.setLayoutData(gridData);
 	}
 
 	@Override

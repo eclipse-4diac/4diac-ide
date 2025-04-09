@@ -37,6 +37,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.MessageBox;
@@ -60,17 +61,28 @@ public class DiagramPreferencePage extends FordiacPropertyPreferencePage {
 	@Override
 	public void createFieldEditors() {
 
-		// Create a Group to hold the ruler fields
-		createGroupRulerGrid();
+		final Composite parent = getFieldEditorParent();
+
+		final BooleanFieldEditor snapToGrid = new BooleanFieldEditor(GefPreferenceConstants.SNAP_TO_GRID,
+				Messages.DiagramPreferences_FieldEditors_SnapToGrid, parent);
+		addField(snapToGrid);
+
+		final BooleanFieldEditor connectionAutoLayout = new BooleanFieldEditor(
+				GefPreferenceConstants.CONNECTION_AUTO_LAYOUT,
+				Messages.DiagramPreferences_LayoutConnectionsAutomatically, parent);
+		addField(connectionAutoLayout);
+
+		final IntegerFieldEditor integerFieldEditorValue = new IntegerFieldEditor(
+				GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH, Messages.DiagramPreferences_MaximumDefaultValueSize,
+				parent);
+		integerFieldEditorValue.setValidRange(120, 100000);
+		addField(integerFieldEditorValue);
 
 		// Create a Group to hold label size field
 		createGroupLabelSize();
 
 		// Create a Group to hold the interface pin field
 		createGroupInterfacePins();
-
-		// Create a Group to hold the layout options field
-		createGroupLayoutOptionsPins();
 
 		// Create a Group to hold the block margin fields
 		createGroupBlockMargins();
@@ -146,12 +158,6 @@ public class DiagramPreferencePage extends FordiacPropertyPreferencePage {
 		integerFieldEditorLabel.setValidRange(0, 120);
 		addField(integerFieldEditorLabel);
 
-		final IntegerFieldEditor integerFieldEditorValue = new IntegerFieldEditor(
-				GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH, Messages.DiagramPreferences_MaximumDefaultValueSize,
-				labelSize);
-		integerFieldEditorValue.setValidRange(120, 100000);
-		addField(integerFieldEditorValue);
-
 		final IntegerFieldEditor integerFieldEditorTypeLabel = new IntegerFieldEditor(
 				GefPreferenceConstants.MAX_TYPE_LABEL_SIZE, Messages.DiagramPreferences_MaximumTypeLabelSize,
 				labelSize);
@@ -187,26 +193,6 @@ public class DiagramPreferencePage extends FordiacPropertyPreferencePage {
 		addField(integerFieldEditorConnection);
 
 		configGroup(labelSize);
-	}
-
-	private void createGroupRulerGrid() {
-		final Group group = createGroup(Messages.DiagramPreferences_FieldEditors_RulerAndGrid);
-		// Add the fields to the group
-
-		final BooleanFieldEditor snapToGrid = new BooleanFieldEditor(GefPreferenceConstants.SNAP_TO_GRID,
-				Messages.DiagramPreferences_FieldEditors_SnapToGrid, group);
-		addField(snapToGrid);
-
-		configGroup(group);
-	}
-
-	private void createGroupLayoutOptionsPins() {
-		final Group group = createGroup(Messages.DiagramPreferences_LayoutOptions);
-		final BooleanFieldEditor connectionAutoLayout = new BooleanFieldEditor(
-				GefPreferenceConstants.CONNECTION_AUTO_LAYOUT,
-				Messages.DiagramPreferences_LayoutConnectionsAutomatically, group);
-		addField(connectionAutoLayout);
-		configGroup(group);
 	}
 
 	private void createGroupInterfacePins() {
