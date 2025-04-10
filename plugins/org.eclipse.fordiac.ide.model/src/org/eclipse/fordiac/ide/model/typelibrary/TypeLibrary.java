@@ -232,8 +232,8 @@ public final class TypeLibrary {
 	/** Instantiates a new fB type library. */
 	TypeLibrary(final IProject project) {
 		this.project = project;
+		buildpath = BuildpathUtil.loadBuildpath(project);
 		if (project != null && project.isAccessible()) {
-			buildpath = BuildpathUtil.loadBuildpath(project);
 			checkAdditions(project);
 		}
 	}

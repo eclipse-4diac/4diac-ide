@@ -76,13 +76,12 @@ public final class BuildpathUtil {
 	/**
 	 * Load build path configuration for project
 	 *
-	 * @param project The project
+	 * @param project The project (may be null)
 	 * @return The build path configuration, either loaded from disk or using
 	 *         default values
 	 */
 	public static Buildpath loadBuildpath(final IProject project) {
-		Objects.requireNonNull(project);
-		if (project.isAccessible() && getBuildpathFile(project).exists()) {
+		if (project != null && project.isAccessible() && getBuildpathFile(project).exists()) {
 			try {
 				final ResourceSet resourceSet = new ResourceSetImpl();
 				final Resource resource = resourceSet.getResource(getBuildpathURI(project), true);
