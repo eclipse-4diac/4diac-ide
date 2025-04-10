@@ -54,11 +54,10 @@ public final class BuildpathUtil {
 	/**
 	 * Create a default build path configuration for project
 	 *
-	 * @param project The project
+	 * @param project The project (may be null)
 	 * @return The default build path configuration
 	 */
 	public static Buildpath createDefaultBuildpath(final IProject project) {
-		Objects.requireNonNull(project);
 		final Buildpath buildpath = BuildpathFactory.eINSTANCE.createBuildpath();
 		final SourceFolder projectFolder = createSourceFolder(""); //$NON-NLS-1$
 		buildpath.getSourceFolders().add(projectFolder);
@@ -299,6 +298,9 @@ public final class BuildpathUtil {
 	}
 
 	private static URI getBuildpathURI(final IProject project) {
+		if (project == null) {
+			return URI.createFileURI(BUILDPATH_FILE_NAME);
+		}
 		return URI.createPlatformResourceURI(getBuildpathFile(project).getFullPath().toString(), true);
 	}
 

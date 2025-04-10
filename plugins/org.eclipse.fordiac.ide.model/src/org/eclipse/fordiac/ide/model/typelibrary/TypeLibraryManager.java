@@ -33,7 +33,6 @@ import java.util.function.Consumer;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -149,11 +148,6 @@ public enum TypeLibraryManager {
 		if (library != null) {
 			eventBroker.send(TypeLibraryTags.TYPE_LIBRARY_CREATION_TOPIC, library);
 		}
-	}
-
-	public void refreshTypeLib(final IResource res) {
-		final TypeLibrary typeLib = getTypeLibrary(res.getProject());
-		typeLib.refresh();
 	}
 
 	private static IEventBroker initEventBroker() {

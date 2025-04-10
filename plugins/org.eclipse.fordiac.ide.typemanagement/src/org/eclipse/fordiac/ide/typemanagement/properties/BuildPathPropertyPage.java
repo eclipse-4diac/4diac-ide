@@ -227,7 +227,7 @@ public class BuildPathPropertyPage extends PropertyPage {
 			removeDefaultAttributes(buildpath);
 			BuildpathUtil.saveBuildpath(buildpath);
 			addDefaultAttributes(buildpath);
-			TypeLibraryManager.INSTANCE.refreshTypeLib(getProject());
+			TypeLibraryManager.INSTANCE.getTypeLibrary(getProject()).refresh();
 		} catch (final Exception e) {
 			MessageDialog.openError(getShell(), Messages.BuildPathPropertyPage_SaveError, e.getLocalizedMessage());
 			return false;

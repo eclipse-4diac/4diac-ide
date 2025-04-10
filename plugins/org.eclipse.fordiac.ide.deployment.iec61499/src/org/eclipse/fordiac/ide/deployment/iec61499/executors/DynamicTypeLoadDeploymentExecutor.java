@@ -467,7 +467,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 					final File file = new File(path.toString());
 					file.getParentFile().mkdirs();
 					Files.write(path, result.getBytes(), StandardOpenOption.CREATE);
-					TypeLibraryManager.INSTANCE.refreshTypeLib(sysFile);
+					TypeLibraryManager.INSTANCE.getTypeLibrary(sysFile.getProject()).refresh();
 				}
 			}
 		} catch (final Exception e) {
