@@ -76,13 +76,17 @@ public class SystemExplorerRootContentProvider implements ITreeContentProvider, 
 
 	@Override
 	public void distributedSystemWorkspaceChanged() {
-		if (null != viewer && null != viewer.getControl() && null != viewer.getControl().getDisplay()) {
+		if (isViewerValid()) {
 			viewer.getControl().getDisplay().asyncExec(() -> {
-				if (null != viewer && null != viewer.getControl() && !viewer.getControl().isDisposed()) {
+				if (isViewerValid()) {
 					viewer.refresh();
 				}
 			});
 		}
+	}
+
+	private boolean isViewerValid() {
+		return null != viewer && null != viewer.getControl() && !viewer.getControl().isDisposed();
 	}
 
 	private static boolean projectToShow(final IProject proj) {
