@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 /**
@@ -47,18 +46,15 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 			final List<? extends EditPart> editParts = ((ChangeBoundsRequest) request).getEditParts();
 			final List<? extends EditPart> addTo = collectAddToElements(editParts);
 
-			final CompoundCommand cmd = new CompoundCommand();
 			if (!addTo.isEmpty()) {
 				final Point destination = getTranslatedAndZoomedPoint((ChangeBoundsRequest) request);
 				translateToRelative(getHost(), destination);
 				final List<FBNetworkElement> elements = editParts.stream().map(EditPart::getModel)
 						.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).toList();
-				cmd.add(new MoveAndReconnectCommand(elements, destination, getParentModel().getSubAppNetwork()));
+				return new ResizeGroupOrSubappCommand(getHost(),
+						new MoveAndReconnectCommand(elements, destination, getParentModel().getSubAppNetwork()));
 			}
 
-			if (!cmd.isEmpty()) {
-				return new ResizeGroupOrSubappCommand(getHost(), cmd);
-			}
 		}
 		return super.getAddCommand(request);
 	}

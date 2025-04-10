@@ -39,14 +39,13 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 
 public class ResizeGroupOrSubappCommand extends Command implements ConnectionLayoutTagger, QualNameAffectedCommand {
 
 	final GraphicalEditPart graphicalEditPart;
 	List<FBNetworkElement> fbnetworkElements;
 
-	Command cmdToExecuteBefore;
+	private Command cmdToExecuteBefore;
 
 	List<AbstractChangeContainerBoundsCommand> changeContainerBoundsCommandList = new ArrayList<>();
 
@@ -265,29 +264,36 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 
 	@Override
 	public String getOldQualName(final INamedElement element) {
-		if ((cmdToExecuteBefore instanceof final CompoundCommand cmd) && (cmd.getChildren().length > 0
-				&& cmd.getChildren()[0] instanceof final MoveAndReconnectCommand moveAndReconnectCommand)) {
-			return moveAndReconnectCommand.getOldQualName(element);
+		final QualNameAffectedCommand cmd = getQualNameAffectedCommand();
+		if (cmd != null) {
+			return cmd.getOldQualName(element);
 		}
 		return null;
 	}
 
 	@Override
 	public String getNewQualName(final INamedElement element) {
-		if ((cmdToExecuteBefore instanceof final CompoundCommand cmd) && (cmd.getChildren().length > 0
-				&& cmd.getChildren()[0] instanceof final MoveAndReconnectCommand moveAndReconnectCommand)) {
-			return moveAndReconnectCommand.getNewQualName(element);
+		final QualNameAffectedCommand cmd = getQualNameAffectedCommand();
+		if (cmd != null) {
+			return cmd.getNewQualName(element);
 		}
 		return null;
 	}
 
 	@Override
 	public List<INamedElement> getChangedElements() {
-		if ((cmdToExecuteBefore instanceof final CompoundCommand cmd) && (cmd.getChildren().length > 0
-				&& cmd.getChildren()[0] instanceof final MoveAndReconnectCommand moveAndReconnectCommand)) {
-			return moveAndReconnectCommand.getChangedElements();
+		final QualNameAffectedCommand cmd = getQualNameAffectedCommand();
+		if (cmd != null) {
+			return cmd.getChangedElements();
 		}
 		return Collections.emptyList();
+	}
+
+	private QualNameAffectedCommand getQualNameAffectedCommand() {
+		if (cmdToExecuteBefore instanceof final QualNameAffectedCommand cmd) {
+			return cmd;
+		}
+		return null;
 	}
 
 }
