@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2024 fortiss GmbH, Johannes Kepler University Linz
+ * Copyright (c) 2015, 2025 fortiss GmbH, Johannes Kepler University Linz
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -88,12 +88,16 @@ public class SystemExplorerRootContentProvider implements ITreeContentProvider, 
 	private static boolean projectToShow(final IProject proj) {
 		// if the project is closed or a 4diac project return true
 		try {
-			return !proj.isOpen() || proj.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID)
-					|| proj.hasNature(SystemManager.ROBOT_PROJECT_NATURE_ID);
+			return !proj.isOpen() || isSystemExplorerProject(proj);
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError("Could not read project nature", e); //$NON-NLS-1$
 		}
 		return false;
+	}
+
+	private static boolean isSystemExplorerProject(final IProject proj) throws CoreException {
+		return proj.exists() && (proj.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID)
+				|| proj.hasNature(SystemManager.ROBOT_PROJECT_NATURE_ID));
 	}
 
 }
