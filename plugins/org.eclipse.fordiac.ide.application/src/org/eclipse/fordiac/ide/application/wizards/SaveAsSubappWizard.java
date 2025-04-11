@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 fortiss GmbH, Johannes Kepler University Linz,
+ * Copyright (c) 2014, 2025 fortiss GmbH, Johannes Kepler University Linz,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.CommandUtil;
+import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -46,7 +47,9 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.util.TypeFromTemplateCreator;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorDescriptor;
@@ -79,8 +82,8 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 	private IProject checkSubAppEditor() {
 		IProject project = null;
 		final EObject obj = EcoreUtil.getRootContainer(subApp);
-		if (obj instanceof SubAppType) {
-			project = ((SubAppType) obj).getTypeEntry().getFile().getProject();
+		if (obj instanceof final SubAppType subappType) {
+			project = subappType.getTypeEntry().getFile().getProject();
 		} else {
 			project = getSystem().getTypeLibrary().getProject();
 		}
@@ -99,13 +102,7 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 				MessageDialog.openError(getShell(), Messages.SaveAsSubApplicationTypeAction_TemplateMissingErrorTitle,
 						Messages.SaveAsSubApplicationTypeAction_TemplateMissingErrorMessage);
 			} else {
-				final TypeFromTemplateCreator creator = new TypeFromTemplateCreator(getTargetTypeFile(), template,
-						newFilePage.getPackageName()) {
-					@Override
-					protected void performTypeSpecificSetup(final LibraryElement type) {
-						performTypeSetup((SubAppType) type);
-					}
-				};
+				final TypeFromTemplateCreator creator = getTypeCreator(template);
 				try {
 					getContainer().run(true, true, creator::createTypeFromTemplate);
 				} catch (final InvocationTargetException e) {
@@ -114,21 +111,34 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 					FordiacLogHelper.logError(e.getMessage(), e);
 					Thread.currentThread().interrupt();
 				}
-				final TypeEntry entry = creator.getTypeEntry();
-				if (entry != null) {
-					// replace needs to be called before opening the type editor so that we get the correct command
-					// stack
-					if (newFilePage.getReplaceSource()) {
-						replaceWithType(entry);
-					}
-
-					if (newFilePage.getOpenType()) {
-						openTypeEditor(entry);
-					}
-				}
+				preformPostTypeCreationSteps(creator);
 			}
 		}
 		return true;
+	}
+
+	private TypeFromTemplateCreator getTypeCreator(final File template) {
+		return new TypeFromTemplateCreator(getTargetTypeFile(), template, newFilePage.getPackageName()) {
+			@Override
+			protected void performTypeSpecificSetup(final LibraryElement type) {
+				performTypeSetup((SubAppType) type);
+			}
+		};
+	}
+
+	private void preformPostTypeCreationSteps(final TypeFromTemplateCreator creator) {
+		final TypeEntry entry = creator.getTypeEntry();
+		if (entry != null) {
+			// replace needs to be called before opening the type editor so that we get the
+			// correct command stack
+			if (newFilePage.getReplaceSource()) {
+				replaceWithType(entry);
+			}
+
+			if (newFilePage.getOpenType()) {
+				openTypeEditor(entry);
+			}
+		}
 	}
 
 	private static File getSubappTemplate() {
@@ -161,7 +171,14 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
 		if (currentActiveEditor != null) {
 			final CommandStack commandStack = currentActiveEditor.getAdapter(CommandStack.class);
-			commandStack.execute(new UpdateFBTypeCommand(subApp, entry));
+			Command cmd = new UpdateFBTypeCommand(subApp, entry);
+			if (subApp.isUnfolded()) {
+				final CompoundCommand compoundCmd = new CompoundCommand();
+				compoundCmd.add(new ToggleSubAppRepresentationCommand(subApp));
+				compoundCmd.add(cmd);
+				cmd = compoundCmd;
+			}
+			commandStack.execute(cmd);
 		}
 	}
 
