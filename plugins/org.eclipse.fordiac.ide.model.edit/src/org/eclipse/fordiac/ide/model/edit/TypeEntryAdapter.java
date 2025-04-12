@@ -78,7 +78,7 @@ public class TypeEntryAdapter extends AdapterImpl {
 			break;
 		case TypeEntry.TYPE_ENTRY_FILE_FEATURE:
 			Display.getDefault().asyncExec(() -> {
-				if (notification.getNewValue() instanceof final IFile newFile) {
+				if (!editorClosed() && notification.getNewValue() instanceof final IFile newFile) {
 					editor.setInput(new FileEditorInput(newFile));
 				}
 			});
@@ -113,7 +113,7 @@ public class TypeEntryAdapter extends AdapterImpl {
 
 	private void performReload() {
 		Display.getDefault().asyncExec(() -> {
-			if (!editor.isDirty() || openFileChangedDialog() == 0) {
+			if (!editorClosed() && (!editor.isDirty() || openFileChangedDialog() == 0)) {
 				editor.reloadType();
 			}
 		});
@@ -136,6 +136,10 @@ public class TypeEntryAdapter extends AdapterImpl {
 		final LibraryElement editedElement = editor.getAdapter(LibraryElement.class);
 		if (editedElement != null) {
 			Display.getDefault().asyncExec(() -> {
+				if (editorClosed()) {
+					// our editor was closed no update needed
+					return;
+				}
 				if ((typeEntry instanceof FBTypeEntry || typeEntry instanceof SubAppTypeEntry)) {
 					handleBlockTypeDependencyUpdate(editedElement, typeEntry);
 				}
@@ -147,6 +151,10 @@ public class TypeEntryAdapter extends AdapterImpl {
 				}
 			});
 		}
+	}
+
+	private boolean editorClosed() {
+		return editor.getSite().getPage() == null;
 	}
 
 	private static void handleAttributeTypeEntryUpdate(final LibraryElement editedElement,
