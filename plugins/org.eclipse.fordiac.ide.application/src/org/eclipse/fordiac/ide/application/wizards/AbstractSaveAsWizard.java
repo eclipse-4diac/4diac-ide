@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.wizards;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.ui.providers.DialogSettingsProvider;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -50,6 +51,16 @@ public abstract class AbstractSaveAsWizard extends Wizard {
 			settings.addNewSection(subappSection);
 		}
 		setDialogSettings(settings);
+	}
+
+	protected static IContainer getFirstExistingParent(final IFile targetFile) {
+		IContainer parent = targetFile.getParent();
+
+		while (parent != null && !parent.exists()) {
+			parent = parent.getParent();
+		}
+
+		return (parent != null) ? parent : targetFile.getProject();
 	}
 
 	@Override

@@ -60,7 +60,8 @@ public class ExtractStructTypeWizard extends AbstractSaveAsWizard {
 	public boolean performFinish() {
 		if (perform()) {
 			final IFile targetFile = getTargetTypeFile();
-			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(targetFile.getParent()) {
+			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(
+					getFirstExistingParent(targetFile)) {
 
 				@Override
 				protected void execute(final IProgressMonitor monitor)

@@ -20,6 +20,7 @@ import java.nio.file.Files;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -78,7 +79,7 @@ public class TypeFromTemplateCreator {
 
 		final TypeImporter importer = getTypeImporter(entry);
 		if (importer != null) {
-			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(targetTypeFile.getParent()) {
+			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(getFirstExistingParent()) {
 
 				@Override
 				protected void execute(final IProgressMonitor monitor)
@@ -107,6 +108,16 @@ public class TypeFromTemplateCreator {
 		} else {
 			entry = null;
 		}
+	}
+
+	private IContainer getFirstExistingParent() {
+		IContainer parent = targetTypeFile.getParent();
+
+		while (parent != null && !parent.exists()) {
+			parent = parent.getParent();
+		}
+
+		return (parent != null) ? parent : targetTypeFile.getProject();
 	}
 
 	@SuppressWarnings("static-method") // allow subclasses to override
