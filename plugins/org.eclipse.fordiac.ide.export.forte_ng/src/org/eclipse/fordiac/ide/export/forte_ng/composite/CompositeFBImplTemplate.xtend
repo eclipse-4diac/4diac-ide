@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+import java.util.Set
 
 class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
@@ -61,6 +62,8 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		«generateHeader»
 		
 		«generateImplIncludes»
+		
+		«generateUseStringId»
 		
 		«generateFBDefinition»
 		«generateFBInterfaceDefinition»
@@ -314,4 +317,29 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 			getDependencies(options)
 		]).toSet
 	}
+	
+	override Set<String> getUsedStrings(Map<?, ?> options) {
+		val strings = super.getUsedStrings(options)
+		type.FBNetwork.networkElements.forEach[{ getUsedFBStrings(it, strings) getUsedInitialFBVarStrings(it, strings)}]		
+		type.FBNetwork.eventConnections.forEach[getUsedConStrings(it, strings)]		
+		type.FBNetwork.dataConnections.forEach[getUsedConStrings(it, strings)]		
+		type.FBNetwork.adapterConnections.forEach[getUsedConStrings(it, strings)]		
+		return strings	
+	}
+	
+	def protected void getUsedConStrings(Connection con, Set<String> strings){
+		//fb instances names are already added when the network elements are added so we can ignore them here
+		strings.add(con.source.name)
+		strings.add(con.destination.name)
+	}
+	
+	
+	def protected void getUsedInitialFBVarStrings(FBNetworkElement fbe, Set<String> strings){
+		if(fbe.type.genericType){
+		  	for (variable : fbe.interface.inputVars.filter[!value?.value.nullOrEmpty]) {
+		  		strings.add(variable.name)
+	  		}
+  		}
+	}
+	
 }

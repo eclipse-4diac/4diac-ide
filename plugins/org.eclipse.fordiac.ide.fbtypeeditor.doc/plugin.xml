@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-	<extension
+	<!-- 
+	RichTextEditor causes a stack overflow on windows with Eclipse 2025-03
+
+	Reinstate once this issue is fixed:
+	https://github.com/EclipseNebula/nebula/issues/631
+	 -->
+	<!--extension
     		point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">
 		<editorPage
         		class="org.eclipse.fordiac.ide.fbtypeeditor.doc.editors.DescriptionEditor"
             	sortIndex="70">
       	</editorPage>
-   	</extension>
+   	</extension-->
 </plugin>

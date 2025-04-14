@@ -30,6 +30,7 @@ import java.util.Map
 import java.util.Set
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.LibraryElementTags
+import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
@@ -37,7 +38,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.With
@@ -71,15 +74,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«type.compilerInfo?.header»
 	'''
 
-	def protected generateImplIncludes() '''
-		#include "«fileBasename».h"
-		#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-		#include "«type.generateTypeGenIncludePath»"
-		#endif
-		
-		«getDependencies(emptyMap).generateDependencyIncludes»
-		«type.compilerInfo?.header»
-	'''
 
 	def protected generateFBDeclaration() '''
 		DECLARE_FIRMWARE_FB(«FBClassName»)
@@ -612,5 +606,24 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	override Set<INamedElement> getDependencies(Map<?, ?> options) {
 		(super.getDependencies(options) + (type.interfaceList.sockets + type.interfaceList.plugs).map[getType]
 			).toSet
+	}
+	
+	override Set<String> getUsedStrings(Map<?, ?> options) {
+		val strings = super.getUsedStrings(options)
+		type.interfaceList.allInterfaceElements.forEach[getUsedIEStrings(it, strings)]
+		return strings	
+	}
+	
+	def protected void getUsedIEStrings(IInterfaceElement ie, Set<String> strings){
+		strings.add(ie.name)
+		strings.add(ie.type.generateTypeNamePlain)
+		if(ie.type instanceof ArrayType) {
+			strings.add((ie.type as ArrayType).baseType.generateTypeNamePlain)
+		}
+	}
+	
+	def protected void getUsedFBStrings(FBNetworkElement fb, Set<String> strings){
+		strings.add(fb.name)
+		strings.add(fb.type.generateTypeNamePlain)
 	}
 }
