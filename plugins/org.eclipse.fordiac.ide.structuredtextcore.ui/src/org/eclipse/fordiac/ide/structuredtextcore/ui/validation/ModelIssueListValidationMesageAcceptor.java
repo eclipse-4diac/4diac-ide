@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -32,10 +32,18 @@ public class ModelIssueListValidationMesageAcceptor extends IssueListValidationM
 		issue.setMessage(message);
 		if (object != null) {
 			issue.setUriToProblem(EcoreUtil.getURI(object));
-			issue.setData(new String[] { FordiacMarkerHelper.getLocation(object), // [0] LOCATION
-					EcoreUtil.getURI(object).toString(), // [1] TARGET_URI
-					EcoreUtil.getURI(object.eClass()).toString() // [2] TARGET_TYPE
-			});
+			if (feature != null) {
+				issue.setData(new String[] { FordiacMarkerHelper.getLocation(object), // [0] LOCATION
+						EcoreUtil.getURI(object).toString(), // [1] TARGET_URI
+						EcoreUtil.getURI(object.eClass()).toString(), // [2] TARGET_TYPE
+						EcoreUtil.getURI(feature).toString() // [3] TARGET_FEATURE
+				});
+			} else {
+				issue.setData(new String[] { FordiacMarkerHelper.getLocation(object), // [0] LOCATION
+						EcoreUtil.getURI(object).toString(), // [1] TARGET_URI
+						EcoreUtil.getURI(object.eClass()).toString() // [2] TARGET_TYPE
+				});
+			}
 		}
 		issue.setCode(LibraryElementValidator.DIAGNOSTIC_SOURCE);
 		issue.setType(CheckType.FAST);
