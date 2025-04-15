@@ -28,6 +28,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
@@ -316,12 +317,21 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// Initialization of variables
 		final SimpleFBType simpleFBType = simpleFBTypeRuntime.getSimpleFBType();
 		VariableUtils.fBVariableInitialization(simpleFBType);
-		final var outputEvents = new BasicEList<EventOccurrence>();
+
 		processAlgorithmWithEvaluator(simpleFBType, simpleFBType.getAlgorithm().get(0), eventOccurrence);
 		isConsumed(this.eventOccurrence);
-		final Event outputEvent = simpleFBType.getInterfaceList().getEventOutputs().get(0);
-		outputEvents.add(createOutputEventOccurrence(simpleFBTypeRuntime, outputEvent, simpleFBType));
-		return outputEvents;
+
+		// if we don't have ECStates, we just return the first output event as fallback
+		if (simpleFBType.getSimpleECStates() == null || simpleFBType.getSimpleECStates().isEmpty()) {
+			final Event outputEvent = simpleFBType.getInterfaceList().getEventOutputs().get(0);
+			return ECollections.asEList(createOutputEventOccurrence(simpleFBTypeRuntime, outputEvent, simpleFBType));
+		}
+
+		// find ECStates matching the input event and return their outputs
+		final String inEvent = this.eventOccurrence.getEvent().getName();
+		return ECollections.asEList(simpleFBType.getSimpleECStates().stream()
+				.filter(state -> state.getName().equals(inEvent)).flatMap(state -> state.getSimpleECActions().stream())
+				.map(a -> createOutputEventOccurrence(simpleFBTypeRuntime, a.getOutput(), simpleFBType)).toList());
 	}
 
 	@Override
