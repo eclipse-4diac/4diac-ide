@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2007 - 2018 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
- * 							 Johannes Kepler University
+ * Copyright (c) 2007, 2025 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *  Alois Zoitl, Florian Noack, Gerhard Ebenhofer, Monika Wenger
  *  		- initial API and implementation and/or initial documentation
  *  Alois Zoitl - Harmonized deployment and monitoring communication
+ *  Martin Jobst - add connection source suffix for delegate connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499.executors;
 
@@ -202,7 +203,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		final FBNetworkElement sourceFB = source.getFBNetworkElement();
 		final FBNetworkElement destFB = destination.getFBNetworkElement();
 		final String request = MessageFormat.format(CREATE_CONNECTION, getNextId(),
-				connData.sourcePrefix() + sourceFB.getName() + "." + source.getName(), //$NON-NLS-1$
+				connData.sourcePrefix() + sourceFB.getName() + "." + source.getName() + connData.sourceSuffix(), //$NON-NLS-1$
 				connData.destinationPrefix() + destFB.getName() + "." + destination.getName()); //$NON-NLS-1$
 
 		try {

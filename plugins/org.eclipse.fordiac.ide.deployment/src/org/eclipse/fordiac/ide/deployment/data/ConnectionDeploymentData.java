@@ -14,6 +14,6 @@ package org.eclipse.fordiac.ide.deployment.data;
 
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public record ConnectionDeploymentData(String sourcePrefix, IInterfaceElement source, String destinationPrefix,
-		IInterfaceElement destination) {
+public record ConnectionDeploymentData(String sourcePrefix, String sourceSuffix, IInterfaceElement source,
+		String destinationPrefix, IInterfaceElement destination) {
 }

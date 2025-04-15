@@ -14,10 +14,10 @@ package org.eclipse.fordiac.ide.deployment.data;
 
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public record ConnectionDeploymentSource(String prefix, IInterfaceElement source) {
+public record ConnectionDeploymentSource(String prefix, String suffix, IInterfaceElement source) {
 
 	public ConnectionDeploymentData toConnectionData(final String destinationPrefix,
 			final IInterfaceElement destination) {
-		return new ConnectionDeploymentData(prefix, source, destinationPrefix, destination);
+		return new ConnectionDeploymentData(prefix, suffix, source, destinationPrefix, destination);
 	}
 }

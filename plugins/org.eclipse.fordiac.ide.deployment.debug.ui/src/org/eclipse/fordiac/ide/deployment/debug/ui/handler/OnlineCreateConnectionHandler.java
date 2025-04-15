@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
+ * Copyright (c) 2017, 2025 fortiss GmbH, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,8 @@
  * Contributors:
  *   Jose Cabral, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *     - add connection source suffix for delegate connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 
@@ -19,6 +21,7 @@ import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.debug.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -47,8 +50,10 @@ public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand {
 
 	@Override
 	protected void executeCommand(final IDeviceManagementInteractor executor) throws DeploymentException {
-		executor.createConnection(res, new ConnectionDeploymentData(getPrefixFor(conn.getSourceElement()),
-				conn.getSource(), getPrefixFor(conn.getDestinationElement()), conn.getDestination()));
+		executor.createConnection(res,
+				new ConnectionDeploymentData(getPrefixFor(conn.getSourceElement()),
+						DeploymentHelper.getSourceSuffix(conn), conn.getSource(),
+						getPrefixFor(conn.getDestinationElement()), conn.getDestination()));
 	}
 
 	private static Connection getResourceConnection(final Connection conn) {
