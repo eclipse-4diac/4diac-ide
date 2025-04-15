@@ -133,14 +133,13 @@ public class RecordSequenceDialog extends MessageDialog {
 		inputParameterText = new Text(group, SWT.LEFT);
 		inputParameterText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		inputParameterText.setToolTipText(Messages.RecordSequenceDialog_SpecifyParametersTooltipText);
-		// $NON-NLS-1$
 
 		label = new Label(group, SWT.None);
 		label.setText(Messages.RecordSequenceDialog_StartState);
+		inputStartStateCombo = ComboBoxWidgetFactory.createCombo(group);
+		inputStartStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		if (type instanceof final BasicFBType bfbType) {
-			inputStartStateCombo = ComboBoxWidgetFactory.createCombo(group);
-			inputStartStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 			final String[] startnames = Stream
 					.concat(bfbType.getECC().getECState().stream().map(ECState::getName), Stream.of("")) //$NON-NLS-1$
 					.toArray(String[]::new);
