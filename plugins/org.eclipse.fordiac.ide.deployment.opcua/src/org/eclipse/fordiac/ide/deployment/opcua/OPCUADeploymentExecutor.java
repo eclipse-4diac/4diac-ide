@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Markus Meingast, Johannes Kepler University Linz
+ * Copyright (c) 2022, 2025 Markus Meingast, Johannes Kepler University Linz
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Markus Meingast
  *     - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *     - add connection source suffix for delegate connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.opcua;
 
@@ -324,7 +327,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	public void writeFBParameter(final Resource resource, final String value, final FBDeploymentData fbData,
 			final VarDeclaration varDecl) throws DeploymentException {
 		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, fbData.getPrefix(),
-				fbData.getFb().getName(), varDecl.getName());
+				fbData.getFb().getName(), varDecl.getName(), ""); //$NON-NLS-1$
 		writeFBParameter(resource, destination, value);
 	}
 
@@ -357,9 +360,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		final FBNetworkElement sourceFB = sourceData.getFBNetworkElement();
 		final FBNetworkElement destinationFB = destinationData.getFBNetworkElement();
 		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.sourcePrefix(),
-				sourceFB.getName(), sourceData.getName());
+				sourceFB.getName(), sourceData.getName(), connData.sourceSuffix());
 		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.destinationPrefix(),
-				destinationFB.getName(), destinationData.getName());
+				destinationFB.getName(), destinationData.getName(), ""); //$NON-NLS-1$
 		final CallMethodRequest request = new CallMethodRequest(resourceNode, Constants.CREATE_CONNECTION_NODE,
 				new Variant[] { new Variant(source), new Variant(destination) });
 		final String message = MessageFormat.format(Constants.CREATE_CONNECTION, destination, source);
@@ -503,9 +506,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		final FBNetworkElement sourceFB = sourceData.getFBNetworkElement();
 		final FBNetworkElement destinationFB = destinationData.getFBNetworkElement();
 		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.sourcePrefix(),
-				sourceFB.getName(), sourceData.getName());
+				sourceFB.getName(), sourceData.getName(), connData.sourceSuffix());
 		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.destinationPrefix(),
-				destinationFB.getName(), destinationData.getName());
+				destinationFB.getName(), destinationData.getName(), ""); //$NON-NLS-1$
 		final String resName = res.getName();
 		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
 				Constants.DELETE_CONNECTION_NODE, new Variant[] { new Variant(source), new Variant(destination) });

@@ -9,6 +9,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Martin Jobst - rework initial value and connection handling
+ *                - add connection source suffix for delegate connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.data;
 
@@ -124,6 +125,7 @@ public class ResourceDeploymentData {
 
 	private static String findInitialValue(final Deque<SubApp> subAppHierarchy, final VarDeclaration input)
 			throws DeploymentException {
+		boolean negate = false;
 		VarDeclaration result = input;
 		final Iterator<SubApp> subAppIterator = subAppHierarchy.descendingIterator();
 		while (!result.getInputConnections().isEmpty()
@@ -132,47 +134,51 @@ public class ResourceDeploymentData {
 				// get the external source of the subapp instance
 				&& subAppIterator.hasNext() && getSubAppExternalElement(source,
 						subAppIterator.next()) instanceof final VarDeclaration externalSource) {
+			negate ^= result.getInputConnections().getFirst().isNegated();
 			result = externalSource;
 		}
-		return DeploymentHelper.getVariableValue(result, input);
+		return DeploymentHelper.getVariableValue(result, input, negate);
 	}
 
 	private void addInputConnections(final Deque<SubApp> subAppHierarchy, final StringBuilder prefix,
 			final IInterfaceElement input) {
 		final String inputPrefix = ensurePrefix(prefix, input.getFBNetworkElement());
-		for (final ConnectionDeploymentSource sourceData : findSourceEndPoints(subAppHierarchy, prefix, input,
-				new ArrayList<>())) {
+		for (final ConnectionDeploymentSource sourceData : findSourceEndPoints(subAppHierarchy, prefix,
+				new StringBuilder(), input, new ArrayList<>())) {
 			connections.add(sourceData.toConnectionData(inputPrefix, input));
 		}
 	}
 
 	private List<ConnectionDeploymentSource> findSourceEndPoints(final Deque<SubApp> subAppHierarchy,
-			final StringBuilder prefix, final IInterfaceElement destination,
+			final StringBuilder prefix, final StringBuilder suffix, final IInterfaceElement destination,
 			final List<ConnectionDeploymentSource> result) {
 		for (final Connection con : destination.getInputConnections()) {
-			findConnectionEndPoints(subAppHierarchy, prefix, con.getSource(), result);
+			DeploymentHelper.addSourceSuffix(suffix, con);
+			findConnectionEndPoints(subAppHierarchy, prefix, suffix, con.getSource(), result);
+			DeploymentHelper.removeSourceSuffix(suffix, con);
 		}
 		return result;
 	}
 
 	private void findConnectionEndPoints(final Deque<SubApp> subAppHierarchy, final StringBuilder prefix,
-			final IInterfaceElement source, final List<ConnectionDeploymentSource> result) {
+			final StringBuilder suffix, final IInterfaceElement source, final List<ConnectionDeploymentSource> result) {
 		if (source.isIsInput()) { // source is a (subapp) input
 			final SubApp subApp = leaveSubApp(subAppHierarchy, prefix);
 			final IInterfaceElement externalElement = getSubAppExternalElement(source, subApp);
 			if (externalElement != null) {
-				findSourceEndPoints(subAppHierarchy, prefix, externalElement, result);
+				findSourceEndPoints(subAppHierarchy, prefix, suffix, externalElement, result);
 			}
 			enterSubApp(subAppHierarchy, prefix, subApp);
 		} else if (source.getFBNetworkElement() instanceof final SubApp subApp) { // source is a subapp output
 			enterSubApp(subAppHierarchy, prefix, subApp);
 			final IInterfaceElement internalElement = getSubAppInternalElement(source, subApp);
 			if (internalElement != null) {
-				findSourceEndPoints(subAppHierarchy, prefix, internalElement, result);
+				findSourceEndPoints(subAppHierarchy, prefix, suffix, internalElement, result);
 			}
 			leaveSubApp(subAppHierarchy, prefix);
 		} else { // source is a regular FB output
-			result.add(new ConnectionDeploymentSource(ensurePrefix(prefix, source.getFBNetworkElement()), source));
+			result.add(new ConnectionDeploymentSource(ensurePrefix(prefix, source.getFBNetworkElement()),
+					suffix.toString(), source));
 		}
 	}
 
