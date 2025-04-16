@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *                			Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -236,7 +237,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		});
 	}
 
-	protected void recreateResourceConns(final List<ConnData> resourceConns) {
+	private void recreateResourceConns(final List<ConnData> resourceConns) {
 		final FBNetworkElement orgMappedElement = unmapCmd.getMappedFBNetworkElement();
 		final FBNetworkElement copiedMappedElement = newElement.getOpposite();
 		for (final ConnData connData : resourceConns) {
@@ -259,7 +260,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		}
 	}
 
-	protected static IInterfaceElement findUpdatedInterfaceElement(final FBNetworkElement newElement,
+	private static IInterfaceElement findUpdatedInterfaceElement(final FBNetworkElement newElement,
 			final FBNetworkElement oldElement, final IInterfaceElement oldInterface) {
 		if ((oldInterface != null) && (oldInterface.getFBNetworkElement() == oldElement)) {
 			// origView is an interface of the original FB => find same interface on copied
@@ -269,24 +270,24 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		return oldInterface;
 	}
 
-	protected static List<Connection> getAllConnections(final FBNetworkElement element) {
+	private static Stream<Connection> getAllConnections(final FBNetworkElement element) {
 		return element.getInterface().getAllInterfaceElements().stream().map((final IInterfaceElement ifEle) -> {
 			if (ifEle.isIsInput()) {
 				return ifEle.getInputConnections();
 			}
 			return ifEle.getOutputConnections();
-		}).flatMap(List::stream).toList();
-
+		}).flatMap(List::stream).distinct();
+		// distinct filters duplicated connection objects originating from self loops
 	}
 
-	protected void createValues() {
+	private void createValues() {
 		newElement.getInterface().getInputVars().stream().forEach(inVar -> {
 			inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			checkSourceParam(inVar);
 		});
 	}
 
-	protected void transferInstanceComments() {
+	private void transferInstanceComments() {
 		oldElement.getInterface().getAllInterfaceElements().stream().filter(ie -> !ie.getComment().isBlank())
 				.forEach(ie -> {
 					final IInterfaceElement newIE = newElement.getInterfaceElement(ie.getName());
@@ -306,7 +307,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	protected List<ConnData> getResourceCons() {
 		final List<ConnData> retVal = new ArrayList<>();
 		final FBNetworkElement resElement = oldElement.getOpposite();
-		for (final Connection conn : getAllConnections(resElement)) {
+
+		getAllConnections(resElement).forEach(conn -> {
 			final IInterfaceElement source = conn.getSource();
 			final IInterfaceElement dest = conn.getDestination();
 			if (!source.getFBNetworkElement().isMapped() || !dest.getFBNetworkElement().isMapped()) {
@@ -321,7 +323,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 				// this is also a resource specific connection
 				retVal.add(new ConnData(conn.getSource(), conn.getDestination()));
 			}
-		}
+		});
 		return retVal;
 	}
 
@@ -448,7 +450,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		return updatedSelected;
 	}
 
-	protected void handleConnections() {
+	private void handleConnections() {
 		getAllConnections(oldElement).forEach(this::handleConnection);
 	}
 
@@ -464,51 +466,30 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 			destination = updateSelectedInterface(destination, newElement);
 		}
 
-		// reconnect/replace connection
+		// reconnect/replace connection, we can not use AbstractReconnectCommand as
+		// source and destination could be our block
 		replaceConnection(connection, source, destination);
 	}
 
-	protected void replaceConnection(final Connection oldConn, final IInterfaceElement source,
+	private void replaceConnection(final Connection oldConn, final IInterfaceElement source,
 			final IInterfaceElement dest) {
-		if (!isConnectionInList(oldConn)) {
-			reconnCmds.add(new DeleteConnectionCommand(oldConn, true));
-		}
-		if (!isConnectionToBeCreated(source, dest)) {
-			final FBNetwork fbn = oldConn.getFBNetwork();
-			final AbstractConnectionCreateCommand cmd = createConnectionCreateCommand(fbn, source.getType());
-			cmd.setSource(source);
-			cmd.setDestination(dest);
-			cmd.setNegated(oldConn.isNegated());
-			cmd.setVisible(oldConn.isVisible());
-			cmd.setArrangementConstraints(oldConn.getRoutingData());
-			cmd.setElementIndex(fbn.getConnectionIndex(oldConn));
-			reconnCmds.add(cmd);
-		}
+		reconnCmds.add(new DeleteConnectionCommand(oldConn, true));
+
+		final FBNetwork fbn = oldConn.getFBNetwork();
+		final AbstractConnectionCreateCommand cmd = createConnectionCreateCommand(fbn, source.getType());
+		// when changing this list also update the list in
+		// AbstractReconnectCommand::getCreateConnectionCommand
+		cmd.setSource(source);
+		cmd.setDestination(dest);
+		cmd.setNegated(oldConn.isNegated());
+		cmd.setVisible(oldConn.isVisible());
+		cmd.setArrangementConstraints(oldConn.getRoutingData());
+		cmd.setElementIndex(fbn.getConnectionIndex(oldConn));
+		reconnCmds.add(cmd);
 	}
 
-	protected boolean isConnectionInList(final Connection conn) {
-		for (final Object cmd : reconnCmds.getCommands()) {
-			if ((cmd instanceof final DeleteConnectionCommand deleteConnectionCommand)
-					&& deleteConnectionCommand.getConnection().equals(conn)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	protected boolean isConnectionToBeCreated(final IInterfaceElement source, final IInterfaceElement dest) {
-		for (final Object cmd : reconnCmds.getCommands()) {
-			if ((cmd instanceof final AbstractConnectionCreateCommand abstractConnectionCreateCommand)
-					&& (abstractConnectionCreateCommand.getSource() == source)
-					&& (abstractConnectionCreateCommand.getDestination() == dest)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@SuppressWarnings("static-method")
-	protected AbstractConnectionCreateCommand createConnectionCreateCommand(final FBNetwork fbn, final DataType type) {
+	private static AbstractConnectionCreateCommand createConnectionCreateCommand(final FBNetwork fbn,
+			final DataType type) {
 		if (type instanceof EventType) {
 			return new EventConnectionCreateCommand(fbn);
 		}

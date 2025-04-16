@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2017 fortiss GmbH
- * 				 2019 Johannes Keppler University Linz
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Keppler University Linz
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -92,12 +91,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command impleme
 	public void execute() {
 		final Connection con = getConnnection();
 		deleteConnectionCmd = new DeleteConnectionCommand(con);
-		connectionCreateCmd = createConnectionCreateCommand(parent);
-		connectionCreateCmd.setSource(getNewSource());
-		connectionCreateCmd.setDestination(getNewDestination());
-		connectionCreateCmd.setArrangementConstraints(con.getRoutingData());
-		connectionCreateCmd.setVisible(con.isVisible());
-		connectionCreateCmd.setElementIndex(parent.getConnectionIndex(con));
+		getCreateConnectionCommand(con);
 		connectionCreateCmd.execute(); // perform adding the connection first to preserve any error markers
 		deleteConnectionCmd.execute();
 		copyAttributes(connectionCreateCmd.getConnection(), deleteConnectionCmd.getConnection());
@@ -132,6 +126,18 @@ public abstract class AbstractReconnectConnectionCommand extends Command impleme
 			result.addAll(deleteConnectionCmd.getAffectedObjects());
 		}
 		return Set.copyOf(result);
+	}
+
+	private void getCreateConnectionCommand(final Connection con) {
+		connectionCreateCmd = createConnectionCreateCommand(parent);
+		// when updating the following list also update the similar list in
+		// AbstractUpdateFBNElementCommand::replaceConnection
+		connectionCreateCmd.setSource(getNewSource());
+		connectionCreateCmd.setDestination(getNewDestination());
+		connectionCreateCmd.setArrangementConstraints(con.getRoutingData());
+		connectionCreateCmd.setVisible(con.isVisible());
+		connectionCreateCmd.setNegated(con.isNegated());
+		connectionCreateCmd.setElementIndex(parent.getConnectionIndex(con));
 	}
 
 	protected abstract AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent);
