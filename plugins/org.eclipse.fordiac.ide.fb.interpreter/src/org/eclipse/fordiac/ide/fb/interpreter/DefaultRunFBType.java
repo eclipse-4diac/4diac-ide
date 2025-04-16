@@ -28,7 +28,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
@@ -320,16 +319,16 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		final SimpleFBType simpleFBType = simpleFBTypeRuntime.getSimpleFBType();
 		VariableUtils.fBVariableInitialization(simpleFBType);
 
-		final List<SimpleECAction> actions = getActions(simpleFBType, eventOccurrence.getEvent().getName());
+		final var actions = getActions(simpleFBType, eventOccurrence.getEvent().getName());
+		final var outputEvents = new BasicEList<EventOccurrence>(actions.size());
 
 		for (final SimpleECAction action : actions) {
 			simpleFBType.getAlgorithm().stream().filter(a -> a.getName().equals(action.getAlgorithm())).findAny()
 					.ifPresent(a -> processAlgorithmWithEvaluator(simpleFBType, a, eventOccurrence));
+			outputEvents.add(createOutputEventOccurrence(simpleFBTypeRuntime, action.getOutput(), simpleFBType));
 		}
 		isConsumed(this.eventOccurrence);
-
-		return ECollections.asEList(actions.stream()
-				.map(a -> createOutputEventOccurrence(simpleFBTypeRuntime, a.getOutput(), simpleFBType)).toList());
+		return outputEvents;
 	}
 
 	private static List<SimpleECAction> getActions(final SimpleFBType simpleFBType, final String inEvent) {
