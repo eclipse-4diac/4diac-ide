@@ -33,7 +33,7 @@ class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate<ServiceInterfaceF
 		«generateHeaderIncludes»
 		
 		«generateFBClassHeader»
-		  «generateFBDeclaration»
+		    «generateFBDeclaration»
 		
 		  private:
 		    «generateFBInterfaceDeclaration»
@@ -54,11 +54,11 @@ class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate<ServiceInterfaceF
 		};
 		
 		«generateIncludeGuardEnd»
-		
 	'''
 
 	override protected generateHeaderIncludes() '''
 		«generateDependencyInclude("core/funcbloc.h")»
+		
 		«super.generateHeaderIncludes»
 	'''
 }

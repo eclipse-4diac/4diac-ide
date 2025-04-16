@@ -85,7 +85,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 
 	override protected generateReadInputDataDefinition() '''
 		void «FBClassName»::readInputData(«IF (type.interfaceList.eventInputs + type.interfaceList.eventOutputs).exists[!with.empty]»const TEventID paEIID«ELSE»TEventID«ENDIF») {
-		  if(isSocket()) {
+		  if (isSocket()) {
 		    «type.interfaceList.eventInputs.generateReadInputDataBody»
 		  } else {
 		    «type.interfaceList.eventOutputs.generateReadInputDataBody»
@@ -95,7 +95,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 
 	override protected generateReadInputDataBody(List<Event> events) '''
 		«IF events.exists[!with.empty]»
-			switch(paEIID) {
+			switch (paEIID) {
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
 			  	  «FOR variable : event.with.map[withVariable]»
@@ -104,8 +104,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 			  	  break;
 			  	}
 			  «ENDFOR»
-			  default:
-			    break;
+			  default: break;
 			}
 		«ELSE»
 			// nothing to do
@@ -114,7 +113,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 
 	override protected generateWriteOutputDataDefinition() '''
 		void «FBClassName»::writeOutputData(«IF (type.interfaceList.eventInputs + type.interfaceList.eventOutputs).exists[!with.empty]»const TEventID paEIID«ELSE»TEventID«ENDIF») {
-		  if(isSocket()) {
+		  if (isSocket()) {
 		    «type.interfaceList.eventOutputs.generateWriteOutputDataBody»
 		  } else {
 		    «type.interfaceList.eventInputs.generateWriteOutputDataBody»
@@ -124,7 +123,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 
 	override protected generateWriteOutputDataBody(List<Event> events) '''
 		«IF events.exists[!with.empty]»
-			switch(paEIID) {
+			switch (paEIID) {
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
 			  	  «FOR variable : event.with.map[withVariable]»
@@ -133,8 +132,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 			  	  break;
 			  	}
 			  «ENDFOR»
-			  default:
-			    break;
+			  default: break;
 			}
 		«ELSE»
 			// nothing to do

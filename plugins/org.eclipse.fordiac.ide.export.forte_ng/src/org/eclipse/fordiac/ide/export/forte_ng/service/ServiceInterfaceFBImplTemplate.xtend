@@ -36,7 +36,8 @@ class ServiceInterfaceFBImplTemplate extends ForteFBTemplate<ServiceInterfaceFBT
 		«generateFBInterfaceDefinition»
 		«generateFBInterfaceSpecDefinition»
 		
-		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
+		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId,
+		«" ".repeat(FBClassName.length * 2)»   forte::core::CFBContainer &paContainer) :
 		    «baseClass»(paContainer, scmFBInterfaceSpec, paInstanceNameId)«//no newline
 			»«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
 			»«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterInitializer»«generateConnectionInitializer» {
@@ -51,7 +52,7 @@ class ServiceInterfaceFBImplTemplate extends ForteFBTemplate<ServiceInterfaceFBT
 
 	def protected generateExecuteEvent() '''
 		void «FBClassName»::executeEvent(const TEventID paEIID, CEventChainExecutionThread *const paECET) {
-		  switch(paEIID) {
+		  switch (paEIID) {
 		    «FOR event : type.interfaceList.eventInputs»
 		    	case scmEvent«event.name»ID:
 		    	  #error add code for «event.name» event!

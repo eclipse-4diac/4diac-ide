@@ -58,7 +58,9 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterType> {
 		    «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
 		    «type.interfaceList.eventInputs.generateEventAccessors»
 		    «type.interfaceList.eventOutputs.generateEventAccessors»
-		    «FBClassName»(CStringDictionary::TStringId paAdapterInstanceName, forte::core::CFBContainer &paContainer, bool paIsPlug) :
+		    «FBClassName»(CStringDictionary::TStringId paAdapterInstanceName,
+		    «" ".repeat(FBClassName.length)» forte::core::CFBContainer &paContainer,
+		    «" ".repeat(FBClassName.length)» bool paIsPlug) :
 		        «baseClass»(paContainer, scmFBInterfaceSpecSocket, paAdapterInstanceName, scmFBInterfaceSpecPlug, paIsPlug) {	
 		    };
 		
@@ -66,12 +68,12 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterType> {
 		};
 		
 		«generateIncludeGuardEnd»
-		
 	'''
 
 	override protected generateHeaderIncludes() '''
 		«generateDependencyInclude("core/adapter.h")»
 		«generateDependencyInclude("core/typelib.h")»
+		
 		«super.generateHeaderIncludes»
 	'''
 

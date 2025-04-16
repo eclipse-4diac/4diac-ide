@@ -241,14 +241,15 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						#pragma once
 						
 						#include "core/basicfb.h"
-						#include "core/iec61131_functions.h"
-						#include "core/datatypes/forte_array_common.h"
+						
 						#include "core/datatypes/forte_array.h"
+						#include "core/datatypes/forte_array_common.h"
 						#include "core/datatypes/forte_array_fixed.h"
 						#include "core/datatypes/forte_array_variable.h"
+						#include "core/iec61131_functions.h"
 						
 						class «EXPORTED_FUNCTIONBLOCK_NAME» final : public CBasicFB {
-						  DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
+						    DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
 						
 						  private:
 						
@@ -276,7 +277,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						    CDataConnection **getDIConUnchecked(TPortId) override;
 						    CDataConnection *getDOConUnchecked(TPortId) override;
 						};
-						
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
 				}
@@ -296,32 +296,47 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						
 						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h"
 						
-						#include "core/iec61131_functions.h"
-						#include "core/datatypes/forte_array_common.h"
 						#include "core/datatypes/forte_array.h"
+						#include "core/datatypes/forte_array_common.h"
 						#include "core/datatypes/forte_array_fixed.h"
 						#include "core/datatypes/forte_array_variable.h"
+						#include "core/iec61131_functions.h"
 						
 						USE_STRING_ID(functionblock);
 						
 						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», STRID(functionblock))
 						
 						const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scmFBInterfaceSpec = {
-						  0, nullptr, nullptr, nullptr, nullptr,
-						  0, nullptr, nullptr, nullptr, nullptr,
-						  0, nullptr, nullptr,
-						  0, nullptr, nullptr,
-						  0, nullptr,
-						  0, nullptr
+						    0,
+						    nullptr,
+						    nullptr,
+						    nullptr,
+						    nullptr,
+						    0,
+						    nullptr,
+						    nullptr,
+						    nullptr,
+						    nullptr,
+						    0,
+						    nullptr,
+						    nullptr,
+						    0,
+						    nullptr,
+						    nullptr,
+						    0,
+						    nullptr,
+						    0,
+						    nullptr,
 						};
 						
-						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
+						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(const CStringDictionary::TStringId paInstanceNameId,
+						«" ".repeat((BASICFUNCTIONBLOCK_NAME.length + 6) * 2)»   forte::core::CFBContainer &paContainer) :
 						    CBasicFB(paContainer, scmFBInterfaceSpec, paInstanceNameId, nullptr) {
 						}
 						
 						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {
 						  do {
-						    switch(mECCState) {
+						    switch (mECCState) {
 						      case scmStateINIT:
 						        return; //no transition cleared
 						      default:

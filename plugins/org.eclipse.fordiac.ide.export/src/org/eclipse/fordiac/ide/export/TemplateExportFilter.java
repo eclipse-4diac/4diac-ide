@@ -29,6 +29,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
@@ -49,6 +50,8 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.widgets.Display;
 
 public abstract class TemplateExportFilter extends ExportFilter {
+
+	private static final Pattern STRIP_PATTERN = Pattern.compile("\\s*#\\w"); //$NON-NLS-1$
 
 	// Prepare the button labels
 	private static final String[] BUTTON_LABELS = new String[] { //
@@ -197,12 +200,19 @@ public abstract class TemplateExportFilter extends ExportFilter {
 				files.clear();
 				break;
 			}
-			final String processed = content.toString().lines().map(String::stripTrailing)
+			final String processed = content.toString().lines().map(TemplateExportFilter::stripLine)
 					.collect(Collectors.joining(System.lineSeparator()));
 			final Path templatePath = destinationPath.resolve(template.getPath());
 			files.write(templatePath, processed);
 		}
 		return files;
+	}
+
+	private static String stripLine(final String line) {
+		if (STRIP_PATTERN.matcher(line).lookingAt()) {
+			return line.strip();
+		}
+		return line.stripTrailing();
 	}
 
 	private static void openMergeEditor(final Iterable<StoredFiles> writtenFiles) throws ExportException {
