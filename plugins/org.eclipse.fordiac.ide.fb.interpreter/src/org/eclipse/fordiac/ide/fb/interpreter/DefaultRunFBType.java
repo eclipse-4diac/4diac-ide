@@ -72,10 +72,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementFactoryImpl;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class DefaultRunFBType implements IRunFBTypeVisitor {
@@ -318,20 +320,30 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		final SimpleFBType simpleFBType = simpleFBTypeRuntime.getSimpleFBType();
 		VariableUtils.fBVariableInitialization(simpleFBType);
 
-		processAlgorithmWithEvaluator(simpleFBType, simpleFBType.getAlgorithm().get(0), eventOccurrence);
+		final List<SimpleECAction> actions = getActions(simpleFBType, eventOccurrence.getEvent().getName());
+
+		for (final SimpleECAction action : actions) {
+			simpleFBType.getAlgorithm().stream().filter(a -> a.getName().equals(action.getAlgorithm())).findAny()
+					.ifPresent(a -> processAlgorithmWithEvaluator(simpleFBType, a, eventOccurrence));
+		}
 		isConsumed(this.eventOccurrence);
 
-		// if we don't have ECStates, we just return the first output event as fallback
+		return ECollections.asEList(actions.stream()
+				.map(a -> createOutputEventOccurrence(simpleFBTypeRuntime, a.getOutput(), simpleFBType)).toList());
+	}
+
+	private static List<SimpleECAction> getActions(final SimpleFBType simpleFBType, final String inEvent) {
+		// if we don't have ECStates, use first output/algorithm as fallback
 		if (simpleFBType.getSimpleECStates() == null || simpleFBType.getSimpleECStates().isEmpty()) {
-			final Event outputEvent = simpleFBType.getInterfaceList().getEventOutputs().get(0);
-			return ECollections.asEList(createOutputEventOccurrence(simpleFBTypeRuntime, outputEvent, simpleFBType));
+			final SimpleECAction action = LibraryElementFactoryImpl.eINSTANCE.createSimpleECAction();
+			action.setAlgorithm(simpleFBType.getAlgorithm().get(0).getName());
+			action.setOutput(simpleFBType.getInterfaceList().getEventOutputs().get(0));
+			return List.of(action);
 		}
 
-		// find ECStates matching the input event and return their outputs
-		final String inEvent = this.eventOccurrence.getEvent().getName();
-		return ECollections.asEList(simpleFBType.getSimpleECStates().stream()
-				.filter(state -> state.getName().equals(inEvent)).flatMap(state -> state.getSimpleECActions().stream())
-				.map(a -> createOutputEventOccurrence(simpleFBTypeRuntime, a.getOutput(), simpleFBType)).toList());
+		// find ECStates matching the input event and return their actions
+		return simpleFBType.getSimpleECStates().stream().filter(state -> state.getName().equals(inEvent))
+				.flatMap(state -> state.getSimpleECActions().stream()).toList();
 	}
 
 	@Override
