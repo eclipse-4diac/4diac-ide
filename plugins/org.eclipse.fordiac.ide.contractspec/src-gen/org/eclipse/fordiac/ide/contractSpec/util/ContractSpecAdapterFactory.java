@@ -171,11 +171,6 @@ public class ContractSpecAdapterFactory extends AdapterFactoryImpl
         return createTimeExprAdapter();
       }
       @Override
-      public Adapter caseValue(Value object)
-      {
-        return createValueAdapter();
-      }
-      @Override
       public Adapter caseCausalFuncDecl(CausalFuncDecl object)
       {
         return createCausalFuncDeclAdapter();
@@ -458,21 +453,6 @@ public class ContractSpecAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTimeExprAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.contractSpec.Value <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.eclipse.fordiac.ide.contractSpec.Value
-   * @generated
-   */
-  public Adapter createValueAdapter()
   {
     return null;
   }

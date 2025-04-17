@@ -35,9 +35,10 @@ import org.eclipse.fordiac.ide.contractSpec.Reaction;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.ReactionImpl#getTrigger <em>Trigger</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.ReactionImpl#getReaction <em>Reaction</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.ReactionImpl#getInput <em>Input</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.ReactionImpl#getOutput <em>Output</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.ReactionImpl#getInterval <em>Interval</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.ReactionImpl#isOnce <em>Once</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.ReactionImpl#getN <em>N</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.ReactionImpl#getOutOf <em>Out Of</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.ReactionImpl#getClock <em>Clock</em>}</li>
@@ -48,24 +49,24 @@ import org.eclipse.fordiac.ide.contractSpec.Reaction;
 public class ReactionImpl extends TimeSpecImpl implements Reaction
 {
   /**
-   * The cached value of the '{@link #getTrigger() <em>Trigger</em>}' containment reference.
+   * The cached value of the '{@link #getInput() <em>Input</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getTrigger()
+   * @see #getInput()
    * @generated
    * @ordered
    */
-  protected EventExpr trigger;
+  protected EventExpr input;
 
   /**
-   * The cached value of the '{@link #getReaction() <em>Reaction</em>}' containment reference.
+   * The cached value of the '{@link #getOutput() <em>Output</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getReaction()
+   * @see #getOutput()
    * @generated
    * @ordered
    */
-  protected EventExpr reaction;
+  protected EventExpr output;
 
   /**
    * The cached value of the '{@link #getInterval() <em>Interval</em>}' containment reference.
@@ -76,6 +77,26 @@ public class ReactionImpl extends TimeSpecImpl implements Reaction
    * @ordered
    */
   protected Interval interval;
+
+  /**
+   * The default value of the '{@link #isOnce() <em>Once</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isOnce()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean ONCE_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isOnce() <em>Once</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isOnce()
+   * @generated
+   * @ordered
+   */
+  protected boolean once = ONCE_EDEFAULT;
 
   /**
    * The default value of the '{@link #getN() <em>N</em>}' attribute.
@@ -154,9 +175,9 @@ public class ReactionImpl extends TimeSpecImpl implements Reaction
    * @generated
    */
   @Override
-  public EventExpr getTrigger()
+  public EventExpr getInput()
   {
-    return trigger;
+    return input;
   }
 
   /**
@@ -164,13 +185,13 @@ public class ReactionImpl extends TimeSpecImpl implements Reaction
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetTrigger(EventExpr newTrigger, NotificationChain msgs)
+  public NotificationChain basicSetInput(EventExpr newInput, NotificationChain msgs)
   {
-    EventExpr oldTrigger = trigger;
-    trigger = newTrigger;
+    EventExpr oldInput = input;
+    input = newInput;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.REACTION__TRIGGER, oldTrigger, newTrigger);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.REACTION__INPUT, oldInput, newInput);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -182,20 +203,20 @@ public class ReactionImpl extends TimeSpecImpl implements Reaction
    * @generated
    */
   @Override
-  public void setTrigger(EventExpr newTrigger)
+  public void setInput(EventExpr newInput)
   {
-    if (newTrigger != trigger)
+    if (newInput != input)
     {
       NotificationChain msgs = null;
-      if (trigger != null)
-        msgs = ((InternalEObject)trigger).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.REACTION__TRIGGER, null, msgs);
-      if (newTrigger != null)
-        msgs = ((InternalEObject)newTrigger).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.REACTION__TRIGGER, null, msgs);
-      msgs = basicSetTrigger(newTrigger, msgs);
+      if (input != null)
+        msgs = ((InternalEObject)input).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.REACTION__INPUT, null, msgs);
+      if (newInput != null)
+        msgs = ((InternalEObject)newInput).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.REACTION__INPUT, null, msgs);
+      msgs = basicSetInput(newInput, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.REACTION__TRIGGER, newTrigger, newTrigger));
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.REACTION__INPUT, newInput, newInput));
   }
 
   /**
@@ -204,9 +225,9 @@ public class ReactionImpl extends TimeSpecImpl implements Reaction
    * @generated
    */
   @Override
-  public EventExpr getReaction()
+  public EventExpr getOutput()
   {
-    return reaction;
+    return output;
   }
 
   /**
@@ -214,13 +235,13 @@ public class ReactionImpl extends TimeSpecImpl implements Reaction
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetReaction(EventExpr newReaction, NotificationChain msgs)
+  public NotificationChain basicSetOutput(EventExpr newOutput, NotificationChain msgs)
   {
-    EventExpr oldReaction = reaction;
-    reaction = newReaction;
+    EventExpr oldOutput = output;
+    output = newOutput;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.REACTION__REACTION, oldReaction, newReaction);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.REACTION__OUTPUT, oldOutput, newOutput);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -232,20 +253,20 @@ public class ReactionImpl extends TimeSpecImpl implements Reaction
    * @generated
    */
   @Override
-  public void setReaction(EventExpr newReaction)
+  public void setOutput(EventExpr newOutput)
   {
-    if (newReaction != reaction)
+    if (newOutput != output)
     {
       NotificationChain msgs = null;
-      if (reaction != null)
-        msgs = ((InternalEObject)reaction).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.REACTION__REACTION, null, msgs);
-      if (newReaction != null)
-        msgs = ((InternalEObject)newReaction).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.REACTION__REACTION, null, msgs);
-      msgs = basicSetReaction(newReaction, msgs);
+      if (output != null)
+        msgs = ((InternalEObject)output).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.REACTION__OUTPUT, null, msgs);
+      if (newOutput != null)
+        msgs = ((InternalEObject)newOutput).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.REACTION__OUTPUT, null, msgs);
+      msgs = basicSetOutput(newOutput, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.REACTION__REACTION, newReaction, newReaction));
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.REACTION__OUTPUT, newOutput, newOutput));
   }
 
   /**
@@ -296,6 +317,31 @@ public class ReactionImpl extends TimeSpecImpl implements Reaction
     }
     else if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.REACTION__INTERVAL, newInterval, newInterval));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public boolean isOnce()
+  {
+    return once;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setOnce(boolean newOnce)
+  {
+    boolean oldOnce = once;
+    once = newOnce;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.REACTION__ONCE, oldOnce, once));
   }
 
   /**
@@ -403,10 +449,10 @@ public class ReactionImpl extends TimeSpecImpl implements Reaction
   {
     switch (featureID)
     {
-      case ContractSpecPackage.REACTION__TRIGGER:
-        return basicSetTrigger(null, msgs);
-      case ContractSpecPackage.REACTION__REACTION:
-        return basicSetReaction(null, msgs);
+      case ContractSpecPackage.REACTION__INPUT:
+        return basicSetInput(null, msgs);
+      case ContractSpecPackage.REACTION__OUTPUT:
+        return basicSetOutput(null, msgs);
       case ContractSpecPackage.REACTION__INTERVAL:
         return basicSetInterval(null, msgs);
     }
@@ -423,12 +469,14 @@ public class ReactionImpl extends TimeSpecImpl implements Reaction
   {
     switch (featureID)
     {
-      case ContractSpecPackage.REACTION__TRIGGER:
-        return getTrigger();
-      case ContractSpecPackage.REACTION__REACTION:
-        return getReaction();
+      case ContractSpecPackage.REACTION__INPUT:
+        return getInput();
+      case ContractSpecPackage.REACTION__OUTPUT:
+        return getOutput();
       case ContractSpecPackage.REACTION__INTERVAL:
         return getInterval();
+      case ContractSpecPackage.REACTION__ONCE:
+        return isOnce();
       case ContractSpecPackage.REACTION__N:
         return getN();
       case ContractSpecPackage.REACTION__OUT_OF:
@@ -450,14 +498,17 @@ public class ReactionImpl extends TimeSpecImpl implements Reaction
   {
     switch (featureID)
     {
-      case ContractSpecPackage.REACTION__TRIGGER:
-        setTrigger((EventExpr)newValue);
+      case ContractSpecPackage.REACTION__INPUT:
+        setInput((EventExpr)newValue);
         return;
-      case ContractSpecPackage.REACTION__REACTION:
-        setReaction((EventExpr)newValue);
+      case ContractSpecPackage.REACTION__OUTPUT:
+        setOutput((EventExpr)newValue);
         return;
       case ContractSpecPackage.REACTION__INTERVAL:
         setInterval((Interval)newValue);
+        return;
+      case ContractSpecPackage.REACTION__ONCE:
+        setOnce((Boolean)newValue);
         return;
       case ContractSpecPackage.REACTION__N:
         setN((Integer)newValue);
@@ -482,14 +533,17 @@ public class ReactionImpl extends TimeSpecImpl implements Reaction
   {
     switch (featureID)
     {
-      case ContractSpecPackage.REACTION__TRIGGER:
-        setTrigger((EventExpr)null);
+      case ContractSpecPackage.REACTION__INPUT:
+        setInput((EventExpr)null);
         return;
-      case ContractSpecPackage.REACTION__REACTION:
-        setReaction((EventExpr)null);
+      case ContractSpecPackage.REACTION__OUTPUT:
+        setOutput((EventExpr)null);
         return;
       case ContractSpecPackage.REACTION__INTERVAL:
         setInterval((Interval)null);
+        return;
+      case ContractSpecPackage.REACTION__ONCE:
+        setOnce(ONCE_EDEFAULT);
         return;
       case ContractSpecPackage.REACTION__N:
         setN(N_EDEFAULT);
@@ -514,12 +568,14 @@ public class ReactionImpl extends TimeSpecImpl implements Reaction
   {
     switch (featureID)
     {
-      case ContractSpecPackage.REACTION__TRIGGER:
-        return trigger != null;
-      case ContractSpecPackage.REACTION__REACTION:
-        return reaction != null;
+      case ContractSpecPackage.REACTION__INPUT:
+        return input != null;
+      case ContractSpecPackage.REACTION__OUTPUT:
+        return output != null;
       case ContractSpecPackage.REACTION__INTERVAL:
         return interval != null;
+      case ContractSpecPackage.REACTION__ONCE:
+        return once != ONCE_EDEFAULT;
       case ContractSpecPackage.REACTION__N:
         return n != N_EDEFAULT;
       case ContractSpecPackage.REACTION__OUT_OF:
@@ -541,7 +597,9 @@ public class ReactionImpl extends TimeSpecImpl implements Reaction
     if (eIsProxy()) return super.toString();
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (n: ");
+    result.append(" (once: ");
+    result.append(once);
+    result.append(", n: ");
     result.append(n);
     result.append(", outOf: ");
     result.append(outOf);

@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.Messages;
 import org.eclipse.fordiac.ide.contractSpec.Age;
 import org.eclipse.fordiac.ide.contractSpec.CausalAge;
 import org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl;
+import org.eclipse.fordiac.ide.contractSpec.CausalFuncName;
 import org.eclipse.fordiac.ide.contractSpec.CausalReaction;
 import org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage;
 import org.eclipse.fordiac.ide.contractSpec.EventExpr;
@@ -29,7 +30,6 @@ import org.eclipse.fordiac.ide.contractSpec.Port;
 import org.eclipse.fordiac.ide.contractSpec.Reaction;
 import org.eclipse.fordiac.ide.contractSpec.Repetition;
 import org.eclipse.fordiac.ide.contractSpec.SingleEvent;
-import org.eclipse.fordiac.ide.contractSpec.Value;
 import org.eclipse.xtext.validation.Check;
 
 /**
@@ -53,17 +53,15 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 		if (interval.getTime() != null) {
 			return; // was a single value -> no check needed
 		}
-		final double begin = value2Double(interval.getV1());
-		final double end = value2Double(interval.getV2());
 
-		if (begin > end) { // e.g. [10, 5]
-			warning(Messages.EmptyIntervalWarning, ContractSpecPackage.Literals.INTERVAL__V1, EMPTY_INTERVAL);
-		} else if (begin == end) {
-			if (interval.getB1().equals("]") || interval.getB2().equals("[")) { //$NON-NLS-1$ //$NON-NLS-2$
-				warning(Messages.EmptyIntervalWarning, ContractSpecPackage.Literals.INTERVAL__V1,
+		if (interval.getLbValue() > interval.getUbValue()) { // e.g. [10, 5]
+			warning(Messages.EmptyIntervalWarning, ContractSpecPackage.Literals.INTERVAL__LB_VALUE, EMPTY_INTERVAL);
+		} else if (interval.getLbValue() == interval.getUbValue()) {
+			if (interval.getLBound().equals("]") || interval.getUBound().equals("[")) { //$NON-NLS-1$ //$NON-NLS-2$
+				warning(Messages.EmptyIntervalWarning, ContractSpecPackage.Literals.INTERVAL__LB_VALUE,
 						SPECIAL_EMPTY_INTERVAL); // e.g. ]10, 10] or [10, 10[ or ]10, 10[
 			} else {
-				warning(Messages.DegenerateIntervalWarning, ContractSpecPackage.Literals.INTERVAL__V1,
+				warning(Messages.DegenerateIntervalWarning, ContractSpecPackage.Literals.INTERVAL__LB_VALUE,
 						DEGENERATE_INTERVAL); // e.g. [10, 10]
 			}
 		}
@@ -81,32 +79,37 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 
 	@Check
 	public void checkReaction(final Reaction reaction) {
-		checkPortsOfType(reaction.getTrigger(), INPUT, ContractSpecPackage.Literals.REACTION__TRIGGER);
-		checkPortsOfType(reaction.getReaction(), OUTPUT, ContractSpecPackage.Literals.REACTION__REACTION);
+		checkPortsOfType(reaction.getInput(), INPUT, ContractSpecPackage.Literals.REACTION__INPUT);
+		checkPortsOfType(reaction.getOutput(), OUTPUT, ContractSpecPackage.Literals.REACTION__OUTPUT);
 	}
 
 	@Check
 	public void checkCausalReaction(final CausalReaction causalReaction) {
-		checkPortsOfType(causalReaction.getE1(), INPUT, ContractSpecPackage.Literals.CAUSAL_REACTION__E1);
-		checkPortsOfType(causalReaction.getE2(), OUTPUT, ContractSpecPackage.Literals.CAUSAL_REACTION__E2);
+		checkPortsOfType(causalReaction.getInput(), INPUT, ContractSpecPackage.Literals.CAUSAL_REACTION__INPUT);
+		checkPortsOfType(causalReaction.getOutput(), OUTPUT, ContractSpecPackage.Literals.CAUSAL_REACTION__OUTPUT);
 	}
 
 	@Check
 	public void checkAge(final Age age) {
-		checkPortsOfType(age.getTrigger(), OUTPUT, ContractSpecPackage.Literals.AGE__TRIGGER);
-		checkPortsOfType(age.getReaction(), INPUT, ContractSpecPackage.Literals.AGE__REACTION);
+		checkPortsOfType(age.getOutput(), OUTPUT, ContractSpecPackage.Literals.AGE__OUTPUT);
+		checkPortsOfType(age.getInput(), INPUT, ContractSpecPackage.Literals.AGE__INPUT);
 	}
 
 	@Check
 	public void checkCausalAge(final CausalAge causalAge) {
-		checkPortsOfType(causalAge.getE1(), OUTPUT, ContractSpecPackage.Literals.CAUSAL_AGE__E1);
-		checkPortsOfType(causalAge.getE2(), INPUT, ContractSpecPackage.Literals.CAUSAL_AGE__E2);
+		checkPortsOfType(causalAge.getOutput(), OUTPUT, ContractSpecPackage.Literals.CAUSAL_AGE__OUTPUT);
+		checkPortsOfType(causalAge.getInput(), INPUT, ContractSpecPackage.Literals.CAUSAL_AGE__INPUT);
 	}
 
 	@Check
 	public void checkCausalFuncDecl(final CausalFuncDecl causalFuncDecl) {
-		checkPortOfType(causalFuncDecl.getP1(), INPUT, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__P1);
-		checkPortOfType(causalFuncDecl.getP2(), OUTPUT, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__P2);
+		if (causalFuncDecl.getFuncName() == CausalFuncName.REACTION) {
+			checkPortOfType(causalFuncDecl.getPort1(), INPUT, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__PORT1);
+			checkPortOfType(causalFuncDecl.getPort2(), OUTPUT, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__PORT2);
+		} else {
+			checkPortOfType(causalFuncDecl.getPort1(), OUTPUT, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__PORT1);
+			checkPortOfType(causalFuncDecl.getPort2(), INPUT, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__PORT2);
+		}
 	}
 
 	private void checkPortsOfSameType(final EventList list, final EStructuralFeature feature) {
@@ -125,20 +128,17 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 	}
 
 	private void checkPortsOfType(final EList<EventSpec> list, final int type, final EStructuralFeature feature) {
-		if (list == null) {
-			return; // nothing to check
-		}
-
-		for (final EventSpec es : list) {
-			checkPortOfType(es.getPort(), type, feature);
+		if (list != null) {
+			for (final EventSpec es : list) {
+				checkPortOfType(es.getPort(), type, feature);
+			}
 		}
 	}
 
 	private void checkPortsOfType(final EventSpec es, final int type, final EStructuralFeature feature) {
-		if (es == null) {
-			return; // nothing to check
+		if (es != null) {
+			checkPortOfType(es.getPort(), type, feature);
 		}
-		checkPortOfType(es.getPort(), type, feature);
 	}
 
 	private void checkPortOfType(final Port port, final int type, final EStructuralFeature feature) {
@@ -151,15 +151,5 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 				error(s, feature, PORT_NOT_OUTPUT);
 			}
 		}
-	}
-
-	private static double value2Double(final Value value) {
-		final double i = value.getInteger();
-		double f = value.getFraction();
-
-		while (f >= 1) {
-			f /= 10.0;
-		}
-		return i + f;
 	}
 }
