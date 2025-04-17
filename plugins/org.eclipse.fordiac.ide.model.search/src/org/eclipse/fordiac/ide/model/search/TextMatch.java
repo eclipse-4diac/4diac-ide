@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -32,10 +32,11 @@ public class TextMatch extends Match {
 	 * @param line   The line of the match (may be -1 if unknown)
 	 * @param offset The offset of the match (may be -1 if unknown)
 	 * @param length The length of the match (may be -1 if unknown)
+	 * @param type   The type of the match
 	 */
-	public TextMatch(final URI uri, final int line, final int offset, final int length) {
+	public TextMatch(final URI uri, final int line, final int offset, final int length, final String type) {
 		super(uri, MessageFormat.format(Messages.TextMatch_Location, Integer.valueOf(line), Integer.valueOf(offset),
-				Integer.valueOf(length)));
+				Integer.valueOf(length)), type);
 		this.line = line;
 		this.offset = offset;
 		this.length = length;
@@ -90,8 +91,7 @@ public class TextMatch extends Match {
 
 	@Override
 	public String toString() {
-		return String.format("%s [uri=%s, location=%s, line=%s, offset=%s, length=%s]", getClass().getName(), getUri(), //$NON-NLS-1$
-				getLocation(), Integer.valueOf(line), Integer.valueOf(offset), Integer.valueOf(length));
+		return String.format("%s [uri=%s, location=%s, type=%s, line=%s, offset=%s, length=%s]", getClass().getName(), //$NON-NLS-1$
+				getUri(), getLocation(), getType(), Integer.valueOf(line), Integer.valueOf(offset), Integer.valueOf(length));
 	}
-
 }
