@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 public class Match {
 	private final URI uri;
 	private final String location;
+	private final String type;
 
 	/**
 	 * Create a new generic search match based on an object
@@ -32,7 +33,8 @@ public class Match {
 	 * @param object The object
 	 */
 	public Match(final EObject object) {
-		this(EcoreUtil.getURI(object), FordiacMarkerHelper.getLocation(object));
+		this(EcoreUtil.getURI(object), FordiacMarkerHelper.getLocation(object),
+				object.eClass().getEPackage().getName());
 	}
 
 	/**
@@ -40,10 +42,12 @@ public class Match {
 	 *
 	 * @param uri      The uri of the match (must not be null)
 	 * @param location The location string of the match (must not be null)
+	 * @param type     The type of the match
 	 */
-	public Match(final URI uri, final String location) {
+	public Match(final URI uri, final String location, final String type) {
 		this.uri = Objects.requireNonNull(uri);
 		this.location = Objects.requireNonNull(location);
+		this.type = type;
 	}
 
 	public final URI getUri() {
@@ -54,9 +58,13 @@ public class Match {
 		return location;
 	}
 
+	public String getType() {
+		return type;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(uri, location);
+		return Objects.hash(uri, location, type);
 	}
 
 	@Override
@@ -71,11 +79,12 @@ public class Match {
 			return false;
 		}
 		final Match other = (Match) obj;
-		return Objects.equals(uri, other.uri) && Objects.equals(location, other.location);
+		return Objects.equals(uri, other.uri) && Objects.equals(location, other.location)
+				&& Objects.equals(type, other.type);
 	}
 
 	@Override
 	public String toString() {
-		return String.format("%s [uri=%s, location=%s]", getClass().getName(), uri, location); //$NON-NLS-1$
+		return String.format("%s [uri=%s, location=%s, type=%s]", getClass().getName(), uri, location, type); //$NON-NLS-1$
 	}
 }
