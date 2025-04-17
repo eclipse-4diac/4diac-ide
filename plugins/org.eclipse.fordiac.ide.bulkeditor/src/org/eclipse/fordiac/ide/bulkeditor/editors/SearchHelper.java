@@ -192,7 +192,7 @@ public class SearchHelper {
 				final ITypedElement typedElement = (ITypedElement) searchCandidate;
 
 				return matchesString(typedElement.getName(), filters.get(0), namePattern)
-						&& matchesString(typedElement.getTypeName(), filters.get(1), typePattern)
+						&& matchesString(typedElement.getFullTypeName(), filters.get(1), typePattern)
 						&& matchesString(typedElement.getComment(), filters.get(2), commentPattern)
 						&& matchesString(InitialValueHelper.getInitialOrDefaultValue(typedElement), filters.get(3),
 								valuePattern);
