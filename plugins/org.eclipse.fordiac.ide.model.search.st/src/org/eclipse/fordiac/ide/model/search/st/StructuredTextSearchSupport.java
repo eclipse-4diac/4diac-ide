@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.search.Match;
 import org.eclipse.fordiac.ide.model.search.TextMatch;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector;
 import org.eclipse.xtext.EcoreUtil2;
+import org.eclipse.xtext.LanguageInfo;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.resource.DefaultLocationInFileProvider;
 import org.eclipse.xtext.resource.ILocationInFileProvider;
@@ -58,9 +59,9 @@ public abstract class StructuredTextSearchSupport implements ISearchSupport {
 		if (locationInFileProvider
 				.getSignificantTextRegion(object) instanceof final ITextRegionWithLineInformation region) {
 			return new TextMatch(EcoreUtil.getURI(object), region.getLineNumber(), region.getOffset(),
-					region.getLength());
+					region.getLength(), getMatchType(object));
 		}
-		return new Match(EcoreUtil.getURI(object), FordiacMarkerHelper.getLocation(object));
+		return new Match(EcoreUtil.getURI(object), FordiacMarkerHelper.getLocation(object), getMatchType(object));
 	}
 
 	protected static Stream<String> getImportedNamespaces(final EObject object) {
@@ -72,5 +73,20 @@ public abstract class StructuredTextSearchSupport implements ISearchSupport {
 			return usedTypes.stream().map(converter::toString);
 		}
 		return Stream.empty();
+	}
+
+	protected static String getMatchType(final EObject object) {
+		if (object.eResource() instanceof final XtextResource xtextResource) {
+			final IResourceServiceProvider provider = xtextResource.getResourceServiceProvider();
+			final LanguageInfo languageInfo = provider.get(LanguageInfo.class);
+			return getLanguagePrefix(languageInfo) + "ui." + languageInfo.getShortName().toLowerCase(); //$NON-NLS-1$
+		}
+		return object.eClass().getEPackage().getName();
+	}
+
+	protected static String getLanguagePrefix(final LanguageInfo languageInfo) {
+		final String languageName = languageInfo.getLanguageName();
+		final int lastIndex = languageName.lastIndexOf('.');
+		return languageName.substring(0, lastIndex + 1);
 	}
 }
