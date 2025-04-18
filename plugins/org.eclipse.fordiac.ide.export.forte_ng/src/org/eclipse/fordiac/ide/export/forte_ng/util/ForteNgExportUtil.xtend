@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.model.value.StringValueConverter
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
+import org.eclipse.fordiac.ide.model.libraryElement.Connection
 
 final class ForteNgExportUtil {
 	public static final CharSequence CONNECTION_EXPORT_PREFIX = "conn_"
@@ -75,17 +76,20 @@ final class ForteNgExportUtil {
 				element.eContainer.eContainer instanceof CompositeFBType:
 				if (element.isInput || element.inOutVar)
 					'''«CONNECTION_EXPORT_PREFIX»if2in_«element.name».getValue()'''
-				else if (!element.inputConnections.empty) {
-					val conn = element.inputConnections.first
-					if (conn.sourceElement.type.genericType)
-						'''«FB_EXPORT_PREFIX»«conn.sourceElement.name»->getDOConnection(«conn.source.name.FORTEStringId»)->getValue()'''
-					else
-						'''«FB_EXPORT_PREFIX»«conn.sourceElement.name»->«CONNECTION_EXPORT_PREFIX»«conn.source.name».getValue()'''
-				} else
+				else if (!element.inputConnections.empty && !element.inputConnections.first.negated)
+					element.inputConnections.first.generateConnectionValue
+				else
 					'''«VARIABLE_EXPORT_PREFIX»«element.name»'''
 			case element.rootContainer instanceof AdapterType: '''«VARIABLE_EXPORT_PREFIX»«element.name»()'''
 			default: '''«VARIABLE_EXPORT_PREFIX»«element.name»'''
 		}
+	}
+
+	def static CharSequence generateConnectionValue(Connection conn) {
+		if (conn.sourceElement.type.genericType)
+			'''«FB_EXPORT_PREFIX»«conn.sourceElement.name»->getDOConnection(«conn.source.name.FORTEStringId»)->getValue()'''
+		else
+			'''«FB_EXPORT_PREFIX»«conn.sourceElement.name»->«CONNECTION_EXPORT_PREFIX»«conn.source.name».getValue()'''
 	}
 
 	def static CharSequence generateName(FB feature) '''«FB_EXPORT_PREFIX»«feature.name»'''

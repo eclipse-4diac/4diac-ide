@@ -267,7 +267,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
 			  	  «FOR variable : event.with.map[withVariable]»
-			  	  	readData(«variable.interfaceElementIndex», «variable.generateName», «IF variable.inOutVar»&«ENDIF»«variable.generateNameAsConnection»);
+			  	  	«variable.generateReadInputDataVariable»
 			  	  «ENDFOR»
 			  	  break;
 			  	}
@@ -278,6 +278,10 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«ELSE»
 			// nothing to do
 		«ENDIF»
+	'''
+	
+	def protected generateReadInputDataVariable(VarDeclaration variable) '''
+		readData(«variable.interfaceElementIndex», «variable.generateName», «IF variable.inOutVar»&«ENDIF»«variable.generateNameAsConnection»);
 	'''
 
 	def protected generateWriteOutputDataDeclaration() '''
@@ -296,7 +300,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
 			  	  «FOR variable : event.with.map[withVariable]»
-			  	  	writeData(«variable.interfaceElementIndex», «variable.generateName», «variable.generateNameAsConnection»);
+			  	  	«variable.generateWriteOutputDataVariable»
 			  	  «ENDFOR»
 			  	  break;
 			  	}
@@ -307,6 +311,10 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«ELSE»
 			// nothing to do
 		«ENDIF»
+	'''
+
+	def protected generateWriteOutputDataVariable(VarDeclaration variable) '''
+		writeData(«variable.interfaceElementIndex», «variable.generateName», «variable.generateNameAsConnection»);
 	'''
 
 	def protected getWithVariable(With with) {
@@ -405,9 +413,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def protected generateVariableDefaultAssignment(Iterable<VarDeclaration> variables) '''
 		«FOR variable : variables»
-		  	«IF variable.needsGenericAccess»
-		  		«variable.generateName».setValue(«variable.generateVariableDefaultValue»);
-		  	«ELSE»
+			«IF variable.needsGenericAccess»
+				«variable.generateName».setValue(«variable.generateVariableDefaultValue»);
+			«ELSE»
 				«variable.generateName» = «variable.generateVariableDefaultValue»;
 			«ENDIF»
 		«ENDFOR»

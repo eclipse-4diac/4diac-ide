@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 
@@ -100,7 +101,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 	'''
 
 	override generateInterfaceVariableAndConnectionDeclarations() '''
-		«type.interfaceList.outputVars.filter[inputConnections.empty].toList.generateVariableDeclarations(false)»
+		«type.interfaceList.outputVars.filter[needsOutputVariable].toList.generateVariableDeclarations(false)»
 		«type.interfaceList.sockets.generateAdapterDeclarations»
 		«type.interfaceList.plugs.generateAdapterDeclarations»
 		«type.interfaceList.eventOutputs.generateEventConnectionDeclarations»
@@ -111,6 +112,10 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		«type.interfaceList.inputVars.generateDataConnectionDeclarations(false, true)»
 		«type.interfaceList.outMappedInOutVars.generateDataConnectionDeclarations(false, true)»
 	'''
+	
+	def private needsOutputVariable(VarDeclaration varDeclaration) {
+		varDeclaration.inputConnections.empty || varDeclaration.inputConnections.first.negated
+	}
 
 	override generateAccessorDeclarations() '''
 		«super.generateAccessorDeclarations»
