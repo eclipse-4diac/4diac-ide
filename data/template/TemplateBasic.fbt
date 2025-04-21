@@ -40,7 +40,7 @@
   <VersionInfo Author="AZ" Date="2016-05-26" Organization="fortiss GmbH" Version="1.0"/>
   <InterfaceList>
     <EventInputs>
-      <Event Comment="Initialization Request" Name="INIT" Type="Event">
+      <Event Comment="Initialization Request" Name="INIT" Type="EInit">
         <With Var="QI"/>
       </Event>
       <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
@@ -48,7 +48,7 @@
       </Event>
     </EventInputs>
     <EventOutputs>
-      <Event Comment="Initialization Confirm" Name="INITO" Type="Event">
+      <Event Comment="Initialization Confirm" Name="INITO" Type="EInit">
         <With Var="QO"/>
       </Event>
       <Event Comment="Execution Confirmation" Name="CNF" Type="Event">

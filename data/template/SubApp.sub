@@ -39,13 +39,13 @@
   <VersionInfo Organization="4DIAC-Consortium" Version="0.0" Author="4DIAC-IDE" Date="2012-02-28" />
   <SubAppInterfaceList>
     <SubAppEventInputs>
-      <SubAppEvent Name="INIT" Comment="Initialization Request" >
+      <SubAppEvent Name="INIT" Type="EInit" Comment="Initialization Request" >
       </SubAppEvent>
       <SubAppEvent Name="REQ" Comment="Normal Execution Request" >
       </SubAppEvent>
     </SubAppEventInputs>
     <SubAppEventOutputs>
-      <SubAppEvent Name="INITO" Comment="Initialization Confirm" >
+      <SubAppEvent Name="INITO" Type="EInit" Comment="Initialization Confirm" >
       </SubAppEvent>
       <SubAppEvent Name="CNF" Comment="Execution Confirmation" >
       </SubAppEvent>

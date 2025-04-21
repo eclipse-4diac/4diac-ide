@@ -39,7 +39,7 @@
   <VersionInfo Organization="4DIAC-Consortium" Version="0.0" Author="4DIAC-IDE" Date="2008-07-10" />
   <InterfaceList>
     <EventInputs>
-      <Event Name="INIT" Comment="Initialization Request" >
+      <Event Name="INIT" Type="EInit" Comment="Initialization Request" >
         <With Var="QI" />
       </Event>
       <Event Name="REQ" Comment="Normal Execution Request" >
@@ -47,7 +47,7 @@
       </Event>
     </EventInputs>
     <EventOutputs>
-      <Event Name="INITO" Comment="Initialization Confirm" >
+      <Event Name="INITO" Type="EInit" Comment="Initialization Confirm" >
         <With Var="QO" />
       </Event>
       <Event Name="CNF" Comment="Execution Confirmation" >
