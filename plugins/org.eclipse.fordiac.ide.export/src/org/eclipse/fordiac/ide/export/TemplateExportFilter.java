@@ -164,6 +164,8 @@ public abstract class TemplateExportFilter extends ExportFilter {
 					openMergeEditor(writtenFiles);
 				}
 			} else if (res == BUTTON_OVERWRITE_ALL) {
+				// write the files that were prepared
+				files.write(true);
 				throw (new ExportException.OverwriteAll());
 			} else if (res == BUTTON_CANCEL_ALL) {
 				throw (new ExportException.CancelAll());
