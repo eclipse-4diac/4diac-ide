@@ -7809,13 +7809,22 @@ public interface LibraryElementPackage extends EPackage {
 	int TYPED_SUB_APP__SUB_APP_NETWORK = SUB_APP_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Var Config Params</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__VAR_CONFIG_PARAMS = SUB_APP_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Typed Sub App</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TYPED_SUB_APP_FEATURE_COUNT = SUB_APP_FEATURE_COUNT + 1;
+	int TYPED_SUB_APP_FEATURE_COUNT = SUB_APP_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.UntypedSubAppImpl <em>Untyped Sub App</em>}' class.
@@ -11331,6 +11340,17 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getTypedSubApp_SubAppNetwork();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getVarConfigParams <em>Var Config Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Var Config Params</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getVarConfigParams()
+	 * @see #getTypedSubApp()
+	 * @generated
+	 */
+	EReference getTypedSubApp_VarConfigParams();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp <em>Untyped Sub App</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -14211,6 +14231,14 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TYPED_SUB_APP__SUB_APP_NETWORK = eINSTANCE.getTypedSubApp_SubAppNetwork();
+
+		/**
+		 * The meta object literal for the '<em><b>Var Config Params</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TYPED_SUB_APP__VAR_CONFIG_PARAMS = eINSTANCE.getTypedSubApp_VarConfigParams();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.UntypedSubAppImpl <em>Untyped Sub App</em>}' class.
