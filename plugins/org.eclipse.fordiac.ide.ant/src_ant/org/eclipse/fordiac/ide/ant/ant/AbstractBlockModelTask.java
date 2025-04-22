@@ -84,6 +84,10 @@ public abstract class AbstractBlockModelTask extends Task {
 		if (entry != null) {
 			entries.add(entry);
 		}
+		entry = tl.getDataTypeLibrary().getDerivedTypeEntry(blockname);
+		if (entry != null) {
+			entries.add(entry);
+		}
 		entry = tl.getDeviceTypeEntry(blockname);
 		if (entry != null) {
 			entries.add(entry);
@@ -137,6 +141,9 @@ public abstract class AbstractBlockModelTask extends Task {
 		}
 		case TypeLibraryTags.FB_TYPE_FILE_ENDING: {
 			typeEntry = tl.getFBTypeEntry(blockname);
+			if (typeEntry instanceof FunctionFBTypeEntry) {
+				typeEntry = null;
+			}
 			break;
 		}
 		case TypeLibraryTags.FC_TYPE_FILE_ENDING: {
@@ -172,7 +179,7 @@ public abstract class AbstractBlockModelTask extends Task {
 		}
 		}
 		if (typeEntry == null) {
-			throw new BuildException(MessageFormat.format("Can not get TypeEntry for {0}", blockname)); //$NON-NLS-1$
+			throw new BuildException(MessageFormat.format("Can not get {0}-TypeEntry for {1}", fileending, blockname)); //$NON-NLS-1$
 		}
 		return typeEntry;
 	}
