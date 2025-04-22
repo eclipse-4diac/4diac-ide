@@ -7,11 +7,11 @@
 	Reinstate once this issue is fixed:
 	https://github.com/EclipseNebula/nebula/issues/631
 	 -->
-	<!--extension
+	<extension
     		point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">
 		<editorPage
         		class="org.eclipse.fordiac.ide.fbtypeeditor.doc.editors.DescriptionEditor"
             	sortIndex="70">
       	</editorPage>
-   	</extension-->
+   	</extension>
 </plugin>
