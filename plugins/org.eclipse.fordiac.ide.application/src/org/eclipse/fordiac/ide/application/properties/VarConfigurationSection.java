@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
@@ -171,7 +172,8 @@ public class VarConfigurationSection extends AbstractSection {
 		final Stream<VarDeclaration> varConfStream = StreamSupport
 				.stream(Spliterators.spliteratorUnknownSize(EcoreUtil.getAllProperContents(getType(), true), 0), false)
 				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
-				.filter(VarDeclaration::isVarConfig);
+				.filter(VarDeclaration::isVarConfig)
+				.filter(var -> !FBNetworkElementHelper.isContainedInTypedInstance(var));
 		if (getType() instanceof final Application app) {
 			final Stream<VarDeclaration> subAppStream = app.getFBNetwork().getNetworkElements().stream()
 					.filter(TypedSubApp.class::isInstance).map(TypedSubApp.class::cast)

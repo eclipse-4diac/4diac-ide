@@ -15,12 +15,11 @@ package org.eclipse.fordiac.ide.model.helpers;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public final class FBNetworkElementHelper {
 
-	public static boolean isContainedInTypedInstance(final FBNetworkElement element) {
+	public static boolean isContainedInTypedInstance(final EObject element) {
 		EObject obj = element;
 		while (obj.eContainer() != null) {
 			obj = obj.eContainer();
