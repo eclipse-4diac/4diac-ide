@@ -17,12 +17,14 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import java.util.List;
 import java.util.Spliterators;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
@@ -35,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
@@ -104,13 +107,16 @@ public class VarConfigurationSection extends AbstractSection {
 		if (input instanceof final INamedElement namedElement) {
 			return namedElement;
 		}
+		if (input instanceof final SubAppForFBNetworkEditPart safbnEp) {
+			return safbnEp.getModel();
+		}
 		return null;
 	}
 
 	@Override
 	protected INamedElement getType() {
 		if ((type instanceof Application) || (type instanceof FB) || (type instanceof SubApp)
-				|| (type instanceof CFBInstance)) {
+				|| (type instanceof CFBInstance) || (type instanceof TypedSubApp)) {
 			return (INamedElement) type;
 		}
 		return null;
@@ -159,10 +165,21 @@ public class VarConfigurationSection extends AbstractSection {
 	}
 
 	private List<VarDeclaration> collectVarConfigs() {
-		return StreamSupport
+		if (getType() instanceof final TypedSubApp tsa) {
+			return tsa.getVarConfigParams();
+		}
+		final Stream<VarDeclaration> varConfStream = StreamSupport
 				.stream(Spliterators.spliteratorUnknownSize(EcoreUtil.getAllProperContents(getType(), true), 0), false)
 				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
-				.filter(VarDeclaration::isVarConfig).toList();
+				.filter(VarDeclaration::isVarConfig);
+		if (getType() instanceof final Application app) {
+			final Stream<VarDeclaration> subAppStream = app.getFBNetwork().getNetworkElements().stream()
+					.filter(TypedSubApp.class::isInstance).map(TypedSubApp.class::cast)
+					.flatMap(tsa -> tsa.getVarConfigParams().stream());
+
+			return Stream.concat(subAppStream, varConfStream).distinct().toList();
+		}
+		return varConfStream.toList();
 	}
 
 	private static class VarConfigDeclarationColumnAccessor extends VarDeclarationColumnAccessor {
@@ -173,10 +190,7 @@ public class VarConfigurationSection extends AbstractSection {
 
 		@Override
 		public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
-			return switch (getColumns().get(columnIndex)) {
-			case NAME -> rowObject.getQualifiedName();
-			default -> super.getDataValue(rowObject, columnIndex);
-			};
+			return super.getDataValue(rowObject, columnIndex);
 		}
 
 		@Override

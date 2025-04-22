@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -25,7 +26,8 @@ public class VarConfigurationFilter implements IFilter {
 	@Override
 	public boolean select(final Object toTest) {
 		return (toTest instanceof FB) || (toTest instanceof SubApp) || (toTest instanceof Application)
-				|| (toTest instanceof FBNetworkEditPart);
+				|| (toTest instanceof FBNetworkEditPart) || (toTest instanceof final SubAppForFBNetworkEditPart sfep
+						&& !sfep.getModel().isContainedInTypedInstance());
 	}
 
 }
