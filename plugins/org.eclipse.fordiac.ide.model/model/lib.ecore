@@ -2299,6 +2299,8 @@
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subAppNetwork" eType="#//FBNetwork"
         transient="true" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="varConfigParams" upperBound="-1"
+        eType="#//VarDeclaration" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UntypedSubApp" eSuperTypes="#//SubApp">
     <eOperations name="getType" lowerBound="1" eType="#//SubAppType">

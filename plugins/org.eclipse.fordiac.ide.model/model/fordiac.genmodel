@@ -861,6 +861,7 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//TypedSubApp">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//TypedSubApp/subAppNetwork"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TypedSubApp/varConfigParams"/>
       <genOperations ecoreOperation="lib.ecore#//TypedSubApp/isTyped" body="return true;"/>
       <genOperations ecoreOperation="lib.ecore#//TypedSubApp/loadSubAppNetwork" body="return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.loadSubAppNetwork(this);"/>
       <genOperations ecoreOperation="lib.ecore#//TypedSubApp/findBySimpleName" body="return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.findBySimpleName(this, name);">
