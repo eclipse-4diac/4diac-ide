@@ -36,7 +36,7 @@ public class NegateConnectionCommand extends Command implements ScopedCommand {
 
 	@Override
 	public Set<EObject> getAffectedObjects() {
-		return Set.of(connection.getSource(), connection.getDestination());
+		return Set.of(connection);
 	}
 
 	@Override

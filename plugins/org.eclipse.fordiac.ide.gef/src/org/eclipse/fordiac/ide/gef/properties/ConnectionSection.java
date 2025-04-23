@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeConnectionCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.HideConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.NegateConnectionCommand;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -120,15 +119,11 @@ public class ConnectionSection extends AbstractSection {
 		}
 		showConnectionButton.setSelection(getConnection().isVisible());
 
-		boolean isBooleanConnection = false;
-		if (getConnection().getSource() != null && getConnection().getDestination() != null) {
-			isBooleanConnection = getConnection().getSource().getType() == IecTypes.ElementaryTypes.BOOL
-					&& getConnection().getDestination().getType() == IecTypes.ElementaryTypes.BOOL;
-		}
-		negateConnectionLabel.setVisible(isBooleanConnection);
-		negateConnectionButton.setVisible(isBooleanConnection);
+		final boolean showNegated = getConnection().supportsNegated() || getConnection().isNegated();
+		negateConnectionLabel.setVisible(showNegated);
+		negateConnectionButton.setVisible(showNegated);
 		negateConnectionButton.setSelection(getConnection().isNegated());
-		negateConnectionButton.setEnabled(isBooleanConnection);
+		negateConnectionButton.setEnabled(showNegated);
 	}
 
 	private boolean isViewer() {

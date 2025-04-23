@@ -844,6 +844,27 @@
 				</with>
 		</enabledWhen>
 	</handler>
+ <handler
+       class="org.eclipse.fordiac.ide.application.handlers.NegateConnectionsHandler"
+       commandId="org.eclipse.fordiac.ide.application.commands.negateConnections">
+    <activeWhen>
+       <test
+             property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor">
+       </test>
+    </activeWhen>
+    <enabledWhen>
+       <with
+             variable="selection">
+          <iterate
+                ifEmpty="false"
+                operator="and">
+             <instanceof
+                   value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart">
+             </instanceof>
+          </iterate>
+       </with>
+    </enabledWhen>
+ </handler>
   </extension>
   
   <extension
@@ -1101,11 +1122,7 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.negateConnections"
                label="%command.negatecon.name">
-        <visibleWhen checkEnabled="false">
-        <and>
-          <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
-          <test property="org.eclipse.fordiac.ide.application.utilities.isBoolConnectionEditor"/> 
-		</and>
+        <visibleWhen checkEnabled="true">
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.trim" >
@@ -1356,11 +1373,7 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.negateConnections"
                label="%command.negatecon.name">
-        <visibleWhen checkEnabled="false">
-        <and>
-        	<test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
-        	<test property="org.eclipse.fordiac.ide.application.utilities.isBoolConnectionEditor"/> 
-        </and>
+        <visibleWhen checkEnabled="true">
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.expandSubApp">
@@ -1797,12 +1810,6 @@
                     id="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditorTester"
                     namespace="org.eclipse.fordiac.ide.application.utilities"
                     properties="isNoReadOnlyEditor"
-                    type="java.lang.Object">
-    </propertyTester>
-    <propertyTester class="org.eclipse.fordiac.ide.application.utilities.IsBoolConnectionTester"
-                    id="org.eclipse.fordiac.ide.application.utilities.isBoolConnectionTester"
-                    namespace="org.eclipse.fordiac.ide.application.utilities"
-                    properties="isBoolConnectionEditor"
                     type="java.lang.Object">
     </propertyTester>
     <propertyTester

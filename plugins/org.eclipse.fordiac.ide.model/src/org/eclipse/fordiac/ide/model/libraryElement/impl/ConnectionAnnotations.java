@@ -26,7 +26,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -355,13 +354,7 @@ public class ConnectionAnnotations {
 
 	public static boolean validateNegatedConnection(final Connection connection, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (connection == null || connection.getSource() == null || connection.getDestination() == null) {
-			return false;
-		}
-
-		if (connection.isNegated() && (!connection.getSource().getType().equals(IecTypes.ElementaryTypes.BOOL)
-				|| !connection.getDestination().getType().equals(IecTypes.ElementaryTypes.BOOL)
-				|| hasInOutVar(connection))) {
+		if (connection.isNegated() && !connection.supportsNegated()) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.CONNECTION__VALIDATE_NEGATED_CONNECTION,
@@ -373,12 +366,7 @@ public class ConnectionAnnotations {
 		return true;
 	}
 
-	private static boolean hasInOutVar(final Connection connection) {
-		return (connection.getSource() instanceof final VarDeclaration vd && vd.isInOutVar())
-				|| (connection.getDestination() instanceof final VarDeclaration vd2 && vd2.isInOutVar());
-	}
-
-	public static void setNegated(final HiddenElement connection, final boolean negated) {
+	public static void setNegated(final Connection connection, final boolean negated) {
 		if (!negated) {
 			connection.deleteAttribute(LibraryElementTags.CONNECTION_NEGATED);
 		} else {
@@ -386,12 +374,21 @@ public class ConnectionAnnotations {
 		}
 	}
 
-	private static void setNegated(final HiddenElement connection, final String negated) {
+	private static void setNegated(final Connection connection, final String negated) {
 		connection.setAttribute(InternalAttributeDeclarations.NEGATED, negated, "");
 	}
 
-	public static boolean isNegated(final HiddenElement connection) {
+	public static boolean isNegated(final Connection connection) {
 		final String negatedAttribute = connection.getAttributeValue(LibraryElementTags.CONNECTION_NEGATED);
 		return "true".equalsIgnoreCase(negatedAttribute); //$NON-NLS-1$
+	}
+
+	public static boolean supportsNegated(final Connection connection) {
+		return isPlainBoolVariable(connection.getSource()) && isPlainBoolVariable(connection.getDestination());
+	}
+
+	private static boolean isPlainBoolVariable(final IInterfaceElement element) {
+		return element instanceof final VarDeclaration varDeclaration && !varDeclaration.isInOutVar()
+				&& !varDeclaration.isArray() && ElementaryTypes.BOOL.equals(varDeclaration.getType());
 	}
 }

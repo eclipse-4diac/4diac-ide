@@ -709,6 +709,11 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.isNegated(this);"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="supportsNegated" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.supportsNegated(this);"/>
+      </eAnnotations>
+    </eOperations>
     <eOperations name="validateNegatedConnection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
         <details key="invariant" value="true"/>

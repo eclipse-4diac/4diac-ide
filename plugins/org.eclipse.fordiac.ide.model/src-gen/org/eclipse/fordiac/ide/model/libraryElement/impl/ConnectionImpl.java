@@ -613,6 +613,16 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	@Override
+	public boolean supportsNegated() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.supportsNegated(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public boolean validateNegatedConnection(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateNegatedConnection(this, diagnostics, context);
 	}

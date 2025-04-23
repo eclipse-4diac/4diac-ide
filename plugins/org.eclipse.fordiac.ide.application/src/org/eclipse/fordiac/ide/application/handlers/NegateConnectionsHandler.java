@@ -28,6 +28,7 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.commands.IElementUpdater;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.menus.UIElement;
@@ -69,4 +70,11 @@ public class NegateConnectionsHandler extends AbstractHandler implements IElemen
 		}
 	}
 
+	@Override
+	public void setEnabled(final Object evaluationContext) {
+		setBaseEnabled(HandlerUtil.getVariable(evaluationContext,
+				ISources.ACTIVE_CURRENT_SELECTION_NAME) instanceof final IStructuredSelection selection
+				&& selection.stream().allMatch(element -> element instanceof final ConnectionEditPart conEP
+						&& (conEP.getModel().supportsNegated() || conEP.getModel().isNegated())));
+	}
 }
