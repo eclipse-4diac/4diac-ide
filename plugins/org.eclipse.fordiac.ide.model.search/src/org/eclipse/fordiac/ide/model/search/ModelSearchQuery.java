@@ -359,7 +359,8 @@ public class ModelSearchQuery implements ISearchQuery {
 			if (modelElement instanceof final VarDeclaration varDecl) {
 				return compareStrings(varDecl.getTypeName())
 						|| (varDecl.getType() != null && varDecl.getType().getTypeEntry() != null
-								&& compareStrings(varDecl.getType().getTypeEntry().getFullTypeName()));
+								&& compareStrings(varDecl.getType().getTypeEntry().getFullTypeName()))
+						|| ((varDecl.getValue() != null) && compareStrings(varDecl.getValue().getValue()));
 			}
 		}
 		return false;
