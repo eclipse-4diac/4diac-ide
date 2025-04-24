@@ -459,6 +459,11 @@
              name="Toggle Connections Visibility">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
+             defaultHandler="org.eclipse.fordiac.ide.application.handlers.ToggleConnectionBendpointHandler"
+             id="org.eclipse.fordiac.ide.application.commands.toggleConnectionBendpoints"
+             name="Toggle Connection Bendpoints">
+    </command>
+    <command categoryId="org.eclipse.fordiac.ide.commands.category"
 
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.NegateConnectionsHandler"
              id="org.eclipse.fordiac.ide.application.commands.negateConnections"
@@ -1099,6 +1104,19 @@
           <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
         </visibleWhen>
       </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnectionBendpoints"
+               label="Toggle Connection Bendpoints">
+        <visibleWhen checkEnabled="false">
+        <and>
+            <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
+            <with variable="selection">
+                <iterate ifEmpty="false">
+                    <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
+                </iterate>
+            </with>
+        </and>
+    	</visibleWhen>
+      </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.negateConnections"
                label="%command.negatecon.name">
         <visibleWhen checkEnabled="false">
@@ -1353,6 +1371,19 @@
         <visibleWhen checkEnabled="false">
         	<test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
         </visibleWhen>
+      </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnectionBendpoints"
+               label="Toggle Connection Bendpoints">
+        <visibleWhen checkEnabled="false">
+        <and>
+            <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
+            <with variable="selection">
+                <iterate ifEmpty="false">
+                    <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
+                </iterate>
+            </with>
+        </and>
+    	</visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.negateConnections"
                label="%command.negatecon.name">
