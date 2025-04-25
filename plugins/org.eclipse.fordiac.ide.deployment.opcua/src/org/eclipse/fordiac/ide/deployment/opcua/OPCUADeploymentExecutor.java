@@ -345,8 +345,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		if (resourceNode == null) {
 			return;
 		}
-		final IInterfaceElement sourceData = connData.getSource();
-		final IInterfaceElement destinationData = connData.getDestination();
+		final IInterfaceElement sourceData = connData.source();
+		final IInterfaceElement destinationData = connData.destination();
 
 		if (sourceData == null || sourceData.getFBNetworkElement() == null || destinationData == null
 				|| destinationData.getFBNetworkElement() == null) {
@@ -356,9 +356,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 		final FBNetworkElement sourceFB = sourceData.getFBNetworkElement();
 		final FBNetworkElement destinationFB = destinationData.getFBNetworkElement();
-		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.getSourcePrefix(),
+		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.sourcePrefix(),
 				sourceFB.getName(), sourceData.getName());
-		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.getDestinationPrefix(),
+		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.destinationPrefix(),
 				destinationFB.getName(), destinationData.getName());
 		final CallMethodRequest request = new CallMethodRequest(resourceNode, Constants.CREATE_CONNECTION_NODE,
 				new Variant[] { new Variant(source), new Variant(destination) });
@@ -492,8 +492,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			return;
 		}
 
-		final IInterfaceElement sourceData = connData.getSource();
-		final IInterfaceElement destinationData = connData.getDestination();
+		final IInterfaceElement sourceData = connData.source();
+		final IInterfaceElement destinationData = connData.destination();
 
 		if (sourceData == null || sourceData.getFBNetworkElement() == null || destinationData == null
 				|| destinationData.getFBNetworkElement() == null) {
@@ -502,9 +502,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 		final FBNetworkElement sourceFB = sourceData.getFBNetworkElement();
 		final FBNetworkElement destinationFB = destinationData.getFBNetworkElement();
-		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.getSourcePrefix(),
+		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.sourcePrefix(),
 				sourceFB.getName(), sourceData.getName());
-		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.getDestinationPrefix(),
+		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.destinationPrefix(),
 				destinationFB.getName(), destinationData.getName());
 		final String resName = res.getName();
 		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),

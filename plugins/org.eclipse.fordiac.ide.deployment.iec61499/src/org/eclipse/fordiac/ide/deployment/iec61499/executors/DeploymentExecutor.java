@@ -193,8 +193,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	@Override
 	public void createConnection(final Resource resource, final ConnectionDeploymentData connData)
 			throws DeploymentException {
-		final IInterfaceElement source = connData.getSource();
-		final IInterfaceElement destination = connData.getDestination();
+		final IInterfaceElement source = connData.source();
+		final IInterfaceElement destination = connData.destination();
 		if ((null == source) || (null == destination) || (null == source.getFBNetworkElement())
 				|| (null == destination.getFBNetworkElement())) {
 			throw new DeploymentException(Messages.DeploymentExecutor_CreateConnectionFailed);
@@ -202,8 +202,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		final FBNetworkElement sourceFB = source.getFBNetworkElement();
 		final FBNetworkElement destFB = destination.getFBNetworkElement();
 		final String request = MessageFormat.format(CREATE_CONNECTION, getNextId(),
-				connData.getSourcePrefix() + sourceFB.getName() + "." + source.getName(), //$NON-NLS-1$
-				connData.getDestinationPrefix() + destFB.getName() + "." + destination.getName()); //$NON-NLS-1$
+				connData.sourcePrefix() + sourceFB.getName() + "." + source.getName(), //$NON-NLS-1$
+				connData.destinationPrefix() + destFB.getName() + "." + destination.getName()); //$NON-NLS-1$
 
 		try {
 			sendREQ(resource.getName(), request);
