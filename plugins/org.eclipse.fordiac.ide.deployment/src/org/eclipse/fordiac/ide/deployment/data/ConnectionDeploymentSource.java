@@ -8,12 +8,16 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
- *   Martin Jobst - change to record
+ *   Martin Jobst - extract from ResourceDeploymentData and change to record
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.data;
 
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public record ConnectionDeploymentData(String sourcePrefix, IInterfaceElement source, String destinationPrefix,
-		IInterfaceElement destination) {
+public record ConnectionDeploymentSource(String prefix, IInterfaceElement source) {
+
+	public ConnectionDeploymentData toConnectionData(final String destinationPrefix,
+			final IInterfaceElement destination) {
+		return new ConnectionDeploymentData(prefix, source, destinationPrefix, destination);
+	}
 }
