@@ -51,7 +51,7 @@ public class ExtractedLibraryImportWizard extends Wizard implements IImportWizar
 
 	@Override
 	public void addPages() {
-		firstPage = new LibrarySelectionPage(Messages.ImportExtractedFiles, false, false, true, true);
+		firstPage = new LibrarySelectionPage(Messages.ImportExtractedFiles, false, true, true);
 		addPage(firstPage);
 	}
 }
