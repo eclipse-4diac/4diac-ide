@@ -351,9 +351,11 @@ public enum LibraryManager {
 		}
 		final PosixFileAttributeView posixView = Files.getFileAttributeView(path, PosixFileAttributeView.class);
 		if (posixView != null) {
-			final Set<PosixFilePermission> permissions = Set.of(PosixFilePermission.OWNER_READ,
-					PosixFilePermission.GROUP_READ, PosixFilePermission.OTHERS_READ);
 			try {
+				final Set<PosixFilePermission> permissions = posixView.readAttributes().permissions();
+				permissions.remove(PosixFilePermission.OWNER_WRITE);
+				permissions.remove(PosixFilePermission.GROUP_WRITE);
+				permissions.remove(PosixFilePermission.OTHERS_WRITE);
 				posixView.setPermissions(permissions);
 			} catch (final IOException e) {
 				// empty
