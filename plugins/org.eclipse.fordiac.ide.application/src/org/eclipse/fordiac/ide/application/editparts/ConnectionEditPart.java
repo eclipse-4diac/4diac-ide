@@ -85,6 +85,7 @@ import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.PlatformUI;
@@ -204,16 +205,24 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 	private final IPropertyChangeListener propertyChangeListener = event -> {
 		if (event.getProperty().equals(UIPreferenceConstants.P_HIDE_DATA_CON)
 				&& (getModel() instanceof DataConnection)) {
-			getFigure().setVisible(!((Boolean) event.getNewValue()).booleanValue());
+			getFigure().setVisible(!getNewBooleanFromEvent(event));
 		}
 		if (event.getProperty().equals(UIPreferenceConstants.P_HIDE_EVENT_CON)
 				&& (getModel() instanceof EventConnection)) {
-			getFigure().setVisible(!((Boolean) event.getNewValue()).booleanValue());
+			getFigure().setVisible(!getNewBooleanFromEvent(event));
 		}
 		if (event.getProperty().equals(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE)) {
 			getFigure().updateConLabels();
 		}
 	};
+
+	private static boolean getNewBooleanFromEvent(final PropertyChangeEvent event) {
+		return switch (event.getNewValue()) {
+		case final Boolean bool -> bool.booleanValue();
+		case final String string -> Boolean.parseBoolean(string);
+		default -> false;
+		};
+	}
 
 	private final IPropertyChangeListener colorChangeListener = event -> {
 		if (event.getProperty().equals(UIPreferenceConstants.P_EVENT_CONNECTOR_COLOR)
