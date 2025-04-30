@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.application.handlers;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -28,6 +29,8 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -96,6 +99,17 @@ public class MarkPredecessorHandler extends AbstractHandler implements IElementU
 
 	public static AbstractFBNElementEditPart getPredecessor(final FBNetworkRootEditPart root) {
 		return predecessorMap.get(EcoreUtil.getURI(root.getAdapter(FBNetwork.class)));
+	}
+
+	public static boolean hasPredecessorMarker(final INamedElement element) {
+		if (element instanceof final FBNetworkElement fb) {
+			for (final Entry<URI, AbstractFBNElementEditPart> entry : predecessorMap.entrySet()) {
+				if (entry.getValue() != null && entry.getValue().getModel().equals(fb)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private static boolean isActivePredecessor(final AbstractFBNElementEditPart ep) {
