@@ -266,6 +266,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						
 						    void readInputData(TEventID paEIID) override;
 						    void writeOutputData(TEventID paEIID) override;
+						    void setInitialValues() override;
 						
 						  public:
 						    «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer);
@@ -317,6 +318,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						
 						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
 						    CBasicFB(paContainer, scmFBInterfaceSpec, paInstanceNameId, nullptr) {
+						}
+						
+						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::setInitialValues() {
+						  CBasicFB::setInitialValues();
 						}
 						
 						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {

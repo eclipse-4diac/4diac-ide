@@ -388,27 +388,20 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateSetInitialValuesDeclaration(Iterable<VarDeclaration> variables) '''
-		«IF containsNonRetainedVariable(variables)»
-			void setInitialValues() override;
-		«ENDIF»
+		void setInitialValues() override;
 	'''
 
 	def protected generateSetInitialValuesDefinition(Iterable<VarDeclaration> variables) '''
-		«IF (containsNonRetainedVariable(variables))»
-			void «className»::setInitialValues() {
-			  «generateVariableDefaultAssignment(variables.filter[!isRetainedVariable(it)])»
-			}
-			
-		«ENDIF»	
+		void «className»::setInitialValues() {
+		  «baseClass»::setInitialValues();
+		  «generateVariableDefaultAssignment(variables.filter[!isRetainedVariable(it)])»
+		}
+		
 	'''
 
 	def private boolean isRetainedVariable(VarDeclaration variable) {
 		return variable.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE) !== null &&
 			variable.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE).equals(RetainTag.RETAIN.string);
-	}
-
-	def private boolean containsNonRetainedVariable(Iterable<VarDeclaration> variables) {
-		return variables.exists[!isRetainedVariable(it)];
 	}
 
 	def protected generateVariableDefaultAssignment(Iterable<VarDeclaration> variables) '''
