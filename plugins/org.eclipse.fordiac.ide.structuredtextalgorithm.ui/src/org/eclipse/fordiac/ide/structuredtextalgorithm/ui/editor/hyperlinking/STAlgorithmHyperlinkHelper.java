@@ -17,7 +17,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.resource.XtextResource;
@@ -55,8 +54,7 @@ public class STAlgorithmHyperlinkHelper extends HyperlinkHelper {
 
 		@Override
 		public void accept(final IHyperlink hyperlink) {
-			if (hyperlink instanceof XtextHyperlink) {
-				final XtextHyperlink xtextHyperlink = (XtextHyperlink) hyperlink;
+			if (hyperlink instanceof final XtextHyperlink xtextHyperlink) {
 				xtextHyperlink.setURI(xtextHyperlink.getURI().trimFragment());
 			}
 			delegate.accept(hyperlink);
@@ -70,16 +68,13 @@ public class STAlgorithmHyperlinkHelper extends HyperlinkHelper {
 		if (node != null) {
 			final EObject target = getEObjectAtOffsetHelper().getCrossReferencedElement(node);
 			if (target != null && !target.eIsProxy()) {
-				if (target instanceof FB) {
-					createHyperlinksToType(resource, node, ((FB) target).getType(), acceptor);
-				} else if (target instanceof Event && target.eContainer() instanceof InterfaceList
-						&& target.eContainer().eContainer() instanceof FBType) {
-					createHyperlinksToType(resource, node, (FBType) target.eContainer().eContainer(), acceptor);
-				} else if (target instanceof AdapterDeclaration) {
-					createHyperlinksToType(resource, node, ((AdapterDeclaration) target).getAdapterFB().getType(),
-							acceptor);
-				} else {
-					createHyperlinksTo(resource, node, target, acceptor);
+				switch (target) {
+				case final FB fb -> createHyperlinksToType(resource, node, fb.getType(), acceptor);
+				case final Event event when event.getFBType() != null ->
+					createHyperlinksToType(resource, node, event.getFBType(), acceptor);
+				case final AdapterDeclaration adapterDeclaration ->
+					createHyperlinksToType(resource, node, adapterDeclaration.getAdapterFB().getType(), acceptor);
+				default -> createHyperlinksTo(resource, node, target, acceptor);
 				}
 			}
 		}
@@ -87,8 +82,7 @@ public class STAlgorithmHyperlinkHelper extends HyperlinkHelper {
 
 	protected void createHyperlinksToType(final XtextResource from, final INode node, final FBType target,
 			final IHyperlinkAcceptor acceptor) {
-		super.createHyperlinksTo(from, node, target,
-				new RenamingHyperlinkAcceptor(new TrimmingHyperlinkAcceptor(acceptor),
-						"Open Type - " + target.getName())); //$NON-NLS-1$
+		super.createHyperlinksTo(from, node, target, new RenamingHyperlinkAcceptor(
+				new TrimmingHyperlinkAcceptor(acceptor), "Open Type - " + target.getName())); //$NON-NLS-1$
 	}
 }

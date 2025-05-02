@@ -58,8 +58,7 @@ final class ForteNgExportUtil {
 
 	def static boolean needsGenericAccess(IInterfaceElement element) {
 		switch (element) {
-			VarDeclaration case element.eContainer instanceof InterfaceList &&
-				element.eContainer.eContainer instanceof CompositeFBType:
+			VarDeclaration case element.FBType instanceof CompositeFBType:
 				element.inOutVar || (!element.isInput && !element.inputConnections.empty &&
 					element.inputConnections.first.sourceElement.type.genericType)
 			default:
@@ -72,8 +71,7 @@ final class ForteNgExportUtil {
 			Event: '''«EVENT_EXPORT_PREFIX»«element.name»'''
 			case element.eContainmentFeature == LibraryElementPackage.Literals.
 				BASE_FB_TYPE__INTERNAL_CONST_VARS: '''«VARIABLE_EXPORT_PREFIX»const_«element.name»'''
-			VarDeclaration case element.eContainer instanceof InterfaceList &&
-				element.eContainer.eContainer instanceof CompositeFBType:
+			VarDeclaration case element.FBType instanceof CompositeFBType:
 				if (element.isInput || element.inOutVar)
 					'''«CONNECTION_EXPORT_PREFIX»if2in_«element.name».getValue()'''
 				else if (!element.inputConnections.empty && !element.inputConnections.first.negated)

@@ -175,8 +175,8 @@ class STCoreHoverDocumentationProvider extends DefaultHoverDocumentationProvider
 	'''
 
 	private def isVarInternalConst(VarDeclaration object) {
-		if (object.eContainer instanceof BaseFBType) {
-			val fbType = object.eContainer as BaseFBType
+		val fbType = object.FBType
+		if (fbType instanceof BaseFBType) {
 			fbType.internalConstVars.contains(object);
 		}
 	}

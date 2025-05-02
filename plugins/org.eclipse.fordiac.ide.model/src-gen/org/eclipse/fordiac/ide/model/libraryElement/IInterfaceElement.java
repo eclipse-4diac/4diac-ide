@@ -125,6 +125,14 @@ public interface IInterfaceElement extends ITypedElement, ConfigurableObject, Hi
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	FBType getFBType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
 	 * @generated
 	 */
