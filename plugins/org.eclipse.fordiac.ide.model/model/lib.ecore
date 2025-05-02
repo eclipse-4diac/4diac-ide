@@ -1323,7 +1323,7 @@
       <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interface" eType="#//InterfaceList"
-        containment="true"/>
+        containment="true" eOpposite="#//InterfaceList/FBNetworkElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" eType="#//Mapping"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="group" eType="#//Group"
         eOpposite="#//Group/groupElements"/>
@@ -1350,7 +1350,7 @@
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interfaceList" lowerBound="1"
-        eType="#//InterfaceList" containment="true" resolveProxies="false">
+        eType="#//InterfaceList" containment="true" resolveProxies="false" eOpposite="#//InterfaceList/FBType">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="InterfaceList"/>
@@ -1596,11 +1596,6 @@
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
-    <eOperations name="getFBNetworkElement" lowerBound="1" eType="#//FBNetworkElement">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return InterfaceListAnnotations.getFBNetworkElement(this);"/>
-      </eAnnotations>
-    </eOperations>
     <eOperations name="getAdapter" eType="#//AdapterDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return InterfaceListAnnotations.getAdapter(this, name);"/>
@@ -1708,6 +1703,10 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="FBType" eType="#//FBType"
+        changeable="false" eOpposite="#//FBType/interfaceList"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="FBNetworkElement" eType="#//FBNetworkElement"
+        changeable="false" eOpposite="#//FBNetworkElement/interface"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ITypedElement" abstract="true" interface="true"
       eSuperTypes="#//INamedElement">

@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -222,7 +221,7 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 		if (dataType instanceof AdapterType) {
 			final int xyPos = 10;
 			adapterCreateCmd = new AdapterFBCreateCommand(xyPos, xyPos, (AdapterDeclaration) newInterfaceElement,
-					(targetInterfaceList.eContainer() instanceof final FBType fbType) ? fbType : null);
+					targetInterfaceList.getFBType());
 		}
 	}
 

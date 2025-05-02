@@ -57,8 +57,7 @@ public class DeleteInterfaceCommand extends Command implements ScopedCommand {
 			handleWiths(varDecl.getInOutVarOpposite());
 			handleSubAppConnections(varDecl.getInOutVarOpposite());
 		}
-		if ((interfaceElement instanceof final AdapterDeclaration adp)
-				&& (parent.eContainer() instanceof CompositeFBType)) {
+		if (interfaceElement instanceof final AdapterDeclaration adp && parent.getFBType() instanceof CompositeFBType) {
 			cmds.add(new DeleteFBNetworkElementCommand(adp.getAdapterFB()));
 		}
 		performDeletion();

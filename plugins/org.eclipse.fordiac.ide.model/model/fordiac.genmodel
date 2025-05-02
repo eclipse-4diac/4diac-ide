@@ -593,6 +593,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/plugs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/sockets"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/errorMarker"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/FBType"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//InterfaceList/FBNetworkElement"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAllInterfaceElements"
           body="return InterfaceListAnnotations.getAllInterfaceElements(this);"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getEvent" body="return InterfaceListAnnotations.getEvent(this, name);">
@@ -605,8 +607,6 @@
           body="return InterfaceListAnnotations.getInterfaceElement(this, name);">
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getInterfaceElement/name"/>
       </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getFBNetworkElement"
-          body="return InterfaceListAnnotations.getFBNetworkElement(this);"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAdapter" body="return InterfaceListAnnotations.getAdapter(this, name);">
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getAdapter/name"/>
       </genOperations>
