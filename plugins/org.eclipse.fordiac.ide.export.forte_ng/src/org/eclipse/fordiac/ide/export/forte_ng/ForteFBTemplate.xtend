@@ -281,7 +281,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 	
 	def protected generateReadInputDataVariable(VarDeclaration variable) '''
-		readData(«variable.interfaceElementIndex», «variable.generateName», «IF variable.inOutVar»&«ENDIF»«variable.generateNameAsConnection»);
+		readData(«variable.absoluteDataPortIndex», «variable.generateName», «IF variable.inOutVar»&«ENDIF»«variable.generateNameAsConnection»);
 	'''
 
 	def protected generateWriteOutputDataDeclaration() '''
@@ -314,7 +314,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateWriteOutputDataVariable(VarDeclaration variable) '''
-		writeData(«variable.interfaceElementIndex», «variable.generateName», «variable.generateNameAsConnection»);
+		writeData(«variable.absoluteDataPortIndex», «variable.generateName», «variable.generateNameAsConnection»);
 	'''
 
 	def protected getWithVariable(With with) {

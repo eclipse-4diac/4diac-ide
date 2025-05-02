@@ -99,7 +99,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
 			  	  «FOR variable : event.with.map[withVariable]»
-			  	  	«val index = variable.interfaceElementIndex»readData(«index», *mDIs[«index»], mDIConns[«index»]);
+			  	  	«val index = variable.interfaceElementIndex»readData(«variable.absoluteDataPortIndex», *mDIs[«index»], mDIConns[«index»]);
 			  	  «ENDFOR»
 			  	  break;
 			  	}
@@ -128,7 +128,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 			  «FOR event : events.filter[!with.empty]»
 			  	case «event.generateEventID»: {
 			  	  «FOR variable : event.with.map[withVariable]»
-			  	  	«val index = variable.interfaceElementIndex»writeData(«index», *mDOs[«index»], mDOConns[«index»]);
+			  	  	«val index = variable.interfaceElementIndex»writeData(«variable.absoluteDataPortIndex», *mDOs[«index»], mDOConns[«index»]);
 			  	  «ENDFOR»
 			  	  break;
 			  	}

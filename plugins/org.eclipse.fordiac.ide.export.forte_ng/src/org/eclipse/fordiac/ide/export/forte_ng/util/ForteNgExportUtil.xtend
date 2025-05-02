@@ -269,6 +269,24 @@ final class ForteNgExportUtil {
 
 	def static CharSequence getFORTEStringId(String s) '''STRID(«s»)'''
 
+	def static int getAbsoluteDataPortIndex(IInterfaceElement element) {
+		val container = element.eContainer
+		if (container instanceof InterfaceList) {
+			switch (element.eContainmentFeature) {
+				case LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS:
+					0
+				case LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS:
+					container.inputVars.size
+				case LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
+				case LibraryElementPackage.Literals.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS:
+					container.inputVars.size + container.outputVars.size
+				default:
+					0
+			} + element.interfaceElementIndex
+		} else
+			element.interfaceElementIndex
+	}
+
 	def static int getInterfaceElementIndex(IInterfaceElement element) {
 		if (element.eContainer !== null && element.eContainingFeature.many) {
 			(element.eContainer.eGet(element.eContainingFeature) as EList<? extends IInterfaceElement>).indexOf(element)
