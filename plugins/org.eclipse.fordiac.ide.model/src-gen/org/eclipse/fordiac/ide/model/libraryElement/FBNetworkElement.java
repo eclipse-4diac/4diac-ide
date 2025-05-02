@@ -41,12 +41,14 @@ import org.eclipse.emf.common.util.DiagnosticChain;
 public interface FBNetworkElement extends TypedConfigureableObject, PositionableElement {
 	/**
 	 * Returns the value of the '<em><b>Interface</b></em>' containment reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getFBNetworkElement <em>FB Network Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Interface</em>' containment reference.
 	 * @see #setInterface(InterfaceList)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBNetworkElement_Interface()
-	 * @model containment="true" resolveProxies="true"
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getFBNetworkElement
+	 * @model opposite="FBNetworkElement" containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	InterfaceList getInterface();

@@ -40,12 +40,14 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 public interface FBType extends LibraryElement, ICallable {
 	/**
 	 * Returns the value of the '<em><b>Interface List</b></em>' containment reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getFBType <em>FB Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Interface List</em>' containment reference.
 	 * @see #setInterfaceList(InterfaceList)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBType_InterfaceList()
-	 * @model containment="true" required="true"
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getFBType
+	 * @model opposite="FBType" containment="true" required="true"
 	 *        extendedMetaData="kind='element' name='InterfaceList' namespace='##targetNamespace'"
 	 * @generated
 	 */

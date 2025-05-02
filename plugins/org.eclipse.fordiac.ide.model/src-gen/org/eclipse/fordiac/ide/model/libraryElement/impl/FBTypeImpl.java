@@ -124,9 +124,9 @@ public class FBTypeImpl extends LibraryElementImpl implements FBType {
 		if (newInterfaceList != interfaceList) {
 			NotificationChain msgs = null;
 			if (interfaceList != null)
-				msgs = ((InternalEObject)interfaceList).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_TYPE__INTERFACE_LIST, null, msgs);
+				msgs = ((InternalEObject)interfaceList).eInverseRemove(this, LibraryElementPackage.INTERFACE_LIST__FB_TYPE, InterfaceList.class, msgs);
 			if (newInterfaceList != null)
-				msgs = ((InternalEObject)newInterfaceList).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_TYPE__INTERFACE_LIST, null, msgs);
+				msgs = ((InternalEObject)newInterfaceList).eInverseAdd(this, LibraryElementPackage.INTERFACE_LIST__FB_TYPE, InterfaceList.class, msgs);
 			msgs = basicSetInterfaceList(newInterfaceList, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
@@ -237,6 +237,23 @@ public class FBTypeImpl extends LibraryElementImpl implements FBType {
 	@Override
 	public boolean isVarargs() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.isVarargs(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.FB_TYPE__INTERFACE_LIST:
+				if (interfaceList != null)
+					msgs = ((InternalEObject)interfaceList).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_TYPE__INTERFACE_LIST, null, msgs);
+				return basicSetInterfaceList((InterfaceList)otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
+		}
 	}
 
 	/**
