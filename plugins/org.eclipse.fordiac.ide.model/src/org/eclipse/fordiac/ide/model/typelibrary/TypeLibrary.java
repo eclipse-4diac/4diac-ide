@@ -197,7 +197,7 @@ public final class TypeLibrary {
 		return fileMap.get(typeFile);
 	}
 
-	public void reload() {
+	public void clear() {
 		adapterTypes.clear();
 		attributeTypes.clear();
 		deviceTypes.clear();
@@ -212,6 +212,10 @@ public final class TypeLibrary {
 		fileMap.clear();
 		packages.clear();
 		deleteTypeLibraryMarkers(project);
+	}
+
+	public void reload() {
+		clear();
 		buildpath = BuildpathUtil.loadBuildpath(project);
 		checkAdditions(project);
 	}

@@ -5,7 +5,6 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.library;singleton:=true
 Bundle-Version: 3.0.0.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.library
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.eclipse.fordiac.ide.library.LibraryPlugin
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,

@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,7 +50,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IPathVariableManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
@@ -59,35 +57,24 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.URIUtil;
-import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.e4.core.contexts.EclipseContextFactory;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
-import org.osgi.service.event.EventHandler;
 
 public enum LibraryManager {
 
@@ -129,10 +116,6 @@ public enum LibraryManager {
 
 	public static final Object FAMILY_FORDIAC_LIBRARY = new Object();
 
-	private IEventBroker eventBroker;
-	private final IResourceChangeListener libraryListener = new LibraryChangeListener();
-	private final Set<IProject> resolvingProjects = Collections.synchronizedSet(new HashSet<>());
-
 	LibraryManager() {
 		initLibraryMap(stdlibraries, standardLibraryPath, standardLibraryUri);
 		if (!Files.exists(libraryPath)) {
@@ -150,7 +133,6 @@ public enum LibraryManager {
 		} catch (final IOException e) {
 			FordiacLogHelper.logError("Cannot register watch watch service!", e); //$NON-NLS-1$
 		}
-		addLibraryChangeListener();
 
 		setStandardLibsReadOnly();
 	}
@@ -317,7 +299,7 @@ public enum LibraryManager {
 
 		if (autoImport && project != null) {
 			// Parent's name because we want package-version name when importing
-			importLibrary(project, null, importURI, true, resolve);
+			importLibrary(project, importURI, true, resolve);
 		}
 		return importURI;
 	}
@@ -416,36 +398,35 @@ public enum LibraryManager {
 	/**
 	 * Import library into {@link IProject}
 	 *
-	 * @param project     target project
-	 * @param typeLibrary {@link TypeLibrary} to use, will be retrieved through
-	 *                    {@link TypeLibraryManager} if {@code null}
-	 * @param uri         URI of the library folder
-	 * @param update      define if a dependency gets created/updated in the
-	 *                    {@link Manifest}
-	 * @param resolve     define if dependencies should get resolved on import
+	 * @param project target project
+	 * @param uri     URI of the library folder
+	 * @param update  define if a dependency gets created/updated in the
+	 *                {@link Manifest}
+	 * @param resolve define if dependencies should get resolved on import
+	 *
+	 * @return {@code true}, if library was successfully imported
 	 */
-	public void importLibrary(final IProject project, final TypeLibrary typeLibrary, final java.net.URI uri,
-			final boolean update, final boolean resolve) {
+	public boolean importLibrary(final IProject project, final java.net.URI uri, final boolean update,
+			final boolean resolve) {
 		boolean imported = false;
 
 		FordiacLogHelper.logInfo("Importing library at " + uri + " into project " + project.getName() + " (update=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				+ update + ", resolve=" + resolve + ")"); //$NON-NLS-1$ //$NON-NLS-2$
-		final TypeLibrary typeLib = typeLibrary != null ? typeLibrary
-				: TypeLibraryManager.INSTANCE.getTypeLibrary(project);
+
 		checkLibChanges();
 		final IPathVariableManager varMan = project.getPathVariableManager();
 		final java.net.URI resolvedUri = varMan.resolveURI(uri);
 		final Path path = Paths.get(resolvedUri);
 		if (!Files.isDirectory(path) || Files.notExists(path.resolve(LIB_TYPELIB_FOLDER_NAME))) {
-			return;
+			return false;
 		}
 		final Manifest libManifest = ManifestHelper.getFolderManifest(path);
 		if (libManifest == null) {
-			return;
+			return false;
 		}
 		final Manifest projManifest = ManifestHelper.getOrCreateProjectManifest(project);
 		if (projManifest == null) {
-			return;
+			return false;
 		}
 		final IFolder libDirectory = project
 				.getFolder(uri.getPath().startsWith(standardLibraryUri.getPath())
@@ -453,41 +434,24 @@ public enum LibraryManager {
 						: TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME)
 				.getFolder(libManifest.getProduct().getSymbolicName());
 
-		removeLibraryChangeListener();
-		SystemManager.INSTANCE.removeFordiacChangeListener();
-		final Map<String, TypeEntry> cachedTypes = removeOldLibVersion(libDirectory, typeLib);
 		final java.net.URI libUri = URIUtil.append(uri, LIB_TYPELIB_FOLDER_NAME);
 		final java.net.URI manUri = URIUtil.append(uri, MANIFEST);
 		try {
-			libDirectory.createLink(libUri, IResource.NONE, null);
+			libDirectory.createLink(libUri, IResource.REPLACE, null);
 			final IFile man = libDirectory.getFile(MANIFEST);
-			man.createLink(manUri, IResource.HIDDEN, null);
+			man.createLink(manUri, IResource.HIDDEN | IResource.REPLACE, null);
 			if (update) {
 				ManifestHelper.updateDependency(projManifest,
 						ManifestHelper.createRequired(libManifest.getProduct().getSymbolicName(),
 								libManifest.getProduct().getVersionInfo().getVersion()));
 				projManifest.eResource().save(null);
 			}
-			createTypeEntriesManually(libDirectory, cachedTypes, typeLib);
-			if (!cachedTypes.isEmpty()) {
-				final List<TypeEntry> affectedTypes = new ArrayList<>(cachedTypes.values());
-				// clean up if there was a version before
-				cleanupOldLibraryVersion(cachedTypes, typeLib);
-				// show affected elements
-				showUpdatedElements(affectedTypes);
-			}
 			imported = true;
 		} catch (final CoreException | IOException e) {
-			Display.getDefault().syncExec(() -> MessageDialog.openWarning(null, Messages.Warning,
-					MessageFormat.format(Messages.ImportFailedOnLinkCreation, e.getMessage())));
+			FordiacLogHelper.logError(MessageFormat.format(Messages.ImportFailedOnLinkCreation, e.getMessage()), e);
 		}
 
-		SystemManager.INSTANCE.addFordiacChangeListener();
-		addLibraryChangeListener();
-		// dependency resolution
-		if (resolve && imported) {
-			startResolveJob(project);
-		}
+		return imported;
 	}
 
 	/**
@@ -499,129 +463,8 @@ public enum LibraryManager {
 	 */
 	public void importLibraries(final IProject project, final Collection<java.net.URI> uris, final boolean resolve) {
 		for (final java.net.URI uri : uris) {
-			importLibrary(project, null, uri, true, resolve);
+			importLibrary(project, uri, true, resolve);
 		}
-	}
-
-	/**
-	 * Remove old library version
-	 *
-	 * @param libDirectory library directory in project
-	 * @param typeLibrary  {@link TypeLibrary} to use
-	 * @return Map containing all {@link TypeEntry} of the removed library
-	 */
-	private static Map<String, TypeEntry> removeOldLibVersion(final IFolder libDirectory,
-			final TypeLibrary typeLibrary) {
-		if (libDirectory.exists()) {
-			FordiacLogHelper.logInfo("Removing old library version at " + libDirectory); //$NON-NLS-1$
-			try {
-				final Map<String, TypeEntry> existingTypes = findExistingTypes(libDirectory, typeLibrary);
-				// Remove the link but keep the resource on disk
-				libDirectory.delete(true, null);
-				return existingTypes;
-			} catch (final CoreException e) {
-				Display.getDefault().syncExec(() -> MessageDialog.openWarning(null, Messages.Warning,
-						Messages.OldTypeLibVersionCouldNotBeDeleted));
-			}
-		}
-		return Collections.emptyMap();
-	}
-
-	/**
-	 * Find all existing types contained in a project directory
-	 *
-	 * @param folder      directory in project
-	 * @param typeLibrary {@link TypeLibrary} to use
-	 * @return Map containing all {@link TypeEntry} of the library
-	 */
-	private static Map<String, TypeEntry> findExistingTypes(final IFolder folder, final TypeLibrary typeLibrary) {
-		final Map<String, TypeEntry> existingTypes = new HashMap<>();
-
-		final IResourceVisitor visitor = resource -> (switch (resource) {
-		case final IFolder f -> true;
-		case final IFile file when TYPE_ENDINGS.contains(file.getFileExtension().toUpperCase()) -> {
-			final TypeEntry entry = typeLibrary.getTypeEntry(file);
-			if (entry != null) {
-				existingTypes.put(entry.getFullTypeName(), entry);
-			}
-			yield false;
-		}
-		default -> false;
-		});
-		try {
-			folder.accept(visitor);
-			return existingTypes;
-		} catch (final CoreException e) {
-			// do nothing
-		}
-
-		return Collections.emptyMap();
-	}
-
-	/**
-	 * Create {@link TypeEntry} contained in project folder
-	 *
-	 * @param folder      directory in project
-	 * @param cachedTypes old types that need to be replaced
-	 * @param typeLibrary {@link TypeLibrary} to use
-	 */
-	private static void createTypeEntriesManually(final IFolder folder, final Map<String, TypeEntry> cachedTypes,
-			final TypeLibrary typeLibrary) {
-		final IResourceVisitor visitor = resource -> (switch (resource) {
-		case final IFolder f -> true;
-		case final IFile file -> {
-			final TypeEntry entry = TypeEntryFactory.INSTANCE.createTypeEntry(file);
-			if (entry != null) {
-				final TypeEntry oldEntry = cachedTypes.get(entry.getFullTypeName());
-				if (oldEntry != null) {
-					FordiacResourceChangeListener.updateTypeEntry(file, oldEntry);
-					cachedTypes.remove(entry.getFullTypeName());
-				} else {
-					typeLibrary.createTypeEntry(file);
-				}
-			}
-			yield false;
-		}
-		default -> false;
-		});
-		try {
-			folder.accept(visitor);
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		}
-	}
-
-	/**
-	 * Removes {@link TypeEntry} from library
-	 *
-	 * @param cachedTypes old types that need to be removed
-	 * @param typeLibrary {@link TypeLibrary} to use
-	 */
-	private static void cleanupOldLibraryVersion(final Map<String, TypeEntry> cachedTypes,
-			final TypeLibrary typeLibrary) {
-		// remove obsolete types
-		cachedTypes.values().forEach(typeLibrary::removeTypeEntry);
-	}
-
-	/**
-	 * Show dialog listing {@link TypeEntry} that were affected by other operations
-	 *
-	 * @param affectedTypes list of affected types
-	 */
-	private static void showUpdatedElements(final List<TypeEntry> affectedTypes) {
-		if (affectedTypes.isEmpty()) {
-			return;
-		}
-		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(affectedTypes);
-		final List<FBNetworkElement> elements = search.performSearch().stream()
-				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).toList();
-
-		Display.getDefault().syncExec(() -> {
-			final InstanceUpdateDialog updateDialog = new InstanceUpdateDialog(null, Messages.InstanceUpdate, null,
-					Messages.UpdatedInstances, MessageDialog.NONE, new String[] { Messages.Confirm }, 0, elements);
-			updateDialog.open();
-
-		});
 	}
 
 	/**
@@ -675,61 +518,6 @@ public enum LibraryManager {
 	}
 
 	/**
-	 * Check {@link Manifest} of {@link IProject} and ensure project is set up
-	 * properly
-	 *
-	 * <p>
-	 * Will download/import libraries as needed through background jobs
-	 *
-	 * @param project selected project
-	 */
-	public void checkManifestFile(final IProject project) {
-		final Manifest manifest = ManifestHelper.getContainerManifest(project);
-		if (manifest == null || !ManifestHelper.isProject(manifest)) {
-			return;
-		}
-
-		ManifestHelper.sortAndSaveManifest(manifest);
-
-		startResolveJob(project);
-	}
-
-	/**
-	 * Start background job that resolves transitive library dependencies of
-	 * {@link IProject}
-	 *
-	 * @param project selected project
-	 */
-	public void startResolveJob(final IProject project) {
-		if (resolvingProjects.contains(project)) {
-			return;
-		}
-		resolvingProjects.add(project);
-
-		final WorkspaceJob job = new WorkspaceJob("Resolve dependencies: " + project.getName()) { //$NON-NLS-1$
-
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-				if (project.isAccessible()) {
-					// only resolve if we have an accessible project
-					resolveDependencies(project, TypeLibraryManager.INSTANCE.getTypeLibrary(project));
-				}
-				return Status.OK_STATUS;
-			}
-
-			@Override
-			public boolean belongsTo(final Object family) {
-				return family == FAMILY_FORDIAC_LIBRARY;
-			}
-		};
-		job.setRule(project);
-		job.setPriority(Job.LONG);
-		// act after job is done and has sent its POST_CHANGE notifications
-		job.addJobChangeListener(IJobChangeListener.onDone(c -> resolvingProjects.remove(project)));
-		job.schedule();
-	}
-
-	/**
 	 * Uses registered {@link IArchiveDownloader} to download specified library.
 	 * Will download the latest version if versionRange is {@code null} or empty.
 	 *
@@ -744,24 +532,32 @@ public enum LibraryManager {
 	 * @param autoImport   if library should be automatically imported into project
 	 * @param resolve      define if dependencies should get resolved on import
 	 *                     (irrelevant if {@code autoImport} is false)
+	 * @param progress     SubMonitor for progress report
 	 * @return {@link java.net.URI} of the extracted library folder encapsulated in
 	 *         a {@link DownloadResult}
 	 */
 	private DownloadResult<java.net.URI> libraryDownload(final String symbolicName, final VersionRange versionRange,
-			final Version preferred, final IProject project, final boolean autoImport, final boolean resolve) {
+			final Version preferred, final IProject project, final boolean autoImport, final boolean resolve,
+			final SubMonitor progress) {
+		progress.setTaskName("Library download: " + symbolicName);
 		FordiacLogHelper.logInfo("Attempting to download library " + symbolicName + " with version " + versionRange //$NON-NLS-1$ //$NON-NLS-2$
 				+ " preferring " + preferred); //$NON-NLS-1$
+
 		final List<IArchiveDownloader> downloaders = TypeLibraryManager.listExtensions(DOWNLOADER_EXTENSION,
 				IArchiveDownloader.class);
 		DownloadResult<Path> dlResult;
 		final StringBuilder errors = new StringBuilder();
 		final VersionRange range = (versionRange == null || versionRange.isEmpty()) ? ALL_RANGE : versionRange;
+
+		progress.setWorkRemaining(downloaders.size());
 		for (final var downloader : downloaders) {
 			if (!downloader.isActive()) {
+				progress.worked(1);
 				continue;
 			}
 			try {
 				dlResult = downloader.downloadLibrary(symbolicName, range, preferred);
+				progress.worked(1);
 				if (dlResult.status() == DownloadResult.Status.OK) {
 					return new DownloadResult<>(extractLibrary(dlResult.result(), project, autoImport, resolve));
 				}
@@ -795,7 +591,7 @@ public enum LibraryManager {
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 				libraryDownload(symbolicName, VersionComparator.parseVersionRange(versionRange), null, project, true,
-						true);
+						true, null);
 				return Status.OK_STATUS;
 			}
 
@@ -816,10 +612,10 @@ public enum LibraryManager {
 	 * This method will remove already linked libraries if they cause conflicts or
 	 * are no longer needed
 	 *
-	 * @param project     selected project
-	 * @param typeLibrary {@link TypeLibrary} to use
+	 * @param project selected project
 	 */
-	public void resolveDependencies(final IProject project, final TypeLibrary typeLibrary) {
+	public void resolveDependencies(final IProject project, final IProgressMonitor monitor)
+			throws OperationCanceledException {
 		final Map<String, DependencyNode> deps = new HashMap<>();
 		final Map<String, ResolveNode> res = new HashMap<>();
 		final Map<String, Version> preferred = new HashMap<>();
@@ -827,21 +623,28 @@ public enum LibraryManager {
 
 		final Queue<String> queue = new LinkedList<>(); // symbolicNames
 
+		final SubMonitor progress = SubMonitor.convert(monitor, "Resolving library dependencies", 100);
+
 		final Manifest projectManifest = ManifestHelper.getContainerManifest(project);
 
 		if (projectManifest == null) {
+			SubMonitor.done(monitor);
 			return;
 		}
 
+		progress.split(4);
 		checkLibChanges();
 
+		progress.split(1);
 		// TODO this is for migrating old projects: remove when no longer needed
 		moveLinksToVirtualFolders(project);
 
 		if (projectManifest.getDependencies() == null) {
+			SubMonitor.done(monitor);
 			return;
 		}
 
+		progress.split(5);
 		findPreferred(project, preferred, linked);
 
 		projectManifest.getDependencies().getRequired().forEach(req -> {
@@ -850,7 +653,10 @@ public enum LibraryManager {
 			queue.add(req.getSymbolicName());
 		});
 
+		final var loopProgress = progress.split(70);
+
 		while (!queue.isEmpty()) {
+			loopProgress.setWorkRemaining(10);
 			final String symbolicName = queue.poll();
 
 			final var dnode = deps.get(symbolicName);
@@ -876,7 +682,8 @@ public enum LibraryManager {
 			}
 
 			// resolve dependency
-			final var rnode = resolveDependency(symbolicName, dnode.getRange(), preferred.get(symbolicName));
+			final var rnode = resolveDependency(symbolicName, dnode.getRange(), preferred.get(symbolicName),
+					loopProgress.split(1));
 
 			if (res.containsKey(symbolicName)) {
 				final var oldRNode = res.get(symbolicName);
@@ -901,6 +708,7 @@ public enum LibraryManager {
 
 		final List<ErrorMarkerBuilder> markerList = new LinkedList<>();
 
+		progress.split(15);
 		// import valid nodes
 		for (final var dnode : deps.values()) {
 			if (dnode.isValid()) {
@@ -910,7 +718,7 @@ public enum LibraryManager {
 					// no need to import the same version again
 					if (!linked.containsKey(rnode.getSymbolicName())
 							|| !preferred.get(rnode.getSymbolicName()).equals(rnode.getVersion())) {
-						importLibrary(project, typeLibrary, rnode.getUri(), false, false);
+						importLibrary(project, rnode.getUri(), false, false);
 
 					}
 					linked.remove(rnode.getSymbolicName());
@@ -923,6 +731,7 @@ public enum LibraryManager {
 			}
 		}
 
+		progress.split(5);
 		linked.values().forEach(f -> {
 			try {
 				f.delete(true, null);
@@ -933,6 +742,8 @@ public enum LibraryManager {
 
 		FordiacMarkerHelper.updateMarkers(project.getFile(MANIFEST), FordiacErrorMarker.LIBRARY_MARKER, markerList,
 				true);
+
+		SubMonitor.done(monitor);
 	}
 
 	/**
@@ -989,13 +800,18 @@ public enum LibraryManager {
 	 * @param symbolicName name of the library
 	 * @param range        version range of the dependency
 	 * @param prefVersion  preferred version, can be {@code null}
+	 * @param progress     SubMonitor for progress report
 	 * @return
 	 */
 	private ResolveNode resolveDependency(final String symbolicName, final VersionRange range,
-			final Version prefVersion) {
+			final Version prefVersion, final SubMonitor progress) {
 		final boolean usePref = prefVersion != null && range.includes(prefVersion);
 		LibraryRecord rec;
 
+		progress.setTaskName("Resolving dependency: " + symbolicName); //$NON-NLS-1$
+		progress.setWorkRemaining(100);
+
+		progress.split(5);
 		if (stdlibraries.containsKey(symbolicName)) {
 			if (usePref) {
 				rec = getLibraryRecord(stdlibraries, symbolicName, prefVersion);
@@ -1022,8 +838,9 @@ public enum LibraryManager {
 		}
 
 		final DownloadResult<java.net.URI> dlResult = libraryDownload(symbolicName, range, prefVersion, null, false,
-				false);
+				false, progress.split(90));
 
+		progress.split(5);
 		if (dlResult.status() == DownloadResult.Status.OK) {
 			rec = getLibraryRecord(libraries, symbolicName, dlResult.result());
 			if (rec != null) {
@@ -1052,7 +869,6 @@ public enum LibraryManager {
 		if (project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME).exists()) {
 			return;
 		}
-		removeLibraryChangeListener();
 
 		IResource[] members = null;
 		try {
@@ -1085,7 +901,6 @@ public enum LibraryManager {
 				}
 			}
 		}
-		addLibraryChangeListener();
 	}
 
 	/**
@@ -1166,38 +981,6 @@ public enum LibraryManager {
 						MessageFormat.format(Messages.ErrorMarkerVersionRangeEmpty, dnode.getSymbolicName(), causedBy))
 				.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(manifest.getDependencies())
 				.addAdditionalAttributes(Map.of(MARKER_ATTRIBUTE, dnode.getSymbolicName()));
-	}
-
-	/**
-	 * Starts event broker for the creation event of {@link TypeLibrary}
-	 *
-	 * @param context available context
-	 */
-	public void startEventBroker(final BundleContext context) {
-		eventBroker = EclipseContextFactory.getServiceContext(context).get(IEventBroker.class);
-		eventBroker.subscribe(TypeLibraryTags.TYPE_LIBRARY_CREATION_TOPIC, null, handler, true);
-	}
-
-	/**
-	 * Stops the event broker
-	 */
-	void stopEventBroker() {
-		eventBroker.unsubscribe(handler);
-	}
-
-	private final EventHandler handler = event -> {
-		final Object data = event.getProperty(IEventBroker.DATA);
-		if (data instanceof final TypeLibrary typeLibrary) {
-			checkManifestFile(typeLibrary.getProject());
-		}
-	};
-
-	public void removeLibraryChangeListener() {
-		ResourcesPlugin.getWorkspace().removeResourceChangeListener(libraryListener);
-	}
-
-	public void addLibraryChangeListener() {
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(libraryListener);
 	}
 
 	private static Path getStandardLibPath() {

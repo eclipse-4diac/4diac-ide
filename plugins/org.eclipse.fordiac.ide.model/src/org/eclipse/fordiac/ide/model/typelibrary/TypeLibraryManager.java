@@ -40,13 +40,10 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.e4.core.contexts.EclipseContextFactory;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.ModelPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -57,11 +54,9 @@ public enum TypeLibraryManager {
 	// !> Holds type libraries of all open 4diac IDE projects
 	private final Map<IProject, TypeLibrary> typeLibraryList = new HashMap<>();
 
-	private final IEventBroker eventBroker = initEventBroker();
-
 	public TypeLibrary getTypeLibrary(final IProject proj) {
 		synchronized (typeLibraryList) {
-			return typeLibraryList.computeIfAbsent(proj, this::createTypeLibrary);
+			return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
 		}
 	}
 
@@ -132,29 +127,6 @@ public enum TypeLibraryManager {
 					ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true))));
 		}
 		return null;
-	}
-
-	private TypeLibrary createTypeLibrary(final IProject project) {
-		final TypeLibrary library = new TypeLibrary(project);
-		eventBroker.send(TypeLibraryTags.TYPE_LIBRARY_CREATION_TOPIC, library);
-		return library;
-	}
-
-	public void resendCreateEvent(final IProject project) {
-		if (project == null) {
-			return;
-		}
-		final TypeLibrary library = getTypeLibrary(project);
-		if (library != null) {
-			eventBroker.send(TypeLibraryTags.TYPE_LIBRARY_CREATION_TOPIC, library);
-		}
-	}
-
-	private static IEventBroker initEventBroker() {
-		useExtensions("org.eclipse.fordiac.ide.model.TypeLibraryStarter", ITypeLibraryStarter.class, //$NON-NLS-1$
-				ITypeLibraryStarter::start);
-		return EclipseContextFactory.getServiceContext(ModelPlugin.getDefault().getBundle().getBundleContext())
-				.get(IEventBroker.class);
 	}
 
 	// TODO: move to more appropriate utility class

@@ -18,9 +18,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -466,19 +466,28 @@ public final class ManifestHelper {
 	}
 
 	/**
-	 * Sorts dependencies and saves the {@link Manifest}
+	 * Sorts dependencies of the {@link Manifest} <br>
+	 * Note: Does not save the manifest.
 	 *
 	 * @param manifest specified manifest
-	 * @return {@code true} if it was saved successfully, else {@code false}
+	 * @return {@code true} if sorting was necessary, else {@code false}
 	 */
-	public static boolean sortAndSaveManifest(final Manifest manifest) {
-		if (manifest.getDependencies() != null) {
-			// ensure dependencies are sorted (can't use EList.sort())
-			final var dependencies = new LinkedList<>(manifest.getDependencies().getRequired());
-			manifest.getDependencies().getRequired().clear();
-			dependencies.forEach(d -> ManifestHelper.addDependency(manifest, d));
+	public static boolean sortManifestDependencies(final Manifest manifest) {
+		if (manifest.getDependencies() == null) {
+			return false; // nothing to do
 		}
-		return saveManifest(manifest);
+		// ensure dependencies are sorted (can't use EList.sort())
+		final var dependencies = new ArrayList<>(manifest.getDependencies().getRequired());
+		manifest.getDependencies().getRequired().clear();
+		dependencies.forEach(d -> ManifestHelper.addDependency(manifest, d));
+		int index = 0;
+		for (final Required req : manifest.getDependencies().getRequired()) {
+			if (req != dependencies.get(index)) {
+				return true;
+			}
+			index++;
+		}
+		return false;
 	}
 
 	/**
