@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
+import org.eclipse.fordiac.ide.application.commands.DeleteElementInExecutionChainCommand;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.commands.Command;
@@ -32,8 +34,11 @@ public class DeleteFBNElementEditPolicy extends org.eclipse.gef.editpolicies.Com
 	 */
 	@Override
 	protected Command createDeleteCommand(final GroupRequest request) {
-		if (getHost().getModel() instanceof FBNetworkElement) {
-			return new DeleteFBNetworkElementCommand((FBNetworkElement) getHost().getModel());
+		if (getHost().getModel() instanceof final FBNetworkElement fbne) {
+			if (getHost().getParent() instanceof UnfoldedSubappContentEditPart) {
+				return new DeleteElementInExecutionChainCommand(fbne);
+			}
+			return new DeleteFBNetworkElementCommand(fbne);
 		}
 		return null;
 	}
