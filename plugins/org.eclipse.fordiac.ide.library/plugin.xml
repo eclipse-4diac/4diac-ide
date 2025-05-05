@@ -3,9 +3,14 @@
 <plugin>
    <extension-point id="ArchiveDownloaderExtension" name="Extension point for Archive Downloader" schema="schema/ArchiveDownloaderExtension.exsd"/>
    <extension
-         point="org.eclipse.fordiac.ide.model.TypeLibraryStarter">
-      <client
-            class="org.eclipse.fordiac.ide.library.LibraryStarter">
-      </client>
+         id="builder"
+         name="4diac Library Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="org.eclipse.fordiac.ide.library.builder.LibraryBuilder">
+         </run>
+      </builder>
    </extension>
 </plugin>

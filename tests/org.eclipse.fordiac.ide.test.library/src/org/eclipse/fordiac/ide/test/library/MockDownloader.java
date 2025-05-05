@@ -21,7 +21,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.fordiac.ide.library.DownloadResult;
 import org.eclipse.fordiac.ide.library.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
@@ -47,22 +50,25 @@ public class MockDownloader implements IArchiveDownloader {
 	}
 
 	@Override
-	public DownloadResult<List<String>> availableLibraries() {
+	public DownloadResult<List<String>> availableLibraries(final IProgressMonitor monitor)
+			throws OperationCanceledException {
 		return new DownloadResult<>(List.copyOf(archiveMap.keySet()));
 	}
 
 	@Override
-	public DownloadResult<List<String>> availableVersions(final String symbolicName) {
+	public DownloadResult<List<String>> availableVersions(final String symbolicName, final IProgressMonitor monitor)
+			throws OperationCanceledException {
 		return new DownloadResult<>(archiveMap.getOrDefault(symbolicName, Collections.emptyList()));
 	}
 
 	@Override
 	public DownloadResult<Path> downloadLibrary(final String symbolicName, final VersionRange range,
-			final Version preferredVersion) {
+			final Version preferredVersion, final IProgressMonitor monitor) throws OperationCanceledException {
+		final SubMonitor progress = SubMonitor.convert(monitor, "", 5); //$NON-NLS-1$
 		if (!archiveMap.containsKey(symbolicName)) {
 			return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Library_Not_Found);
 		}
-		final var st = availableVersions(symbolicName).result().stream();
+		final var st = availableVersions(symbolicName, progress.split(1)).result().stream();
 		if (range != null) {
 			st.filter(v -> VersionComparator.contains(range, v));
 		}

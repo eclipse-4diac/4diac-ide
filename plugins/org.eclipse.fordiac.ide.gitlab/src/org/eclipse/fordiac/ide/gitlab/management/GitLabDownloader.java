@@ -35,6 +35,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
@@ -267,7 +270,8 @@ public class GitLabDownloader implements IArchiveDownloader {
 	}
 
 	@Override
-	public DownloadResult<List<String>> availableLibraries() {
+	public DownloadResult<List<String>> availableLibraries(final IProgressMonitor monitor)
+			throws OperationCanceledException {
 		final var fetchResult = fetchProjectsAndPackages();
 		if (fetchResult.status() != DownloadResult.Status.OK) {
 			return new DownloadResult<>(fetchResult.status(), fetchResult.message());
@@ -276,7 +280,8 @@ public class GitLabDownloader implements IArchiveDownloader {
 	}
 
 	@Override
-	public DownloadResult<List<String>> availableVersions(final String symbolicName) {
+	public DownloadResult<List<String>> availableVersions(final String symbolicName, final IProgressMonitor monitor)
+			throws OperationCanceledException {
 		final var fetchResult = fetchProjectsAndPackages();
 		if (fetchResult.status() != DownloadResult.Status.OK) {
 			return new DownloadResult<>(fetchResult.status(), fetchResult.message());
@@ -290,8 +295,10 @@ public class GitLabDownloader implements IArchiveDownloader {
 
 	@Override
 	public DownloadResult<Path> downloadLibrary(final String symbolicName, final VersionRange range,
-			final Version preferredVersion) {
+			final Version preferredVersion, final IProgressMonitor monitor) throws OperationCanceledException {
+		final SubMonitor progress = SubMonitor.convert(monitor, "Downloading Library form Gitlab", 5); //$NON-NLS-1$
 		final var fetchResult = fetchProjectsAndPackages();
+		progress.worked(4);
 		if (fetchResult.status() != DownloadResult.Status.OK) {
 			return new DownloadResult<>(fetchResult.status(), fetchResult.message());
 		}
@@ -317,6 +324,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 		if (node == null) {
 			node = nodes.getFirst();
 		}
+		progress.worked(1);
 		try {
 			return new DownloadResult<>(packageDownloader(node.getProject(), node.getPackage()));
 		} catch (final IOException e) {
