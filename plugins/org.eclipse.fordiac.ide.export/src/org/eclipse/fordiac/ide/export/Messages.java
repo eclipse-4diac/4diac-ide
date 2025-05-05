@@ -24,6 +24,8 @@ public final class Messages extends NLS {
 
 	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
+	public static String ExportBuilder_CannotCreateDirectory;
+
 	public static String ExportTemplate_ExportTemplate;
 
 	public static String FordiacExporter_ERROR;

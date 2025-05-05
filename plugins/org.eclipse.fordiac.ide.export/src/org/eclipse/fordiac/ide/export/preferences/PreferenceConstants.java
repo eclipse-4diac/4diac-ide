@@ -32,4 +32,6 @@ public final class PreferenceConstants {
 	public static final String OUTPUT_FOLDER = "OUTPUT_FOLDER"; //$NON-NLS-1$
 	public static final String EXPORT_FILTER_ID = "EXPORT_FILTER_ID"; //$NON-NLS-1$
 
+	public static final String DEFAULT_OUTPUT_FOLDER_NAME = "out"; //$NON-NLS-1$
+
 }

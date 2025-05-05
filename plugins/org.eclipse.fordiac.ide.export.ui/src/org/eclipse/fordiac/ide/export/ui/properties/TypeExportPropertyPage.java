@@ -58,8 +58,6 @@ public class TypeExportPropertyPage extends PropertyPage {
 	private Composite directoryEditorContainer;
 	private Composite exporterEditorContainer;
 
-	private static final String OUTPUT_FOLDER_NAME = "out"; //$NON-NLS-1$
-
 	@Override
 	protected Control createContents(final Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NONE);
@@ -127,8 +125,9 @@ public class TypeExportPropertyPage extends PropertyPage {
 	}
 
 	private String getOutputFolder() {
-		if (getProject().getFolder(OUTPUT_FOLDER_NAME).exists()) {
-			return getProject().getFolder(OUTPUT_FOLDER_NAME).getProjectRelativePath().toPortableString();
+		if (getProject().getFolder(PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME).exists()) {
+			return getProject().getFolder(PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME).getProjectRelativePath()
+					.toPortableString();
 		}
 
 		return ""; //$NON-NLS-1$
