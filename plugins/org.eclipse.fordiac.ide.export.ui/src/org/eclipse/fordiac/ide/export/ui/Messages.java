@@ -35,16 +35,6 @@ public final class Messages extends NLS {
 
 	public static String FordiacExportWizard_DESCRIPTION_WizardPage;
 
-	public static String FordiacExportWizard_ERROR;
-
-	public static String FordiacExportWizard_EXPORT_CANCELED;
-
-	public static String FordiacExportWizard_ExportingCMakeLists;
-
-	public static String FordiacExportWizard_ExportingSelectedTypesUsingExporter;
-
-	public static String FordiacExportWizard_ExportingType;
-
 	public static String FordiacExportWizard_LABEL_Window_Title;
 
 	public static String FordiacExportWizard_TITLE_WizardPage;

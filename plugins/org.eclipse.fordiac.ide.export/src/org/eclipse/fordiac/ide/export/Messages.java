@@ -26,6 +26,16 @@ public final class Messages extends NLS {
 
 	public static String ExportTemplate_ExportTemplate;
 
+	public static String FordiacExporter_ERROR;
+
+	public static String FordiacExporter_EXPORT_CANCELED;
+
+	public static String FordiacExporter_ExportingCMakeLists;
+
+	public static String FordiacExporter_ExportingSelectedTypesUsingExporter;
+
+	public static String FordiacExporter_ExportingType;
+
 	public static String TemplateExportFilter_CANCEL_ALL_LABEL_STRING;
 
 	public static String TemplateExportFilter_ErrorDuringTemplateGeneration;
