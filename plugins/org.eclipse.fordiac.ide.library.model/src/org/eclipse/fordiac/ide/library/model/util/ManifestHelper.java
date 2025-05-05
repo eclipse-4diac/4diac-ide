@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -32,6 +31,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
@@ -316,6 +317,7 @@ public final class ManifestHelper {
 		if (manifest.getDependencies() == null) {
 			manifest.setDependencies(factory.createDependencies());
 		}
+		sortManifestDependencies(manifest);
 		final EList<Required> reqList = manifest.getDependencies().getRequired();
 		int index = 0;
 		while (index < reqList.size()) {
@@ -466,19 +468,21 @@ public final class ManifestHelper {
 	}
 
 	/**
-	 * Sorts dependencies and saves the {@link Manifest}
+	 * Sorts dependencies of the {@link Manifest} <br>
+	 * Note: Does not save the manifest.
 	 *
 	 * @param manifest specified manifest
-	 * @return {@code true} if it was saved successfully, else {@code false}
+	 * @return {@code true} if sorting was necessary, else {@code false}
 	 */
-	public static boolean sortAndSaveManifest(final Manifest manifest) {
-		if (manifest.getDependencies() != null) {
-			// ensure dependencies are sorted (can't use EList.sort())
-			final var dependencies = new LinkedList<>(manifest.getDependencies().getRequired());
-			manifest.getDependencies().getRequired().clear();
-			dependencies.forEach(d -> ManifestHelper.addDependency(manifest, d));
+	public static boolean sortManifestDependencies(final Manifest manifest) {
+		if (manifest.getDependencies() == null) {
+			return false; // nothing to do
 		}
-		return saveManifest(manifest);
+		final var dependencies = new BasicEList<>(manifest.getDependencies().getRequired());
+		ECollections.sort(manifest.getDependencies().getRequired(),
+				(o1, o2) -> o1.getSymbolicName().compareTo(o2.getSymbolicName()));
+
+		return !dependencies.equals(manifest.getDependencies().getRequired());
 	}
 
 	/**
