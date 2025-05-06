@@ -35,10 +35,14 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteAttributeCommand;
 import org.eclipse.fordiac.ide.model.data.InternalDataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -62,8 +66,8 @@ import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
+import org.eclipse.nebula.widgets.nattable.config.EditableRule;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
-import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
@@ -77,6 +81,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class AttributeSection extends AbstractSection implements I4diacNatTableUtil {
 	protected IChangeableRowDataProvider<Attribute> provider;
 	protected NatTable table;
+	protected AddDeleteReorderListWidget buttons;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -89,7 +94,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+		buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
 		provider = new ChangeableListDataProvider<>(new AttributeColumnAccessor(this));
@@ -98,10 +103,13 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		final NatTableColumnProvider<AttributeTableColumn> columnProvider = new NatTableColumnProvider<>(
 				AttributeTableColumn.DEFAULT_COLUMNS);
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, columnProvider,
-				new AttributeEditableRule(IEditableRule.ALWAYS_EDITABLE, AttributeTableColumn.DEFAULT_COLUMNS,
-						provider),
-				new TypeSelectionButton(this::getTypeLibrary, DataTypeSelectionContentProvider.INSTANCE,
-						DataTypeSelectionTreeContentProvider.INSTANCE),
+				new AttributeEditableRule(new EditableRule() {
+					@Override
+					public boolean isEditable(final int columnIndex, final int rowIndex) {
+						return isTypeEditable();
+					}
+				}, AttributeTableColumn.DEFAULT_COLUMNS, provider), new TypeSelectionButton(this::getTypeLibrary,
+						DataTypeSelectionContentProvider.INSTANCE, DataTypeSelectionTreeContentProvider.INSTANCE),
 				this, false);
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
 
@@ -134,6 +142,13 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 						getNeighbourListItem((Attribute) ref, true)),
 				ref -> new ChangeAttributeOrderCommand(getType(), (Attribute) ref,
 						getNeighbourListItem((Attribute) ref, false)));
+	}
+
+	private boolean isTypeEditable() {
+		final ConfigurableObject type = getType();
+		return !(type instanceof final FBNetworkElement fbne && fbne.isContainedInTypedInstance()
+				|| type instanceof final IInterfaceElement ie && ie.getFBNetworkElement().isContainedInTypedInstance()
+				|| type instanceof final Connection conn && FBNetworkElementHelper.isContainedInTypedInstance(conn));
 	}
 
 	private Attribute getNeighbourListItem(final Attribute ref, final boolean above) {
@@ -202,7 +217,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 
 	@Override
 	public boolean isEditable() {
-		return true;
+		return isTypeEditable();
 	}
 
 	@Override
@@ -220,6 +235,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	@Override
 	protected void setInputInit() {
 		provider.setInput(getFilteredAttributeList());
+		buttons.setEnabled(isTypeEditable());
 		table.refresh();
 	}
 
