@@ -48,6 +48,8 @@ public final class Messages extends NLS {
 	public static String DiagramPreferences_LabelSize;
 	public static String DiagramPreferences_LayoutConnectionsAutomatically;
 
+	public static String DiagramPreferences_ManageConnectionOfEventsAutomatically;
+
 	public static String DiagramPreferences_MaximumDefaultValueSize;
 
 	public static String DiagramPreferences_MaximumValueLabelSize;
