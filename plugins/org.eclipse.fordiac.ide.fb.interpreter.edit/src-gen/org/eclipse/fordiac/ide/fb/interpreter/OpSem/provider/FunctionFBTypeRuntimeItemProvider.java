@@ -24,6 +24,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
  * This is the item provider adapter for a
@@ -94,11 +95,11 @@ public class FunctionFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProv
 	 * This returns FunctionFBTypeRuntime.gif. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/FunctionFBTypeRuntime")); //$NON-NLS-1$
+	public Object getImage(final Object object) {
+		return overlayImage(object, FordiacImage.ICON_RESOURCE.getImage());
 	}
 
 	/**
