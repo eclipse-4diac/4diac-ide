@@ -28,6 +28,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
@@ -38,6 +39,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
@@ -68,6 +70,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
@@ -98,6 +101,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		return new LambdaVisitor<>() //
 				.on(BasicFBTypeRuntime.class).then(runTypeVisitor::runBasicFBType) //
 				.on(SimpleFBTypeRuntime.class).then(runTypeVisitor::runSimpleFBType) //
+				.on(FunctionFBTypeRuntime.class).then(runTypeVisitor::runFunctionFBType) //
 				.on(FBNetworkRuntime.class).then(runTypeVisitor::runFBNetwork);
 	}
 
@@ -264,16 +268,15 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// Copy FBType
 		final FBType copyFBType = EcoreUtil.copy(executedFbtype);
 		// Add copy FBType to the RuntimeFBType
-		if (runtime instanceof BasicFBTypeRuntime) {
-			((BasicFBTypeRuntime) newFBTypeRT).setBasicfbtype((BasicFBType) copyFBType);
-		} else if (runtime instanceof SimpleFBTypeRuntime) {
-			((SimpleFBTypeRuntime) newFBTypeRT).setSimpleFBType((SimpleFBType) copyFBType);
-		} else {
-			throw new UnsupportedOperationException();
+		switch (newFBTypeRT) {
+		case final BasicFBTypeRuntime b -> b.setBasicfbtype((BasicFBType) copyFBType);
+		case final SimpleFBTypeRuntime s -> s.setSimpleFBType((SimpleFBType) copyFBType);
+		case final FunctionFBTypeRuntime f -> f.setFunctionFBType((FunctionFBType) copyFBType);
+		default -> throw new UnsupportedOperationException();
 		}
+
 		final var newEventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 		newEventOccurrence.setFbRuntime(newFBTypeRT);
-		// Event
 		newEventOccurrence.setEvent(output);
 		return newEventOccurrence;
 	}
@@ -331,6 +334,14 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		return outputEvents;
 	}
 
+	@Override
+	public EList<EventOccurrence> runFunctionFBType(final FunctionFBTypeRuntime fBTypeRuntime) {
+		final FunctionFBType functionFBType = fBTypeRuntime.getModel();
+		// function types always have exactly 1 output event
+		final Event event = functionFBType.getInterfaceList().getEventOutputs().get(0);
+		return ECollections.newBasicEList(createOutputEventOccurrence(fBTypeRuntime, event, functionFBType));
+	}
+
 	private static List<SimpleECAction> getActions(final SimpleFBType simpleFBType, final String inEvent) {
 		// if we don't have ECStates, use first output/algorithm as fallback
 		if (simpleFBType.getSimpleECStates() == null || simpleFBType.getSimpleECStates().isEmpty()) {
@@ -350,7 +361,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// run FB Type to get the output events for the instance in the network
 		FBRuntimeAbstract runtime = fBNetworkRuntime.getTypeRuntimes().get(eventOccurrence.getParentFB());
 		if (runtime == null) {
-			final BaseFBType copiedType = (BaseFBType) EcoreUtil.copy(eventOccurrence.getParentFB().getType());
+			final FBType copiedType = EcoreUtil.copy(eventOccurrence.getParentFB().getType());
 			runtime = RuntimeFactory.createFrom(copiedType);
 			fBNetworkRuntime.getTypeRuntimes().put(eventOccurrence.getParentFB(), runtime);
 		}
@@ -542,5 +553,4 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		interfaceElement.getOutputConnections().forEach(conn -> destinations.add(conn.getDestination()));
 		return destinations;
 	}
-
 }
