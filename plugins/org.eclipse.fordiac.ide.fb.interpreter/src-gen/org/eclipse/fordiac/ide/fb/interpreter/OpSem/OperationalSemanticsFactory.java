@@ -69,6 +69,15 @@ public interface OperationalSemanticsFactory extends EFactory {
 	SimpleFBTypeRuntime createSimpleFBTypeRuntime();
 
 	/**
+	 * Returns a new object of class '<em>Function FB Type Runtime</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return a new object of class '<em>Function FB Type Runtime</em>'.
+	 * @generated
+	 */
+	FunctionFBTypeRuntime createFunctionFBTypeRuntime();
+
+	/**
 	 * Returns a new object of class '<em>FB Network Runtime</em>'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *

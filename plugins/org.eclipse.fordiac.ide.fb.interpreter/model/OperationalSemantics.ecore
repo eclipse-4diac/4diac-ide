@@ -77,6 +77,16 @@
         eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//SimpleFBType"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionFBTypeRuntime" eSuperTypes="#//FBRuntimeAbstract">
+    <eOperations name="getModel" lowerBound="1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FunctionFBType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return functionFBType;"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functionFBType" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FunctionFBType"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Transaction" abstract="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputEventOccurrence" lowerBound="1"

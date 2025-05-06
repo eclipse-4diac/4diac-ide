@@ -183,6 +183,9 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 				OperationalSemanticsFactory.eINSTANCE.createSimpleFBTypeRuntime()));
 
 		newChildDescriptors.add(createChildParameter(OperationalSemanticsPackage.Literals.RUNTIME_MAP__VALUE,
+				OperationalSemanticsFactory.eINSTANCE.createFunctionFBTypeRuntime()));
+
+		newChildDescriptors.add(createChildParameter(OperationalSemanticsPackage.Literals.RUNTIME_MAP__VALUE,
 				OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime()));
 	}
 

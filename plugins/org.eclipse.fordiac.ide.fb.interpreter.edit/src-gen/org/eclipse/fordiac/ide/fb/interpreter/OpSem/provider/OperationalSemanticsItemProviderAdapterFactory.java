@@ -185,6 +185,31 @@ public class OperationalSemanticsItemProviderAdapterFactory extends OperationalS
 
 	/**
 	 * This keeps track of the one adapter used for all
+	 * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime}
+	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	protected FunctionFBTypeRuntimeItemProvider functionFBTypeRuntimeItemProvider;
+
+	/**
+	 * This creates an adapter for a
+	 * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public Adapter createFunctionFBTypeRuntimeAdapter() {
+		if (functionFBTypeRuntimeItemProvider == null) {
+			functionFBTypeRuntimeItemProvider = new FunctionFBTypeRuntimeItemProvider(this);
+		}
+
+		return functionFBTypeRuntimeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all
 	 * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -468,6 +493,9 @@ public class OperationalSemanticsItemProviderAdapterFactory extends OperationalS
 		}
 		if (simpleFBTypeRuntimeItemProvider != null) {
 			simpleFBTypeRuntimeItemProvider.dispose();
+		}
+		if (functionFBTypeRuntimeItemProvider != null) {
+			functionFBTypeRuntimeItemProvider.dispose();
 		}
 		if (fbNetworkRuntimeItemProvider != null) {
 			fbNetworkRuntimeItemProvider.dispose();
