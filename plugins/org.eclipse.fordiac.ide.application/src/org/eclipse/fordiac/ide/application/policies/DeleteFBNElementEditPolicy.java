@@ -13,10 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.fordiac.ide.application.commands.DeleteElementInExecutionChainCommand;
+import java.util.Optional;
+
+import org.eclipse.fordiac.ide.application.commands.ConnectThroughCommand;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.GroupRequest;
 
@@ -36,9 +39,27 @@ public class DeleteFBNElementEditPolicy extends org.eclipse.gef.editpolicies.Com
 	protected Command createDeleteCommand(final GroupRequest request) {
 		if (getHost().getModel() instanceof final FBNetworkElement fbne) {
 			if (getHost().getParent() instanceof UnfoldedSubappContentEditPart) {
-				return new DeleteElementInExecutionChainCommand(fbne);
+				final Command rerouteCommand = createRerouteConnectionCommand(fbne);
+				if (rerouteCommand != null) {
+					return rerouteCommand.chain(new DeleteFBNetworkElementCommand(fbne));
+				}
 			}
 			return new DeleteFBNetworkElementCommand(fbne);
+		}
+		return null;
+	}
+
+	private static Command createRerouteConnectionCommand(final FBNetworkElement fbne) {
+		if (fbne.getInterface() != null && !fbne.getInterface().getEventInputs().isEmpty()
+				&& !fbne.getInterface().getEventOutputs().isEmpty()) {
+			final Optional<IInterfaceElement> inputEvent = fbne.getInterface().getEventInputs().stream()
+					.filter(e -> !e.getInputConnections().isEmpty()).map(e -> ((IInterfaceElement) e)).findFirst();
+			final Optional<IInterfaceElement> outputEvent = fbne.getInterface().getEventOutputs().stream()
+					.filter(e -> !e.getOutputConnections().isEmpty()).map(e -> (IInterfaceElement) e).findFirst();
+
+			if (outputEvent.isPresent() && inputEvent.isPresent()) {
+				return new ConnectThroughCommand(inputEvent.get(), outputEvent.get());
+			}
 		}
 		return null;
 	}
