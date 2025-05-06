@@ -1,7 +1,7 @@
 /**
  * ******************************************************************************
  * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
- * * 
+ * *
  * * This program and the accompanying materials are made available under the
  * * terms of the Eclipse Public License 2.0 which is available at
  * * http://www.eclipse.org/legal/epl-2.0.
@@ -13,9 +13,11 @@
  * *     - initial API and implementation and/or initial documentation
  * *   Alois Zoitl - moved to deployment and reworked it to a device response model
  * ******************************************************************************
- * 
+ *
  */
 package org.eclipse.fordiac.ide.deployment.devResponse.impl;
+
+import static org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage.RESOURCE;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -142,7 +144,9 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 * @generated
 	 */
 	public static DevResponsePackage init() {
-		if (isInited) return (DevResponsePackage)EPackage.Registry.INSTANCE.getEPackage(DevResponsePackage.eNS_URI);
+		if (isInited) {
+			return (DevResponsePackage)EPackage.Registry.INSTANCE.getEPackage(DevResponsePackage.eNS_URI);
+		}
 
 		// Obtain or create and register package
 		Object registeredDevResponsePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
@@ -300,18 +304,8 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 * @generated
 	 */
 	@Override
-	public EAttribute getData_Time() {
-		return (EAttribute)dataEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getData_Forced() {
-		return (EAttribute)dataEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)dataEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -499,7 +493,9 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 * @generated
 	 */
 	public void createPackageContents() {
-		if (isCreated) return;
+		if (isCreated) {
+			return;
+		}
 		isCreated = true;
 
 		// Create classes and their features
@@ -519,7 +515,6 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 
 		dataEClass = createEClass(DATA);
 		createEAttribute(dataEClass, DATA__VALUE);
-		createEAttribute(dataEClass, DATA__TIME);
 		createEAttribute(dataEClass, DATA__FORCED);
 
 		responseEClass = createEClass(RESPONSE);
@@ -559,7 +554,9 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 * @generated
 	 */
 	public void initializePackageContents() {
-		if (isInitialized) return;
+		if (isInitialized) {
+			return;
+		}
 		isInitialized = true;
 
 		// Initialize package
@@ -590,7 +587,6 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 
 		initEClass(dataEClass, Data.class, "Data", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getData_Value(), ecorePackage.getEString(), "value", null, 0, 1, Data.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getData_Time(), ecorePackage.getEString(), "time", null, 0, 1, Data.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getData_Forced(), ecorePackage.getEString(), "forced", null, 0, 1, Data.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(responseEClass, Response.class, "Response", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

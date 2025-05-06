@@ -26,7 +26,6 @@
     </genClasses>
     <genClasses ecoreClass="devResponse.ecore#//Data">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Data/value"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Data/time"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Data/forced"/>
     </genClasses>
     <genClasses ecoreClass="devResponse.ecore#//Response">

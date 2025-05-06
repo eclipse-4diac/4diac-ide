@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl#getValue <em>Value</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl#getTime <em>Time</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl#getForced <em>Forced</em>}</li>
  * </ul>
  *
@@ -59,26 +58,6 @@ public class DataImpl extends EObjectImpl implements Data {
 	 * @ordered
 	 */
 	protected String value = VALUE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getTime() <em>Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTime()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String TIME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getTime() <em>Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTime()
-	 * @generated
-	 * @ordered
-	 */
-	protected String time = TIME_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getForced() <em>Forced</em>}' attribute.
@@ -138,31 +117,9 @@ public class DataImpl extends EObjectImpl implements Data {
 	public void setValue(String newValue) {
 		String oldValue = value;
 		value = newValue;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.DATA__VALUE, oldValue, value));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getTime() {
-		return time;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setTime(String newTime) {
-		String oldTime = time;
-		time = newTime;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.DATA__TIME, oldTime, time));
+		}
 	}
 
 	/**
@@ -184,8 +141,9 @@ public class DataImpl extends EObjectImpl implements Data {
 	public void setForced(String newForced) {
 		String oldForced = forced;
 		forced = newForced;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.DATA__FORCED, oldForced, forced));
+		}
 	}
 
 	/**
@@ -198,8 +156,6 @@ public class DataImpl extends EObjectImpl implements Data {
 		switch (featureID) {
 			case DevResponsePackage.DATA__VALUE:
 				return getValue();
-			case DevResponsePackage.DATA__TIME:
-				return getTime();
 			case DevResponsePackage.DATA__FORCED:
 				return getForced();
 			default:
@@ -217,9 +173,6 @@ public class DataImpl extends EObjectImpl implements Data {
 		switch (featureID) {
 			case DevResponsePackage.DATA__VALUE:
 				setValue((String)newValue);
-				return;
-			case DevResponsePackage.DATA__TIME:
-				setTime((String)newValue);
 				return;
 			case DevResponsePackage.DATA__FORCED:
 				setForced((String)newValue);
@@ -241,9 +194,6 @@ public class DataImpl extends EObjectImpl implements Data {
 			case DevResponsePackage.DATA__VALUE:
 				setValue(VALUE_EDEFAULT);
 				return;
-			case DevResponsePackage.DATA__TIME:
-				setTime(TIME_EDEFAULT);
-				return;
 			case DevResponsePackage.DATA__FORCED:
 				setForced(FORCED_EDEFAULT);
 				return;
@@ -263,8 +213,6 @@ public class DataImpl extends EObjectImpl implements Data {
 		switch (featureID) {
 			case DevResponsePackage.DATA__VALUE:
 				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
-			case DevResponsePackage.DATA__TIME:
-				return TIME_EDEFAULT == null ? time != null : !TIME_EDEFAULT.equals(time);
 			case DevResponsePackage.DATA__FORCED:
 				return FORCED_EDEFAULT == null ? forced != null : !FORCED_EDEFAULT.equals(forced);
 			default:
@@ -279,13 +227,13 @@ public class DataImpl extends EObjectImpl implements Data {
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (value: "); //$NON-NLS-1$
 		result.append(value);
-		result.append(", time: "); //$NON-NLS-1$
-		result.append(time);
 		result.append(", forced: "); //$NON-NLS-1$
 		result.append(forced);
 		result.append(')');

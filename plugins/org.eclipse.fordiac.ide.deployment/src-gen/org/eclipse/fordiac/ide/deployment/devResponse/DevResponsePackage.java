@@ -209,22 +209,13 @@ public interface DevResponsePackage extends EPackage {
 	int DATA__VALUE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Time</b></em>' attribute.
-	 * <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DATA__TIME = 1;
-
-	/**
 	 * The feature id for the '<em><b>Forced</b></em>' attribute. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered
 	 */
-	int DATA__FORCED = 2;
+	int DATA__FORCED = 1;
 
 	/**
 	 * The number of structural features of the '<em>Data</em>' class. <!--
@@ -233,7 +224,7 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DATA_FEATURE_COUNT = 3;
+	int DATA_FEATURE_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl <em>Response</em>}' class.
@@ -553,16 +544,6 @@ public interface DevResponsePackage extends EPackage {
 	EAttribute getData_Value();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data#getTime <em>Time</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Time</em>'.
-	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Data#getTime()
-	 * @see #getData()
-	 * @generated
-	 */
-	EAttribute getData_Time();
-
-	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data#getForced <em>Forced</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Forced</em>'.
@@ -846,13 +827,6 @@ public interface DevResponsePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DATA__VALUE = eINSTANCE.getData_Value();
-
-		/**
-		 * The meta object literal for the '<em><b>Time</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DATA__TIME = eINSTANCE.getData_Time();
 
 		/**
 		 * The meta object literal for the '<em><b>Forced</b></em>' attribute feature.

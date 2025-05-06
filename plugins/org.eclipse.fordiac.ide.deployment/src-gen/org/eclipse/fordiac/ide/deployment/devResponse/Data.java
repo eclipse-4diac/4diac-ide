@@ -1,7 +1,7 @@
 /**
  * ******************************************************************************
  * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
- * * 
+ * *
  * * This program and the accompanying materials are made available under the
  * * terms of the Eclipse Public License 2.0 which is available at
  * * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +13,7 @@
  * *     - initial API and implementation and/or initial documentation
  * *   Alois Zoitl - moved to deployment and reworked it to a device response model
  * ******************************************************************************
- * 
+ *
  */
 package org.eclipse.fordiac.ide.deployment.devResponse;
 
@@ -29,7 +29,6 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Data#getValue <em>Value</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Data#getTime <em>Time</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Data#getForced <em>Forced</em>}</li>
  * </ul>
  *
@@ -63,32 +62,6 @@ public interface Data extends EObject {
 	 * @generated
 	 */
 	void setValue(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Time</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Time</em>' attribute.
-	 * @see #setTime(String)
-	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getData_Time()
-	 * @model
-	 * @generated
-	 */
-	String getTime();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data#getTime <em>Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Time</em>' attribute.
-	 * @see #getTime()
-	 * @generated
-	 */
-	void setTime(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Forced</b></em>' attribute.
