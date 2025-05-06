@@ -13,23 +13,31 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.validation;
 
+import java.util.HashSet;
+import java.util.OptionalDouble;
+import java.util.Set;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.Messages;
+import org.eclipse.fordiac.ide.Utils;
 import org.eclipse.fordiac.ide.contractSpec.Age;
 import org.eclipse.fordiac.ide.contractSpec.CausalAge;
 import org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl;
 import org.eclipse.fordiac.ide.contractSpec.CausalFuncName;
 import org.eclipse.fordiac.ide.contractSpec.CausalReaction;
+import org.eclipse.fordiac.ide.contractSpec.ClockDefinition;
 import org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage;
 import org.eclipse.fordiac.ide.contractSpec.EventExpr;
 import org.eclipse.fordiac.ide.contractSpec.EventList;
 import org.eclipse.fordiac.ide.contractSpec.EventSpec;
 import org.eclipse.fordiac.ide.contractSpec.Interval;
+import org.eclipse.fordiac.ide.contractSpec.Model;
 import org.eclipse.fordiac.ide.contractSpec.Port;
 import org.eclipse.fordiac.ide.contractSpec.Reaction;
 import org.eclipse.fordiac.ide.contractSpec.Repetition;
 import org.eclipse.fordiac.ide.contractSpec.SingleEvent;
+import org.eclipse.fordiac.ide.contractSpec.TimeSpec;
 import org.eclipse.xtext.validation.Check;
 
 /**
@@ -47,6 +55,13 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 	public static final String DEGENERATE_INTERVAL = "degenerateInterval"; //$NON-NLS-1$
 	public static final String PORT_NOT_INPUT = "portNotInput"; //$NON-NLS-1$
 	public static final String PORT_NOT_OUTPUT = "portNotOutput"; //$NON-NLS-1$
+	public static final String SLIDING_WINDOW_UNNEEDED = "slidingWindowUnneeded"; //$NON-NLS-1$
+	public static final String SLIDING_WINDOW_INVALID = "slidingWindowInvalid"; //$NON-NLS-1$
+	public static final String CLOCK_ALREADY_DEFINED = "clockAlreadyDefined"; //$NON-NLS-1$
+	public static final String MAXDIFF_AND_SKEW = "maxdiffAndSkew"; //$NON-NLS-1$
+	public static final String MAXDIFF_AND_DRIFT = "maxdiffAndDrift"; //$NON-NLS-1$
+	public static final String SKEW_WITHOUT_RESOLUTION = "skewWithoutResolution"; //$NON-NLS-1$
+	public static final String SKEW_LT_RESOLUTION = "skewLTResolution"; //$NON-NLS-1$
 
 	@Check
 	public void checkInterval(final Interval interval) {
@@ -68,6 +83,43 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 	}
 
 	@Check
+	public void checkClocksUnique(final Model model) {
+		final Set<String> clockNames = new HashSet<>();
+
+		for (final TimeSpec timeSpec : model.getTimeSpec()) {
+			if (timeSpec instanceof final ClockDefinition clock && !clockNames.add(clock.getName())) {
+				error(Messages.ClockAlreadyDefinedError, clock, ContractSpecPackage.Literals.CLOCK_DEFINITION__NAME,
+						CLOCK_ALREADY_DEFINED);
+			}
+		}
+	}
+
+	@Check
+	public void checkClock(final ClockDefinition clock) {
+		if (clock.getMaxdiff() != null && clock.getSkew() != null) { // cannot use maxdiff & skew together
+			error(Messages.MaxdiffAndSkewError, ContractSpecPackage.Literals.CLOCK_DEFINITION__MAXDIFF,
+					MAXDIFF_AND_SKEW);
+		}
+		if (clock.getMaxdiff() != null && clock.getDrift() != null) { // cannot use maxdiff & drift together
+			error(Messages.MaxdiffAndDriftError, ContractSpecPackage.Literals.CLOCK_DEFINITION__MAXDIFF,
+					MAXDIFF_AND_DRIFT);
+		}
+
+		final OptionalDouble skew = Utils.timeExpr2Ns(clock.getSkew());
+		if (skew.isPresent()) {
+			// skew requires resolution and it must hold that skew < resolutions
+			final OptionalDouble resolution = Utils.timeExpr2Ns(clock.getResolution());
+			if (resolution.isEmpty()) {
+				error(Messages.SkewWithoutResolutionError, ContractSpecPackage.Literals.CLOCK_DEFINITION__SKEW,
+						SKEW_WITHOUT_RESOLUTION);
+			} else if (skew.getAsDouble() >= resolution.getAsDouble()) {
+				error(Messages.SkewLTResolutionError, ContractSpecPackage.Literals.CLOCK_DEFINITION__SKEW,
+						SKEW_LT_RESOLUTION);
+			}
+		}
+	}
+
+	@Check
 	public void checkSingleEvent(final SingleEvent singleEvent) {
 		checkPortsOfSameType(singleEvent.getEvents(), ContractSpecPackage.Literals.SINGLE_EVENT__EVENTS);
 	}
@@ -81,6 +133,7 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 	public void checkReaction(final Reaction reaction) {
 		checkPortsOfType(reaction.getInput(), INPUT, ContractSpecPackage.Literals.REACTION__INPUT);
 		checkPortsOfType(reaction.getOutput(), OUTPUT, ContractSpecPackage.Literals.REACTION__OUTPUT);
+		validateNOutOfM(reaction.getN(), reaction.getOutOf(), ContractSpecPackage.Literals.REACTION__N);
 	}
 
 	@Check
@@ -93,6 +146,7 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 	public void checkAge(final Age age) {
 		checkPortsOfType(age.getOutput(), OUTPUT, ContractSpecPackage.Literals.AGE__OUTPUT);
 		checkPortsOfType(age.getInput(), INPUT, ContractSpecPackage.Literals.AGE__INPUT);
+		validateNOutOfM(age.getN(), age.getOutOf(), ContractSpecPackage.Literals.AGE__N);
 	}
 
 	@Check
@@ -150,6 +204,14 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 				final String s = String.format(Messages.OutputPortExpectedError, port.getName());
 				error(s, feature, PORT_NOT_OUTPUT);
 			}
+		}
+	}
+
+	private void validateNOutOfM(final int n, final int m, final EStructuralFeature feature) {
+		if (n == m) {
+			warning(Messages.SlidingWindowNotNeededWarning, feature, SLIDING_WINDOW_UNNEEDED);
+		} else if (n > m) {
+			error(Messages.SlidingWindowInvalidError, feature, SLIDING_WINDOW_INVALID);
 		}
 	}
 }
