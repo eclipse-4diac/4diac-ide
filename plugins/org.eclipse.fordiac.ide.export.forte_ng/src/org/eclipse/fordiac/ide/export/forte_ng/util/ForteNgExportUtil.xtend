@@ -108,7 +108,8 @@ final class ForteNgExportUtil {
 			DataType: '''CIEC_«type.generateTypeNamePlain»«IF GenericTypes.isAnyType(type)»_VARIANT«ENDIF»'''
 			FBType case type.genericType:
 				type.genericClassName
-			FBType: '''FORTE_«type.generateTypeNamePlain»'''
+			FBType,
+			GlobalConstants: '''FORTE_«type.generateTypeNamePlain»'''
 			default:
 				type.generateTypeNamePlain
 		}
@@ -125,7 +126,8 @@ final class ForteNgExportUtil {
 			DataType: '''CIEC_«type.generateTypeNamePlain»'''
 			FBType case type.genericType:
 				type.genericClassName
-			FBType: '''FORTE_«type.generateTypeNamePlain»'''
+			FBType,
+			GlobalConstants: '''FORTE_«type.generateTypeNamePlain»'''
 			default:
 				type.generateTypeNamePlain
 		}
@@ -140,6 +142,17 @@ final class ForteNgExportUtil {
 			default:
 				type.generateTypeNamePlain.FORTEStringId
 		}
+	}
+
+	def static CharSequence generateDefiningTypeName(EObject object) {
+		switch (object) {
+			LibraryElement: object.generateTypeName
+			default: object.eResource?.generateDefiningTypeName
+		}
+	}
+
+	def static CharSequence generateDefiningTypeName(Resource resource) {
+		resource.contents.filter(LibraryElement)?.head?.generateTypeName
 	}
 
 	def static String generateDefiningInclude(EObject object) {

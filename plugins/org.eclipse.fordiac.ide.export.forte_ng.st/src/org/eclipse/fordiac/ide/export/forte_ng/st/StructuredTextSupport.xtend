@@ -446,7 +446,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) {
 		switch (feature.eContainer) {
-			STVarGlobalDeclarationBlock: '''st_global_«feature.name»'''
+			STVarGlobalDeclarationBlock: '''«feature.generateDefiningTypeName»::var_«feature.name»'''
 			default: '''st_lv_«feature.name»'''
 		}
 	}
