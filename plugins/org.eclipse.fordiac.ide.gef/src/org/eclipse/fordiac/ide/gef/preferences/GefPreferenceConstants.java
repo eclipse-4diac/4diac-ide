@@ -52,6 +52,8 @@ public class GefPreferenceConstants {
 	public static final String P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX = "DeactivateCommentsTransferringDemuxToMux"; //$NON-NLS-1$
 	public static final boolean P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX_DEFAULT_VALUE = false;
 
+	public static final String MANAGE_EVENT_CONNECTIONS_AUTOMATICALLY = "ManageEventConnectionsAutomatically"; //$NON-NLS-1$
+
 	private GefPreferenceConstants() {
 
 	}

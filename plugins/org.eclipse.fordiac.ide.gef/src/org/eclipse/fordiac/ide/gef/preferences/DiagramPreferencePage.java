@@ -78,6 +78,11 @@ public class DiagramPreferencePage extends FordiacPropertyPreferencePage {
 		integerFieldEditorValue.setValidRange(120, 100000);
 		addField(integerFieldEditorValue);
 
+		final BooleanFieldEditor manageConnections = new BooleanFieldEditor(
+				GefPreferenceConstants.MANAGE_EVENT_CONNECTIONS_AUTOMATICALLY,
+				Messages.DiagramPreferences_ManageConnectionOfEventsAutomatically, parent);
+		addField(manageConnections);
+
 		// Create a Group to hold label size field
 		createGroupLabelSize();
 
