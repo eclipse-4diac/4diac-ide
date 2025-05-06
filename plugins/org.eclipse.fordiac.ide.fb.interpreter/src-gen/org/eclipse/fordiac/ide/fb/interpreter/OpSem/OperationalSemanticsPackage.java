@@ -296,6 +296,36 @@ public interface OperationalSemanticsPackage extends EPackage {
 
 	/**
 	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FunctionFBTypeRuntimeImpl
+	 * <em>Function FB Type Runtime</em>}' class. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FunctionFBTypeRuntimeImpl
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getFunctionFBTypeRuntime()
+	 * @generated
+	 */
+	int FUNCTION_FB_TYPE_RUNTIME = 5;
+
+	/**
+	 * The feature id for the '<em><b>Function FB Type</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int FUNCTION_FB_TYPE_RUNTIME__FUNCTION_FB_TYPE = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Function FB Type Runtime</em>'
+	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int FUNCTION_FB_TYPE_RUNTIME_FEATURE_COUNT = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransactionImpl
 	 * <em>Transaction</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -303,7 +333,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getTransaction()
 	 * @generated
 	 */
-	int TRANSACTION = 5;
+	int TRANSACTION = 6;
 
 	/**
 	 * The feature id for the '<em><b>Input Event Occurrence</b></em>' containment
@@ -351,7 +381,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getFBNetworkRuntime()
 	 * @generated
 	 */
-	int FB_NETWORK_RUNTIME = 6;
+	int FB_NETWORK_RUNTIME = 7;
 
 	/**
 	 * The feature id for the '<em><b>Fbnetwork</b></em>' containment reference.
@@ -399,7 +429,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getFBTransaction()
 	 * @generated
 	 */
-	int FB_TRANSACTION = 7;
+	int FB_TRANSACTION = 8;
 
 	/**
 	 * The feature id for the '<em><b>Input Event Occurrence</b></em>' containment
@@ -474,7 +504,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getConnectionToValueMap()
 	 * @generated
 	 */
-	int CONNECTION_TO_VALUE_MAP = 8;
+	int CONNECTION_TO_VALUE_MAP = 9;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' reference. <!-- begin-user-doc
@@ -512,7 +542,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getRuntimeMap()
 	 * @generated
 	 */
-	int RUNTIME_MAP = 9;
+	int RUNTIME_MAP = 10;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' reference. <!-- begin-user-doc
@@ -550,7 +580,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getTrace()
 	 * @generated
 	 */
-	int TRACE = 10;
+	int TRACE = 11;
 
 	/**
 	 * The number of structural features of the '<em>Trace</em>' class. <!--
@@ -570,7 +600,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getEccTrace()
 	 * @generated
 	 */
-	int ECC_TRACE = 11;
+	int ECC_TRACE = 12;
 
 	/**
 	 * The feature id for the '<em><b>Transition Traces</b></em>' containment
@@ -600,7 +630,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getTransitionTrace()
 	 * @generated
 	 */
-	int TRANSITION_TRACE = 12;
+	int TRANSITION_TRACE = 13;
 
 	/**
 	 * The feature id for the '<em><b>Source State</b></em>' attribute. <!--
@@ -876,6 +906,31 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSimpleFBTypeRuntime_SimpleFBType();
+
+	/**
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime
+	 * <em>Function FB Type Runtime</em>}'. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @return the meta object for class '<em>Function FB Type Runtime</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime
+	 * @generated
+	 */
+	EClass getFunctionFBTypeRuntime();
+
+	/**
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime#getFunctionFBType
+	 * <em>Function FB Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference '<em>Function FB
+	 *         Type</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime#getFunctionFBType()
+	 * @see #getFunctionFBTypeRuntime()
+	 * @generated
+	 */
+	EReference getFunctionFBTypeRuntime_FunctionFBType();
 
 	/**
 	 * Returns the meta object for class
@@ -1381,6 +1436,26 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SIMPLE_FB_TYPE_RUNTIME__SIMPLE_FB_TYPE = eINSTANCE.getSimpleFBTypeRuntime_SimpleFBType();
+
+		/**
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FunctionFBTypeRuntimeImpl
+		 * <em>Function FB Type Runtime</em>}' class. <!-- begin-user-doc --> <!--
+		 * end-user-doc -->
+		 *
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FunctionFBTypeRuntimeImpl
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getFunctionFBTypeRuntime()
+		 * @generated
+		 */
+		EClass FUNCTION_FB_TYPE_RUNTIME = eINSTANCE.getFunctionFBTypeRuntime();
+
+		/**
+		 * The meta object literal for the '<em><b>Function FB Type</b></em>'
+		 * containment reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EReference FUNCTION_FB_TYPE_RUNTIME__FUNCTION_FB_TYPE = eINSTANCE.getFunctionFBTypeRuntime_FunctionFBType();
 
 		/**
 		 * The meta object literal for the
