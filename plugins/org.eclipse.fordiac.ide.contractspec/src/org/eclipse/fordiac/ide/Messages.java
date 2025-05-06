@@ -35,6 +35,20 @@ public final class Messages extends NLS {
 
 	public static String DegenerateIntervalQuickfixDescription;
 
+	public static String SlidingWindowNotNeededWarning;
+
+	public static String SlidingWindowInvalidError;
+
+	public static String ClockAlreadyDefinedError;
+
+	public static String MaxdiffAndSkewError;
+
+	public static String MaxdiffAndDriftError;
+
+	public static String SkewWithoutResolutionError;
+
+	public static String SkewLTResolutionError;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
