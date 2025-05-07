@@ -381,6 +381,16 @@ public class TypedConfigureableObjectImpl extends EObjectImpl implements TypedCo
 	 * @generated
 	 */
 	@Override
+	public boolean isContainedInTypedInstance() {
+		return org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper.isContainedInTypedInstance(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES:

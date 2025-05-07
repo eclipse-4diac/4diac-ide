@@ -185,14 +185,6 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
 	 * @generated
 	 */
-	boolean isContainedInTypedInstance();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 * @generated
-	 */
 	boolean isInGroup();
 
 	/**

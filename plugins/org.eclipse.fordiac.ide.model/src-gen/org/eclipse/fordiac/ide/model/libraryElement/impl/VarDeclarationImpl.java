@@ -708,6 +708,16 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * @generated
 	 */
 	@Override
+	public boolean isContainedInTypedInstance() {
+		return org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper.isContainedInTypedInstance(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public void setVisible(final boolean visible) {
 		org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);
 	}

@@ -474,16 +474,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @generated
 	 */
 	@Override
-	public boolean isContainedInTypedInstance() {
-		return org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper.isContainedInTypedInstance(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public boolean isInGroup() {
 		return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.isInGroup(this);
 	}

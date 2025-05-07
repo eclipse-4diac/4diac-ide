@@ -566,6 +566,16 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	 * @generated
 	 */
 	@Override
+	public boolean isContainedInTypedInstance() {
+		return org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper.isContainedInTypedInstance(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String getQualifiedName() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
 	}

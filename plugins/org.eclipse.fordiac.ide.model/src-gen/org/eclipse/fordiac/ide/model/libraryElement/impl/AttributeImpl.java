@@ -368,6 +368,16 @@ public class AttributeImpl extends EObjectImpl implements Attribute {
 	 * @generated
 	 */
 	@Override
+	public boolean isContainedInTypedInstance() {
+		return org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper.isContainedInTypedInstance(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Stream<INamedElement> findBySimpleName(final String name) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.findBySimpleName(this, name);
 	}

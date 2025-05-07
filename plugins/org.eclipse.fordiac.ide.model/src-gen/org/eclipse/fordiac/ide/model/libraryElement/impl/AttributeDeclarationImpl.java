@@ -711,6 +711,16 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	 * @generated
 	 */
 	@Override
+	public boolean isContainedInTypedInstance() {
+		return org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper.isContainedInTypedInstance(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__NAME:

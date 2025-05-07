@@ -63,4 +63,12 @@ public interface ITypedElement extends INamedElement {
 	 */
 	boolean validateType(DiagnosticChain diagnostics, Map<Object, Object> context);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated
+	 */
+	boolean isContainedInTypedInstance();
+
 } // ITypedElement
