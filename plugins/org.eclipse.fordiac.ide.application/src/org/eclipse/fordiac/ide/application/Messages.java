@@ -203,12 +203,6 @@ public final class Messages extends NLS {
 
 	public static String StructManipulatorSection_Contained_variables;
 
-	public static String ToggleSegments;
-
-	public static String ToggleSegments_3;
-
-	public static String ToggleSegments_5;
-
 	public static String TransferInstanceComments_WizardTitle;
 
 	public static String TransferInstanceComments_TransferLabel;

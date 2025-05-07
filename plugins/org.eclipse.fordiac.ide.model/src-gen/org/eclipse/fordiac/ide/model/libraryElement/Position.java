@@ -34,7 +34,7 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPosition()
- * @model annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData ignored='true'"
+ * @model
  * @generated
  */
 public interface Position extends EObject {

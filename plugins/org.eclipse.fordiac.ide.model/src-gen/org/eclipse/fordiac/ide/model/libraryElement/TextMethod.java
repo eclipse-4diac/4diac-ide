@@ -129,7 +129,7 @@ public interface TextMethod extends Method {
 	 * @return the value of the '<em>Text</em>' attribute.
 	 * @see #setText(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextMethod_Text()
-	 * @model annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData transformer='org.eclipse.fordiac.ide.model.util.StringTransformer'"
+	 * @model
 	 * @generated
 	 */
 	String getText();

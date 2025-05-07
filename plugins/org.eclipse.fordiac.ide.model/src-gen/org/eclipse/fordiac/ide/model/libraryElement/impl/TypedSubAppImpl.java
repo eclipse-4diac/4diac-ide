@@ -16,24 +16,19 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
-import java.util.Collection;
 import java.util.stream.Stream;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
  * <!-- begin-user-doc -->
@@ -44,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedSubAppImpl#getSubAppNetwork <em>Sub App Network</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedSubAppImpl#getVarConfigParams <em>Var Config Params</em>}</li>
  * </ul>
  *
  * @generated
@@ -59,16 +53,6 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 	 * @ordered
 	 */
 	protected FBNetwork subAppNetwork;
-
-	/**
-	 * The cached value of the '{@link #getVarConfigParams() <em>Var Config Params</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVarConfigParams()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<VarDeclaration> varConfigParams;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -163,19 +147,6 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 	 * @generated
 	 */
 	@Override
-	public EList<VarDeclaration> getVarConfigParams() {
-		if (varConfigParams == null) {
-			varConfigParams = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS);
-		}
-		return varConfigParams;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public boolean isTyped() {
 		return true;
 	}
@@ -210,8 +181,6 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 		switch (featureID) {
 			case LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK:
 				return basicSetSubAppNetwork(null, msgs);
-			case LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS:
-				return ((InternalEList<?>)getVarConfigParams()).basicRemove(otherEnd, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -228,8 +197,6 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 			case LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK:
 				if (resolve) return getSubAppNetwork();
 				return basicGetSubAppNetwork();
-			case LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS:
-				return getVarConfigParams();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -240,16 +207,11 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK:
 				setSubAppNetwork((FBNetwork)newValue);
-				return;
-			case LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS:
-				getVarConfigParams().clear();
-				getVarConfigParams().addAll((Collection<? extends VarDeclaration>)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -268,9 +230,6 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 			case LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK:
 				setSubAppNetwork((FBNetwork)null);
 				return;
-			case LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS:
-				getVarConfigParams().clear();
-				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -287,8 +246,6 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 		switch (featureID) {
 			case LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK:
 				return subAppNetwork != null;
-			case LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS:
-				return varConfigParams != null && !varConfigParams.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}

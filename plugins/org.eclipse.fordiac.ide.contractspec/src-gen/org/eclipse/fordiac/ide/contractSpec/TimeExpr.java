@@ -35,50 +35,47 @@ import org.eclipse.emf.ecore.EObject;
 public interface TimeExpr extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Value</b></em>' attribute.
+   * Returns the value of the '<em><b>Value</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Value</em>' attribute.
-   * @see #setValue(double)
+   * @return the value of the '<em>Value</em>' containment reference.
+   * @see #setValue(Value)
    * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getTimeExpr_Value()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  double getValue();
+  Value getValue();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.TimeExpr#getValue <em>Value</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.TimeExpr#getValue <em>Value</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Value</em>' attribute.
+   * @param value the new value of the '<em>Value</em>' containment reference.
    * @see #getValue()
    * @generated
    */
-  void setValue(double value);
+  void setValue(Value value);
 
   /**
    * Returns the value of the '<em><b>Unit</b></em>' attribute.
-   * The literals are from the enumeration {@link org.eclipse.fordiac.ide.contractSpec.Unit}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Unit</em>' attribute.
-   * @see org.eclipse.fordiac.ide.contractSpec.Unit
-   * @see #setUnit(Unit)
+   * @see #setUnit(String)
    * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getTimeExpr_Unit()
    * @model
    * @generated
    */
-  Unit getUnit();
+  String getUnit();
 
   /**
    * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.TimeExpr#getUnit <em>Unit</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Unit</em>' attribute.
-   * @see org.eclipse.fordiac.ide.contractSpec.Unit
    * @see #getUnit()
    * @generated
    */
-  void setUnit(Unit value);
+  void setUnit(String value);
 
 } // TimeExpr

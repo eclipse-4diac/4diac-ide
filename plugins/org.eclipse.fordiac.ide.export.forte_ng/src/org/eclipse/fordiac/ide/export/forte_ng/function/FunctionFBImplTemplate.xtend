@@ -30,8 +30,6 @@ class FunctionFBImplTemplate extends FunctionFBTemplate {
 		
 		«generateImplIncludes»
 		
-		«generateUseStringId»
-		
 		«generateFBDefinition»
 		«generateFBInterfaceDefinition»
 		«generateFBInterfaceSpecDefinition»

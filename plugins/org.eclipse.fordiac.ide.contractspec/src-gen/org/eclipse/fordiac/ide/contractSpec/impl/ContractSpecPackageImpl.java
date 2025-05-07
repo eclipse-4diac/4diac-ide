@@ -1,21 +1,20 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2024 Felix Schmid
- *
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *   Felix Schmid
  *     - initial implementation and/or documentation
- *******************************************************************************/
+ */
 package org.eclipse.fordiac.ide.contractSpec.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -24,9 +23,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.fordiac.ide.contractSpec.Age;
 import org.eclipse.fordiac.ide.contractSpec.CausalAge;
 import org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl;
-import org.eclipse.fordiac.ide.contractSpec.CausalFuncName;
 import org.eclipse.fordiac.ide.contractSpec.CausalReaction;
-import org.eclipse.fordiac.ide.contractSpec.CausalRelation;
 import org.eclipse.fordiac.ide.contractSpec.ClockDefinition;
 import org.eclipse.fordiac.ide.contractSpec.ContractSpecFactory;
 import org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage;
@@ -44,7 +41,7 @@ import org.eclipse.fordiac.ide.contractSpec.RepetitionOptions;
 import org.eclipse.fordiac.ide.contractSpec.SingleEvent;
 import org.eclipse.fordiac.ide.contractSpec.TimeExpr;
 import org.eclipse.fordiac.ide.contractSpec.TimeSpec;
-import org.eclipse.fordiac.ide.contractSpec.Unit;
+import org.eclipse.fordiac.ide.contractSpec.Value;
 
 /**
  * <!-- begin-user-doc -->
@@ -178,6 +175,13 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass valueEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass causalFuncDeclEClass = null;
 
   /**
@@ -186,27 +190,6 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   private EClass clockDefinitionEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EEnum unitEEnum = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EEnum causalFuncNameEEnum = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EEnum causalRelationEEnum = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -496,7 +479,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EReference getReaction_Input()
+  public EReference getReaction_Trigger()
   {
     return (EReference)reactionEClass.getEStructuralFeatures().get(0);
   }
@@ -507,7 +490,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EReference getReaction_Output()
+  public EReference getReaction_Reaction()
   {
     return (EReference)reactionEClass.getEStructuralFeatures().get(1);
   }
@@ -529,7 +512,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EAttribute getReaction_Once()
+  public EAttribute getReaction_N()
   {
     return (EAttribute)reactionEClass.getEStructuralFeatures().get(3);
   }
@@ -540,7 +523,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EAttribute getReaction_N()
+  public EAttribute getReaction_OutOf()
   {
     return (EAttribute)reactionEClass.getEStructuralFeatures().get(4);
   }
@@ -551,20 +534,9 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EAttribute getReaction_OutOf()
-  {
-    return (EAttribute)reactionEClass.getEStructuralFeatures().get(5);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EReference getReaction_Clock()
   {
-    return (EReference)reactionEClass.getEStructuralFeatures().get(6);
+    return (EReference)reactionEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -584,7 +556,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EReference getAge_Output()
+  public EReference getAge_Trigger()
   {
     return (EReference)ageEClass.getEStructuralFeatures().get(0);
   }
@@ -595,7 +567,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EReference getAge_Input()
+  public EReference getAge_Reaction()
   {
     return (EReference)ageEClass.getEStructuralFeatures().get(1);
   }
@@ -617,7 +589,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EAttribute getAge_Once()
+  public EAttribute getAge_N()
   {
     return (EAttribute)ageEClass.getEStructuralFeatures().get(3);
   }
@@ -628,7 +600,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EAttribute getAge_N()
+  public EAttribute getAge_OutOf()
   {
     return (EAttribute)ageEClass.getEStructuralFeatures().get(4);
   }
@@ -639,20 +611,9 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EAttribute getAge_OutOf()
-  {
-    return (EAttribute)ageEClass.getEStructuralFeatures().get(5);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EReference getAge_Clock()
   {
-    return (EReference)ageEClass.getEStructuralFeatures().get(6);
+    return (EReference)ageEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -672,7 +633,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EReference getCausalReaction_Input()
+  public EReference getCausalReaction_E1()
   {
     return (EReference)causalReactionEClass.getEStructuralFeatures().get(0);
   }
@@ -683,7 +644,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EReference getCausalReaction_Output()
+  public EReference getCausalReaction_E2()
   {
     return (EReference)causalReactionEClass.getEStructuralFeatures().get(1);
   }
@@ -727,7 +688,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EReference getCausalAge_Output()
+  public EReference getCausalAge_E1()
   {
     return (EReference)causalAgeEClass.getEStructuralFeatures().get(0);
   }
@@ -738,7 +699,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EReference getCausalAge_Input()
+  public EReference getCausalAge_E2()
   {
     return (EReference)causalAgeEClass.getEStructuralFeatures().get(1);
   }
@@ -793,20 +754,9 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EAttribute getEventExpr_Sequence()
-  {
-    return (EAttribute)eventExprEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EReference getEventExpr_Events()
   {
-    return (EReference)eventExprEClass.getEStructuralFeatures().get(2);
+    return (EReference)eventExprEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -925,7 +875,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EAttribute getInterval_LBound()
+  public EAttribute getInterval_B1()
   {
     return (EAttribute)intervalEClass.getEStructuralFeatures().get(1);
   }
@@ -936,9 +886,9 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EAttribute getInterval_LbValue()
+  public EReference getInterval_V1()
   {
-    return (EAttribute)intervalEClass.getEStructuralFeatures().get(2);
+    return (EReference)intervalEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -947,9 +897,9 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EAttribute getInterval_UbValue()
+  public EReference getInterval_V2()
   {
-    return (EAttribute)intervalEClass.getEStructuralFeatures().get(3);
+    return (EReference)intervalEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -958,7 +908,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EAttribute getInterval_UBound()
+  public EAttribute getInterval_B2()
   {
     return (EAttribute)intervalEClass.getEStructuralFeatures().get(4);
   }
@@ -991,9 +941,9 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EAttribute getTimeExpr_Value()
+  public EReference getTimeExpr_Value()
   {
-    return (EAttribute)timeExprEClass.getEStructuralFeatures().get(0);
+    return (EReference)timeExprEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1005,6 +955,39 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
   public EAttribute getTimeExpr_Unit()
   {
     return (EAttribute)timeExprEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getValue()
+  {
+    return valueEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getValue_Integer()
+  {
+    return (EAttribute)valueEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getValue_Fraction()
+  {
+    return (EAttribute)valueEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1035,7 +1018,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EReference getCausalFuncDecl_Port1()
+  public EReference getCausalFuncDecl_P1()
   {
     return (EReference)causalFuncDeclEClass.getEStructuralFeatures().get(1);
   }
@@ -1046,7 +1029,7 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EReference getCausalFuncDecl_Port2()
+  public EReference getCausalFuncDecl_P2()
   {
     return (EReference)causalFuncDeclEClass.getEStructuralFeatures().get(2);
   }
@@ -1134,39 +1117,6 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
    * @generated
    */
   @Override
-  public EEnum getUnit()
-  {
-    return unitEEnum;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EEnum getCausalFuncName()
-  {
-    return causalFuncNameEEnum;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EEnum getCausalRelation()
-  {
-    return causalRelationEEnum;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public ContractSpecFactory getContractSpecFactory()
   {
     return (ContractSpecFactory)getEFactoryInstance();
@@ -1219,38 +1169,35 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
     createEReference(offsetEClass, OFFSET__INTERVAL);
 
     reactionEClass = createEClass(REACTION);
-    createEReference(reactionEClass, REACTION__INPUT);
-    createEReference(reactionEClass, REACTION__OUTPUT);
+    createEReference(reactionEClass, REACTION__TRIGGER);
+    createEReference(reactionEClass, REACTION__REACTION);
     createEReference(reactionEClass, REACTION__INTERVAL);
-    createEAttribute(reactionEClass, REACTION__ONCE);
     createEAttribute(reactionEClass, REACTION__N);
     createEAttribute(reactionEClass, REACTION__OUT_OF);
     createEReference(reactionEClass, REACTION__CLOCK);
 
     ageEClass = createEClass(AGE);
-    createEReference(ageEClass, AGE__OUTPUT);
-    createEReference(ageEClass, AGE__INPUT);
+    createEReference(ageEClass, AGE__TRIGGER);
+    createEReference(ageEClass, AGE__REACTION);
     createEReference(ageEClass, AGE__INTERVAL);
-    createEAttribute(ageEClass, AGE__ONCE);
     createEAttribute(ageEClass, AGE__N);
     createEAttribute(ageEClass, AGE__OUT_OF);
     createEReference(ageEClass, AGE__CLOCK);
 
     causalReactionEClass = createEClass(CAUSAL_REACTION);
-    createEReference(causalReactionEClass, CAUSAL_REACTION__INPUT);
-    createEReference(causalReactionEClass, CAUSAL_REACTION__OUTPUT);
+    createEReference(causalReactionEClass, CAUSAL_REACTION__E1);
+    createEReference(causalReactionEClass, CAUSAL_REACTION__E2);
     createEReference(causalReactionEClass, CAUSAL_REACTION__INTERVAL);
     createEReference(causalReactionEClass, CAUSAL_REACTION__CLOCK);
 
     causalAgeEClass = createEClass(CAUSAL_AGE);
-    createEReference(causalAgeEClass, CAUSAL_AGE__OUTPUT);
-    createEReference(causalAgeEClass, CAUSAL_AGE__INPUT);
+    createEReference(causalAgeEClass, CAUSAL_AGE__E1);
+    createEReference(causalAgeEClass, CAUSAL_AGE__E2);
     createEReference(causalAgeEClass, CAUSAL_AGE__INTERVAL);
     createEReference(causalAgeEClass, CAUSAL_AGE__CLOCK);
 
     eventExprEClass = createEClass(EVENT_EXPR);
     createEReference(eventExprEClass, EVENT_EXPR__EVENT);
-    createEAttribute(eventExprEClass, EVENT_EXPR__SEQUENCE);
     createEReference(eventExprEClass, EVENT_EXPR__EVENTS);
 
     eventListEClass = createEClass(EVENT_LIST);
@@ -1266,20 +1213,24 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
 
     intervalEClass = createEClass(INTERVAL);
     createEReference(intervalEClass, INTERVAL__TIME);
-    createEAttribute(intervalEClass, INTERVAL__LBOUND);
-    createEAttribute(intervalEClass, INTERVAL__LB_VALUE);
-    createEAttribute(intervalEClass, INTERVAL__UB_VALUE);
-    createEAttribute(intervalEClass, INTERVAL__UBOUND);
+    createEAttribute(intervalEClass, INTERVAL__B1);
+    createEReference(intervalEClass, INTERVAL__V1);
+    createEReference(intervalEClass, INTERVAL__V2);
+    createEAttribute(intervalEClass, INTERVAL__B2);
     createEAttribute(intervalEClass, INTERVAL__UNIT);
 
     timeExprEClass = createEClass(TIME_EXPR);
-    createEAttribute(timeExprEClass, TIME_EXPR__VALUE);
+    createEReference(timeExprEClass, TIME_EXPR__VALUE);
     createEAttribute(timeExprEClass, TIME_EXPR__UNIT);
+
+    valueEClass = createEClass(VALUE);
+    createEAttribute(valueEClass, VALUE__INTEGER);
+    createEAttribute(valueEClass, VALUE__FRACTION);
 
     causalFuncDeclEClass = createEClass(CAUSAL_FUNC_DECL);
     createEAttribute(causalFuncDeclEClass, CAUSAL_FUNC_DECL__FUNC_NAME);
-    createEReference(causalFuncDeclEClass, CAUSAL_FUNC_DECL__PORT1);
-    createEReference(causalFuncDeclEClass, CAUSAL_FUNC_DECL__PORT2);
+    createEReference(causalFuncDeclEClass, CAUSAL_FUNC_DECL__P1);
+    createEReference(causalFuncDeclEClass, CAUSAL_FUNC_DECL__P2);
     createEAttribute(causalFuncDeclEClass, CAUSAL_FUNC_DECL__RELATION);
 
     clockDefinitionEClass = createEClass(CLOCK_DEFINITION);
@@ -1288,11 +1239,6 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
     createEReference(clockDefinitionEClass, CLOCK_DEFINITION__SKEW);
     createEReference(clockDefinitionEClass, CLOCK_DEFINITION__DRIFT);
     createEReference(clockDefinitionEClass, CLOCK_DEFINITION__MAXDIFF);
-
-    // Create enums
-    unitEEnum = createEEnum(UNIT);
-    causalFuncNameEEnum = createEEnum(CAUSAL_FUNC_NAME);
-    causalRelationEEnum = createEEnum(CAUSAL_RELATION);
   }
 
   /**
@@ -1361,38 +1307,35 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
     initEReference(getOffset_Interval(), this.getInterval(), null, "interval", null, 0, 1, Offset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(reactionEClass, Reaction.class, "Reaction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getReaction_Input(), this.getEventExpr(), null, "input", null, 0, 1, Reaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getReaction_Output(), this.getEventExpr(), null, "output", null, 0, 1, Reaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getReaction_Trigger(), this.getEventExpr(), null, "trigger", null, 0, 1, Reaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getReaction_Reaction(), this.getEventExpr(), null, "reaction", null, 0, 1, Reaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getReaction_Interval(), this.getInterval(), null, "interval", null, 0, 1, Reaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getReaction_Once(), ecorePackage.getEBoolean(), "once", null, 0, 1, Reaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getReaction_N(), ecorePackage.getEInt(), "n", null, 0, 1, Reaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getReaction_OutOf(), ecorePackage.getEInt(), "outOf", null, 0, 1, Reaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getReaction_Clock(), this.getClockDefinition(), null, "clock", null, 0, 1, Reaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(ageEClass, Age.class, "Age", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getAge_Output(), this.getEventExpr(), null, "output", null, 0, 1, Age.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getAge_Input(), this.getEventExpr(), null, "input", null, 0, 1, Age.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getAge_Trigger(), this.getEventExpr(), null, "trigger", null, 0, 1, Age.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getAge_Reaction(), this.getEventExpr(), null, "reaction", null, 0, 1, Age.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getAge_Interval(), this.getInterval(), null, "interval", null, 0, 1, Age.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAge_Once(), ecorePackage.getEBoolean(), "once", null, 0, 1, Age.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getAge_N(), ecorePackage.getEInt(), "n", null, 0, 1, Age.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getAge_OutOf(), ecorePackage.getEInt(), "outOf", null, 0, 1, Age.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getAge_Clock(), this.getClockDefinition(), null, "clock", null, 0, 1, Age.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(causalReactionEClass, CausalReaction.class, "CausalReaction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getCausalReaction_Input(), this.getEventSpec(), null, "input", null, 0, 1, CausalReaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getCausalReaction_Output(), this.getEventSpec(), null, "output", null, 0, 1, CausalReaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getCausalReaction_E1(), this.getEventSpec(), null, "e1", null, 0, 1, CausalReaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getCausalReaction_E2(), this.getEventSpec(), null, "e2", null, 0, 1, CausalReaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getCausalReaction_Interval(), this.getInterval(), null, "interval", null, 0, 1, CausalReaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getCausalReaction_Clock(), this.getClockDefinition(), null, "clock", null, 0, 1, CausalReaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(causalAgeEClass, CausalAge.class, "CausalAge", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getCausalAge_Output(), this.getEventSpec(), null, "output", null, 0, 1, CausalAge.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getCausalAge_Input(), this.getEventSpec(), null, "input", null, 0, 1, CausalAge.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getCausalAge_E1(), this.getEventSpec(), null, "e1", null, 0, 1, CausalAge.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getCausalAge_E2(), this.getEventSpec(), null, "e2", null, 0, 1, CausalAge.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getCausalAge_Interval(), this.getInterval(), null, "interval", null, 0, 1, CausalAge.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getCausalAge_Clock(), this.getClockDefinition(), null, "clock", null, 0, 1, CausalAge.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(eventExprEClass, EventExpr.class, "EventExpr", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getEventExpr_Event(), this.getEventSpec(), null, "event", null, 0, 1, EventExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEventExpr_Sequence(), ecorePackage.getEBoolean(), "sequence", null, 0, 1, EventExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getEventExpr_Events(), this.getEventList(), null, "events", null, 0, 1, EventExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(eventListEClass, EventList.class, "EventList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1408,21 +1351,25 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
 
     initEClass(intervalEClass, Interval.class, "Interval", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getInterval_Time(), this.getTimeExpr(), null, "time", null, 0, 1, Interval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getInterval_LBound(), ecorePackage.getEString(), "lBound", null, 0, 1, Interval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getInterval_LbValue(), ecorePackage.getEDouble(), "lbValue", null, 0, 1, Interval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getInterval_UbValue(), ecorePackage.getEDouble(), "ubValue", null, 0, 1, Interval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getInterval_UBound(), ecorePackage.getEString(), "uBound", null, 0, 1, Interval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getInterval_Unit(), this.getUnit(), "unit", null, 0, 1, Interval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getInterval_B1(), ecorePackage.getEString(), "b1", null, 0, 1, Interval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInterval_V1(), this.getValue(), null, "v1", null, 0, 1, Interval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInterval_V2(), this.getValue(), null, "v2", null, 0, 1, Interval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getInterval_B2(), ecorePackage.getEString(), "b2", null, 0, 1, Interval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getInterval_Unit(), ecorePackage.getEString(), "unit", null, 0, 1, Interval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(timeExprEClass, TimeExpr.class, "TimeExpr", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getTimeExpr_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, TimeExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTimeExpr_Unit(), this.getUnit(), "unit", null, 0, 1, TimeExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTimeExpr_Value(), this.getValue(), null, "value", null, 0, 1, TimeExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTimeExpr_Unit(), ecorePackage.getEString(), "unit", null, 0, 1, TimeExpr.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(valueEClass, Value.class, "Value", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getValue_Integer(), ecorePackage.getEInt(), "integer", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getValue_Fraction(), ecorePackage.getEInt(), "fraction", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(causalFuncDeclEClass, CausalFuncDecl.class, "CausalFuncDecl", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getCausalFuncDecl_FuncName(), this.getCausalFuncName(), "funcName", null, 0, 1, CausalFuncDecl.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getCausalFuncDecl_Port1(), this.getPort(), null, "port1", null, 0, 1, CausalFuncDecl.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getCausalFuncDecl_Port2(), this.getPort(), null, "port2", null, 0, 1, CausalFuncDecl.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getCausalFuncDecl_Relation(), this.getCausalRelation(), "relation", null, 0, 1, CausalFuncDecl.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getCausalFuncDecl_FuncName(), ecorePackage.getEString(), "funcName", null, 0, 1, CausalFuncDecl.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getCausalFuncDecl_P1(), this.getPort(), null, "p1", null, 0, 1, CausalFuncDecl.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getCausalFuncDecl_P2(), this.getPort(), null, "p2", null, 0, 1, CausalFuncDecl.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getCausalFuncDecl_Relation(), ecorePackage.getEString(), "relation", null, 0, 1, CausalFuncDecl.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(clockDefinitionEClass, ClockDefinition.class, "ClockDefinition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getClockDefinition_Name(), ecorePackage.getEString(), "name", null, 0, 1, ClockDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1430,22 +1377,6 @@ public class ContractSpecPackageImpl extends EPackageImpl implements ContractSpe
     initEReference(getClockDefinition_Skew(), this.getTimeExpr(), null, "skew", null, 0, 1, ClockDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getClockDefinition_Drift(), this.getInterval(), null, "drift", null, 0, 1, ClockDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getClockDefinition_Maxdiff(), this.getTimeExpr(), null, "maxdiff", null, 0, 1, ClockDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    // Initialize enums and add enum literals
-    initEEnum(unitEEnum, Unit.class, "Unit");
-    addEEnumLiteral(unitEEnum, Unit.S);
-    addEEnumLiteral(unitEEnum, Unit.MS);
-    addEEnumLiteral(unitEEnum, Unit.US);
-    addEEnumLiteral(unitEEnum, Unit.NS);
-
-    initEEnum(causalFuncNameEEnum, CausalFuncName.class, "CausalFuncName");
-    addEEnumLiteral(causalFuncNameEEnum, CausalFuncName.REACTION);
-    addEEnumLiteral(causalFuncNameEEnum, CausalFuncName.AGE);
-
-    initEEnum(causalRelationEEnum, CausalRelation.class, "CausalRelation");
-    addEEnumLiteral(causalRelationEEnum, CausalRelation.FIFO);
-    addEEnumLiteral(causalRelationEEnum, CausalRelation.LIFO);
-    addEEnumLiteral(causalRelationEEnum, CausalRelation.ID);
 
     // Create resource
     createResource(eNS_URI);

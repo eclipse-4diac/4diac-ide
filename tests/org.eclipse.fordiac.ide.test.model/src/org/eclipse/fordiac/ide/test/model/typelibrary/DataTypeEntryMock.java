@@ -135,11 +135,6 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 	}
 
 	@Override
-	public String getTypeHash() {
-		return ""; //$NON-NLS-1$
-	}
-
-	@Override
 	public String getComment() {
 		return dataType.getComment();
 	}

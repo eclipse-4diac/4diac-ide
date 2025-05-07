@@ -20,8 +20,6 @@ public final class Messages extends NLS {
 
 	public static String TypeEditor_CouldNotLoadType;
 
-	public static String TypeEditor_ReadOnly;
-
 	public static String TypeEditor_TypeUpdateDialog_Headline;
 	public static String TypeEditor_TypeUpdateDialog_Description;
 	public static String TypeEditor_TypeUpdateDialog_SaveAndUpdate;

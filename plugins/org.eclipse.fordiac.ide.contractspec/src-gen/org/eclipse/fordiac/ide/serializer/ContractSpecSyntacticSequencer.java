@@ -21,6 +21,8 @@ import org.eclipse.xtext.IGrammarAccess;
 import org.eclipse.xtext.RuleCall;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.serializer.analysis.GrammarAlias.AbstractElementAlias;
+import org.eclipse.xtext.serializer.analysis.GrammarAlias.TokenAlias;
+import org.eclipse.xtext.serializer.analysis.ISyntacticSequencerPDAProvider.ISynNavigable;
 import org.eclipse.xtext.serializer.analysis.ISyntacticSequencerPDAProvider.ISynTransition;
 import org.eclipse.xtext.serializer.sequencer.AbstractSyntacticSequencer;
 
@@ -28,10 +30,14 @@ import org.eclipse.xtext.serializer.sequencer.AbstractSyntacticSequencer;
 public class ContractSpecSyntacticSequencer extends AbstractSyntacticSequencer {
 
 	protected ContractSpecGrammarAccess grammarAccess;
+	protected AbstractElementAlias match_Age_OnceKeyword_9_q;
+	protected AbstractElementAlias match_Reaction_OnceKeyword_8_q;
 	
 	@Inject
 	protected void init(IGrammarAccess access) {
 		grammarAccess = (ContractSpecGrammarAccess) access;
+		match_Age_OnceKeyword_9_q = new TokenAlias(false, true, grammarAccess.getAgeAccess().getOnceKeyword_9());
+		match_Reaction_OnceKeyword_8_q = new TokenAlias(false, true, grammarAccess.getReactionAccess().getOnceKeyword_8());
 	}
 	
 	@Override
@@ -46,8 +52,44 @@ public class ContractSpecSyntacticSequencer extends AbstractSyntacticSequencer {
 		List<INode> transitionNodes = collectNodes(fromNode, toNode);
 		for (AbstractElementAlias syntax : transition.getAmbiguousSyntaxes()) {
 			List<INode> syntaxNodes = getNodesFor(transitionNodes, syntax);
-			acceptNodes(getLastNavigableState(), syntaxNodes);
+			if (match_Age_OnceKeyword_9_q.equals(syntax))
+				emit_Age_OnceKeyword_9_q(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if (match_Reaction_OnceKeyword_8_q.equals(syntax))
+				emit_Reaction_OnceKeyword_8_q(semanticObject, getLastNavigableState(), syntaxNodes);
+			else acceptNodes(getLastNavigableState(), syntaxNodes);
 		}
 	}
 
+	/**
+	 * <pre>
+	 * Ambiguous syntax:
+	 *     'once'?
+	 *
+	 * This ambiguous syntax occurs at:
+	 *     interval=Interval (ambiguity) 'using' 'clock' clock=[ClockDefinition|ID]
+	 *     interval=Interval (ambiguity) (rule end)
+	 *     interval=Interval (ambiguity) n=INT
+	 
+	 * </pre>
+	 */
+	protected void emit_Age_OnceKeyword_9_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+		acceptNodes(transition, nodes);
+	}
+	
+	/**
+	 * <pre>
+	 * Ambiguous syntax:
+	 *     'once'?
+	 *
+	 * This ambiguous syntax occurs at:
+	 *     interval=Interval (ambiguity) 'using' 'clock' clock=[ClockDefinition|ID]
+	 *     interval=Interval (ambiguity) (rule end)
+	 *     interval=Interval (ambiguity) n=INT
+	 
+	 * </pre>
+	 */
+	protected void emit_Reaction_OnceKeyword_8_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+		acceptNodes(transition, nodes);
+	}
+	
 }

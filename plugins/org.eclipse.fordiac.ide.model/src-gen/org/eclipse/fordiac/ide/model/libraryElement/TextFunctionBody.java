@@ -41,7 +41,7 @@ public interface TextFunctionBody extends FunctionBody {
 	 * @return the value of the '<em>Text</em>' attribute.
 	 * @see #setText(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextFunctionBody_Text()
-	 * @model annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData transformer='org.eclipse.fordiac.ide.model.util.StringTransformer'"
+	 * @model
 	 * @generated
 	 */
 	String getText();

@@ -21,8 +21,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl;
-import org.eclipse.fordiac.ide.contractSpec.CausalFuncName;
-import org.eclipse.fordiac.ide.contractSpec.CausalRelation;
 import org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage;
 import org.eclipse.fordiac.ide.contractSpec.Port;
 
@@ -35,8 +33,8 @@ import org.eclipse.fordiac.ide.contractSpec.Port;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalFuncDeclImpl#getFuncName <em>Func Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalFuncDeclImpl#getPort1 <em>Port1</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalFuncDeclImpl#getPort2 <em>Port2</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalFuncDeclImpl#getP1 <em>P1</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalFuncDeclImpl#getP2 <em>P2</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalFuncDeclImpl#getRelation <em>Relation</em>}</li>
  * </ul>
  *
@@ -52,7 +50,7 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
    * @generated
    * @ordered
    */
-  protected static final CausalFuncName FUNC_NAME_EDEFAULT = CausalFuncName.REACTION;
+  protected static final String FUNC_NAME_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getFuncName() <em>Func Name</em>}' attribute.
@@ -62,27 +60,27 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
    * @generated
    * @ordered
    */
-  protected CausalFuncName funcName = FUNC_NAME_EDEFAULT;
+  protected String funcName = FUNC_NAME_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getPort1() <em>Port1</em>}' reference.
+   * The cached value of the '{@link #getP1() <em>P1</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getPort1()
+   * @see #getP1()
    * @generated
    * @ordered
    */
-  protected Port port1;
+  protected Port p1;
 
   /**
-   * The cached value of the '{@link #getPort2() <em>Port2</em>}' reference.
+   * The cached value of the '{@link #getP2() <em>P2</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getPort2()
+   * @see #getP2()
    * @generated
    * @ordered
    */
-  protected Port port2;
+  protected Port p2;
 
   /**
    * The default value of the '{@link #getRelation() <em>Relation</em>}' attribute.
@@ -92,7 +90,7 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
    * @generated
    * @ordered
    */
-  protected static final CausalRelation RELATION_EDEFAULT = CausalRelation.FIFO;
+  protected static final String RELATION_EDEFAULT = null;
 
   /**
    * The cached value of the '{@link #getRelation() <em>Relation</em>}' attribute.
@@ -102,7 +100,7 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
    * @generated
    * @ordered
    */
-  protected CausalRelation relation = RELATION_EDEFAULT;
+  protected String relation = RELATION_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -131,7 +129,7 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
    * @generated
    */
   @Override
-  public CausalFuncName getFuncName()
+  public String getFuncName()
   {
     return funcName;
   }
@@ -142,10 +140,10 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
    * @generated
    */
   @Override
-  public void setFuncName(CausalFuncName newFuncName)
+  public void setFuncName(String newFuncName)
   {
-    CausalFuncName oldFuncName = funcName;
-    funcName = newFuncName == null ? FUNC_NAME_EDEFAULT : newFuncName;
+    String oldFuncName = funcName;
+    funcName = newFuncName;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_FUNC_DECL__FUNC_NAME, oldFuncName, funcName));
   }
@@ -156,19 +154,19 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
    * @generated
    */
   @Override
-  public Port getPort1()
+  public Port getP1()
   {
-    if (port1 != null && port1.eIsProxy())
+    if (p1 != null && p1.eIsProxy())
     {
-      InternalEObject oldPort1 = (InternalEObject)port1;
-      port1 = (Port)eResolveProxy(oldPort1);
-      if (port1 != oldPort1)
+      InternalEObject oldP1 = (InternalEObject)p1;
+      p1 = (Port)eResolveProxy(oldP1);
+      if (p1 != oldP1)
       {
         if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractSpecPackage.CAUSAL_FUNC_DECL__PORT1, oldPort1, port1));
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractSpecPackage.CAUSAL_FUNC_DECL__P1, oldP1, p1));
       }
     }
-    return port1;
+    return p1;
   }
 
   /**
@@ -176,9 +174,9 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Port basicGetPort1()
+  public Port basicGetP1()
   {
-    return port1;
+    return p1;
   }
 
   /**
@@ -187,12 +185,12 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
    * @generated
    */
   @Override
-  public void setPort1(Port newPort1)
+  public void setP1(Port newP1)
   {
-    Port oldPort1 = port1;
-    port1 = newPort1;
+    Port oldP1 = p1;
+    p1 = newP1;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_FUNC_DECL__PORT1, oldPort1, port1));
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_FUNC_DECL__P1, oldP1, p1));
   }
 
   /**
@@ -201,19 +199,19 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
    * @generated
    */
   @Override
-  public Port getPort2()
+  public Port getP2()
   {
-    if (port2 != null && port2.eIsProxy())
+    if (p2 != null && p2.eIsProxy())
     {
-      InternalEObject oldPort2 = (InternalEObject)port2;
-      port2 = (Port)eResolveProxy(oldPort2);
-      if (port2 != oldPort2)
+      InternalEObject oldP2 = (InternalEObject)p2;
+      p2 = (Port)eResolveProxy(oldP2);
+      if (p2 != oldP2)
       {
         if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractSpecPackage.CAUSAL_FUNC_DECL__PORT2, oldPort2, port2));
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, ContractSpecPackage.CAUSAL_FUNC_DECL__P2, oldP2, p2));
       }
     }
-    return port2;
+    return p2;
   }
 
   /**
@@ -221,9 +219,9 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Port basicGetPort2()
+  public Port basicGetP2()
   {
-    return port2;
+    return p2;
   }
 
   /**
@@ -232,12 +230,12 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
    * @generated
    */
   @Override
-  public void setPort2(Port newPort2)
+  public void setP2(Port newP2)
   {
-    Port oldPort2 = port2;
-    port2 = newPort2;
+    Port oldP2 = p2;
+    p2 = newP2;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_FUNC_DECL__PORT2, oldPort2, port2));
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_FUNC_DECL__P2, oldP2, p2));
   }
 
   /**
@@ -246,7 +244,7 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
    * @generated
    */
   @Override
-  public CausalRelation getRelation()
+  public String getRelation()
   {
     return relation;
   }
@@ -257,10 +255,10 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
    * @generated
    */
   @Override
-  public void setRelation(CausalRelation newRelation)
+  public void setRelation(String newRelation)
   {
-    CausalRelation oldRelation = relation;
-    relation = newRelation == null ? RELATION_EDEFAULT : newRelation;
+    String oldRelation = relation;
+    relation = newRelation;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_FUNC_DECL__RELATION, oldRelation, relation));
   }
@@ -277,12 +275,12 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
     {
       case ContractSpecPackage.CAUSAL_FUNC_DECL__FUNC_NAME:
         return getFuncName();
-      case ContractSpecPackage.CAUSAL_FUNC_DECL__PORT1:
-        if (resolve) return getPort1();
-        return basicGetPort1();
-      case ContractSpecPackage.CAUSAL_FUNC_DECL__PORT2:
-        if (resolve) return getPort2();
-        return basicGetPort2();
+      case ContractSpecPackage.CAUSAL_FUNC_DECL__P1:
+        if (resolve) return getP1();
+        return basicGetP1();
+      case ContractSpecPackage.CAUSAL_FUNC_DECL__P2:
+        if (resolve) return getP2();
+        return basicGetP2();
       case ContractSpecPackage.CAUSAL_FUNC_DECL__RELATION:
         return getRelation();
     }
@@ -300,16 +298,16 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
     switch (featureID)
     {
       case ContractSpecPackage.CAUSAL_FUNC_DECL__FUNC_NAME:
-        setFuncName((CausalFuncName)newValue);
+        setFuncName((String)newValue);
         return;
-      case ContractSpecPackage.CAUSAL_FUNC_DECL__PORT1:
-        setPort1((Port)newValue);
+      case ContractSpecPackage.CAUSAL_FUNC_DECL__P1:
+        setP1((Port)newValue);
         return;
-      case ContractSpecPackage.CAUSAL_FUNC_DECL__PORT2:
-        setPort2((Port)newValue);
+      case ContractSpecPackage.CAUSAL_FUNC_DECL__P2:
+        setP2((Port)newValue);
         return;
       case ContractSpecPackage.CAUSAL_FUNC_DECL__RELATION:
-        setRelation((CausalRelation)newValue);
+        setRelation((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -328,11 +326,11 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
       case ContractSpecPackage.CAUSAL_FUNC_DECL__FUNC_NAME:
         setFuncName(FUNC_NAME_EDEFAULT);
         return;
-      case ContractSpecPackage.CAUSAL_FUNC_DECL__PORT1:
-        setPort1((Port)null);
+      case ContractSpecPackage.CAUSAL_FUNC_DECL__P1:
+        setP1((Port)null);
         return;
-      case ContractSpecPackage.CAUSAL_FUNC_DECL__PORT2:
-        setPort2((Port)null);
+      case ContractSpecPackage.CAUSAL_FUNC_DECL__P2:
+        setP2((Port)null);
         return;
       case ContractSpecPackage.CAUSAL_FUNC_DECL__RELATION:
         setRelation(RELATION_EDEFAULT);
@@ -352,13 +350,13 @@ public class CausalFuncDeclImpl extends TimeSpecImpl implements CausalFuncDecl
     switch (featureID)
     {
       case ContractSpecPackage.CAUSAL_FUNC_DECL__FUNC_NAME:
-        return funcName != FUNC_NAME_EDEFAULT;
-      case ContractSpecPackage.CAUSAL_FUNC_DECL__PORT1:
-        return port1 != null;
-      case ContractSpecPackage.CAUSAL_FUNC_DECL__PORT2:
-        return port2 != null;
+        return FUNC_NAME_EDEFAULT == null ? funcName != null : !FUNC_NAME_EDEFAULT.equals(funcName);
+      case ContractSpecPackage.CAUSAL_FUNC_DECL__P1:
+        return p1 != null;
+      case ContractSpecPackage.CAUSAL_FUNC_DECL__P2:
+        return p2 != null;
       case ContractSpecPackage.CAUSAL_FUNC_DECL__RELATION:
-        return relation != RELATION_EDEFAULT;
+        return RELATION_EDEFAULT == null ? relation != null : !RELATION_EDEFAULT.equals(relation);
     }
     return super.eIsSet(featureID);
   }

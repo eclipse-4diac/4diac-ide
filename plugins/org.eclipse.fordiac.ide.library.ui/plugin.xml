@@ -116,7 +116,7 @@
          <enablement>
             <and>
                <instanceof
-                     value="org.eclipse.core.resources.IResource">
+                     value="org.eclipse.core.resources.IFolder">
                </instanceof>
             </and>
          </enablement>

@@ -7,8 +7,7 @@
             class="org.eclipse.fordiac.ide.export.xmi.XMIExportFilter"
             description="XMI Export"
             name="XMI"
-            sortIndex="50"
-            id="org.eclipse.fordiac.ide.export.exportFilter.xmi">
+            sortIndex="50">
       </ExportFilter>
    </extension>
    <extension point="org.eclipse.emf.ecore.generated_package">

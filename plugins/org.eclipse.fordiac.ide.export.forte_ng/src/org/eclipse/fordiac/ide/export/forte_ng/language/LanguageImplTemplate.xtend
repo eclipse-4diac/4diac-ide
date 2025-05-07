@@ -48,6 +48,9 @@ class LanguageImplTemplate extends ForteNgExportTemplate {
 
 	def protected generateImplIncludes() '''
 		#include "«fileBasename».h"
+		#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
+		#include "«fileBasename»_gen.cpp"
+		#endif
 
 		«generateDependencyInclude("core/iec61131_functions.h")»
 		«IF languageSupport !== null»«languageSupport.getDependencies(emptyMap).generateDependencyIncludes»«ENDIF»

@@ -71,12 +71,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementFactoryImpl;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class DefaultRunFBType implements IRunFBTypeVisitor {
@@ -321,21 +319,9 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		final var outputEvents = new BasicEList<EventOccurrence>();
 		processAlgorithmWithEvaluator(simpleFBType, simpleFBType.getAlgorithm().get(0), eventOccurrence);
 		isConsumed(this.eventOccurrence);
+		final Event outputEvent = simpleFBType.getInterfaceList().getEventOutputs().get(0);
+		outputEvents.add(createOutputEventOccurrence(simpleFBTypeRuntime, outputEvent, simpleFBType));
 		return outputEvents;
-	}
-
-	private static List<SimpleECAction> getActions(final SimpleFBType simpleFBType, final String inEvent) {
-		// if we don't have ECStates, use first output/algorithm as fallback
-		if (simpleFBType.getSimpleECStates() == null || simpleFBType.getSimpleECStates().isEmpty()) {
-			final SimpleECAction action = LibraryElementFactoryImpl.eINSTANCE.createSimpleECAction();
-			action.setAlgorithm(simpleFBType.getAlgorithm().get(0).getName());
-			action.setOutput(simpleFBType.getInterfaceList().getEventOutputs().get(0));
-			return List.of(action);
-		}
-
-		// find ECStates matching the input event and return their actions
-		return simpleFBType.getSimpleECStates().stream().filter(state -> state.getName().equals(inEvent))
-				.flatMap(state -> state.getSimpleECActions().stream()).toList();
 	}
 
 	@Override

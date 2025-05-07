@@ -63,7 +63,7 @@ public final class IdentifierVerifier {
 	 *         message is contained in the Optional
 	 */
 	public static Optional<String> verifyIdentifier(final String identifier, final Object context) {
-		if (identifier == null || (!IDENTIFIER_PATTERN.matcher(identifier).matches() && !identifier.contains("."))) { //$NON-NLS-1$
+		if (identifier == null || !IDENTIFIER_PATTERN.matcher(identifier).matches()) {
 			return Optional.of(MessageFormat.format(Messages.IdentifierVerifier_NameNotAValidIdentifier, identifier));
 		}
 		if (identifier.contains("__")) { //$NON-NLS-1$

@@ -17,7 +17,6 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import java.util.stream.Stream;
-import org.eclipse.emf.common.util.EList;
 
 
 /**
@@ -30,7 +29,6 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getSubAppNetwork <em>Sub App Network</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getVarConfigParams <em>Var Config Params</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTypedSubApp()
@@ -59,18 +57,6 @@ public interface TypedSubApp extends SubApp {
 	 * @generated
 	 */
 	void setSubAppNetwork(FBNetwork value);
-
-	/**
-	 * Returns the value of the '<em><b>Var Config Params</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Var Config Params</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTypedSubApp_VarConfigParams()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	EList<VarDeclaration> getVarConfigParams();
 
 	/**
 	 * <!-- begin-user-doc -->

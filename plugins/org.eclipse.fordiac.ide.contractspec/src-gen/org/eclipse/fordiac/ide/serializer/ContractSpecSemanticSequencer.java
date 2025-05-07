@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.contractSpec.Repetition;
 import org.eclipse.fordiac.ide.contractSpec.RepetitionOptions;
 import org.eclipse.fordiac.ide.contractSpec.SingleEvent;
 import org.eclipse.fordiac.ide.contractSpec.TimeExpr;
+import org.eclipse.fordiac.ide.contractSpec.Value;
 import org.eclipse.fordiac.ide.services.ContractSpecGrammarAccess;
 import org.eclipse.xtext.Action;
 import org.eclipse.xtext.Parameter;
@@ -113,6 +114,9 @@ public class ContractSpecSemanticSequencer extends AbstractDelegatingSemanticSeq
 			case ContractSpecPackage.TIME_EXPR:
 				sequence_TimeExpr(context, (TimeExpr) semanticObject); 
 				return; 
+			case ContractSpecPackage.VALUE:
+				sequence_Value(context, (Value) semanticObject); 
+				return; 
 			}
 		if (errorAcceptor != null)
 			errorAcceptor.accept(diagnosticProvider.createInvalidContextOrTypeDiagnostic(semanticObject, context));
@@ -125,7 +129,7 @@ public class ContractSpecSemanticSequencer extends AbstractDelegatingSemanticSeq
 	 *     Age returns Age
 	 *
 	 * Constraint:
-	 *     (output=EventExpr input=EventExpr interval=Interval (once?='once' | (n=INT outOf=INT))? clock=[ClockDefinition|ID]?)
+	 *     (trigger=EventExpr reaction=EventExpr interval=Interval (n=INT outOf=INT)? clock=[ClockDefinition|ID]?)
 	 * </pre>
 	 */
 	protected void sequence_Age(ISerializationContext context, Age semanticObject) {
@@ -140,7 +144,7 @@ public class ContractSpecSemanticSequencer extends AbstractDelegatingSemanticSeq
 	 *     CausalAge returns CausalAge
 	 *
 	 * Constraint:
-	 *     (output=EventSpec input=EventSpec interval=Interval clock=[ClockDefinition|ID]?)
+	 *     (e1=EventSpec e2=EventSpec interval=Interval clock=[ClockDefinition|ID]?)
 	 * </pre>
 	 */
 	protected void sequence_CausalAge(ISerializationContext context, CausalAge semanticObject) {
@@ -155,25 +159,25 @@ public class ContractSpecSemanticSequencer extends AbstractDelegatingSemanticSeq
 	 *     CausalFuncDecl returns CausalFuncDecl
 	 *
 	 * Constraint:
-	 *     (funcName=CausalFuncName port1=[Port|ID] port2=[Port|ID] relation=CausalRelation)
+	 *     (funcName=CausalFuncName p1=[Port|ID] p2=[Port|ID] relation=CausalRelation)
 	 * </pre>
 	 */
 	protected void sequence_CausalFuncDecl(ISerializationContext context, CausalFuncDecl semanticObject) {
 		if (errorAcceptor != null) {
 			if (transientValues.isValueTransient(semanticObject, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__FUNC_NAME) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__FUNC_NAME));
-			if (transientValues.isValueTransient(semanticObject, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__PORT1) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__PORT1));
-			if (transientValues.isValueTransient(semanticObject, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__PORT2) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__PORT2));
+			if (transientValues.isValueTransient(semanticObject, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__P1) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__P1));
+			if (transientValues.isValueTransient(semanticObject, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__P2) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__P2));
 			if (transientValues.isValueTransient(semanticObject, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__RELATION) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__RELATION));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getCausalFuncDeclAccess().getFuncNameCausalFuncNameEnumRuleCall_0_0(), semanticObject.getFuncName());
-		feeder.accept(grammarAccess.getCausalFuncDeclAccess().getPort1PortIDTerminalRuleCall_2_0_1(), semanticObject.eGet(ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__PORT1, false));
-		feeder.accept(grammarAccess.getCausalFuncDeclAccess().getPort2PortIDTerminalRuleCall_4_0_1(), semanticObject.eGet(ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__PORT2, false));
-		feeder.accept(grammarAccess.getCausalFuncDeclAccess().getRelationCausalRelationEnumRuleCall_7_0(), semanticObject.getRelation());
+		feeder.accept(grammarAccess.getCausalFuncDeclAccess().getFuncNameCausalFuncNameParserRuleCall_0_0(), semanticObject.getFuncName());
+		feeder.accept(grammarAccess.getCausalFuncDeclAccess().getP1PortIDTerminalRuleCall_2_0_1(), semanticObject.eGet(ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__P1, false));
+		feeder.accept(grammarAccess.getCausalFuncDeclAccess().getP2PortIDTerminalRuleCall_4_0_1(), semanticObject.eGet(ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__P2, false));
+		feeder.accept(grammarAccess.getCausalFuncDeclAccess().getRelationCausalRelationParserRuleCall_7_0(), semanticObject.getRelation());
 		feeder.finish();
 	}
 	
@@ -185,7 +189,7 @@ public class ContractSpecSemanticSequencer extends AbstractDelegatingSemanticSeq
 	 *     CausalReaction returns CausalReaction
 	 *
 	 * Constraint:
-	 *     (input=EventSpec output=EventSpec interval=Interval clock=[ClockDefinition|ID]?)
+	 *     (e1=EventSpec e2=EventSpec interval=Interval clock=[ClockDefinition|ID]?)
 	 * </pre>
 	 */
 	protected void sequence_CausalReaction(ISerializationContext context, CausalReaction semanticObject) {
@@ -214,7 +218,7 @@ public class ContractSpecSemanticSequencer extends AbstractDelegatingSemanticSeq
 	 *     EventExpr returns EventExpr
 	 *
 	 * Constraint:
-	 *     (event=EventSpec | (sequence?='(' events=EventList) | events=EventList)
+	 *     (event=EventSpec | events=EventList | events=EventList)
 	 * </pre>
 	 */
 	protected void sequence_EventExpr(ISerializationContext context, EventExpr semanticObject) {
@@ -256,7 +260,7 @@ public class ContractSpecSemanticSequencer extends AbstractDelegatingSemanticSeq
 	 *     Interval returns Interval
 	 *
 	 * Constraint:
-	 *     (time=TimeExpr | (lBound=Boundary lbValue=Value ubValue=Value uBound=Boundary unit=Unit))
+	 *     (time=TimeExpr | (b1=Boundary v1=Value v2=Value b2=Boundary unit=Unit))
 	 * </pre>
 	 */
 	protected void sequence_Interval(ISerializationContext context, Interval semanticObject) {
@@ -348,7 +352,7 @@ public class ContractSpecSemanticSequencer extends AbstractDelegatingSemanticSeq
 	 *     Reaction returns Reaction
 	 *
 	 * Constraint:
-	 *     (input=EventExpr output=EventExpr interval=Interval (once?='once' | (n=INT outOf=INT))? clock=[ClockDefinition|ID]?)
+	 *     (trigger=EventExpr reaction=EventExpr interval=Interval (n=INT outOf=INT)? clock=[ClockDefinition|ID]?)
 	 * </pre>
 	 */
 	protected void sequence_Reaction(ISerializationContext context, Reaction semanticObject) {
@@ -418,8 +422,22 @@ public class ContractSpecSemanticSequencer extends AbstractDelegatingSemanticSeq
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getTimeExprAccess().getValueValueParserRuleCall_0_0(), semanticObject.getValue());
-		feeder.accept(grammarAccess.getTimeExprAccess().getUnitUnitEnumRuleCall_1_0(), semanticObject.getUnit());
+		feeder.accept(grammarAccess.getTimeExprAccess().getUnitUnitParserRuleCall_1_0(), semanticObject.getUnit());
 		feeder.finish();
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     Value returns Value
+	 *
+	 * Constraint:
+	 *     (integer=INT fraction=INT?)
+	 * </pre>
+	 */
+	protected void sequence_Value(ISerializationContext context, Value semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	

@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.ui.utils;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.eclipse.swt.graphics.Color;
@@ -61,10 +60,6 @@ public class ContractScanner implements Iterable<ContractScanner.Token> {
 
 			@Override
 			public Token next() {
-				if (!hasNext) {
-					throw new NoSuchElementException();
-				}
-
 				if (ch == '/') {
 					sb.append((char) ch);
 					nextChar();

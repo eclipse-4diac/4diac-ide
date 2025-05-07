@@ -35,8 +35,8 @@ import org.eclipse.fordiac.ide.contractSpec.Interval;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalReactionImpl#getInput <em>Input</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalReactionImpl#getOutput <em>Output</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalReactionImpl#getE1 <em>E1</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalReactionImpl#getE2 <em>E2</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalReactionImpl#getInterval <em>Interval</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalReactionImpl#getClock <em>Clock</em>}</li>
  * </ul>
@@ -46,24 +46,24 @@ import org.eclipse.fordiac.ide.contractSpec.Interval;
 public class CausalReactionImpl extends TimeSpecImpl implements CausalReaction
 {
   /**
-   * The cached value of the '{@link #getInput() <em>Input</em>}' containment reference.
+   * The cached value of the '{@link #getE1() <em>E1</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getInput()
+   * @see #getE1()
    * @generated
    * @ordered
    */
-  protected EventSpec input;
+  protected EventSpec e1;
 
   /**
-   * The cached value of the '{@link #getOutput() <em>Output</em>}' containment reference.
+   * The cached value of the '{@link #getE2() <em>E2</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getOutput()
+   * @see #getE2()
    * @generated
    * @ordered
    */
-  protected EventSpec output;
+  protected EventSpec e2;
 
   /**
    * The cached value of the '{@link #getInterval() <em>Interval</em>}' containment reference.
@@ -112,9 +112,9 @@ public class CausalReactionImpl extends TimeSpecImpl implements CausalReaction
    * @generated
    */
   @Override
-  public EventSpec getInput()
+  public EventSpec getE1()
   {
-    return input;
+    return e1;
   }
 
   /**
@@ -122,13 +122,13 @@ public class CausalReactionImpl extends TimeSpecImpl implements CausalReaction
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetInput(EventSpec newInput, NotificationChain msgs)
+  public NotificationChain basicSetE1(EventSpec newE1, NotificationChain msgs)
   {
-    EventSpec oldInput = input;
-    input = newInput;
+    EventSpec oldE1 = e1;
+    e1 = newE1;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_REACTION__INPUT, oldInput, newInput);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_REACTION__E1, oldE1, newE1);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -140,20 +140,20 @@ public class CausalReactionImpl extends TimeSpecImpl implements CausalReaction
    * @generated
    */
   @Override
-  public void setInput(EventSpec newInput)
+  public void setE1(EventSpec newE1)
   {
-    if (newInput != input)
+    if (newE1 != e1)
     {
       NotificationChain msgs = null;
-      if (input != null)
-        msgs = ((InternalEObject)input).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_REACTION__INPUT, null, msgs);
-      if (newInput != null)
-        msgs = ((InternalEObject)newInput).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_REACTION__INPUT, null, msgs);
-      msgs = basicSetInput(newInput, msgs);
+      if (e1 != null)
+        msgs = ((InternalEObject)e1).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_REACTION__E1, null, msgs);
+      if (newE1 != null)
+        msgs = ((InternalEObject)newE1).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_REACTION__E1, null, msgs);
+      msgs = basicSetE1(newE1, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_REACTION__INPUT, newInput, newInput));
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_REACTION__E1, newE1, newE1));
   }
 
   /**
@@ -162,9 +162,9 @@ public class CausalReactionImpl extends TimeSpecImpl implements CausalReaction
    * @generated
    */
   @Override
-  public EventSpec getOutput()
+  public EventSpec getE2()
   {
-    return output;
+    return e2;
   }
 
   /**
@@ -172,13 +172,13 @@ public class CausalReactionImpl extends TimeSpecImpl implements CausalReaction
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetOutput(EventSpec newOutput, NotificationChain msgs)
+  public NotificationChain basicSetE2(EventSpec newE2, NotificationChain msgs)
   {
-    EventSpec oldOutput = output;
-    output = newOutput;
+    EventSpec oldE2 = e2;
+    e2 = newE2;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_REACTION__OUTPUT, oldOutput, newOutput);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_REACTION__E2, oldE2, newE2);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -190,20 +190,20 @@ public class CausalReactionImpl extends TimeSpecImpl implements CausalReaction
    * @generated
    */
   @Override
-  public void setOutput(EventSpec newOutput)
+  public void setE2(EventSpec newE2)
   {
-    if (newOutput != output)
+    if (newE2 != e2)
     {
       NotificationChain msgs = null;
-      if (output != null)
-        msgs = ((InternalEObject)output).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_REACTION__OUTPUT, null, msgs);
-      if (newOutput != null)
-        msgs = ((InternalEObject)newOutput).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_REACTION__OUTPUT, null, msgs);
-      msgs = basicSetOutput(newOutput, msgs);
+      if (e2 != null)
+        msgs = ((InternalEObject)e2).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_REACTION__E2, null, msgs);
+      if (newE2 != null)
+        msgs = ((InternalEObject)newE2).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_REACTION__E2, null, msgs);
+      msgs = basicSetE2(newE2, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_REACTION__OUTPUT, newOutput, newOutput));
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_REACTION__E2, newE2, newE2));
   }
 
   /**
@@ -311,10 +311,10 @@ public class CausalReactionImpl extends TimeSpecImpl implements CausalReaction
   {
     switch (featureID)
     {
-      case ContractSpecPackage.CAUSAL_REACTION__INPUT:
-        return basicSetInput(null, msgs);
-      case ContractSpecPackage.CAUSAL_REACTION__OUTPUT:
-        return basicSetOutput(null, msgs);
+      case ContractSpecPackage.CAUSAL_REACTION__E1:
+        return basicSetE1(null, msgs);
+      case ContractSpecPackage.CAUSAL_REACTION__E2:
+        return basicSetE2(null, msgs);
       case ContractSpecPackage.CAUSAL_REACTION__INTERVAL:
         return basicSetInterval(null, msgs);
     }
@@ -331,10 +331,10 @@ public class CausalReactionImpl extends TimeSpecImpl implements CausalReaction
   {
     switch (featureID)
     {
-      case ContractSpecPackage.CAUSAL_REACTION__INPUT:
-        return getInput();
-      case ContractSpecPackage.CAUSAL_REACTION__OUTPUT:
-        return getOutput();
+      case ContractSpecPackage.CAUSAL_REACTION__E1:
+        return getE1();
+      case ContractSpecPackage.CAUSAL_REACTION__E2:
+        return getE2();
       case ContractSpecPackage.CAUSAL_REACTION__INTERVAL:
         return getInterval();
       case ContractSpecPackage.CAUSAL_REACTION__CLOCK:
@@ -354,11 +354,11 @@ public class CausalReactionImpl extends TimeSpecImpl implements CausalReaction
   {
     switch (featureID)
     {
-      case ContractSpecPackage.CAUSAL_REACTION__INPUT:
-        setInput((EventSpec)newValue);
+      case ContractSpecPackage.CAUSAL_REACTION__E1:
+        setE1((EventSpec)newValue);
         return;
-      case ContractSpecPackage.CAUSAL_REACTION__OUTPUT:
-        setOutput((EventSpec)newValue);
+      case ContractSpecPackage.CAUSAL_REACTION__E2:
+        setE2((EventSpec)newValue);
         return;
       case ContractSpecPackage.CAUSAL_REACTION__INTERVAL:
         setInterval((Interval)newValue);
@@ -380,11 +380,11 @@ public class CausalReactionImpl extends TimeSpecImpl implements CausalReaction
   {
     switch (featureID)
     {
-      case ContractSpecPackage.CAUSAL_REACTION__INPUT:
-        setInput((EventSpec)null);
+      case ContractSpecPackage.CAUSAL_REACTION__E1:
+        setE1((EventSpec)null);
         return;
-      case ContractSpecPackage.CAUSAL_REACTION__OUTPUT:
-        setOutput((EventSpec)null);
+      case ContractSpecPackage.CAUSAL_REACTION__E2:
+        setE2((EventSpec)null);
         return;
       case ContractSpecPackage.CAUSAL_REACTION__INTERVAL:
         setInterval((Interval)null);
@@ -406,10 +406,10 @@ public class CausalReactionImpl extends TimeSpecImpl implements CausalReaction
   {
     switch (featureID)
     {
-      case ContractSpecPackage.CAUSAL_REACTION__INPUT:
-        return input != null;
-      case ContractSpecPackage.CAUSAL_REACTION__OUTPUT:
-        return output != null;
+      case ContractSpecPackage.CAUSAL_REACTION__E1:
+        return e1 != null;
+      case ContractSpecPackage.CAUSAL_REACTION__E2:
+        return e2 != null;
       case ContractSpecPackage.CAUSAL_REACTION__INTERVAL:
         return interval != null;
       case ContractSpecPackage.CAUSAL_REACTION__CLOCK:

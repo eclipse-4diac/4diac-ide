@@ -157,7 +157,7 @@ public class ExportServiceSequenceToCppTest {
 
 		writer.append(MessageFormat.format(CppBoostTestConstants.TEST_FIXTURE_STRUCT, fb.getName()));
 		writer.newLine();
-		writer.append(MessageFormat.format(CppBoostTestConstants.TEST_FIXTURE_BASE, fb.getName()));
+		writer.append(MessageFormat.format(CppBoostTestConstants.TEST_FICTURE_BASE, fb.getName()));
 		writer.newLine();
 		writer.append(CppBoostTestConstants.SET_INPUT_DATA_START);
 		if (!inputData.isEmpty()) {

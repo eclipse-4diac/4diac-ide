@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.contractSpec;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -320,22 +319,22 @@ public interface ContractSpecPackage extends EPackage
   int REACTION = 7;
 
   /**
-   * The feature id for the '<em><b>Input</b></em>' containment reference.
+   * The feature id for the '<em><b>Trigger</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int REACTION__INPUT = TIME_SPEC_FEATURE_COUNT + 0;
+  int REACTION__TRIGGER = TIME_SPEC_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Output</b></em>' containment reference.
+   * The feature id for the '<em><b>Reaction</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int REACTION__OUTPUT = TIME_SPEC_FEATURE_COUNT + 1;
+  int REACTION__REACTION = TIME_SPEC_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Interval</b></em>' containment reference.
@@ -347,22 +346,13 @@ public interface ContractSpecPackage extends EPackage
   int REACTION__INTERVAL = TIME_SPEC_FEATURE_COUNT + 2;
 
   /**
-   * The feature id for the '<em><b>Once</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int REACTION__ONCE = TIME_SPEC_FEATURE_COUNT + 3;
-
-  /**
    * The feature id for the '<em><b>N</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int REACTION__N = TIME_SPEC_FEATURE_COUNT + 4;
+  int REACTION__N = TIME_SPEC_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Out Of</b></em>' attribute.
@@ -371,7 +361,7 @@ public interface ContractSpecPackage extends EPackage
    * @generated
    * @ordered
    */
-  int REACTION__OUT_OF = TIME_SPEC_FEATURE_COUNT + 5;
+  int REACTION__OUT_OF = TIME_SPEC_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Clock</b></em>' reference.
@@ -380,7 +370,7 @@ public interface ContractSpecPackage extends EPackage
    * @generated
    * @ordered
    */
-  int REACTION__CLOCK = TIME_SPEC_FEATURE_COUNT + 6;
+  int REACTION__CLOCK = TIME_SPEC_FEATURE_COUNT + 5;
 
   /**
    * The number of structural features of the '<em>Reaction</em>' class.
@@ -389,7 +379,7 @@ public interface ContractSpecPackage extends EPackage
    * @generated
    * @ordered
    */
-  int REACTION_FEATURE_COUNT = TIME_SPEC_FEATURE_COUNT + 7;
+  int REACTION_FEATURE_COUNT = TIME_SPEC_FEATURE_COUNT + 6;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.contractSpec.impl.AgeImpl <em>Age</em>}' class.
@@ -402,22 +392,22 @@ public interface ContractSpecPackage extends EPackage
   int AGE = 8;
 
   /**
-   * The feature id for the '<em><b>Output</b></em>' containment reference.
+   * The feature id for the '<em><b>Trigger</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int AGE__OUTPUT = TIME_SPEC_FEATURE_COUNT + 0;
+  int AGE__TRIGGER = TIME_SPEC_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Input</b></em>' containment reference.
+   * The feature id for the '<em><b>Reaction</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int AGE__INPUT = TIME_SPEC_FEATURE_COUNT + 1;
+  int AGE__REACTION = TIME_SPEC_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Interval</b></em>' containment reference.
@@ -429,22 +419,13 @@ public interface ContractSpecPackage extends EPackage
   int AGE__INTERVAL = TIME_SPEC_FEATURE_COUNT + 2;
 
   /**
-   * The feature id for the '<em><b>Once</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int AGE__ONCE = TIME_SPEC_FEATURE_COUNT + 3;
-
-  /**
    * The feature id for the '<em><b>N</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int AGE__N = TIME_SPEC_FEATURE_COUNT + 4;
+  int AGE__N = TIME_SPEC_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Out Of</b></em>' attribute.
@@ -453,7 +434,7 @@ public interface ContractSpecPackage extends EPackage
    * @generated
    * @ordered
    */
-  int AGE__OUT_OF = TIME_SPEC_FEATURE_COUNT + 5;
+  int AGE__OUT_OF = TIME_SPEC_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Clock</b></em>' reference.
@@ -462,7 +443,7 @@ public interface ContractSpecPackage extends EPackage
    * @generated
    * @ordered
    */
-  int AGE__CLOCK = TIME_SPEC_FEATURE_COUNT + 6;
+  int AGE__CLOCK = TIME_SPEC_FEATURE_COUNT + 5;
 
   /**
    * The number of structural features of the '<em>Age</em>' class.
@@ -471,7 +452,7 @@ public interface ContractSpecPackage extends EPackage
    * @generated
    * @ordered
    */
-  int AGE_FEATURE_COUNT = TIME_SPEC_FEATURE_COUNT + 7;
+  int AGE_FEATURE_COUNT = TIME_SPEC_FEATURE_COUNT + 6;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalReactionImpl <em>Causal Reaction</em>}' class.
@@ -484,22 +465,22 @@ public interface ContractSpecPackage extends EPackage
   int CAUSAL_REACTION = 9;
 
   /**
-   * The feature id for the '<em><b>Input</b></em>' containment reference.
+   * The feature id for the '<em><b>E1</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CAUSAL_REACTION__INPUT = TIME_SPEC_FEATURE_COUNT + 0;
+  int CAUSAL_REACTION__E1 = TIME_SPEC_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Output</b></em>' containment reference.
+   * The feature id for the '<em><b>E2</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CAUSAL_REACTION__OUTPUT = TIME_SPEC_FEATURE_COUNT + 1;
+  int CAUSAL_REACTION__E2 = TIME_SPEC_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Interval</b></em>' containment reference.
@@ -539,22 +520,22 @@ public interface ContractSpecPackage extends EPackage
   int CAUSAL_AGE = 10;
 
   /**
-   * The feature id for the '<em><b>Output</b></em>' containment reference.
+   * The feature id for the '<em><b>E1</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CAUSAL_AGE__OUTPUT = TIME_SPEC_FEATURE_COUNT + 0;
+  int CAUSAL_AGE__E1 = TIME_SPEC_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Input</b></em>' containment reference.
+   * The feature id for the '<em><b>E2</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CAUSAL_AGE__INPUT = TIME_SPEC_FEATURE_COUNT + 1;
+  int CAUSAL_AGE__E2 = TIME_SPEC_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Interval</b></em>' containment reference.
@@ -603,22 +584,13 @@ public interface ContractSpecPackage extends EPackage
   int EVENT_EXPR__EVENT = 0;
 
   /**
-   * The feature id for the '<em><b>Sequence</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVENT_EXPR__SEQUENCE = 1;
-
-  /**
    * The feature id for the '<em><b>Events</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EVENT_EXPR__EVENTS = 2;
+  int EVENT_EXPR__EVENTS = 1;
 
   /**
    * The number of structural features of the '<em>Event Expr</em>' class.
@@ -627,7 +599,7 @@ public interface ContractSpecPackage extends EPackage
    * @generated
    * @ordered
    */
-  int EVENT_EXPR_FEATURE_COUNT = 3;
+  int EVENT_EXPR_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.contractSpec.impl.EventListImpl <em>Event List</em>}' class.
@@ -751,40 +723,40 @@ public interface ContractSpecPackage extends EPackage
   int INTERVAL__TIME = 0;
 
   /**
-   * The feature id for the '<em><b>LBound</b></em>' attribute.
+   * The feature id for the '<em><b>B1</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INTERVAL__LBOUND = 1;
+  int INTERVAL__B1 = 1;
 
   /**
-   * The feature id for the '<em><b>Lb Value</b></em>' attribute.
+   * The feature id for the '<em><b>V1</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INTERVAL__LB_VALUE = 2;
+  int INTERVAL__V1 = 2;
 
   /**
-   * The feature id for the '<em><b>Ub Value</b></em>' attribute.
+   * The feature id for the '<em><b>V2</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INTERVAL__UB_VALUE = 3;
+  int INTERVAL__V2 = 3;
 
   /**
-   * The feature id for the '<em><b>UBound</b></em>' attribute.
+   * The feature id for the '<em><b>B2</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INTERVAL__UBOUND = 4;
+  int INTERVAL__B2 = 4;
 
   /**
    * The feature id for the '<em><b>Unit</b></em>' attribute.
@@ -815,7 +787,7 @@ public interface ContractSpecPackage extends EPackage
   int TIME_EXPR = 16;
 
   /**
-   * The feature id for the '<em><b>Value</b></em>' attribute.
+   * The feature id for the '<em><b>Value</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -842,6 +814,43 @@ public interface ContractSpecPackage extends EPackage
   int TIME_EXPR_FEATURE_COUNT = 2;
 
   /**
+   * The meta object id for the '{@link org.eclipse.fordiac.ide.contractSpec.impl.ValueImpl <em>Value</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.fordiac.ide.contractSpec.impl.ValueImpl
+   * @see org.eclipse.fordiac.ide.contractSpec.impl.ContractSpecPackageImpl#getValue()
+   * @generated
+   */
+  int VALUE = 17;
+
+  /**
+   * The feature id for the '<em><b>Integer</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VALUE__INTEGER = 0;
+
+  /**
+   * The feature id for the '<em><b>Fraction</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VALUE__FRACTION = 1;
+
+  /**
+   * The number of structural features of the '<em>Value</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VALUE_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalFuncDeclImpl <em>Causal Func Decl</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -849,7 +858,7 @@ public interface ContractSpecPackage extends EPackage
    * @see org.eclipse.fordiac.ide.contractSpec.impl.ContractSpecPackageImpl#getCausalFuncDecl()
    * @generated
    */
-  int CAUSAL_FUNC_DECL = 17;
+  int CAUSAL_FUNC_DECL = 18;
 
   /**
    * The feature id for the '<em><b>Func Name</b></em>' attribute.
@@ -861,22 +870,22 @@ public interface ContractSpecPackage extends EPackage
   int CAUSAL_FUNC_DECL__FUNC_NAME = TIME_SPEC_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Port1</b></em>' reference.
+   * The feature id for the '<em><b>P1</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CAUSAL_FUNC_DECL__PORT1 = TIME_SPEC_FEATURE_COUNT + 1;
+  int CAUSAL_FUNC_DECL__P1 = TIME_SPEC_FEATURE_COUNT + 1;
 
   /**
-   * The feature id for the '<em><b>Port2</b></em>' reference.
+   * The feature id for the '<em><b>P2</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CAUSAL_FUNC_DECL__PORT2 = TIME_SPEC_FEATURE_COUNT + 2;
+  int CAUSAL_FUNC_DECL__P2 = TIME_SPEC_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Relation</b></em>' attribute.
@@ -904,7 +913,7 @@ public interface ContractSpecPackage extends EPackage
    * @see org.eclipse.fordiac.ide.contractSpec.impl.ContractSpecPackageImpl#getClockDefinition()
    * @generated
    */
-  int CLOCK_DEFINITION = 18;
+  int CLOCK_DEFINITION = 19;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -959,36 +968,6 @@ public interface ContractSpecPackage extends EPackage
    * @ordered
    */
   int CLOCK_DEFINITION_FEATURE_COUNT = TIME_SPEC_FEATURE_COUNT + 5;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.contractSpec.Unit <em>Unit</em>}' enum.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.contractSpec.Unit
-   * @see org.eclipse.fordiac.ide.contractSpec.impl.ContractSpecPackageImpl#getUnit()
-   * @generated
-   */
-  int UNIT = 19;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.contractSpec.CausalFuncName <em>Causal Func Name</em>}' enum.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.contractSpec.CausalFuncName
-   * @see org.eclipse.fordiac.ide.contractSpec.impl.ContractSpecPackageImpl#getCausalFuncName()
-   * @generated
-   */
-  int CAUSAL_FUNC_NAME = 20;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.fordiac.ide.contractSpec.CausalRelation <em>Causal Relation</em>}' enum.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.fordiac.ide.contractSpec.CausalRelation
-   * @see org.eclipse.fordiac.ide.contractSpec.impl.ContractSpecPackageImpl#getCausalRelation()
-   * @generated
-   */
-  int CAUSAL_RELATION = 21;
 
 
   /**
@@ -1204,26 +1183,26 @@ public interface ContractSpecPackage extends EPackage
   EClass getReaction();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getInput <em>Input</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getTrigger <em>Trigger</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Input</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.Reaction#getInput()
+   * @return the meta object for the containment reference '<em>Trigger</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.Reaction#getTrigger()
    * @see #getReaction()
    * @generated
    */
-  EReference getReaction_Input();
+  EReference getReaction_Trigger();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getOutput <em>Output</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getReaction <em>Reaction</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Output</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.Reaction#getOutput()
+   * @return the meta object for the containment reference '<em>Reaction</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.Reaction#getReaction()
    * @see #getReaction()
    * @generated
    */
-  EReference getReaction_Output();
+  EReference getReaction_Reaction();
 
   /**
    * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getInterval <em>Interval</em>}'.
@@ -1235,17 +1214,6 @@ public interface ContractSpecPackage extends EPackage
    * @generated
    */
   EReference getReaction_Interval();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.Reaction#isOnce <em>Once</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Once</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.Reaction#isOnce()
-   * @see #getReaction()
-   * @generated
-   */
-  EAttribute getReaction_Once();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getN <em>N</em>}'.
@@ -1291,26 +1259,26 @@ public interface ContractSpecPackage extends EPackage
   EClass getAge();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.Age#getOutput <em>Output</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.Age#getTrigger <em>Trigger</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Output</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.Age#getOutput()
+   * @return the meta object for the containment reference '<em>Trigger</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.Age#getTrigger()
    * @see #getAge()
    * @generated
    */
-  EReference getAge_Output();
+  EReference getAge_Trigger();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.Age#getInput <em>Input</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.Age#getReaction <em>Reaction</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Input</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.Age#getInput()
+   * @return the meta object for the containment reference '<em>Reaction</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.Age#getReaction()
    * @see #getAge()
    * @generated
    */
-  EReference getAge_Input();
+  EReference getAge_Reaction();
 
   /**
    * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.Age#getInterval <em>Interval</em>}'.
@@ -1322,17 +1290,6 @@ public interface ContractSpecPackage extends EPackage
    * @generated
    */
   EReference getAge_Interval();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.Age#isOnce <em>Once</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Once</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.Age#isOnce()
-   * @see #getAge()
-   * @generated
-   */
-  EAttribute getAge_Once();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.Age#getN <em>N</em>}'.
@@ -1378,26 +1335,26 @@ public interface ContractSpecPackage extends EPackage
   EClass getCausalReaction();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.CausalReaction#getInput <em>Input</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.CausalReaction#getE1 <em>E1</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Input</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.CausalReaction#getInput()
+   * @return the meta object for the containment reference '<em>E1</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.CausalReaction#getE1()
    * @see #getCausalReaction()
    * @generated
    */
-  EReference getCausalReaction_Input();
+  EReference getCausalReaction_E1();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.CausalReaction#getOutput <em>Output</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.CausalReaction#getE2 <em>E2</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Output</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.CausalReaction#getOutput()
+   * @return the meta object for the containment reference '<em>E2</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.CausalReaction#getE2()
    * @see #getCausalReaction()
    * @generated
    */
-  EReference getCausalReaction_Output();
+  EReference getCausalReaction_E2();
 
   /**
    * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.CausalReaction#getInterval <em>Interval</em>}'.
@@ -1432,26 +1389,26 @@ public interface ContractSpecPackage extends EPackage
   EClass getCausalAge();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getOutput <em>Output</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getE1 <em>E1</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Output</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.CausalAge#getOutput()
+   * @return the meta object for the containment reference '<em>E1</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.CausalAge#getE1()
    * @see #getCausalAge()
    * @generated
    */
-  EReference getCausalAge_Output();
+  EReference getCausalAge_E1();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getInput <em>Input</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getE2 <em>E2</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Input</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.CausalAge#getInput()
+   * @return the meta object for the containment reference '<em>E2</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.CausalAge#getE2()
    * @see #getCausalAge()
    * @generated
    */
-  EReference getCausalAge_Input();
+  EReference getCausalAge_E2();
 
   /**
    * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getInterval <em>Interval</em>}'.
@@ -1495,17 +1452,6 @@ public interface ContractSpecPackage extends EPackage
    * @generated
    */
   EReference getEventExpr_Event();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.EventExpr#isSequence <em>Sequence</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Sequence</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.EventExpr#isSequence()
-   * @see #getEventExpr()
-   * @generated
-   */
-  EAttribute getEventExpr_Sequence();
 
   /**
    * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.EventExpr#getEvents <em>Events</em>}'.
@@ -1625,48 +1571,48 @@ public interface ContractSpecPackage extends EPackage
   EReference getInterval_Time();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getLBound <em>LBound</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getB1 <em>B1</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>LBound</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.Interval#getLBound()
+   * @return the meta object for the attribute '<em>B1</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.Interval#getB1()
    * @see #getInterval()
    * @generated
    */
-  EAttribute getInterval_LBound();
+  EAttribute getInterval_B1();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getLbValue <em>Lb Value</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getV1 <em>V1</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Lb Value</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.Interval#getLbValue()
+   * @return the meta object for the containment reference '<em>V1</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.Interval#getV1()
    * @see #getInterval()
    * @generated
    */
-  EAttribute getInterval_LbValue();
+  EReference getInterval_V1();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getUbValue <em>Ub Value</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getV2 <em>V2</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Ub Value</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.Interval#getUbValue()
+   * @return the meta object for the containment reference '<em>V2</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.Interval#getV2()
    * @see #getInterval()
    * @generated
    */
-  EAttribute getInterval_UbValue();
+  EReference getInterval_V2();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getUBound <em>UBound</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getB2 <em>B2</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>UBound</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.Interval#getUBound()
+   * @return the meta object for the attribute '<em>B2</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.Interval#getB2()
    * @see #getInterval()
    * @generated
    */
-  EAttribute getInterval_UBound();
+  EAttribute getInterval_B2();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getUnit <em>Unit</em>}'.
@@ -1690,15 +1636,15 @@ public interface ContractSpecPackage extends EPackage
   EClass getTimeExpr();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.TimeExpr#getValue <em>Value</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.contractSpec.TimeExpr#getValue <em>Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Value</em>'.
+   * @return the meta object for the containment reference '<em>Value</em>'.
    * @see org.eclipse.fordiac.ide.contractSpec.TimeExpr#getValue()
    * @see #getTimeExpr()
    * @generated
    */
-  EAttribute getTimeExpr_Value();
+  EReference getTimeExpr_Value();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.TimeExpr#getUnit <em>Unit</em>}'.
@@ -1710,6 +1656,38 @@ public interface ContractSpecPackage extends EPackage
    * @generated
    */
   EAttribute getTimeExpr_Unit();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.fordiac.ide.contractSpec.Value <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Value</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.Value
+   * @generated
+   */
+  EClass getValue();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.Value#getInteger <em>Integer</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Integer</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.Value#getInteger()
+   * @see #getValue()
+   * @generated
+   */
+  EAttribute getValue_Integer();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.Value#getFraction <em>Fraction</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Fraction</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.Value#getFraction()
+   * @see #getValue()
+   * @generated
+   */
+  EAttribute getValue_Fraction();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl <em>Causal Func Decl</em>}'.
@@ -1733,26 +1711,26 @@ public interface ContractSpecPackage extends EPackage
   EAttribute getCausalFuncDecl_FuncName();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl#getPort1 <em>Port1</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl#getP1 <em>P1</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Port1</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl#getPort1()
+   * @return the meta object for the reference '<em>P1</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl#getP1()
    * @see #getCausalFuncDecl()
    * @generated
    */
-  EReference getCausalFuncDecl_Port1();
+  EReference getCausalFuncDecl_P1();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl#getPort2 <em>Port2</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl#getP2 <em>P2</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Port2</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl#getPort2()
+   * @return the meta object for the reference '<em>P2</em>'.
+   * @see org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl#getP2()
    * @see #getCausalFuncDecl()
    * @generated
    */
-  EReference getCausalFuncDecl_Port2();
+  EReference getCausalFuncDecl_P2();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl#getRelation <em>Relation</em>}'.
@@ -1829,36 +1807,6 @@ public interface ContractSpecPackage extends EPackage
    * @generated
    */
   EReference getClockDefinition_Maxdiff();
-
-  /**
-   * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.contractSpec.Unit <em>Unit</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for enum '<em>Unit</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.Unit
-   * @generated
-   */
-  EEnum getUnit();
-
-  /**
-   * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.contractSpec.CausalFuncName <em>Causal Func Name</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for enum '<em>Causal Func Name</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.CausalFuncName
-   * @generated
-   */
-  EEnum getCausalFuncName();
-
-  /**
-   * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.contractSpec.CausalRelation <em>Causal Relation</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for enum '<em>Causal Relation</em>'.
-   * @see org.eclipse.fordiac.ide.contractSpec.CausalRelation
-   * @generated
-   */
-  EEnum getCausalRelation();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -2060,20 +2008,20 @@ public interface ContractSpecPackage extends EPackage
     EClass REACTION = eINSTANCE.getReaction();
 
     /**
-     * The meta object literal for the '<em><b>Input</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Trigger</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference REACTION__INPUT = eINSTANCE.getReaction_Input();
+    EReference REACTION__TRIGGER = eINSTANCE.getReaction_Trigger();
 
     /**
-     * The meta object literal for the '<em><b>Output</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Reaction</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference REACTION__OUTPUT = eINSTANCE.getReaction_Output();
+    EReference REACTION__REACTION = eINSTANCE.getReaction_Reaction();
 
     /**
      * The meta object literal for the '<em><b>Interval</b></em>' containment reference feature.
@@ -2082,14 +2030,6 @@ public interface ContractSpecPackage extends EPackage
      * @generated
      */
     EReference REACTION__INTERVAL = eINSTANCE.getReaction_Interval();
-
-    /**
-     * The meta object literal for the '<em><b>Once</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute REACTION__ONCE = eINSTANCE.getReaction_Once();
 
     /**
      * The meta object literal for the '<em><b>N</b></em>' attribute feature.
@@ -2126,20 +2066,20 @@ public interface ContractSpecPackage extends EPackage
     EClass AGE = eINSTANCE.getAge();
 
     /**
-     * The meta object literal for the '<em><b>Output</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Trigger</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference AGE__OUTPUT = eINSTANCE.getAge_Output();
+    EReference AGE__TRIGGER = eINSTANCE.getAge_Trigger();
 
     /**
-     * The meta object literal for the '<em><b>Input</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Reaction</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference AGE__INPUT = eINSTANCE.getAge_Input();
+    EReference AGE__REACTION = eINSTANCE.getAge_Reaction();
 
     /**
      * The meta object literal for the '<em><b>Interval</b></em>' containment reference feature.
@@ -2148,14 +2088,6 @@ public interface ContractSpecPackage extends EPackage
      * @generated
      */
     EReference AGE__INTERVAL = eINSTANCE.getAge_Interval();
-
-    /**
-     * The meta object literal for the '<em><b>Once</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute AGE__ONCE = eINSTANCE.getAge_Once();
 
     /**
      * The meta object literal for the '<em><b>N</b></em>' attribute feature.
@@ -2192,20 +2124,20 @@ public interface ContractSpecPackage extends EPackage
     EClass CAUSAL_REACTION = eINSTANCE.getCausalReaction();
 
     /**
-     * The meta object literal for the '<em><b>Input</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>E1</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference CAUSAL_REACTION__INPUT = eINSTANCE.getCausalReaction_Input();
+    EReference CAUSAL_REACTION__E1 = eINSTANCE.getCausalReaction_E1();
 
     /**
-     * The meta object literal for the '<em><b>Output</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>E2</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference CAUSAL_REACTION__OUTPUT = eINSTANCE.getCausalReaction_Output();
+    EReference CAUSAL_REACTION__E2 = eINSTANCE.getCausalReaction_E2();
 
     /**
      * The meta object literal for the '<em><b>Interval</b></em>' containment reference feature.
@@ -2234,20 +2166,20 @@ public interface ContractSpecPackage extends EPackage
     EClass CAUSAL_AGE = eINSTANCE.getCausalAge();
 
     /**
-     * The meta object literal for the '<em><b>Output</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>E1</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference CAUSAL_AGE__OUTPUT = eINSTANCE.getCausalAge_Output();
+    EReference CAUSAL_AGE__E1 = eINSTANCE.getCausalAge_E1();
 
     /**
-     * The meta object literal for the '<em><b>Input</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>E2</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference CAUSAL_AGE__INPUT = eINSTANCE.getCausalAge_Input();
+    EReference CAUSAL_AGE__E2 = eINSTANCE.getCausalAge_E2();
 
     /**
      * The meta object literal for the '<em><b>Interval</b></em>' containment reference feature.
@@ -2282,14 +2214,6 @@ public interface ContractSpecPackage extends EPackage
      * @generated
      */
     EReference EVENT_EXPR__EVENT = eINSTANCE.getEventExpr_Event();
-
-    /**
-     * The meta object literal for the '<em><b>Sequence</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute EVENT_EXPR__SEQUENCE = eINSTANCE.getEventExpr_Sequence();
 
     /**
      * The meta object literal for the '<em><b>Events</b></em>' containment reference feature.
@@ -2388,36 +2312,36 @@ public interface ContractSpecPackage extends EPackage
     EReference INTERVAL__TIME = eINSTANCE.getInterval_Time();
 
     /**
-     * The meta object literal for the '<em><b>LBound</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>B1</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute INTERVAL__LBOUND = eINSTANCE.getInterval_LBound();
+    EAttribute INTERVAL__B1 = eINSTANCE.getInterval_B1();
 
     /**
-     * The meta object literal for the '<em><b>Lb Value</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>V1</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute INTERVAL__LB_VALUE = eINSTANCE.getInterval_LbValue();
+    EReference INTERVAL__V1 = eINSTANCE.getInterval_V1();
 
     /**
-     * The meta object literal for the '<em><b>Ub Value</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>V2</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute INTERVAL__UB_VALUE = eINSTANCE.getInterval_UbValue();
+    EReference INTERVAL__V2 = eINSTANCE.getInterval_V2();
 
     /**
-     * The meta object literal for the '<em><b>UBound</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>B2</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute INTERVAL__UBOUND = eINSTANCE.getInterval_UBound();
+    EAttribute INTERVAL__B2 = eINSTANCE.getInterval_B2();
 
     /**
      * The meta object literal for the '<em><b>Unit</b></em>' attribute feature.
@@ -2438,12 +2362,12 @@ public interface ContractSpecPackage extends EPackage
     EClass TIME_EXPR = eINSTANCE.getTimeExpr();
 
     /**
-     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute TIME_EXPR__VALUE = eINSTANCE.getTimeExpr_Value();
+    EReference TIME_EXPR__VALUE = eINSTANCE.getTimeExpr_Value();
 
     /**
      * The meta object literal for the '<em><b>Unit</b></em>' attribute feature.
@@ -2452,6 +2376,32 @@ public interface ContractSpecPackage extends EPackage
      * @generated
      */
     EAttribute TIME_EXPR__UNIT = eINSTANCE.getTimeExpr_Unit();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.fordiac.ide.contractSpec.impl.ValueImpl <em>Value</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.fordiac.ide.contractSpec.impl.ValueImpl
+     * @see org.eclipse.fordiac.ide.contractSpec.impl.ContractSpecPackageImpl#getValue()
+     * @generated
+     */
+    EClass VALUE = eINSTANCE.getValue();
+
+    /**
+     * The meta object literal for the '<em><b>Integer</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute VALUE__INTEGER = eINSTANCE.getValue_Integer();
+
+    /**
+     * The meta object literal for the '<em><b>Fraction</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute VALUE__FRACTION = eINSTANCE.getValue_Fraction();
 
     /**
      * The meta object literal for the '{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalFuncDeclImpl <em>Causal Func Decl</em>}' class.
@@ -2472,20 +2422,20 @@ public interface ContractSpecPackage extends EPackage
     EAttribute CAUSAL_FUNC_DECL__FUNC_NAME = eINSTANCE.getCausalFuncDecl_FuncName();
 
     /**
-     * The meta object literal for the '<em><b>Port1</b></em>' reference feature.
+     * The meta object literal for the '<em><b>P1</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference CAUSAL_FUNC_DECL__PORT1 = eINSTANCE.getCausalFuncDecl_Port1();
+    EReference CAUSAL_FUNC_DECL__P1 = eINSTANCE.getCausalFuncDecl_P1();
 
     /**
-     * The meta object literal for the '<em><b>Port2</b></em>' reference feature.
+     * The meta object literal for the '<em><b>P2</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference CAUSAL_FUNC_DECL__PORT2 = eINSTANCE.getCausalFuncDecl_Port2();
+    EReference CAUSAL_FUNC_DECL__P2 = eINSTANCE.getCausalFuncDecl_P2();
 
     /**
      * The meta object literal for the '<em><b>Relation</b></em>' attribute feature.
@@ -2544,36 +2494,6 @@ public interface ContractSpecPackage extends EPackage
      * @generated
      */
     EReference CLOCK_DEFINITION__MAXDIFF = eINSTANCE.getClockDefinition_Maxdiff();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.contractSpec.Unit <em>Unit</em>}' enum.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.contractSpec.Unit
-     * @see org.eclipse.fordiac.ide.contractSpec.impl.ContractSpecPackageImpl#getUnit()
-     * @generated
-     */
-    EEnum UNIT = eINSTANCE.getUnit();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.contractSpec.CausalFuncName <em>Causal Func Name</em>}' enum.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.contractSpec.CausalFuncName
-     * @see org.eclipse.fordiac.ide.contractSpec.impl.ContractSpecPackageImpl#getCausalFuncName()
-     * @generated
-     */
-    EEnum CAUSAL_FUNC_NAME = eINSTANCE.getCausalFuncName();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.fordiac.ide.contractSpec.CausalRelation <em>Causal Relation</em>}' enum.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.fordiac.ide.contractSpec.CausalRelation
-     * @see org.eclipse.fordiac.ide.contractSpec.impl.ContractSpecPackageImpl#getCausalRelation()
-     * @generated
-     */
-    EEnum CAUSAL_RELATION = eINSTANCE.getCausalRelation();
 
   }
 

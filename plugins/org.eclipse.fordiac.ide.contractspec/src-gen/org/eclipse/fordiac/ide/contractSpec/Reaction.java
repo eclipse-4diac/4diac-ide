@@ -23,10 +23,9 @@ package org.eclipse.fordiac.ide.contractSpec;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getInput <em>Input</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getOutput <em>Output</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getTrigger <em>Trigger</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getReaction <em>Reaction</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getInterval <em>Interval</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Reaction#isOnce <em>Once</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getN <em>N</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getOutOf <em>Out Of</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getClock <em>Clock</em>}</li>
@@ -39,48 +38,48 @@ package org.eclipse.fordiac.ide.contractSpec;
 public interface Reaction extends TimeSpec
 {
   /**
-   * Returns the value of the '<em><b>Input</b></em>' containment reference.
+   * Returns the value of the '<em><b>Trigger</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Input</em>' containment reference.
-   * @see #setInput(EventExpr)
-   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getReaction_Input()
+   * @return the value of the '<em>Trigger</em>' containment reference.
+   * @see #setTrigger(EventExpr)
+   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getReaction_Trigger()
    * @model containment="true"
    * @generated
    */
-  EventExpr getInput();
+  EventExpr getTrigger();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getInput <em>Input</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getTrigger <em>Trigger</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Input</em>' containment reference.
-   * @see #getInput()
+   * @param value the new value of the '<em>Trigger</em>' containment reference.
+   * @see #getTrigger()
    * @generated
    */
-  void setInput(EventExpr value);
+  void setTrigger(EventExpr value);
 
   /**
-   * Returns the value of the '<em><b>Output</b></em>' containment reference.
+   * Returns the value of the '<em><b>Reaction</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Output</em>' containment reference.
-   * @see #setOutput(EventExpr)
-   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getReaction_Output()
+   * @return the value of the '<em>Reaction</em>' containment reference.
+   * @see #setReaction(EventExpr)
+   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getReaction_Reaction()
    * @model containment="true"
    * @generated
    */
-  EventExpr getOutput();
+  EventExpr getReaction();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getOutput <em>Output</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Reaction#getReaction <em>Reaction</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Output</em>' containment reference.
-   * @see #getOutput()
+   * @param value the new value of the '<em>Reaction</em>' containment reference.
+   * @see #getReaction()
    * @generated
    */
-  void setOutput(EventExpr value);
+  void setReaction(EventExpr value);
 
   /**
    * Returns the value of the '<em><b>Interval</b></em>' containment reference.
@@ -103,28 +102,6 @@ public interface Reaction extends TimeSpec
    * @generated
    */
   void setInterval(Interval value);
-
-  /**
-   * Returns the value of the '<em><b>Once</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Once</em>' attribute.
-   * @see #setOnce(boolean)
-   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getReaction_Once()
-   * @model
-   * @generated
-   */
-  boolean isOnce();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Reaction#isOnce <em>Once</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Once</em>' attribute.
-   * @see #isOnce()
-   * @generated
-   */
-  void setOnce(boolean value);
 
   /**
    * Returns the value of the '<em><b>N</b></em>' attribute.

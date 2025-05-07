@@ -58,7 +58,6 @@ import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -98,7 +97,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	private final TypeEntryAdapter adapter = new TypeEntryAdapter(this);
 	private GraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
-	private boolean readOnly = false;
 
 	@Override
 	protected void addPages() {
@@ -149,26 +147,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	@Override
 	public void createPartControl(final Composite parent) {
 		if (getType() != null) {
-			if (getTypeEntry() != null && getTypeEntry().getFile() != null && getTypeEntry().getFile().isReadOnly()) {
-				readOnly = true;
-				// create read only banner
-				final Composite composite = new Composite(parent, SWT.NONE);
-				GridLayoutFactory.fillDefaults().applyTo(composite);
-				GridDataFactory.fillDefaults().applyTo(composite);
-
-				final Label label = new Label(composite, SWT.NONE);
-				label.setText(Messages.TypeEditor_ReadOnly);
-				label.setBackground(JFaceResources.getColorRegistry().get("org.eclipse.fordiac.ide.gef.warningColor")); //$NON-NLS-1$
-				label.setFont(JFaceResources.getFont(JFaceResources.HEADER_FONT));
-				GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(label);
-
-				final Composite newParent = new Composite(composite, SWT.NONE);
-				GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(newParent);
-
-				super.createPartControl(newParent);
-			} else {
-				super.createPartControl(parent);
-			}
+			super.createPartControl(parent);
 		} else {
 			showLoadErrorMessage(parent);
 		}
@@ -226,10 +205,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		if (null != getTypeEntry()) {
-			if (readOnly) {
-				doSaveAs();
-				return;
-			}
 			int result = DEFAULT_BUTTON_INDEX;
 			if (dependencyAffectingTypeChange()) {
 				result = createTypeUpdateDialog().open();
@@ -512,4 +487,5 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	public void stackChanged(final CommandStackEvent event) {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
+
 }
