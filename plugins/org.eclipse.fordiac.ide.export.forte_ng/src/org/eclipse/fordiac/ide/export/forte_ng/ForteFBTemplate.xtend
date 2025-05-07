@@ -352,8 +352,8 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	protected def CharSequence generateInterfaceVariableAndConnectionDeclarations() '''
 		«type.interfaceList.inputVars.generateVariableDeclarations(false)»
-		«type.interfaceList.outputVars.generateVariableDeclarations(false)»
 		«type.interfaceList.inOutVars.generateVariableDeclarations(false)»
+		«type.interfaceList.outputVars.generateVariableDeclarations(false)»
 		«type.interfaceList.sockets.generateAdapterDeclarations»
 		«type.interfaceList.plugs.generateAdapterDeclarations»
 		«type.interfaceList.eventOutputs.generateEventConnectionDeclarations»
