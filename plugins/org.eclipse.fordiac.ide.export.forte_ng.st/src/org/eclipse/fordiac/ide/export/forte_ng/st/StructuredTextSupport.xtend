@@ -50,6 +50,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
@@ -319,7 +320,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		}
 	}
 
-	def protected CharSequence generateInputCallArgument(INamedElement parameter, STCallArgument argument,
+	def protected CharSequence generateInputCallArgument(ITypedElement parameter, STCallArgument argument,
 		STFeatureExpression expr) {
 		switch (expr.feature) {
 			FB case argument === null: '''«expr.feature.generateFeatureName»->«parameter.generateFeatureName»'''
@@ -330,11 +331,11 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		}
 	}
 
-	def protected CharSequence generateInputCallArgument(INamedElement parameter, STCallArgument argument) {
+	def protected CharSequence generateInputCallArgument(ITypedElement parameter, STCallArgument argument) {
 		if(argument === null) parameter.generateVariableDefaultValue else argument.argument.generateExpression
 	}
 
-	def protected CharSequence generateInOutCallArgument(INamedElement parameter, STCallArgument argument) {
+	def protected CharSequence generateInOutCallArgument(ITypedElement parameter, STCallArgument argument) {
 		switch (argument) {
 			case null: '''ST_IGNORE_OUT_PARAM(«parameter.featureType.generateTypeName»(«parameter.generateVariableDefaultValue»))'''
 			case (argument.argument instanceof STMemberAccessExpression) &&
@@ -345,7 +346,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		}
 	}
 
-	def protected CharSequence generateOutputCallArgument(INamedElement parameter, STCallArgument argument) {
+	def protected CharSequence generateOutputCallArgument(ITypedElement parameter, STCallArgument argument) {
 		switch (argument) {
 			case null: '''ST_IGNORE_OUT_PARAM(«parameter.featureType.generateTypeName»(«parameter.generateVariableDefaultValue»))'''
 			STCallNamedOutputArgument case argument.

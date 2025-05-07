@@ -21,6 +21,7 @@ import java.util.Map;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -122,7 +123,7 @@ public interface STBuiltinFeatureExpression extends STExpression {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	Map<INamedElement, STCallArgument> getMappedInputArguments();
+	Map<ITypedElement, STCallArgument> getMappedInputArguments();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -130,7 +131,7 @@ public interface STBuiltinFeatureExpression extends STExpression {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	Map<INamedElement, STCallArgument> getMappedOutputArguments();
+	Map<ITypedElement, STCallArgument> getMappedOutputArguments();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -138,6 +139,6 @@ public interface STBuiltinFeatureExpression extends STExpression {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	Map<INamedElement, STCallArgument> getMappedInOutArguments();
+	Map<ITypedElement, STCallArgument> getMappedInOutArguments();
 
 } // STBuiltinFeatureExpression
