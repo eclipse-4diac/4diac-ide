@@ -27,6 +27,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PolylineConnection;
@@ -269,13 +270,15 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 
 	private void performConnTypeConfiguration(final FBNetworkConnection connectionFigure) {
 		if (getModel() instanceof EventConnection) {
-			connectionFigure.setVisible(!InstanceScope.INSTANCE.getNode(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID)
-					.getBoolean(UIPreferenceConstants.P_HIDE_EVENT_CON, false));
+			connectionFigure.setVisible(
+					!Platform.getPreferencesService().getBoolean(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID,
+							UIPreferenceConstants.P_HIDE_EVENT_CON, false, null));
 		}
 
 		if (getModel() instanceof DataConnection) {
-			connectionFigure.setVisible(!InstanceScope.INSTANCE.getNode(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID)
-					.getBoolean(UIPreferenceConstants.P_HIDE_DATA_CON, false));
+			connectionFigure.setVisible(
+					!Platform.getPreferencesService().getBoolean(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID,
+							UIPreferenceConstants.P_HIDE_DATA_CON, false, null));
 		}
 	}
 

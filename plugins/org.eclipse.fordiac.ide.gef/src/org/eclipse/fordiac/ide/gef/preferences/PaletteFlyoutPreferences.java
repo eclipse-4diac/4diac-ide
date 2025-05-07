@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.preferences;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.gef.Messages;
@@ -41,18 +42,20 @@ public class PaletteFlyoutPreferences implements FlyoutPreferences {
 
 	@Override
 	public int getDockLocation() {
-		return InstanceScope.INSTANCE.getNode(GefPreferenceConstants.GEF_PREFERENCES_ID).getInt(paletteDockLocationID,
-				0);
+		return Platform.getPreferencesService().getInt(GefPreferenceConstants.GEF_PREFERENCES_ID, paletteDockLocationID,
+				0, null);
 	}
 
 	@Override
 	public int getPaletteState() {
-		return InstanceScope.INSTANCE.getNode(GefPreferenceConstants.GEF_PREFERENCES_ID).getInt(paletteStateID, 0);
+		return Platform.getPreferencesService().getInt(GefPreferenceConstants.GEF_PREFERENCES_ID, paletteStateID, 0,
+				null);
 	}
 
 	@Override
 	public int getPaletteWidth() {
-		return InstanceScope.INSTANCE.getNode(GefPreferenceConstants.GEF_PREFERENCES_ID).getInt(paletteSizeID, 0);
+		return Platform.getPreferencesService().getInt(GefPreferenceConstants.GEF_PREFERENCES_ID, paletteSizeID, 0,
+				null);
 	}
 
 	@Override
@@ -82,7 +85,7 @@ public class PaletteFlyoutPreferences implements FlyoutPreferences {
 	}
 
 	private void checkPreferenceStoreStatus() {
-		if (InstanceScope.INSTANCE.getNode(GefPreferenceConstants.GEF_PREFERENCES_ID).get(paletteStateID,
+		if (Platform.getPreferencesService().getString(GefPreferenceConstants.GEF_PREFERENCES_ID, paletteStateID, null,
 				null) == null) {
 			// there is no setting in the preference store. Set palette opend with a good
 			// initial size

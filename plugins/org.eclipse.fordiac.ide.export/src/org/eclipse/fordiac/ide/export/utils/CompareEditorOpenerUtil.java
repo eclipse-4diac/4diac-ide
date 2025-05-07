@@ -22,8 +22,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.export.ICompareEditorOpener;
 import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -53,8 +51,7 @@ public final class CompareEditorOpenerUtil {
 			try {
 				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
 				final String name = element.getAttribute("name"); //$NON-NLS-1$
-				if (object instanceof ICompareEditorOpener) {
-					final ICompareEditorOpener compareEditorOpener = (ICompareEditorOpener) object;
+				if (object instanceof final ICompareEditorOpener compareEditorOpener) {
 					openers.put(name, compareEditorOpener);
 				}
 			} catch (final CoreException corex) {
@@ -72,8 +69,8 @@ public final class CompareEditorOpenerUtil {
 	 * @return the opener
 	 */
 	public static ICompareEditorOpener getOpener() {
-		final IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode("org.eclipse.fordiac.ide.export"); //$NON-NLS-1$
-		final String compareEditor = preferences.get(PreferenceConstants.P_COMPARE_EDITOR, ""); //$NON-NLS-1$
+		final String compareEditor = Platform.getPreferencesService().getString("org.eclipse.fordiac.ide.export", //$NON-NLS-1$
+				PreferenceConstants.P_COMPARE_EDITOR, "", null); //$NON-NLS-1$
 		final Map<String, ICompareEditorOpener> openers = getCompareEditorOpeners();
 		ICompareEditorOpener opener = openers.get(compareEditor);
 		if (opener == null && openers.size() >= 1) { // simply use the first compare
