@@ -266,6 +266,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						
 						    void readInputData(TEventID paEIID) override;
 						    void writeOutputData(TEventID paEIID) override;
+						    void setInitialValues() override;
 						
 						  public:
 						    «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer);
@@ -295,9 +296,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						 *************************************************************************/
 						
 						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h"
-						#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt_gen.cpp"
-						#endif
 						
 						#include "core/iec61131_functions.h"
 						#include "core/datatypes/forte_array_common.h"
@@ -305,7 +303,9 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						#include "core/datatypes/forte_array_fixed.h"
 						#include "core/datatypes/forte_array_variable.h"
 						
-						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringIdfunctionblock)
+						USE_STRING_ID(functionblock);
+						
+						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», STRID(functionblock))
 						
 						const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scmFBInterfaceSpec = {
 						  0, nullptr, nullptr, nullptr, nullptr,
@@ -318,6 +318,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						
 						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
 						    CBasicFB(paContainer, scmFBInterfaceSpec, paInstanceNameId, nullptr) {
+						}
+						
+						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::setInitialValues() {
+						  CBasicFB::setInitialValues();
 						}
 						
 						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {

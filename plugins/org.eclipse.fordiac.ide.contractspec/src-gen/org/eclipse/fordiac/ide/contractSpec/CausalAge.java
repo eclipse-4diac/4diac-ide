@@ -23,8 +23,8 @@ package org.eclipse.fordiac.ide.contractSpec;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getE1 <em>E1</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getE2 <em>E2</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getOutput <em>Output</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getInput <em>Input</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getInterval <em>Interval</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getClock <em>Clock</em>}</li>
  * </ul>
@@ -36,48 +36,48 @@ package org.eclipse.fordiac.ide.contractSpec;
 public interface CausalAge extends TimeSpec
 {
   /**
-   * Returns the value of the '<em><b>E1</b></em>' containment reference.
+   * Returns the value of the '<em><b>Output</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>E1</em>' containment reference.
-   * @see #setE1(EventSpec)
-   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getCausalAge_E1()
+   * @return the value of the '<em>Output</em>' containment reference.
+   * @see #setOutput(EventSpec)
+   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getCausalAge_Output()
    * @model containment="true"
    * @generated
    */
-  EventSpec getE1();
+  EventSpec getOutput();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getE1 <em>E1</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getOutput <em>Output</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>E1</em>' containment reference.
-   * @see #getE1()
+   * @param value the new value of the '<em>Output</em>' containment reference.
+   * @see #getOutput()
    * @generated
    */
-  void setE1(EventSpec value);
+  void setOutput(EventSpec value);
 
   /**
-   * Returns the value of the '<em><b>E2</b></em>' containment reference.
+   * Returns the value of the '<em><b>Input</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>E2</em>' containment reference.
-   * @see #setE2(EventSpec)
-   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getCausalAge_E2()
+   * @return the value of the '<em>Input</em>' containment reference.
+   * @see #setInput(EventSpec)
+   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getCausalAge_Input()
    * @model containment="true"
    * @generated
    */
-  EventSpec getE2();
+  EventSpec getInput();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getE2 <em>E2</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.CausalAge#getInput <em>Input</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>E2</em>' containment reference.
-   * @see #getE2()
+   * @param value the new value of the '<em>Input</em>' containment reference.
+   * @see #getInput()
    * @generated
    */
-  void setE2(EventSpec value);
+  void setInput(EventSpec value);
 
   /**
    * Returns the value of the '<em><b>Interval</b></em>' containment reference.

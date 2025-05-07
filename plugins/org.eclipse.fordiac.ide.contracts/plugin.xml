@@ -2,97 +2,47 @@
 <?eclipse version="3.0"?>
 <plugin>
   <extension point="org.eclipse.ui.commands">
-    <command
-          categoryId="org.eclipse.fordiac.ide.commands.category"
-          id="org.eclipse.fordiac.ide.contracts.defineFbInterfaceConstraint"
-          name="Define Contract for FB Interface Pins">
-    </command>
-     <command
-           categoryId="org.eclipse.fordiac.ide.commands.category"
-           id="org.eclipse.fordiac.ide.contracts.evaluatecontract"
-           name="Evaluate Contract">
-     </command>
-
+    <command categoryId="org.eclipse.fordiac.ide.commands.category"
+             id="org.eclipse.fordiac.ide.contracts.defineFbInterfaceConstraint"
+             name="Define Contract for FB Interface Pins" />
+    <command categoryId="org.eclipse.fordiac.ide.commands.category"
+             id="org.eclipse.fordiac.ide.contracts.evaluatecontract"
+             name="Evaluate Contract" />
   </extension>
   <extension point="org.eclipse.ui.handlers">
-  
-  
- <!-- HANDLERS -->
-    <handler
-          class="org.eclipse.fordiac.ide.contracts.DefineFbInterfaceConstraintHandler"
-          commandId="org.eclipse.fordiac.ide.contracts.defineFbInterfaceConstraint">
+    <!-- HANDLERS -->
+    <handler class="org.eclipse.fordiac.ide.contracts.DefineFbInterfaceConstraintHandler"
+             commandId="org.eclipse.fordiac.ide.contracts.defineFbInterfaceConstraint">
+      <enabledWhen>
+        <with variable="selection">
+          <count value="+" /> <!-- one or more -->
+          <iterate>
+            <or>
+              <instanceof value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork" />
+              <instanceof value="org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart" />
+            </or>
+          </iterate>
+        </with>
+      </enabledWhen>
     </handler>
-    <handler
-          class="org.eclipse.fordiac.ide.contracts.EvaluateContractHandler"
-          commandId="org.eclipse.fordiac.ide.contracts.evaluatecontract">
-    </handler>
+    <handler class="org.eclipse.fordiac.ide.contracts.EvaluateContractHandler"
+             commandId="org.eclipse.fordiac.ide.contracts.evaluatecontract" />
   </extension>
   <extension point="org.eclipse.ui.menus">
     <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup">
-      
       <command commandId="org.eclipse.fordiac.ide.contracts.defineFbInterfaceConstraint" >
-          <visibleWhen checkEnabled="true">
-          <with variable="selection">
-          <or>
-            <count value="2"/>
-            <iterate>
-              <or>
-                <instanceof value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
-                </instanceof>
-                <instanceof value="org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart">
-                </instanceof>
-              </or>
-            </iterate>
-            <count value="1"/>
-            <iterate>
-              <or>
-                <instanceof value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
-                </instanceof>
-                <instanceof value="org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart">
-                </instanceof>
-              </or>
-            </iterate>
-            </or>
+        <visibleWhen checkEnabled="true">
+          <with variable="activeEditor">
+            <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
           </with>
         </visibleWhen>
-       </command>
-      <command
-            commandId="org.eclipse.fordiac.ide.contracts.evaluatecontract"
-            label="Evaluate Contracts ">
-         <visibleWhen
-               checkEnabled="true">
-            <with
-                  variable="selection">
-               <or>
-                  <count
-                        value="2">
-                  </count>
-                  <iterate>
-                     <or>
-                        <instanceof
-                              value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
-                        </instanceof>
-                        <instanceof
-                              value="org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart">
-                        </instanceof>
-                     </or>
-                  </iterate>
-                  <count
-                        value="1">
-                  </count>
-                  <iterate>
-                     <or>
-                        <instanceof
-                              value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork">
-                        </instanceof>
-                        <instanceof
-                              value="org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart">
-                        </instanceof>
-                     </or>
-                  </iterate>
-               </or>
-            </with>
-         </visibleWhen>
+      </command>
+      <command commandId="org.eclipse.fordiac.ide.contracts.evaluatecontract">
+        <visibleWhen checkEnabled="true">
+          <with variable="activeEditor">
+            <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+          </with>
+        </visibleWhen>
       </command>
     </menuContribution>
   </extension>

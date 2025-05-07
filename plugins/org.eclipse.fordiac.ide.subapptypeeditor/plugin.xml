@@ -177,6 +177,12 @@
                indented="false"
                label="Attributes">
          </propertyTab>
+         <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyAttributeTab"
+       		   category="Application"
+               id="org.eclipse.fordiac.ide.application.propertyVarConfigTab"
+               indented="false"
+               label="Var Config">
+      	</propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -257,6 +263,12 @@
                tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
                filter="org.eclipse.fordiac.ide.gef.filters.PinAdapterInfoFilter">
       	</propertySection>
+        <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.VarConfigurationSection"
+              filter="org.eclipse.fordiac.ide.application.properties.VarConfigurationFilter"
+              id="org.eclipse.fordiac.ide.application.properties.VarConfigSection"
+              tab="org.eclipse.fordiac.ide.application.propertyVarConfigTab">
+        </propertySection>
       </propertySections>
    </extension>
    

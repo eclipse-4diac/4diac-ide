@@ -1,19 +1,20 @@
-/**
+/*******************************************************************************
  * Copyright (c) 2024 Felix Schmid
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Felix Schmid
  *     - initial implementation and/or documentation
- */
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.contractSpec.impl;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -92,11 +93,52 @@ public class ContractSpecFactoryImpl extends EFactoryImpl implements ContractSpe
       case ContractSpecPackage.PORT: return createPort();
       case ContractSpecPackage.INTERVAL: return createInterval();
       case ContractSpecPackage.TIME_EXPR: return createTimeExpr();
-      case ContractSpecPackage.VALUE: return createValue();
       case ContractSpecPackage.CAUSAL_FUNC_DECL: return createCausalFuncDecl();
       case ContractSpecPackage.CLOCK_DEFINITION: return createClockDefinition();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Object createFromString(EDataType eDataType, String initialValue)
+  {
+    switch (eDataType.getClassifierID())
+    {
+      case ContractSpecPackage.UNIT:
+        return createUnitFromString(eDataType, initialValue);
+      case ContractSpecPackage.CAUSAL_FUNC_NAME:
+        return createCausalFuncNameFromString(eDataType, initialValue);
+      case ContractSpecPackage.CAUSAL_RELATION:
+        return createCausalRelationFromString(eDataType, initialValue);
+      default:
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String convertToString(EDataType eDataType, Object instanceValue)
+  {
+    switch (eDataType.getClassifierID())
+    {
+      case ContractSpecPackage.UNIT:
+        return convertUnitToString(eDataType, instanceValue);
+      case ContractSpecPackage.CAUSAL_FUNC_NAME:
+        return convertCausalFuncNameToString(eDataType, instanceValue);
+      case ContractSpecPackage.CAUSAL_RELATION:
+        return convertCausalRelationToString(eDataType, instanceValue);
+      default:
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
   }
 
@@ -310,18 +352,6 @@ public class ContractSpecFactoryImpl extends EFactoryImpl implements ContractSpe
    * @generated
    */
   @Override
-  public Value createValue()
-  {
-    ValueImpl value = new ValueImpl();
-    return value;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public CausalFuncDecl createCausalFuncDecl()
   {
     CausalFuncDeclImpl causalFuncDecl = new CausalFuncDeclImpl();
@@ -338,6 +368,72 @@ public class ContractSpecFactoryImpl extends EFactoryImpl implements ContractSpe
   {
     ClockDefinitionImpl clockDefinition = new ClockDefinitionImpl();
     return clockDefinition;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Unit createUnitFromString(EDataType eDataType, String initialValue)
+  {
+    Unit result = Unit.get(initialValue);
+    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertUnitToString(EDataType eDataType, Object instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public CausalFuncName createCausalFuncNameFromString(EDataType eDataType, String initialValue)
+  {
+    CausalFuncName result = CausalFuncName.get(initialValue);
+    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertCausalFuncNameToString(EDataType eDataType, Object instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public CausalRelation createCausalRelationFromString(EDataType eDataType, String initialValue)
+  {
+    CausalRelation result = CausalRelation.get(initialValue);
+    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertCausalRelationToString(EDataType eDataType, Object instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
   }
 
   /**

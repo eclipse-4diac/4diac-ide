@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.EventExpr#getEvent <em>Event</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.EventExpr#isSequence <em>Sequence</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.EventExpr#getEvents <em>Events</em>}</li>
  * </ul>
  *
@@ -55,6 +56,28 @@ public interface EventExpr extends EObject
    * @generated
    */
   void setEvent(EventSpec value);
+
+  /**
+   * Returns the value of the '<em><b>Sequence</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Sequence</em>' attribute.
+   * @see #setSequence(boolean)
+   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getEventExpr_Sequence()
+   * @model
+   * @generated
+   */
+  boolean isSequence();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.EventExpr#isSequence <em>Sequence</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Sequence</em>' attribute.
+   * @see #isSequence()
+   * @generated
+   */
+  void setSequence(boolean value);
 
   /**
    * Returns the value of the '<em><b>Events</b></em>' containment reference.

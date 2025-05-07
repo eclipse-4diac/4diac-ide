@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.contractSpec.EventSpec;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.EventExprImpl#getEvent <em>Event</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.EventExprImpl#isSequence <em>Sequence</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.EventExprImpl#getEvents <em>Events</em>}</li>
  * </ul>
  *
@@ -52,6 +53,26 @@ public class EventExprImpl extends MinimalEObjectImpl.Container implements Event
    * @ordered
    */
   protected EventSpec event;
+
+  /**
+   * The default value of the '{@link #isSequence() <em>Sequence</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isSequence()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean SEQUENCE_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isSequence() <em>Sequence</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isSequence()
+   * @generated
+   * @ordered
+   */
+  protected boolean sequence = SEQUENCE_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getEvents() <em>Events</em>}' containment reference.
@@ -140,6 +161,31 @@ public class EventExprImpl extends MinimalEObjectImpl.Container implements Event
    * @generated
    */
   @Override
+  public boolean isSequence()
+  {
+    return sequence;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setSequence(boolean newSequence)
+  {
+    boolean oldSequence = sequence;
+    sequence = newSequence;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.EVENT_EXPR__SEQUENCE, oldSequence, sequence));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EventList getEvents()
   {
     return events;
@@ -214,6 +260,8 @@ public class EventExprImpl extends MinimalEObjectImpl.Container implements Event
     {
       case ContractSpecPackage.EVENT_EXPR__EVENT:
         return getEvent();
+      case ContractSpecPackage.EVENT_EXPR__SEQUENCE:
+        return isSequence();
       case ContractSpecPackage.EVENT_EXPR__EVENTS:
         return getEvents();
     }
@@ -232,6 +280,9 @@ public class EventExprImpl extends MinimalEObjectImpl.Container implements Event
     {
       case ContractSpecPackage.EVENT_EXPR__EVENT:
         setEvent((EventSpec)newValue);
+        return;
+      case ContractSpecPackage.EVENT_EXPR__SEQUENCE:
+        setSequence((Boolean)newValue);
         return;
       case ContractSpecPackage.EVENT_EXPR__EVENTS:
         setEvents((EventList)newValue);
@@ -253,6 +304,9 @@ public class EventExprImpl extends MinimalEObjectImpl.Container implements Event
       case ContractSpecPackage.EVENT_EXPR__EVENT:
         setEvent((EventSpec)null);
         return;
+      case ContractSpecPackage.EVENT_EXPR__SEQUENCE:
+        setSequence(SEQUENCE_EDEFAULT);
+        return;
       case ContractSpecPackage.EVENT_EXPR__EVENTS:
         setEvents((EventList)null);
         return;
@@ -272,10 +326,29 @@ public class EventExprImpl extends MinimalEObjectImpl.Container implements Event
     {
       case ContractSpecPackage.EVENT_EXPR__EVENT:
         return event != null;
+      case ContractSpecPackage.EVENT_EXPR__SEQUENCE:
+        return sequence != SEQUENCE_EDEFAULT;
       case ContractSpecPackage.EVENT_EXPR__EVENTS:
         return events != null;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (sequence: ");
+    result.append(sequence);
+    result.append(')');
+    return result.toString();
   }
 
 } //EventExprImpl

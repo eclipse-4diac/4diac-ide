@@ -14,13 +14,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.source.SourceViewer;
@@ -143,20 +139,9 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 			projectionViewer.disableProjection();
 		}
 		uninstallFoldingSupport();
-		invokeUninstallHighlightingHelper();
+		uninstallHighlightingHelper();
 		if (getSourceViewer() instanceof final SourceViewer sourceViewer) {
 			sourceViewer.setCodeMiningProviders(null);
-		}
-	}
-
-	protected void invokeUninstallHighlightingHelper() {
-		// uninstallHighlightingHelper() is unfortunately private in XtextEditor
-		try {
-			final Method method = XtextEditor.class.getDeclaredMethod("uninstallHighlightingHelper"); //$NON-NLS-1$
-			method.setAccessible(true); // NOSONAR
-			method.invoke(this);
-		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
-			FordiacLogHelper.logError("Cannot invoke uninstallHighlightingHelper() in XtextEditor", e); //$NON-NLS-1$
 		}
 	}
 

@@ -3529,6 +3529,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EReference getTypedSubApp_VarConfigParams() {
+		return (EReference)typedSubAppEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getUntypedSubApp() {
 		return untypedSubAppEClass;
 	}
@@ -4206,6 +4216,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		typedSubAppEClass = createEClass(TYPED_SUB_APP);
 		createEReference(typedSubAppEClass, TYPED_SUB_APP__SUB_APP_NETWORK);
+		createEReference(typedSubAppEClass, TYPED_SUB_APP__VAR_CONFIG_PARAMS);
 
 		untypedSubAppEClass = createEClass(UNTYPED_SUB_APP);
 		createEReference(untypedSubAppEClass, UNTYPED_SUB_APP__SUB_APP_NETWORK);
@@ -5413,6 +5424,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(typedSubAppEClass, TypedSubApp.class, "TypedSubApp", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getTypedSubApp_SubAppNetwork(), this.getFBNetwork(), null, "subAppNetwork", null, 0, 1, TypedSubApp.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getTypedSubApp_VarConfigParams(), this.getVarDeclaration(), null, "varConfigParams", null, 0, -1, TypedSubApp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(typedSubAppEClass, theXMLTypePackage.getBoolean(), "isTyped", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -5564,6 +5576,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createExtendedMetaDataAnnotations();
 		// http://www.eclipse.org/emf/2002/Ecore
 		createEcoreAnnotations();
+		// http:///org/eclipse/fordiac/ide/model/HashMetaData
+		createHashMetaDataAnnotations();
 		// http:///org/eclipse/fordiac/ide/model/MetaData
 		createMetaDataAnnotations();
 	}
@@ -6374,6 +6388,70 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   source,
 		   new String[] {
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http:///org/eclipse/fordiac/ide/model/HashMetaData</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createHashMetaDataAnnotations() {
+		String source = "http:///org/eclipse/fordiac/ide/model/HashMetaData"; //$NON-NLS-1$
+		addAnnotation
+		  (connectionRoutingDataEClass,
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getECTransition_ConditionExpression(),
+		   source,
+		   new String[] {
+			   "transformer", "org.eclipse.fordiac.ide.model.util.StringTransformer" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getINamedElement_Comment(),
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (positionEClass,
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getService_Comment(),
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getTextAlgorithm_Text(),
+		   source,
+		   new String[] {
+			   "transformer", "org.eclipse.fordiac.ide.model.util.StringTransformer" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getTextFunction_Text(),
+		   source,
+		   new String[] {
+			   "transformer", "org.eclipse.fordiac.ide.model.util.StringTransformer" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getTextFunctionBody_Text(),
+		   source,
+		   new String[] {
+			   "transformer", "org.eclipse.fordiac.ide.model.util.StringTransformer" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getTextMethod_Text(),
+		   source,
+		   new String[] {
+			   "transformer", "org.eclipse.fordiac.ide.model.util.StringTransformer" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 	}
 

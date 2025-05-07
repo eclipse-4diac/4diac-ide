@@ -27,4 +27,11 @@ public final class PreferenceConstants {
 	/** The Constant for the Compare Editor Preference. */
 	public static final String P_COMPARE_EDITOR = "compareeditor"; //$NON-NLS-1$
 
+	/** The Constant for the Type Export Preferences. */
+	public static final String ENABLE_TYPE_EXPORT = "ENABLE_TYPE_EXPORT"; //$NON-NLS-1$
+	public static final String OUTPUT_FOLDER = "OUTPUT_FOLDER"; //$NON-NLS-1$
+	public static final String EXPORT_FILTER_ID = "EXPORT_FILTER_ID"; //$NON-NLS-1$
+
+	public static final String DEFAULT_OUTPUT_FOLDER_NAME = "out"; //$NON-NLS-1$
+
 }

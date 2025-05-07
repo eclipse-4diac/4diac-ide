@@ -41,7 +41,7 @@ public interface TextAlgorithm extends Algorithm {
 	 * @return the value of the '<em>Text</em>' attribute.
 	 * @see #setText(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextAlgorithm_Text()
-	 * @model
+	 * @model annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData transformer='org.eclipse.fordiac.ide.model.util.StringTransformer'"
 	 * @generated
 	 */
 	String getText();

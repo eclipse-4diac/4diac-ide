@@ -14,8 +14,14 @@
 package org.eclipse.fordiac.ide.model.search;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.search.ui.ISearchQuery;
@@ -31,6 +37,8 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 	private final List<EObject> results;
 
 	private final SearchNameDictionary dictionary;
+
+	private final Map<URI, Set<Match>> matches = new HashMap<>();
 
 	public ModelSearchResult(final ISearchQuery job) {
 		this.modelSearchQuery = job;
@@ -73,6 +81,24 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 		}
 	}
 
+	public Match[] getFordiacMatches(final URI uri) {
+		final Set<Match> targetMatches = matches.get(uri);
+		if (targetMatches == null) {
+			return new Match[0];
+		}
+		return targetMatches.toArray(new Match[targetMatches.size()]);
+	}
+
+	public void addFordiacMatch(final Match match) {
+		matches.computeIfAbsent(match.getUri(),
+				k -> new ConcurrentSkipListSet<Match>(Comparator.comparing(Match::getLocation))).add(match);
+	}
+
+	public boolean hasFordiacMatch(final URI uri) {
+		final var uriMatches = matches.get(uri);
+		return uriMatches != null && !uriMatches.isEmpty();
+	}
+
 	private SearchResultEvent getSearchResultEvent(final EObject el, final int eventKind) {
 		final ModelSearchResultEvent searchResEvent = new ModelSearchResultEvent(this);
 		searchResEvent.setKind(eventKind);
@@ -103,7 +129,7 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 	public void clear() {
 		final EObject first = (results.isEmpty()) ? null : results.get(0);
 		results.clear();
-		removeAll();
+		matches.clear();
 		fireChange(getSearchResultEvent(first, ModelSearchResultEvent.REMOVED));
 	}
 

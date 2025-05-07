@@ -29,13 +29,13 @@ import org.eclipse.xtext.scoping.Scopes;
  */
 public class ContractSpecScopeProvider extends AbstractContractSpecScopeProvider {
 
-	public static URI interfaceURI;
+	private static URI interfaceURI;
 	private static final ContractSpecPackage pack = ContractSpecPackage.eINSTANCE;
 
 	@Override
 	public IScope getScope(final EObject context, final EReference reference) {
-		if (interfaceURI != null && (reference == pack.getEventSpec_Port() || reference == pack.getCausalFuncDecl_P1()
-				|| reference == pack.getCausalFuncDecl_P2())) {
+		if (interfaceURI != null && (reference == pack.getEventSpec_Port()
+				|| reference == pack.getCausalFuncDecl_Port1() || reference == pack.getCausalFuncDecl_Port2())) {
 
 			final var res = context.eResource().getResourceSet().getResource(interfaceURI, false);
 			if (res != null) {
@@ -43,5 +43,9 @@ public class ContractSpecScopeProvider extends AbstractContractSpecScopeProvider
 			}
 		}
 		return super.getScope(context, reference);
+	}
+
+	public static void setInterfaceURI(final URI uri) {
+		interfaceURI = uri;
 	}
 }

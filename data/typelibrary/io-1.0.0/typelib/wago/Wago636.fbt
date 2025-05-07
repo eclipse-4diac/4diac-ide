@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="Wago636" Comment="Wago 750-636 DC-Drive-Controller 24V 5A">
+	<Identification Standard="61499-2" Description="Copyright (c) 2025 Monika Wenger&#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Monika Wenger" Date="2025-05-05">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="MAP" Type="Event" Comment="Map Pins">
+				<With Var="LimitSwitchP"/>
+				<With Var="LimitSwitchN"/>
+				<With Var="QI"/>
+				<With Var="MotorP"/>
+				<With Var="MotorN"/>
+				<With Var="CurrentPosition"/>
+				<With Var="TargetPosition"/>
+				<With Var="QuitErrors"/>
+				<With Var="Positioning"/>
+				<With Var="Preset"/>
+				<With Var="Busy"/>
+				<With Var="OptimizeOnZInput"/>
+				<With Var="OnTarget"/>
+				<With Var="ReferenceOk"/>
+				<With Var="OptimizeOn"/>
+				<With Var="PresetInput"/>
+				<With Var="PresetInputEnable"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="MAPO" Type="Event" Comment="Confirm Pin Mapping">
+				<With Var="QO"/>
+			</Event>
+			<Event Name="IND" Type="Event" Comment="Indication from Resource">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+			<VarDeclaration Name="Busy" Type="STRING" Comment="True as long as command is executed as IX"/>
+			<VarDeclaration Name="LimitSwitchN" Type="STRING" Comment="Reference switch negative (Hardware pin) as IX"/>
+			<VarDeclaration Name="LimitSwitchP" Type="STRING" Comment="Reference switch positive (Hardware Pin) as IX"/>
+			<VarDeclaration Name="PresetInput" Type="STRING" Comment="(Hardware pin) IX"/>
+			<VarDeclaration Name="OptimizeOnZInput" Type="STRING" Comment="(Hardware pin) IX"/>
+			<VarDeclaration Name="OnTarget" Type="STRING" Comment="True when Positioning ended at target area as IX"/>
+			<VarDeclaration Name="ReferenceOk" Type="STRING" Comment="True when reference movement was successfull as IX"/>
+			<VarDeclaration Name="CurrentPosition" Type="STRING" Comment="Current position as ID"/>
+			<VarDeclaration Name="TargetPosition" Type="STRING" Comment="Target position as QD"/>
+			<VarDeclaration Name="MotorN" Type="STRING" Comment="Motor A- (Hardware pin) as QX"/>
+			<VarDeclaration Name="MotorP" Type="STRING" Comment="Motor A+ (Hardware pin) as QX"/>
+			<VarDeclaration Name="Positioning" Type="STRING" Comment="Drive to target position (MotorN, MotorP = false) as QX"/>
+			<VarDeclaration Name="OptimizeOn" Type="STRING" Comment="turn prestop optimization on as QX"/>
+			<VarDeclaration Name="Preset" Type="STRING" Comment="A rising edge copies the target position into the current position as QX"/>
+			<VarDeclaration Name="PresetInputEnable" Type="STRING" Comment="preset input enabled (OptimizeOnZInput means optimize on), preset input disbaled (OptimizeOnZInput means z input) as QX"/>
+			<VarDeclaration Name="QuitErrors" Type="STRING" Comment="Quits error Bits as QX"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status"/>
+		</OutputVars>
+		<Plugs>
+			<AdapterDeclaration Name="BusAdapterOut" Type="WagoBusAdapter"/>
+		</Plugs>
+		<Sockets>
+			<AdapterDeclaration Name="BusAdapterIn" Type="WagoBusAdapter"/>
+		</Sockets>
+	</InterfaceList>
+</FBType>

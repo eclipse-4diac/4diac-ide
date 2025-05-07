@@ -57,7 +57,7 @@ public class ContractspecResourceProvider implements IEditedResourceProvider {
 
 	private static void addFBInterface(final ResourceSet set, final FBNetworkElement fbElem) {
 		final Resource r = set.createResource(SYNTHETIC_URI_INTERFACE);
-		ContractSpecScopeProvider.interfaceURI = SYNTHETIC_URI_INTERFACE;
+		ContractSpecScopeProvider.setInterfaceURI(SYNTHETIC_URI_INTERFACE);
 
 		fbElem.getInterface().getInputs().forEach(ie -> {
 			final Port p = ContractSpecFactory.eINSTANCE.createPort();

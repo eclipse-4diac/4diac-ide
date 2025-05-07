@@ -23,9 +23,10 @@ package org.eclipse.fordiac.ide.contractSpec;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Age#getTrigger <em>Trigger</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Age#getReaction <em>Reaction</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Age#getOutput <em>Output</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Age#getInput <em>Input</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Age#getInterval <em>Interval</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Age#isOnce <em>Once</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Age#getN <em>N</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Age#getOutOf <em>Out Of</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Age#getClock <em>Clock</em>}</li>
@@ -38,48 +39,48 @@ package org.eclipse.fordiac.ide.contractSpec;
 public interface Age extends TimeSpec
 {
   /**
-   * Returns the value of the '<em><b>Trigger</b></em>' containment reference.
+   * Returns the value of the '<em><b>Output</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Trigger</em>' containment reference.
-   * @see #setTrigger(EventExpr)
-   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getAge_Trigger()
+   * @return the value of the '<em>Output</em>' containment reference.
+   * @see #setOutput(EventExpr)
+   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getAge_Output()
    * @model containment="true"
    * @generated
    */
-  EventExpr getTrigger();
+  EventExpr getOutput();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Age#getTrigger <em>Trigger</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Age#getOutput <em>Output</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Trigger</em>' containment reference.
-   * @see #getTrigger()
+   * @param value the new value of the '<em>Output</em>' containment reference.
+   * @see #getOutput()
    * @generated
    */
-  void setTrigger(EventExpr value);
+  void setOutput(EventExpr value);
 
   /**
-   * Returns the value of the '<em><b>Reaction</b></em>' containment reference.
+   * Returns the value of the '<em><b>Input</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Reaction</em>' containment reference.
-   * @see #setReaction(EventExpr)
-   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getAge_Reaction()
+   * @return the value of the '<em>Input</em>' containment reference.
+   * @see #setInput(EventExpr)
+   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getAge_Input()
    * @model containment="true"
    * @generated
    */
-  EventExpr getReaction();
+  EventExpr getInput();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Age#getReaction <em>Reaction</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Age#getInput <em>Input</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Reaction</em>' containment reference.
-   * @see #getReaction()
+   * @param value the new value of the '<em>Input</em>' containment reference.
+   * @see #getInput()
    * @generated
    */
-  void setReaction(EventExpr value);
+  void setInput(EventExpr value);
 
   /**
    * Returns the value of the '<em><b>Interval</b></em>' containment reference.
@@ -102,6 +103,28 @@ public interface Age extends TimeSpec
    * @generated
    */
   void setInterval(Interval value);
+
+  /**
+   * Returns the value of the '<em><b>Once</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Once</em>' attribute.
+   * @see #setOnce(boolean)
+   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getAge_Once()
+   * @model
+   * @generated
+   */
+  boolean isOnce();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Age#isOnce <em>Once</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Once</em>' attribute.
+   * @see #isOnce()
+   * @generated
+   */
+  void setOnce(boolean value);
 
   /**
    * Returns the value of the '<em><b>N</b></em>' attribute.

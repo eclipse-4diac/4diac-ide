@@ -1,58 +1,68 @@
 <?xml version="1.0" encoding="ASCII"?>
-<opsem:EventManager xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:libraryElement="org.eclipse.fordiac.ide.model.libraryElement" xmlns:opsem="http://OperationalSemantics/1.0">
+<opsem:EventManager xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:data="org.eclipse.fordiac.ide.model.datatype" xmlns:libraryElement="org.eclipse.fordiac.ide.model.libraryElement" xmlns:opsem="http://OperationalSemantics/1.0">
   <transactions xsi:type="opsem:FBTransaction">
     <inputEventOccurrence>
       <event href="../ReferenceExamples.sys#//@application.4/@fBNetwork/@networkElements.3/@subAppNetwork/@networkElements.0/@interface/@eventInputs.0"/>
       <fbRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork>
           <networkElements xsi:type="libraryElement:FB" name="E_PERMIT">
-            <position x="40" y="5"/>
+            <position x="266.6666666666667" y="33.333333333333336"/>
             <interface>
               <eventInputs name="EI" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@inputVars.0"/>
               </eventInputs>
-              <eventOutputs name="EO"/>
-              <inputVars name="PERMIT" isInput="true" typeName="BOOL" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage="" value="0"/>
+              <eventOutputs name="EO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
+              <inputVars name="PERMIT" isInput="true" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:BoolType" href="data.lib#/12"/>
+                <value value="0"/>
               </inputVars>
             </interface>
           </networkElements>
         </fbnetwork>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.4/@fBNetwork/@networkElements.3/@subAppNetwork/@networkElements.0"/>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.4/@fBNetwork/@networkElements.3/@subAppNetwork/@networkElements.0"/>
       <resultFBRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork>
           <networkElements xsi:type="libraryElement:FB" name="E_PERMIT">
-            <position x="40" y="5"/>
+            <position x="266.6666666666667" y="33.333333333333336"/>
             <interface>
               <eventInputs name="EI" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@inputVars.0"/>
               </eventInputs>
-              <eventOutputs name="EO"/>
-              <inputVars name="PERMIT" isInput="true" typeName="BOOL" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage="" value="0"/>
+              <eventOutputs name="EO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventOutputs>
+              <inputVars name="PERMIT" isInput="true" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:BoolType" href="data.lib#/12"/>
+                <value value="0"/>
               </inputVars>
             </interface>
           </networkElements>
         </fbnetwork>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.4/@fBNetwork/@networkElements.3/@subAppNetwork/@networkElements.0"/>
-          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.4/@fBNetwork/@networkElements.3/@subAppNetwork/@networkElements.0"/>
+          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="START">
             <basicfbtype name="E_DEFAULT_PERMIT" comment="permissive propagation of an event">
               <versionInfo author="Bianca Wiesmayr" date="2023-03-08" organization="Johannes Kepler University Linz" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
               <identification description="Copyright (c) 2023 Johannes Kepler University Linz This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0 &#xA;" standard="61499-1 Annex A"/>
               <interfaceList>
                 <eventInputs name="EI" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@inputVars.0"/>
                 </eventInputs>
-                <eventOutputs name="EO"/>
-                <inputVars name="PERMIT" isInput="true" typeName="BOOL" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventInputs.0/@with.0">
-                  <value errorMessage="" value="0"/>
+                <eventOutputs name="EO">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventOutputs>
+                <inputVars name="PERMIT" isInput="true" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventInputs.0/@with.0">
+                  <type xsi:type="data:BoolType" href="data.lib#/12"/>
+                  <value value="0"/>
                 </inputVars>
               </interfaceList>
-              <service>
+              <service comment="permissive propagation of an event">
                 <rightInterface name="right interface"/>
                 <leftInterface name="left interface"/>
                 <serviceSequence name="Service Sequence" startState="START">
@@ -76,17 +86,17 @@
               </service>
               <eCC start="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
                 <eCState name="START" comment="Initial State" outTransitions="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.0" inTransitions="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.1">
-                  <position x="56" y="75"/>
+                  <position x="373.33333333333337" y="500.0"/>
                 </eCState>
                 <eCState name="EO" comment="Event propagration permited" outTransitions="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCTransition.0">
-                  <position x="225" y="75"/>
+                  <position x="1500.0" y="500.0"/>
                   <eCAction output="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.0"/>
                 </eCState>
                 <eCTransition conditionExpression="PERMIT" source="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventInputs.0">
-                  <position x="180" y="36"/>
+                  <position x="1200.0" y="240.0"/>
                 </eCTransition>
                 <eCTransition source="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
-                  <position x="180" y="132"/>
+                  <position x="1200.0" y="880.0"/>
                 </eCTransition>
               </eCC>
             </basicfbtype>

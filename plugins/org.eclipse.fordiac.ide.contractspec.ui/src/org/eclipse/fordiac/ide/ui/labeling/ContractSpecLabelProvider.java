@@ -13,29 +13,23 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.labeling;
 
-import com.google.inject.Inject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider;
 
+import com.google.inject.Inject;
+
 /**
  * Provides labels for EObjects.
- * 
- * See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#label-provider
+ *
+ * See
+ * https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#label-provider
  */
 public class ContractSpecLabelProvider extends DefaultEObjectLabelProvider {
 
 	@Inject
-	public ContractSpecLabelProvider(AdapterFactoryLabelProvider delegate) {
+	public ContractSpecLabelProvider(final AdapterFactoryLabelProvider delegate) {
 		super(delegate);
 	}
 
-	// Labels and icons can be computed like this:
-	
-//	String text(Greeting ele) {
-//		return "A greeting to " + ele.getName();
-//	}
-//
-//	String image(Greeting ele) {
-//		return "Greeting.gif";
-//	}
+	// Labels and icons can be computed here
 }

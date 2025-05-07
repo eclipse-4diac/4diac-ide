@@ -25,10 +25,10 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Interval#getTime <em>Time</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Interval#getB1 <em>B1</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Interval#getV1 <em>V1</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Interval#getV2 <em>V2</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Interval#getB2 <em>B2</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Interval#getLBound <em>LBound</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Interval#getLbValue <em>Lb Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Interval#getUbValue <em>Ub Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Interval#getUBound <em>UBound</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.Interval#getUnit <em>Unit</em>}</li>
  * </ul>
  *
@@ -61,113 +61,116 @@ public interface Interval extends EObject
   void setTime(TimeExpr value);
 
   /**
-   * Returns the value of the '<em><b>B1</b></em>' attribute.
+   * Returns the value of the '<em><b>LBound</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>B1</em>' attribute.
-   * @see #setB1(String)
-   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getInterval_B1()
+   * @return the value of the '<em>LBound</em>' attribute.
+   * @see #setLBound(String)
+   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getInterval_LBound()
    * @model
    * @generated
    */
-  String getB1();
+  String getLBound();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getB1 <em>B1</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getLBound <em>LBound</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>B1</em>' attribute.
-   * @see #getB1()
+   * @param value the new value of the '<em>LBound</em>' attribute.
+   * @see #getLBound()
    * @generated
    */
-  void setB1(String value);
+  void setLBound(String value);
 
   /**
-   * Returns the value of the '<em><b>V1</b></em>' containment reference.
+   * Returns the value of the '<em><b>Lb Value</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>V1</em>' containment reference.
-   * @see #setV1(Value)
-   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getInterval_V1()
-   * @model containment="true"
-   * @generated
-   */
-  Value getV1();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getV1 <em>V1</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>V1</em>' containment reference.
-   * @see #getV1()
-   * @generated
-   */
-  void setV1(Value value);
-
-  /**
-   * Returns the value of the '<em><b>V2</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>V2</em>' containment reference.
-   * @see #setV2(Value)
-   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getInterval_V2()
-   * @model containment="true"
-   * @generated
-   */
-  Value getV2();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getV2 <em>V2</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>V2</em>' containment reference.
-   * @see #getV2()
-   * @generated
-   */
-  void setV2(Value value);
-
-  /**
-   * Returns the value of the '<em><b>B2</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>B2</em>' attribute.
-   * @see #setB2(String)
-   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getInterval_B2()
+   * @return the value of the '<em>Lb Value</em>' attribute.
+   * @see #setLbValue(double)
+   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getInterval_LbValue()
    * @model
    * @generated
    */
-  String getB2();
+  double getLbValue();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getB2 <em>B2</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getLbValue <em>Lb Value</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>B2</em>' attribute.
-   * @see #getB2()
+   * @param value the new value of the '<em>Lb Value</em>' attribute.
+   * @see #getLbValue()
    * @generated
    */
-  void setB2(String value);
+  void setLbValue(double value);
+
+  /**
+   * Returns the value of the '<em><b>Ub Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Ub Value</em>' attribute.
+   * @see #setUbValue(double)
+   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getInterval_UbValue()
+   * @model
+   * @generated
+   */
+  double getUbValue();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getUbValue <em>Ub Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Ub Value</em>' attribute.
+   * @see #getUbValue()
+   * @generated
+   */
+  void setUbValue(double value);
+
+  /**
+   * Returns the value of the '<em><b>UBound</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>UBound</em>' attribute.
+   * @see #setUBound(String)
+   * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getInterval_UBound()
+   * @model
+   * @generated
+   */
+  String getUBound();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getUBound <em>UBound</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>UBound</em>' attribute.
+   * @see #getUBound()
+   * @generated
+   */
+  void setUBound(String value);
 
   /**
    * Returns the value of the '<em><b>Unit</b></em>' attribute.
+   * The literals are from the enumeration {@link org.eclipse.fordiac.ide.contractSpec.Unit}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Unit</em>' attribute.
-   * @see #setUnit(String)
+   * @see org.eclipse.fordiac.ide.contractSpec.Unit
+   * @see #setUnit(Unit)
    * @see org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage#getInterval_Unit()
    * @model
    * @generated
    */
-  String getUnit();
+  Unit getUnit();
 
   /**
    * Sets the value of the '{@link org.eclipse.fordiac.ide.contractSpec.Interval#getUnit <em>Unit</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Unit</em>' attribute.
+   * @see org.eclipse.fordiac.ide.contractSpec.Unit
    * @see #getUnit()
    * @generated
    */
-  void setUnit(String value);
+  void setUnit(Unit value);
 
 } // Interval

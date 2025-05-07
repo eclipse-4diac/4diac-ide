@@ -3,9 +3,24 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (c) 2024 Felix Schmid&#xD;&#xA;&#xD;&#xA;This program and the accompanying materials are made available under the&#xD;&#xA;terms of the Eclipse Public License 2.0 which is available at&#xD;&#xA;http://www.eclipse.org/legal/epl-2.0.&#xD;&#xA;&#xD;&#xA;SPDX-License-Identifier: EPL-2.0&#xD;&#xA;&#xD;&#xA;Contributors:&#xD;&#xA;  Felix Schmid&#xD;&#xA;    - initial implementation and/or documentation"
     modelDirectory="/org.eclipse.fordiac.ide.contractspec/src-gen" modelPluginID="org.eclipse.fordiac.ide.contractspec"
     forceOverwrite="true" modelName="ContractSpec" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
-    complianceLevel="11.0" copyrightFields="false" runtimeVersion="2.29">
+    complianceLevel="17.0" copyrightFields="false" runtimeVersion="2.36">
   <genPackages prefix="ContractSpec" basePackage="org.eclipse.fordiac.ide" disposableProviderFactory="true"
       fileExtensions="contract" ecorePackage="ContractSpec.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="ContractSpec.ecore#//Unit">
+      <genEnumLiterals ecoreEnumLiteral="ContractSpec.ecore#//Unit/S"/>
+      <genEnumLiterals ecoreEnumLiteral="ContractSpec.ecore#//Unit/MS"/>
+      <genEnumLiterals ecoreEnumLiteral="ContractSpec.ecore#//Unit/US"/>
+      <genEnumLiterals ecoreEnumLiteral="ContractSpec.ecore#//Unit/NS"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="ContractSpec.ecore#//CausalFuncName">
+      <genEnumLiterals ecoreEnumLiteral="ContractSpec.ecore#//CausalFuncName/REACTION"/>
+      <genEnumLiterals ecoreEnumLiteral="ContractSpec.ecore#//CausalFuncName/AGE"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="ContractSpec.ecore#//CausalRelation">
+      <genEnumLiterals ecoreEnumLiteral="ContractSpec.ecore#//CausalRelation/FIFO"/>
+      <genEnumLiterals ecoreEnumLiteral="ContractSpec.ecore#//CausalRelation/LIFO"/>
+      <genEnumLiterals ecoreEnumLiteral="ContractSpec.ecore#//CausalRelation/ID"/>
+    </genEnums>
     <genClasses ecoreClass="ContractSpec.ecore#//Model">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Model/timeSpec"/>
     </genClasses>
@@ -32,35 +47,38 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Offset/interval"/>
     </genClasses>
     <genClasses ecoreClass="ContractSpec.ecore#//Reaction">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Reaction/trigger"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Reaction/reaction"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Reaction/input"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Reaction/output"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Reaction/interval"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Reaction/once"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Reaction/n"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Reaction/outOf"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Reaction/clock"/>
     </genClasses>
     <genClasses ecoreClass="ContractSpec.ecore#//Age">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Age/trigger"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Age/reaction"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Age/output"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Age/input"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Age/interval"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Age/once"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Age/n"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Age/outOf"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Age/clock"/>
     </genClasses>
     <genClasses ecoreClass="ContractSpec.ecore#//CausalReaction">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalReaction/e1"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalReaction/e2"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalReaction/input"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalReaction/output"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalReaction/interval"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalReaction/clock"/>
     </genClasses>
     <genClasses ecoreClass="ContractSpec.ecore#//CausalAge">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalAge/e1"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalAge/e2"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalAge/output"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalAge/input"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalAge/interval"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalAge/clock"/>
     </genClasses>
     <genClasses ecoreClass="ContractSpec.ecore#//EventExpr">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//EventExpr/event"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//EventExpr/sequence"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//EventExpr/events"/>
     </genClasses>
     <genClasses ecoreClass="ContractSpec.ecore#//EventList">
@@ -76,24 +94,20 @@
     </genClasses>
     <genClasses ecoreClass="ContractSpec.ecore#//Interval">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Interval/time"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Interval/b1"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Interval/v1"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//Interval/v2"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Interval/b2"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Interval/lBound"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Interval/lbValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Interval/ubValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Interval/uBound"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Interval/unit"/>
     </genClasses>
     <genClasses ecoreClass="ContractSpec.ecore#//TimeExpr">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//TimeExpr/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//TimeExpr/value"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//TimeExpr/unit"/>
-    </genClasses>
-    <genClasses ecoreClass="ContractSpec.ecore#//Value">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Value/integer"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//Value/fraction"/>
     </genClasses>
     <genClasses ecoreClass="ContractSpec.ecore#//CausalFuncDecl">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//CausalFuncDecl/funcName"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalFuncDecl/p1"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalFuncDecl/p2"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalFuncDecl/port1"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ContractSpec.ecore#//CausalFuncDecl/port2"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ContractSpec.ecore#//CausalFuncDecl/relation"/>
     </genClasses>
     <genClasses ecoreClass="ContractSpec.ecore#//ClockDefinition">

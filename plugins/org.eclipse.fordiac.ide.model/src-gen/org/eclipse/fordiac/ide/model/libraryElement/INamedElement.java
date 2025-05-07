@@ -71,6 +71,7 @@ public interface INamedElement extends EObject {
 	 * @see #setComment(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getINamedElement_Comment()
 	 * @model default="" dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData ignored='true'"
 	 * @generated
 	 */
 	String getComment();

@@ -134,6 +134,11 @@ public class AttributeTypeEntryMock extends BasicNotifierImpl implements Attribu
 	}
 
 	@Override
+	public String getTypeHash() {
+		return ""; //$NON-NLS-1$
+	}
+
+	@Override
 	public String getComment() {
 		return attributeDeclaration.getComment();
 	}
