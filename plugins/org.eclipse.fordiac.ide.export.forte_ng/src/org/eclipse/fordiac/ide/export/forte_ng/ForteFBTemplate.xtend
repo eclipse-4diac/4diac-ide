@@ -30,7 +30,6 @@ import java.util.Map
 import java.util.Set
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.LibraryElementTags
-import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
@@ -279,7 +278,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			// nothing to do
 		«ENDIF»
 	'''
-	
+
 	def protected generateReadInputDataVariable(VarDeclaration variable) '''
 		readData(«variable.absoluteDataPortIndex», «variable.generateName», «IF variable.inOutVar»&«ENDIF»«variable.generateNameAsConnection»);
 	'''
@@ -622,8 +621,10 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def protected void getUsedIEStrings(IInterfaceElement ie, Set<String> strings) {
 		strings.add(ie.name)
 		strings.add(ie.type.generateTypeNamePlain)
-		if (ie.type instanceof ArrayType) {
-			strings.add((ie.type as ArrayType).baseType.generateTypeNamePlain)
+		if (ie instanceof VarDeclaration) {
+			if (ie.array) {
+				strings.add("ARRAY")
+			}
 		}
 	}
 
