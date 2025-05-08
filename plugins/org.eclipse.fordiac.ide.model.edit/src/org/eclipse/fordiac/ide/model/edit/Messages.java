@@ -19,9 +19,14 @@ public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.edit.messages"; //$NON-NLS-1$
 
 	public static String TypeEntryEditor_FileChangedTitle;
-	public static String TypeEntryEditor_filedchanged_message;
+	public static String TypeEntryEditor_FileChanged_message;
 	public static String TypeEntryEditor_replace_button_label;
 	public static String TypeEntryEditor_dontreplace_button_label;
+
+	public static String TypeEntryEditor_FilesChangedTitle;
+	public static String TypeEntryEditor_FilesChanged_message;
+	public static String TypeEntryEditor_RedoSearch_label;
+	public static String TypeEntryEditor_IgnoreChanges_label;
 
 	static {
 		// initialize resource bundle
