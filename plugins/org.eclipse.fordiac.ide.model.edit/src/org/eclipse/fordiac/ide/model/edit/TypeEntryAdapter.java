@@ -12,14 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.edit;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeDeclarationCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeTypeCommand;
@@ -48,19 +46,28 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.part.FileEditorInput;
 
-public class TypeEntryAdapter extends AdapterImpl {
+public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 
 	private final ITypeEntryEditor editor;
-	private boolean reloadPending;
 
 	public TypeEntryAdapter(final ITypeEntryEditor editor) {
 		this.editor = editor;
+	}
+
+	@Override
+	protected IEditorPart getEditor() {
+		return editor;
+	}
+
+	@Override
+	protected void reloadEditorType() {
+		editor.reloadType();
 	}
 
 	@Override
@@ -73,7 +80,7 @@ public class TypeEntryAdapter extends AdapterImpl {
 		}
 
 		switch (feature) {
-		case TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE:
+		case TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE, TypeEntry.TYPE_ENTRY_TYPE_FEATURE:
 			handleFileContentChange();
 			break;
 		case TypeEntry.TYPE_ENTRY_FILE_FEATURE:
@@ -96,42 +103,6 @@ public class TypeEntryAdapter extends AdapterImpl {
 		}
 	}
 
-	public void checkFileReload() {
-		if (reloadPending) {
-			performReload();
-		}
-	}
-
-	private void handleFileContentChange() {
-		if (editor.equals(editor.getSite().getPage().getActiveEditor())) {
-			performReload();
-		} else {
-			reloadPending = true;
-		}
-
-	}
-
-	private void performReload() {
-		Display.getDefault().asyncExec(() -> {
-			if (!editorClosed() && (!editor.isDirty() || openFileChangedDialog() == 0)) {
-				editor.reloadType();
-			}
-		});
-		reloadPending = false;
-	}
-
-	private int openFileChangedDialog() {
-		final String message = MessageFormat.format(Messages.TypeEntryEditor_filedchanged_message,
-				editor.getEditorInput().getName());
-		final MessageDialog dialog = new MessageDialog(editor.getSite().getShell(),
-				Messages.TypeEntryEditor_FileChangedTitle, null, message, MessageDialog.QUESTION,
-				new String[] { Messages.TypeEntryEditor_replace_button_label,
-						Messages.TypeEntryEditor_dontreplace_button_label },
-				0);
-
-		return dialog.open();
-	}
-
 	private void handleDependencyUpdate(final TypeEntry typeEntry) {
 		final LibraryElement editedElement = editor.getAdapter(LibraryElement.class);
 		if (editedElement != null) {
@@ -151,10 +122,6 @@ public class TypeEntryAdapter extends AdapterImpl {
 				}
 			});
 		}
-	}
-
-	private boolean editorClosed() {
-		return editor.getSite().getPage() == null;
 	}
 
 	private static void handleAttributeTypeEntryUpdate(final LibraryElement editedElement,
@@ -217,7 +184,6 @@ public class TypeEntryAdapter extends AdapterImpl {
 			}
 			return null;
 		}).filter(Objects::nonNull).forEach(Command::execute);
-
 	}
 
 }
