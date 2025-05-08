@@ -20,6 +20,12 @@ public final class Messages extends NLS {
 
 	public static String BulkEditor;
 
+	public static String Dirty_Editor;
+	public static String Dirty_Editors;
+	public static String Dirty_Editor_IgnoreChange;
+	public static String Dirty_Editor_SaveAndSearch;
+	public static String Dirty_Editors_SaveAndSearch;
+
 	public static String Variable;
 	public static String Attribute;
 

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +26,7 @@ import java.util.function.Predicate;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
@@ -57,6 +59,8 @@ import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider
 import org.eclipse.fordiac.ide.model.ui.widgets.ImportContentProposal;
 import org.eclipse.fordiac.ide.model.ui.widgets.ImportTypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
@@ -67,6 +71,7 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.jface.bindings.keys.KeyStroke;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
@@ -91,7 +96,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.forms.widgets.Twistie;
 import org.eclipse.ui.part.EditorPart;
 
@@ -105,6 +113,15 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private final CommandStack commandStack = new CommandStack();
 	private final Map<TypeEntry, CopyElementRecord> map = new HashMap<>();
 	private BulkEditorSettings settings;
+	private final BulkEditorTypeEntryAdapter adapter = new BulkEditorTypeEntryAdapter(this);
+	private final IPartListener2 focusListener = new IPartListener2() {
+		@Override
+		public void partActivated(final IWorkbenchPartReference partRef) {
+			if (partRef.getPart(false) == BulkEditor.this) {
+				checkTypeEntriesForDirty();
+			}
+		}
+	};
 
 	// Search For
 	private Combo modeSelectionDropDown;
@@ -176,6 +193,8 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 		scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		composite.layout();
+
+		getSite().getPage().addPartListener(focusListener);
 	}
 
 	private static <T> List<T> mapList(final List<EObject> ori, final Class<T> clazz) {
@@ -283,59 +302,114 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	private void createSearchButton(final Composite parent) {
 		WidgetFactory.button(SWT.PUSH).text(Messages.Search).onSelect(event -> {
-			final SearchHelper helper = new SearchHelper(
-					new SearchHelper.FilterRecordClass(settings.fbSubappTypes,
-							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
-							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
-							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecordClass(settings.fbTypedSubappInstance,
-							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
-							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
-							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecordClass(settings.untypedSubapp,
-							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
-							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
-							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecordClass(settings.dataTypes,
-							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
-							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
-							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecordClass(settings.attributeTypes,
-							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
-							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
-							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					ignoreLinkedLibrariesButton.getSelection());
-
-			final List<ISearchContext> contexts = helper.createSearchContextList(workspaceScopeButton.getSelection(),
-					projectScopeButton.getSelection(), project);
-
-			final var result = contexts.stream()
-					.flatMap(context -> new IEC61499ElementSearch(context,
-							SearchHelper.createSearchFilter(modeSelectionDropDown.getSelectionIndex(),
-									DEFAULT_LIST.stream().map(searchFilter::getFilter).toList()),
-							helper.createChildrenSearchProvider()).performSearch().stream())
-					.toList();
-
-			final List<EObject> mappedList = createMappedList(result);
-
-			if (modeSelectionDropDown.getSelectionIndex() == 0
-					&& (mappedList.isEmpty() || mappedList.getFirst() instanceof VarDeclaration)) {
-				varDeclProvider.setInput(mapList(mappedList, VarDeclaration.class));
-			} else if (modeSelectionDropDown.getSelectionIndex() == 1
-					&& (mappedList.isEmpty() || mappedList.getFirst() instanceof Attribute)) {
-				attributeProvider.setInput(mapList(mappedList, Attribute.class));
-			}
-			natTable.refresh();
+			performSearch();
+			checkTypeEntriesForDirty();
 		}).create(parent);
+
+	}
+
+	private void checkTypeEntriesForDirty() {
+		final var editors = EditorUtils.findEditor(part -> {
+			if (!part.isDirty()) {
+				return false;
+			}
+
+			final LibraryElement libE = part.getAdapter(LibraryElement.class);
+			if (libE == null) {
+				return false;
+			}
+
+			return map.containsKey(libE.getTypeEntry());
+		});
+
+		if (editors.length <= 0) {
+			return;
+		}
+
+		final StringBuilder sb = new StringBuilder();
+		for (final IEditorPart editor : editors) {
+			sb.append("\n"); //$NON-NLS-1$
+			sb.append(editor.getAdapter(LibraryElement.class).getTypeEntry().getFile().getFullPath().toOSString());
+		}
+		sb.append("\n"); //$NON-NLS-1$
+
+		final MessageDialog dialog = new MessageDialog(this.getSite().getShell(), "", null, //$NON-NLS-1$
+				MessageFormat
+						.format(editors.length > 1 ? Messages.Dirty_Editors : Messages.Dirty_Editor, sb.toString()),
+				MessageDialog.QUESTION,
+				new String[] { Messages.Dirty_Editor_IgnoreChange,
+						editors.length > 1 ? Messages.Dirty_Editors_SaveAndSearch
+								: Messages.Dirty_Editor_SaveAndSearch },
+				0);
+		final var choise = dialog.open();
+
+		if (choise == 1) {
+			for (final IEditorPart editor : editors) {
+				editor.doSave(new NullProgressMonitor());
+			}
+
+			performSearch();
+		}
+	}
+
+	private void performSearch() {
+		final SearchHelper helper = new SearchHelper(
+				new SearchHelper.FilterRecordClass(settings.fbSubappTypes,
+						fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+						fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+						fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+				new SearchHelper.FilterRecordClass(settings.fbTypedSubappInstance,
+						fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+						fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+						fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+				new SearchHelper.FilterRecordClass(settings.untypedSubapp,
+						untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+						untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+						untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+				new SearchHelper.FilterRecordClass(settings.dataTypes,
+						dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+						dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+						dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+				new SearchHelper.FilterRecordClass(settings.attributeTypes,
+						attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+						attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+						attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+				ignoreLinkedLibrariesButton.getSelection());
+
+		final List<ISearchContext> contexts = helper.createSearchContextList(workspaceScopeButton.getSelection(),
+				projectScopeButton.getSelection(), project);
+
+		final var result = contexts.stream()
+				.flatMap(context -> new IEC61499ElementSearch(context,
+						SearchHelper.createSearchFilter(modeSelectionDropDown.getSelectionIndex(),
+								DEFAULT_LIST.stream().map(searchFilter::getFilter).toList()),
+						helper.createChildrenSearchProvider()).performSearch().stream())
+				.toList();
+
+		final List<EObject> mappedList = createMappedList(result);
+
+		if (modeSelectionDropDown.getSelectionIndex() == 0
+				&& (mappedList.isEmpty() || mappedList.getFirst() instanceof VarDeclaration)) {
+			varDeclProvider.setInput(mapList(mappedList, VarDeclaration.class));
+		} else if (modeSelectionDropDown.getSelectionIndex() == 1
+				&& (mappedList.isEmpty() || mappedList.getFirst() instanceof Attribute)) {
+			attributeProvider.setInput(mapList(mappedList, Attribute.class));
+		}
+		natTable.refresh();
+		commandStack.flush();
 	}
 
 	private List<EObject> createMappedList(final List<? extends EObject> list) {
 		final List<EObject> mappedList = new ArrayList<>();
+		map.keySet().forEach(typeEntry -> typeEntry.eAdapters().remove(adapter));
 		map.clear();
 		for (final EObject libE : list) {
 			if (EcoreUtil.getRootContainer(libE) instanceof final LibraryElement rootLibE) {
 				final TypeEntry entry = rootLibE.getTypeEntry();
-				map.computeIfAbsent(entry, e -> new CopyElementRecord(e.copyType(), new ArrayList<>()));
+				map.computeIfAbsent(entry, e -> {
+					entry.eAdapters().add(adapter);
+					return new CopyElementRecord(e.copyType(), new ArrayList<>());
+				});
 				final EObject copyLibE = EcoreUtil.getEObject(map.get(entry).copiedElement(),
 						EcoreUtil.getRelativeURIFragmentPath(rootLibE, libE));
 				map.get(entry).addToList(copyLibE);
@@ -446,34 +520,63 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	@Override
 	public void setFocus() {
-		// nothing done here
+		adapter.checkFileReload();
+	}
+
+	public void reloadType() {
+		performSearch();
+		commandStack.flush();
 	}
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		final var affect = Arrays.stream(commandStack.getCommands()).filter(ScopedCommand.class::isInstance)
-				.flatMap(cmd -> ((ScopedCommand) cmd).getAffectedObjects().stream()).map(eobj -> {
-					if (EcoreUtil.getRootContainer(eobj) instanceof final LibraryElement rootLibE) {
-						return rootLibE.getTypeEntry();
-					}
-					return null;
-				}).filter(Objects::nonNull).distinct().toList();
+		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(project.getParent()) {
+			@Override
+			protected void execute(final IProgressMonitor monitor)
+					throws CoreException, InvocationTargetException, InterruptedException {
+				final var affect = Arrays.stream(commandStack.getCommands()).filter(ScopedCommand.class::isInstance)
+						.flatMap(cmd -> ((ScopedCommand) cmd).getAffectedObjects().stream()).map(eobj -> {
+							if (EcoreUtil.getRootContainer(eobj) instanceof final LibraryElement rootLibE) {
+								return rootLibE.getTypeEntry();
+							}
+							return null;
+						}).filter(Objects::nonNull).distinct().toList();
 
-		affect.forEach(entry -> {
-			try {
-				if (map.containsKey(entry)) {
-					entry.save(map.get(entry).copiedElement());
-				}
-			} catch (final CoreException e) {
-				e.printStackTrace();
+				affect.forEach(entry -> {
+					try {
+						if (map.containsKey(entry)) {
+							entry.eAdapters().remove(adapter);
+							entry.save(map.get(entry).copiedElement());
+							entry.eAdapters().add(adapter);
+						}
+					} catch (final CoreException e) {
+						e.printStackTrace();
+					}
+				});
 			}
-		});
+		};
+		try {
+			operation.run(monitor);
+		} catch (final InvocationTargetException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		} catch (final InterruptedException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			Thread.currentThread().interrupt();
+		}
+
 		commandStack.markSaveLocation();
 	}
 
 	@Override
 	public void doSaveAs() {
 		// should not be used with this editor
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		getSite().getPage().removePartListener(focusListener);
+		map.keySet().forEach(typeEntry -> typeEntry.eAdapters().remove(adapter));
 	}
 
 	@Override
