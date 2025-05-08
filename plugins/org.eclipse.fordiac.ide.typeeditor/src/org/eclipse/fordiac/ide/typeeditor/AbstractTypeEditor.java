@@ -389,7 +389,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void reloadType() {
-		final LibraryElement newFBType = getTypeEntry().getTypeEditable();
+		final LibraryElement newFBType = getTypeEntry().copyType();
 		final LibraryElement curType = getType();
 		if (newFBType != curType) {
 			if ((curType != null) && getTypeEntry().eAdapters().contains(adapter)) {
