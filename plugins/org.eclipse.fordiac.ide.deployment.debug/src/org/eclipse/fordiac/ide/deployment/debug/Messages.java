@@ -21,6 +21,7 @@ public class Messages extends NLS {
 	public static String AbstractRuntimeWatch_RemoveWatch;
 	public static String AbstractVariableWatch_Disconnected;
 	public static String AbstractVariableWatch_ElementNotInResource;
+	public static String AbstractVariableWatch_InconsistentValues;
 	public static String AbstractVariableWatch_InvalidValue;
 	public static String AbstractVariableWatch_NoValue;
 	public static String AbstractVariableWatch_UnknownError;
