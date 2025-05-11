@@ -45,7 +45,7 @@ public class DeleteInterfaceCommand extends Command implements ScopedCommand {
 
 	public DeleteInterfaceCommand(final IInterfaceElement interfaceElement) {
 		this.interfaceElement = getTargetElement(Objects.requireNonNull(interfaceElement));
-		parent = (InterfaceList) Objects.requireNonNull(interfaceElement.eContainer(), "container is null"); //$NON-NLS-1$
+		parent = Objects.requireNonNull(interfaceElement.getInterfaceList(), "not in an interface list"); //$NON-NLS-1$
 		targetList = getTargetList(this.interfaceElement); // this has to be the adjust this.interfaceElement
 	}
 
@@ -126,7 +126,7 @@ public class DeleteInterfaceCommand extends Command implements ScopedCommand {
 	}
 
 	private static List<? extends IInterfaceElement> getTargetList(final IInterfaceElement ie) {
-		final InterfaceList il = (InterfaceList) ie.eContainer();
+		final InterfaceList il = ie.getInterfaceList();
 
 		if (ie instanceof ErrorMarkerInterface) {
 			return il.getErrorMarker();
