@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
@@ -439,6 +440,16 @@ public class EventImpl extends EObjectImpl implements Event {
 	@Override
 	public FBType getFBType() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFBType(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public InterfaceList getInterfaceList() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getInterfaceList(this);
 	}
 
 	/**

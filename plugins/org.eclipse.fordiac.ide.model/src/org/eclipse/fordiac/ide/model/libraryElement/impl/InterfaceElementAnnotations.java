@@ -82,6 +82,10 @@ public final class InterfaceElementAnnotations {
 		};
 	}
 
+	public static InterfaceList getInterfaceList(final IInterfaceElement element) {
+		return element.eContainer() instanceof final InterfaceList interfaceList ? interfaceList : null;
+	}
+
 	public static boolean validateName(final IInterfaceElement element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
 		if (isErrorMarker(element) || isInTypedInstance(element)) {

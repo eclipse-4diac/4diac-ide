@@ -559,6 +559,8 @@
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getFBNetworkElement"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFBNetworkElement(this);"/>
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getFBType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFBType(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getInterfaceList"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getInterfaceList(this);"/>
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/validateName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);">
         <genParameters ecoreParameter="lib.ecore#//IInterfaceElement/validateName/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//IInterfaceElement/validateName/context"/>

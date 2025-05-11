@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
+import org.eclipse.fordiac.ide.model.libraryElement.Connection
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
@@ -47,8 +48,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.value.StringValueConverter
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
-import org.eclipse.fordiac.ide.model.libraryElement.Connection
 
 final class ForteNgExportUtil {
 	public static final CharSequence CONNECTION_EXPORT_PREFIX = "conn_"
@@ -281,16 +280,16 @@ final class ForteNgExportUtil {
 	def static CharSequence getFORTEStringId(String s) '''STRID(«s»)'''
 
 	def static int getAbsoluteDataPortIndex(IInterfaceElement element) {
-		val container = element.eContainer
-		if (container instanceof InterfaceList) {
+		val interfaceList = element.interfaceList
+		if (interfaceList !== null) {
 			switch (element.eContainmentFeature) {
 				case LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS:
 					0
 				case LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS:
-					container.inputVars.size
+					interfaceList.inputVars.size
 				case LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
 				case LibraryElementPackage.Literals.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS:
-					container.inputVars.size + container.outputVars.size
+					interfaceList.inputVars.size + interfaceList.outputVars.size
 				default:
 					0
 			} + element.interfaceElementIndex
