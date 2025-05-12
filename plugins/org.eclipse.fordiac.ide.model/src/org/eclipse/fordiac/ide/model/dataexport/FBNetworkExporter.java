@@ -21,9 +21,12 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -41,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.SubAppTypeEntryImpl;
 
 class FBNetworkExporter extends CommonElementExporter {
@@ -86,6 +90,12 @@ class FBNetworkExporter extends CommonElementExporter {
 			addStartElement(nodeName);
 			addFBNetworkElementXMLAttributes(fbnElement);
 			addFBNetworkElementChildren(fbnElement);
+			if (fbnElement instanceof final TypedSubApp tsa && !tsa.getVarConfigParams().isEmpty()) {
+				final EObject container = EcoreUtil.getRootContainer(tsa);
+				if (container instanceof AutomationSystem || container instanceof SubAppType) {
+					addParamsConfig(tsa.getVarConfigParams());
+				}
+			}
 			addEndElement();
 		}
 	}
