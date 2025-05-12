@@ -40,11 +40,11 @@ public final class CommandUtil {
 		final EditorFilter filter = ((final IEditorPart editor) -> (editor instanceof DiagramEditorWithFlyoutPalette)
 				&& (network.equals(((DiagramEditorWithFlyoutPalette) editor).getModel())));
 
-		final IEditorPart editor = EditorUtils.findEditor(filter);
+		final IEditorPart[] editors = EditorUtils.findEditor(filter);
 
-		if (null != editor) {
-			final IEditorInput input = editor.getEditorInput();
-			EditorUtils.CloseEditor.run(editor);
+		if (editors.length > 0) {
+			final IEditorInput input = editors[0].getEditorInput();
+			EditorUtils.CloseEditor.run(editors[0]);
 			return input;
 		}
 		return null;
@@ -56,8 +56,7 @@ public final class CommandUtil {
 	 * @return the active workbench Part, or <code>null</code>.
 	 */
 	public static IWorkbenchPart getActiveWorkbenchPart() {
-		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActivePart();
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 	}
 
 	private CommandUtil() {

@@ -74,12 +74,12 @@ public class UpdateTypeEntryChange extends Change {
 		// depending if the in-place renaming is active we may not be in the display
 		// thread
 		Display.getDefault().syncExec(() -> {
-			final IEditorPart findEditor = EditorUtils.findEditor(
+			final IEditorPart[] findEditors = EditorUtils.findEditor(
 					(final IEditorPart editor) -> editor.getEditorInput() instanceof final FileEditorInput fei
 							&& fei.getFile().equals(typeEntry.getFile()));
-			if (findEditor != null && findEditor.isDirty()) {
-				if (shouldSaveFile(findEditor.getSite().getShell(), oldName)) {
-					findEditor.doSave(new NullProgressMonitor());
+			if (findEditors.length > 0 && findEditors[0].isDirty()) {
+				if (shouldSaveFile(findEditors[0].getSite().getShell(), oldName)) {
+					findEditors[0].doSave(new NullProgressMonitor());
 				} else {
 					result.addFatalError("Abort rename as editor is dirty!"); //$NON-NLS-1$
 				}
