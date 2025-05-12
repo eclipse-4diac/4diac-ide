@@ -33,8 +33,11 @@ public final class NumericValueConverter implements ValueConverter<Object> {
 	private static final Pattern DECIMAL = Pattern
 			.compile("[+-]?\\d[_\\d]*+(?:\\.\\d[_\\d]*+(?:[eE][+-]?\\d[_\\d]*+)?)?"); //$NON-NLS-1$
 	private static final Pattern NON_DECIMAL = Pattern.compile("(\\d++)#(\\p{XDigit}[_\\p{XDigit}]*+)"); //$NON-NLS-1$
-	private static final Pattern SCANNER_PATTERN = Pattern
-			.compile("\\G(?:TRUE|FALSE|" + NON_DECIMAL + "|" + DECIMAL + ")", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	private static final Pattern INFINITY = Pattern.compile("[+-]?Inf(?:inity)?", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
+	private static final Pattern NAN = Pattern.compile("[+-]?NaN", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
+	private static final Pattern SCANNER_PATTERN = Pattern.compile(
+			"\\G(?:TRUE|FALSE|" + NON_DECIMAL + "|" + DECIMAL + "|" + INFINITY + "|" + NAN + ")", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+			Pattern.CASE_INSENSITIVE);
 
 	private final String format;
 
@@ -53,16 +56,29 @@ public final class NumericValueConverter implements ValueConverter<Object> {
 				throw new IllegalArgumentException(
 						MessageFormat.format(Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE, string));
 			}
-			final Matcher matcher = NON_DECIMAL.matcher(string);
 			if (TRUE.equalsIgnoreCase(string)) {
 				return Boolean.TRUE;
 			}
 			if (FALSE.equalsIgnoreCase(string)) {
 				return Boolean.FALSE;
 			}
-			if (matcher.matches()) {
-				final var radixString = matcher.group(1);
-				final var numberString = matcher.group(2).replace("_", ""); //$NON-NLS-1$ //$NON-NLS-2$
+			if (string.equalsIgnoreCase("NaN")) { //$NON-NLS-1$
+				return Double.valueOf(Double.NaN);
+			}
+			if (string.equalsIgnoreCase("-NaN")) { //$NON-NLS-1$
+				return Double.valueOf(-Double.NaN);
+			}
+			final Matcher infinityMatcher = INFINITY.matcher(string);
+			if (infinityMatcher.matches()) {
+				if (string.startsWith("-")) { //$NON-NLS-1$
+					return Double.valueOf(Double.NEGATIVE_INFINITY);
+				}
+				return Double.valueOf(Double.POSITIVE_INFINITY);
+			}
+			final Matcher nonDecimalMatcher = NON_DECIMAL.matcher(string);
+			if (nonDecimalMatcher.matches()) {
+				final var radixString = nonDecimalMatcher.group(1);
+				final var numberString = nonDecimalMatcher.group(2).replace("_", ""); //$NON-NLS-1$ //$NON-NLS-2$
 				final var radix = Integer.parseInt(radixString);
 				return new BigInteger(numberString, radix);
 			}
