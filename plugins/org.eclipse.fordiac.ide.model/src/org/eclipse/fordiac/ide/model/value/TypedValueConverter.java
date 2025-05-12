@@ -244,6 +244,9 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 		if (value instanceof Boolean) {
 			return type instanceof BoolType;
 		}
+		if (value instanceof Double) {
+			return type instanceof RealType || type instanceof LrealType;
+		}
 		if (value instanceof final BigDecimal bigDecimal) {
 			if (type instanceof RealType) {
 				return Float.isFinite(bigDecimal.floatValue());

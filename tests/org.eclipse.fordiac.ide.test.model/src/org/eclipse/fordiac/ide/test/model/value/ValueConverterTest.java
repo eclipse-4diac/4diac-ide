@@ -59,6 +59,14 @@ class ValueConverterTest {
 				arguments(NumericValueConverter.INSTANCE, Boolean.FALSE, "false"), //
 				arguments(NumericValueConverter.INSTANCE, Boolean.TRUE, "TRUE"), //
 				arguments(NumericValueConverter.INSTANCE, Boolean.FALSE, "FALSE"), //
+				arguments(NumericValueConverter.INSTANCE, Double.valueOf(Double.NaN), "nan"), //
+				arguments(NumericValueConverter.INSTANCE, Double.valueOf(-Double.NaN), "-nan"), //
+				arguments(NumericValueConverter.INSTANCE, Double.valueOf(Double.POSITIVE_INFINITY), "inf"), //
+				arguments(NumericValueConverter.INSTANCE, Double.valueOf(Double.POSITIVE_INFINITY), "+inf"), //
+				arguments(NumericValueConverter.INSTANCE, Double.valueOf(Double.NEGATIVE_INFINITY), "-inf"), //
+				arguments(NumericValueConverter.INSTANCE, Double.valueOf(Double.POSITIVE_INFINITY), "Infinity"), //
+				arguments(NumericValueConverter.INSTANCE, Double.valueOf(Double.POSITIVE_INFINITY), "+Infinity"), //
+				arguments(NumericValueConverter.INSTANCE, Double.valueOf(Double.NEGATIVE_INFINITY), "-Infinity"), //
 				arguments(NumericValueConverter.INSTANCE, BigInteger.valueOf(100), "1_00"), //
 				arguments(NumericValueConverter.INSTANCE, BigInteger.valueOf(16), "16#10"), //
 				arguments(NumericValueConverter.INSTANCE, BigDecimal.valueOf(3.1415), "3.1415"), //
@@ -173,6 +181,10 @@ class ValueConverterTest {
 		return Stream.of(//
 				arguments(NumericValueConverter.INSTANCE, "TRUE", Boolean.TRUE), //
 				arguments(NumericValueConverter.INSTANCE, "FALSE", Boolean.FALSE), //
+				arguments(NumericValueConverter.INSTANCE, "NAN", Double.valueOf(Double.NaN)), //
+				arguments(NumericValueConverter.INSTANCE, "NAN", Double.valueOf(-Double.NaN)), //
+				arguments(NumericValueConverter.INSTANCE, "INFINITY", Double.valueOf(Double.POSITIVE_INFINITY)), //
+				arguments(NumericValueConverter.INSTANCE, "-INFINITY", Double.valueOf(Double.NEGATIVE_INFINITY)), //
 				arguments(NumericValueConverter.INSTANCE, "100", BigInteger.valueOf(100)), //
 				arguments(NumericValueConverter.INSTANCE, "3.1415", BigDecimal.valueOf(3.1415)), //
 				arguments(NumericValueConverter.INSTANCE_BYTE, "16#04", BigInteger.valueOf(4)), //
