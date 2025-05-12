@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -95,10 +96,11 @@ public enum OpenListenerManager {
 	 * @return the default open listener
 	 */
 	public IOpenListener getDefaultOpenListener(final EObject elementToOpen) {
-		final IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(PLUGIN_ID);
+		final IPreferencesService service = Platform.getPreferencesService();
 		for (final IOpenListener openListener : getOpenListeners()) {
 			if (listenerSupportsElement(openListener, elementToOpen)) {
-				final String value = preferences.get(openListener.getHandledClass().getName(), ""); //$NON-NLS-1$
+				final String value = service.getString(PLUGIN_ID, openListener.getHandledClass().getName(), "", null); //$NON-NLS-1$
+
 				openListener.selectionChanged(null, new StructuredSelection(elementToOpen));
 				if (("".equals(value)) //$NON-NLS-1$
 						|| (value.equals(openListener.getOpenListenerID()))) {
