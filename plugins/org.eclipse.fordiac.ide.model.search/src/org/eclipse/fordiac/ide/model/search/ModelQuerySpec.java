@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.search;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.emf.ecore.EObject;
 
 // The inputs from the search page grouped in one place
 public record ModelQuerySpec(
@@ -25,7 +26,8 @@ public record ModelQuerySpec(
 	    boolean checkExactMatching,
 	    boolean checkInterfaceValues,
 	    SearchScope scope,
-	    IProject project
+	    IProject project,
+		EObject referenceObject
 ) {
 
 	public enum SearchScope {

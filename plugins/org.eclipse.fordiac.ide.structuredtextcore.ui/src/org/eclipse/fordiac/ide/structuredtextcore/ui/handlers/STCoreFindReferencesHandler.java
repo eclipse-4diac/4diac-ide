@@ -19,6 +19,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
 import org.eclipse.fordiac.ide.model.search.ModelSearchQuery;
@@ -40,7 +41,7 @@ public class STCoreFindReferencesHandler extends FindReferencesHandler {
 				&& varDec.eContainer() instanceof STVarGlobalDeclarationBlock) {
 			// @formatter:off
 			final ModelQuerySpec searchSpec = new ModelQuerySpec(
-					nameProvider.getFullyQualifiedName(varDec).toString("::"), //$NON-NLS-1$
+					nameProvider.getFullyQualifiedName(varDec).toString(PackageNameHelper.PACKAGE_NAME_DELIMITER),
 					false,
 					false,
 					true,
@@ -49,7 +50,9 @@ public class STCoreFindReferencesHandler extends FindReferencesHandler {
 					true,
 					true, // search initial value
 					SearchScope.PROJECT,
-					getProject(varDec));
+					getProject(varDec),
+					target
+					);
 			// @formatter:on
 
 			final ModelSearchQuery searchJob = new ModelSearchQuery(searchSpec);
