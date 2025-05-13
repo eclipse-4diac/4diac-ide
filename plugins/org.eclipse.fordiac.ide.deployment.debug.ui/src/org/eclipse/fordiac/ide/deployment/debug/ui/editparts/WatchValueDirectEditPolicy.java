@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
@@ -64,10 +65,17 @@ public class WatchValueDirectEditPolicy extends DirectEditPolicy {
 				&& editPart.getInterfaceElement() instanceof final VarDeclaration varDeclaration
 				&& varDeclaration.isIsInput()
 				&& !FBNetworkElementHelper.isContainedInTypedInstance(varDeclaration.getFBNetworkElement())
+				&& !isConnectedWithSubAppInput(varDeclaration)
 				&& EcoreUtil.getRootContainer(varDeclaration) instanceof final AutomationSystem system
 				&& system.getCommandStack() != null) {
 			system.getCommandStack().execute(new ChangeValueCommand(varDeclaration, value));
 		}
+	}
+
+	private static boolean isConnectedWithSubAppInput(final VarDeclaration varDeclaration) {
+		return !varDeclaration.getInputConnections().isEmpty()
+				&& varDeclaration.getInputConnections().getFirst().getSourceElement() instanceof SubApp
+				&& varDeclaration.getInputConnections().getFirst().getSource().isIsInput();
 	}
 
 	@Override
