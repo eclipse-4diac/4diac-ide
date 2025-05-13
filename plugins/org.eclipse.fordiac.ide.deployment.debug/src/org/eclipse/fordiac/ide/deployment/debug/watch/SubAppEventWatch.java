@@ -18,6 +18,7 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugElement;
+import org.eclipse.fordiac.ide.deployment.debug.Messages;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.eval.value.EventValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
@@ -43,6 +44,8 @@ public class SubAppEventWatch extends AbstractSubAppInterfaceWatch implements IE
 			// all counts must be equal for input events (fan-out)
 			if (values.stream().distinct().count() == 1) {
 				updateValue(values.getFirst());
+			} else {
+				setError(Messages.AbstractVariableWatch_InconsistentValues);
 			}
 		} else {
 			// calculate sum of all counts for output events (fan-in)

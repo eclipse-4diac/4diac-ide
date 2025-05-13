@@ -31,9 +31,8 @@ public abstract class AbstractVariableWatch extends DeploymentDebugVariable impl
 
 	private final Resource resource;
 	private final ITypedElement element;
-	private long aliveCount;
-	private String invalidValue;
-	private DeploymentDebugErrorValue cachedErrorValue;
+	private boolean error;
+	private DeploymentDebugErrorValue errorValue;
 	private boolean pinned;
 	private Source source = Source.BREAKPOINT;
 
@@ -51,61 +50,49 @@ public abstract class AbstractVariableWatch extends DeploymentDebugVariable impl
 
 	@Override
 	public IEvaluatorDebugValue getValue() {
-		if (hasError()) {
-			return getErrorValue();
+		if (error) {
+			return errorValue;
 		}
 		return super.getValue();
 	}
 
 	protected void updateValue(final String value) {
-		aliveCount = getDebugTarget().getVariableUpdateCount();
 		try {
 			getInternalVariable().setValue(value, getDebugTarget().getTypeLibrary());
-			invalidValue = null;
+			clearError();
 		} catch (final Exception e) {
-			invalidValue = value;
+			setError(MessageFormat.format(Messages.AbstractVariableWatch_InvalidValue, value));
 		}
 	}
 
 	protected void updateValue(final Value value) {
-		aliveCount = getDebugTarget().getVariableUpdateCount();
 		try {
 			getInternalVariable().setValue(value);
-			invalidValue = null;
+			clearError();
 		} catch (final Exception e) {
-			invalidValue = value.toString();
+			setError(MessageFormat.format(Messages.AbstractVariableWatch_InvalidValue, value.toString()));
 		}
 	}
 
 	@Override
-	public boolean isAlive() {
-		return aliveCount == getDebugTarget().getVariableUpdateCount();
+	public void disconnected() {
+		setError(Messages.AbstractVariableWatch_Disconnected);
 	}
 
 	@Override
 	public boolean hasError() {
-		return !isAlive() || invalidValue != null;
+		return error;
 	}
 
-	protected IEvaluatorDebugValue getErrorValue() {
-		final String errorMessage = getErrorMessage();
-		if (cachedErrorValue == null || !cachedErrorValue.getMessage().equals(errorMessage)) {
-			cachedErrorValue = new DeploymentDebugErrorValue(errorMessage, getDebugTarget());
+	protected void setError(final String message) {
+		if (errorValue == null || !errorValue.getMessage().equals(message)) {
+			errorValue = new DeploymentDebugErrorValue(message, getDebugTarget());
 		}
-		return cachedErrorValue;
+		error = true;
 	}
 
-	protected String getErrorMessage() {
-		if (!isAlive()) {
-			if (!getDebugTarget().isAlive()) {
-				return Messages.AbstractVariableWatch_Disconnected;
-			}
-			return Messages.AbstractVariableWatch_NoValue;
-		}
-		if (invalidValue != null) {
-			return MessageFormat.format(Messages.AbstractVariableWatch_InvalidValue, invalidValue);
-		}
-		return Messages.AbstractVariableWatch_UnknownError;
+	protected void clearError() {
+		error = false;
 	}
 
 	@Override

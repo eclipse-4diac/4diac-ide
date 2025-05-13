@@ -87,11 +87,9 @@ public interface IWatch extends IVariable, IDeploymentDebugElement {
 	void updateValue(DeploymentDebugWatchData watchData);
 
 	/**
-	 * Check if the watch was recently updated
-	 *
-	 * @return true if alive, false otherwise
+	 * Update the watch that the target has been disconnected
 	 */
-	boolean isAlive();
+	void disconnected();
 
 	/**
 	 * Check if the watch is in an error state

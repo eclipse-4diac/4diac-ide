@@ -90,7 +90,8 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 
 	protected void terminated() {
 		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
-		incrementVariableUpdateCount(); // mark watch values as stale
+		incrementVariableUpdateCount();
+		watches.values().forEach(IWatch::disconnected);
 		getPrimaryDebugTarget().updateWatches(false);
 		fireTerminateEvent();
 	}
