@@ -99,6 +99,22 @@ public class VarDeclarationAnnotations {
 		return true;
 	}
 
+	public static boolean validateValueOverriddenBySubAppInput(final VarDeclaration varDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (varDeclaration.isIsInput() && hasValue(varDeclaration) && !varDeclaration.getInputConnections().isEmpty()
+				&& varDeclaration.getInputConnections().getFirst().getSourceElement() instanceof SubApp
+				&& varDeclaration.getInputConnections().getFirst().getSource().isIsInput()) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.VAR_DECLARATION__VALIDATE_VALUE_OVERRIDDEN_BY_SUB_APP_INPUT,
+						Messages.VarDeclarationAnnotations_ValueOverriddenBySubAppInput,
+						FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
+			}
+			return false;
+		}
+		return true;
+	}
+
 	public static boolean validateVarInOutSourceTypeIsWellDefined(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isInOutVar() && varDeclaration.isIsInput() && varDeclaration.getFBNetworkElement() != null

@@ -916,6 +916,11 @@
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateValueForGenericInstanceVariable/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateValueForGenericInstanceVariable/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateValueOverriddenBySubAppInput"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateValueOverriddenBySubAppInput(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateValueOverriddenBySubAppInput/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateValueOverriddenBySubAppInput/context"/>
+      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateVarInOutSourceTypeIsWellDefined"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutSourceTypeIsWellDefined(this, diagnostics, context);">
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutSourceTypeIsWellDefined/diagnostics"/>

@@ -403,12 +403,20 @@ public class LibraryElementValidator extends EObjectValidator {
 	public static final int VAR_DECLARATION__VALIDATE_VALUE_FOR_GENERIC_INSTANCE_VARIABLE = 29;
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Value Overridden By Sub App Input' of 'Var Declaration'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int VAR_DECLARATION__VALIDATE_VALUE_OVERRIDDEN_BY_SUB_APP_INPUT = 30;
+
+	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Source Type Is Well Defined' of 'Var Declaration'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED = 30;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED = 31;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Is Withed' of 'Var Declaration'.
@@ -416,7 +424,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_IS_WITHED = 31;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_IS_WITHED = 32;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Subapp Interface' of 'Var Declaration'.
@@ -424,7 +432,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_INTERFACE = 32;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_INTERFACE = 33;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Subapp Network' of 'Var Declaration'.
@@ -432,7 +440,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_NETWORK = 33;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_NETWORK = 34;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -440,7 +448,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 33;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 34;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -2040,6 +2048,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForGenericTypeVariable(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForVariableLengthArrayVariable(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueForGenericInstanceVariable(localVariable, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueOverriddenBySubAppInput(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(localVariable, diagnostics, context);
@@ -2728,6 +2737,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForGenericTypeVariable(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForVariableLengthArrayVariable(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueForGenericInstanceVariable(varDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueOverriddenBySubAppInput(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(varDeclaration, diagnostics, context);
@@ -2773,6 +2783,16 @@ public class LibraryElementValidator extends EObjectValidator {
 	 */
 	public boolean validateVarDeclaration_validateValueForGenericInstanceVariable(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return varDeclaration.validateValueForGenericInstanceVariable(diagnostics, context);
+	}
+
+	/**
+	 * Validates the validateValueOverriddenBySubAppInput constraint of '<em>Var Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateVarDeclaration_validateValueOverriddenBySubAppInput(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return varDeclaration.validateValueOverriddenBySubAppInput(diagnostics, context);
 	}
 
 	/**
@@ -2854,6 +2874,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForGenericTypeVariable(memberVarDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForVariableLengthArrayVariable(memberVarDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueForGenericInstanceVariable(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueOverriddenBySubAppInput(memberVarDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(memberVarDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(memberVarDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(memberVarDeclaration, diagnostics, context);
