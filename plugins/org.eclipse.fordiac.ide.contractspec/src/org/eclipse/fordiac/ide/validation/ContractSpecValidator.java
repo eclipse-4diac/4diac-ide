@@ -208,6 +208,9 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 	}
 
 	private void validateNOutOfM(final int n, final int m, final EStructuralFeature feature) {
+		if (n == 0 && m == 0) {
+			return; // sliding window likely not set...
+		}
 		if (n == m) {
 			warning(Messages.SlidingWindowNotNeededWarning, feature, SLIDING_WINDOW_UNNEEDED);
 		} else if (n > m) {
